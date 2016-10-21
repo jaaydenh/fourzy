@@ -11,7 +11,7 @@ Features:
 -simple AI
 
 Usage:
-Simply open the game scene, adjust GameController to your liking and Play
+Simply open the game scene, adjust GameManager to your liking and Play
 
 Credits:
 Kenney.nl for Sprites, Soundeffect and Font

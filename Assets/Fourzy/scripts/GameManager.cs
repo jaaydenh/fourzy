@@ -1,431 +1,652 @@
 ﻿using UnityEngine;
-using System;
+using System.Collections;
 using System.Collections.Generic;
+using GameSparks.Api.Requests;
 
 namespace ConnectFour
 {
-	// A singletoon that provides a layer between the game scenes and the AWS network calls, while
-	// also keeping track of the state of the game.
-	public class GameManager
+    public class GameManager : MonoBehaviour
 	{
-		# region private members
-		private GameState GameState;
-		private bool IdentityRegistered;
-		private string MostRecentMatchIdentifier;
-		private GameState.MatchState UnconsumedCurrentMatchState;
-		private string UnconsumedCurrentMatchStateError;
-		# endregion
-
-		# region Handlers and events
-		public delegate void StatesAvailableHandler(List<GameState.MatchState> MatchStates);
-		public delegate void FriendsAvailableHandler(List<GameState.PlayerInfo> Friends);
-		public delegate void SelfAvailableHandler(GameState.PlayerInfo Self);
-		public delegate void FriendAddedHandler(string RequestedId, GameState.PlayerInfo Friend);
-		public delegate void CurrentMatchStateAvailableHandler(string Error, GameState.MatchState currentMatchState);
-
-		private event StatesAvailableHandler OnStatesAvailable;
-		private event FriendsAvailableHandler OnFriendsAvailable;
-		private event SelfAvailableHandler OnSelfAvailable;
-		private event FriendAddedHandler OnFriendAdded;
-		private event CurrentMatchStateAvailableHandler OnCurrentMatchStateAvailable;
-		# endregion
-
-		# region Singleton
-		// Manager is a singleton throughout the game lifecycle.
-		private static GameManager _instance = null;
-		public static GameManager Instance
+		enum Piece
 		{
-			get
+			Empty = 0,
+			Blue = 1,
+			Red = 2
+		}
+
+		enum Direction {Up, Down, Left, Right};
+
+		[Range(3, 8)]
+		public int numRows = 6;
+		[Range(3, 8)]
+		public int numColumns = 7;
+
+		[Tooltip("How many pieces have to be connected to win.")]
+		public int numPiecesToWin = 4;
+
+		[Tooltip("Allow diagonally connected Pieces?")]
+		public bool allowDiagonally = true;
+		
+		public float dropTime = 1.0f;
+
+		// GameSparks
+        public string challengeInstanceId;
+
+		// Gameobjects 
+		public GameObject pieceRed;
+		public GameObject pieceBlue;
+		public GameObject pieceEmpty;
+
+		public GameObject winningText;
+		public string bluePlayerWonText = "Blue Player Won!";
+		public string redPlayerWonText = "Red Player Won!";
+		public string playerWonText = "You Won!";
+		public string playerLoseText = "You Lose!";
+		public string drawText = "Draw!";
+
+		public GameObject btnPlayAgain;
+		bool btnPlayAgainTouching = false;
+		Color btnPlayAgainOrigColor;
+		Color btnPlayAgainHoverColor = new Color(255, 143,4);
+
+		GameObject gamePieces;
+
+		/// <summary>
+		/// The Gameboard.
+		/// 0 = Empty
+		/// 1 = Blue
+		/// 2 = Red
+		/// </summary>
+		public int[,] gameBoard;
+
+		public bool isMultiplayer = false;
+        public bool isCurrentPlayerTurn = true;
+		public bool isPlayerOneTurn = true;
+		bool isLoading = true;
+		bool isDropping = false; 
+		bool mouseButtonPressed = false;
+
+		bool gameOver = false;
+		bool isCheckingForWinner = false;
+
+        //Singleton
+        private static GameManager _instance;
+        public static GameManager instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = GameObject.FindObjectOfType<GameManager>();
+                }
+                return _instance;
+            }
+        }
+            
+		void Start() 
+		{
+			int max = Mathf.Max(numRows, numColumns);
+
+			if(numPiecesToWin > max)
+				numPiecesToWin = max;
+
+			CreateGameBoard();
+
+			btnPlayAgainOrigColor = btnPlayAgain.GetComponent<Renderer>().material.color;
+		}
+
+        public void SetGameBoard(int[] boardData) {
+            isLoading = true;
+
+            for(int x = 0; x < numColumns; x++)
+            {
+                for(int y = 0; y < numRows; y++)
+                {
+                    int piece = boardData[x * numColumns + y];
+                    gameBoard[x, y] = piece;
+                    if (piece == (int)Piece.Blue)
+                    {
+                        GameObject g = Instantiate(pieceBlue, new Vector3(x, y * -1, 20), Quaternion.identity) as GameObject;
+                        g.transform.parent = gamePieces.transform;
+                    }
+                    else if (piece == (int)Piece.Red)
+                    {
+                        GameObject g = Instantiate(pieceRed, new Vector3(x, y * -1, 20), Quaternion.identity) as GameObject;
+                        g.transform.parent = gamePieces.transform;
+                    }
+                }
+            }
+
+            isLoading = false;
+        }
+
+        void CreateGameBoard() {
+			winningText.SetActive(false);
+			btnPlayAgain.SetActive(false);
+
+			isLoading = true;
+
+            gamePieces = GameObject.Find ("EmptySpot");
+            if(gamePieces != null)
 			{
-				if (_instance == null)
+                DestroyImmediate(gamePieces);
+			}
+            gamePieces = new GameObject("EmptySpot");
+
+			// create an empty gameboard and instantiate the cells
+			gameBoard = new int[numColumns, numRows];
+			for(int col = 0; col < numColumns; col++)
+			{
+				for(int row = 0; row < numRows; row++)
 				{
-					_instance = new GameManager();
+					gameBoard[col, row] = (int)Piece.Empty;
+                    GameObject g = Instantiate(pieceEmpty, new Vector3(col, row * -1, 20), Quaternion.identity) as GameObject;
+                    g.transform.parent = gamePieces.transform;
 				}
-				return _instance;
 			}
+
+			isLoading = false;
+			gameOver = false;
+
+			// center camera 
+			Camera.main.transform.position = new Vector3(
+				(numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
+
+			winningText.transform.position = new Vector3(
+				(numColumns-1) / 2.0f, -((numRows-1) / 2.0f) + 1, winningText.transform.position.z);
+
+			btnPlayAgain.transform.position = new Vector3(
+				(numColumns-1) / 2.0f, -((numRows-1) / 2.0f) - 1, btnPlayAgain.transform.position.z);
 		}
 
-		private GameManager()
-		{
-			IdentityRegistered = false;
-			MostRecentMatchIdentifier = "";
+		/// <summary>
+		/// Spawns a piece at mouse position above the first row
+		/// </summary>
+		/// <returns>The piece.</returns>
+        GameObject SpawnPiece(float posX, float posY)
+		{          
+			GameObject g = Instantiate(
+				isPlayerOneTurn ? pieceBlue : pieceRed,
+				new Vector3(Mathf.FloorToInt(posX + 0.5f), 
+					Mathf.FloorToInt(posY + 0.5f), 10), // spawn it above the first row
+					Quaternion.identity) as GameObject;
+
+			return g;
 		}
-		# endregion
 
-		# region Methods to (un)register handlers
-
-		// Registering and unregistering handlers allows game objects to be notified when
-		// asynchronous actions (like network calls) complete.
-
-		public void RegisterOnStatesAvailableHandler(StatesAvailableHandler handler)
+		void UpdatePlayAgainButton()
 		{
-			OnStatesAvailable += handler;
-			if (GameState != null)
+			RaycastHit hit;
+			//ray shooting out of the camera from where the mouse is
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			
+			if (Physics.Raycast(ray, out hit) && hit.collider.name == btnPlayAgain.name)
 			{
-				handler(getMatchStates());
-			}
-		}
-
-		public void RegisterOnFriendsAvailableHandler(FriendsAvailableHandler handler)
-		{
-			OnFriendsAvailable += handler;
-			if (GameState != null)
-			{
-				handler(getFriends());
-			}
-		}
-
-		public void RegisterOnSelfAvailableHandler(SelfAvailableHandler handler)
-		{
-			OnSelfAvailable += handler;
-			if (GameState != null)
-			{
-				handler(GameState.Self);
-			}
-		}
-
-		public void RegisterFriendAddedHandler(FriendAddedHandler handler)
-		{
-			OnFriendAdded += handler;
-		}
-
-		public void RegisterOnCurrentMatchStateAvailableHandler(CurrentMatchStateAvailableHandler handler)
-		{
-			if (UnconsumedCurrentMatchState != null || UnconsumedCurrentMatchStateError != null)
-			{
-				handler(UnconsumedCurrentMatchStateError, UnconsumedCurrentMatchState);
-				UnconsumedCurrentMatchState = null;
-				UnconsumedCurrentMatchStateError = null;
-			}
-			OnCurrentMatchStateAvailable += handler;
-		}
-
-		public void UnregisterOnStatesAvailableHandler(StatesAvailableHandler handler)
-		{
-			OnStatesAvailable -= handler;
-		}
-
-		public void UnregisterOnFriendsAvailableHandler(FriendsAvailableHandler handler)
-		{
-			OnFriendsAvailable -= handler;
-		}
-
-		public void UnregisterOnSelfAvailableHandler(SelfAvailableHandler handler)
-		{
-			OnSelfAvailable -= handler;
-		}
-
-		public void UnregisterOnFriendAddedHandler(FriendAddedHandler handler)
-		{
-			OnFriendAdded -= handler;
-		}
-
-		public void UnregisterOnCurrentMatchStateAvailableHandler(CurrentMatchStateAvailableHandler handler)
-		{
-			OnCurrentMatchStateAvailable -= handler;
-		}
-		# endregion
-
-		private void SaveLocal()
-		{
-			NetworkManager.Instance.SaveGameStateLocal(GameState);
-		}
-
-		public void SyncLocallySaved()
-		{
-			NetworkManager.Instance.SynchronizeLocalDataAsync();
-			PubliclyRegisterIdentity();
-		}
-
-		private void PubliclyRegisterIdentity()
-		{
-			if (!IdentityRegistered)
-			{
-				// So two registrations do not overlap, as well as to avoid extraneous DDB calls on saving data.
-				IdentityRegistered = true;
-				NetworkManager.Instance.PubliclyRegisterIdentityAsync(GameState, (error) =>
-					{
-						if (error == null)
-						{
-							IdentityRegistered = true;
-							Debug.Log("Successfully publicly registered player identity");
-						}
-						else
-						{
-							IdentityRegistered = false;
-							Debug.LogWarning(string.Format("Could not publicly register player identity. Got error:\n{0}", error));
-						}
-					});
-			}
-		}
-
-		public void LogInToFacebook()
-		{
-			NetworkManager.Instance.LogInToFacebookAsync();
-		}
-
-		public void Load()
-		{
-			// Load friends and local games with this call.
-			NetworkManager.Instance.LoadGameStateAsync(delegate(string warning, GameState loadedGameState)
+				btnPlayAgain.GetComponent<Renderer>().material.color = btnPlayAgainHoverColor;
+				//check if the left mouse has been pressed down this frame
+				if (Input.GetMouseButtonDown(0) || Input.touchCount > 0 && btnPlayAgainTouching == false)
 				{
-					GameState oldGameState = GameState;
-					GameState = loadedGameState;
-					if (!string.IsNullOrEmpty(warning))
-					{
-						Debug.LogWarning(warning);
-						AfterLoad();
-					}
-					else
-					{
-						// If we successfully loaded friends and local games, load online games with
-						// this call.
-						NetworkManager.Instance.GetOnlineMatchesAsync(delegate(string error, List<GameState.MatchState> matchStates)
-							{
-								if (string.IsNullOrEmpty(error))
-								{
-									foreach (var matchState in matchStates)
-									{
-										GameState.MatchStates[matchState.Identifier] = matchState;
-									}
-								}
-								else
-								{
-									Debug.LogWarning("Error loading Online Matches (is there internet connectectivity?): " + error);
-								}
-								if (oldGameState == null || oldGameState.Self != GameState.Self)
-								{
-									// Player's info has changed, so register it
-									IdentityRegistered = false;
-									PubliclyRegisterIdentity();
-								}
-								AfterLoad();
-							});
-					}
-				});
-		}
-
-		// When we have loaded a game state, notify all listeners
-		private void AfterLoad()
-		{
-			if (GameState.Friends.Count == 0)
-			{
-				GameState.AddLocalOpponent();
-			}
-			if (OnFriendsAvailable != null)
-			{
-				OnFriendsAvailable(getFriends());
-			}
-			if (OnStatesAvailable != null)
-			{
-				OnStatesAvailable(getMatchStates());
-			}
-			if (OnSelfAvailable != null)
-			{
-				OnSelfAvailable(GameState.Self);
-			}
-		}
-
-		// Get the friend's info and save them
-		public void AddFriend(string id)
-		{
-			NetworkManager.Instance.FindPlayerByIdAsync(id, (player) =>
-				{
-					if (player != null)
-					{
-						if (GameState.Self != null && player.Id == GameState.Self.Id)
-						{
-							player = null;
-						}
-						else
-						{
-							GameState.Friends[player.Id] = player;
-						}
-					}
-					if (OnFriendAdded != null)
-					{
-						OnFriendAdded(id, player);
-					}
-					SaveLocal();
-					SyncLocallySaved();
-				});
-		}
-
-		// When a move has been made, update the game manager's GameState and save either locally or
-		// overnetwork depending on whether the game is a local game or an online game.
-		public void UpdateMatchState(GameState.MatchState matchState)
-		{
-			if (matchState.Opponent.IsLocalOpponent())
-			{
-				GameState.MatchStates[matchState.Identifier] = matchState;
-				if (OnCurrentMatchStateAvailable == null)
-				{
-					UnconsumedCurrentMatchState = matchState;
-					UnconsumedCurrentMatchStateError = null;
-				}
-				else
-				{
-					OnCurrentMatchStateAvailable(null, matchState);
+					btnPlayAgainTouching = true;
+					
+					//CreateField();
+					Application.LoadLevel(0);
 				}
 			}
 			else
 			{
-				NetworkManager.Instance.SaveOnlineMatchAsync(matchState, (error) =>
+				btnPlayAgain.GetComponent<Renderer>().material.color = btnPlayAgainOrigColor;
+			}
+			
+			if(Input.touchCount == 0)
+			{
+				btnPlayAgainTouching = false;
+			}
+		}
+
+		// Update is called once per frame
+		void Update () 
+		{
+			if(isLoading)
+				return;
+
+			if(isCheckingForWinner)
+				return;
+
+			if(gameOver)
+			{
+				winningText.SetActive(true);
+				btnPlayAgain.SetActive(true);
+
+				UpdatePlayAgainButton();
+
+				return;
+			}
+
+            if(isCurrentPlayerTurn)
+			{
+				if (Input.GetMouseButtonDown (0) && !mouseButtonPressed && !isDropping) {
+					mouseButtonPressed = true;
+					Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+                    Debug.Log("posX:" + pos.x);
+                    Debug.Log("posY:" + pos.y);
+					if (inTopRowBounds (pos.x, pos.y)) {
+                        //gameObjectTurn = SpawnPiece (pos.x, pos.y);
+                        StartCoroutine (movePiece (pos.x, pos.y, Direction.Down));
+					} else if (inBottomRowBounds(pos.x, pos.y)) {
+                        //gameObjectTurn = SpawnPiece (pos.x, pos.y);
+                        StartCoroutine (movePiece (pos.x, pos.y, Direction.Up));
+					} else if (inRightRowBounds(pos.x, pos.y)) {
+                        //gameObjectTurn = SpawnPiece (pos.x, pos.y);
+                        StartCoroutine (movePiece (pos.x, pos.y, Direction.Left));
+					} else if (inLeftRowBounds(pos.x, pos.y)) {
+                        //gameObjectTurn = SpawnPiece (pos.x, pos.y);
+                        StartCoroutine (movePiece (pos.x, pos.y, Direction.Right));
+					}
+				} else {
+					mouseButtonPressed = false;
+				}
+			} else { // TODO: inform the player it is not their turn
+
+            }
+		}
+            
+		/// <summary>
+		/// This method searches for a row or column with an empty spot 
+		/// </summary>
+        /// <param name="posX">x position</param>
+        /// <param name="posY">y position</param>
+        /// <param name="direction">direction</param>
+        IEnumerator movePiece(float posX, float posY, Direction direction)
+		{
+			isDropping = true;
+			Vector3 endPosition = new Vector3();
+
+			// round to a grid cell
+			int column = Mathf.RoundToInt(posX);
+			int row = Mathf.RoundToInt(posY * -1);
+            int movePosition = -1;
+            Vector3 startPosition = new Vector3(column, Mathf.RoundToInt(posY), 10);
+
+			// is there a free spot in the selected column?
+			bool foundFreeSpot = false;
+			if (direction == Direction.Down) {
+				int nextRow = nextEmptySpotInColumnDown(column);
+				if (nextRow != -1) {
+                    foundFreeSpot = true;
+                    movePosition = column;
+					gameBoard [column, nextRow] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
+                    endPosition = new Vector3(column, nextRow * -1, startPosition.z);
+				}
+			} else if (direction == Direction.Up) {
+				int nextRow = nextEmptySpotInColumnUp(column);
+				if (nextRow != -1) {
+                    foundFreeSpot = true;
+                    movePosition = column;
+					gameBoard [column, nextRow] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
+                    endPosition = new Vector3(column, nextRow * -1, startPosition.z);
+				}
+			} else if (direction == Direction.Right) {
+				int nextColumn = nextEmptySpotInRowRight(row);
+				if (nextColumn != -1) {
+                    foundFreeSpot = true;
+                    movePosition = row;
+					gameBoard [nextColumn, row] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
+                    endPosition = new Vector3(nextColumn, row * -1, startPosition.z);
+				}
+			} else if (direction == Direction.Left) {
+				int nextColumn = nextEmptySpotInRowLeft(row);
+				if (nextColumn != -1) {
+                    foundFreeSpot = true;
+                    movePosition = row;
+					gameBoard [nextColumn, row] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
+					endPosition = new Vector3(nextColumn, row * -1, startPosition.z);
+				}
+			}
+
+            if(foundFreeSpot)
+			{
+                Debug.Log("Direction: " + direction.GetHashCode());
+                Debug.Log("Direction: " + direction);
+                Debug.Log("Move Position: " + movePosition);
+                Debug.Log("challengeInstanceId: " + challengeInstanceId);
+                if (isMultiplayer)
+                {
+                    new LogChallengeEventRequest().SetChallengeInstanceId(challengeInstanceId)
+                    .SetEventKey("takeTurn") //The event we are calling is "takeTurn", we set this up on the GameSparks Portal
+                    .SetEventAttribute("pos", movePosition) // pos is the row or column the piece was placed at depending on the direction
+                    .SetEventAttribute("direction", direction.GetHashCode()) // direction can be up, down, left, right
+                    .SetEventAttribute("player", isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red) //takeTurn also has an attribute called "playerIcon, we set to our X or O
+                    .Send((response) =>
+                        {
+                            if (response.HasErrors)
+                            {
+
+                            }
+                            else
+                            {
+                                // If our ChallengeEventRequest was successful we inform the player
+                                Debug.Log("ChallengeEventRequest was successful");
+                            }
+                        });
+                }
+
+                Debug.Log("posX: " + posX + ", posY: " + posY);
+                Debug.Log("Start Position: " + startPosition);
+                GameObject g = SpawnPiece(posX, posY);
+
+				float distance = Vector3.Distance(startPosition, endPosition);
+
+				float t = 0;
+				while(t < 1)
+				{
+					t += Time.deltaTime * dropTime;
+					if (numRows - distance > 0) {
+						t += (numRows - distance) / 100;
+					}
+                    g.transform.position = Vector3.Lerp (startPosition, endPosition, t);
+					yield return null;
+				}
+
+                g.transform.parent = gamePieces.transform;
+
+				StartCoroutine(CheckForWinner());
+
+				// wait until winning check is done
+				while(isCheckingForWinner)
+					yield return null;
+
+				isPlayerOneTurn = !isPlayerOneTurn;
+				//isPlayersTurn = !isPlayersTurn;
+			}
+
+			isDropping = false;
+
+			yield return 0;
+		}
+
+		/// <summary>
+		/// Check for Winner
+		/// </summary>
+		IEnumerator CheckForWinner()
+		{
+			isCheckingForWinner = true;
+
+			for(int x = 0; x < numColumns; x++)
+			{
+				for(int y = 0; y < numRows; y++)
+				{
+					// Get the Laymask to Raycast against, if its Players turn only include
+					// Layermask Blue otherwise Layermask Red
+					int layermask = isPlayerOneTurn ? (1 << 8) : (1 << 9);
+
+					// If its Players turn ignore red as Starting piece and wise versa
+					if(gameBoard[x, y] != (isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red))
 					{
-						if (string.IsNullOrEmpty(error))
-						{
-							GameState.MatchStates[matchState.Identifier] = matchState;
-						}
+						continue;
+					}
 
-						if (OnCurrentMatchStateAvailable == null)
-						{
-							UnconsumedCurrentMatchState = matchState;
-							UnconsumedCurrentMatchStateError = error;
-						}
-						else
-						{
-							OnCurrentMatchStateAvailable(error, matchState);
-						}
-					});
-			}
-			SaveLocal();
-		}
+					// shoot a ray of length 'numPiecesToWin - 1' to the right to test horizontally
+					RaycastHit2D[] hitsHorz = Physics2D.RaycastAll(
+						new Vector2(x, y * -1), 
+						Vector2.right, 
+						numPiecesToWin - 1, 
+						layermask);
 
-		// Change the users name and make appropriate changes over network.
-		public void UpdateName(string name)
-		{
-			GameState.Self = new GameState.PlayerInfo(GameState.Self.Id, name);
-			IdentityRegistered = false;
-			SaveLocal();
-			SyncLocallySaved();
-		}
-
-		public List<GameState.MatchState> getMatchStates()
-		{
-			return new List<GameState.MatchState>(GameState.MatchStates.Values);
-		}
-
-		public List<GameState.PlayerInfo> getFriends()
-		{
-			return new List<GameState.PlayerInfo>(GameState.Friends.Values);
-		}
-
-		public GameState.PlayerInfo GetFriendIfKnown(string id)
-		{
-			if (GameState.Friends.ContainsKey(id))
-			{
-				return GameState.Friends[id];
-			}
-			else
-			{
-				var unknownPlayer = new GameState.PlayerInfo(id, "unknown player");
-				GameState.Friends[id] = unknownPlayer;
-				return unknownPlayer;
-			}
-		}
-
-		// Load the board scene, make sure that the match is up to date, and inform any listeners
-		// (particularly, the board scene) that it is available.
-		public void LoadMatch(GameState.MatchState matchState)
-		{
-			Application.LoadLevel("Board");
-			if (matchState.Opponent.IsLocalOpponent())
-			{
-				if (OnCurrentMatchStateAvailable == null)
-				{
-					UnconsumedCurrentMatchState = matchState;
-					UnconsumedCurrentMatchStateError = null;
-				}
-				else
-				{
-					OnCurrentMatchStateAvailable(null, matchState);
-				}
-			}
-			else
-			{
-				NetworkManager.Instance.LoadMatchAsync(matchState.Identifier, (error, loadedMatchState) =>
+					// return true (won) if enough hits
+					if(hitsHorz.Length == numPiecesToWin)
 					{
-						if (string.IsNullOrEmpty(error))
-						{
-							GameState.MatchStates[loadedMatchState.Identifier] = loadedMatchState;
-						}
-						if (OnCurrentMatchStateAvailable == null)
-						{
-							UnconsumedCurrentMatchState = loadedMatchState;
-							UnconsumedCurrentMatchStateError = error;
-						}
-						else
-						{
-							OnCurrentMatchStateAvailable(error, loadedMatchState);
-						}
-						SaveLocal();
-					});
-			}
-		}
+						gameOver = true;
+						break;
+					}
 
-		// Load the board scene, create a new match against the given opponent, and inform any
-		// listeners (particularly, the board scene) that it is available.
-		public void LoadNewMatch(GameState.PlayerInfo opponent)
-		{
-			Application.LoadLevel("Board");
-			if (opponent.IsLocalOpponent())
-			{
-				var matchState = new GameState.MatchState(opponent, BoardState.InitialBoardNotation, BoardState.InitialMoves, true, opponent.Id + DateTime.Now.ToUniversalTime().ToString());
-				GameState.MatchStates[matchState.Identifier] = matchState;
-				if (OnCurrentMatchStateAvailable == null)
-				{
-					UnconsumedCurrentMatchState = matchState;
-					UnconsumedCurrentMatchStateError = null;
-				}
-				else
-				{
-					OnCurrentMatchStateAvailable(UnconsumedCurrentMatchStateError, matchState);
-				}
-				SaveLocal();
-				SyncLocallySaved();
-			}
-			else
-			{
-				NetworkManager.Instance.NewMatchAsync(opponent, (newMatchError, matchId) =>
+					// shoot a ray up to test vertically
+					RaycastHit2D[] hitsVert = Physics2D.RaycastAll(
+						new Vector2(x, y * -1), 
+						Vector2.up, 
+						numPiecesToWin - 1,
+						layermask);
+
+					if(hitsVert.Length == numPiecesToWin)
 					{
-						if (string.IsNullOrEmpty(newMatchError))
-						{
-							NetworkManager.Instance.LoadMatchAsync(matchId, (loadMatchError, loadedMatchState) =>
-								{
-									GameState.MatchStates[loadedMatchState.Identifier] = loadedMatchState;
-									if (OnCurrentMatchStateAvailable == null)
-									{
-										UnconsumedCurrentMatchState = loadedMatchState;
-										UnconsumedCurrentMatchStateError = null;
-									}
-									else
-									{
-										OnCurrentMatchStateAvailable(loadMatchError, loadedMatchState);
-									}
-									SaveLocal();
-									SyncLocallySaved();
-								});
-						}
-						else
-						{
-							OnCurrentMatchStateAvailable(newMatchError, null);
-						}
-					});
-			}
-		}
+						gameOver = true;
+						break;
+					}
 
-		public GameState.MatchState GetCurrentMatchState()
-		{
-			if (GameState == null)
+					// test diagonally
+					if(allowDiagonally)
+					{
+						// calculate the length of the ray to shoot diagonally
+						float length = Vector2.Distance(new Vector2(0, 0), new Vector2(numPiecesToWin - 1, numPiecesToWin - 1));
+
+						RaycastHit2D[] hitsDiaLeft = Physics2D.RaycastAll(
+							new Vector3(x, y * -1), 
+							new Vector3(-1 , 1), 
+							length, 
+							layermask);
+
+						if(hitsDiaLeft.Length == numPiecesToWin)
+						{
+							gameOver = true;
+							break;
+						}
+
+						RaycastHit2D[] hitsDiaRight = Physics2D.RaycastAll(
+							new Vector3(x, y * -1), 
+							new Vector3(1 , 1), 
+							length, 
+							layermask);
+
+						if(hitsDiaRight.Length == numPiecesToWin)
+						{
+							gameOver = true;
+							break;
+						}
+					}
+
+					yield return null;
+				}
+
+				yield return null;
+			}
+
+			// if Game Over update the winning text to show who has won
+			if(gameOver == true)
 			{
-				return null;
+				winningText.GetComponent<TextMesh>().text = isPlayerOneTurn ? bluePlayerWonText : redPlayerWonText;
 			}
-			return GameState.getWithIdentifier(MostRecentMatchIdentifier);
+			else 
+			{
+				// check if there are any empty cells left, if not set game over and update text to show a draw
+				if(!FieldContainsEmptyCell())
+				{
+					gameOver = true;
+					winningText.GetComponent<TextMesh>().text = drawText;
+				}
+			}
+
+			isCheckingForWinner = false;
+
+			yield return 0;
 		}
 
-		public void DereferenceGameState()
+		/// <summary>
+		/// check if the field contains an empty cell
+		/// </summary>
+		/// <returns><c>true</c>, if it contains empty cell, <c>false</c> otherwise.</returns>
+		bool FieldContainsEmptyCell()
 		{
-			GameState = null;
+			for(int x = 0; x < numColumns; x++)
+			{
+				for(int y = 0; y < numRows; y++)
+				{
+					if(gameBoard[x, y] == (int)Piece.Empty)
+						return true;
+				}
+			}
+			return false;
 		}
+
+		bool inTopRowBounds(float x, float y) {
+			return x > 0.5 && x < numColumns - 1.5 && y > -0.5 && y < 0.5;
+		}
+
+		bool inBottomRowBounds(float x, float y) {
+			return x > 0.5 && x < numColumns - 1.5 && y > -numColumns && y < -numColumns + 1.5;
+		}
+
+		bool inLeftRowBounds(float x, float y) {
+			return x > - 0.5 && x < 0.5 && y > -numColumns + 1.5 && y < -0.5;
+		}
+
+		bool inRightRowBounds(float x, float y) {
+			return x > numColumns - 1.5 && x < numColumns - 0.5 && y > -numColumns + 1.5 && y < -0.5;
+		}
+
+		int nextEmptySpotInColumnUp(int column) {
+			int nextEmptyRow = -1;
+			for (int row = numRows - 1; row >= 0; row--) {
+				if (gameBoard [column, row] == 0) {
+					nextEmptyRow = row;
+					if (nextEmptyRow == 0) {
+						return nextEmptyRow;
+					}
+				} else if (nextEmptyRow != -1) {
+					return nextEmptyRow;
+				} else {
+					return nextEmptyRow;
+				}
+			}
+			return nextEmptyRow;
+		}
+
+		int nextEmptySpotInColumnDown(int column) {
+			int nextEmptyRow = -1;
+			for (int row = 0; row < numRows; row++) {
+				if (gameBoard [column, row] == 0) {
+					nextEmptyRow = row;
+					if (nextEmptyRow == numRows - 1) {
+						return nextEmptyRow;
+					}
+				} else if (nextEmptyRow != -1) {
+					return nextEmptyRow;
+				} else {
+					return nextEmptyRow;
+				}
+			}
+			return nextEmptyRow;
+		}
+
+		int nextEmptySpotInRowRight(int row) {
+			int nextEmptyCol = -1;
+			for (int column = 0; column < numColumns; column++) {
+				if (gameBoard [column, row] == 0) {
+					nextEmptyCol = column;
+					if (nextEmptyCol == numColumns - 1) {
+						return nextEmptyCol;
+					}
+				} else if (nextEmptyCol != -1) {
+					return nextEmptyCol;
+				} else {
+					return nextEmptyCol;
+				}
+			}
+			return nextEmptyCol;
+		}
+
+		int nextEmptySpotInRowLeft(int row) {
+			int nextEmptyCol = -1;
+			for (int column = numColumns - 1; column >= 0; column--) {
+				if (gameBoard [column, row] == 0) {
+					nextEmptyCol = column;
+					if (nextEmptyCol == 0) {
+						return nextEmptyCol;
+					}
+				} else if (nextEmptyCol != -1) {
+					return nextEmptyCol;
+				} else {
+					return nextEmptyCol;
+				}
+			}
+			return nextEmptyCol;
+		}
+
+        //When this is called we reset the game instance to a blank state
+        public void ClearInstance()
+        {
+            for (int i = 0; i < gameBoard.Length; i++)
+            {
+
+            }
+
+        }
+
+		//		bool squaresMatchPiece(int piece, int row, int col, int moveX, int moveY) {
+		//			// bail out early if we can't win from here
+		//			if (row + (moveY * 3) < 0) { return false; }
+		//			if (row + (moveY * 3) >= numRows) { return false; }
+		//			if (col + (moveX * 3) < 0) { return false; }
+		//			if (col + (moveX * 3) >= numColumns) { return false; }
+		//
+		//			// still here? Check every square
+		//			if (field[col, row] != piece) { return false; }
+		//			if (field[col + moveX,row + moveY] != piece) { return false; }
+		//			if (field[col + (moveX * 2), row + (moveY * 2)] != piece) { return false; }
+		//			if (field[col + (moveX * 3), row + (moveY * 3)] != piece) { return false; }
+		//
+		//			return true;
+		//		}
+
+		//		/// <summary>
+		//		/// Check for Winner
+		//		/// </summary>
+		//		IEnumerator Won()
+		//		{
+		//			int currentPlayer = 1;
+		//
+		//			isCheckingForWinner = true;
+		//
+		//			for(int col = 0; col < numColumns; col++)
+		//			{
+		//				for(int row = 0; row < numRows; row++)
+		//				{
+		//					if (squaresMatchPiece(currentPlayer, row, col, moveX: 1, moveY: 0)) {
+		//						gameOver = true;
+		//						break;
+		//					} else if (squaresMatchPiece(currentPlayer, row, col, moveX: 0, moveY: 1)) {
+		//						gameOver = true;
+		//						break;
+		//					} else if (squaresMatchPiece(currentPlayer, row, col, moveX: 1, moveY: 1)) {
+		//						gameOver = true;
+		//						break;
+		//					} else if (squaresMatchPiece(currentPlayer, row, col, moveX: 1, moveY: -1)) {
+		//						gameOver = true;
+		//						break;
+		//					}
+		//
+		//					yield return null;
+		//				}
+		//
+		//				yield return null;
+		//			}
+		//
+		//			// if Game Over update the winning text to show who has won
+		//			if(gameOver == true)
+		//			{
+		//				winningText.GetComponent<TextMesh>().text = isPlayersTurn ? playerWonText : playerLoseText;
+		//			}
+		//			else 
+		//			{
+		//				// check if there are any empty cells left, if not set game over and update text to show a draw
+		//				if(!FieldContainsEmptyCell())
+		//				{
+		//					gameOver = true;
+		//					winningText.GetComponent<TextMesh>().text = drawText;
+		//				}
+		//			}
+		//
+		//			isCheckingForWinner = false;
+		//
+		//			yield return 0;
+		//		}
 	}
 }
