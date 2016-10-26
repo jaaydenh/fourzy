@@ -14,12 +14,12 @@ namespace ConnectFour
 			Red = 2
 		}
 
-		enum Direction {Up, Down, Left, Right};
+		public enum Direction {Up, Down, Left, Right};
 
 		[Range(3, 8)]
-		public int numRows = 6;
+		public int numRows = 8;
 		[Range(3, 8)]
-		public int numColumns = 7;
+		public int numColumns = 8;
 
 		[Tooltip("How many pieces have to be connected to win.")]
 		public int numPiecesToWin = 4;
@@ -36,6 +36,7 @@ namespace ConnectFour
 		public GameObject pieceRed;
 		public GameObject pieceBlue;
 		public GameObject pieceEmpty;
+        public GameObject cornerSpot;
 
 		public GameObject winningText;
 		public string bluePlayerWonText = "Blue Player Won!";
@@ -68,6 +69,9 @@ namespace ConnectFour
 
 		bool gameOver = false;
 		bool isCheckingForWinner = false;
+
+        int spacing = 1; //100
+        int offset = 0; //4
 
         //Singleton
         private static GameManager _instance;
@@ -140,8 +144,47 @@ namespace ConnectFour
 				for(int row = 0; row < numRows; row++)
 				{
 					gameBoard[col, row] = (int)Piece.Empty;
-                    GameObject g = Instantiate(pieceEmpty, new Vector3(col, row * -1, 20), Quaternion.identity) as GameObject;
-                    g.transform.parent = gamePieces.transform;
+                    if (col + row == 0)
+                    {
+                        GameObject ula = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        ula.transform.parent = gamePieces.transform;
+                        ula.GetComponent<CornerSpot>().downArrowActive = true;
+                        ula.GetComponent<CornerSpot>().rightArrowActive = true;
+                        ula.GetComponent<CornerSpot>().row = 0;
+                        ula.GetComponent<CornerSpot>().column = 0;
+                    }
+                    else if (col == 0 && row == numRows - 1)
+                    {
+                        GameObject lla = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        lla.transform.parent = gamePieces.transform;
+                        lla.GetComponent<CornerSpot>().rightArrowActive = true;
+                        lla.GetComponent<CornerSpot>().upArrowActive = true;
+                        lla.GetComponent<CornerSpot>().row = numRows - 1;
+                        lla.GetComponent<CornerSpot>().column = 0;
+                    }
+                    else if (col * row == (numColumns - 1) * (numRows - 1))
+                    { 
+                        GameObject bra = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        bra.transform.parent = gamePieces.transform;
+                        bra.GetComponent<CornerSpot>().upArrowActive = true;
+                        bra.GetComponent<CornerSpot>().leftArrowActive = true;
+                        bra.GetComponent<CornerSpot>().row = numRows - 1;
+                        bra.GetComponent<CornerSpot>().column = numColumns - 1;
+                    }
+                    else if (col == numColumns - 1 && row == 0)
+                    {
+                        GameObject ura = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        ura.transform.parent = gamePieces.transform;
+                        ura.GetComponent<CornerSpot>().downArrowActive = true;
+                        ura.GetComponent<CornerSpot>().leftArrowActive = true;
+                        ura.GetComponent<CornerSpot>().row = 0;
+                        ura.GetComponent<CornerSpot>().column = numColumns - 1;
+                    }
+                    else
+                    {   
+                        GameObject g = Instantiate(pieceEmpty, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        g.transform.parent = gamePieces.transform;
+                    }
 				}
 			}
 
@@ -149,8 +192,7 @@ namespace ConnectFour
 			gameOver = false;
 
 			// center camera 
-			Camera.main.transform.position = new Vector3(
-				(numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
+			Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
 
 			winningText.transform.position = new Vector3(
 				(numColumns-1) / 2.0f, -((numRows-1) / 2.0f) + 1, winningText.transform.position.z);
@@ -189,7 +231,8 @@ namespace ConnectFour
 					btnPlayAgainTouching = true;
 					
 					//CreateField();
-					Application.LoadLevel(0);
+
+					//Application.LoadLevel(0);
 				}
 			}
 			else
@@ -224,29 +267,28 @@ namespace ConnectFour
 
             if(isCurrentPlayerTurn)
 			{
-				if (Input.GetMouseButtonDown (0) && !mouseButtonPressed && !isDropping) {
+				if (Input.GetMouseButtonDown(0) && !mouseButtonPressed && !isDropping) {
 					mouseButtonPressed = true;
-					Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-                    Debug.Log("posX:" + pos.x);
-                    Debug.Log("posY:" + pos.y);
+					Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                    // round to a grid cell
+                    int column = Mathf.RoundToInt(pos.x);
+                    int row = Mathf.RoundToInt(pos.y * -1);
+
 					if (inTopRowBounds (pos.x, pos.y)) {
-                        //gameObjectTurn = SpawnPiece (pos.x, pos.y);
-                        StartCoroutine (movePiece (pos.x, pos.y, Direction.Down));
+                        StartCoroutine(movePiece(column, row, Direction.Down));
 					} else if (inBottomRowBounds(pos.x, pos.y)) {
-                        //gameObjectTurn = SpawnPiece (pos.x, pos.y);
-                        StartCoroutine (movePiece (pos.x, pos.y, Direction.Up));
+                        StartCoroutine(movePiece(column, row, Direction.Up));
 					} else if (inRightRowBounds(pos.x, pos.y)) {
-                        //gameObjectTurn = SpawnPiece (pos.x, pos.y);
-                        StartCoroutine (movePiece (pos.x, pos.y, Direction.Left));
+                        StartCoroutine(movePiece(column, row, Direction.Left));
 					} else if (inLeftRowBounds(pos.x, pos.y)) {
-                        //gameObjectTurn = SpawnPiece (pos.x, pos.y);
-                        StartCoroutine (movePiece (pos.x, pos.y, Direction.Right));
+                        StartCoroutine(movePiece(column, row, Direction.Right));
 					}
 				} else {
 					mouseButtonPressed = false;
 				}
-			} else { // TODO: inform the player it is not their turn
-
+			} else { 
+                // TODO: inform the player it is not their turn
             }
 		}
             
@@ -256,18 +298,13 @@ namespace ConnectFour
         /// <param name="posX">x position</param>
         /// <param name="posY">y position</param>
         /// <param name="direction">direction</param>
-        IEnumerator movePiece(float posX, float posY, Direction direction)
+        public IEnumerator movePiece(int column, int row, Direction direction)
 		{
 			isDropping = true;
-			Vector3 endPosition = new Vector3();
-
-			// round to a grid cell
-			int column = Mathf.RoundToInt(posX);
-			int row = Mathf.RoundToInt(posY * -1);
             int movePosition = -1;
-            Vector3 startPosition = new Vector3(column, Mathf.RoundToInt(posY), 10);
+            Vector3 startPosition = new Vector3(column, row * -1, 10);
+            Vector3 endPosition = new Vector3();
 
-			// is there a free spot in the selected column?
 			bool foundFreeSpot = false;
 			if (direction == Direction.Down) {
 				int nextRow = nextEmptySpotInColumnDown(column);
@@ -303,6 +340,14 @@ namespace ConnectFour
 				}
 			}
 
+            GameObject[] gos;
+            gos = GameObject.FindGameObjectsWithTag("Arrow");
+
+            foreach (GameObject go in gos) {
+                SpriteRenderer sr = go.GetComponentInChildren<SpriteRenderer>();
+                sr.enabled = false;
+            }
+
             if(foundFreeSpot)
 			{
                 Debug.Log("Direction: " + direction.GetHashCode());
@@ -329,10 +374,8 @@ namespace ConnectFour
                             }
                         });
                 }
-
-                Debug.Log("posX: " + posX + ", posY: " + posY);
-                Debug.Log("Start Position: " + startPosition);
-                GameObject g = SpawnPiece(posX, posY);
+                    
+                GameObject g = SpawnPiece(column, row * -1);
 
 				float distance = Vector3.Distance(startPosition, endPosition);
 
@@ -358,6 +401,12 @@ namespace ConnectFour
 				isPlayerOneTurn = !isPlayerOneTurn;
 				//isPlayersTurn = !isPlayersTurn;
 			}
+               
+            foreach (GameObject go in gos) {
+                go.SetActive(false);
+                SpriteRenderer sr = go.GetComponentInChildren<SpriteRenderer>();
+                sr.enabled = true;
+            }
 
 			isDropping = false;
 

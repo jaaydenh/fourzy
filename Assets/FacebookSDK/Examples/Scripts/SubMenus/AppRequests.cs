@@ -99,7 +99,7 @@ namespace Facebook.Unity.Example
                         this.requestMessage,
                         action.Value,
                         this.requestObjectID,
-                        string.IsNullOrEmpty(this.requestTo) ? null : this.requestTo.Split(','),
+                        this.requestTo != null ? this.requestTo.Split(',') : null,
                         this.requestData,
                         this.requestTitle,
                         this.HandleResult);
