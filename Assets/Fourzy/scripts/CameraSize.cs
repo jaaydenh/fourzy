@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ConnectFour
+namespace Fourzy
 {
 	public class CameraSize : MonoBehaviour 
 	{

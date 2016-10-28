@@ -1,28 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace ConnectFour
+namespace Fourzy
 {
     public class MoveArrow : MonoBehaviour {
 
-        public ConnectFour.GameManager.Direction direction;
-    	// Use this for initialization
-    	void Start () {
-            
-    	}
-    	
-        IEnumerator OnMouseDown() {
-            Debug.Log("movearrow");
-            int row = gameObject.GetComponentInParent<CornerSpot>().row;
-            int column = gameObject.GetComponentInParent<CornerSpot>().column;
-            yield return StartCoroutine(GameManager.instance.movePiece(column, row, direction));
+        public Fourzy.GameManager.Direction direction;
+        bool mouseButtonPressed = false;
 
-            //gameObject.GetComponentInParent<CornerSpot>().HideArrows();
+        void OnMouseDown() {
+            Debug.Log("mouseButtonPressed: " + mouseButtonPressed);
+
+            if (!mouseButtonPressed)
+            {
+                mouseButtonPressed = true;
+                int row = gameObject.GetComponentInParent<CornerSpot>().row;
+                int column = gameObject.GetComponentInParent<CornerSpot>().column;
+                StartCoroutine(GameManager.instance.movePiece(column, row, direction));
+            }
         }
-
-    	// Update is called once per frame
-    	void Update () {
-    	
+            
+    	void Start () {
+            GameManager.OnMoved += setMouseButtonPressed;
     	}
+
+        void setMouseButtonPressed() {
+            mouseButtonPressed = false;
+        }
     }
 }

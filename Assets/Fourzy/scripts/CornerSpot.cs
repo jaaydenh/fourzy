@@ -14,7 +14,6 @@ public class CornerSpot : MonoBehaviour {
     GameObject UpArrow;
     GameObject DownArrow;
 
-	// Use this for initialization
 	void Start () {
         RightArrow = GameObject.Find("RightArrow");
         LeftArrow = GameObject.Find("LeftArrow");
@@ -32,7 +31,6 @@ public class CornerSpot : MonoBehaviour {
     }
 
     void OnMouseDown() {
-        Debug.Log("Corner spot tapped");
         if (rightArrowActive)
         {
             RightArrow.SetActive(true);

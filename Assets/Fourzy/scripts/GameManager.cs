@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using GameSparks.Api.Requests;
 
-namespace ConnectFour
+namespace Fourzy
 {
     public class GameManager : MonoBehaviour
 	{
@@ -51,6 +51,9 @@ namespace ConnectFour
 		Color btnPlayAgainHoverColor = new Color(255, 143,4);
 
 		GameObject gamePieces;
+
+        public delegate void MoveAction();
+        public static event MoveAction OnMoved;
 
 		/// <summary>
 		/// The Gameboard.
@@ -124,7 +127,7 @@ namespace ConnectFour
             isLoading = false;
         }
 
-        void CreateGameBoard() {
+       public void CreateGameBoard() {
 			winningText.SetActive(false);
 			btnPlayAgain.SetActive(false);
 
@@ -148,6 +151,7 @@ namespace ConnectFour
                     {
                         GameObject ula = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
                         ula.transform.parent = gamePieces.transform;
+                        //ula.transform.SetAsLastSibling();
                         ula.GetComponent<CornerSpot>().downArrowActive = true;
                         ula.GetComponent<CornerSpot>().rightArrowActive = true;
                         ula.GetComponent<CornerSpot>().row = 0;
@@ -157,6 +161,7 @@ namespace ConnectFour
                     {
                         GameObject lla = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
                         lla.transform.parent = gamePieces.transform;
+                        //lla.transform.SetAsLastSibling();
                         lla.GetComponent<CornerSpot>().rightArrowActive = true;
                         lla.GetComponent<CornerSpot>().upArrowActive = true;
                         lla.GetComponent<CornerSpot>().row = numRows - 1;
@@ -166,6 +171,7 @@ namespace ConnectFour
                     { 
                         GameObject bra = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
                         bra.transform.parent = gamePieces.transform;
+                        //bra.transform.SetAsLastSibling();
                         bra.GetComponent<CornerSpot>().upArrowActive = true;
                         bra.GetComponent<CornerSpot>().leftArrowActive = true;
                         bra.GetComponent<CornerSpot>().row = numRows - 1;
@@ -175,6 +181,7 @@ namespace ConnectFour
                     {
                         GameObject ura = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
                         ura.transform.parent = gamePieces.transform;
+                        //ura.transform.SetAsLastSibling();
                         ura.GetComponent<CornerSpot>().downArrowActive = true;
                         ura.GetComponent<CornerSpot>().leftArrowActive = true;
                         ura.GetComponent<CornerSpot>().row = 0;
@@ -202,18 +209,18 @@ namespace ConnectFour
 		}
 
 		/// <summary>
-		/// Spawns a piece at mouse position above the first row
+		/// Spawns a gamepiece at the given column and row
 		/// </summary>
 		/// <returns>The piece.</returns>
         GameObject SpawnPiece(float posX, float posY)
 		{          
-			GameObject g = Instantiate(
+			GameObject gamePiece = Instantiate(
 				isPlayerOneTurn ? pieceBlue : pieceRed,
 				new Vector3(Mathf.FloorToInt(posX + 0.5f), 
 					Mathf.FloorToInt(posY + 0.5f), 10), // spawn it above the first row
 					Quaternion.identity) as GameObject;
 
-			return g;
+            return gamePiece;
 		}
 
 		void UpdatePlayAgainButton()
@@ -230,9 +237,7 @@ namespace ConnectFour
 				{
 					btnPlayAgainTouching = true;
 					
-					//CreateField();
-
-					//Application.LoadLevel(0);
+                    CreateGameBoard();
 				}
 			}
 			else
@@ -350,10 +355,10 @@ namespace ConnectFour
 
             if(foundFreeSpot)
 			{
-                Debug.Log("Direction: " + direction.GetHashCode());
-                Debug.Log("Direction: " + direction);
-                Debug.Log("Move Position: " + movePosition);
-                Debug.Log("challengeInstanceId: " + challengeInstanceId);
+//                Debug.Log("Direction: " + direction.GetHashCode());
+//                Debug.Log("Direction: " + direction);
+//                Debug.Log("Move Position: " + movePosition);
+//                Debug.Log("challengeInstanceId: " + challengeInstanceId);
                 if (isMultiplayer)
                 {
                     new LogChallengeEventRequest().SetChallengeInstanceId(challengeInstanceId)
@@ -410,6 +415,8 @@ namespace ConnectFour
 
 			isDropping = false;
 
+            if(OnMoved != null)
+                OnMoved();
 			yield return 0;
 		}
 

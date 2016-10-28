@@ -4,7 +4,7 @@ using GameSparks.Api.Requests;
 using System.Collections.Generic;
 using System;
 
-namespace ConnectFour
+namespace Fourzy
 {
 	public class ChallengeManager : MonoBehaviour
 	{
