@@ -72,9 +72,10 @@ namespace Fourzy
 							go.gameObject.transform.SetParent(inviteGrid.transform);
 
 							//Update all the gameObject's variables
-							go.GetComponent<GameInvite>().challengeId = challenge.ChallengeId;
-							go.GetComponent<GameInvite>().inviteName = challenge.Challenger.Name;
-							go.GetComponent<GameInvite>().inviteExpiry = challenge.EndDate.ToString();
+                            GameInvite gameInvite = go.GetComponent<GameInvite>();
+                            gameInvite.challengeId = challenge.ChallengeId;
+                            gameInvite.inviteName = challenge.Challenger.Name;
+                            gameInvite.inviteExpiry = challenge.EndDate.ToString();
 
 							//Add the gameObject to the list of friends
 							gameInvites.Add(go);
@@ -109,24 +110,25 @@ namespace Fourzy
 							GameObject go = Instantiate(activeGamePrefab) as GameObject;
 							go.gameObject.transform.SetParent(activeGameGrid.transform);
 
+                            ActiveGame activeGame = go.GetComponent<ActiveGame>();
 							//Set our variables
-							go.GetComponent<ActiveGame>().challengeId = challenge.ChallengeId;
-							go.GetComponent<ActiveGame>().turnStatus = challenge.NextPlayer;
+                            activeGame.challengeId = challenge.ChallengeId;
+                            activeGame.turnStatus = challenge.NextPlayer;
 
 							//For every player in the collection of players who have accepted the challenge
 							foreach (var player in challenge.Accepted)
 							{
 								//Add their names and their Ids to the list i each respective Running Game Entry
-								go.GetComponent<ActiveGame>().playerNames.Add(player.Name);
-								go.GetComponent<ActiveGame>().playerIds.Add(player.Id);
+                                activeGame.playerNames.Add(player.Name);
+                                activeGame.playerIds.Add(player.Id);
 							}
 
-							go.GetComponent<ActiveGame>().challengerId = challenge.Challenger.Id;
+                            activeGame.challengerId = challenge.Challenger.Id;
 
 							//We've saved the gameBoard in the cloud in ScriptData, we saved it as a String List and we need to convert it to a Unity Array
                             //go.GetComponent<ActiveGame>().gameBoard = challenge.ScriptData.GetString("gameBoard");
                             int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
-                            go.GetComponent<ActiveGame>().gameBoard = gameboard;
+                            activeGame.gameBoard = gameboard;
 //							int[] data1 = challenge.ScriptData.GetIntList("gameBoard").ToArray();
 //							List<string> data2 = challenge.ScriptData.GetStringList("gameBoard");
 //							String[] data3 = challenge.ScriptData.GetStringList("gameBoard").ToArray();

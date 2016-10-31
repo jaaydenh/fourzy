@@ -90,6 +90,16 @@ namespace Fourzy
             }
         }
             
+        private void OnEnable()
+        {
+            UserInputHandler.OnTap += processPlayerInput;
+        }
+
+        private void OnDisable()
+        {
+            UserInputHandler.OnTap -= processPlayerInput;
+        }
+
 		void Start() 
 		{
 			int max = Mathf.Max(numRows, numColumns);
@@ -133,12 +143,13 @@ namespace Fourzy
 
 			isLoading = true;
 
-            gamePieces = GameObject.Find ("EmptySpot");
+            gamePieces = GameObject.Find ("GamePieces");
+
             if(gamePieces != null)
 			{
                 DestroyImmediate(gamePieces);
 			}
-            gamePieces = new GameObject("EmptySpot");
+            gamePieces = new GameObject("GamePieces");
 
 			// create an empty gameboard and instantiate the cells
 			gameBoard = new int[numColumns, numRows];
@@ -149,43 +160,44 @@ namespace Fourzy
 					gameBoard[col, row] = (int)Piece.Empty;
                     if (col + row == 0)
                     {
-                        GameObject ula = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
-                        ula.transform.parent = gamePieces.transform;
-                        //ula.transform.SetAsLastSibling();
-                        ula.GetComponent<CornerSpot>().downArrowActive = true;
-                        ula.GetComponent<CornerSpot>().rightArrowActive = true;
-                        ula.GetComponent<CornerSpot>().row = 0;
-                        ula.GetComponent<CornerSpot>().column = 0;
+                        GameObject g = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        g.transform.parent = gamePieces.transform;
+                        CornerSpot spot = g.GetComponent<CornerSpot>();
+                        spot.downArrowActive = true;
+                        spot.downArrowActive = true;
+                        spot.rightArrowActive = true;
+                        spot.row = 0;
+                        spot.column = 0;
                     }
                     else if (col == 0 && row == numRows - 1)
                     {
-                        GameObject lla = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
-                        lla.transform.parent = gamePieces.transform;
-                        //lla.transform.SetAsLastSibling();
-                        lla.GetComponent<CornerSpot>().rightArrowActive = true;
-                        lla.GetComponent<CornerSpot>().upArrowActive = true;
-                        lla.GetComponent<CornerSpot>().row = numRows - 1;
-                        lla.GetComponent<CornerSpot>().column = 0;
+                        GameObject g = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        g.transform.parent = gamePieces.transform;
+                        CornerSpot spot = g.GetComponent<CornerSpot>();
+                        spot.rightArrowActive = true;
+                        spot.upArrowActive = true;
+                        spot.row = numRows - 1;
+                        spot.column = 0;
                     }
                     else if (col * row == (numColumns - 1) * (numRows - 1))
                     { 
-                        GameObject bra = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
-                        bra.transform.parent = gamePieces.transform;
-                        //bra.transform.SetAsLastSibling();
-                        bra.GetComponent<CornerSpot>().upArrowActive = true;
-                        bra.GetComponent<CornerSpot>().leftArrowActive = true;
-                        bra.GetComponent<CornerSpot>().row = numRows - 1;
-                        bra.GetComponent<CornerSpot>().column = numColumns - 1;
+                        GameObject g = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        g.transform.parent = gamePieces.transform;
+                        CornerSpot spot = g.GetComponent<CornerSpot>();
+                        spot.upArrowActive = true;
+                        spot.leftArrowActive = true;
+                        spot.row = numRows - 1;
+                        spot.column = numColumns - 1;
                     }
                     else if (col == numColumns - 1 && row == 0)
                     {
-                        GameObject ura = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
-                        ura.transform.parent = gamePieces.transform;
-                        //ura.transform.SetAsLastSibling();
-                        ura.GetComponent<CornerSpot>().downArrowActive = true;
-                        ura.GetComponent<CornerSpot>().leftArrowActive = true;
-                        ura.GetComponent<CornerSpot>().row = 0;
-                        ura.GetComponent<CornerSpot>().column = numColumns - 1;
+                        GameObject g = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        g.transform.parent = gamePieces.transform;
+                        CornerSpot spot = g.GetComponent<CornerSpot>();
+                        spot.downArrowActive = true;
+                        spot.leftArrowActive = true;
+                        spot.row = 0;
+                        spot.column = numColumns - 1;
                     }
                     else
                     {   
@@ -252,13 +264,7 @@ namespace Fourzy
 		}
 
 		// Update is called once per frame
-		void Update () 
-		{
-			if(isLoading)
-				return;
-
-			if(isCheckingForWinner)
-				return;
+		void Update () {
 
 			if(gameOver)
 			{
@@ -269,34 +275,48 @@ namespace Fourzy
 
 				return;
 			}
+		}
+
+        private void processPlayerInput(Vector3 mousePosition) {
+
+            if(isLoading)
+                return;
+
+            if(isCheckingForWinner)
+                return;
+            
+            if(gameOver)
+            {
+                return;
+            }
 
             if(isCurrentPlayerTurn)
-			{
-				if (Input.GetMouseButtonDown(0) && !mouseButtonPressed && !isDropping) {
-					mouseButtonPressed = true;
-					Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            {
+                if (!isDropping) {
+                    mouseButtonPressed = true;
+                    Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
 
                     // round to a grid cell
                     int column = Mathf.RoundToInt(pos.x);
                     int row = Mathf.RoundToInt(pos.y * -1);
 
-					if (inTopRowBounds (pos.x, pos.y)) {
+                    if (inTopRowBounds (pos.x, pos.y)) {
                         StartCoroutine(movePiece(column, row, Direction.Down));
-					} else if (inBottomRowBounds(pos.x, pos.y)) {
+                    } else if (inBottomRowBounds(pos.x, pos.y)) {
                         StartCoroutine(movePiece(column, row, Direction.Up));
-					} else if (inRightRowBounds(pos.x, pos.y)) {
+                    } else if (inRightRowBounds(pos.x, pos.y)) {
                         StartCoroutine(movePiece(column, row, Direction.Left));
-					} else if (inLeftRowBounds(pos.x, pos.y)) {
+                    } else if (inLeftRowBounds(pos.x, pos.y)) {
                         StartCoroutine(movePiece(column, row, Direction.Right));
-					}
-				} else {
-					mouseButtonPressed = false;
-				}
-			} else { 
+                    }
+                } else {
+                    mouseButtonPressed = false;
+                }
+            } else { 
                 // TODO: inform the player it is not their turn
             }
-		}
-            
+        }
+
 		/// <summary>
 		/// This method searches for a row or column with an empty spot 
 		/// </summary>

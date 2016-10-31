@@ -38,10 +38,11 @@ namespace Fourzy
     					GameObject go = Instantiate(friendEntryPrefab) as GameObject;
     					go.gameObject.transform.SetParent(friendsList.transform);
     					//Update all the gameObject's variables
-    					go.GetComponent<FriendEntry>().userName = friend.DisplayName;
-    					go.GetComponent<FriendEntry>().id = friend.Id;
-    					go.GetComponent<FriendEntry>().isOnline = friend.Online.Value;
-    					go.GetComponent<FriendEntry>().facebookId = friend.ExternalIds.GetString("FB");
+                        FriendEntry friendEntry = go.GetComponent<FriendEntry>();
+                        friendEntry.userName = friend.DisplayName;
+                        friendEntry.id = friend.Id;
+                        friendEntry.isOnline = friend.Online.Value;
+                        friendEntry.facebookId = friend.ExternalIds.GetString("FB");
 
     					//Add the gameObject to the list of friends
     					friends.Add(go);
