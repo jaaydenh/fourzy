@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using GameSparks.Api.Requests;
+using GameSparks.Api.Messages;
+using GameSparks.Core;
 
 namespace Fourzy
 {
@@ -37,20 +40,26 @@ namespace Fourzy
 		public GameObject pieceBlue;
 		public GameObject pieceEmpty;
         public GameObject cornerSpot;
+        public Button rematchButton;
 
-		public GameObject winningText;
+		public Text gameStatusText;
 		public string bluePlayerWonText = "Blue Player Won!";
 		public string redPlayerWonText = "Red Player Won!";
+        public string bluePlayerMoveText = "Blue Player's Move";
+        public string redPlayerMoveText = "Red Player's Move";
 		public string playerWonText = "You Won!";
 		public string playerLoseText = "You Lose!";
 		public string drawText = "Draw!";
 
-		public GameObject btnPlayAgain;
-		bool btnPlayAgainTouching = false;
-		Color btnPlayAgainOrigColor;
-		Color btnPlayAgainHoverColor = new Color(255, 143,4);
+        public Color bluePlayerColor = new Color(0f/255f, 176.0f/255f, 255.0f/255.0f);
+        public Color redPlayerColor = new Color(254.0f/255.0f, 40.0f/255.0f, 81.0f/255.0f);
+
+        public Shader lineShader = null;
 
 		GameObject gamePieces;
+
+        public GameObject gameScreenCanvas;
+        private GameObject UIScreen;
 
         public delegate void MoveAction();
         public static event MoveAction OnMoved;
@@ -68,13 +77,13 @@ namespace Fourzy
 		public bool isPlayerOneTurn = true;
 		bool isLoading = true;
 		bool isDropping = false; 
-		bool mouseButtonPressed = false;
-
 		bool gameOver = false;
 		bool isCheckingForWinner = false;
 
         int spacing = 1; //100
         int offset = 0; //4
+
+        private GameObject gameScreen;
 
         //Singleton
         private static GameManager _instance;
@@ -89,28 +98,82 @@ namespace Fourzy
                 return _instance;
             }
         }
-            
+
+        private void enableGameScreen(bool enabled) {
+            UserInputHandler.inputEnabled = false;
+            gameScreen.SetActive(enabled);
+            StartCoroutine(WaitToEnableInput());
+        }
+
+        IEnumerator WaitToEnableInput() {
+            yield return new WaitForSeconds(1);
+            UserInputHandler.inputEnabled = true;
+        }
+
         private void OnEnable()
         {
             UserInputHandler.OnTap += processPlayerInput;
+            ActiveGame.OnActiveGame += enableGameScreen;
         }
 
         private void OnDisable()
         {
             UserInputHandler.OnTap -= processPlayerInput;
+            ActiveGame.OnActiveGame -= enableGameScreen;
         }
 
 		void Start() 
 		{
-			int max = Mathf.Max(numRows, numColumns);
+//            ChallengeStartedMessage.Listener = (message) => {
+//                var challenge = message.Challenge; 
+//                string messageId = message.MessageId; 
+//                bool? notification = message.Notification; 
+//                GSData scriptData = message.ScriptData; 
+//                string subTitle = message.SubTitle; 
+//                string summary = message.Summary;
+//                string title = message.Title;
+//
+//                Debug.Log(message);
+//                Debug.Log("ChallengeStartedMessage: " + message.Title);
+//            };
+                
+            ChallengeTurnTakenMessage.Listener = (message) => {
+                var challenge = message.Challenge;
+                string messageId = message.MessageId;
+                bool? notification = message.Notification;
+                GSData scriptData = message.ScriptData;
+                Debug.Log("ChallengeTurnTakenMessage:" + message.ScriptData.JSON);
+                string subTitle = message.SubTitle;
+                string summary = message.Summary;
+                string title = message.Title;
+                string who = message.Who;
+            };
+
+            int max = Mathf.Max(numRows, numColumns);
 
 			if(numPiecesToWin > max)
 				numPiecesToWin = max;
 
-			CreateGameBoard();
+			//CreateGameBoard();
 
-			btnPlayAgainOrigColor = btnPlayAgain.GetComponent<Renderer>().material.color;
+            UIScreen = GameObject.Find("UI Screen");
+
+            if (!isMultiplayer)
+            {   
+                gameStatusText.text = isPlayerOneTurn ? bluePlayerMoveText : redPlayerMoveText;
+            }
+
+            rematchButton.gameObject.SetActive(false);
+
+            gameScreen = GameObject.Find("Game Screen");
+            gameScreen.SetActive(false);
 		}
+
+        public void TransitionToGamesList() {
+            enableGameScreen(false);
+            UIScreen.SetActive(true);
+            //ChallengeManager.instance.GetActiveChallenges();
+        }
 
         public void SetGameBoard(int[] boardData) {
             isLoading = true;
@@ -123,12 +186,12 @@ namespace Fourzy
                     gameBoard[x, y] = piece;
                     if (piece == (int)Piece.Blue)
                     {
-                        GameObject g = Instantiate(pieceBlue, new Vector3(x, y * -1, 20), Quaternion.identity) as GameObject;
+                        GameObject g = Instantiate(pieceBlue, new Vector3(x, y * -1, 10), Quaternion.identity) as GameObject;
                         g.transform.parent = gamePieces.transform;
                     }
                     else if (piece == (int)Piece.Red)
                     {
-                        GameObject g = Instantiate(pieceRed, new Vector3(x, y * -1, 20), Quaternion.identity) as GameObject;
+                        GameObject g = Instantiate(pieceRed, new Vector3(x, y * -1, 10), Quaternion.identity) as GameObject;
                         g.transform.parent = gamePieces.transform;
                     }
                 }
@@ -136,20 +199,28 @@ namespace Fourzy
 
             isLoading = false;
         }
+       
+        public void SetMultiplayerGameStatusText() {
+            if (isCurrentPlayerTurn)
+            {
+                gameStatusText.text = "Your Move";
+            }
+            else
+            {
+                gameStatusText.text = "Their Move";
+            }
+        }
 
-       public void CreateGameBoard() {
-			winningText.SetActive(false);
-			btnPlayAgain.SetActive(false);
+        public void CreateGameBoard() {
 
 			isLoading = true;
-
-            gamePieces = GameObject.Find ("GamePieces");
 
             if(gamePieces != null)
 			{
                 DestroyImmediate(gamePieces);
 			}
             gamePieces = new GameObject("GamePieces");
+            gamePieces.transform.parent = gameScreenCanvas.transform;
 
 			// create an empty gameboard and instantiate the cells
 			gameBoard = new int[numColumns, numRows];
@@ -212,12 +283,6 @@ namespace Fourzy
 
 			// center camera 
 			Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
-
-			winningText.transform.position = new Vector3(
-				(numColumns-1) / 2.0f, -((numRows-1) / 2.0f) + 1, winningText.transform.position.z);
-
-			btnPlayAgain.transform.position = new Vector3(
-				(numColumns-1) / 2.0f, -((numRows-1) / 2.0f) - 1, btnPlayAgain.transform.position.z);
 		}
 
 		/// <summary>
@@ -235,45 +300,18 @@ namespace Fourzy
             return gamePiece;
 		}
 
-		void UpdatePlayAgainButton()
-		{
-			RaycastHit hit;
-			//ray shooting out of the camera from where the mouse is
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			
-			if (Physics.Raycast(ray, out hit) && hit.collider.name == btnPlayAgain.name)
-			{
-				btnPlayAgain.GetComponent<Renderer>().material.color = btnPlayAgainHoverColor;
-				//check if the left mouse has been pressed down this frame
-				if (Input.GetMouseButtonDown(0) || Input.touchCount > 0 && btnPlayAgainTouching == false)
-				{
-					btnPlayAgainTouching = true;
-					
-                    CreateGameBoard();
-				}
-			}
-			else
-			{
-				btnPlayAgain.GetComponent<Renderer>().material.color = btnPlayAgainOrigColor;
-			}
-			
-			if(Input.touchCount == 0)
-			{
-				btnPlayAgainTouching = false;
-			}
-		}
-
-		// Update is called once per frame
+        public void RematchGame() {
+            CreateGameBoard();
+            gameStatusText.text = isPlayerOneTurn ? bluePlayerMoveText : redPlayerMoveText;
+            gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
+            rematchButton.gameObject.SetActive(false);
+        }
+            
 		void Update () {
 
 			if(gameOver)
 			{
-				winningText.SetActive(true);
-				btnPlayAgain.SetActive(true);
-
-				UpdatePlayAgainButton();
-
-				return;
+                rematchButton.gameObject.SetActive(true);
 			}
 		}
 
@@ -293,7 +331,6 @@ namespace Fourzy
             if(isCurrentPlayerTurn)
             {
                 if (!isDropping) {
-                    mouseButtonPressed = true;
                     Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
 
                     // round to a grid cell
@@ -309,8 +346,6 @@ namespace Fourzy
                     } else if (inLeftRowBounds(pos.x, pos.y)) {
                         StartCoroutine(movePiece(column, row, Direction.Right));
                     }
-                } else {
-                    mouseButtonPressed = false;
                 }
             } else { 
                 // TODO: inform the player it is not their turn
@@ -424,7 +459,17 @@ namespace Fourzy
 					yield return null;
 
 				isPlayerOneTurn = !isPlayerOneTurn;
-				//isPlayersTurn = !isPlayersTurn;
+                isCurrentPlayerTurn = !isCurrentPlayerTurn;
+
+                if (gameOver == false) {
+                    if (isMultiplayer)
+                    {
+                        SetMultiplayerGameStatusText();
+                    } else {
+                        gameStatusText.text = isPlayerOneTurn ? bluePlayerMoveText : redPlayerMoveText;
+                        gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
+                    }
+                }
 			}
                
             foreach (GameObject go in gos) {
@@ -471,7 +516,8 @@ namespace Fourzy
 					// return true (won) if enough hits
 					if(hitsHorz.Length == numPiecesToWin)
 					{
-						gameOver = true;
+                        DrawLine(hitsHorz[0].transform.position, hitsHorz[3].transform.position, isPlayerOneTurn ? bluePlayerColor : redPlayerColor);
+                        gameOver = true;
 						break;
 					}
 
@@ -481,10 +527,14 @@ namespace Fourzy
 						Vector2.up, 
 						numPiecesToWin - 1,
 						layermask);
-
+                    
 					if(hitsVert.Length == numPiecesToWin)
 					{
-						gameOver = true;
+                        //SpriteRenderer glow =  hitsVert[3].transform.gameObject.GetComponentInChildren<SpriteRenderer>();
+                        //glow.enabled = false;
+                        DrawLine(hitsVert[0].transform.position, hitsVert[3].transform.position, isPlayerOneTurn ? bluePlayerColor : redPlayerColor);
+
+                        gameOver = true;
 						break;
 					}
 
@@ -502,7 +552,8 @@ namespace Fourzy
 
 						if(hitsDiaLeft.Length == numPiecesToWin)
 						{
-							gameOver = true;
+                            DrawLine(hitsDiaLeft[0].transform.position, hitsDiaLeft[3].transform.position, isPlayerOneTurn ? bluePlayerColor : redPlayerColor);
+                            gameOver = true;
 							break;
 						}
 
@@ -514,7 +565,8 @@ namespace Fourzy
 
 						if(hitsDiaRight.Length == numPiecesToWin)
 						{
-							gameOver = true;
+                            DrawLine(hitsDiaRight[0].transform.position, hitsDiaRight[3].transform.position, isPlayerOneTurn ? bluePlayerColor : redPlayerColor);
+                            gameOver = true;
 							break;
 						}
 					}
@@ -528,7 +580,8 @@ namespace Fourzy
 			// if Game Over update the winning text to show who has won
 			if(gameOver == true)
 			{
-				winningText.GetComponent<TextMesh>().text = isPlayerOneTurn ? bluePlayerWonText : redPlayerWonText;
+                gameStatusText.text = isPlayerOneTurn ? bluePlayerWonText : redPlayerWonText;
+                gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
 			}
 			else 
 			{
@@ -536,14 +589,30 @@ namespace Fourzy
 				if(!FieldContainsEmptyCell())
 				{
 					gameOver = true;
-					winningText.GetComponent<TextMesh>().text = drawText;
+                    gameStatusText.text = drawText;
 				}
-			}
+            } 
 
 			isCheckingForWinner = false;
 
 			yield return 0;
 		}
+
+        void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0.2f)
+        {
+            GameObject myLine = new GameObject();
+            myLine.transform.parent = gamePieces.transform;
+            myLine.transform.position = start;
+            myLine.AddComponent<LineRenderer>();
+            LineRenderer lr = myLine.GetComponent<LineRenderer>();
+            lr.material = new Material(lineShader);
+            lr.SetColors(color, color);
+            lr.SetWidth(0.15f, 0.15f);
+            lr.SetPosition(0, start);
+            lr.SetPosition(1, end);
+
+            //GameObject.Destroy(myLine, duration);
+        }
 
 		/// <summary>
 		/// check if the field contains an empty cell
@@ -654,6 +723,51 @@ namespace Fourzy
 
             }
 
+        }
+        public static void shineObject (GameObject obj, float width, float duration)
+        {
+            var mono = obj.GetComponent<MonoBehaviour>();
+            if( mono != null) {
+                Debug.Log("MonoBehaviour");
+                // change material
+                Material mat = Resources.Load ("Materials/ShineMaterial", typeof(Material)) as Material;
+            var render = obj.GetComponent<SpriteRenderer> ();
+            if (render != null) {
+                Debug.Log("render");
+                render.material = mat;
+            } else {
+                var img = obj.GetComponent<Image> ();
+                if (img != null) {
+                    img.material = mat;
+                } else {
+                    Debug.LogWarning ("cannot get the render or image compoent!");
+                }
+            }
+            mat.SetFloat("_ShineWidth", width);
+            // start a coroutine
+            mono.StopAllCoroutines ();
+            mono.StartCoroutine (shineRoutine (mat, duration));
+        } else {
+            Debug.LogWarning ("cannot find MonoBehaviour component!");
+        }
+        }
+        static IEnumerator shineRoutine (Material mat, float duration)
+        {
+            if( mat != null ) {
+                float location = 0f;
+                float interval = 0.04f;
+                float offsetVal = interval / duration;
+                while(true) {
+                    yield return new WaitForSeconds (interval);
+                    mat.SetFloat("_ShineLocation", location);
+                    location += offsetVal;
+                    if (location > 1f) {
+                        location = 0f;
+                    }
+                }
+            } else {
+                Debug.LogWarning ("there is no material parameter!");
+            }
         }
 
 		//		bool squaresMatchPiece(int piece, int row, int col, int moveX, int moveY) {

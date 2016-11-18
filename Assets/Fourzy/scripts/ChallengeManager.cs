@@ -23,6 +23,8 @@ namespace Fourzy
 		void Start()
 		{
 			instance = this;
+
+            GetActiveChallenges();
 		}
 
 		//This function accepts a string of UserIds and invites them to a new challenge
@@ -113,7 +115,7 @@ namespace Fourzy
                             ActiveGame activeGame = go.GetComponent<ActiveGame>();
 							//Set our variables
                             activeGame.challengeId = challenge.ChallengeId;
-                            activeGame.turnStatus = challenge.NextPlayer;
+                            activeGame.nextPlayerId = challenge.NextPlayer;
 
 							//For every player in the collection of players who have accepted the challenge
 							foreach (var player in challenge.Accepted)
@@ -121,6 +123,7 @@ namespace Fourzy
 								//Add their names and their Ids to the list i each respective Running Game Entry
                                 activeGame.playerNames.Add(player.Name);
                                 activeGame.playerIds.Add(player.Id);
+                                activeGame.playerFacebookIds.Add(player.ExternalIds.GetString("FB"));
 							}
 
                             activeGame.challengerId = challenge.Challenger.Id;

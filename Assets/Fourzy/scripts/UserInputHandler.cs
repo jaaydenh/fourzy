@@ -12,7 +12,7 @@ public class UserInputHandler : MonoBehaviour {
     #region PUBLIC VARIABLES
     // Maximum pixels a tap can move.
     //public float tapMaxMovement = 50f;
-
+    public static bool inputEnabled = true;
     #endregion
 
     #region PRIVATE VARIABLES
@@ -26,7 +26,7 @@ public class UserInputHandler : MonoBehaviour {
     #region MONOBEHAVIOUR METHODS
     void Update () {
 
-        if (Input.GetMouseButtonDown(0) && !mouseButtonPressed) {
+        if (Input.GetMouseButtonDown(0) && !mouseButtonPressed && inputEnabled) {
             mouseButtonPressed = true;
             if (OnTap != null)
                 OnTap(Input.mousePosition);

@@ -15,6 +15,11 @@ namespace Fourzy
 
     	public List<GameObject> friends = new List<GameObject>();
 
+        void Start()
+        {
+            GetFriends();
+        }
+
     	public void GetFriends()
     	{
     		//Every time we call get friends we'll refresh the list
