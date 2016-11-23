@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Messages;
 using GameSparks.Core;
+using System.Linq;
 
 namespace Fourzy
 {
@@ -73,8 +74,12 @@ namespace Fourzy
 		public int[,] gameBoard;
 
 		public bool isMultiplayer = false;
+        public bool isNewChallenge = false;
         public bool isCurrentPlayerTurn = true;
 		public bool isPlayerOneTurn = true;
+        public string challengedUserId;
+        public int currentPlayerId;
+
 		bool isLoading = true;
 		bool isDropping = false; 
 		bool gameOver = false;
@@ -114,12 +119,14 @@ namespace Fourzy
         {
             UserInputHandler.OnTap += processPlayerInput;
             ActiveGame.OnActiveGame += enableGameScreen;
+            FriendEntry.OnActiveGame += enableGameScreen;
         }
 
         private void OnDisable()
         {
             UserInputHandler.OnTap -= processPlayerInput;
             ActiveGame.OnActiveGame -= enableGameScreen;
+            FriendEntry.OnActiveGame -= enableGameScreen;
         }
 
 		void Start() 
@@ -139,14 +146,37 @@ namespace Fourzy
                 
             ChallengeTurnTakenMessage.Listener = (message) => {
                 var challenge = message.Challenge;
-                string messageId = message.MessageId;
-                bool? notification = message.Notification;
-                GSData scriptData = message.ScriptData;
-                Debug.Log("ChallengeTurnTakenMessage:" + message.ScriptData.JSON);
-                string subTitle = message.SubTitle;
-                string summary = message.Summary;
-                string title = message.Title;
-                string who = message.Who;
+                var nextPlayerId = challenge.NextPlayer;
+
+                Debug.Log("message: " + message.JSONString.ToString());
+//                List<int> boardDataInt = challenge.ScriptData.GetIntList("gameBoard");
+//
+//                foreach (int x in boardDataInt) {
+//                    Debug.Log("IntPiece: " + x);
+//                }
+
+
+                    
+                //string messageId = message.MessageId;
+                //bool? notification = message.Notification;
+                //GSData scriptData = message.ScriptData;
+
+                Debug.Log("UserId: " + UserManager.instance.userId);
+                Debug.Log("Message nextplayerId: " + nextPlayerId);
+                if (UserManager.instance.userId == nextPlayerId) { 
+                    List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
+
+                    foreach (GSData x in moveList) {
+                        Debug.Log("position: " + x.GetInt("position"));
+                        Debug.Log("direction: " + x.GetInt("direction"));
+                        Debug.Log("player: " + x.GetInt("player"));
+                    }
+                    GSData lastMove = moveList.Last();
+                    int position = lastMove.GetInt("position").GetValueOrDefault();
+                    int directionInt = lastMove.GetInt("direction").GetValueOrDefault();
+                    Direction direction = (Direction)directionInt;
+                    StartCoroutine(movePiece(position, direction, true));
+                }
             };
 
             int max = Mathf.Max(numRows, numColumns);
@@ -209,6 +239,18 @@ namespace Fourzy
             {
                 gameStatusText.text = "Their Move";
             }
+        }
+
+        private string GetGameBoard() {
+            string gameBoardString = "";
+            for(int col = 0; col < numColumns; col++)
+            {
+                for(int row = 0; row < numRows; row++)
+                {
+                    gameBoardString += gameBoard[col, row];
+                }
+            }
+            return gameBoardString;
         }
 
         public void CreateGameBoard() {
@@ -336,15 +378,16 @@ namespace Fourzy
                     // round to a grid cell
                     int column = Mathf.RoundToInt(pos.x);
                     int row = Mathf.RoundToInt(pos.y * -1);
-
+                    Debug.Log("column: " + column);
+                    Debug.Log("row: " + row);
                     if (inTopRowBounds (pos.x, pos.y)) {
-                        StartCoroutine(movePiece(column, row, Direction.Down));
+                        StartCoroutine(movePiece(column, Direction.Down, false));
                     } else if (inBottomRowBounds(pos.x, pos.y)) {
-                        StartCoroutine(movePiece(column, row, Direction.Up));
+                        StartCoroutine(movePiece(column, Direction.Up, false));
                     } else if (inRightRowBounds(pos.x, pos.y)) {
-                        StartCoroutine(movePiece(column, row, Direction.Left));
+                        StartCoroutine(movePiece(row, Direction.Left, false));
                     } else if (inLeftRowBounds(pos.x, pos.y)) {
-                        StartCoroutine(movePiece(column, row, Direction.Right));
+                        StartCoroutine(movePiece(row, Direction.Right, false));
                     }
                 }
             } else { 
@@ -358,47 +401,58 @@ namespace Fourzy
         /// <param name="posX">x position</param>
         /// <param name="posY">y position</param>
         /// <param name="direction">direction</param>
-        public IEnumerator movePiece(int column, int row, Direction direction)
+        public IEnumerator movePiece(int position, Direction direction, bool replayMove)
 		{
 			isDropping = true;
             int movePosition = -1;
-            Vector3 startPosition = new Vector3(column, row * -1, 10);
+            int row = -1, column = -1;
+
             Vector3 endPosition = new Vector3();
 
 			bool foundFreeSpot = false;
 			if (direction == Direction.Down) {
-				int nextRow = nextEmptySpotInColumnDown(column);
+                int nextRow = nextEmptySpotInColumnDown(position);
 				if (nextRow != -1) {
                     foundFreeSpot = true;
-                    movePosition = column;
-					gameBoard [column, nextRow] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
-                    endPosition = new Vector3(column, nextRow * -1, startPosition.z);
+                    movePosition = position;
+                    gameBoard [position, nextRow] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
+                    endPosition = new Vector3(position, nextRow * -1, 10);
+                    row = 0;
+                    column = position;
 				}
 			} else if (direction == Direction.Up) {
-				int nextRow = nextEmptySpotInColumnUp(column);
+                int nextRow = nextEmptySpotInColumnUp(position);
 				if (nextRow != -1) {
                     foundFreeSpot = true;
-                    movePosition = column;
-					gameBoard [column, nextRow] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
-                    endPosition = new Vector3(column, nextRow * -1, startPosition.z);
+                    movePosition = position;
+                    gameBoard [position, nextRow] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
+                    endPosition = new Vector3(position, nextRow * -1, 10);
+                    row = numRows - 1;
+                    column = position;
 				}
 			} else if (direction == Direction.Right) {
-				int nextColumn = nextEmptySpotInRowRight(row);
+                int nextColumn = nextEmptySpotInRowRight(position);
 				if (nextColumn != -1) {
                     foundFreeSpot = true;
-                    movePosition = row;
-					gameBoard [nextColumn, row] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
-                    endPosition = new Vector3(nextColumn, row * -1, startPosition.z);
+                    movePosition = position;
+                    gameBoard [nextColumn, position] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
+                    endPosition = new Vector3(nextColumn, position * -1, 10);
+                    row = position;
+                    column = 0;
 				}
 			} else if (direction == Direction.Left) {
-				int nextColumn = nextEmptySpotInRowLeft(row);
+                int nextColumn = nextEmptySpotInRowLeft(position);
 				if (nextColumn != -1) {
                     foundFreeSpot = true;
-                    movePosition = row;
-					gameBoard [nextColumn, row] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
-					endPosition = new Vector3(nextColumn, row * -1, startPosition.z);
+                    movePosition = position;
+                    gameBoard [nextColumn, position] = isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red;
+                    endPosition = new Vector3(nextColumn, position * -1, 10);
+                    row = position;
+                    column = numColumns - 1;
 				}
 			}
+
+            Vector3 startPosition = new Vector3(column, row * -1, 10);
 
             GameObject[] gos;
             gos = GameObject.FindGameObjectsWithTag("Arrow");
@@ -407,20 +461,20 @@ namespace Fourzy
                 SpriteRenderer sr = go.GetComponentInChildren<SpriteRenderer>();
                 sr.enabled = false;
             }
-
+            Debug.Log("foundFreeSpot: " + foundFreeSpot);
             if(foundFreeSpot)
 			{
 //                Debug.Log("Direction: " + direction.GetHashCode());
 //                Debug.Log("Direction: " + direction);
 //                Debug.Log("Move Position: " + movePosition);
 //                Debug.Log("challengeInstanceId: " + challengeInstanceId);
-                if (isMultiplayer)
+                if (!replayMove && isMultiplayer && !isNewChallenge)
                 {
                     new LogChallengeEventRequest().SetChallengeInstanceId(challengeInstanceId)
                     .SetEventKey("takeTurn") //The event we are calling is "takeTurn", we set this up on the GameSparks Portal
                     .SetEventAttribute("pos", movePosition) // pos is the row or column the piece was placed at depending on the direction
                     .SetEventAttribute("direction", direction.GetHashCode()) // direction can be up, down, left, right
-                    .SetEventAttribute("player", isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red) //takeTurn also has an attribute called "playerIcon, we set to our X or O
+                    .SetEventAttribute("player", isPlayerOneTurn ? (int)Piece.Blue : (int)Piece.Red)
                     .Send((response) =>
                         {
                             if (response.HasErrors)
@@ -434,6 +488,11 @@ namespace Fourzy
                             }
                         });
                 }
+//                else if (isMultiplayer && isNewChallenge) {
+//                    Debug.Log("challenge user");
+//                    Debug.Log(GetGameBoard());
+//                    ChallengeManager.instance.ChallengeUser(challengedUserId, GetGameBoard());
+//                }
                     
                 GameObject g = SpawnPiece(column, row * -1);
 
@@ -724,6 +783,7 @@ namespace Fourzy
             }
 
         }
+
         public static void shineObject (GameObject obj, float width, float duration)
         {
             var mono = obj.GetComponent<MonoBehaviour>();

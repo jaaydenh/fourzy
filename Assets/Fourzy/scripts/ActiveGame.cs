@@ -21,9 +21,6 @@ namespace Fourzy
     	//This is the array of strings we pass our Cloud Code gameBoard to
         public int[] gameBoard;
 
-    	//We use canDestroy to let the Tween Alpha know it's safe to remove the gameObject OnFinish animating
-    	public bool canDestroy = false;
-
     	public Text opponentNameLabel, statusLabel;
         public Image profilePicture;
 
@@ -67,8 +64,8 @@ namespace Fourzy
             StartCoroutine(getFBPicture());
     	}
 
-    	//Start game gets called OnClick of the play button
-    	public void StartGame()
+    	//Open game gets called OnClick of the play button
+    	public void OpenGame()
     	{
             //Clear any previous instances of Fourzy GameManager
             GameManager.instance.CreateGameBoard();
@@ -76,7 +73,7 @@ namespace Fourzy
 			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
             GameManager.instance.SetGameBoard(gameBoard);
             GameManager.instance.isMultiplayer = true;
-
+            GameManager.instance.isNewChallenge = false;
 			//Update the Fourzy gamemanager instance's challenge Id to the current one
             Debug.Log("challengeId: " + challengeId);
             GameManager.instance.challengeInstanceId = challengeId;
@@ -98,15 +95,11 @@ namespace Fourzy
 			}
                 
             GameManager.instance.SetMultiplayerGameStatusText();
-            //GameManager.instance.GetBoard();
 
             UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
                 OnActiveGame(true);
-            
-			//We've done everything we can do with the Running Game Entry, so we can remove it from the scene.
-			canDestroy = true;
     	}
 
         public IEnumerator getFBPicture()

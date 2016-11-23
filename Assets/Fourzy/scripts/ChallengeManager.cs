@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using GameSparks.Api.Requests;
+using GameSparks.Core;
 using System.Collections.Generic;
 using System;
 
@@ -28,13 +29,22 @@ namespace Fourzy
 		}
 
 		//This function accepts a string of UserIds and invites them to a new challenge
-		public void ChallengeUser(List<string> userIds)
+        //public void ChallengeUser(string userId, string gameBoard)
+        public void ChallengeUser(string userId)
 		{
-			//we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
+            //CreateChallengeRequest takes a list of UserIds because you can challenge more than one user at a time
+            List<string> gsId = new List<string>();
+            //Add our friends UserId to the list
+            gsId.Add(userId);
+            //Debug.Log("GameBoard: " + gameBoard);
+            //GSRequestData data = new GSRequestData().AddString("gameBoard", gameBoard);
+
+            //we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
 			new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
-				.SetUsersToChallenge(userIds) //We supply the userIds of who we wish to challenge
+                .SetUsersToChallenge(gsId) //We supply the userIds of who we wish to challenge
 				.SetEndTime(System.DateTime.Today.AddDays(1)) //We set a date and time the challenge will end on
 				.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
+                //.SetScriptData(data)
 				.Send((response) =>
 					{
 						if (response.HasErrors)
@@ -87,7 +97,6 @@ namespace Fourzy
 						}
 					});
 		}
-
 
 		public void GetActiveChallenges()
 		{

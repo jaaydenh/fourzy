@@ -7,6 +7,8 @@ namespace Fourzy
 {
     public class FriendEntry : MonoBehaviour 
     {
+        public delegate void GameActive(bool active);
+        public static event GameActive OnActiveGame;
 
     	public string userName, id, facebookId;
     	public bool isOnline;
@@ -15,10 +17,13 @@ namespace Fourzy
     	public Image profilePicture;
     	public Image onlineTexture;
 
+        private GameObject UIScreen;
+
     	// Use this for initialization
     	void Start()
     	{
-    		//When the object is instantiated, update the GUI variables
+            UIScreen = GameObject.Find("UI Screen");
+            //When the object is instantiated, update the GUI variables
     		UpdateFriend();
     	}
 
@@ -43,17 +48,31 @@ namespace Fourzy
     		Sprite tempSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
     		profilePicture.sprite = tempSprite;
     	}
-
-    	//This is the function we call for our UIButton OnClick
+            
     	public void StartChallenge()
     	{
-    		//CreateChallengeRequest takes a list of UserIds because you can challenge more than one user at a time
-    		List<string> gsId = new List<string>();
-    		//Add our friends UserId to the list
-    		gsId.Add(id);
-
-    		//Call the ChallengeUser function and pass on the list containing our friends UserId
-    		ChallengeManager.instance.ChallengeUser(gsId);
+    		ChallengeManager.instance.ChallengeUser(id);
     	}
+
+        //Open game gets called OnClick of the play button
+        public void OpenGame()
+        {
+            
+            GameManager.instance.CreateGameBoard();
+
+            GameManager.instance.isMultiplayer = true;
+            //If we initiated the challenge, we get to be player 1
+            GameManager.instance.isPlayerOneTurn = true;
+            GameManager.instance.isCurrentPlayerTurn = true;
+            GameManager.instance.isNewChallenge = true;
+            GameManager.instance.challengedUserId = id;
+
+            GameManager.instance.SetMultiplayerGameStatusText();
+
+            UIScreen.SetActive(false);
+
+            if (OnActiveGame != null)
+                OnActiveGame(true);
+        }
     }
 }

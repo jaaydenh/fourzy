@@ -16,7 +16,15 @@ namespace Fourzy
                 mouseButtonPressed = true;
                 int row = gameObject.GetComponentInParent<CornerSpot>().row;
                 int column = gameObject.GetComponentInParent<CornerSpot>().column;
-                StartCoroutine(GameManager.instance.movePiece(column, row, direction));
+                if (direction == Fourzy.GameManager.Direction.Down) {
+                    StartCoroutine(GameManager.instance.movePiece(column, direction, false));
+                } else if (direction == Fourzy.GameManager.Direction.Up) {
+                    StartCoroutine(GameManager.instance.movePiece(column, direction, false));
+                } else if (direction == Fourzy.GameManager.Direction.Right) {
+                    StartCoroutine(GameManager.instance.movePiece(row, direction, false));
+                } else if (direction == Fourzy.GameManager.Direction.Left) {
+                    StartCoroutine(GameManager.instance.movePiece(row, direction, false));
+                }
             }
         }
             
