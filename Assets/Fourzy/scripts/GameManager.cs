@@ -106,12 +106,17 @@ namespace Fourzy
 
         private void enableGameScreen(bool enabled) {
             UserInputHandler.inputEnabled = false;
+            Debug.Log("UserInputHandler.inputEnabled = false;");
             gameScreen.SetActive(enabled);
-            StartCoroutine(WaitToEnableInput());
+            if (enabled)
+            {
+                StartCoroutine(WaitToEnableInput());
+            }
         }
 
         IEnumerator WaitToEnableInput() {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(2);
+            Debug.Log("UserInputHandler.inputEnabled = true;");
             UserInputHandler.inputEnabled = true;
         }
 
@@ -155,8 +160,6 @@ namespace Fourzy
 //                    Debug.Log("IntPiece: " + x);
 //                }
 
-
-                    
                 //string messageId = message.MessageId;
                 //bool? notification = message.Notification;
                 //GSData scriptData = message.ScriptData;
@@ -174,6 +177,12 @@ namespace Fourzy
                     GSData lastMove = moveList.Last();
                     int position = lastMove.GetInt("position").GetValueOrDefault();
                     int directionInt = lastMove.GetInt("direction").GetValueOrDefault();
+                    int player = lastMove.GetInt("player").GetValueOrDefault();
+                    if (player == (int)Piece.Blue) {
+                        isPlayerOneTurn = true;
+                    } else if (player == (int)Piece.Red) {
+                        isPlayerOneTurn = false;
+                    }
                     Direction direction = (Direction)directionInt;
                     StartCoroutine(movePiece(position, direction, true));
                 }
@@ -241,16 +250,19 @@ namespace Fourzy
             }
         }
 
-        private string GetGameBoard() {
-            string gameBoardString = "";
+        private List<long> GetGameBoard() {
+//            List<GSData> gameBoardList = new List<GSData>();
+            List<long> gameBoardList = new List<long>();
             for(int col = 0; col < numColumns; col++)
             {
                 for(int row = 0; row < numRows; row++)
                 {
-                    gameBoardString += gameBoard[col, row];
+                    //GSData TEST = new GSData(gameBoard[col, row].ToString());
+                    //gameBoardList.Add(gameBoard[col, row]);
+                    gameBoardList.Add(gameBoard[col, row]);
                 }
             }
-            return gameBoardString;
+            return gameBoardList;
         }
 
         public void CreateGameBoard() {
@@ -488,11 +500,11 @@ namespace Fourzy
                             }
                         });
                 }
-//                else if (isMultiplayer && isNewChallenge) {
-//                    Debug.Log("challenge user");
-//                    Debug.Log(GetGameBoard());
-//                    ChallengeManager.instance.ChallengeUser(challengedUserId, GetGameBoard());
-//                }
+                else if (isMultiplayer && isNewChallenge) {
+                    Debug.Log("challenge user");
+                    //Debug.Log(GetGameBoard());
+                    ChallengeManager.instance.ChallengeUser(challengedUserId, GetGameBoard(), position, direction);
+                }
                     
                 GameObject g = SpawnPiece(column, row * -1);
 

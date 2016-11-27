@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using GameSparks.Core;
+using System.Linq;
 
 namespace Fourzy
 {
@@ -20,6 +22,8 @@ namespace Fourzy
 
     	//This is the array of strings we pass our Cloud Code gameBoard to
         public int[] gameBoard;
+
+        public List<GSData> moveList;
 
     	public Text opponentNameLabel, statusLabel;
         public Image profilePicture;
@@ -78,8 +82,12 @@ namespace Fourzy
             Debug.Log("challengeId: " + challengeId);
             GameManager.instance.challengeInstanceId = challengeId;
 
+            GSData lastPlayerMove = moveList.LastOrDefault();
+            int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
 			//If we initiated the challenge, we get to be player 1
-			if (challengerId == UserManager.instance.userId)
+			//if (challengerId == UserManager.instance.userId)
+            Debug.Log("lastPlayer: " + lastPlayer);
+            if (lastPlayer == 0 || lastPlayer == 2)
 			{
                 GameManager.instance.isPlayerOneTurn = true;
 			} else {

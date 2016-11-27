@@ -11,7 +11,7 @@ namespace Fourzy
         void OnMouseDown() {
             Debug.Log("mouseButtonPressed: " + mouseButtonPressed);
 
-            if (!mouseButtonPressed)
+            if (!mouseButtonPressed && Fourzy.GameManager.instance.isCurrentPlayerTurn)
             {
                 mouseButtonPressed = true;
                 int row = gameObject.GetComponentInParent<CornerSpot>().row;

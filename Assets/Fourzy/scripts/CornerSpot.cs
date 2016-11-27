@@ -31,21 +31,24 @@ public class CornerSpot : MonoBehaviour {
     }
 
     void OnMouseDown() {
-        if (rightArrowActive)
+        if (Fourzy.GameManager.instance.isCurrentPlayerTurn)
         {
-            RightArrow.SetActive(true);
-        }
-        if (leftArrowActive)
-        {
-            LeftArrow.SetActive(true);
-        }
-        if (upArrowActive)
-        {
-            UpArrow.SetActive(true);
-        }
-        if (downArrowActive)
-        {
-            DownArrow.SetActive(true);
+            if (rightArrowActive)
+            {
+                RightArrow.SetActive(true);
+            }
+            if (leftArrowActive)
+            {
+                LeftArrow.SetActive(true);
+            }
+            if (upArrowActive)
+            {
+                UpArrow.SetActive(true);
+            }
+            if (downArrowActive)
+            {
+                DownArrow.SetActive(true);
+            }
         }
     }
 }

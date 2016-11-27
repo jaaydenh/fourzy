@@ -12,7 +12,10 @@ namespace Fourzy {
 
         private void OnEnable() {
             //Debug.Log("GamesList Enabled");
-            ChallengeManager.instance.GetActiveChallenges();
+            if (ChallengeManager.instance)
+            {   
+                ChallengeManager.instance.GetActiveChallenges();
+            }
         }
     }
 }

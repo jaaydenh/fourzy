@@ -51,13 +51,12 @@ namespace Fourzy
             
     	public void StartChallenge()
     	{
-    		ChallengeManager.instance.ChallengeUser(id);
+    		ChallengeManager.instance.ChallengeUserOld(id);
     	}
 
         //Open game gets called OnClick of the play button
         public void OpenGame()
         {
-            
             GameManager.instance.CreateGameBoard();
 
             GameManager.instance.isMultiplayer = true;
