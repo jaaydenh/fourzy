@@ -139,10 +139,11 @@ namespace Fourzy
 			}
 			//Clear the list of friends so we don't have null reference errors
 			activeGames.Clear();
+            List<string> challengeStates = new List<string> {"RUNNING","COMPLETE"};
 
 			//We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
 			new ListChallengeRequest().SetShortCode("chalRanked")
-				.SetState("RUNNING") //We want to get all games that are running
+                .SetStates(challengeStates)
 				.SetEntryCount(50) //We want to pull in the first 50
 				.Send((response) =>
 					{

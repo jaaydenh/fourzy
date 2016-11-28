@@ -148,43 +148,24 @@ namespace Fourzy
 //                Debug.Log(message);
 //                Debug.Log("ChallengeStartedMessage: " + message.Title);
 //            };
-                
+
+            ChallengeWonMessage.Listener = (message) => {
+
+            };
+
+            ChallengeLostMessage.Listener = (message) => {
+                var challenge = message.Challenge;
+                if (UserManager.instance.userId == challenge.NextPlayer) {
+                    List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
+                    ReplayLastMove(moveList);
+                }
+            };
+
             ChallengeTurnTakenMessage.Listener = (message) => {
                 var challenge = message.Challenge;
-                var nextPlayerId = challenge.NextPlayer;
-
-                Debug.Log("message: " + message.JSONString.ToString());
-//                List<int> boardDataInt = challenge.ScriptData.GetIntList("gameBoard");
-//
-//                foreach (int x in boardDataInt) {
-//                    Debug.Log("IntPiece: " + x);
-//                }
-
-                //string messageId = message.MessageId;
-                //bool? notification = message.Notification;
-                //GSData scriptData = message.ScriptData;
-
-                Debug.Log("UserId: " + UserManager.instance.userId);
-                Debug.Log("Message nextplayerId: " + nextPlayerId);
-                if (UserManager.instance.userId == nextPlayerId) { 
+                if (UserManager.instance.userId == challenge.NextPlayer) {
                     List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
-
-                    foreach (GSData x in moveList) {
-                        Debug.Log("position: " + x.GetInt("position"));
-                        Debug.Log("direction: " + x.GetInt("direction"));
-                        Debug.Log("player: " + x.GetInt("player"));
-                    }
-                    GSData lastMove = moveList.Last();
-                    int position = lastMove.GetInt("position").GetValueOrDefault();
-                    int directionInt = lastMove.GetInt("direction").GetValueOrDefault();
-                    int player = lastMove.GetInt("player").GetValueOrDefault();
-                    if (player == (int)Piece.Blue) {
-                        isPlayerOneTurn = true;
-                    } else if (player == (int)Piece.Red) {
-                        isPlayerOneTurn = false;
-                    }
-                    Direction direction = (Direction)directionInt;
-                    StartCoroutine(movePiece(position, direction, true));
+                    ReplayLastMove(moveList);
                 }
             };
 
@@ -208,6 +189,21 @@ namespace Fourzy
             gameScreen.SetActive(false);
 		}
 
+        private void ReplayLastMove(List<GSData> moveList) {
+            GSData lastMove = moveList.Last();
+            int position = lastMove.GetInt("position").GetValueOrDefault();
+            Direction direction = (Direction)lastMove.GetInt("direction").GetValueOrDefault();
+            int player = lastMove.GetInt("player").GetValueOrDefault();
+
+            if (player == (int)Piece.Blue) {
+                isPlayerOneTurn = true;
+            } else if (player == (int)Piece.Red) {
+                isPlayerOneTurn = false;
+            }
+
+            StartCoroutine(movePiece(position, direction, true));
+        }
+
         public void TransitionToGamesList() {
             enableGameScreen(false);
             UIScreen.SetActive(true);
@@ -217,20 +213,20 @@ namespace Fourzy
         public void SetGameBoard(int[] boardData) {
             isLoading = true;
 
-            for(int x = 0; x < numColumns; x++)
+            for(int col = 0; col < numColumns; col++)
             {
-                for(int y = 0; y < numRows; y++)
+                for(int row = 0; row < numRows; row++)
                 {
-                    int piece = boardData[x * numColumns + y];
-                    gameBoard[x, y] = piece;
+                    int piece = boardData[col * numColumns + row];
+                    gameBoard[col, row] = piece;
                     if (piece == (int)Piece.Blue)
                     {
-                        GameObject g = Instantiate(pieceBlue, new Vector3(x, y * -1, 10), Quaternion.identity) as GameObject;
+                        GameObject g = Instantiate(pieceBlue, new Vector3(col, row * -1, 10), Quaternion.identity) as GameObject;
                         g.transform.parent = gamePieces.transform;
                     }
                     else if (piece == (int)Piece.Red)
                     {
-                        GameObject g = Instantiate(pieceRed, new Vector3(x, y * -1, 10), Quaternion.identity) as GameObject;
+                        GameObject g = Instantiate(pieceRed, new Vector3(col, row * -1, 10), Quaternion.identity) as GameObject;
                         g.transform.parent = gamePieces.transform;
                     }
                 }
@@ -842,73 +838,73 @@ namespace Fourzy
             }
         }
 
-		//		bool squaresMatchPiece(int piece, int row, int col, int moveX, int moveY) {
-		//			// bail out early if we can't win from here
-		//			if (row + (moveY * 3) < 0) { return false; }
-		//			if (row + (moveY * 3) >= numRows) { return false; }
-		//			if (col + (moveX * 3) < 0) { return false; }
-		//			if (col + (moveX * 3) >= numColumns) { return false; }
-		//
-		//			// still here? Check every square
-		//			if (field[col, row] != piece) { return false; }
-		//			if (field[col + moveX,row + moveY] != piece) { return false; }
-		//			if (field[col + (moveX * 2), row + (moveY * 2)] != piece) { return false; }
-		//			if (field[col + (moveX * 3), row + (moveY * 3)] != piece) { return false; }
-		//
-		//			return true;
-		//		}
+//				bool squaresMatchPiece(int piece, int row, int col, int moveX, int moveY) {
+//					// bail out early if we can't win from here
+//					if (row + (moveY * 3) < 0) { return false; }
+//					if (row + (moveY * 3) >= numRows) { return false; }
+//					if (col + (moveX * 3) < 0) { return false; }
+//					if (col + (moveX * 3) >= numColumns) { return false; }
+//		
+//					// still here? Check every square
+//					if (field[col, row] != piece) { return false; }
+//					if (field[col + moveX,row + moveY] != piece) { return false; }
+//					if (field[col + (moveX * 2), row + (moveY * 2)] != piece) { return false; }
+//					if (field[col + (moveX * 3), row + (moveY * 3)] != piece) { return false; }
+//		
+//					return true;
+//				}
 
 		//		/// <summary>
 		//		/// Check for Winner
 		//		/// </summary>
-		//		IEnumerator Won()
-		//		{
-		//			int currentPlayer = 1;
-		//
-		//			isCheckingForWinner = true;
-		//
-		//			for(int col = 0; col < numColumns; col++)
-		//			{
-		//				for(int row = 0; row < numRows; row++)
-		//				{
-		//					if (squaresMatchPiece(currentPlayer, row, col, moveX: 1, moveY: 0)) {
-		//						gameOver = true;
-		//						break;
-		//					} else if (squaresMatchPiece(currentPlayer, row, col, moveX: 0, moveY: 1)) {
-		//						gameOver = true;
-		//						break;
-		//					} else if (squaresMatchPiece(currentPlayer, row, col, moveX: 1, moveY: 1)) {
-		//						gameOver = true;
-		//						break;
-		//					} else if (squaresMatchPiece(currentPlayer, row, col, moveX: 1, moveY: -1)) {
-		//						gameOver = true;
-		//						break;
-		//					}
-		//
-		//					yield return null;
-		//				}
-		//
-		//				yield return null;
-		//			}
-		//
-		//			// if Game Over update the winning text to show who has won
-		//			if(gameOver == true)
-		//			{
-		//				winningText.GetComponent<TextMesh>().text = isPlayersTurn ? playerWonText : playerLoseText;
-		//			}
-		//			else 
-		//			{
-		//				// check if there are any empty cells left, if not set game over and update text to show a draw
-		//				if(!FieldContainsEmptyCell())
-		//				{
-		//					gameOver = true;
-		//					winningText.GetComponent<TextMesh>().text = drawText;
-		//				}
-		//			}
-		//
-		//			isCheckingForWinner = false;
-		//
-		//			yield return 0;
-		//		}
+//				IEnumerator Won()
+//				{
+//					int currentPlayer = 1;
+//		
+//					isCheckingForWinner = true;
+//		
+//					for(int col = 0; col < numColumns; col++)
+//					{
+//						for(int row = 0; row < numRows; row++)
+//						{
+//							if (squaresMatchPiece(currentPlayer, row, col, moveX: 1, moveY: 0)) {
+//								gameOver = true;
+//								break;
+//							} else if (squaresMatchPiece(currentPlayer, row, col, moveX: 0, moveY: 1)) {
+//								gameOver = true;
+//								break;
+//							} else if (squaresMatchPiece(currentPlayer, row, col, moveX: 1, moveY: 1)) {
+//								gameOver = true;
+//								break;
+//							} else if (squaresMatchPiece(currentPlayer, row, col, moveX: 1, moveY: -1)) {
+//								gameOver = true;
+//								break;
+//							}
+//		
+//							yield return null;
+//						}
+//		
+//						yield return null;
+//					}
+//		
+//					// if Game Over update the winning text to show who has won
+//					if(gameOver == true)
+//					{
+//						winningText.GetComponent<TextMesh>().text = isPlayersTurn ? playerWonText : playerLoseText;
+//					}
+//					else 
+//					{
+//						// check if there are any empty cells left, if not set game over and update text to show a draw
+//						if(!FieldContainsEmptyCell())
+//						{
+//							gameOver = true;
+//							winningText.GetComponent<TextMesh>().text = drawText;
+//						}
+//					}
+//		
+//					isCheckingForWinner = false;
+//		
+//					yield return 0;
+//				}
 	}
 }
