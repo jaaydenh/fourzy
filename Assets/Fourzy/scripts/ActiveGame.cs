@@ -13,7 +13,7 @@ namespace Fourzy
         public static event GameActive OnActiveGame;
 
     	//We store the challengeId, next player's userId and the userId who initiated the challenge.
-    	public string challengeId, nextPlayerId, challengerId;
+    	public string challengeId, nextPlayerId, challengerId, winner;
 
     	//We create a list for playerNames and Ids
     	public List<string> playerNames = new List<string>();
@@ -71,35 +71,31 @@ namespace Fourzy
     	//Open game gets called OnClick of the play button
     	public void OpenGame()
     	{
-            //Clear any previous instances of Fourzy GameManager
-            GameManager.instance.CreateGameBoard();
-
-			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
-            GameManager.instance.SetGameBoard(gameBoard);
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
-			//Update the Fourzy gamemanager instance's challenge Id to the current one
-            Debug.Log("challengeId: " + challengeId);
             GameManager.instance.challengeInstanceId = challengeId;
+            GameManager.instance.winner = winner;
+
+            //If the user Id of the next player is equal to the current player then it is the current player's turn
+            if (nextPlayerId == UserManager.instance.userId)
+            {
+                GameManager.instance.isCurrentPlayerTurn = true;
+            } else {
+                GameManager.instance.isCurrentPlayerTurn = false;
+            }
+                
+            GameManager.instance.ResetGameBoard();
+			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
+            GameManager.instance.SetGameBoard(gameBoard);
 
             GSData lastPlayerMove = moveList.LastOrDefault();
             int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
-			//If we initiated the challenge, we get to be player 1
-			//if (challengerId == UserManager.instance.userId)
-            Debug.Log("lastPlayer: " + lastPlayer);
+
             if (lastPlayer == 0 || lastPlayer == 2)
 			{
                 GameManager.instance.isPlayerOneTurn = true;
 			} else {
                 GameManager.instance.isPlayerOneTurn = false;
-			}
-
-			//If the user Id of the next player is equal to ours then it's out turn
-            if (nextPlayerId == UserManager.instance.userId)
-			{
-                GameManager.instance.isCurrentPlayerTurn = true;
-			} else {
-                GameManager.instance.isCurrentPlayerTurn = false;
 			}
                 
             GameManager.instance.SetMultiplayerGameStatusText();

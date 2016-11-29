@@ -57,7 +57,7 @@ namespace Fourzy
         //Open game gets called OnClick of the play button
         public void OpenGame()
         {
-            GameManager.instance.CreateGameBoard();
+            GameManager.instance.ResetGameBoard();
 
             GameManager.instance.isMultiplayer = true;
             //If we initiated the challenge, we get to be player 1

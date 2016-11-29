@@ -147,43 +147,32 @@ namespace Fourzy
 				.SetEntryCount(50) //We want to pull in the first 50
 				.Send((response) =>
 					{
-						//For every challenge we receive
 						foreach (var challenge in response.ChallengeInstances)
 						{
 							GameObject go = Instantiate(activeGamePrefab) as GameObject;
 							go.gameObject.transform.SetParent(activeGameGrid.transform);
 
                             ActiveGame activeGame = go.GetComponent<ActiveGame>();
-							//Set our variables
+
                             activeGame.challengeId = challenge.ChallengeId;
                             activeGame.nextPlayerId = challenge.NextPlayer;
 
-							//For every player in the collection of players who have accepted the challenge
 							foreach (var player in challenge.Accepted)
 							{
-								//Add their names and their Ids to the list i each respective Running Game Entry
                                 activeGame.playerNames.Add(player.Name);
                                 activeGame.playerIds.Add(player.Id);
                                 activeGame.playerFacebookIds.Add(player.ExternalIds.GetString("FB"));
 							}
 
                             activeGame.challengerId = challenge.Challenger.Id;
+                            activeGame.winner = challenge.ScriptData.GetString("winner");
 
-							//We've saved the gameBoard in the cloud in ScriptData, we saved it as a String List and we need to convert it to a Unity Array
-                            //go.GetComponent<ActiveGame>().gameBoard = challenge.ScriptData.GetString("gameBoard");
                             int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
                             activeGame.gameBoard = gameboard;
 
                             List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                             activeGame.moveList = moveList;
-//							int[] data1 = challenge.ScriptData.GetIntList("gameBoard").ToArray();
-//							List<string> data2 = challenge.ScriptData.GetStringList("gameBoard");
-//							String[] data3 = challenge.ScriptData.GetStringList("gameBoard").ToArray();
-//							String test = challenge.ScriptData.JSON;
-//							Debug.Log("gameboard data1: " + data1);
-//							Debug.Log("gameboard data2: " + data2);
-//							Debug.Log("gameboard data3: " + data3);
-//							Debug.Log("gameboard json: " + test);
+
 							int i;
 							String stringDebug = "";
 
@@ -191,7 +180,6 @@ namespace Fourzy
                                 stringDebug = stringDebug + " , " + gameboard[i].ToString();
 							}
 							//Debug.Log("gameboard: " + stringDebug);
-							//Add the gameObject to the list of friends
 							activeGames.Add(go);
 						}
 					});
