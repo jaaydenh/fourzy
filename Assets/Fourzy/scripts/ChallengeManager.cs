@@ -7,7 +7,8 @@ using System;
 
 namespace Fourzy
 {
-	public class ChallengeManager : MonoBehaviour
+    
+    public class ChallengeManager : MonoBehaviour
 	{
 		public static ChallengeManager instance;
 
@@ -20,17 +21,23 @@ namespace Fourzy
 		public GameObject invitePrefab;
 		public List<GameObject> gameInvites = new List<GameObject>();
 
+        //delegate Action<GameSparks.Api.Responses.CreateChallengeResponse> ChallengeId(GameSparks.Api.Responses.CreateChallengeResponse response);
+
+        //Action<GameSparks.Api.Responses.CreateChallengeResponse> test;
+
 		void Start()
 		{
 			instance = this;
 
-            GetActiveChallenges();
+            //GetActiveChallenges();
 		}
 
 		//This function accepts a string of UserIds and invites them to a new challenge
         public void ChallengeUser(string userId, List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
         //public void ChallengeUser(string userId)
 		{
+            //ChallengeId challengeInstanceId;
+
             //CreateChallengeRequest takes a list of UserIds because you can challenge more than one user at a time
             List<string> gsId = new List<string>();
             //Add our friends UserId to the list
@@ -43,12 +50,16 @@ namespace Fourzy
             // always player 1 plays first
             data.AddNumber("player", 1);
             //we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
-			new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
+            //GameSparks.Api.Responses.CreateChallengeResponse chalResponse =
+                new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
                 .SetUsersToChallenge(gsId) //We supply the userIds of who we wish to challenge
 				.SetEndTime(System.DateTime.Today.AddDays(1)) //We set a date and time the challenge will end on
 				.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
                 .SetScriptData(data)
-				.Send((response) =>
+//                .Send(delegate(GameSparks.Api.Responses.CreateChallengeResponse response) {
+//                    Test1(response.ChallengeInstanceId);
+//                });
+                .Send((response) => 
 					{
 						if (response.HasErrors)
 						{
@@ -56,10 +67,14 @@ namespace Fourzy
 						}
 						else
 						{
-							//Show message saying sent!;
+                            GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
 						}
 					});
 		}
+
+//        public void Test1(string challengeId) {
+//            GameManager.instance.challengeInstanceId = challengeId;
+//        }
 
         public void ChallengeUserOld(string userId)
         //public void ChallengeUser(string userId)
@@ -165,7 +180,9 @@ namespace Fourzy
 							}
 
                             activeGame.challengerId = challenge.Challenger.Id;
-                            activeGame.winner = challenge.ScriptData.GetString("winner");
+
+                            activeGame.winnerName = challenge.ScriptData.GetString("winnerName");
+                            activeGame.winnerId = challenge.ScriptData.GetString("winnerId");
 
                             int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
                             activeGame.gameBoard = gameboard;

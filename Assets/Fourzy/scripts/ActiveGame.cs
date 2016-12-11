@@ -13,7 +13,7 @@ namespace Fourzy
         public static event GameActive OnActiveGame;
 
     	//We store the challengeId, next player's userId and the userId who initiated the challenge.
-    	public string challengeId, nextPlayerId, challengerId, winner;
+    	public string challengeId, nextPlayerId, challengerId, winnerName, winnerId;
 
     	//We create a list for playerNames and Ids
     	public List<string> playerNames = new List<string>();
@@ -45,36 +45,50 @@ namespace Fourzy
             }
 
             opponentNameLabel.text = playerNames[opponentIndex];
-
-    		//We then check if the userId of the next player is equal to ours
-            if (nextPlayerId == UserManager.instance.userId)
-    		{
-    			//If it is, then we say it's your turn
-    			statusLabel.text = "Your Turn!";
-    		}
-    		else
-    		{
-                statusLabel.text = "Their Turn!";
-//                for (int i = 0; i < playerIds.Count; i++)
-//    			{
-//    				//else find the player whose Id does match and return their name
-                //   if (playerIds[i] == nextPlayerId)
-//    				{
-//    					statusLabel.text = playerNames[i] + "'s Turn!";
-//    				}
-//    			}
-    		}
+            print("WinnerID : " + winnerId);
+            if (winnerId != null)
+            {
+                if (winnerId == UserManager.instance.userId)
+                {
+                    statusLabel.text = "You won!";
+                }
+                else
+                {
+                    statusLabel.text = "They won!";
+                }
+            }
+            else
+            {
+                //We then check if the userId of the next player is equal to ours
+                if (nextPlayerId == UserManager.instance.userId)
+                {
+                    //If it is, then we say it's your turn
+                    statusLabel.text = "Your Turn!";
+                }
+                else
+                {
+                    statusLabel.text = "Their Turn!";
+                    //                for (int i = 0; i < playerIds.Count; i++)
+                    //              {
+                    //                  //else find the player whose Id does match and return their name
+                    //   if (playerIds[i] == nextPlayerId)
+                    //                  {
+                    //                      statusLabel.text = playerNames[i] + "'s Turn!";
+                    //                  }
+                    //              }
+                }
+            }
 
             StartCoroutine(getFBPicture());
     	}
 
-    	//Open game gets called OnClick of the play button
+    	//Open game gets called OnClick of the play button which happens when pressing or clicking an active game in the games list
     	public void OpenGame()
     	{
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.challengeInstanceId = challengeId;
-            GameManager.instance.winner = winner;
+            GameManager.instance.winner = winnerName;
 
             //If the user Id of the next player is equal to the current player then it is the current player's turn
             if (nextPlayerId == UserManager.instance.userId)

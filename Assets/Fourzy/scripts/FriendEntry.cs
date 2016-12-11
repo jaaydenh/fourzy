@@ -65,6 +65,7 @@ namespace Fourzy
             GameManager.instance.isCurrentPlayerTurn = true;
             GameManager.instance.isNewChallenge = true;
             GameManager.instance.challengedUserId = id;
+            GameManager.instance.challengeInstanceId = null;
 
             GameManager.instance.SetMultiplayerGameStatusText();
 

@@ -75,7 +75,7 @@ namespace Fourzy
 
 		public bool isMultiplayer = false;
         public bool isNewChallenge = false;
-        public bool isCurrentPlayerTurn = true;
+        public bool isCurrentPlayerTurn = false;
 		public bool isPlayerOneTurn = true;
         public string challengedUserId;
         public int currentPlayerId;
@@ -102,6 +102,16 @@ namespace Fourzy
                     _instance = GameObject.FindObjectOfType<GameManager>();
                 }
                 return _instance;
+            }
+        }
+
+        void OnApplicationPause(bool paused) {
+            if (!paused)
+            {
+                if (ChallengeManager.instance)
+                {
+                    ChallengeManager.instance.GetActiveChallenges();
+                }
             }
         }
 
@@ -139,27 +149,42 @@ namespace Fourzy
 		{
             ChallengeWonMessage.Listener = (message) => {
                 var challenge = message.Challenge;
+
                 if (UserManager.instance.userId != challenge.NextPlayer) {
-                    List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
-                    ReplayLastMove(moveList);
-                    gameStatusText.text = challenge.Challenger.Name + " Won!";
+                    // Only Replay the last move if the player is viewing the game screen for that game
+                    if (challenge.ChallengeId == challengeInstanceId) {
+                        List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
+                        ReplayLastMove(moveList);
+                        gameStatusText.text = challenge.Challenger.Name + " Won!";
+                    }
+                    ChallengeManager.instance.GetActiveChallenges();
                 }
             };
 
             ChallengeLostMessage.Listener = (message) => {
                 var challenge = message.Challenge;
                 if (UserManager.instance.userId != challenge.NextPlayer) {
-                    List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
-                    ReplayLastMove(moveList);
-                    gameStatusText.text = challenge.Challenged.First().Name + " Won!";
+                    // Only Replay the last move if the player is viewing the game screen for that game
+                    if (challenge.ChallengeId == challengeInstanceId) {
+                        List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
+                        ReplayLastMove(moveList);
+                        gameStatusText.text = challenge.Challenged.First().Name + " Won!";
+                    }
+                    ChallengeManager.instance.GetActiveChallenges();
                 }
             };
 
             ChallengeTurnTakenMessage.Listener = (message) => {
                 var challenge = message.Challenge;
                 if (UserManager.instance.userId == challenge.NextPlayer) {
-                    List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
-                    ReplayLastMove(moveList);
+                    // Only Replay the last move if the player is viewing the game screen for that game
+                    print("challenge.ChallengeId: " + challenge.ChallengeId);
+                    print("challengeInstanceId: " + challengeInstanceId);
+                    if (challenge.ChallengeId == challengeInstanceId) {
+                        List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
+                        ReplayLastMove(moveList);
+                    }
+                    ChallengeManager.instance.GetActiveChallenges();
                 }
             };
 
@@ -201,6 +226,8 @@ namespace Fourzy
         public void TransitionToGamesList() {
             enableGameScreen(false);
             UIScreen.SetActive(true);
+            challengeInstanceId = null;
+            isCurrentPlayerTurn = false;
             //ChallengeManager.instance.GetActiveChallenges();
         }
 
@@ -493,6 +520,7 @@ namespace Fourzy
                 }
                 else if (isMultiplayer && isNewChallenge) {
                     Debug.Log("challenge user");
+                    isNewChallenge = false;
                     //Debug.Log(GetGameBoard());
                     ChallengeManager.instance.ChallengeUser(challengedUserId, GetGameBoard(), position, direction);
                 }
@@ -658,9 +686,31 @@ namespace Fourzy
             }
             else
             {
-                if (gameOver == true && winner != null)
+                if (gameOver == true)
                 {
-                    gameStatusText.text = winner + " Won!";
+                    if (winner != null)
+                    {
+                        gameStatusText.text = winner + " Won!";
+                    }
+                    else
+                    {
+                        if (isPlayerOneTurn && playerOne) {
+
+                            gameStatusText.text = UserManager.instance.userName + " Won!";
+                        }
+                        if (isPlayerOneTurn && !playerOne)
+                        {
+                            gameStatusText.text = UserManager.instance.userName + " Lost!";
+                        }
+                        if (!isPlayerOneTurn && !playerOne) {
+
+                            gameStatusText.text = UserManager.instance.userName + " Won!";
+                        }
+                        if (!isPlayerOneTurn && playerOne)
+                        {
+                            gameStatusText.text = UserManager.instance.userName + " Lost!";
+                        }
+                    }
                 }
 
             }
