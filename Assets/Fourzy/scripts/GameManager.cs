@@ -91,6 +91,12 @@ namespace Fourzy
 
         private GameObject gameScreen;
 
+        public Text playerNameLabel;
+        public Image playerProfilePicture;
+        public Text opponentNameLabel;
+        public Image opponentProfilePicture;
+        public Sprite opponentProfilePictureSprite;
+
         //Singleton
         private static GameManager _instance;
         public static GameManager instance
@@ -147,6 +153,14 @@ namespace Fourzy
 
 		void Start() 
 		{
+//            ChallengeStartedMessage.Listener = (message) => {
+//                //var challenge = message.Challenge;
+//
+//                //if (UserManager.instance.userId == challenge.NextPlayer) {
+//                    ChallengeManager.instance.GetActiveChallenges();
+//                //}
+//            };
+
             ChallengeWonMessage.Listener = (message) => {
                 var challenge = message.Challenge;
 
@@ -355,6 +369,9 @@ namespace Fourzy
 
 			// center camera 
 			Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
+
+            print("GameManager opponentProfilePictureSprite: " + opponentProfilePictureSprite);
+            opponentProfilePicture.sprite = opponentProfilePictureSprite;
 		}
 
 		/// <summary>

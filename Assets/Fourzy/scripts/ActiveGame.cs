@@ -26,13 +26,14 @@ namespace Fourzy
         public List<GSData> moveList;
 
     	public Text opponentNameLabel, statusLabel;
-        public Image profilePicture;
+        public Image opponentProfilePicture;
 
         private GameObject UIScreen;
         private GameObject gameScreen;
         private int opponentIndex;
 
-    	// Use this for initialization
+        private Sprite opponentProfilePictureSprite;
+
     	void Start()
     	{
             UIScreen = GameObject.Find("UI Screen");
@@ -79,12 +80,20 @@ namespace Fourzy
                 }
             }
 
-            StartCoroutine(getFBPicture());
+            StartCoroutine(UserManager.instance.GetFBPicture(playerFacebookIds[opponentIndex], (sprite)=>
+                {
+                    print("ActiveGame opponentProfilePictureSprite: " + sprite);
+                    opponentProfilePictureSprite = sprite;
+                    opponentProfilePicture.sprite = sprite;
+                }));
     	}
 
     	//Open game gets called OnClick of the play button which happens when pressing or clicking an active game in the games list
-    	public void OpenGame()
+        public void OpenGame()
     	{
+            
+            GameManager.instance.opponentProfilePictureSprite = opponentProfilePictureSprite;
+
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.challengeInstanceId = challengeId;
@@ -119,19 +128,5 @@ namespace Fourzy
             if (OnActiveGame != null)
                 OnActiveGame(true);
     	}
-
-        public IEnumerator getFBPicture()
-        {
-            //To get our facebook picture we use this address which we pass our facebookId into
-            var www = new WWW("http://graph.facebook.com/" + playerFacebookIds[opponentIndex] + "/picture?width=210&height=210");
-
-            yield return www;
-
-            Texture2D tempPic = new Texture2D(25, 25);
-
-            www.LoadImageIntoTexture(tempPic);
-            Sprite tempSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
-            profilePicture.sprite = tempSprite;
-        }
     }
 }

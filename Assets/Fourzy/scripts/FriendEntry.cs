@@ -19,7 +19,6 @@ namespace Fourzy
 
         private GameObject UIScreen;
 
-    	// Use this for initialization
     	void Start()
     	{
             UIScreen = GameObject.Find("UI Screen");
@@ -32,23 +31,13 @@ namespace Fourzy
     		nameLabel.text = userName;
     		onlineTexture.color = isOnline ? Color.green : Color.gray;
     		//onlineTexture.texture.SetPixels(new Color[] {isOnline ? Color.green : Color.gray});
-    		StartCoroutine(getFBPicture());
+
+            StartCoroutine(UserManager.instance.GetFBPicture(facebookId, (sprite)=>
+                {
+                    profilePicture.sprite = sprite;
+                }));
     	}
-
-    	public IEnumerator getFBPicture()
-    	{
-    		//To get our facebook picture we use this address which we pass our facebookId into
-    		var www = new WWW("http://graph.facebook.com/" + facebookId + "/picture?width=210&height=210");
-
-    		yield return www;
-
-    		Texture2D tempPic = new Texture2D(25, 25);
-
-    		www.LoadImageIntoTexture(tempPic);
-    		Sprite tempSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
-    		profilePicture.sprite = tempSprite;
-    	}
-            
+             
     	public void StartChallenge()
     	{
     		ChallengeManager.instance.ChallengeUserOld(id);

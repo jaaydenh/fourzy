@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using GameSparks.Api.Requests;
+using System;
 
 namespace Fourzy
 {
@@ -12,7 +13,6 @@ namespace Fourzy
 
     	public string userName;
     	public string userId;
-    	private string facebookId;
 
     	public Text userNameLabel;
     	public Image profilePicture;
@@ -35,22 +35,28 @@ namespace Fourzy
     		userName = name;
     		userNameLabel.text = userName;
     		userId = uid;
-    		facebookId = fbId;
-    		StartCoroutine(getFBPicture());
+
+            StartCoroutine(UserManager.instance.GetFBPicture(fbId, (sprite)=>
+                {
+                    profilePicture.sprite = sprite;
+                }));
     	}
 
-    	public IEnumerator getFBPicture()
+        public IEnumerator GetFBPicture(string facebookId, Action<Sprite> callback)
     	{
     		//To get our facebook picture we use this address which we pass our facebookId into
     		var www = new WWW("http://graph.facebook.com/" + facebookId + "/picture?width=210&height=210");
 
-    		yield return www;
+            while (!www.isDone)
+                yield return null;
+    		//yield return www;
 
     		Texture2D tempPic = new Texture2D(25, 25);
 
     		www.LoadImageIntoTexture(tempPic);
-    		Sprite tempSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
-    		profilePicture.sprite = tempSprite;
+    		Sprite profilePictureSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
+
+            callback(profilePictureSprite);
     	}
     }
 }

@@ -64,32 +64,5 @@ namespace Fourzy
     					}
     				});
     	}
-
-    	public IEnumerator getFBPicture()
-    	{
-    		//To get our facebook picture we use this address which we pass our facebookId into
-    		var www = new WWW("http://graph.facebook.com/" + facebookId + "/picture?width=210&height=210");
-
-    		yield return www;
-
-    		Texture2D tempPic = new Texture2D(25, 25);
-
-    		www.LoadImageIntoTexture(tempPic);
-    		Sprite tempSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
-    		profilePicture.sprite = tempSprite;
-    	}
-
-
-    	public void DestroyAfterTween()
-    	{
-    		if (canDestroy)
-    		{
-    			//First remove the gameObject from it's list, so we don't end up with a null reference when we destroy it
-    			ChallengeManager.instance.gameInvites.Remove(gameObject);
-
-    			//Then destroy the gameObject, removing it from the scene.
-    			Destroy(gameObject);
-    		}
-    	}
     }
 }

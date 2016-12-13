@@ -183,19 +183,23 @@ namespace Fourzy
 
                             activeGame.winnerName = challenge.ScriptData.GetString("winnerName");
                             activeGame.winnerId = challenge.ScriptData.GetString("winnerId");
-
-                            int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
-                            activeGame.gameBoard = gameboard;
-
+                            List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
+                            if (boardData != null) {
+                                int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
+//                                int i;
+//                                String stringDebug = "";
+//                                for (i = 0; i < gameboard.Length; i++){
+//                                    stringDebug = stringDebug + " , " + gameboard[i].ToString();
+//                                }
+                                activeGame.gameBoard = gameboard;
+                            }
+                                
                             List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                             activeGame.moveList = moveList;
 
-							int i;
-							String stringDebug = "";
 
-                            for (i = 0; i < gameboard.Length; i++){
-                                stringDebug = stringDebug + " , " + gameboard[i].ToString();
-							}
+
+
 							//Debug.Log("gameboard: " + stringDebug);
 							activeGames.Add(go);
 						}
