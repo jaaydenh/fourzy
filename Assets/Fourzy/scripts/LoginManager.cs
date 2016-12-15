@@ -14,41 +14,41 @@ namespace Fourzy
 
         void Awake() {
             ConnectWithFacebook();
-            NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
+            //NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
         }
 
         private void OnEnable()
         {
             //Triggered when registration for remote notification event is done.
-            NotificationService.DidFinishRegisterForRemoteNotificationEvent += DidFinishRegisterForRemoteNotificationEvent;
+            //NotificationService.DidFinishRegisterForRemoteNotificationEvent += DidFinishRegisterForRemoteNotificationEvent;
         }
 
         private void OnDisable()
         {
-            NotificationService.DidFinishRegisterForRemoteNotificationEvent -= DidFinishRegisterForRemoteNotificationEvent;
+            //NotificationService.DidFinishRegisterForRemoteNotificationEvent -= DidFinishRegisterForRemoteNotificationEvent;
         }
 
-        private void DidFinishRegisterForRemoteNotificationEvent (string _deviceToken, string _error)
-        {
-            print("Request to register for remote notification finished. Error = " + _error.GetPrintableString());
-            print("DeviceToken = " + _deviceToken);
+//        private void DidFinishRegisterForRemoteNotificationEvent (string _deviceToken, string _error)
+//        {
+//            print("Request to register for remote notification finished. Error = " + _error.GetPrintableString());
+//            print("DeviceToken = " + _deviceToken);
+//
+//            ManagePushNotifications(_deviceToken);
+//        }
 
-            ManagePushNotifications(_deviceToken);
-        }
-
-        private void ManagePushNotifications(string token)
-        {       
-            //string deviceToken = System.BitConverter.ToString(token).Replace('-', '').ToLower ();
-
-            new PushRegistrationRequest().SetPushId(token)
-                .Send((response) =>
-                    {
-                        if (response.HasErrors)
-                        {
-                            Debug.Log(response.Errors);
-                        }
-                    });
-        }
+//        private void ManagePushNotifications(string token)
+//        {       
+//            //string deviceToken = System.BitConverter.ToString(token).Replace('-', '').ToLower ();
+//
+//            new PushRegistrationRequest().SetPushId(token)
+//                .Send((response) =>
+//                    {
+//                        if (response.HasErrors)
+//                        {
+//                            Debug.Log(response.Errors);
+//                        }
+//                    });
+//        }
 
         #region FaceBook Authentication
         /// <summary>
@@ -106,7 +106,7 @@ namespace Fourzy
         {
             Debug.Log(_resp.DisplayName );
             UserManager.instance.UpdateInformation();
-            NPBinding.NotificationService.RegisterForRemoteNotifications();
+            //NPBinding.NotificationService.RegisterForRemoteNotifications();
             ChallengeManager.instance.GetActiveChallenges();
         }
 

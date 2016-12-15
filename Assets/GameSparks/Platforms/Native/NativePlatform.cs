@@ -7,7 +7,8 @@ using System.Runtime.InteropServices;
 
 namespace GameSparks.Platforms.Native
 {
-    #if ((UNITY_PS4 || UNITY_XBOXONE) && !UNITY_EDITOR) || GS_FORCE_NATIVE_PLATFORM
+    //#if ((UNITY_PS4 || UNITY_XBOXONE) && !UNITY_EDITOR) || GS_FORCE_NATIVE_PLATFORM
+	#if (UNITY_XBOXONE && !UNITY_EDITOR) || GS_FORCE_NATIVE_PLATFORM
     /// <summary>
     /// Platform specific implementation used for the iOS Platform.
     /// </summary>

@@ -22,7 +22,7 @@ public class GameSparksUnity : MonoBehaviour
 	{
 
 //#if ((UNITY_PS4 || UNITY_XBOXONE) && !UNITY_EDITOR) || GS_FORCE_NATIVE_PLATFORM
-#if GS_FORCE_NATIVE_PLATFORM
+#if (UNITY_XBOXONE && !UNITY_EDITOR) || GS_FORCE_NATIVE_PLATFORM
         this.gameObject.AddComponent<NativePlatform>();
 #elif UNITY_WEBGL && !UNITY_EDITOR
 		this.gameObject.AddComponent<WebGLPlatform>();
