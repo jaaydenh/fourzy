@@ -275,15 +275,16 @@ namespace Fourzy
             if (isCurrentPlayerTurn)
             {
                 gameStatusText.text = "Your Move";
+                gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
             }
             else
             {
                 gameStatusText.text = "Their Move";
+                gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
             }
         }
 
         private List<long> GetGameBoard() {
-//            List<GSData> gameBoardList = new List<GSData>();
             List<long> gameBoardList = new List<long>();
             for(int col = 0; col < numColumns; col++)
             {
@@ -295,6 +296,16 @@ namespace Fourzy
                 }
             }
             return gameBoardList;
+        }
+
+        public void ResetUI() {
+            if (isCurrentPlayerTurn) {
+                playerNameLabel.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
+                opponentNameLabel.color = isPlayerOneTurn ? redPlayerColor : bluePlayerColor;
+            } else {
+                playerNameLabel.color = isPlayerOneTurn ? redPlayerColor : bluePlayerColor;
+                opponentNameLabel.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
+            }
         }
 
         public void ResetGameBoard() {
@@ -370,7 +381,6 @@ namespace Fourzy
 			// center camera 
 			Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
 
-            print("GameManager opponentProfilePictureSprite: " + opponentProfilePictureSprite);
             opponentProfilePicture.sprite = opponentProfilePictureSprite;
 		}
 

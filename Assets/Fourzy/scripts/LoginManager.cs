@@ -97,7 +97,7 @@ namespace Fourzy
             }
             else
             {
-                Debug.Log("Something went wrong with FaceBook");
+                Debug.Log("Something went wrong with FaceBook: " + result.Error);
             }
         }
 
@@ -128,7 +128,7 @@ namespace Fourzy
                     }
                     else
                     {
-                        Debug.Log("Error Logging into facebook");
+                        Debug.Log("Error Logging into facebook: " + response.Errors.ToString());
                     }
                     Answers.LogLogin("facebook", success);
                 });

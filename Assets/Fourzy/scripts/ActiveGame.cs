@@ -31,6 +31,7 @@ namespace Fourzy
         private GameObject UIScreen;
         private GameObject gameScreen;
         private int opponentIndex;
+        public bool isCurrentPlayerTurn = false;
 
         private Sprite opponentProfilePictureSprite;
 
@@ -46,7 +47,7 @@ namespace Fourzy
             }
 
             opponentNameLabel.text = playerNames[opponentIndex];
-            print("WinnerID : " + winnerId);
+
             if (winnerId != null)
             {
                 if (winnerId == UserManager.instance.userId)
@@ -64,11 +65,11 @@ namespace Fourzy
                 if (nextPlayerId == UserManager.instance.userId)
                 {
                     //If it is, then we say it's your turn
-                    statusLabel.text = "Your Turn!";
+                    statusLabel.text = "Your Move!";
                 }
                 else
                 {
-                    statusLabel.text = "Their Turn!";
+                    statusLabel.text = "Their Move!";
                     //                for (int i = 0; i < playerIds.Count; i++)
                     //              {
                     //                  //else find the player whose Id does match and return their name
@@ -82,7 +83,6 @@ namespace Fourzy
 
             StartCoroutine(UserManager.instance.GetFBPicture(playerFacebookIds[opponentIndex], (sprite)=>
                 {
-                    print("ActiveGame opponentProfilePictureSprite: " + sprite);
                     opponentProfilePictureSprite = sprite;
                     opponentProfilePicture.sprite = sprite;
                 }));
@@ -91,21 +91,23 @@ namespace Fourzy
     	//Open game gets called OnClick of the play button which happens when pressing or clicking an active game in the games list
         public void OpenGame()
     	{
-            
             GameManager.instance.opponentProfilePictureSprite = opponentProfilePictureSprite;
+            GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
 
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.challengeInstanceId = challengeId;
             GameManager.instance.winner = winnerName;
+            print("ActiveGame isCurrentPlayerTurn: " + isCurrentPlayerTurn);
+            GameManager.instance.isCurrentPlayerTurn = isCurrentPlayerTurn;
 
-            //If the user Id of the next player is equal to the current player then it is the current player's turn
-            if (nextPlayerId == UserManager.instance.userId)
-            {
-                GameManager.instance.isCurrentPlayerTurn = true;
-            } else {
-                GameManager.instance.isCurrentPlayerTurn = false;
-            }
+//            //If the user Id of the next player is equal to the current player then it is the current player's turn
+//            if (nextPlayerId == UserManager.instance.userId)
+//            {
+//                GameManager.instance.isCurrentPlayerTurn = true;
+//            } else {
+//                GameManager.instance.isCurrentPlayerTurn = false;
+//            }
                 
             GameManager.instance.ResetGameBoard();
 			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
@@ -122,6 +124,7 @@ namespace Fourzy
 			}
                 
             GameManager.instance.SetMultiplayerGameStatusText();
+            GameManager.instance.ResetUI();
 
             UIScreen.SetActive(false);
 

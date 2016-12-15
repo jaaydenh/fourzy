@@ -12,7 +12,9 @@ namespace Fourzy
 	{
 		public static ChallengeManager instance;
 
-		public GameObject activeGameGrid;
+		public GameObject yourMoveGameGrid;
+        public GameObject theirMoveGameGrid;
+        public GameObject completedGameGrid;
 		public GameObject activeGamePrefab;
 
 		public List<GameObject> activeGames = new List<GameObject>();
@@ -21,28 +23,18 @@ namespace Fourzy
 		public GameObject invitePrefab;
 		public List<GameObject> gameInvites = new List<GameObject>();
 
-        //delegate Action<GameSparks.Api.Responses.CreateChallengeResponse> ChallengeId(GameSparks.Api.Responses.CreateChallengeResponse response);
-
-        //Action<GameSparks.Api.Responses.CreateChallengeResponse> test;
-
 		void Start()
 		{
 			instance = this;
-
-            //GetActiveChallenges();
 		}
 
 		//This function accepts a string of UserIds and invites them to a new challenge
         public void ChallengeUser(string userId, List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
-        //public void ChallengeUser(string userId)
 		{
-            //ChallengeId challengeInstanceId;
-
             //CreateChallengeRequest takes a list of UserIds because you can challenge more than one user at a time
             List<string> gsId = new List<string>();
             //Add our friends UserId to the list
             gsId.Add(userId);
-            //Debug.Log("GameBoard: " + gameBoard);
 
             GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameBoard);
             data.AddNumber("position", position);
@@ -50,15 +42,11 @@ namespace Fourzy
             // always player 1 plays first
             data.AddNumber("player", 1);
             //we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
-            //GameSparks.Api.Responses.CreateChallengeResponse chalResponse =
                 new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
                 .SetUsersToChallenge(gsId) //We supply the userIds of who we wish to challenge
-				.SetEndTime(System.DateTime.Today.AddDays(1)) //We set a date and time the challenge will end on
+				.SetEndTime(System.DateTime.Today.AddDays(15)) //We set a date and time the challenge will end on
 				.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
                 .SetScriptData(data)
-//                .Send(delegate(GameSparks.Api.Responses.CreateChallengeResponse response) {
-//                    Test1(response.ChallengeInstanceId);
-//                });
                 .Send((response) => 
 					{
 						if (response.HasErrors)
@@ -71,38 +59,6 @@ namespace Fourzy
 						}
 					});
 		}
-
-//        public void Test1(string challengeId) {
-//            GameManager.instance.challengeInstanceId = challengeId;
-//        }
-
-        public void ChallengeUserOld(string userId)
-        //public void ChallengeUser(string userId)
-        {
-            //CreateChallengeRequest takes a list of UserIds because you can challenge more than one user at a time
-            List<string> gsId = new List<string>();
-            //Add our friends UserId to the list
-            gsId.Add(userId);
-            //Debug.Log("GameBoard: " + gameBoard);
-
-
-            //we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
-            new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
-                .SetUsersToChallenge(gsId) //We supply the userIds of who we wish to challenge
-                .SetEndTime(System.DateTime.Today.AddDays(1)) //We set a date and time the challenge will end on
-                .SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
-                .Send((response) =>
-                    {
-                        if (response.HasErrors)
-                        {
-                            Debug.Log(response.Errors);
-                        }
-                        else
-                        {
-                            //Show message saying sent!;
-                        }
-                    });
-        }
 
 //		public void GetChallengeInvites()
 //		{
@@ -164,10 +120,23 @@ namespace Fourzy
 					{
 						foreach (var challenge in response.ChallengeInstances)
 						{
-							GameObject go = Instantiate(activeGamePrefab) as GameObject;
-							go.gameObject.transform.SetParent(activeGameGrid.transform);
-
+                            GameObject go = Instantiate(activeGamePrefab) as GameObject;
                             ActiveGame activeGame = go.GetComponent<ActiveGame>();
+
+                            if (challenge.State == "RUNNING") {
+                                //If the user Id of the next player is equal to the current player then it is the current player's turn
+                                if (challenge.NextPlayer == UserManager.instance.userId)
+                                {
+                                    activeGame.isCurrentPlayerTurn = true;
+                                    go.gameObject.transform.SetParent(yourMoveGameGrid.transform);
+                                } else {
+                                    activeGame.isCurrentPlayerTurn = false;
+                                    go.gameObject.transform.SetParent(theirMoveGameGrid.transform);
+                                }
+                            } else if (challenge.State == "COMPLETE") {
+                                activeGame.isCurrentPlayerTurn = false;
+                                go.gameObject.transform.SetParent(completedGameGrid.transform);
+                            }
 
                             activeGame.challengeId = challenge.ChallengeId;
                             activeGame.nextPlayerId = challenge.NextPlayer;
@@ -196,9 +165,6 @@ namespace Fourzy
                                 
                             List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                             activeGame.moveList = moveList;
-
-
-
 
 							//Debug.Log("gameboard: " + stringDebug);
 							activeGames.Add(go);

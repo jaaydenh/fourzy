@@ -22,7 +22,6 @@ namespace Fourzy
     	void Start()
     	{
             UIScreen = GameObject.Find("UI Screen");
-            //When the object is instantiated, update the GUI variables
     		UpdateFriend();
     	}
 
@@ -30,17 +29,11 @@ namespace Fourzy
     	{
     		nameLabel.text = userName;
     		onlineTexture.color = isOnline ? Color.green : Color.gray;
-    		//onlineTexture.texture.SetPixels(new Color[] {isOnline ? Color.green : Color.gray});
 
             StartCoroutine(UserManager.instance.GetFBPicture(facebookId, (sprite)=>
                 {
                     profilePicture.sprite = sprite;
                 }));
-    	}
-             
-    	public void StartChallenge()
-    	{
-    		ChallengeManager.instance.ChallengeUserOld(id);
     	}
 
         //Open game gets called OnClick of the play button

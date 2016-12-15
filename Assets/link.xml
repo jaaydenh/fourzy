@@ -21,4 +21,10 @@
     <namespace fullname="Mono.Security.Protocol.Tls" preserve="all" />
     <namespace fullname="Mono.Security.X509" preserve="all" />
   </assembly>
+  <assembly fullname="Facebook.Unity.Android">
+    <type fullname="Facebook.Unity.Android.*" preserve="all" />
+  </assembly>
+  <assembly fullname="Facebook.Unity.IOS">
+    <type fullname="Facebook.Unity.IOS.*" preserve="all" />
+  </assembly>
 </linker>
