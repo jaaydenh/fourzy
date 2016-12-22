@@ -14,56 +14,55 @@ namespace Fourzy
 
         void Awake() {
             ConnectWithFacebook();
-            //NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
+            NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
         }
 
         private void OnEnable()
         {
             //Triggered when registration for remote notification event is done.
-            //NotificationService.DidFinishRegisterForRemoteNotificationEvent += DidFinishRegisterForRemoteNotificationEvent;
+            NotificationService.DidFinishRegisterForRemoteNotificationEvent += DidFinishRegisterForRemoteNotificationEvent;
         }
 
         private void OnDisable()
         {
-            //NotificationService.DidFinishRegisterForRemoteNotificationEvent -= DidFinishRegisterForRemoteNotificationEvent;
+            NotificationService.DidFinishRegisterForRemoteNotificationEvent -= DidFinishRegisterForRemoteNotificationEvent;
         }
 
-//        private void DidFinishRegisterForRemoteNotificationEvent (string _deviceToken, string _error)
-//        {
-//            print("Request to register for remote notification finished. Error = " + _error.GetPrintableString());
-//            print("DeviceToken = " + _deviceToken);
-//
-//            ManagePushNotifications(_deviceToken);
-//        }
+        private void DidFinishRegisterForRemoteNotificationEvent (string _deviceToken, string _error)
+        {
+            print("Request to register for remote notification finished. Error = " + _error.GetPrintableString());
+            print("DeviceToken = " + _deviceToken);
 
-//        private void ManagePushNotifications(string token)
-//        {       
-//            //string deviceToken = System.BitConverter.ToString(token).Replace('-', '').ToLower ();
-//
-//            new PushRegistrationRequest().SetPushId(token)
-//                .Send((response) =>
-//                    {
-//                        if (response.HasErrors)
-//                        {
-//                            Debug.Log(response.Errors);
-//                        }
-//                    });
-//        }
+            ManagePushNotifications(_deviceToken);
+        }
 
-        #region FaceBook Authentication
+        private void ManagePushNotifications(string token)
+        {       
+            //string deviceToken = System.BitConverter.ToString(token).Replace('-', '').ToLower ();
+
+            new PushRegistrationRequest().SetPushId(token)
+                .Send((response) =>
+                    {
+                        if (response.HasErrors)
+                        {
+                            Debug.Log(response.Errors);
+                        }
+                    });
+        }
+            
         /// <summary>
         /// Below we will login with facebook.
         /// When FB is ready we will call the method that allows GS to connect to GameSparks
         /// </summary>
         public void ConnectWithFacebook()
         {
-            if(!FB.IsInitialized)
-            {
-                Debug.Log("Initializing Facebook");
-                FB.Init(FacebookLogin);
-            }
-            else
-            {
+            Debug.Log("Connecting Facebook With GameSparks...");// first check if FB is ready, and then login //
+            // if its not ready we just init FB and use the login method as the callback for the init method //
+            if (!FB.IsInitialized) {
+                Debug.Log("Initializing Facebook...");
+                FB.Init(FacebookLogin, null);
+            } else {
+                FB.ActivateApp();
                 FacebookLogin();
             }
         }
@@ -77,10 +76,8 @@ namespace Fourzy
             if (!FB.IsLoggedIn)
             {
                 Debug.Log("Logging into Facebook");
-                FB.LogInWithReadPermissions(
-                    new List<string>() { "public_profile", "email", "user_friends" },
-                    GameSparksFBConnect
-                );
+                var perms = new List<string>(){"public_profile", "email", "user_friends"} ;
+                FB.LogInWithReadPermissions(perms, GameSparksFBConnect);
             }
             else
             {
@@ -97,7 +94,7 @@ namespace Fourzy
             }
             else
             {
-                Debug.Log("Something went wrong with FaceBook: " + result.Error);
+                Debug.LogWarning("Something went wrong with FaceBook: " + result.Error);
             }
         }
 
@@ -106,7 +103,7 @@ namespace Fourzy
         {
             Debug.Log(_resp.DisplayName );
             UserManager.instance.UpdateInformation();
-            //NPBinding.NotificationService.RegisterForRemoteNotifications();
+            NPBinding.NotificationService.RegisterForRemoteNotifications();
             ChallengeManager.instance.GetActiveChallenges();
         }
 
@@ -119,6 +116,8 @@ namespace Fourzy
             bool success = false;
             new GameSparks.Api.Requests.FacebookConnectRequest()
                 .SetAccessToken(AccessToken.CurrentAccessToken.TokenString)
+                .SetDoNotLinkToCurrentPlayer(false)// we don't want to create a new account so link to the player that is currently logged in
+                .SetSwitchIfPossible(true)//this will switch to the player with this FB account id if they already have an account from a separate login
                 .Send((response) => {
                     if(!response.HasErrors)
                     {
@@ -128,11 +127,11 @@ namespace Fourzy
                     }
                     else
                     {
-                        Debug.Log("Error Logging into facebook: " + response.Errors.ToString());
+                        Debug.LogWarning("Error Logging into facebook: " + response.Errors.JSON);
                     }
                     Answers.LogLogin("facebook", success);
                 });
         }
-        #endregion
+
     }
 }

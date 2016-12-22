@@ -23,6 +23,10 @@ namespace Fourzy
 		public GameObject invitePrefab;
 		public List<GameObject> gameInvites = new List<GameObject>();
 
+        public GameObject NoMovesPanel;
+
+        //private int yourMoveGames = 0;
+
 		void Start()
 		{
 			instance = this;
@@ -102,13 +106,15 @@ namespace Fourzy
 
 		public void GetActiveChallenges()
 		{
-			//Every time we call GetChallengeInvites we'll refresh the list
+            //yourMoveGames = 0;
+
+            //Every time we call GetChallengeInvites we'll refresh the list
 			for (int i = 0; i < activeGames.Count; i++)
 			{
 				//Destroy all runningGame gameObjects currently in the scene
 				Destroy(activeGames[i]);
 			}
-			//Clear the list of friends so we don't have null reference errors
+			
 			activeGames.Clear();
             List<string> challengeStates = new List<string> {"RUNNING","COMPLETE"};
 
@@ -129,6 +135,8 @@ namespace Fourzy
                                 {
                                     activeGame.isCurrentPlayerTurn = true;
                                     go.gameObject.transform.SetParent(yourMoveGameGrid.transform);
+                                    //Debug.Log("Add game to yourMoveGameGrid");
+                                    //yourMoveGames++;
                                 } else {
                                     activeGame.isCurrentPlayerTurn = false;
                                     go.gameObject.transform.SetParent(theirMoveGameGrid.transform);
@@ -170,6 +178,17 @@ namespace Fourzy
 							activeGames.Add(go);
 						}
 					});
+//            Debug.Log("yourMoveGameGrid.transform.childCount: " + yourMoveGameGrid.transform.childCount);
+//            if (yourMoveGames == 0)
+//            {
+//                NoMovesPanel.SetActive(false);
+//                Debug.Log("NoMovesPanel Active: true " + yourMoveGames);
+//            }
+//            else
+//            {
+//                Debug.Log("NoMovesPanel Active: false " + yourMoveGames);
+//                NoMovesPanel.SetActive(true);
+//            }
 		}
 	}
 }
