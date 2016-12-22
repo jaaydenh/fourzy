@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Facebook.Unity;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
-using Fabric.Answers;
+//using Fabric.Answers;
 using VoxelBusters.NativePlugins;
 using VoxelBusters.Utility;
 
@@ -129,7 +129,7 @@ namespace Fourzy
                     {
                         Debug.LogWarning("Error Logging into facebook: " + response.Errors.JSON);
                     }
-                    Answers.LogLogin("facebook", success);
+                    //Answers.LogLogin("facebook", success);
                 });
         }
 
