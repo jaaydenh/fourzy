@@ -84,7 +84,9 @@ namespace Fourzy
 		bool isLoading = true;
 		bool isDropping = false; 
 		bool gameOver = false;
-		bool isCheckingForWinner = false;
+        bool isGameDrawn = false;
+        bool didPlayer1Win = false;
+		public bool isCheckingForWinner = false;
 
         int spacing = 1; //100
         int offset = 0; //4
@@ -123,7 +125,7 @@ namespace Fourzy
 
         private void enableGameScreen(bool enabled) {
             UserInputHandler.inputEnabled = false;
-            Debug.Log("UserInputHandler.inputEnabled = false;");
+            //Debug.Log("UserInputHandler.inputEnabled = false;");
             gameScreen.SetActive(enabled);
             if (enabled)
             {
@@ -133,7 +135,7 @@ namespace Fourzy
 
         IEnumerator WaitToEnableInput() {
             yield return new WaitForSeconds(2);
-            Debug.Log("UserInputHandler.inputEnabled = true;");
+            //Debug.Log("UserInputHandler.inputEnabled = true;");
             UserInputHandler.inputEnabled = true;
         }
 
@@ -245,7 +247,37 @@ namespace Fourzy
             //ChallengeManager.instance.GetActiveChallenges();
         }
 
-        public void SetGameBoard(int[] boardData) {
+        public void SetupGame(int[] boardData) {
+            StartCoroutine(Test(boardData));
+        }
+
+        public IEnumerator Test(int[] test) {
+            StartCoroutine(SetGameBoard(test));
+            while (isLoading)
+              yield return null;
+            StartCoroutine(CheckWinners());
+        }
+
+        public IEnumerator CheckWinners() {
+            // Check if Player one is the winner
+            StartCoroutine(CheckForWinner(true));
+
+            if (gameOver == false)
+            {
+                // Check if Player two is the winner
+                StartCoroutine(CheckForWinner(false));
+            }
+
+            // wait until winning check is done
+            while (this.isCheckingForWinner == true)
+            {
+                yield return null;
+            }
+
+            UpdateGameStatusText();
+        }
+
+        public IEnumerator SetGameBoard(int[] boardData) {
             isLoading = true;
 
             for(int col = 0; col < numColumns; col++)
@@ -266,23 +298,83 @@ namespace Fourzy
                     }
                 }
             }
-            StartCoroutine(CheckForWinner(true));
-            StartCoroutine(CheckForWinner(false));
+                
+
             isLoading = false;
+
+            yield return 0;
         }
        
-        public void SetMultiplayerGameStatusText() {
-            if (isCurrentPlayerTurn)
+        public void UpdateGameStatusText() {
+            print("isMultiplayer: " + isMultiplayer);
+            print("gameOver: " + gameOver);
+            print("isCurrentPlayerTurn: " + isCurrentPlayerTurn);
+            print("isPlayerOneTurn: " + isPlayerOneTurn);
+            print("didPlayer1Win: " + didPlayer1Win);
+
+            if (gameOver == true)
             {
-                gameStatusText.text = "Your Move";
-                gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
-            }
-            else
-            {
-                gameStatusText.text = "Their Move";
-                gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
+                if (isGameDrawn) {
+                    gameStatusText.text = drawText;
+                } else if (isMultiplayer) {
+                    if (winner != null)
+                    {
+                        gameStatusText.text = winner + " Won!";
+                    }
+                    else
+                    {
+                        if (isPlayerOneTurn && didPlayer1Win)
+                        {
+                            gameStatusText.text = UserManager.instance.userName + " Won!";
+                        }
+                        if (isPlayerOneTurn && !didPlayer1Win)
+                        {
+                            gameStatusText.text = UserManager.instance.userName + " Lost!";
+                        }
+                        if (!isPlayerOneTurn && !didPlayer1Win)
+                        {
+                            gameStatusText.text = UserManager.instance.userName + " Won!";
+                        }
+                        if (!isPlayerOneTurn && didPlayer1Win)
+                        {
+                            gameStatusText.text = UserManager.instance.userName + " Lost!";
+                        }
+                        gameStatusText.color = didPlayer1Win ? bluePlayerColor : redPlayerColor;
+                    }
+                } else {
+                    gameStatusText.text = didPlayer1Win ? bluePlayerWonText : redPlayerWonText;
+                    gameStatusText.color = didPlayer1Win ? bluePlayerColor : redPlayerColor;
+                }
+            } else {
+                if (isMultiplayer)
+                {
+                    if (isCurrentPlayerTurn)
+                    {
+                        gameStatusText.text = "Your Move";
+                        gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
+                    }
+                    else
+                    {
+                        gameStatusText.text = "Their Move";
+                        gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
+                    }
+                } else {
+                    gameStatusText.text = isPlayerOneTurn ? bluePlayerMoveText : redPlayerMoveText;
+                    gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
+                }
             }
         }
+
+//        private void UpdateGameStatusText() {
+//            if (gameOver == false) {
+//                if (isMultiplayer) {
+//                    SetMultiplayerGameStatusText();
+//                } else {
+//                    gameStatusText.text = isPlayerOneTurn ? bluePlayerMoveText : redPlayerMoveText;
+//                    gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
+//                }
+//            }
+//        }
 
         private List<long> GetGameBoard() {
             List<long> gameBoardList = new List<long>();
@@ -569,10 +661,16 @@ namespace Fourzy
 
                 g.transform.parent = gamePieces.transform;
 
-				StartCoroutine(CheckForWinner(true));
-                StartCoroutine(CheckForWinner(false));
+                // Check if Player one is the winner
+                StartCoroutine(CheckForWinner(true));
+                if (gameOver == false)
+                {
+                    // Check if Player two is the winner
+                    StartCoroutine(CheckForWinner(false));
+                }
+
 				// wait until winning check is done
-				while(isCheckingForWinner)
+				while(this.isCheckingForWinner)
 					yield return null;
 
 				isPlayerOneTurn = !isPlayerOneTurn;
@@ -594,23 +692,13 @@ namespace Fourzy
 			yield return 0;
 		}
 
-        private void UpdateGameStatusText() {
-            if (gameOver == false) {
-                if (isMultiplayer) {
-                    SetMultiplayerGameStatusText();
-                } else {
-                    gameStatusText.text = isPlayerOneTurn ? bluePlayerMoveText : redPlayerMoveText;
-                    gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
-                }
-            }
-        }
-
 		/// <summary>
 		/// Check for Winner
 		/// </summary>
 		public IEnumerator CheckForWinner(bool playerOne)
 		{
             isCheckingForWinner = true;
+            didPlayer1Win = playerOne;
 
 			for(int x = 0; x < numColumns; x++)
 			{
@@ -627,9 +715,9 @@ namespace Fourzy
 					}
 
 					// shoot a ray of length 'numPiecesToWin - 1' to the right to test horizontally
-					RaycastHit2D[] hitsHorz = Physics2D.RaycastAll(
+                    RaycastHit2D[] hitsHorz = Physics2D.RaycastAll(
 						new Vector2(x, y * -1), 
-						Vector2.right, 
+                        Vector2.left, 
 						numPiecesToWin - 1, 
 						layermask);
 
@@ -644,9 +732,10 @@ namespace Fourzy
 					// shoot a ray up to test vertically
 					RaycastHit2D[] hitsVert = Physics2D.RaycastAll(
 						new Vector2(x, y * -1), 
-						Vector2.up, 
+                        Vector2.up, 
 						numPiecesToWin - 1,
 						layermask);
+                    
 					if(hitsVert.Length == numPiecesToWin)
 					{
                         //SpriteRenderer glow =  hitsVert[3].transform.gameObject.GetComponentInChildren<SpriteRenderer>();
@@ -693,55 +782,13 @@ namespace Fourzy
 				yield return null;
 			}
 
-			// if Game Over update the winning text to show who has won
-            if (!isMultiplayer)
+            if (!FieldContainsEmptyCell())
             {
-                if (gameOver == true)
-                {
-                    gameStatusText.text = playerOne ? bluePlayerWonText : redPlayerWonText;
-                    gameStatusText.color = playerOne ? bluePlayerColor : redPlayerColor;
-                }
-                else
-                {
-                    // check if there are any empty cells left, if not set game over and update text to show a draw
-                    if (!FieldContainsEmptyCell())
-                    {
-                        gameOver = true;
-                        gameStatusText.text = drawText;
-                    }
-                } 
+                gameOver = true;
+                isGameDrawn = true;
             }
-            else
-            {
-                if (gameOver == true)
-                {
-                    if (winner != null)
-                    {
-                        gameStatusText.text = winner + " Won!";
-                    }
-                    else
-                    {
-                        if (isPlayerOneTurn && playerOne) {
-
-                            gameStatusText.text = UserManager.instance.userName + " Won!";
-                        }
-                        if (isPlayerOneTurn && !playerOne)
-                        {
-                            gameStatusText.text = UserManager.instance.userName + " Lost!";
-                        }
-                        if (!isPlayerOneTurn && !playerOne) {
-
-                            gameStatusText.text = UserManager.instance.userName + " Won!";
-                        }
-                        if (!isPlayerOneTurn && playerOne)
-                        {
-                            gameStatusText.text = UserManager.instance.userName + " Lost!";
-                        }
-                    }
-                }
-
-            }
-			isCheckingForWinner = false;
+                
+			this.isCheckingForWinner = false;
 
 			yield return 0;
 		}

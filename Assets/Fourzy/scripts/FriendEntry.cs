@@ -49,7 +49,7 @@ namespace Fourzy
             GameManager.instance.challengedUserId = id;
             GameManager.instance.challengeInstanceId = null;
 
-            GameManager.instance.SetMultiplayerGameStatusText();
+            GameManager.instance.UpdateGameStatusText();
 
             UIScreen.SetActive(false);
 

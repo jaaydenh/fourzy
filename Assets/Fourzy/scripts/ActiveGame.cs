@@ -98,7 +98,7 @@ namespace Fourzy
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.challengeInstanceId = challengeId;
             GameManager.instance.winner = winnerName;
-            print("ActiveGame isCurrentPlayerTurn: " + isCurrentPlayerTurn);
+            //print("ActiveGame isCurrentPlayerTurn: " + isCurrentPlayerTurn);
             GameManager.instance.isCurrentPlayerTurn = isCurrentPlayerTurn;
 
 //            //If the user Id of the next player is equal to the current player then it is the current player's turn
@@ -111,7 +111,9 @@ namespace Fourzy
                 
             GameManager.instance.ResetGameBoard();
 			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
-            GameManager.instance.SetGameBoard(gameBoard);
+            GameManager.instance.SetupGame(gameBoard);
+            //StartCoroutine(GameManager.instance.SetGameBoard(gameBoard));
+            //print("called SetGameBoard");
 
             GSData lastPlayerMove = moveList.LastOrDefault();
             int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
@@ -123,7 +125,7 @@ namespace Fourzy
                 GameManager.instance.isPlayerOneTurn = false;
 			}
                 
-            GameManager.instance.SetMultiplayerGameStatusText();
+//            GameManager.instance.SetMultiplayerGameStatusText();
             GameManager.instance.ResetUI();
 
             UIScreen.SetActive(false);
