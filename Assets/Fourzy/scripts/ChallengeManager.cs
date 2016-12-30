@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using GameSparks.Api.Requests;
 using GameSparks.Core;
-using System.Collections.Generic;
-using System;
 
 namespace Fourzy
 {

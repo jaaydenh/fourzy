@@ -365,17 +365,6 @@ namespace Fourzy
             }
         }
 
-//        private void UpdateGameStatusText() {
-//            if (gameOver == false) {
-//                if (isMultiplayer) {
-//                    SetMultiplayerGameStatusText();
-//                } else {
-//                    gameStatusText.text = isPlayerOneTurn ? bluePlayerMoveText : redPlayerMoveText;
-//                    gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
-//                }
-//            }
-//        }
-
         private List<long> GetGameBoard() {
             List<long> gameBoardList = new List<long>();
             for(int col = 0; col < numColumns; col++)
@@ -801,8 +790,10 @@ namespace Fourzy
             myLine.AddComponent<LineRenderer>();
             LineRenderer lr = myLine.GetComponent<LineRenderer>();
             lr.material = new Material(lineShader);
-            lr.SetColors(color, color);
-            lr.SetWidth(0.15f, 0.15f);
+            lr.startColor = color;
+            lr.endColor = color;
+            lr.startWidth = 0.15f;
+            lr.endWidth = 0.15f;
             lr.SetPosition(0, start);
             lr.SetPosition(1, end);
 

@@ -8,6 +8,7 @@ namespace Fourzy
 {
     public class FriendManager : MonoBehaviour 
     {
+        public static FriendManager instance;
 
     	public GameObject friendEntryPrefab;
 
@@ -17,7 +18,7 @@ namespace Fourzy
 
         void Start()
         {
-            GetFriends();
+            instance = this; 
         }
 
     	public void GetFriends()
@@ -38,8 +39,7 @@ namespace Fourzy
     				//For ever friend stored in our collection of friends
     				foreach (var friend in response.Friends)
     				{
-    					//Create a new gameObject, add friendEntryPrefab as a child of the Friend Grid GameObject
-    					//GameObject go = NGUITools.AddChild(friendGrid.gameObject, friendEntryPrefab);
+    					//Create a new gameObject, add friendEntryPrefab as a child of the Friend List GameObject
     					GameObject go = Instantiate(friendEntryPrefab) as GameObject;
     					go.gameObject.transform.SetParent(friendsList.transform);
     					//Update all the gameObject's variables
@@ -51,8 +51,6 @@ namespace Fourzy
 
     					//Add the gameObject to the list of friends
     					friends.Add(go);
-    					//Tell the grid to reposition everything nicely
-    					//friendGrid.Reposition();
     				}
     			});
     	}

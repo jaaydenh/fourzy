@@ -12,6 +12,12 @@ namespace Fourzy
 {
     public class LoginManager : MonoBehaviour {
 
+        private GameObject facebookButton;
+
+        void Start() {
+            facebookButton = GameObject.Find("Facebook Button");
+        }
+
         void Awake() {
             ConnectWithFacebook();
             NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
@@ -60,10 +66,25 @@ namespace Fourzy
             // if its not ready we just init FB and use the login method as the callback for the init method //
             if (!FB.IsInitialized) {
                 Debug.Log("Initializing Facebook...");
-                FB.Init(FacebookLogin, null);
+                FB.Init(CheckFacebookLogin, null);
             } else {
                 FB.ActivateApp();
-                FacebookLogin();
+                CheckFacebookLogin();
+            }
+        }
+
+        void CheckFacebookLogin()
+        {
+            if (FB.IsLoggedIn)
+            {
+                Debug.Log("Already Logged into Facebook");
+                GSFacebookLogin(AfterFBLogin);
+                facebookButton.SetActive(false);
+            }
+            else
+            {
+                Debug.Log("Not Logged into Facebook");
+                facebookButton.SetActive(true);
             }
         }
 
@@ -71,7 +92,7 @@ namespace Fourzy
         /// When Facebook is ready , this will connect the pleyer to Facebook
         /// After the Player is authenticated it will  call the GS connect
         /// </summary>
-        void FacebookLogin()
+        public void FacebookLogin()
         {
             if (!FB.IsLoggedIn)
             {
@@ -102,9 +123,11 @@ namespace Fourzy
         private void AfterFBLogin(GameSparks.Api.Responses.AuthenticationResponse _resp)
         {
             Debug.Log(_resp.DisplayName );
+            facebookButton.SetActive(false);
             UserManager.instance.UpdateInformation();
             NPBinding.NotificationService.RegisterForRemoteNotifications();
             ChallengeManager.instance.GetActiveChallenges();
+            FriendManager.instance.GetFriends();
         }
 
         //delegate for asynchronous callbacks
@@ -113,7 +136,7 @@ namespace Fourzy
         //This method will connect GameSparks with FaceBook
         public void GSFacebookLogin(FacebookLoginCallback _fbLoginCallback )
         {
-            bool success = false;
+            //bool success = false;
             new GameSparks.Api.Requests.FacebookConnectRequest()
                 .SetAccessToken(AccessToken.CurrentAccessToken.TokenString)
                 .SetDoNotLinkToCurrentPlayer(false)// we don't want to create a new account so link to the player that is currently logged in
@@ -122,7 +145,7 @@ namespace Fourzy
                     if(!response.HasErrors)
                     {
                         Debug.Log("Logged into gamesparks with facebook");
-                        success = true;
+                        //success = true;
                         _fbLoginCallback(response);
                     }
                     else
