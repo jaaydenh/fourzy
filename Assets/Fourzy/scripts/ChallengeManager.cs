@@ -24,6 +24,8 @@ namespace Fourzy
 
         public GameObject NoMovesPanel;
 
+        private bool gettingChallenges = false;
+
         //private int yourMoveGames = 0;
 
 		void Start()
@@ -107,87 +109,95 @@ namespace Fourzy
 		{
             //yourMoveGames = 0;
 
-            //Every time we call GetChallengeInvites we'll refresh the list
-			for (int i = 0; i < activeGames.Count; i++)
-			{
-				//Destroy all runningGame gameObjects currently in the scene
-				Destroy(activeGames[i]);
-			}
-			
-			activeGames.Clear();
-            List<string> challengeStates = new List<string> {"RUNNING","COMPLETE"};
+            if (!gettingChallenges)
+            {
+                gettingChallenges = true;
 
-			//We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
-			new ListChallengeRequest().SetShortCode("chalRanked")
-                .SetStates(challengeStates)
-				.SetEntryCount(50) //We want to pull in the first 50
-				.Send((response) =>
-					{
-						foreach (var challenge in response.ChallengeInstances)
-						{
-                            GameObject go = Instantiate(activeGamePrefab) as GameObject;
-                            ActiveGame activeGame = go.GetComponent<ActiveGame>();
+                //Every time we call GetChallengeInvites we'll refresh the list
+                for (int i = 0; i < activeGames.Count; i++)
+                {
+                    //Destroy all runningGame gameObjects currently in the scene
+                    Destroy(activeGames[i]);
+                }
 
-                            if (challenge.State == "RUNNING") {
-                                //If the user Id of the next player is equal to the current player then it is the current player's turn
-                                if (challenge.NextPlayer == UserManager.instance.userId)
-                                {
-                                    activeGame.isCurrentPlayerTurn = true;
-                                    go.gameObject.transform.SetParent(yourMoveGameGrid.transform);
-                                    //Debug.Log("Add game to yourMoveGameGrid");
-                                    //yourMoveGames++;
-                                } else {
+                activeGames.Clear();
+                List<string> challengeStates = new List<string> {"RUNNING","COMPLETE"};
+
+                //We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
+                new ListChallengeRequest().SetShortCode("chalRanked")
+                    .SetStates(challengeStates)
+                    .SetEntryCount(50) //We want to pull in the first 50
+                    .Send((response) =>
+                        {
+                            foreach (var challenge in response.ChallengeInstances)
+                            {
+                                GameObject go = Instantiate(activeGamePrefab) as GameObject;
+                                ActiveGame activeGame = go.GetComponent<ActiveGame>();
+
+                                if (challenge.State == "RUNNING") {
+                                    //If the user Id of the next player is equal to the current player then it is the current player's turn
+                                    if (challenge.NextPlayer == UserManager.instance.userId)
+                                    {
+                                        activeGame.isCurrentPlayerTurn = true;
+                                        go.gameObject.transform.SetParent(yourMoveGameGrid.transform);
+                                        //Debug.Log("Add game to yourMoveGameGrid");
+                                        //yourMoveGames++;
+                                    } else {
+                                        activeGame.isCurrentPlayerTurn = false;
+                                        go.gameObject.transform.SetParent(theirMoveGameGrid.transform);
+                                    }
+                                } else if (challenge.State == "COMPLETE") {
                                     activeGame.isCurrentPlayerTurn = false;
-                                    go.gameObject.transform.SetParent(theirMoveGameGrid.transform);
+                                    go.gameObject.transform.SetParent(completedGameGrid.transform);
                                 }
-                            } else if (challenge.State == "COMPLETE") {
-                                activeGame.isCurrentPlayerTurn = false;
-                                go.gameObject.transform.SetParent(completedGameGrid.transform);
+
+                                activeGame.challengeId = challenge.ChallengeId;
+                                activeGame.nextPlayerId = challenge.NextPlayer;
+
+                                foreach (var player in challenge.Accepted)
+                                {
+                                    activeGame.playerNames.Add(player.Name);
+                                    activeGame.playerIds.Add(player.Id);
+                                    activeGame.playerFacebookIds.Add(player.ExternalIds.GetString("FB"));
+                                }
+
+                                activeGame.challengerId = challenge.Challenger.Id;
+
+                                activeGame.winnerName = challenge.ScriptData.GetString("winnerName");
+                                activeGame.winnerId = challenge.ScriptData.GetString("winnerId");
+                                List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
+                                if (boardData != null) {
+                                    int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
+                                    //                                int i;
+                                    //                                String stringDebug = "";
+                                    //                                for (i = 0; i < gameboard.Length; i++){
+                                    //                                    stringDebug = stringDebug + " , " + gameboard[i].ToString();
+                                    //                                }
+                                    activeGame.gameBoard = gameboard;
+                                }
+
+                                List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
+                                activeGame.moveList = moveList;
+
+                                //Debug.Log("gameboard: " + stringDebug);
+                                activeGames.Add(go);
+
+                                gettingChallenges = false;
                             }
-
-                            activeGame.challengeId = challenge.ChallengeId;
-                            activeGame.nextPlayerId = challenge.NextPlayer;
-
-							foreach (var player in challenge.Accepted)
-							{
-                                activeGame.playerNames.Add(player.Name);
-                                activeGame.playerIds.Add(player.Id);
-                                activeGame.playerFacebookIds.Add(player.ExternalIds.GetString("FB"));
-							}
-
-                            activeGame.challengerId = challenge.Challenger.Id;
-
-                            activeGame.winnerName = challenge.ScriptData.GetString("winnerName");
-                            activeGame.winnerId = challenge.ScriptData.GetString("winnerId");
-                            List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
-                            if (boardData != null) {
-                                int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
-//                                int i;
-//                                String stringDebug = "";
-//                                for (i = 0; i < gameboard.Length; i++){
-//                                    stringDebug = stringDebug + " , " + gameboard[i].ToString();
-//                                }
-                                activeGame.gameBoard = gameboard;
-                            }
-                                
-                            List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
-                            activeGame.moveList = moveList;
-
-							//Debug.Log("gameboard: " + stringDebug);
-							activeGames.Add(go);
-						}
-					});
-//            Debug.Log("yourMoveGameGrid.transform.childCount: " + yourMoveGameGrid.transform.childCount);
-//            if (yourMoveGames == 0)
-//            {
-//                NoMovesPanel.SetActive(false);
-//                Debug.Log("NoMovesPanel Active: true " + yourMoveGames);
-//            }
-//            else
-//            {
-//                Debug.Log("NoMovesPanel Active: false " + yourMoveGames);
-//                NoMovesPanel.SetActive(true);
-//            }
+                        });
+                //            Debug.Log("yourMoveGameGrid.transform.childCount: " + yourMoveGameGrid.transform.childCount);
+                //            if (yourMoveGames == 0)
+                //            {
+                //                NoMovesPanel.SetActive(false);
+                //                Debug.Log("NoMovesPanel Active: true " + yourMoveGames);
+                //            }
+                //            else
+                //            {
+                //                Debug.Log("NoMovesPanel Active: false " + yourMoveGames);
+                //                NoMovesPanel.SetActive(true);
+                //            }
+            }
+ 
 		}
 	}
 }
