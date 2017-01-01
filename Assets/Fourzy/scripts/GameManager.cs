@@ -75,6 +75,7 @@ namespace Fourzy
 
 		public bool isMultiplayer = false;
         public bool isNewChallenge = false;
+        public bool isNewRandomChallenge = false;
         public bool isCurrentPlayerTurn = false;
 		public bool isPlayerOneTurn = true;
         public string challengedUserId;
@@ -144,6 +145,7 @@ namespace Fourzy
             UserInputHandler.OnTap += processPlayerInput;
             ActiveGame.OnActiveGame += enableGameScreen;
             FriendEntry.OnActiveGame += enableGameScreen;
+            ChallengeManager.OnActiveGame += enableGameScreen;
         }
 
         private void OnDisable()
@@ -151,17 +153,31 @@ namespace Fourzy
             UserInputHandler.OnTap -= processPlayerInput;
             ActiveGame.OnActiveGame -= enableGameScreen;
             FriendEntry.OnActiveGame -= enableGameScreen;
+            ChallengeManager.OnActiveGame -= enableGameScreen;
         }
 
 		void Start() 
 		{
-//            ChallengeStartedMessage.Listener = (message) => {
-//                //var challenge = message.Challenge;
-//
-//                //if (UserManager.instance.userId == challenge.NextPlayer) {
-//                    ChallengeManager.instance.GetActiveChallenges();
-//                //}
-//            };
+
+            ChallengeIssuedMessage.Listener = (message) => {
+                Debug.Log("ChallengeIssuedMessage: " + message.JSONString);
+            };
+
+            ChallengeStartedMessage.Listener = (message) => {
+                Debug.Log("ChallengeStartedMessage: " + message.JSONString);
+            };
+
+            ChallengeWaitingMessage.Listener = (message) => {
+                Debug.Log("ChallengeWaitingMessage: " + message.JSONString);
+            };
+
+            ChallengeJoinedMessage.Listener = (message) => {
+                Debug.Log("ChallengeJoinedMessage: " + message.JSONString);
+            };
+
+            ChallengeWaitingMessage.Listener = (message) => {
+                Debug.Log("ChallengeWaitingMessage: " + message.JSONString);
+            };
 
             ChallengeWonMessage.Listener = (message) => {
                 var challenge = message.Challenge;
@@ -606,7 +622,7 @@ namespace Fourzy
 //                Debug.Log("Direction: " + direction);
 //                Debug.Log("Move Position: " + movePosition);
 //                Debug.Log("challengeInstanceId: " + challengeInstanceId);
-                if (!replayMove && isMultiplayer && !isNewChallenge)
+                if (!replayMove && isMultiplayer && !isNewChallenge && !isNewRandomChallenge)
                 {
                     new LogChallengeEventRequest().SetChallengeInstanceId(challengeInstanceId)
                     .SetEventKey("takeTurn") //The event we are calling is "takeTurn", we set this up on the GameSparks Portal
@@ -626,11 +642,18 @@ namespace Fourzy
                             }
                         });
                 }
-                else if (isMultiplayer && isNewChallenge) {
+                else if (isMultiplayer && isNewChallenge)
+                {
                     Debug.Log("challenge user");
                     isNewChallenge = false;
                     //Debug.Log(GetGameBoard());
                     ChallengeManager.instance.ChallengeUser(challengedUserId, GetGameBoard(), position, direction);
+                }
+                else if (isMultiplayer && isNewRandomChallenge)
+                {
+                    Debug.Log("challenge random user");
+                    isNewRandomChallenge = false;
+                    ChallengeManager.instance.ChallengeRandomUser(GetGameBoard(), position, direction);
                 }
                     
                 GameObject g = SpawnPiece(column, row * -1);

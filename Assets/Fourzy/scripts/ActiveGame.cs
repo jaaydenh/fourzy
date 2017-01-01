@@ -39,14 +39,23 @@ namespace Fourzy
     	{
             UIScreen = GameObject.Find("UI Screen");
 
-            if (playerIds[0] == UserManager.instance.userId)
+            if (playerIds.Count > 1)
             {
-                opponentIndex = 1;
-            } else {
-                opponentIndex = 0;
-            }
+                if (playerIds[0] == UserManager.instance.userId)
+                {
+                    opponentIndex = 1;
+                }
+                else
+                {
+                    opponentIndex = 0;
+                }
 
-            opponentNameLabel.text = playerNames[opponentIndex];
+                opponentNameLabel.text = playerNames[opponentIndex];
+            }
+            else
+            {
+                opponentNameLabel.text = "Waiting for Opponent";
+            }
 
             if (winnerId != null)
             {

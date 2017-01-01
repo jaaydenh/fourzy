@@ -3,13 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using GameSparks.Api.Requests;
 using GameSparks.Core;
+using System.Linq;
 
 namespace Fourzy
 {
     
     public class ChallengeManager : MonoBehaviour
 	{
-		public static ChallengeManager instance;
+        public delegate void GameActive(bool active);
+        public static event GameActive OnActiveGame;
+
+        public static ChallengeManager instance;
 
 		public GameObject yourMoveGameGrid;
         public GameObject theirMoveGameGrid;
@@ -24,6 +28,8 @@ namespace Fourzy
 
         public GameObject NoMovesPanel;
 
+        private GameObject UIScreen;
+
         private bool gettingChallenges = false;
 
         //private int yourMoveGames = 0;
@@ -31,6 +37,8 @@ namespace Fourzy
 		void Start()
 		{
 			instance = this;
+
+            UIScreen = GameObject.Find("UI Screen");
 		}
 
 		//This function accepts a string of UserIds and invites them to a new challenge
@@ -47,23 +55,184 @@ namespace Fourzy
             // always player 1 plays first
             data.AddNumber("player", 1);
             //we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
-                new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
-                .SetUsersToChallenge(gsId) //We supply the userIds of who we wish to challenge
-				.SetEndTime(System.DateTime.Today.AddDays(15)) //We set a date and time the challenge will end on
-				.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
+            new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
+            .SetUsersToChallenge(gsId) //We supply the userIds of who we wish to challenge
+			.SetEndTime(System.DateTime.Today.AddDays(15)) //We set a date and time the challenge will end on
+			.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
+            .SetScriptData(data)
+            .Send((response) => 
+				{
+					if (response.HasErrors)
+					{
+						Debug.Log(response.Errors);
+					}
+					else
+					{
+                        GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
+					}
+				});
+		}
+
+        public void FindRandomChallenge() {
+
+            new FindChallengeRequest()
+                .SetAccessType("PUBLIC")
+                .SetCount(50)
+                //.SetEligibility()
+                //.SetOffset()
+                //.SetShortCode()
+                .Send((response) => {
+
+                    if (response.HasErrors)
+                    {
+                        Debug.Log(response.Errors);
+                    } else {
+                        GSEnumerable<GameSparks.Api.Responses.FindChallengeResponse._Challenge> challengeInstances = response.ChallengeInstances; 
+                        //GSData scriptData = response.ScriptData; 
+
+                        if (challengeInstances.Count() > 0) {
+                            List<string> challengeInstanceIds = new List<string>();
+
+                            //for every object in the challenges array, get the challengeId field and push to challengeInstanceId[]
+                            foreach (var instance in challengeInstances)
+                            {
+                                challengeInstanceIds.Add(instance.ChallengeId);
+                            }
+
+                            int randNum = Random.Range(0, challengeInstanceIds.Count-1);
+
+                            //reference the id at that random numbers location
+                            string randomChallengeId = challengeInstanceIds[randNum];
+                            //each time you run this code, a different id is set in the scriptdata
+                            //Spark.setScriptData("challenge to join", randomChallengeId);
+                            Debug.Log("JoinChallenge: challengeId: " + randomChallengeId);
+                            JoinChallenge(randomChallengeId);
+                        } else {
+
+                            //Send player to Game Screen to make the first move
+                            
+                            OpenNewGame();
+                        }
+                    }
+                });
+        }
+
+        public void OpenNewGame()
+        {
+            GameManager.instance.ResetGameBoard();
+
+            GameManager.instance.isMultiplayer = true;
+            //If we initiated the challenge, we get to be player 1
+            GameManager.instance.isPlayerOneTurn = true;
+            GameManager.instance.isCurrentPlayerTurn = true;
+            GameManager.instance.isNewChallenge = true;
+            GameManager.instance.challengeInstanceId = null;
+
+            GameManager.instance.UpdateGameStatusText();
+
+            UIScreen.SetActive(false);
+
+            if (OnActiveGame != null)
+                OnActiveGame(true);
+        }
+
+        public void ChallengeRandomUser(List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
+        {
+            GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameBoard);
+            data.AddNumber("position", position);
+            data.AddNumber("direction", (int)direction);
+            // always player 1 plays first
+            data.AddNumber("player", 1);
+            //we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
+            new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
+                .SetAccessType("PUBLIC")
+                //.SetAutoStartJoinedChallengeOnMaxPlayers(true)
+                //.SetMaxPlayers(2)
+                //.SetMinPlayers(1)
+                .SetEndTime(System.DateTime.Today.AddDays(15)) //We set a date and time the challenge will end on
+                .SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
                 .SetScriptData(data)
                 .Send((response) => 
-					{
-						if (response.HasErrors)
-						{
-							Debug.Log(response.Errors);
-						}
-						else
-						{
+                    {
+                        if (response.HasErrors)
+                        {
+                            Debug.Log(response.Errors);
+                        }
+                        else
+                        {
                             GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
-						}
-					});
-		}
+                        }
+                    });
+        }
+
+        public void JoinChallenge(string challengeInstanceId) {
+            new JoinChallengeRequest()
+                .SetChallengeInstanceId(challengeInstanceId)
+                .Send((response) => {
+                    if (response.HasErrors)
+                    {
+                        Debug.Log(response.Errors);
+                    }
+                    else
+                    {
+                        GameManager.instance.challengeInstanceId = challengeInstanceId;
+                        //Send Player to Game Screen to make a move
+                        GetChallenge(challengeInstanceId);
+                    }
+                });
+        }
+
+        public void GetChallenge(string challengeInstanceId) {
+            new GetChallengeRequest()
+                .SetChallengeInstanceId(challengeInstanceId)
+                //.SetMessage(message)
+                .Send((response) => {
+                    var challenge = response.Challenge; 
+                    GSData scriptData = response.ScriptData;
+                    OpenGame(challenge);
+                });
+        }
+            
+        public void OpenGame(GameSparks.Api.Responses.GetChallengeResponse._Challenge challenge)
+        {
+            //GameManager.instance.opponentProfilePictureSprite = opponentProfilePictureSprite;
+            //GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
+
+            GameManager.instance.isMultiplayer = true;
+            GameManager.instance.isNewChallenge = false;
+            GameManager.instance.challengeInstanceId = challenge.ChallengeId;
+            GameManager.instance.winner = challenge.ScriptData.GetString("winnerName");
+
+            GameManager.instance.isCurrentPlayerTurn = true;
+
+            GameManager.instance.ResetGameBoard();
+            
+            List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
+            if (boardData != null) {
+                int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
+
+                GameManager.instance.SetupGame(gameboard);
+            }
+
+            List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
+            
+            GSData lastPlayerMove = moveList.LastOrDefault();
+            int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
+
+            if (lastPlayer == 0 || lastPlayer == 2)
+            {
+                GameManager.instance.isPlayerOneTurn = true;
+            } else {
+                GameManager.instance.isPlayerOneTurn = false;
+            }
+                            
+            GameManager.instance.ResetUI();
+
+            UIScreen.SetActive(false);
+
+            if (OnActiveGame != null)
+                OnActiveGame(true);
+        }
 
 //		public void GetChallengeInvites()
 //		{
@@ -121,7 +290,7 @@ namespace Fourzy
                 }
 
                 activeGames.Clear();
-                List<string> challengeStates = new List<string> {"RUNNING","COMPLETE"};
+                List<string> challengeStates = new List<string> {"RUNNING","COMPLETE","ISSUED"};
 
                 //We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
                 new ListChallengeRequest().SetShortCode("chalRanked")
@@ -134,7 +303,7 @@ namespace Fourzy
                                 GameObject go = Instantiate(activeGamePrefab) as GameObject;
                                 ActiveGame activeGame = go.GetComponent<ActiveGame>();
 
-                                if (challenge.State == "RUNNING") {
+                                if (challenge.State == "RUNNING" || challenge.State == "ISSUED") {
                                     //If the user Id of the next player is equal to the current player then it is the current player's turn
                                     if (challenge.NextPlayer == UserManager.instance.userId)
                                     {
@@ -181,9 +350,9 @@ namespace Fourzy
 
                                 //Debug.Log("gameboard: " + stringDebug);
                                 activeGames.Add(go);
-
-                                gettingChallenges = false;
                             }
+
+                            gettingChallenges = false;
                         });
                 //            Debug.Log("yourMoveGameGrid.transform.childCount: " + yourMoveGameGrid.transform.childCount);
                 //            if (yourMoveGames == 0)
