@@ -41,6 +41,27 @@ namespace Fourzy
             UIScreen = GameObject.Find("UI Screen");
 		}
 
+        private void OnEnable()
+        {
+            ActiveGame.OnRemoveGame += RemoveGame;
+        }
+
+        private void RemoveGame(string challengeInstanceId) {
+            new LogEventRequest().SetEventKey("removeGame")
+                .SetEventAttribute("challengeInstanceId", challengeInstanceId)
+                .Send((response) =>
+                    {
+                        if (response.HasErrors)
+                        {
+                            Debug.Log("Problem removing game");
+                        }
+                        else
+                        {
+                            Debug.Log("Remove Game was successful");
+                        }
+                    });
+        }
+
 		//This function accepts a string of UserIds and invites them to a new challenge
         public void ChallengeUser(string userId, List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
 		{
@@ -110,7 +131,6 @@ namespace Fourzy
                         } else {
 
                             //Send player to Game Screen to make the first move
-                            
                             OpenNewGame();
                         }
                     }
@@ -146,20 +166,17 @@ namespace Fourzy
             //we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
             new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
                 .SetAccessType("PUBLIC")
-                //.SetAutoStartJoinedChallengeOnMaxPlayers(true)
-                //.SetMaxPlayers(2)
-                //.SetMinPlayers(1)
+                .SetAutoStartJoinedChallengeOnMaxPlayers(true)
+                .SetMaxPlayers(2)
+                .SetMinPlayers(1)
                 .SetEndTime(System.DateTime.Today.AddDays(15)) //We set a date and time the challenge will end on
-                .SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
+                //.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
                 .SetScriptData(data)
                 .Send((response) => 
                     {
-                        if (response.HasErrors)
-                        {
+                        if (response.HasErrors) {
                             Debug.Log(response.Errors);
-                        }
-                        else
-                        {
+                        } else {
                             GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
                         }
                     });
@@ -302,6 +319,8 @@ namespace Fourzy
                             {
                                 GameObject go = Instantiate(activeGamePrefab) as GameObject;
                                 ActiveGame activeGame = go.GetComponent<ActiveGame>();
+                                bool? isVisible = challenge.ScriptData.GetBoolean("isVisible");
+                                activeGame.challengeState = challenge.State;
 
                                 if (challenge.State == "RUNNING" || challenge.State == "ISSUED") {
                                     //If the user Id of the next player is equal to the current player then it is the current player's turn
@@ -315,7 +334,7 @@ namespace Fourzy
                                         activeGame.isCurrentPlayerTurn = false;
                                         go.gameObject.transform.SetParent(theirMoveGameGrid.transform);
                                     }
-                                } else if (challenge.State == "COMPLETE") {
+                                } else if (challenge.State == "COMPLETE" && isVisible == true) {
                                     activeGame.isCurrentPlayerTurn = false;
                                     go.gameObject.transform.SetParent(completedGameGrid.transform);
                                 }

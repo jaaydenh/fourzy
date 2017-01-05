@@ -12,8 +12,11 @@ namespace Fourzy
         public delegate void GameActive(bool active);
         public static event GameActive OnActiveGame;
 
+        public delegate void RemoveGame(string challengeInstanceId);
+        public static event RemoveGame OnRemoveGame;
+
     	//We store the challengeId, next player's userId and the userId who initiated the challenge.
-    	public string challengeId, nextPlayerId, challengerId, winnerName, winnerId;
+    	public string challengeId, nextPlayerId, challengerId, winnerName, winnerId, challengeState;
 
     	//We create a list for playerNames and Ids
     	public List<string> playerNames = new List<string>();
@@ -30,6 +33,8 @@ namespace Fourzy
 
         private GameObject UIScreen;
         private GameObject gameScreen;
+        private GameObject deleteGameButton;
+
         private int opponentIndex;
         public bool isCurrentPlayerTurn = false;
 
@@ -97,17 +102,45 @@ namespace Fourzy
                 }));
     	}
 
+        private void OnEnable()
+        {
+            GamesListManager.OnShowDeleteGame += ShowDeleteButton;
+
+            deleteGameButton = transform.Find("DeleteGameButton").gameObject;
+            deleteGameButton.SetActive(false);
+        }
+
+        private void ShowDeleteButton(bool show) {
+            if (challengeState == "COMPLETE" && deleteGameButton != null)
+            {
+                if (show)
+                {
+                    deleteGameButton.SetActive(true);
+                }
+                else
+                {
+                    deleteGameButton.SetActive(false);
+                }
+            }
+        }
+
+        public void DeleteGame() {
+            if (OnRemoveGame != null)
+            {
+                OnRemoveGame(challengeId);
+                gameObject.SetActive(false);
+            }
+        }
+
     	//Open game gets called OnClick of the play button which happens when pressing or clicking an active game in the games list
         public void OpenGame()
     	{
             GameManager.instance.opponentProfilePictureSprite = opponentProfilePictureSprite;
             GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
-
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.challengeInstanceId = challengeId;
             GameManager.instance.winner = winnerName;
-            //print("ActiveGame isCurrentPlayerTurn: " + isCurrentPlayerTurn);
             GameManager.instance.isCurrentPlayerTurn = isCurrentPlayerTurn;
 
 //            //If the user Id of the next player is equal to the current player then it is the current player's turn
