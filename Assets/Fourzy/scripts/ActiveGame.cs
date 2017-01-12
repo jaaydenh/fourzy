@@ -157,15 +157,22 @@ namespace Fourzy
             //StartCoroutine(GameManager.instance.SetGameBoard(gameBoard));
             //print("called SetGameBoard");
 
-            GSData lastPlayerMove = moveList.LastOrDefault();
-            int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
+            if (moveList != null && moveList.Count > 0)
+            {
+                GSData lastPlayerMove = moveList.LastOrDefault();
+                int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
 
-            if (lastPlayer == 0 || lastPlayer == 2)
-			{
+                if (lastPlayer == 0 || lastPlayer == 2)
+                {
+                    GameManager.instance.isPlayerOneTurn = true;
+                }
+                else
+                {
+                    GameManager.instance.isPlayerOneTurn = false;
+                }
+            } else {
                 GameManager.instance.isPlayerOneTurn = true;
-			} else {
-                GameManager.instance.isPlayerOneTurn = false;
-			}
+            }
                 
 //            GameManager.instance.SetMultiplayerGameStatusText();
             GameManager.instance.ResetUI();

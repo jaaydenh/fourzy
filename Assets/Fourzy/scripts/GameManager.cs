@@ -99,6 +99,7 @@ namespace Fourzy
         public Text opponentNameLabel;
         public Image opponentProfilePicture;
         public Sprite opponentProfilePictureSprite;
+        public CreateGame createGameScript;
 
         //Singleton
         private static GameManager _instance;
@@ -177,6 +178,11 @@ namespace Fourzy
 
             ChallengeWaitingMessage.Listener = (message) => {
                 Debug.Log("ChallengeWaitingMessage: " + message.JSONString);
+            };
+
+            MatchFoundMessage.Listener = (message) => {
+                createGameScript.SetButtonStateWrapper(false);
+                ChallengeManager.instance.GetActiveChallenges();
             };
 
             ChallengeWonMessage.Listener = (message) => {

@@ -62,6 +62,21 @@ namespace Fourzy
                     });
         }
 
+        public void StartMatchmaking() {
+
+            new LogEventRequest().SetEventKey("startMatchmaking")
+                .SetEventAttribute("matchShortCode","matchRanked")
+                .SetDurable(true)
+                .Send((response) => 
+                    {
+                        if (response.HasErrors)
+                        {
+                            Debug.Log(response.Errors);
+                        }
+                    });
+
+        }
+
 		//This function accepts a string of UserIds and invites them to a new challenge
         public void ChallengeUser(string userId, List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
 		{
@@ -127,9 +142,10 @@ namespace Fourzy
                             //each time you run this code, a different id is set in the scriptdata
                             //Spark.setScriptData("challenge to join", randomChallengeId);
                             Debug.Log("JoinChallenge: challengeId: " + randomChallengeId);
+
+                            // For now players are joined to a random challenge
                             JoinChallenge(randomChallengeId);
                         } else {
-
                             //Send player to Game Screen to make the first move
                             OpenNewGame();
                         }
@@ -145,7 +161,7 @@ namespace Fourzy
             //If we initiated the challenge, we get to be player 1
             GameManager.instance.isPlayerOneTurn = true;
             GameManager.instance.isCurrentPlayerTurn = true;
-            GameManager.instance.isNewChallenge = true;
+            GameManager.instance.isNewRandomChallenge = true;
             GameManager.instance.challengeInstanceId = null;
 
             GameManager.instance.UpdateGameStatusText();
@@ -155,6 +171,24 @@ namespace Fourzy
             if (OnActiveGame != null)
                 OnActiveGame(true);
         }
+
+//        public void ChallengeRandomUser(List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
+//        {
+//            GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameBoard);
+//
+//            new LogEventRequest().SetEventKey("createRandomChallenge")
+//                .SetEventAttribute("position", position)
+//                .SetEventAttribute("direction", (int)direction)
+//                .SetScriptData(data)
+//                .Send((response) => 
+//                    {
+//                        if (response.HasErrors) {
+//                            Debug.Log(response.Errors);
+//                        } else {
+//                            //GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
+//                        }
+//                    });
+//        }
 
         public void ChallengeRandomUser(List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
         {
