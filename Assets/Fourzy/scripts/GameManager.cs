@@ -122,6 +122,8 @@ namespace Fourzy
                 {
                     ChallengeManager.instance.GetActiveChallenges();
                 }
+            } else {
+                createGameScript.ResetButton();
             }
         }
 
@@ -184,6 +186,8 @@ namespace Fourzy
                 createGameScript.SetButtonStateWrapper(false);
                 ChallengeManager.instance.GetActiveChallenges();
             };
+
+
 
             ChallengeWonMessage.Listener = (message) => {
                 var challenge = message.Challenge;

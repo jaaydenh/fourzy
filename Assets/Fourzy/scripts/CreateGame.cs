@@ -41,6 +41,10 @@ namespace Fourzy
             isRunning = false;
     	}
 
+        public void ResetButton() {
+            createButtonImage.color = gameCreate;
+            buttonText.text = "Find Quick Match";
+        }
 
         public void SetButtonStateWrapper(bool isSearching){
             if(isRunning == false){
