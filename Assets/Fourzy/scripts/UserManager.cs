@@ -36,10 +36,12 @@ namespace Fourzy
     		userNameLabel.text = userName;
     		userId = uid;
 
-            StartCoroutine(UserManager.instance.GetFBPicture(fbId, (sprite)=>
-                {
-                    profilePicture.sprite = sprite;
-                }));
+            if (fbId != null) {
+                StartCoroutine(UserManager.instance.GetFBPicture(fbId, (sprite) =>
+                        {
+                            profilePicture.sprite = sprite;
+                        }));
+            }
     	}
 
         public IEnumerator GetFBPicture(string facebookId, Action<Sprite> callback)

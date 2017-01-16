@@ -30,6 +30,7 @@ namespace Fourzy
 
     	public Text opponentNameLabel, statusLabel;
         public Image opponentProfilePicture;
+        public Texture2D defaultProfilePicture;
 
         private GameObject UIScreen;
         private GameObject gameScreen;
@@ -56,10 +57,19 @@ namespace Fourzy
                 }
 
                 opponentNameLabel.text = playerNames[opponentIndex];
+
+                StartCoroutine(UserManager.instance.GetFBPicture(playerFacebookIds[opponentIndex], (sprite)=>
+                    {
+                        opponentProfilePictureSprite = sprite;
+                        opponentProfilePicture.sprite = sprite;
+                    }));
             }
             else
             {
                 opponentNameLabel.text = "Waiting for Opponent";
+                opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                    new Vector2(0.5f, 0.5f));
             }
 
             if (winnerId != null)
@@ -95,11 +105,7 @@ namespace Fourzy
                 }
             }
 
-            StartCoroutine(UserManager.instance.GetFBPicture(playerFacebookIds[opponentIndex], (sprite)=>
-                {
-                    opponentProfilePictureSprite = sprite;
-                    opponentProfilePicture.sprite = sprite;
-                }));
+
     	}
 
         private void OnEnable()

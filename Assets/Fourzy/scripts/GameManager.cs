@@ -187,8 +187,6 @@ namespace Fourzy
                 ChallengeManager.instance.GetActiveChallenges();
             };
 
-
-
             ChallengeWonMessage.Listener = (message) => {
                 var challenge = message.Challenge;
 
