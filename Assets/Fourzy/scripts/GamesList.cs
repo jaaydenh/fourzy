@@ -8,7 +8,7 @@ namespace Fourzy {
         private void OnEnable() {
             if (ChallengeManager.instance)
             {   
-                ChallengeManager.instance.GetActiveChallenges();
+                ChallengeManager.instance.GetChallenges();
             }
         }
     }

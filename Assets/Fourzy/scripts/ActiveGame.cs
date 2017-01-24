@@ -159,7 +159,7 @@ namespace Fourzy
                 
             GameManager.instance.ResetGameBoard();
 			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
-            GameManager.instance.SetupGame(gameBoard);
+            GameManager.instance.SetupGameWrapper(gameBoard);
             //StartCoroutine(GameManager.instance.SetGameBoard(gameBoard));
             //print("called SetGameBoard");
 

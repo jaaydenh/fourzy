@@ -20,7 +20,8 @@ namespace Fourzy
         public GameObject completedGameGrid;
 		public GameObject activeGamePrefab;
 
-		public List<GameObject> activeGames = new List<GameObject>();
+		public List<GameObject> games = new List<GameObject>();
+        public List<string> activeGameIds = new List<string>();
 
 		public GameObject inviteGrid;
 		public GameObject invitePrefab;
@@ -262,7 +263,7 @@ namespace Fourzy
             if (boardData != null) {
                 int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
 
-                GameManager.instance.SetupGame(gameboard);
+                GameManager.instance.SetupGameWrapper(gameboard);
             }
 
             List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
@@ -283,49 +284,9 @@ namespace Fourzy
 
             if (OnActiveGame != null)
                 OnActiveGame(true);
-        }
+        }          
 
-//		public void GetChallengeInvites()
-//		{
-//			//Every time we call GetChallengeInvites we'll refresh the list
-//			for (int i = 0; i < gameInvites.Count; i++)
-//			{
-//				//Destroy all gameInvite gameObjects currently in the scene
-//				Destroy(gameInvites[i]);
-//			}
-//			//Clear the list of gameInvites so we don't have null reference errors
-//			gameInvites.Clear();
-//
-//			//We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
-//            new ListChallengeRequest().SetShortCode("chalRanked")
-//				.SetState("RECEIVED") //We only want to get games that we've received
-//				.SetEntryCount(50) //We want to pull in the first 50 we find
-//				.Send((response) =>
-//					{
-//						//For every challenge we get
-//						foreach (var challenge in response.ChallengeInstances)
-//						{
-//							//Create a new gameObject, add invitePrefab as a child of the invite Grid GameObject
-//							//GameObject go = NGUITools.AddChild(inviteGrid.gameObject, invitePrefab);
-//							GameObject go = Instantiate(invitePrefab) as GameObject;
-//							go.gameObject.transform.SetParent(inviteGrid.transform);
-//
-//							//Update all the gameObject's variables
-//                            GameInvite gameInvite = go.GetComponent<GameInvite>();
-//                            gameInvite.challengeId = challenge.ChallengeId;
-//                            gameInvite.inviteName = challenge.Challenger.Name;
-//                            gameInvite.inviteExpiry = challenge.EndDate.ToString();
-//
-//							//Add the gameObject to the list of friends
-//							gameInvites.Add(go);
-//
-//							//Tell the grid to reposition everything nicely
-//							//inviteGrid.Reposition();
-//						}
-//					});
-//		}
-
-		public void GetActiveChallenges()
+		public void GetChallenges()
 		{
             //yourMoveGames = 0;
 
@@ -334,13 +295,13 @@ namespace Fourzy
                 gettingChallenges = true;
 
                 //Every time we call GetChallengeInvites we'll refresh the list
-                for (int i = 0; i < activeGames.Count; i++)
+                for (int i = 0; i < games.Count; i++)
                 {
                     //Destroy all runningGame gameObjects currently in the scene
-                    Destroy(activeGames[i]);
+                    Destroy(games[i]);
                 }
 
-                activeGames.Clear();
+                games.Clear();
                 List<string> challengeStates = new List<string> {"RUNNING","COMPLETE","ISSUED"};
 
                 //We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
@@ -361,8 +322,9 @@ namespace Fourzy
                                     if (challenge.NextPlayer == UserManager.instance.userId)
                                     {
                                         activeGame.isCurrentPlayerTurn = true;
+
                                         go.gameObject.transform.SetParent(yourMoveGameGrid.transform);
-                                        //Debug.Log("Add game to yourMoveGameGrid");
+                                        activeGameIds.Add(challenge.ChallengeId);
                                         //yourMoveGames++;
                                     } else {
                                         activeGame.isCurrentPlayerTurn = false;
@@ -402,7 +364,7 @@ namespace Fourzy
                                 activeGame.moveList = moveList;
 
                                 //Debug.Log("gameboard: " + stringDebug);
-                                activeGames.Add(go);
+                                games.Add(go);
                             }
 
                             gettingChallenges = false;
@@ -421,5 +383,45 @@ namespace Fourzy
             }
  
 		}
+
+        //      public void GetChallengeInvites()
+        //      {
+        //          //Every time we call GetChallengeInvites we'll refresh the list
+        //          for (int i = 0; i < gameInvites.Count; i++)
+        //          {
+        //              //Destroy all gameInvite gameObjects currently in the scene
+        //              Destroy(gameInvites[i]);
+        //          }
+        //          //Clear the list of gameInvites so we don't have null reference errors
+        //          gameInvites.Clear();
+        //
+        //          //We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
+        //            new ListChallengeRequest().SetShortCode("chalRanked")
+        //              .SetState("RECEIVED") //We only want to get games that we've received
+        //              .SetEntryCount(50) //We want to pull in the first 50 we find
+        //              .Send((response) =>
+        //                  {
+        //                      //For every challenge we get
+        //                      foreach (var challenge in response.ChallengeInstances)
+        //                      {
+        //                          //Create a new gameObject, add invitePrefab as a child of the invite Grid GameObject
+        //                          //GameObject go = NGUITools.AddChild(inviteGrid.gameObject, invitePrefab);
+        //                          GameObject go = Instantiate(invitePrefab) as GameObject;
+        //                          go.gameObject.transform.SetParent(inviteGrid.transform);
+        //
+        //                          //Update all the gameObject's variables
+        //                            GameInvite gameInvite = go.GetComponent<GameInvite>();
+        //                            gameInvite.challengeId = challenge.ChallengeId;
+        //                            gameInvite.inviteName = challenge.Challenger.Name;
+        //                            gameInvite.inviteExpiry = challenge.EndDate.ToString();
+        //
+        //                          //Add the gameObject to the list of friends
+        //                          gameInvites.Add(go);
+        //
+        //                          //Tell the grid to reposition everything nicely
+        //                          //inviteGrid.Reposition();
+        //                      }
+        //                  });
+        //      }
 	}
 }

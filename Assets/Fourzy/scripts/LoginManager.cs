@@ -84,7 +84,7 @@ namespace Fourzy
                         UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null);
 
                         NPBinding.NotificationService.RegisterForRemoteNotifications();
-                        ChallengeManager.instance.GetActiveChallenges();
+                        ChallengeManager.instance.GetChallenges();
                         //Debug.Log("Device Authenticated...UserId: " + response.UserId);
                         //Debug.Log("DisplayName: " + response.DisplayName);
                         //Debug.Log("NewPlayer: " + response.NewPlayer);
@@ -149,7 +149,7 @@ namespace Fourzy
             facebookButton.SetActive(false);
             UserManager.instance.UpdateInformation();
             NPBinding.NotificationService.RegisterForRemoteNotifications();
-            ChallengeManager.instance.GetActiveChallenges();
+            ChallengeManager.instance.GetChallenges();
             FriendManager.instance.GetFriends();
         }
 

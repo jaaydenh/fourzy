@@ -41,7 +41,7 @@ namespace Fourzy
             isRunning = false;
     	}
 
-        public void ResetButton() {
+        public void ResetFindMatchButton() {
             createButtonImage.color = gameCreate;
             buttonText.text = "Find Quick Match";
         }

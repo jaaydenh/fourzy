@@ -42,6 +42,7 @@ namespace Fourzy
 		public GameObject pieceEmpty;
         public GameObject cornerSpot;
         public Button rematchButton;
+        public Button nextGameButton;
 
 		public Text gameStatusText;
 		public string bluePlayerWonText = "Blue Player Won!";
@@ -120,16 +121,15 @@ namespace Fourzy
             {
                 if (ChallengeManager.instance)
                 {
-                    ChallengeManager.instance.GetActiveChallenges();
+                    ChallengeManager.instance.GetChallenges();
                 }
             } else {
-                createGameScript.ResetButton();
+                createGameScript.ResetFindMatchButton();
             }
         }
 
         private void enableGameScreen(bool enabled) {
             UserInputHandler.inputEnabled = false;
-            //Debug.Log("UserInputHandler.inputEnabled = false;");
             gameScreen.SetActive(enabled);
             if (enabled)
             {
@@ -139,7 +139,6 @@ namespace Fourzy
 
         IEnumerator WaitToEnableInput() {
             yield return new WaitForSeconds(2);
-            //Debug.Log("UserInputHandler.inputEnabled = true;");
             UserInputHandler.inputEnabled = true;
         }
 
@@ -184,7 +183,7 @@ namespace Fourzy
 
             MatchFoundMessage.Listener = (message) => {
                 createGameScript.SetButtonStateWrapper(false);
-                ChallengeManager.instance.GetActiveChallenges();
+                ChallengeManager.instance.GetChallenges();
             };
 
             ChallengeWonMessage.Listener = (message) => {
@@ -197,7 +196,7 @@ namespace Fourzy
                         ReplayLastMove(moveList);
                         gameStatusText.text = challenge.Challenger.Name + " Won!";
                     }
-                    ChallengeManager.instance.GetActiveChallenges();
+                    ChallengeManager.instance.GetChallenges();
                 }
             };
 
@@ -210,7 +209,7 @@ namespace Fourzy
                         ReplayLastMove(moveList);
                         gameStatusText.text = challenge.Challenged.First().Name + " Won!";
                     }
-                    ChallengeManager.instance.GetActiveChallenges();
+                    ChallengeManager.instance.GetChallenges();
                 }
             };
 
@@ -224,7 +223,7 @@ namespace Fourzy
                         List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                         ReplayLastMove(moveList);
                     }
-                    ChallengeManager.instance.GetActiveChallenges();
+                    ChallengeManager.instance.GetChallenges();
                 }
             };
 
@@ -268,14 +267,13 @@ namespace Fourzy
             UIScreen.SetActive(true);
             challengeInstanceId = null;
             isCurrentPlayerTurn = false;
-            //ChallengeManager.instance.GetActiveChallenges();
         }
 
-        public void SetupGame(int[] boardData) {
-            StartCoroutine(Test(boardData));
+        public void SetupGameWrapper(int[] boardData) {
+            StartCoroutine(SetupGame(boardData));
         }
 
-        public IEnumerator Test(int[] test) {
+        public IEnumerator SetupGame(int[] test) {
             StartCoroutine(SetGameBoard(test));
             while (isLoading)
               yield return null;
@@ -504,7 +502,7 @@ namespace Fourzy
             return gamePiece;
 		}
 
-        public void RematchGame() {
+        public void RematchPassAndPlayGame() {
             ResetGameBoard();
             gameStatusText.text = isPlayerOneTurn ? bluePlayerMoveText : redPlayerMoveText;
             gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
