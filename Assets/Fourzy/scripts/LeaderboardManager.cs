@@ -28,7 +28,7 @@ namespace Fourzy {
                         {
                             int rank = (int)entry.Rank; // we can get the rank directly
                             string playerName = entry.UserName;
-                            string playerRating = entry.JSONData["playerRating"].ToString(); // we need to get the key, in order to get the score
+                            //string playerRating = entry.JSONData["playerRating"].ToString(); // we need to get the key, in order to get the score
                         }
                     }
                     else

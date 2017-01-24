@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using GameSparks.Api.Requests;
@@ -28,11 +29,12 @@ namespace Fourzy
 		public List<GameObject> gameInvites = new List<GameObject>();
 
         public GameObject NoMovesPanel;
+        public GameObject loadingSpinner;
+        public GameObject gamesListContainer;
 
         private GameObject UIScreen;
-
         private bool gettingChallenges = false;
-
+        private bool pulledToRefresh = false;
         //private int yourMoveGames = 0;
 
 		void Start()
@@ -40,11 +42,27 @@ namespace Fourzy
 			instance = this;
 
             UIScreen = GameObject.Find("UI Screen");
+            loadingSpinner.GetComponent<Animator>().enabled = false;
+            loadingSpinner.GetComponent<Image>().enabled = false;
 		}
 
         private void OnEnable()
         {
             ActiveGame.OnRemoveGame += RemoveGame;
+        }
+
+        public void GamesListPullToRefresh(Vector2 pos) {
+            //Debug.Log("ScrolRectPos: x:" + pos.x + " y: " + pos.y);
+            if (!pulledToRefresh && pos.y > 1.06) {
+                pulledToRefresh = true;
+                loadingSpinner.GetComponent<Animator>().enabled = true;
+                loadingSpinner.GetComponent<Image>().enabled = true;
+                gamesListContainer.GetComponent<VerticalLayoutGroup>().padding.top = 250;
+                GetChallenges();
+            }
+            if (!gettingChallenges && pos.y <= 1.015) {
+                pulledToRefresh = false;
+            }
         }
 
         private void RemoveGame(string challengeInstanceId) {
@@ -289,7 +307,7 @@ namespace Fourzy
 		public void GetChallenges()
 		{
             //yourMoveGames = 0;
-
+            Debug.Log("GamesListPullToRefresh getting challenges: " + gettingChallenges);
             if (!gettingChallenges)
             {
                 gettingChallenges = true;
@@ -367,7 +385,14 @@ namespace Fourzy
                                 games.Add(go);
                             }
 
+                            if (pulledToRefresh) {
+                                StartCoroutine(Wait());
+
+//                                pulledToRefresh = false;
+                            }
                             gettingChallenges = false;
+                            //Debug.Log("After coroutine");
+
                         });
                 //            Debug.Log("yourMoveGameGrid.transform.childCount: " + yourMoveGameGrid.transform.childCount);
                 //            if (yourMoveGames == 0)
@@ -384,6 +409,16 @@ namespace Fourzy
  
 		}
 
+        IEnumerator Wait() {
+//            Debug.Log("Start Wait");
+            yield return new WaitForSeconds(0.8f);
+            loadingSpinner.GetComponent<Animator>().enabled = false;
+            loadingSpinner.GetComponent<Image>().enabled = false;
+            gamesListContainer.GetComponent<VerticalLayoutGroup>().padding.top = 170;
+            gamesListContainer.GetComponent<VerticalLayoutGroup>().SetLayoutVertical();
+           // gamesListViewport.position = new Vector3(0, 78);
+//            Debug.Log("End Wait");
+        }
         //      public void GetChallengeInvites()
         //      {
         //          //Every time we call GetChallengeInvites we'll refresh the list

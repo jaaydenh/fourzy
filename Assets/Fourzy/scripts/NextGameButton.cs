@@ -10,9 +10,9 @@ namespace Fourzy {
             Debug.Log("Next Game Button - OnEnable");
             Debug.Log("Next Game Button - Challengeinstanceid" + GameManager.instance.challengeInstanceId);
 
-            if (ChallengeManager.instance.activeGameIds.Count == 0) {
+            //if (ChallengeManager.instance.activeGameIds.Count == 0) {
                 //this.gameObject.SetActive(false);
-            }
+            //}
         }
 
         public void CheckForActiveGames() {
