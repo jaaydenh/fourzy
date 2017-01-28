@@ -328,11 +328,11 @@ namespace Fourzy
         }
        
         public void UpdateGameStatusText() {
-            print("isMultiplayer: " + isMultiplayer);
-            print("gameOver: " + gameOver);
-            print("isCurrentPlayerTurn: " + isCurrentPlayerTurn);
-            print("isPlayerOneTurn: " + isPlayerOneTurn);
-            print("didPlayer1Win: " + didPlayer1Win);
+//            print("isMultiplayer: " + isMultiplayer);
+//            print("gameOver: " + gameOver);
+//            print("isCurrentPlayerTurn: " + isCurrentPlayerTurn);
+//            print("isPlayerOneTurn: " + isPlayerOneTurn);
+//            print("didPlayer1Win: " + didPlayer1Win);
 
             if (gameOver == true)
             {
@@ -538,8 +538,7 @@ namespace Fourzy
                     // round to a grid cell
                     int column = Mathf.RoundToInt(pos.x);
                     int row = Mathf.RoundToInt(pos.y * -1);
-                    //Debug.Log("column: " + column);
-                    //Debug.Log("row: " + row);
+
                     if (inTopRowBounds (pos.x, pos.y)) {
                         StartCoroutine(movePiece(column, Direction.Down, false));
                     } else if (inBottomRowBounds(pos.x, pos.y)) {
@@ -621,13 +620,9 @@ namespace Fourzy
                 SpriteRenderer sr = go.GetComponentInChildren<SpriteRenderer>();
                 sr.enabled = false;
             }
-            Debug.Log("foundFreeSpot: " + foundFreeSpot);
+
             if(foundFreeSpot)
 			{
-//                Debug.Log("Direction: " + direction.GetHashCode());
-//                Debug.Log("Direction: " + direction);
-//                Debug.Log("Move Position: " + movePosition);
-//                Debug.Log("challengeInstanceId: " + challengeInstanceId);
                 if (!replayMove && isMultiplayer && !isNewChallenge && !isNewRandomChallenge)
                 {
                     new LogChallengeEventRequest().SetChallengeInstanceId(challengeInstanceId)
@@ -650,14 +645,11 @@ namespace Fourzy
                 }
                 else if (isMultiplayer && isNewChallenge)
                 {
-                    Debug.Log("challenge user");
                     isNewChallenge = false;
-                    //Debug.Log(GetGameBoard());
                     ChallengeManager.instance.ChallengeUser(challengedUserId, GetGameBoard(), position, direction);
                 }
                 else if (isMultiplayer && isNewRandomChallenge)
                 {
-                    Debug.Log("challenge random user");
                     isNewRandomChallenge = false;
                     ChallengeManager.instance.ChallengeRandomUser(GetGameBoard(), position, direction);
                 }

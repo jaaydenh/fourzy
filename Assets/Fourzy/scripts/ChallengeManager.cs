@@ -52,7 +52,6 @@ namespace Fourzy
         }
 
         public void GamesListPullToRefresh(Vector2 pos) {
-            //Debug.Log("ScrolRectPos: x:" + pos.x + " y: " + pos.y);
             if (!pulledToRefresh && pos.y > 1.06) {
                 pulledToRefresh = true;
                 loadingSpinner.GetComponent<Animator>().enabled = true;
@@ -160,7 +159,6 @@ namespace Fourzy
                             string randomChallengeId = challengeInstanceIds[randNum];
                             //each time you run this code, a different id is set in the scriptdata
                             //Spark.setScriptData("challenge to join", randomChallengeId);
-                            Debug.Log("JoinChallenge: challengeId: " + randomChallengeId);
 
                             // For now players are joined to a random challenge
                             JoinChallenge(randomChallengeId);
@@ -307,7 +305,6 @@ namespace Fourzy
 		public void GetChallenges()
 		{
             //yourMoveGames = 0;
-            Debug.Log("GamesListPullToRefresh getting challenges: " + gettingChallenges);
             if (!gettingChallenges)
             {
                 gettingChallenges = true;

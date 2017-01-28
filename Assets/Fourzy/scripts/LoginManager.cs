@@ -85,6 +85,7 @@ namespace Fourzy
 
                         NPBinding.NotificationService.RegisterForRemoteNotifications();
                         ChallengeManager.instance.GetChallenges();
+                        LeaderboardManager.instance.GetLeaderboard();
                         //Debug.Log("Device Authenticated...UserId: " + response.UserId);
                         //Debug.Log("DisplayName: " + response.DisplayName);
                         //Debug.Log("NewPlayer: " + response.NewPlayer);
@@ -151,6 +152,7 @@ namespace Fourzy
             NPBinding.NotificationService.RegisterForRemoteNotifications();
             ChallengeManager.instance.GetChallenges();
             FriendManager.instance.GetFriends();
+            LeaderboardManager.instance.GetLeaderboard();
         }
 
         //delegate for asynchronous callbacks
