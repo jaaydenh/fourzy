@@ -154,12 +154,10 @@ namespace Fourzy
 //            } else {
 //                GameManager.instance.isCurrentPlayerTurn = false;
 //            }
-                
-            GameManager.instance.ResetGameBoard();
+            GameManager.instance.ResetGameBoard();    
 			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
             GameManager.instance.SetupGameWrapper(gameBoard);
-            //StartCoroutine(GameManager.instance.SetGameBoard(gameBoard));
-            //print("called SetGameBoard");
+            GameManager.instance.PopulateEmptySpots();
 
             if (moveList != null && moveList.Count > 0)
             {

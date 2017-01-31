@@ -14,7 +14,7 @@ namespace Fourzy
     	public GameObject friendEntryPrefab;
 
     	public GameObject friendsList;
-
+        public GameObject noFriendsText;
     	public List<GameObject> friends = new List<GameObject>();
 
         void Start()
@@ -52,6 +52,12 @@ namespace Fourzy
 
                             //Add the gameObject to the list of friends
                             friends.Add(go);
+                        }
+
+                        if (friends.Count > 0) {
+                            noFriendsText.SetActive(false);
+                        } else {
+                            noFriendsText.SetActive(true);
                         }
                     });
             }

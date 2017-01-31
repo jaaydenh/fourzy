@@ -150,7 +150,7 @@ namespace GameSparks.Platforms
                     Debug.Log("GS: " + message);
                 } else
                 {
-                    Debug.Log("GS: " + message.Substring(0, 1500) + "...");
+                    Debug.Log("GS: " + message + "...");
                 }
             });
 		}

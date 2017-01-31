@@ -40,7 +40,7 @@ namespace Fourzy
         public void OpenGame()
         {
             GameManager.instance.ResetGameBoard();
-
+            GameManager.instance.PopulateEmptySpots();
             GameManager.instance.isMultiplayer = true;
             //If we initiated the challenge, we get to be player 1
             GameManager.instance.isPlayerOneTurn = true;

@@ -133,7 +133,7 @@ PlayerSettings:
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
-  iPhoneBuildNumber: 9
+  iPhoneBuildNumber: 14
   ForceInternetPermission: 0
   ForceSDCardPermission: 0
   CreateWallpaper: 0
@@ -304,7 +304,7 @@ PlayerSettings:
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 1
-  cameraUsageDescription: 
+  cameraUsageDescription: Does not use camera
   locationUsageDescription: 
   microphoneUsageDescription: 
   XboxTitleId: 

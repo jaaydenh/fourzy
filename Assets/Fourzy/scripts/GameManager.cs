@@ -217,11 +217,12 @@ namespace Fourzy
                 var challenge = message.Challenge;
                 if (UserManager.instance.userId == challenge.NextPlayer) {
                     // Only Replay the last move if the player is viewing the game screen for that game
-                    print("challenge.ChallengeId: " + challenge.ChallengeId);
-                    print("challengeInstanceId: " + challengeInstanceId);
+                    //print("challenge.ChallengeId: " + challenge.ChallengeId);
+                    //print("challengeInstanceId: " + challengeInstanceId);
                     if (challenge.ChallengeId == challengeInstanceId) {
                         List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                         ReplayLastMove(moveList);
+                        //AnimateEmptyEdgeSpots(true);
                     }
                     ChallengeManager.instance.GetChallenges();
                 }
@@ -320,7 +321,6 @@ namespace Fourzy
                     }
                 }
             }
-                
 
             isLoading = false;
 
@@ -405,6 +405,7 @@ namespace Fourzy
             if (isCurrentPlayerTurn) {
                 playerNameLabel.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
                 opponentNameLabel.color = isPlayerOneTurn ? redPlayerColor : bluePlayerColor;
+                AnimateEmptyEdgeSpots(true);
             } else {
                 playerNameLabel.color = isPlayerOneTurn ? redPlayerColor : bluePlayerColor;
                 opponentNameLabel.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
@@ -424,14 +425,34 @@ namespace Fourzy
 
 			// create an empty gameboard and instantiate the cells
 			gameBoard = new int[numColumns, numRows];
-			for(int col = 0; col < numColumns; col++)
-			{
-				for(int row = 0; row < numRows; row++)
-				{
-					gameBoard[col, row] = (int)Piece.Empty;
+
+            for (int col = 0; col < numColumns; col++)
+            {
+                for (int row = 0; row < numRows; row++)
+                {
+                    gameBoard[col, row] = (int)Piece.Empty;
+                }
+            }
+
+			isLoading = false;
+			gameOver = false;
+
+			// center camera 
+			Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
+
+            opponentProfilePicture.sprite = opponentProfilePictureSprite;
+		}
+
+        public void PopulateEmptySpots() {
+            for(int col = 0; col < numColumns; col++)
+            {
+                for(int row = 0; row < numRows; row++)
+                {
+                    //gameBoard[col, row] = (int)Piece.Empty;
+                    GameObject g;
                     if (col + row == 0)
                     {
-                        GameObject g = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        g = Instantiate(pieceEmpty, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
                         g.transform.parent = gamePieces.transform;
                         CornerSpot spot = g.GetComponent<CornerSpot>();
                         spot.downArrowActive = true;
@@ -442,7 +463,7 @@ namespace Fourzy
                     }
                     else if (col == 0 && row == numRows - 1)
                     {
-                        GameObject g = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        g = Instantiate(pieceEmpty, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
                         g.transform.parent = gamePieces.transform;
                         CornerSpot spot = g.GetComponent<CornerSpot>();
                         spot.rightArrowActive = true;
@@ -452,7 +473,7 @@ namespace Fourzy
                     }
                     else if (col * row == (numColumns - 1) * (numRows - 1))
                     { 
-                        GameObject g = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        g = Instantiate(pieceEmpty, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
                         g.transform.parent = gamePieces.transform;
                         CornerSpot spot = g.GetComponent<CornerSpot>();
                         spot.upArrowActive = true;
@@ -462,7 +483,7 @@ namespace Fourzy
                     }
                     else if (col == numColumns - 1 && row == 0)
                     {
-                        GameObject g = Instantiate(cornerSpot, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                        g = Instantiate(pieceEmpty, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
                         g.transform.parent = gamePieces.transform;
                         CornerSpot spot = g.GetComponent<CornerSpot>();
                         spot.downArrowActive = true;
@@ -471,21 +492,34 @@ namespace Fourzy
                         spot.column = numColumns - 1;
                     }
                     else
-                    {   
-                        GameObject g = Instantiate(pieceEmpty, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
+                    {
+                        g = Instantiate(pieceEmpty, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 20), Quaternion.identity) as GameObject;
                         g.transform.parent = gamePieces.transform;
                     }
-				}
-			}
 
-			isLoading = false;
-			gameOver = false;
+                    EmptySpot emptySpot = g.GetComponent<EmptySpot>();
+                    if (gameBoard[col, row] != (int)Piece.Empty) {
+                        emptySpot.hasPiece = true;
+                    }
+                    if (col == 0 || row == 0 || col == numColumns - 1 || row == numRows - 1) {
+                        emptySpot.isEdgeSpot = true;
+                    }
+                }
+            }
+        }
 
-			// center camera 
-			Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
-
-            opponentProfilePicture.sprite = opponentProfilePictureSprite;
-		}
+        public void AnimateEmptyEdgeSpots(bool animate) {
+            foreach (EmptySpot spot in gamePieces.GetComponentsInChildren<EmptySpot>())
+            {
+                StartCoroutine(spot.AnimateSpot(animate));
+            }
+//            foreach (CornerSpot spot in gamePieces.GetComponentsInChildren<CornerSpot>())
+//            {
+//                Debug.Log("CORNERSPOT");
+//                StartCoroutine(spot.GetComponentInChildren<EmptySpot>().AnimateSpot(animate));
+//                //StartCoroutine(spot.AnimateSpot(animate));
+//            }
+        } 
 
 		/// <summary>
 		/// Spawns a gamepiece at the given column and row
@@ -671,6 +705,7 @@ namespace Fourzy
 
                 g.transform.parent = gamePieces.transform;
 
+
                 // Check if Player one is the winner
                 StartCoroutine(CheckForWinner(true));
                 if (gameOver == false)
@@ -687,6 +722,7 @@ namespace Fourzy
                 isCurrentPlayerTurn = !isCurrentPlayerTurn;
 
                 UpdateGameStatusText();
+                AnimateEmptyEdgeSpots(false);
 			}
                
             foreach (GameObject go in gos) {
@@ -735,6 +771,9 @@ namespace Fourzy
 					if(hitsHorz.Length == numPiecesToWin)
 					{
                         DrawLine(hitsHorz[0].transform.position, hitsHorz[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
+                        if (isCurrentPlayerTurn) {
+                            Handheld.Vibrate();    
+                        }
                         gameOver = true;
 						break;
 					}
@@ -751,6 +790,9 @@ namespace Fourzy
                         //SpriteRenderer glow =  hitsVert[3].transform.gameObject.GetComponentInChildren<SpriteRenderer>();
                         //glow.enabled = false;
                         DrawLine(hitsVert[0].transform.position, hitsVert[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
+                        if (isCurrentPlayerTurn) {
+                            Handheld.Vibrate();    
+                        }
                         gameOver = true;
 						break;
 					}
@@ -769,6 +811,9 @@ namespace Fourzy
 						if(hitsDiaLeft.Length == numPiecesToWin)
 						{
                             DrawLine(hitsDiaLeft[0].transform.position, hitsDiaLeft[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
+                            if (isCurrentPlayerTurn) {
+                                Handheld.Vibrate();    
+                            }
                             gameOver = true;
 							break;
 						}
@@ -781,6 +826,9 @@ namespace Fourzy
 						if(hitsDiaRight.Length == numPiecesToWin)
 						{
                             DrawLine(hitsDiaRight[0].transform.position, hitsDiaRight[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
+                            if (isCurrentPlayerTurn) {
+                                Handheld.Vibrate();    
+                            }
                             gameOver = true;
 							break;
 						}

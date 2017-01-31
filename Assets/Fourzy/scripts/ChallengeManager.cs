@@ -52,6 +52,7 @@ namespace Fourzy
         }
 
         public void GamesListPullToRefresh(Vector2 pos) {
+            //Debug.Log("pos x:" + pos.x + "pos y: " + pos.y + "magnitude: " + pos.magnitude + "normal: " + pos.normalized);
             if (!pulledToRefresh && pos.y > 1.06) {
                 pulledToRefresh = true;
                 loadingSpinner.GetComponent<Animator>().enabled = true;
@@ -173,7 +174,7 @@ namespace Fourzy
         public void OpenNewGame()
         {
             GameManager.instance.ResetGameBoard();
-
+            GameManager.instance.PopulateEmptySpots();
             GameManager.instance.isMultiplayer = true;
             //If we initiated the challenge, we get to be player 1
             GameManager.instance.isPlayerOneTurn = true;

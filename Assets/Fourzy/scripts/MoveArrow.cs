@@ -9,8 +9,6 @@ namespace Fourzy
         bool mouseButtonPressed = false;
 
         void OnMouseDown() {
-            Debug.Log("mouseButtonPressed: " + mouseButtonPressed);
-
             if (!mouseButtonPressed && Fourzy.GameManager.instance.isCurrentPlayerTurn)
             {
                 mouseButtonPressed = true;
