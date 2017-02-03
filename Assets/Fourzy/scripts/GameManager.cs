@@ -82,6 +82,7 @@ namespace Fourzy
         public string challengedUserId;
         public int currentPlayerId;
         public string winner;
+        public string opponentFacebookId;
 
 		bool isLoading = true;
 		bool isDropping = false; 
@@ -393,8 +394,6 @@ namespace Fourzy
             {
                 for(int row = 0; row < numRows; row++)
                 {
-                    //GSData TEST = new GSData(gameBoard[col, row].ToString());
-                    //gameBoardList.Add(gameBoard[col, row]);
                     gameBoardList.Add(gameBoard[col, row]);
                 }
             }
@@ -409,6 +408,13 @@ namespace Fourzy
             } else {
                 playerNameLabel.color = isPlayerOneTurn ? redPlayerColor : bluePlayerColor;
                 opponentNameLabel.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
+            }
+
+            if (opponentFacebookId != null) {
+                StartCoroutine(UserManager.instance.GetFBPicture(opponentFacebookId, (sprite) =>
+                    {
+                        opponentProfilePicture.sprite = sprite;
+                    }));
             }
         }
 
@@ -439,8 +445,6 @@ namespace Fourzy
 
 			// center camera 
 			Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
-
-            opponentProfilePicture.sprite = opponentProfilePictureSprite;
 		}
 
         public void PopulateEmptySpots() {

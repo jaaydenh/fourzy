@@ -283,6 +283,7 @@ MonoBehaviour:
   challengedUserId: 
   currentPlayerId: 0
   winner: 
+  opponentFacebookId: 
   isCheckingForWinner: 0
   playerNameLabel: {fileID: 539133078}
   playerProfilePicture: {fileID: 574052263}
@@ -415,6 +416,8 @@ MonoBehaviour:
   NoMovesPanel: {fileID: 1755481388}
   loadingSpinner: {fileID: 176489462}
   gamesListContainer: {fileID: 381019440}
+  defaultProfilePicture: {fileID: 2800000, guid: 09111b8bd10774b4fa0a0056fa2cc3c2,
+    type: 3}
 --- !u!114 &159214252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -914,7 +917,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 40}
+  m_SizeDelta: {x: 400, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &249640193
 MonoBehaviour:
@@ -948,7 +951,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Wins / Losses
+  m_Text: Tournament Wins / Losses
 --- !u!222 &249640194
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1492,8 +1495,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -30}
-  m_SizeDelta: {x: 170, y: 30}
+  m_AnchoredPosition: {x: 100, y: -10}
+  m_SizeDelta: {x: 145, y: 80}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &539133078
 MonoBehaviour:
@@ -1521,11 +1524,11 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Player
 --- !u!222 &539133079
@@ -2936,8 +2939,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -97, y: -30}
-  m_SizeDelta: {x: 170, y: 30}
+  m_AnchoredPosition: {x: -100, y: -10}
+  m_SizeDelta: {x: 145, y: 80}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1084174629
 MonoBehaviour:
@@ -2965,11 +2968,11 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 40
-    m_Alignment: 2
+    m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Opponent
 --- !u!222 &1084174630

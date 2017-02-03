@@ -16,7 +16,7 @@ namespace Fourzy
         public static event RemoveGame OnRemoveGame;
 
     	//We store the challengeId, next player's userId and the userId who initiated the challenge.
-    	public string challengeId, nextPlayerId, challengerId, winnerName, winnerId, challengeState;
+        public string challengeId, nextPlayerId, challengerId, winnerName, winnerId, challengeState, challengeShortCode;
 
     	//We create a list for playerNames and Ids
     	public List<string> playerNames = new List<string>();
@@ -31,6 +31,7 @@ namespace Fourzy
     	public Text opponentNameLabel, statusLabel;
         public Image opponentProfilePicture;
         public Texture2D defaultProfilePicture;
+        public Image tournamentIcon;
 
         private GameObject UIScreen;
         private GameObject gameScreen;
@@ -44,6 +45,12 @@ namespace Fourzy
     	void Start()
     	{
             UIScreen = GameObject.Find("UI Screen");
+
+            if (challengeShortCode == "tournamentChallenge") {
+                tournamentIcon.enabled = true;
+            } else {
+                tournamentIcon.enabled = false;
+            }
 
             if (playerIds.Count > 1)
             {
@@ -139,7 +146,7 @@ namespace Fourzy
     	//Open game gets called OnClick of the play button which happens when pressing or clicking an active game in the games list
         public void OpenGame()
     	{
-            GameManager.instance.opponentProfilePictureSprite = opponentProfilePictureSprite;
+            GameManager.instance.opponentProfilePicture.sprite = opponentProfilePictureSprite;
             GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
@@ -176,7 +183,6 @@ namespace Fourzy
                 GameManager.instance.isPlayerOneTurn = true;
             }
                 
-//            GameManager.instance.SetMultiplayerGameStatusText();
             GameManager.instance.ResetUI();
 
             UIScreen.SetActive(false);

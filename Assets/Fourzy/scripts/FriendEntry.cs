@@ -48,6 +48,8 @@ namespace Fourzy
             GameManager.instance.isNewChallenge = true;
             GameManager.instance.challengedUserId = id;
             GameManager.instance.challengeInstanceId = null;
+            GameManager.instance.opponentNameLabel.text = userName;
+            GameManager.instance.opponentProfilePicture.sprite = profilePicture.sprite;
 
             GameManager.instance.UpdateGameStatusText();
 

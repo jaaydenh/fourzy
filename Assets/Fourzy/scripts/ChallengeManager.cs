@@ -32,6 +32,8 @@ namespace Fourzy
         public GameObject loadingSpinner;
         public GameObject gamesListContainer;
 
+        public Texture2D defaultProfilePicture;
+
         private GameObject UIScreen;
         private bool gettingChallenges = false;
         private bool pulledToRefresh = false;
@@ -180,8 +182,13 @@ namespace Fourzy
             GameManager.instance.isPlayerOneTurn = true;
             GameManager.instance.isCurrentPlayerTurn = true;
             GameManager.instance.isNewRandomChallenge = true;
+            GameManager.instance.isNewChallenge = false;
             GameManager.instance.challengeInstanceId = null;
-
+            GameManager.instance.opponentNameLabel.text = "Waiting for Opponent";
+            GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                new Vector2(0.5f, 0.5f));
+            
             GameManager.instance.UpdateGameStatusText();
 
             UIScreen.SetActive(false);
@@ -264,8 +271,12 @@ namespace Fourzy
             
         public void OpenGame(GameSparks.Api.Responses.GetChallengeResponse._Challenge challenge)
         {
-            //GameManager.instance.opponentProfilePictureSprite = opponentProfilePictureSprite;
-            //GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
+            GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                new Vector2(0.5f, 0.5f));
+            GameManager.instance.opponentNameLabel.text = challenge.Challenger.Name;
+
+            GameManager.instance.opponentFacebookId = challenge.Challenger.ExternalIds.GetString("FB");
 
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
@@ -275,7 +286,8 @@ namespace Fourzy
             GameManager.instance.isCurrentPlayerTurn = true;
 
             GameManager.instance.ResetGameBoard();
-            
+            GameManager.instance.PopulateEmptySpots();
+
             List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
             if (boardData != null) {
                 int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
@@ -321,7 +333,8 @@ namespace Fourzy
                 List<string> challengeStates = new List<string> {"RUNNING","COMPLETE","ISSUED"};
 
                 //We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
-                new ListChallengeRequest().SetShortCode("chalRanked")
+                new ListChallengeRequest()
+                    //.SetShortCode("chalRanked")
                     .SetStates(challengeStates)
                     .SetEntryCount(50) //We want to pull in the first 50
                     .Send((response) =>
@@ -353,6 +366,7 @@ namespace Fourzy
 
                                 activeGame.challengeId = challenge.ChallengeId;
                                 activeGame.nextPlayerId = challenge.NextPlayer;
+                                activeGame.challengeShortCode = challenge.ShortCode;
 
                                 foreach (var player in challenge.Accepted)
                                 {
