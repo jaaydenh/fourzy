@@ -35,7 +35,7 @@ namespace Fourzy {
 
                 players.Clear();
                 new LeaderboardDataRequest()
-                .SetLeaderboardShortCode("winLossLeaderboard")
+                .SetLeaderboardShortCode("tournamentWinLossLeaderboard")
                 .SetEntryCount(100) // we need to parse this text input, since the entry count only takes long
                 .Send((response) =>
                     {

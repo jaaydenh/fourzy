@@ -167,34 +167,10 @@ namespace Fourzy
                             JoinChallenge(randomChallengeId);
                         } else {
                             //Send player to Game Screen to make the first move
-                            OpenNewGame();
+                            OpenNewMultiplayerGame();
                         }
                     }
                 });
-        }
-
-        public void OpenNewGame()
-        {
-            GameManager.instance.ResetGameBoard();
-            GameManager.instance.PopulateEmptySpots();
-            GameManager.instance.isMultiplayer = true;
-            //If we initiated the challenge, we get to be player 1
-            GameManager.instance.isPlayerOneTurn = true;
-            GameManager.instance.isCurrentPlayerTurn = true;
-            GameManager.instance.isNewRandomChallenge = true;
-            GameManager.instance.isNewChallenge = false;
-            GameManager.instance.challengeInstanceId = null;
-            GameManager.instance.opponentNameLabel.text = "Waiting for Opponent";
-            GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
-                new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
-                new Vector2(0.5f, 0.5f));
-            
-            GameManager.instance.UpdateGameStatusText();
-
-            UIScreen.SetActive(false);
-
-            if (OnActiveGame != null)
-                OnActiveGame(true);
         }
 
 //        public void ChallengeRandomUser(List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
@@ -265,11 +241,60 @@ namespace Fourzy
                 .Send((response) => {
                     var challenge = response.Challenge; 
                     GSData scriptData = response.ScriptData;
-                    OpenGame(challenge);
+                    OpenMultiplayerGame(challenge);
                 });
         }
-            
-        public void OpenGame(GameSparks.Api.Responses.GetChallengeResponse._Challenge challenge)
+
+        public void OpenPassAndPlayGame() 
+        {
+            GameManager.instance.ResetGameBoard();
+            GameManager.instance.PopulateEmptySpots();
+            GameManager.instance.isMultiplayer = false;
+            GameManager.instance.isPlayerOneTurn = true;
+            GameManager.instance.isCurrentPlayerTurn = true;
+            GameManager.instance.isNewRandomChallenge = false;
+            GameManager.instance.isNewChallenge = false;
+            GameManager.instance.challengeInstanceId = null;
+            GameManager.instance.playerNameLabel.text = "Blue Player";
+            GameManager.instance.playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                new Vector2(0.5f, 0.5f));
+            GameManager.instance.opponentNameLabel.text = "Red Player";
+            GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                new Vector2(0.5f, 0.5f));
+            GameManager.instance.UpdateGameStatusText();
+
+            UIScreen.SetActive(false);
+
+            if (OnActiveGame != null)
+                OnActiveGame(true);
+        }
+
+        public void OpenNewMultiplayerGame() 
+        {
+            GameManager.instance.ResetGameBoard();
+            GameManager.instance.PopulateEmptySpots();
+            GameManager.instance.isMultiplayer = true;
+            GameManager.instance.isPlayerOneTurn = true;
+            GameManager.instance.isCurrentPlayerTurn = true;
+            GameManager.instance.isNewRandomChallenge = true;
+            GameManager.instance.isNewChallenge = false;
+            GameManager.instance.challengeInstanceId = null;
+            GameManager.instance.opponentNameLabel.text = "Waiting for Opponent";
+            GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                new Vector2(0.5f, 0.5f));
+
+            GameManager.instance.UpdateGameStatusText();
+
+            UIScreen.SetActive(false);
+
+            if (OnActiveGame != null)
+                OnActiveGame(true);
+        }
+
+        public void OpenMultiplayerGame(GameSparks.Api.Responses.GetChallengeResponse._Challenge challenge)
         {
             GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
