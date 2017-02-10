@@ -148,6 +148,15 @@ namespace Fourzy
     	{
             GameManager.instance.opponentProfilePicture.sprite = opponentProfilePictureSprite;
             GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
+            GameManager.instance.playerNameLabel.text = UserManager.instance.userName;
+            if (UserManager.instance.profilePicture) {
+                GameManager.instance.playerProfilePicture.sprite = UserManager.instance.profilePicture;    
+            } else {
+                GameManager.instance.playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                    new Vector2(0.5f, 0.5f));
+            }
+
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.challengeInstanceId = challengeId;

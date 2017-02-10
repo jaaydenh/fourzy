@@ -13,9 +13,13 @@ namespace Fourzy
 
     	public string userName;
     	public string userId;
-
+        public Sprite profilePicture;
     	public Text userNameLabel;
-    	public Image profilePicture;
+    	public Image profilePictureImage;
+
+        void Start() {
+            profilePicture = new Sprite();
+        }
 
     	void Awake()
     	{
@@ -39,7 +43,8 @@ namespace Fourzy
             if (fbId != null) {
                 StartCoroutine(UserManager.instance.GetFBPicture(fbId, (sprite) =>
                         {
-                            profilePicture.sprite = sprite;
+                            profilePicture = sprite;
+                            profilePictureImage.sprite = sprite;
                         }));
             }
     	}

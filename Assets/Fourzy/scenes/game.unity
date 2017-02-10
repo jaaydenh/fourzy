@@ -290,7 +290,6 @@ MonoBehaviour:
   playerProfilePicture: {fileID: 574052263}
   opponentNameLabel: {fileID: 1084174629}
   opponentProfilePicture: {fileID: 1568791573}
-  opponentProfilePictureSprite: {fileID: 0}
   createGameScript: {fileID: 185923094}
 --- !u!4 &137424724
 Transform:
@@ -376,7 +375,7 @@ MonoBehaviour:
   userName: 
   userId: 
   userNameLabel: {fileID: 539133078}
-  profilePicture: {fileID: 574052263}
+  profilePictureImage: {fileID: 574052263}
 --- !u!114 &159214250
 MonoBehaviour:
   m_ObjectHideFlags: 0

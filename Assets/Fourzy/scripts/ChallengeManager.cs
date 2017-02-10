@@ -286,6 +286,15 @@ namespace Fourzy
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
                 new Vector2(0.5f, 0.5f));
 
+            GameManager.instance.playerNameLabel.text = UserManager.instance.userName;
+            if (UserManager.instance.profilePicture) {
+                GameManager.instance.playerProfilePicture.sprite = UserManager.instance.profilePicture;    
+            } else {
+                GameManager.instance.playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                    new Vector2(0.5f, 0.5f));
+            }
+
             GameManager.instance.UpdateGameStatusText();
 
             UIScreen.SetActive(false);
@@ -300,8 +309,16 @@ namespace Fourzy
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
                 new Vector2(0.5f, 0.5f));
             GameManager.instance.opponentNameLabel.text = challenge.Challenger.Name;
-
             GameManager.instance.opponentFacebookId = challenge.Challenger.ExternalIds.GetString("FB");
+
+            GameManager.instance.playerNameLabel.text = UserManager.instance.userName;
+            if (UserManager.instance.profilePicture) {
+                GameManager.instance.playerProfilePicture.sprite = UserManager.instance.profilePicture;    
+            } else {
+                GameManager.instance.playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                    new Vector2(0.5f, 0.5f));
+            }
 
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
