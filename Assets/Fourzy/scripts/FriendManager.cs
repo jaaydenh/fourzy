@@ -50,6 +50,8 @@ namespace Fourzy
                             friendEntry.isOnline = friend.Online.Value;
                             friendEntry.facebookId = friend.ExternalIds.GetString("FB");
 
+                            friendEntry.transform.localScale = new Vector3(1f,1f,1f);
+
                             //Add the gameObject to the list of friends
                             friends.Add(go);
                         }

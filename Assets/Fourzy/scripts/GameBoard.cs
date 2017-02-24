@@ -2,48 +2,139 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameBoard : MonoBehaviour {
+namespace Fourzy {
+    
+    public class GameBoard : MonoBehaviour {
 
-    GameObject gamePieces;
-    public GameObject pieceRed;
-    public GameObject pieceBlue;
-    public enum Token {Empty, UpArrow, DownArrow, LeftArrow, RightArrow}
-    public enum Piece {Empty, Blue, Red}
-    public GameObject[,] gamePiecesArray;
-    public Token[,] tokenBoard;
-    [Range(3, 8)]
-    public int numRows = 8;
-    [Range(3, 8)]
-    public int numColumns = 8;
-    bool isLoading = true;
+        GameObject gamePiecesView;
+        public GameObject gameScreenCanvas;
+        public GameObject pieceRed; // View
+        public GameObject pieceBlue; // View
+        public GameObject[,] gamePieces; //Collection of Views
+        public IToken[,] tokenBoard;
+        [Range(3, 8)]
+        public int numRows = 8;
+        [Range(3, 8)]
+        public int numColumns = 8;
+        bool isLoading = true;
 
-	void Start () {
-        tokenBoard = new Token[numColumns, numRows];
-        gamePiecesArray = new GameObject[numColumns, numRows];
-	}
+        public List<MovingGamePiece> activeMovingPieces;
+        public List<MovingGamePiece> completedMovingPieces;
 
-    public IEnumerator SetGameBoard(int[] boardData) {
-        isLoading = true;
+    	void Start () {
+            activeMovingPieces = new List<MovingGamePiece>();
+            completedMovingPieces = new List<MovingGamePiece>();
+            tokenBoard = new IToken[numColumns, numRows];
+            gamePieces = new GameObject[numColumns, numRows];
+    	}
 
-        for(int col = 0; col < numColumns; col++)
-        {
-            for(int row = 0; row < numRows; row++)
-            {
-                int piece = boardData[col * numColumns + row];
-                //gameBoard[col, row] = piece;
-                if (piece == (int)Piece.Blue)
-                {
-                    gamePiecesArray[col,row] = Instantiate(pieceBlue, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
-                }
-                else if (piece == (int)Piece.Red)
-                {
-                    gamePiecesArray[col,row] = Instantiate(pieceRed, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
-                }
+        public void SwapPiecePosition(Position oldPos, Position newPos) {
+            GameObject oldPiece = gamePieces[oldPos.column, oldPos.row];
+            gamePieces[oldPos.column, oldPos.row] = null;
+            gamePieces[newPos.column, newPos.row] = oldPiece;
+        }
+
+        public void DisableNextMovingPiece() {
+            if (activeMovingPieces.Count > 0) {
+                completedMovingPieces.Add(activeMovingPieces[0]);
+                activeMovingPieces.RemoveAt(0);
             }
         }
 
-        isLoading = false;
+        public Player PlayerAtPosition(Position position) {
+            if (gamePieces[position.column, position.row]) {
+                Player player = gamePieces[position.column, position.row].GetComponent<GamePiece>().player;
+                return player;
+            }
+            return Player.NONE;
+        }
 
-        yield return 0;
+        public List<long> GetGameBoardData() {
+            List<long> gameBoardList = new List<long>();
+            for(int col = 0; col < numColumns; col++)
+            {
+                for(int row = 0; row < numRows; row++)
+                {
+                    if (gamePieces[col, row]) {
+                        gameBoardList.Add((int)gamePieces[col, row].GetComponent<GamePiece>().player);    
+                    } else {
+                        gameBoardList.Add(0);
+                    }
+                }
+            }
+            return gameBoardList;
+        }
+
+        public void PrintGameBoard() {
+            string gameboard = "Gameboard: ";
+
+            for (int col = 0; col < numColumns; col++)
+            {
+                for (int row = 0; row < numRows; row++)
+                {
+                    if (gamePieces[col, row]) {
+                        gameboard += (int)gamePieces[col, row].GetComponent<GamePiece>().player + ",";    
+                    } else {
+                        gameboard += "0,";
+                    }
+                }
+            }
+            Debug.Log(gameboard);
+        }
+
+        public void ResetGameBoard() {
+
+            isLoading = true;
+
+            if(gamePiecesView != null)
+            {
+                DestroyImmediate(gamePiecesView);
+            }
+            gamePiecesView = new GameObject("GamePieces");
+            gamePiecesView.transform.parent = gameScreenCanvas.transform;
+
+            // create an empty gameboard and instantiate the cells
+            //gameBoard = new int[numColumns, numRows];
+            //tokenBoard = new int[numColumns, numRows];
+            gamePieces = new GameObject[numColumns, numRows];
+
+            for (int col = 0; col < numColumns; col++)
+            {
+                for (int row = 0; row < numRows; row++)
+                {
+                    //gameBoard[col, row] = (int)Piece.Empty;
+                    //tokenBoard[col, row] = (int)Token.Empty;
+                }
+            }
+                
+
+            isLoading = false;
+            //gameOver = false;
+        }
+
+        public IEnumerator SetGameBoard(int[] boardData) {
+            //isLoading = true;
+
+            for(int col = 0; col < numColumns; col++)
+            {
+                for(int row = 0; row < numRows; row++)
+                {
+                    int piece = boardData[col * numColumns + row];
+                    //gameBoard[col, row] = piece;
+                    if (piece == (int)Piece.BLUE)
+                    {
+                        gamePieces[col,row] = Instantiate(pieceBlue, new Vector3(col, row * -1, 10), Quaternion.identity, gamePiecesView.transform);
+                    }
+                    else if (piece == (int)Piece.RED)
+                    {
+                        gamePieces[col,row] = Instantiate(pieceRed, new Vector3(col, row * -1, 10), Quaternion.identity, gamePiecesView.transform);
+                    }
+                }
+            }
+
+            //isLoading = false;
+
+            yield return 0;
+        }
     }
 }

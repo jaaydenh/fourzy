@@ -25,6 +25,7 @@ namespace Fourzy
 
     	//This is the array of strings we pass our Cloud Code gameBoard to
         public int[] gameBoard;
+        public int[] tokenBoard;
 
         public List<GSData> moveList;
 
@@ -160,6 +161,7 @@ namespace Fourzy
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.challengeInstanceId = challengeId;
+            Debug.Log("Open Active Game: challengeInstanceId: " + challengeId);
             GameManager.instance.winner = winnerName;
             GameManager.instance.isCurrentPlayerTurn = isCurrentPlayerTurn;
 
@@ -172,7 +174,7 @@ namespace Fourzy
 //            }
             GameManager.instance.ResetGameBoard();    
 			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
-            GameManager.instance.SetupGameWrapper(gameBoard);
+            GameManager.instance.SetupGameWrapper(gameBoard, tokenBoard);
             GameManager.instance.PopulateEmptySpots();
 
             if (moveList != null && moveList.Count > 0)

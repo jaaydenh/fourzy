@@ -10,9 +10,10 @@ GameObject:
   - component: {fileID: 455054}
   - component: {fileID: 21211242}
   - component: {fileID: 5836388}
+  - component: {fileID: 114455832749552324}
   m_Layer: 8
   m_Name: BluePiece
-  m_TagString: Untagged
+  m_TagString: GamePiece
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,6 +121,21 @@ Transform:
   m_Father: {fileID: 455054}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114455832749552324
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c45a8ccec88446a2b606295173d3562, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  col: 0
+  row: 0
+  dir: 0
+  isMoveable: 0
 --- !u!212 &212000013818764942
 SpriteRenderer:
   m_ObjectHideFlags: 1

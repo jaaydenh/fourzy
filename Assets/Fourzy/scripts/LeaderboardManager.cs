@@ -61,7 +61,7 @@ namespace Fourzy {
                                 string losses = entry.JSONData["losses"].ToString();
                                 leaderboardPlayer.ratingLabel.text = wins + "/" + losses;
                                 //leaderboardPlayer.ratingLabel.text = entry.JSONData["playerRating"].ToString();
-
+                                leaderboardPlayer.transform.localScale = new Vector3(1f,1f,1f);
                                 players.Add(go);
                             }
                         }

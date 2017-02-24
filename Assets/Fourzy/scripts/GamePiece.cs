@@ -2,20 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GamePiece : MonoBehaviour {
+namespace Fourzy {
+    
+    public class GamePiece : MonoBehaviour {
 
-    public enum Direction {Up, Down, Left, Right, None};
-    public int x;
-    public int y;
-    public Direction dir;
+        public Player player;
+        public Position position;
+        public bool isMoveable;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    	void Start () {
+            isMoveable = false;
+    	}
+
+        public Position GetNextPosition(Direction direction) {
+            Position nextPosition = new Position(0,0);
+
+            switch (direction)
+            {
+                case Direction.UP:
+                    nextPosition.column = position.column;
+                    nextPosition.row = position.row - 1;
+                    break;
+                case Direction.DOWN:
+                    nextPosition.column = position.column;
+                    nextPosition.row = position.row + 1;
+                    break;
+                case Direction.LEFT:
+                    nextPosition.column = position.column - 1;
+                    nextPosition.row = position.row;
+                    break;
+                case Direction.RIGHT:
+                    nextPosition.column = position.column + 1;
+                    nextPosition.row = position.row;
+                    break;
+                default:
+                    break;
+            }
+
+            return nextPosition;
+        }
+    }
 }

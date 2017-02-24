@@ -5,7 +5,7 @@ namespace Fourzy
 {
     public class MoveArrow : MonoBehaviour {
 
-        public Fourzy.GameManager.Direction direction;
+        public Direction direction;
         bool mouseButtonPressed = false;
 
         void OnMouseDown() {
@@ -14,15 +14,18 @@ namespace Fourzy
                 mouseButtonPressed = true;
                 int row = gameObject.GetComponentInParent<CornerSpot>().row;
                 int column = gameObject.GetComponentInParent<CornerSpot>().column;
-                if (direction == Fourzy.GameManager.Direction.Down) {
-                    StartCoroutine(GameManager.instance.MovePiece(column, direction, false));
-                } else if (direction == Fourzy.GameManager.Direction.Up) {
-                    StartCoroutine(GameManager.instance.MovePiece(column, direction, false));
-                } else if (direction == Fourzy.GameManager.Direction.Right) {
-                    StartCoroutine(GameManager.instance.MovePiece(row, direction, false));
-                } else if (direction == Fourzy.GameManager.Direction.Left) {
-                    StartCoroutine(GameManager.instance.MovePiece(row, direction, false));
-                }
+                Position pos = new Position(column, row);
+                StartCoroutine(GameManager.instance.MovePiece(pos, direction, false));
+
+//                if (direction == Direction.DOWN) {
+//                    StartCoroutine(GameManager.instance.NewMovePiece(column, direction, false));
+//                } else if (direction == Direction.UP) {
+//                    StartCoroutine(GameManager.instance.NewMovePiece(column, direction, false));
+//                } else if (direction == Direction.RIGHT) {
+//                    StartCoroutine(GameManager.instance.NewMovePiece(row, direction, false));
+//                } else if (direction == Direction.LEFT) {
+//                    StartCoroutine(GameManager.instance.NewMovePiece(row, direction, false));
+//                }
             }
         }
             

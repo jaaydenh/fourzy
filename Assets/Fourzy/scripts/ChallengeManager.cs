@@ -99,7 +99,7 @@ namespace Fourzy
         }
 
 		//This function accepts a string of UserIds and invites them to a new challenge
-        public void ChallengeUser(string userId, List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
+        public void ChallengeUser(string userId, List<long> gameBoard, List<long> tokenBoard, int position, Direction direction)
 		{
             //CreateChallengeRequest takes a list of UserIds because you can challenge more than one user at a time
             List<string> gsId = new List<string>();
@@ -107,6 +107,7 @@ namespace Fourzy
             gsId.Add(userId);
 
             GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameBoard);
+            data.AddNumberList("tokenBoard", tokenBoard);
             data.AddNumber("position", position);
             data.AddNumber("direction", (int)direction);
             // always player 1 plays first
@@ -191,9 +192,10 @@ namespace Fourzy
 //                    });
 //        }
 
-        public void ChallengeRandomUser(List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
+        public void ChallengeRandomUser(List<long> gameBoard, List<long> tokenBoard, int position, Direction direction)
         {
             GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameBoard);
+            data.AddNumberList("tokenBoard", tokenBoard);
             data.AddNumber("position", position);
             data.AddNumber("direction", (int)direction);
             // always player 1 plays first
@@ -249,6 +251,16 @@ namespace Fourzy
         {
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateEmptySpots();
+            //GameManager.instance.SetSampleTokenBoard();
+            int[] tokenData = TokenBoard.Instance.FindTokenBoard();
+            string x = "";
+            foreach (var item in tokenData)
+            {
+                x += item + ",";
+
+            }
+            Debug.Log(x);
+            StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
             GameManager.instance.isMultiplayer = false;
             GameManager.instance.isPlayerOneTurn = true;
             GameManager.instance.isCurrentPlayerTurn = true;
@@ -273,8 +285,19 @@ namespace Fourzy
 
         public void OpenNewMultiplayerGame() 
         {
+            Debug.Log("OpenNewMultiplayerGame");
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateEmptySpots();
+            int[] tokenData = TokenBoard.Instance.FindTokenBoard();
+            string x = "";
+            foreach (var item in tokenData)
+            {
+                x += item + ",";
+
+            }
+            Debug.Log(x);
+            StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
+            Debug.Log("Aftet set token board");
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isPlayerOneTurn = true;
             GameManager.instance.isCurrentPlayerTurn = true;
@@ -305,6 +328,7 @@ namespace Fourzy
 
         public void OpenMultiplayerGame(GameSparks.Api.Responses.GetChallengeResponse._Challenge challenge)
         {
+            Debug.Log("Open MultiplayerGame");
             GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
                 new Vector2(0.5f, 0.5f));
@@ -331,10 +355,15 @@ namespace Fourzy
             GameManager.instance.PopulateEmptySpots();
 
             List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
+            List<int> tokenData = challenge.ScriptData.GetIntList("tokenBoard");
             if (boardData != null) {
                 int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
+                int[] tokenboard = Enumerable.Repeat(0, 64).ToArray();
+                if (tokenData != null) {
+                    tokenboard = challenge.ScriptData.GetIntList("tokenBoard").ToArray();    
+                }
 
-                GameManager.instance.SetupGameWrapper(gameboard);
+                GameManager.instance.SetupGameWrapper(gameboard, tokenboard);
             }
 
             List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
@@ -385,6 +414,7 @@ namespace Fourzy
                             {
                                 GameObject go = Instantiate(activeGamePrefab) as GameObject;
                                 ActiveGame activeGame = go.GetComponent<ActiveGame>();
+
                                 bool? isVisible = challenge.ScriptData.GetBoolean("isVisible");
                                 activeGame.challengeState = challenge.State;
 
@@ -432,11 +462,21 @@ namespace Fourzy
                                     activeGame.gameBoard = gameboard;
                                 }
 
+                                List<int> tokenData = challenge.ScriptData.GetIntList("tokenBoard");
+                                if (tokenData != null) {
+                                    int[] tokenboard = challenge.ScriptData.GetIntList("tokenBoard").ToArray();
+                                    activeGame.tokenBoard = tokenboard;
+                                } else {
+                                    int[] tokenboard = Enumerable.Repeat(0, 64).ToArray();
+                                    activeGame.tokenBoard = tokenboard;
+                                }
+
                                 List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                                 activeGame.moveList = moveList;
-
+                                activeGame.transform.localScale = new Vector3(1f,1f,1f);
                                 //Debug.Log("gameboard: " + stringDebug);
                                 games.Add(go);
+
                             }
 
                             if (pulledToRefresh) {
@@ -464,15 +504,13 @@ namespace Fourzy
 		}
 
         IEnumerator Wait() {
-//            Debug.Log("Start Wait");
             yield return new WaitForSeconds(0.8f);
             loadingSpinner.GetComponent<Animator>().enabled = false;
             loadingSpinner.GetComponent<Image>().enabled = false;
             gamesListContainer.GetComponent<VerticalLayoutGroup>().padding.top = 170;
             gamesListContainer.GetComponent<VerticalLayoutGroup>().SetLayoutVertical();
-           // gamesListViewport.position = new Vector3(0, 78);
-//            Debug.Log("End Wait");
         }
+
         //      public void GetChallengeInvites()
         //      {
         //          //Every time we call GetChallengeInvites we'll refresh the list
