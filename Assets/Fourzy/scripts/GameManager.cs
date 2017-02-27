@@ -27,7 +27,6 @@ namespace Fourzy
 		// GameSparks
         public string challengeInstanceId;
 
-		// Gameobjects 
 		public GameObject pieceRed;
 		public GameObject pieceBlue;
 		public GameObject pieceEmpty;
@@ -37,6 +36,12 @@ namespace Fourzy
         public GameObject leftArrowToken;
         public GameObject rightArrowToken;
 
+        /// <summary>
+        /// Gameboard
+        /// 0 = Empty
+        /// 1 = Player 1
+        /// 2 = Player 2
+        /// </summary>
         public GameBoard newGameBoard;
         public IToken[,] tokenBoard;
 
@@ -64,14 +69,6 @@ namespace Fourzy
 
         public delegate void MoveAction();
         public static event MoveAction OnMoved;
-
-		/// <summary>
-		/// Gameboard
-		/// 0 = Empty
-		/// 1 = Blue
-		/// 2 = Red
-		/// </summary>
-		//public int[,] gameBoard;
 
 		public bool isMultiplayer = false;
         public bool isNewChallenge = false;
@@ -167,7 +164,6 @@ namespace Fourzy
 
             ChallengeWonMessage.Listener = (message) => {
                 var challenge = message.Challenge;
-
                 if (UserManager.instance.userId != challenge.NextPlayer) {
                     // Only Replay the last move if the player is viewing the game screen for that game
                     if (challenge.ChallengeId == challengeInstanceId) {
@@ -193,12 +189,9 @@ namespace Fourzy
             };
 
             ChallengeTurnTakenMessage.Listener = (message) => {
-                Debug.Log("ChallengeTurnTakenMessage");
                 var challenge = message.Challenge;
                 if (UserManager.instance.userId == challenge.NextPlayer) {
                     // Only Replay the last move if the player is viewing the game screen for that game
-                    //print("challenge.ChallengeId: " + challenge.ChallengeId);
-                    //print("challengeInstanceId: " + challengeInstanceId);
                     if (challenge.ChallengeId == challengeInstanceId) {
                         List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                         ReplayLastMove(moveList);
@@ -234,23 +227,24 @@ namespace Fourzy
                 isPlayerOneTurn = false;
             }
             Position pos = new Position(0,0);
-
+            Debug.Log("ReplayLastMove direction: " + direction.ToString());
+            Debug.Log("ReplayLastMove position: " + position);
             switch (direction)
             {
                 case Direction.UP:
                     pos.column = position;
-                    pos.row = numRows - 1;
+                    pos.row = numRows;
                     break;
                 case Direction.DOWN:
                     pos.column = position;
-                    pos.row = 0;
+                    pos.row = -1;
                     break;
                 case Direction.LEFT:
-                    pos.column = numColumns - 1;
+                    pos.column = numColumns;
                     pos.row = position;
                     break;
                 case Direction.RIGHT:
-                    pos.column = 0;
+                    pos.column = -1;
                     pos.row = position;
                     break;
                 default:
@@ -386,24 +380,24 @@ namespace Fourzy
             yield return 0;
         }
 
-        public void SetSampleTokenBoard()
-        {
-            tokenBoard[2, 2] = new RightArrowToken();
-            tokenBoard[5, 2] = new DownArrowToken();
-            tokenBoard[5, 5] = new LeftArrowToken();
-            tokenBoard[1, 5] = new UpArrowToken();
-            tokenBoard[1, 1] = new RightArrowToken();
-            tokenBoard[6, 1] = new DownArrowToken();
-            tokenBoard[6, 6] = new LeftArrowToken();
-
-            Instantiate(rightArrowToken, new Vector3(2, 2 * -1, 8), Quaternion.identity, gamePieces.transform);
-            Instantiate(downArrowToken, new Vector3(5, 2 * -1, 8), Quaternion.identity, gamePieces.transform);
-            Instantiate(leftArrowToken, new Vector3(5, 5 * -1, 8), Quaternion.identity, gamePieces.transform);
-            Instantiate(upArrowToken, new Vector3(1, 5 * -1, 8), Quaternion.identity, gamePieces.transform);
-            Instantiate(rightArrowToken, new Vector3(1, 1 * -1, 8), Quaternion.identity, gamePieces.transform);
-            Instantiate(downArrowToken, new Vector3(6, 1 * -1, 8), Quaternion.identity, gamePieces.transform);
-            Instantiate(leftArrowToken, new Vector3(6, 6 * -1, 8), Quaternion.identity, gamePieces.transform);
-        }
+//        public void SetSampleTokenBoard()
+//        {
+//            tokenBoard[2, 2] = new RightArrowToken();
+//            tokenBoard[5, 2] = new DownArrowToken();
+//            tokenBoard[5, 5] = new LeftArrowToken();
+//            tokenBoard[1, 5] = new UpArrowToken();
+//            tokenBoard[1, 1] = new RightArrowToken();
+//            tokenBoard[6, 1] = new DownArrowToken();
+//            tokenBoard[6, 6] = new LeftArrowToken();
+//
+//            Instantiate(rightArrowToken, new Vector3(2, 2 * -1, 8), Quaternion.identity, gamePieces.transform);
+//            Instantiate(downArrowToken, new Vector3(5, 2 * -1, 8), Quaternion.identity, gamePieces.transform);
+//            Instantiate(leftArrowToken, new Vector3(5, 5 * -1, 8), Quaternion.identity, gamePieces.transform);
+//            Instantiate(upArrowToken, new Vector3(1, 5 * -1, 8), Quaternion.identity, gamePieces.transform);
+//            Instantiate(rightArrowToken, new Vector3(1, 1 * -1, 8), Quaternion.identity, gamePieces.transform);
+//            Instantiate(downArrowToken, new Vector3(6, 1 * -1, 8), Quaternion.identity, gamePieces.transform);
+//            Instantiate(leftArrowToken, new Vector3(6, 6 * -1, 8), Quaternion.identity, gamePieces.transform);
+//        }
 
         public void UpdateGameStatusText() {
 //            print("isMultiplayer: " + isMultiplayer);
@@ -667,18 +661,22 @@ namespace Fourzy
                     if (inTopRowBounds (pos.x, pos.y)) {
                         //StartCoroutine(MovePiece(column, Direction.Down, false));
                         position = new Position(column, row - 1);
+                        Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                         StartCoroutine(MovePiece(position, Direction.DOWN, false));
                     } else if (inBottomRowBounds(pos.x, pos.y)) {
                         //StartCoroutine(MovePiece(column, Direction.Up, false));
                         position = new Position(column, row + 1);
+                        Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                         StartCoroutine(MovePiece(position, Direction.UP, false));
                     } else if (inRightRowBounds(pos.x, pos.y)) {
                         //StartCoroutine(MovePiece(row, Direction.Left, false));
                         position = new Position(column + 1, row);
+                        Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                         StartCoroutine(MovePiece(position, Direction.LEFT, false));
                     } else if (inLeftRowBounds(pos.x, pos.y)) {
                         //StartCoroutine(MovePiece(row, Direction.Right, false));
                         position = new Position(column - 1, row);
+                        Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                         StartCoroutine(MovePiece(position, Direction.RIGHT, false));
                     }
                 }
@@ -743,7 +741,8 @@ namespace Fourzy
                 gamePiece.player = isPlayerOneTurn ? Player.ONE : Player.TWO;
                 //Debug.Log("moveposition col: " + movePosition.column + " row: " + movePosition.row);
                 newGameBoard.gamePieces[movePosition.column, movePosition.row] = g;
-                newGameBoard.activeMovingPieces[0].positions.Add(movePosition);
+                newGameBoard = tokenBoard[movePosition.column, movePosition.row].UpdateBoard(newGameBoard, false);    
+                //newGameBoard.activeMovingPieces[0].positions.Add(movePosition);
 
                 while (newGameBoard.activeMovingPieces.Count > 0) {
                     Position startPosition = newGameBoard.activeMovingPieces[0].GetCurrentPosition();
@@ -751,7 +750,7 @@ namespace Fourzy
 
                     if (CanMoveInPosition(startPosition, endPosition, direction)) {
                         //Debug.Log("CanMoveInPosition: direction: " + direction.ToString());
-                        newGameBoard = tokenBoard[endPosition.column, endPosition.row].UpdateBoard(newGameBoard);    
+                        newGameBoard = tokenBoard[endPosition.column, endPosition.row].UpdateBoard(newGameBoard, true);    
                     } else {
                         //Debug.Log("Disable next moving piece");
                         newGameBoard.DisableNextMovingPiece();
@@ -832,6 +831,7 @@ namespace Fourzy
                     OnMoved();
             } else {
                 newGameBoard.activeMovingPieces.Clear();
+                isDropping = false;
             }
 
             yield return 0;

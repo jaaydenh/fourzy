@@ -10,7 +10,7 @@ namespace Fourzy {
         int Column { get; set; }
         bool canPassThrough { get; set; }
         Token tokenType { get; set; }
-        GameBoard UpdateBoard(GameBoard board);
+        GameBoard UpdateBoard(GameBoard board, bool swapPiece);
     }
            
     // x o o o o o
@@ -30,13 +30,15 @@ namespace Fourzy {
             tokenType = Token.UP_ARROW;
     	}
     	
-        public GameBoard UpdateBoard(GameBoard board)
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
         {
             Debug.Log("UpToken:UpdateBoard");
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
                 MovingGamePiece piece = board.activeMovingPieces[0];
-                board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());
+                if (swapPiece) {
+                    board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());
+                }
                 board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                 piece.currentDirection = Direction.UP;
             } else {
@@ -60,13 +62,15 @@ namespace Fourzy {
             tokenType = Token.DOWN_ARROW;
         }
 
-        public GameBoard UpdateBoard(GameBoard board)
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
         {
             Debug.Log("DownToken:UpdateBoard");
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
                 MovingGamePiece piece = board.activeMovingPieces[0];
-                board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());
+                if (swapPiece) {
+                    board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());
+                }
                 board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                 piece.currentDirection = Direction.DOWN;
             } else {
@@ -90,13 +94,15 @@ namespace Fourzy {
             tokenType = Token.LEFT_ARROW;
         }
 
-        public GameBoard UpdateBoard(GameBoard board)
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
         {
             Debug.Log("LeftToken:UpdateBoard");
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
                 MovingGamePiece piece = board.activeMovingPieces[0];
-                board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());
+                if (swapPiece) {
+                    board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());    
+                }
                 board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                 piece.currentDirection = Direction.LEFT;
             } else {
@@ -120,13 +126,15 @@ namespace Fourzy {
             tokenType = Token.RIGHT_ARROW;
         }
 
-        public GameBoard UpdateBoard(GameBoard board)
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
         {
             Debug.Log("RightToken:UpdateBoard");
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
                 MovingGamePiece piece = board.activeMovingPieces[0];
-                board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());
+                if (swapPiece) {
+                    board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());    
+                }
                 board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                 piece.currentDirection = Direction.RIGHT;
             } else {
@@ -150,7 +158,7 @@ namespace Fourzy {
             tokenType = Token.EMPTY;
         }
 
-        public GameBoard UpdateBoard(GameBoard board)
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
         {
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
@@ -159,7 +167,9 @@ namespace Fourzy {
                 Position newPosition = piece.GetNextPosition();
 
                 board.activeMovingPieces[0].positions.Add(newPosition);
-                board.SwapPiecePosition(currentPosition, newPosition);
+                if (swapPiece) {
+                    board.SwapPiecePosition(currentPosition, newPosition);   
+                }
             } else {
                 Debug.LogWarning("Updating gameboard when there is no active moving piece to update", board);
             }
