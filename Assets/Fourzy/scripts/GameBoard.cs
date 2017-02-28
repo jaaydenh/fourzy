@@ -7,15 +7,16 @@ namespace Fourzy {
     public class GameBoard : MonoBehaviour {
 
         GameObject gamePiecesView;
+        GameObject tempPiece;
         public GameObject gameScreenCanvas;
         public GameObject pieceRed; // View
         public GameObject pieceBlue; // View
         public GameObject[,] gamePieces; //Collection of Views
         public IToken[,] tokenBoard;
         [Range(3, 8)]
-        public int numRows = 8;
+        public int numRows = Constants.numRows;
         [Range(3, 8)]
-        public int numColumns = 8;
+        public int numColumns = Constants.numRows;
         bool isLoading = true;
 
         public List<MovingGamePiece> activeMovingPieces;
@@ -28,7 +29,21 @@ namespace Fourzy {
             gamePieces = new GameObject[numColumns, numRows];
     	}
 
+        public void MakePieceMoveable(Position pos, bool moveable, Direction direction) {
+            gamePieces[pos.column, pos.row].GetComponent<GamePiece>().MakeMoveable(moveable, direction);
+        }
+
         public void SwapPiecePosition(Position oldPos, Position newPos) {
+            GameObject oldPiece = gamePieces[oldPos.column, oldPos.row];
+            GamePiece gamePiece = oldPiece.GetComponent<GamePiece>();
+            //gamePiece.position = newPos;
+            gamePiece.column = newPos.column;
+            gamePiece.row = newPos.row;
+            gamePieces[oldPos.column, oldPos.row] = null;
+            gamePieces[newPos.column, newPos.row] = oldPiece;
+        }
+
+        public void SwapStickyPiecePosition(Position oldPos, Position newPos) {
             GameObject oldPiece = gamePieces[oldPos.column, oldPos.row];
             gamePieces[oldPos.column, oldPos.row] = null;
             gamePieces[newPos.column, newPos.row] = oldPiece;

@@ -29,7 +29,7 @@ namespace Fourzy
 
         public List<GSData> moveList;
 
-    	public Text opponentNameLabel, statusLabel;
+    	public Text opponentNameLabel, statusLabel, moveTimeAgo;
         public Image opponentProfilePicture;
         public Texture2D defaultProfilePicture;
         public Image tournamentIcon;
@@ -111,6 +111,14 @@ namespace Fourzy
                     //                  }
                     //              }
                 }
+            }
+
+            GSData lastPlayerMove = moveList.LastOrDefault();
+            long timestamp = lastPlayerMove.GetLong("timestamp").GetValueOrDefault();
+
+            if (timestamp != 0) {
+                System.DateTime timestampDateTime = new System.DateTime (1970, 1, 1, 0, 0, 0,System.DateTimeKind.Utc).AddMilliseconds(timestamp).ToLocalTime();
+                moveTimeAgo.text = TimeAgo.DateTimeExtensions.TimeAgo(timestampDateTime);                
             }
     	}
 

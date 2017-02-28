@@ -439,6 +439,10 @@ MonoBehaviour:
   leftArrowActive: 0
   upArrowActive: 0
   downArrowActive: 0
+  RightArrow: {fileID: 1341822479659436}
+  LeftArrow: {fileID: 1484501577231752}
+  UpArrow: {fileID: 1586504126977194}
+  DownArrow: {fileID: 1345316378804208}
 --- !u!114 &114367919085561552
 MonoBehaviour:
   m_ObjectHideFlags: 1

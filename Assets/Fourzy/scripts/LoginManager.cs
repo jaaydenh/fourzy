@@ -19,6 +19,7 @@ namespace Fourzy
 
         void Start() {
             facebookButton = GameObject.Find("Facebook Button");
+            NPBinding.NotificationService.ClearNotifications();
         }
 
         void Awake() {

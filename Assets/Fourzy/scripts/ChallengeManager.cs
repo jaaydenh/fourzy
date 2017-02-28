@@ -252,7 +252,7 @@ namespace Fourzy
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateEmptySpots();
             //GameManager.instance.SetSampleTokenBoard();
-            int[] tokenData = TokenBoard.Instance.FindTokenBoard();
+            int[] tokenData = TokenBoard.Instance.FindTokenBoardAll();
             string x = "";
             foreach (var item in tokenData)
             {
@@ -288,7 +288,7 @@ namespace Fourzy
             Debug.Log("OpenNewMultiplayerGame");
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateEmptySpots();
-            int[] tokenData = TokenBoard.Instance.FindTokenBoard();
+            int[] tokenData = TokenBoard.Instance.FindTokenBoardNoSticky();
             string x = "";
             foreach (var item in tokenData)
             {
@@ -476,7 +476,6 @@ namespace Fourzy
                                 activeGame.transform.localScale = new Vector3(1f,1f,1f);
                                 //Debug.Log("gameboard: " + stringDebug);
                                 games.Add(go);
-
                             }
 
                             if (pulledToRefresh) {
@@ -485,7 +484,6 @@ namespace Fourzy
 //                                pulledToRefresh = false;
                             }
                             gettingChallenges = false;
-                            //Debug.Log("After coroutine");
 
                         });
                 //            Debug.Log("yourMoveGameGrid.transform.childCount: " + yourMoveGameGrid.transform.childCount);

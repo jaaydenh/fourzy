@@ -10,6 +10,9 @@ namespace Fourzy {
         public bool isActive;
         public List<Position> positions;
         public Position position;
+        public Player player;
+        public bool swapPiece = true;
+        public GameObject gamePieceObject;
 
         public MovingGamePiece(Position position, Direction direction) {
             positions = new List<Position>();
@@ -28,6 +31,36 @@ namespace Fourzy {
             Position currentPosition = positions[positions.Count - 1];
 
             switch (currentDirection)
+            {
+                case Direction.UP:
+                    nextPosition.column = currentPosition.column;
+                    nextPosition.row = currentPosition.row - 1;
+                    break;
+                case Direction.DOWN:
+                    nextPosition.column = currentPosition.column;
+                    nextPosition.row = currentPosition.row + 1;
+                    break;
+                case Direction.LEFT:
+                    nextPosition.column = currentPosition.column - 1;
+                    nextPosition.row = currentPosition.row;
+                    break;
+                case Direction.RIGHT:
+                    nextPosition.column = currentPosition.column + 1;
+                    nextPosition.row = currentPosition.row;
+                    break;
+                default:
+                    break;
+            }
+
+            return nextPosition;
+        }
+
+        // position is a row and column
+        public Position GetNextPositionWithDirection(Direction direction) {
+            Position nextPosition = new Position(0,0);
+            Position currentPosition = positions[positions.Count - 1];
+
+            switch (direction)
             {
                 case Direction.UP:
                     nextPosition.column = currentPosition.column;

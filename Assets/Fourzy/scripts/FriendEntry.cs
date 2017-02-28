@@ -41,7 +41,7 @@ namespace Fourzy
         {
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateEmptySpots();
-            int[] tokenData = TokenBoard.Instance.FindTokenBoard();
+            int[] tokenData = TokenBoard.Instance.FindTokenBoardNoSticky();
             string x = "";
             foreach (var item in tokenData)
             {

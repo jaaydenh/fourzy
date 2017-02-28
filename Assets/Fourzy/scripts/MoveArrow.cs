@@ -15,17 +15,16 @@ namespace Fourzy
                 int row = gameObject.GetComponentInParent<CornerSpot>().row;
                 int column = gameObject.GetComponentInParent<CornerSpot>().column;
                 Position pos = new Position(column, row);
+                if (direction == Direction.DOWN) {
+                    pos.row = -1;
+                } else if (direction == Direction.UP) {
+                    pos.row = Constants.numRows;
+                } else if (direction == Direction.RIGHT) {
+                    pos.column = -1;
+                } else if (direction == Direction.LEFT) {
+                    pos.column = Constants.numColumns;
+                }
                 StartCoroutine(GameManager.instance.MovePiece(pos, direction, false));
-
-//                if (direction == Direction.DOWN) {
-//                    StartCoroutine(GameManager.instance.NewMovePiece(column, direction, false));
-//                } else if (direction == Direction.UP) {
-//                    StartCoroutine(GameManager.instance.NewMovePiece(column, direction, false));
-//                } else if (direction == Direction.RIGHT) {
-//                    StartCoroutine(GameManager.instance.NewMovePiece(row, direction, false));
-//                } else if (direction == Direction.LEFT) {
-//                    StartCoroutine(GameManager.instance.NewMovePiece(row, direction, false));
-//                }
             }
         }
             

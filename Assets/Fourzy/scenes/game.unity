@@ -255,7 +255,7 @@ MonoBehaviour:
   numColumns: 8
   numPiecesToWin: 4
   allowDiagonally: 1
-  dropTime: 10
+  dropTime: 12
   challengeInstanceId: 
   pieceRed: {fileID: 116674, guid: 5db9c14a3a5c5433c9e36b52f19f4403, type: 2}
   pieceBlue: {fileID: 174738, guid: edd52c6e9d75d420199836641a1473b2, type: 2}
@@ -269,7 +269,9 @@ MonoBehaviour:
     type: 2}
   rightArrowToken: {fileID: 1923614959021622, guid: 33d3d900faebb4be681b73d3f70b7700,
     type: 2}
-  newGameBoard: {fileID: 440620694}
+  stickyToken: {fileID: 1660667990289766, guid: 6b7f67346b9e845aca14c64f8e4ca2a3,
+    type: 2}
+  gameBoard: {fileID: 440620694}
   rematchButton: {fileID: 1649922472}
   nextGameButton: {fileID: 437029456}
   gameStatusText: {fileID: 218465671}
@@ -293,6 +295,7 @@ MonoBehaviour:
   currentPlayerId: 0
   winner: 
   opponentFacebookId: 
+  gameOver: 0
   isCheckingForWinner: 0
   isAnimating: 0
   gameScreen: {fileID: 308658290}
@@ -2804,7 +2807,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 175}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &988853846
 MonoBehaviour:
@@ -2812,7 +2815,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 988853844}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1741964061, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 

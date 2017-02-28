@@ -122,7 +122,7 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleIdentifier: com.PartyTroll.Fourzy
-  bundleVersion: 1.1
+  bundleVersion: 1.2
   preloadedAssets: []
   metroInputSource: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -136,7 +136,7 @@ PlayerSettings:
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
-  iPhoneBuildNumber: 20
+  iPhoneBuildNumber: 2
   ForceInternetPermission: 0
   ForceSDCardPermission: 0
   CreateWallpaper: 0
@@ -556,5 +556,5 @@ PlayerSettings:
     Unity_Ads: 0
   cloudProjectId: ff06e18a-8109-4825-a4d3-8f637e2314c8
   projectName: Fourzy
-  organizationId: mindisle
+  organizationId: supermove-games
   cloudEnabled: 0
