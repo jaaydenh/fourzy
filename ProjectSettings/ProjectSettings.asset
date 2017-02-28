@@ -10,7 +10,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 0
-  companyName: MindIsle Games
+  companyName: SuperMove Games
   productName: Fourzy
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -136,7 +136,7 @@ PlayerSettings:
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
-  iPhoneBuildNumber: 2
+  iPhoneBuildNumber: 3
   ForceInternetPermission: 0
   ForceSDCardPermission: 0
   CreateWallpaper: 0
