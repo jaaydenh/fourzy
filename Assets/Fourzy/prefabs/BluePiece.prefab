@@ -77,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 829016276e2eb49ae92e20c1197b1c28, type: 3}
+  m_Sprite: {fileID: 21300022, guid: 61c9f0101f867164b81781c97cdb48ee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -132,10 +132,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c45a8ccec88446a2b606295173d3562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  col: 0
+  player: 0
+  column: 0
   row: 0
-  dir: 0
-  isMoveable: 0
+  isMoveableUp: 0
+  isMoveableDown: 0
+  isMoveableLeft: 0
+  isMoveableRight: 0
 --- !u!212 &212000013818764942
 SpriteRenderer:
   m_ObjectHideFlags: 1

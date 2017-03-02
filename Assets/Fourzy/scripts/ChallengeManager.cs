@@ -70,6 +70,7 @@ namespace Fourzy
         private void RemoveGame(string challengeInstanceId) {
             new LogEventRequest().SetEventKey("removeGame")
                 .SetEventAttribute("challengeInstanceId", challengeInstanceId)
+                .SetDurable(true)
                 .Send((response) =>
                     {
                         if (response.HasErrors)
@@ -87,7 +88,6 @@ namespace Fourzy
 
             new LogEventRequest().SetEventKey("startMatchmaking")
                 .SetEventAttribute("matchShortCode","matchRanked")
-                .SetDurable(true)
                 .Send((response) => 
                     {
                         if (response.HasErrors)
@@ -118,15 +118,18 @@ namespace Fourzy
 			.SetEndTime(System.DateTime.Today.AddDays(15)) //We set a date and time the challenge will end on
 			.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
             .SetScriptData(data)
+            .SetDurable(true)
             .Send((response) => 
 				{
 					if (response.HasErrors)
 					{
 						Debug.Log(response.Errors);
+                            //return false;
 					}
 					else
 					{
                         GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
+                            //return true;
 					}
 				});
 		}
@@ -209,12 +212,15 @@ namespace Fourzy
                 .SetEndTime(System.DateTime.Today.AddDays(15)) //We set a date and time the challenge will end on
                 //.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
                 .SetScriptData(data)
+                .SetDurable(true)
                 .Send((response) => 
                     {
                         if (response.HasErrors) {
                             Debug.Log(response.Errors);
+                            //return false;
                         } else {
                             GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
+                            //return true;
                         }
                     });
         }

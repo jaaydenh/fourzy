@@ -184,7 +184,7 @@ namespace Fourzy
                     ChallengeManager.instance.GetChallenges();
                 }
             };
-
+                
             ChallengeTurnTakenMessage.Listener = (message) => {
                 var challenge = message.Challenge;
                 if (UserManager.instance.userId == challenge.NextPlayer) {
@@ -638,22 +638,22 @@ namespace Fourzy
                     if (inTopRowBounds (pos.x, pos.y)) {
                         //StartCoroutine(MovePiece(column, Direction.Down, false));
                         position = new Position(column, row - 1);
-                        Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
+                        //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                         StartCoroutine(MovePiece(position, Direction.DOWN, false));
                     } else if (inBottomRowBounds(pos.x, pos.y)) {
                         //StartCoroutine(MovePiece(column, Direction.Up, false));
                         position = new Position(column, row + 1);
-                        Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
+                        //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                         StartCoroutine(MovePiece(position, Direction.UP, false));
                     } else if (inRightRowBounds(pos.x, pos.y)) {
                         //StartCoroutine(MovePiece(row, Direction.Left, false));
                         position = new Position(column + 1, row);
-                        Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
+                        //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                         StartCoroutine(MovePiece(position, Direction.LEFT, false));
                     } else if (inLeftRowBounds(pos.x, pos.y)) {
                         //StartCoroutine(MovePiece(row, Direction.Right, false));
                         position = new Position(column - 1, row);
-                        Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
+                        //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                         StartCoroutine(MovePiece(position, Direction.RIGHT, false));
                     }
                 }
@@ -702,57 +702,57 @@ namespace Fourzy
             isDropping = true;
 
             MovingGamePiece activeMovingPiece = new MovingGamePiece(position, direction);
-            gameBoard.activeMovingPieces.Add(activeMovingPiece);
+//            gameBoard.activeMovingPieces.Add(activeMovingPiece);
+
             if (CanMoveInPosition(position, activeMovingPiece.GetNextPosition(), direction))
             {
-                GameObject[] cornerArrows = GameObject.FindGameObjectsWithTag("Arrow");
+//                GameObject[] cornerArrows = GameObject.FindGameObjectsWithTag("Arrow");
+//
+//                foreach (GameObject cornerArrow in cornerArrows) {
+//                    SpriteRenderer sr = cornerArrow.GetComponentInChildren<SpriteRenderer>();
+//                    sr.enabled = false;
+//                }
+//
+//                Position movePosition = activeMovingPiece.GetNextPosition();
+//                GameObject g = SpawnPiece(movePosition.column, movePosition.row * -1);
+//                GamePiece gamePiece = g.GetComponent<GamePiece>();
+//                gamePiece.player = isPlayerOneTurn ? Player.ONE : Player.TWO;
+//                gamePiece.column = movePosition.column;
+//                gamePiece.row = movePosition.row;
+//
+//                gameBoard.gamePieces[movePosition.column, movePosition.row] = g;
+//                gameBoard = tokenBoard[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);    
+//
+//                while (gameBoard.activeMovingPieces.Count > 0) {
+//                    Position startPosition = gameBoard.activeMovingPieces[0].GetCurrentPosition();
+//                    Position endPosition = gameBoard.activeMovingPieces[0].GetNextPosition();
+//
+//                    if (CanMoveInPosition(startPosition, endPosition, direction)) {
+//                        gameBoard = tokenBoard[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);    
+//                    } else {
+//                        gameBoard.DisableNextMovingPiece();
+//                    }
+//                }
+//
+//                UpdateMoveablePieces();
 
-                foreach (GameObject cornerArrow in cornerArrows) {
-                    SpriteRenderer sr = cornerArrow.GetComponentInChildren<SpriteRenderer>();
-                    sr.enabled = false;
-                }
-
-                Position movePosition = activeMovingPiece.GetNextPosition();
-                GameObject g = SpawnPiece(movePosition.column, movePosition.row * -1);
-                GamePiece gamePiece = g.GetComponent<GamePiece>();
-                gamePiece.player = isPlayerOneTurn ? Player.ONE : Player.TWO;
-                gamePiece.column = movePosition.column;
-                gamePiece.row = movePosition.row;
-
-                gameBoard.gamePieces[movePosition.column, movePosition.row] = g;
-                gameBoard = tokenBoard[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);    
-
-                while (gameBoard.activeMovingPieces.Count > 0) {
-                    //loop = 0;
-                    Debug.Log("Checking if a move is possible");
-                    Position startPosition = gameBoard.activeMovingPieces[0].GetCurrentPosition();
-                    Position endPosition = gameBoard.activeMovingPieces[0].GetNextPosition();
-
-                    if (CanMoveInPosition(startPosition, endPosition, direction)) {
-                        //Debug.Log("CanMoveInPosition: direction: " + direction.ToString());
-                        gameBoard = tokenBoard[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);    
-                    } else {
-                        //Debug.Log("Disable next moving piece");
-                        gameBoard.DisableNextMovingPiece();
-                    }
-                }
-
-                UpdateMoveablePieces();
-
-                //Debug.Log("replayMove: " + replayMove + " ismultiplayer: " + isMultiplayer + " isNewChallenge: " + isNewChallenge + " isNewRandomChallenge: " + isNewRandomChallenge);
+                Debug.Log("replayMove: " + replayMove + " ismultiplayer: " + isMultiplayer + " isNewChallenge: " + isNewChallenge + " isNewRandomChallenge: " + isNewRandomChallenge);
 
                 if (!replayMove && isMultiplayer && !isNewChallenge && !isNewRandomChallenge)
                 {
+                    StartCoroutine(ProcessMove(position, direction));
                     new LogChallengeEventRequest().SetChallengeInstanceId(challengeInstanceId)
                         .SetEventKey("takeTurn") //The event we are calling is "takeTurn", we set this up on the GameSparks Portal
                         .SetEventAttribute("pos", GetMoveLocation(position, direction)) // pos is the row or column the piece was placed at depending on the direction
                         .SetEventAttribute("direction", direction.GetHashCode()) // direction can be up, down, left, right
                         .SetEventAttribute("player", isPlayerOneTurn ? (int)Piece.BLUE : (int)Piece.RED)
+                        .SetDurable(true)
                         .Send((response) =>
                             {
                                 if (response.HasErrors)
                                 {
                                     Debug.Log("ChallengeEventRequest was not successful");
+                                    gameStatusText.text = "There was a problem making your move. Please try again.";
                                 }
                                 else
                                 {
@@ -765,57 +765,144 @@ namespace Fourzy
                 {
                     isNewChallenge = false;
                     ChallengeManager.instance.ChallengeUser(challengedUserId, gameBoard.GetGameBoardData(), GetTokenBoardData(), GetMoveLocation(position, direction), direction);
+                    //if (success) {
+                        StartCoroutine(ProcessMove(position, direction));
+                    //} else {
+                      //  gameStatusText.text = "There was a problem making your move. Please try again.";
+                    //}
                 }
                 else if (isMultiplayer && isNewRandomChallenge)
                 {
                     isNewRandomChallenge = false;
                     ChallengeManager.instance.ChallengeRandomUser(gameBoard.GetGameBoardData(), GetTokenBoardData(), GetMoveLocation(position, direction), direction);
+                    //if (success) {
+                        StartCoroutine(ProcessMove(position, direction));
+                    //} else {
+                      //  gameStatusText.text = "There was a problem making your move. Please try again.";
+                    //}
+                } else {
+                    StartCoroutine(ProcessMove(position, direction));
                 }
 
-                // process animations for completed moving pieces
-                foreach (var piece in gameBoard.completedMovingPieces)
-                {
-                    StartCoroutine(AnimatePiece(piece.positions));
-                    while(this.isAnimating)
-                        yield return null;
-                }
-
-                gameBoard.completedMovingPieces.Clear();
-
-                //gameBoard.PrintGameBoard();
-
-                // Check if Player one is the winner
-                StartCoroutine(CheckForWinner(true));
-                // Check if Player two is the winner
-                StartCoroutine(CheckForWinner(false));
-
-                // wait until winning check is done
-                while(this.isCheckingForWinner)
-                    yield return null;
-
-                isPlayerOneTurn = !isPlayerOneTurn;
-                if (isMultiplayer) {
-                    isCurrentPlayerTurn = !isCurrentPlayerTurn;    
-                }
-                UpdateGameStatusText();
-                AnimateEmptyEdgeSpots(false);
-
-                foreach (GameObject cornerArrow in cornerArrows) {
-                    cornerArrow.SetActive(false);
-                    SpriteRenderer sr = cornerArrow.GetComponentInChildren<SpriteRenderer>();
-                    sr.enabled = true;
-                }
-
-                isDropping = false;
-
-                if(OnMoved != null)
-                    OnMoved();
+//                // process animations for completed moving pieces
+//                foreach (var piece in gameBoard.completedMovingPieces)
+//                {
+//                    StartCoroutine(AnimatePiece(piece.positions));
+//                    while(this.isAnimating)
+//                        yield return null;
+//                }
+//
+//                gameBoard.completedMovingPieces.Clear();
+//
+//                //gameBoard.PrintGameBoard();
+//
+//                // Check if Player one is the winner
+//                StartCoroutine(CheckForWinner(true));
+//                // Check if Player two is the winner
+//                StartCoroutine(CheckForWinner(false));
+//
+//                // wait until winning check is done
+//                while(this.isCheckingForWinner)
+//                    yield return null;
+//
+//                isPlayerOneTurn = !isPlayerOneTurn;
+//                if (isMultiplayer) {
+//                    isCurrentPlayerTurn = !isCurrentPlayerTurn;    
+//                }
+//                UpdateGameStatusText();
+//                AnimateEmptyEdgeSpots(false);
+//
+//                foreach (GameObject cornerArrow in cornerArrows) {
+//                    cornerArrow.SetActive(false);
+//                    SpriteRenderer sr = cornerArrow.GetComponentInChildren<SpriteRenderer>();
+//                    sr.enabled = true;
+//                }
+//
+//                isDropping = false;
+//
+//                if(OnMoved != null)
+//                    OnMoved();
             } else {
+                // TODO: inform the player that the move is not possible
                 gameBoard.activeMovingPieces.Clear();
                 isDropping = false;
             }
 
             yield return 0;
+        }
+
+        private IEnumerator ProcessMove(Position position, Direction direction) {
+            MovingGamePiece activeMovingPiece = new MovingGamePiece(position, direction);
+            gameBoard.activeMovingPieces.Add(activeMovingPiece);
+
+            GameObject[] cornerArrows = GameObject.FindGameObjectsWithTag("Arrow");
+
+            foreach (GameObject cornerArrow in cornerArrows) {
+                SpriteRenderer sr = cornerArrow.GetComponentInChildren<SpriteRenderer>();
+                sr.enabled = false;
+            }
+
+            Position movePosition = activeMovingPiece.GetNextPosition();
+            GameObject g = SpawnPiece(movePosition.column, movePosition.row * -1);
+            GamePiece gamePiece = g.GetComponent<GamePiece>();
+            gamePiece.player = isPlayerOneTurn ? Player.ONE : Player.TWO;
+            gamePiece.column = movePosition.column;
+            gamePiece.row = movePosition.row;
+
+            gameBoard.gamePieces[movePosition.column, movePosition.row] = g;
+            gameBoard = tokenBoard[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);    
+
+            while (gameBoard.activeMovingPieces.Count > 0) {
+                Position startPosition = gameBoard.activeMovingPieces[0].GetCurrentPosition();
+                Position endPosition = gameBoard.activeMovingPieces[0].GetNextPosition();
+
+                if (CanMoveInPosition(startPosition, endPosition, direction)) {
+                    gameBoard = tokenBoard[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);    
+                } else {
+                    gameBoard.DisableNextMovingPiece();
+                }
+            }
+
+            UpdateMoveablePieces();
+
+            // process animations for completed moving pieces
+            foreach (var piece in gameBoard.completedMovingPieces)
+            {
+                StartCoroutine(AnimatePiece(piece.positions));
+                while(this.isAnimating)
+                    yield return null;
+            }
+
+            gameBoard.completedMovingPieces.Clear();
+
+            //gameBoard.PrintGameBoard();
+
+            // Check if Player one is the winner
+            StartCoroutine(CheckForWinner(true));
+            // Check if Player two is the winner
+            StartCoroutine(CheckForWinner(false));
+
+            // wait until winning check is done
+            while(this.isCheckingForWinner)
+                yield return null;
+
+            isPlayerOneTurn = !isPlayerOneTurn;
+            if (isMultiplayer) {
+                isCurrentPlayerTurn = !isCurrentPlayerTurn;    
+            }
+            UpdateGameStatusText();
+            AnimateEmptyEdgeSpots(false);
+
+            foreach (GameObject cornerArrow in cornerArrows) {
+                cornerArrow.SetActive(false);
+                SpriteRenderer sr = cornerArrow.GetComponentInChildren<SpriteRenderer>();
+                sr.enabled = true;
+            }
+
+            isDropping = false;
+
+            if(OnMoved != null)
+                OnMoved();
         }
 
         private void UpdateMoveablePieces() {
