@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Fourzy {
     
-    public interface IToken
+    public interface IToken 
     {
         int Row { get; set; }
         int Column { get; set; }
@@ -17,7 +17,6 @@ namespace Fourzy {
     // o s o o o o 
     // x > s o o o
     // o o o o o o
-
     public class UpArrowToken : IToken {
 
         public int Row { get; set; }
@@ -33,6 +32,7 @@ namespace Fourzy {
         public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
         {
             Debug.Log("UpToken:UpdateBoard");
+
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
                 MovingGamePiece piece = board.activeMovingPieces[0];

@@ -40,6 +40,8 @@ namespace Fourzy
 
         private int opponentIndex;
         public bool isCurrentPlayerTurn = false;
+        public bool viewedResult = false;
+        public bool isExpired = false;
 
         private Sprite opponentProfilePictureSprite;
 
@@ -90,9 +92,9 @@ namespace Fourzy
                 {
                     statusLabel.text = "They won!";
                 }
-            }
-            else
-            {
+            } else if (isExpired == true) {
+                statusLabel.text = "Game Expired";
+            } else {
                 //We then check if the userId of the next player is equal to ours
                 if (nextPlayerId == UserManager.instance.userId)
                 {
@@ -203,6 +205,10 @@ namespace Fourzy
             }
                 
             GameManager.instance.ResetUI();
+
+            if (!viewedResult && challengeState == "COMPLETE") {
+                ChallengeManager.instance.SetViewedCompletedGame(challengeId);
+            }
 
             UIScreen.SetActive(false);
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using GameSparks.Api.Requests;
 using GameSparks.Core;
 using System.Linq;
+using System;
 
 namespace Fourzy
 {
@@ -19,6 +20,7 @@ namespace Fourzy
 		public GameObject yourMoveGameGrid;
         public GameObject theirMoveGameGrid;
         public GameObject completedGameGrid;
+        public GameObject resultsGameGrid;
 		public GameObject activeGamePrefab;
 
 		public List<GameObject> games = new List<GameObject>();
@@ -84,6 +86,25 @@ namespace Fourzy
                     });
         }
 
+        public void SetViewedCompletedGame(string challengeInstanceId) {
+            Debug.Log("SetViewedCompletedGame: UserManager.instance.userId: " + UserManager.instance.userId);
+            new LogEventRequest().SetEventKey("viewedGame")
+                .SetEventAttribute("challengeInstanceId", challengeInstanceId)
+                .SetEventAttribute("player", UserManager.instance.userId)
+                .SetDurable(true)
+                .Send((response) =>
+                    {
+                        if (response.HasErrors)
+                        {
+                            Debug.Log("Problem setting game viewed");
+                        }
+                        else
+                        {
+                            Debug.Log("Set Viewed Game was successful");
+                        }
+                    });
+        }
+
         public void StartMatchmaking() {
 
             new LogEventRequest().SetEventKey("startMatchmaking")
@@ -115,7 +136,7 @@ namespace Fourzy
             //we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
             new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
             .SetUsersToChallenge(gsId) //We supply the userIds of who we wish to challenge
-			.SetEndTime(System.DateTime.Today.AddDays(15)) //We set a date and time the challenge will end on
+			.SetEndTime(System.DateTime.Today.AddDays(60)) //We set a date and time the challenge will end on
 			.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
             .SetScriptData(data)
             .SetDurable(true)
@@ -160,7 +181,7 @@ namespace Fourzy
                                 challengeInstanceIds.Add(instance.ChallengeId);
                             }
 
-                            int randNum = Random.Range(0, challengeInstanceIds.Count-1);
+                            int randNum = UnityEngine.Random.Range(0, challengeInstanceIds.Count-1);
 
                             //reference the id at that random numbers location
                             string randomChallengeId = challengeInstanceIds[randNum];
@@ -209,7 +230,7 @@ namespace Fourzy
                 .SetAutoStartJoinedChallengeOnMaxPlayers(true)
                 .SetMaxPlayers(2)
                 .SetMinPlayers(1)
-                .SetEndTime(System.DateTime.Today.AddDays(15)) //We set a date and time the challenge will end on
+                .SetEndTime(System.DateTime.Today.AddDays(60)) //We set a date and time the challenge will end on
                 //.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
                 .SetScriptData(data)
                 .SetDurable(true)
@@ -422,6 +443,25 @@ namespace Fourzy
                                 ActiveGame activeGame = go.GetComponent<ActiveGame>();
 
                                 bool? isVisible = challenge.ScriptData.GetBoolean("isVisible");
+//                                bool? wasViewed = challenge.ScriptData.GetBoolean("wasViewed");
+
+                                bool viewedResult = false;
+                                List<String> playersViewedResult = challenge.ScriptData.GetStringList("playersViewedResult");
+                                if (playersViewedResult != null) {
+                                    Debug.Log("playersViewedResult: " + playersViewedResult.Count);
+                                    for (int i = 0; i < playersViewedResult.Count; i++)
+                                    {   
+                                        //Debug.Log("playersViewedResult[i] " + playersViewedResult[i]);
+                                        //Debug.Log("UserManager.instance.userId " + UserManager.instance.userId);
+                                        //Debug.Log("string compare: " + String.Compare(playersViewedResult[i], UserManager.instance.userId));
+                                        if (String.Compare(playersViewedResult[i], UserManager.instance.userId) == 0) {
+                                            viewedResult = true;
+                                        }
+                                    }
+                                }
+                            
+                                activeGame.viewedResult = viewedResult;
+
                                 activeGame.challengeState = challenge.State;
 
                                 if (challenge.State == "RUNNING" || challenge.State == "ISSUED") {
@@ -437,11 +477,14 @@ namespace Fourzy
                                         activeGame.isCurrentPlayerTurn = false;
                                         go.gameObject.transform.SetParent(theirMoveGameGrid.transform);
                                     }
-                                } else if (challenge.State == "COMPLETE" && isVisible == true) {
+                                } else if (challenge.State == "COMPLETE" && isVisible == true && viewedResult == true) {
                                     activeGame.isCurrentPlayerTurn = false;
                                     go.gameObject.transform.SetParent(completedGameGrid.transform);
+                                } else if (challenge.State == "COMPLETE" && isVisible == true && viewedResult == false) {
+                                    activeGame.isCurrentPlayerTurn = false;
+                                    go.gameObject.transform.SetParent(resultsGameGrid.transform);
                                 }
-
+                                Debug.Log("viewedResult: " + viewedResult);
                                 activeGame.challengeId = challenge.ChallengeId;
                                 activeGame.nextPlayerId = challenge.NextPlayer;
                                 activeGame.challengeShortCode = challenge.ShortCode;
@@ -457,6 +500,11 @@ namespace Fourzy
 
                                 activeGame.winnerName = challenge.ScriptData.GetString("winnerName");
                                 activeGame.winnerId = challenge.ScriptData.GetString("winnerId");
+
+                                if (activeGame.winnerId == null && challenge.State == "COMPLETE") {
+                                    activeGame.isExpired = true;
+                                }
+
                                 List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
                                 if (boardData != null) {
                                     int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();

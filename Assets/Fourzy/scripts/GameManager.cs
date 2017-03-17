@@ -6,6 +6,7 @@ using GameSparks.Api.Requests;
 using GameSparks.Api.Messages;
 using GameSparks.Core;
 using System.Linq;
+using DG.Tweening;
 
 namespace Fourzy
 {
@@ -94,7 +95,8 @@ namespace Fourzy
         public Image opponentProfilePicture;
         public CreateGame createGameScript;
 
-        //int loop = 0;
+        public AudioClip test1;
+        AudioSource audio1;
 
         //Singleton
         private static GameManager _instance;
@@ -118,7 +120,7 @@ namespace Fourzy
                     ChallengeManager.instance.GetChallenges();
                 }
             } else {
-                createGameScript.ResetFindMatchButton();
+                //createGameScript.ResetFindMatchButton();
             }
         }
 
@@ -152,8 +154,18 @@ namespace Fourzy
             ChallengeManager.OnActiveGame -= enableGameScreen;
         }
 
+        private void CheckConnectionStatus(bool connected) {
+            Debug.Log("CheckConnectionStatus: " + connected);
+        }
+
 		void Start() 
 		{
+            GS.GameSparksAvailable += CheckConnectionStatus;
+
+            DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
+
+            audio1 = GetComponent<AudioSource>();
+
             MatchFoundMessage.Listener = (message) => {
                 createGameScript.SetButtonStateWrapper(false);
                 ChallengeManager.instance.GetChallenges();
@@ -167,6 +179,7 @@ namespace Fourzy
                         List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                         ReplayLastMove(moveList);
                         gameStatusText.text = challenge.Challenger.Name + " Won!";
+                        ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
                     }
                     ChallengeManager.instance.GetChallenges();
                 }
@@ -180,6 +193,7 @@ namespace Fourzy
                         List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                         ReplayLastMove(moveList);
                         gameStatusText.text = challenge.Challenged.First().Name + " Won!";
+                        //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
                     }
                     ChallengeManager.instance.GetChallenges();
                 }
@@ -764,9 +778,10 @@ namespace Fourzy
                 else if (isMultiplayer && isNewChallenge)
                 {
                     isNewChallenge = false;
+                    StartCoroutine(ProcessMove(position, direction));
                     ChallengeManager.instance.ChallengeUser(challengedUserId, gameBoard.GetGameBoardData(), GetTokenBoardData(), GetMoveLocation(position, direction), direction);
                     //if (success) {
-                        StartCoroutine(ProcessMove(position, direction));
+                        
                     //} else {
                       //  gameStatusText.text = "There was a problem making your move. Please try again.";
                     //}
@@ -774,9 +789,10 @@ namespace Fourzy
                 else if (isMultiplayer && isNewRandomChallenge)
                 {
                     isNewRandomChallenge = false;
+                    StartCoroutine(ProcessMove(position, direction));
                     ChallengeManager.instance.ChallengeRandomUser(gameBoard.GetGameBoardData(), GetTokenBoardData(), GetMoveLocation(position, direction), direction);
                     //if (success) {
-                        StartCoroutine(ProcessMove(position, direction));
+                        
                     //} else {
                       //  gameStatusText.text = "There was a problem making your move. Please try again.";
                     //}
@@ -857,7 +873,16 @@ namespace Fourzy
                 Position endPosition = gameBoard.activeMovingPieces[0].GetNextPosition();
 
                 if (CanMoveInPosition(startPosition, endPosition, direction)) {
-                    gameBoard = tokenBoard[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);    
+                    gameBoard = tokenBoard[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);
+                    if(tokenBoard[endPosition.column, endPosition.row].tokenType == Token.UP_ARROW) {
+                        //audio1.Play();
+                    } else if (tokenBoard[endPosition.column, endPosition.row].tokenType == Token.DOWN_ARROW) {
+                        //audio1.Play();
+                    } else if (tokenBoard[endPosition.column, endPosition.row].tokenType == Token.LEFT_ARROW) {
+                        //audio1.Play();
+                    } else  if (tokenBoard[endPosition.column, endPosition.row].tokenType == Token.RIGHT_ARROW) {
+                        //audio1.Play();
+                    }
                 } else {
                     gameBoard.DisableNextMovingPiece();
                 }
@@ -869,6 +894,8 @@ namespace Fourzy
             foreach (var piece in gameBoard.completedMovingPieces)
             {
                 StartCoroutine(AnimatePiece(piece.positions));
+                //piece.SimplifyMovePositions();
+                //AnimatePiece(piece.positions);
                 while(this.isAnimating)
                     yield return null;
             }
@@ -944,24 +971,36 @@ namespace Fourzy
             GameObject g = gameBoard.gamePieces[positions[positions.Count - 1].column, positions[positions.Count - 1].row];
 
             Vector3 start = new Vector3(positions[1].column, positions[1].row * -1);
+            Sequence mySequence = DOTween.Sequence();
             for (int i = 1; i < positions.Count; i++)
             {
                 Vector3 end = new Vector3(positions[i].column, positions[i].row * -1);
                 float distance = Vector3.Distance(start, end);
 
-                float t = 0;
-                while(t < 1)
-                {
-                    t += Time.deltaTime * dropTime;
-                    if (numRows - distance > 0) {
-                        t += (numRows - distance) / 500;
-                    }
-                    g.transform.position = Vector3.Lerp (start, end, t);
-                    yield return null;
+                if (i < positions.Count - 1) {
+                    mySequence.Append(g.transform.DOMove(end, dropTime, false).SetEase(Ease.Linear)); 
+                } else {
+                    mySequence.Append(g.transform.DOMove(end, dropTime, false).SetEase(Ease.Linear));
                 }
+
+                //mySequence.Append(g.transform.DOMove(end, dropTime, false).SetEase(Ease.Linear));
+
+//                float t = 0;
+//                while(t < 1)
+//                {
+//                    t += Time.deltaTime * dropTime;
+//                    if (numRows - distance > 0) {
+//                        t += (numRows - distance) / 500;
+//                    }
+//                    g.transform.position = Vector3.Lerp (start, end, t);
+//
+//                    yield return null;
+//                }
 
                 start = end;
             }
+
+            yield return mySequence.WaitForCompletion();
             isAnimating = false;
         }
 
