@@ -260,17 +260,49 @@ namespace Fourzy
         {
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateEmptySpots();
-            //GameManager.instance.SetSampleTokenBoard();
             int[] tokenData = TokenBoard.Instance.FindTokenBoardAll();
-            string x = "";
-            foreach (var item in tokenData)
-            {
-                x += item + ",";
-
-            }
-            Debug.Log(x);
+//            string x = "";
+//            foreach (var item in tokenData)
+//            {
+//                x += item + ",";
+//
+//            }
+//            Debug.Log(x);
             StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
             GameManager.instance.isMultiplayer = false;
+            GameManager.instance.isPlayerOneTurn = true;
+            GameManager.instance.isCurrentPlayerTurn = true;
+            GameManager.instance.isNewRandomChallenge = false;
+            GameManager.instance.isNewChallenge = false;
+            GameManager.instance.challengeInstanceId = null;
+            GameManager.instance.playerNameLabel.text = "Blue Player";
+            GameManager.instance.playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                new Vector2(0.5f, 0.5f));
+            GameManager.instance.opponentNameLabel.text = "Red Player";
+            GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                new Vector2(0.5f, 0.5f));
+            GameManager.instance.UpdateGameStatusText();
+
+            UIScreen.SetActive(false);
+
+            if (OnActiveGame != null)
+                OnActiveGame(true);
+        }
+
+        public void OpenAiGame() 
+        {
+            GameManager.instance.ResetGameBoard();
+            GameManager.instance.PopulateEmptySpots();
+  
+            int[] tokenData = new int[64];            
+            StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
+
+            GameManager.instance.aiPlayer = new AiPlayer("default");
+
+            GameManager.instance.isMultiplayer = false;
+            GameManager.instance.isAiActive = true;
             GameManager.instance.isPlayerOneTurn = true;
             GameManager.instance.isCurrentPlayerTurn = true;
             GameManager.instance.isNewRandomChallenge = false;
@@ -430,7 +462,7 @@ namespace Fourzy
                                 bool viewedResult = false;
                                 List<String> playersViewedResult = challenge.ScriptData.GetStringList("playersViewedResult");
                                 if (playersViewedResult != null) {
-                                    Debug.Log("playersViewedResult: " + playersViewedResult.Count);
+                                    //Debug.Log("playersViewedResult: " + playersViewedResult.Count);
                                     for (int i = 0; i < playersViewedResult.Count; i++)
                                     {   
                                         //Debug.Log("playersViewedResult[i] " + playersViewedResult[i]);
@@ -466,7 +498,7 @@ namespace Fourzy
                                     activeGame.isCurrentPlayerTurn = false;
                                     go.gameObject.transform.SetParent(resultsGameGrid.transform);
                                 }
-                                Debug.Log("viewedResult: " + viewedResult);
+                                //Debug.Log("viewedResult: " + viewedResult);
                                 activeGame.challengeId = challenge.ChallengeId;
                                 activeGame.nextPlayerId = challenge.NextPlayer;
                                 activeGame.challengeShortCode = challenge.ShortCode;
