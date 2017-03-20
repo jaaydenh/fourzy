@@ -171,6 +171,7 @@ namespace Fourzy
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.challengeInstanceId = challengeId;
+
             Debug.Log("Open Active Game: challengeInstanceId: " + challengeId);
             GameManager.instance.winner = winnerName;
             GameManager.instance.isCurrentPlayerTurn = isCurrentPlayerTurn;

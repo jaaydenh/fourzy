@@ -178,7 +178,8 @@ namespace Fourzy
                     if (challenge.ChallengeId == challengeInstanceId) {
                         List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                         ReplayLastMove(moveList);
-                        gameStatusText.text = challenge.Challenger.Name + " Won!";
+                        //gameStatusText.text = challenge.ScriptData.GetString("winnerName") + " Won!";
+                        //gameStatusText.text = challenge.Challenger.Name + " Won!";
                         ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
                     }
                     ChallengeManager.instance.GetChallenges();
@@ -192,8 +193,9 @@ namespace Fourzy
                     if (challenge.ChallengeId == challengeInstanceId) {
                         List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                         ReplayLastMove(moveList);
-                        gameStatusText.text = challenge.Challenged.First().Name + " Won!";
-                        //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
+                        //gameStatusText.text = challenge.ScriptData.GetString("winnerName") + " Won!";
+                        //gameStatusText.text = challenge.Challenged.First().Name + " Won!";
+                        ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
                     }
                     ChallengeManager.instance.GetChallenges();
                 }
@@ -269,6 +271,7 @@ namespace Fourzy
             enableGameScreen(false);
             UIScreen.SetActive(true);
             challengeInstanceId = null;
+            winner = null;
             isCurrentPlayerTurn = false;
         }
 
@@ -301,6 +304,7 @@ namespace Fourzy
                 yield return null;
             }
 
+            DisplayGameOverView();
             UpdateGameStatusText();
         }
 
@@ -316,7 +320,7 @@ namespace Fourzy
                     if (piece == (int)Piece.BLUE)
                     {
                         GameObject pieceObject = Instantiate(pieceBlue, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
-                        SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
+                       // SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
                         //pieceSprite.sprite = new Sprite().texture.
                         GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
                         pieceModel.player = Player.ONE;
@@ -325,7 +329,7 @@ namespace Fourzy
                     else if (piece == (int)Piece.RED)
                     {
                         GameObject pieceObject = Instantiate(pieceRed, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
-                        SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
+                        //SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
                         //pieceSprite.sprite = new Sprite().texture.
                         GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
                         pieceModel.player = Player.TWO;
@@ -394,66 +398,47 @@ namespace Fourzy
             yield return 0;
         }
 
-//        public void SetSampleTokenBoard()
-//        {
-//            tokenBoard[2, 2] = new RightArrowToken();
-//            tokenBoard[5, 2] = new DownArrowToken();
-//            tokenBoard[5, 5] = new LeftArrowToken();
-//            tokenBoard[1, 5] = new UpArrowToken();
-//            tokenBoard[1, 1] = new RightArrowToken();
-//            tokenBoard[6, 1] = new DownArrowToken();
-//            tokenBoard[6, 6] = new LeftArrowToken();
-//
-//            Instantiate(rightArrowToken, new Vector3(2, 2 * -1, 8), Quaternion.identity, gamePieces.transform);
-//            Instantiate(downArrowToken, new Vector3(5, 2 * -1, 8), Quaternion.identity, gamePieces.transform);
-//            Instantiate(leftArrowToken, new Vector3(5, 5 * -1, 8), Quaternion.identity, gamePieces.transform);
-//            Instantiate(upArrowToken, new Vector3(1, 5 * -1, 8), Quaternion.identity, gamePieces.transform);
-//            Instantiate(rightArrowToken, new Vector3(1, 1 * -1, 8), Quaternion.identity, gamePieces.transform);
-//            Instantiate(downArrowToken, new Vector3(6, 1 * -1, 8), Quaternion.identity, gamePieces.transform);
-//            Instantiate(leftArrowToken, new Vector3(6, 6 * -1, 8), Quaternion.identity, gamePieces.transform);
-//        }
-
-        public void UpdateGameStatusText() {
-//            print("isMultiplayer: " + isMultiplayer);
-//            print("gameOver: " + gameOver);
-//            print("isCurrentPlayerTurn: " + isCurrentPlayerTurn);
-//            print("isPlayerOneTurn: " + isPlayerOneTurn);
-//            print("didPlayer1Win: " + didPlayer1Win);
-
+        public void DisplayGameOverView() {
             if (gameOver == true)
             {
+//                print("isMultiplayer: " + isMultiplayer);
+//                print("gameOver: " + gameOver);
+//                print("isCurrentPlayerTurn: " + isCurrentPlayerTurn);
+//                print("isPlayerOneTurn: " + isPlayerOneTurn);
+//                print("didPlayer1Win: " + didPlayer1Win);
+//                print("opponentNameLabel: " + opponentNameLabel.text);
+//                print("UserManager.instance.userName: " + UserManager.instance.userName);
+
                 if (isGameDrawn) {
                     gameStatusText.text = drawText;
                 } else if (isMultiplayer) {
-                    if (winner != null)
+                    if (winner != null && winner.Length > 0)
                     {
+                        //Debug.Log("SET Winner WON");
                         gameStatusText.text = winner + " Won!";
                     }
                     else
                     {
-                        if (isPlayerOneTurn && didPlayer1Win)
-                        {
+                        if (isCurrentPlayerTurn && (isPlayerOneTurn == didPlayer1Win)) {
+                            //Debug.Log("SET CURRENT PLAYER WON");
                             gameStatusText.text = UserManager.instance.userName + " Won!";
+                        } else {
+                            //Debug.Log("SET OPPONENT PLAYER WON");
+                            gameStatusText.text = opponentNameLabel.text + " Won!";
                         }
-                        if (isPlayerOneTurn && !didPlayer1Win)
-                        {
-                            gameStatusText.text = UserManager.instance.userName + " Lost!";
-                        }
-                        if (!isPlayerOneTurn && !didPlayer1Win)
-                        {
-                            gameStatusText.text = UserManager.instance.userName + " Won!";
-                        }
-                        if (!isPlayerOneTurn && didPlayer1Win)
-                        {
-                            gameStatusText.text = UserManager.instance.userName + " Lost!";
-                        }
+
                         gameStatusText.color = didPlayer1Win ? bluePlayerColor : redPlayerColor;
                     }
                 } else {
                     gameStatusText.text = didPlayer1Win ? bluePlayerWonText : redPlayerWonText;
                     gameStatusText.color = didPlayer1Win ? bluePlayerColor : redPlayerColor;
                 }
-            } else {
+            }
+        }
+
+        public void UpdateGameStatusText() {
+            if (!gameOver)
+            {
                 if (isMultiplayer)
                 {
                     if (isCurrentPlayerTurn)
@@ -466,7 +451,9 @@ namespace Fourzy
                         gameStatusText.text = "Their Move";
                         gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
                     }
-                } else {
+                }
+                else
+                {
                     gameStatusText.text = isPlayerOneTurn ? bluePlayerMoveText : redPlayerMoveText;
                     gameStatusText.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
                 }
@@ -913,6 +900,14 @@ namespace Fourzy
             while(this.isCheckingForWinner)
                 yield return null;
 
+            if (gameOver) {
+                DisplayGameOverView();
+            }
+
+            if (isCurrentPlayerTurn && gameOver) {
+                ChallengeManager.instance.SetViewedCompletedGame(challengeInstanceId);
+            }
+
             isPlayerOneTurn = !isPlayerOneTurn;
             if (isMultiplayer) {
                 isCurrentPlayerTurn = !isCurrentPlayerTurn;    
@@ -970,12 +965,12 @@ namespace Fourzy
             isAnimating = true;
             GameObject g = gameBoard.gamePieces[positions[positions.Count - 1].column, positions[positions.Count - 1].row];
 
-            Vector3 start = new Vector3(positions[1].column, positions[1].row * -1);
+            //Vector3 start = new Vector3(positions[1].column, positions[1].row * -1);
             Sequence mySequence = DOTween.Sequence();
             for (int i = 1; i < positions.Count; i++)
             {
                 Vector3 end = new Vector3(positions[i].column, positions[i].row * -1);
-                float distance = Vector3.Distance(start, end);
+                //float distance = Vector3.Distance(start, end);
 
                 if (i < positions.Count - 1) {
                     mySequence.Append(g.transform.DOMove(end, dropTime, false).SetEase(Ease.Linear)); 
@@ -997,7 +992,7 @@ namespace Fourzy
 //                    yield return null;
 //                }
 
-                start = end;
+                //start = end;
             }
 
             yield return mySequence.WaitForCompletion();
@@ -1006,10 +1001,6 @@ namespace Fourzy
 
         public bool CanMoveInPosition(Position startPosition, Position endPosition, Direction direction)
         {
-//            loop++;
-//            if (loop> 10) {
-//                return false;
-//            }
             //Debug.Log("startPosition:col: " + startPosition.column + " row: " + startPosition.row);
             //Debug.Log("endPosition:col: " + endPosition.column + " row: " + endPosition.row);
             // if the next end position is outside of the board then return false;
@@ -1095,7 +1086,7 @@ namespace Fourzy
                         //Debug.Log("HORIZONTAL WIN");
                         DrawLine(hitsHorz[0].transform.position, hitsHorz[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
                         if (isCurrentPlayerTurn) {
-                            Handheld.Vibrate();    
+                            Handheld.Vibrate();
                         }
                         gameOver = true;
                         didPlayer1Win = playerOne;

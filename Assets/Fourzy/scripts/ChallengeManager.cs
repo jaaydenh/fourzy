@@ -198,24 +198,6 @@ namespace Fourzy
                 });
         }
 
-//        public void ChallengeRandomUser(List<long> gameBoard, int position, Fourzy.GameManager.Direction direction)
-//        {
-//            GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameBoard);
-//
-//            new LogEventRequest().SetEventKey("createRandomChallenge")
-//                .SetEventAttribute("position", position)
-//                .SetEventAttribute("direction", (int)direction)
-//                .SetScriptData(data)
-//                .Send((response) => 
-//                    {
-//                        if (response.HasErrors) {
-//                            Debug.Log(response.Errors);
-//                        } else {
-//                            //GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
-//                        }
-//                    });
-//        }
-
         public void ChallengeRandomUser(List<long> gameBoard, List<long> tokenBoard, int position, Direction direction)
         {
             GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameBoard);
