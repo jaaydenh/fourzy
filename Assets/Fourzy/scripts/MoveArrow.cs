@@ -24,7 +24,7 @@ namespace Fourzy
                 } else if (direction == Direction.LEFT) {
                     pos.column = Constants.numColumns;
                 }
-                StartCoroutine(GameManager.instance.MovePiece(pos, direction, false));
+                StartCoroutine(GameManager.instance.MovePiece(new Move(pos, direction), false));
             }
         }
             

@@ -250,7 +250,7 @@ namespace Fourzy
                 .SetChallengeInstanceId(challengeInstanceId)
                 //.SetMessage(message)
                 .Send((response) => {
-                    var challenge = response.Challenge; 
+                    var challenge = response.Challenge;
                     GSData scriptData = response.ScriptData;
                     OpenMultiplayerGame(challenge);
                 });
@@ -258,17 +258,17 @@ namespace Fourzy
 
         public void OpenPassAndPlayGame() 
         {
+            TokenBoard tokenBoard = new TokenBoard("ALL");
+            GameManager.instance.tokenBoard = tokenBoard;
+
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateEmptySpots();
-            int[] tokenData = TokenBoard.Instance.FindTokenBoardAll();
-//            string x = "";
-//            foreach (var item in tokenData)
-//            {
-//                x += item + ",";
-//
-//            }
-//            Debug.Log(x);
-            StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
+
+            StartCoroutine(GameManager.instance.CreateTokens());
+
+            //int[] tokenData = TokenBoardLoader.Instance.FindTokenBoardAll();
+            //StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
+
             GameManager.instance.isMultiplayer = false;
             GameManager.instance.isPlayerOneTurn = true;
             GameManager.instance.isCurrentPlayerTurn = true;
@@ -296,8 +296,12 @@ namespace Fourzy
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateEmptySpots();
   
-            int[] tokenData = new int[64];            
-            StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
+            TokenBoard tokenBoard = new TokenBoard("EMPTY");
+            GameManager.instance.tokenBoard = tokenBoard;
+            StartCoroutine(GameManager.instance.CreateTokens());
+
+            //int[] tokenData = new int[64];            
+            //StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
 
             GameManager.instance.aiPlayer = new AiPlayer("default");
 
@@ -329,16 +333,13 @@ namespace Fourzy
             Debug.Log("OpenNewMultiplayerGame");
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateEmptySpots();
-            int[] tokenData = TokenBoard.Instance.FindTokenBoardNoSticky();
-            string x = "";
-            foreach (var item in tokenData)
-            {
-                x += item + ",";
 
-            }
-            Debug.Log(x);
-            StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
-            Debug.Log("Aftet set token board");
+            TokenBoard tokenBoard = new TokenBoard("NOSTICKY");
+            GameManager.instance.tokenBoard = tokenBoard;
+            StartCoroutine(GameManager.instance.CreateTokens());
+            //int[] tokenData = TokenBoardLoader.Instance.FindTokenBoardNoSticky();
+            //StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
+
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isPlayerOneTurn = true;
             GameManager.instance.isCurrentPlayerTurn = true;
@@ -370,6 +371,7 @@ namespace Fourzy
         public void OpenMultiplayerGame(GameSparks.Api.Responses.GetChallengeResponse._Challenge challenge)
         {
             Debug.Log("Open MultiplayerGame");
+
             GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
                 new Vector2(0.5f, 0.5f));
@@ -399,12 +401,13 @@ namespace Fourzy
             List<int> tokenData = challenge.ScriptData.GetIntList("tokenBoard");
             if (boardData != null) {
                 int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
-                int[] tokenboard = Enumerable.Repeat(0, 64).ToArray();
+                int[] tokenBoard = Enumerable.Repeat(0, 64).ToArray();
                 if (tokenData != null) {
-                    tokenboard = challenge.ScriptData.GetIntList("tokenBoard").ToArray();    
+                    tokenBoard = challenge.ScriptData.GetIntList("tokenBoard").ToArray();  
+                    GameManager.instance.tokenBoard = new TokenBoard(tokenBoard);
                 }
 
-                GameManager.instance.SetupGameWrapper(gameboard, tokenboard);
+                GameManager.instance.SetupGameWrapper(gameboard);
             }
 
             List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");

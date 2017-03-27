@@ -10,6 +10,7 @@ namespace Fourzy {
         int Column { get; set; }
         bool canPassThrough { get; set; }
         Token tokenType { get; set; }
+        void UpdateBoard(GameBoardView boardView, bool swapPiece);
         GameBoard UpdateBoard(GameBoard board, bool swapPiece);
     }
            
@@ -29,34 +30,58 @@ namespace Fourzy {
             tokenType = Token.UP_ARROW;
     	}
     	
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoardView boardView, bool swapPiece)
         {
-            Debug.Log("UpToken:UpdateBoard");
+            //Debug.Log("UpToken:UpdateBoard");
 
             // process next moving piece at gameBoard.activeMovingPieces[0]
-            if (board.activeMovingPieces.Count > 0) {
-                MovingGamePiece piece = board.activeMovingPieces[0];
+            if (boardView.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = boardView.activeMovingPieces[0];
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
                 if (piece.gamePieceObject) {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = newPosition.column;
                     gamePiece.row = newPosition.row;
-                    board.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
                     piece.gamePieceObject = null;
                 } else {
                     if (swapPiece) {
-                        board.SwapPiecePosition(currentPosition, newPosition);    
+                        boardView.SwapPiecePosition(currentPosition, newPosition);
                     }
                 }
-//                if (swapPiece) {
-//                    board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());
-//                }
-                board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+                    
+                boardView.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+
                 piece.currentDirection = Direction.UP;
             } else {
                 Debug.LogWarning("Attempting to update gameboard when there is " +
-                    "no active moving piece to update", board);
+                    "no active moving piece to update", boardView);
+            }
+
+            //return board;
+        }
+
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        {
+            //Debug.Log("UpToken:UpdateBoard");
+
+            // process next moving piece at gameBoard.activeMovingPieces[0]
+            if (board.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = board.activeMovingPieces[0];
+                Position currentPosition = piece.GetCurrentPosition();
+                Position newPosition = piece.GetNextPosition();
+                if (piece.player != Player.NONE) {
+                    board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
+                    piece.player = 0;
+                } else {
+                    if (swapPiece) {
+                        board.SwapPiecePosition(currentPosition, newPosition);
+                    }
+                }
+
+                board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+                piece.currentDirection = Direction.UP;
             }
 
             return board;
@@ -75,33 +100,54 @@ namespace Fourzy {
             tokenType = Token.DOWN_ARROW;
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoardView boardView, bool swapPiece)
         {
-            Debug.Log("DownToken:UpdateBoard");
+            //Debug.Log("DownToken:UpdateBoard");
             // process next moving piece at gameBoard.activeMovingPieces[0]
-            if (board.activeMovingPieces.Count > 0) {
-                MovingGamePiece piece = board.activeMovingPieces[0];
+            if (boardView.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = boardView.activeMovingPieces[0];
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
                 if (piece.gamePieceObject) {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = newPosition.column;
                     gamePiece.row = newPosition.row;
-                    board.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
                     piece.gamePieceObject = null;
                 } else {
                     if (swapPiece) {
-                        board.SwapPiecePosition(currentPosition, newPosition);    
+                        boardView.SwapPiecePosition(currentPosition, newPosition);    
                     }
                 }
-//                if (swapPiece) {
-//                    board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());
-//                }
-                board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+
+                boardView.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                 piece.currentDirection = Direction.DOWN;
             } else {
                 Debug.LogWarning("Attempting to update gameboard when there is " +
-                    "no active moving piece to update", board);
+                    "no active moving piece to update", boardView);
+            }
+
+            //return board;
+        }
+
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        {
+            // process next moving piece at gameBoard.activeMovingPieces[0]
+            if (board.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = board.activeMovingPieces[0];
+                Position currentPosition = piece.GetCurrentPosition();
+                Position newPosition = piece.GetNextPosition();
+                if (piece.player != Player.NONE) {
+                    board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
+                    piece.player = 0;
+                } else {
+                    if (swapPiece) {
+                        board.SwapPiecePosition(currentPosition, newPosition);
+                    }
+                }
+
+                board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+                piece.currentDirection = Direction.DOWN;
             }
 
             return board;
@@ -120,33 +166,54 @@ namespace Fourzy {
             tokenType = Token.LEFT_ARROW;
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoardView boardView, bool swapPiece)
         {
-            Debug.Log("LeftToken:UpdateBoard");
+            //Debug.Log("LeftToken:UpdateBoard");
             // process next moving piece at gameBoard.activeMovingPieces[0]
-            if (board.activeMovingPieces.Count > 0) {
-                MovingGamePiece piece = board.activeMovingPieces[0];
+            if (boardView.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = boardView.activeMovingPieces[0];
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
                 if (piece.gamePieceObject) {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = newPosition.column;
                     gamePiece.row = newPosition.row;
-                    board.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
                     piece.gamePieceObject = null;
                 } else {
                     if (swapPiece) {
-                        board.SwapPiecePosition(currentPosition, newPosition);    
+                        boardView.SwapPiecePosition(currentPosition, newPosition);    
                     }
                 }
-//                if (swapPiece) {
-//                    board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());    
-//                }
-                board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+
+                boardView.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                 piece.currentDirection = Direction.LEFT;
             } else {
                 Debug.LogWarning("Attempting to update gameboard when there is " +
-                    "no active moving piece to update", board);
+                    "no active moving piece to update", boardView);
+            }
+
+            //return board;
+        }
+
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        {
+            // process next moving piece at gameBoard.activeMovingPieces[0]
+            if (board.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = board.activeMovingPieces[0];
+                Position currentPosition = piece.GetCurrentPosition();
+                Position newPosition = piece.GetNextPosition();
+                if (piece.player != Player.NONE) {
+                    board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
+                    piece.player = 0;
+                } else {
+                    if (swapPiece) {
+                        board.SwapPiecePosition(currentPosition, newPosition);
+                    }
+                }
+
+                board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+                piece.currentDirection = Direction.LEFT;
             }
 
             return board;
@@ -165,33 +232,54 @@ namespace Fourzy {
             tokenType = Token.RIGHT_ARROW;
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoardView boardView, bool swapPiece)
         {
-            Debug.Log("RightToken:UpdateBoard");
+            //Debug.Log("RightToken:UpdateBoard");
             // process next moving piece at gameBoard.activeMovingPieces[0]
-            if (board.activeMovingPieces.Count > 0) {
-                MovingGamePiece piece = board.activeMovingPieces[0];
+            if (boardView.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = boardView.activeMovingPieces[0];
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
                 if (piece.gamePieceObject) {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = newPosition.column;
                     gamePiece.row = newPosition.row;
-                    board.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
                     piece.gamePieceObject = null;
                 } else {
                     if (swapPiece) {
-                        board.SwapPiecePosition(currentPosition, newPosition);    
+                        boardView.SwapPiecePosition(currentPosition, newPosition);    
                     }
                 }
-//                if (swapPiece) {
-//                    board.SwapPiecePosition(piece.GetCurrentPosition(), piece.GetNextPosition());    
-//                }
-                board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+
+                boardView.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                 piece.currentDirection = Direction.RIGHT;
             } else {
                 Debug.LogWarning("Attempting to update gameboard when there is " +
-                    "no active moving piece to update", board);
+                    "no active moving piece to update", boardView);
+            }
+
+            //return board;
+        }
+
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        {
+            // process next moving piece at gameBoard.activeMovingPieces[0]
+            if (board.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = board.activeMovingPieces[0];
+                Position currentPosition = piece.GetCurrentPosition();
+                Position newPosition = piece.GetNextPosition();
+                if (piece.player != Player.NONE) {
+                    board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
+                    piece.player = 0;
+                } else {
+                    if (swapPiece) {
+                        board.SwapPiecePosition(currentPosition, newPosition);
+                    }
+                }
+
+                board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+                piece.currentDirection = Direction.RIGHT;
             }
 
             return board;
@@ -210,6 +298,34 @@ namespace Fourzy {
             tokenType = Token.EMPTY;
         }
 
+        public void UpdateBoard(GameBoardView boardView, bool swapPiece)
+        {
+            // process next moving piece at gameBoard.activeMovingPieces[0]
+            if (boardView.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = boardView.activeMovingPieces[0];
+                Position currentPosition = piece.GetCurrentPosition();
+                //Debug.Log("view currentposition col: " + currentPosition.column + " row: " + currentPosition.row);
+                Position newPosition = piece.GetNextPosition();
+
+                boardView.activeMovingPieces[0].positions.Add(newPosition);
+                if (piece.gamePieceObject) {
+                    GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
+                    gamePiece.column = newPosition.column;
+                    gamePiece.row = newPosition.row;
+                    boardView.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
+                    piece.gamePieceObject = null;
+                } else {
+                    if (swapPiece) {
+                        boardView.SwapPiecePosition(currentPosition, newPosition);    
+                    }
+                }
+            } else {
+                Debug.LogWarning("Updating gameboard when there is no active moving piece to update", boardView);
+            }
+
+            //return board;
+        }
+
         public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
         {
             // process next moving piece at gameBoard.activeMovingPieces[0]
@@ -217,24 +333,18 @@ namespace Fourzy {
                 MovingGamePiece piece = board.activeMovingPieces[0];
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
-
+                //Debug.Log("model currentposition col: " + currentPosition.column + " row: " + currentPosition.row);
                 board.activeMovingPieces[0].positions.Add(newPosition);
-                if (piece.gamePieceObject) {
-                    GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
-                    gamePiece.column = newPosition.column;
-                    gamePiece.row = newPosition.row;
-                    board.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
-                    piece.gamePieceObject = null;
+                if (piece.player != Player.NONE) {
+                    board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
+                    piece.player = 0;
                 } else {
                     if (swapPiece) {
-                        board.SwapPiecePosition(currentPosition, newPosition);    
+                        //board.PrintBoard();
+                        board.SwapPiecePosition(currentPosition, newPosition);
+                        //board.PrintBoard();
                     }
                 }
-//                if (swapPiece) {
-//                    board.SwapPiecePosition(currentPosition, newPosition);   
-//                }
-            } else {
-                Debug.LogWarning("Updating gameboard when there is no active moving piece to update", board);
             }
 
             return board;
@@ -253,44 +363,71 @@ namespace Fourzy {
             tokenType = Token.STICKY;
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoardView boardView, bool swapPiece)
         {
-            //Debug.Log("StickyToken:UpdateBoard");
             // process next moving piece at gameBoard.activeMovingPieces[0]
-            if (board.activeMovingPieces.Count > 0) {
-                MovingGamePiece piece = board.activeMovingPieces[0];
+            if (boardView.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = boardView.activeMovingPieces[0];
                 Position nextPosition = piece.GetNextPosition();
 
-                //Debug.Log("tag: " + board.gamePieces[nextPosition.column, nextPosition.row].GetType());
-                if (board.gamePieces[nextPosition.column, nextPosition.row]) {
+                if (boardView.gamePieces[nextPosition.column, nextPosition.row]) {
                     //Debug.Log("Add active piece at sticky column: " + nextPosition.column + " row: " + nextPosition.row);
-                    MovingGamePiece activeMovingPiece = new MovingGamePiece(nextPosition, piece.currentDirection);
-
-                    GameObject pieceObject = board.gamePieces[nextPosition.column, nextPosition.row];
-
+                    Move move = new Move(nextPosition, piece.currentDirection);
+                    MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
+                    GameObject pieceObject = boardView.gamePieces[nextPosition.column, nextPosition.row];
                     activeMovingPiece.gamePieceObject = pieceObject;
-                    board.activeMovingPieces.Add(activeMovingPiece);
+                    boardView.activeMovingPieces.Add(activeMovingPiece);
                 } 
 
                 if (piece.gamePieceObject) {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = nextPosition.column;
                     gamePiece.row = nextPosition.row;
-                    board.gamePieces[nextPosition.column, nextPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[nextPosition.column, nextPosition.row] = piece.gamePieceObject;
 
                     piece.gamePieceObject = null;
                 } else {
                     if (swapPiece) {
-                        board.SwapPiecePosition(piece.GetCurrentPosition(), nextPosition);
-                        //board.MakePieceMoveable(nextPosition, true);
+                        boardView.SwapPiecePosition(piece.GetCurrentPosition(), nextPosition);
                     }
                 }
                     
-                board.activeMovingPieces[0].positions.Add(nextPosition);
-                board.DisableNextMovingPiece();
+                boardView.activeMovingPieces[0].positions.Add(nextPosition);
+                boardView.DisableNextMovingPiece();
             } else {
                 Debug.LogWarning("Attempting to update gameboard when there is " +
-                    "no active moving piece to update", board);
+                    "no active moving piece to update", boardView);
+            }
+
+            //return board;
+        }
+
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        {
+            // process next moving piece at gameBoard.activeMovingPieces[0]
+            if (board.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = board.activeMovingPieces[0];
+                Position nextPosition = piece.GetNextPosition();
+
+                if (board.board[nextPosition.column * Constants.numColumns + nextPosition.row] != 0) {
+                    Move move = new Move(nextPosition, piece.currentDirection);
+                    MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
+                    int player = board.board[nextPosition.column * Constants.numColumns + nextPosition.row];
+                    activeMovingPiece.player = (Player)player;
+                    board.activeMovingPieces.Add(activeMovingPiece);
+                } 
+
+                if (piece.player != Player.NONE) {
+                    board.board[nextPosition.column * Constants.numColumns + nextPosition.row] = (int)piece.player;
+                    piece.player = 0;
+                } else {
+                    if (swapPiece) {
+                        board.SwapPiecePosition(piece.GetCurrentPosition(), nextPosition);
+                    }
+                }
+
+                board.activeMovingPieces[0].positions.Add(nextPosition);
+                board.DisableNextMovingPiece();
             }
 
             return board;

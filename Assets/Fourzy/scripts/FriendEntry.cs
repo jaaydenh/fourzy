@@ -41,15 +41,13 @@ namespace Fourzy
         {
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateEmptySpots();
-            int[] tokenData = TokenBoard.Instance.FindTokenBoardNoSticky();
-            string x = "";
-            foreach (var item in tokenData)
-            {
-                x += item + ",";
 
-            }
-            Debug.Log(x);
-            StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
+            TokenBoard tokenBoard = new TokenBoard("NOSTICKY");
+            GameManager.instance.tokenBoard = tokenBoard;
+            StartCoroutine(GameManager.instance.CreateTokens());
+            //int[] tokenData = TokenBoardLoader.Instance.FindTokenBoardNoSticky();
+            //StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
+
             GameManager.instance.isMultiplayer = true;
             //If we initiated the challenge, we get to be player 1
             GameManager.instance.isPlayerOneTurn = true;

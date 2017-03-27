@@ -4,49 +4,72 @@ using UnityEngine;
 
 namespace Fourzy {
     
-    public class GameBoard : MonoBehaviour {
+    public struct GameBoard {
 
-        GameObject gamePiecesView;
-        GameObject tempPiece;
-        public GameObject gameScreenCanvas;
-        public GameObject pieceRed; // View
-        public GameObject pieceBlue; // View
-        public GameObject[,] gamePieces; //Collection of Views
-        public IToken[,] tokenBoard;
-        [Range(3, 8)]
-        public int numRows = Constants.numRows;
-        [Range(3, 8)]
-        public int numColumns = Constants.numRows;
-        bool isLoading = true;
+        private int numRows;
+        private int numColumns;
 
+        public int[] board;
+        public int[] isMoveableUp;
+        public int[] isMoveableDown;
+        public int[] isMoveableLeft;
+        public int[] isMoveableRight;
         public List<MovingGamePiece> activeMovingPieces;
         public List<MovingGamePiece> completedMovingPieces;
 
-    	void Start () {
+        public GameBoard (bool test) {
+            numRows = Constants.numRows;
+            numColumns = Constants.numColumns;
+
+            board = new int[numColumns * numRows];
+            isMoveableUp = new int[numColumns * numRows];
+            isMoveableDown = new int[numColumns * numRows];
+            isMoveableLeft = new int[numColumns * numRows];
+            isMoveableRight = new int[numColumns * numRows];
             activeMovingPieces = new List<MovingGamePiece>();
             completedMovingPieces = new List<MovingGamePiece>();
-            tokenBoard = new IToken[numColumns, numRows];
-            gamePieces = new GameObject[numColumns, numRows];
-    	}
 
-        public void MakePieceMoveable(Position pos, bool moveable, Direction direction) {
-            gamePieces[pos.column, pos.row].GetComponent<GamePiece>().MakeMoveable(moveable, direction);
+            InitGameBoard();
+    	}
+    	
+        public void InitGameBoard() {
+            for (int i = 0; i < numColumns * numRows; i++)
+            {
+                board[i] = 0;
+                isMoveableUp[i] = 1;
+                isMoveableDown[i] = 1;
+                isMoveableLeft[i] = 1;
+                isMoveableRight[i] = 1;
+            }
+
+            for (int i = 0; i < numColumns * numRows; i++)
+            {
+                board[i] = 0;
+            }
+        }
+
+        public void PrintBoard() {
+            string log = "";
+            for (int i = 0; i < numColumns * numRows; i++)
+            {
+                log += board[i] + ",";
+            }
+
+            Debug.Log(log);
+        }
+
+        public void SetGameBoard(int[] boardData) {
+            board = boardData;
         }
 
         public void SwapPiecePosition(Position oldPos, Position newPos) {
-            GameObject oldPiece = gamePieces[oldPos.column, oldPos.row];
-            GamePiece gamePiece = oldPiece.GetComponent<GamePiece>();
-            //gamePiece.position = newPos;
-            gamePiece.column = newPos.column;
-            gamePiece.row = newPos.row;
-            gamePieces[oldPos.column, oldPos.row] = null;
-            gamePieces[newPos.column, newPos.row] = oldPiece;
-        }
+            //Debug.Log("oldPos col: " + oldPos.column);
+            //Debug.Log("oldPos row: " + oldPos.row);
 
-        public void SwapStickyPiecePosition(Position oldPos, Position newPos) {
-            GameObject oldPiece = gamePieces[oldPos.column, oldPos.row];
-            gamePieces[oldPos.column, oldPos.row] = null;
-            gamePieces[newPos.column, newPos.row] = oldPiece;
+            int oldPiece = board[oldPos.column * numColumns + oldPos.row];
+            //Debug.Log("OLDPIECE: " + oldPiece + " oldpos.col: " + oldPos.column + " oldpos row: " + oldPos.row);
+            board[oldPos.column * numColumns + oldPos.row] = 0;
+            board[newPos.column * numColumns + newPos.row] = oldPiece;
         }
 
         public void DisableNextMovingPiece() {
@@ -56,100 +79,53 @@ namespace Fourzy {
             }
         }
 
-        public Player PlayerAtPosition(Position position) {
-            if (gamePieces[position.column, position.row]) {
-                Player player = gamePieces[position.column, position.row].GetComponent<GamePiece>().player;
-                return player;
+        public void MakePieceMoveable(Position pos, bool moveable, Direction direction) {
+
+            switch (direction)
+            {
+                case Direction.UP:
+                    isMoveableUp[pos.column * numColumns + pos.row] = moveable ? 1 : 0;
+                    break;
+                case Direction.DOWN:
+                    isMoveableDown[pos.column * numColumns + pos.row] = moveable ? 1 : 0;
+                    break;
+                case Direction.LEFT:
+                    isMoveableLeft[pos.column * numColumns + pos.row] = moveable ? 1 : 0;
+                    break;
+                case Direction.RIGHT:
+                    isMoveableRight[pos.column * numColumns + pos.row] = moveable ? 1 : 0;
+                    break;
+                default:
+                    break;
             }
-            return Player.NONE;
         }
 
-        public List<long> GetGameBoardData() {
-            List<long> gameBoardList = new List<long>();
-            for(int col = 0; col < numColumns; col++)
+        public Position GetNextPosition(Move move) {
+            Position nextPosition = new Position(0,0);
+
+            switch (move.direction)
             {
-                for(int row = 0; row < numRows; row++)
-                {
-                    if (gamePieces[col, row]) {
-                        gameBoardList.Add((int)gamePieces[col, row].GetComponent<GamePiece>().player);    
-                    } else {
-                        gameBoardList.Add(0);
-                    }
-                }
-            }
-            return gameBoardList;
-        }
-
-        public void PrintGameBoard() {
-            string gameboard = "Gameboard: ";
-
-            for (int col = 0; col < numColumns; col++)
-            {
-                for (int row = 0; row < numRows; row++)
-                {
-                    if (gamePieces[col, row]) {
-                        gameboard += (int)gamePieces[col, row].GetComponent<GamePiece>().player + ",";    
-                    } else {
-                        gameboard += "0,";
-                    }
-                }
-            }
-            Debug.Log(gameboard);
-        }
-
-        public void ResetGameBoard() {
-
-            isLoading = true;
-
-            if(gamePiecesView != null)
-            {
-                DestroyImmediate(gamePiecesView);
-            }
-            gamePiecesView = new GameObject("GamePieces");
-            gamePiecesView.transform.parent = gameScreenCanvas.transform;
-
-            // create an empty gameboard and instantiate the cells
-            //gameBoard = new int[numColumns, numRows];
-            //tokenBoard = new int[numColumns, numRows];
-            gamePieces = new GameObject[numColumns, numRows];
-
-            for (int col = 0; col < numColumns; col++)
-            {
-                for (int row = 0; row < numRows; row++)
-                {
-                    //gameBoard[col, row] = (int)Piece.Empty;
-                    //tokenBoard[col, row] = (int)Token.Empty;
-                }
-            }
-                
-
-            isLoading = false;
-            //gameOver = false;
-        }
-
-        public IEnumerator SetGameBoard(int[] boardData) {
-            //isLoading = true;
-
-            for(int col = 0; col < numColumns; col++)
-            {
-                for(int row = 0; row < numRows; row++)
-                {
-                    int piece = boardData[col * numColumns + row];
-                    //gameBoard[col, row] = piece;
-                    if (piece == (int)Piece.BLUE)
-                    {
-                        gamePieces[col,row] = Instantiate(pieceBlue, new Vector3(col, row * -1, 10), Quaternion.identity, gamePiecesView.transform);
-                    }
-                    else if (piece == (int)Piece.RED)
-                    {
-                        gamePieces[col,row] = Instantiate(pieceRed, new Vector3(col, row * -1, 10), Quaternion.identity, gamePiecesView.transform);
-                    }
-                }
+                case Direction.UP:
+                    nextPosition.column = move.position.column;
+                    nextPosition.row = move.position.row - 1;
+                    break;
+                case Direction.DOWN:
+                    nextPosition.column = move.position.column;
+                    nextPosition.row = move.position.row + 1;
+                    break;
+                case Direction.LEFT:
+                    nextPosition.column = move.position.column - 1;
+                    nextPosition.row = move.position.row;
+                    break;
+                case Direction.RIGHT:
+                    nextPosition.column = move.position.column + 1;
+                    nextPosition.row = move.position.row;
+                    break;
+                default:
+                    break;
             }
 
-            //isLoading = false;
-
-            yield return 0;
+            return nextPosition;
         }
     }
 }

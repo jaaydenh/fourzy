@@ -157,6 +157,8 @@ namespace Fourzy
     	//Open game gets called OnClick of the play button which happens when pressing or clicking an active game in the games list
         public void OpenGame()
     	{
+            GameManager.instance.tokenBoard = new TokenBoard(tokenBoard);
+
             GameManager.instance.opponentProfilePicture.sprite = opponentProfilePictureSprite;
             GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
             GameManager.instance.playerNameLabel.text = UserManager.instance.userName;
@@ -185,8 +187,9 @@ namespace Fourzy
 //            }
             GameManager.instance.ResetGameBoard();    
 			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
-            GameManager.instance.SetupGameWrapper(gameBoard, tokenBoard);
+            GameManager.instance.SetupGameWrapper(gameBoard);
             GameManager.instance.PopulateEmptySpots();
+            StartCoroutine(GameManager.instance.CreateTokens());
 
             if (moveList != null && moveList.Count > 0)
             {

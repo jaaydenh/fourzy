@@ -7,18 +7,18 @@ namespace Fourzy {
     public class MovingGamePiece {
 
         public Direction currentDirection;
-        public bool isActive;
+        //public bool isActive;
         public List<Position> positions;
         public Position position;
-        public Player player;
-        public bool swapPiece = true;
+        public Player player = Player.NONE;
+        //public bool swapPiece = true;
         public GameObject gamePieceObject;
 
-        public MovingGamePiece(Position position, Direction direction) {
+        public MovingGamePiece(Move move) {
             positions = new List<Position>();
-            this.position = position;
+            this.position = move.position;
             positions.Add(position);
-            currentDirection = direction;
+            currentDirection = move.direction;
         }
     	
         public Position GetCurrentPosition() {
@@ -59,42 +59,5 @@ namespace Fourzy {
 
             return nextPosition;
         }
-
-
-        // o > o o o o
-        // o ^ < o o o 
-        // o o ^ < o o
-        // o o o o o o
-
-//        public void SimplifyMovePositions() {
-//            if (positions.Count > 2) {
-//                int x = positions.Count - 1;
-//                int column = -1;
-//                int row = -1;
-//                
-//                while (x > 1)
-//                {
-//                    if (positions[x - 1].column == positions[x - 2].column) {
-//                        column = positions[x - 1].column;
-//                        if (positions[x].column == positions[x - 1].column) {
-//                            
-//                            positions.RemoveAt(x - 1);
-//                            //x--;
-//                        }
-//                    }
-//                    if (positions[x - 1].row == positions[x - 2].row) {
-//                        row = positions[x - 1].row;
-//                        if (positions[x].row == positions[x-1].row) {
-//                            positions.RemoveAt(x - 1);
-//                            //x--;
-//                        }
-//                    }
-//                    x--;
-//                }
-//                //for (int x = 0; x < positions.Count; x++) {
-//                  //  if (positions[x])
-//                //}
-//            }
-//        }
     }
 }
