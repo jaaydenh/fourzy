@@ -480,7 +480,6 @@ GameObject:
   m_Component:
   - component: {fileID: 137424724}
   - component: {fileID: 137424723}
-  - component: {fileID: 137424725}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -519,6 +518,16 @@ MonoBehaviour:
     type: 2}
   stickyToken: {fileID: 1660667990289766, guid: 6b7f67346b9e845aca14c64f8e4ca2a3,
     type: 2}
+  blockerToken: {fileID: 1187047679181528, guid: 0d7e3c7375ded49a2bc99d0e0d3584aa,
+    type: 2}
+  moveArrowLeft: {fileID: 1951836253388886, guid: 36d26fd20ba0f4f889d04038d1b5d6e4,
+    type: 2}
+  moveArrowRight: {fileID: 1459885036096070, guid: 36b21e6b584474efe8f008eb4a426bbc,
+    type: 2}
+  moveArrowDown: {fileID: 1520256694127478, guid: 9a76b4835c70b42c2b82c231f6aacb26,
+    type: 2}
+  moveArrowUp: {fileID: 1875338580760464, guid: 2b5a2b7ec7c53494fa52afec2d71c590,
+    type: 2}
   gameBoardView: {fileID: 440620694}
   rematchButton: {fileID: 1649922472}
   nextGameButton: {fileID: 437029456}
@@ -547,13 +556,14 @@ MonoBehaviour:
   gameOver: 0
   isCheckingForWinner: 0
   isAnimating: 0
+  clipMove: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
+  clipWin: {fileID: 8300000, guid: 2cda08f34c076490b8ec095a4f5d5256, type: 3}
   gameScreen: {fileID: 308658290}
   playerNameLabel: {fileID: 539133078}
   playerProfilePicture: {fileID: 574052263}
   opponentNameLabel: {fileID: 1084174629}
   opponentProfilePicture: {fileID: 1568791573}
   createGameScript: {fileID: 185923094}
-  test1: {fileID: 8300000, guid: 15b3f9adb9fc04116a30e38d6d26baf4, type: 3}
 --- !u!4 &137424724
 Transform:
   m_ObjectHideFlags: 0
@@ -567,86 +577,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &137424725
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 137424722}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 15b3f9adb9fc04116a30e38d6d26baf4, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
 --- !u!1 &159214245
 GameObject:
   m_ObjectHideFlags: 0
@@ -1440,7 +1370,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 750, y: 1136}
+  m_ReferenceResolution: {x: 740, y: 1136}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -2005,7 +1935,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 440620693}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 284.98712, y: 683.1725, z: -2736.7756}
+  m_LocalPosition: {x: 284.98712, y: 683.1725, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2579,7 +2509,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &694409853
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2594,10 +2524,10 @@ RectTransform:
   m_Father: {fileID: 1502554997}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 90}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 563.75, y: 0}
+  m_SizeDelta: {x: 372.5, y: 90}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &694409854
 MonoBehaviour:
@@ -6939,7 +6869,7 @@ Transform:
   m_GameObject: {fileID: 1789846566}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 67.5, y: 67.5, z: 0}
+  m_LocalScale: {x: 68.3, y: 68.3, z: 0}
   m_Children: []
   m_Father: {fileID: 308658291}
   m_RootOrder: 0
@@ -6975,7 +6905,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 01c1248a66dbb01469eeb6e0666bd9da, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0419eea772ac74b02a56e830e43f52c4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

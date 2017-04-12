@@ -44,7 +44,7 @@ PlayerSettings:
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 640
-  defaultScreenHeight: 480
+  defaultScreenHeight: 1136
   defaultScreenWidthWeb: 960
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
@@ -56,7 +56,7 @@ PlayerSettings:
   androidShowActivityIndicatorOnLoading: -1
   tizenShowActivityIndicatorOnLoading: -1
   iosAppInBackgroundBehavior: 0
-  displayResolutionDialog: 0
+  displayResolutionDialog: 1
   iosAllowHTTPDownload: 1
   allowedAutorotateToPortrait: 1
   allowedAutorotateToPortraitUpsideDown: 1
@@ -65,7 +65,7 @@ PlayerSettings:
   useOSAutorotation: 1
   use32BitDisplayBuffer: 1
   disableDepthAndStencilBuffers: 0
-  defaultIsFullScreen: 0
+  defaultIsFullScreen: 1
   defaultIsNativeResolution: 1
   runInBackground: 1
   captureSingleScreen: 0
@@ -115,10 +115,10 @@ PlayerSettings:
   wiiUAllowScreenCapture: 1
   wiiUControllerCount: 0
   m_SupportedAspectRatios:
-    4:3: 1
-    5:4: 1
-    16:10: 1
-    16:9: 1
+    4:3: 0
+    5:4: 0
+    16:10: 0
+    16:9: 0
     Others: 1
   bundleIdentifier: com.PartyTroll.Fourzy
   bundleVersion: 1.2
@@ -135,7 +135,7 @@ PlayerSettings:
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
-  iPhoneBuildNumber: 5
+  iPhoneBuildNumber: 6
   ForceInternetPermission: 0
   ForceSDCardPermission: 0
   CreateWallpaper: 0

@@ -285,10 +285,14 @@ namespace Fourzy
                 new Vector2(0.5f, 0.5f));
             GameManager.instance.UpdateGameStatusText();
 
+            GameManager.instance.ResetUI();
+
             UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
                 OnActiveGame(true);
+
+            GameManager.instance.EnableTokenAudio();
         }
 
         public void OpenAiGame() 
@@ -428,6 +432,8 @@ namespace Fourzy
 
             if (OnActiveGame != null)
                 OnActiveGame(true);
+
+            GameManager.instance.EnableTokenAudio();
         }          
 
 		public void GetChallenges()

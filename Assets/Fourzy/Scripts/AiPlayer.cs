@@ -34,11 +34,13 @@ namespace Fourzy {
             return moves;
         }
 
-        public Move GetRandomMove()
+        public Move GetRandomMove(List<Move> availableMoves)
         {
-            Move move = new Move(1, Direction.DOWN);
+            //Move move = new Move(1, Direction.DOWN);
 
-            return move;
+            int move = Random.Range(0, availableMoves.Count-1);
+
+            return availableMoves[move];
 
             //            int movePosition;
             //            Move move;
@@ -65,8 +67,8 @@ namespace Fourzy {
 
         // gameboard, tokenboard, player 1-2 turn, num rows, num cols
         public Move GetMove(GameBoard gameBoard, TokenBoard tokenBoard, int player)  {
-            Debug.Log("GET MOVE");
-            Move move = new Move(1, Direction.DOWN);
+            //Debug.Log("GET MOVE");
+            Move move;
             Dictionary<Move, AIGameState> goodMoves = new Dictionary<Move, AIGameState>();
 
             AIGameState start = new AIGameState(gameBoard, tokenBoard, player);
@@ -89,9 +91,16 @@ namespace Fourzy {
             //RULE: IF you can make a winning move, make it!
             Debug.Log("GetAvailableMoves: " + start.GetAvailableMoves().Count);
             foreach (Move m in start.GetAvailableMoves()) {
-                AIGameState state = start.MakeMove(m);
+				//start.gameBoard.PrintBoard ();
+
+				AIGameState state = start.Copy();
+			    state.MakeMove(m);
+				state.gameBoard.PrintBoard("BEFORE CHECKING FOR WIN");
+
                 if (state.isWinForPlayer == player) {
-                    Debug.Log("MAKE FIRST WINNING MOVE");
+			        Debug.Log("MAKE FIRST WINNING MOVE for PLAYER=" + player);
+					//state.gameBoard.PrintBoard ();
+
                     return m;
                 }
                 lookAhead.Add(m, state);
@@ -108,8 +117,9 @@ namespace Fourzy {
 
                 foreach (var m in lookAhead.Keys)
                 {
-                    AIGameState newState = state.MakeMove(m);
-                    //newState.isWinForPlayer = newState.IsEndGameState();
+                    AIGameState newState = state.Copy();
+                    newState.MakeMove(m);
+
                     if (newState.isWinForPlayer == GetOpponent(player)) {
                         Debug.Log("WILL LOSE is true");
                         willLose = true;
@@ -127,7 +137,7 @@ namespace Fourzy {
             Debug.Log("GOOD MOVES COUNT: " + goodMoves.Count);
             if (goodMoves.Count == 0) {
                 Debug.Log("GetRandomMove");
-                return GetRandomMove();
+                return GetRandomMove(start.GetAvailableMoves());
             } else if (goodMoves.Count == 1) {
                 Debug.Log("First good move");
                 return goodMoves.Keys.First();
@@ -187,6 +197,9 @@ namespace Fourzy {
                     return mo;
                 }
             }
+
+            move = GetRandomMove(start.GetAvailableMoves());
+
             Debug.Log("return default move: col: " + move.position.column + " row: " + move.position.row);
             return move;
         }
@@ -201,17 +214,70 @@ namespace Fourzy {
         public GameBoard gameBoard;
         public TokenBoard tokenBoard;
 
+		public AIGameState(string defaultval)
+		{
+			depth = 0;
+			isWinForPlayer = 0;
+			player = 0;
+			isEvaluated = false;
+			tokenBoard = new TokenBoard ("EMPTY");
+			gameBoard = new GameBoard (true);
+
+			//Debug.Log ("DEFAULT CONSTRUCTOR!!");
+			//Debug.Log ("size=" + gameBoard.board.Length);
+			//gameBoard.PrintBoard ();
+
+
+		}
+
         //TO DO: Need to think about pointers for pieces and token arrays.
         public AIGameState(GameBoard gameBoard, TokenBoard tokenBoard, int player)
         {
             depth = 0;
             isWinForPlayer = 0;
-            player = 0;
+            //player = 0;
             isEvaluated = false;
             this.tokenBoard = tokenBoard;
             this.player = player;
             this.gameBoard = gameBoard;
         }
+
+
+
+//		public string GameStateId { get { 
+//				string id =  gameBoard.PrintBoard () + ":" + tokenBoard.ToString () + ":"+ player;
+//			} }
+
+
+		public AIGameState Copy()
+		{
+			//AIGameState gs = new AIGameState (this.gameBoard, this.tokenBoard, this.player);
+		
+			AIGameState gs = new AIGameState ("TEST");
+
+			//Debug.Log ("COPY NEW OBJECT");
+			//gs.gameBoard.PrintBoard ();
+			//Debug.Log ("COPY EXISTING");
+			//this.gameBoard.PrintBoard ();
+
+			gs.player = player;
+
+			gs.gameBoard.InitGameBoard ();
+			for (int i = 0; i < gameBoard.board.Length; i++) {
+				gs.gameBoard.board [i] = gameBoard.board [i];
+			}
+
+			for(int col = 0; col < Constants.numColumns; col++)
+			{
+				for(int row = 0; row < Constants.numRows; row++)
+				{
+					gs.tokenBoard.tokens [col, row] = tokenBoard.tokens [col, row];
+				}
+			}
+
+
+			return gs;
+		}
 
         //not sure which of these to use: List or Dictionary.
         // don't want to recalculate all of these.
@@ -245,6 +311,7 @@ namespace Fourzy {
         //        }
 
         public AIGameState MakeMove(Move move) {
+            //gameBoard.PrintBoard("BEGIN MAKE MOVE: COLUMNS: " + move.position.column + " ROW: " + move.position.row);
             MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
             gameBoard.activeMovingPieces.Add(activeMovingPiece);
 
@@ -252,7 +319,8 @@ namespace Fourzy {
             //Debug.Log("MOVE POSITION!!!!!!: COL: " + movePosition.column + ", ROW:" + movePosition.row);
             //Debug.Log("movePosition.column: " + movePosition.column);
             //Debug.Log("movePosition.row: " + movePosition.row);
-            gameBoard.PrintBoard();
+
+
             gameBoard.board[movePosition.column * Constants.numColumns + movePosition.row] = player;
 
             gameBoard = tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);    
@@ -266,15 +334,15 @@ namespace Fourzy {
                     gameBoard.DisableNextMovingPiece();
                 }
             }
-            gameBoard.PrintBoard();
+            //gameBoard.PrintBoard();
             tokenBoard.UpdateMoveablePieces(gameBoard);
 
             gameBoard.completedMovingPieces.Clear();
-
+            //gameBoard.PrintBoard("END MAKE MOVE: COLUMNS: " + move.position.column + " ROW: " + move.position.row);
             isWinForPlayer = IsEndGameState();
-            if (isWinForPlayer != 0) {
-                Debug.Log("isWinForPlayer: " + isWinForPlayer);    
-            }
+//            if (isWinForPlayer != 0) {
+//                Debug.Log("isWinForPlayer: " + isWinForPlayer);    
+//            }
 
             return this;
         }
@@ -295,9 +363,15 @@ namespace Fourzy {
 
             // check for horizontal win
             for (int r = 0; r < Constants.numRows; r++) {
+				count = 0;
                 for (int c = 0; c < Constants.numColumns; c++)
                 {
                     int evalPiece = gameBoard.board[c * Constants.numColumns + r];
+					if (evalPiece == 0) {
+						count = 0;
+						currentPiece = 0;
+						continue;
+					}
                     if (currentPiece == 0)
                     {
                         currentPiece = evalPiece;
@@ -306,8 +380,13 @@ namespace Fourzy {
                         if (currentPiece == evalPiece)
                         {
                             count++;
-                            if (count >= Constants.numPiecesToWin)
+							if (count > 2) {
+                                Debug.Log("count horizontal: " + count + " for " + currentPiece + " at row: " + r + " col: " + c);
+							}
+
+							if (count >= Constants.numPiecesToWin)
                             {
+                                Debug.Log("HORIZONTAL WIN FOUND FOR PIECE: " + currentPiece);
                                 wins[currentPiece] = true;
                             }
                         } else {
@@ -318,12 +397,22 @@ namespace Fourzy {
                 }
                 currentPiece = 0;
             }
+
+            count = 0;
             //gameBoard.PrintBoard();
             // check for vertical win
             for (int c = 0; c < Constants.numColumns; c++) {
+				count = 0;
                 for (int r = 0; r < Constants.numRows; r++)
                 {
                     int evalPiece = gameBoard.board[c * Constants.numColumns + r];
+
+					if (evalPiece == 0) {
+						count = 0;
+						currentPiece = 0;
+						continue;
+					}
+
                     if (currentPiece == 0)
                     {
                         currentPiece = evalPiece;
@@ -333,11 +422,12 @@ namespace Fourzy {
                         {
                             count++;
                             if (count > 2) {
-                                Debug.Log("count: " + count);
+                                Debug.Log("count vertical: " + count + " for " + currentPiece + " at row: " + r + " col: " + c);
                             }
 
                             if (count >= Constants.numPiecesToWin)
                             {
+                                Debug.Log("VERTICAL WIN FOUND FOR PIECE: " + currentPiece);
                                 wins[currentPiece] = true;
                             }
                         } else {
@@ -352,15 +442,26 @@ namespace Fourzy {
             // NEED TO IMPLEMENT DIAGONAL DETECTION!!
             // Go left high and then right high
 
+
+
             //draw state if win found for both players
-            if (wins[1] && wins[2])
+            if (wins[1] && wins[2]) {
+                Debug.Log("FOUND DRAW");
                 return 3;
+            }
+                
 
-            if (wins[1])
+            if (wins[1]) {
+                Debug.Log("PLAYER 1 WINS");
                 return 1;
+            }
+                
 
-            if (wins[2])
-                return 2;
+            if (wins[2]) {
+                Debug.Log("PLAYER 2 WINS");
+                return 2;                
+            }
+
 
             return 0;
         }

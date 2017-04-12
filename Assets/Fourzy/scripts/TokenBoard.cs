@@ -15,7 +15,7 @@ namespace Fourzy {
 
         public TokenBoard (string type) {
             InitTokenBoard();
-            Debug.Log("TOKEN BOARD TYPE: " + type);
+            //Debug.Log("TOKEN BOARD TYPE: " + type);
             if (type == "ALL") {
                 SetTokenBoard(TokenBoardLoader.Instance.FindTokenBoardAll());
             } else if (type == "NOSTICKY") {
@@ -64,6 +64,10 @@ namespace Fourzy {
                     else if (token == (int)Token.STICKY)
                     {
                         tokens[col, row] = new StickyToken();
+                    }
+                    else if (token == (int)Token.BLOCKER)
+                    {
+                        tokens[col, row] = new BlockerToken();
                     }
                 }
             }
@@ -185,6 +189,7 @@ namespace Fourzy {
             foreach (var piece in gameBoard.completedMovingPieces)
             {
                 Position currentPosition = piece.GetCurrentPosition();
+                Debug.Log("UpdateMoveablePieces col: " + currentPosition.column + " row: " + currentPosition.row);
                 if (tokens[currentPosition.column, currentPosition.row].tokenType == Token.STICKY) {
 
                     if (CanMove(gameBoard, new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP))) {

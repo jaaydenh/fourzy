@@ -20,7 +20,7 @@ QualitySettings:
     blendWeights: 1
     textureQuality: 0
     anisotropicTextures: 1
-    antiAliasing: 8
+    antiAliasing: 0
     softParticles: 0
     softVegetation: 0
     realtimeReflectionProbes: 0
@@ -163,5 +163,6 @@ QualitySettings:
     asyncUploadBufferSize: 4
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
+    Android: 0
     Standalone: 0
     iPhone: 0

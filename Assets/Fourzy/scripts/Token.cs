@@ -264,6 +264,7 @@ namespace Fourzy {
 
         public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
         {
+            Debug.Log("RIGHT ARROW TOKEN");
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
                 MovingGamePiece piece = board.activeMovingPieces[0];
@@ -322,12 +323,11 @@ namespace Fourzy {
             } else {
                 Debug.LogWarning("Updating gameboard when there is no active moving piece to update", boardView);
             }
-
-            //return board;
         }
 
         public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
         {
+            Debug.Log("EMPTY TOKEN");
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
                 MovingGamePiece piece = board.activeMovingPieces[0];
@@ -340,13 +340,36 @@ namespace Fourzy {
                     piece.player = 0;
                 } else {
                     if (swapPiece) {
-                        //board.PrintBoard();
                         board.SwapPiecePosition(currentPosition, newPosition);
-                        //board.PrintBoard();
                     }
                 }
             }
 
+            return board;
+        }
+    }
+
+    public class BlockerToken : IToken {
+
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public bool canPassThrough { get; set; }
+        public Token tokenType { get; set; }
+
+        public BlockerToken () {
+            canPassThrough = false;
+            tokenType = Token.BLOCKER;
+        }
+
+        public void UpdateBoard(GameBoardView boardView, bool swapPiece)
+        {
+            //Do nothing as the blocker token prevents the piece from moving here
+        }
+
+        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        {
+            Debug.Log("BLOCKER TOKEN");
+            //Do nothing as the blocker token prevents the piece from moving here
             return board;
         }
     }

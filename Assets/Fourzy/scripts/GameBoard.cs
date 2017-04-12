@@ -29,7 +29,7 @@ namespace Fourzy {
             activeMovingPieces = new List<MovingGamePiece>();
             completedMovingPieces = new List<MovingGamePiece>();
 
-            InitGameBoard();
+		    InitGameBoard();
     	}
     	
         public void InitGameBoard() {
@@ -48,8 +48,8 @@ namespace Fourzy {
             }
         }
 
-        public void PrintBoard() {
-            string log = "";
+        public void PrintBoard(string name) {
+            string log = name + ": ";
             for (int i = 0; i < numColumns * numRows; i++)
             {
                 log += board[i] + ",";
@@ -67,7 +67,8 @@ namespace Fourzy {
             //Debug.Log("oldPos row: " + oldPos.row);
 
             int oldPiece = board[oldPos.column * numColumns + oldPos.row];
-            //Debug.Log("OLDPIECE: " + oldPiece + " oldpos.col: " + oldPos.column + " oldpos row: " + oldPos.row);
+            Debug.Log("OLDPIECE: " + oldPiece + " oldpos.col: " + oldPos.column + " oldpos row: " + oldPos.row);
+            Debug.Log("NEWPIECE: " + oldPiece + " newPos.col: " + newPos.column + " newPos row: " + newPos.row);
             board[oldPos.column * numColumns + oldPos.row] = 0;
             board[newPos.column * numColumns + newPos.row] = oldPiece;
         }

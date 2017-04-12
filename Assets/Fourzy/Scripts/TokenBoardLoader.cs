@@ -8,13 +8,13 @@ namespace Fourzy {
 
         public int[] FindTokenBoardAll() {
 
-            int boardIndex = Random.Range(0, 7);
+            int boardIndex = Random.Range(0, 8);
             int[] tokenBoard = new int[64];
 
             switch (boardIndex)
             {
                 case 0:
-                    tokenBoard = TokenBoard1();
+                    tokenBoard = TokenBoard5();
                     break;
                 case 1:
                     tokenBoard = TokenBoard2();
@@ -34,6 +34,9 @@ namespace Fourzy {
                 case 6:
                     tokenBoard = TokenBoardSticky3();
                     break;
+                case 7:
+                    tokenBoard = TokenBoardSticky4();
+                    break;
                 default:
                     break;
             }
@@ -49,7 +52,7 @@ namespace Fourzy {
             switch (boardIndex)
             {
                 case 0:
-                    tokenBoard = TokenBoard1();
+                    tokenBoard = TokenBoard5();
                     break;
                 case 1:
                     tokenBoard = TokenBoard2();
@@ -69,98 +72,126 @@ namespace Fourzy {
 
         public int[] TokenBoard1() {
             int[] tokens = new int[] {
-                0, 0, 0, 0, 0, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 2, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 3, 0, 0,
                 0, 0, 4, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 1, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0};
+                6, 0, 0, 0, 0, 0, 0, 6};
 
             return tokens;
         }
             
         public int[] TokenBoard2() {
             int[] tokens = new int[] {
-                0, 0, 0, 0, 0, 0, 0, 4,
+                6, 0, 0, 0, 0, 0, 0, 6,
                 0, 0, 0, 0, 0, 0, 4, 0,
                 0, 0, 0, 0, 0, 4, 0, 0,
                 0, 0, 0, 0, 4, 0, 0, 0,
                 0, 0, 0, 4, 0, 0, 0, 0,
                 0, 0, 4, 0, 0, 0, 0, 0,
                 0, 4, 0, 0, 0, 0, 0, 0,
-                4, 0, 0, 0, 0, 0, 0, 0};
+                6, 0, 0, 0, 0, 0, 0, 6};
 
             return tokens;
         }
 
         public int[] TokenBoard3() {
             int[] tokens = new int[] {
-                0, 0, 0, 0, 1, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6,
                 0, 0, 0, 0, 1, 0, 0, 0,
                 0, 0, 0, 0, 1, 0, 0, 0,
                 0, 0, 0, 0, 1, 0, 0, 0,
                 0, 0, 0, 2, 0, 0, 0, 0,
                 0, 0, 0, 2, 0, 0, 0, 0,
                 0, 0, 0, 2, 0, 0, 0, 0,
-                0, 0, 0, 2, 0, 0, 0, 0};
-
-            return tokens;
-        }
-
-        public int[] TokenBoardSticky3() {
-            int[] tokens = new int[] {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 5, 0, 0, 5, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 5, 0, 0, 5, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0};
-
-            return tokens;
-        }
-
-        public int[] TokenBoardSticky2() {
-            int[] tokens = new int[] {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 1, 5, 0, 0,
-                0, 0, 0, 1, 5, 0, 0, 0,
-                0, 0, 1, 5, 0, 0, 0, 0,
-                0, 1, 5, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0};
-
-            return tokens;
-        }
-
-        public int[] TokenBoardSticky1() {
-            int[] tokens = new int[] {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 5, 5, 5, 5, 0, 0,
-                0, 0, 5, 5, 5, 5, 0, 0,
-                0, 0, 5, 5, 5, 5, 0, 0,
-                0, 0, 5, 5, 5, 5, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0};
+                6, 0, 0, 0, 0, 0, 0, 6};
 
             return tokens;
         }
 
         public int[] TokenBoard4() {
             int[] tokens = new int[] {
-                4, 0, 0, 0, 0, 0, 0, 0,
-                2, 4, 0, 0, 0, 0, 0, 0,
-                0, 2, 4, 0, 0, 0, 0, 0,
-                0, 0, 2, 4, 0, 0, 0, 0,
-                0, 0, 0, 2, 4, 0, 0, 0,
-                0, 0, 0, 0, 2, 4, 0, 0,
-                0, 0, 0, 0, 0, 2, 4, 0,
-                0, 0, 0, 0, 0, 0, 2, 4};
+                6, 0, 0, 0, 0, 0, 0, 6,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 6, 0, 0, 6, 0, 0,
+                0, 0, 2, 0, 0, 0, 0, 0,
+                0, 0, 2, 0, 0, 0, 0, 0,
+                0, 0, 6, 3, 3, 6, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6};
+
+            return tokens;
+        }
+
+        public int[] TokenBoard5() {
+            int[] tokens = new int[] {
+                6, 0, 0, 0, 0, 0, 0, 6,
+                0, 0, 0, 2, 0, 0, 0, 0,
+                0, 0, 0, 0, 4, 0, 0, 0,
+                0, 0, 2, 0, 0, 0, 4, 0,
+                0, 3, 0, 0, 0, 1, 0, 0,
+                0, 0, 0, 3, 0, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6};
+
+            return tokens;
+        }
+
+        public int[] TokenBoardSticky1() {
+            int[] tokens = new int[] {
+                6, 0, 0, 0, 0, 0, 0, 6,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 5, 0, 0, 5, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 5, 0, 0, 5, 0, 0,
+                0 ,0, 0, 0, 0, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6};
+
+            return tokens;
+        }
+
+        public int[] TokenBoardSticky2() {
+            int[] tokens = new int[] {
+                6, 0, 0, 0, 0, 0, 0, 6,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 1, 5, 0, 0,
+                0, 0, 0, 1, 5, 0, 0, 0,
+                0, 0, 1, 5, 0, 0, 0, 0,
+                0, 1, 5, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6};
+
+            return tokens;
+        }
+
+        public int[] TokenBoardSticky3() {
+            int[] tokens = new int[] {
+                6, 0, 0, 0, 0, 0, 0, 6,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 5, 5, 5, 5, 0, 0,
+                0, 0, 5, 5, 5, 5, 0, 0,
+                0, 0, 5, 5, 5, 5, 0, 0,
+                0, 0, 5, 5, 5, 5, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6};
+
+            return tokens;
+        }
+
+        public int[] TokenBoardSticky4() {
+            int[] tokens = new int[] {
+                6, 0, 0, 0, 0, 0, 0, 6,
+                0, 0, 0, 0, 0, 0, 5, 0,
+                0, 0, 0, 0, 0, 5, 0, 0,
+                0, 0, 0, 4, 0, 0, 0, 0,
+                0, 0, 0, 0, 3, 0, 0, 0,
+                0, 0, 5, 0, 0, 0, 0, 0,
+                0, 5, 0, 0, 0, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6};
 
             return tokens;
         }
