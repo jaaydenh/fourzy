@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Fourzy {
     
-    public struct GameBoard {
+    public class GameBoard {
 
         private int numRows;
         private int numColumns;

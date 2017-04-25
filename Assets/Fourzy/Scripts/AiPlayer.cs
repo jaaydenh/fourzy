@@ -323,13 +323,13 @@ namespace Fourzy {
 
             gameBoard.board[movePosition.column * Constants.numColumns + movePosition.row] = player;
 
-            gameBoard = tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);    
+            tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);    
 
             while (gameBoard.activeMovingPieces.Count > 0) {
                 Position endPosition = gameBoard.activeMovingPieces[0].GetNextPosition();
 
                 if (tokenBoard.CanMove(gameBoard, new Move(endPosition, move.direction))) {
-                    gameBoard = tokenBoard.tokens[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);
+                    tokenBoard.tokens[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);
                 } else {
                     gameBoard.DisableNextMovingPiece();
                 }

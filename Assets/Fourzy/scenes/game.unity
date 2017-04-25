@@ -529,6 +529,7 @@ MonoBehaviour:
   moveArrowUp: {fileID: 1875338580760464, guid: 2b5a2b7ec7c53494fa52afec2d71c590,
     type: 2}
   gameBoardView: {fileID: 440620694}
+  tokens: []
   rematchButton: {fileID: 1649922472}
   nextGameButton: {fileID: 437029456}
   gameStatusText: {fileID: 218465671}
@@ -542,7 +543,6 @@ MonoBehaviour:
   bluePlayerColor: {r: 0, g: 0.68235296, b: 1, a: 1}
   redPlayerColor: {r: 0.99607843, g: 0.15686275, b: 0.31764707, a: 1}
   lineShader: {fileID: 10800, guid: 0000000000000000f000000000000000, type: 0}
-  gameScreenCanvas: {fileID: 308658290}
   isMultiplayer: 0
   isNewChallenge: 0
   isNewRandomChallenge: 0
@@ -559,6 +559,7 @@ MonoBehaviour:
   clipMove: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
   clipWin: {fileID: 8300000, guid: 2cda08f34c076490b8ec095a4f5d5256, type: 3}
   gameScreen: {fileID: 308658290}
+  ErrorPanel: {fileID: 192249069}
   playerNameLabel: {fileID: 539133078}
   playerProfilePicture: {fileID: 574052263}
   opponentNameLabel: {fileID: 1084174629}
@@ -1025,7 +1026,7 @@ GameObject:
   - component: {fileID: 192249072}
   - component: {fileID: 192249071}
   m_Layer: 5
-  m_Name: NoMovePanel
+  m_Name: ErrorPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1037,18 +1038,18 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 192249069}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9997514, y: 0.9997514, z: 0.9997514}
   m_Children:
   - {fileID: 1341713548}
-  m_Father: {fileID: 835035268}
-  m_RootOrder: 2
+  m_Father: {fileID: 381019441}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 360, y: -140}
-  m_SizeDelta: {x: 720, y: 140}
+  m_AnchoredPosition: {x: 369.66055, y: -240}
+  m_SizeDelta: {x: 745, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &192249071
 MonoBehaviour:
@@ -1063,7 +1064,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 140
+  m_MinHeight: 90
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
@@ -1080,7 +1081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.25882354, g: 0.25882354, b: 0.25882354, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1522,7 +1523,7 @@ RectTransform:
   - {fileID: 1470911612}
   - {fileID: 653560889}
   m_Father: {fileID: 381019441}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1682,6 +1683,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 192249070}
   - {fileID: 835035268}
   - {fileID: 1280329477}
   - {fileID: 1825896595}
@@ -3163,9 +3165,8 @@ RectTransform:
   m_Children:
   - {fileID: 961650583}
   - {fileID: 21478388}
-  - {fileID: 192249070}
   m_Father: {fileID: 381019441}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4323,7 +4324,7 @@ RectTransform:
   - {fileID: 1271251862}
   - {fileID: 1755481389}
   m_Father: {fileID: 381019441}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4580,7 +4581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.12941177, g: 0.80784315, b: 0.6, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4600,7 +4601,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Challenge a friend to start a new game!
+  m_Text: Error logging in!
 --- !u!222 &1341713550
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6513,8 +6514,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 360, y: -140}
-  m_SizeDelta: {x: 720, y: 140}
+  m_AnchoredPosition: {x: 375, y: -132}
+  m_SizeDelta: {x: 750, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1755481390
 MonoBehaviour:
@@ -7096,7 +7097,7 @@ RectTransform:
   - {fileID: 1500405833}
   - {fileID: 551335424}
   m_Father: {fileID: 381019441}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

@@ -13,6 +13,9 @@ namespace Fourzy
 {
     public class LoginManager : MonoBehaviour {
 
+        public delegate void LoginError();
+        public static event LoginError OnLoginError;
+
         private GameObject facebookButton;
         string[] firstNameSyllables = new string[] {"mon","fay","shi","zag","blarg","rash","izen"};
         string[] lastNameSyllables = new string[] {"malo","zak","abo","wonk"};
@@ -60,6 +63,28 @@ namespace Fourzy
                     });
         }
             
+        void DeviceLogin() {
+            new DeviceAuthenticationRequest()
+                .SetDisplayName(CreateNewName())
+                .Send((response) => {
+                    if (!response.HasErrors) {
+                        UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null);
+
+                        NPBinding.NotificationService.RegisterForRemoteNotifications();
+                        ChallengeManager.instance.GetChallenges();
+                        LeaderboardManager.instance.GetLeaderboard();
+                        //Debug.Log("Device Authenticated...UserId: " + response.UserId);
+                        //Debug.Log("DisplayName: " + response.DisplayName);
+                        //Debug.Log("NewPlayer: " + response.NewPlayer);
+                        //Debug.Log("SwitchSummary: " + response.SwitchSummary);
+                    } else {
+                        Debug.Log("Error Authenticating Device: " + response.Errors.JSON);
+                        if (OnLoginError != null)
+                            OnLoginError();
+                    }
+                });
+        }
+
         /// <summary>
         /// Below we will login with facebook.
         /// When FB is ready we will call the method that allows GS to connect to GameSparks
@@ -77,44 +102,29 @@ namespace Fourzy
             }
         }
 
-        void DeviceLogin() {
-            new DeviceAuthenticationRequest()
-                .SetDisplayName(CreateNewName())
-                .Send((response) => {
-                    if (!response.HasErrors) {
-                        UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null);
-
-                        NPBinding.NotificationService.RegisterForRemoteNotifications();
-                        ChallengeManager.instance.GetChallenges();
-                        LeaderboardManager.instance.GetLeaderboard();
-                        //Debug.Log("Device Authenticated...UserId: " + response.UserId);
-                        //Debug.Log("DisplayName: " + response.DisplayName);
-                        //Debug.Log("NewPlayer: " + response.NewPlayer);
-                        //Debug.Log("SwitchSummary: " + response.SwitchSummary);
-                    } else {
-                        Debug.Log("Error Authenticating Device: " + response.Errors.JSON);
-                    }
-                });
-        }
-
         void CheckFacebookLogin()
         {
-            if (FB.IsLoggedIn)
-            {
-                Debug.Log("Already Logged into Facebook");
-                GSFacebookLogin(AfterFBLogin);
-                facebookButton.SetActive(false);
-            }
-            else
-            {
-                Debug.Log("Not Logged into Facebook");
-                facebookButton.SetActive(true);
-                Invoke("DeviceLogin", 0.5f);
+            if (FB.IsInitialized) {
+                FB.ActivateApp();
+                if (FB.IsLoggedIn)
+                {
+                    Debug.Log("Already Logged into Facebook");
+                    GSFacebookLogin(AfterFBLogin);
+                    facebookButton.SetActive(false);
+                }
+                else
+                {
+                    Debug.Log("Not Logged into Facebook");
+                    facebookButton.SetActive(true);
+                    Invoke("DeviceLogin", 0.5f);
+                }
+            } else {
+                ConnectWithFacebook(); // if we are still not connected, then try to process again
             }
         }
 
         /// <summary>
-        /// When Facebook is ready , this will connect the pleyer to Facebook
+        /// When Facebook is ready , this will connect the player to Facebook
         /// After the Player is authenticated it will  call the GS connect
         /// </summary>
         public void FacebookLogin()
@@ -141,6 +151,8 @@ namespace Fourzy
             else
             {
                 Debug.LogWarning("Something went wrong with FaceBook: " + result.Error);
+                if (OnLoginError != null)
+                    OnLoginError();
             }
         }
 
@@ -162,9 +174,14 @@ namespace Fourzy
         //This method will connect GameSparks with FaceBook
         public void GSFacebookLogin(FacebookLoginCallback _fbLoginCallback )
         {
+            Debug.Log("Sending FacebookConnectRequest using AccessToken: " + AccessToken.CurrentAccessToken.TokenString);
             //bool success = false;
+            //yield return new WaitForSeconds(1f);
+
             new GameSparks.Api.Requests.FacebookConnectRequest()
                 .SetAccessToken(AccessToken.CurrentAccessToken.TokenString)
+                .SetMaxResponseTimeInSeconds(15)
+                .SetMaxQueueTimeInSeconds(15)
                 .SetDoNotLinkToCurrentPlayer(false)// we don't want to create a new account so link to the player that is currently logged in
                 .SetSwitchIfPossible(true)//this will switch to the player with this FB account id if they already have an account from a separate login
                 .SetSyncDisplayName(true)
@@ -178,6 +195,9 @@ namespace Fourzy
                     else
                     {
                         Debug.LogWarning("Error Logging into facebook: " + response.Errors.JSON);
+                        facebookButton.SetActive(true);
+                        if (OnLoginError != null)
+                            OnLoginError();
                     }
                     //Answers.LogLogin("facebook", success);
                 });

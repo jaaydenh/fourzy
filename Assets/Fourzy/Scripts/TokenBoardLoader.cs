@@ -8,7 +8,7 @@ namespace Fourzy {
 
         public int[] FindTokenBoardAll() {
 
-            int boardIndex = Random.Range(0, 8);
+            int boardIndex = Random.Range(0, 11);
             int[] tokenBoard = new int[64];
 
             switch (boardIndex)
@@ -37,6 +37,15 @@ namespace Fourzy {
                 case 7:
                     tokenBoard = TokenBoardSticky4();
                     break;
+                case 8:
+                    tokenBoard = TokenBoard6();
+                    break;
+                case 9:
+                    tokenBoard = TokenBoard7();
+                    break;
+                case 10:
+                    tokenBoard = TokenBoard8();
+                    break;
                 default:
                     break;
             }
@@ -46,7 +55,7 @@ namespace Fourzy {
 
         public int[] FindTokenBoardNoSticky() {
 
-            int boardIndex = Random.Range(0, 4);
+            int boardIndex = Random.Range(0, 7);
             int[] tokenBoard = new int[64];
 
             switch (boardIndex)
@@ -62,6 +71,15 @@ namespace Fourzy {
                     break;
                 case 3:
                     tokenBoard = TokenBoard4();
+                    break;
+                case 4:
+                    tokenBoard = TokenBoard6();
+                    break;
+                case 5:
+                    tokenBoard = TokenBoard7();
+                    break;
+                case 6:
+                    tokenBoard = TokenBoard8();
                     break;
                 default:
                     break;
@@ -135,6 +153,48 @@ namespace Fourzy {
                 0, 3, 0, 0, 0, 1, 0, 0,
                 0, 0, 0, 3, 0, 0, 0, 0,
                 0, 0, 0, 0, 1, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6};
+
+            return tokens;
+        }
+
+        public int[] TokenBoard6() {
+            int[] tokens = new int[] {
+                6, 0, 0, 0, 0, 0, 0, 6,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 4, 0, 4, 0, 4, 0,
+                0, 3, 0, 3, 0, 3, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6};
+
+            return tokens;
+        }
+
+        public int[] TokenBoard7() {
+            int[] tokens = new int[] {
+                6, 0, 0, 0, 0, 0, 0, 6,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 3, 0, 0, 0, 0, 0,
+                0, 0, 2, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 1, 0, 0,
+                0, 0, 0, 0, 0, 4, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                6, 0, 0, 0, 0, 0, 0, 6};
+
+            return tokens;
+        }
+
+        public int[] TokenBoard8() {
+            int[] tokens = new int[] {
+                6, 0, 0, 0, 0, 0, 0, 6,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 2, 0, 0,
+                0, 0, 0, 0, 4, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 3, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
                 6, 0, 0, 0, 0, 0, 0, 6};
 
             return tokens;

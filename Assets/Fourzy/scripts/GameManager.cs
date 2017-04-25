@@ -67,7 +67,7 @@ namespace Fourzy
 
 		GameObject gamePieces;
 
-        public GameObject gameScreenCanvas;
+//        public GameObject gameScreenCanvas;
         private GameObject UIScreen;
 
         public delegate void MoveAction();
@@ -101,6 +101,7 @@ namespace Fourzy
         private AudioSource audioWin;
 
         public GameObject gameScreen;
+        public GameObject ErrorPanel;
 
         public Text playerNameLabel;
         public Image playerProfilePicture;
@@ -156,6 +157,7 @@ namespace Fourzy
             ActiveGame.OnActiveGame += enableGameScreen;
             FriendEntry.OnActiveGame += enableGameScreen;
             ChallengeManager.OnActiveGame += enableGameScreen;
+            LoginManager.OnLoginError += DisplayLoginError;
         }
 
         private void OnDisable()
@@ -164,6 +166,7 @@ namespace Fourzy
             ActiveGame.OnActiveGame -= enableGameScreen;
             FriendEntry.OnActiveGame -= enableGameScreen;
             ChallengeManager.OnActiveGame -= enableGameScreen;
+            LoginManager.OnLoginError -= DisplayLoginError;
         }
 
         private void CheckConnectionStatus(bool connected) {
@@ -232,7 +235,7 @@ namespace Fourzy
 			if(numPiecesToWin > max)
 				numPiecesToWin = max;
 
-            gameBoard = new GameBoard();
+            gameBoard = new GameBoard(true);
 
             UIScreen = GameObject.Find("UI Screen");
 
@@ -490,7 +493,7 @@ namespace Fourzy
                 DestroyImmediate(gamePieces);
 			}
             gamePieces = new GameObject("GamePieces");
-            gamePieces.transform.parent = gameScreenCanvas.transform;
+            gamePieces.transform.parent = gameScreen.transform;
             gamePieces.transform.localPosition = new Vector3(-375f, -501f);
 
 /*            for (int col = 0; col < numColumns; col++)
@@ -648,6 +651,10 @@ namespace Fourzy
                 rematchButton.gameObject.SetActive(true);
 			}
 		}
+
+        private void DisplayLoginError() {
+            ErrorPanel.SetActive(true);
+        }
 
         private void ProcessPlayerInput(Vector3 mousePosition) {
 
@@ -815,7 +822,7 @@ namespace Fourzy
             gameBoard.board[movePosition.column * numColumns + movePosition.row] = isPlayerOneTurn ? (int)Player.ONE : (int)Player.TWO;
             //gameBoard.PrintBoard();
             tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoardView, false);    
-            gameBoard = tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);
+            tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);
 
             while (gameBoardView.activeMovingPieces.Count > 0) {
                 //Position startPosition = gameBoard.activeMovingPieces[0].GetCurrentPosition();
@@ -823,21 +830,12 @@ namespace Fourzy
 
                 if (tokenBoard.CanMove(gameBoardView, new Move(endPosition, direction))) {
                     tokenBoard.tokens[endPosition.column, endPosition.row].UpdateBoard(gameBoardView, true);
-//                    if(tokenBoard[endPosition.column, endPosition.row].tokenType == Token.UP_ARROW) {
-//                        //audio1.Play();
-//                    } else if (tokenBoard[endPosition.column, endPosition.row].tokenType == Token.DOWN_ARROW) {
-//                        //audio1.Play();
-//                    } else if (tokenBoard[endPosition.column, endPosition.row].tokenType == Token.LEFT_ARROW) {
-//                        //audio1.Play();
-//                    } else  if (tokenBoard[endPosition.column, endPosition.row].tokenType == Token.RIGHT_ARROW) {
-//                        //audio1.Play();
-//                    }
                 } else {
                     gameBoardView.DisableNextMovingPiece();
                 }
 
                 if (tokenBoard.CanMove(gameBoard, new Move(endPosition, direction))) {
-                    gameBoard = tokenBoard.tokens[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);
+                    tokenBoard.tokens[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);
 
                 } else {
                     gameBoard.DisableNextMovingPiece();
@@ -889,7 +887,7 @@ namespace Fourzy
                 sr.enabled = true;
             }
 
-            //gameBoard.PrintBoard();
+            //gameBoard.PrintBoard("ProcessMove");
 
             if (isAiActive && !gameOver && aiPlayer != null && !isCurrentPlayerTurn) {
                 Move move = aiPlayer.GetMove(gameBoard, tokenBoard, isPlayerOneTurn ? 1 : 2);

@@ -47,7 +47,6 @@ namespace Fourzy {
 
         public override bool Equals(object obj)
         {
-            //Debug.Log("MOVE OVERRIDE EQUALS");
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
 
@@ -58,7 +57,6 @@ namespace Fourzy {
 
         public bool Equals(Move other)
         {
-            //Debug.Log("MOVE EQUALS");
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 

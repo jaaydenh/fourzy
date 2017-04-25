@@ -135,7 +135,7 @@ namespace Fourzy {
             //Debug.Log("endPosition:col: " + endPosition.column + " row: " + endPosition.row);
             // if the next end position is outside of the board then return false;
             if (endPosition.column >= Constants.numColumns || endPosition.column < 0 || endPosition.row >= Constants.numRows || endPosition.row < 0) {
-                //Debug.Log("OUTSIDE OF BOARD");
+                Debug.Log("OUTSIDE OF BOARD Model");
                 return false;
             }
 

@@ -11,7 +11,7 @@ namespace Fourzy {
         bool canPassThrough { get; set; }
         Token tokenType { get; set; }
         void UpdateBoard(GameBoardView boardView, bool swapPiece);
-        GameBoard UpdateBoard(GameBoard board, bool swapPiece);
+        void UpdateBoard(GameBoard board, bool swapPiece);
     }
            
     // x o o o o o
@@ -62,7 +62,7 @@ namespace Fourzy {
             //return board;
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoard board, bool swapPiece)
         {
             //Debug.Log("UpToken:UpdateBoard");
 
@@ -84,7 +84,7 @@ namespace Fourzy {
                 piece.currentDirection = Direction.UP;
             }
 
-            return board;
+            //return board;
         }
     }
 
@@ -130,7 +130,7 @@ namespace Fourzy {
             //return board;
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoard board, bool swapPiece)
         {
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
@@ -150,7 +150,7 @@ namespace Fourzy {
                 piece.currentDirection = Direction.DOWN;
             }
 
-            return board;
+            //return board;
         }
     }
 
@@ -196,7 +196,7 @@ namespace Fourzy {
             //return board;
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoard board, bool swapPiece)
         {
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
@@ -216,7 +216,7 @@ namespace Fourzy {
                 piece.currentDirection = Direction.LEFT;
             }
 
-            return board;
+            //return board;
         }
     }
 
@@ -262,7 +262,7 @@ namespace Fourzy {
             //return board;
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoard board, bool swapPiece)
         {
             Debug.Log("RIGHT ARROW TOKEN");
             // process next moving piece at gameBoard.activeMovingPieces[0]
@@ -283,7 +283,7 @@ namespace Fourzy {
                 piece.currentDirection = Direction.RIGHT;
             }
 
-            return board;
+            //return board;
         }
     }
 
@@ -325,7 +325,7 @@ namespace Fourzy {
             }
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoard board, bool swapPiece)
         {
             Debug.Log("EMPTY TOKEN");
             // process next moving piece at gameBoard.activeMovingPieces[0]
@@ -333,6 +333,7 @@ namespace Fourzy {
                 MovingGamePiece piece = board.activeMovingPieces[0];
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
+                Debug.Log("CURRENT PIECE DIRECTION: " + piece.currentDirection);
                 //Debug.Log("model currentposition col: " + currentPosition.column + " row: " + currentPosition.row);
                 board.activeMovingPieces[0].positions.Add(newPosition);
                 if (piece.player != Player.NONE) {
@@ -345,7 +346,7 @@ namespace Fourzy {
                 }
             }
 
-            return board;
+            //return board;
         }
     }
 
@@ -366,11 +367,11 @@ namespace Fourzy {
             //Do nothing as the blocker token prevents the piece from moving here
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoard board, bool swapPiece)
         {
             Debug.Log("BLOCKER TOKEN");
             //Do nothing as the blocker token prevents the piece from moving here
-            return board;
+            //return board;
         }
     }
 
@@ -425,7 +426,7 @@ namespace Fourzy {
             //return board;
         }
 
-        public GameBoard UpdateBoard(GameBoard board, bool swapPiece)
+        public void UpdateBoard(GameBoard board, bool swapPiece)
         {
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
@@ -453,7 +454,7 @@ namespace Fourzy {
                 board.DisableNextMovingPiece();
             }
 
-            return board;
+            //return board;
         }
     }
 }
