@@ -140,7 +140,7 @@ namespace Fourzy {
             }
 
             // check for piece at end position, if there is a piece and the piece is not moveable then return false
-            if (gameBoard.board[endPosition.column * Constants.numColumns + endPosition.row] != 0) {
+            if (gameBoard.GetCell(endPosition.column, endPosition.row) != 0) {
                 //int piece = gameBoard[endPosition.column * Constants.numColumns + endPosition.row];
 
                 switch (move.direction)
@@ -189,7 +189,7 @@ namespace Fourzy {
             foreach (var piece in gameBoard.completedMovingPieces)
             {
                 Position currentPosition = piece.GetCurrentPosition();
-                Debug.Log("UpdateMoveablePieces col: " + currentPosition.column + " row: " + currentPosition.row);
+
                 if (tokens[currentPosition.column, currentPosition.row].tokenType == Token.STICKY) {
 
                     if (CanMove(gameBoard, new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP))) {
@@ -225,6 +225,7 @@ namespace Fourzy {
             foreach (var piece in gameBoard.completedMovingPieces)
             {
                 Position currentPosition = piece.GetCurrentPosition();
+                Debug.Log("UpdateMoveablePieces col: " + currentPosition.column + " row: " + currentPosition.row);
                 if (tokens[currentPosition.column, currentPosition.row].tokenType == Token.STICKY) {
 
                     if (CanMove(gameBoard, new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP))) {

@@ -40,7 +40,7 @@ namespace Fourzy
         public void OpenGame()
         {
             GameManager.instance.ResetGameBoard();
-            GameManager.instance.PopulateEmptySpots();
+            GameManager.instance.PopulateMoveArrows();
 
             TokenBoard tokenBoard = new TokenBoard("NOSTICKY");
             GameManager.instance.tokenBoard = tokenBoard;

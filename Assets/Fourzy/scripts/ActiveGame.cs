@@ -188,7 +188,7 @@ namespace Fourzy
             GameManager.instance.ResetGameBoard();    
 			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
             GameManager.instance.SetupGameWrapper(gameBoard);
-            GameManager.instance.PopulateEmptySpots();
+            GameManager.instance.PopulateMoveArrows();
             StartCoroutine(GameManager.instance.CreateTokens());
 
             if (moveList != null && moveList.Count > 0)

@@ -262,7 +262,7 @@ namespace Fourzy
             GameManager.instance.tokenBoard = tokenBoard;
 
             GameManager.instance.ResetGameBoard();
-            GameManager.instance.PopulateEmptySpots();
+            GameManager.instance.PopulateMoveArrows();
 
             StartCoroutine(GameManager.instance.CreateTokens());
 
@@ -298,7 +298,7 @@ namespace Fourzy
         public void OpenAiGame() 
         {
             GameManager.instance.ResetGameBoard();
-            GameManager.instance.PopulateEmptySpots();
+            GameManager.instance.PopulateMoveArrows();
   
             TokenBoard tokenBoard = new TokenBoard("EMPTY");
             GameManager.instance.tokenBoard = tokenBoard;
@@ -336,7 +336,7 @@ namespace Fourzy
         {
             Debug.Log("OpenNewMultiplayerGame");
             GameManager.instance.ResetGameBoard();
-            GameManager.instance.PopulateEmptySpots();
+            GameManager.instance.PopulateMoveArrows();
 
             TokenBoard tokenBoard = new TokenBoard("NOSTICKY");
             GameManager.instance.tokenBoard = tokenBoard;
@@ -399,7 +399,7 @@ namespace Fourzy
             GameManager.instance.isCurrentPlayerTurn = true;
 
             GameManager.instance.ResetGameBoard();
-            GameManager.instance.PopulateEmptySpots();
+            GameManager.instance.PopulateMoveArrows();
 
             List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
             List<int> tokenData = challenge.ScriptData.GetIntList("tokenBoard");

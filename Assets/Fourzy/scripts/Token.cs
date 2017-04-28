@@ -72,14 +72,15 @@ namespace Fourzy {
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
                 if (piece.player != Player.NONE) {
-                    board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
+                    board.SetCell(newPosition.column, newPosition.row, piece.player);
+                    //board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
                     piece.player = 0;
                 } else {
                     if (swapPiece) {
                         board.SwapPiecePosition(currentPosition, newPosition);
                     }
                 }
-
+                
                 board.activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                 piece.currentDirection = Direction.UP;
             }
@@ -138,7 +139,8 @@ namespace Fourzy {
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
                 if (piece.player != Player.NONE) {
-                    board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
+                    board.SetCell(newPosition.column, newPosition.row, piece.player);
+                    //board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
                     piece.player = 0;
                 } else {
                     if (swapPiece) {
@@ -204,7 +206,8 @@ namespace Fourzy {
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
                 if (piece.player != Player.NONE) {
-                    board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
+                    board.SetCell(newPosition.column, newPosition.row, piece.player);
+                    //board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
                     piece.player = 0;
                 } else {
                     if (swapPiece) {
@@ -271,7 +274,8 @@ namespace Fourzy {
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
                 if (piece.player != Player.NONE) {
-                    board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
+                    board.SetCell(newPosition.column, newPosition.row, piece.player);
+                    //board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
                     piece.player = 0;
                 } else {
                     if (swapPiece) {
@@ -327,7 +331,7 @@ namespace Fourzy {
 
         public void UpdateBoard(GameBoard board, bool swapPiece)
         {
-            Debug.Log("EMPTY TOKEN");
+            //Debug.Log("EMPTY TOKEN");
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
                 MovingGamePiece piece = board.activeMovingPieces[0];
@@ -337,7 +341,8 @@ namespace Fourzy {
                 //Debug.Log("model currentposition col: " + currentPosition.column + " row: " + currentPosition.row);
                 board.activeMovingPieces[0].positions.Add(newPosition);
                 if (piece.player != Player.NONE) {
-                    board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
+                    board.SetCell(newPosition.column, newPosition.row, piece.player);
+                    //board.board[newPosition.column * Constants.numColumns + newPosition.row] = (int)piece.player;
                     piece.player = 0;
                 } else {
                     if (swapPiece) {
@@ -433,16 +438,17 @@ namespace Fourzy {
                 MovingGamePiece piece = board.activeMovingPieces[0];
                 Position nextPosition = piece.GetNextPosition();
 
-                if (board.board[nextPosition.column * Constants.numColumns + nextPosition.row] != 0) {
+                if (board.GetCell(nextPosition.column, nextPosition.row) != 0) {
                     Move move = new Move(nextPosition, piece.currentDirection);
                     MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
-                    int player = board.board[nextPosition.column * Constants.numColumns + nextPosition.row];
+                    int player = board.GetCell(nextPosition.column, nextPosition.row);
                     activeMovingPiece.player = (Player)player;
                     board.activeMovingPieces.Add(activeMovingPiece);
                 } 
 
                 if (piece.player != Player.NONE) {
-                    board.board[nextPosition.column * Constants.numColumns + nextPosition.row] = (int)piece.player;
+                    board.SetCell(nextPosition.column, nextPosition.row, piece.player);
+                    //board.board[nextPosition.column * Constants.numColumns + nextPosition.row] = (int)piece.player;
                     piece.player = 0;
                 } else {
                     if (swapPiece) {

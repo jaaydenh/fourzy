@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace Fourzy {
     
@@ -8,8 +9,12 @@ namespace Fourzy {
 
         private int numRows;
         private int numColumns;
+        private int numPiecesToWin;
+        private int piecesCount = 0;
 
-        public int[] board;
+        protected int[] board;
+        protected int[,] boardnew;
+
         public int[] isMoveableUp;
         public int[] isMoveableDown;
         public int[] isMoveableLeft;
@@ -17,11 +22,14 @@ namespace Fourzy {
         public List<MovingGamePiece> activeMovingPieces;
         public List<MovingGamePiece> completedMovingPieces;
 
-        public GameBoard (bool test) {
-            numRows = Constants.numRows;
-            numColumns = Constants.numColumns;
+        public GameBoard (int numRows, int numColumns, int numPiecesToWin) {
+            this.numRows = numRows;
+            this.numColumns = numColumns;
+            this.numPiecesToWin = numPiecesToWin;
 
             board = new int[numColumns * numRows];
+            boardnew = new int[numColumns, numRows];
+
             isMoveableUp = new int[numColumns * numRows];
             isMoveableDown = new int[numColumns * numRows];
             isMoveableLeft = new int[numColumns * numRows];
@@ -32,30 +40,59 @@ namespace Fourzy {
 		    InitGameBoard();
     	}
     	
+        public GameBoard (int numRows, int numColumns, int numPiecesToWin, int piecesCount, int[,] board)
+        {
+            this.numRows = numRows;
+            this.numColumns = numColumns;
+            this.numPiecesToWin = numPiecesToWin;
+            this.piecesCount = piecesCount;
+
+            this.boardnew = new int[numColumns, numRows];
+
+            for (int row = 0; row < numRows; row++) {
+                for (int col = 0; col < numColumns; col++) {
+                    this.boardnew [row, col] = board [row, col];
+                }
+            }
+        }
+
         public void InitGameBoard() {
             for (int i = 0; i < numColumns * numRows; i++)
             {
-                board[i] = 0;
+                board[i] = (int)Piece.EMPTY;
                 isMoveableUp[i] = 1;
                 isMoveableDown[i] = 1;
                 isMoveableLeft[i] = 1;
                 isMoveableRight[i] = 1;
             }
 
-            for (int i = 0; i < numColumns * numRows; i++)
-            {
-                board[i] = 0;
+            for (int row = 0; row < numRows; row++) {
+                for (int col = 0; col < numColumns; col++) {
+                    boardnew[row, col] = (int)Piece.EMPTY;
+                }
             }
         }
 
-        public void PrintBoard(string name) {
-            string log = name + ": ";
-            for (int i = 0; i < numColumns * numRows; i++)
-            {
-                log += board[i] + ",";
-            }
+        public void SampleBoard() {
+            boardnew = new int[8, 8] { 
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,0,0,0,0,0,0 }
+            };
+        }
 
-            Debug.Log(log);
+        public void SetCell(int col, int row, Player player) {
+            board[col * numColumns + row] = (int)player;
+            boardnew[row, col] = (int)player;
+        }
+
+        public int GetCell(int col, int row) {
+            return board[col * numColumns + row];
         }
 
         public void SetGameBoard(int[] boardData) {
@@ -127,6 +164,42 @@ namespace Fourzy {
             }
 
             return nextPosition;
+        }
+
+        public bool ContainsEmptyCell ()
+        {
+            return (piecesCount < numRows * numColumns);
+        }
+
+        public GameBoard Clone ()
+        {
+            return new GameBoard (numRows, numColumns, numPiecesToWin, piecesCount, boardnew);
+        }
+
+        public String ToString() {
+            string log = "Board: ";
+            for (int i = 0; i < numColumns * numRows; i++)
+            {
+                log += board[i] + ",";
+                if ((i+1) % 8 == 0) {
+                    log += "\n";
+                }
+            }
+
+            return log;
+        }
+
+        public void PrintBoard(string name) {
+            string log = name + ": ";
+            for (int i = 0; i < numColumns * numRows; i++)
+            {
+                log += board[i] + ",";
+                if ((i+1) % 8 == 0) {
+                    log += "\n";
+                }
+            }
+
+            Debug.Log(log);
         }
     }
 }

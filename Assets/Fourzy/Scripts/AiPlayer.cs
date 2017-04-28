@@ -221,7 +221,7 @@ namespace Fourzy {
 			player = 0;
 			isEvaluated = false;
 			tokenBoard = new TokenBoard ("EMPTY");
-			gameBoard = new GameBoard (true);
+            gameBoard = new GameBoard (Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
 			//Debug.Log ("DEFAULT CONSTRUCTOR!!");
 			//Debug.Log ("size=" + gameBoard.board.Length);
@@ -263,9 +263,12 @@ namespace Fourzy {
 			gs.player = player;
 
 			gs.gameBoard.InitGameBoard ();
-			for (int i = 0; i < gameBoard.board.Length; i++) {
-				gs.gameBoard.board [i] = gameBoard.board [i];
-			}
+
+            gs.gameBoard = gameBoard.Clone();
+
+			//for (int i = 0; i < gameBoard.board.Length; i++) {
+			//	gs.gameBoard.board [i] = gameBoard.board [i];
+			//}
 
 			for(int col = 0; col < Constants.numColumns; col++)
 			{
@@ -321,7 +324,8 @@ namespace Fourzy {
             //Debug.Log("movePosition.row: " + movePosition.row);
 
 
-            gameBoard.board[movePosition.column * Constants.numColumns + movePosition.row] = player;
+            //gameBoard.board[movePosition.column * Constants.numColumns + movePosition.row] = player;
+            gameBoard.SetCell(movePosition.column, movePosition.row, (Player)player);
 
             tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);    
 
@@ -366,7 +370,7 @@ namespace Fourzy {
 				count = 0;
                 for (int c = 0; c < Constants.numColumns; c++)
                 {
-                    int evalPiece = gameBoard.board[c * Constants.numColumns + r];
+                    int evalPiece = gameBoard.GetCell(c, r);
 					if (evalPiece == 0) {
 						count = 0;
 						currentPiece = 0;
@@ -405,7 +409,7 @@ namespace Fourzy {
 				count = 0;
                 for (int r = 0; r < Constants.numRows; r++)
                 {
-                    int evalPiece = gameBoard.board[c * Constants.numColumns + r];
+                    int evalPiece = gameBoard.GetCell(c, r);
 
 					if (evalPiece == 0) {
 						count = 0;
