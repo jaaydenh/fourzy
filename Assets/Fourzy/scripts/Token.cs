@@ -43,7 +43,7 @@ namespace Fourzy {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = newPosition.column;
                     gamePiece.row = newPosition.row;
-                    boardView.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[newPosition.row, newPosition.column] = piece.gamePieceObject;
                     piece.gamePieceObject = null;
                 } else {
                     if (swapPiece) {
@@ -113,7 +113,7 @@ namespace Fourzy {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = newPosition.column;
                     gamePiece.row = newPosition.row;
-                    boardView.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[newPosition.row, newPosition.column] = piece.gamePieceObject;
                     piece.gamePieceObject = null;
                 } else {
                     if (swapPiece) {
@@ -180,7 +180,7 @@ namespace Fourzy {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = newPosition.column;
                     gamePiece.row = newPosition.row;
-                    boardView.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[newPosition.row, newPosition.column] = piece.gamePieceObject;
                     piece.gamePieceObject = null;
                 } else {
                     if (swapPiece) {
@@ -247,7 +247,7 @@ namespace Fourzy {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = newPosition.column;
                     gamePiece.row = newPosition.row;
-                    boardView.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[newPosition.row, newPosition.column] = piece.gamePieceObject;
                     piece.gamePieceObject = null;
                 } else {
                     if (swapPiece) {
@@ -317,7 +317,7 @@ namespace Fourzy {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = newPosition.column;
                     gamePiece.row = newPosition.row;
-                    boardView.gamePieces[newPosition.column, newPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[newPosition.row, newPosition.column] = piece.gamePieceObject;
                     piece.gamePieceObject = null;
                 } else {
                     if (swapPiece) {
@@ -337,7 +337,7 @@ namespace Fourzy {
                 MovingGamePiece piece = board.activeMovingPieces[0];
                 Position currentPosition = piece.GetCurrentPosition();
                 Position newPosition = piece.GetNextPosition();
-                Debug.Log("CURRENT PIECE DIRECTION: " + piece.currentDirection);
+                //Debug.Log("CURRENT PIECE DIRECTION: " + piece.currentDirection);
                 //Debug.Log("model currentposition col: " + currentPosition.column + " row: " + currentPosition.row);
                 board.activeMovingPieces[0].positions.Add(newPosition);
                 if (piece.player != Player.NONE) {
@@ -399,11 +399,11 @@ namespace Fourzy {
                 MovingGamePiece piece = boardView.activeMovingPieces[0];
                 Position nextPosition = piece.GetNextPosition();
 
-                if (boardView.gamePieces[nextPosition.column, nextPosition.row]) {
+                if (boardView.gamePieces[nextPosition.row, nextPosition.column]) {
                     //Debug.Log("Add active piece at sticky column: " + nextPosition.column + " row: " + nextPosition.row);
                     Move move = new Move(nextPosition, piece.currentDirection);
                     MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
-                    GameObject pieceObject = boardView.gamePieces[nextPosition.column, nextPosition.row];
+                    GameObject pieceObject = boardView.gamePieces[nextPosition.row, nextPosition.column];
                     activeMovingPiece.gamePieceObject = pieceObject;
                     boardView.activeMovingPieces.Add(activeMovingPiece);
                 } 
@@ -412,7 +412,7 @@ namespace Fourzy {
                     GamePiece gamePiece = piece.gamePieceObject.GetComponent<GamePiece>();
                     gamePiece.column = nextPosition.column;
                     gamePiece.row = nextPosition.row;
-                    boardView.gamePieces[nextPosition.column, nextPosition.row] = piece.gamePieceObject;
+                    boardView.gamePieces[nextPosition.row, nextPosition.column] = piece.gamePieceObject;
 
                     piece.gamePieceObject = null;
                 } else {

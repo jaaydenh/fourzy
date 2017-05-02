@@ -318,11 +318,11 @@ namespace Fourzy
         public IEnumerator SetGameBoardView(int[] boardData) {
             isLoading = true;
 
-            for(int col = 0; col < numColumns; col++)
+            for(int row = 0; row < numRows; row++)
             {
-                for(int row = 0; row < numRows; row++)
+                for(int col = 0; col < numColumns; col++)
                 {
-                    int piece = boardData[col * numColumns + row];
+                    int piece = boardData[row * numRows + col];
 
                     if (piece == (int)Piece.BLUE)
                     {
@@ -331,7 +331,7 @@ namespace Fourzy
                         //pieceSprite.sprite = new Sprite().texture.
                         GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
                         pieceModel.player = Player.ONE;
-                        gameBoardView.gamePieces[col, row] = pieceObject;
+                        gameBoardView.gamePieces[row, col] = pieceObject;
                     }
                     else if (piece == (int)Piece.RED)
                     {
@@ -340,7 +340,7 @@ namespace Fourzy
                         //pieceSprite.sprite = new Sprite().texture.
                         GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
                         pieceModel.player = Player.TWO;
-                        gameBoardView.gamePieces[col, row] = pieceObject;
+                        gameBoardView.gamePieces[row, col] = pieceObject;
                     }
                 }
             }
@@ -354,11 +354,11 @@ namespace Fourzy
             isLoading = true;
             tokens = new List<GameObject>();
 
-            for(int col = 0; col < numColumns; col++)
+            for(int row = 0; row < numRows; row++)
             {
-                for(int row = 0; row < numRows; row++)
+                for(int col = 0; col < numColumns; col++)
                 {
-                    Token token = tokenBoard.tokens[col, row].tokenType;
+                    Token token = tokenBoard.tokens[row, col].tokenType;
 
                     if (token == Token.UP_ARROW)
                     {
@@ -461,11 +461,11 @@ namespace Fourzy
 
         private List<long> GetTokenBoardData() {
             List<long> tokenBoardList = new List<long>();
-            for(int col = 0; col < numColumns; col++)
+            for(int row = 0; row < numRows; row++)
             {
-                for(int row = 0; row < numRows; row++)
+                for(int col = 0; col < numColumns; col++)
                 {
-                    tokenBoardList.Add((int)tokenBoard.tokens[col, row].tokenType);
+                    tokenBoardList.Add((int)tokenBoard.tokens[row, col].tokenType);
                 }
             }
             return tokenBoardList;
@@ -496,13 +496,6 @@ namespace Fourzy
             gamePieces.transform.parent = gameScreen.transform;
             gamePieces.transform.localPosition = new Vector3(-375f, -501f);
 
-/*            for (int col = 0; col < numColumns; col++)
-            {
-                for (int row = 0; row < numRows; row++)
-                {
-                    tokenBoard.tokens[col, row] = new EmptyToken();
-                }
-            }*/
             gameBoard = new GameBoard(Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
 			isLoading = false;
@@ -750,7 +743,7 @@ namespace Fourzy
             gamePiece.column = movePosition.column;
             gamePiece.row = movePosition.row;
 
-            gameBoardView.gamePieces[movePosition.column, movePosition.row] = g;
+            gameBoardView.gamePieces[movePosition.row, movePosition.column] = g;
 
 
             //gameBoard.board[movePosition.column * numColumns + movePosition.row] = isPlayerOneTurn ? (int)Player.ONE : (int)Player.TWO;
@@ -758,21 +751,21 @@ namespace Fourzy
             gameBoard.SetCell(movePosition.column, movePosition.row, isPlayerOneTurn ? Player.ONE : Player.TWO);
 
 
-            tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoardView, false);    
-            tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);
+            tokenBoard.tokens[movePosition.row, movePosition.column].UpdateBoard(gameBoardView, false);    
+            tokenBoard.tokens[movePosition.row, movePosition.column].UpdateBoard(gameBoard, false);
 
             while (gameBoardView.activeMovingPieces.Count > 0) {
                 //Position startPosition = gameBoard.activeMovingPieces[0].GetCurrentPosition();
                 Position endPosition = gameBoardView.activeMovingPieces[0].GetNextPosition();
 
                 if (tokenBoard.CanMove(gameBoardView, new Move(endPosition, direction))) {
-                    tokenBoard.tokens[endPosition.column, endPosition.row].UpdateBoard(gameBoardView, true);
+                    tokenBoard.tokens[endPosition.row, endPosition.column].UpdateBoard(gameBoardView, true);
                 } else {
                     gameBoardView.DisableNextMovingPiece();
                 }
 
                 if (tokenBoard.CanMove(gameBoard, new Move(endPosition, direction))) {
-                    tokenBoard.tokens[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);
+                    tokenBoard.tokens[endPosition.row, endPosition.column].UpdateBoard(gameBoard, true);
 
                 } else {
                     gameBoard.DisableNextMovingPiece();
@@ -839,7 +832,7 @@ namespace Fourzy
 
         private IEnumerator AnimatePiece(List<Position> positions) {
             isAnimating = true;
-            GameObject g = gameBoardView.gamePieces[positions[positions.Count - 1].column, positions[positions.Count - 1].row];
+            GameObject g = gameBoardView.gamePieces[positions[positions.Count - 1].row, positions[positions.Count - 1].column];
 
             //Vector3 start = new Vector3(positions[1].column, positions[1].row * -1);
             Sequence mySequence = DOTween.Sequence();
@@ -1024,13 +1017,13 @@ namespace Fourzy
 		/// <returns><c>true</c>, if it contains empty cell, <c>false</c> otherwise.</returns>
 		bool FieldContainsEmptyCell()
 		{
-			for(int col = 0; col < numColumns; col++)
+			for(int row = 0; row < numRows; row++)
 			{
-				for(int row = 0; row < numRows; row++)
+				for(int col = 0; col < numColumns; col++)
 				{
 //					if(gameBoard[x, y] == (int)Piece.EMPTY)
 //						return true;
-                    if(!gameBoardView.gamePieces[col, row]) {
+                    if(!gameBoardView.gamePieces[row, col]) {
                         return true;
                     }
 				}

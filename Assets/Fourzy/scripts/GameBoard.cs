@@ -12,7 +12,7 @@ namespace Fourzy {
         private int numPiecesToWin;
         private int piecesCount = 0;
 
-        protected int[] board;
+        //protected int[] board;
         protected int[,] boardnew;
 
         public int[] isMoveableUp;
@@ -27,7 +27,7 @@ namespace Fourzy {
             this.numColumns = numColumns;
             this.numPiecesToWin = numPiecesToWin;
 
-            board = new int[numColumns * numRows];
+            //board = new int[numColumns * numRows];
             boardnew = new int[numColumns, numRows];
 
             isMoveableUp = new int[numColumns * numRows];
@@ -59,7 +59,7 @@ namespace Fourzy {
         public void InitGameBoard() {
             for (int i = 0; i < numColumns * numRows; i++)
             {
-                board[i] = (int)Piece.EMPTY;
+                //board[i] = (int)Piece.EMPTY;
                 isMoveableUp[i] = 1;
                 isMoveableDown[i] = 1;
                 isMoveableLeft[i] = 1;
@@ -87,27 +87,39 @@ namespace Fourzy {
         }
 
         public void SetCell(int col, int row, Player player) {
-            board[col * numColumns + row] = (int)player;
+            //board[col * numColumns + row] = (int)player;
             boardnew[row, col] = (int)player;
         }
 
         public int GetCell(int col, int row) {
-            return board[col * numColumns + row];
+            //return board[col * numColumns + row];
+            return boardnew[row, col]; 
         }
 
         public void SetGameBoard(int[] boardData) {
-            board = boardData;
+            for (int row = 0; row < numRows; row++) {
+                for (int col = 0; col < numColumns; col++) {
+                    boardnew[row, col] = boardData[row * numRows + col];
+                }
+            }
+            //board = boardData;
         }
 
         public void SwapPiecePosition(Position oldPos, Position newPos) {
             //Debug.Log("oldPos col: " + oldPos.column);
             //Debug.Log("oldPos row: " + oldPos.row);
 
-            int oldPiece = board[oldPos.column * numColumns + oldPos.row];
-            Debug.Log("OLDPIECE: " + oldPiece + " oldpos.col: " + oldPos.column + " oldpos row: " + oldPos.row);
-            Debug.Log("NEWPIECE: " + oldPiece + " newPos.col: " + newPos.column + " newPos row: " + newPos.row);
-            board[oldPos.column * numColumns + oldPos.row] = 0;
-            board[newPos.column * numColumns + newPos.row] = oldPiece;
+            // int oldPiece = board[oldPos.column * numColumns + oldPos.row];
+            // Debug.Log("OLDPIECE: " + oldPiece + " oldpos.col: " + oldPos.column + " oldpos row: " + oldPos.row);
+            // Debug.Log("NEWPIECE: " + oldPiece + " newPos.col: " + newPos.column + " newPos row: " + newPos.row);
+            // board[oldPos.column * numColumns + oldPos.row] = 0;
+            // board[newPos.column * numColumns + newPos.row] = oldPiece;
+
+            int oldPiece = boardnew[oldPos.row, oldPos.column];
+            //Debug.Log("OLDPIECE: " + oldPiece + " oldpos.col: " + oldPos.column + " oldpos row: " + oldPos.row);
+            //Debug.Log("NEWPIECE: " + oldPiece + " newPos.col: " + newPos.column + " newPos row: " + newPos.row);
+            boardnew[oldPos.row, oldPos.column] = 0;
+            boardnew[newPos.row, newPos.column] = oldPiece;
         }
 
         public void DisableNextMovingPiece() {
@@ -122,16 +134,16 @@ namespace Fourzy {
             switch (direction)
             {
                 case Direction.UP:
-                    isMoveableUp[pos.column * numColumns + pos.row] = moveable ? 1 : 0;
+                    isMoveableUp[pos.row * numRows + pos.column] = moveable ? 1 : 0;
                     break;
                 case Direction.DOWN:
-                    isMoveableDown[pos.column * numColumns + pos.row] = moveable ? 1 : 0;
+                    isMoveableDown[pos.row * numRows + pos.column] = moveable ? 1 : 0;
                     break;
                 case Direction.LEFT:
-                    isMoveableLeft[pos.column * numColumns + pos.row] = moveable ? 1 : 0;
+                    isMoveableLeft[pos.row * numRows + pos.column] = moveable ? 1 : 0;
                     break;
                 case Direction.RIGHT:
-                    isMoveableRight[pos.column * numColumns + pos.row] = moveable ? 1 : 0;
+                    isMoveableRight[pos.row * numRows + pos.column] = moveable ? 1 : 0;
                     break;
                 default:
                     break;
@@ -176,27 +188,14 @@ namespace Fourzy {
             return new GameBoard (numRows, numColumns, numPiecesToWin, piecesCount, boardnew);
         }
 
-        public String ToString() {
-            string log = "Board: ";
-            for (int i = 0; i < numColumns * numRows; i++)
-            {
-                log += board[i] + ",";
-                if ((i+1) % 8 == 0) {
-                    log += "\n";
-                }
-            }
-
-            return log;
-        }
-
         public void PrintBoard(string name) {
-            string log = name + ": ";
-            for (int i = 0; i < numColumns * numRows; i++)
-            {
-                log += board[i] + ",";
-                if ((i+1) % 8 == 0) {
-                    log += "\n";
+            string log = name + "\n";
+
+            for (int row = 0; row < numRows; row++) {
+                for (int col = 0; col < numColumns; col++) {
+                    log += boardnew[row, col];
                 }
+                log += "\n";
             }
 
             Debug.Log(log);

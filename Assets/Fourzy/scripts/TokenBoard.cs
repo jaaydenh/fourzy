@@ -9,8 +9,17 @@ namespace Fourzy {
 
         public TokenBoard(int[] tokenData) {
             InitTokenBoard();
+            int[,] convertedTokenData = new int [8,8];
 
-            SetTokenBoard(tokenData);
+            for(int row = 0; row < Constants.numRows; row++)
+            {
+                for(int col = 0; col < Constants.numColumns; col++)
+                {
+                    convertedTokenData[row, col] = tokenData[row * Constants.numRows + col];
+                }
+            }
+
+            SetTokenBoard(convertedTokenData);
         }
 
         public TokenBoard (string type) {
@@ -21,53 +30,53 @@ namespace Fourzy {
             } else if (type == "NOSTICKY") {
                 SetTokenBoard(TokenBoardLoader.Instance.FindTokenBoardNoSticky());
             } else if (type == "EMPTY") {
-                SetTokenBoard(new int[64]);
+                SetTokenBoard(new int[8,8]);
             }
     	}
     	
         public void InitTokenBoard() {
             tokens = new IToken[Constants.numColumns, Constants.numRows];
 
-            for(int col = 0; col < Constants.numColumns; col++)
+            for(int row = 0; row < Constants.numRows; row++)
             {
-                for(int row = 0; row < Constants.numRows; row++)
+                for(int col = 0; col < Constants.numColumns; col++)
                 {
-                    tokens[col, row] = new EmptyToken();
+                    tokens[row, col] = new EmptyToken();
                 }
             }
         }
 
-        public void SetTokenBoard(int[] tokenData) {
+        public void SetTokenBoard(int[,] tokenData) {
             
-            for(int col = 0; col < Constants.numColumns; col++)
+            for(int row = 0; row < Constants.numRows; row++)
             {
-                for(int row = 0; row < Constants.numRows; row++)
+                for(int col = 0; col < Constants.numColumns; col++)
                 {
-                    int token = tokenData[col * Constants.numColumns + row];
+                    int token = tokenData[row, col];
                     //Debug.Log("TOKEN:" + token.ToString());
                     if (token == (int)Token.UP_ARROW)
                     {
-                        tokens[col, row] = new UpArrowToken();
+                        tokens[row, col] = new UpArrowToken();
                     }
                     else if (token == (int)Token.DOWN_ARROW)
                     {
-                        tokens[col, row] = new DownArrowToken();
+                        tokens[row, col] = new DownArrowToken();
                     }
                     else if (token == (int)Token.LEFT_ARROW)
                     {
-                        tokens[col, row] = new LeftArrowToken();
+                        tokens[row, col] = new LeftArrowToken();
                     }
                     else if (token == (int)Token.RIGHT_ARROW)
                     {
-                        tokens[col, row] = new RightArrowToken();
+                        tokens[row, col] = new RightArrowToken();
                     }
                     else if (token == (int)Token.STICKY)
                     {
-                        tokens[col, row] = new StickyToken();
+                        tokens[row, col] = new StickyToken();
                     }
                     else if (token == (int)Token.BLOCKER)
                     {
-                        tokens[col, row] = new BlockerToken();
+                        tokens[row, col] = new BlockerToken();
                     }
                 }
             }
@@ -85,8 +94,8 @@ namespace Fourzy {
             }
 
             // check for piece at end position if there is a piece and the piece is not moveable then return false
-            if (gameBoard.gamePieces[endPosition.column, endPosition.row]) {
-                GameObject pieceObject = gameBoard.gamePieces[endPosition.column, endPosition.row];
+            if (gameBoard.gamePieces[endPosition.row, endPosition.column]) {
+                GameObject pieceObject = gameBoard.gamePieces[endPosition.row, endPosition.column];
                 GamePiece gamePiece = pieceObject.GetComponent<GamePiece>();
 
                 switch (move.direction)
@@ -120,7 +129,7 @@ namespace Fourzy {
             }
 
             // if there is a token at the end position and canPassThrough is true then true
-            if (!tokens[endPosition.column, endPosition.row].canPassThrough) {
+            if (!tokens[endPosition.row, endPosition.column].canPassThrough) {
                 Debug.Log("CANT PASS THROUGH");
                 return false;
             }
@@ -146,25 +155,25 @@ namespace Fourzy {
                 switch (move.direction)
                 {
                     case Direction.UP:
-                        int isMoveableUp = gameBoard.isMoveableUp[endPosition.column * Constants.numColumns + endPosition.row];
+                        int isMoveableUp = gameBoard.isMoveableUp[endPosition.row * Constants.numRows + endPosition.column];
                         if (isMoveableUp == 0) {
                             return false;
                         }
                         break;
                     case Direction.DOWN:
-                        int isMoveableDown = gameBoard.isMoveableUp[endPosition.column * Constants.numColumns + endPosition.row];
+                        int isMoveableDown = gameBoard.isMoveableDown[endPosition.row * Constants.numRows + endPosition.column];
                         if (isMoveableDown == 0) {
                             return false;
                         }
                         break;
                     case Direction.LEFT:
-                        int isMoveableLeft = gameBoard.isMoveableUp[endPosition.column * Constants.numColumns + endPosition.row];
+                        int isMoveableLeft = gameBoard.isMoveableLeft[endPosition.row * Constants.numRows + endPosition.column];
                         if (isMoveableLeft == 0) {
                             return false;
                         }
                         break;
                     case Direction.RIGHT:
-                        int isMoveableRight = gameBoard.isMoveableUp[endPosition.column * Constants.numColumns + endPosition.row];
+                        int isMoveableRight = gameBoard.isMoveableRight[endPosition.row * Constants.numRows + endPosition.column];
                         if (isMoveableRight == 0) {
                             return false;
                         }
@@ -177,7 +186,7 @@ namespace Fourzy {
             }
 
             // if there is a token at the end position and canPassThrough is true then true
-            if (!tokens[endPosition.column, endPosition.row].canPassThrough) {
+            if (!tokens[endPosition.row, endPosition.column].canPassThrough) {
                 Debug.Log("CANT PASS THROUGH");
                 return false;
             }
@@ -190,7 +199,7 @@ namespace Fourzy {
             {
                 Position currentPosition = piece.GetCurrentPosition();
 
-                if (tokens[currentPosition.column, currentPosition.row].tokenType == Token.STICKY) {
+                if (tokens[currentPosition.row, currentPosition.column].tokenType == Token.STICKY) {
 
                     if (CanMove(gameBoard, new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP))) {
                         gameBoard.MakePieceMoveable(currentPosition, true, Direction.UP);
@@ -226,7 +235,7 @@ namespace Fourzy {
             {
                 Position currentPosition = piece.GetCurrentPosition();
                 Debug.Log("UpdateMoveablePieces col: " + currentPosition.column + " row: " + currentPosition.row);
-                if (tokens[currentPosition.column, currentPosition.row].tokenType == Token.STICKY) {
+                if (tokens[currentPosition.row, currentPosition.column].tokenType == Token.STICKY) {
 
                     if (CanMove(gameBoard, new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP))) {
                         gameBoard.MakePieceMoveable(currentPosition, true, Direction.UP);
