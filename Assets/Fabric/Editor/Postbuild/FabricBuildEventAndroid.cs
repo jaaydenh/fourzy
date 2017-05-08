@@ -33,7 +33,11 @@
 				return;
 			}
 
+#if UNITY_5_6_OR_NEWER
+			var bundleId = PlayerSettings.applicationIdentifier;
+#else
 			var bundleId = PlayerSettings.bundleIdentifier;
+#endif
 			WWWForm form = new WWWForm();
 			form.AddField("app_name", bundleId);
 			form.AddField("app_identifier", bundleId);

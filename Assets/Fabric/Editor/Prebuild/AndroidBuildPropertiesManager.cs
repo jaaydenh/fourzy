@@ -25,9 +25,14 @@
 
 		public static void UpdateBuildProperties(string buildId)
 		{
+#if UNITY_5_6_OR_NEWER
+			string bundleIdentifier = PlayerSettings.applicationIdentifier;
+#else
+			string bundleIdentifier = PlayerSettings.bundleIdentifier;
+#endif
 			Dictionary<string, string> properties = new Dictionary<string, string> () {
 				{ AppNameKey, PlayerSettings.productName },
-				{ PackageNameKey, PlayerSettings.bundleIdentifier },
+				{ PackageNameKey, bundleIdentifier },
 				{ BuildIdKey, buildId },
 				{ VersionCodeKey, PlayerSettings.Android.bundleVersionCode.ToString () },
 				{ VersionNameKey, PlayerSettings.bundleVersion }

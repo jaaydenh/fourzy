@@ -7,7 +7,6 @@ namespace Fabric.Internal.Editor.Postbuild
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Text;
-	using System.Linq;
 	using Fabric.Internal.Editor.Model;
 	using Fabric.Internal.Editor.ThirdParty.xcodeapi;
 

@@ -37,7 +37,7 @@ namespace Fourzy
                 {
                     if (column == 0) {
                         Move move = new Move(new Position(column + 1, row), Direction.RIGHT);
-                        if (GameManager.instance.tokenBoard.CanMove(board, move)) {
+                        if (GameManager.instance.gameBoard.CanMove(move, GameManager.instance.tokenBoard.tokens)) {
                             RightArrow.SetActive(true);    
                         } else {
                             noMoves++;
@@ -48,7 +48,7 @@ namespace Fourzy
                 {
                     if (column == 7) {
                         Move move = new Move(new Position(column - 1, row), Direction.LEFT);
-                        if (GameManager.instance.tokenBoard.CanMove(board, move)) {
+                        if (GameManager.instance.gameBoard.CanMove(move, GameManager.instance.tokenBoard.tokens)) {
                             LeftArrow.SetActive(true);
                         } else {
                             noMoves++;
@@ -59,7 +59,7 @@ namespace Fourzy
                 {
                     if (row == 7) {
                         Move move = new Move(new Position(column, row - 1), Direction.UP);
-                        if (GameManager.instance.tokenBoard.CanMove(board, move)) {
+                        if (GameManager.instance.gameBoard.CanMove(move, GameManager.instance.tokenBoard.tokens)) {
                             UpArrow.SetActive(true);
                         } else {
                             noMoves++;
@@ -70,7 +70,7 @@ namespace Fourzy
                 {
                     if (row == 0) {
                         Move move = new Move(new Position(column, row + 1), Direction.DOWN);
-                        if (GameManager.instance.tokenBoard.CanMove(board, move)) {
+                        if (GameManager.instance.gameBoard.CanMove(move, GameManager.instance.tokenBoard.tokens)) {
                             DownArrow.SetActive(true);
                         } else {
                             noMoves++;

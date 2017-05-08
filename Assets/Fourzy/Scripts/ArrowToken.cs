@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ArrowToken : MonoBehaviour {
 
@@ -11,7 +9,6 @@ public class ArrowToken : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D coll) {
-        //Debug.Log("play arrow sound");           
         if (coll.gameObject.tag == "GamePiece") {
             as1.Play();
         }

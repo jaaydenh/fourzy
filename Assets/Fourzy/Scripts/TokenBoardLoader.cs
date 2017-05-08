@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Fourzy {
-    
+namespace Fourzy
+{
+
     public class TokenBoardLoader : Singleton<TokenBoardLoader> {
 
         public int[,] FindTokenBoardAll() {

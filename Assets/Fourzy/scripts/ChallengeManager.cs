@@ -408,10 +408,10 @@ namespace Fourzy
                 int[] tokenBoard = Enumerable.Repeat(0, 64).ToArray();
                 if (tokenData != null) {
                     tokenBoard = challenge.ScriptData.GetIntList("tokenBoard").ToArray();  
-                    GameManager.instance.tokenBoard = new TokenBoard(tokenBoard);
+                    //GameManager.instance.tokenBoard = new TokenBoard(tokenBoard);
                 }
 
-                GameManager.instance.SetupGameWrapper(gameboard);
+                GameManager.instance.SetupGameWrapper(gameboard, new TokenBoard(tokenBoard));
             }
 
             List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");

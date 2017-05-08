@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Fourzy {
+﻿namespace Fourzy
+{
 
     public enum Token {EMPTY, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, STICKY, BLOCKER}
     public enum Piece {EMPTY, BLUE, RED}

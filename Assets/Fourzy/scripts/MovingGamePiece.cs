@@ -7,11 +7,9 @@ namespace Fourzy {
     public class MovingGamePiece {
 
         public Direction currentDirection;
-        //public bool isActive;
         public List<Position> positions;
         public Position position;
         public Player player = Player.NONE;
-        //public bool swapPiece = true;
         public GameObject gamePieceObject;
 
         public MovingGamePiece(Move move) {

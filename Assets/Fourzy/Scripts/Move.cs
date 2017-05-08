@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
+﻿using System;
 
-namespace Fourzy {
+namespace Fourzy
+{
     public class Move : IEquatable<Move> {
 
         public int location;

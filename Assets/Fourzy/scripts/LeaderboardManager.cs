@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
 using UnityEngine;
 
-namespace Fourzy {
+namespace Fourzy
+{
 
     public class LeaderboardManager : MonoBehaviour {
 

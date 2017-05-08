@@ -11,7 +11,6 @@ public class StickyToken : MonoBehaviour {
 	}
 
     void OnTriggerEnter2D(Collider2D coll) {
-        //Debug.Log("play stick sound");
         if (coll.gameObject.tag == "GamePiece") {
             as1.Play();
         }

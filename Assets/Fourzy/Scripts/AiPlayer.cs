@@ -291,7 +291,7 @@ namespace Fourzy {
             //gameBoard.PrintBoard();
             foreach (Move m in AiPlayer.PotentialMoves ()) {
 
-                if (tokenBoard.CanMove(gameBoard, new Move(gameBoard.GetNextPosition(m), m.direction))) {
+                if (gameBoard.CanMove(new Move(gameBoard.GetNextPosition(m), m.direction), tokenBoard.tokens)) {
                     moves.Add(m);
                 }
             }
@@ -314,17 +314,11 @@ namespace Fourzy {
         //        }
 
         public AIGameState MakeMove(Move move) {
-            //gameBoard.PrintBoard("BEGIN MAKE MOVE: COLUMNS: " + move.position.column + " ROW: " + move.position.row);
             MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
             gameBoard.activeMovingPieces.Add(activeMovingPiece);
 
             Position movePosition = activeMovingPiece.GetNextPosition();
-            //Debug.Log("MOVE POSITION!!!!!!: COL: " + movePosition.column + ", ROW:" + movePosition.row);
-            //Debug.Log("movePosition.column: " + movePosition.column);
-            //Debug.Log("movePosition.row: " + movePosition.row);
 
-
-            //gameBoard.board[movePosition.column * Constants.numColumns + movePosition.row] = player;
             gameBoard.SetCell(movePosition.column, movePosition.row, (Player)player);
 
             tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);    
@@ -332,17 +326,15 @@ namespace Fourzy {
             while (gameBoard.activeMovingPieces.Count > 0) {
                 Position endPosition = gameBoard.activeMovingPieces[0].GetNextPosition();
 
-                if (tokenBoard.CanMove(gameBoard, new Move(endPosition, move.direction))) {
+                if (gameBoard.CanMove(new Move(endPosition, move.direction), tokenBoard.tokens)) {
                     tokenBoard.tokens[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);
                 } else {
                     gameBoard.DisableNextMovingPiece();
                 }
             }
-            //gameBoard.PrintBoard();
-            tokenBoard.UpdateMoveablePieces(gameBoard);
 
+            gameBoard.UpdateMoveablePieces(tokenBoard.tokens);
             gameBoard.completedMovingPieces.Clear();
-            //gameBoard.PrintBoard("END MAKE MOVE: COLUMNS: " + move.position.column + " ROW: " + move.position.row);
             isWinForPlayer = IsEndGameState();
 //            if (isWinForPlayer != 0) {
 //                Debug.Log("isWinForPlayer: " + isWinForPlayer);    

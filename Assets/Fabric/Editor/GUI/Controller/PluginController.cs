@@ -55,7 +55,12 @@
 			}
 
 			string organization = Settings.Instance.Organization.Name;
+
+#if UNITY_5_6_OR_NEWER
+			string bundleIdentifier = PlayerSettings.applicationIdentifier;
+#else
 			string bundleIdentifier = PlayerSettings.bundleIdentifier;
+#endif
 			BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
 
 			kitInstallationChecker = new KitInstallationChecker ();
