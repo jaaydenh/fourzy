@@ -38,12 +38,12 @@ namespace VoxelBusters.NativePlugins
 
 				if (_regProductsJSONList != null)
 				{
-					_regProductsList	= new iOSBillingProduct[_regProductsJSONList.Count];
+					_regProductsList	= new BillingProductIOS[_regProductsJSONList.Count];
 					int		_iter		= 0;
 					
 					foreach (IDictionary _productInfoDict in _regProductsJSONList)
 					{
-						_regProductsList[_iter++]			= new iOSBillingProduct(_productInfoDict);
+						_regProductsList[_iter++]			= new BillingProductIOS(_productInfoDict);
 					}
 				}
 				
@@ -69,10 +69,10 @@ namespace VoxelBusters.NativePlugins
 				if (_transactionsJSONList != null)
 				{
 					int		_count		= _transactionsJSONList.Count;
-					_transactions		= new iOSBillingTransaction[_count];
+					_transactions		= new BillingTransactionIOS[_count];
 
 					for (int _iter = 0; _iter < _count; _iter++)
-						_transactions[_iter]	= new iOSBillingTransaction((IDictionary)_transactionsJSONList[_iter]);
+						_transactions[_iter]	= new BillingTransactionIOS((IDictionary)_transactionsJSONList[_iter]);
 				}
 			}
 		}

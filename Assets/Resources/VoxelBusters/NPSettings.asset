@@ -11,22 +11,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89aa10cdd49e949efad7c366f36fa247, type: 3}
   m_Name: NPSettings
   m_EditorClassIdentifier: 
+  m_lastOpenedDateString: 05/11/2017 00:00:00
   m_applicationSettings:
-    m_iOS:
-      m_storeIdentifier: 
-    m_android:
-      m_storeIdentifier: 
     m_supportedFeatures:
       m_usesAddressBook: 0
       m_usesBilling: 0
       m_usesCloudServices: 0
       m_usesGameServices: 0
-      m_usesMediaLibrary: 0
+      m_mediaLibrary:
+        value: 0
+        usesCamera: 1
+        usesPhotoAlbum: 1
       m_usesNetworkConnectivity: 0
-      m_usesNotificationService: 1
+      m_notificationService:
+        value: 1
+        usesLocalNotification: 1
+        usesRemoteNotification: 1
       m_usesSharing: 0
       m_usesTwitter: 0
       m_usesWebView: 0
+    m_iOS:
+      m_storeIdentifier: 
+      m_addressBookUsagePermissionDescription: $(PRODUCT_NAME) uses contacts
+      m_cameraUsagePermissionDescription: $(PRODUCT_NAME) uses camera
+      m_photoAlbumUsagePermissionDescription: $(PRODUCT_NAME) uses photo library
+    m_android:
+      m_storeIdentifier: com.PartyTroll.Fourzy
     m_supportedAddonServices:
       m_usesSoomlaGrow: 0
       m_usesOneSignal: 0

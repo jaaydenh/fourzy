@@ -3,6 +3,9 @@
     <type fullname="System.Type" preserve="all" />
     <namespace fullname="System.Reflection" preserve="all" />
     <namespace fullname="System.Security.Cryptography" preserve="all" />
+    <namespace fullname="Mono.Security.Cryptography" preserve="all" />
+    <namespace fullname="System.Security" preserve="all" />
+    <namespace fullname="System.Security.Cryptography.X509Certificates" preserve="all" />
   </assembly>
   <assembly fullname="Assembly-CSharp-firstpass">
     <namespace fullname="VoxelBusters.NativePlugins" preserve="all" />
@@ -16,6 +19,13 @@
     <namespace fullname="System.Runtime.InteropServices" preserve="all" />
     <namespace fullname="System.Runtime.Serialization" preserve="all" />
     <namespace fullname="System.Configuration" preserve="all" />
+    <namespace fullname="System" preserve="all" />
+    <namespace fullname="System.ComponentModel.EnumConverter" preserve="all" />
+    <namespace fullname="System.Net.NetworkInformation" preserve="all" />
+    <namespace fullname="System.Net.Sockets" preserve="all" />
+    <namespace fullname="System.Net.Security" preserve="all" />
+    <namespace fullname="System.Security.Cryptography" preserve="all" />
+    <namespace fullname="System.Security.Cryptography.X509Certificates" preserve="all" />
   </assembly>
   <assembly fullname="Mono.Security">
     <namespace fullname="Mono.Security.Protocol.Tls" preserve="all" />
@@ -26,5 +36,13 @@
   </assembly>
   <assembly fullname="Facebook.Unity.IOS">
     <type fullname="Facebook.Unity.IOS.*" preserve="all" />
+  </assembly>
+  <assembly fullname="Firebase.App">
+    <namespace fullname="Firebase.App" preserve="all" />
+    <namespace fullname="Firebase.Internal" preserve="all" />
+    <namespace fullname="Firebase" preserve="all" />
+  </assembly>
+  <assembly fullname="System.Core">
+    <namespace fullname="System.Security.Cryptography" preserve="all" />
   </assembly>
 </linker>

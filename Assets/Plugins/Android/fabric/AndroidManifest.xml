@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.fabric.sdk.android.unity">
+  <application>
+    <meta-data android:name="io.fabric.InitializationType" android:value="Automatic" />
+  </application>
+</manifest>

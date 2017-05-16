@@ -248,19 +248,29 @@ namespace ExifLibrary
 
                     // Create the exif property from the interop data
                     ExifProperty prop = ExifPropertyFactory.Get(tag, type, count, value, ByteOrder, currentifd);
-                    Properties.Add(prop.Tag, prop);
+					if (!Properties.ContainsKey(prop.Tag))
+					{
+                    	Properties.Add(prop.Tag, prop);
+					
 #if DEBUG__
-                    mMap.Seek(fieldoffset, SeekOrigin.Begin);
-                    mMap.Write(new Bin(ExifTagFactory.GetTagName(currentifd, tag) + " ID: " + tag.ToString(), 6, 2, prop));
-                    mMap.Write(new Bin(ExifTagFactory.GetTagName(currentifd, tag) + " Type: " + type.ToString(), 6, 2, prop));
-                    mMap.Write(new Bin(ExifTagFactory.GetTagName(currentifd, tag) + " Count: " + count.ToString(), 6, 4, prop));
-                    mMap.Write(new Bin(ExifTagFactory.GetTagName(currentifd, tag) + " Value: " + string.Format("[0x{0:x2}, 0x{1:x2}, 0x{2:x2}, 0x{3:x2}]", value[0], value[1], value[2], value[3]), 6, 4, prop));
-                    if (totallength > 4)
-                    {
-                        mMap.Seek(fieldposition, SeekOrigin.Begin);
-                        mMap.Write(new Bin(ExifTagFactory.GetTagName(currentifd, tag) + " Data", 7, totallength, prop));
-                    }
+	                    mMap.Seek(fieldoffset, SeekOrigin.Begin);
+	                    mMap.Write(new Bin(ExifTagFactory.GetTagName(currentifd, tag) + " ID: " + tag.ToString(), 6, 2, prop));
+	                    mMap.Write(new Bin(ExifTagFactory.GetTagName(currentifd, tag) + " Type: " + type.ToString(), 6, 2, prop));
+	                    mMap.Write(new Bin(ExifTagFactory.GetTagName(currentifd, tag) + " Count: " + count.ToString(), 6, 4, prop));
+	                    mMap.Write(new Bin(ExifTagFactory.GetTagName(currentifd, tag) + " Value: " + string.Format("[0x{0:x2}, 0x{1:x2}, 0x{2:x2}, 0x{3:x2}]", value[0], value[1], value[2], value[3]), 6, 4, prop));
+	                    if (totallength > 4)
+	                    {
+	                        mMap.Seek(fieldposition, SeekOrigin.Begin);
+	                        mMap.Write(new Bin(ExifTagFactory.GetTagName(currentifd, tag) + " Data", 7, totallength, prop));
+	                    }
 #endif
+					}
+					else
+					{
+						Properties[prop.Tag] = prop;
+					}
+
+
                 }
 
                 // 1st IFD pointer

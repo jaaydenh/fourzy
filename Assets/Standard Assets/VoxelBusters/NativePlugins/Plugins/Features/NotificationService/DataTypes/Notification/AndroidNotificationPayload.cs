@@ -134,7 +134,6 @@ namespace VoxelBusters.NativePlugins.Internal
 			_payloadDict[kRepeatIntervalKey]	= (int)_notification.RepeatInterval;
 			_payloadDict[kCustomSound]			= _notification.SoundName;
 			
-
 			// ContentTitle, TickerText, Tag
 			if(_androidProperties != null)
 			{
@@ -143,13 +142,6 @@ namespace VoxelBusters.NativePlugins.Internal
 				_payloadDict[TagKey]			= _androidProperties.Tag;
 				_payloadDict[kLargeIcon]		= _androidProperties.LargeIcon;
 				_payloadDict[kBadgeCount]		= _androidProperties.BadgeCount;
-
-				if(string.IsNullOrEmpty(_notification.SoundName)) //This fallback will be removed in upcoming version.
-				{
-#pragma warning disable
-					_payloadDict[kCustomSound] = _androidProperties.CustomSound;
-#pragma warning enable
-				}
 			}
 			
 			return _payloadDict;

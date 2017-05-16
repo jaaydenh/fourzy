@@ -44,6 +44,8 @@ namespace VoxelBusters.NativePlugins
 		/// <param name="_error">If the operation was successful, this value is nil; otherwise, this parameter holds the description of the problem that occurred.</param>
 		public delegate void GameServiceViewClosed (string _error);
 
+		public delegate void LoadExternalAuthenticationCredentialsCompletion (ExternalAuthenticationCredentials _credentials, string _error);
+
 		#endregion
 
 		#region Events
@@ -60,6 +62,9 @@ namespace VoxelBusters.NativePlugins
 		// UI events
 		private event GameServiceViewClosed ShowLeaderboardViewFinishedEvent;
 		private event GameServiceViewClosed ShowAchievementViewFinishedEvent;
+
+		// Misc Events
+		private event LoadExternalAuthenticationCredentialsCompletion LoadExternalAuthenticationCredentialsFinishedEvent;
 
 		#endregion
 
@@ -351,6 +356,34 @@ namespace VoxelBusters.NativePlugins
 				ShowAchievementViewFinishedEvent(string.IsNullOrEmpty(_error) ? null : _error);
 		}
 
+		#endregion
+
+		#region Misc Callback Methods
+		protected void LoadExternalAuthenticationCredentialsFinished (string _dataStr)
+		{
+			IDictionary		_dataDict	= (IDictionary)JSONUtility.FromJSON(_dataStr);
+			Debug.Log("LoadExternalAuthenticationCredentialsFinished" + _dataStr);
+			// Invoke handler
+			LoadExternalAuthenticationCredentialsFinished(_dataDict);
+		}
+
+		protected virtual void LoadExternalAuthenticationCredentialsFinished (IDictionary _dataDict)
+		{}
+
+		protected void LoadExternalAuthenticationCredentialsFinished(IDictionary _credentialsData, string _error)
+		{
+			ExternalAuthenticationCredentials _credentials = null;
+
+			if (string.IsNullOrEmpty(_error))
+			{
+				_credentials = new ExternalAuthenticationCredentials(_credentialsData);
+			}
+
+			if (LoadExternalAuthenticationCredentialsFinishedEvent != null)
+			{
+				LoadExternalAuthenticationCredentialsFinishedEvent(_credentials, _error);
+			}
+		}
 		#endregion
 	}
 }

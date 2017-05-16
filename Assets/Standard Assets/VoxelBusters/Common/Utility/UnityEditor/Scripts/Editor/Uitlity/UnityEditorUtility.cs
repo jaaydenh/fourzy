@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System;
 
 namespace VoxelBusters.Utility
 {
@@ -20,7 +21,6 @@ namespace VoxelBusters.Utility
 
 		private const int 				kTabSize				= 12;
 
-		// GUI styles
 		public const string				kOuterContainerStyle	= "Tooltip";
 		public const string				kContainerStyle			= "HelpBox";
 	
@@ -196,6 +196,23 @@ namespace VoxelBusters.Utility
 			_toggleStyle.richText		= true;
 			
 			return GUILayout.Toggle(_status, _newText, _toggleStyle);
+		}
+
+		public static void ForEach (SerializedProperty _property, Action<SerializedProperty> _action)
+		{
+			SerializedProperty	_firstLayerProperty		= _property.Copy();
+			SerializedProperty 	_firstLayerEndProperty	= _property.GetEndProperty();
+			bool				_enterChildren			= true;
+
+			while (_firstLayerProperty.NextVisible(_enterChildren))
+			{
+				_enterChildren 	= false;
+
+				if (SerializedProperty.EqualContents(_firstLayerProperty, _firstLayerEndProperty))
+					break;
+
+				_action(_firstLayerProperty);
+			}
 		}
 		
 		#endregion

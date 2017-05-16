@@ -16,7 +16,12 @@ namespace VoxelBusters.NativePlugins
 			[NotifyNPSettingsOnValueChange]
 			[Tooltip ("Your application id in Google Play services.")]
 			private 	string		m_playServicesApplicationID;
+
 			[SerializeField]
+			[NotifyNPSettingsOnValueChange]
+			[Tooltip ("Your Server Client ID for getting external authentication credentials")]
+			private 	string 		m_serverClientID;
+
 			[Tooltip ("String formats used to derive completed achievement description. Note: Achievement title will be inserted in place of token \'#\'.")]
 			private 	string[]	m_achievedDescriptionFormats = new string[] {
 				"Awesome! Achievement # completed."
@@ -35,6 +40,14 @@ namespace VoxelBusters.NativePlugins
 				get
 				{
 					return m_playServicesApplicationID;
+				}
+			}
+		
+			internal string ServerClientID
+			{
+				get
+				{
+					return m_serverClientID;
 				}
 			}
 

@@ -15,12 +15,16 @@ namespace VoxelBusters.Utility
 
 		public static void Destroy (string _path)
 		{
+#if IO_UNSUPPORTED_PLATFORM
+			Debug.LogWarning("[IOExtensions] Not supported.");
+#else
 			FileAttributes _attributes = File.GetAttributes(_path);
-
+			
 			if ((_attributes & FileAttributes.Directory) == FileAttributes.Directory)
 				Directory.Delete(_path, true);
 			else
 				File.Delete(_path);
+#endif
 		}
 
 		public static string MakeRelativePath (this string _fromPath, string _toPath)

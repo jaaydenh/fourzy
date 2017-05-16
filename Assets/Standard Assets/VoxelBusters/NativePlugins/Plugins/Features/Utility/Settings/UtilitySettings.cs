@@ -10,19 +10,18 @@ namespace VoxelBusters.NativePlugins
 
 		[SerializeField]
 		[Tooltip("Rate My App dialog settings.")]
-		private 	RateMyApp.Settings		m_rateMyApp;
+		private 	RateMyAppSettings		m_rateMyApp;
 
 		#endregion
 
 		#region Properties
 
-		public RateMyApp.Settings RateMyApp
+		public RateMyAppSettings RateMyApp
 		{
 			get
 			{
 				return m_rateMyApp;
 			}
-
 			private set
 			{
 				m_rateMyApp	= value;

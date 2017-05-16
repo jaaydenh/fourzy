@@ -26,7 +26,7 @@ namespace VoxelBusters.NativePlugins.Internal
 		#region Simulation Methods
 
 #if USES_ADDRESS_BOOK
-		[MenuItem(kMenuNodeSimulation + "/Select AddressBook", false, kMenuItemPrioritySimulate)]
+		[MenuItem(kMenuNodeSimulation + "/Open Address Book", false, kMenuItemPrioritySimulate)]
 		private static void ShowAddressBook ()
 		{
 			EditorAddressBook _addressBook	= EditorAddressBook.Instance;
@@ -39,7 +39,7 @@ namespace VoxelBusters.NativePlugins.Internal
 #endif
 
 #if USES_GAME_SERVICES
-		[MenuItem(kMenuNodeSimulation + "/Select Game Center", false, kMenuItemPrioritySimulate)]
+		[MenuItem(kMenuNodeSimulation + "/Open Game Center", false, kMenuItemPrioritySimulate)]
 		private static void SelectGameCenter ()
 		{
 			EditorGameCenter _gameCenter	= EditorGameCenter.Instance;
@@ -50,7 +50,7 @@ namespace VoxelBusters.NativePlugins.Internal
 #endif
 
 #if USES_NOTIFICATION_SERVICE
-		[MenuItem(kMenuNodeSimulation + "/Select Notification Center", false, kMenuItemPrioritySimulate)]
+		[MenuItem(kMenuNodeSimulation + "/Open Notification Center", false, kMenuItemPrioritySimulate)]
 		private static void ShowNotificationCenter ()
 		{
 			EditorNotificationCenter _notificationCenter	= EditorNotificationCenter.Instance;
@@ -76,7 +76,7 @@ namespace VoxelBusters.NativePlugins.Internal
 
 		#region Settings
 
-		[MenuItem(kMenuNodeMainNode + "/Select NPSettings", false, kMenuItemPriorityNPSettings)]
+		[MenuItem(kMenuNodeMainNode + "/Open NPSettings", false, kMenuItemPriorityNPSettings)]
 		private static void SelectSettings ()
 		{
 			NPSettings _npSettings	= NPSettings.Instance;

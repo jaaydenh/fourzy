@@ -25,6 +25,9 @@ namespace VoxelBusters.NativePlugins
 		// Users
 		private		const 		string		kUsersList					= "users-list";
 
+		private		const 		string		kCredentialsData			= "credentials-data";
+		
+
 		#endregion
 
 		#region Leaderboard Callback Methods
@@ -136,6 +139,14 @@ namespace VoxelBusters.NativePlugins
 			Debug.Log("User disconnected! " + _reason);
 		}
 
+		protected override void LoadExternalAuthenticationCredentialsFinished (IDictionary _dataDict)
+		{
+			IDictionary	_credentials	= _dataDict.GetIfAvailable<IDictionary>(kCredentialsData);
+			
+			string	_error				= _dataDict.GetIfAvailable<string>(kNativeMessageError);
+			
+			LoadExternalAuthenticationCredentialsFinished(_credentials, _error);
+		}
 		#endregion
 	}
 }

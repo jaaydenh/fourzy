@@ -11,11 +11,13 @@ namespace VoxelBusters.NativePlugins.Internal
 		public const string kNotSupportedInEditor				= "The operation could not be completed because the requested feature is not simulated in Unity Editor. Use your mobile device for testing this functionality.";
 		public const string kiOSFeature							= "The operation could not be completed because the requested feature is supported only on iOS platform.";
 		public const string kAndroidFeature						= "The operation could not be completed because the requested feature is supported only on Android platform.";
+		public const string kNotSupported						= "The operation could not be completed because the requested feature is not supported.";
 
 		#endregion
 
 		#region Assets Path	
 
+		public const string	kRootAssetsPath						= "Assets";
 		public const string	kVBCodebasePath						= "Assets/Standard Assets/VoxelBusters";
 		public const string	kVBExternalCodebasePath				= "Assets/VoxelBusters";
 		public const string kAndroidPluginsPath					= "Assets/Plugins/Android";
@@ -69,11 +71,11 @@ namespace VoxelBusters.NativePlugins.Internal
 
 		#endregion
 
-
 		#region Plugin Android Jar Files Names
 		
 		public const string kAddressBookJARName					= "feature.addressbook";
 		public const string kBillingJARName						= "feature.billing";
+		public const string kBillingAmazonJARName				= "feature.billing.amazon";
 		public const string kCloudServicesJARName				= "feature.cloudservices";
 		public const string kGameServicesJARName				= "feature.gameservices";
 		public const string kMediaLibraryJARName				= "feature.medialibrary";
@@ -90,6 +92,20 @@ namespace VoxelBusters.NativePlugins.Internal
 
 		public const string	kPrefsKeyResolveAndroidDependencies	= "np-resolve-android-dependencies";
 	
+		#endregion
+
+		#region Asset Store Constants
+
+		public const string	kFullVersionProductURL				= "http://bit.ly/1Fnpb5j";
+		public const string	kLiteVersionProductURL				= "http://bit.ly/1KFEzdi";
+		public const string	kProductURL							= 
+			#if NATIVE_PLUGINS_LITE_VERSION
+			kLiteVersionProductURL
+			#else
+			kFullVersionProductURL
+			#endif
+			;
+
 		#endregion
 	}
 }

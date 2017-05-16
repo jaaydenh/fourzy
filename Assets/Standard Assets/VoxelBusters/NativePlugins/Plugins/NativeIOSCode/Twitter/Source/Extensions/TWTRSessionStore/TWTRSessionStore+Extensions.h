@@ -6,12 +6,12 @@
 //
 //
 
-//#import <Foundation/Foundation.h>
-//#import <TwitterKit/TwitterKit.h>
-//
-//@interface TWTRSessionStore (Extensions)
-//
-//// Methods
-//- (NSDictionary *)getSessionDictionaryWithUserID:(NSString *)userID;
-//
-//@end
+#import <Foundation/Foundation.h>
+#import <TwitterKit/TwitterKit.h>
+
+@interface TWTRSessionStore (Extensions)
+
+// Methods
+- (NSDictionary *)getSessionDictionaryWithUserID:(NSString *)userID;
+
+@end

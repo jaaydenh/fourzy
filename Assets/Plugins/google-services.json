@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "46444527925",
+    "firebase_url": "https://crafty-fourzy-725.firebaseio.com",
+    "project_id": "crafty-fourzy-725",
+    "storage_bucket": "crafty-fourzy-725.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46444527925:android:1f1237922610a6a0",
+        "android_client_info": {
+          "package_name": "com.PartyTroll.Fourzy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "46444527925-ob6fq5qaihc7cmshr29g00s5p8em7n34.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT1Tho8k5xuf9i2fwQfzegTaqJ2bL_eUA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

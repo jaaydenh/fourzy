@@ -99,7 +99,7 @@ namespace VoxelBusters.NativePlugins.Demo
 		
 		protected override void DisplayFeatureFunctionalities ()
 		{
-			base.DisplayFeatureFunctionalities ();
+			base.DisplayFeatureFunctionalities();
 			
 			if (m_webview == null)
 			{
@@ -116,10 +116,10 @@ namespace VoxelBusters.NativePlugins.Demo
 				return;
 			}
 
-			DrawLoadAPI ();
-			DrawLifeCycleAPI ();
-			DrawControlTypes ();
-			DrawPropertiesAPI ();
+			DrawLoadAPI();
+			DrawLifeCycleAPI();
+			DrawControlTypes();
+			DrawPropertiesAPI();
 			
 			// Misc
 			GUILayout.Label("Misc.", kSubTitleStyle);
@@ -139,12 +139,16 @@ namespace VoxelBusters.NativePlugins.Demo
 		
 		private void DrawLoadAPI ()
 		{
-			GUILayout.Label("Load API's", kSubTitleStyle);
-			
-			if (GUILayout.Button("Load Request"))
+			GUILayout.Label("Load URL", kSubTitleStyle);
+
+			m_url = GUILayout.TextField(m_url);
+
+			if (GUILayout.Button("Load"))
 			{
 				LoadRequest();
 			}
+
+			GUILayout.Label("Other Load Operations", kSubTitleStyle);
 
 			if (GUILayout.Button("Load HTML String"))
 			{

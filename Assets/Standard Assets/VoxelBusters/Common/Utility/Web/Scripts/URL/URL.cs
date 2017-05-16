@@ -26,10 +26,10 @@ namespace VoxelBusters.Utility
 
 		public URL (string _URLString) : this ()
 		{
-			if (_URLString.IndexOf(kProtocolSeperator) != -1)
-				URLString	= _URLString;
-			else
+			if (_URLString.IndexOf(kProtocolSeperator) == -1)
 				URLString	= kFileProtocol + _URLString;
+			else
+				URLString	= _URLString;
 		}
 
 		#endregion
@@ -47,7 +47,7 @@ namespace VoxelBusters.Utility
 			
 			if (_filePath != null)
 			{
-				if (!_filePath.StartsWith(kFileProtocol))
+				if (_filePath.IndexOf(kProtocolSeperator) == -1)
 					_URLWithScheme	= kFileProtocol + _filePath;
 			}
 
@@ -69,7 +69,7 @@ namespace VoxelBusters.Utility
 			if (_URLString != null)
 			{
 				if (_URLString.IndexOf(kProtocolSeperator) == -1)
-					_URLWithScheme	= kHttpProtocol + _URLString;
+					_URLWithScheme	= kFileProtocol + _URLString;
 			}
 			
 			return new URL()
@@ -84,7 +84,7 @@ namespace VoxelBusters.Utility
 
 		public bool isFileReferenceURL ()
 		{
-			return URLString.StartsWith(kFileProtocol);
+			return URLString.Contains(kFileProtocol);
 		}
 
 		public override string ToString ()

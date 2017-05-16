@@ -128,14 +128,14 @@ PlayerSettings:
   xboxOneDisableKinectGpuReservation: 0
   protectGraphicsMemory: 0
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 9
+  AndroidMinSdkVersion: 15
   AndroidPreferredInstallLocation: 1
   aotOptions: 
   apiCompatibilityLevel: 2
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
-  iPhoneBuildNumber: 7
+  iPhoneBuildNumber: 8
   ForceInternetPermission: 0
   ForceSDCardPermission: 0
   CreateWallpaper: 0
@@ -199,9 +199,9 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
-  AndroidTVCompatibility: 1
+  AndroidKeystoreName: /Users/Jaayden/Desktop/user.keystore
+  AndroidKeyaliasName: key
+  AndroidTVCompatibility: 0
   AndroidIsGame: 1
   androidEnableBanner: 1
   m_AndroidBanners:
@@ -452,6 +452,7 @@ PlayerSettings:
     4: USES_NOTIFICATION_SERVICE
     7: USES_NOTIFICATION_SERVICE
     14: USES_NOTIFICATION_SERVICE
+    25: USES_NOTIFICATION_SERVICE
   platformArchitecture:
     iOS: 2
     tvOS: 1

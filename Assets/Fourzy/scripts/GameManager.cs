@@ -751,9 +751,11 @@ namespace Fourzy
 
             while (gameBoard.activeMovingPieces.Count > 0) {
                 //Position startPosition = gameBoard.activeMovingPieces[0].GetCurrentPosition();
-                Position endPosition = gameBoard.activeMovingPieces[0].GetNextPosition();
+                MovingGamePiece activePiece = gameBoard.activeMovingPieces[0];
+                Position endPosition = activePiece.GetNextPosition();
+                Direction activeDirection = activePiece.currentDirection;
 
-                if (gameBoard.CanMove(new Move(endPosition, direction), tokenBoard.tokens)) {
+                if (gameBoard.CanMove(new Move(endPosition, activeDirection), tokenBoard.tokens)) {
                     tokenBoard.tokens[endPosition.row, endPosition.column].UpdateBoard(gameBoard, true);
                 } else {
                     gameBoard.DisableNextMovingPiece();

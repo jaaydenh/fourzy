@@ -175,6 +175,21 @@ namespace VoxelBusters.NativePlugins
 		}
 		
 		#endregion
+
+		#region Misc Methods
+
+		public override void LoadExternalAuthenticationCredentials(LoadExternalAuthenticationCredentialsCompletion _onCompletion)
+		{
+			base.LoadExternalAuthenticationCredentials(_onCompletion);
+			
+			// Verify auth status
+			if (!VerifyUser())
+				return;
+
+			LoadExternalAuthenticationCredentialsFinished(null, Constants.kNotSupportedInEditor);	
+		}
+
+		#endregion
 	}
 }
 #endif

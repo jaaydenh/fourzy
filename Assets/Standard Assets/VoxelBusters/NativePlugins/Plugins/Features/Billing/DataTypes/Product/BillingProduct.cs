@@ -13,24 +13,29 @@ namespace VoxelBusters.NativePlugins
 
 		[SerializeField]
 		[Tooltip("The name of the product. This information is used for simulating feature behaviour in Editor.")]
-		private 	string		m_name;
+		private 	string			m_name;
 		[SerializeField]
 		[Tooltip("The description of the product. This information is used for simulating feature behaviour in Editor.")]
-		private 	string		m_description;
+		private 	string			m_description;
 		[SerializeField]
 		[Tooltip("The flag determines the product type. If enabled, product is identified as consumable.")]
-		private 	bool		m_isConsumable;
+		private 	bool			m_isConsumable;
 		[SerializeField]
-		private 	float		m_price;
+		[HideInInspector]
+		private 	float			m_price;
+		[Tooltip("Array of string values, where each value represents a product in a specific platform.")]
 		[SerializeField]
-		[Tooltip("Product's registration id in iOS App Store.")]
-		private 	string		m_iosProductId;
-		[SerializeField]
-		[Tooltip("Product's registration id in Google Play Store.")]
-		private 	string 		m_androidProductId;
+		protected	PlatformID[]	m_productIDs;
 		[SerializeField]
 		[Tooltip("Optional extra data to let store to send back in purchase response. Used for security purposes and supported by Google's Android Platform only currently.")]
-		private 	string 		m_developerPayload;
+		private 	string 			m_developerPayload;
+
+		[SerializeField]
+		[HideInInspector]
+		private 	string			m_iosProductId;
+		[SerializeField]
+		[HideInInspector]
+		private 	string 			m_androidProductId;
 
 		#endregion
 
@@ -45,7 +50,6 @@ namespace VoxelBusters.NativePlugins
 			{ 
 				return  m_name; 
 			}
-
 			protected set	
 			{ 
 				m_name	= value; 
@@ -61,7 +65,6 @@ namespace VoxelBusters.NativePlugins
 			{ 
 				return  m_description; 
 			} 
-
 			protected set	
 			{ 
 				m_description	= value; 
@@ -77,7 +80,6 @@ namespace VoxelBusters.NativePlugins
 			{ 
 				return  m_isConsumable; 
 			}
-
 			protected set 
 			{ 
 				m_isConsumable	= value; 
@@ -93,7 +95,6 @@ namespace VoxelBusters.NativePlugins
 			{ 
 				return  m_price; 
 			}
-			
 			protected set 
 			{ 
 				m_price	= value; 
@@ -127,32 +128,6 @@ namespace VoxelBusters.NativePlugins
 			protected set;
 		}
 
-		protected string IOSProductID
-		{
-			get
-			{
-				return m_iosProductId;
-			}
-
-			set
-			{
-				m_iosProductId = value;
-			}
-		}
-
-		protected string AndroidProductID
-		{
-			get
-			{
-				return m_androidProductId;
-			}
-
-			set
-			{
-				m_androidProductId = value;
-			}
-		}
-
 		/// <summary>
 		/// The string that identifies the product to the Store. (read-only)
 		/// </summary>
@@ -160,11 +135,7 @@ namespace VoxelBusters.NativePlugins
 		{
 			get 
 			{
-#if UNITY_ANDROID
-				return m_androidProductId;
-#else
-				return m_iosProductId;
-#endif
+				return m_productIDs.GetCurrentPlatformID();
 			}
 		}
 
@@ -178,13 +149,11 @@ namespace VoxelBusters.NativePlugins
 			{
 				return m_developerPayload;
 			}
-			
 			set
 			{
 				m_developerPayload = value;
 			}
 		}
-
 
 		#endregion
 
@@ -199,11 +168,10 @@ namespace VoxelBusters.NativePlugins
 			this.Description		= _product.Description;
 			this.IsConsumable		= _product.IsConsumable;
 			this.Price				= _product.Price;
+			this.m_productIDs		= _product.m_productIDs;
 			this.LocalizedPrice		= _product.LocalizedPrice;
 			this.CurrencyCode		= _product.CurrencyCode;
 			this.CurrencySymbol		= _product.CurrencySymbol;
-			this.IOSProductID		= _product.IOSProductID;
-			this.AndroidProductID	= _product.AndroidProductID;
 		}
 
 		#endregion
@@ -219,36 +187,22 @@ namespace VoxelBusters.NativePlugins
 		/// <example>
 		/// The following code example shows how to dynamically create billing product.
 		/// <code>
-		/// BillingProduct	_newProduct	= BillingProduct.Create("name", true, Platform.Android("android-product-id"), Platform.IOS("ios-product-id"));
+		/// BillingProduct _newProduct	= BillingProduct.Create("name", true, Platform.Android("android-product-id"), Platform.IOS("ios-product-id"));
 		/// </code>
 		/// </example>
-		public static BillingProduct Create (string _name, bool _isConsumable, params PlatformID[] _platformIDs)
+		public static BillingProduct Create (string _name, bool _isConsumable, params PlatformID[] _productIDs)
 		{
 			BillingProduct	_newProduct	= new BillingProduct();
 			_newProduct.Name			= _name;
 			_newProduct.IsConsumable	= _isConsumable;
-
-			// Set product identifiers
-			if (_platformIDs != null)
-			{
-				foreach (PlatformID _curID in _platformIDs)
-				{
-					if (_curID == null)
-						continue;
-
-					if (_curID.Platform == PlatformID.ePlatform.IOS)
-						_newProduct.IOSProductID		= _curID.Value;
-					else if (_curID.Platform == PlatformID.ePlatform.ANDROID)
-						_newProduct.AndroidProductID	= _curID.Value;
-				}
-			}
+			_newProduct.m_productIDs	= _productIDs;
 
 			return _newProduct;
 		}
 
 		#endregion
 
-		#region Methods
+		#region Public Methods
 
 		public override string ToString ()
 		{
@@ -258,12 +212,23 @@ namespace VoxelBusters.NativePlugins
 
 		#endregion
 
-		#region Deprecated Methods
+		#region Private Methods
 
-		[System.Obsolete("Instead use Create methods.")]
-		public BillingProduct Copy ()
+		internal void RebuildObject ()
 		{
-			return null;
+			if (string.IsNullOrEmpty(m_iosProductId) && string.IsNullOrEmpty(m_androidProductId))
+				return;
+
+			// Copy product identifier information
+			m_productIDs	= new PlatformID[]
+			{
+				PlatformID.IOS(m_iosProductId),
+				PlatformID.Android(m_androidProductId)
+			};
+
+			// Reset deprecated attribute value
+			m_iosProductId		= null;
+			m_androidProductId	= null;
 		}
 
 		#endregion

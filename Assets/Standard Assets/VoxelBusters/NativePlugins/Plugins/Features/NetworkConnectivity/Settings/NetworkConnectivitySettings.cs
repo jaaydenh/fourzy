@@ -10,44 +10,61 @@ namespace VoxelBusters.NativePlugins
 		
 		[SerializeField]
 		[Tooltip("The host IP address in IPv4 format.")]
-		private 	string 			m_hostAddressIPv4 	= "8.8.8.8";
+		private 	string 			m_hostAddressIPV4 		= "8.8.8.8";
 		[SerializeField]
 		[Tooltip("The host IP address in IPv6 format.")]
-		private 	string 			m_hostAddressIPv6 	= "0:0:0:0:0:FFFF:0808:0808";
+		private 	string 			m_hostAddressIPV6 		= "0:0:0:0:0:FFFF:0808:0808";
 		[SerializeField]
-		private 	EditorSettings	m_editor			= new EditorSettings();
+		[Tooltip ("The number of seconds to wait before the request times out.")]		
+		private 	int 			m_timeOutPeriod 		= 60;
 		[SerializeField]
-		private 	AndroidSettings	m_android			= new AndroidSettings();
+		[Tooltip ("The number of retry attempts, when a response is not received from the host.")]		
+		private 	int 			m_maxRetryCount 		= 2;
+		[SerializeField]
+		[Tooltip ("The time interval between consecutive poll.")]		
+		private 	float 			m_timeGapBetweenPolling = 2.0f;
+		[SerializeField]
+		private 	AndroidSettings	m_android				= new AndroidSettings();
 
 		#endregion
 
 		#region Properties
 
-		internal string HostAddressIPv4
+		public string HostAddress
 		{
 			get 
 			{ 
-				return m_hostAddressIPv4; 
-			}
-		}
-		
-		internal string HostAddressIPv6
-		{
-			get 
-			{ 
-				return m_hostAddressIPv6; 
+				return (Application.platform == RuntimePlatform.IPhonePlayer)
+						? m_hostAddressIPV6
+						: m_hostAddressIPV4;
 			}
 		}
 
-		internal EditorSettings Editor
+		public int TimeOutPeriod
 		{
 			get 
 			{ 
-				return m_editor; 
+				return m_timeOutPeriod; 
 			}
 		}
 
-		internal AndroidSettings Android
+		public int MaxRetryCount
+		{
+			get 
+			{ 
+				return m_maxRetryCount; 
+			}
+		}
+
+		public float TimeGapBetweenPolling
+		{
+			get 
+			{ 
+				return m_timeGapBetweenPolling;
+			}
+		}
+
+		public AndroidSettings Android
 		{
 			get 
 			{ 

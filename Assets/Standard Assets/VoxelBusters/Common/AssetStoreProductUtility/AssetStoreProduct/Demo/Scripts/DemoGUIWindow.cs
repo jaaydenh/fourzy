@@ -29,6 +29,7 @@ namespace VoxelBusters.AssetStoreProductUtility.Demo
 			GUI.skin.button.fontSize 					= Mathf.Clamp((int)(Screen.width * 0.03f), 0, 36);
 			GUI.skin.label.fontSize 					= Mathf.Clamp((int)(Screen.width * 0.03f), 0, 36);
 			GUI.skin.toggle.fontSize 					= Mathf.Clamp((int)(Screen.width * 0.03f), 0, 36);
+			GUI.skin.textField.fontSize 				= Mathf.Clamp((int)(Screen.width * 0.03f), 20, 36);
 			GUI.skin.GetStyle(kSubTitleStyle).fontSize	= Mathf.Clamp((int)(Screen.width * 0.03f), 0, 40);
 		}
 

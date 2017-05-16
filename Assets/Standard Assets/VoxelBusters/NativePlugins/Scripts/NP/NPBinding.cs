@@ -209,7 +209,7 @@ public class NPBinding : SingletonPattern <NPBinding>
 				return null;
 			
 			if (notificationService == null)
-				notificationService	= _sharedInstance.AddComponentBasedOnPlatformOnlyIfRequired<NotificationService>();
+				notificationService	= _sharedInstance.CachedGameObject.AddComponentIfNotFound<NotificationService>();
 			
 			return notificationService;
 		}
@@ -290,7 +290,7 @@ public class NPBinding : SingletonPattern <NPBinding>
 				return null;
 			
 			if (utility == null)
-				utility	= _sharedInstance.AddComponentBasedOnPlatformOnlyIfRequired<Utility>();
+				utility	= _sharedInstance.CachedGameObject.AddComponentIfNotFound<Utility>();
 				
 			return utility;
 		}
@@ -310,7 +310,7 @@ public class NPBinding : SingletonPattern <NPBinding>
 				return null;
 
 			if (webview == null)
-				webview	= _sharedInstance.AddComponentBasedOnPlatformOnlyIfRequired<WebViewNative>();
+				webview	= _sharedInstance.CachedGameObject.AddComponentIfNotFound<WebViewNative>();
 			
 			return webview;
 		}
@@ -380,7 +380,7 @@ public class NPBinding : SingletonPattern <NPBinding>
 
 #if USES_NOTIFICATION_SERVICE
 		if (notificationService == null)
-			notificationService		= AddComponentBasedOnPlatformOnlyIfRequired<NotificationService>();
+			notificationService		= CachedGameObject.AddComponentIfNotFound<NotificationService>();
 #endif
 
 #if USES_SHARING
@@ -397,11 +397,11 @@ public class NPBinding : SingletonPattern <NPBinding>
 			userInterface	= AddComponentBasedOnPlatformOnlyIfRequired<UI>();
 
 		if (utility == null)
-			utility			= AddComponentBasedOnPlatformOnlyIfRequired<Utility>();
+			utility			= CachedGameObject.AddComponentIfNotFound<Utility>();
 
 #if USES_WEBVIEW
 		if (webview == null)
-			webview			= AddComponentBasedOnPlatformOnlyIfRequired<WebViewNative>();
+			webview			= CachedGameObject.AddComponentIfNotFound<WebViewNative>();
 #endif
 
 #if USES_SOOMLA_GROW

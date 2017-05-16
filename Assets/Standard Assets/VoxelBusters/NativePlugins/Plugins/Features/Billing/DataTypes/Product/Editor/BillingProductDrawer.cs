@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace VoxelBusters.NativePlugins
 {
-	[CustomPropertyDrawer(typeof(BillingProduct))]
+//	[CustomPropertyDrawer(typeof(BillingProduct))]
 	public class BillingProductDrawer : PropertyDrawer
 	{
 		#region Properties

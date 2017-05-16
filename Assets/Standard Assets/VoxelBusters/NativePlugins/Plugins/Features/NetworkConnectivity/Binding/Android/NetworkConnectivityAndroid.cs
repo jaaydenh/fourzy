@@ -28,12 +28,11 @@ namespace VoxelBusters.NativePlugins
 			base.Initialise ();
 
 			NetworkConnectivitySettings _settings = NPSettings.NetworkConnectivity;
-
-			Plugin.Call(Native.Methods.INITIALIZE,_settings.HostAddressIPv4, 
+			Plugin.Call(Native.Methods.INITIALIZE,_settings.HostAddress, 
 			            							_settings.Android.Port, 
-													_settings.Android.TimeGapBetweenPolling, 
-													_settings.Android.TimeOutPeriod,
-													_settings.Android.MaxRetryCount);
+													_settings.TimeGapBetweenPolling, 
+													_settings.TimeOutPeriod,
+													_settings.MaxRetryCount);
 			
 		}	
 

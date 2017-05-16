@@ -151,7 +151,8 @@
     "frameworks": [
       "Accounts.framework:weak",
       "Social.framework:weak",
-      "Security.framework:weak"
+      "Security.framework:weak",
+      "SafariServices.framework:weak"
     ],
     "folders": [
       "Twitter/Assets",

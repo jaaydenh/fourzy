@@ -174,6 +174,17 @@ namespace VoxelBusters.NativePlugins
 			Plugin.Call(Native.Methods.SHOW_LEADERBOARD_UI, _leaderboardID, _timeScopeString);
 		}
 
+		public override void LoadExternalAuthenticationCredentials(LoadExternalAuthenticationCredentialsCompletion _onCompletion)
+		{
+			base.LoadExternalAuthenticationCredentials(_onCompletion);
+
+			// Verify auth status
+			if (!VerifyUser())
+				return;
+			
+			// Native method call
+			Plugin.Call(Native.Methods.LOAD_EXTERNAL_AUTHENTICATION_DETAILS, NPSettings.GameServicesSettings.Android.ServerClientID);
+		}
 		#endregion
 	}
 }

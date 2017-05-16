@@ -52,6 +52,15 @@ namespace VoxelBusters.NativePlugins
 		}
 
 		#endregion
+
+		#region Misc Callback Methods
+
+		protected override void LoadExternalAuthenticationCredentialsFinished (IDictionary _dataDict)
+		{
+			LoadExternalAuthenticationCredentialsFinished(null, "Not supported on Editor");
+		}
+
+		#endregion
 	}
 }
 #endif

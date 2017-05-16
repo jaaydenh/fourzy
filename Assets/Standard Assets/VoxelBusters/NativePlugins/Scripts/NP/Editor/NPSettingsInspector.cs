@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
-
-#if UNITY_EDITOR
 using UnityEditor;
 using System.Collections.Generic;
 using VoxelBusters.Utility;
@@ -14,28 +13,12 @@ namespace VoxelBusters.NativePlugins
 	[CustomEditor(typeof(NPSettings))]
 	public class NPSettingsInspector : AssetStoreProductInspector
 	{
-		private enum eTabView
-		{
-			NONE,
-			APPLICATION_SETTINGS,
-			BILLING_SETTINGS,
-			CLOUD_SERVICES_SETTINGS,
-			GAME_SERVICES_SETTINGS,
-			MEDIA_LIBRARY_SETTINGS,
-			NETWORK_CONNECTVITY_SETTINGS,
-			NOTIFICATION_SERVICE_SETTINGS,
-			SOCIAL_NETWORK_SETTINGS,
-			UTILITY_SETTINGS,
-			ADDON_SERVICES_SETTINGS
-		}
-
 		#region Constants
 
 		private		const 	string					kActiveView				= "np-active-view";
 
 		// URL
-		private		const 	string					kFullVersionProductURL	= "http://bit.ly/1Fnpb5j";
-		private		const 	string					kLiteVersionProductURL	= "http://bit.ly/1KFEzdi";
+
 		private		const 	string					kTutorialURL			= "http://bit.ly/1ZFadk4";
 		private		const	string					kDocumentationURL		= "http://bit.ly/1cBFHDd";
 		private		const	string					kForumURL				= "http://bit.ly/1AjQRYp";
@@ -56,8 +39,7 @@ namespace VoxelBusters.NativePlugins
 #pragma warning disable
 		private 			GUIContent				m_documentationText		= new GUIContent("Documentation", 	"One click access to online documentation.");
 		private 			GUIContent				m_saveChangesText		= new GUIContent("Save", 			"Save all your changes.");
-		private 			GUIContent				m_forumText				= new GUIContent("Forum - Quick Response", 	"Houston, we have a problem!");
-		private 			GUIContent				m_contactText			= new GUIContent("Contact Us", 		"Contact us");
+		private 			GUIContent				m_forumText				= new GUIContent("Forum - Support", 	"Houston, we have a problem!");
 		private 			GUIContent				m_tutotialsText			= new GUIContent("Tutorials", 		"Check our blog posts about product features and usage.");
 		private 			GUIContent				m_writeReviewText		= new GUIContent("Write a review", 	"Write a review to share your experience with others.");
 		private 			GUIContent				m_upgradeText			= new GUIContent("Upgrade", 		"Click to find out more about full version product.");
@@ -105,9 +87,9 @@ namespace VoxelBusters.NativePlugins
 		protected override void OnGUIWindow ()
 		{
 			// Disable GUI when its compiling
-			GUI.enabled			= !EditorApplication.isCompiling;
+			GUI.enabled	= !EditorApplication.isCompiling;
 
-			// Drawing tabs
+			// Drawing inspector
 			GUILayout.BeginVertical(UnityEditorUtility.kOuterContainerStyle);
 			{	
 				base.OnGUIWindow();
@@ -134,14 +116,14 @@ namespace VoxelBusters.NativePlugins
 					GUILayout.FlexibleSpace();
 
 					// Change button color, as a feedback to user activity
-					Color _GUIColorOld 	= GUI.color;
-					GUI.color			= EditorPrefs.GetBool(NPSettings.kPrefsKeyPropertyModified) ? Color.red : Color.green;
+					Color _oldColor = GUI.color;
+					GUI.color		= EditorPrefs.GetBool(NPSettings.kPrefsKeyPropertyModified) ? Color.red : Color.green;
 
 					if (GUILayout.Button(m_saveChangesText, GUILayout.MinWidth(120)))
 						OnPressingSave();
 
 					// Reset back to old state
-					GUI.color 			= _GUIColorOld;
+					GUI.color 		= _oldColor;
 
 					GUILayout.FlexibleSpace();
 				}
@@ -151,7 +133,7 @@ namespace VoxelBusters.NativePlugins
 			GUILayout.EndVertical();
 
 			// Reset GUI state
-			GUI.enabled			= true;
+			GUI.enabled	= true;
 		}
 
 		#endregion
@@ -173,12 +155,9 @@ namespace VoxelBusters.NativePlugins
 				if (GUILayout.Button(m_forumText, Constants.kButtonMidStyle))
 					Application.OpenURL(kForumURL);
 				
-				if (GUILayout.Button(m_contactText, Constants.kButtonMidStyle))
-					OnPressingContact();
-				
 #if NATIVE_PLUGINS_LITE_VERSION
 				if (GUILayout.Button(m_upgradeText, Constants.kButtonMidStyle))
-					Application.OpenURL(kFullVersionProductURL);
+					Application.OpenURL(Constants.kFullVersionProductURL);
 #endif
 				
 				if (GUILayout.Button(m_writeReviewText, Constants.kButtonRightStyle))
@@ -193,7 +172,6 @@ namespace VoxelBusters.NativePlugins
 		{
 			// Draw settings tab view
 			Dictionary<eTabView, SerializedProperty>.Enumerator _enumerator	= m_settingsCollection.GetEnumerator();
-			
 			while (_enumerator.MoveNext())
 			{
 				eTabView			_curTabView		= _enumerator.Current.Key;
@@ -205,7 +183,6 @@ namespace VoxelBusters.NativePlugins
 					if (m_activeView != eTabView.NONE)
 					{
 						SerializedProperty _curActiveProperty	= m_settingsCollection[m_activeView];
-
 						if (_curActiveProperty != null)
 							_curActiveProperty.isExpanded		= false;
 					}
@@ -224,10 +201,7 @@ namespace VoxelBusters.NativePlugins
 			if (_property == null || !_property.hasVisibleChildren)
 				return false;
 
-			// Draw header
-			bool	_isSelected		= UnityEditorUtility.DrawPropertyHeader(_property);
-
-			// Draw childrens
+			bool	_isSelected	= UnityEditorUtility.DrawPropertyHeader(_property);
 			if (_property.hasVisibleChildren && _property.isExpanded)
 			{
 				GUILayout.Space(-4f);
@@ -236,21 +210,25 @@ namespace VoxelBusters.NativePlugins
 					GUILayout.Space(8f);
 					GUILayout.BeginVertical();
 					{
-						SerializedProperty	_propertyCopy	= _property.Copy();
-						SerializedProperty 	_endProperty	= _property.GetEndProperty();
-
-						// Move pointer to first child and start drawing
-						_propertyCopy.NextVisible(true);
-					
-						do
-						{
-							if (SerializedProperty.EqualContents(_propertyCopy, _endProperty))
-								break;
-
-							_propertyCopy.isExpanded	= true;
-							
-							EditorGUILayout.PropertyField(_propertyCopy, true);
-						} while (_propertyCopy.NextVisible(false));
+						UnityEditorUtility.ForEach(_property, (_childrenProperty) => 
+							{
+								if (_childrenProperty.hasChildren && _childrenProperty.propertyType != SerializedPropertyType.String)
+								{
+									EditorGUILayout.LabelField(_childrenProperty.displayName, EditorStyles.boldLabel);
+									UnityEditorUtility.ForEach(_childrenProperty, (_2ndLayerChildrenProperty) =>
+										{
+											EditorGUI.indentLevel++;
+											EditorGUILayout.PropertyField(_2ndLayerChildrenProperty, true);
+											EditorGUI.indentLevel--;
+										}
+									);
+								}
+								else
+								{
+									EditorGUILayout.PropertyField(_childrenProperty);
+								}
+							}
+						);
 					}
 					GUILayout.EndVertical();
 				}
@@ -262,33 +240,33 @@ namespace VoxelBusters.NativePlugins
 
 		private void OnPressingSave ()
 		{
-			// Save changes
-			(target as NPSettings).SaveConfigurationChanges();
-		}
-
-		private void OnPressingContact ()
-		{
-			string	_mailToAddress	= WWW.EscapeURL("support+cross_platform_native_plugins@voxelbusters.com").Replace("+","%20");
-			
-			string	_mailToString	= string.Format("mailto:{0}", _mailToAddress);
-			
-			// Opens mail client
-			Application.OpenURL(_mailToString);
+			((NPSettings)target).SaveConfigurationChanges();
 		}
 
 		private void OnPressingWriteReview ()
 		{
-			string	_assetPageURL	= null;
-
-#if NATIVE_PLUGINS_LITE_VERSION
-			_assetPageURL			= kLiteVersionProductURL;
-#else
-			_assetPageURL			= kFullVersionProductURL;
-#endif
-
-			Application.OpenURL(_assetPageURL);
+			Application.OpenURL(Constants.kProductURL);
 		}
 			   
+		#endregion
+
+		#region Nested Types
+
+		private enum eTabView
+		{
+			NONE,
+			APPLICATION_SETTINGS,
+			BILLING_SETTINGS,
+			CLOUD_SERVICES_SETTINGS,
+			GAME_SERVICES_SETTINGS,
+			MEDIA_LIBRARY_SETTINGS,
+			NETWORK_CONNECTVITY_SETTINGS,
+			NOTIFICATION_SERVICE_SETTINGS,
+			SOCIAL_NETWORK_SETTINGS,
+			UTILITY_SETTINGS,
+			ADDON_SERVICES_SETTINGS
+		}
+
 		#endregion
 	}
 }

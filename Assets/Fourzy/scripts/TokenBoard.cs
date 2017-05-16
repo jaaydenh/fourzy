@@ -28,7 +28,7 @@ namespace Fourzy {
             if (type == "ALL") {
                 SetTokenBoard(TokenBoardLoader.Instance.FindTokenBoardAll());
             } else if (type == "NOSTICKY") {
-                SetTokenBoard(TokenBoardLoader.Instance.FindTokenBoardNoSticky());
+                SetTokenBoard(TokenBoardLoader.Instance.FindTokenBoardAll());
             } else if (type == "EMPTY") {
                 SetTokenBoard(new int[8,8]);
             }

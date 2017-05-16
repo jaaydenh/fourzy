@@ -66,6 +66,7 @@ namespace VoxelBusters.NativePlugins
 
 			// Native method call
 			cpnpCloudServicesInitialise();
+			Synchronise();
 		}
 
 		#endregion

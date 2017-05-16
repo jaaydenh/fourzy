@@ -436,6 +436,17 @@ namespace VoxelBusters.NativePlugins
 			return false;
 		}
 
+		public virtual void LoadExternalAuthenticationCredentials (LoadExternalAuthenticationCredentialsCompletion _onCompletion)
+		{
+			LoadExternalAuthenticationCredentialsFinishedEvent = _onCompletion;
+
+			if (!VerifyUser())
+			{
+				LoadExternalAuthenticationCredentialsFinished(null, Constants.kGameServicesUserAuthMissingError);
+				return;
+			}
+		}
+
 		#endregion
 
 		#region Deprecated Methods

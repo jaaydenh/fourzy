@@ -38,12 +38,12 @@ namespace VoxelBusters.NativePlugins
 				
 				if (_regProductsJSONList != null)
 				{
-					_regProductsList	= new AndroidBillingProduct[_regProductsJSONList.Count];
+					_regProductsList	= new BillingProductAndroid[_regProductsJSONList.Count];
 					int		_iter		= 0;
 					
 					foreach (IDictionary _productInfoDict in _regProductsJSONList)
 					{
-						_regProductsList[_iter++]			= new AndroidBillingProduct(_productInfoDict);
+						_regProductsList[_iter++]			= new BillingProductAndroid(_productInfoDict);
 					}
 				}
 				
@@ -70,10 +70,10 @@ namespace VoxelBusters.NativePlugins
 				if (_transactionsJSONList != null)
 				{
 					int		_count		= _transactionsJSONList.Count;
-					_transactions		= new AndroidBillingTransaction[_count];
+					_transactions		= new BillingTransactionAndroid[_count];
 					
 					for (int _iter = 0; _iter < _count; _iter++)
-						_transactions[_iter]	= new AndroidBillingTransaction((IDictionary)_transactionsJSONList[_iter]);
+						_transactions[_iter]	= new BillingTransactionAndroid((IDictionary)_transactionsJSONList[_iter]);
 				}
 			}
 		}

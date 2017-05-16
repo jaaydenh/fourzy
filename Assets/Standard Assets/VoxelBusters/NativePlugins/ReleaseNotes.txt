@@ -1,3 +1,33 @@
+1.5
+Important : UPGRADE INSTRUCTIONS : "https://tutorials.cpnp.voxelbusters.com/Upgrade%20Guide/upgrade_guide.html"
+
+***Uninstall (from Window->VoxelBusters Menu) before importing the new update***
+
+• Added delegate system to control RateMyApp dialog presentation
+• Changed Billing Settings configuration interface
+• Added additional toggle buttons for specifying usage of optional subcomponents.
+• Fixed Twitter SDK export issue
+• Fixed Twitter SDK store submission issue
+• Removed deprecated API's from Billing, Game Services
+• Fixed Cloud Services initial sync issue in iOS
+• Modified class design structure for native binding classes
+• Added privacy permission support for native features in iOS platform
+• Modified Network Connectivity settings structure
+• Fixed Default URL to prefix file protocol in all methods
+• Access Token added for Google Play Services (Check ExternalCredentials under Game Services)
+• Amazon Billing Jar disabled when billing is not used.
+• URL now considers jar:file:/ paths as well
+• Fixed Webview to allow Https URLs
+• Fixed minor crashes for Billing in QueryPurchases call internally
+• Fixed Camera scale issue in Media Library
+• Fixed Exif crash issue when picture taken from Google Camera App
+• Removed Default aar files in Plugin. Now Google Jar Resolver needs to resolve on its own
+• Google Play Services Auto Sign In Fixes
+• Unity 5.5 Compatibility
+
+
+
+
 1.4
 Important : UPGRADE INSTRUCTIONS : "https://tutorials.cpnp.voxelbusters.com/Upgrade%20Guide/upgrade_guide.html"
 

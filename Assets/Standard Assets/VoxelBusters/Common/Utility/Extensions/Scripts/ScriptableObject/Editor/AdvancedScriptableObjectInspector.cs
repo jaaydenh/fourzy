@@ -29,13 +29,7 @@ namespace VoxelBusters.Utility
 		
 		public override void OnInspectorGUI ()
 		{
-			// Update object
 			serializedObject.Update();
-
-#pragma warning disable
-			// Make all EditorGUI look like regular controls
-			EditorGUIUtility.LookLikeControls();
-#pragma warning restore
 
 			// Draw inspector
 			GUILayout.BeginVertical(EditorStyles.inspectorFullWidthMargins);
@@ -46,7 +40,9 @@ namespace VoxelBusters.Utility
 
 			// Apply modifications
 			if (GUI.changed)
+			{
 				serializedObject.ApplyModifiedProperties();
+			}
 		}
 
 		#endregion
@@ -60,7 +56,7 @@ namespace VoxelBusters.Utility
 	
 		#endregion
 
-		#region Methods
+		#region Private Methods
 
 		protected void DrawProperties (string _style)
 		{
@@ -70,8 +66,6 @@ namespace VoxelBusters.Utility
 		protected void DrawProperties (GUIStyle _style)
 		{
 			SerializedProperty 	_property	= serializedObject.GetIterator();
-			
-			// Move to next
 			_property.NextVisible(true);
 
 			GUILayout.BeginHorizontal(_style);

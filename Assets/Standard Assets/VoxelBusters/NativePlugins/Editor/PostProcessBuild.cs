@@ -154,7 +154,6 @@ namespace VoxelBusters.NativePlugins
 			for (int _iter = 0; _iter < _lineCount; _iter++)
 			{
 				string	_curLine			= _contents[_iter];
-				
 				if (!_curLine.StartsWith("const"))
 					continue;
 				
@@ -174,8 +173,8 @@ namespace VoxelBusters.NativePlugins
 		
 		private static void DecompressTwitterSDKFiles ()
 		{
-			string		_projectPath					= AssetsUtility.GetProjectPath();
-			string		_twitterNativeCodeFolderPath	= Path.Combine(_projectPath, kRelativePathIOSNativeCodeFolder + "/Twitter");
+			string	_projectPath					= AssetsUtility.GetProjectPath();
+			string	_twitterNativeCodeFolderPath	= Path.Combine(_projectPath, kRelativePathIOSNativeCodeFolder + "/Twitter");
 
 			if (!Directory.Exists(_twitterNativeCodeFolderPath)) 
 				return;
@@ -187,7 +186,6 @@ namespace VoxelBusters.NativePlugins
 		private static void	GenerateXcodeModFiles ()
 		{
 			string		_xcodeModDataCollectionText	= File.ReadAllText(kRelativePathXcodeModDataCollectionFile);
-
 			if (_xcodeModDataCollectionText == null)
 				return;
 
@@ -260,46 +258,52 @@ namespace VoxelBusters.NativePlugins
 //		}
 
 		private static void ModifyInfoPlist (string _buildPath)
-		{
+		{	
+			ApplicationSettings				_applicationSettings		= NPSettings.Application;
 			ApplicationSettings.Features 	_supportedFeatures			= NPSettings.Application.SupportedFeatures;
 			Dictionary<string, object> 		_newPermissionsDict			= new Dictionary<string, object>();
 
-			// Add twitter info 
 #if USES_TWITTER
+			// Add twitter info 
+			if (_supportedFeatures.UsesTwitter)
 			{
 				const string 	_kFabricKitRootKey 		= "Fabric";
+
 				TwitterSettings _twitterSettings		= NPSettings.SocialNetworkSettings.TwitterSettings;
 				string 			_fabricJsonStr			= string.Format(kFabricKitJsonStringFormat, _twitterSettings.ConsumerKey);
-				IDictionary 	_fabricJsonDictionary	= (IDictionary)JSONUtility.FromJSON(_fabricJsonStr);
 
-				// Add fabric
+				IDictionary 	_fabricJsonDictionary	= (IDictionary)JSONUtility.FromJSON(_fabricJsonStr);
 				_newPermissionsDict[_kFabricKitRootKey]	= _fabricJsonDictionary[_kFabricKitRootKey];
 			}
 #endif
 
-			// Add background process details
-#if USES_NOTIFICATION_SERVICE && USES_ONE_SIGNAL
-			const string		_kUIBackgroundModesKey	= "UIBackgroundModes";
-			IList				_backgroundModesList	= (IList)infoPlist.GetKeyPathValue(_kUIBackgroundModesKey);
+			// Add permissions
+			if (_supportedFeatures.UsesNotificationService)
+			{
+#if !UNITY_4
+				if (_supportedFeatures.NotificationService.usesRemoteNotification)
+				{
+					const string	_kUIBackgroundModesKey		= "UIBackgroundModes";
+					const string	_kRemoteNotificationProcess	= "remote-notification";
 
-			if (_backgroundModesList == null)
-				_backgroundModesList					= new List<string>();
+					IList			_backgroundModesList		= (IList)infoPlist.GetKeyPathValue(_kUIBackgroundModesKey);
+					if (_backgroundModesList == null)
+						_backgroundModesList					= new List<string>();
 
-			const string		_kRemoteNotificationProcess	= "remote-notification";
-			
-			if (!_backgroundModesList.Contains(_kRemoteNotificationProcess))
-				_backgroundModesList.Add(_kRemoteNotificationProcess);
-			
-			_newPermissionsDict[_kUIBackgroundModesKey]	= _backgroundModesList;
+					if (!_backgroundModesList.Contains(_kRemoteNotificationProcess))
+						_backgroundModesList.Add(_kRemoteNotificationProcess);
+					
+					_newPermissionsDict[_kUIBackgroundModesKey]	= _backgroundModesList;
+				}
 #endif
+			}
 
-			// Device capablities addition
 			if (_supportedFeatures.UsesGameServices)
 			{
 				const string	_kDeviceCapablitiesKey	= "UIRequiredDeviceCapabilities";
 				const string	_kGameKitKey			= "gamekit";
-				IList			_deviceCapablitiesList	= (IList)infoPlist.GetKeyPathValue(_kDeviceCapablitiesKey);
 
+				IList			_deviceCapablitiesList	= (IList)infoPlist.GetKeyPathValue(_kDeviceCapablitiesKey);
 				if (_deviceCapablitiesList == null)
 					_deviceCapablitiesList				= new List<string>();
 
@@ -309,13 +313,12 @@ namespace VoxelBusters.NativePlugins
 				_newPermissionsDict[_kDeviceCapablitiesKey]	= _deviceCapablitiesList;
 			}
 
-			// Query scheme related key inclusion
 			if (_supportedFeatures.UsesSharing)
 			{
 				const string	_kQuerySchemesKey		= "LSApplicationQueriesSchemes";
 				const string	_kWhatsAppKey			= "whatsapp";
-				IList			_queriesSchemesList		= (IList)infoPlist.GetKeyPathValue(_kQuerySchemesKey);
 
+				IList			_queriesSchemesList		= (IList)infoPlist.GetKeyPathValue(_kQuerySchemesKey);
 				if (_queriesSchemesList == null)
 					_queriesSchemesList					= new List<string>();
 
@@ -325,13 +328,12 @@ namespace VoxelBusters.NativePlugins
 				_newPermissionsDict[_kQuerySchemesKey]	= _queriesSchemesList;
 			}
 
-			// Apple transport security
 			if (_supportedFeatures.UsesNetworkConnectivity || _supportedFeatures.UsesWebView)
 			{
 				const string	_kATSKey				= "NSAppTransportSecurity";
 				const string	_karbitraryLoadsKey		= "NSAllowsArbitraryLoads";
-				IDictionary		_transportSecurityDict	= (IDictionary)infoPlist.GetKeyPathValue(_kATSKey);
 
+				IDictionary		_transportSecurityDict	= (IDictionary)infoPlist.GetKeyPathValue(_kATSKey);
 				if (_transportSecurityDict == null)
 					_transportSecurityDict				= new Dictionary<string, object>();
 
@@ -339,21 +341,37 @@ namespace VoxelBusters.NativePlugins
 				_newPermissionsDict[_kATSKey]			= _transportSecurityDict;
 			}
 
+			// Add privacy info
+			const string	_kPermissionContacts		= "NSContactsUsageDescription";
+			const string	_kPermissionCamera			= "NSCameraUsageDescription";
+			const string	_kPermissionPhotoLibrary	= "NSPhotoLibraryUsageDescription";
+
+			if (_supportedFeatures.UsesAddressBook)
+			{
+				_newPermissionsDict[_kPermissionContacts]	= _applicationSettings.IOS.AddressBookUsagePermissionDescription;
+			}
+
+			if (_supportedFeatures.UsesMediaLibrary)
+			{
+				if (_supportedFeatures.MediaLibrary.usesCamera)
+					_newPermissionsDict[_kPermissionCamera]			= _applicationSettings.IOS.CameraUsagePermissionDescription;
+				
+				if (_supportedFeatures.MediaLibrary.usesPhotoAlbum)
+					_newPermissionsDict[_kPermissionPhotoLibrary]	= _applicationSettings.IOS.PhotoAlbumUsagePermissionDescription;
+			}
+
 			if (_newPermissionsDict.Count == 0)
 				return;
 
-			// First create a backup of old data
-			string			_infoPlistBackupSavePath	= GetInfoPlistBackupFilePath(_buildPath);
-
+			// Create a backup of old plist
+			string	_infoPlistBackupSavePath	= GetInfoPlistBackupFilePath(_buildPath);
 			infoPlist.Save(_infoPlistBackupSavePath);
 
-			// Now add new permissions
+			// Save the plist with new permissions
 			foreach (string _key in _newPermissionsDict.Keys)
 				infoPlist.AddValue(_key, _newPermissionsDict[_key]);
 
-			// Save these changes
-			string			_infoPlistSavePath			= GetInfoPlistFilePath(_buildPath);
-
+			string	_infoPlistSavePath			= GetInfoPlistFilePath(_buildPath);
 			infoPlist.Save(_infoPlistSavePath);
 		}
 
@@ -363,23 +381,21 @@ namespace VoxelBusters.NativePlugins
 			string[] 	_pchFiles 			= Directory.GetFiles(_pchFileDirectory, kPrecompiledHeaderExtensionPattern);
 			string 		_pchFilePath 		= null;
 
-			// There will be only one file per project if it exists.
+			// Check whether file exists
 			if (_pchFiles.Length > 0)
 				_pchFilePath =  _pchFiles[0];
 
 			if (File.Exists(_pchFilePath))
 			{
 				string 	_fileContents 		= File.ReadAllText(_pchFilePath);
-
-				// Make sure content doesnt exist
 				if (_fileContents.Contains(kPrecompiledHeaderInsertText))
 					return;
 
+				// We should append text within end tag
 				Regex 	_regex				= new Regex(kPrecompiledHeaderRegexPattern);
 				Match 	_match 				= _regex.Match(_fileContents);
 				int		_endOfPatternIndex	= _match.Groups[0].Index + _match.Groups[0].Length;
 
-				// We should append text within end tag
 				if (_match.Value.Contains(kPrecompiledHeaderEndIfTag))
 					_endOfPatternIndex	-= kPrecompiledHeaderEndIfTag.Length;
 

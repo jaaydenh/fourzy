@@ -239,12 +239,12 @@ namespace VoxelBusters.Utility
 	
 			for (int _yCord	= 0; _yCord	< _newHeight; _yCord++)
 			{
-				float _vCord 			= _yCord / (_newHeight - 1f);
+				float _vCord 			= _yCord / (_newHeight * 1f);
 				int   _scanLineIndex	= _yCord * _newWidth;
 				
 				for (int _xCord	= 0; _xCord	< _newWidth; _xCord++)
 				{
-					float _uCord = _xCord / (_newWidth - 1f);
+					float _uCord = _xCord / (_newWidth * 1f);
 					
 					_scaledTexPixels[_scanLineIndex + _xCord] = _inputTex.GetPixelBilinear(_uCord, _vCord);
 				}

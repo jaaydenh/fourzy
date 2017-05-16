@@ -61,7 +61,7 @@ namespace VoxelBusters.Utility
 				// Coroutine to run in editor mode
 				if (!Application.isPlaying)
 				{
-					EditorCoroutine.StartCoroutine(StartAsynchronousRequest());
+					EditorUtils.StartCoroutine(StartAsynchronousRequest());
 					return;
 				}
 #endif
@@ -69,13 +69,10 @@ namespace VoxelBusters.Utility
 				if (surrogateMonobehaviour == null)
 				{
 					GameObject _surrogateGO	= new GameObject();
-					
-					// Make it persistent object
-					GameObject.DontDestroyOnLoad(_surrogateGO);
-					
-					// Hide it in hierarchy and add a mono component
 					_surrogateGO.hideFlags	= HideFlags.HideInHierarchy;
 					surrogateMonobehaviour	= _surrogateGO.AddComponent<SurrogateMonoBehaviour>();
+
+					GameObject.DontDestroyOnLoad(_surrogateGO);
 				}
 
 				// Start coroutine using surrogate object
@@ -111,6 +108,13 @@ namespace VoxelBusters.Utility
 		protected abstract void OnFetchingResponse ();
 
 		protected abstract void DidFailStartRequestWithError (string _error);
+
+		#endregion
+
+		#region Nested Types
+
+		private class SurrogateMonoBehaviour : MonoBehaviour
+		{}
 
 		#endregion
 	}

@@ -22,8 +22,7 @@ namespace VoxelBusters.NativePlugins
 			base.Initialise ();
 
 			NetworkConnectivitySettings _settings = NPSettings.NetworkConnectivity;
-
-			cpnpNetworkConnectivitySetHostAddress(_settings.HostAddressIPv6);
+			cpnpNetworkConnectivitySetHostAddress(_settings.HostAddress);
 		}
 
 		#endregion

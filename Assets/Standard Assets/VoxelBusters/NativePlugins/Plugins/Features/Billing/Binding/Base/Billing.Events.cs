@@ -215,7 +215,7 @@ namespace VoxelBusters.NativePlugins
 			// Update product type information
 			if (_storeProducts != null)
 			{
-				foreach (MutableBillingProduct _currentStoreProduct in _storeProducts)
+				foreach (BillingProductMutable _currentStoreProduct in _storeProducts)
 				{
 					int 	_productIndex	= System.Array.FindIndex(m_requestedProducts, (BillingProduct _requestedProduct) => _currentStoreProduct.ProductIdentifier.Equals(_requestedProduct.ProductIdentifier));
 					

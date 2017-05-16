@@ -16,6 +16,12 @@ namespace VoxelBusters.NativePlugins
 			[SerializeField]
 			[Tooltip("The string that identifies your app in iOS App Store.")]
 			private 	string		m_storeIdentifier;
+			[SerializeField]
+			private		string		m_addressBookUsagePermissionDescription	= "$(PRODUCT_NAME) uses contacts";
+			[SerializeField]
+			private		string		m_cameraUsagePermissionDescription		= "$(PRODUCT_NAME) uses camera";
+			[SerializeField]
+			private		string		m_photoAlbumUsagePermissionDescription	= "$(PRODUCT_NAME) uses photo library";
 
 			#endregion
 
@@ -30,10 +36,33 @@ namespace VoxelBusters.NativePlugins
 				{
 					return m_storeIdentifier;
 				}
-				
 				private set
 				{
 					m_storeIdentifier	= value;
+				}
+			}
+
+			public string AddressBookUsagePermissionDescription
+			{
+				get
+				{
+					return m_addressBookUsagePermissionDescription;
+				}
+			}
+
+			public string CameraUsagePermissionDescription
+			{
+				get
+				{
+					return m_cameraUsagePermissionDescription;
+				}
+			}
+
+			public string PhotoAlbumUsagePermissionDescription
+			{
+				get
+				{
+					return m_photoAlbumUsagePermissionDescription;
 				}
 			}
 

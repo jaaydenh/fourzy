@@ -25,7 +25,8 @@ namespace VoxelBusters.NativePlugins.Internal
 			Constants.kVBCodebasePath 			+	"/NativePlugins",
 			Constants.kVBCodebasePath			+	"/Common",
 			Constants.kVBCodebasePath			+	"/DebugPro",
-			Constants.kVBExternalCodebasePath 	+ 	"/NativePlugins"
+			Constants.kVBExternalCodebasePath 	+ 	"/NativePlugins",
+			Constants.kRootAssetsPath			+	"/PlayServicesResolver"
 		};
 		
 		#endregion	

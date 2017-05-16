@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 using VoxelBusters.Utility;
 using VoxelBusters.AssetStoreProductUtility;
+using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
-using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -22,18 +22,23 @@ namespace VoxelBusters.NativePlugins
 #if UNITY_EDITOR
 	[InitializeOnLoad]
 #endif
-	public class NPSettings : AdvancedScriptableObject <NPSettings>, IAssetStoreProduct
+	public class NPSettings : 	AdvancedScriptableObject <NPSettings>, 
+#if UNITY_EDITOR
+								IRateMyAppDelegate,
+#endif
+								IAssetStoreProduct
 	{
 		#region Constants
 
 		// Product info
 		private		const	bool		kIsFullVersion					= true;
 		private 	const 	string 		kProductName					= "Native Plugins";
-		private 	const 	string 		kProductVersion					= "1.4";
+		private 	const 	string 		kProductVersion					= "1.5.1";
 
 		// Pref key
 		private		const	string		kPrefsKeyBuildIdentifier		= "np-build-identifier";
 		internal	const	string		kPrefsKeyPropertyModified		= "np-property-modified";
+		internal	const	string 		kMethodPropertyChanged 			= "OnPropertyModified";		
 
 		// Macro symbols
 		internal	const 	string		kLiteVersionMacro				= "NATIVE_PLUGINS_LITE_VERSION";
@@ -73,7 +78,11 @@ namespace VoxelBusters.NativePlugins
 			BuildTargetGroup.Metro,
 			BuildTargetGroup.WP8,
 #endif
+#if !(UNITY_5_0 || UNITY_5_1 || UNITY_5_2 || UNITY_5_3_0) && (UNITY_5 || UNITY_6 || UNITY_7)
+			BuildTargetGroup.tvOS,
+#endif
 			BuildTargetGroup.Standalone
+
 		};
 #endif
 		
@@ -81,50 +90,45 @@ namespace VoxelBusters.NativePlugins
 
 		#region Fields
 
-		[System.NonSerialized]
+		[NonSerialized]
 		private	AssetStoreProduct			m_assetStoreProduct;
+		private	RateMyApp					m_rateMyApp;
+		[SerializeField]
+		[HideInInspector]
+		private	string						m_lastOpenedDateString;
 
 		[SerializeField]
 		private ApplicationSettings			m_applicationSettings			= new ApplicationSettings();
-
 #if USES_NETWORK_CONNECTIVITY
 		[SerializeField]
 		private NetworkConnectivitySettings	m_networkConnectivitySettings	= new NetworkConnectivitySettings();
 #endif
-	
 		[SerializeField]
 		private UtilitySettings				m_utilitySettings				= new UtilitySettings();
-
 #if USES_BILLING
 		[SerializeField]
 		private BillingSettings				m_billingSettings				= new BillingSettings();
 #endif
-
 #if USES_CLOUD_SERVICES
 		[SerializeField]
 		private CloudServicesSettings		m_cloudServicesSettings			= new CloudServicesSettings();
 #endif
-
 #if USES_MEDIA_LIBRARY
 		[SerializeField]
 		private MediaLibrarySettings		m_mediaLibrarySettings			= new MediaLibrarySettings();
 #endif
-
 #if USES_NOTIFICATION_SERVICE
 		[SerializeField]
 		private NotificationServiceSettings	m_notificationSettings			= new NotificationServiceSettings();
 #endif
-
 #if USES_TWITTER
 		[SerializeField]
 		private SocialNetworkSettings		m_socialNetworkSettings			= new SocialNetworkSettings();
 #endif
-
 #if USES_GAME_SERVICES
 		[SerializeField]
 		private GameServicesSettings		m_gameServicesSettings			= new GameServicesSettings();
 #endif
-
 		[SerializeField]
 		private	AddonServicesSettings		m_addonServicesSettings			= new AddonServicesSettings();
 
@@ -278,24 +282,27 @@ namespace VoxelBusters.NativePlugins
 
 		#region Constructor
 
+#if UNITY_EDITOR && !DISABLE_NPSETTINGS_GENERATION
 		static NPSettings ()
 		{
-#if UNITY_EDITOR && !DISABLE_NPSETTINGS_GENERATION
-			EditorInvoke.Invoke(()=>{
-				NPSettings _instance	= NPSettings.Instance;
+			EditorUtils.Invoke(
+				_method: ()=>
+				{
+					NPSettings _instance	= NPSettings.Instance;
+					_instance.SaveConfigurationChanges();
+				}, 
+				_time: 1f);
 
-				// Save configuration once
-				_instance.SaveConfigurationChanges();
-			}, 1f);
-
-			EditorInvoke.InvokeRepeating(()=>{
-				NPSettings _instance	= NPSettings.Instance;
-				
-				// Monitor player settings changes
-				_instance.MonitorPlayerSettings();
-			}, 1f, 1f);
-#endif
+			EditorUtils.InvokeRepeating(
+				_method: ()=>
+				{
+					NPSettings _instance	= NPSettings.Instance;
+					_instance.MonitorPlayerSettings();
+				}, 
+				_time: 1f, 
+				_repeatRate: 1f);
 		}
+#endif
 
 		#endregion
 
@@ -314,54 +321,62 @@ namespace VoxelBusters.NativePlugins
 		{
 			base.OnEnable ();
 
-#if UNITY_EDITOR
-			// Initialise components
 			Initialise();
-#endif
-
-			// Set debug mode
-			if (m_applicationSettings.IsDebugMode)
-				DebugPRO.Console.RemoveIgnoreTag(Constants.kDebugTag);
-			else
-				DebugPRO.Console.AddIgnoreTag(Constants.kDebugTag);
 		}
 
 		#endregion
 
-		#region Methods
+		#region Private Methods
 
 		private void Initialise ()
 		{
-			// Initialise product settings
 			m_assetStoreProduct	= new AssetStoreProduct(kProductName, kProductVersion, Constants.kLogoPath);
 
-			// Initialise Game Services settings
-#if USES_GAME_SERVICES
-			if (m_gameServicesSettings.AchievementMetadataCollection == null)
+#if UNITY_EDITOR
+			SetupRateNPSettings();
+			
+#if USES_BILLING
+			// Rebuilding asset bundles is required
+			if (m_billingSettings.Products != null)
 			{
-				IDContainer[]			_achievementIDCollection	= m_gameServicesSettings.AchievementIDCollection;
-				int 					_count						= _achievementIDCollection.Length;
-				AchievementMetadata[] 	_metadataCollection			= new AchievementMetadata[_count];
-
-				for (int _iter = 0; _iter < _count; _iter++)
-					_metadataCollection[_iter]	= AchievementMetadata.Create(_achievementIDCollection[_iter]);
-
-				m_gameServicesSettings.AchievementMetadataCollection	= _metadataCollection;
-			}
-
-			if (m_gameServicesSettings.LeaderboardMetadataCollection == null)
-			{
-				IDContainer[]			_leaderboardIDCollection	= m_gameServicesSettings.LeaderboardIDCollection;
-				int 					_count						= _leaderboardIDCollection.Length;
-				LeaderboardMetadata[] 	_metadataCollection			= new LeaderboardMetadata[_count];
-				
-				for (int _iter = 0; _iter < _count; _iter++)
-					_metadataCollection[_iter]	= LeaderboardMetadata.Create(_leaderboardIDCollection[_iter]);
-				
-				m_gameServicesSettings.LeaderboardMetadataCollection	= _metadataCollection;
+				foreach (BillingProduct _billingProduct in m_billingSettings.Products)
+					_billingProduct.RebuildObject();
 			}
 #endif
+
+#endif
 		}
+
+#if UNITY_EDITOR
+		private void SetupRateNPSettings ()
+		{
+			// Set rate my app 
+			RateMyAppSettings _settings	= new RateMyAppSettings()
+			{
+				Title							= "Rate Cross Platform Native Plugins",
+				Message							= "If you enjoy using Native Plugin, Don't forget to rate us. Its like an extra beer for our whole team ;) " +
+					"It wont take more than a minute. Thanks for your support",
+				ShowFirstPromptAfterHours		= 1,
+				SuccessivePromptAfterHours 		= 0,
+				SuccessivePromptAfterLaunches 	= 20,
+				DontAskButtonText 				= null
+			};
+			m_rateMyApp				= new RateMyApp(_settings, new RateNPSettingsController());
+			m_rateMyApp.Delegate	= this;
+
+			// Record load
+			DateTime _lastOpenedDate;
+			DateTime.TryParse(m_lastOpenedDateString, out _lastOpenedDate);
+
+			if ((DateTime.Today - _lastOpenedDate).TotalHours > 24)
+			{
+				m_lastOpenedDateString	= DateTime.Today.ToString();
+
+				m_rateMyApp.RecordAppLaunch();
+			}
+			m_rateMyApp.AskForReview();
+		}
+#endif
 
 		#endregion
 
@@ -448,8 +463,6 @@ namespace VoxelBusters.NativePlugins
 			if (AssetsUtility.FolderExists(_manifestFolderPath))
 			{
 				NPAndroidManifestGenerator _generator	= new NPAndroidManifestGenerator();
-				
-				// Save file
 				_generator.SaveManifest("com.voxelbusters.androidnativeplugin", _manifestFolderPath + "/AndroidManifest.xml");
 			}
 		}
@@ -457,12 +470,12 @@ namespace VoxelBusters.NativePlugins
 		private void UpdatePluginResources ()
 		{
 #if UNITY_ANDROID
-				// Update JAR files
-				UpdateResourcesBasedOnFeaturesUsage();
+			// Update JAR files
+			UpdateResourcesBasedOnFeaturesUsage();
 #endif
 	
-				// Copy required assets
-				CopyNotificationAssets();
+			// Copy required assets
+			CopyNotificationAssets();
 		}
 
 		private void CopyNotificationAssets ()
@@ -494,7 +507,9 @@ namespace VoxelBusters.NativePlugins
 			
 			if (_iconsConfiguredCount == 1)
 			{
+#if NP_DEBUG
 				Debug.LogError("[NPSettings] You need to set both(white & coloured) icons for proper functionality on all devices. As, White icon will be used by post Android L devices and coloured one by pre Android L Devices.");
+#endif
 			}
 #endif
 		}
@@ -521,6 +536,7 @@ namespace VoxelBusters.NativePlugins
 			
 			UpdateJARFile(_supportedFeatures.UsesAddressBook, 			Constants.kAddressBookJARName);
 			UpdateJARFile(_supportedFeatures.UsesBilling, 				Constants.kBillingJARName);
+			UpdateJARFile(_supportedFeatures.UsesBilling, 				Constants.kBillingAmazonJARName);
 			UpdateJARFile(_supportedFeatures.UsesCloudServices, 		Constants.kCloudServicesJARName);
 			UpdateJARFile(_supportedFeatures.UsesGameServices, 			Constants.kGameServicesJARName);
 			UpdateJARFile(_supportedFeatures.UsesMediaLibrary, 			Constants.kMediaLibraryJARName);
@@ -550,6 +566,22 @@ namespace VoxelBusters.NativePlugins
 #endif
 
 		#endregion
+
+
+#if UNITY_EDITOR
+		#region Rate NPSettings Delegate Methods
+
+		public bool CanShowRateMyAppDialog ()
+		{
+			return !(EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isPaused);
+		}
+
+		public void OnBeforeShowingRateMyAppDialog ()
+		{}
+
+		#endregion
+#endif
+
 
 		#region Editor Callback Methods
 

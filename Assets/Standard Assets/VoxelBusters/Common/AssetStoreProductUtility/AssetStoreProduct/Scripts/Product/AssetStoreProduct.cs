@@ -13,35 +13,6 @@ namespace VoxelBusters.AssetStoreProductUtility
 
 	public class AssetStoreProduct
 	{
-		#region Properties
-
-		public		string 					ProductName
-		{	
-			get;
-			private set;
-		}
-
-		public		string					ProductVersion
-		{
-			get;
-			private set;
-		}
-
-		public 	 	Texture2D				LogoTexture
-		{
-			get;
-			private set;
-		}
-
-		private 	ProductUpdateInfo		m_productUpdateInfo;
-		private 	bool					m_isAutomaticCheck;
-		private 	GETRequest				m_updateGETRequest;
-		#if UNITY_EDITOR
-		private		UpdatePromptWindow		m_promptWindow;
-		#endif
-
-		#endregion
-
 		#region Constants
 
 		private const string 				kServerBaseAddress				= "https://unity3dplugindashboard.herokuapp.com";
@@ -53,8 +24,39 @@ namespace VoxelBusters.AssetStoreProductUtility
 		private const string 				kNewVersionAvailableMessage		= "Newer version of {0} is available for download.";
 
 		// Related to update request
-		private const int					kCheckForUpdatesAfterMinutes	= 360;	
 		private const string 				kSkippedVersionPrefix			= "version-skipped";
+
+		#endregion
+
+		#region Fields
+
+		private 	ProductUpdateInfo		m_productUpdateInfo;
+		private 	GETRequest				m_updateGETRequest;
+#if UNITY_EDITOR
+		private		UpdatePromptWindow		m_promptWindow;
+#endif
+
+		#endregion
+
+		#region Properties
+
+		public string ProductName
+		{	
+			get;
+			private set;
+		}
+
+		public string ProductVersion
+		{
+			get;
+			private set;
+		}
+
+		public Texture2D LogoTexture
+		{
+			get;
+			private set;
+		}
 
 		#endregion
 
@@ -72,20 +74,8 @@ namespace VoxelBusters.AssetStoreProductUtility
 #if UNITY_EDITOR
 			// Load logo texture
 			LogoTexture					= AssetDatabase.LoadAssetAtPath(_logoPath, typeof(Texture2D)) as Texture2D;
-
 			if (LogoTexture != null)
 				LogoTexture.hideFlags	= HideFlags.HideAndDontSave;
-
-			float _recheckAfterSecs		= kCheckForUpdatesAfterMinutes * 60f;
-			float _firstCheckAfterSecs	= _recheckAfterSecs;
-
-			// Check at unity application launch
-			if (EditorApplication.timeSinceStartup < 100f)
-			{
-				_firstCheckAfterSecs	= 1f;
-			}
-
-			EditorInvoke.InvokeRepeating(AutoCheckForUpdates, _firstCheckAfterSecs, _recheckAfterSecs);
 #endif
 		}
 
@@ -103,34 +93,20 @@ namespace VoxelBusters.AssetStoreProductUtility
 		{
 			return ProductName.Replace(" ", "-").ToLower();
 		}
-
-		public void AutoCheckForUpdates ()
-		{
-			// If already a request is going on, then no need to auto check for updates
-			if (m_updateGETRequest != null)
-			{
-				return;
-			}
-
-			// Check for updates
-			CheckForUpdates(true);
-		}
 		
-		public void CheckForUpdates (bool isAutoCheck = false) 
+		public void CheckForUpdates () 
 		{
-			// Mark if request is auto or manual check
-			m_isAutomaticCheck			= isAutoCheck;
+			if (m_updateGETRequest != null)
+				return;
 
-			string _productName			= GetGlobalIdentificationForThisProduct();
-			string _productDetailsPath	= string.Format(kProductDetailsPathFormat, _productName);
-			URL _URL					= URL.URLWithString(kServerBaseAddress, _productDetailsPath);
-
+			string 	_productName		= GetGlobalIdentificationForThisProduct();
+			string 	_productDetailsPath	= string.Format(kProductDetailsPathFormat, _productName);
+			URL 	_URL				= URL.URLWithString(kServerBaseAddress, _productDetailsPath);
+		
 			// Start asynchronous request
 			GETRequest _request			= GETRequest.CreateAsyncRequest(_URL, null);
 			_request.OnSuccess			= RequestForUpdatesSuccess;
 			_request.OnFailure			= RequestForUpdatesFailed;
-
-			// Start request
 			_request.StartRequest();
 
 			// Cache request
@@ -154,21 +130,14 @@ namespace VoxelBusters.AssetStoreProductUtility
 			// Process update info data
 			OnReceivingUpdateInfo(_updateInfo);
 
-			// Reset
 			ResetFieldsRelatedToUpdateCheck();
 		}
 
 		private void RequestForUpdatesFailed (IDictionary _responseDict)
 		{
-			string _message	= string.Format(kCheckUpdatesFailedMessage, ProductName);
+			string	_message	= string.Format(kCheckUpdatesFailedMessage, ProductName);
+			ShowUpdatePrompt(ProductName, _message);
 
-			// Show dialog
-			if (!m_isAutomaticCheck)
-			{
-				ShowUpdatePrompt(ProductName, _message);
-			}
-
-			// Reset
 			ResetFieldsRelatedToUpdateCheck();
 		}
 #endif
@@ -183,31 +152,18 @@ namespace VoxelBusters.AssetStoreProductUtility
 			// New update is not available
 			if (!_updateInfo.NewUpdateAvailable)
 			{
-				if (!m_isAutomaticCheck)
-				{
-					string _uptoDateMessage	= string.Format(kAlreadyUptoDateMessage, ProductName);
-
-					// Show update prompt dialog
-					ShowUpdatePrompt(ProductName, _uptoDateMessage);
-				}
+				string	_uptoDateMessage	= string.Format(kAlreadyUptoDateMessage, ProductName);
+				ShowUpdatePrompt(ProductName, _uptoDateMessage);
 
 				return;
 			}
 			
 			// Cache update info
-			m_productUpdateInfo				= _updateInfo;
+			m_productUpdateInfo	= _updateInfo;
 
 			// User has already skipped download for this version
-			string _versionNO				= m_productUpdateInfo.VersionNumber;
-
-			if (m_isAutomaticCheck && EditorPrefs.GetBool(GetKeyForSkippedVersion(_versionNO), false))
-			{
-				return;
-			}
-
-			// New update is available
-			string _updateAvailableMessage	= string.Format(kNewVersionAvailableMessage, ProductName);
-			string _releaseNote				= "Release Note:\n\n" + _updateInfo.ReleaseNote;
+			string 	_updateAvailableMessage	= string.Format(kNewVersionAvailableMessage, ProductName);
+			string 	_releaseNote			= "Release Note:\n\n" + _updateInfo.ReleaseNote;
 			List<string> _buttonNames		= new List<string>();
 
 			// Check if download from asset store is allowed
@@ -235,11 +191,11 @@ namespace VoxelBusters.AssetStoreProductUtility
 				m_promptWindow	= EditorWindow.CreateInstance<UpdatePromptWindow>();
 			
 			// Set properties
-			#if !(UNITY_5_0) && (UNITY_5 || UNITY_6 || UNITY_7)
+#if !(UNITY_5_0) && (UNITY_5 || UNITY_6 || UNITY_7)
 			m_promptWindow.titleContent			= new GUIContent(_title);
-			#else
+#else
 			m_promptWindow.title				= _title;
-			#endif
+#endif
 			m_promptWindow.Message				= _message;
 			m_promptWindow.Description			= _description;
 			m_promptWindow.Buttons				= _buttons;
@@ -294,7 +250,6 @@ namespace VoxelBusters.AssetStoreProductUtility
 
 		private void ResetFieldsRelatedToUpdateCheck ()
 		{
-			m_isAutomaticCheck	= false;
 			m_updateGETRequest	= null;
 		}
 #endif

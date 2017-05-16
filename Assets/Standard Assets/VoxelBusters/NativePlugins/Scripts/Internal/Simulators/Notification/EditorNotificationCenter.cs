@@ -78,7 +78,7 @@ namespace VoxelBusters.NativePlugins.Internal
 		
 		static EditorNotificationCenter ()
 		{
-			EditorInvoke.Invoke(()=>{
+			EditorUtils.Invoke(()=>{
 #pragma warning disable
 				EditorNotificationCenter _instance	= EditorNotificationCenter.Instance;
 #pragma warning restore 
@@ -92,7 +92,7 @@ namespace VoxelBusters.NativePlugins.Internal
 			RemoteNotifications					= new List<CrossPlatformNotification>();
 
 			// Invoke methods
-			EditorInvoke.InvokeRepeating(MonitorScheduledLocalNotifications, 1f, 1f);
+			EditorUtils.InvokeRepeating(MonitorScheduledLocalNotifications, 1f, 1f);
 		}
 
 		#endregion

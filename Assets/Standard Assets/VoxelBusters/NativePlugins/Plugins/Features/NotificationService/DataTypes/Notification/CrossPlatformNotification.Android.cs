@@ -67,19 +67,6 @@ namespace VoxelBusters.NativePlugins
 			}
 
 			/// <summary>
-			/// The name of the sound file to play when an alert is displayed.
-			/// </summary>
-			/// <remarks>
-			/// \note Make sure all referred sounds are in Assets/PluginResources/Android or Common folder. 
-			/// </remarks>
-			[System.Obsolete("This property is deprecated. Use SoundName property of CrossPlatformNotification instance instead.")]
-			public string CustomSound
-			{
-				get; 
-				set;
-			}
-
-			/// <summary>
 			/// The image used as the large icon for notification.
 			/// </summary>
 			/// <remarks>

@@ -8,6 +8,8 @@ using GameSparks.Api.Responses;
 //using Fabric.Answers;
 using VoxelBusters.NativePlugins;
 using VoxelBusters.Utility;
+using Firebase;
+
 
 namespace Fourzy
 {
@@ -23,6 +25,8 @@ namespace Fourzy
         void Start() {
             facebookButton = GameObject.Find("Facebook Button");
             NPBinding.NotificationService.ClearNotifications();
+            Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
+            Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
         }
 
         void Awake() {
@@ -39,6 +43,16 @@ namespace Fourzy
         private void OnDisable()
         {
             NotificationService.DidFinishRegisterForRemoteNotificationEvent -= DidFinishRegisterForRemoteNotificationEvent;
+        }
+
+        public void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token) {
+            Debug.Log("Firebase: Received Registration Token: " + token.Token);
+
+            ManagePushNotifications(token.Token);
+        }
+
+        public void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e) {
+            Debug.Log("Firebase: Received a new message from: " + e.Message.From);
         }
 
         private void DidFinishRegisterForRemoteNotificationEvent (string _deviceToken, string _error)

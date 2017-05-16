@@ -32,13 +32,11 @@ namespace VoxelBusters.Utility
 		{
 			_label	= EditorGUI.BeginProperty(_position, _label, _property);
 
-			// Invoke action if property value gets modified
 			EditorGUI.BeginChangeCheck();
 			EditorGUI.PropertyField(_position, _property, _label, true);
 			if (EditorGUI.EndChangeCheck())
 			{
 				SerializedObject	_serializedObject	= _property.serializedObject;
-
 				_serializedObject.ApplyModifiedProperties();
 				_serializedObject.targetObject.InvokeMethod(ExecuteOnValueChange.InvokeMethod);
 			}

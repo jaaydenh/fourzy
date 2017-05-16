@@ -19,35 +19,26 @@ namespace VoxelBusters.NativePlugins.Internal
 
 		#region Constructor
 
-		public OneSignalNotificationPayload (string _message, Dictionary<string, object> _additionalData)
+		public OneSignalNotificationPayload (OSNotificationPayload _payload)
 		{
-			// Set properties
-			this.AlertBody			= _message;
-			this.iOSProperties		= new iOSSpecificProperties();
-			this.AndroidProperties	= new AndroidSpecificProperties();
-			this.SoundName			= _additionalData.GetIfAvailable<string>(kSoundKey);
-
-		
-			// Extract other properties from data dictionary
-			if (_additionalData == null)
-				return;
-
 			// iOS specific properties
-			iOSSpecificProperties		_iOSProperties		= this.iOSProperties;
-
-			_iOSProperties.HasAction		= _additionalData.ContainsKey(kActionButtonsKey);
-
+			iOSSpecificProperties	_iOSProperties	= new iOSSpecificProperties();
+			_iOSProperties.HasAction				= (_payload.actionButtons!= null) && (_payload.actionButtons.Count > 0);
+			
 			// Android specific properties
-			AndroidSpecificProperties	_androidProperties	= this.AndroidProperties;
-
-			_androidProperties.ContentTitle	= _additionalData.GetIfAvailable<string>(kTitleKey);
+			AndroidSpecificProperties	_androidProperties	= new AndroidSpecificProperties();
+			_androidProperties.ContentTitle					= _payload.title;
 
 			// Get user info dictionary by removing used property keys
-			IDictionary		_userInfoDict	= new Dictionary<string, object>(_additionalData);
-
+			IDictionary		_userInfoDict			= new Dictionary<string, object>(_payload.additionalData != null ? _payload.additionalData : new Dictionary<string, object>());
 			_userInfoDict.Remove(kTitleKey);
 
-			this.UserInfo	= _userInfoDict;
+			// Set properties
+			this.AlertBody			= _payload.body;
+			this.iOSProperties		= _iOSProperties;
+			this.AndroidProperties	= _androidProperties;
+			this.SoundName			= _payload.sound;
+			this.UserInfo			= _userInfoDict;
 		}
 
 		#endregion
