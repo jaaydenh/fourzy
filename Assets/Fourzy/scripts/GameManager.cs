@@ -975,7 +975,8 @@ namespace Fourzy
 							layermask);
 						if(hitsDiaLeft.Length == numPiecesToWin)
 						{
-                            DrawLine(hitsDiaLeft[0].transform.position, hitsDiaLeft[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
+                            Vector3 pos = new Vector3(hitsDiaLeft[0].transform.position.x, hitsDiaLeft[0].transform.position.y, 12);
+                            DrawLine(pos, hitsDiaLeft[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
                             if (isCurrentPlayerTurn) {
                                 #if UNITY_IOS || UNITY_ANDROID
                                     Handheld.Vibrate();
@@ -993,7 +994,8 @@ namespace Fourzy
 							layermask);
 						if(hitsDiaRight.Length == numPiecesToWin)
 						{
-                            DrawLine(hitsDiaRight[0].transform.position, hitsDiaRight[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
+                            Vector3 pos = new Vector3(hitsDiaRight[0].transform.position.x, hitsDiaRight[0].transform.position.y, 12);
+                            DrawLine(pos, hitsDiaRight[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
                             if (isCurrentPlayerTurn) {
                                 #if UNITY_IOS || UNITY_ANDROID
                                     Handheld.Vibrate();
