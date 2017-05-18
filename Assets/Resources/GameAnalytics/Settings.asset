@@ -37,8 +37,8 @@ MonoBehaviour:
   SelectedPlatformGameID: 5d840000
   SelectedStudio: 01000000
   SelectedGame: 02000000
-  NewVersion: 
-  Changes: 
+  NewVersion: 3.9.8
+  Changes: '- bug fix for end session when using manual session handling'
   SignUpOpen: 0
   FirstName: 
   LastName: 
@@ -48,7 +48,7 @@ MonoBehaviour:
   EmailOptIn: 1
   EmailGA: jaayden.halko@gmail.com
   IntroScreen: 0
-  InfoLogEditor: 1
+  InfoLogEditor: 0
   InfoLogBuild: 1
   VerboseLogBuild: 0
   UseManualSessionHandling: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
   ResourceCurrencies: []
   LastCreatedGamePlatform: -1
   Platforms: 08000000
-  CurrentInspectorState: 1
+  CurrentInspectorState: 0
   ClosedHints: 
   DisplayHints: 0
   DisplayHintsScrollState: {x: 0, y: 0}
@@ -80,6 +80,7 @@ MonoBehaviour:
   macIcon: {fileID: 0}
   windowsPhoneIcon: {fileID: 0}
   UseCustomId: 0
+  UsePlayerSettingsBundleVersion: 0
   SubmitErrors: 1
   MaxErrorCount: 10
   SubmitFpsAverage: 1
@@ -88,7 +89,7 @@ MonoBehaviour:
   FpsCirticalSubmitInterval: 1
   PlatformFoldOut: 01
   CustomDimensions01FoldOut: 0
-  CustomDimensions02FoldOut: 0
-  CustomDimensions03FoldOut: 0
-  ResourceItemTypesFoldOut: 0
-  ResourceCurrenciesFoldOut: 0
+  CustomDimensions02FoldOut: 1
+  CustomDimensions03FoldOut: 1
+  ResourceItemTypesFoldOut: 1
+  ResourceCurrenciesFoldOut: 1

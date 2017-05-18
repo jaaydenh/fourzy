@@ -224,33 +224,33 @@ namespace Fourzy {
 
             // check for piece at end position, if there is a piece and the piece is not moveable then return false
             if (GetCell(endPosition.column, endPosition.row) != 0) {
-                Debug.Log("Check can move: row: " + endPosition.row + " col: " + endPosition.column + " direction: " + move.direction);                
+                //Debug.Log("Check can move: row: " + endPosition.row + " col: " + endPosition.column + " direction: " + move.direction);                
                 switch (move.direction)
                 {
                     case Direction.UP:
                         int isMoveableUp = this.isMoveableUp[endPosition.row * Constants.numRows + endPosition.column];
-                        Debug.Log("isMoveableUp: " + isMoveableUp);
+                        //Debug.Log("isMoveableUp: " + isMoveableUp);
                         if (isMoveableUp == 0) {
                             return false;
                         }
                         break;
                     case Direction.DOWN:
                         int isMoveableDown = this.isMoveableDown[endPosition.row * Constants.numRows + endPosition.column];
-                        Debug.Log("isMoveableDown: " + isMoveableDown);
+                        //Debug.Log("isMoveableDown: " + isMoveableDown);
                         if (isMoveableDown == 0) {
                             return false;
                         }
                         break;
                     case Direction.LEFT:
                         int isMoveableLeft = this.isMoveableLeft[endPosition.row * Constants.numRows + endPosition.column];
-                        Debug.Log("isMoveableLeft: " + isMoveableLeft);
+                        //Debug.Log("isMoveableLeft: " + isMoveableLeft);
                         if (isMoveableLeft == 0) {
                             return false;
                         }
                         break;
                     case Direction.RIGHT:
                         int isMoveableRight = this.isMoveableRight[endPosition.row * Constants.numRows + endPosition.column];
-                        Debug.Log("isMoveableRight: " + isMoveableRight);
+                        //Debug.Log("isMoveableRight: " + isMoveableRight);
                         if (isMoveableRight == 0) {
                             return false;
                         }

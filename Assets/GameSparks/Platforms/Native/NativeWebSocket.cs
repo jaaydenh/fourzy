@@ -7,8 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace GameSparks.Platforms.Native
 {
-    //#if ((UNITY_PS4 || UNITY_XBOXONE) && !UNITY_EDITOR) || GS_FORCE_NATIVE_PLATFORM
-	#if (UNITY_XBOXONE && !UNITY_EDITOR) || GS_FORCE_NATIVE_PLATFORM
+#if ((UNITY_XBOXONE || (WINDOWS_UWP && ENABLE_IL2CPP)) && !UNITY_EDITOR) || GS_FORCE_NATIVE_PLATFORM
     ///  <summary>
     /// iOS specific websocket. This is a wrapper for the native objective-c Websocket.
     /// </summary>
@@ -31,7 +30,7 @@ namespace GameSparks.Platforms.Native
         WebSocketController controller;
         string controllerName;
 
-        #region IGameSparksWebSocket implementation
+    #region IGameSparksWebSocket implementation
 
         public void Initialize(string url, Action<string> onMessage, Action onClose, Action onOpen, Action<string> onError)
         {
@@ -83,9 +82,9 @@ namespace GameSparks.Platforms.Native
             private set;
         }
 
-        #endregion
+    #endregion
 
-        #region IControlledWebSocket implementation, triggered by WebSocketController
+    #region IControlledWebSocket implementation, triggered by WebSocketController
 
         public void TriggerOnClose()
         {
@@ -144,10 +143,10 @@ namespace GameSparks.Platforms.Native
             return true;
         }
 
-        #endregion
+    #endregion
 
         // if you get a compile error here, please contact GameSparks support for the native XBox One and PS4 support plugins.
         GameSparksNative.detail.NativeWebSocket nativeWebSocket = new GameSparksNative.detail.NativeWebSocket();
 	}
-	#endif
+#endif
 }

@@ -666,6 +666,7 @@ namespace Fourzy
         // 2. List of completed moving pieces and list of positions for those pieces to be used for piece animation
         public IEnumerator MovePiece(Move move, bool replayMove)
         {
+            Debug.Log("BEGIN MOVE PIECE");
             isDropping = true;
 
             MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
@@ -677,6 +678,7 @@ namespace Fourzy
                 if (!replayMove && isMultiplayer && !isNewChallenge && !isNewRandomChallenge)
                 {
                     StartCoroutine(ProcessMove(move.position, move.direction));
+                    Debug.Log("LogChallengeEventRequest: challengeInstanceId: " + challengeInstanceId);
                     new LogChallengeEventRequest().SetChallengeInstanceId(challengeInstanceId)
                         .SetEventKey("takeTurn") //The event we are calling is "takeTurn", we set this up on the GameSparks Portal
                         .SetEventAttribute("pos", GetMoveLocation(move)) // pos is the row or column the piece was placed at depending on the direction

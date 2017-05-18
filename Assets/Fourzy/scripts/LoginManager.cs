@@ -48,7 +48,7 @@ namespace Fourzy
         public void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token) {
             Debug.Log("Firebase: Received Registration Token: " + token.Token);
 
-            ManagePushNotifications(token.Token);
+            ManagePushNotifications(token.Token, "fcm");
         }
 
         public void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e) {
@@ -60,14 +60,15 @@ namespace Fourzy
             print("Request to register for remote notification finished. Error = " + _error.GetPrintableString());
             print("DeviceToken = " + _deviceToken);
 
-            ManagePushNotifications(_deviceToken);
+            ManagePushNotifications(_deviceToken, "ios");
         }
 
-        private void ManagePushNotifications(string token)
+        private void ManagePushNotifications(string token, string deviceOS)
         {       
             //string deviceToken = System.BitConverter.ToString(token).Replace('-', '').ToLower ();
 
-            new PushRegistrationRequest().SetPushId(token)
+            new PushRegistrationRequest().SetDeviceOS(deviceOS)
+                .SetPushId(token)
                 .Send((response) =>
                     {
                         if (response.HasErrors)

@@ -80,7 +80,7 @@ namespace GameSparks.Editor
 		{
 			string url = HOST2 + "latest.json";
 
-			Debug.Log(url);
+			//Debug.Log(url);
 
 			WebClient wc = new WebClient();
 
@@ -144,7 +144,7 @@ namespace GameSparks.Editor
 		{
 			string url = HOST2 + "Gamesparks_Unity_" + version + ".unitypackage";
 
-			Debug.Log(url);
+			//Debug.Log(url);
 
 			WebClient wc = new WebClient();
 

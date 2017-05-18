@@ -3,6 +3,7 @@ using System.Collections;
 using GameSparks.Core;
 using System.Collections.Generic;
 using System;
+using System.Text.RegularExpressions;
 
 namespace GameSparks.Platforms
 {
@@ -15,6 +16,7 @@ namespace GameSparks.Platforms
 
 		static string PLAYER_PREF_AUTHTOKEN_KEY = "gamesparks.authtoken";
 		static string PLAYER_PREF_USERID_KEY = "gamesparks.userid";
+        static string PLAYER_PREF_DEVICEID_KEY = "gamesparks.deviceid";
 
 
 		virtual protected void Start()
@@ -22,21 +24,172 @@ namespace GameSparks.Platforms
 
 			DeviceName = SystemInfo.deviceName.ToString();
 			DeviceType = SystemInfo.deviceType.ToString();
-			DeviceId = SystemInfo.deviceUniqueIdentifier.ToString();
-            #if !GS_DONT_USE_PLAYER_PREFS
-            AuthToken = PlayerPrefs.GetString(PLAYER_PREF_AUTHTOKEN_KEY);
+            if (Application.platform == RuntimePlatform.PS4 || Application.platform == RuntimePlatform.XboxOne)
+            {
+#if GS_DONT_USE_PLAYER_PREFS
+                DeviceId = SystemInfo.deviceUniqueIdentifier.ToString();
+#else
+                DeviceId = PlayerPrefs.GetString(PLAYER_PREF_DEVICEID_KEY);
+                if (DeviceId.Equals(""))
+                {
+                    DeviceId = System.Guid.NewGuid().ToString();
+
+                    PlayerPrefs.SetString(PLAYER_PREF_DEVICEID_KEY, DeviceId);
+                    PlayerPrefs.Save();
+                }
+#endif
+            }
+            else
+            {
+                DeviceId = SystemInfo.deviceUniqueIdentifier.ToString();
+            }
+
+			char[] delimiterChars = { ' ', ',', '.', ':', '-', '_', '(', ')' };
+			int cpuCores = SystemInfo.processorCount;
+			string manufacturer = "Unknown";
+			string model = SystemInfo.deviceModel;
+			string memory = SystemInfo.systemMemorySize + " MB";
+			string osName = SystemInfo.operatingSystem;
+			string osVersion = SystemInfo.operatingSystem;
+			string cpuVendor = SystemInfo.processorType;
+			string resolution = Screen.width + "x" + Screen.height;
+			string gssdk = GameSparks.Core.GS.Version;
+			string[] listStrings; 
+
+			switch (DeviceOS) {
+				case "MACOS":
+				case "IOS":
+				case "TVOS":
+					manufacturer = "Apple";
+					listStrings = SystemInfo.operatingSystem.Split (delimiterChars);
+					if (DeviceOS.Equals ("MACOS")) {
+						osName = listStrings [0] + " " + listStrings [1] + " " + listStrings[2];
+						osVersion = listStrings [3] + "." + listStrings [4] + "." + listStrings[5];
+					} else {
+						if (listStrings[0].Equals("iOS")) {
+							osName = listStrings [0];
+							osVersion = listStrings [1] + "." + listStrings [2];
+						} else {
+							osName = listStrings [0] + " " + listStrings [1];
+							osVersion = listStrings [2] + "." + listStrings [3];
+						}
+					}
+
+					break;
+
+				case "WINDOWS":
+				case "WSA":
+				case "XBOXONE":
+					manufacturer = "Microsoft";
+					if (DeviceOS.Equals ("XBOXONE")) {
+						model = "Xbox One";
+						memory = (SystemInfo.systemMemorySize / 1000) + " MB";
+						osVersion = "Unknown";
+					} else {
+						model = "PC";
+						listStrings = SystemInfo.operatingSystem.Split (delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+						osName = listStrings [0] + " " + listStrings [1];
+						osVersion = listStrings [2] + "." + listStrings [3] + "." + listStrings[4];
+					}
+                    cpuVendor += " " + SystemInfo.processorFrequency.ToString() + "MHz";
+
+                    RegexOptions options = RegexOptions.None;
+                    Regex regex = new Regex("[ ]{2,}", options);
+
+                    cpuVendor = regex.Replace(cpuVendor, " ");
+            
+                    break;
+
+				case "ANDROID":
+					listStrings = SystemInfo.deviceModel.Split (delimiterChars);
+					manufacturer = listStrings [0];
+					model = SystemInfo.deviceModel.Replace (manufacturer, "").Substring(1);
+					listStrings = SystemInfo.operatingSystem.Split (delimiterChars);
+					osName = listStrings [0] + " " + listStrings [1];
+					osVersion = listStrings [7];
+					cpuVendor += " " + SystemInfo.processorFrequency + "MHz";
+					
+					break;
+
+				case "SAMSUNGTV":
+					manufacturer = "Samsung";
+					
+					break;
+
+				case "WIIU":
+					manufacturer = "Nintendo";
+					model = "WiiU";
+					
+					break;
+
+				case "PS4":
+					manufacturer = "Sony";
+					model = "PS4";
+					memory = (SystemInfo.systemMemorySize / 1000000) + " MB";
+					listStrings = SystemInfo.operatingSystem.Split (delimiterChars);
+					osName = listStrings [0];
+					osVersion = listStrings [1] + "." + listStrings [2] + "." + listStrings[3];
+					cpuVendor += " " + SystemInfo.processorFrequency + "MHz";
+
+					break;
+
+				case "TIZEN":
+					manufacturer = "Tizen";
+					
+					break;
+
+				case "WEBGL":
+					listStrings = SystemInfo.deviceModel.Split (delimiterChars);
+					model = listStrings [0];
+					listStrings = SystemInfo.operatingSystem.Split (delimiterChars);
+					osName = listStrings [0];
+					if (osName.Equals ("Mac")) {
+						osName += " " + listStrings [1] + " " + listStrings [2];
+						osVersion = listStrings [3] + "." + listStrings [4] + "." + listStrings [5];
+					} else {
+						osVersion = listStrings [1];
+					}
+
+                    break;
+			}
+
+			Dictionary<string, object> data = new Dictionary<string, object> ();
+
+			data.Add ("manufacturer", manufacturer);
+			data.Add ("model", model);
+			data.Add ("memory", memory);
+			data.Add ("os.name", osName);
+			data.Add ("os.version", osVersion);
+			data.Add ("cpu.cores", cpuCores.ToString());
+			data.Add ("cpu.vendor", cpuVendor);
+			data.Add ("resolution", resolution);
+			data.Add ("gssdk", gssdk);
+
+			DeviceStats = new GSData (data);
+
+			/*Debug.Log (DeviceStats.GetString ("manufacturer"));
+			Debug.Log (DeviceStats.GetString ("model"));
+			Debug.Log (DeviceStats.GetString ("memory"));
+			Debug.Log (DeviceStats.GetString ("os.name"));
+			Debug.Log (DeviceStats.GetString ("os.version"));
+			Debug.Log (DeviceStats.GetString ("cpu.cores"));
+			Debug.Log (DeviceStats.GetString ("cpu.vendor"));
+			Debug.Log (DeviceStats.GetString ("resolution"));
+			Debug.Log (DeviceStats.GetString ("gssdk"));*/
+
+#if !GS_DONT_USE_PLAYER_PREFS
+			AuthToken = PlayerPrefs.GetString(PLAYER_PREF_AUTHTOKEN_KEY);
 			UserId = PlayerPrefs.GetString(PLAYER_PREF_USERID_KEY);
-            #endif
-            Platform = Application.platform.ToString();
+#endif
+			Platform = Application.platform.ToString();
 			ExtraDebug = GameSparksSettings.DebugBuild;
-			ServiceUrl = GameSparksSettings.ServiceUrl;
-			GameSparksSecret = GameSparksSettings.ApiSecret;
+
 #if !UNITY_WEBPLAYER
 			PersistentDataPath = Application.persistentDataPath;
 #endif
 			RequestTimeoutSeconds = 10;
 
-            GS.Initialise(this);
+			GS.Initialise(this);
 
 			DontDestroyOnLoad (this);
 
@@ -57,37 +210,47 @@ namespace GameSparks.Platforms
 
 			lock (_actions)
 			{
-				_currentActions.AddRange(_actions);
-				_actions.Clear();
-			}
-			foreach(var a in _currentActions)
-			{
-				if(a != null)
-				{
-					a();
+				if (_actions.Count > 0) {
+					_currentActions.AddRange (_actions);
+					_actions.Clear ();
 				}
 			}
+			var count = _currentActions.Count;
 
-			_currentActions.Clear();
+			if (count > 0) {
+				for (var index = 0; index < count; ++index) {
+					var a = _currentActions [index];
+					if (a != null) {
+						a ();
+					}
+				}
 
+				_currentActions.Clear ();
+			}
 		}
 
 		virtual protected void OnApplicationPause(bool paused)
 		{
 			if(paused)
 			{
-				//#if UNITY_EDITOR
+#if UNITY_EDITOR
 				GS.Disconnect();
-				//#endif
+#endif
 			}
 			else
 			{
-				GS.Reconnect();
+				try{
+					GS.Reconnect();
+				}catch(Exception e) {
+					if(ExceptionReporter != null) {
+						ExceptionReporter(e);
+					}
+				}
 			}
 		}
 
 		virtual protected void OnApplicationQuit(){
-            GS.Disconnect();
+			GS.Disconnect();
 		}
 
 		virtual protected void OnDestroy () {
@@ -97,26 +260,61 @@ namespace GameSparks.Platforms
 
 		public String DeviceOS {
 			get{
-                #if UNITY_IOS
-                return "IOS";
-                #elif UNITY_TVOS
-                return "TVOS";
-                #elif UNITY_ANDROID
-                return "ANDROID";
-                #elif UNITY_METRO
-                return "W8";
-                #elif UNITY_PS4
-                return "PS4";
-                #elif UNITY_XBOXONE
-                return "XBOXONE";
-                #else
-                return "WP8";
-                #endif
+                switch (Application.platform)
+                {
+                    case RuntimePlatform.OSXEditor:
+                    case RuntimePlatform.OSXPlayer:
+                    case RuntimePlatform.OSXDashboardPlayer:             
+                        return "MACOS";
+
+                    case RuntimePlatform.WindowsPlayer:
+                    case RuntimePlatform.WindowsEditor:
+                        return "WINDOWS";
+
+                    case RuntimePlatform.IPhonePlayer:
+                        return "IOS";         
+
+                    case RuntimePlatform.Android:
+                        return "ANDROID";
+
+                    case RuntimePlatform.LinuxPlayer:
+                        return "LINUX";
+
+                    case RuntimePlatform.WebGLPlayer:
+                        return "WEBGL";
+
+                    case RuntimePlatform.WSAPlayerX86:
+                    case RuntimePlatform.WSAPlayerX64:
+                    case RuntimePlatform.WSAPlayerARM:
+                        return "WSA";
+
+                    case RuntimePlatform.TizenPlayer:
+                        return "TIZEN";
+
+                    case RuntimePlatform.PS4:
+                        return "PS4";
+
+                    case RuntimePlatform.XboxOne:
+                        return "XBOXONE";
+
+                    case RuntimePlatform.SamsungTVPlayer:
+                        return "SAMSUNGTV";
+
+                    case RuntimePlatform.WiiU:
+                        return "WIIU";
+
+                    case RuntimePlatform.tvOS:
+                        return "TVOS";
+
+                    default:
+                        return "UNKNOWN";
+                }
 			}
 		}
 
 		public String DeviceName  {get; private set;}
 		public String DeviceType {get; private set;}
+		public GSData DeviceStats {get; private set;}
 		public virtual String DeviceId  {get; private set;}
 		public String Platform {get; private set;}
 
@@ -125,16 +323,27 @@ namespace GameSparks.Platforms
 		/// </summary>
 		public bool ExtraDebug {get; private set;}
 
-		/// <summary>
-		/// The service URL GameSparks connects to. To set it use the GameSparksSettings editor window. <see cref="GameSparksSettings.DebugBuild"/>
-		/// </summary>
-		/// <value>The service URL.</value>
-		public String ServiceUrl  {get; private set;}
+		public string ApiKey { get {
+				return GameSparksSettings.ApiKey;
+			}
+		}
 
-		/// <summary>
-		/// The Api secret. The Api secret can be obtained from the GameSparks Developer Portal and is game specific. To set it use the GameSparksSettings editor window.
-		/// </summary>
-		public String GameSparksSecret  {get; private set;}
+		public string ApiSecret { get {
+				return GameSparksSettings.ApiSecret;
+			}
+		}
+
+		public string ApiCredential { get {
+				return GameSparksSettings.Credential;
+			}
+		}
+
+		public string ApiStage { get {
+				return GameSparksSettings.PreviewBuild ? "preview" : "live";
+			}
+		}
+
+		public String ApiDomain { get { return null; } }
 
 		public int RequestTimeoutSeconds  {get; set;}
 		public String PersistentDataPath{get; private set;}
@@ -144,15 +353,18 @@ namespace GameSparks.Platforms
 		/// Logs the given string to the Unity debug console.
 		/// </summary>
 		public void DebugMsg(String message){
-            ExecuteOnMainThread(() => {
-                if (message.Length < 1500)
-                {
-                    Debug.Log("GS: " + message);
-                } else
-                {
-                    Debug.Log("GS: " + message + "...");
-                }
-            });
+			ExecuteOnMainThread(() => {
+				if (GameSparksSettings.DebugBuild)
+				{
+					if (message.Length < 1500)
+					{
+						Debug.Log("GS: " + message);
+					} else
+					{
+						Debug.Log("GS: " + message.Substring(0, 1500) + "...");
+					}
+				}
+			});
 		}
 
 		public String SDK{get;set;}
@@ -163,9 +375,9 @@ namespace GameSparks.Platforms
 			get {return m_authToken;}
 			set {
 				m_authToken = value;
-                #if !GS_DONT_USE_PLAYER_PREFS
-                PlayerPrefs.SetString(PLAYER_PREF_AUTHTOKEN_KEY, value);
-                #endif
+#if !GS_DONT_USE_PLAYER_PREFS
+				PlayerPrefs.SetString(PLAYER_PREF_AUTHTOKEN_KEY, value);
+#endif
 			}
 		}
 
@@ -175,10 +387,15 @@ namespace GameSparks.Platforms
 			get {return m_userId;}
 			set {
 				m_userId = value;
-                #if !GS_DONT_USE_PLAYER_PREFS
-                PlayerPrefs.SetString(PLAYER_PREF_USERID_KEY, value);
-                #endif
+#if !GS_DONT_USE_PLAYER_PREFS
+				PlayerPrefs.SetString(PLAYER_PREF_USERID_KEY, value);
+#endif
 			}
+		}
+
+		public Action<Exception> ExceptionReporter {
+			get;
+			set;
 		}
 
 		/// <summary>

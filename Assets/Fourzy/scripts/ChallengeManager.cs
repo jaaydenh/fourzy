@@ -122,6 +122,7 @@ namespace Fourzy
 		//This function accepts a string of UserIds and invites them to a new challenge
         public void ChallengeUser(string userId, List<long> gameBoard, List<long> tokenBoard, int position, Direction direction)
 		{
+            Debug.Log("ChallengeUser");
             //CreateChallengeRequest takes a list of UserIds because you can challenge more than one user at a time
             List<string> gsId = new List<string>();
             //Add our friends UserId to the list
@@ -156,7 +157,7 @@ namespace Fourzy
 		}
 
         public void FindRandomChallenge() {
-
+            Debug.Log("FindRandomChallenge");
             new FindChallengeRequest()
                 .SetAccessType("PUBLIC")
                 .SetCount(50)
@@ -200,6 +201,7 @@ namespace Fourzy
 
         public void ChallengeRandomUser(List<long> gameBoard, List<long> tokenBoard, int position, Direction direction)
         {
+            Debug.Log("ChallengeRandomUser");
             GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameBoard);
             data.AddNumberList("tokenBoard", tokenBoard);
             data.AddNumber("position", position);
@@ -229,6 +231,7 @@ namespace Fourzy
         }
 
         public void JoinChallenge(string challengeInstanceId) {
+            Debug.Log("JoinChallenge");
             new JoinChallengeRequest()
                 .SetChallengeInstanceId(challengeInstanceId)
                 .Send((response) => {
@@ -334,7 +337,7 @@ namespace Fourzy
 
         public void OpenNewMultiplayerGame() 
         {
-            Debug.Log("OpenNewMultiplayerGame");
+            Debug.Log("Open New Multiplayer Game");
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateMoveArrows();
 
@@ -374,7 +377,7 @@ namespace Fourzy
 
         public void OpenMultiplayerGame(GameSparks.Api.Responses.GetChallengeResponse._Challenge challenge)
         {
-            Debug.Log("Open MultiplayerGame");
+            Debug.Log("Open Multiplayer Game");
 
             GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
@@ -525,7 +528,8 @@ namespace Fourzy
                                 activeGame.winnerId = challenge.ScriptData.GetString("winnerId");
 
                                 if (activeGame.winnerId == null && challenge.State == "COMPLETE") {
-                                    activeGame.isExpired = true;
+                                    //activeGame.isExpired = true;
+                                    Debug.Log("WinnerName: " + activeGame.winnerName);
                                 }
 
                                 List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");

@@ -12,8 +12,8 @@ public class GameSparksSettings : ScriptableObject
     public const string gamesparksSettingsAssetName = "GameSparksSettings";
     public const string gamesparksSettingsPath = "GameSparks/Resources";
     public const string gamesparksSettingsAssetExtension = ".asset";
-    private static readonly string liveServiceUrlBase = "wss://live-{0}.ws.gamesparks.net/ws/{0}";
-    private static readonly string previewServiceUrlBase = "wss://preview.gamesparks.net/ws/{0}";
+	private static readonly string liveServiceUrlBase = "wss://live-{0}.ws.gamesparks.net/ws/{1}/{0}";
+	private static readonly string previewServiceUrlBase = "wss://preview-{0}.ws.gamesparks.net/ws/{1}/{0}";
     private static GameSparksSettings instance;
 
     public static void SetInstance(GameSparksSettings settings)
@@ -44,6 +44,9 @@ public class GameSparksSettings : ScriptableObject
     [SerializeField]
     private string
         apiKey = "";
+	[SerializeField]
+	private string
+		credential = "device";
     [SerializeField]
     private string
         apiSecret = "";
@@ -77,6 +80,12 @@ public class GameSparksSettings : ScriptableObject
         get{ return Instance.apiKey;}
         set { Instance.apiKey = value; }
     }
+
+	public static string Credential
+	{
+		get{ return (Instance.credential == null || Instance.credential.Length == 0) ? "device" : Instance.credential ;}
+		set { Instance.credential = value; }
+	}
     
     public static bool DebugBuild
     {
@@ -89,15 +98,16 @@ public class GameSparksSettings : ScriptableObject
         get
         { 
             String urlAddition = Instance.apiKey;
+
             if (Instance.apiSecret.Contains(":"))
             {
                 urlAddition = Instance.apiSecret.Substring(0, Instance.apiSecret.IndexOf(":")) + "/" + urlAddition;
             }
             if (Instance.previewBuild)
             {
-                return String.Format(previewServiceUrlBase, urlAddition);   
+				return String.Format(previewServiceUrlBase, urlAddition, Instance.credential);   
             }
-            return String.Format(liveServiceUrlBase, urlAddition);
+			return String.Format(liveServiceUrlBase, urlAddition, Instance.credential);
         }
     }
  
