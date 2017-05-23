@@ -220,7 +220,7 @@ namespace Fourzy {
 			isWinForPlayer = 0;
 			player = 0;
 			isEvaluated = false;
-			tokenBoard = new TokenBoard ("EMPTY");
+			tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
             gameBoard = new GameBoard (Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
 			//Debug.Log ("DEFAULT CONSTRUCTOR!!");

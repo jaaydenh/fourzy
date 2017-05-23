@@ -529,7 +529,7 @@ MonoBehaviour:
   moveArrowUp: {fileID: 1875338580760464, guid: 2b5a2b7ec7c53494fa52afec2d71c590,
     type: 2}
   gameBoardView: {fileID: 440620694}
-  tokens: []
+  tokenViews: []
   rematchButton: {fileID: 1649922472}
   nextGameButton: {fileID: 437029456}
   gameStatusText: {fileID: 218465671}
@@ -1925,9 +1925,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2f3b14855e094dbeaf1082064102ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameScreenCanvas: {fileID: 0}
-  pieceRed: {fileID: 0}
-  pieceBlue: {fileID: 0}
   numRows: 8
   numColumns: 8
 --- !u!4 &440620695
@@ -5739,6 +5736,8 @@ GameObject:
   - component: {fileID: 1647859501}
   - component: {fileID: 1647859506}
   - component: {fileID: 1647859507}
+  - component: {fileID: 1647859508}
+  - component: {fileID: 1647859509}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5838,6 +5837,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cube: {fileID: 1789846566}
+--- !u!114 &1647859508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1647859500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78da3f00f3328541b4526c0b0b5ec5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineThickness: 2
+  lineIntensity: 2
+  fillAmount: 0
+  lineColor0: {r: 0.89705884, g: 0.13192044, b: 0.13192044, a: 1}
+  lineColor1: {r: 1, g: 0.9724138, b: 0, a: 1}
+  lineColor2: {r: 1, g: 0, b: 0, a: 1}
+  backfaceCulling: 1
+  additiveRendering: 0
+  cornerOutlines: 1
+  addLinesBetweenColors: 0
+  scaleWithScreenSize: 1
+  alphaCutoff: 0.5
+  flipY: 0
+  sourceCamera: {fileID: 0}
+  outlineCamera: {fileID: 0}
+--- !u!114 &1647859509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1647859500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1da628a6ee02a456fb998c63a333484a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1649922470
 GameObject:
   m_ObjectHideFlags: 0

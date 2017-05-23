@@ -5,10 +5,15 @@ using UnityEngine;
 namespace Fourzy {
     public class TokenBoard {
 
+        public string id;
+        public string name;
         public IToken[,] tokens;
 
-        public TokenBoard(int[] tokenData) {
+        public TokenBoard(int[] tokenData, string id, string name) {
             InitTokenBoard();
+            this.id = id;
+            this.name = name;
+
             int[,] convertedTokenData = new int [8,8];
 
             for(int row = 0; row < Constants.numRows; row++)
@@ -19,20 +24,15 @@ namespace Fourzy {
                 }
             }
 
-            SetTokenBoard(convertedTokenData);
+            SetTokenBoardFromData(convertedTokenData);
         }
 
-        public TokenBoard (string type) {
+        public TokenBoard(int[,] tokenData, string id, string name) {
             InitTokenBoard();
-            //Debug.Log("TOKEN BOARD TYPE: " + type);
-            if (type == "ALL") {
-                SetTokenBoard(TokenBoardLoader.Instance.FindTokenBoardAll());
-            } else if (type == "NOSTICKY") {
-                SetTokenBoard(TokenBoardLoader.Instance.FindTokenBoardAll());
-            } else if (type == "EMPTY") {
-                SetTokenBoard(new int[8,8]);
-            }
-    	}
+            this.id = id;
+            this.name = name;
+            SetTokenBoardFromData(tokenData);
+        }
     	
         public void InitTokenBoard() {
             tokens = new IToken[Constants.numColumns, Constants.numRows];
@@ -46,7 +46,19 @@ namespace Fourzy {
             }
         }
 
-        public void SetTokenBoard(int[,] tokenData) {
+        public List<long> GetTokenBoardData() {
+            List<long> tokenBoardList = new List<long>();
+            for(int row = 0; row < Constants.numRows; row++)
+            {
+                for(int col = 0; col < Constants.numColumns; col++)
+                {
+                    tokenBoardList.Add((int)tokens[row, col].tokenType);
+                }
+            }
+            return tokenBoardList;
+        }
+
+        public void SetTokenBoardFromData(int[,] tokenData) {
             
             for(int row = 0; row < Constants.numRows; row++)
             {

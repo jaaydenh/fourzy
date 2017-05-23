@@ -459,17 +459,17 @@ namespace Fourzy
             }
         }
 
-        private List<long> GetTokenBoardData() {
-            List<long> tokenBoardList = new List<long>();
-            for(int row = 0; row < numRows; row++)
-            {
-                for(int col = 0; col < numColumns; col++)
-                {
-                    tokenBoardList.Add((int)tokenBoard.tokens[row, col].tokenType);
-                }
-            }
-            return tokenBoardList;
-        }
+        // private List<long> GetTokenBoardData() {
+        //     List<long> tokenBoardList = new List<long>();
+        //     for(int row = 0; row < numRows; row++)
+        //     {
+        //         for(int col = 0; col < numColumns; col++)
+        //         {
+        //             tokenBoardList.Add((int)tokenBoard.tokens[row, col].tokenType);
+        //         }
+        //     }
+        //     return tokenBoardList;
+        // }
 
         public void ResetUI() {
             if (isCurrentPlayerTurn) {
@@ -560,7 +560,7 @@ namespace Fourzy
             ResetGameBoard();
             PopulateMoveArrows();
 
-            TokenBoard tokenBoard = new TokenBoard("ALL");
+            TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
             GameManager.instance.tokenBoard = tokenBoard;
             StartCoroutine(GameManager.instance.CreateTokens());
             gameOver = false;
@@ -677,7 +677,7 @@ namespace Fourzy
 
                 if (!replayMove && isMultiplayer && !isNewChallenge && !isNewRandomChallenge)
                 {
-                    StartCoroutine(ProcessMove(move.position, move.direction));
+                    StartCoroutine(ProcessMove(move.position, move.direction, replayMove));
                     Debug.Log("LogChallengeEventRequest: challengeInstanceId: " + challengeInstanceId);
                     new LogChallengeEventRequest().SetChallengeInstanceId(challengeInstanceId)
                         .SetEventKey("takeTurn") //The event we are calling is "takeTurn", we set this up on the GameSparks Portal
@@ -702,16 +702,16 @@ namespace Fourzy
                 else if (isMultiplayer && isNewChallenge)
                 {
                     isNewChallenge = false;
-                    StartCoroutine(ProcessMove(move.position, move.direction));
-                    ChallengeManager.instance.ChallengeUser(challengedUserId, gameBoard.GetGameBoardData(), GetTokenBoardData(), GetMoveLocation(move), move.direction);
+                    StartCoroutine(ProcessMove(move.position, move.direction, replayMove));
+                    ChallengeManager.instance.ChallengeUser(challengedUserId, gameBoard.GetGameBoardData(), tokenBoard, GetMoveLocation(move), move.direction);
                 }
                 else if (isMultiplayer && isNewRandomChallenge)
                 {
                     isNewRandomChallenge = false;
-                    StartCoroutine(ProcessMove(move.position, move.direction));
-                    ChallengeManager.instance.ChallengeRandomUser(gameBoard.GetGameBoardData(), GetTokenBoardData(), GetMoveLocation(move), move.direction);
+                    StartCoroutine(ProcessMove(move.position, move.direction, replayMove));
+                    ChallengeManager.instance.ChallengeRandomUser(gameBoard.GetGameBoardData(), tokenBoard, GetMoveLocation(move), move.direction);
                 } else {
-                    StartCoroutine(ProcessMove(move.position, move.direction));
+                    StartCoroutine(ProcessMove(move.position, move.direction, replayMove));
                 }
             } else {
                 // TODO: inform the player that the move is not possible
@@ -722,7 +722,7 @@ namespace Fourzy
             yield return 0;
         }
 
-        private IEnumerator ProcessMove(Position position, Direction direction) {
+        private IEnumerator ProcessMove(Position position, Direction direction, bool replayMove) {
             gameBoard.PrintBoard("BeforeMove");
 
             Dictionary<GameObject, List<Position>> GameBoardViewUpdates = new Dictionary<GameObject, List<Position>>();
@@ -842,7 +842,7 @@ namespace Fourzy
 
             if (isAiActive && !gameOver && aiPlayer != null && !isCurrentPlayerTurn) {
                 Move move = aiPlayer.GetMove(gameBoard, tokenBoard, isPlayerOneTurn ? 1 : 2);
-                StartCoroutine(ProcessMove(move.position, move.direction));
+                StartCoroutine(ProcessMove(move.position, move.direction, replayMove));
             }
 
             isDropping = false;
@@ -928,7 +928,8 @@ namespace Fourzy
 					if(hitsHorz.Length == numPiecesToWin)
 					{
                         //Debug.Log("HORIZONTAL WIN");
-                        DrawLine(hitsHorz[0].transform.position, hitsHorz[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
+                        Vector3 pos = new Vector3(hitsHorz[0].transform.position.x, hitsHorz[0].transform.position.y, 12);
+                        DrawLine(pos, hitsHorz[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
                         if (isCurrentPlayerTurn) {
                             #if UNITY_IOS || UNITY_ANDROID
                                 Handheld.Vibrate();
@@ -951,7 +952,8 @@ namespace Fourzy
                         //Debug.Log("VERTICAL WIN");
                         //SpriteRenderer glow =  hitsVert[3].transform.gameObject.GetComponentInChildren<SpriteRenderer>();
                         //glow.enabled = false;
-                        DrawLine(hitsVert[0].transform.position, hitsVert[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
+                        Vector3 pos = new Vector3(hitsVert[0].transform.position.x, hitsVert[0].transform.position.y, 12);
+                        DrawLine(pos, hitsVert[3].transform.position, playerOne ? bluePlayerColor : redPlayerColor);
                         if (isCurrentPlayerTurn) {
                             #if UNITY_IOS || UNITY_ANDROID
                                 Handheld.Vibrate();

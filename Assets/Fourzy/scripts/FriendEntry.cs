@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+using Fabric.Answers;
 
 namespace Fourzy
 {
@@ -42,7 +44,7 @@ namespace Fourzy
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateMoveArrows();
 
-            TokenBoard tokenBoard = new TokenBoard("NOSTICKY");
+            TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
             GameManager.instance.tokenBoard = tokenBoard;
             StartCoroutine(GameManager.instance.CreateTokens());
             //int[] tokenData = TokenBoardLoader.Instance.FindTokenBoardNoSticky();
@@ -64,6 +66,11 @@ namespace Fourzy
 
             if (OnActiveGame != null)
                 OnActiveGame(true);
+
+            Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+            customAttributes.Add("TokenBoardId", tokenBoard.id);
+            customAttributes.Add("TokenBoardName", tokenBoard.name);
+            Answers.LogCustom("OpenNewFriendChallenge", customAttributes);
         }
     }
 }

@@ -3,12 +3,27 @@
 namespace Fourzy
 {
 
-    public class TokenBoardLoader : Singleton<TokenBoardLoader> {
+    public class TokenBoardLoader : MonoBehaviour {
 
-        public int[,] FindTokenBoardAll() {
+        //Singleton
+        private static TokenBoardLoader _instance;
+        public static TokenBoardLoader instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = GameObject.FindObjectOfType<TokenBoardLoader>();
+                }
+                return _instance;
+            }
+        }
+
+        public TokenBoard GetTokenBoard() {
+
+            TokenBoard tokenBoard;
 
             int boardIndex = Random.Range(0, 16);
-            int[,] tokenBoard = new int[8, 8];
 
             switch (boardIndex)
             {
@@ -61,16 +76,17 @@ namespace Fourzy
                     tokenBoard = TokenBoardSticky8();
                     break;
                 default:
+                    tokenBoard = TokenBoard5();
                     break;
             }
 
             return tokenBoard;
         }
 
-        public int[,] FindTokenBoardNoSticky() {
+        public TokenBoard FindTokenBoardNoSticky() {
 
+            TokenBoard tokenBoard;
             int boardIndex = Random.Range(0, 8);
-            int[,] tokenBoard = new int[8, 8];
 
             switch (boardIndex)
             {
@@ -99,13 +115,16 @@ namespace Fourzy
                     tokenBoard = TokenBoard8();
                     break;
                 default:
+                    tokenBoard = TokenBoard5();
                     break;
             }
 
             return tokenBoard;
         }
 
-        public int[,] TokenBoard1() {
+        public TokenBoard TokenBoard1() {
+            string id = "1000";
+            string name = "Simple Spiral";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,0,0,0,0,0 },
@@ -116,11 +135,13 @@ namespace Fourzy
                 { 0,0,0,0,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
             
-        public int[,] TokenBoard2() {
+        public TokenBoard TokenBoard2() {
+            string id = "1001";
+            string name = "Sticky to the Right";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,0,0,0,4,0 },
@@ -131,11 +152,13 @@ namespace Fourzy
                 { 0,4,5,4,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoard3() {
+        public TokenBoard TokenBoard3() {
+            string id = "1002";
+            string name = "Up and Down";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,0,0,0,0,0 },
@@ -146,11 +169,13 @@ namespace Fourzy
                 { 0,0,0,0,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoard4() {
+        public TokenBoard TokenBoard4() {
+            string id = "1003";
+            string name = "Empty Center";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,5,5,0,0,0 },
@@ -161,11 +186,13 @@ namespace Fourzy
                 { 0,0,0,0,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoard5() {
+        public TokenBoard TokenBoard5() {
+            string id = "1004";
+            string name = "The Basic Game";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,0,0,0,0,0 },
@@ -176,11 +203,13 @@ namespace Fourzy
                 { 0,0,0,0,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoard6() {
+        public TokenBoard TokenBoard6() {
+            string id = "1005";
+            string name = "Left or Right";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,0,3,0,0,0 },
@@ -191,11 +220,13 @@ namespace Fourzy
                 { 0,0,0,4,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoard7() {
+        public TokenBoard TokenBoard7() {
+            string id = "1006";
+            string name = "A Sticky Escape";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,2,2,0,0,0 },
@@ -206,11 +237,13 @@ namespace Fourzy
                 { 0,0,0,3,4,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoard8() {
+        public TokenBoard TokenBoard8() {
+            string id = "1007";
+            string name = "Wierd Arrows";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,0,0,1,0,0 },
@@ -221,11 +254,13 @@ namespace Fourzy
                 { 0,0,2,0,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoardSticky1() {
+        public TokenBoard TokenBoardSticky1() {
+            string id = "1008";
+            string name = "Narrow Miss";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,0,0,0,0,0 },
@@ -236,11 +271,13 @@ namespace Fourzy
                 { 0,0,0,0,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoardSticky2() {
+        public TokenBoard TokenBoardSticky2() {
+            string id = "1009";
+            string name = "Up or Stuck";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,0,0,1,0,0 },
@@ -251,11 +288,13 @@ namespace Fourzy
                 { 0,0,0,0,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoardSticky3() {
+        public TokenBoard TokenBoardSticky3() {
+            string id = "1010";
+            string name = "Sticky Donut";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,0,0,0,0,0 },
@@ -266,11 +305,13 @@ namespace Fourzy
                 { 0,0,0,0,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoardSticky4() {
+        public TokenBoard TokenBoardSticky4() {
+            string id = "1011";
+            string name = "Reversed Sticky X";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,5,0,0,0,0,5,0 },
@@ -281,11 +322,13 @@ namespace Fourzy
                 { 0,5,0,0,0,0,5,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoardSticky5() {
+        public TokenBoard TokenBoardSticky5() {
+            string id = "1012";
+            string name = "Sticky Corners";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,5,5,0,0,5,5,0 },
@@ -296,11 +339,13 @@ namespace Fourzy
                 { 0,5,5,0,0,5,5,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoardSticky6() {
+        public TokenBoard TokenBoardSticky6() {
+            string id = "1013";
+            string name = "Sticky Checkers";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,5,0,5,0,5,0,0 },
@@ -311,11 +356,13 @@ namespace Fourzy
                 { 0,0,5,0,5,0,5,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoardSticky7() {
+        public TokenBoard TokenBoardSticky7() {
+            string id = "1014";
+            string name = "Big Sticky Zero";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,5,5,5,5,0,0 },
@@ -326,11 +373,13 @@ namespace Fourzy
                 { 0,0,5,5,5,5,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
 
-        public int[,] TokenBoardSticky8() {
+        public TokenBoard TokenBoardSticky8() {
+            string id = "1015";
+            string name = "Big Sticky Block";
             int [,] tokens = new int[8, 8] { 
                 { 6,0,0,0,0,0,0,6 },
                 { 0,0,0,0,0,0,0,0 },
@@ -341,8 +390,8 @@ namespace Fourzy
                 { 0,0,0,0,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
             };
-
-            return tokens;
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
         }
     }
 }

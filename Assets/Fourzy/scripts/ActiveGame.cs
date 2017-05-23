@@ -27,6 +27,8 @@ namespace Fourzy
         public int[] gameBoard;
         public int[] tokenBoard;
 
+        public TokenBoard tokenBoard2;
+
         public List<GSData> moveList;
 
     	public Text opponentNameLabel, statusLabel, moveTimeAgo;
@@ -186,9 +188,9 @@ namespace Fourzy
 //                GameManager.instance.isCurrentPlayerTurn = false;
 //            }
             GameManager.instance.ResetGameBoard();
-            TokenBoard tokenBoard1 = new TokenBoard(tokenBoard);
+            //TokenBoard tokenBoard1 = new TokenBoard(tokenBoard);
 			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
-            GameManager.instance.SetupGameWrapper(gameBoard, tokenBoard1);
+            GameManager.instance.SetupGameWrapper(gameBoard, tokenBoard2);
             GameManager.instance.PopulateMoveArrows();
             StartCoroutine(GameManager.instance.CreateTokens());
 

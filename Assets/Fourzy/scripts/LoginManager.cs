@@ -5,7 +5,7 @@ using Facebook.Unity;
 using GameSparks.Api;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
-//using Fabric.Answers;
+using Fabric.Answers;
 using VoxelBusters.NativePlugins;
 using VoxelBusters.Utility;
 using Firebase;
@@ -92,10 +92,12 @@ namespace Fourzy
                         //Debug.Log("DisplayName: " + response.DisplayName);
                         //Debug.Log("NewPlayer: " + response.NewPlayer);
                         //Debug.Log("SwitchSummary: " + response.SwitchSummary);
+                        Answers.LogCustom("DeviceAuthenticationRequest");
                     } else {
                         Debug.Log("Error Authenticating Device: " + response.Errors.JSON);
                         if (OnLoginError != null)
                             OnLoginError();
+                        Answers.LogCustom("DeviceAuthenticationRequest:Error");
                     }
                 });
         }
@@ -190,8 +192,7 @@ namespace Fourzy
         public void GSFacebookLogin(FacebookLoginCallback _fbLoginCallback )
         {
             Debug.Log("Sending FacebookConnectRequest using AccessToken: " + AccessToken.CurrentAccessToken.TokenString);
-            //bool success = false;
-            //yield return new WaitForSeconds(1f);
+            bool success = false;
 
             new GameSparks.Api.Requests.FacebookConnectRequest()
                 .SetAccessToken(AccessToken.CurrentAccessToken.TokenString)
@@ -204,7 +205,7 @@ namespace Fourzy
                     if(!response.HasErrors)
                     {
                         Debug.Log("Logged into gamesparks with facebook");
-                        //success = true;
+                        success = true;
                         _fbLoginCallback(response);
                     }
                     else
@@ -214,7 +215,7 @@ namespace Fourzy
                         if (OnLoginError != null)
                             OnLoginError();
                     }
-                    //Answers.LogLogin("facebook", success);
+                    Answers.LogLogin("facebook", success);
                 });
         }
 
