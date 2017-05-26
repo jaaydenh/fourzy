@@ -8,7 +8,7 @@ namespace cakeslice
     public class OutlineAnimation : MonoBehaviour
     {
         bool pingPong = false;
-        public bool enabled = false;
+        public bool animationEnabled = false;
 
         // Use this for initialization
         void Start()
@@ -19,7 +19,7 @@ namespace cakeslice
         // Update is called once per frame
         void Update()
         {
-            if (enabled) {
+            if (animationEnabled) {
                 Color c = GetComponent<OutlineEffect>().lineColor0;
 
                 if(pingPong)

@@ -9,7 +9,7 @@ namespace Fourzy
 {
     public class ActiveGame : MonoBehaviour
     {
-        public delegate void GameActive(bool active);
+        public delegate void GameActive();
         public static event GameActive OnActiveGame;
 
         public delegate void RemoveGame(string challengeInstanceId);
@@ -70,11 +70,14 @@ namespace Fourzy
 
                 opponentNameLabel.text = playerNames[opponentIndex];
 
-                StartCoroutine(UserManager.instance.GetFBPicture(playerFacebookIds[opponentIndex], (sprite)=>
-                    {
-                        opponentProfilePictureSprite = sprite;
-                        opponentProfilePicture.sprite = sprite;
-                    }));
+                string fbID = playerFacebookIds[opponentIndex];
+                if (fbID != null) {
+                    StartCoroutine(UserManager.instance.GetFBPicture(playerFacebookIds[opponentIndex], (sprite)=>
+                        {
+                            opponentProfilePictureSprite = sprite;
+                            opponentProfilePicture.sprite = sprite;
+                        }));
+                }
             }
             else
             {
@@ -217,10 +220,10 @@ namespace Fourzy
                 ChallengeManager.instance.SetViewedCompletedGame(challengeId);
             }
 
-            UIScreen.SetActive(false);
+            // UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
-                OnActiveGame(true);
+                OnActiveGame();
     	}
     }
 }

@@ -14,8 +14,7 @@ PlayerSettings:
   productName: Fourzy
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  m_SplashScreenBackgroundColor: {r: 0.101960786, g: 0.101960786, b: 0.101960786,
-    a: 0}
+  m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 1
@@ -135,7 +134,7 @@ PlayerSettings:
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
-  iPhoneBuildNumber: 9
+  iPhoneBuildNumber: 11
   ForceInternetPermission: 0
   ForceSDCardPermission: 0
   CreateWallpaper: 0

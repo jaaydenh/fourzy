@@ -9,7 +9,7 @@ namespace Fourzy
 {
     public class FriendEntry : MonoBehaviour 
     {
-        public delegate void GameActive(bool active);
+        public delegate void GameActive();
         public static event GameActive OnActiveGame;
 
     	public string userName, id, facebookId;
@@ -31,11 +31,12 @@ namespace Fourzy
     	{
     		nameLabel.text = userName;
     		onlineTexture.color = isOnline ? Color.green : Color.gray;
-
-            StartCoroutine(UserManager.instance.GetFBPicture(facebookId, (sprite)=>
-                {
-                    profilePicture.sprite = sprite;
-                }));
+            if (facebookId != null) {
+                StartCoroutine(UserManager.instance.GetFBPicture(facebookId, (sprite)=>
+                    {
+                        profilePicture.sprite = sprite;
+                    }));
+            }
     	}
 
         //Open game gets called OnClick of the play button
@@ -65,7 +66,7 @@ namespace Fourzy
             UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
-                OnActiveGame(true);
+                OnActiveGame();
 
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("TokenBoardId", tokenBoard.id);

@@ -35,14 +35,16 @@ namespace Fourzy
 
                 players.Clear();
                 new LeaderboardDataRequest()
-                .SetLeaderboardShortCode("tournamentWinLossLeaderboard")
+                .SetLeaderboardShortCode("gamesCompletedLeaderboard")
                 .SetEntryCount(100) // we need to parse this text input, since the entry count only takes long
                 .Send((response) =>
                     {
                         if (!response.HasErrors)
                         {
+                            Debug.Log("LEADERBOARD");
                             foreach (LeaderboardDataResponse._LeaderboardData entry in response.Data) // iterate through the leaderboard data
                             {                                
+                                Debug.Log("LEADERBOARD: userid: " + entry.UserId);
                                 GameObject go = Instantiate(leaderboardPlayerPrefab) as GameObject;
                                 go.gameObject.transform.SetParent(leaderboardPlayersList.transform);
                                 LeaderboardPlayer leaderboardPlayer = go.GetComponent<LeaderboardPlayer>();
@@ -51,16 +53,18 @@ namespace Fourzy
                                 //int? playerRating = entry.ScriptData.GetInt("playerRaing");
                                 //string playerName = entry.UserName;
                                 //string playerRating = entry.JSONData["playerRating"].ToString();
-                                //Debug.Log("playerRating: " + playerRating);
 
                                 leaderboardPlayer.playerId = entry.UserId;
                                 leaderboardPlayer.facebookId = entry.ExternalIds.GetString("FB");
                                 leaderboardPlayer.playerNameLabel.text = entry.UserName;
                                 leaderboardPlayer.rankLabel.text = entry.Rank.ToString();
-                                string wins = entry.JSONData["wins"].ToString();
-                                string losses = entry.JSONData["losses"].ToString();
-                                leaderboardPlayer.ratingLabel.text = wins + "/" + losses;
-                                //leaderboardPlayer.ratingLabel.text = entry.JSONData["playerRating"].ToString();
+
+                                string gamesCompleted = entry.JSONData["gamesCompleted"].ToString();
+                                leaderboardPlayer.ratingLabel.text = gamesCompleted;
+                                // string wins = entry.JSONData["wins"].ToString();
+                                // string losses = entry.JSONData["losses"].ToString();
+                                // leaderboardPlayer.ratingLabel.text = wins + "/" + losses;
+                                // leaderboardPlayer.ratingLabel.text = entry.JSONData["playerRating"].ToString();
                                 leaderboardPlayer.transform.localScale = new Vector3(1f,1f,1f);
                                 players.Add(go);
                             }

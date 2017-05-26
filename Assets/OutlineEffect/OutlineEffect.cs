@@ -46,7 +46,7 @@ namespace cakeslice
         }
         private OutlineEffect() { }
 
-		private readonly LinkedSet<Outline> outlines = new LinkedSet<Outline>();
+        private readonly LinkedSet<Outline> outlines = new LinkedSet<Outline>();
         private const int outlineLayer = 6;
 
         [Range(1.0f, 6.0f)]
@@ -190,15 +190,15 @@ namespace cakeslice
 
                         outline.originalLayer = outline.gameObject.layer;
 
-						if(outline.eraseRenderer)
-							outline.Renderer.sharedMaterials = eraseMaterialBuffer;
+                        if(outline.eraseRenderer)
+                            outline.Renderer.sharedMaterials = eraseMaterialBuffer;
                         else
-							outline.Renderer.sharedMaterials = GetMaterialBufferFromID(outline.color);
+                            outline.Renderer.sharedMaterials = GetMaterialBufferFromID(outline.color);
 
-						for(int m = 0; m < outline.originalMaterials.Length; m++)
+                        for(int m = 0; m < outline.originalMaterials.Length; m++)
                         {
-							if(outline.Renderer is MeshRenderer)
-								outline.Renderer.sharedMaterials[m].mainTexture = outline.originalMaterials[m].mainTexture;
+                            if(outline.Renderer is MeshRenderer)
+                                outline.Renderer.sharedMaterials[m].mainTexture = outline.originalMaterials[m].mainTexture;
                         }
 
                         outline.gameObject.layer = outlineLayer;
@@ -210,7 +210,7 @@ namespace cakeslice
 
             if(outlines != null)
             {
-				foreach (Outline outline in outlines)
+                foreach (Outline outline in outlines)
                 {
                     LayerMask l = sourceCamera.cullingMask;
                     if(outline != null && l == (l | (1 << outline.originalLayer)))
@@ -362,7 +362,7 @@ namespace cakeslice
         public void AddOutline(Outline outline)
         {
             if(!outlines.Contains(outline))
-			    outlines.Add(outline);
+                outlines.Add(outline);
         }
 
         public void RemoveOutline(Outline outline)

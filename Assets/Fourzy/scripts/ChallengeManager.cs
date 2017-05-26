@@ -13,7 +13,7 @@ namespace Fourzy
     
     public class ChallengeManager : MonoBehaviour
 	{
-        public delegate void GameActive(bool active);
+        public delegate void GameActive();
         public static event GameActive OnActiveGame;
 
         public static ChallengeManager instance;
@@ -327,7 +327,7 @@ namespace Fourzy
             UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
-                OnActiveGame(true);
+                OnActiveGame();
 
             GameManager.instance.EnableTokenAudio();
             
@@ -371,7 +371,7 @@ namespace Fourzy
             UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
-                OnActiveGame(true);
+                OnActiveGame();
         }
 
         public void OpenNewMultiplayerGame() 
@@ -409,7 +409,7 @@ namespace Fourzy
             UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
-                OnActiveGame(true);
+                OnActiveGame();
             
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("PlayerName", UserManager.instance.userName);
@@ -480,7 +480,7 @@ namespace Fourzy
             UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
-                OnActiveGame(true);
+                OnActiveGame();
 
             GameManager.instance.EnableTokenAudio();
 
@@ -513,6 +513,7 @@ namespace Fourzy
                 //We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
                 new ListChallengeRequest()
                     //.SetShortCode("chalRanked")
+                    .SetMaxResponseTimeInSeconds(10)
                     .SetStates(challengeStates)
                     .SetEntryCount(50) //We want to pull in the first 50
                     .Send((response) =>

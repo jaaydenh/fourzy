@@ -8,6 +8,8 @@ TagManager:
   - Blue
   - Arrow
   - GamePiece
+  - WinLine
+  - Token
   layers:
   - Default
   - TransparentFX

@@ -42,7 +42,6 @@ namespace Fourzy
         public GameObject moveArrowRight;
         public GameObject moveArrowDown;
         public GameObject moveArrowUp;
-
         public GameBoardView gameBoardView;
         public TokenBoard tokenBoard;
         public GameBoard gameBoard;
@@ -81,7 +80,7 @@ namespace Fourzy
         public int currentPlayerId;
         public string winner;
         public string opponentFacebookId;
-
+        
 		bool isLoading = true;
 		bool isDropping = false; 
 		public bool gameOver = false;
@@ -89,7 +88,7 @@ namespace Fourzy
         bool didPlayer1Win = false;
 		public bool isCheckingForWinner = false;
         public bool isAnimating = false;
-
+        public float gameScreenFadeInTime = 0.6f;
         int spacing = 1; //100
         int offset = 0; //4
 
@@ -132,38 +131,118 @@ namespace Fourzy
                 }
             } else {
                 //createGameScript.ResetFindMatchButton();
+                new EndSessionRequest()
+                    .Send((response) => {
+                        if (response.HasErrors) {
+                            Debug.Log("EndSessionRequest:Error");
+                        }
+                    });
             }
         }
 
-        private void enableGameScreen(bool enabled) {
+        private void TransitionToGameScreen() {
             UserInputHandler.inputEnabled = false;
-            gameScreen.SetActive(enabled);
-            if (enabled)
+            //FadeGamesListScreen(0.0f, false, 0.1f);
+            UIScreen.SetActive(false);
+            gameScreen.SetActive(true);
+            FadeGameScreen(1.0f, gameScreenFadeInTime);
+            StartCoroutine(WaitToEnableInput());
+        }
+
+        private void FadeGameScreen(float alpha, float fadeTime) {
+            gameScreen.GetComponent<CanvasGroup>().DOFade(alpha, 0.5f).OnComplete(()=>FadeTokens(alpha, fadeTime));
+        }
+
+        private void WinLineSetActive(bool active) {
+            LineRenderer[] winLines = gameScreen.GetComponentsInChildren<LineRenderer>(true);
+
+            foreach (var line in winLines)
             {
-                StartCoroutine(WaitToEnableInput());
+                if (line) {
+                    line.gameObject.SetActive(active);
+                }
             }
+        }
+        private void FadePieces(float alpha, float fadeTime) {
+        //    SpriteRenderer[] sprites = gameScreen.GetComponentsInChildren<SpriteRenderer>();
+           
+        //     for (int i=0; i < sprites.Length; i++)
+        //     { 
+        //         if (i < sprites.Length-1) {
+        //             sprites[i].DOFade(alpha, fadeTime);
+        //         } else {
+        //             sprites[i].DOFade(alpha, fadeTime).OnComplete(()=>WinLineSetActive(true));
+        //         }
+        //     }
+
+            GameObject[] pieces = GameObject.FindGameObjectsWithTag("GamePiece");
+            for (int i=0; i < pieces.Length; i++)
+            {
+                if (i < pieces.Length-1) {
+                    pieces[i].GetComponent<SpriteRenderer>().DOFade(alpha, fadeTime);
+                } else {
+                    pieces[i].GetComponent<SpriteRenderer>().DOFade(alpha, fadeTime).OnComplete(()=>WinLineSetActive(true));
+                }
+            }
+
+        }
+
+        private void FadeTokens(float alpha, float fadeTime) {
+            GameObject[] tokens = GameObject.FindGameObjectsWithTag("Token");
+            for (int i=0; i < tokens.Length; i++)
+            {
+                if (i < tokens.Length-1) {
+                    tokens[i].GetComponent<SpriteRenderer>().DOFade(alpha, fadeTime);
+                } else {
+                    tokens[i].GetComponent<SpriteRenderer>().DOFade(alpha, fadeTime).OnComplete(()=>FadePieces(alpha, fadeTime));
+                }
+            }
+        }
+
+        private void FadeGamesListScreen(float alpha, bool enabled, float fadeTime) {
+            UIScreen.GetComponent<CanvasGroup>().DOFade(alpha, fadeTime).OnComplete(()=>UIScreenSetActive(enabled));
+        }
+
+        private void GameScreenSetActive(bool setActive) {
+            gameScreen.SetActive(setActive);
+        }
+
+        private void UIScreenSetActive(bool setActive) {
+            UIScreen.SetActive(setActive);
+        }
+
+        public void TransitionToGamesListScreen() {
+            UserInputHandler.inputEnabled = false;
+            UIScreen.SetActive(true);
+            gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
+            gameScreen.SetActive(false);
+            // FadeGameScreen(0.0f, false, 0.4f);
+            //FadeGamesListScreen(1.0f, true, 0.1f);
+            challengeInstanceId = null;
+            winner = null;
+            isCurrentPlayerTurn = false;
         }
 
         IEnumerator WaitToEnableInput() {
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1.5f);
             UserInputHandler.inputEnabled = true;
         }
 
         private void OnEnable()
         {
             UserInputHandler.OnTap += ProcessPlayerInput;
-            ActiveGame.OnActiveGame += enableGameScreen;
-            FriendEntry.OnActiveGame += enableGameScreen;
-            ChallengeManager.OnActiveGame += enableGameScreen;
+            ActiveGame.OnActiveGame += TransitionToGameScreen;
+            FriendEntry.OnActiveGame += TransitionToGameScreen;
+            ChallengeManager.OnActiveGame += TransitionToGameScreen;
             LoginManager.OnLoginError += DisplayLoginError;
         }
 
         private void OnDisable()
         {
             UserInputHandler.OnTap -= ProcessPlayerInput;
-            ActiveGame.OnActiveGame -= enableGameScreen;
-            FriendEntry.OnActiveGame -= enableGameScreen;
-            ChallengeManager.OnActiveGame -= enableGameScreen;
+            ActiveGame.OnActiveGame -= TransitionToGameScreen;
+            FriendEntry.OnActiveGame -= TransitionToGameScreen;
+            ChallengeManager.OnActiveGame -= TransitionToGameScreen;
             LoginManager.OnLoginError -= DisplayLoginError;
         }
 
@@ -269,14 +348,6 @@ namespace Fourzy
             StartCoroutine(MovePiece(move, true));
         }
 
-        public void TransitionToGamesList() {
-            enableGameScreen(false);
-            UIScreen.SetActive(true);
-            challengeInstanceId = null;
-            winner = null;
-            isCurrentPlayerTurn = false;
-        }
-
         public void SetupGameWrapper(int[] boardData, TokenBoard tokenBoard) {
             this.tokenBoard = tokenBoard;
             StartCoroutine(SetupGame(boardData));
@@ -329,8 +400,12 @@ namespace Fourzy
                     {
                         GameObject pieceObject = Instantiate(pieceBlue, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
                         //TODO: Use player chosen sprite for gamepiece
-                        //SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
+                        SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
+                        Color c = pieceSprite.color;
+                        c.a = 0.0f;
+                        pieceSprite.color = c;
                         //pieceSprite.sprite = new Sprite().texture.
+                        
                         GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
                         pieceModel.player = Player.ONE;
                         gameBoardView.gamePieces[row, col] = pieceObject;
@@ -338,7 +413,10 @@ namespace Fourzy
                     else if (piece == (int)Piece.RED)
                     {
                         GameObject pieceObject = Instantiate(pieceRed, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
-                        //SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
+                        SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
+                        Color c = pieceSprite.color;
+                        c.a = 0.0f;
+                        pieceSprite.color = c;
                         //pieceSprite.sprite = new Sprite().texture.
                         GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
                         pieceModel.player = Player.TWO;
@@ -360,35 +438,41 @@ namespace Fourzy
                 for(int col = 0; col < numColumns; col++)
                 {
                     Token token = tokenBoard.tokens[row, col].tokenType;
-
-                    if (token == Token.UP_ARROW)
+                    GameObject go;
+                    switch (token)
                     {
-                        GameObject go = Instantiate(upArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
-                        tokenViews.Add(go);
-                    }
-                    else if (token == Token.DOWN_ARROW)
-                    {
-                        GameObject go = Instantiate(downArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
-                        tokenViews.Add(go);
-                    }
-                    else if (token == Token.LEFT_ARROW)
-                    {
-                        GameObject go = Instantiate(leftArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
-                        tokenViews.Add(go);
-                    }
-                    else if (token == Token.RIGHT_ARROW)
-                    {
-                        GameObject go = Instantiate(rightArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
-                        tokenViews.Add(go);
-                    }
-                    else if (token == Token.STICKY)
-                    {
-                        GameObject go = Instantiate(stickyToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
-                        tokenViews.Add(go);
-                    }
-                    else if (token == Token.BLOCKER)
-                    {
-                        Instantiate(blockerToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                        case Token.UP_ARROW:
+                            go = Instantiate(upArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
+                        case Token.DOWN_ARROW:
+                            go = Instantiate(downArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
+                        case Token.LEFT_ARROW:
+                            go = Instantiate(leftArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
+                        case Token.RIGHT_ARROW:
+                            go = Instantiate(rightArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
+                        case Token.STICKY:
+                            go = Instantiate(stickyToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
+                        case Token.BLOCKER:
+                            go = Instantiate(blockerToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
@@ -400,7 +484,9 @@ namespace Fourzy
         public void EnableTokenAudio() {
             foreach (var item in tokenViews)
             {
-                item.GetComponent<AudioSource>().mute = false;
+                if (item.GetComponent<AudioSource>()) {
+                    item.GetComponent<AudioSource>().mute = false;
+                }
             }
         }
 
@@ -459,18 +545,6 @@ namespace Fourzy
             }
         }
 
-        // private List<long> GetTokenBoardData() {
-        //     List<long> tokenBoardList = new List<long>();
-        //     for(int row = 0; row < numRows; row++)
-        //     {
-        //         for(int col = 0; col < numColumns; col++)
-        //         {
-        //             tokenBoardList.Add((int)tokenBoard.tokens[row, col].tokenType);
-        //         }
-        //     }
-        //     return tokenBoardList;
-        // }
-
         public void ResetUI() {
             if (isCurrentPlayerTurn) {
                 playerNameLabel.color = isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
@@ -494,7 +568,7 @@ namespace Fourzy
 			}
             gamePieces = new GameObject("GamePieces");
             gamePieces.transform.parent = gameScreen.transform;
-            gamePieces.transform.localPosition = new Vector3(-375f, -501f);
+            gamePieces.transform.localPosition = new Vector3(-375f, -501f);                        
 
             gameBoard = new GameBoard(Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
@@ -503,38 +577,37 @@ namespace Fourzy
 		}
 
         public void PopulateMoveArrows() {
-            for(int col = 0; col < numColumns; col++)
-            {
-                for(int row = 0; row < numRows; row++)
-                {
-                    GameObject g;
+            // for(int col = 0; col < numColumns; col++)
+            // {
+            //     for(int row = 0; row < numRows; row++)
+            //     {
+            //         GameObject g;
 
-                    if (col == numColumns - 1 && row > 0 && row < numRows - 1) {
-                        g = Instantiate(moveArrowLeft, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
-                        g.transform.parent = gamePieces.transform;
-                    }
-                    if (col == 0 && row > 0 && row < numRows - 1) {
-                        g = Instantiate(moveArrowRight, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
-                        g.transform.parent = gamePieces.transform;
-                    }
-                    if (row == 0 && col > 0 && col < numColumns - 1) {
-                        if (gameBoard.GetCell(col, row) == 0) {
-                            g = Instantiate(moveArrowDown, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
-                            g.transform.parent = gamePieces.transform;
-                        }
-                    }
-                    if (row == numRows - 1 && col > 0 && col < numColumns - 1) {
-                        if (gameBoard.GetCell(col, row) == 0) {
-                            g = Instantiate(moveArrowUp, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
-                            g.transform.parent = gamePieces.transform;
-                        }
-                    }
-                }
-            }
+            //         if (col == numColumns - 1 && row > 0 && row < numRows - 1) {
+            //             g = Instantiate(moveArrowLeft, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
+            //             g.transform.parent = gamePieces.transform;
+            //         }
+            //         if (col == 0 && row > 0 && row < numRows - 1) {
+            //             g = Instantiate(moveArrowRight, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
+            //             g.transform.parent = gamePieces.transform;
+            //         }
+            //         if (row == 0 && col > 0 && col < numColumns - 1) {
+            //             if (gameBoard.GetCell(col, row) == 0) {
+            //                 g = Instantiate(moveArrowDown, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
+            //                 g.transform.parent = gamePieces.transform;
+            //             }
+            //         }
+            //         if (row == numRows - 1 && col > 0 && col < numColumns - 1) {
+            //             if (gameBoard.GetCell(col, row) == 0) {
+            //                 g = Instantiate(moveArrowUp, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
+            //                 g.transform.parent = gamePieces.transform;
+            //             }
+            //         }
+            //     }
+            // }
         }            
 
         public void AnimateEmptyEdgeSpots(bool animate) {
-            //Debug.Log("AnimateEmptyEdgeSpots: " + animate);
             foreach (EmptySpot spot in gamePieces.GetComponentsInChildren<EmptySpot>())
             {
                 StartCoroutine(spot.AnimateSpot(animate));
@@ -557,9 +630,10 @@ namespace Fourzy
 		}
 
         public void RematchPassAndPlayGame() {
+            gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
             ResetGameBoard();
             PopulateMoveArrows();
-
+            
             TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
             GameManager.instance.tokenBoard = tokenBoard;
             StartCoroutine(GameManager.instance.CreateTokens());
@@ -567,8 +641,10 @@ namespace Fourzy
             UpdateGameStatusText();
             rematchButton.gameObject.SetActive(false);
             GameManager.instance.EnableTokenAudio();
-        }
             
+            FadeGameScreen(1.0f, gameScreenFadeInTime);
+        }
+
 		void Update () {
             if(!isMultiplayer && gameOver)
 			{
@@ -832,7 +908,7 @@ namespace Fourzy
                 isCurrentPlayerTurn = !isCurrentPlayerTurn;    
             }
             UpdateGameStatusText();
-            AnimateEmptyEdgeSpots(false);
+            //AnimateEmptyEdgeSpots(false);
 
             foreach (GameObject cornerArrow in cornerArrows) {
                 cornerArrow.SetActive(false);
@@ -844,6 +920,8 @@ namespace Fourzy
                 Move move = aiPlayer.GetMove(gameBoard, tokenBoard, isPlayerOneTurn ? 1 : 2);
                 StartCoroutine(ProcessMove(move.position, move.direction, replayMove));
             }
+
+            WinLineSetActive(true);
 
             isDropping = false;
 
@@ -1029,8 +1107,9 @@ namespace Fourzy
 
         void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0.2f)
         {
-            //Debug.Log("DRAWLINE");
-            GameObject myLine = new GameObject();
+            Debug.Log("DRAWLINE");
+            GameObject myLine = new GameObject("WinLine");
+            myLine.tag = "WinLine";
             myLine.transform.parent = gamePieces.transform;
             myLine.transform.position = start;
             myLine.AddComponent<LineRenderer>();
@@ -1042,7 +1121,7 @@ namespace Fourzy
             lr.endWidth = 0.15f;
             lr.SetPosition(0, start);
             lr.SetPosition(1, end);
-
+            myLine.SetActive(false);
             //GameObject.Destroy(myLine, duration);
         }
 

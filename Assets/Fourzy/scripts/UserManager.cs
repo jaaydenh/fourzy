@@ -42,16 +42,17 @@ namespace Fourzy
 
             if (fbId != null) {
                 StartCoroutine(UserManager.instance.GetFBPicture(fbId, (sprite) =>
-                        {
-                            profilePicture = sprite;
-                            profilePictureImage.sprite = sprite;
-                        }));
+					{
+                        profilePicture = sprite;
+                        profilePictureImage.sprite = sprite;
+                    }));
             }
     	}
 
         public IEnumerator GetFBPicture(string facebookId, Action<Sprite> callback)
     	{
-    		//To get our facebook picture we use this address which we pass our facebookId into
+    		//Debug.Log("FACEBOOK ID: " + facebookId);
+			//To get our facebook picture we use this address which we pass our facebookId into
     		var www = new WWW("http://graph.facebook.com/" + facebookId + "/picture?width=210&height=210");
 
             while (!www.isDone)

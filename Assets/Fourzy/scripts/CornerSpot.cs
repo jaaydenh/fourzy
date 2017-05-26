@@ -31,7 +31,7 @@ namespace Fourzy
             if (Fourzy.GameManager.instance.isCurrentPlayerTurn && !Fourzy.GameManager.instance.gameOver)
             {
                 int noMoves = 0;
-                GameBoardView board = GameManager.instance.gameBoardView;
+                //GameBoardView board = GameManager.instance.gameBoardView;
 
                 if (rightArrowActive)
                 {

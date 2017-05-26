@@ -556,6 +556,7 @@ MonoBehaviour:
   gameOver: 0
   isCheckingForWinner: 0
   isAnimating: 0
+  gameScreenFadeInTime: 0.5
   clipMove: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
   clipWin: {fileID: 8300000, guid: 2cda08f34c076490b8ec095a4f5d5256, type: 3}
   gameScreen: {fileID: 308658290}
@@ -1112,6 +1113,7 @@ GameObject:
   - component: {fileID: 204049812}
   - component: {fileID: 204049814}
   - component: {fileID: 204049813}
+  - component: {fileID: 204049815}
   m_Layer: 5
   m_Name: UI Screen
   m_TagString: Untagged
@@ -1175,6 +1177,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 204049811}
+--- !u!225 &204049815
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 204049811}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &218465669
 GameObject:
   m_ObjectHideFlags: 0
@@ -1316,7 +1329,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Tournament Wins / Losses
+  m_Text: Games Played
 --- !u!222 &249640194
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1427,6 +1440,7 @@ GameObject:
   - component: {fileID: 308658291}
   - component: {fileID: 308658293}
   - component: {fileID: 308658292}
+  - component: {fileID: 308658294}
   m_Layer: 5
   m_Name: Game Screen
   m_TagString: Untagged
@@ -1492,6 +1506,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 308658290}
+--- !u!225 &308658294
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 308658290}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &327297645
 GameObject:
   m_ObjectHideFlags: 0
@@ -4672,7 +4697,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Friends
+  m_Text: Social
 --- !u!222 &1460452887
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5874,6 +5899,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da628a6ee02a456fb998c63a333484a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enabled: 0
 --- !u!1 &1649922470
 GameObject:
   m_ObjectHideFlags: 0
@@ -6680,7 +6706,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 137424723}
-        m_MethodName: TransitionToGamesList
+        m_MethodName: TransitionToGamesListScreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
