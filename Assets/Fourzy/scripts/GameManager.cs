@@ -38,6 +38,7 @@ namespace Fourzy
         public GameObject rightArrowToken;
         public GameObject stickyToken;
         public GameObject blockerToken;
+        public GameObject ghostToken;
         public GameObject moveArrowLeft;
         public GameObject moveArrowRight;
         public GameObject moveArrowDown;
@@ -468,6 +469,11 @@ namespace Fourzy
                             break;
                         case Token.BLOCKER:
                             go = Instantiate(blockerToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
+                        case Token.GHOST:
+                            go = Instantiate(ghostToken, new Vector3(col, row * -1, 5), Quaternion.identity, gamePieces.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;

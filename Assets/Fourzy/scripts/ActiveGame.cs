@@ -36,7 +36,7 @@ namespace Fourzy
         public Texture2D defaultProfilePicture;
         public Image tournamentIcon;
 
-        private GameObject UIScreen;
+        //private GameObject UIScreen;
         private GameObject gameScreen;
         private GameObject deleteGameButton;
 
@@ -49,7 +49,7 @@ namespace Fourzy
 
     	void Start()
     	{
-            UIScreen = GameObject.Find("UI Screen");
+            //UIScreen = GameObject.Find("UI Screen");
 
             if (challengeShortCode == "tournamentChallenge") {
                 tournamentIcon.enabled = true;

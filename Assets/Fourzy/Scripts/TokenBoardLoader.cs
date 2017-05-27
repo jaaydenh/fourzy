@@ -23,7 +23,7 @@ namespace Fourzy
 
             TokenBoard tokenBoard;
 
-            int boardIndex = Random.Range(0, 16);
+            int boardIndex = Random.Range(0, 21);
 
             switch (boardIndex)
             {
@@ -75,6 +75,21 @@ namespace Fourzy
                 case 15:
                     tokenBoard = TokenBoardSticky8();
                     break;
+                case 16:
+                    tokenBoard = TokenBoardGhost1();
+                    break;
+                case 17:
+                    tokenBoard = TokenBoardGhost2();
+                    break;
+                case 18:
+                    tokenBoard = TokenBoardGhost3();
+                    break;
+                case 19:
+                    tokenBoard = TokenBoardGhost4();
+                    break;
+                case 20:
+                    tokenBoard = TokenBoardGhost5();
+                    break;
                 default:
                     tokenBoard = TokenBoard5();
                     break;
@@ -83,10 +98,10 @@ namespace Fourzy
             return tokenBoard;
         }
 
-        public TokenBoard FindTokenBoardNoSticky() {
+        public TokenBoard GetTokenBoardNoGhost() {
 
             TokenBoard tokenBoard;
-            int boardIndex = Random.Range(0, 8);
+            int boardIndex = Random.Range(0, 16);
 
             switch (boardIndex)
             {
@@ -113,6 +128,30 @@ namespace Fourzy
                     break;
                 case 7:
                     tokenBoard = TokenBoard8();
+                    break;
+                case 8:
+                    tokenBoard = TokenBoardSticky1();
+                    break;
+                case 9:
+                    tokenBoard = TokenBoardSticky2();
+                    break;
+                case 10:
+                    tokenBoard = TokenBoardSticky3();
+                    break;
+                case 11:
+                    tokenBoard = TokenBoardSticky4();
+                    break;
+                case 12:
+                    tokenBoard = TokenBoardSticky5();
+                    break;
+                case 13:
+                    tokenBoard = TokenBoardSticky6();
+                    break;
+                case 14:
+                    tokenBoard = TokenBoardSticky7();
+                    break;
+                case 15:
+                    tokenBoard = TokenBoardSticky8();
                     break;
                 default:
                     tokenBoard = TokenBoard5();
@@ -389,6 +428,91 @@ namespace Fourzy
                 { 0,0,5,5,5,5,0,0 },
                 { 0,0,0,0,0,0,0,0 },
                 { 6,0,0,0,0,0,0,6 }
+            };
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
+        }
+
+        public TokenBoard TokenBoardGhost1() {
+            string id = "1016";
+            string name = "Original Ghost";
+            int [,] tokens = new int[8, 8] { 
+                { 6,0,0,0,0,0,0,6 },
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,7,0,0,7,0,0 },
+                { 0,0,0,0,7,0,0,0 },
+                { 0,0,0,7,0,0,0,0 },
+                { 0,0,7,0,0,7,0,0 },
+                { 0,0,0,0,0,0,0,0 },
+                { 6,0,0,0,0,0,0,6 }
+            };
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
+        }
+
+        public TokenBoard TokenBoardGhost2() {
+            string id = "1017";
+            string name = "Ghost Push";
+            int [,] tokens = new int[8, 8] { 
+                { 6,0,0,0,0,0,0,6 },
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,7,3,4,7,0,0 },
+                { 0,0,1,0,0,1,0,0 },
+                { 0,0,2,0,0,2,0,0 },
+                { 0,0,7,3,4,7,0,0 },
+                { 0,0,0,0,0,0,0,0 },
+                { 6,0,0,0,0,0,0,6 }
+            };
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
+        }
+
+        public TokenBoard TokenBoardGhost3() {
+            string id = "1018";
+            string name = "Sticky Sided Ghost";
+            int [,] tokens = new int[8, 8] { 
+                { 6,0,0,0,0,0,0,6 },
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,7,5,5,7,0,0 },
+                { 0,0,5,0,0,5,0,0 },
+                { 0,0,5,0,0,5,0,0 },
+                { 0,0,7,5,5,7,0,0 },
+                { 0,0,0,0,0,0,0,0 },
+                { 6,0,0,0,0,0,0,6 }
+            };
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
+        }
+
+        public TokenBoard TokenBoardGhost4() {
+            string id = "1019";
+            string name = "Big Ghost Zero";
+            int [,] tokens = new int[8, 8] { 
+                { 6,0,0,0,0,0,0,6 },
+                { 0,0,0,0,0,0,0,0 },
+                { 0,0,0,7,7,0,0,0 },
+                { 0,0,7,0,0,7,0,0 },
+                { 0,0,7,0,0,7,0,0 },
+                { 0,0,0,7,7,0,0,0 },
+                { 0,0,0,0,0,0,0,0 },
+                { 6,0,0,0,0,0,0,6 }
+            };
+            TokenBoard tokenboard = new TokenBoard(tokens, id, name);
+            return tokenboard;
+        }
+
+        public TokenBoard TokenBoardGhost5() {
+            string id = "1020";
+            string name = "Ghost Edge";
+            int [,] tokens = new int[8, 8] { 
+                { 6,7,7,7,7,7,7,6 },
+                { 7,0,0,0,0,0,0,7 },
+                { 7,0,0,0,0,0,0,7 },
+                { 7,0,0,0,0,0,0,7 },
+                { 7,0,0,0,0,0,0,7 },
+                { 7,0,0,0,0,0,0,7 },
+                { 7,0,0,0,0,0,0,7 },
+                { 6,7,7,7,7,7,7,6 }
             };
             TokenBoard tokenboard = new TokenBoard(tokens, id, name);
             return tokenboard;

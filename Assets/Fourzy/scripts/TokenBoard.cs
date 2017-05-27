@@ -90,6 +90,10 @@ namespace Fourzy {
                     {
                         tokens[row, col] = new BlockerToken();
                     }
+                    else if (token == (int)Token.GHOST)
+                    {
+                        tokens[row, col] = new GhostToken();
+                    }
                 }
             }
         }
