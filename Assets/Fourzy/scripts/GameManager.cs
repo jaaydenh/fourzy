@@ -30,7 +30,7 @@ namespace Fourzy
 
 		public GameObject pieceRed;
 		public GameObject pieceBlue;
-		public GameObject pieceEmpty;
+		// public GameObject pieceEmpty;
         public GameObject cornerSpot;
         public GameObject upArrowToken;
         public GameObject downArrowToken;

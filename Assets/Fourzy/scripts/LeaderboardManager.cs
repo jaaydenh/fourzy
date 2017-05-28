@@ -41,10 +41,8 @@ namespace Fourzy
                     {
                         if (!response.HasErrors)
                         {
-                            Debug.Log("LEADERBOARD");
                             foreach (LeaderboardDataResponse._LeaderboardData entry in response.Data) // iterate through the leaderboard data
                             {                                
-                                Debug.Log("LEADERBOARD: userid: " + entry.UserId);
                                 GameObject go = Instantiate(leaderboardPlayerPrefab) as GameObject;
                                 go.gameObject.transform.SetParent(leaderboardPlayersList.transform);
                                 LeaderboardPlayer leaderboardPlayer = go.GetComponent<LeaderboardPlayer>();
