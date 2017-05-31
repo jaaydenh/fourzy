@@ -22,9 +22,9 @@ MonoBehaviour:
     Icon Dark.png
   dashboardUrl: https://www.fabric.io/party-troll/ios/apps/com.partytroll.fourzy
   initialization: 0
-  flowSequence: 200
+  flowSequence: 0
   conflict: 
-  kit: Crashlytics
+  kit: 
   installedKits:
   - Name: Crashlytics
     InstallationStatus: 2

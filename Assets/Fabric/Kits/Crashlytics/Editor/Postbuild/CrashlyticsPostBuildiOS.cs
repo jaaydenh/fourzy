@@ -7,11 +7,13 @@ namespace Fabric.Internal.Crashlytics.Editor.Postbuild
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Text;
-	using System.Linq;
 	using Fabric.Internal.Editor;
 	using Fabric.Internal.Editor.Model;
 	using Fabric.Internal.Editor.Postbuild;
 	using Fabric.Internal.Editor.ThirdParty.xcodeapi;
+#if !UNITY_5_5_OR_NEWER
+	using System.Linq;
+#endif
 	
 	public class CrashlyticsPostBuildiOS : PostBuildiOS
 	{

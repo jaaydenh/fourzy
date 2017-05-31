@@ -513,7 +513,8 @@ namespace Fourzy
                 //We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
                 new ListChallengeRequest()
                     //.SetShortCode("chalRanked")
-                    .SetMaxResponseTimeInSeconds(10)
+                    .SetMaxQueueTimeInSeconds(25)
+                    .SetMaxResponseTimeInSeconds(25)
                     .SetStates(challengeStates)
                     .SetEntryCount(50) //We want to pull in the first 50
                     .Send((response) =>

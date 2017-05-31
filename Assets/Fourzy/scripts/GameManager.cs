@@ -49,7 +49,8 @@ namespace Fourzy
         public List<GameObject> tokenViews;
         public Button rematchButton;
         public Button nextGameButton;
-
+        //public GameObject UIScreen;
+        public GameObject CreateGameScreen;
 		public Text gameStatusText;
 		public string bluePlayerWonText = "Blue Player Won!";
 		public string redPlayerWonText = "Red Player Won!";
@@ -145,9 +146,15 @@ namespace Fourzy
             UserInputHandler.inputEnabled = false;
             //FadeGamesListScreen(0.0f, false, 0.1f);
             UIScreen.SetActive(false);
+            CreateGameScreen.SetActive(false);
             gameScreen.SetActive(true);
             FadeGameScreen(1.0f, gameScreenFadeInTime);
             StartCoroutine(WaitToEnableInput());
+        }
+
+        public void TransitionToCreateGameScreen() {
+            UIScreen.SetActive(false);
+            CreateGameScreen.SetActive(true);
         }
 
         private void FadeGameScreen(float alpha, float fadeTime) {
