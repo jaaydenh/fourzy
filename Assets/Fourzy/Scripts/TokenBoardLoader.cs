@@ -170,6 +170,30 @@ namespace Fourzy
             return tokenBoard;
         }
 
+        public TokenBoard[] GetAllTokenBoards() {
+            TokenBoard[] tokenBoards = new TokenBoard[6];
+
+            TokenBoard tokenBoard1 = TokenBoard1();
+            tokenBoards[0] = tokenBoard1;
+
+            TokenBoard tokenBoard2 = TokenBoard2();
+            tokenBoards[1] = tokenBoard2;
+
+            TokenBoard tokenBoard3 = TokenBoard3();
+            tokenBoards[2] = tokenBoard3;
+
+            TokenBoard tokenBoard4 = TokenBoard4();
+            tokenBoards[3] = tokenBoard4;
+
+            TokenBoard tokenBoard5 = TokenBoard5();
+            tokenBoards[4] = tokenBoard5;
+
+            TokenBoard tokenBoard6 = TokenBoard6();
+            tokenBoards[5] = tokenBoard6;
+
+            return tokenBoards;
+        }
+
         public TokenBoard TokenBoard1() {
             string id = "1000";
             string name = "Simple Spiral";
