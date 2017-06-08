@@ -534,6 +534,8 @@ MonoBehaviour:
   nextGameButton: {fileID: 437029456}
   CreateGameScreen: {fileID: 2138970301}
   gameStatusText: {fileID: 218465671}
+  playerOneSprite: {fileID: 21300002, guid: baa829ac81b434043bfc2463fc3a9f65, type: 3}
+  playerTwoSprite: {fileID: 21300000, guid: baa829ac81b434043bfc2463fc3a9f65, type: 3}
   bluePlayerWonText: Blue Player Won!
   redPlayerWonText: Red Player Won!
   bluePlayerMoveText: Blue Player's Move
@@ -544,6 +546,8 @@ MonoBehaviour:
   bluePlayerColor: {r: 0, g: 0.68235296, b: 1, a: 1}
   redPlayerColor: {r: 0.99607843, g: 0.15686275, b: 0.31764707, a: 1}
   lineShader: {fileID: 10800, guid: 0000000000000000f000000000000000, type: 0}
+  gameScreen: {fileID: 308658290}
+  ErrorPanel: {fileID: 192249069}
   isMultiplayer: 0
   isNewChallenge: 0
   isNewRandomChallenge: 0
@@ -560,8 +564,6 @@ MonoBehaviour:
   gameScreenFadeInTime: 0.5
   clipMove: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
   clipWin: {fileID: 8300000, guid: 2cda08f34c076490b8ec095a4f5d5256, type: 3}
-  gameScreen: {fileID: 308658290}
-  ErrorPanel: {fileID: 192249069}
   playerNameLabel: {fileID: 539133078}
   playerProfilePicture: {fileID: 574052263}
   opponentNameLabel: {fileID: 1084174629}
@@ -1658,6 +1660,7 @@ RectTransform:
   - {fileID: 1649922471}
   - {fileID: 437029455}
   - {fileID: 1758807501}
+  - {fileID: 2052989939}
   m_Father: {fileID: 293108652}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8457,6 +8460,50 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
     type: 2}
   m_PrefabInternal: {fileID: 717141509}
+--- !u!1 &2052989938
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2052989939}
+  - component: {fileID: 2052989940}
+  m_Layer: 0
+  m_Name: GamePiecePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2052989939
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2052989938}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -8222.223}
+  m_LocalScale: {x: 91.358025, y: 91.358025, z: 91.358025}
+  m_Children: []
+  m_Father: {fileID: 308658291}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2052989940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2052989938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3fe984997ad302409b2ad4e270c1c8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 174738, guid: edd52c6e9d75d420199836641a1473b2, type: 2}
+  Preload: 64
+  Capacity: 64
+  Notification: 0
 --- !u!1 &2070770103
 GameObject:
   m_ObjectHideFlags: 0

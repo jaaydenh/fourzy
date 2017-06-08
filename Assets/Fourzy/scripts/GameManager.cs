@@ -11,26 +11,26 @@ using DG.Tweening;
 namespace Fourzy
 {
     public class GameManager : MonoBehaviour
-	{
-		[Range(3, 8)]
+    {
+        [Range(3, 8)]
         public int numRows = Constants.numRows;
-		[Range(3, 8)]
+        [Range(3, 8)]
         public int numColumns = Constants.numColumns;
 
-		[Tooltip("How many pieces have to be connected to win.")]
+        [Tooltip("How many pieces have to be connected to win.")]
         public int numPiecesToWin = Constants.numPiecesToWin;
 
-		[Tooltip("Allow diagonally connected Pieces?")]
-		public bool allowDiagonally = true;
-		
-		public float dropTime = 1.0f;
+        [Tooltip("Allow diagonally connected Pieces?")]
+        public bool allowDiagonally = true;
 
-		// GameSparks
+        public float dropTime = 1.0f;
+
+        // GameSparks
         public string challengeInstanceId;
 
-		public GameObject pieceRed;
-		public GameObject pieceBlue;
-		// public GameObject pieceEmpty;
+        public GameObject pieceRed;
+        public GameObject pieceBlue;
+        // public GameObject pieceEmpty;
         public GameObject cornerSpot;
         public GameObject upArrowToken;
         public GameObject downArrowToken;
@@ -51,21 +51,26 @@ namespace Fourzy
         public Button nextGameButton;
         //public GameObject UIScreen;
         public GameObject CreateGameScreen;
-		public Text gameStatusText;
-		public string bluePlayerWonText = "Blue Player Won!";
-		public string redPlayerWonText = "Red Player Won!";
+        public Text gameStatusText;
+        public Sprite playerOneSprite;
+        public Sprite playerTwoSprite;
+        public string bluePlayerWonText = "Blue Player Won!";
+        public string redPlayerWonText = "Red Player Won!";
         public string bluePlayerMoveText = "Blue Player's Move";
         public string redPlayerMoveText = "Red Player's Move";
-		public string playerWonText = "You Won!";
-		public string playerLoseText = "You Lose!";
-		public string drawText = "Draw!";
+        public string playerWonText = "You Won!";
+        public string playerLoseText = "You Lose!";
+        public string drawText = "Draw!";
 
         public Color bluePlayerColor = new Color(0f/255f, 176.0f/255f, 255.0f/255.0f);
         public Color redPlayerColor = new Color(254.0f/255.0f, 40.0f/255.0f, 81.0f/255.0f);
 
         public Shader lineShader = null;
 
-		GameObject gamePieces;
+        GameObject gamePieces;
+        GameObject tokens;
+        public GameObject gameScreen;
+        public GameObject ErrorPanel;
 
         private GameObject UIScreen;
 
@@ -98,9 +103,6 @@ namespace Fourzy
         public AudioClip clipWin;
         private AudioSource audioMove;
         private AudioSource audioWin;
-
-        public GameObject gameScreen;
-        public GameObject ErrorPanel;
 
         public Text playerNameLabel;
         public Image playerProfilePicture;
@@ -316,9 +318,13 @@ namespace Fourzy
             };
 
             int max = Mathf.Max(numRows, numColumns);
+            
+            if(numPiecesToWin > max)
+                numPiecesToWin = max;
 
-			if(numPiecesToWin > max)
-				numPiecesToWin = max;
+            gamePieces = new GameObject("GamePieces");
+            gamePieces.transform.parent = gameScreen.transform;
+            gamePieces.transform.localPosition = new Vector3(-375f, -501f);
 
             gameBoard = new GameBoard(Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
@@ -329,7 +335,7 @@ namespace Fourzy
 
             // center camera
             Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
-		}
+        }
             
         public AudioSource AddAudio(AudioClip clip, bool loop, bool playAwake, float vol) { 
             AudioSource newAudio = gameObject.AddComponent<AudioSource>();
@@ -406,7 +412,8 @@ namespace Fourzy
 
                     if (piece == (int)Piece.BLUE)
                     {
-                        GameObject pieceObject = Instantiate(pieceBlue, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
+                        //GameObject pieceObject = Instantiate(pieceBlue, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
+                        GameObject pieceObject = SpawnPiece(col, row * -1, Player.ONE);
                         //TODO: Use player chosen sprite for gamepiece
                         SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
                         Color c = pieceSprite.color;
@@ -420,7 +427,8 @@ namespace Fourzy
                     }
                     else if (piece == (int)Piece.RED)
                     {
-                        GameObject pieceObject = Instantiate(pieceRed, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
+                        //GameObject pieceObject = Instantiate(pieceRed, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
+                        GameObject pieceObject = SpawnPiece(col, row * -1, Player.TWO);
                         SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
                         Color c = pieceSprite.color;
                         c.a = 0.0f;
@@ -450,37 +458,37 @@ namespace Fourzy
                     switch (token)
                     {
                         case Token.UP_ARROW:
-                            go = Instantiate(upArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            go = Instantiate(upArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, tokens.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
                         case Token.DOWN_ARROW:
-                            go = Instantiate(downArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            go = Instantiate(downArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, tokens.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
                         case Token.LEFT_ARROW:
-                            go = Instantiate(leftArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            go = Instantiate(leftArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, tokens.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
                         case Token.RIGHT_ARROW:
-                            go = Instantiate(rightArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            go = Instantiate(rightArrowToken, new Vector3(col, row * -1, 15), Quaternion.identity, tokens.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
                         case Token.STICKY:
-                            go = Instantiate(stickyToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            go = Instantiate(stickyToken, new Vector3(col, row * -1, 15), Quaternion.identity, tokens.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
                         case Token.BLOCKER:
-                            go = Instantiate(blockerToken, new Vector3(col, row * -1, 15), Quaternion.identity, gamePieces.transform);
+                            go = Instantiate(blockerToken, new Vector3(col, row * -1, 15), Quaternion.identity, tokens.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
                         case Token.GHOST:
-                            go = Instantiate(ghostToken, new Vector3(col, row * -1, 5), Quaternion.identity, gamePieces.transform);
+                            go = Instantiate(ghostToken, new Vector3(col, row * -1, 5), Quaternion.identity, tokens.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
@@ -573,21 +581,47 @@ namespace Fourzy
 
         public void ResetGameBoard() {
 
-			isLoading = true;
+            isLoading = true;
+            int count = 0;
+            Debug.Log("GAMEPIECES COUNT: " + gamePieces.transform.childCount);
+            if (gamePieces.transform.childCount > 0) {
+                for (int i = gamePieces.transform.childCount-1; i >= 0; i--)
+                {
+                    count++;
+                    Debug.Log("count: " + count);
+                    Transform piece = gamePieces.transform.GetChild(i);
+                    Lean.LeanPool.Despawn(piece.gameObject);
+                }
+            }
 
-            if(gamePieces != null)
-			{
-                DestroyImmediate(gamePieces);
-			}
-            gamePieces = new GameObject("GamePieces");
-            gamePieces.transform.parent = gameScreen.transform;
-            gamePieces.transform.localPosition = new Vector3(-375f, -501f);                        
+            // foreach (Transform piece in gamePieces.transform)
+            // {
+            //     count++;
+            //     Debug.Log("count: " + count);
+            //     Lean.LeanPool.Despawn(piece.gameObject);
+            // }
+
+            // if(gamePieces != null)
+            // {
+            //     DestroyImmediate(gamePieces);
+            // }
+            // gamePieces = new GameObject("GamePieces");
+            // gamePieces.transform.parent = gameScreen.transform;
+            // gamePieces.transform.localPosition = new Vector3(-375f, -501f);
+
+            if(tokens != null)
+            {
+                DestroyImmediate(tokens);
+            }
+            tokens = new GameObject("Tokens");
+            tokens.transform.parent = gameScreen.transform;
+            tokens.transform.localPosition = new Vector3(-375f, -501f);
 
             gameBoard = new GameBoard(Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
-			isLoading = false;
-			gameOver = false;
-		}
+            isLoading = false;
+            gameOver = false;
+        }
 
         public void PopulateMoveArrows() {
             // for(int col = 0; col < numColumns; col++)
@@ -621,24 +655,42 @@ namespace Fourzy
         }            
 
         public void AnimateEmptyEdgeSpots(bool animate) {
-            foreach (EmptySpot spot in gamePieces.GetComponentsInChildren<EmptySpot>())
+            foreach (EmptySpot spot in gameScreen.GetComponentsInChildren<EmptySpot>())
             {
                 StartCoroutine(spot.AnimateSpot(animate));
             }
         } 
 
-		/// <summary>
-		/// Spawns a gamepiece at the given column and row
-		/// </summary>
-		/// <returns>The piece.</returns>
-        GameObject SpawnPiece(float posX, float posY)
-		{          
-			GameObject gamePiece = Instantiate(
-				isPlayerOneTurn ? pieceBlue : pieceRed,
-				new Vector3(Mathf.FloorToInt(posX + 0.5f), 
-					Mathf.FloorToInt(posY + 0.5f), 10), // spawn it above the first row
+        /// <summary>
+        /// Spawns a gamepiece at the given column and row
+        /// </summary>
+        /// <returns>The piece.</returns>
+        GameObject SpawnPiece(float posX, float posY, Player player)
+        {
+            GameObject gamePiece = Lean.LeanPool.Spawn(pieceBlue,
+            new Vector3(Mathf.FloorToInt(posX + 0.5f), 
+                Mathf.FloorToInt(posY + 0.5f), 10),
                 Quaternion.identity, gamePieces.transform) as GameObject;
-
+            
+            gamePiece.transform.position = new Vector3(Mathf.FloorToInt(posX + 0.5f), 
+                Mathf.FloorToInt(posY + 0.5f), 10);
+            // GameObject gamePiece = Instantiate(
+            //     isPlayerOneTurn ? pieceBlue : pieceRed,
+            //     new Vector3(Mathf.FloorToInt(posX + 0.5f),
+            //     Mathf.FloorToInt(posY + 0.5f), 10), // spawn it above the first row
+            //     Quaternion.identity, gamePieces.transform) as GameObject;
+            
+            if (player == Player.ONE) {
+                gamePiece.GetComponent<SpriteRenderer>().sprite = playerOneSprite;
+                // Layer for player 1 pieces
+                gamePiece.layer = 8;
+            } else {
+                gamePiece.GetComponent<SpriteRenderer>().sprite = playerTwoSprite;
+                // Layer for player 2 pieces
+                gamePiece.layer = 9;
+            }
+            gamePiece.GetComponent<SpriteRenderer>().enabled = true;
+            
             return gamePiece;
 		}
 
@@ -827,7 +879,7 @@ namespace Fourzy
             gameBoard.activeMovingPieces.Add(activeMovingPiece);
 
             Position movePosition = activeMovingPiece.GetNextPosition();
-            GameObject g = SpawnPiece(movePosition.column, movePosition.row * -1);
+            GameObject g = SpawnPiece(movePosition.column, movePosition.row * -1, isPlayerOneTurn ? Player.ONE : Player.TWO);
             GamePiece gamePiece = g.GetComponent<GamePiece>();
             gamePiece.player = isPlayerOneTurn ? Player.ONE : Player.TWO;
             gamePiece.column = movePosition.column;
@@ -864,6 +916,7 @@ namespace Fourzy
                 }
 
                 GameObject pieceView = gameBoardView.gamePieces[piece.positions[0].row, piece.positions[0].column];
+                
                 GameBoardViewUpdates.Add(pieceView, piece.positions);
 
                 StartCoroutine(AnimatePiece(piece.positions));
@@ -954,7 +1007,7 @@ namespace Fourzy
             
             //GameObject g = gameBoardView.gamePieces[positions[positions.Count - 1].row, positions[positions.Count - 1].column];
             GameObject g = gameBoardView.gamePieces[positions[0].row, positions[0].column];
-
+            
             //Vector3 start = new Vector3(positions[1].column, positions[1].row * -1);
             Sequence mySequence = DOTween.Sequence();
             for (int i = 0; i < positions.Count; i++)
@@ -984,7 +1037,7 @@ namespace Fourzy
 
                 //start = end;
             }
-
+            
             yield return mySequence.WaitForCompletion();
             isAnimating = false;
         }
@@ -1123,7 +1176,7 @@ namespace Fourzy
             Debug.Log("DRAWLINE");
             GameObject myLine = new GameObject("WinLine");
             myLine.tag = "WinLine";
-            myLine.transform.parent = gamePieces.transform;
+            myLine.transform.parent = tokens.transform;
             myLine.transform.position = start;
             myLine.AddComponent<LineRenderer>();
             LineRenderer lr = myLine.GetComponent<LineRenderer>();
@@ -1138,17 +1191,17 @@ namespace Fourzy
             //GameObject.Destroy(myLine, duration);
         }
 
-		bool inTopRowBounds(float x, float y) {
-			return x > 0.5 && x < numColumns - 1.5 && y > -0.5 && y < 0.5;
-		}
+        bool inTopRowBounds(float x, float y) {
+            return x > 0.5 && x < numColumns - 1.5 && y > -0.5 && y < 0.5;
+        }
 
-		bool inBottomRowBounds(float x, float y) {
-			return x > 0.5 && x < numColumns - 1.5 && y > -numColumns && y < -numColumns + 1.5;
-		}
+        bool inBottomRowBounds(float x, float y) {
+            return x > 0.5 && x < numColumns - 1.5 && y > -numColumns && y < -numColumns + 1.5;
+        }
 
-		bool inLeftRowBounds(float x, float y) {
-			return x > - 0.5 && x < 0.5 && y > -numColumns + 1.5 && y < -0.5;
-		}
+        bool inLeftRowBounds(float x, float y) {
+            return x > - 0.5 && x < 0.5 && y > -numColumns + 1.5 && y < -0.5;
+        }
 
 		bool inRightRowBounds(float x, float y) {
 			return x > numColumns - 1.5 && x < numColumns - 0.5 && y > -numColumns + 1.5 && y < -0.5;
