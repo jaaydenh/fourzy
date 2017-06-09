@@ -67,8 +67,8 @@ namespace Fourzy
 
         public Shader lineShader = null;
 
-        GameObject gamePieces;
-        GameObject tokens;
+        public GameObject gamePieces;
+        public GameObject tokens;
         public GameObject gameScreen;
         public GameObject ErrorPanel;
 
@@ -326,6 +326,10 @@ namespace Fourzy
             gamePieces.transform.parent = gameScreen.transform;
             gamePieces.transform.localPosition = new Vector3(-375f, -501f);
 
+            tokens = new GameObject("Tokens");
+            tokens.transform.parent = gameScreen.transform;
+            tokens.transform.localPosition = new Vector3(-375f, -501f);
+
             gameBoard = new GameBoard(Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
             UIScreen = GameObject.Find("UI Screen");
@@ -582,13 +586,13 @@ namespace Fourzy
         public void ResetGameBoard() {
 
             isLoading = true;
-            int count = 0;
-            Debug.Log("GAMEPIECES COUNT: " + gamePieces.transform.childCount);
+            //int count = 0;
+            //Debug.Log("GAMEPIECES COUNT: " + gamePieces.transform.childCount);
             if (gamePieces.transform.childCount > 0) {
                 for (int i = gamePieces.transform.childCount-1; i >= 0; i--)
                 {
-                    count++;
-                    Debug.Log("count: " + count);
+                    //count++;
+                    //Debug.Log("count: " + count);
                     Transform piece = gamePieces.transform.GetChild(i);
                     Lean.LeanPool.Despawn(piece.gameObject);
                 }
@@ -609,13 +613,21 @@ namespace Fourzy
             // gamePieces.transform.parent = gameScreen.transform;
             // gamePieces.transform.localPosition = new Vector3(-375f, -501f);
 
-            if(tokens != null)
-            {
-                DestroyImmediate(tokens);
+            if (tokens.transform.childCount > 0) {
+                for (int i = tokens.transform.childCount-1; i >= 0; i--)
+                {
+                    Transform token = tokens.transform.GetChild(i);
+                    DestroyImmediate(token.gameObject);
+                }
             }
-            tokens = new GameObject("Tokens");
-            tokens.transform.parent = gameScreen.transform;
-            tokens.transform.localPosition = new Vector3(-375f, -501f);
+
+            // if(tokens != null)
+            // {
+            //     DestroyImmediate(tokens);
+            // }
+            // tokens = new GameObject("Tokens");
+            // tokens.transform.parent = gameScreen.transform;
+            // tokens.transform.localPosition = new Vector3(-375f, -501f);
 
             gameBoard = new GameBoard(Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 

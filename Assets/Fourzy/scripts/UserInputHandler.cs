@@ -26,6 +26,16 @@ public class UserInputHandler : MonoBehaviour {
     #region MONOBEHAVIOUR METHODS
     void Update () {
 
+        // if (Input.touchCount > 0 && !mouseButtonPressed && inputEnabled) {
+        //     mouseButtonPressed = true;
+        //     Debug.Log("touch: " + Input.touches[0].position.ToString());
+        //     if (OnTap != null)
+                
+        //         OnTap(Input.touches[0].position);
+        // } else {
+        //     mouseButtonPressed = false;
+        // }
+
         if (Input.GetMouseButtonDown(0) && !mouseButtonPressed && inputEnabled) {
             mouseButtonPressed = true;
             if (OnTap != null)
