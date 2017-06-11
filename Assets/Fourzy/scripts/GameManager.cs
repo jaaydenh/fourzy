@@ -7,6 +7,7 @@ using GameSparks.Api.Messages;
 using GameSparks.Core;
 using System.Linq;
 using DG.Tweening;
+using Lean;
 
 namespace Fourzy
 {
@@ -96,8 +97,8 @@ namespace Fourzy
 		public bool isCheckingForWinner = false;
         public bool isAnimating = false;
         public float gameScreenFadeInTime = 0.6f;
-        int spacing = 1; //100
-        int offset = 0; //4
+        //int spacing = 1; //100
+        //int offset = 0; //4
 
         public AudioClip clipMove;
         public AudioClip clipWin;
