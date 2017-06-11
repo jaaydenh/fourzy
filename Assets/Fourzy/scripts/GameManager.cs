@@ -122,6 +122,7 @@ namespace Fourzy
                 if (_instance == null)
                 {
                     _instance = GameObject.FindObjectOfType<GameManager>();
+                    DontDestroyOnLoad(_instance.gameObject);
                 }
                 return _instance;
             }
