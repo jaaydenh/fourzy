@@ -7,6 +7,7 @@
 //
 
 #import "EtceteraBinding.h"
+#import "Utility.h"
 
 char* getUUID ()
 {
