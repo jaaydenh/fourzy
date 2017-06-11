@@ -8,6 +8,7 @@
 
 #import "SKPaymentTransaction+Serialization.h"
 #import "NSData+Base64.h"
+#import "Utility.h"
 
 @implementation SKPaymentTransaction (Serialization)
 

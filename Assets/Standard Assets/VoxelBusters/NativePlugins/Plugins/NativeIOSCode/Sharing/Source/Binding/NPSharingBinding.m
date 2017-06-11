@@ -8,6 +8,7 @@
 
 #import "NPSharingBinding.h"
 #import "NPSharingHandler.h"
+#import "Utility.h"
 
 #define kWhatsAppShareFinished 	"WhatsAppShareFinished"
 

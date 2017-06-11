@@ -7,6 +7,7 @@
 //
 
 #import "NSData+UIImage.h"
+#import "Utility.h"
 
 @implementation NSData (UIImage)
 

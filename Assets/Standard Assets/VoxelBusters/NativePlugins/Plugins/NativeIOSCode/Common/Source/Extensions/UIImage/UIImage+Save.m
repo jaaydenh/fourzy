@@ -10,6 +10,7 @@
 #import "NSData+UIImage.h"
 #import "UIImage+Formats.h"
 #import "UIImage+Resize.h"
+#import "Utility.h"
 
 @implementation UIImage (Save)
 

@@ -8,6 +8,7 @@
 
 #import "UILocalNotification+Payload.h"
 #import "NotificationHandler.h"
+#import "Utility.h"
 
 @implementation UILocalNotification (Payload)
 

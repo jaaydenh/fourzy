@@ -7,6 +7,7 @@
 //
 
 #import "GKAchievement+Extensions.h"
+#import "Utility.h"
 
 const NSString *kGKAchievementInfo						= @"achievement-info";
 const NSString *kGKAchievementIdentifier				= @"id";

@@ -8,6 +8,7 @@
 
 #import "TwitterBinding.h"
 #import "TwitterHandler.h"
+#import "Utility.h"
 
 #pragma mark - init
 

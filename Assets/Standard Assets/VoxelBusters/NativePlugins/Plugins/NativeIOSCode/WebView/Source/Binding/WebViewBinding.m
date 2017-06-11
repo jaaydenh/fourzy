@@ -9,6 +9,7 @@
 #import "WebViewBinding.h"
 #import	"WebViewHandler.h"
 #import "CustomWebView.h"
+#import "Utility.h"
 
 #pragma mark - Handling webviews
 

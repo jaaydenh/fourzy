@@ -8,6 +8,7 @@
 
 #import "MediaLibraryBindings.h"
 #import "MediaLibraryHandler.h"
+#import "Utility.h"
 
 #pragma mark - Image Methods
 
