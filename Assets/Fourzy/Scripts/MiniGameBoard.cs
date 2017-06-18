@@ -17,6 +17,7 @@ namespace Fourzy {
         public GameObject stickyToken;
         public GameObject blockerToken;
         public GameObject ghostToken;
+        public GameObject glow;
         private GameObject tokens;
 
         public void SetToggleGroup() {
@@ -75,12 +76,12 @@ namespace Fourzy {
             // Debug.Log("shader: " + gameboard.GetComponent<SpriteRenderer>().material.shader);
             if (toggle.isOn) {
                 //Debug.Log("GAME BOARD SELECTED ON");
-                gameboard.GetComponent<SpriteRenderer>().material.shader = Shader.Find("Outline2D");
+                glow.SetActive(true);
                 if (OnSetTokenBoard != null)
                     OnSetTokenBoard(tokenBoard);
             } else {
                 //Debug.Log("GAME BOARD SELECTED OFF");
-                gameboard.GetComponent<SpriteRenderer>().material.shader = Shader.Find("Sprites/Default");
+                glow.SetActive(false);
             }
         }
     }
