@@ -157,6 +157,7 @@ namespace Fourzy
         }
 
         public void TransitionToCreateGameScreen() {
+            BoardSelectionManager.instance.LoadMiniBoards();
             UIScreen.SetActive(false);
             CreateGameScreen.SetActive(true);
         }
@@ -724,12 +725,12 @@ namespace Fourzy
             FadeGameScreen(1.0f, gameScreenFadeInTime);
         }
 
-		void Update () {
+        void Update () {
             if(!isMultiplayer && gameOver)
-			{
+            {
                 rematchButton.gameObject.SetActive(true);
-			}
-		}
+            }
+        }
 
         private void DisplayLoginError() {
             ErrorPanel.SetActive(true);

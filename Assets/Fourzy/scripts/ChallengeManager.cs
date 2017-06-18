@@ -15,9 +15,9 @@ namespace Fourzy
 	{
         public delegate void GameActive();
         public static event GameActive OnActiveGame;
-
         public static ChallengeManager instance;
 
+        TokenBoard tokenBoard;
 		public GameObject yourMoveGameGrid;
         public GameObject theirMoveGameGrid;
         public GameObject completedGameGrid;
@@ -54,6 +54,16 @@ namespace Fourzy
         private void OnEnable()
         {
             ActiveGame.OnRemoveGame += RemoveGame;
+            MiniGameBoard.OnSetTokenBoard += SetTokenBoard;
+        }
+
+        private void OnDisable() {
+            ActiveGame.OnRemoveGame -= RemoveGame;
+            MiniGameBoard.OnSetTokenBoard -= SetTokenBoard;
+        }
+
+        private void SetTokenBoard(TokenBoard tokenboard) {
+            tokenBoard = new TokenBoard(tokenboard.tokenData, tokenboard.id, tokenboard.name, true);
         }
 
         public void GamesListPullToRefresh(Vector2 pos) {
@@ -299,8 +309,13 @@ namespace Fourzy
 
         public void OpenPassAndPlayGame() 
         {
-            TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-            GameManager.instance.tokenBoard = tokenBoard;
+            if (tokenBoard == null) {
+                TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
+                tokenBoard = randomTokenBoard;
+                GameManager.instance.tokenBoard = randomTokenBoard;
+            } else {
+                GameManager.instance.tokenBoard = this.tokenBoard;
+            }
 
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateMoveArrows();
@@ -341,9 +356,17 @@ namespace Fourzy
         {
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateMoveArrows();
-  
-            TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-            GameManager.instance.tokenBoard = tokenBoard;
+
+            if (tokenBoard == null) {
+                TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
+                tokenBoard = randomTokenBoard;
+                GameManager.instance.tokenBoard = randomTokenBoard;
+            } else {
+                GameManager.instance.tokenBoard = this.tokenBoard;
+            }
+
+            // TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
+            // GameManager.instance.tokenBoard = tokenBoard;
             StartCoroutine(GameManager.instance.CreateTokens());
 
             //int[] tokenData = new int[64];            
@@ -380,8 +403,16 @@ namespace Fourzy
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateMoveArrows();
 
-            TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-            GameManager.instance.tokenBoard = tokenBoard;
+            if (tokenBoard == null) {
+                TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
+                tokenBoard = randomTokenBoard;
+                GameManager.instance.tokenBoard = randomTokenBoard;
+            } else {
+                GameManager.instance.tokenBoard = this.tokenBoard;
+            }
+            
+            // TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
+            // GameManager.instance.tokenBoard = tokenBoard;
             StartCoroutine(GameManager.instance.CreateTokens());
 
             GameManager.instance.isMultiplayer = true;

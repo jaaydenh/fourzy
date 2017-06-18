@@ -8,6 +8,7 @@ namespace Fourzy {
         public string id;
         public string name;
         public IToken[,] tokens;
+        public int[,] tokenData;
 
         public TokenBoard(int[] tokenData, string id, string name) {
             InitTokenBoard();
@@ -27,11 +28,17 @@ namespace Fourzy {
             SetTokenBoardFromData(convertedTokenData);
         }
 
-        public TokenBoard(int[,] tokenData, string id, string name) {
+        public TokenBoard(int[,] tokenData, string id, string name, bool instantiateTokenBoard) {
             InitTokenBoard();
             this.id = id;
             this.name = name;
-            SetTokenBoardFromData(tokenData);
+
+            if (instantiateTokenBoard) {
+                SetTokenBoardFromData(tokenData);    
+            } else {
+                this.tokenData = tokenData;
+            }
+            
         }
     	
         public void InitTokenBoard() {
