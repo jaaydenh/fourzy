@@ -27,16 +27,26 @@ namespace Fourzy {
 			TokenBoard[] boards = TokenBoardLoader.instance.GetAllTokenBoards();
 			
 			 if (createGameGameboardGrid.transform.childCount > 0) {
-                for (int i = createGameGameboardGrid.transform.childCount-1; i >= 0; i--)
-                {
-                    //count++;
-                    //Debug.Log("count: " + count);
+				for (int i = createGameGameboardGrid.transform.childCount-1; i >= 0; i--)
+				{
 					Transform board = createGameGameboardGrid.transform.GetChild(i);
 					DestroyImmediate(board.gameObject);
-                    // Transform piece = createGameGameboardGrid.transform.GetChild(i);
-                    //Lean.LeanPool.Despawn(piece.gameObject);
-                }
-            }
+					// Transform piece = createGameGameboardGrid.transform.GetChild(i);
+					//Lean.LeanPool.Despawn(piece.gameObject);
+				}
+			}
+
+			// Create Random Miniboard
+			GameObject random = Instantiate(miniBoardPrefab1) as GameObject;
+			random.transform.localScale = new Vector3(1,1,1);
+			MiniGameBoard miniGameBoardr = random.GetComponent<MiniGameBoard>();
+			miniGameBoardr.SetAsRandom();
+			random.gameObject.transform.SetParent(createGameGameboardGrid.transform);
+			
+			var toggler = random.GetComponentInChildren<Toggle>();
+			ToggleGroup tgr = createGameGameboardGrid.GetComponent<ToggleGroup>();
+			toggler.group = tgr;
+			toggler.isOn = true;
 
 			foreach (var board in boards)
 			{
@@ -52,6 +62,8 @@ namespace Fourzy {
 				ToggleGroup tg = createGameGameboardGrid.GetComponent<ToggleGroup>();
 				toggle.group = tg;
 			}
+
+			createGameGameboardGrid.transform.Translate(1900f,0,0);
 		}
 	}
 }

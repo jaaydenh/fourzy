@@ -18,6 +18,7 @@ namespace Fourzy {
         public GameObject blockerToken;
         public GameObject ghostToken;
         public GameObject glow;
+        public GameObject questionMark;
         private GameObject tokens;
 
         public void SetToggleGroup() {
@@ -69,6 +70,10 @@ namespace Fourzy {
 
             tokens.transform.localPosition = new Vector3(-1.63f,1.63f);
             tokens.transform.localScale = new Vector3(0.46f,0.46f,1);
+        }
+
+        public void SetAsRandom() {
+            questionMark.SetActive(true);
         }
 
         public void BoardSelect() {

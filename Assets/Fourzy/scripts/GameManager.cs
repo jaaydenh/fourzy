@@ -31,7 +31,6 @@ namespace Fourzy
 
         public GameObject pieceRed;
         public GameObject pieceBlue;
-        // public GameObject pieceEmpty;
         public GameObject cornerSpot;
         public GameObject upArrowToken;
         public GameObject downArrowToken;
@@ -50,7 +49,6 @@ namespace Fourzy
         public List<GameObject> tokenViews;
         public Button rematchButton;
         public Button nextGameButton;
-        //public GameObject UIScreen;
         public GameObject CreateGameScreen;
         public Text gameStatusText;
         public Sprite playerOneSprite;
@@ -197,7 +195,6 @@ namespace Fourzy
                     pieces[i].GetComponent<SpriteRenderer>().DOFade(alpha, fadeTime).OnComplete(()=>WinLineSetActive(true));
                 }
             }
-
         }
 
         private void FadeTokens(float alpha, float fadeTime) {
@@ -325,13 +322,11 @@ namespace Fourzy
             if(numPiecesToWin > max)
                 numPiecesToWin = max;
 
-            gamePieces = new GameObject("GamePieces");
-            gamePieces.transform.parent = gameScreen.transform;
-            gamePieces.transform.localPosition = new Vector3(-375f, -501f);
+            //gamePieces = new GameObject("GamePieces");
+            //gamePieces.transform.parent = gameScreen.transform;
 
             tokens = new GameObject("Tokens");
             tokens.transform.parent = gameScreen.transform;
-            tokens.transform.localPosition = new Vector3(-375f, -501f);
 
             gameBoard = new GameBoard(Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
@@ -341,7 +336,7 @@ namespace Fourzy
             gameScreen.SetActive(false);
 
             // center camera
-            Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f), Camera.main.transform.position.z);
+            Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f)+.2f, Camera.main.transform.position.z);
         }
             
         public AudioSource AddAudio(AudioClip clip, bool loop, bool playAwake, float vol) { 
@@ -419,7 +414,6 @@ namespace Fourzy
 
                     if (piece == (int)Piece.BLUE)
                     {
-                        //GameObject pieceObject = Instantiate(pieceBlue, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
                         GameObject pieceObject = SpawnPiece(col, row * -1, Player.ONE);
                         //TODO: Use player chosen sprite for gamepiece
                         SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
@@ -434,7 +428,6 @@ namespace Fourzy
                     }
                     else if (piece == (int)Piece.RED)
                     {
-                        //GameObject pieceObject = Instantiate(pieceRed, new Vector3(col, row * -1, 10), Quaternion.identity, gamePieces.transform);
                         GameObject pieceObject = SpawnPiece(col, row * -1, Player.TWO);
                         SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
                         Color c = pieceSprite.color;
@@ -594,8 +587,6 @@ namespace Fourzy
             if (gamePieces.transform.childCount > 0) {
                 for (int i = gamePieces.transform.childCount-1; i >= 0; i--)
                 {
-                    //count++;
-                    //Debug.Log("count: " + count);
                     Transform piece = gamePieces.transform.GetChild(i);
                     Lean.LeanPool.Despawn(piece.gameObject);
                 }
@@ -607,14 +598,6 @@ namespace Fourzy
             //     Debug.Log("count: " + count);
             //     Lean.LeanPool.Despawn(piece.gameObject);
             // }
-
-            // if(gamePieces != null)
-            // {
-            //     DestroyImmediate(gamePieces);
-            // }
-            // gamePieces = new GameObject("GamePieces");
-            // gamePieces.transform.parent = gameScreen.transform;
-            // gamePieces.transform.localPosition = new Vector3(-375f, -501f);
 
             if (tokens.transform.childCount > 0) {
                 for (int i = tokens.transform.childCount-1; i >= 0; i--)

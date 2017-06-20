@@ -63,7 +63,11 @@ namespace Fourzy
         }
 
         private void SetTokenBoard(TokenBoard tokenboard) {
-            tokenBoard = new TokenBoard(tokenboard.tokenData, tokenboard.id, tokenboard.name, true);
+            if (tokenboard != null) {
+                this.tokenBoard = new TokenBoard(tokenboard.tokenData, tokenboard.id, tokenboard.name, true);
+            } else {
+                this.tokenBoard = null;
+            }
         }
 
         public void GamesListPullToRefresh(Vector2 pos) {
