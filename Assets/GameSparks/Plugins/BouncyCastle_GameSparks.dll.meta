@@ -46,6 +46,9 @@ PluginImporter:
     PS4:
       enabled: 1
       settings: {}
+    Switch:
+      enabled: 1
+      settings: {}
     WebGL:
       enabled: 1
       settings: {}

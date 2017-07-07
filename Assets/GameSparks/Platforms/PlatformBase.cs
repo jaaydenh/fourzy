@@ -26,7 +26,7 @@ namespace GameSparks.Platforms
 			DeviceType = SystemInfo.deviceType.ToString();
             if (Application.platform == RuntimePlatform.PS4 || Application.platform == RuntimePlatform.XboxOne)
             {
-#if GS_DONT_USE_PLAYER_PREFS
+#if GS_DONT_USE_PLAYER_PREFS || UNITY_SWITCH
                 DeviceId = SystemInfo.deviceUniqueIdentifier.ToString();
 #else
                 DeviceId = PlayerPrefs.GetString(PLAYER_PREF_DEVICEID_KEY);
@@ -122,7 +122,14 @@ namespace GameSparks.Platforms
 					
 					break;
 
-				case "PS4":
+                case "SWITCH":
+                    manufacturer = "Nintendo";
+                    model = "Switch";
+                    osVersion = "Unknown";
+
+                    break;
+
+                case "PS4":
 					manufacturer = "Sony";
 					model = "PS4";
 					memory = (SystemInfo.systemMemorySize / 1000000) + " MB";
@@ -167,7 +174,7 @@ namespace GameSparks.Platforms
 
 			DeviceStats = new GSData (data);
 
-			/*Debug.Log (DeviceStats.GetString ("manufacturer"));
+            /*Debug.Log (DeviceStats.GetString ("manufacturer"));
 			Debug.Log (DeviceStats.GetString ("model"));
 			Debug.Log (DeviceStats.GetString ("memory"));
 			Debug.Log (DeviceStats.GetString ("os.name"));
@@ -177,17 +184,17 @@ namespace GameSparks.Platforms
 			Debug.Log (DeviceStats.GetString ("resolution"));
 			Debug.Log (DeviceStats.GetString ("gssdk"));*/
 
-#if !GS_DONT_USE_PLAYER_PREFS
-			AuthToken = PlayerPrefs.GetString(PLAYER_PREF_AUTHTOKEN_KEY);
+#if !GS_DONT_USE_PLAYER_PREFS && !UNITY_SWITCH
+            AuthToken = PlayerPrefs.GetString(PLAYER_PREF_AUTHTOKEN_KEY);
 			UserId = PlayerPrefs.GetString(PLAYER_PREF_USERID_KEY);
 #endif
 			Platform = Application.platform.ToString();
 			ExtraDebug = GameSparksSettings.DebugBuild;
 
-#if !UNITY_WEBPLAYER
-			PersistentDataPath = Application.persistentDataPath;
+#if !UNITY_WEBPLAYER && !UNITY_SWITCH
+            PersistentDataPath = Application.persistentDataPath;
 #endif
-			RequestTimeoutSeconds = 10;
+            RequestTimeoutSeconds = 10;
 
 			GS.Initialise(this);
 
@@ -306,6 +313,11 @@ namespace GameSparks.Platforms
                     case RuntimePlatform.tvOS:
                         return "TVOS";
 
+                    #if UNITY_SWITCH
+                    case RuntimePlatform.Switch:
+                        return "SWITCH";
+                    #endif
+
                     default:
                         return "UNKNOWN";
                 }
@@ -375,8 +387,8 @@ namespace GameSparks.Platforms
 			get {return m_authToken;}
 			set {
 				m_authToken = value;
-#if !GS_DONT_USE_PLAYER_PREFS
-				PlayerPrefs.SetString(PLAYER_PREF_AUTHTOKEN_KEY, value);
+#if !GS_DONT_USE_PLAYER_PREFS && !UNITY_SWITCH
+                PlayerPrefs.SetString(PLAYER_PREF_AUTHTOKEN_KEY, value);
 #endif
 			}
 		}
@@ -387,11 +399,11 @@ namespace GameSparks.Platforms
 			get {return m_userId;}
 			set {
 				m_userId = value;
-#if !GS_DONT_USE_PLAYER_PREFS
+#if !GS_DONT_USE_PLAYER_PREFS && !UNITY_SWITCH
 				PlayerPrefs.SetString(PLAYER_PREF_USERID_KEY, value);
 #endif
-			}
-		}
+            }
+        }
 
 		public Action<Exception> ExceptionReporter {
 			get;

@@ -7,10 +7,6 @@
     <namespace fullname="System.Security" preserve="all" />
     <namespace fullname="System.Security.Cryptography.X509Certificates" preserve="all" />
   </assembly>
-  <assembly fullname="Assembly-CSharp-firstpass">
-    <namespace fullname="VoxelBusters.NativePlugins" preserve="all" />
-    <namespace fullname="VoxelBusters.NativePlugins.Internal" preserve="all" />
-  </assembly>
   <assembly fullname="System">
     <namespace fullname="System.Net" preserve="all" />
     <namespace fullname="System.Net.Configuration" preserve="all" />

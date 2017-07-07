@@ -16,6 +16,7 @@ namespace GameSparks.Editor
 
     	private static string HOST = "https://portal.gamesparks.net/";
 		private static string HOST2 = "http://repo.gamesparks.net/unity-sdk/";
+        private static string HOST3 = "https://config2.gamesparks.net/restv2/game/";
 
     	private static string REST_URL = HOST + "rest/";
 
@@ -63,7 +64,7 @@ namespace GameSparks.Editor
     	}
 
     	public static String getApi(){
-    		string url = HOST + "sdk/" + GameSparksSettings.ApiKey + "/" + GameSparksSettings.ApiSecret + "/GameSparksCustomSDK501.cs";
+    		string url = HOST3 + GameSparksSettings.ApiKey + "/sdk/" + GameSparksSettings.ApiSecret + "/GameSparksCustomSDK501.cs";
     		Debug.Log(url);
     		WebClient wc = new WebClient();
     		String ret = null;

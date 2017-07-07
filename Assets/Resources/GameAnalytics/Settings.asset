@@ -37,8 +37,9 @@ MonoBehaviour:
   SelectedPlatformGameID: 5d840000
   SelectedStudio: 01000000
   SelectedGame: 02000000
-  NewVersion: 3.9.8
-  Changes: '- bug fix for end session when using manual session handling'
+  NewVersion: 3.10.0
+  Changes: '- changed the behaviour of using IMEI with the ''READ_PHONE_STATE'' permission
+    to guarantee precise analytics for certain regions (android)'
   SignUpOpen: 0
   FirstName: 
   LastName: 
@@ -61,7 +62,7 @@ MonoBehaviour:
   ResourceCurrencies: []
   LastCreatedGamePlatform: -1
   Platforms: 08000000
-  CurrentInspectorState: 0
+  CurrentInspectorState: 1
   ClosedHints: 
   DisplayHints: 0
   DisplayHintsScrollState: {x: 0, y: 0}

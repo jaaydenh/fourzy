@@ -5,9 +5,9 @@ using Facebook.Unity;
 using GameSparks.Api;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
-using Fabric.Answers;
-using VoxelBusters.NativePlugins;
-using VoxelBusters.Utility;
+//using Fabric.Answers;
+//using VoxelBusters.NativePlugins;
+//using VoxelBusters.Utility;
 using Firebase;
 
 
@@ -24,25 +24,25 @@ namespace Fourzy
 
         void Start() {
             facebookButton = GameObject.Find("Facebook Button");
-            NPBinding.NotificationService.ClearNotifications();
+            //NPBinding.NotificationService.ClearNotifications();
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
         }
 
         void Awake() {
             ConnectWithFacebook();
-            NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
+            //NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
         }
 
         private void OnEnable()
         {
             //Triggered when registration for remote notification event is done.
-            NotificationService.DidFinishRegisterForRemoteNotificationEvent += DidFinishRegisterForRemoteNotificationEvent;
+            //NotificationService.DidFinishRegisterForRemoteNotificationEvent += DidFinishRegisterForRemoteNotificationEvent;
         }
 
         private void OnDisable()
         {
-            NotificationService.DidFinishRegisterForRemoteNotificationEvent -= DidFinishRegisterForRemoteNotificationEvent;
+            //NotificationService.DidFinishRegisterForRemoteNotificationEvent -= DidFinishRegisterForRemoteNotificationEvent;
         }
 
         public void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token) {
@@ -57,7 +57,7 @@ namespace Fourzy
 
         private void DidFinishRegisterForRemoteNotificationEvent (string _deviceToken, string _error)
         {
-            print("Request to register for remote notification finished. Error = " + _error.GetPrintableString());
+           // print("Request to register for remote notification finished. Error = " + _error.GetPrintableString());
             print("DeviceToken = " + _deviceToken);
 
             ManagePushNotifications(_deviceToken, "ios");
@@ -65,8 +65,6 @@ namespace Fourzy
 
         private void ManagePushNotifications(string token, string deviceOS)
         {       
-            //string deviceToken = System.BitConverter.ToString(token).Replace('-', '').ToLower ();
-
             new PushRegistrationRequest().SetDeviceOS(deviceOS)
                 .SetPushId(token)
                 .Send((response) =>
@@ -85,19 +83,19 @@ namespace Fourzy
                     if (!response.HasErrors) {
                         UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null);
 
-                        NPBinding.NotificationService.RegisterForRemoteNotifications();
+                        //NPBinding.NotificationService.RegisterForRemoteNotifications();
                         ChallengeManager.instance.GetChallenges();
                         LeaderboardManager.instance.GetLeaderboard();
                         //Debug.Log("Device Authenticated...UserId: " + response.UserId);
                         //Debug.Log("DisplayName: " + response.DisplayName);
                         //Debug.Log("NewPlayer: " + response.NewPlayer);
                         //Debug.Log("SwitchSummary: " + response.SwitchSummary);
-                        Answers.LogCustom("DeviceAuthenticationRequest");
+                        //Answers.LogCustom("DeviceAuthenticationRequest");
                     } else {
                         Debug.Log("Error Authenticating Device: " + response.Errors.JSON);
                         if (OnLoginError != null)
                             OnLoginError();
-                        Answers.LogCustom("DeviceAuthenticationRequest:Error");
+                        //Answers.LogCustom("DeviceAuthenticationRequest:Error");
                     }
                 });
         }
@@ -179,7 +177,7 @@ namespace Fourzy
             //Debug.Log(_resp.DisplayName );
             facebookButton.SetActive(false);
             UserManager.instance.UpdateInformation();
-            NPBinding.NotificationService.RegisterForRemoteNotifications();
+            //NPBinding.NotificationService.RegisterForRemoteNotifications();
             ChallengeManager.instance.GetChallenges();
             FriendManager.instance.GetFriends();
             LeaderboardManager.instance.GetLeaderboard();
@@ -215,7 +213,7 @@ namespace Fourzy
                         if (OnLoginError != null)
                             OnLoginError();
                     }
-                    Answers.LogLogin("facebook", success);
+                    //Answers.LogLogin("facebook", success);
                 });
         }
 
