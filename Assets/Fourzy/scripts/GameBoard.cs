@@ -265,14 +265,14 @@ namespace Fourzy {
             // if there is a token at the end position and canPassThrough is false then return false
             // MUST CHECK FOR canPassThrough before checking canStopOn
             if (!tokens[endPosition.row, endPosition.column].canPassThrough) {
-                Debug.Log("CANT PASS THROUGH");
+                //Debug.Log("CANT PASS THROUGH");
                 return false;
             }
             
             // if there is a token at the end position and canStopOn is false then check if the piece can move
             // to the next position, if not then return false
             if (!tokens[endPosition.row, endPosition.column].canStopOn) {
-                Debug.Log("CANT STOP ON");
+                //Debug.Log("CANT STOP ON");
                 return CanMove(new Move(GetNextPosition(move), move.direction), tokens);
             }
 

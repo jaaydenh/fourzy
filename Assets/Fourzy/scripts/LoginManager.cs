@@ -5,11 +5,8 @@ using Facebook.Unity;
 using GameSparks.Api;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
-//using Fabric.Answers;
-//using VoxelBusters.NativePlugins;
-//using VoxelBusters.Utility;
+using Fabric.Answers;
 using Firebase;
-
 
 namespace Fourzy
 {
@@ -20,29 +17,16 @@ namespace Fourzy
 
         private GameObject facebookButton;
         string[] firstNameSyllables = new string[] {"mon","fay","shi","zag","blarg","rash","izen"};
-        string[] lastNameSyllables = new string[] {"malo","zak","abo","wonk"};
+        string[] lastNameSyllables = new string[] {"malo","zak","abo","wonk","zig","wolf","cat"};
 
         void Start() {
             facebookButton = GameObject.Find("Facebook Button");
-            //NPBinding.NotificationService.ClearNotifications();
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
         }
 
         void Awake() {
             ConnectWithFacebook();
-            //NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
-        }
-
-        private void OnEnable()
-        {
-            //Triggered when registration for remote notification event is done.
-            //NotificationService.DidFinishRegisterForRemoteNotificationEvent += DidFinishRegisterForRemoteNotificationEvent;
-        }
-
-        private void OnDisable()
-        {
-            //NotificationService.DidFinishRegisterForRemoteNotificationEvent -= DidFinishRegisterForRemoteNotificationEvent;
         }
 
         public void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token) {
@@ -55,13 +39,13 @@ namespace Fourzy
             Debug.Log("Firebase: Received a new message from: " + e.Message.From);
         }
 
-        private void DidFinishRegisterForRemoteNotificationEvent (string _deviceToken, string _error)
-        {
-           // print("Request to register for remote notification finished. Error = " + _error.GetPrintableString());
-            print("DeviceToken = " + _deviceToken);
+        // private void DidFinishRegisterForRemoteNotificationEvent (string _deviceToken, string _error)
+        // {
+        //     // print("Request to register for remote notification finished. Error = " + _error.GetPrintableString());
+        //     print("DeviceToken = " + _deviceToken);
 
-            ManagePushNotifications(_deviceToken, "ios");
-        }
+        //     ManagePushNotifications(_deviceToken, "ios");
+        // }
 
         private void ManagePushNotifications(string token, string deviceOS)
         {       
@@ -71,7 +55,11 @@ namespace Fourzy
                     {
                         if (response.HasErrors)
                         {
-                            Debug.Log(response.Errors);
+                            Debug.Log("***** PushRegistration Request Error: " + response.Errors.JSON);
+                            Answers.LogCustom("PushRegistrationRequest:Error: " + response.Errors.JSON);
+                        } else {
+                            Debug.Log("***** PushRegistration Successful: Device OS: " + deviceOS);
+                            Answers.LogCustom("PushRegistrationRequest");
                         }
                     });
         }
@@ -82,20 +70,18 @@ namespace Fourzy
                 .Send((response) => {
                     if (!response.HasErrors) {
                         UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null);
-
-                        //NPBinding.NotificationService.RegisterForRemoteNotifications();
                         ChallengeManager.instance.GetChallenges();
                         LeaderboardManager.instance.GetLeaderboard();
                         //Debug.Log("Device Authenticated...UserId: " + response.UserId);
                         //Debug.Log("DisplayName: " + response.DisplayName);
                         //Debug.Log("NewPlayer: " + response.NewPlayer);
                         //Debug.Log("SwitchSummary: " + response.SwitchSummary);
-                        //Answers.LogCustom("DeviceAuthenticationRequest");
+                        Answers.LogCustom("DeviceAuthenticationRequest");
                     } else {
-                        Debug.Log("Error Authenticating Device: " + response.Errors.JSON);
+                        Debug.Log("***** Error Authenticating Device: " + response.Errors.JSON);
                         if (OnLoginError != null)
                             OnLoginError();
-                        //Answers.LogCustom("DeviceAuthenticationRequest:Error");
+                        Answers.LogCustom("DeviceAuthenticationRequest:Error");
                     }
                 });
         }
@@ -161,13 +147,19 @@ namespace Fourzy
             if(FB.IsLoggedIn)
             {
                 Debug.Log("Logging into gamesparks with facebook details");
+                Answers.LogCustom("PlayerConnectsWithFacebook");
                 GSFacebookLogin(AfterFBLogin);
             }
             else
             {
-                Debug.LogWarning("Something went wrong with FaceBook: " + result.Error);
-                if (OnLoginError != null)
+                Debug.LogWarning("Something went wrong with connectin to FaceBook: " + result.Error);
+                
+                if (OnLoginError != null) {
+                    Answers.LogCustom("GameSparksFBConnect:Error");
                     OnLoginError();
+                } else {
+                    Answers.LogCustom("GameSparksFBConnect:Decline");
+                }
             }
         }
 
@@ -177,7 +169,6 @@ namespace Fourzy
             //Debug.Log(_resp.DisplayName );
             facebookButton.SetActive(false);
             UserManager.instance.UpdateInformation();
-            //NPBinding.NotificationService.RegisterForRemoteNotifications();
             ChallengeManager.instance.GetChallenges();
             FriendManager.instance.GetFriends();
             LeaderboardManager.instance.GetLeaderboard();
@@ -208,12 +199,12 @@ namespace Fourzy
                     }
                     else
                     {
-                        Debug.LogWarning("Error Logging into facebook: " + response.Errors.JSON);
+                        Debug.LogWarning("***** Error Logging into facebook: " + response.Errors.JSON);
                         facebookButton.SetActive(true);
                         if (OnLoginError != null)
                             OnLoginError();
                     }
-                    //Answers.LogLogin("facebook", success);
+                    Answers.LogLogin("facebook", success);
                 });
         }
 
@@ -246,7 +237,7 @@ namespace Fourzy
             lastName = lastNameLetter + lastName;
 
             //assembles the newly-created name
-            return firstName + " " + lastName + Random.Range(0f,9999f).ToString();
+            return firstName + " " + lastName + Mathf.CeilToInt(Random.Range(0f,9999f)).ToString();
         }
     }
 }

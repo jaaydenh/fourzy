@@ -34,7 +34,7 @@ namespace Fourzy
     				{
     					if (response.HasErrors)
     					{
-    						Debug.Log(response.Errors);
+    						Debug.Log("***** Error Accepting Challenge Request: " + response.Errors.JSON);
     					}
     					else
     					{
@@ -55,7 +55,7 @@ namespace Fourzy
     				{
     					if (response.HasErrors)
     					{
-    						Debug.Log(response.Errors);
+    						Debug.Log("***** Error Declining Challenge Request: " + response.Errors.JSON);
     					}
     					else
     					{

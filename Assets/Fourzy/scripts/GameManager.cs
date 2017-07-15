@@ -29,8 +29,7 @@ namespace Fourzy
         // GameSparks
         public string challengeInstanceId;
 
-        public GameObject pieceRed;
-        public GameObject pieceBlue;
+        public GameObject gamePiecePrefab;
         public GameObject cornerSpot;
         public GameObject upArrowToken;
         public GameObject downArrowToken;
@@ -138,7 +137,7 @@ namespace Fourzy
                 new EndSessionRequest()
                     .Send((response) => {
                         if (response.HasErrors) {
-                            Debug.Log("EndSessionRequest:Error");
+                            Debug.Log("***** EndSessionRequest:Error: " + response.Errors.JSON);
                         }
                     });
             }
@@ -665,7 +664,7 @@ namespace Fourzy
         /// <returns>The piece.</returns>
         GameObject SpawnPiece(float posX, float posY, Player player)
         {
-            GameObject gamePiece = Lean.LeanPool.Spawn(pieceBlue,
+            GameObject gamePiece = Lean.LeanPool.Spawn(gamePiecePrefab,
             new Vector3(Mathf.FloorToInt(posX + 0.5f), 
                 Mathf.FloorToInt(posY + 0.5f), 10),
                 Quaternion.identity, gamePieces.transform) as GameObject;
@@ -828,7 +827,7 @@ namespace Fourzy
                             {
                                 if (response.HasErrors)
                                 {
-                                    Debug.Log("ChallengeEventRequest was not successful");
+                                    Debug.Log("***** ChallengeEventRequest failed: " + response.Errors.JSON);
                                     gameStatusText.text = "There was a problem making your move. Please try again.";
                                 }
                                 else

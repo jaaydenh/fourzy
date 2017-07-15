@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using System.Collections;
 using GameSparks.Api.Requests;
 using System;
@@ -43,28 +44,49 @@ namespace Fourzy
             if (fbId != null) {
                 StartCoroutine(UserManager.instance.GetFBPicture(fbId, (sprite) =>
 					{
-                        profilePicture = sprite;
-                        profilePictureImage.sprite = sprite;
+                        if (sprite) {
+							profilePicture = sprite;
+                        	//profilePictureImage.sprite = sprite;
+						}
                     }));
             }
     	}
 
         public IEnumerator GetFBPicture(string facebookId, Action<Sprite> callback)
     	{
-    		//Debug.Log("FACEBOOK ID: " + facebookId);
-			//To get our facebook picture we use this address which we pass our facebookId into
-    		var www = new WWW("http://graph.facebook.com/" + facebookId + "/picture?width=210&height=210");
+    		using (UnityWebRequest www = UnityWebRequest.GetTexture("https://graph.facebook.com/" + facebookId + "/picture?width=210&height=210"))
+			{
+				yield return www.Send();
 
-            while (!www.isDone)
-                yield return null;
+				if (www.isError)
+				{
+					Debug.Log(www.error);
+				}
+				else
+				{
+					Texture2D tempPic = new Texture2D(25, 25);
+					tempPic = DownloadHandlerTexture.GetContent(www);
+					Sprite profilePictureSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
+
+            		callback(profilePictureSprite);
+				}
+			}
+
+			
+			//Debug.Log("FACEBOOK ID: " + facebookId);
+			//To get our facebook picture we use this address which we pass our facebookId into
+    		//var www = new WWW("http://graph.facebook.com/" + facebookId + "/picture?width=210&height=210");
+
+            //while (!www1.isDone)
+            //    yield return null;
     		//yield return www;
 
-    		Texture2D tempPic = new Texture2D(25, 25);
+    		//Texture2D tempPic = new Texture2D(25, 25);
+			
+    		//www1.LoadImageIntoTexture(tempPic);
+    		//Sprite profilePictureSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
 
-    		www.LoadImageIntoTexture(tempPic);
-    		Sprite profilePictureSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
-
-            callback(profilePictureSprite);
+            //callback(profilePictureSprite);
     	}
     }
 }

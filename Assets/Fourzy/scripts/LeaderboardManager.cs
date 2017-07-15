@@ -69,7 +69,7 @@ namespace Fourzy
                         }
                         else
                         {
-                            Debug.Log("Error Retrieving Leaderboard Data...");
+                            Debug.Log("***** Error Retrieving Leaderboard Data: " + response.Errors.JSON);
                         }
                         
                         loadingLeaderboard = false;

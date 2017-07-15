@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-//using Fabric.Answers;
+using Fabric.Answers;
 
 namespace Fourzy
 {
@@ -71,7 +71,7 @@ namespace Fourzy
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("TokenBoardId", tokenBoard.id);
             customAttributes.Add("TokenBoardName", tokenBoard.name);
-            //Answers.LogCustom("OpenNewFriendChallenge", customAttributes);
+            Answers.LogCustom("OpenNewFriendChallenge", customAttributes);
         }
     }
 }
