@@ -54,11 +54,11 @@ namespace Fourzy
 
         public IEnumerator GetFBPicture(string facebookId, Action<Sprite> callback)
     	{
-    		using (UnityWebRequest www = UnityWebRequest.GetTexture("https://graph.facebook.com/" + facebookId + "/picture?width=210&height=210"))
+    		using (UnityWebRequest www = UnityWebRequestTexture.GetTexture("https://graph.facebook.com/" + facebookId + "/picture?width=210&height=210"))
 			{
 				yield return www.Send();
 
-				if (www.isError)
+				if (www.isNetworkError)
 				{
 					Debug.Log(www.error);
 				}
