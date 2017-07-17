@@ -88,8 +88,26 @@ public class FirebaseAppDeps : AssetPostprocessor
             svcSupport, "DependOn",
             new object[] {
                 "com.google.firebase",
+                "firebase-core",
+                "11.0.0"
+            },
+            namedArgs: new Dictionary<string, object>() {
+                { "packageIds",
+                    new string[] {
+                        "extra-google-m2repository",
+                        "extra-android-m2repository"
+                    }
+                },
+                { "repositories",
+                    null
+                }
+            });
+        Google.VersionHandler.InvokeInstanceMethod(
+            svcSupport, "DependOn",
+            new object[] {
+                "com.google.firebase",
                 "firebase-app-unity",
-                "4.0.1"
+                "4.0.2"
             },
             namedArgs: new Dictionary<string, object>() {
                 { "packageIds",
