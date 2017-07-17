@@ -5,7 +5,7 @@ using Facebook.Unity;
 using GameSparks.Api;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
-using Fabric.Answers;
+//using Fabric.Answers;
 using Firebase;
 
 namespace Fourzy
@@ -56,10 +56,10 @@ namespace Fourzy
                         if (response.HasErrors)
                         {
                             Debug.Log("***** PushRegistration Request Error: " + response.Errors.JSON);
-                            Answers.LogCustom("PushRegistrationRequest:Error: " + response.Errors.JSON);
+                            //Answers.LogCustom("PushRegistrationRequest:Error: " + response.Errors.JSON);
                         } else {
                             Debug.Log("***** PushRegistration Successful: Device OS: " + deviceOS);
-                            Answers.LogCustom("PushRegistrationRequest");
+                            //Answers.LogCustom("PushRegistrationRequest");
                         }
                     });
         }
@@ -76,12 +76,12 @@ namespace Fourzy
                         //Debug.Log("DisplayName: " + response.DisplayName);
                         //Debug.Log("NewPlayer: " + response.NewPlayer);
                         //Debug.Log("SwitchSummary: " + response.SwitchSummary);
-                        Answers.LogCustom("DeviceAuthenticationRequest");
+                        //Answers.LogCustom("DeviceAuthenticationRequest");
                     } else {
                         Debug.Log("***** Error Authenticating Device: " + response.Errors.JSON);
                         if (OnLoginError != null)
                             OnLoginError();
-                        Answers.LogCustom("DeviceAuthenticationRequest:Error");
+                        //Answers.LogCustom("DeviceAuthenticationRequest:Error");
                     }
                 });
         }
@@ -147,7 +147,7 @@ namespace Fourzy
             if(FB.IsLoggedIn)
             {
                 Debug.Log("Logging into gamesparks with facebook details");
-                Answers.LogCustom("PlayerConnectsWithFacebook");
+                //Answers.LogCustom("PlayerConnectsWithFacebook");
                 GSFacebookLogin(AfterFBLogin);
             }
             else
@@ -155,10 +155,10 @@ namespace Fourzy
                 Debug.LogWarning("Something went wrong with connectin to FaceBook: " + result.Error);
                 
                 if (OnLoginError != null) {
-                    Answers.LogCustom("GameSparksFBConnect:Error");
+                    //Answers.LogCustom("GameSparksFBConnect:Error");
                     OnLoginError();
                 } else {
-                    Answers.LogCustom("GameSparksFBConnect:Decline");
+                    //Answers.LogCustom("GameSparksFBConnect:Decline");
                 }
             }
         }
@@ -181,7 +181,7 @@ namespace Fourzy
         public void GSFacebookLogin(FacebookLoginCallback _fbLoginCallback )
         {
             Debug.Log("Sending FacebookConnectRequest using AccessToken: " + AccessToken.CurrentAccessToken.TokenString);
-            bool success = false;
+           // bool success = false;
 
             new GameSparks.Api.Requests.FacebookConnectRequest()
                 .SetAccessToken(AccessToken.CurrentAccessToken.TokenString)
@@ -194,7 +194,7 @@ namespace Fourzy
                     if(!response.HasErrors)
                     {
                         Debug.Log("Logged into gamesparks with facebook");
-                        success = true;
+                        //success = true;
                         _fbLoginCallback(response);
                     }
                     else
@@ -204,7 +204,7 @@ namespace Fourzy
                         if (OnLoginError != null)
                             OnLoginError();
                     }
-                    Answers.LogLogin("facebook", success);
+                    //Answers.LogLogin("facebook", success);
                 });
         }
 
