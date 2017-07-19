@@ -121,7 +121,7 @@ PlayerSettings:
     16:10: 0
     16:9: 0
     Others: 1
-  bundleVersion: 1.2
+  bundleVersion: 0.1
   preloadedAssets: []
   metroInputSource: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -141,7 +141,7 @@ PlayerSettings:
   targetPixelDensity: 0
   resolutionScalingMode: 0
   applicationIdentifier:
-    Android: com.PartyTroll.Fourzy
+    Android: com.supermove.fourzy
     Standalone: unity.SuperMove Games.Fourzy
     Tizen: com.PartyTroll.Fourzy
     iOS: com.PartyTroll.Fourzy
@@ -222,8 +222,8 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: FourzyAndroidKeystore.keystore
+  AndroidKeyaliasName: fourzyandroidkeystore
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
   androidEnableBanner: 1
