@@ -6,6 +6,7 @@ using GameSparks.Api.Requests;
 using GameSparks.Core;
 using System.Linq;
 using System;
+using UnityEngine.Analytics.Experimental;
 //using Fabric.Answers;
 
 namespace Fourzy
@@ -95,11 +96,13 @@ namespace Fourzy
                             Debug.Log("***** Error removing game: " + response.Errors.JSON);
                             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                             customAttributes.Add("errorJSON", response.Errors.JSON);
+                            AnalyticsEvent.Custom("RemoveGame:Error", customAttributes);
                             //Answers.LogCustom("RemoveGame:Error", customAttributes);
                         }
                         else
                         {
                             Debug.Log("Remove Game was successful");
+                            AnalyticsEvent.Custom("RemoveGame");
                             //Answers.LogCustom("RemoveGame");
                         }
                     });
@@ -118,11 +121,13 @@ namespace Fourzy
                             Debug.Log("***** Error setting game viewed: " + response.Errors.JSON);
                             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                             customAttributes.Add("errorJSON", response.Errors.JSON);
+                            AnalyticsEvent.Custom("ViewedCompletedGame:Error", customAttributes);
                             //Answers.LogCustom("ViewedCompletedGame:Error", customAttributes);
                         }
                         else
                         {
                             Debug.Log("Set Viewed Game was successful");
+                            AnalyticsEvent.Custom("ViewedCompletedGame");
                             //Answers.LogCustom("ViewedCompletedGame");
                         }
                     });
@@ -173,6 +178,7 @@ namespace Fourzy
 						Debug.Log("***** Error Challenging User: " + response.Errors.JSON);
                         Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                         customAttributes.Add("errorJSON", response.Errors.JSON);
+                        AnalyticsEvent.Custom("CreateChallengeRequest:ChallengeUser:Error", customAttributes);
                         //Answers.LogCustom("CreateChallengeRequest:ChallengeUser:Error", customAttributes);
 					}
 					else
@@ -182,6 +188,7 @@ namespace Fourzy
                         customAttributes.Add("ChallengedId", userId);
                         customAttributes.Add("TokenBoardId", tokenBoard.id);
                         customAttributes.Add("TokenBoardName", tokenBoard.name);
+                        AnalyticsEvent.Custom("CreateChallengeRequest:ChallengeUser", customAttributes);
                         //Answers.LogCustom("CreateChallengeRequest:ChallengeUser", customAttributes);
 					}
 				});
@@ -202,6 +209,7 @@ namespace Fourzy
                         Debug.Log("***** Error Finding Random Challenge: " + response.Errors.JSON);
                         Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                         customAttributes.Add("errorJSON", response.Errors.JSON);
+                        AnalyticsEvent.Custom("FindChallengeRequest:Error", customAttributes);
                         //Answers.LogCustom("FindChallengeRequest:Error", customAttributes);
                     } else {
                         GSEnumerable<GameSparks.Api.Responses.FindChallengeResponse._Challenge> challengeInstances = response.ChallengeInstances; 
@@ -260,6 +268,7 @@ namespace Fourzy
                             Debug.Log("***** Error Challenging Random User: " + response.Errors.JSON);
                             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                             customAttributes.Add("errorJSON", response.Errors.JSON);
+                            AnalyticsEvent.Custom("CreateChallengeRequest:Error", customAttributes);
                             //Answers.LogCustom("CreateChallengeRequest:Error", customAttributes);
                         } else {
                             GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
@@ -267,6 +276,7 @@ namespace Fourzy
                             customAttributes.Add("ChallengeInstanceId", response.ChallengeInstanceId);
                             customAttributes.Add("TokenBoardId", tokenBoard.id);
                             customAttributes.Add("TokenBoardName", tokenBoard.name);
+                            AnalyticsEvent.Custom("CreateChallengeRequest:ChallengeRandomUser", customAttributes);
                             //Answers.LogCustom("CreateChallengeRequest:ChallengeRandomUser", customAttributes);
                         }
                     });
@@ -282,6 +292,7 @@ namespace Fourzy
                         Debug.Log("***** Error Joining Challenge: " + response.Errors.JSON);
                         Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                         customAttributes.Add("errorJSON", response.Errors.JSON);
+                        AnalyticsEvent.Custom("JoinChallengeRequest:Error", customAttributes);
                         //Answers.LogCustom("JoinChallengeRequest:Error", customAttributes);
                     }
                     else
@@ -302,6 +313,7 @@ namespace Fourzy
                         Debug.Log("***** Error Getting Challenge: " + response.Errors);
                         Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                         customAttributes.Add("errorJSON", response.Errors.JSON);
+                        AnalyticsEvent.Custom("GetChallengeRequest:Error", customAttributes);
                         //Answers.LogCustom("GetChallengeRequest:Error", customAttributes);
                     } else {
                         var challenge = response.Challenge;
@@ -353,6 +365,7 @@ namespace Fourzy
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("TokenBoardId", tokenBoard.id);
             customAttributes.Add("TokenBoardName", tokenBoard.name);
+            AnalyticsEvent.Custom("OpenPassAndPlayGame", customAttributes);
             //Answers.LogCustom("OpenPassAndPlayGame", customAttributes);
         }
 
@@ -450,6 +463,7 @@ namespace Fourzy
             customAttributes.Add("PlayerName", UserManager.instance.userName);
             customAttributes.Add("TokenBoardId", tokenBoard.id);
             customAttributes.Add("TokenBoardName", tokenBoard.name);
+            AnalyticsEvent.Custom("OpenNewMultiplayerGame", customAttributes);
             //Answers.LogCustom("OpenNewMultiplayerGame", customAttributes);
         }
 
@@ -525,6 +539,7 @@ namespace Fourzy
             customAttributes.Add("OpponentName", challenge.Challenger.Name);
             customAttributes.Add("TokenBoardId", tokenBoardId);
             customAttributes.Add("TokenBoardName", tokenBoardName);
+            AnalyticsEvent.Custom("JoinedMultiplayerGame", customAttributes);
             //Answers.LogCustom("JoinedMultiplayerGame", customAttributes);
         }          
 
@@ -558,6 +573,7 @@ namespace Fourzy
                                 Debug.Log("***** Error Listing Challenge Request: " + response.Errors.JSON);
                                 Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                                 customAttributes.Add("errorJSON", response.Errors.JSON);
+                                AnalyticsEvent.Custom("ListChallengeRequest:Error", customAttributes);
                                 //Answers.LogCustom("ListChallengeRequest:Error", customAttributes);
                             } else {
                                 int challengeCount = 0;
@@ -668,6 +684,7 @@ namespace Fourzy
                                 
                                 Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                                 customAttributes.Add("ChallengeCount", challengeCount);
+                                //AnalyticsEvent.Custom("ListChallengeRequest", customAttributes);
                                 //Answers.LogCustom("ListChallengeRequest", customAttributes);
                             }
                         });

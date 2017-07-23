@@ -1,1 +1,0 @@
-<dependencies><dependency><groupId>com.google.android.gms</groupId><artifactId>play-services-gcm</artifactId><version>LATEST</version></dependency><dependency><groupId>com.android.support</groupId><artifactId>support-v4</artifactId><version>23.+</version></dependency></dependencies>

@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 222000011962662988}
   - component: {fileID: 114000011205198002}
   - component: {fileID: 114000012318100788}
+  - component: {fileID: 114662141742512824}
   m_Layer: 5
   m_Name: Challenge
   m_TagString: Untagged
@@ -167,6 +168,7 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!114 &114000011125735090
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -376,8 +378,77 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 114662141742512824}
+        m_MethodName: TriggerEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114662141742512824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012627995134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eb0edc33cd2e446fab64950ae3ae78e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Trigger:
+    m_IsTriggerExpanded: 1
+    m_Type: 1
+    m_LifecycleEvent: 0
+    m_ApplyRules: 0
+    m_Rules:
+      m_Rules: []
+    m_TriggerBool: 0
+    m_InitTime: 5
+    m_RepeatTime: 5
+    m_Repetitions: 0
+    repetitionCount: 0
+  m_EventPayload:
+    m_IsEventExpanded: 1
+    m_StandardEventType: Progression/GameStart
+    m_Parameters:
+      m_Parameters:
+      - m_RequirementType: 0
+        m_GroupID: 
+        m_Tooltip: 
+        m_Name: challenge_friend
+        m_Value:
+          m_EditingCustomValue: 0
+          m_PopupIndex: 0
+          m_CustomValue: 
+          m_FixedType: 0
+          m_EnumType: 
+          m_EnumTypeIsCustomizable: 0
+          m_CanDisable: 0
+          m_PropertyType: 1
+          m_ValueType: System.Boolean
+          m_Value: True
+          m_Target:
+            m_Target: {fileID: 0}
+            m_Path: 
+            m_ValidTypeNames:
+            - System.Int32
+            - System.Boolean
+            - System.Decimal
+            - System.Double
+            - System.Single
+            - System.Int64
+            - System.Int16
+            - System.String
+            m_Type: System.Boolean
+            m_EnumType: 
+    m_Name: game_start
 --- !u!222 &222000010499956472
 CanvasRenderer:
   m_ObjectHideFlags: 1

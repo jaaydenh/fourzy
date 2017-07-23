@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using Facebook.Unity;
 using GameSparks.Api;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
-//using Fabric.Answers;
+using UnityEngine.Analytics.Experimental;
 using Firebase;
+//using Fabric.Answers;
 
 namespace Fourzy
 {
@@ -56,9 +58,13 @@ namespace Fourzy
                         if (response.HasErrors)
                         {
                             Debug.Log("***** PushRegistration Request Error: " + response.Errors.JSON);
+                            Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                            customAttributes.Add("errorJSON", response.Errors.JSON);
+                            AnalyticsEvent.Custom("PushRegistrationRequest:Error: ", customAttributes);
                             //Answers.LogCustom("PushRegistrationRequest:Error: " + response.Errors.JSON);
                         } else {
                             Debug.Log("***** PushRegistration Successful: Device OS: " + deviceOS);
+                            AnalyticsEvent.Custom("PushRegistrationRequest");
                             //Answers.LogCustom("PushRegistrationRequest");
                         }
                     });
@@ -76,11 +82,15 @@ namespace Fourzy
                         //Debug.Log("DisplayName: " + response.DisplayName);
                         //Debug.Log("NewPlayer: " + response.NewPlayer);
                         //Debug.Log("SwitchSummary: " + response.SwitchSummary);
+                        AnalyticsEvent.Custom("DeviceAuthenticationRequest");
                         //Answers.LogCustom("DeviceAuthenticationRequest");
                     } else {
                         Debug.Log("***** Error Authenticating Device: " + response.Errors.JSON);
                         if (OnLoginError != null)
                             OnLoginError();
+                        Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                        customAttributes.Add("errorJSON", response.Errors.JSON);
+                        AnalyticsEvent.Custom("DeviceAuthenticationRequest:Error: ", customAttributes);
                         //Answers.LogCustom("DeviceAuthenticationRequest:Error");
                     }
                 });
@@ -147,6 +157,7 @@ namespace Fourzy
             if(FB.IsLoggedIn)
             {
                 Debug.Log("Logging into gamesparks with facebook details");
+                AnalyticsEvent.Custom("PlayerConnectsWithFacebook");
                 //Answers.LogCustom("PlayerConnectsWithFacebook");
                 GSFacebookLogin(AfterFBLogin);
             }
@@ -155,9 +166,11 @@ namespace Fourzy
                 Debug.LogWarning("Something went wrong with connectin to FaceBook: " + result.Error);
                 
                 if (OnLoginError != null) {
+                    AnalyticsEvent.Custom("GameSparksFBConnect:Error");
                     //Answers.LogCustom("GameSparksFBConnect:Error");
                     OnLoginError();
                 } else {
+                    AnalyticsEvent.Custom("GameSparksFBConnect:Decline");
                     //Answers.LogCustom("GameSparksFBConnect:Decline");
                 }
             }
@@ -181,7 +194,7 @@ namespace Fourzy
         public void GSFacebookLogin(FacebookLoginCallback _fbLoginCallback )
         {
             Debug.Log("Sending FacebookConnectRequest using AccessToken: " + AccessToken.CurrentAccessToken.TokenString);
-           // bool success = false;
+            bool success = false;
 
             new GameSparks.Api.Requests.FacebookConnectRequest()
                 .SetAccessToken(AccessToken.CurrentAccessToken.TokenString)
@@ -194,7 +207,7 @@ namespace Fourzy
                     if(!response.HasErrors)
                     {
                         Debug.Log("Logged into gamesparks with facebook");
-                        //success = true;
+                        success = true;
                         _fbLoginCallback(response);
                     }
                     else
@@ -204,6 +217,9 @@ namespace Fourzy
                         if (OnLoginError != null)
                             OnLoginError();
                     }
+                    Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                    customAttributes.Add("success", success);
+                    AnalyticsEvent.Custom("FacebookLogin", customAttributes);
                     //Answers.LogLogin("facebook", success);
                 });
         }
@@ -212,9 +228,9 @@ namespace Fourzy
         {
             //Creates a first name with 2-3 syllables
             string firstName = "";
-            int numberOfSyllablesInFirstName = Random.Range(2, 4);
+            int numberOfSyllablesInFirstName = UnityEngine.Random.Range(2, 4);
             for (int i = 0; i < numberOfSyllablesInFirstName; i++) {
-                firstName += firstNameSyllables[Random.Range(0, firstNameSyllables.Length)];
+                firstName += firstNameSyllables[UnityEngine.Random.Range(0, firstNameSyllables.Length)];
             }
 
             string firstNameLetter = "";
@@ -225,10 +241,10 @@ namespace Fourzy
 
             //Creates a last name with 1-2 syllables
             string lastName = "";
-            int numberOfSyllablesInLastName = Random.Range(1, 3);
+            int numberOfSyllablesInLastName = UnityEngine.Random.Range(1, 3);
             for (int j = 0; j < numberOfSyllablesInLastName; j++)
             {
-                lastName += lastNameSyllables[Random.Range(0, lastNameSyllables.Length)];
+                lastName += lastNameSyllables[UnityEngine.Random.Range(0, lastNameSyllables.Length)];
             }
             string lastNameLetter = "";
             lastNameLetter = lastName.Substring(0,1);
@@ -237,7 +253,7 @@ namespace Fourzy
             lastName = lastNameLetter + lastName;
 
             //assembles the newly-created name
-            return firstName + " " + lastName + Mathf.CeilToInt(Random.Range(0f,9999f)).ToString();
+            return firstName + " " + lastName + Mathf.CeilToInt(UnityEngine.Random.Range(0f,9999f)).ToString();
         }
     }
 }

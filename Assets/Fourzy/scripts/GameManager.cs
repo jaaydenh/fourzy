@@ -8,6 +8,7 @@ using GameSparks.Core;
 using System.Linq;
 using DG.Tweening;
 using Lean;
+using UnityEngine.Analytics.Experimental;
 
 namespace Fourzy
 {
@@ -91,6 +92,7 @@ namespace Fourzy
 		public bool gameOver = false;
         bool isGameDrawn = false;
         bool didPlayer1Win = false;
+        bool replayedLastMove = false;
 		public bool isCheckingForWinner = false;
         public bool isAnimating = false;
         public float gameScreenFadeInTime = 0.6f;
@@ -305,9 +307,11 @@ namespace Fourzy
                 
             ChallengeTurnTakenMessage.Listener = (message) => {
                 var challenge = message.Challenge;
-                if (UserManager.instance.userId == challenge.NextPlayer) {
+                
+                if (UserManager.instance.userId == challenge.NextPlayer && !replayedLastMove) {
                     // Only Replay the last move if the player is viewing the game screen for that game
                     if (challenge.ChallengeId == challengeInstanceId) {
+                        replayedLastMove = true;
                         List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                         ReplayLastMove(moveList);
                         //AnimateEmptyEdgeSpots(true);
@@ -337,7 +341,11 @@ namespace Fourzy
             // center camera
             Camera.main.transform.position = new Vector3((numColumns-1) / 2.0f, -((numRows-1) / 2.0f)+.2f, Camera.main.transform.position.z);
         }
-            
+
+        void Awake() {
+            replayedLastMove = false;
+        }
+
         public AudioSource AddAudio(AudioClip clip, bool loop, bool playAwake, float vol) { 
             AudioSource newAudio = gameObject.AddComponent<AudioSource>();
             newAudio.clip = clip; 
@@ -532,6 +540,7 @@ namespace Fourzy
                         gameStatusText.color = didPlayer1Win ? bluePlayerColor : redPlayerColor;
                     }
                 } else {
+                    AnalyticsEvent.GameOver("local_game");
                     if (isPlayerOneTurn == didPlayer1Win) {
                         audioWin.Play();
                     }
@@ -815,6 +824,7 @@ namespace Fourzy
 
                 if (!replayMove && isMultiplayer && !isNewChallenge && !isNewRandomChallenge)
                 {
+                    replayedLastMove = false;
                     StartCoroutine(ProcessMove(move.position, move.direction, replayMove));
                     Debug.Log("LogChallengeEventRequest: challengeInstanceId: " + challengeInstanceId);
                     new LogChallengeEventRequest().SetChallengeInstanceId(challengeInstanceId)

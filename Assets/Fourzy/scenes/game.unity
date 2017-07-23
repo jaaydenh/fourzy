@@ -1166,6 +1166,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 381019441}
     m_Modifications:
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -1209,7 +1214,7 @@ Prefab:
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 376.49997
+      value: 376.5
       objectReference: {fileID: 0}
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
@@ -1294,6 +1299,31 @@ Prefab:
         type: 2}
       propertyPath: m_Text
       value: New Game
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 331152905}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: TriggerEvent
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e1194a128740942a481833de0ce83eac, type: 2}
@@ -1793,6 +1823,69 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 327297645}
+--- !u!1 &331152904 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1262587047926788, guid: e1194a128740942a481833de0ce83eac,
+    type: 2}
+  m_PrefabInternal: {fileID: 211538547}
+--- !u!114 &331152905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 331152904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eb0edc33cd2e446fab64950ae3ae78e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Trigger:
+    m_IsTriggerExpanded: 1
+    m_Type: 1
+    m_LifecycleEvent: 0
+    m_ApplyRules: 0
+    m_Rules:
+      m_Rules: []
+    m_TriggerBool: 0
+    m_InitTime: 5
+    m_RepeatTime: 5
+    m_Repetitions: 0
+    repetitionCount: 0
+  m_EventPayload:
+    m_IsEventExpanded: 1
+    m_StandardEventType: Progression/GameStart
+    m_Parameters:
+      m_Parameters:
+      - m_RequirementType: 0
+        m_GroupID: 
+        m_Tooltip: 
+        m_Name: new_game
+        m_Value:
+          m_EditingCustomValue: 0
+          m_PopupIndex: 0
+          m_CustomValue: 
+          m_FixedType: 0
+          m_EnumType: 
+          m_EnumTypeIsCustomizable: 0
+          m_CanDisable: 0
+          m_PropertyType: 1
+          m_ValueType: System.Boolean
+          m_Value: True
+          m_Target:
+            m_Target: {fileID: 0}
+            m_Path: 
+            m_ValidTypeNames:
+            - System.Int32
+            - System.Boolean
+            - System.Decimal
+            - System.Double
+            - System.Single
+            - System.Int64
+            - System.Int16
+            - System.String
+            m_Type: System.Boolean
+            m_EnumType: 
+    m_Name: game_start
 --- !u!1 &358718005
 GameObject:
   m_ObjectHideFlags: 0
@@ -3185,6 +3278,16 @@ Prefab:
       propertyPath: m_Text
       value: Training  Game (coming soon)
       objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1095226898}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TriggerEvent
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e1194a128740942a481833de0ce83eac, type: 2}
   m_IsPrefabParent: 0
@@ -3746,6 +3849,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 2138970302}
     m_Modifications:
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -3864,6 +3972,31 @@ Prefab:
         type: 2}
       propertyPath: m_Text
       value: Standard Game
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1252355742}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: TriggerEvent
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e1194a128740942a481833de0ce83eac, type: 2}
@@ -4238,6 +4371,7 @@ GameObject:
   - component: {fileID: 963059899}
   - component: {fileID: 963059898}
   - component: {fileID: 963059901}
+  - component: {fileID: 963059902}
   m_Layer: 5
   m_Name: Facebook Button
   m_TagString: Untagged
@@ -4367,8 +4501,70 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 963059902}
+        m_MethodName: TriggerEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &963059902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 963059896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eb0edc33cd2e446fab64950ae3ae78e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Trigger:
+    m_IsTriggerExpanded: 1
+    m_Type: 1
+    m_LifecycleEvent: 0
+    m_ApplyRules: 0
+    m_Rules:
+      m_Rules: []
+    m_TriggerBool: 0
+    m_InitTime: 5
+    m_RepeatTime: 5
+    m_Repetitions: 0
+    repetitionCount: 0
+  m_EventPayload:
+    m_IsEventExpanded: 1
+    m_StandardEventType: Engagement/UserSignup
+    m_Parameters:
+      m_Parameters:
+      - m_RequirementType: 1
+        m_GroupID: 
+        m_Tooltip: The authorization network or login service provider (required).
+        m_Name: authorization_network
+        m_Value:
+          m_EditingCustomValue: 0
+          m_PopupIndex: 2
+          m_CustomValue: 
+          m_FixedType: 1
+          m_EnumType: UnityEngine.Analytics.Experimental.AuthorizationNetwork
+          m_EnumTypeIsCustomizable: 1
+          m_CanDisable: 0
+          m_PropertyType: 1
+          m_ValueType: enum
+          m_Value: facebook
+          m_Target:
+            m_Target: {fileID: 0}
+            m_Path: 
+            m_ValidTypeNames:
+            - enum
+            m_Type: enum
+            m_EnumType: UnityEngine.Analytics.Experimental.AuthorizationNetwork
+    m_Name: user_signup
 --- !u!1 &963101640
 GameObject:
   m_ObjectHideFlags: 0
@@ -4798,6 +4994,132 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!1 &1095226897 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1262587047926788, guid: e1194a128740942a481833de0ce83eac,
+    type: 2}
+  m_PrefabInternal: {fileID: 717141509}
+--- !u!114 &1095226898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1095226897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eb0edc33cd2e446fab64950ae3ae78e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Trigger:
+    m_IsTriggerExpanded: 1
+    m_Type: 1
+    m_LifecycleEvent: 0
+    m_ApplyRules: 0
+    m_Rules:
+      m_Rules: []
+    m_TriggerBool: 0
+    m_InitTime: 5
+    m_RepeatTime: 5
+    m_Repetitions: 0
+    repetitionCount: 0
+  m_EventPayload:
+    m_IsEventExpanded: 1
+    m_StandardEventType: Progression/GameStart
+    m_Parameters:
+      m_Parameters:
+      - m_RequirementType: 0
+        m_GroupID: 
+        m_Tooltip: 
+        m_Name: training_game
+        m_Value:
+          m_EditingCustomValue: 0
+          m_PopupIndex: 0
+          m_CustomValue: 
+          m_FixedType: 0
+          m_EnumType: 
+          m_EnumTypeIsCustomizable: 0
+          m_CanDisable: 0
+          m_PropertyType: 1
+          m_ValueType: System.Boolean
+          m_Value: True
+          m_Target:
+            m_Target: {fileID: 0}
+            m_Path: 
+            m_ValidTypeNames:
+            - System.Int32
+            - System.Boolean
+            - System.Decimal
+            - System.Double
+            - System.Single
+            - System.Int64
+            - System.Int16
+            - System.String
+            m_Type: System.Boolean
+            m_EnumType: 
+    m_Name: game_start
+--- !u!1 &1116398854 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1262587047926788, guid: e1194a128740942a481833de0ce83eac,
+    type: 2}
+  m_PrefabInternal: {fileID: 1142814816}
+--- !u!114 &1116398855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1116398854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eb0edc33cd2e446fab64950ae3ae78e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Trigger:
+    m_IsTriggerExpanded: 1
+    m_Type: 1
+    m_LifecycleEvent: 0
+    m_ApplyRules: 0
+    m_Rules:
+      m_Rules: []
+    m_TriggerBool: 0
+    m_InitTime: 5
+    m_RepeatTime: 5
+    m_Repetitions: 0
+    repetitionCount: 0
+  m_EventPayload:
+    m_IsEventExpanded: 1
+    m_StandardEventType: Progression/GameStart
+    m_Parameters:
+      m_Parameters:
+      - m_RequirementType: 0
+        m_GroupID: 
+        m_Tooltip: 
+        m_Name: pass_and_play
+        m_Value:
+          m_EditingCustomValue: 0
+          m_PopupIndex: 0
+          m_CustomValue: 
+          m_FixedType: 0
+          m_EnumType: 
+          m_EnumTypeIsCustomizable: 0
+          m_CanDisable: 0
+          m_PropertyType: 1
+          m_ValueType: System.Boolean
+          m_Value: True
+          m_Target:
+            m_Target: {fileID: 0}
+            m_Path: 
+            m_ValidTypeNames:
+            - System.Int32
+            - System.Boolean
+            - System.Decimal
+            - System.Double
+            - System.Single
+            - System.Int64
+            - System.Int16
+            - System.String
+            m_Type: System.Boolean
+            m_EnumType: 
+    m_Name: game_start
 --- !u!1 &1131531076
 GameObject:
   m_ObjectHideFlags: 0
@@ -4899,6 +5221,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 2138970302}
     m_Modifications:
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -5007,6 +5334,31 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OpenPassAndPlayGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1116398855}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: TriggerEvent
+      objectReference: {fileID: 0}
+    - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e1194a128740942a481833de0ce83eac, type: 2}
@@ -5120,6 +5472,69 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1252355741 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1262587047926788, guid: e1194a128740942a481833de0ce83eac,
+    type: 2}
+  m_PrefabInternal: {fileID: 807927895}
+--- !u!114 &1252355742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1252355741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eb0edc33cd2e446fab64950ae3ae78e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Trigger:
+    m_IsTriggerExpanded: 1
+    m_Type: 1
+    m_LifecycleEvent: 0
+    m_ApplyRules: 0
+    m_Rules:
+      m_Rules: []
+    m_TriggerBool: 0
+    m_InitTime: 5
+    m_RepeatTime: 5
+    m_Repetitions: 0
+    repetitionCount: 0
+  m_EventPayload:
+    m_IsEventExpanded: 1
+    m_StandardEventType: Progression/GameStart
+    m_Parameters:
+      m_Parameters:
+      - m_RequirementType: 0
+        m_GroupID: 
+        m_Tooltip: 
+        m_Name: standard_game
+        m_Value:
+          m_EditingCustomValue: 0
+          m_PopupIndex: 0
+          m_CustomValue: 
+          m_FixedType: 0
+          m_EnumType: 
+          m_EnumTypeIsCustomizable: 0
+          m_CanDisable: 0
+          m_PropertyType: 1
+          m_ValueType: System.Boolean
+          m_Value: True
+          m_Target:
+            m_Target: {fileID: 0}
+            m_Path: 
+            m_ValidTypeNames:
+            - System.Int32
+            - System.Boolean
+            - System.Decimal
+            - System.Double
+            - System.Single
+            - System.Int64
+            - System.Int16
+            - System.String
+            m_Type: System.Boolean
+            m_EnumType: 
+    m_Name: game_start
 --- !u!1 &1271251861
 GameObject:
   m_ObjectHideFlags: 0
@@ -6810,6 +7225,7 @@ GameObject:
   - component: {fileID: 1649922474}
   - component: {fileID: 1649922473}
   - component: {fileID: 1649922472}
+  - component: {fileID: 1649922475}
   m_Layer: 5
   m_Name: Rematch Button
   m_TagString: Untagged
@@ -6886,6 +7302,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1649922475}
+        m_MethodName: TriggerEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1649922473
@@ -6921,6 +7348,64 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1649922470}
+--- !u!114 &1649922475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1649922470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eb0edc33cd2e446fab64950ae3ae78e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Trigger:
+    m_IsTriggerExpanded: 1
+    m_Type: 1
+    m_LifecycleEvent: 0
+    m_ApplyRules: 0
+    m_Rules:
+      m_Rules: []
+    m_TriggerBool: 0
+    m_InitTime: 5
+    m_RepeatTime: 5
+    m_Repetitions: 0
+    repetitionCount: 0
+  m_EventPayload:
+    m_IsEventExpanded: 1
+    m_StandardEventType: Progression/GameStart
+    m_Parameters:
+      m_Parameters:
+      - m_RequirementType: 0
+        m_GroupID: 
+        m_Tooltip: 
+        m_Name: rematch
+        m_Value:
+          m_EditingCustomValue: 0
+          m_PopupIndex: 0
+          m_CustomValue: 
+          m_FixedType: 0
+          m_EnumType: 
+          m_EnumTypeIsCustomizable: 0
+          m_CanDisable: 0
+          m_PropertyType: 1
+          m_ValueType: System.Boolean
+          m_Value: True
+          m_Target:
+            m_Target: {fileID: 0}
+            m_Path: 
+            m_ValidTypeNames:
+            - System.Int32
+            - System.Boolean
+            - System.Decimal
+            - System.Double
+            - System.Single
+            - System.Int64
+            - System.Int16
+            - System.String
+            m_Type: System.Boolean
+            m_EnumType: 
+    m_Name: game_start
 --- !u!1 &1653158419
 GameObject:
   m_ObjectHideFlags: 0

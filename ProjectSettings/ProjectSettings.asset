@@ -121,7 +121,7 @@ PlayerSettings:
     16:10: 0
     16:9: 0
     Others: 1
-  bundleVersion: 0.1
+  bundleVersion: 1.2
   preloadedAssets: []
   metroInputSource: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -147,7 +147,7 @@ PlayerSettings:
     iOS: com.PartyTroll.Fourzy
     tvOS: com.PartyTroll.Fourzy
   buildNumber:
-    iOS: 23
+    iOS: 24
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
