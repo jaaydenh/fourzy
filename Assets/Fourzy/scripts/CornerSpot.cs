@@ -89,7 +89,7 @@ namespace Fourzy
                         direction = Direction.LEFT;
                     }
                     Move move = new Move(pos, direction);
-                    StartCoroutine(GameManager.instance.MovePiece(move, false));
+                    StartCoroutine(GameManager.instance.MovePiece(move, false, true));
                 }
             }
         }

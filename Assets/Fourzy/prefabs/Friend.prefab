@@ -368,7 +368,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114000011843956246}
-        m_MethodName: OpenGame
+        m_MethodName: OpenNewFriendChallengeGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

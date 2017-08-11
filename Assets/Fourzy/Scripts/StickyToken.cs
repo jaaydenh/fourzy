@@ -12,6 +12,7 @@ public class StickyToken : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "GamePiece") {
+            Debug.Log("STICKY PIECE COLLISION");
             as1.Play();
         }
     }

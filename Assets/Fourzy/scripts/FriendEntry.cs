@@ -41,7 +41,7 @@ namespace Fourzy
     	}
 
         //Open game gets called OnClick of the play button
-        public void OpenGame()
+        public void OpenNewFriendChallengeGame()
         {
             GameManager.instance.ResetGameBoard();
             GameManager.instance.PopulateMoveArrows();
@@ -62,7 +62,7 @@ namespace Fourzy
             GameManager.instance.opponentNameLabel.text = userName;
             GameManager.instance.opponentProfilePicture.sprite = profilePicture.sprite;
 
-            GameManager.instance.UpdateGameStatusText();
+            GameManager.instance.UpdatePlayersStatusView();
 
             UIScreen.SetActive(false);
 

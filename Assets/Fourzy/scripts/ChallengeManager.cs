@@ -352,7 +352,7 @@ namespace Fourzy
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
                 new Vector2(0.5f, 0.5f));
             
-            GameManager.instance.UpdateGameStatusText();
+            GameManager.instance.UpdatePlayersStatusView();
             GameManager.instance.ResetUI();
 
             UIScreen.SetActive(false);
@@ -406,7 +406,7 @@ namespace Fourzy
             GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
                 new Vector2(0.5f, 0.5f));
-            GameManager.instance.UpdateGameStatusText();
+            GameManager.instance.UpdatePlayersStatusView();
 
             UIScreen.SetActive(false);
 
@@ -452,7 +452,7 @@ namespace Fourzy
                     new Vector2(0.5f, 0.5f));
             }
 
-            GameManager.instance.UpdateGameStatusText();
+            GameManager.instance.UpdatePlayersStatusView();
 
             UIScreen.SetActive(false);
 
@@ -501,18 +501,18 @@ namespace Fourzy
             string tokenBoardId = challenge.ScriptData.GetString("tokenBoardId");
             string tokenBoardName = challenge.ScriptData.GetString("tokenBoardName");
 
+            List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
+
             if (boardData != null) {
-                int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
+                int[] lastGameboard = challenge.ScriptData.GetIntList("lastGameBoard").ToArray();
                 int[] tokenBoard = Enumerable.Repeat(0, 64).ToArray();
 
                 if (tokenData != null) {
                     tokenBoard = challenge.ScriptData.GetIntList("tokenBoard").ToArray();  
                 }
 
-                GameManager.instance.SetupGameWrapper(gameboard, new TokenBoard(tokenBoard, tokenBoardId, tokenBoardName));
+                GameManager.instance.SetupGameWrapper(lastGameboard, new TokenBoard(tokenBoard, tokenBoardId, tokenBoardName), moveList);
             }
-
-            List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
             
             GSData lastPlayerMove = moveList.LastOrDefault();
             int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
@@ -653,19 +653,25 @@ namespace Fourzy
                                         activeGame.gameBoard = gameboard;
                                     }
 
+                                    List<int> lastBoardData = challenge.ScriptData.GetIntList("lastGameBoard");
+                                    if (lastBoardData != null) {
+                                        int[] lastGameboard = challenge.ScriptData.GetIntList("lastGameBoard").ToArray();
+                                        activeGame.lastGameBoard = lastGameboard;
+                                    }
+
                                     string tokenBoardId = challenge.ScriptData.GetString("tokenBoardId");
                                     string tokenBoardName = challenge.ScriptData.GetString("tokenBoardName");
                                     List<int> tokenData = challenge.ScriptData.GetIntList("tokenBoard");
                                     if (tokenData != null) {
                                         int[] tokenBoardData = challenge.ScriptData.GetIntList("tokenBoard").ToArray();
-                                        activeGame.tokenBoard = tokenBoardData;
+                                        activeGame.tokenBoardData = tokenBoardData;
                                         TokenBoard tb  = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName);
-                                        activeGame.tokenBoard2 = tb;
+                                        activeGame.tokenBoard = tb;
                                     } else {
                                         int[] tokenBoardData = Enumerable.Repeat(0, 64).ToArray();
-                                        activeGame.tokenBoard = tokenBoardData;
+                                        activeGame.tokenBoardData = tokenBoardData;
                                         TokenBoard tb  = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName);
-                                        activeGame.tokenBoard2 = tb;
+                                        activeGame.tokenBoard = tb;
                                     }
 
                                     List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");

@@ -25,9 +25,10 @@ namespace Fourzy
 
     	//This is the array of strings we pass our Cloud Code gameBoard to
         public int[] gameBoard;
-        public int[] tokenBoard;
+        public int[] lastGameBoard;
+        public int[] tokenBoardData;
 
-        public TokenBoard tokenBoard2;
+        public TokenBoard tokenBoard;
 
         public List<GSData> moveList;
 
@@ -103,20 +104,9 @@ namespace Fourzy
                 //We then check if the userId of the next player is equal to ours
                 if (nextPlayerId == UserManager.instance.userId)
                 {
-                    //If it is, then we say it's your turn
                     statusLabel.text = "Your Move!";
-                }
-                else
-                {
+                } else {
                     statusLabel.text = "Their Move!";
-                    //                for (int i = 0; i < playerIds.Count; i++)
-                    //              {
-                    //                  //else find the player whose Id does match and return their name
-                    //   if (playerIds[i] == nextPlayerId)
-                    //                  {
-                    //                      statusLabel.text = playerNames[i] + "'s Turn!";
-                    //                  }
-                    //              }
                 }
             }
 
@@ -193,15 +183,13 @@ namespace Fourzy
             GameManager.instance.ResetGameBoard();
             //TokenBoard tokenBoard1 = new TokenBoard(tokenBoard);
 			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
-            GameManager.instance.SetupGameWrapper(gameBoard, tokenBoard2);
-            GameManager.instance.PopulateMoveArrows();
-            StartCoroutine(GameManager.instance.CreateTokens());
+
 
             if (moveList != null && moveList.Count > 0)
             {
                 GSData lastPlayerMove = moveList.LastOrDefault();
                 int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
-
+                Debug.Log("ActiveGame:lastPlayer: " + lastPlayer);
                 if (lastPlayer == 0 || lastPlayer == 2)
                 {
                     GameManager.instance.isPlayerOneTurn = true;
@@ -213,7 +201,11 @@ namespace Fourzy
             } else {
                 GameManager.instance.isPlayerOneTurn = true;
             }
-                
+            
+            GameManager.instance.SetupGameWrapper(lastGameBoard, tokenBoard, moveList);
+            GameManager.instance.PopulateMoveArrows();
+            StartCoroutine(GameManager.instance.CreateTokens());
+
             GameManager.instance.ResetUI();
 
             if (!viewedResult && challengeState == "COMPLETE") {
