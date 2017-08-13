@@ -290,7 +290,57 @@ namespace Fourzy {
                 }
 
                 board.activeMovingPieces[0].positions.Add(nextPosition);
+                // Stop the active piece in the sticky token square
                 board.DisableNextMovingPiece();
+            }
+        }
+    }
+
+    public class IceSheetToken : IToken {
+
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public bool canPassThrough { get; set; }
+        public bool canStopOn { get; set; }
+        public Token tokenType { get; set; }
+
+        public IceSheetToken() {
+            canPassThrough = true;
+            canStopOn = true;
+            tokenType = Token.ICE_SHEET;
+        }
+
+        public void UpdateBoard(GameBoard board, bool swapPiece)
+        {
+            bool pieceInSquare = false;
+
+            // process next moving piece at gameBoard.activeMovingPieces[0]
+            if (board.activeMovingPieces.Count > 0) {
+                MovingGamePiece piece = board.activeMovingPieces[0];
+                Position nextPosition = piece.GetNextPosition();
+                
+                if (board.GetCell(nextPosition.column, nextPosition.row) != 0) {
+                    pieceInSquare = true;
+                    Move move = new Move(nextPosition, piece.currentDirection);
+                    MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
+                    int player = board.GetCell(nextPosition.column, nextPosition.row);
+                    activeMovingPiece.player = (Player)player;
+                    board.activeMovingPieces.Add(activeMovingPiece);
+                }
+
+                if (piece.player != Player.NONE) {
+                    board.SetCell(nextPosition.column, nextPosition.row, piece.player);
+                    piece.player = 0;
+                } else {
+                    if (swapPiece) {
+                        board.SwapPiecePosition(piece.GetCurrentPosition(), nextPosition);
+                    }
+                }
+
+                board.activeMovingPieces[0].positions.Add(nextPosition);
+                if (pieceInSquare) {
+                    board.DisableNextMovingPiece();
+                }
             }
         }
     }

@@ -473,6 +473,8 @@ MonoBehaviour:
   blockerToken: {fileID: 1187047679181528, guid: 0d7e3c7375ded49a2bc99d0e0d3584aa,
     type: 2}
   ghostToken: {fileID: 1727477774046648, guid: 6e4f94269d5d54d82b69d83f7028a2e5, type: 2}
+  iceSheetToken: {fileID: 1419971408396618, guid: 3499a5e46e3be49a6a1cc9f3657fbff2,
+    type: 2}
   moveArrowLeft: {fileID: 1951836253388886, guid: 36d26fd20ba0f4f889d04038d1b5d6e4,
     type: 2}
   moveArrowRight: {fileID: 1459885036096070, guid: 36b21e6b584474efe8f008eb4a426bbc,

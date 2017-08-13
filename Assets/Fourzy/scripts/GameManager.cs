@@ -39,6 +39,7 @@ namespace Fourzy
         public GameObject stickyToken;
         public GameObject blockerToken;
         public GameObject ghostToken;
+        public GameObject iceSheetToken;
         public GameObject moveArrowLeft;
         public GameObject moveArrowRight;
         public GameObject moveArrowDown;
@@ -538,6 +539,11 @@ namespace Fourzy
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
+                        case Token.ICE_SHEET:
+                            go = Instantiate(iceSheetToken, new Vector3(col, row * -1, 15), Quaternion.identity, tokens.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
                         default:
                             break;
                     }
@@ -948,6 +954,7 @@ namespace Fourzy
 
             while (gameBoard.activeMovingPieces.Count > 0) {
                 //Position startPosition = gameBoard.activeMovingPieces[0].GetCurrentPosition();
+
                 MovingGamePiece activePiece = gameBoard.activeMovingPieces[0];
                 Position endPosition = activePiece.GetNextPosition();
                 Direction activeDirection = activePiece.currentDirection;
@@ -968,8 +975,17 @@ namespace Fourzy
                 if (i==0) {
                     piece.positions.RemoveAt(0);
                 }
-
+                //foreach (var piece in gameBoard.activeMovingPieces)
+                //{
+                    foreach (var item in piece.positions)
+                    {
+                        Debug.Log("completed piece position row: " + item.row + " col: " + item.column);
+                    }
+                //}
                 GameObject pieceView = gameBoardView.gamePieces[piece.positions[0].row, piece.positions[0].column];
+                Debug.Log("pieceView row: " + piece.positions[0].row + " column: " + piece.positions[0].column);
+                Debug.Log("pieceView positions: " + pieceView.ToString());
+                Debug.Log("completed moving piece positions: " + piece.positions.ToString());
                 pieceView.GetComponent<GamePiece>().positions = piece.positions;
                 GameBoardViewUpdates.Add(pieceView, piece.positions);
                 

@@ -17,6 +17,7 @@ namespace Fourzy {
         public GameObject stickyToken;
         public GameObject blockerToken;
         public GameObject ghostToken;
+        public GameObject iceSheetToken;
         public GameObject glow;
         public GameObject questionMark;
         private GameObject tokens;
@@ -61,6 +62,9 @@ namespace Fourzy {
                             break;
                         case Token.GHOST:
                             go = Instantiate(ghostToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
+                            break;
+                        case Token.ICE_SHEET:
+                            go = Instantiate(iceSheetToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
                             break;
                         default:
                             break;

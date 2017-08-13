@@ -110,6 +110,15 @@ namespace Fourzy {
             }
         }
 
+        public void SetMovingPieceAsLastActivePiece() {
+            if (activeMovingPieces.Count > 0) {
+                MovingGamePiece mgp = activeMovingPieces[0];
+                activeMovingPieces.RemoveAt(0);
+                // activeMovingPieces.Insert(activeMovingPieces.Count-1, mgp);
+                activeMovingPieces.Add(mgp);
+            }
+        }
+
         public void MakePieceMoveable(Position pos, bool moveable, Direction direction) {
 
             switch (direction)
@@ -180,7 +189,7 @@ namespace Fourzy {
             {
                 Position currentPosition = piece.GetCurrentPosition();
                 //Debug.Log("UpdateMoveablePieces col: " + currentPosition.column + " row: " + currentPosition.row);
-                if (tokens[currentPosition.row, currentPosition.column].tokenType == Token.STICKY) {
+                if (tokens[currentPosition.row, currentPosition.column].tokenType == Token.STICKY || tokens[currentPosition.row, currentPosition.column].tokenType == Token.ICE_SHEET) {
 
                     if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP), tokens)) {
                         MakePieceMoveable(currentPosition, true, Direction.UP);

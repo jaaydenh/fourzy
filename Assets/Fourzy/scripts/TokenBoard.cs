@@ -101,6 +101,10 @@ namespace Fourzy {
                     {
                         tokens[row, col] = new GhostToken();
                     }
+                    else if (token == (int)Token.ICE_SHEET)
+                    {
+                        tokens[row, col] = new IceSheetToken();
+                    }
                 }
             }
         }
