@@ -10,6 +10,7 @@ namespace Fourzy {
         int Column { get; set; }
         bool canPassThrough { get; set; }
         bool canStopOn { get; set; }
+        bool isMoveable { get; set; }
         Token tokenType { get; set; }
         void UpdateBoard(GameBoard board, bool swapPiece);
     }
@@ -20,11 +21,13 @@ namespace Fourzy {
         public int Column { get; set; }
         public bool canPassThrough { get; set; }
         public bool canStopOn { get; set; }
+        public bool isMoveable { get; set; }
         public Token tokenType { get; set; }
 
         public UpArrowToken() {
             canPassThrough = true;
             canStopOn = true;
+            isMoveable = false;
             tokenType = Token.UP_ARROW;
     	}
 
@@ -56,11 +59,13 @@ namespace Fourzy {
         public int Column { get; set; }
         public bool canPassThrough { get; set; }
         public bool canStopOn { get; set; }
+        public bool isMoveable { get; set; }
         public Token tokenType { get; set; }
 
         public DownArrowToken() {
             canPassThrough = true;
             canStopOn = true;
+            isMoveable = false;
             tokenType = Token.DOWN_ARROW;
         }
 
@@ -92,11 +97,13 @@ namespace Fourzy {
         public int Column { get; set; }
         public bool canPassThrough { get; set; }
         public bool canStopOn { get; set; }
+        public bool isMoveable { get; set; }
         public Token tokenType { get; set; }
 
         public LeftArrowToken() {
             canPassThrough = true;
             canStopOn = true;
+            isMoveable = false;
             tokenType = Token.LEFT_ARROW;
         }
 
@@ -128,11 +135,13 @@ namespace Fourzy {
         public int Column { get; set; }
         public bool canPassThrough { get; set; }
         public bool canStopOn { get; set; }
+        public bool isMoveable { get; set; }
         public Token tokenType { get; set; }
 
         public RightArrowToken() {
             canPassThrough = true;
             canStopOn = true;
+            isMoveable = false;
             tokenType = Token.RIGHT_ARROW;
         }
 
@@ -164,11 +173,13 @@ namespace Fourzy {
         public int Column { get; set; }
         public bool canPassThrough { get; set; }
         public bool canStopOn { get; set; }
+        public bool isMoveable { get; set; }
         public Token tokenType { get; set; }
 
         public EmptyToken () {
             canPassThrough = true;
             canStopOn = true;
+            isMoveable = false;
             tokenType = Token.EMPTY;
         }
 
@@ -199,11 +210,13 @@ namespace Fourzy {
         public int Column { get; set; }
         public bool canPassThrough { get; set; }
         public bool canStopOn { get; set; }
+        public bool isMoveable { get; set; }
         public Token tokenType { get; set; }
 
         public BlockerToken () {
             canPassThrough = false;
             canStopOn = false;
+            isMoveable = false;
             tokenType = Token.BLOCKER;
         }
 
@@ -221,17 +234,18 @@ namespace Fourzy {
         public int Column { get; set; }
         public bool canPassThrough { get; set; }
         public bool canStopOn { get; set; }
+        public bool isMoveable { get; set; }
         public Token tokenType { get; set; }
 
         public GhostToken () {
             canPassThrough = true;
             canStopOn = false;
+            isMoveable = false;
             tokenType = Token.GHOST;
         }
 
         public void UpdateBoard(GameBoard board, bool swapPiece)
         {
-            Debug.Log("GHOST TOKEN");
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (board.activeMovingPieces.Count > 0) {
                 MovingGamePiece piece = board.activeMovingPieces[0];
@@ -257,11 +271,13 @@ namespace Fourzy {
         public int Column { get; set; }
         public bool canPassThrough { get; set; }
         public bool canStopOn { get; set; }
+        public bool isMoveable { get; set; }
         public Token tokenType { get; set; }
 
         public StickyToken() {
             canPassThrough = true;
             canStopOn = true;
+            isMoveable = true;
             tokenType = Token.STICKY;
         }
 
@@ -286,7 +302,7 @@ namespace Fourzy {
                 } else {
                     if (swapPiece) {
                         board.SwapPiecePosition(piece.GetCurrentPosition(), nextPosition);
-                    }
+                    } 
                 }
 
                 board.activeMovingPieces[0].positions.Add(nextPosition);
@@ -302,11 +318,13 @@ namespace Fourzy {
         public int Column { get; set; }
         public bool canPassThrough { get; set; }
         public bool canStopOn { get; set; }
+        public bool isMoveable { get; set; }
         public Token tokenType { get; set; }
 
         public IceSheetToken() {
             canPassThrough = true;
             canStopOn = true;
+            isMoveable = true;
             tokenType = Token.ICE_SHEET;
         }
 

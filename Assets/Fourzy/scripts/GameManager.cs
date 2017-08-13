@@ -700,7 +700,7 @@ namespace Fourzy
             //         }
             //     }
             // }
-        }            
+        }
 
         public void AnimateEmptyEdgeSpots(bool animate) {
             foreach (EmptySpot spot in gameScreen.GetComponentsInChildren<EmptySpot>())
@@ -917,8 +917,6 @@ namespace Fourzy
         private IEnumerator ProcessMove(Position position, Direction direction, bool replayMove, bool updatePlayer, Fourzy.Player playerMove) {
             gameBoard.PrintBoard("BeforeMove");
 
-            Dictionary<GameObject, List<Position>> GameBoardViewUpdates = new Dictionary<GameObject, List<Position>>();
-
             audioMove.Play();
             GameObject[] cornerArrows = GameObject.FindGameObjectsWithTag("Arrow");
             foreach (GameObject cornerArrow in cornerArrows) {
@@ -926,18 +924,20 @@ namespace Fourzy
                 sr.enabled = false;
             }
 
-            MovingGamePiece activeMovingPiece = new MovingGamePiece(new Move(position, direction));
-            gameBoard.activeMovingPieces.Add(activeMovingPiece);
-
             Fourzy.Player player = Player.NONE;
-
             if (playerMove != Player.NONE) {
                 player = playerMove;
             } else {
                 player = isPlayerOneTurn ? Player.ONE : Player.TWO;
             }
 
-            Position movePosition = activeMovingPiece.GetNextPosition();
+            MovingGamePiece activeMovingPiece = new MovingGamePiece(new Move(position, direction));
+            activeMovingPiece.player = player;
+            gameBoard.activeMovingPieces.Add(activeMovingPiece);
+
+            //Position movePosition = activeMovingPiece.GetNextPosition();
+            Position moveNextPosition = activeMovingPiece.GetNextPosition();
+            Position movePosition = activeMovingPiece.GetCurrentPosition();
             GameObject g = SpawnPiece(movePosition.column, movePosition.row * -1, player);
             GamePiece gamePiece = g.GetComponent<GamePiece>();
             gamePiece.isMoving = true;
@@ -945,16 +945,14 @@ namespace Fourzy
             gamePiece.column = movePosition.column;
             gamePiece.row = movePosition.row;
 
-            gameBoardView.gamePieces[movePosition.row, movePosition.column] = g;
+            //gameBoardView.gamePieces[moveNextPosition.row, moveNextPosition.column] = g;
             Debug.Log("Move position row: " + movePosition.row + " column: " + movePosition.column);
 
-            gameBoard.SetCell(movePosition.column, movePosition.row, player);
+            tokenBoard.tokens[moveNextPosition.row, moveNextPosition.column].UpdateBoard(gameBoard, false);
 
-            tokenBoard.tokens[movePosition.row, movePosition.column].UpdateBoard(gameBoard, false);
+            //gameBoard.SetCell(movePosition.column, movePosition.row, player);
 
             while (gameBoard.activeMovingPieces.Count > 0) {
-                //Position startPosition = gameBoard.activeMovingPieces[0].GetCurrentPosition();
-
                 MovingGamePiece activePiece = gameBoard.activeMovingPieces[0];
                 Position endPosition = activePiece.GetNextPosition();
                 Direction activeDirection = activePiece.currentDirection;
@@ -968,55 +966,46 @@ namespace Fourzy
 
             gameBoard.UpdateMoveablePieces(tokenBoard.tokens);
 
+            GameObject nextPieceView = new GameObject();
             // process animations for completed moving pieces
             for (int i = 0; i < gameBoard.completedMovingPieces.Count; i++)
             {   
                 var piece = gameBoard.completedMovingPieces[i];
+                Position startPosition = piece.positions[0];
+                Position endPosition = piece.positions[piece.positions.Count - 1];
                 if (i==0) {
                     piece.positions.RemoveAt(0);
                 }
-                //foreach (var piece in gameBoard.activeMovingPieces)
-                //{
-                    foreach (var item in piece.positions)
-                    {
-                        Debug.Log("completed piece position row: " + item.row + " col: " + item.column);
-                    }
-                //}
-                GameObject pieceView = gameBoardView.gamePieces[piece.positions[0].row, piece.positions[0].column];
-                Debug.Log("pieceView row: " + piece.positions[0].row + " column: " + piece.positions[0].column);
-                Debug.Log("pieceView positions: " + pieceView.ToString());
-                Debug.Log("completed moving piece positions: " + piece.positions.ToString());
+
+                // Debug.Log("GamePiece " + i);
+                // foreach (var item in piece.positions)
+                // {
+                //     Debug.Log("completed piece position row: " + item.row + " col: " + item.column);
+                // }
+
+                GameObject pieceView;
+                
+
+                if (i == 0) {
+                    pieceView = g;
+                    nextPieceView = gameBoardView.gamePieces[endPosition.row,endPosition.column];
+                } else {
+                    
+                    pieceView = nextPieceView;
+                    nextPieceView = gameBoardView.gamePieces[endPosition.row,endPosition.column];
+                }
+
+                //Debug.Log("pieceView row: " + piece.positions[0].row + " column: " + piece.positions[0].column);            
+                //Debug.Log("completed moving piece positions: " + piece.positions.ToString());
+
                 pieceView.GetComponent<GamePiece>().positions = piece.positions;
-                GameBoardViewUpdates.Add(pieceView, piece.positions);
-                
-                StartCoroutine(AnimatePiece(piece.positions));
-                
+                StartCoroutine(AnimatePiece(pieceView, piece.positions));
+
+                gameBoardView.gamePieces[endPosition.row, endPosition.column] = pieceView;
+
                 while(this.isAnimating)
                     yield return null;
             }
-
-            foreach (var update in GameBoardViewUpdates.Reverse())
-            {
-                GameObject piece = update.Key;
-                List<Position> positions = update.Value;
-                
-                Position startPosition = positions[0];
-                Position endPosition = positions[positions.Count - 1];
-
-                gameBoardView.gamePieces[endPosition.row, endPosition.column] = gameBoardView.gamePieces[startPosition.row, startPosition.column];
-                gameBoardView.gamePieces[startPosition.row, startPosition.column] = null;
-            }
-
-            // foreach (var piece in gameBoard.completedMovingPieces)
-            // {
-            //     StartCoroutine(AnimatePiece(piece.positions));
-            //     // gameBoardView.gamePieces[piece.positions[piece.positions.Count - 1].row, piece.positions[piece.positions.Count - 1].column] = gameBoardView.gamePieces[piece.positions[index].row, piece.positions[index].column];
-            //     // if (piece.positions.Count > 2) {
-            //     //     gameBoardView.gamePieces[piece.positions[index].row, piece.positions[index].column] = null;
-            //     // }
-            //     while(this.isAnimating)
-            //         yield return null;
-            // }
 
             gameBoard.PrintBoard("AfterMove");
             gameBoardView.PrintGameBoard();
@@ -1068,7 +1057,7 @@ namespace Fourzy
                 OnMoved();
         }
 
-        private IEnumerator AnimatePiece(List<Position> positions) {
+        private IEnumerator AnimatePiece(GameObject g, List<Position> positions) {
             isAnimating = true;
             // Debug.Log("POSITIONS: ");
             // foreach (var item in positions)
@@ -1078,8 +1067,7 @@ namespace Fourzy
             //Debug.Log("AnimatePiece: ROW: " + positions[positions.Count - 1].row + "COLUMN: " + positions[positions.Count - 1].column);
             //Debug.Log("AnimatePiece: ROW: " + positions[0].row + "COLUMN: " + positions[0].column);
             
-            //GameObject g = gameBoardView.gamePieces[positions[positions.Count - 1].row, positions[positions.Count - 1].column];
-            GameObject g = gameBoardView.gamePieces[positions[0].row, positions[0].column];
+            //GameObject g = gameBoardView.gamePieces[positions[0].row, positions[0].column];
             
             //Vector3 start = new Vector3(positions[1].column, positions[1].row * -1);
             Sequence mySequence = DOTween.Sequence();
