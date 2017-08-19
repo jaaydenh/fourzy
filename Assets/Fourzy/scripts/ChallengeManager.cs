@@ -514,15 +514,18 @@ namespace Fourzy
                 GameManager.instance.SetupGameWrapper(lastGameboard, new TokenBoard(tokenBoard, tokenBoardId, tokenBoardName), moveList);
             }
             
-            GSData lastPlayerMove = moveList.LastOrDefault();
-            int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
+            int currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
+            GameManager.instance.isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
 
-            if (lastPlayer == 0 || lastPlayer == 2)
-            {
-                GameManager.instance.isPlayerOneTurn = true;
-            } else {
-                GameManager.instance.isPlayerOneTurn = false;
-            }
+            // GSData lastPlayerMove = moveList.LastOrDefault();
+            // int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
+
+            // if (lastPlayer == 0 || lastPlayer == 2)
+            // {
+            //     GameManager.instance.isPlayerOneTurn = true;
+            // } else {
+            //     GameManager.instance.isPlayerOneTurn = false;
+            // }
                             
             GameManager.instance.ResetUI();
 
@@ -629,6 +632,7 @@ namespace Fourzy
                                     activeGame.challengeId = challenge.ChallengeId;
                                     activeGame.nextPlayerId = challenge.NextPlayer;
                                     activeGame.challengeShortCode = challenge.ShortCode;
+                                    activeGame.currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
 
                                     foreach (var player in challenge.Accepted)
                                     {

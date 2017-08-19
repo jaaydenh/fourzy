@@ -17,6 +17,7 @@ namespace Fourzy {
             this.position = move.position;
             positions.Add(position);
             currentDirection = move.direction;
+            this.player = move.player;
         }
     	
         public Position GetCurrentPosition() {

@@ -7,13 +7,23 @@ namespace Fourzy
         public int location;
         public Position position;
         public Direction direction;
+        public Player player;
 
         public Move(Position position, Direction direction) {
             this.position = position;
             this.direction = direction;
         }
 
+        public Move(int location, Direction direction, Player player) {
+            this.player = player;
+            InitMove(location, direction);
+        }
+
         public Move(int location, Direction direction) {
+            InitMove(location, direction);
+        }
+
+        public void InitMove(int location, Direction direction) {
             this.location = location;
             this.direction = direction;
 

@@ -45,6 +45,7 @@ namespace Fourzy
         public bool isCurrentPlayerTurn = false;
         public bool viewedResult = false;
         public bool isExpired = false;
+        public int currentPlayerMove;
 
         private Sprite opponentProfilePictureSprite;
 
@@ -182,25 +183,26 @@ namespace Fourzy
 //            }
             GameManager.instance.ResetGameBoard();
             //TokenBoard tokenBoard1 = new TokenBoard(tokenBoard);
-			//Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
+            //Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
 
+            GameManager.instance.isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
 
-            if (moveList != null && moveList.Count > 0)
-            {
-                GSData lastPlayerMove = moveList.LastOrDefault();
-                int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
-                Debug.Log("ActiveGame:lastPlayer: " + lastPlayer);
-                if (lastPlayer == 0 || lastPlayer == 2)
-                {
-                    GameManager.instance.isPlayerOneTurn = true;
-                }
-                else
-                {
-                    GameManager.instance.isPlayerOneTurn = false;
-                }
-            } else {
-                GameManager.instance.isPlayerOneTurn = true;
-            }
+            // if (moveList != null && moveList.Count > 0)
+            // {
+            //     GSData lastPlayerMove = moveList.LastOrDefault();
+            //     int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
+            //     Debug.Log("ActiveGame:lastPlayer: " + lastPlayer);
+            //     if (lastPlayer == 0 || lastPlayer == 2)
+            //     {
+            //         GameManager.instance.isPlayerOneTurn = true;
+            //     }
+            //     else
+            //     {
+            //         GameManager.instance.isPlayerOneTurn = false;
+            //     }
+            // } else {
+            //     GameManager.instance.isPlayerOneTurn = true;
+            // }
             
             GameManager.instance.SetupGameWrapper(lastGameBoard, tokenBoard, moveList);
             GameManager.instance.PopulateMoveArrows();

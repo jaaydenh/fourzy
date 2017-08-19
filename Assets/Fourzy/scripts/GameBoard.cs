@@ -118,6 +118,54 @@ namespace Fourzy {
             }
         }
 
+        public void ProcessBoardUpdate(IToken token, bool swapPiece) {
+            bool pieceInSquare = false;
+            // process next moving piece at gameBoard.activeMovingPieces[0]
+            if (token.canPassThrough == true) {
+                if (activeMovingPieces.Count > 0) {
+                    MovingGamePiece piece = activeMovingPieces[0];
+                    Position nextPosition = piece.GetNextPosition();
+                    Position currentPosition = piece.GetCurrentPosition();
+
+                    if (token.changePieceDirection) {
+                        activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+                    }
+                    
+                    if (token.isMoveable) {
+                        if (GetCell(nextPosition.column, nextPosition.row) != 0) {
+                            pieceInSquare = true;
+                            Move move = new Move(nextPosition, piece.currentDirection);
+                            MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
+                            int player = GetCell(nextPosition.column, nextPosition.row);
+                            activeMovingPiece.player = (Player)player;
+                            activeMovingPieces.Add(activeMovingPiece);
+                        }
+                    }
+
+                    if (piece.player != Player.NONE) {
+                        SetCell(nextPosition.column, nextPosition.row, piece.player);
+                        piece.player = 0;
+                    } else {
+                        if (swapPiece) {
+                            SwapPiecePosition(currentPosition, nextPosition);
+                        }
+                    }
+
+                    if (!token.changePieceDirection) {
+                        activeMovingPieces[0].positions.Add(nextPosition);
+                    }
+
+                    if (token.newPieceDirection != Direction.NONE) {
+                        piece.currentDirection = token.newPieceDirection;
+                    }
+
+                    if (pieceInSquare || token.isSticky) {
+                        DisableNextMovingPiece();
+                    }
+                }
+            } 
+        }
+
         public void MakePieceMoveable(Position pos, bool moveable, Direction direction) {
 
             switch (direction)
@@ -299,7 +347,8 @@ namespace Fourzy {
                 }
                 log += "\n";
             }
-
+            log += "\n";
+            
             for (int row = 0; row < numRows; row++) {
                 for (int col = 0; col < numColumns; col++) {
                     log += isMoveableUp[row * numRows + col];
