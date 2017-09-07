@@ -6,9 +6,9 @@ public class StickyToken : MonoBehaviour {
 
     private AudioSource as1;
 
-	void Start () {
+    void Start () {
         as1 = gameObject.GetComponent<AudioSource>();
-	}
+    }
 
     void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "GamePiece") {

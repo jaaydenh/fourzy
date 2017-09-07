@@ -14,10 +14,9 @@ namespace Fourzy
 
         public string playerId, facebookId;
 
-    	void Start () {
-    		
+        void Start () {
             UpdatePlayer();
-    	}
+        }
 
         public void UpdatePlayer()
         {

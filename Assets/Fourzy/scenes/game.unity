@@ -452,10 +452,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0eddd50cb28548f5918a9539a099c0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numRows: 8
-  numColumns: 8
-  numPiecesToWin: 4
-  allowDiagonally: 1
   dropTime: 0.1
   challengeInstanceId: 
   gamePiecePrefab: {fileID: 174738, guid: edd52c6e9d75d420199836641a1473b2, type: 2}
@@ -495,8 +491,6 @@ MonoBehaviour:
   redPlayerWonText: Red Player Won!
   bluePlayerMoveText: Blue Player's Move
   redPlayerMoveText: Red Player's Move
-  playerWonText: You Won!
-  playerLoseText: You Lose!
   drawText: Draw!
   bluePlayerColor: {r: 0, g: 0.68235296, b: 1, a: 1}
   redPlayerColor: {r: 0.99607843, g: 0.15686275, b: 0.31764707, a: 1}
@@ -505,26 +499,22 @@ MonoBehaviour:
   tokens: {fileID: 0}
   gameScreen: {fileID: 308658290}
   ErrorPanel: {fileID: 192249069}
+  playerNameLabel: {fileID: 539133078}
+  playerProfilePicture: {fileID: 574052263}
+  opponentNameLabel: {fileID: 1084174629}
+  opponentProfilePicture: {fileID: 1568791573}
   isMultiplayer: 0
   isNewChallenge: 0
   isNewRandomChallenge: 0
-  isCurrentPlayerTurn: 1
-  isPlayerOneTurn: 1
   isAiActive: 0
   challengedUserId: 
-  currentPlayerId: 0
   winner: 
   opponentFacebookId: 
-  gameOver: 0
   isCheckingForWinner: 0
   isAnimating: 0
   gameScreenFadeInTime: 0.5
   clipMove: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
   clipWin: {fileID: 8300000, guid: 2cda08f34c076490b8ec095a4f5d5256, type: 3}
-  playerNameLabel: {fileID: 539133078}
-  playerProfilePicture: {fileID: 574052263}
-  opponentNameLabel: {fileID: 1084174629}
-  opponentProfilePicture: {fileID: 1568791573}
   createGameScript: {fileID: 185923094}
 --- !u!4 &137424724
 Transform:
@@ -661,7 +651,6 @@ MonoBehaviour:
   activeGameIds: []
   inviteGrid: {fileID: 0}
   invitePrefab: {fileID: 0}
-  gameInvites: []
   NoMovesPanel: {fileID: 1755481388}
   loadingSpinner: {fileID: 176489462}
   gamesListContainer: {fileID: 381019440}
@@ -2686,7 +2675,6 @@ GameObject:
   - component: {fileID: 644585906}
   - component: {fileID: 644585908}
   - component: {fileID: 644585909}
-  - component: {fileID: 644585910}
   m_Layer: 5
   m_Name: BoardGrid
   m_TagString: Untagged
@@ -2766,19 +2754,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 0
---- !u!114 &644585910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 644585904}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e42e57bf427143089ddd584db2a882d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  height: 0
-  rt: {fileID: 644585905}
 --- !u!1 &653560888
 GameObject:
   m_ObjectHideFlags: 0

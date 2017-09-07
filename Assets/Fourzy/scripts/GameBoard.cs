@@ -4,7 +4,6 @@ using UnityEngine;
 using System;
 
 namespace Fourzy {
-    
     public class GameBoard {
 
         private int numRows;
@@ -12,12 +11,10 @@ namespace Fourzy {
         private int numPiecesToWin;
         private int piecesCount = 0;
         protected int[,] board;
-        public int[] isMoveableUp;
-        public int[] isMoveableDown;
-        public int[] isMoveableLeft;
-        public int[] isMoveableRight;
         public List<MovingGamePiece> activeMovingPieces;
         public List<MovingGamePiece> completedMovingPieces;
+        public List<Position> player1WinningPositions;
+        public List<Position> player2WinningPositions;
 
         public GameBoard (int numRows, int numColumns, int numPiecesToWin) {
             this.numRows = numRows;
@@ -26,16 +23,14 @@ namespace Fourzy {
 
             board = new int[numColumns, numRows];
 
-            isMoveableUp = new int[numColumns * numRows];
-            isMoveableDown = new int[numColumns * numRows];
-            isMoveableLeft = new int[numColumns * numRows];
-            isMoveableRight = new int[numColumns * numRows];
             activeMovingPieces = new List<MovingGamePiece>();
             completedMovingPieces = new List<MovingGamePiece>();
+            player1WinningPositions = new List<Position>();
+            player2WinningPositions = new List<Position>(); 
 
-		    InitGameBoard();
-    	}
-    	
+            InitGameBoard();
+        }
+
         public GameBoard (int numRows, int numColumns, int numPiecesToWin, int piecesCount, int[,] board)
         {
             this.numRows = numRows;
@@ -53,14 +48,6 @@ namespace Fourzy {
         }
 
         public void InitGameBoard() {
-            for (int i = 0; i < numColumns * numRows; i++)
-            {
-                isMoveableUp[i] = 1;
-                isMoveableDown[i] = 1;
-                isMoveableLeft[i] = 1;
-                isMoveableRight[i] = 1;
-            }
-
             for (int row = 0; row < numRows; row++) {
                 for (int col = 0; col < numColumns; col++) {
                     board[row, col] = (int)Piece.EMPTY;
@@ -76,7 +63,7 @@ namespace Fourzy {
             return board[row, col]; 
         }
 
-        public void SetGameBoard(int[] boardData, IToken[,] tokens) {
+        public void SetGameBoard(int[] boardData) {
             for (int row = 0; row < numRows; row++) {
                 for (int col = 0; col < numColumns; col++) {
                     board[row, col] = boardData[row * numRows + col];
@@ -87,11 +74,9 @@ namespace Fourzy {
                     }
                 }
             }
-            UpdateMoveablePieces(tokens);
-            completedMovingPieces.Clear();
         }
 
-        public int[,] GetBoard() {
+        public int[,] GetGameBoard() {
             return board;
         }
 
@@ -110,18 +95,10 @@ namespace Fourzy {
             }
         }
 
-        public void SetMovingPieceAsLastActivePiece() {
-            if (activeMovingPieces.Count > 0) {
-                MovingGamePiece mgp = activeMovingPieces[0];
-                activeMovingPieces.RemoveAt(0);
-                activeMovingPieces.Add(mgp);
-            }
-        }
-
         public void ProcessBoardUpdate(IToken token, bool swapPiece) {
             bool pieceInSquare = false;
             // process next moving piece at gameBoard.activeMovingPieces[0]
-            if (token.canPassThrough == true) {
+            if (token.canEnter == true) {
                 if (activeMovingPieces.Count > 0) {
                     MovingGamePiece piece = activeMovingPieces[0];
                     Position nextPosition = piece.GetNextPosition();
@@ -159,60 +136,11 @@ namespace Fourzy {
                         piece.currentDirection = token.newPieceDirection;
                     }
 
-                    if (pieceInSquare || token.isSticky) {
+                    if (pieceInSquare || token.mustStop) {
                         DisableNextMovingPiece();
                     }
                 }
             } 
-        }
-
-        public void MakePieceMoveable(Position pos, bool moveable, Direction direction) {
-
-            switch (direction)
-            {
-                case Direction.UP:
-                    isMoveableUp[pos.row * numRows + pos.column] = moveable ? 1 : 0;
-                    break;
-                case Direction.DOWN:
-                    isMoveableDown[pos.row * numRows + pos.column] = moveable ? 1 : 0;
-                    break;
-                case Direction.LEFT:
-                    isMoveableLeft[pos.row * numRows + pos.column] = moveable ? 1 : 0;
-                    break;
-                case Direction.RIGHT:
-                    isMoveableRight[pos.row * numRows + pos.column] = moveable ? 1 : 0;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public Position GetNextPosition(Move move) {
-            Position nextPosition = new Position(0,0);
-
-            switch (move.direction)
-            {
-                case Direction.UP:
-                    nextPosition.column = move.position.column;
-                    nextPosition.row = move.position.row - 1;
-                    break;
-                case Direction.DOWN:
-                    nextPosition.column = move.position.column;
-                    nextPosition.row = move.position.row + 1;
-                    break;
-                case Direction.LEFT:
-                    nextPosition.column = move.position.column - 1;
-                    nextPosition.row = move.position.row;
-                    break;
-                case Direction.RIGHT:
-                    nextPosition.column = move.position.column + 1;
-                    nextPosition.row = move.position.row;
-                    break;
-                default:
-                    break;
-            }
-
-            return nextPosition;
         }
 
         public Player PlayerAtPosition(Position position) {
@@ -231,106 +159,116 @@ namespace Fourzy {
             return data;
         }
 
-        public void UpdateMoveablePieces(IToken[,] tokens) {
-            foreach (var piece in completedMovingPieces)
+        public bool didPlayerWin(int player) {
+            for(var row = 0; row < numRows; row++)
             {
-                Position currentPosition = piece.GetCurrentPosition();
-                //Debug.Log("UpdateMoveablePieces col: " + currentPosition.column + " row: " + currentPosition.row);
-                if (tokens[currentPosition.row, currentPosition.column].isMoveable) {
-
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP), tokens)) {
-                        MakePieceMoveable(currentPosition, true, Direction.UP);
-                    } else {
-                        MakePieceMoveable(currentPosition, false, Direction.UP);
-                    } 
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.DOWN), Direction.DOWN), tokens)) {
-                        MakePieceMoveable(currentPosition, true, Direction.DOWN);
-                    } else {
-                        MakePieceMoveable(currentPosition, false, Direction.DOWN);
+                for(var col = 0; col < numColumns; col++)
+                {
+                    if (squaresMatchPiece(player, col, row, 1, 0)) { // Check for win in a column
+                        return true;
+                    } else if (squaresMatchPiece(player, col, row, 0, 1)) { //Check for win in a row
+                        return true;
+                    } else if (squaresMatchPiece(player, col, row, 1, 1)) { // Check for win in diagonal from upper left to lower right
+                        return true;
+                    } else if (squaresMatchPiece(player, col, row, 1, -1)) { // Check for win in diagonal from upper right to lower left
+                        return true;
                     }
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.LEFT), Direction.LEFT), tokens)) {
-                        MakePieceMoveable(currentPosition, true, Direction.LEFT);
-                    } else {
-                        MakePieceMoveable(currentPosition, false, Direction.LEFT);
-                    }
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.RIGHT), Direction.RIGHT), tokens)) {
-                        MakePieceMoveable(currentPosition, true, Direction.RIGHT);
-                    } else {
-                        MakePieceMoveable(currentPosition, false, Direction.RIGHT);
-                    }
-                } else {
-                    MakePieceMoveable(currentPosition, false, Direction.UP);
-                    MakePieceMoveable(currentPosition, false, Direction.DOWN);
-                    MakePieceMoveable(currentPosition, false, Direction.LEFT);
-                    MakePieceMoveable(currentPosition, false, Direction.RIGHT);
                 }
             }
+            return false;
         }
 
-        public bool CanMove(Move move, IToken[,] tokens)
-        {
-            Position endPosition = move.position;
-            //Debug.Log("startPosition:col: " + startPosition.column + " row: " + startPosition.row);
-            //Debug.Log("endPosition:col: " + endPosition.column + " row: " + endPosition.row);
-            // if the next end position is outside of the board then return false;
-            if (endPosition.column >= Constants.numColumns || endPosition.column < 0 || endPosition.row >= Constants.numRows || endPosition.row < 0) {
-                //Debug.Log("OUTSIDE OF BOARD Model");
-                return false;
-            }
+        public bool squaresMatchPiece(int player, int col, int row, int rowShift, int colShift) {
+            // exit if we can't win from here
+            if (row + (rowShift * 3) < 0) { return false; }
+            if (row + (rowShift * 3) >= numRows) { return false; }
+            if (col + (colShift * 3) < 0) { return false; }
+            if (col + (colShift * 3) >= numColumns) { return false; }
 
-            // check for piece at end position, if there is a piece and the piece is not moveable then return false
-            if (GetCell(endPosition.column, endPosition.row) != 0) {
-                //Debug.Log("Check can move: row: " + endPosition.row + " col: " + endPosition.column + " direction: " + move.direction);                
-                switch (move.direction)
-                {
-                    case Direction.UP:
-                        int isMoveableUp = this.isMoveableUp[endPosition.row * Constants.numRows + endPosition.column];
-                        //Debug.Log("isMoveableUp: " + isMoveableUp);
-                        if (isMoveableUp == 0) {
-                            return false;
+            // still here? Check every square
+            //var boardPosition = row * numRows + col;
+            if (board[row, col] != player) { return false; }
+            if (board[row + rowShift, col + colShift] != player) { return false; }
+            if (board[row + (rowShift * 2), col + (colShift * 2)] != player) { return false; }
+            if (board[row + (rowShift * 3), col + (colShift * 3)] != player) { return false; }
+
+            if (player == 1) {
+                player1WinningPositions.Clear();
+                player1WinningPositions.Add(new Position(col, row));
+                player1WinningPositions.Add(new Position(col + colShift, row + rowShift));
+                player1WinningPositions.Add(new Position(col + (colShift * 2), row + (rowShift * 2)));
+                player1WinningPositions.Add(new Position(col + (colShift * 3), row + (rowShift * 3)));
+                if (row + (rowShift * 4) < numRows && col + (colShift * 4) < numColumns && col + (colShift * 4) >= 0) {
+                    if (board[row + (rowShift * 4), col + (colShift * 4)] == player) {
+                        player1WinningPositions.Add(new Position(col + (colShift * 4), row + (rowShift * 4)));
+
+                        if (row + (rowShift * 5) < numRows && col + (colShift * 5) < numColumns && col + (colShift * 5) >= 0) {
+                            if (board[row + (rowShift * 5), col + (colShift * 5)] == player) {
+                                player1WinningPositions.Add(new Position(col + (colShift * 5), row + (rowShift * 5)));
+
+                                if (row + (rowShift * 6) < numRows && col + (colShift * 6) < numColumns && col + (colShift * 6) >= 0) {
+                                    if (board[row + (rowShift * 6), col + (colShift * 6)] == player) {
+                                        player1WinningPositions.Add(new Position(col + (colShift * 6), row + (rowShift * 6)));
+                                    }
+                                }
+                            }
                         }
-                        break;
-                    case Direction.DOWN:
-                        int isMoveableDown = this.isMoveableDown[endPosition.row * Constants.numRows + endPosition.column];
-                        //Debug.Log("isMoveableDown: " + isMoveableDown);
-                        if (isMoveableDown == 0) {
-                            return false;
-                        }
-                        break;
-                    case Direction.LEFT:
-                        int isMoveableLeft = this.isMoveableLeft[endPosition.row * Constants.numRows + endPosition.column];
-                        //Debug.Log("isMoveableLeft: " + isMoveableLeft);
-                        if (isMoveableLeft == 0) {
-                            return false;
-                        }
-                        break;
-                    case Direction.RIGHT:
-                        int isMoveableRight = this.isMoveableRight[endPosition.row * Constants.numRows + endPosition.column];
-                        //Debug.Log("isMoveableRight: " + isMoveableRight);
-                        if (isMoveableRight == 0) {
-                            return false;
-                        }
-                        break;
-                    default:
-                        break;
+                    }
                 }
-                        
-                return CanMove(new Move(GetNextPosition(move), move.direction), tokens);
             }
 
-            // if there is a token at the end position and canPassThrough is false then return false
-            // MUST CHECK FOR canPassThrough before checking canStopOn
-            if (!tokens[endPosition.row, endPosition.column].canPassThrough) {
-                return false;
-            }
-            
-            // if there is a token at the end position and canStopOn is false then check if the piece can move
-            // to the next position, if not then return false
-            if (!tokens[endPosition.row, endPosition.column].canStopOn) {
-                return CanMove(new Move(GetNextPosition(move), move.direction), tokens);
+            if (player == 2) {
+                player2WinningPositions.Clear();
+                player2WinningPositions.Add(new Position(col, row));
+                player2WinningPositions.Add(new Position(col + colShift, row + rowShift));
+                player2WinningPositions.Add(new Position(col + (colShift * 2), row + (rowShift * 2)));
+                player2WinningPositions.Add(new Position(col + (colShift * 3), row + (rowShift * 3)));
+                if (row + (rowShift * 4) < numRows && col + (colShift * 4) < numColumns && col + (colShift * 4) >= 0) {
+                    if (board[row + (rowShift * 4), col + (colShift * 4)] == player) {
+                        player2WinningPositions.Add(new Position(col + (colShift * 4), row + (rowShift * 4)));
+
+                        if (row + (rowShift * 5) < numRows && col + (colShift * 5) < numColumns && col + (colShift * 5) >= 0) {
+                            if (board[row + (rowShift * 5), col + (colShift * 5)] == player) {
+                                player2WinningPositions.Add(new Position(col + (colShift * 5), row + (rowShift * 5)));
+
+                                if (row + (rowShift * 6) < numRows && col + (colShift * 6) < numColumns && col + (colShift * 6) >= 0) {
+                                    if (board[row + (rowShift * 6), col + (colShift * 6)] == player) {
+                                        player2WinningPositions.Add(new Position(col + (colShift * 6), row + (rowShift * 6)));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             return true;
+        }
+
+        // TODO: Need to move this to GameState to also check the tokenboard incase there are tokens on the edge of the board
+        public bool hasValidMove() {
+            // check the left edge for empty spaces
+            for(var row = 1; row < numRows - 1; row++)
+            {
+                if (board[row, 0] == 0) { return true; }
+            }
+            // check the right edge for empty spaces
+            for(var row = 1; row < numRows - 1; row++)
+            {
+                if (board[row, numColumns - 1] == 0) { return true; }
+            }
+            // check the top edge for empty spaces
+            for(var col = 1; col < numColumns - 1; col++)
+            {
+                if (board[0, col] == 0) { return true; }
+            }
+            // check the bottom edge for empty spaces
+            for(var col = 1; col < numColumns - 1; col++)
+            {
+                if (board[numRows - 1, col] == 0) { return true; }
+            }
+
+            return false;
         }
 
         public GameBoard Clone ()
@@ -338,8 +276,8 @@ namespace Fourzy {
             return new GameBoard (numRows, numColumns, numPiecesToWin, piecesCount, board);
         }
 
-        public void PrintBoard(string name) {
-            string log = name + "\n";
+        public string PrintBoard() {
+            string log = "GameBoard" + "\n";
 
             for (int row = 0; row < numRows; row++) {
                 for (int col = 0; col < numColumns; col++) {
@@ -348,39 +286,8 @@ namespace Fourzy {
                 log += "\n";
             }
             log += "\n";
-            
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numColumns; col++) {
-                    log += isMoveableUp[row * numRows + col];
-                }
-                log += "\n";
-            }
-            log += "\n";
 
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numColumns; col++) {
-                    log += isMoveableDown[row * numRows + col];
-                }
-                log += "\n";
-            }
-            log += "\n";
-
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numColumns; col++) {
-                    log += isMoveableLeft[row * numRows + col];
-                }
-                log += "\n";
-            }
-            log += "\n";
-
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numColumns; col++) {
-                    log += isMoveableRight[row * numRows + col];
-                }
-                log += "\n";
-            }
-            
-            Debug.Log(log);
+            return log;
         }
     }
 }

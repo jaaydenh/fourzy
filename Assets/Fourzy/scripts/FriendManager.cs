@@ -10,20 +10,18 @@ namespace Fourzy
     public class FriendManager : MonoBehaviour 
     {
         public static FriendManager instance;
-
-    	public GameObject friendEntryPrefab;
-
-    	public GameObject friendsList;
+        public GameObject friendEntryPrefab;
+        public GameObject friendsList;
         public GameObject noFriendsText;
-    	public List<GameObject> friends = new List<GameObject>();
+        public List<GameObject> friends = new List<GameObject>();
 
         void Start()
         {
             instance = this;
         }
 
-    	public void GetFriends()
-    	{
+        public void GetFriends()
+        {
             if (FB.IsLoggedIn) {
                 //Every time we call get friends we'll refresh the list
                 for (int i = 0; i < friends.Count; i++)
@@ -63,6 +61,6 @@ namespace Fourzy
                         }
                     });
             }
-    	}
+        }
     }
 }

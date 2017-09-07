@@ -40,7 +40,7 @@ namespace Fourzy {
             }
             
         }
-    	
+
         public void InitTokenBoard() {
             tokens = new IToken[Constants.numColumns, Constants.numRows];
 

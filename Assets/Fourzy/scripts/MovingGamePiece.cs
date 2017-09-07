@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy {
-    
     public class MovingGamePiece {
 
         public Direction currentDirection;
@@ -19,7 +18,7 @@ namespace Fourzy {
             currentDirection = move.direction;
             this.player = move.player;
         }
-    	
+
         public Position GetCurrentPosition() {
             return positions[positions.Count - 1];
         }

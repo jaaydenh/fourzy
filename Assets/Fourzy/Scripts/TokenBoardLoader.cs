@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using System.Linq;
+using System.IO;
 
 namespace Fourzy
 {
 
     public class TokenBoardLoader : MonoBehaviour
     {
+        private TokenBoardInfo[] allTokenBoards;
 
         //Singleton
         private static TokenBoardLoader _instance;
@@ -20,6 +23,33 @@ namespace Fourzy
             }
         }
 
+        public TokenBoardInfo LoadAllTokenBoards()
+        {
+            // XmlSerializer serializer = new XmlSerializer(typeof(TokenBoardInfo[]));
+            // using (StreamReader streamReader = new StreamReader("TokenBoards.xml"))
+            // {
+            // 	allTokenBoards = (TokenBoardInfo[])serializer.Deserialize(streamReader);
+            // }
+
+            var asset = Resources.Load<TextAsset>("TokenBoards.json");
+            StreamReader reader = new StreamReader("TokenBoards.json");
+            string json = reader.ReadToEnd();
+            Debug.Log("asset: " + json);
+            allTokenBoards = JsonUtility.FromJson<TokenBoardInfo[]>(json);
+            
+
+            var tokenBoard = allTokenBoards
+                .Where(t => t.Enabled == true)
+                .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
+            .FirstOrDefault();
+
+            // Debug.Log("tokenboard ID: " + allTokenBoards[0].ID);
+            // Debug.Log("tokenboard Name: " + allTokenBoards[0].Name);
+            // Debug.Log("tokenboard Enabled: " + allTokenBoards[0].Enabled);
+            // Debug.Log("tokenboard TokenData: " + allTokenBoards[0].TokenData);
+
+            return tokenBoard;
+        }
         public TokenBoard GetTokenBoard()
         {
 

@@ -60,33 +60,5 @@ namespace Fourzy
                     break;
             }
         }
-
-        public Position GetNextPosition(Direction direction) {
-            Position nextPosition = new Position(0,0);
-
-            switch (direction)
-            {
-                case Direction.UP:
-                    nextPosition.column = column;
-                    nextPosition.row = row - 1;
-                    break;
-                case Direction.DOWN:
-                    nextPosition.column = column;
-                    nextPosition.row = row + 1;
-                    break;
-                case Direction.LEFT:
-                    nextPosition.column = column - 1;
-                    nextPosition.row = row;
-                    break;
-                case Direction.RIGHT:
-                    nextPosition.column = column + 1;
-                    nextPosition.row = row;
-                    break;
-                default:
-                    break;
-            }
-
-            return nextPosition;
-        }
     }
 }

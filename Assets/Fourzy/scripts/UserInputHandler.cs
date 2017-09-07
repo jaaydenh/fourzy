@@ -36,6 +36,7 @@ public class UserInputHandler : MonoBehaviour {
         //     mouseButtonPressed = false;
         // }
 
+        // TODO: use touch events
         if (Input.GetMouseButtonDown(0) && !mouseButtonPressed && inputEnabled) {
             mouseButtonPressed = true;
             if (OnTap != null)

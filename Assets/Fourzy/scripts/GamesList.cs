@@ -2,7 +2,6 @@
 using System.Collections;
 
 namespace Fourzy {
-    
     public class GamesList : MonoBehaviour {
 
         private void OnEnable() {

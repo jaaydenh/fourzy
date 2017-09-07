@@ -10,7 +10,7 @@ namespace Fourzy {
         public static event SetTokenBoard OnSetTokenBoard;
         public GameObject gameboard;
         public TokenBoard tokenBoard;
-	    public GameObject upArrowToken;
+        public GameObject upArrowToken;
         public GameObject downArrowToken;
         public GameObject leftArrowToken;
         public GameObject rightArrowToken;

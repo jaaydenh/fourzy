@@ -79,5 +79,34 @@ namespace Fourzy
             // This will give poor hash performance, but will prevent bugs.
             return 0;
         }
+
+        public Move GetNextPosition() {
+            Position nextPosition = new Position(0,0);
+
+            switch (direction)
+            {
+                case Direction.UP:
+                    nextPosition.column = position.column;
+                    nextPosition.row = position.row - 1;
+                    break;
+                case Direction.DOWN:
+                    nextPosition.column = position.column;
+                    nextPosition.row = position.row + 1;
+                    break;
+                case Direction.LEFT:
+                    nextPosition.column = position.column - 1;
+                    nextPosition.row = position.row;
+                    break;
+                case Direction.RIGHT:
+                    nextPosition.column = position.column + 1;
+                    nextPosition.row = position.row;
+                    break;
+                default:
+                    break;
+            }
+
+            Move move = new Move(nextPosition, direction);
+            return move;
+        }
     }
 }

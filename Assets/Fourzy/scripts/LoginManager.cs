@@ -16,7 +16,6 @@ namespace Fourzy
 
         public delegate void LoginError();
         public static event LoginError OnLoginError;
-
         private GameObject facebookButton;
         string[] firstNameSyllables = new string[] {"mon","fay","shi","zag","blarg","rash","izen"};
         string[] lastNameSyllables = new string[] {"malo","zak","abo","wonk","zig","wolf","cat"};
@@ -69,7 +68,7 @@ namespace Fourzy
                         }
                     });
         }
-            
+
         void DeviceLogin() {
             new DeviceAuthenticationRequest()
                 .SetDisplayName(CreateNewName())

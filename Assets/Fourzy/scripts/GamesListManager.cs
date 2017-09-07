@@ -15,10 +15,10 @@ namespace Fourzy
         public GameObject editButton;
         Text editButtonText;
 
-    	void Start () {
+        void Start () {
             instance = this;
             editButtonText = editButton.GetComponentInChildren<Text>();
-    	}
+        }
             
         public void ShowDeleteButtons() {
             if (OnShowDeleteGame != null)

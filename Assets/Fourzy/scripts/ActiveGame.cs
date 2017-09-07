@@ -15,44 +15,36 @@ namespace Fourzy
         public delegate void RemoveGame(string challengeInstanceId);
         public static event RemoveGame OnRemoveGame;
 
-    	//We store the challengeId, next player's userId and the userId who initiated the challenge.
+        //We store the challengeId, next player's userId and the userId who initiated the challenge.
         public string challengeId, nextPlayerId, challengerId, winnerName, winnerId, challengeState, challengeShortCode;
 
-    	//We create a list for playerNames and Ids
-    	public List<string> playerNames = new List<string>();
-    	public List<string> playerIds = new List<string>();
+        //We create a list for playerNames and Ids
+        public List<string> playerNames = new List<string>();
+        public List<string> playerIds = new List<string>();
         public List<string> playerFacebookIds = new List<string>();
 
-    	//This is the array of strings we pass our Cloud Code gameBoard to
+        //This is the array of strings we pass our Cloud Code gameBoard to
         public int[] gameBoard;
         public int[] lastGameBoard;
         public int[] tokenBoardData;
-
         public TokenBoard tokenBoard;
-
         public List<GSData> moveList;
-
-    	public Text opponentNameLabel, statusLabel, moveTimeAgo;
+        public Text opponentNameLabel, statusLabel, moveTimeAgo;
         public Image opponentProfilePicture;
         public Texture2D defaultProfilePicture;
         public Image tournamentIcon;
-
-        //private GameObject UIScreen;
         private GameObject gameScreen;
         private GameObject deleteGameButton;
-
         private int opponentIndex;
         public bool isCurrentPlayerTurn = false;
         public bool viewedResult = false;
         public bool isExpired = false;
+        public bool isGameOver = false;
         public int currentPlayerMove;
-
         private Sprite opponentProfilePictureSprite;
 
-    	void Start()
-    	{
-            //UIScreen = GameObject.Find("UI Screen");
-
+        void Start()
+        {
             if (challengeShortCode == "tournamentChallenge") {
                 tournamentIcon.enabled = true;
             } else {
@@ -118,7 +110,7 @@ namespace Fourzy
                 System.DateTime timestampDateTime = new System.DateTime (1970, 1, 1, 0, 0, 0,System.DateTimeKind.Utc).AddMilliseconds(timestamp).ToLocalTime();
                 moveTimeAgo.text = TimeAgo.DateTimeExtensions.TimeAgo(timestampDateTime);                
             }
-    	}
+        }
 
         private void OnEnable()
         {
@@ -150,19 +142,22 @@ namespace Fourzy
             }
         }
 
-    	//Open game gets called OnClick of the play button which happens when pressing or clicking an active game in the games list
+        //Open game gets called OnClick of the play button which happens when selecting an active game in the games list
         public void OpenGame()
-    	{
-            //GameManager.instance.tokenBoard = new TokenBoard(tokenBoard);
+        {
+            bool isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
+
+            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, isPlayerOneTurn, isCurrentPlayerTurn, tokenBoard, lastGameBoard, isGameOver);
+            GameManager.instance.gameState = gameState;
 
             GameManager.instance.opponentProfilePicture.sprite = opponentProfilePictureSprite;
             GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
             GameManager.instance.playerNameLabel.text = UserManager.instance.userName;
             if (UserManager.instance.profilePicture) {
-                GameManager.instance.playerProfilePicture.sprite = UserManager.instance.profilePicture;    
+                GameManager.instance.playerProfilePicture.sprite = UserManager.instance.profilePicture;
             } else {
-                GameManager.instance.playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
-                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                GameManager.instance.playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
+                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
                     new Vector2(0.5f, 0.5f));
             }
 
@@ -172,41 +167,12 @@ namespace Fourzy
 
             Debug.Log("Open Active Game: challengeInstanceId: " + challengeId);
             GameManager.instance.winner = winnerName;
-            GameManager.instance.isCurrentPlayerTurn = isCurrentPlayerTurn;
 
-//            //If the user Id of the next player is equal to the current player then it is the current player's turn
-//            if (nextPlayerId == UserManager.instance.userId)
-//            {
-//                GameManager.instance.isCurrentPlayerTurn = true;
-//            } else {
-//                GameManager.instance.isCurrentPlayerTurn = false;
-//            }
-            GameManager.instance.ResetGameBoard();
-            //TokenBoard tokenBoard1 = new TokenBoard(tokenBoard);
-            //Pass the gameBoard we got from Cloud Code to the Fourzy GameManager instance
+            GameManager.instance.ResetGamePiecesAndTokens();
 
-            GameManager.instance.isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
-
-            // if (moveList != null && moveList.Count > 0)
-            // {
-            //     GSData lastPlayerMove = moveList.LastOrDefault();
-            //     int lastPlayer = lastPlayerMove.GetInt("player").GetValueOrDefault(0);
-            //     Debug.Log("ActiveGame:lastPlayer: " + lastPlayer);
-            //     if (lastPlayer == 0 || lastPlayer == 2)
-            //     {
-            //         GameManager.instance.isPlayerOneTurn = true;
-            //     }
-            //     else
-            //     {
-            //         GameManager.instance.isPlayerOneTurn = false;
-            //     }
-            // } else {
-            //     GameManager.instance.isPlayerOneTurn = true;
-            // }
-            
-            GameManager.instance.SetupGameWrapper(lastGameBoard, tokenBoard, moveList);
-            GameManager.instance.PopulateMoveArrows();
-            StartCoroutine(GameManager.instance.CreateTokens());
+            GameManager.instance.SetupGameWrapper(moveList);
+            //GameManager.instance.PopulateMoveArrows();
+            StartCoroutine(GameManager.instance.CreateTokenViews());
 
             GameManager.instance.ResetUI();
 
@@ -214,10 +180,8 @@ namespace Fourzy
                 ChallengeManager.instance.SetViewedCompletedGame(challengeId);
             }
 
-            // UIScreen.SetActive(false);
-
             if (OnActiveGame != null)
                 OnActiveGame();
-    	}
+        }
     }
 }

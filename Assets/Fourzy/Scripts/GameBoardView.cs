@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Fourzy
 {
-
     public class GameBoardView : MonoBehaviour {
 
         public GameObject[,] gamePieces; //Collection of Views
@@ -15,12 +14,12 @@ namespace Fourzy
         public List<MovingGamePiece> activeMovingPieces;
         public List<MovingGamePiece> completedMovingPieces;
 
-    	void Start () {
+        void Start () {
             activeMovingPieces = new List<MovingGamePiece>();
             completedMovingPieces = new List<MovingGamePiece>();
             tokenBoard = new IToken[numRows, numColumns];
             gamePieces = new GameObject[numRows, numColumns];
-    	}
+        }
 
         public void MakePieceMoveable(Position pos, bool moveable, Direction direction) {
             gamePieces[pos.row, pos.column].GetComponent<GamePiece>().MakeMoveable(moveable, direction);
@@ -51,7 +50,7 @@ namespace Fourzy
                 for (int col = 0; col < numColumns; col++)
                 {
                     if (gamePieces[row, col]) {
-                        gameboard += (int)gamePieces[row, col].GetComponent<GamePiece>().player;    
+                        gameboard += (int)gamePieces[row, col].GetComponent<GamePiece>().player;
                     } else {
                         gameboard += "0";
                     }

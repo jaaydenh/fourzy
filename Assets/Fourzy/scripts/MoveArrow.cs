@@ -9,7 +9,7 @@ namespace Fourzy
         bool mouseButtonPressed = false;
 
         void OnMouseDown() {
-            if (!mouseButtonPressed && Fourzy.GameManager.instance.isCurrentPlayerTurn)
+            if (!mouseButtonPressed && Fourzy.GameManager.instance.gameState.isCurrentPlayerTurn)
             {
                 mouseButtonPressed = true;
                 int row = gameObject.GetComponentInParent<CornerSpot>().row;
@@ -24,13 +24,13 @@ namespace Fourzy
                 } else if (direction == Direction.LEFT) {
                     pos.column = Constants.numColumns;
                 }
-                StartCoroutine(GameManager.instance.MovePiece(new Move(pos, direction), false, true));
+                StartCoroutine(GameManager.instance.MovePiece(new Move(pos, direction), true));
             }
         }
             
-    	void Start () {
+        void Start () {
             GameManager.OnMoved += setMouseButtonPressed;
-    	}
+        }
 
         void setMouseButtonPressed() {
             mouseButtonPressed = false;

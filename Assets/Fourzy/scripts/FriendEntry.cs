@@ -13,49 +13,49 @@ namespace Fourzy
         public delegate void GameActive();
         public static event GameActive OnActiveGame;
 
-    	public string userName, id, facebookId;
-    	public bool isOnline;
+        public string userName, id, facebookId;
+        public bool isOnline;
 
-    	public Text nameLabel;
-    	public Image profilePicture;
-    	public Image onlineTexture;
+        public Text nameLabel;
+        public Image profilePicture;
+        public Image onlineTexture;
 
         private GameObject UIScreen;
 
-    	void Start()
-    	{
+        void Start()
+        {
             UIScreen = GameObject.Find("UI Screen");
-    		UpdateFriend();
-    	}
+            UpdateFriend();
+        }
 
-    	public void UpdateFriend()
-    	{
-    		nameLabel.text = userName;
-    		onlineTexture.color = isOnline ? Color.green : Color.gray;
+        public void UpdateFriend()
+        {
+            nameLabel.text = userName;
+            onlineTexture.color = isOnline ? Color.green : Color.gray;
             if (facebookId != null) {
                 StartCoroutine(UserManager.instance.GetFBPicture(facebookId, (sprite)=>
                     {
                         profilePicture.sprite = sprite;
                     }));
             }
-    	}
+        }
 
         //Open game gets called OnClick of the play button
         public void OpenNewFriendChallengeGame()
         {
-            GameManager.instance.ResetGameBoard();
+            GameManager.instance.ResetGamePiecesAndTokens();
             GameManager.instance.PopulateMoveArrows();
 
             TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-            GameManager.instance.tokenBoard = tokenBoard;
-            StartCoroutine(GameManager.instance.CreateTokens());
-            //int[] tokenData = TokenBoardLoader.Instance.FindTokenBoardNoSticky();
-            //StartCoroutine(GameManager.instance.SetTokenBoard(tokenData));
+            //GameManager.instance.gameState.tokenBoard = tokenBoard;
+
+            //If we initiated the challenge, we get to be player 1
+            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false);
+            GameManager.instance.gameState = gameState;
+
+            StartCoroutine(GameManager.instance.CreateTokenViews());
 
             GameManager.instance.isMultiplayer = true;
-            //If we initiated the challenge, we get to be player 1
-            GameManager.instance.isPlayerOneTurn = true;
-            GameManager.instance.isCurrentPlayerTurn = true;
             GameManager.instance.isNewChallenge = true;
             GameManager.instance.challengedUserId = id;
             GameManager.instance.challengeInstanceId = null;
