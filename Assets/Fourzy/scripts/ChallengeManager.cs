@@ -583,10 +583,18 @@ namespace Fourzy
                                             }
                                         }
                                     }
-                                    
+
                                     activeGame.viewedResult = viewedResult;
 
                                     activeGame.challengeState = challenge.State;
+
+                                    if (challenge.Challenger.Id == UserManager.instance.userId) {
+                                        //Debug.Log("isCurrentPlayer_PlayerOne: true");
+                                        activeGame.isCurrentPlayer_PlayerOne = true;
+                                    } else {
+                                        activeGame.isCurrentPlayer_PlayerOne = false;
+                                        //Debug.Log("isCurrentPlayer_PlayerOne: false");
+                                    }
 
                                     if (challenge.State == "RUNNING" || challenge.State == "ISSUED") {
                                         //If the user Id of the next player is equal to the current player then it is the current player's turn
@@ -663,7 +671,7 @@ namespace Fourzy
                                     List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
                                     activeGame.moveList = moveList;
                                     activeGame.transform.localScale = new Vector3(1f,1f,1f);
-                                    //Debug.Log("gameboard: " + stringDebug);
+
                                     games.Add(go);
                                 }
 

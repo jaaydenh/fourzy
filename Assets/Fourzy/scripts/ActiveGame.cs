@@ -37,6 +37,7 @@ namespace Fourzy
         private GameObject deleteGameButton;
         private int opponentIndex;
         public bool isCurrentPlayerTurn = false;
+        public bool isCurrentPlayer_PlayerOne;
         public bool viewedResult = false;
         public bool isExpired = false;
         public bool isGameOver = false;
@@ -150,6 +151,8 @@ namespace Fourzy
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, isPlayerOneTurn, isCurrentPlayerTurn, tokenBoard, lastGameBoard, isGameOver);
             GameManager.instance.gameState = gameState;
 
+            GameManager.instance.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;
+            Debug.Log("Active Game: isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
             GameManager.instance.opponentProfilePicture.sprite = opponentProfilePictureSprite;
             GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
             GameManager.instance.playerNameLabel.text = UserManager.instance.userName;

@@ -69,7 +69,7 @@ namespace Fourzy {
                     board[row, col] = boardData[row * numRows + col];
                     if (board[row, col] != (int)Piece.EMPTY) {
                         Position pos = new Position(col, row);
-                        MovingGamePiece mgp = new MovingGamePiece(new Move(pos, Direction.UP));
+                        MovingGamePiece mgp = new MovingGamePiece(new Move(pos, Direction.UP, Player.NONE));
                         completedMovingPieces.Add(mgp);
                     }
                 }
@@ -111,10 +111,10 @@ namespace Fourzy {
                     if (token.isMoveable) {
                         if (GetCell(nextPosition.column, nextPosition.row) != 0) {
                             pieceInSquare = true;
-                            Move move = new Move(nextPosition, piece.currentDirection);
+                            Player player = (Player)GetCell(nextPosition.column, nextPosition.row);
+                            Move move = new Move(nextPosition, piece.currentDirection, player);
                             MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
-                            int player = GetCell(nextPosition.column, nextPosition.row);
-                            activeMovingPiece.player = (Player)player;
+
                             activeMovingPieces.Add(activeMovingPiece);
                         }
                     }

@@ -9,9 +9,10 @@ namespace Fourzy
         public Direction direction;
         public Player player;
 
-        public Move(Position position, Direction direction) {
+        public Move(Position position, Direction direction, Player player) {
             this.position = position;
             this.direction = direction;
+            this.player = player;
         }
 
         public Move(int location, Direction direction, Player player) {
@@ -105,7 +106,7 @@ namespace Fourzy
                     break;
             }
 
-            Move move = new Move(nextPosition, direction);
+            Move move = new Move(nextPosition, direction, player);
             return move;
         }
     }

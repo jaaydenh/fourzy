@@ -31,12 +31,12 @@ namespace Fourzy
             if (Fourzy.GameManager.instance.gameState.isCurrentPlayerTurn && !Fourzy.GameManager.instance.gameState.isGameOver)
             {
                 int noMoves = 0;
-                //GameBoardView board = GameManager.instance.gameBoardView;
+                Player player = GameManager.instance.gameState.isPlayerOneTurn ? Player.ONE : Player.TWO;
 
                 if (rightArrowActive)
                 {
                     if (column == 0) {
-                        Move move = new Move(new Position(column + 1, row), Direction.RIGHT);
+                        Move move = new Move(new Position(column + 1, row), Direction.RIGHT, player);
                         if (GameManager.instance.gameState.CanMove(move, GameManager.instance.gameState.tokenBoard.tokens)) {
                             RightArrow.SetActive(true);    
                         } else {
@@ -47,7 +47,7 @@ namespace Fourzy
                 if (leftArrowActive)
                 {
                     if (column == 7) {
-                        Move move = new Move(new Position(column - 1, row), Direction.LEFT);
+                        Move move = new Move(new Position(column - 1, row), Direction.LEFT, player);
                         if (GameManager.instance.gameState.CanMove(move, GameManager.instance.gameState.tokenBoard.tokens)) {
                             LeftArrow.SetActive(true);
                         } else {
@@ -58,7 +58,7 @@ namespace Fourzy
                 if (upArrowActive)
                 {
                     if (row == 7) {
-                        Move move = new Move(new Position(column, row - 1), Direction.UP);
+                        Move move = new Move(new Position(column, row - 1), Direction.UP, player);
                         if (GameManager.instance.gameState.CanMove(move, GameManager.instance.gameState.tokenBoard.tokens)) {
                             UpArrow.SetActive(true);
                         } else {
@@ -69,7 +69,7 @@ namespace Fourzy
                 if (downArrowActive)
                 {
                     if (row == 0) {
-                        Move move = new Move(new Position(column, row + 1), Direction.DOWN);
+                        Move move = new Move(new Position(column, row + 1), Direction.DOWN, player);
                         if (GameManager.instance.gameState.CanMove(move, GameManager.instance.gameState.tokenBoard.tokens)) {
                             DownArrow.SetActive(true);
                         } else {
@@ -88,8 +88,10 @@ namespace Fourzy
                         pos.column = Constants.numColumns;
                         direction = Direction.LEFT;
                     }
-                    Move move = new Move(pos, direction);
-                    StartCoroutine(GameManager.instance.MovePiece(move, true));
+
+                    Move move = new Move(pos, direction, player);
+
+                    StartCoroutine(GameManager.instance.ProcessMove(move, true));
                 }
             }
         }

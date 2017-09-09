@@ -507,6 +507,7 @@ MonoBehaviour:
   isNewChallenge: 0
   isNewRandomChallenge: 0
   isAiActive: 0
+  isCurrentPlayer_PlayerOne: 0
   challengedUserId: 
   winner: 
   opponentFacebookId: 
@@ -1205,7 +1206,7 @@ Prefab:
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 376.49997
+      value: 376.5
       objectReference: {fileID: 0}
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}

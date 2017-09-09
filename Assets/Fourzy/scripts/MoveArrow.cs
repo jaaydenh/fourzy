@@ -24,7 +24,11 @@ namespace Fourzy
                 } else if (direction == Direction.LEFT) {
                     pos.column = Constants.numColumns;
                 }
-                StartCoroutine(GameManager.instance.MovePiece(new Move(pos, direction), true));
+
+                Player player = GameManager.instance.gameState.isPlayerOneTurn ? Player.ONE : Player.TWO;
+                Move move = new Move(pos, direction, player);
+
+                StartCoroutine(GameManager.instance.ProcessMove(move, true));
             }
         }
             

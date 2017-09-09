@@ -56,7 +56,6 @@ namespace Fourzy
                 UpdateMoveablePieces();
                 gameBoard.completedMovingPieces.Clear();
             }
-            PrintGameState("InitGameState");
         }
 
         public void MovePiece(Move move, bool isReplay) {
@@ -72,7 +71,7 @@ namespace Fourzy
                 Position nextPosition = activePiece.GetNextPosition();
                 Direction activeDirection = activePiece.currentDirection;
 
-                if (CanMove(new Move(nextPosition, activeDirection), tokenBoard.tokens)) {
+                if (CanMove(new Move(nextPosition, activeDirection, move.player), tokenBoard.tokens)) {
                     tokenBoard.tokens[nextPosition.row, nextPosition.column].UpdateBoard(gameBoard, true);
                 } else {
                     gameBoard.DisableNextMovingPiece();
@@ -84,8 +83,6 @@ namespace Fourzy
             }
 
             UpdateMoveablePieces();
-
-            PrintGameState("GameState - After Move");
 
             if (gameBoard.didPlayerWin(1)) {
                 winner = Player.ONE;
@@ -121,22 +118,22 @@ namespace Fourzy
                 //Debug.Log("UpdateMoveablePieces col: " + currentPosition.column + " row: " + currentPosition.row);
                 if (tokenBoard.tokens[currentPosition.row, currentPosition.column].isMoveable) {
 
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP), tokenBoard.tokens)) {
+                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP, Player.NONE), tokenBoard.tokens)) {
                         MakePieceMoveable(currentPosition, true, Direction.UP);
                     } else {
                         MakePieceMoveable(currentPosition, false, Direction.UP);
                     } 
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.DOWN), Direction.DOWN), tokenBoard.tokens)) {
+                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.DOWN), Direction.DOWN, Player.NONE), tokenBoard.tokens)) {
                         MakePieceMoveable(currentPosition, true, Direction.DOWN);
                     } else {
                         MakePieceMoveable(currentPosition, false, Direction.DOWN);
                     }
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.LEFT), Direction.LEFT), tokenBoard.tokens)) {
+                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.LEFT), Direction.LEFT, Player.NONE), tokenBoard.tokens)) {
                         MakePieceMoveable(currentPosition, true, Direction.LEFT);
                     } else {
                         MakePieceMoveable(currentPosition, false, Direction.LEFT);
                     }
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.RIGHT), Direction.RIGHT), tokenBoard.tokens)) {
+                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.RIGHT), Direction.RIGHT, Player.NONE), tokenBoard.tokens)) {
                         MakePieceMoveable(currentPosition, true, Direction.RIGHT);
                     } else {
                         MakePieceMoveable(currentPosition, false, Direction.RIGHT);
@@ -219,7 +216,7 @@ namespace Fourzy
                         break;
                 }
 
-                return CanMove(new Move(Utility.GetNextPosition(move), move.direction), tokens);
+                return CanMove(new Move(Utility.GetNextPosition(move), move.direction, move.player), tokens);
             }
 
             // if there is a token at the end position and canPassThrough is false then return false
@@ -231,7 +228,7 @@ namespace Fourzy
             // if there is a token at the end position and canStopOn is false then check if the piece can move
             // to the next position, if not then return false
             if (!tokens[endPosition.row, endPosition.column].canEndMove) {
-                return CanMove(new Move(Utility.GetNextPosition(move), move.direction), tokens);
+                return CanMove(new Move(Utility.GetNextPosition(move), move.direction, move.player), tokens);
             }
 
             return true;

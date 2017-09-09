@@ -281,7 +281,7 @@ namespace Fourzy {
             //gameBoard.PrintBoard();
             foreach (Move m in AiPlayer.PotentialMoves ()) {
 
-                if (gameState.CanMove(new Move(Utility.GetNextPosition(m), m.direction), tokenBoard.tokens)) {
+                if (gameState.CanMove(new Move(Utility.GetNextPosition(m), m.direction, m.player), tokenBoard.tokens)) {
                     moves.Add(m);
                 }
             }
@@ -316,7 +316,7 @@ namespace Fourzy {
             while (gameBoard.activeMovingPieces.Count > 0) {
                 Position endPosition = gameBoard.activeMovingPieces[0].GetNextPosition();
 
-                if (gameState.CanMove(new Move(endPosition, move.direction), tokenBoard.tokens)) {
+                if (gameState.CanMove(new Move(endPosition, move.direction, move.player), tokenBoard.tokens)) {
                     tokenBoard.tokens[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);
                 } else {
                     gameBoard.DisableNextMovingPiece();
