@@ -238,6 +238,7 @@ namespace Fourzy
         }
 
         private void CheckConnectionStatus(bool connected) {
+            // TODO: inform the player they dont have a connection when connected is false
             Debug.Log("CheckConnectionStatus: " + connected);
         }
 

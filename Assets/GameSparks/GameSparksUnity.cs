@@ -42,7 +42,7 @@ public class GameSparksUnity : MonoBehaviour
         this.gameObject.AddComponent<DefaultPlatform>();
 #endif
 //		System.Net.ServicePointManager.ServerCertificateValidationCallback += (o, certificate, chain, errors) => true;
-//		GameSparksWebSocket.Proxy = new System.Net.DnsEndPoint("localhost", 8888);
+//		GameSparksWebSocket.Proxy = new System.Net.DnsEndPoint2("localhost", 8888);
 //		GS.TraceMessages = true;
 //		GameSparks.Core.GameSparksUtil.LogMessageHandler = Debug.Log;
 #if UNITY_IOS && !UNITY_EDITOR
@@ -85,7 +85,7 @@ public class GameSparksUnity : MonoBehaviour
 			if(parsedIP == null) {
 				GameSparksWebSocket.Proxy = new System.Net.IPEndPoint(parsedIP, int.Parse(parts[1]));
 			} else {
-				GameSparksWebSocket.Proxy = new System.Net.DnsEndPoint(parts[0], int.Parse(parts[1]));
+				GameSparksWebSocket.Proxy = new System.Net.DnsEndPoint2(parts[0], int.Parse(parts[1]));
 			}
 		}
 

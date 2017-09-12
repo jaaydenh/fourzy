@@ -34,11 +34,10 @@ namespace Fourzy {
             this.name = name;
 
             if (instantiateTokenBoard) {
-                SetTokenBoardFromData(tokenData);    
+                SetTokenBoardFromData(tokenData);
             } else {
                 this.tokenData = tokenData;
             }
-            
         }
 
         public void InitTokenBoard() {

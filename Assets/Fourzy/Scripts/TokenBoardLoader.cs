@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using System.Linq;
 using System.IO;
+//using System.Collections;
+using System.Collections.Generic;
 
 namespace Fourzy
 {
 
     public class TokenBoardLoader : MonoBehaviour
     {
+        private string gameDataProjectFilePath = "/Fourzy/Resources/TokenBoards.json";
         private TokenBoardInfo[] allTokenBoards;
 
         //Singleton
@@ -23,34 +26,60 @@ namespace Fourzy
             }
         }
 
-        public TokenBoardInfo LoadAllTokenBoards()
+        private TokenBoardInfo[] LoadTokenBoardData()
         {
-            // XmlSerializer serializer = new XmlSerializer(typeof(TokenBoardInfo[]));
-            // using (StreamReader streamReader = new StreamReader("TokenBoards.xml"))
-            // {
-            // 	allTokenBoards = (TokenBoardInfo[])serializer.Deserialize(streamReader);
-            // }
+            string filePath = Application.dataPath + gameDataProjectFilePath;
+            TokenBoardInfo[] tokenBoardData = new TokenBoardInfo[0];
 
-            var asset = Resources.Load<TextAsset>("TokenBoards.json");
-            StreamReader reader = new StreamReader("TokenBoards.json");
-            string json = reader.ReadToEnd();
-            Debug.Log("asset: " + json);
-            allTokenBoards = JsonUtility.FromJson<TokenBoardInfo[]>(json);
-            
+            if (File.Exists (filePath)) {
+                string dataAsJson = File.ReadAllText (filePath);
+                tokenBoardData = JsonHelper.getJsonArray<TokenBoardInfo> (dataAsJson);
+            } else {
+                tokenBoardData[0] = GetDefaultTokenBoard();
+            }
 
-            var tokenBoard = allTokenBoards
+            return tokenBoardData;
+        }
+
+        public TokenBoard GetTokenBoard()
+        {
+            string filePath = Application.dataPath + gameDataProjectFilePath;
+            string dataAsJson = File.ReadAllText (filePath);
+            TokenBoardInfo[] tokenBoardCollection = LoadTokenBoardData();
+
+            var tokenBoardInfo = tokenBoardCollection
                 .Where(t => t.Enabled == true)
                 .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
             .FirstOrDefault();
 
-            // Debug.Log("tokenboard ID: " + allTokenBoards[0].ID);
-            // Debug.Log("tokenboard Name: " + allTokenBoards[0].Name);
-            // Debug.Log("tokenboard Enabled: " + allTokenBoards[0].Enabled);
-            // Debug.Log("tokenboard TokenData: " + allTokenBoards[0].TokenData);
+            Debug.Log("tokenboard ID: " + tokenBoardInfo.ID);
+            Debug.Log("tokenboard Name: " + tokenBoardInfo.Name);
+            Debug.Log("tokenboard Enabled: " + tokenBoardInfo.Enabled);
+            Debug.Log("tokenboard TokenData: " + tokenBoardInfo.TokenData);
 
-            return tokenBoard;
+            TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID,tokenBoardInfo.Name);
+            return tokenboard;
         }
-        public TokenBoard GetTokenBoard()
+
+        public TokenBoardInfo GetDefaultTokenBoard()
+        {
+            TokenBoardInfo tokenBoardInfo = new TokenBoardInfo();
+            tokenBoardInfo.ID = "1000";
+            tokenBoardInfo.Name = "The Basic Game";
+            tokenBoardInfo.TokenData = new List<int> {
+                6,0,0,0,0,0,0,6,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                6,0,0,0,0,0,0,6};
+
+            return tokenBoardInfo;
+        }
+
+        public TokenBoard GetTokenBoard1()
         {
 
             TokenBoard tokenBoard;

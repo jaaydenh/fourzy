@@ -326,8 +326,6 @@ namespace Fourzy
 
         public void OpenPassAndPlayGame() 
         {
-            //TokenBoardLoader.instance.LoadAllTokenBoards();
-
             if (tokenBoard == null) {
                 TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
                 tokenBoard = randomTokenBoard;

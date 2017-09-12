@@ -24,10 +24,15 @@ namespace GameSparks.Platforms
 
 			DeviceName = SystemInfo.deviceName.ToString();
 			DeviceType = SystemInfo.deviceType.ToString();
-            if (Application.platform == RuntimePlatform.PS4 || Application.platform == RuntimePlatform.XboxOne)
+            if (Application.platform == RuntimePlatform.PS4 || Application.platform == RuntimePlatform.XboxOne ||
+				SystemInfo.unsupportedIdentifier == SystemInfo.deviceUniqueIdentifier)
             {
 #if GS_DONT_USE_PLAYER_PREFS || UNITY_SWITCH
-                DeviceId = SystemInfo.deviceUniqueIdentifier.ToString();
+				if (SystemInfo.unsupportedIdentifier == SystemInfo.deviceUniqueIdentifier) {
+					DeviceId = System.Guid.NewGuid().ToString();
+				} else {
+                	DeviceId = SystemInfo.deviceUniqueIdentifier.ToString();
+				}
 #else
                 DeviceId = PlayerPrefs.GetString(PLAYER_PREF_DEVICEID_KEY);
                 if (DeviceId.Equals(""))
@@ -41,7 +46,7 @@ namespace GameSparks.Platforms
             }
             else
             {
-                DeviceId = SystemInfo.deviceUniqueIdentifier.ToString();
+				DeviceId = SystemInfo.deviceUniqueIdentifier.ToString ();
             }
 
 			char[] delimiterChars = { ' ', ',', '.', ':', '-', '_', '(', ')' };
