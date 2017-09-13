@@ -152,7 +152,6 @@ namespace Fourzy
             GameManager.instance.gameState = gameState;
 
             GameManager.instance.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;
-            Debug.Log("Active Game: isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
             GameManager.instance.opponentProfilePicture.sprite = opponentProfilePictureSprite;
             GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
             GameManager.instance.playerNameLabel.text = UserManager.instance.userName;

@@ -29,6 +29,7 @@ namespace Fourzy
         public GameObject blockerToken;
         public GameObject ghostToken;
         public GameObject iceSheetToken;
+        public GameObject pitToken;
         // ---------- Token Views ----------
 
         public GameObject moveArrowLeft;
@@ -473,6 +474,11 @@ namespace Fourzy
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
+                        case Token.PIT:
+                            go = Instantiate(pitToken, new Vector3(col, row * -1, 15), Quaternion.identity, tokens.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
                         default:
                             break;
                     }
@@ -528,6 +534,7 @@ namespace Fourzy
                 for (int i = gamePieces.transform.childCount-1; i >= 0; i--)
                 {
                     Transform piece = gamePieces.transform.GetChild(i);
+                    piece.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                     Lean.LeanPool.Despawn(piece.gameObject);
                 }
             }
@@ -706,7 +713,6 @@ namespace Fourzy
         // 2. List of completed moving pieces and list of positions for those pieces to be used for piece animation
         public IEnumerator ProcessMove(Move move, bool updatePlayer)
         {
-            //Debug.Log("BEGIN MOVE PIECE");
             isDropping = true;
 
             if (gameState.CanMove(move.GetNextPosition(), gameState.tokenBoard.tokens))
@@ -770,10 +776,10 @@ namespace Fourzy
             audioMove.Play();
 
             gameState.PrintGameState("BeforeMove");
-            gameState.MovePiece(move, replayMove);
+            List<MovingGamePiece> movingPieces = gameState.MovePiece(move, replayMove);
             gameState.PrintGameState("AfterMove");
 
-            StartCoroutine(MovePieceGameView(move, gameState.gameBoard.completedMovingPieces));
+            StartCoroutine(MovePieceGameView(move, movingPieces));
 
             while(updatingViews)
                 yield return null;
@@ -787,7 +793,6 @@ namespace Fourzy
         }
 
         private void UpdateGameStatus(bool updatePlayer) {
-            Debug.Log("UpdateGameStatus");
             if (gameState.isCurrentPlayerTurn && gameState.isGameOver) {
                 ChallengeManager.instance.SetViewedCompletedGame(challengeInstanceId);
             }
@@ -804,7 +809,7 @@ namespace Fourzy
             }
         }
 
-        private IEnumerator MovePieceGameView(Move move, List<MovingGamePiece> completedMovingPieces) {
+        private IEnumerator MovePieceGameView(Move move, List<MovingGamePiece> movingPieces) {
             updatingViews = true;
 
             // Create Game Piece View
@@ -817,13 +822,15 @@ namespace Fourzy
 
             GameObject nextPieceView = new GameObject();
             // process animations for completed moving pieces
-            for (int i = 0; i < completedMovingPieces.Count; i++)
+            for (int i = 0; i < movingPieces.Count; i++)
             {   
-                var piece = completedMovingPieces[i];
-                Position startPosition = piece.positions[0];
-                Position endPosition = piece.positions[piece.positions.Count - 1];
+                var movingGamePiece = movingPieces[i];
+                Position startPosition = movingGamePiece.positions[0];
+                Position endPosition = movingGamePiece.positions[movingGamePiece.positions.Count - 1];
+
+                // If it is the first moving piece, the first position should not be used as the piece starts outside the board
                 if (i==0) {
-                    piece.positions.RemoveAt(0);
+                    movingGamePiece.positions.RemoveAt(0);
                 }
 
                 GameObject pieceView;
@@ -835,24 +842,29 @@ namespace Fourzy
                     nextPieceView = gameBoardView.gamePieces[endPosition.row,endPosition.column];
                 }
 
-                pieceView.GetComponent<GamePiece>().positions = piece.positions;
-                StartCoroutine(AnimatePiece(pieceView, piece.positions));
-
-                // Update the state of the game board views
-                gameBoardView.gamePieces[endPosition.row, endPosition.column] = pieceView;
+                pieceView.GetComponent<GamePiece>().positions = movingGamePiece.positions;
+                StartCoroutine(AnimatePiece(pieceView, movingGamePiece));
+                
+                if (movingGamePiece.isDestroyed) {
+                    // pieceView.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    // Lean.LeanPool.Despawn(pieceView);
+                } else {
+                    // Update the state of the game board views
+                    gameBoardView.gamePieces[endPosition.row, endPosition.column] = pieceView;
+                }
 
                 while(this.isAnimating)
                     yield return null;
             }
 
-            gameState.ClearMovingPieces();
+            //gameState.ClearMovingPieces();
 
             gameBoardView.PrintGameBoard();
 
             updatingViews = false;
         }
 
-        private IEnumerator AnimatePiece(GameObject g, List<Position> positions) {
+        private IEnumerator AnimatePiece(GameObject g, MovingGamePiece movingGamePiece) {
             isAnimating = true;
             // Debug.Log("POSITIONS: ");
             // foreach (var item in positions)
@@ -865,6 +877,9 @@ namespace Fourzy
             //GameObject g = gameBoardView.gamePieces[positions[0].row, positions[0].column];
             
             //Vector3 start = new Vector3(positions[1].column, positions[1].row * -1);
+
+            List<Position> positions = movingGamePiece.positions;
+
             Sequence mySequence = DOTween.Sequence();
             for (int i = 0; i < positions.Count; i++)
             {
@@ -894,8 +909,13 @@ namespace Fourzy
 
                 //start = end;
             }
-            
+
             yield return mySequence.WaitForCompletion();
+
+            if (movingGamePiece.animationState == PieceAnimStates.DROPPING) {
+                g.transform.DOScale(0.0f, 1.0f);
+            }
+
             GamePiece gamePiece = g.GetComponent<GamePiece>();
             gamePiece.isMoving = false;
             isAnimating = false;
@@ -937,8 +957,8 @@ namespace Fourzy
                 {
                     gameStatusText.text = winner + " Won!";
                 } else {
-                    Debug.Log("isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
-                    Debug.Log("gameState.winner: " + gameState.winner.ToString());
+                    // Debug.Log("isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
+                    // Debug.Log("gameState.winner: " + gameState.winner.ToString());
                     if (isCurrentPlayer_PlayerOne && gameState.winner == Player.ONE) {
                         audioWin.Play();
                         gameStatusText.text = UserManager.instance.userName + " Won!";

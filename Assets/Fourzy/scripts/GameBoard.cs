@@ -97,13 +97,20 @@ namespace Fourzy {
 
         public void ProcessBoardUpdate(IToken token, bool swapPiece) {
             bool pieceInSquare = false;
+
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (token.canEnter == true) {
                 if (activeMovingPieces.Count > 0) {
                     MovingGamePiece piece = activeMovingPieces[0];
                     Position nextPosition = piece.GetNextPosition();
                     Position currentPosition = piece.GetCurrentPosition();
+                    bool isPieceDestroyed = piece.isDestroyed;
+                    isPieceDestroyed = CalculatePieceChanceOfDestruction(token.chanceDestroyOnEnd);
 
+                    if (isPieceDestroyed) {
+                        piece.isDestroyed = true;
+                        piece.animationState = PieceAnimStates.DROPPING;
+                    }
                     if (token.changePieceDirection) {
                         activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                     }
@@ -114,7 +121,6 @@ namespace Fourzy {
                             Player player = (Player)GetCell(nextPosition.column, nextPosition.row);
                             Move move = new Move(nextPosition, piece.currentDirection, player);
                             MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
-
                             activeMovingPieces.Add(activeMovingPiece);
                         }
                     }
@@ -128,6 +134,12 @@ namespace Fourzy {
                         }
                     }
 
+                    if (piece.isDestroyed) {
+                        if (InBoardBounds(nextPosition)) {
+                            SetCell(nextPosition.column, nextPosition.row, Player.NONE);
+                        }
+                    }
+
                     if (!token.changePieceDirection) {
                         activeMovingPieces[0].positions.Add(nextPosition);
                     }
@@ -136,11 +148,27 @@ namespace Fourzy {
                         piece.currentDirection = token.newPieceDirection;
                     }
 
-                    if (pieceInSquare || token.mustStop) {
+                    if (pieceInSquare || token.mustStop || piece.isDestroyed) {
                         DisableNextMovingPiece();
                     }
                 }
             } 
+        }
+
+        private bool InBoardBounds(Position pos) {
+            if (pos.column >= 0 && pos.column < numColumns && pos.row >= 0 && pos.row < numRows) {
+                return true;
+            }
+            return false;
+        }
+
+        private bool CalculatePieceChanceOfDestruction(float chance) {
+            //Debug.Log("Chance Destroyed: " + chance);
+            if (chance > 0.0f) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         public Player PlayerAtPosition(Position position) {

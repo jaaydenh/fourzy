@@ -58,7 +58,7 @@ namespace Fourzy
             }
         }
 
-        public void MovePiece(Move move, bool isReplay) {
+        public List<MovingGamePiece> MovePiece(Move move, bool isReplay) {
             gameBoard.completedMovingPieces.Clear();
 
             MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
@@ -102,6 +102,8 @@ namespace Fourzy
                 isGameOver = true;
                 winner = Player.NONE;
             }
+
+            return gameBoard.completedMovingPieces;
         }
 
         public int[,] GetGameBoard() {
@@ -114,35 +116,37 @@ namespace Fourzy
         public void UpdateMoveablePieces() {
             foreach (var piece in gameBoard.completedMovingPieces)
             {
-                Position currentPosition = piece.GetCurrentPosition();
-                //Debug.Log("UpdateMoveablePieces col: " + currentPosition.column + " row: " + currentPosition.row);
-                if (tokenBoard.tokens[currentPosition.row, currentPosition.column].isMoveable) {
+                if (!piece.isDestroyed) {
+                    Position currentPosition = piece.GetCurrentPosition();
+                    //Debug.Log("UpdateMoveablePieces col: " + currentPosition.column + " row: " + currentPosition.row);
+                    if (tokenBoard.tokens[currentPosition.row, currentPosition.column].isMoveable) {
 
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP, Player.NONE), tokenBoard.tokens)) {
-                        MakePieceMoveable(currentPosition, true, Direction.UP);
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP, Player.NONE), tokenBoard.tokens)) {
+                            MakePieceMoveable(currentPosition, true, Direction.UP);
+                        } else {
+                            MakePieceMoveable(currentPosition, false, Direction.UP);
+                        } 
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.DOWN), Direction.DOWN, Player.NONE), tokenBoard.tokens)) {
+                            MakePieceMoveable(currentPosition, true, Direction.DOWN);
+                        } else {
+                            MakePieceMoveable(currentPosition, false, Direction.DOWN);
+                        }
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.LEFT), Direction.LEFT, Player.NONE), tokenBoard.tokens)) {
+                            MakePieceMoveable(currentPosition, true, Direction.LEFT);
+                        } else {
+                            MakePieceMoveable(currentPosition, false, Direction.LEFT);
+                        }
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.RIGHT), Direction.RIGHT, Player.NONE), tokenBoard.tokens)) {
+                            MakePieceMoveable(currentPosition, true, Direction.RIGHT);
+                        } else {
+                            MakePieceMoveable(currentPosition, false, Direction.RIGHT);
+                        }
                     } else {
                         MakePieceMoveable(currentPosition, false, Direction.UP);
-                    } 
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.DOWN), Direction.DOWN, Player.NONE), tokenBoard.tokens)) {
-                        MakePieceMoveable(currentPosition, true, Direction.DOWN);
-                    } else {
                         MakePieceMoveable(currentPosition, false, Direction.DOWN);
-                    }
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.LEFT), Direction.LEFT, Player.NONE), tokenBoard.tokens)) {
-                        MakePieceMoveable(currentPosition, true, Direction.LEFT);
-                    } else {
                         MakePieceMoveable(currentPosition, false, Direction.LEFT);
-                    }
-                    if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.RIGHT), Direction.RIGHT, Player.NONE), tokenBoard.tokens)) {
-                        MakePieceMoveable(currentPosition, true, Direction.RIGHT);
-                    } else {
                         MakePieceMoveable(currentPosition, false, Direction.RIGHT);
                     }
-                } else {
-                    MakePieceMoveable(currentPosition, false, Direction.UP);
-                    MakePieceMoveable(currentPosition, false, Direction.DOWN);
-                    MakePieceMoveable(currentPosition, false, Direction.LEFT);
-                    MakePieceMoveable(currentPosition, false, Direction.RIGHT);
                 }
             }
         }
@@ -234,9 +238,9 @@ namespace Fourzy
             return true;
         }
 
-        public void ClearMovingPieces() {
-            gameBoard.completedMovingPieces.Clear();
-        }
+        // public void ClearMovingPieces() {
+        //     gameBoard.completedMovingPieces.Clear();
+        // }
 
         public void PrintGameState(string name) {
             string log = name + "\n";

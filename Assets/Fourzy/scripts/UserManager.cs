@@ -71,22 +71,6 @@ namespace Fourzy
                     callback(profilePictureSprite);
                 }
             }
-
-			
-			//Debug.Log("FACEBOOK ID: " + facebookId);
-			//To get our facebook picture we use this address which we pass our facebookId into
-    		//var www = new WWW("http://graph.facebook.com/" + facebookId + "/picture?width=210&height=210");
-
-            //while (!www1.isDone)
-            //    yield return null;
-    		//yield return www;
-
-    		//Texture2D tempPic = new Texture2D(25, 25);
-			
-    		//www1.LoadImageIntoTexture(tempPic);
-    		//Sprite profilePictureSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
-
-            //callback(profilePictureSprite);
-    	}
+        }
     }
 }

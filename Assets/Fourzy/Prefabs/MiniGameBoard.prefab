@@ -236,6 +236,7 @@ MonoBehaviour:
   ghostToken: {fileID: 1727477774046648, guid: 6e4f94269d5d54d82b69d83f7028a2e5, type: 2}
   iceSheetToken: {fileID: 1419971408396618, guid: 3499a5e46e3be49a6a1cc9f3657fbff2,
     type: 2}
+  pitToken: {fileID: 1110577959621164, guid: a8e6195c9f07043dba35b16ee6e88c8d, type: 2}
   glow: {fileID: 1719585871036234}
   questionMark: {fileID: 1839717546775038}
 --- !u!114 &114512702855691298

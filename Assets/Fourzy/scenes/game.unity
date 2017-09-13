@@ -471,6 +471,7 @@ MonoBehaviour:
   ghostToken: {fileID: 1727477774046648, guid: 6e4f94269d5d54d82b69d83f7028a2e5, type: 2}
   iceSheetToken: {fileID: 1419971408396618, guid: 3499a5e46e3be49a6a1cc9f3657fbff2,
     type: 2}
+  pitToken: {fileID: 1110577959621164, guid: a8e6195c9f07043dba35b16ee6e88c8d, type: 2}
   moveArrowLeft: {fileID: 1951836253388886, guid: 36d26fd20ba0f4f889d04038d1b5d6e4,
     type: 2}
   moveArrowRight: {fileID: 1459885036096070, guid: 36b21e6b584474efe8f008eb4a426bbc,
@@ -8636,8 +8637,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab: {fileID: 174738, guid: edd52c6e9d75d420199836641a1473b2, type: 2}
-  Preload: 64
-  Capacity: 64
+  Preload: 74
+  Capacity: 74
   Notification: 0
 --- !u!1 &2070770103
 GameObject:

@@ -14,11 +14,11 @@ namespace Fourzy
         Color gameSearching = new Color32(255,155,0,255);
         private bool isRunning = false;
 
-    	void Start () {
+        void Start () {
             createButtonImage = this.GetComponent<Image>();
             buttonText = this.GetComponentInChildren<Text>();
-    	}
-    	
+        }
+
         public IEnumerator SetButtonState (bool isSearching) {
             isRunning = true;
             if (isSearching)
@@ -39,7 +39,7 @@ namespace Fourzy
 
             yield return null;
             isRunning = false;
-    	}
+    }
 
 //        public void ResetFindMatchButton() {
 //            createButtonImage.color = gameCreate;

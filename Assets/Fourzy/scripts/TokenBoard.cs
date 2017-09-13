@@ -10,7 +10,7 @@ namespace Fourzy {
         public IToken[,] tokens;
         public int[,] tokenData;
 
-        public TokenBoard(int[] tokenData, string id, string name) {
+        public TokenBoard(int[] tokenData, string id, string name, bool instantiateTokenBoard) {
             InitTokenBoard();
             this.id = id;
             this.name = name;
@@ -24,8 +24,12 @@ namespace Fourzy {
                     convertedTokenData[row, col] = tokenData[row * Constants.numRows + col];
                 }
             }
+            this.tokenData = convertedTokenData;
 
-            SetTokenBoardFromData(convertedTokenData);
+            if (instantiateTokenBoard) {
+                SetTokenBoardFromData(convertedTokenData);
+            }
+
         }
 
         public TokenBoard(int[,] tokenData, string id, string name, bool instantiateTokenBoard) {
@@ -103,6 +107,10 @@ namespace Fourzy {
                     else if (token == (int)Token.ICE_SHEET)
                     {
                         tokens[row, col] = new IceSheetToken();
+                    }
+                    else if (token == (int)Token.PIT)
+                    {
+                        tokens[row, col] = new PitToken();
                     }
                 }
             }

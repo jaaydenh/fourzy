@@ -495,7 +495,7 @@ namespace Fourzy
 
             int[] tokenBoardArray = Enumerable.Repeat(0, 64).ToArray();
             tokenBoardArray = challenge.ScriptData.GetIntList("tokenBoard").ToArray();  
-            tokenBoard = new TokenBoard(tokenBoardArray, tokenBoardId, tokenBoardName);
+            tokenBoard = new TokenBoard(tokenBoardArray, tokenBoardId, tokenBoardName, true);
 
             int currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
 
@@ -657,12 +657,12 @@ namespace Fourzy
                                     if (tokenData != null) {
                                         int[] tokenBoardData = challenge.ScriptData.GetIntList("tokenBoard").ToArray();
                                         activeGame.tokenBoardData = tokenBoardData;
-                                        TokenBoard tb  = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName);
+                                        TokenBoard tb  = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
                                         activeGame.tokenBoard = tb;
                                     } else {
                                         int[] tokenBoardData = Enumerable.Repeat(0, 64).ToArray();
                                         activeGame.tokenBoardData = tokenBoardData;
-                                        TokenBoard tb  = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName);
+                                        TokenBoard tb  = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
                                         activeGame.tokenBoard = tb;
                                     }
 
@@ -698,7 +698,7 @@ namespace Fourzy
                 //                NoMovesPanel.SetActive(true);
                 //            }
             }
-		}
+        }
 
         IEnumerator Wait() {
             yield return new WaitForSeconds(0.8f);
@@ -747,5 +747,5 @@ namespace Fourzy
         //                      }
         //                  });
         //      }
-	}
+    }
 }

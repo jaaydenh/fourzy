@@ -11,6 +11,7 @@ namespace Fourzy {
         bool canEndMove { get; set; }
         bool isMoveable { get; set; }
         bool mustStop { get; set; }
+        float chanceDestroyOnEnd { get; set; }
         bool changePieceDirection { get; set; }
         Direction newPieceDirection { get; set;}
         Token tokenType { get; set; }
@@ -25,6 +26,7 @@ namespace Fourzy {
         public bool canEndMove { get; set; }
         public bool isMoveable { get; set; }
         public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -34,6 +36,7 @@ namespace Fourzy {
             canEndMove = true;
             isMoveable = false;
             mustStop = false;
+            chanceDestroyOnEnd = 0.0f;
             changePieceDirection = true;
             newPieceDirection = Direction.UP;
             tokenType = Token.UP_ARROW;
@@ -53,6 +56,7 @@ namespace Fourzy {
         public bool canEndMove { get; set; }
         public bool isMoveable { get; set; }
         public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -62,6 +66,7 @@ namespace Fourzy {
             canEndMove = true;
             isMoveable = false;
             mustStop = false;
+            chanceDestroyOnEnd = 0.0f;
             changePieceDirection = true;
             newPieceDirection = Direction.DOWN;
             tokenType = Token.DOWN_ARROW;
@@ -81,6 +86,7 @@ namespace Fourzy {
         public bool canEndMove { get; set; }
         public bool isMoveable { get; set; }
         public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -90,6 +96,7 @@ namespace Fourzy {
             canEndMove = true;
             isMoveable = false;
             mustStop = false;
+            chanceDestroyOnEnd = 0.0f;
             changePieceDirection = true;
             newPieceDirection = Direction.LEFT;
             tokenType = Token.LEFT_ARROW;
@@ -109,6 +116,7 @@ namespace Fourzy {
         public bool canEndMove { get; set; }
         public bool isMoveable { get; set; }
         public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -118,6 +126,7 @@ namespace Fourzy {
             canEndMove = true;
             isMoveable = false;
             mustStop = false;
+            chanceDestroyOnEnd = 0.0f;
             changePieceDirection = true;
             newPieceDirection = Direction.RIGHT;
             tokenType = Token.RIGHT_ARROW;
@@ -137,6 +146,7 @@ namespace Fourzy {
         public bool canEndMove { get; set; }
         public bool isMoveable { get; set; }
         public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -146,6 +156,7 @@ namespace Fourzy {
             canEndMove = true;
             isMoveable = false;
             mustStop = false;
+            chanceDestroyOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.EMPTY;
@@ -165,6 +176,7 @@ namespace Fourzy {
         public bool canEndMove { get; set; }
         public bool isMoveable { get; set; }
         public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -174,6 +186,7 @@ namespace Fourzy {
             canEndMove = false;
             isMoveable = false;
             mustStop = false;
+            chanceDestroyOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.BLOCKER;
@@ -195,6 +208,7 @@ namespace Fourzy {
         public bool canEndMove { get; set; }
         public bool isMoveable { get; set; }
         public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -204,6 +218,7 @@ namespace Fourzy {
             canEndMove = false;
             isMoveable = false;
             mustStop = false;
+            chanceDestroyOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.GHOST;
@@ -223,6 +238,7 @@ namespace Fourzy {
         public bool canEndMove { get; set; }
         public bool isMoveable { get; set; }
         public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -232,6 +248,7 @@ namespace Fourzy {
             canEndMove = true;
             isMoveable = true;
             mustStop = true;
+            chanceDestroyOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.STICKY;
@@ -251,6 +268,7 @@ namespace Fourzy {
         public bool canEndMove { get; set; }
         public bool isMoveable { get; set; }
         public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -260,9 +278,40 @@ namespace Fourzy {
             canEndMove = true;
             isMoveable = true;
             mustStop = false;
+            chanceDestroyOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.ICE_SHEET;
+        }
+
+        public void UpdateBoard(GameBoard board, bool swapPiece)
+        {
+            board.ProcessBoardUpdate(this, swapPiece);
+        }
+    }
+
+       public class PitToken : IToken {
+
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public bool canEnter { get; set; }
+        public bool canEndMove { get; set; }
+        public bool isMoveable { get; set; }
+        public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
+        public bool changePieceDirection { get; set; }
+        public Direction newPieceDirection { get; set;}
+        public Token tokenType { get; set; }
+
+        public PitToken () {
+            canEnter = true;
+            canEndMove = true;
+            isMoveable = false;
+            mustStop = true;
+            chanceDestroyOnEnd = 100.0f;
+            changePieceDirection = false;
+            newPieceDirection = Direction.NONE;
+            tokenType = Token.PIT;
         }
 
         public void UpdateBoard(GameBoard board, bool swapPiece)

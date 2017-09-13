@@ -91,14 +91,14 @@ namespace Fourzy {
             //RULE: IF you can make a winning move, make it!
             Debug.Log("GetAvailableMoves: " + start.GetAvailableMoves().Count);
             foreach (Move m in start.GetAvailableMoves()) {
-				//start.gameBoard.PrintBoard ();
+                //start.gameBoard.PrintBoard ();
 
-				AIGameState state = start.Copy();
-			    state.MakeMove(m);
+                AIGameState state = start.Copy();
+                state.MakeMove(m);
 
                 if (state.isWinForPlayer == player) {
-			        Debug.Log("MAKE FIRST WINNING MOVE for PLAYER=" + player);
-					//state.gameBoard.PrintBoard ();
+                    Debug.Log("MAKE FIRST WINNING MOVE for PLAYER=" + player);
+                    //state.gameBoard.PrintBoard ();
 
                     return m;
                 }
