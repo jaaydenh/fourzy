@@ -512,6 +512,7 @@ MonoBehaviour:
   challengedUserId: 
   winner: 
   opponentFacebookId: 
+  isLoading: 1
   isCheckingForWinner: 0
   isAnimating: 0
   gameScreenFadeInTime: 0.5
@@ -1207,7 +1208,7 @@ Prefab:
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 376.49997
+      value: 376.5
       objectReference: {fileID: 0}
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
@@ -1726,7 +1727,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: e9e80e83189184ea3a3bfe94166065db, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f810a99d5359d42f2bc246cc38dca251, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

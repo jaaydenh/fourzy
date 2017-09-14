@@ -335,7 +335,7 @@ namespace Fourzy
 
             GameManager.instance.ResetGamePiecesAndTokens();
             GameManager.instance.PopulateMoveArrows();
-            StartCoroutine(GameManager.instance.CreateTokenViews());
+            GameManager.instance.CreateTokenViews();
 
             GameManager.instance.isMultiplayer = false;
             GameManager.instance.isNewRandomChallenge = false;
@@ -380,7 +380,7 @@ namespace Fourzy
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false);
             GameManager.instance.gameState = gameState;
 
-            StartCoroutine(GameManager.instance.CreateTokenViews());
+            GameManager.instance.CreateTokenViews();
 
             GameManager.instance.aiPlayer = new AiPlayer("default");
 
@@ -419,7 +419,7 @@ namespace Fourzy
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false);
             GameManager.instance.gameState = gameState;
 
-            StartCoroutine(GameManager.instance.CreateTokenViews());
+            GameManager.instance.CreateTokenViews();
 
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewRandomChallenge = true;
@@ -457,6 +457,7 @@ namespace Fourzy
         public void OpenJoinedMultiplayerGame(GameSparks.Api.Responses.GetChallengeResponse._Challenge challenge)
         {
             Debug.Log("Open Joined Multiplayer Game");
+            GameManager.instance.isLoading = true;
 
             GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),

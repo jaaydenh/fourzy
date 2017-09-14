@@ -47,13 +47,12 @@ namespace Fourzy
             GameManager.instance.PopulateMoveArrows();
 
             TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-            //GameManager.instance.gameState.tokenBoard = tokenBoard;
 
             //If we initiated the challenge, we get to be player 1
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false);
             GameManager.instance.gameState = gameState;
 
-            StartCoroutine(GameManager.instance.CreateTokenViews());
+            GameManager.instance.CreateTokenViews();
 
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = true;

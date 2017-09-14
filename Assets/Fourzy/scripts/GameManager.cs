@@ -16,7 +16,7 @@ namespace Fourzy
     {
         public float dropTime = 1.0f;
         // GameSparks Challenge Instance Id
-        public string challengeInstanceId;
+        public string challengeInstanceId = null;
         public GameObject gamePiecePrefab;
         public GameObject cornerSpot;
 
@@ -80,10 +80,9 @@ namespace Fourzy
         public string challengedUserId;
         public string winner;
         public string opponentFacebookId;
-        bool isLoading = true;
+        public bool isLoading = true;
         bool isDropping = false;
         bool updatingViews = false;
-        //bool updatingModel = false;
         bool replayedLastMove = false;
         public bool isCheckingForWinner = false;
         public bool isAnimating = false;
@@ -266,7 +265,7 @@ namespace Fourzy
                         int currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
                         Player player = currentPlayerMove == 1 ? Player.ONE : Player.TWO;
 
-                        ReplayIncomingOpponentMove(currentPlayerMove, moveList, player);
+                        StartCoroutine(ReplayIncomingOpponentMove(currentPlayerMove, moveList, player));
                         ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
                     }
                     ChallengeManager.instance.GetChallenges();
@@ -282,7 +281,7 @@ namespace Fourzy
                         int currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
                         Player player = currentPlayerMove == 1 ? Player.ONE : Player.TWO;
 
-                        ReplayIncomingOpponentMove(currentPlayerMove, moveList, player);
+                        StartCoroutine(ReplayIncomingOpponentMove(currentPlayerMove, moveList, player));
                         ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
                     }
                     ChallengeManager.instance.GetChallenges();
@@ -300,7 +299,7 @@ namespace Fourzy
                         int currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
                         Player opponent = currentPlayerMove == 1 ? Player.TWO : Player.ONE;
 
-                        ReplayIncomingOpponentMove(currentPlayerMove, moveList, opponent);
+                        StartCoroutine(ReplayIncomingOpponentMove(currentPlayerMove, moveList, opponent));
                     }
                     ChallengeManager.instance.GetChallenges();
                 }
@@ -331,16 +330,18 @@ namespace Fourzy
             newAudio.loop = loop;
             newAudio.playOnAwake = playAwake;
             newAudio.volume = vol; 
-            return newAudio; 
+            return newAudio;
         }
 
-        private void ReplayIncomingOpponentMove(int currentPlayerMove, List<GSData> moveList, Player player) {
+        private IEnumerator ReplayIncomingOpponentMove(int currentPlayerMove, List<GSData> moveList, Player player) {
 
             GSData lastMove = moveList.Last();
             int position = lastMove.GetInt("position").GetValueOrDefault();
             Direction direction = (Direction)lastMove.GetInt("direction").GetValueOrDefault();
             Move move = new Move(position, direction, player);
-
+            Debug.Log("isDropping: " + isDropping + " isLoading: " + isLoading);
+            while(isDropping || isLoading)
+                yield return null;
             StartCoroutine(MovePiece(move, false, true));
         }
 
@@ -359,28 +360,23 @@ namespace Fourzy
                 Move move = new Move(position, direction, player);
 
                 StartCoroutine(MovePiece(move, true, false));
+            } else {
+                isLoading = false;
             }
         }
 
         public void SetupGameWrapper(List<GSData> moveList) {
             this.moveList = moveList;
-            StartCoroutine(SetupGame());
+            SetupGame();
         }
 
-        public IEnumerator SetupGame() {
+        public void SetupGame() {
             UpdatePlayersStatusView();
-
-            StartCoroutine(SetGameBoardView(gameState.GetGameBoard()));
-
-            while (isLoading)
-                yield return null;
-            StartCoroutine(CreateTokenViews());
-            while (isLoading)
-                yield return null;
+            SetGameBoardView(gameState.GetGameBoard());
+            CreateTokenViews();
         }
 
-        public IEnumerator SetGameBoardView(int[,] board) {
-            isLoading = true;
+        public void SetGameBoardView(int[,] board) {
             gameBoardView.gamePieces = new GameObject[Constants.numRows, Constants.numColumns];
 
             for(int row = 0; row < Constants.numRows; row++)
@@ -398,7 +394,7 @@ namespace Fourzy
                         c.a = 0.0f;
                         pieceSprite.color = c;
                         //pieceSprite.sprite = new Sprite().texture.
-                        
+
                         GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
                         pieceModel.player = Player.ONE;
                         gameBoardView.gamePieces[row, col] = pieceObject;
@@ -417,13 +413,9 @@ namespace Fourzy
                     }
                 }
             }
-
-            isLoading = false;
-            yield return 0;
         }
 
-        public IEnumerator CreateTokenViews() {
-            isLoading = true;
+        public void CreateTokenViews() {
             tokenViews = new List<GameObject>();
 
             for(int row = 0; row < Constants.numRows; row++)
@@ -484,9 +476,6 @@ namespace Fourzy
                     }
                 }
             }
-
-            isLoading = false;
-            yield return 0;
         }
 
         public void EnableTokenAudio() {
@@ -528,8 +517,6 @@ namespace Fourzy
 
         public void ResetGamePiecesAndTokens() {
 
-            isLoading = true;
-
             if (gamePieces.transform.childCount > 0) {
                 for (int i = gamePieces.transform.childCount-1; i >= 0; i--)
                 {
@@ -554,8 +541,6 @@ namespace Fourzy
             // tokens = new GameObject("Tokens");
             // tokens.transform.parent = gameScreen.transform;
             // tokens.transform.localPosition = new Vector3(-375f, -501f);
-
-            isLoading = false;
         }
 
         public void PopulateMoveArrows() {
@@ -632,6 +617,7 @@ namespace Fourzy
         }
 
         public void RematchPassAndPlayGame() {
+            isLoading = true;
             gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
             ResetGamePiecesAndTokens();
 
@@ -639,11 +625,12 @@ namespace Fourzy
             gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false);
             //PopulateMoveArrows();
 
-            StartCoroutine(GameManager.instance.CreateTokenViews());
+            CreateTokenViews();
             UpdatePlayersStatusView();
             rematchButton.gameObject.SetActive(false);
             GameManager.instance.EnableTokenAudio();
             FadeGameScreen(1.0f, gameScreenFadeInTime);
+            isLoading = false;
         }
 
         void Update () {
@@ -758,7 +745,6 @@ namespace Fourzy
                 }
             } else {
                 // TODO: inform the player that the move is not possible
-                //gameState.gameBoard.activeMovingPieces.Clear();
                 isDropping = false;
             }
 
@@ -787,7 +773,9 @@ namespace Fourzy
             UpdateGameStatus(updatePlayer);
 
             isDropping = false;
-
+            if (replayMove) {
+                isLoading = false;
+            }
             if(OnMoved != null)
                 OnMoved();
         }
@@ -856,8 +844,6 @@ namespace Fourzy
                 while(this.isAnimating)
                     yield return null;
             }
-
-            //gameState.ClearMovingPieces();
 
             gameBoardView.PrintGameBoard();
 
@@ -957,8 +943,6 @@ namespace Fourzy
                 {
                     gameStatusText.text = winner + " Won!";
                 } else {
-                    // Debug.Log("isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
-                    // Debug.Log("gameState.winner: " + gameState.winner.ToString());
                     if (isCurrentPlayer_PlayerOne && gameState.winner == Player.ONE) {
                         audioWin.Play();
                         gameStatusText.text = UserManager.instance.userName + " Won!";

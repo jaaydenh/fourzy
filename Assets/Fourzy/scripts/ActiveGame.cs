@@ -146,6 +146,7 @@ namespace Fourzy
         //Open game gets called OnClick of the play button which happens when selecting an active game in the games list
         public void OpenGame()
         {
+            GameManager.instance.isLoading = true;
             bool isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
 
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, isPlayerOneTurn, isCurrentPlayerTurn, tokenBoard, lastGameBoard, isGameOver);
@@ -174,7 +175,6 @@ namespace Fourzy
 
             GameManager.instance.SetupGameWrapper(moveList);
             //GameManager.instance.PopulateMoveArrows();
-            StartCoroutine(GameManager.instance.CreateTokenViews());
 
             GameManager.instance.ResetUI();
 
