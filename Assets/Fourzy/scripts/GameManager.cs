@@ -808,7 +808,8 @@ namespace Fourzy
             gamePiece.column = move.position.column;
             gamePiece.row = move.position.row;
 
-            GameObject nextPieceView = new GameObject();
+            GameObject nextPieceView = null;
+
             // process animations for completed moving pieces
             for (int i = 0; i < movingPieces.Count; i++)
             {   
