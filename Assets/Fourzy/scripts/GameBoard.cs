@@ -45,6 +45,11 @@ namespace Fourzy {
                     this.board [row, col] = board [row, col];
                 }
             }
+
+            activeMovingPieces = new List<MovingGamePiece>();
+            completedMovingPieces = new List<MovingGamePiece>();
+            player1WinningPositions = new List<Position>();
+            player2WinningPositions = new List<Position>(); 
         }
 
         public void InitGameBoard() {
@@ -67,6 +72,18 @@ namespace Fourzy {
             for (int row = 0; row < numRows; row++) {
                 for (int col = 0; col < numColumns; col++) {
                     board[row, col] = boardData[row * numRows + col];
+                    if (board[row, col] != (int)Piece.EMPTY) {
+                        Position pos = new Position(col, row);
+                        MovingGamePiece mgp = new MovingGamePiece(new Move(pos, Direction.UP, Player.NONE));
+                        completedMovingPieces.Add(mgp);
+                    }
+                }
+            }
+        }
+
+        public void GetCompletedPieces() {
+            for (int row = 0; row < numRows; row++) {
+                for (int col = 0; col < numColumns; col++) {
                     if (board[row, col] != (int)Piece.EMPTY) {
                         Position pos = new Position(col, row);
                         MovingGamePiece mgp = new MovingGamePiece(new Move(pos, Direction.UP, Player.NONE));
@@ -304,8 +321,8 @@ namespace Fourzy {
             return new GameBoard (numRows, numColumns, numPiecesToWin, piecesCount, board);
         }
 
-        public string PrintBoard() {
-            string log = "GameBoard" + "\n";
+        public string PrintBoard(string name) {
+            string log = name + "\n";
 
             for (int row = 0; row < numRows; row++) {
                 for (int col = 0; col < numColumns; col++) {

@@ -68,10 +68,12 @@ namespace Fourzy
         public TokenBoard[] GetAllTokenBoards()
         {
             TokenBoardInfo[] tokenBoardCollection = LoadTokenBoardData();
+            IEnumerable<TokenBoardInfo> enabledTokenBoards = tokenBoardCollection
+                .Where(t => t.Enabled == true);
 
-            TokenBoard[] tokenBoards = new TokenBoard[tokenBoardCollection.Length];
+            TokenBoard[] tokenBoards = new TokenBoard[enabledTokenBoards.Count()];
             int i = 0;
-            foreach (var tokenBoardInfo in tokenBoardCollection)
+            foreach (var tokenBoardInfo in enabledTokenBoards)
             {
                 TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID, tokenBoardInfo.Name, false);
                 tokenBoards[i] = tokenboard;

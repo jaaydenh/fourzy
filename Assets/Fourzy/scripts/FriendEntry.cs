@@ -12,14 +12,11 @@ namespace Fourzy
     {
         public delegate void GameActive();
         public static event GameActive OnActiveGame;
-
         public string userName, id, facebookId;
         public bool isOnline;
-
         public Text nameLabel;
         public Image profilePicture;
         public Image onlineTexture;
-
         private GameObject UIScreen;
 
         void Start()
@@ -49,7 +46,7 @@ namespace Fourzy
             TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
 
             //If we initiated the challenge, we get to be player 1
-            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false);
+            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
             GameManager.instance.gameState = gameState;
 
             GameManager.instance.CreateTokenViews();

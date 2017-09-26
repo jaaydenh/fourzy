@@ -220,7 +220,7 @@ namespace Fourzy {
             isEvaluated = false;
             tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
             gameBoard = new GameBoard (Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
-            gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false);
+            gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
         }
 
         //TO DO: Need to think about pointers for pieces and token arrays.
@@ -323,7 +323,7 @@ namespace Fourzy {
                 }
             }
 
-            gameState.UpdateMoveablePieces();
+            //gameState.UpdateMoveablePieces();
             gameBoard.completedMovingPieces.Clear();
             //isWinForPlayer = IsEndGameState();
 
