@@ -24,24 +24,34 @@ namespace GameSparks.Platforms
 
 			DeviceName = SystemInfo.deviceName.ToString();
 			DeviceType = SystemInfo.deviceType.ToString();
-            if (Application.platform == RuntimePlatform.PS4 || Application.platform == RuntimePlatform.XboxOne ||
+#if UNITY_ANDROID && !UNITY_EDITOR && UNITY_5_3
+			if (true)
+#elif UNITY_5_4_OR_NEWER 
+			if (Application.platform == RuntimePlatform.PS4 || Application.platform == RuntimePlatform.XboxOne ||
 				SystemInfo.unsupportedIdentifier == SystemInfo.deviceUniqueIdentifier)
-            {
+#else
+			if (Application.platform == RuntimePlatform.PS4 || Application.platform == RuntimePlatform.XboxOne)
+#endif
+			{
 #if GS_DONT_USE_PLAYER_PREFS || UNITY_SWITCH
+	#if UNITY_5_4_OR_NEWER
 				if (SystemInfo.unsupportedIdentifier == SystemInfo.deviceUniqueIdentifier) {
 					DeviceId = System.Guid.NewGuid().ToString();
 				} else {
-                	DeviceId = SystemInfo.deviceUniqueIdentifier.ToString();
+					DeviceId = SystemInfo.deviceUniqueIdentifier.ToString();
 				}
+	#else 
+				DeviceId = System.Guid.NewGuid().ToString();
+	#endif
 #else
-                DeviceId = PlayerPrefs.GetString(PLAYER_PREF_DEVICEID_KEY);
-                if (DeviceId.Equals(""))
-                {
-                    DeviceId = System.Guid.NewGuid().ToString();
+				DeviceId = PlayerPrefs.GetString(PLAYER_PREF_DEVICEID_KEY);
+				if (DeviceId.Equals(""))
+				{
+					DeviceId = System.Guid.NewGuid().ToString();
 
-                    PlayerPrefs.SetString(PLAYER_PREF_DEVICEID_KEY, DeviceId);
-                    PlayerPrefs.Save();
-                }
+					PlayerPrefs.SetString(PLAYER_PREF_DEVICEID_KEY, DeviceId);
+					PlayerPrefs.Save();
+				}
 #endif
             }
             else
@@ -71,13 +81,13 @@ namespace GameSparks.Platforms
 						osName = listStrings [0] + " " + listStrings [1] + " " + listStrings[2];
 						osVersion = listStrings [3] + "." + listStrings [4] + "." + listStrings[5];
 					} else {
-						if (listStrings[0].Equals("iOS")) {
+						//if (listStrings[0].Equals("iOS")) {
 							osName = listStrings [0];
 							osVersion = listStrings [1] + "." + listStrings [2];
-						} else {
-							osName = listStrings [0] + " " + listStrings [1];
-							osVersion = listStrings [2] + "." + listStrings [3];
-						}
+						//} else {
+						//	osName = listStrings [0] + " " + listStrings [1];
+						//	osVersion = listStrings [2] + "." + listStrings [3];
+						//}
 					}
 
 					break;
@@ -194,6 +204,10 @@ namespace GameSparks.Platforms
 			UserId = PlayerPrefs.GetString(PLAYER_PREF_USERID_KEY);
 #endif
 			Platform = Application.platform.ToString();
+
+			var gameSparksUnity = GetComponent<GameSparksUnity>();
+			GameSparksSettings.SetInstance(gameSparksUnity.settings);
+			
 			ExtraDebug = GameSparksSettings.DebugBuild;
 
 #if !UNITY_WEBPLAYER && !UNITY_SWITCH

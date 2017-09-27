@@ -5,15 +5,18 @@ using UnityEngine;
 using UnityEditor;
 
 public class GameSparksPopUp : EditorWindow {
-	private Texture2D logo;
+	private static Texture2D logo;
+
+	static public void Init()
+	{
+		GameSparksPopUp window = (GameSparksPopUp)EditorWindow.GetWindowWithRect(typeof(GameSparksPopUp), new Rect((Screen.width - 350) / 2, (Screen.height - 265) / 2, 350, 265), false, "GameSparksSDK");
+	
+		window.Focus();
+	}
 
 	void OnEnable()
 	{
-		logo = Resources.Load("GameSparksLogo", typeof(Texture2D)) as Texture2D;
-
-		GUIContent content = new GUIContent ("GameSparksSDK");
-
-		titleContent = content;
+		logo = (Texture2D)Resources.Load("GameSparksLogo", typeof(Texture2D));
 	}
 
 	void OnGUI()

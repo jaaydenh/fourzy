@@ -22,13 +22,14 @@ namespace GameSparks.Platforms.WebGL
 			timerController = new TimerController();
 			timerController.Initialize();
 
-
-
 			// Register crypto implementation
 			GSInitializeCrypto();
 			
 			// Register socket implementation
 			GSInitializeGSSocket();
+
+			// Register RT implementation
+			GSInitializeRT();
 			
 			webSocketController = gameObject.AddComponent<WebSocketController>();
 
@@ -84,19 +85,19 @@ namespace GameSparks.Platforms.WebGL
 		
 		[DllImport("__Internal")]
 		private static extern int GSHmacSHA256(string message, string key);
-
-		
 		
 		[DllImport("__Internal")]
 		private static extern void GSInitializeCrypto();
-		
-		
+
 		[DllImport("__Internal")]
 		private static extern void GSInitializeGSSocket();
 
-
 		[DllImport("__Internal")]
 		private static extern int GSGetDeviceId();
+
+		[DllImport("__Internal")]
+		private static extern void GSInitializeRT();
+
 	
 		const string DeviceIdKey = "GameSparks.DeviceId";
 

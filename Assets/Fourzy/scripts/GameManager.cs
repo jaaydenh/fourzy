@@ -303,10 +303,11 @@ namespace Fourzy
                         var activeGame = activeGames
                             .Where(t => t.challengeId == gsChallenge.ChallengeId)
                             .FirstOrDefault();
-
-                        Challenge challenge = new Challenge(gsChallenge);
-                        GameState gameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true);
-                        activeGame.gameState = gameState;
+                        if (activeGame != null) {
+                            Challenge challenge = new Challenge(gsChallenge);
+                            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true);
+                            activeGame.gameState = gameState;
+                        }
                     }
 
                     // This resets the gameslist when the opponent makes a move
@@ -314,6 +315,41 @@ namespace Fourzy
                 }
             };
 
+            // Called when another player joins a game you created that was waiting for a 2nd player
+            ChallengeJoinedMessage.Listener = (message) => {
+                var gsChallenge = message.Challenge;
+            };
+
+            // Called when directly challenged by another player
+            ChallengeIssuedMessage.Listener = (message) => {
+                var gsChallenge = message.Challenge;
+                Debug.Log("ChallengeIssuedMessage");
+                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
+                Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
+                if (UserManager.instance.userId == gsChallenge.NextPlayer) {
+                    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
+                }
+            };
+
+            ChallengeAcceptedMessage.Listener = (message) => {
+                var gsChallenge = message.Challenge;
+                Debug.Log("ChallengeAcceptedMessage");
+                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
+                Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
+                if (UserManager.instance.userId == gsChallenge.NextPlayer) {
+                    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
+                }
+            };
+
+            ChallengeStartedMessage.Listener = (message) => {
+                var gsChallenge = message.Challenge;
+                Debug.Log("ChallengeStartedMessage");
+                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
+                Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
+                if (UserManager.instance.userId == gsChallenge.NextPlayer) {
+                    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
+                }
+            };
             //gamePieces = new GameObject("GamePieces");
             //gamePieces.transform.parent = gameScreen.transform;
 
@@ -328,7 +364,7 @@ namespace Fourzy
             playerNameLabel.text = UserManager.instance.userName;
 
             // center camera
-            Camera.main.transform.position = new Vector3((Constants.numColumns-1) / 2.0f, -((Constants.numRows-1) / 2.0f)+.2f, Camera.main.transform.position.z);
+            Camera.main.transform.position = new Vector3((Constants.numColumns-1) / 2.0f, -((Constants.numRows-1) / 2.0f)+.15f, Camera.main.transform.position.z);
         }
 
         void Awake() {

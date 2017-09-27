@@ -182,6 +182,7 @@ namespace Fourzy
                     }
                     else
                     {
+                        //TODO: Create an active game and add it to the list of ActiveGames
                         GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
                         Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                         customAttributes.Add("ChallengedId", userId);
@@ -272,6 +273,7 @@ namespace Fourzy
                             AnalyticsEvent.Custom("CreateChallengeRequest:Error", customAttributes);
                             //Answers.LogCustom("CreateChallengeRequest:Error", customAttributes);
                         } else {
+                            //TODO: Create an active game and add it to the list of ActiveGames
                             GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
                             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                             customAttributes.Add("ChallengeInstanceId", response.ChallengeInstanceId);

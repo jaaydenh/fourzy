@@ -212,12 +212,6 @@ namespace GameSparks.Editor
 					EditorPrefs.SetBool(PlayerSettings.productName + "_GameSparksPopUpSeen", true);
 					EditorPrefs.SetString (PlayerSettings.productName + "_GameSparksVersion", GameSparks.Core.GS.Version);
 
-                    Selection.activeObject = GetOrCreateSettingsAsset();
-
-                    ShowInspector();
-
-                    EditorWindow.GetWindowWithRect(typeof(GameSparksPopUp), new Rect((Screen.width - 350) / 2, (Screen.height - 265) / 2, 350, 265));
-				
 					string baseDir = "Plugins";
 					string targetDir = "Assets/GameSparks/Plugins";
 					DirectoryInfo dirInfo = new DirectoryInfo (targetDir);
@@ -263,9 +257,19 @@ namespace GameSparks.Editor
 					RecursiveDeleteFolders (dirInfo2);
 
 					var assembly = Assembly.GetAssembly (typeof(UnityEditor.ActiveEditorTracker));
+#if UNITY_2017_1_OR_NEWER
+					var type = assembly.GetType ("UnityEditor.LogEntries");
+#else
 					var type = assembly.GetType ("UnityEditorInternal.LogEntries");
+#endif
 					var method = type.GetMethod ("Clear");
 					method.Invoke (new object (), null);
+
+					Selection.activeObject = GetOrCreateSettingsAsset();
+
+                    ShowInspector();
+
+                    GameSparksPopUp.Init();
 				}
 			} catch {             
 			}

@@ -16,4 +16,4 @@ MonoBehaviour:
   credential: device
   apiSecret: gtZ1JnUzUF2CMkw3lqoi58pPfEGhKea3
   previewBuild: 1
-  debugBuild: 0
+  debugBuild: 1
