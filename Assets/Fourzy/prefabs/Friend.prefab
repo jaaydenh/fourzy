@@ -267,6 +267,8 @@ MonoBehaviour:
   isOnline: 0
   nameLabel: {fileID: 114000011019675130}
   profilePicture: {fileID: 114000012110508938}
+  defaultProfilePicture: {fileID: 2800000, guid: 09111b8bd10774b4fa0a0056fa2cc3c2,
+    type: 3}
   onlineTexture: {fileID: 114000011125735090}
 --- !u!114 &114000011875641964
 MonoBehaviour:

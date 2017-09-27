@@ -52,7 +52,8 @@ namespace Fourzy
                                 //string playerName = entry.UserName;
                                 //string playerRating = entry.JSONData["playerRating"].ToString();
 
-                                leaderboardPlayer.playerId = entry.UserId;
+                                leaderboardPlayer.id = entry.UserId;
+                                leaderboardPlayer.userName = entry.UserName;
                                 leaderboardPlayer.facebookId = entry.ExternalIds.GetString("FB");
                                 leaderboardPlayer.playerNameLabel.text = entry.UserName;
                                 leaderboardPlayer.rankLabel.text = entry.Rank.ToString();

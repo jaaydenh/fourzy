@@ -16,6 +16,7 @@ namespace Fourzy
         public bool isOnline;
         public Text nameLabel;
         public Image profilePicture;
+        public Texture2D defaultProfilePicture;
         public Image onlineTexture;
         private GameObject UIScreen;
 
@@ -34,6 +35,10 @@ namespace Fourzy
                     {
                         profilePicture.sprite = sprite;
                     }));
+            } else {
+                profilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+                    new Vector2(0.5f, 0.5f));
             }
         }
 

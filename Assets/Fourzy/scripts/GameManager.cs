@@ -223,6 +223,7 @@ namespace Fourzy
             UserInputHandler.OnTap += ProcessPlayerInput;
             ActiveGame.OnActiveGame += TransitionToGameScreen;
             FriendEntry.OnActiveGame += TransitionToGameScreen;
+            LeaderboardPlayer.OnActiveGame += TransitionToGameScreen;
             ChallengeManager.OnActiveGame += TransitionToGameScreen;
             LoginManager.OnLoginError += DisplayLoginError;
         }
@@ -232,6 +233,7 @@ namespace Fourzy
             UserInputHandler.OnTap -= ProcessPlayerInput;
             ActiveGame.OnActiveGame -= TransitionToGameScreen;
             FriendEntry.OnActiveGame -= TransitionToGameScreen;
+            LeaderboardPlayer.OnActiveGame -= TransitionToGameScreen;
             ChallengeManager.OnActiveGame -= TransitionToGameScreen;
             LoginManager.OnLoginError -= DisplayLoginError;
         }
@@ -842,14 +844,14 @@ namespace Fourzy
                     isNewChallenge = false;
                     StartCoroutine(MovePiece(move, false, updatePlayer));
                     ChallengeManager.instance.ChallengeUser(challengedUserId, gameState, Utility.GetMoveLocation(move), move.direction);
-                    // Create an ActiveGame and add it to the activeGames list
+                    // TODO: Create an ActiveGame and add it to the activeGames list
                 }
                 else if (isMultiplayer && isNewRandomChallenge)
                 {
                     isNewRandomChallenge = false;
                     StartCoroutine(MovePiece(move, false, updatePlayer));
                     ChallengeManager.instance.ChallengeRandomUser(gameState, Utility.GetMoveLocation(move), move.direction);
-                    // Create an ActiveGame and add it to the activeGames list
+                    // TODO: Create an ActiveGame and add it to the activeGames list
                 } else {
                     // Used for Pass and Play Games
                     StartCoroutine(MovePiece(move, false, updatePlayer));
