@@ -35,7 +35,7 @@ namespace Fourzy
 
                 players.Clear();
                 new LeaderboardDataRequest()
-                .SetLeaderboardShortCode("gamesCompletedLeaderboard")
+                .SetLeaderboardShortCode("winLossLeaderboard")
                 .SetEntryCount(100) // we need to parse this text input, since the entry count only takes long
                 .Send((response) =>
                     {
@@ -58,11 +58,11 @@ namespace Fourzy
                                 leaderboardPlayer.playerNameLabel.text = entry.UserName;
                                 leaderboardPlayer.rankLabel.text = entry.Rank.ToString();
 
-                                string gamesCompleted = entry.JSONData["gamesCompleted"].ToString();
-                                leaderboardPlayer.ratingLabel.text = gamesCompleted;
-                                // string wins = entry.JSONData["wins"].ToString();
-                                // string losses = entry.JSONData["losses"].ToString();
-                                // leaderboardPlayer.ratingLabel.text = wins + "/" + losses;
+                                //string gamesCompleted = entry.JSONData["gamesCompleted"].ToString();
+                                //leaderboardPlayer.ratingLabel.text = gamesCompleted;
+                                string wins = entry.JSONData["wins"].ToString();
+                                string losses = entry.JSONData["losses"].ToString();
+                                leaderboardPlayer.ratingLabel.text = wins + "/" + losses;
                                 // leaderboardPlayer.ratingLabel.text = entry.JSONData["playerRating"].ToString();
                                 leaderboardPlayer.transform.localScale = new Vector3(1f,1f,1f);
                                 players.Add(go);
