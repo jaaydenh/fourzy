@@ -373,6 +373,18 @@ namespace Fourzy
             replayedLastMove = false;
         }
 
+        void Update () {
+            if (Application.platform == RuntimePlatform.Android) {
+                if (Input.GetKeyDown(KeyCode.Escape)) {
+                    if (challengeInstanceId != null) {
+                        TransitionToGamesListScreen();
+                    } else {
+                        Application.Quit();
+                    }
+                }
+           }
+        }
+
         public AudioSource AddAudio(AudioClip clip, bool loop, bool playAwake, float vol) { 
             AudioSource newAudio = gameObject.AddComponent<AudioSource>();
             newAudio.clip = clip; 
@@ -730,13 +742,6 @@ namespace Fourzy
             FadeGameScreen(1.0f, gameScreenFadeInTime);
             isLoading = false;
         }
-
-        //void Update () {
-            // if(!isMultiplayer && gameState != null && gameState.isGameOver)
-            // {
-            //     rematchButton.gameObject.SetActive(true);
-            // }
-        //}
 
         private void DisplayLoginError() {
             ErrorPanel.SetActive(true);
