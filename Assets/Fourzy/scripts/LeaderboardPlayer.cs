@@ -43,7 +43,6 @@ namespace Fourzy
         public void OpenNewLeaderboardChallengeGame()
         {
             GameManager.instance.ResetGamePiecesAndTokens();
-            //GameManager.instance.PopulateMoveArrows();
 
             TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
 

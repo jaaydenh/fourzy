@@ -3,39 +3,18 @@ using System.Collections;
 
 public class UserInputHandler : MonoBehaviour {
 
-    #region EVENTS
-    // Gesture Events
     public delegate void TapAction(Vector3 pos);
     public static event TapAction OnTap;
-    #endregion
-
-    #region PUBLIC VARIABLES
-    // Maximum pixels a tap can move.
-    //public float tapMaxMovement = 50f;
     public static bool inputEnabled = true;
-    #endregion
-
-    #region PRIVATE VARIABLES
-    //private Vector2 movement;
-
-    //private bool tapGestureFailed = false; 
     bool mouseButtonPressed = false;
+    public GameObject moveHintAreas;
+    public GameObject topHintArea;
+    public GameObject bottomHintArea;
+    public GameObject leftHintArea;
+    public GameObject rightHintArea;
+    Vector3 touchPosWorld;
 
-    #endregion
-
-    #region MONOBEHAVIOUR METHODS
     void Update () {
-
-        // if (Input.touchCount > 0 && !mouseButtonPressed && inputEnabled) {
-        //     mouseButtonPressed = true;
-        //     Debug.Log("touch: " + Input.touches[0].position.ToString());
-        //     if (OnTap != null)
-                
-        //         OnTap(Input.touches[0].position);
-        // } else {
-        //     mouseButtonPressed = false;
-        // }
-
         // TODO: use touch events
         if (Input.GetMouseButtonDown(0) && !mouseButtonPressed && inputEnabled) {
             mouseButtonPressed = true;
@@ -45,32 +24,32 @@ public class UserInputHandler : MonoBehaviour {
             mouseButtonPressed = false;
         }
 
-//        if (Input.touchCount > 0)
-//        {
-//            Touch touch = Input.touches[0];
-//
-//            if (touch.phase == TouchPhase.Began)
-//            {
-//                movement = Vector2.zero;
-//            }
-//            else if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
-//            {
-//                movement += touch.deltaPosition;
-//
-//                if (movement.magnitude > tapMaxMovement)
-//                    tapGestureFailed = true;
-//            }
-//            else
-//            {
-//                if (!tapGestureFailed)
-//                {
-//                    if (OnTap != null)
-//                        OnTap(touch);
-//                }
-//
-//                tapGestureFailed = false;
-//            }
-//        }
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
+            //We transform the touch position into word space from screen space and store it.
+            touchPosWorld = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+            //Debug.Log("Input.touchCount: " + Input.touchCount);
+             Vector2 touchPosWorld2D = new Vector2(touchPosWorld.x, touchPosWorld.y);
+ 
+             //We now raycast with this information. If we have hit something we can process it.
+             RaycastHit2D hitInformation = Physics2D.Raycast(touchPosWorld2D, Camera.main.transform.forward);
+ 
+             if (hitInformation.collider != null) {
+                 //We should have hit something with a 2D Physics collider!
+                 GameObject touchedObject = hitInformation.transform.gameObject;
+                 //touchedObject should be the object someone touched.
+                 //Debug.Log("Touched " + touchedObject.transform.name);
+                 if (touchedObject.transform.name == "MoveHintArea") {
+                    moveHintAreas.SetActive(true);
+                    SpriteRenderer srTopHintArea = topHintArea.GetComponent<SpriteRenderer>();
+                    SpriteRenderer srBottomHintArea = bottomHintArea.GetComponent<SpriteRenderer>();
+                    SpriteRenderer srLeftHintArea = leftHintArea.GetComponent<SpriteRenderer>();
+                    SpriteRenderer srRightHintArea = rightHintArea.GetComponent<SpriteRenderer>();
+                    srTopHintArea.FadeInAndOutSprite(this, 4.0f);
+                    srBottomHintArea.FadeInAndOutSprite(this, 4.0f);
+                    srLeftHintArea.FadeInAndOutSprite(this, 4.0f);
+                    srRightHintArea.FadeInAndOutSprite(this, 4.0f);
+                 }
+             }
+         }
     }
-    #endregion
 }

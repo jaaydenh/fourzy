@@ -46,7 +46,6 @@ namespace Fourzy
         public void OpenNewFriendChallengeGame()
         {
             GameManager.instance.ResetGamePiecesAndTokens();
-            GameManager.instance.PopulateMoveArrows();
 
             TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
 

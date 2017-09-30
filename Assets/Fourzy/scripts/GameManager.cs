@@ -32,6 +32,7 @@ namespace Fourzy
         public GameObject pitToken;
         // ---------- Token Views ----------
 
+        public GameObject moveHintArea;
         public GameObject moveArrowLeft;
         public GameObject moveArrowRight;
         public GameObject moveArrowDown;
@@ -574,6 +575,7 @@ namespace Fourzy
             rematchButton.gameObject.SetActive(false);
             nextGameButton.gameObject.SetActive(false);
             createGameButton.gameObject.SetActive(false);
+            moveHintArea.SetActive(false);
         }
 
         public void NextGame() {
@@ -807,6 +809,7 @@ namespace Fourzy
 
             if (gameState.CanMove(move.GetNextPosition(), gameState.tokenBoard.tokens))
             {
+                moveHintArea.SetActive(false);
                 // Debug.Log("isMultiplayer: " + isMultiplayer);
                 // Debug.Log("isNewChallenge: " + isNewChallenge);
                 // Debug.Log("isNewRandomChallenge: " + isNewRandomChallenge);
