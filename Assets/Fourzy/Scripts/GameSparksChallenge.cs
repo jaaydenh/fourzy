@@ -8,7 +8,7 @@ using GameSparks.Core;
 
 namespace Fourzy
 {
-    public class Challenge {
+    public class GameSparksChallenge {
 
         public int currentPlayerMove;
         public bool isPlayerOneTurn;
@@ -17,7 +17,7 @@ namespace Fourzy
         public TokenBoard tokenBoard;
         public List<GSData> moveList;
 
-        public Challenge(ChallengeTurnTakenMessage._Challenge challenge) {
+        public GameSparksChallenge(ChallengeTurnTakenMessage._Challenge challenge) {
             currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
             isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
             if (challenge.State == "COMPLETE") {
@@ -47,7 +47,7 @@ namespace Fourzy
             moveList = challenge.ScriptData.GetGSDataList("moveList");
         }
 
-        public Challenge(ListChallengeResponse._Challenge challenge) {
+        public GameSparksChallenge(ListChallengeResponse._Challenge challenge) {
             currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
             isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
             if (challenge.State == "COMPLETE") {

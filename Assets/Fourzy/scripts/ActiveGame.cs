@@ -185,8 +185,8 @@ namespace Fourzy
             GameManager.instance.winner = winnerName;
 
             GameManager.instance.ResetGamePiecesAndTokens();
-            GameManager.instance.SetupGameWrapper();
             GameManager.instance.ResetUI();
+            GameManager.instance.SetupGame("", "");
 
             if (!viewedResult && challengeState == "COMPLETE") {
                 ChallengeManager.instance.SetViewedCompletedGame(challengeId);

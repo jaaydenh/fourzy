@@ -82,7 +82,7 @@ namespace Fourzy
             return tokenBoards;
         }
 
-        public TokenBoardInfo GetDefaultTokenBoard()
+        private TokenBoardInfo GetDefaultTokenBoard()
         {
             TokenBoardInfo tokenBoardInfo = new TokenBoardInfo();
             tokenBoardInfo.ID = "1000";

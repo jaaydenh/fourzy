@@ -97,6 +97,16 @@ namespace Fourzy {
             return board;
         }
 
+        public int[] ToArray() {
+            int[] boardArray = new int[numRows * numColumns];
+            for (int row = 0; row < numRows; row++) {
+                for (int col = 0; col < numColumns; col++) {
+                    boardArray[row * numRows + col] = board[row, col];
+                }
+            }
+            return boardArray;
+        }
+
         public void SwapPiecePosition(Position oldPos, Position newPos) {
             //Debug.Log("OLDPIECE: " + oldPiece + " oldpos.col: " + oldPos.column + " oldpos row: " + oldPos.row);
             //Debug.Log("NEWPIECE: " + oldPiece + " newPos.col: " + newPos.column + " newPos row: " + newPos.row);
@@ -231,7 +241,6 @@ namespace Fourzy {
             if (col + (colShift * 3) >= numColumns) { return false; }
 
             // still here? Check every square
-            //var boardPosition = row * numRows + col;
             if (board[row, col] != player) { return false; }
             if (board[row + rowShift, col + colShift] != player) { return false; }
             if (board[row + (rowShift * 2), col + (colShift * 2)] != player) { return false; }

@@ -38,7 +38,7 @@ public class UserInputHandler : MonoBehaviour {
                  GameObject touchedObject = hitInformation.transform.gameObject;
                  //touchedObject should be the object someone touched.
                  //Debug.Log("Touched " + touchedObject.transform.name);
-                 if (touchedObject.transform.name == "MoveHintArea") {
+                 if (touchedObject.transform.name == "MoveHintTouchArea") {
                     moveHintAreas.SetActive(true);
                     SpriteRenderer srTopHintArea = topHintArea.GetComponent<SpriteRenderer>();
                     SpriteRenderer srBottomHintArea = bottomHintArea.GetComponent<SpriteRenderer>();

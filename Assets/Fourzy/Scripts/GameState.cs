@@ -9,6 +9,8 @@ namespace Fourzy
 
         private int numRows;
         private int numColumns;
+        public int player1MoveCount;
+        public int player2MoveCount;
         public bool isCurrentPlayerTurn;
         public bool isPlayerOneTurn;
         public bool isGameOver;
@@ -30,6 +32,8 @@ namespace Fourzy
             this.tokenBoard = tokenBoard;
             this.isGameOver = isGameOver;
             this.moveList = moveList;
+            player1MoveCount = 0;
+            player2MoveCount = 0;
 
             isMoveableUp = new int[numColumns * numRows];
             isMoveableDown = new int[numColumns * numRows];
@@ -39,7 +43,7 @@ namespace Fourzy
             InitGameState(gameBoardData);
         }
 
-        public GameState(int numRows, int numColumns, Challenge challenge, bool isCurrentPlayerTurn) {
+        public GameState(int numRows, int numColumns, GameSparksChallenge challenge, bool isCurrentPlayerTurn) {
             this.numRows = numRows;
             this.numColumns = numColumns;
             this.isPlayerOneTurn = challenge.isPlayerOneTurn;
@@ -130,6 +134,12 @@ namespace Fourzy
                 }
                 moveList.Add(data);
 
+                if (isPlayerOneTurn) {
+                    player1MoveCount++;
+                } else {
+                    player2MoveCount++;
+                }
+
                 isPlayerOneTurn = !isPlayerOneTurn;
             }
 
@@ -166,6 +176,10 @@ namespace Fourzy
 
         public int[,] GetGameBoard() {
             return gameBoard.GetGameBoard();
+        }
+
+        public int[] GetGameBoardArray() {
+            return gameBoard.ToArray();
         }
 
         public List<long> GetGameBoardData() {
