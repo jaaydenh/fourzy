@@ -8,9 +8,6 @@ namespace Fourzy
 
     public class TokenBoardLoader : MonoBehaviour
     {
-        private string gameDataProjectFilePath = "/TokenBoards.json";
-        private TokenBoardInfo[] allTokenBoards;
-
         //Singleton
         private static TokenBoardLoader _instance;
         public static TokenBoardLoader instance

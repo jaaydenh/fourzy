@@ -29,24 +29,17 @@ namespace Fourzy
         public List<string> playerIds = new List<string>();
         public List<string> playerFacebookIds = new List<string>();
 
-        //This is the array of strings we pass our Cloud Code gameBoard to
-        //public int[] gameBoard;
-        //public int[] lastGameBoard;
-        //public int[] tokenBoardData;
         public GameState gameState;
         public Text opponentNameLabel, statusLabel, moveTimeAgo;
         public Image opponentProfilePicture;
         public Texture2D defaultProfilePicture;
         public Image tournamentIcon;
-        private GameObject gameScreen;
+        //private GameObject gameScreen;
         private GameObject deleteGameButton;
         private int opponentIndex;
-        //public bool isCurrentPlayerTurn = false;
         public bool isCurrentPlayer_PlayerOne;
         public bool viewedResult = false;
         public bool isExpired = false;
-        //public bool isGameOver = false;
-        //public int currentPlayerMove;
         private Sprite opponentProfilePictureSprite;
 
         void Start()

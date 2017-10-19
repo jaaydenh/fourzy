@@ -17,9 +17,26 @@ namespace Fourzy
 
         void Start()
         {
-            instance = this;
+            //instance = this;
         }
 
+        void Awake()
+        {
+            //instance = this;
+
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+                Destroy(gameObject);
+            }
+
+            //Sets this to not be destroyed when reloading scene
+            DontDestroyOnLoad(gameObject);
+        }
         public void GetLeaderboard()
         {
             if (!loadingLeaderboard)

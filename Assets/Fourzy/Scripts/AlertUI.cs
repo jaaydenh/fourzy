@@ -11,7 +11,7 @@ namespace Fourzy
         public float fadeOutSpeed = 1f;
         public float timeBeforeFade = 1f;
 
-        public void Open(string text, float initY)
+        public void Open(string text)
         {
             alertText.text = text;
             alertText.CrossFadeAlpha(1f,0f, true);

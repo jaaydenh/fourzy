@@ -37,18 +37,30 @@ namespace Fourzy
 
         public Texture2D defaultProfilePicture;
 
-        private GameObject UIScreen;
+        public GameObject UIScreen;
         private bool gettingChallenges = false;
         private bool pulledToRefresh = false;
         //private int yourMoveGames = 0;
 
         void Start()
         {
-            instance = this;
+            //instance = this;
 
-            UIScreen = GameObject.Find("UI Screen");
             loadingSpinner.GetComponent<Animator>().enabled = false;
             loadingSpinner.GetComponent<Image>().enabled = false;
+        }
+
+        void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+                Destroy(gameObject);
+            }
         }
 
         private void OnEnable() {
@@ -217,9 +229,9 @@ namespace Fourzy
                             List<string> challengeInstanceIds = new List<string>();
 
                             //for every object in the challenges array, get the challengeId field and push to challengeInstanceId[]
-                            foreach (var instance in challengeInstances)
+                            foreach (var chalInstance in challengeInstances)
                             {
-                                challengeInstanceIds.Add(instance.ChallengeId);
+                                challengeInstanceIds.Add(chalInstance.ChallengeId);
                             }
 
                             int randNum = UnityEngine.Random.Range(0, challengeInstanceIds.Count-1);
@@ -371,7 +383,7 @@ namespace Fourzy
             PuzzleChallengeInfo puzzleChallenge = PuzzleChallengeLoader.instance.GetChallenge();
             if (puzzleChallenge == null) {
                 // no more puzzle challenges
-                GameManager.instance.alertUI.Open("All Challenges Completed. More coming soon...", 0);
+                GameManager.instance.alertUI.Open("All Challenges Completed. More coming soon...");
                 PlayerPrefs.DeleteAll();
             } else {
                 GameManager.instance.puzzleChallengeInfo = puzzleChallenge;
@@ -486,7 +498,7 @@ namespace Fourzy
             }
 
             GameManager.instance.UpdatePlayersStatusView();
-            GameManager.instance.DisplayIntroUI(tokenBoard.name, "Multiplayer", true);
+            GameManager.instance.DisplayIntroUI(tokenBoard.name, "Random Opponent", true);
 
             UIScreen.SetActive(false);
 

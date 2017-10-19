@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using Facebook.Unity;
@@ -16,12 +15,11 @@ namespace Fourzy
 
         public delegate void LoginError();
         public static event LoginError OnLoginError;
-        private GameObject facebookButton;
-        string[] firstNameSyllables = new string[] {"mon","fay","shi","zag","blarg","rash","izen"};
-        string[] lastNameSyllables = new string[] {"malo","zak","abo","wonk","zig","wolf","cat"};
+        public GameObject facebookButton;
+        readonly string[] firstNameSyllables = { "mon","fay","shi","zag","blarg","rash","izen"};
+        readonly string[] lastNameSyllables = { "malo","zak","abo","wonk","zig","wolf","cat"};
 
         void Start() {
-            facebookButton = GameObject.Find("Facebook Button");
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
         }

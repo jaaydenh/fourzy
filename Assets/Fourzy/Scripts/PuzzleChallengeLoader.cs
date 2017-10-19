@@ -7,9 +7,6 @@ namespace Fourzy
 {
     public class PuzzleChallengeLoader : MonoBehaviour
     {
-        private string gameDataProjectFilePath = "/Challenges.json";
-        private PuzzleChallengeInfo[] challenges;
-
         //Singleton
         private static PuzzleChallengeLoader _instance;
         public static PuzzleChallengeLoader instance
@@ -54,7 +51,7 @@ namespace Fourzy
             //     tokenBoards[i] = tokenboard;
             //     i++;
             // }
-            Debug.Log("number of enabled challenges: " + enabledChallenges.Count());
+
             if (enabledChallenges.Count() > 0) {
                 return enabledChallenges.FirstOrDefault();
             }

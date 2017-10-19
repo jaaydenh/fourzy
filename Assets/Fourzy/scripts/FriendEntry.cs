@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine.Analytics.Experimental;
@@ -63,11 +62,15 @@ namespace Fourzy
             GameManager.instance.opponentProfilePicture.sprite = profilePicture.sprite;
 
             GameManager.instance.UpdatePlayersStatusView();
+            GameManager.instance.ResetUI();
+            GameManager.instance.DisplayIntroUI(tokenBoard.name, "Friend Challenge", true);
 
             UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
                 OnActiveGame();
+
+            GameManager.instance.EnableTokenAudio();
 
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("TokenBoardId", tokenBoard.id);

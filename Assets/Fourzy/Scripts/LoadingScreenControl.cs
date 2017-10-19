@@ -1,40 +1,31 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Loading : MonoBehaviour {
-    
+public class LoadingScreenControl : MonoBehaviour {
+
     public GameObject loadingScreenObj;
     public Slider slider;
 
     AsyncOperation async;
 
-    void Start()
-    {
-        //StartCoroutine(LoadScene());
+    void Start() {
+        //StartCoroutine(Loading());
     }
 
-    public void TransitionToGame()
-    {
-        SceneManager.LoadScene("game");
-        //async.allowSceneActivation = true;
-    }
-
-    IEnumerator LoadScene()
-    {
+    IEnumerator Loading() {
         loadingScreenObj.SetActive(true);
         async = SceneManager.LoadSceneAsync("game");
         async.allowSceneActivation = false;
-
-        while (async.isDone == false)
-        {
+        yield return new WaitForSeconds(1f);
+        while (async.isDone == false) {
             slider.value = async.progress;
-            if (async.progress == 0.9f)
-            {
+            if (async.progress == 0.9f) {
                 slider.value = 1f;
-                //yield return new WaitForSeconds(3f);
-                //async.allowSceneActivation = true;
+                yield return new WaitForSeconds(2f);
+                async.allowSceneActivation = true;
             }
             yield return null;
         }

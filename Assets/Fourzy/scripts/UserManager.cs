@@ -19,12 +19,27 @@ namespace Fourzy
         public Image profilePictureImage;
 
         void Start() {
-            profilePicture = new Sprite();
+            //profilePicture = new Sprite();
         }
 
         void Awake()
         {
-            instance = this;
+            //instance = this;
+
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+                Destroy(gameObject);
+            }
+
+            //Sets this to not be destroyed when reloading scene
+            DontDestroyOnLoad(gameObject);
+
+            profilePicture = new Sprite();
         }
 
         public void UpdateInformation()

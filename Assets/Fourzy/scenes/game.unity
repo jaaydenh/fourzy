@@ -715,6 +715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5999039cf0a134af3898baed20c528d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  facebookButton: {fileID: 963059896}
 --- !u!114 &159214249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773,6 +774,7 @@ MonoBehaviour:
   gamesListContainer: {fileID: 381019440}
   defaultProfilePicture: {fileID: 2800000, guid: 09111b8bd10774b4fa0a0056fa2cc3c2,
     type: 3}
+  UIScreen: {fileID: 204049811}
 --- !u!114 &159214252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4468,7 +4470,7 @@ Prefab:
     - target: {fileID: 114652317583714262, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
       propertyPath: m_Text
-      value: Standard Game
+      value: Random Opponent
       objectReference: {fileID: 0}
     - target: {fileID: 114282727075674704, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
@@ -4796,6 +4798,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 939711114}
+  - component: {fileID: 939711115}
   m_Layer: 5
   m_Name: MoveHintAreas
   m_TagString: Untagged
@@ -4825,6 +4828,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &939711115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 939711113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4f3b24afe6d4cbcb71d50f2ea639a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topHintArea: {fileID: 615211682}
+  bottomHintArea: {fileID: 316790357}
+  leftHintArea: {fileID: 1408305103}
+  rightHintArea: {fileID: 392328587}
 --- !u!1 &961650582
 GameObject:
   m_ObjectHideFlags: 0
@@ -6062,6 +6080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c3fee23f5269403a88f32502010a86e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveHintTouchArea: {fileID: 939711115}
   moveHintAreas: {fileID: 939711113}
   topHintArea: {fileID: 615211682}
   bottomHintArea: {fileID: 316790357}

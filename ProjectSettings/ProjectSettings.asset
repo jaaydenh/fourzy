@@ -147,7 +147,7 @@ PlayerSettings:
     iOS: com.PartyTroll.Fourzy
     tvOS: com.PartyTroll.Fourzy
   buildNumber:
-    iOS: 5
+    iOS: 6
   AndroidBundleVersionCode: 8
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
@@ -684,7 +684,7 @@ PlayerSettings:
     Purchasing: 0
     UNet: 1
     Unity_Ads: 0
-  facebookSdkVersion: 7.9.4
+  facebookSdkVersion: 7.10.0
   apiCompatibilityLevel: 2
   cloudProjectId: ff06e18a-8109-4825-a4d3-8f637e2314c8
   projectName: Fourzy

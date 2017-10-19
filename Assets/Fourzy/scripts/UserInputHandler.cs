@@ -7,6 +7,7 @@ public class UserInputHandler : MonoBehaviour {
     public static event TapAction OnTap;
     public static bool inputEnabled = true;
     bool mouseButtonPressed = false;
+    public MoveHintTouchArea moveHintTouchArea;
     public GameObject moveHintAreas;
     public GameObject topHintArea;
     public GameObject bottomHintArea;
@@ -39,15 +40,16 @@ public class UserInputHandler : MonoBehaviour {
                  //touchedObject should be the object someone touched.
                  //Debug.Log("Touched " + touchedObject.transform.name);
                  if (touchedObject.transform.name == "MoveHintTouchArea") {
-                    moveHintAreas.SetActive(true);
-                    SpriteRenderer srTopHintArea = topHintArea.GetComponent<SpriteRenderer>();
-                    SpriteRenderer srBottomHintArea = bottomHintArea.GetComponent<SpriteRenderer>();
-                    SpriteRenderer srLeftHintArea = leftHintArea.GetComponent<SpriteRenderer>();
-                    SpriteRenderer srRightHintArea = rightHintArea.GetComponent<SpriteRenderer>();
-                    srTopHintArea.FadeInAndOutSprite(this, 4.0f);
-                    srBottomHintArea.FadeInAndOutSprite(this, 4.0f);
-                    srLeftHintArea.FadeInAndOutSprite(this, 4.0f);
-                    srRightHintArea.FadeInAndOutSprite(this, 4.0f);
+                    moveHintTouchArea.FadeInAndOutSprite();
+                    //moveHintAreas.SetActive(true);
+                    //SpriteRenderer srTopHintArea = topHintArea.GetComponent<SpriteRenderer>();
+                    //SpriteRenderer srBottomHintArea = bottomHintArea.GetComponent<SpriteRenderer>();
+                    //SpriteRenderer srLeftHintArea = leftHintArea.GetComponent<SpriteRenderer>();
+                    //SpriteRenderer srRightHintArea = rightHintArea.GetComponent<SpriteRenderer>();
+                    //srTopHintArea.FadeInAndOutSprite(this, 4.0f);
+                    //srBottomHintArea.FadeInAndOutSprite(this, 4.0f);
+                    //srLeftHintArea.FadeInAndOutSprite(this, 4.0f);
+                    //srRightHintArea.FadeInAndOutSprite(this, 4.0f);
                  }
              }
          }
