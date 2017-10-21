@@ -394,7 +394,6 @@ namespace Fourzy
                 GameManager.instance.gameState = gameState;
 
                 GameManager.instance.ResetGamePiecesAndTokens();
-                GameManager.instance.CreateTokenViews();
 
                 GameManager.instance.isCurrentPlayer_PlayerOne = true;
                 GameManager.instance.isPuzzleChallenge = true;
@@ -411,7 +410,6 @@ namespace Fourzy
                     new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
                     new Vector2(0.5f, 0.5f));
                 
-                GameManager.instance.UpdatePlayersStatusView();
                 GameManager.instance.ResetUI();
                 GameManager.instance.SetupGame(puzzleChallenge.Name, "Win in " + puzzleChallenge.MoveGoal + " moves!");
 
@@ -420,7 +418,7 @@ namespace Fourzy
                 if (OnActiveGame != null)
                     OnActiveGame();
 
-                GameManager.instance.EnableTokenAudio();
+                //GameManager.instance.EnableTokenAudio();
 
                 Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                 AnalyticsEvent.Custom("OpenPuzzleChallengeGame", customAttributes);
@@ -467,7 +465,6 @@ namespace Fourzy
         public void OpenNewMultiplayerGame() {
             Debug.Log("Open New Multiplayer Game");
             GameManager.instance.ResetGamePiecesAndTokens();
-            //GameManager.instance.PopulateMoveArrows();
 
             if (tokenBoard == null) {
                 TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
@@ -539,8 +536,6 @@ namespace Fourzy
 
             GameManager.instance.ResetGamePiecesAndTokens();
 
-            //List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
-            //List<int> tokenData = challenge.ScriptData.GetIntList("tokenBoard");
             string tokenBoardId = challenge.ScriptData.GetString("tokenBoardId");
             string tokenBoardName = challenge.ScriptData.GetString("tokenBoardName");
 

@@ -7,10 +7,8 @@ using GameSparks.Api.Messages;
 using GameSparks.Core;
 using System.Linq;
 using DG.Tweening;
-using Lean;
 using UnityEngine.Analytics.Experimental;
 using UnityEngine.SceneManagement;
-
 
 namespace Fourzy
 {
@@ -105,16 +103,17 @@ namespace Fourzy
         public GameObject moveArrowDown;
         public GameObject moveArrowUp;
         public GameObject cornerSpot;
+        public MoveHintTouchArea moveHintTouchArea;
 
         //Static instance of GameManager which allows it to be accessed by any other script.
         public static GameManager instance = null;
-
+#if UNITY_EDITOR
         [UnityEditor.MenuItem("Screenshot/Take screenshot")]
         static void Screenshot()
         {
             ScreenCapture.CaptureScreenshot("test.png");
         }
-
+#endif
         void OnApplicationPause(bool paused)
         {
             if (!paused)
@@ -417,7 +416,12 @@ namespace Fourzy
 
             tokens = new GameObject("Tokens");
             tokens.transform.parent = gameScreen.transform;
+            rematchButton.gameObject.SetActive(false);
+            gameScreen.SetActive(false);
             playerNameLabel.text = UserManager.instance.userName;
+
+            // center camera
+            Camera.main.transform.position = new Vector3((Constants.numColumns - 1) / 2.0f, -((Constants.numRows - 1) / 2.0f) + .15f, Camera.main.transform.position.z);
         }
 
         void Awake()
@@ -442,13 +446,10 @@ namespace Fourzy
             audioMove = AddAudio(clipMove, false, false, 1);
             audioWin = AddAudio(clipWin, false, false, 1);
 
+            //tokens = new GameObject("Tokens");
+            //tokens.transform.parent = gameScreen.transform;
+
             replayedLastMove = false;
-
-            rematchButton.gameObject.SetActive(false);
-            gameScreen.SetActive(false);
-
-            // center camera
-            Camera.main.transform.position = new Vector3((Constants.numColumns - 1) / 2.0f, -((Constants.numRows - 1) / 2.0f) + .15f, Camera.main.transform.position.z);
         }
 
         void OnGameFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -457,12 +458,13 @@ namespace Fourzy
             Debug.Log("Scene Name: " + scene.name);
             Debug.Log("SceneMode: " + mode.ToString());
 
-            tokens = new GameObject("Tokens");
-            tokens.transform.parent = gameScreen.transform;
+
 
             Debug.Log("puzzleChallengeLevel: " + PlayerPrefs.GetInt("puzzleChallengeLevel"));
-            if (PlayerPrefs.GetInt("puzzleChallengeLevel") < 3)
+            if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 3)
             {
+                tokens = new GameObject("Tokens");
+                tokens.transform.parent = gameScreen.transform;
                 gameScreen.SetActive(true);
                 PuzzleChallengeInfo puzzleChallenge = PuzzleChallengeLoader.instance.GetChallenge();
                 if (puzzleChallenge == null)
@@ -504,6 +506,7 @@ namespace Fourzy
                     UIScreen.SetActive(false);
                     TransitionToGameScreen();
                     GameManager.instance.EnableTokenAudio();
+                    moveHintTouchArea.FadeInAndOutSprite();
 
                     Dictionary<System.String, object> customAttributes = new Dictionary<System.String, object>();
                     AnalyticsEvent.Custom("OpenPuzzleChallengeGame", customAttributes);
@@ -584,7 +587,6 @@ namespace Fourzy
             UpdatePlayersStatusView();
             SetGameBoardView(gameState.GetPreviousGameBoard());
             CreateTokenViews();
-
             DisplayIntroUI(title, subtitle, true);
         }
 

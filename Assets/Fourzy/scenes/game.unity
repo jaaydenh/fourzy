@@ -622,6 +622,7 @@ MonoBehaviour:
   moveArrowUp: {fileID: 1875338580760464, guid: 2b5a2b7ec7c53494fa52afec2d71c590,
     type: 2}
   cornerSpot: {fileID: 1000010456282840, guid: bd145474a74ae46039ffc323f67e8539, type: 2}
+  moveHintTouchArea: {fileID: 939711115}
 --- !u!4 &137424724
 Transform:
   m_ObjectHideFlags: 0

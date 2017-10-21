@@ -41,15 +41,6 @@ public class UserInputHandler : MonoBehaviour {
                  //Debug.Log("Touched " + touchedObject.transform.name);
                  if (touchedObject.transform.name == "MoveHintTouchArea") {
                     moveHintTouchArea.FadeInAndOutSprite();
-                    //moveHintAreas.SetActive(true);
-                    //SpriteRenderer srTopHintArea = topHintArea.GetComponent<SpriteRenderer>();
-                    //SpriteRenderer srBottomHintArea = bottomHintArea.GetComponent<SpriteRenderer>();
-                    //SpriteRenderer srLeftHintArea = leftHintArea.GetComponent<SpriteRenderer>();
-                    //SpriteRenderer srRightHintArea = rightHintArea.GetComponent<SpriteRenderer>();
-                    //srTopHintArea.FadeInAndOutSprite(this, 4.0f);
-                    //srBottomHintArea.FadeInAndOutSprite(this, 4.0f);
-                    //srLeftHintArea.FadeInAndOutSprite(this, 4.0f);
-                    //srRightHintArea.FadeInAndOutSprite(this, 4.0f);
                  }
              }
          }
