@@ -48,6 +48,11 @@ namespace Fourzy
 
             loadingSpinner.GetComponent<Animator>().enabled = false;
             loadingSpinner.GetComponent<Image>().enabled = false;
+
+            if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 3)
+            {
+                OpenPuzzleChallengeGame();
+            }
         }
 
         void Awake()

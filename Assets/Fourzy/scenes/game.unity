@@ -609,6 +609,7 @@ MonoBehaviour:
   isAiActive: 0
   isCurrentPlayer_PlayerOne: 0
   isLoading: 1
+  isLoadingUI: 0
   isAnimating: 0
   clipMove: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
   clipWin: {fileID: 8300000, guid: 2cda08f34c076490b8ec095a4f5d5256, type: 3}
@@ -6082,7 +6083,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveHintTouchArea: {fileID: 939711115}
-  moveHintAreas: {fileID: 939711113}
   topHintArea: {fileID: 615211682}
   bottomHintArea: {fileID: 316790357}
   leftHintArea: {fileID: 1408305103}
@@ -7988,7 +7988,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1647859500}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 3.5, y: -3.35, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -9126,7 +9126,7 @@ RectTransform:
   m_GameObject: {fileID: 1789846566}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 68.3, y: 68.3, z: 0}
+  m_LocalScale: {x: 68.5, y: 67.9, z: 0}
   m_Children: []
   m_Father: {fileID: 308658291}
   m_RootOrder: 1

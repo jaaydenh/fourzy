@@ -15,6 +15,7 @@ namespace Fourzy
 
         public void Open(string title, string subTitle, bool fade)
         {
+            GameManager.instance.isLoadingUI = true;
             titleText.text = title;
             subTitleText.text = subTitle;
             gameObject.SetActive(true);
@@ -40,7 +41,9 @@ namespace Fourzy
                 canvasGroup.alpha -= Time.deltaTime * fadeOutSpeed;
                 yield return null;
             }
+
             Close();
+            GameManager.instance.isLoadingUI = false;
         }
 
         public void Close()

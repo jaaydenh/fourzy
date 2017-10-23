@@ -10,6 +10,7 @@ public class MoveHintTouchArea : MonoBehaviour {
 
     public void FadeInAndOutSprite () {
         gameObject.SetActive(true);
+
         SpriteRenderer srTopHintArea = topHintArea.GetComponent<SpriteRenderer>();
         SpriteRenderer srBottomHintArea = bottomHintArea.GetComponent<SpriteRenderer>();
         SpriteRenderer srLeftHintArea = leftHintArea.GetComponent<SpriteRenderer>();

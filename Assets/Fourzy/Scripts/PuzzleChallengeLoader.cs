@@ -55,6 +55,7 @@ namespace Fourzy
             if (enabledChallenges.Count() > 0) {
                 return enabledChallenges.FirstOrDefault();
             }
+            Debug.Log("Return null puzzle challenge");
             return null;
         }
 

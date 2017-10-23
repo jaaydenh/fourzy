@@ -8,7 +8,6 @@ public class UserInputHandler : MonoBehaviour {
     public static bool inputEnabled = true;
     bool mouseButtonPressed = false;
     public MoveHintTouchArea moveHintTouchArea;
-    public GameObject moveHintAreas;
     public GameObject topHintArea;
     public GameObject bottomHintArea;
     public GameObject leftHintArea;
