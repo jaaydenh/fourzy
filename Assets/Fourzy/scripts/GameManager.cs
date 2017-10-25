@@ -9,6 +9,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine.Analytics.Experimental;
 //using UnityEngine.SceneManagement;
+using System.Text.RegularExpressions;
 
 namespace Fourzy
 {
@@ -728,8 +729,6 @@ namespace Fourzy
 
         public void SetActionButton()
         {
-            Debug.Log("SetActionButton");
-
             if (isMultiplayer)
             {
                 //if (!gameState.isCurrentPlayerTurn) {
@@ -779,7 +778,7 @@ namespace Fourzy
 
         public void ResetGamePiecesAndTokens()
         {
-            Debug.Log("ResetGamePiecesAndTokens");
+            //Debug.Log("ResetGamePiecesAndTokens");
             if (gamePieces.transform.childCount > 0)
             {
                 for (int i = gamePieces.transform.childCount - 1; i >= 0; i--)
@@ -994,7 +993,7 @@ namespace Fourzy
                 int row = Mathf.RoundToInt(pos.y * -1);
                 Position position;
                 Player player = gameState.isPlayerOneTurn ? Player.ONE : Player.TWO;
-                Debug.Log("ProcessPlayerInput: column: " + column + " row: " + row);
+                //Debug.Log("ProcessPlayerInput: column: " + column + " row: " + row);
                 if (inTopRowBounds(pos.x, pos.y))
                 {
                     position = new Position(column, row - 1);
@@ -1097,36 +1096,41 @@ namespace Fourzy
                         yield return new WaitForSeconds(1f);
 
                         bool foundMove = false;
-                        Debug.Log("puzzleChallengeInfo.Moves: " + puzzleChallengeInfo.Moves.Count);
-                        Debug.Log("puzzleChallengeInfo.RandomMoves: " + puzzleChallengeInfo.RandomMoves.Count);
+
                         // Check if the current board state matches a board state in the list of boards states for the puzzle challenge
                         foreach (var puzzleMove in puzzleChallengeInfo.Moves)
                         {
-                            Debug.Log("try puzzleMove");
-                            if (gameState.GetGameBoardArray().SequenceEqual(puzzleMove.BoardState.ToArray())) {
+                            //Debug.Log("try puzzleMove");
+
+                            string gameBoardString = string.Join("", gameState.GetGameBoardArray().Select(item => item.ToString()).ToArray());
+                            string puzzleMoveBoardString = string.Join("", puzzleMove.BoardState.Select(item => item.ToString()).ToArray());
+                            puzzleMoveBoardString = Regex.Replace(puzzleMoveBoardString, "9", "[0-2]{1}");
+
+                            if (Regex.IsMatch(gameBoardString, puzzleMoveBoardString)) {
+                                //Debug.Log("FOUND MOVE");
                                 Move newMove = new Move(puzzleMove.Location, (Direction)puzzleMove.Direction, Player.TWO);
-                                Debug.Log("move direction: " + puzzleMove.Direction);
-                                Debug.Log("move location: " + puzzleMove.Location);
+                                //Debug.Log("move direction: " + puzzleMove.Direction);
+                                //Debug.Log("move location: " + puzzleMove.Location);
                                 StartCoroutine(MovePiece(newMove, false, true));
                                 foundMove = true;
                                 break;
                             }
                         }
                         if (!foundMove) {
-                            Debug.Log("!foundMove");
+                            //Debug.Log("!foundMove");
                             // Make Random Move
                             float random = Random.Range(0.0f, 1.0f);
-                            Debug.Log("random number: " + random);
+                            //Debug.Log("random number: " + random);
                             float cumulative = 0.0f;
                             foreach (var randomMove in puzzleChallengeInfo.RandomMoves)
                             {
                                 cumulative += randomMove.Weight;
-                                Debug.Log("randomMove.weight: " + randomMove.Weight);
-                                Debug.Log("cumulative: " + cumulative);
+                                //Debug.Log("randomMove.weight: " + randomMove.Weight);
+                                //Debug.Log("cumulative: " + cumulative);
                                 if (random < cumulative)
                                 {
                                     Move newMove = new Move(randomMove.Location, (Direction)randomMove.Direction, Player.TWO);
-                                    Debug.Log("RandomMove");
+                                    //Debug.Log("RandomMove");
                                     if (gameState.CanMove(newMove.GetNextPosition(), gameState.tokenBoard.tokens)) {
                                         StartCoroutine(MovePiece(newMove, false, true));
                                         break;
@@ -1174,8 +1178,8 @@ namespace Fourzy
                     }
                 } else if (gameState.isGameOver) {
                     isPuzzleChallengeCompleted = true;
-                    Debug.Log("isPuzzleChallengeCompleted: " + isPuzzleChallengeCompleted);
-                    Debug.Log("gameState.player1MoveCount: " + gameState.player1MoveCount);
+                    //Debug.Log("isPuzzleChallengeCompleted: " + isPuzzleChallengeCompleted);
+                    //Debug.Log("gameState.player1MoveCount: " + gameState.player1MoveCount);
                     if (gameState.winner == Player.ONE) {
                         isPuzzleChallengePassed = true;
                         PlayerPrefs.SetInt("puzzleChallengeLevel", puzzleChallengeInfo.Level);
