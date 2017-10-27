@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine.Analytics.Experimental;
+using Fabric.Answers;
 
 namespace Fourzy
 {
@@ -70,7 +70,7 @@ namespace Fourzy
             customAttributes.Add("TokenBoardId", tokenBoard.id);
             customAttributes.Add("TokenBoardName", tokenBoard.name);
             AnalyticsEvent.Custom("OpenNewLeaderboardChallenge", customAttributes);
-            //Answers.LogCustom("OpenNewFriendChallenge", customAttributes);
+            Answers.LogCustom("open_new_friend_challenge", customAttributes);
         }
     }
 }

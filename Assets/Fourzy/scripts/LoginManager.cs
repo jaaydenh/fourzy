@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System;
 using Facebook.Unity;
-using GameSparks.Api;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
-using UnityEngine.Analytics.Experimental;
-using Firebase;
+//using UnityEngine.Analytics.Experimental;
 //using Fabric.Answers;
 
 namespace Fourzy
@@ -15,6 +13,7 @@ namespace Fourzy
 
         public delegate void LoginError();
         public static event LoginError OnLoginError;
+        public static LoginManager instance;
         public GameObject facebookButton;
         readonly string[] firstNameSyllables = { "mon","fay","shi","zag","blarg","rash","izen"};
         readonly string[] lastNameSyllables = { "malo","zak","abo","wonk","zig","wolf","cat"};
@@ -25,6 +24,19 @@ namespace Fourzy
         }
 
         void Awake() {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+                Destroy(gameObject);
+            }
+
+            //Sets this to not be destroyed when reloading scene
+            DontDestroyOnLoad(gameObject);
+
             ConnectWithFacebook();
         }
 
@@ -55,14 +67,18 @@ namespace Fourzy
                         if (response.HasErrors)
                         {
                             Debug.Log("***** PushRegistration Request Error: " + response.Errors.JSON);
-                            Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                            customAttributes.Add("errorJSON", response.Errors.JSON);
-                            AnalyticsEvent.Custom("PushRegistrationRequest:Error: ", customAttributes);
-                            //Answers.LogCustom("PushRegistrationRequest:Error: " + response.Errors.JSON);
+                            //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                            //customAttributes.Add("errorJSON", response.Errors.JSON);
+                            //AnalyticsEvent.Custom("PushRegistrationRequest:Error: ", customAttributes);
+                            //Answers.LogCustom("push_registration_request:error: " + response.Errors.JSON);
+                            AnalyticsManager.LogError("push_registration_request_error: ", response.Errors.JSON);
                         } else {
                             Debug.Log("***** PushRegistration Successful: Device OS: " + deviceOS);
-                            AnalyticsEvent.Custom("PushRegistrationRequest");
-                            //Answers.LogCustom("PushRegistrationRequest");
+                            Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                            customAttributes.Add("deviceOS", deviceOS);
+                            //AnalyticsEvent.Custom("PushRegistrationRequest", customAttributes);
+                            //Answers.LogCustom("push_registration_request", customAttributes);
+                            AnalyticsManager.LogCustom("push_registration_request", customAttributes);
                         }
                     });
         }
@@ -79,16 +95,18 @@ namespace Fourzy
                         //Debug.Log("DisplayName: " + response.DisplayName);
                         //Debug.Log("NewPlayer: " + response.NewPlayer);
                         //Debug.Log("SwitchSummary: " + response.SwitchSummary);
-                        AnalyticsEvent.Custom("DeviceAuthenticationRequest");
-                        //Answers.LogCustom("DeviceAuthenticationRequest");
+                        //AnalyticsEvent.Custom("DeviceAuthenticationRequest");
+                        //Answers.LogCustom("device_authentication_request");
+                        AnalyticsManager.LogCustom("device_authentication_request");
                     } else {
                         Debug.Log("***** Error Authenticating Device: " + response.Errors.JSON);
                         if (OnLoginError != null)
                             OnLoginError();
-                        Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                        customAttributes.Add("errorJSON", response.Errors.JSON);
-                        AnalyticsEvent.Custom("DeviceAuthenticationRequest:Error: ", customAttributes);
-                        //Answers.LogCustom("DeviceAuthenticationRequest:Error");
+                        //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                        //customAttributes.Add("errorJSON", response.Errors.JSON);
+                        //AnalyticsEvent.Custom("DeviceAuthenticationRequest:Error: ", customAttributes);
+                        //Answers.LogCustom("device_authentication_request:error");
+                        AnalyticsManager.LogError("device_authentication_request_error", response.Errors.JSON);
                     }
                 });
         }
@@ -154,8 +172,9 @@ namespace Fourzy
             if(FB.IsLoggedIn)
             {
                 Debug.Log("Logging into gamesparks with facebook details");
-                AnalyticsEvent.Custom("PlayerConnectsWithFacebook");
-                //Answers.LogCustom("PlayerConnectsWithFacebook");
+                //AnalyticsEvent.Custom("PlayerConnectsWithFacebook");
+                //Answers.LogCustom("player_connects_with_facebook");
+                AnalyticsManager.LogCustom("player_connects_with_facebook");
                 GSFacebookLogin(AfterFBLogin);
             }
             else
@@ -163,12 +182,14 @@ namespace Fourzy
                 Debug.LogWarning("Something went wrong with connectin to FaceBook: " + result.Error);
                 
                 if (OnLoginError != null) {
-                    AnalyticsEvent.Custom("GameSparksFBConnect:Error");
-                    //Answers.LogCustom("GameSparksFBConnect:Error");
+                    //AnalyticsEvent.Custom("GameSparksFBConnect:Error");
+                    //Answers.LogCustom("gamesparks_fb_connect:error");
+                    AnalyticsManager.LogError("gamesparks_fb_connect_error", result.Error);
                     OnLoginError();
                 } else {
-                    AnalyticsEvent.Custom("GameSparksFBConnect:Decline");
-                    //Answers.LogCustom("GameSparksFBConnect:Decline");
+                    //AnalyticsEvent.Custom("GameSparksFBConnect:Decline");
+                    //Answers.LogCustom("gamesparks_fb_connect:decline");
+                    AnalyticsManager.LogCustom("gamesparks_fb_connect_decline");
                 }
             }
         }
@@ -214,10 +235,11 @@ namespace Fourzy
                         if (OnLoginError != null)
                             OnLoginError();
                     }
-                    Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                    customAttributes.Add("success", success);
-                    AnalyticsEvent.Custom("FacebookLogin", customAttributes);
+                    //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                    //customAttributes.Add("success", success);
+                    //AnalyticsEvent.Custom("FacebookLogin", customAttributes);
                     //Answers.LogLogin("facebook", success);
+                    AnalyticsManager.LogLogin("facebook", success);
                 });
         }
 

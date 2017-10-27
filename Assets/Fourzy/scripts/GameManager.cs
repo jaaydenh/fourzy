@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameSparks.Api.Requests;
@@ -7,9 +8,10 @@ using GameSparks.Api.Messages;
 using GameSparks.Core;
 using System.Linq;
 using DG.Tweening;
-using UnityEngine.Analytics.Experimental;
+//using UnityEngine.Analytics.Experimental;
 //using UnityEngine.SceneManagement;
 using System.Text.RegularExpressions;
+//using Fabric.Answers;
 
 namespace Fourzy
 {
@@ -113,7 +115,7 @@ namespace Fourzy
         [UnityEditor.MenuItem("Screenshot/Take screenshot")]
         static void Screenshot()
         {
-            ScreenCapture.CaptureScreenshot("test.png");
+            ScreenCapture.CaptureScreenshot("../test.png");
         }
 #endif
         void OnApplicationPause(bool paused)
@@ -724,6 +726,8 @@ namespace Fourzy
             if (activeGame != null)
             {
                 activeGame.OpenGame();
+                //Answers.LogCustom("next_game");
+                AnalyticsManager.LogCustom("next_game");
             }
         }
 
@@ -908,6 +912,9 @@ namespace Fourzy
             EnableTokenAudio();
             FadeGameScreen(1.0f, gameScreenFadeInTime);
             isLoading = false;
+
+            //Answers.LogCustom("rematch_pnp_game");
+            AnalyticsManager.LogCustom("rematch_pnp_game");
         }
 
         public void RetryPuzzleChallenge() {
@@ -938,6 +945,12 @@ namespace Fourzy
                 EnableTokenAudio();
                 FadeGameScreen(1.0f, gameScreenFadeInTime);
                 isLoading = false;
+
+                Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                customAttributes.Add("id", puzzleChallenge.ID);
+                customAttributes.Add("level", puzzleChallenge.Level);
+                //Answers.LogCustom("retry_puzzle_challenge", customAttributes);
+                AnalyticsManager.LogCustom("retry_puzzle_challenge", customAttributes);
             }
         }
 
@@ -968,6 +981,11 @@ namespace Fourzy
                 GameManager.instance.EnableTokenAudio();
                 FadeGameScreen(1.0f, gameScreenFadeInTime);
                 isLoading = false;
+                Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                customAttributes.Add("id", puzzleChallenge.ID);
+                customAttributes.Add("level", puzzleChallenge.Level);
+                //Answers.LogCustom("retry_puzzle_challenge", customAttributes);
+                AnalyticsManager.LogCustom("retry_puzzle_challenge", customAttributes);
             }
         }
 
@@ -978,16 +996,15 @@ namespace Fourzy
 
         private void ProcessPlayerInput(Vector3 mousePosition)
         {
-
             if (isLoading || isLoadingUI || isDropping || gameState.isGameOver)
             {
                 return;
             }
 
+            Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
+
             if (gameState.isCurrentPlayerTurn)
             {
-                Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
-
                 // round to a grid square
                 int column = Mathf.RoundToInt(pos.x);
                 int row = Mathf.RoundToInt(pos.y * -1);
@@ -1025,7 +1042,10 @@ namespace Fourzy
             }
             else
             {
-                // TODO: inform the player it is not their turn
+                if (inTopRowBounds(pos.x, pos.y) || inBottomRowBounds(pos.x, pos.y) || inRightRowBounds(pos.x, pos.y) || inLeftRowBounds(pos.x, pos.y))
+                {
+                    alertUI.Open("Umm... not your turn");
+                }
             }
         }
 
@@ -1078,6 +1098,7 @@ namespace Fourzy
                     StartCoroutine(MovePiece(move, false, updatePlayer));
                     ChallengeManager.instance.ChallengeUser(challengedUserId, gameState, Utility.GetMoveLocation(move), move.direction);
                     // TODO: Create an ActiveGame and add it to the activeGames list
+
                 }
                 else if (isMultiplayer && isNewRandomChallenge)
                 {
@@ -1088,6 +1109,7 @@ namespace Fourzy
                 }
                 else
                 {
+                    ActiveGame game = new ActiveGame();
                     StartCoroutine(MovePiece(move, false, updatePlayer));
                     if (isPuzzleChallenge && !gameState.isGameOver && !isPuzzleChallengeCompleted) {
                         while (isDropping)
@@ -1119,7 +1141,7 @@ namespace Fourzy
                         if (!foundMove) {
                             //Debug.Log("!foundMove");
                             // Make Random Move
-                            float random = Random.Range(0.0f, 1.0f);
+                            float random = UnityEngine.Random.Range(0.0f, 1.0f);
                             //Debug.Log("random number: " + random);
                             float cumulative = 0.0f;
                             foreach (var randomMove in puzzleChallengeInfo.RandomMoves)
@@ -1141,8 +1163,8 @@ namespace Fourzy
                     }
                 }
             } else {
-                // TODO: inform the player that the move is not possible
                 Debug.Log("MOVE IS NOT POSSIBLE");
+                alertUI.Open("Nope, not possible");
                 isDropping = false;
             }
 
@@ -1171,10 +1193,14 @@ namespace Fourzy
                         // Puzzle Challenge Completed
                         isPuzzleChallengePassed = true;
                         PlayerPrefs.SetInt("puzzleChallengeLevel", puzzleChallengeInfo.Level);
+
+                        AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, true);
                     } else {
                         // Puzzle Challenge Failed
                         isPuzzleChallengePassed = false;
                         gameState.isGameOver = true;
+
+                        AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, false);
                     }
                 } else if (gameState.isGameOver) {
                     isPuzzleChallengeCompleted = true;
@@ -1183,9 +1209,13 @@ namespace Fourzy
                     if (gameState.winner == Player.ONE) {
                         isPuzzleChallengePassed = true;
                         PlayerPrefs.SetInt("puzzleChallengeLevel", puzzleChallengeInfo.Level);
+
+                        AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, true);
                     } else {
                         isPuzzleChallengePassed = false;
                         gameState.isGameOver = true;
+
+                        AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, false);
                     }
                 }
             }
@@ -1413,6 +1443,12 @@ namespace Fourzy
             if (gameState.winner == Player.NONE || gameState.winner == Player.ALL)
             {
                 gameStatusText.text = drawText;
+
+                if (isMultiplayer) {
+                    AnalyticsManager.LogGameOver("multiplayer", gameState.winner, gameState.tokenBoard);
+                } else {
+                    AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
+                }
             }
             else if (isMultiplayer)
             {
@@ -1421,7 +1457,7 @@ namespace Fourzy
                     gameStatusText.text = winner + " Won!";
                 }
                 else
-                {
+                {                    
                     if (isCurrentPlayer_PlayerOne && gameState.winner == Player.ONE)
                     {
                         audioWin.Play();
@@ -1438,11 +1474,14 @@ namespace Fourzy
                     }
 
                     gameStatusText.color = gameState.winner == Player.ONE ? bluePlayerColor : redPlayerColor;
+
+                    AnalyticsManager.LogGameOver("multiplayer", gameState.winner, gameState.tokenBoard);
                 }
             }
             else
             {
-                AnalyticsEvent.GameOver("local_game");
+                AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
+
                 audioWin.Play();
                 gameStatusText.text = gameState.winner == Player.ONE ? bluePlayerWonText : redPlayerWonText;
                 gameStatusText.color = gameState.winner == Player.ONE ? bluePlayerColor : redPlayerColor;

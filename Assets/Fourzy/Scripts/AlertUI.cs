@@ -10,7 +10,13 @@ namespace Fourzy
         public Text alertText;
         public float fadeOutSpeed = 1f;
         public float timeBeforeFade = 1f;
+        private float originalY;
 
+        void Start() {
+            originalY = transform.position.y;
+        }
+
+        // TODO: spawn new alert UI each time open is called
         public void Open(string text)
         {
             alertText.text = text;
@@ -21,21 +27,19 @@ namespace Fourzy
         }
 
         private IEnumerator FadeOut()    {
-            float originalY = transform.position.y;
-            transform.DOMoveY(transform.position.y+100,1.4f).OnComplete(() => Reset(originalY));
+            transform.DOMoveY(transform.position.y+100,1.4f).OnComplete(() => Reset());
             yield return new WaitForSeconds(timeBeforeFade);
             alertText.CrossFadeAlpha(0.0f, fadeOutSpeed, false);
             //alertText.DOFade(0f,fadeOutSpeed).OnComplete(() => transform.DOMoveY(originalY, 0f));
         }
 
-        private void Reset(float y) {
-            transform.DOMoveY(y, 0f);
-            Close();
+        private void Reset() {
+            transform.DOMoveY(originalY, 0f);
+            //Close();
         }
 
         public void Close()
         {
-            
             gameObject.SetActive(false);
         }
     }

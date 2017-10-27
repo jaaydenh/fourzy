@@ -30,16 +30,18 @@ namespace Fourzy
         public List<string> playerFacebookIds = new List<string>();
 
         public GameState gameState;
+
+        [Header("Game UI")]
         public Text opponentNameLabel, statusLabel, moveTimeAgo;
         public Image opponentProfilePicture;
         public Texture2D defaultProfilePicture;
         public Image tournamentIcon;
-        //private GameObject gameScreen;
+
         private GameObject deleteGameButton;
         private int opponentIndex;
         public bool isCurrentPlayer_PlayerOne;
-        public bool viewedResult = false;
-        public bool isExpired = false;
+        public bool viewedResult;
+        public bool isExpired;
         private Sprite opponentProfilePictureSprite;
 
         void Start()
@@ -149,13 +151,9 @@ namespace Fourzy
         //Open game gets called OnClick of the play button which happens when selecting an active game in the games list
         public void OpenGame()
         {
-            GameManager.instance.isLoading = true;
-            //bool isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
-            //GameState gameState = new GameState(Constants.numRows, Constants.numColumns, isPlayerOneTurn, isCurrentPlayerTurn, tokenBoard, lastGameBoard, isGameOver);
-            // GameManager.instance.playerNameLabel.text = UserManager.instance.userName;
-
             Debug.Log("Open Active Game: challengeInstanceId: " + challengeId);
 
+            GameManager.instance.isLoading = true;
             GameManager.instance.gameState = gameState;
 
             // All these properties of the ActiveGame will remain the same for the entire lifecycle of the game
