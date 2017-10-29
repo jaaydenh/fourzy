@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System.Collections.Generic;
 using GameSparks.Core;
 using System.Linq;
@@ -76,7 +75,7 @@ namespace Fourzy
             }
             else
             {
-                opponentNameLabel.text = "Waiting for Opponent";
+                opponentNameLabel.text = LocalizationManager.instance.GetLocalizedValue("waiting_opponent_text");
                 opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
                     new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
                     new Vector2(0.5f, 0.5f));
@@ -86,11 +85,11 @@ namespace Fourzy
             {
                 if (winnerId == UserManager.instance.userId)
                 {
-                    statusLabel.text = "You won!";
+                    statusLabel.text = LocalizationManager.instance.GetLocalizedValue("you_won_text");
                 }
                 else
                 {
-                    statusLabel.text = "They won!";
+                    statusLabel.text = LocalizationManager.instance.GetLocalizedValue("they_won_text");
                 }
             } else if (isExpired == true) {
                 statusLabel.text = "Game Expired";
@@ -98,9 +97,9 @@ namespace Fourzy
                 //We then check if the userId of the next player is equal to ours
                 if (nextPlayerId == UserManager.instance.userId)
                 {
-                    statusLabel.text = "Your Move!";
+                    statusLabel.text = LocalizationManager.instance.GetLocalizedValue("your_move_text");
                 } else {
-                    statusLabel.text = "Their Move!";
+                    statusLabel.text = LocalizationManager.instance.GetLocalizedValue("their_move_text");
                 }
             }
 
@@ -109,7 +108,7 @@ namespace Fourzy
 
             if (timestamp != 0) {
                 System.DateTime timestampDateTime = new System.DateTime (1970, 1, 1, 0, 0, 0,System.DateTimeKind.Utc).AddMilliseconds(timestamp).ToLocalTime();
-                moveTimeAgo.text = TimeAgo.DateTimeExtensions.TimeAgo(timestampDateTime);                
+                moveTimeAgo.text = TimeAgo.DateTimeExtensions.TimeAgo(timestampDateTime, LocalizationManager.instance.cultureInfo);                
             }
         }
 

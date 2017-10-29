@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Fourzy
@@ -18,6 +17,7 @@ namespace Fourzy
         public float dropTime = 1.0f;
         public bool isMoving;
         public GameManager gameManager;
+        GameObject nextPiece = null;
 
         void OnTriggerEnter2D(Collider2D coll) {
             // if (coll.gameObject.tag == "GamePiece" && !isMoving) {
@@ -25,21 +25,33 @@ namespace Fourzy
             // }
         }
 
-        private IEnumerator AnimatePiece() {
-            isMoving = true;
-            gameManager.isAnimating = true;
-            Sequence mySequence = DOTween.Sequence();
-            for (int i = 0; i < positions.Count; i++)
-            {
-                Vector3 end = new Vector3(positions[i].column, positions[i].row * -1);
-                mySequence.Append(gameObject.GetComponent<Rigidbody2D>().DOMove(end, dropTime, false).SetEase(Ease.Linear));
-            }
-            mySequence.Play();
-                
-            yield return mySequence.WaitForCompletion();
-            isMoving = false;
-            gameManager.isAnimating = false;
+        public void AnimatePiece(Move move, List<MovingGamePiece> movingPieces, GameBoardView gameBoardView) {
+            var movingGamePiece = movingPieces[0];
+            Position endPosition = movingGamePiece.positions[movingGamePiece.positions.Count - 1];
+            nextPiece = gameBoardView.gamePieces[endPosition.row, endPosition.column];
         }
+
+        void Update()
+        {
+            Rigidbody2D rb2d = gameObject.GetComponent<Rigidbody2D>();
+            //if (rb2d.IsTouching())
+        }
+
+        //private IEnumerator AnimatePiece() {
+        //    isMoving = true;
+        //    gameManager.isAnimating = true;
+        //    Sequence mySequence = DOTween.Sequence();
+        //    for (int i = 0; i < positions.Count; i++)
+        //    {
+        //        Vector3 end = new Vector3(positions[i].column, positions[i].row * -1);
+        //        mySequence.Append(gameObject.GetComponent<Rigidbody2D>().DOMove(end, dropTime, false).SetEase(Ease.Linear));
+        //    }
+        //    mySequence.Play();
+
+        //    yield return mySequence.WaitForCompletion();
+        //    isMoving = false;
+        //    gameManager.isAnimating = false;
+        //}
 
         public void MakeMoveable(bool moveable, Direction direction) {
             switch (direction)

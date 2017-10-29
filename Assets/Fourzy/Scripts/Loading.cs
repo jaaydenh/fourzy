@@ -1,42 +1,53 @@
-﻿using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+﻿namespace Fourzy
+{
+    using System.Collections;
+    using UnityEngine;
+    using UnityEngine.UI;
+    using UnityEngine.SceneManagement;
 
-public class Loading : MonoBehaviour {
-    
-    public GameObject loadingScreenObj;
-    public Slider slider;
-
-    AsyncOperation async;
-
-    void Start()
+    public class Loading : MonoBehaviour
     {
-        //StartCoroutine(LoadScene());
-    }
 
-    public void TransitionToGame()
-    {
-        SceneManager.LoadScene("game");
-        //async.allowSceneActivation = true;
-    }
+        public GameObject loadingScreenObj;
+        public Slider slider;
 
-    IEnumerator LoadScene()
-    {
-        loadingScreenObj.SetActive(true);
-        async = SceneManager.LoadSceneAsync("game");
-        async.allowSceneActivation = false;
+        AsyncOperation async;
 
-        while (async.isDone == false)
+        void Start()
         {
-            slider.value = async.progress;
-            if (async.progress == 0.9f)
+            //StartCoroutine(LoadScene());
+        }
+
+        public void TransitionToGame()
+        {
+            StartCoroutine(LoadScene());
+            //async.allowSceneActivation = true;
+        }
+
+        IEnumerator LoadScene()
+        {
+            while (!LocalizationManager.instance.GetIsReady())
             {
-                slider.value = 1f;
-                //yield return new WaitForSeconds(3f);
-                //async.allowSceneActivation = true;
+                yield return null;
             }
-            yield return null;
+
+            SceneManager.LoadScene("game");
+
+            //loadingScreenObj.SetActive(true);
+            //async = SceneManager.LoadSceneAsync("game");
+            //async.allowSceneActivation = false;
+
+            //while (async.isDone == false)
+            //{
+            //    slider.value = async.progress;
+            //    if (async.progress == 0.9f)
+            //    {
+            //        slider.value = 1f;
+            //        //yield return new WaitForSeconds(3f);
+            //        //async.allowSceneActivation = true;
+            //    }
+            //    yield return null;
+            //}
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Fourzy
 
             GameManager.instance.UpdatePlayersStatusView();
             GameManager.instance.ResetUI();
-            GameManager.instance.DisplayIntroUI(tokenBoard.name, "Friend Challenge", true);
+            GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("friend_challenge_text"), true);
 
             UIScreen.SetActive(false);
 

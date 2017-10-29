@@ -6,8 +6,6 @@ using GameSparks.Api.Requests;
 using GameSparks.Core;
 using System.Linq;
 using System;
-//using UnityEngine.Analytics.Experimental;
-//using Fabric.Answers;
 
 namespace Fourzy
 {
@@ -382,7 +380,7 @@ namespace Fourzy
             
             GameManager.instance.UpdatePlayersStatusView();
             GameManager.instance.ResetUI();
-            GameManager.instance.DisplayIntroUI(tokenBoard.name, "Pass and Play", true);
+            GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("pnp_button"), true);
 
             UIScreen.SetActive(false);
 
@@ -403,7 +401,7 @@ namespace Fourzy
             PuzzleChallengeInfo puzzleChallenge = PuzzleChallengeLoader.instance.GetChallenge();
             if (puzzleChallenge == null) {
                 // no more puzzle challenges
-                GameManager.instance.alertUI.Open("All Challenges Completed. More coming soon...");
+                GameManager.instance.alertUI.Open(LocalizationManager.instance.GetLocalizedValue("all_challenges_completed"));
                 PlayerPrefs.DeleteAll();
             } else {
                 GameManager.instance.puzzleChallengeInfo = puzzleChallenge;
@@ -431,7 +429,18 @@ namespace Fourzy
                     new Vector2(0.5f, 0.5f));
                 
                 GameManager.instance.ResetUI();
-                GameManager.instance.SetupGame(puzzleChallenge.Name, "Win in " + puzzleChallenge.MoveGoal + " moves!");
+
+                string subtitle = "";
+                if (puzzleChallenge.MoveGoal > 1)
+                {
+                    subtitle = LocalizationManager.instance.GetLocalizedValue("puzzle_challenge_win_instructions_plural");
+                }
+                else
+                {
+                    subtitle = LocalizationManager.instance.GetLocalizedValue("puzzle_challenge_win_instructions_singular");
+                }
+
+                GameManager.instance.SetupGame(puzzleChallenge.Name, subtitle.Replace("%1", puzzleChallenge.MoveGoal.ToString()));
 
                 UIScreen.SetActive(false);
 
@@ -518,7 +527,7 @@ namespace Fourzy
             }
 
             GameManager.instance.UpdatePlayersStatusView();
-            GameManager.instance.DisplayIntroUI(tokenBoard.name, "Random Opponent", true);
+            GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("random_opponent_button"), true);
 
             UIScreen.SetActive(false);
 

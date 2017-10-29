@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Fourzy
+﻿namespace Fourzy
 {
+    using System.Collections.Generic;
+
     [System.Serializable]
     public class PuzzleChallengeInfo
     {

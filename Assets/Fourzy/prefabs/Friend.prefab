@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 224000013359349812}
   - component: {fileID: 222000013386672098}
   - component: {fileID: 114000011875641964}
+  - component: {fileID: 114927209687814558}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -303,7 +304,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Play Now
+  m_Text: Play
 --- !u!114 &114000012110508938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -466,6 +467,18 @@ MonoBehaviour:
             m_Type: System.Boolean
             m_EnumType: 
     m_Name: game_start
+--- !u!114 &114927209687814558
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011535215214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb6c2efe2c27e487aa7dc7d495e4fc51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: play_button
 --- !u!222 &222000010499956472
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -557,7 +570,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -590.3722, y: 856.89496}
+  m_AnchoredPosition: {x: -15.926231, y: 23.606548}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224000011116093884
