@@ -4,8 +4,6 @@ using System;
 using Facebook.Unity;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
-//using UnityEngine.Analytics.Experimental;
-//using Fabric.Answers;
 
 namespace Fourzy
 {

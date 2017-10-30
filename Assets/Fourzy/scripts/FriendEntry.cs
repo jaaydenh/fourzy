@@ -2,8 +2,6 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
-using UnityEngine.Analytics.Experimental;
-using Fabric.Answers;
 
 namespace Fourzy
 {
@@ -75,8 +73,7 @@ namespace Fourzy
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("TokenBoardId", tokenBoard.id);
             customAttributes.Add("TokenBoardName", tokenBoard.name);
-            AnalyticsEvent.Custom("OpenNewFriendChallenge", customAttributes);
-            Answers.LogCustom("open_new_friend_challenge", customAttributes);
+            AnalyticsManager.LogCustom("open_new_friend_challenge", customAttributes);
         }
     }
 }

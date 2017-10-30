@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using GameSparks.Api.Requests;
 
 namespace Fourzy

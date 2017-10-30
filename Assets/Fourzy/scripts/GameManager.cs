@@ -17,7 +17,7 @@ namespace Fourzy
     {
         public delegate void MoveAction();
         public static event MoveAction OnMoved;
-        public float dropTime = 1.0f;
+        public float moveSpeed = 8f;
         public float gameScreenFadeInTime = 0.6f;
         public string challengeInstanceId = null; // GameSparks Challenge Instance Id
         public string challengedUserId;
@@ -86,7 +86,7 @@ namespace Fourzy
         public bool isLoadingUI;
         private bool isDropping = false;
         public bool isAnimating = false;
-        private bool updatingViews = false;
+        public bool animatingGamePieces = false;
         private bool replayedLastMove = false;
         private bool isPuzzleChallengeCompleted = false;
         private bool isPuzzleChallengePassed = false;
@@ -172,7 +172,7 @@ namespace Fourzy
             isLoadingUI = false;
             isDropping = false;
             isAnimating = false;
-            updatingViews = false;
+            animatingGamePieces = false;
             replayedLastMove = false;
             isPuzzleChallengeCompleted = false;
             isPuzzleChallengePassed = false;
@@ -1014,7 +1014,7 @@ namespace Fourzy
 
         private void ProcessPlayerInput(Vector3 mousePosition)
         {
-            if (isLoading || isLoadingUI || isDropping || gameState.isGameOver)
+            if (isLoading || isLoadingUI || isDropping || gameState.isGameOver || animatingGamePieces)
             {
                 return;
             }
@@ -1129,7 +1129,6 @@ namespace Fourzy
                 }
                 else
                 {
-                    ActiveGame game = new ActiveGame();
                     StartCoroutine(MovePiece(move, false, updatePlayer));
                     if (isPuzzleChallenge && !gameState.isGameOver && !isPuzzleChallengeCompleted) {
                         while (isDropping)
@@ -1240,9 +1239,10 @@ namespace Fourzy
                 }
             }
 
-            StartCoroutine(MovePieceGameView(move, movingPieces));
+            //StartCoroutine(MovePieceGameView(move, movingPieces));
+            MovePieceGameView(move, movingPieces);
 
-            while (updatingViews)
+            while (animatingGamePieces)
                 yield return null;
 
             UpdateGameStatus(updatePlayer);
@@ -1308,133 +1308,93 @@ namespace Fourzy
             }
         }
 
-        private IEnumerator MovePieceGameView(Move move, List<MovingGamePiece> movingPieces)
+        private void MovePieceGameView(Move move, List<MovingGamePiece> movingPieces)
         {
-            updatingViews = true;
+            animatingGamePieces = true;
 
             // Create Game Piece View
-
             GameObject g = SpawnPiece(move.position.column, move.position.row * -1, move.player);
             GamePiece gamePiece = g.GetComponent<GamePiece>();
-            gamePiece.isMoving = true;
             gamePiece.player = move.player;
             gamePiece.column = move.position.column;
             gamePiece.row = move.position.row;
 
+            StartCoroutine(gamePiece.AnimatePiece(movingPieces));
 
-            // If it is the first moving piece, the first position should not be used as the piece starts outside the board
-            //movingPieces[0].positions.RemoveAt(0);
-            //gamePiece.AnimatePiece(move, movingPieces, gameBoardView);
-            //
+            //GameObject nextPieceView = null;
 
-            GameObject nextPieceView = null;
+            //// process animations for completed moving pieces
+            //for (int i = 0; i < movingPieces.Count; i++)
+            //{
+            //    var movingGamePiece = movingPieces[i];
+            //    Position startPosition = movingGamePiece.positions[0];
+            //    Position endPosition = movingGamePiece.positions[movingGamePiece.positions.Count - 1];
 
-            // process animations for completed moving pieces
-            for (int i = 0; i < movingPieces.Count; i++)
-            {
-                var movingGamePiece = movingPieces[i];
-                Position startPosition = movingGamePiece.positions[0];
-                Position endPosition = movingGamePiece.positions[movingGamePiece.positions.Count - 1];
+            //    // If it is the first moving piece, the first position should not be used as the piece starts outside the board
+            //    if (i == 0)
+            //    {
+            //        movingGamePiece.positions.RemoveAt(0);
+            //    }
 
-                // If it is the first moving piece, the first position should not be used as the piece starts outside the board
-                if (i == 0)
-                {
-                    movingGamePiece.positions.RemoveAt(0);
-                }
+            //    GameObject pieceView;
+            //    if (i == 0)
+            //    {
+            //        pieceView = g;
+            //        nextPieceView = gameBoardView.gamePieces[endPosition.row, endPosition.column];
+            //    }
+            //    else
+            //    {
+            //        pieceView = nextPieceView;
+            //        nextPieceView = gameBoardView.gamePieces[endPosition.row, endPosition.column];
+            //    }
 
-                GameObject pieceView;
-                if (i == 0)
-                {
-                    pieceView = g;
-                    nextPieceView = gameBoardView.gamePieces[endPosition.row, endPosition.column];
-                }
-                else
-                {
-                    pieceView = nextPieceView;
-                    nextPieceView = gameBoardView.gamePieces[endPosition.row, endPosition.column];
-                }
+            //    pieceView.GetComponent<GamePiece>().positions = movingGamePiece.positions;
+            //    StartCoroutine(AnimatePiece(pieceView, movingGamePiece));
 
-                pieceView.GetComponent<GamePiece>().positions = movingGamePiece.positions;
-                StartCoroutine(AnimatePiece(pieceView, movingGamePiece));
+            //    if (movingGamePiece.isDestroyed)
+            //    {
+            //        // pieceView.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            //        // Lean.LeanPool.Despawn(pieceView);
+            //    }
+            //    else
+            //    {
+            //        // Update the state of the game board views
+            //        gameBoardView.gamePieces[endPosition.row, endPosition.column] = pieceView;
+            //    }
 
-                if (movingGamePiece.isDestroyed)
-                {
-                    // pieceView.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    // Lean.LeanPool.Despawn(pieceView);
-                }
-                else
-                {
-                    // Update the state of the game board views
-                    gameBoardView.gamePieces[endPosition.row, endPosition.column] = pieceView;
-                }
-
-                while (this.isAnimating)
-                    yield return null;
-            }
+            //    while (this.isAnimating)
+            //        yield return null;
+            //}
 
             gameBoardView.PrintGameBoard();
 
-            updatingViews = false;
+            //animatingGamePieces = false;
         }
 
-        private IEnumerator AnimatePiece(GameObject g, MovingGamePiece movingGamePiece)
-        {
-            isAnimating = true;
-            // Debug.Log("POSITIONS: ");
-            // foreach (var item in positions)
-            // {
-            //     Debug.Log("row: " + item.row + ", column: " + item.column);
-            // }
-            //Debug.Log("AnimatePiece: ROW: " + positions[positions.Count - 1].row + "COLUMN: " + positions[positions.Count - 1].column);
-            //Debug.Log("AnimatePiece: ROW: " + positions[0].row + "COLUMN: " + positions[0].column);
+        //private IEnumerator AnimatePiece(GameObject g, MovingGamePiece movingGamePiece)
+        //{
+        //    isAnimating = true;
 
-            //GameObject g = gameBoardView.gamePieces[positions[0].row, positions[0].column];
+        //    List<Position> positions = movingGamePiece.positions;
+        //    Sequence mySequence = DOTween.Sequence();
 
-            //Vector3 start = new Vector3(positions[1].column, positions[1].row * -1);
+        //    for (int i = 0; i < positions.Count; i++)
+        //    {
+        //        Vector3 end = new Vector3(positions[i].column, positions[i].row * -1);
+        //        mySequence.Append(g.transform.DOMove(end, dropTime, false).SetEase(Ease.Linear));
+        //    }
 
-            List<Position> positions = movingGamePiece.positions;
+        //    yield return mySequence.WaitForCompletion();
 
-            Sequence mySequence = DOTween.Sequence();
-            for (int i = 0; i < positions.Count; i++)
-            {
-                Vector3 end = new Vector3(positions[i].column, positions[i].row * -1);
-                //float distance = Vector3.Distance(start, end);
+        //    if (movingGamePiece.animationState == PieceAnimStates.DROPPING)
+        //    {
+        //        g.transform.DOScale(0.0f, 1.0f);
+        //    }
 
-                // if (i < positions.Count) {
-                //     mySequence.Append(g.transform.DOMove(end, dropTime, false).SetEase(Ease.Linear));
-                // } else {
-                //     mySequence.Append(g.transform.DOMove(end, dropTime, false).SetEase(Ease.Linear));
-                // }
+        //    GamePiece gamePiece = g.GetComponent<GamePiece>();
 
-                mySequence.Append(g.transform.DOMove(end, dropTime, false).SetEase(Ease.Linear));
-                //mySequence.Append(g.GetComponent<Rigidbody2D>().DOMove(end, dropTime, false).SetEase(Ease.Linear));
-
-                //                float t = 0;
-                //                while(t < 1)
-                //                {
-                //                    t += Time.deltaTime * dropTime;
-                //                    if (numRows - distance > 0) {
-                //                        t += (numRows - distance) / 500;
-                //                    }
-                //                    g.transform.position = Vector3.Lerp (start, end, t);
-                //
-                //                    yield return null;
-                //                }
-
-                //start = end;
-            }
-
-            yield return mySequence.WaitForCompletion();
-
-            if (movingGamePiece.animationState == PieceAnimStates.DROPPING)
-            {
-                g.transform.DOScale(0.0f, 1.0f);
-            }
-
-            GamePiece gamePiece = g.GetComponent<GamePiece>();
-            gamePiece.isMoving = false;
-            isAnimating = false;
-        }
+        //    isAnimating = false;
+        //}
 
         public void DisplayGameOverView()
         {

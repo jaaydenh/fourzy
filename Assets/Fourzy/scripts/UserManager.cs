@@ -9,9 +9,7 @@ namespace Fourzy
 {
     public class UserManager : MonoBehaviour
     {
-
         public static UserManager instance;
-
         public string userName;
         public string userId;
         public Sprite profilePicture;
@@ -24,8 +22,6 @@ namespace Fourzy
 
         void Awake()
         {
-            //instance = this;
-
             if (instance == null)
             {
                 instance = this;
@@ -61,7 +57,6 @@ namespace Fourzy
                     {
                         if (sprite) {
                             profilePicture = sprite;
-                            //profilePictureImage.sprite = sprite;
                         }
                     }));
             }
@@ -73,9 +68,10 @@ namespace Fourzy
             {
                 yield return www.Send();
 
-                if (www.isNetworkError)
+                if (www.isNetworkError || www.isHttpError)
                 {
                     Debug.Log(www.error);
+                    AnalyticsManager.LogError("get_fb_picture_error", www.error);
                 }
                 else
                 {
