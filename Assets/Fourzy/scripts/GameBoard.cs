@@ -169,7 +169,53 @@ namespace Fourzy {
                     }
 
                     if (token.newPieceDirection != Direction.NONE) {
-                        piece.currentDirection = token.newPieceDirection;
+                        if (token.useCurrentDirection) {
+                            switch (piece.currentDirection)
+                            {
+                                case Direction.UP:
+                                    if (token.newPieceDirection == Direction.RIGHT) {
+                                        piece.currentDirection = Direction.RIGHT;
+                                    } else {
+                                        piece.currentDirection = Direction.LEFT;
+                                    }
+                                    break;
+                                case Direction.DOWN:
+                                    if (token.newPieceDirection == Direction.RIGHT)
+                                    {
+                                        piece.currentDirection = Direction.LEFT;
+                                    }
+                                    else
+                                    {
+                                        piece.currentDirection = Direction.RIGHT;
+                                    }
+                                    break;
+                                case Direction.LEFT:
+                                    if (token.newPieceDirection == Direction.RIGHT)
+                                    {
+                                        piece.currentDirection = Direction.UP;
+                                    }
+                                    else
+                                    {
+                                        piece.currentDirection = Direction.DOWN;
+                                    }
+                                    break;
+
+                                case Direction.RIGHT:
+                                    if (token.newPieceDirection == Direction.RIGHT)
+                                    {
+                                        piece.currentDirection = Direction.DOWN;
+                                    }
+                                    else
+                                    {
+                                        piece.currentDirection = Direction.UP;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            piece.currentDirection = token.newPieceDirection;    
+                        }
                     }
 
                     if (pieceInSquare || token.mustStop || piece.isDestroyed) {

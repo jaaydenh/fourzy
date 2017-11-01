@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0eddd50cb28548f5918a9539a099c0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropTime: 0.1
+  moveSpeed: 8
   gameScreenFadeInTime: 0.5
   challengeInstanceId: 
   challengedUserId: 
@@ -588,6 +588,10 @@ MonoBehaviour:
   iceSheetToken: {fileID: 1419971408396618, guid: 3499a5e46e3be49a6a1cc9f3657fbff2,
     type: 2}
   pitToken: {fileID: 1110577959621164, guid: a8e6195c9f07043dba35b16ee6e88c8d, type: 2}
+  NinetyRightArrowToken: {fileID: 1553599341637598, guid: ba678afbd416442d289f06b0d0ef4f89,
+    type: 2}
+  NinetyLeftArrowToken: {fileID: 1467034045519020, guid: 9f8d0f5a262fb4e459b04790f5461829,
+    type: 2}
   puzzleChallengeInfo:
     ID: 
     Name: 
@@ -637,6 +641,7 @@ MonoBehaviour:
   isLoading: 1
   isLoadingUI: 0
   isAnimating: 0
+  animatingGamePieces: 0
   clipMove: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
   clipWin: {fileID: 8300000, guid: 2cda08f34c076490b8ec095a4f5d5256, type: 3}
   createGameScript: {fileID: 185923094}

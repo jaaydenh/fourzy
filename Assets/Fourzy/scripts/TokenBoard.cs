@@ -27,7 +27,6 @@ namespace Fourzy {
             if (instantiateTokenBoard) {
                 SetTokenBoardFromData(convertedTokenData);
             }
-
         }
 
         public TokenBoard(int[,] tokenData, string id, string name, bool instantiateTokenBoard) {
@@ -109,6 +108,14 @@ namespace Fourzy {
                     else if (token == (int)Token.PIT)
                     {
                         tokens[row, col] = new PitToken();
+                    }
+                    else if (token == (int)Token.NINETY_RIGHT_ARROW)
+                    {
+                        tokens[row, col] = new NinetyRightArrowToken();
+                    }
+                    else if (token == (int)Token.NINETY_LEFT_ARROW)
+                    {
+                        tokens[row, col] = new NinetyLeftArrowToken();
                     }
                 }
             }

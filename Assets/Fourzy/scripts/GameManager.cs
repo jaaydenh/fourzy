@@ -32,6 +32,8 @@ namespace Fourzy
         public GameObject ghostToken;
         public GameObject iceSheetToken;
         public GameObject pitToken;
+        public GameObject NinetyRightArrowToken;
+        public GameObject NinetyLeftArrowToken;
         // ---------- End Token Views ----------
 
         public PuzzleChallengeInfo puzzleChallengeInfo;
@@ -653,6 +655,16 @@ namespace Fourzy
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
+                        case Token.NINETY_RIGHT_ARROW:
+                            go = Instantiate(NinetyRightArrowToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
+                        case Token.NINETY_LEFT_ARROW:
+                            go = Instantiate(NinetyLeftArrowToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
                         default:
                             break;
                     }
@@ -934,7 +946,6 @@ namespace Fourzy
 
                 isCurrentPlayer_PlayerOne = true;
                 isPuzzleChallenge = true;
-                //CreateTokenViews();
                 UpdatePlayersStatusView();
 
                 string subtitle = "";
@@ -958,7 +969,6 @@ namespace Fourzy
                 Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                 customAttributes.Add("id", puzzleChallenge.ID);
                 customAttributes.Add("level", puzzleChallenge.Level);
-                //Answers.LogCustom("retry_puzzle_challenge", customAttributes);
                 AnalyticsManager.LogCustom("retry_puzzle_challenge", customAttributes);
             }
         }
@@ -975,14 +985,12 @@ namespace Fourzy
                 gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
                 ResetGamePiecesAndTokens();
 
-
                 TokenBoard initialTokenBoard = new TokenBoard(puzzleChallenge.InitialTokenBoard.ToArray(), "", "", true);
 
                 gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, initialTokenBoard, puzzleChallenge.InitialGameBoard.ToArray(), false, null);
 
                 isCurrentPlayer_PlayerOne = true;
                 isPuzzleChallenge = true;
-                //CreateTokenViews();
                 UpdatePlayersStatusView();
 
                 string subtitle = "";
@@ -1002,7 +1010,6 @@ namespace Fourzy
                 Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                 customAttributes.Add("id", puzzleChallenge.ID);
                 customAttributes.Add("level", puzzleChallenge.Level);
-                //Answers.LogCustom("retry_puzzle_challenge", customAttributes);
                 AnalyticsManager.LogCustom("retry_puzzle_challenge", customAttributes);
             }
         }
@@ -1182,7 +1189,6 @@ namespace Fourzy
                     }
                 }
             } else {
-                Debug.Log("MOVE IS NOT POSSIBLE");
                 alertUI.Open("Nope, not possible");
                 isDropping = false;
             }
