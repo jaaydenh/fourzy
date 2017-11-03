@@ -34,12 +34,13 @@ namespace Fourzy
         public GameObject pitToken;
         public GameObject NinetyRightArrowToken;
         public GameObject NinetyLeftArrowToken;
+        public GameObject BumperToken;
         // ---------- End Token Views ----------
 
         public PuzzleChallengeInfo puzzleChallengeInfo;
         public GameBoardView gameBoardView;
         public GameState gameState { get; set; }
-        private List<GameObject> tokenViews;
+        public List<GameObject> tokenViews;
         public List<ActiveGame> activeGames;
         public GameObject gamePiecePrefab;
         public Sprite playerOneSprite;
@@ -662,6 +663,11 @@ namespace Fourzy
                             break;
                         case Token.NINETY_LEFT_ARROW:
                             go = Instantiate(NinetyLeftArrowToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            tokenViews.Add(go);
+                            break;
+                        case Token.BUMPER:
+                            go = Instantiate(BumperToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
@@ -1371,7 +1377,7 @@ namespace Fourzy
             //    while (this.isAnimating)
             //        yield return null;
             //}
-
+            Debug.Log("Final Game board view");
             gameBoardView.PrintGameBoard();
 
             //animatingGamePieces = false;

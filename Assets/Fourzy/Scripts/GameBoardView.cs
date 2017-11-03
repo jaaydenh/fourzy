@@ -4,19 +4,15 @@ namespace Fourzy
 {
     public class GameBoardView : MonoBehaviour {
 
-        public GameObject[,] gamePieces; //Collection of Views
-        //public IToken[,] tokenBoard;
+        public GameObject[,] gamePieces; //Collection of GamePiece Views
+        public GameObject[,] tokens; //Collection of Token Views
         [Range(3, 8)]
         public int numRows = Constants.numRows;
         [Range(3, 8)]
         public int numColumns = Constants.numRows;
-        // public List<MovingGamePiece> activeMovingPieces;
-        // public List<MovingGamePiece> completedMovingPieces;
 
         void Start () {
-            //activeMovingPieces = new List<MovingGamePiece>();
-            //completedMovingPieces = new List<MovingGamePiece>();
-            //tokenBoard = new IToken[numRows, numColumns];
+            tokens = new GameObject[numRows, numColumns];
             gamePieces = new GameObject[numRows, numColumns];
         }
 
@@ -33,13 +29,6 @@ namespace Fourzy
             gamePieces[oldPos.row, oldPos.column] = null;
             gamePieces[newPos.row, newPos.column] = oldPiece;
         }
-
-        // public void DisableNextMovingPiece() {
-        //     if (activeMovingPieces.Count > 0) {
-        //         completedMovingPieces.Add(activeMovingPieces[0]);
-        //         activeMovingPieces.RemoveAt(0);
-        //     }
-        // }
 
         public void Clear() {
             gamePieces = new GameObject[numRows, numColumns];

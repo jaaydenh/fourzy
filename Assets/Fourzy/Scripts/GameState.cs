@@ -300,6 +300,11 @@ namespace Fourzy
                 return CanMove(new Move(Utility.GetNextPosition(move), move.direction, move.player), tokens);
             }
 
+            if (tokens[endPosition.row, endPosition.column].canEvaluateWithoutEntering)
+            {
+                return true;
+            }
+
             // if there is a token at the end position and canPassThrough is false then return false
             // MUST CHECK FOR canPassThrough before checking canStopOn
             if (!tokens[endPosition.row, endPosition.column].canEnter) {

@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0eddd50cb28548f5918a9539a099c0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
+  moveSpeed: 6
   gameScreenFadeInTime: 0.5
   challengeInstanceId: 
   challengedUserId: 
@@ -592,6 +592,8 @@ MonoBehaviour:
     type: 2}
   NinetyLeftArrowToken: {fileID: 1467034045519020, guid: 9f8d0f5a262fb4e459b04790f5461829,
     type: 2}
+  BumperToken: {fileID: 1581787741766162, guid: dba4630cc9752451bb282ba3125aa030,
+    type: 2}
   puzzleChallengeInfo:
     ID: 
     Name: 
@@ -604,6 +606,7 @@ MonoBehaviour:
     RandomMoves: []
     Moves: []
   gameBoardView: {fileID: 440620694}
+  tokenViews: []
   activeGames: []
   gamePiecePrefab: {fileID: 174738, guid: edd52c6e9d75d420199836641a1473b2, type: 2}
   playerOneSprite: {fileID: 21300002, guid: baa829ac81b434043bfc2463fc3a9f65, type: 3}

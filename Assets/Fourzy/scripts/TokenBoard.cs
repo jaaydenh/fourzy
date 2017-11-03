@@ -117,6 +117,10 @@ namespace Fourzy {
                     {
                         tokens[row, col] = new NinetyLeftArrowToken();
                     }
+                    else if (token == (int)Token.BUMPER)
+                    {
+                        tokens[row, col] = new BumperToken();
+                    }
                 }
             }
         }

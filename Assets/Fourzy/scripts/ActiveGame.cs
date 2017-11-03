@@ -106,6 +106,7 @@ namespace Fourzy
             GSData lastPlayerMove = gameState.moveList.LastOrDefault();
             long timestamp = lastPlayerMove.GetLong("timestamp").GetValueOrDefault();
 
+            Debug.Log("LocalizationManager.instance.cultureInfo: " + LocalizationManager.instance.cultureInfo);
             if (timestamp != 0) {
                 System.DateTime timestampDateTime = new System.DateTime (1970, 1, 1, 0, 0, 0,System.DateTimeKind.Utc).AddMilliseconds(timestamp).ToLocalTime();
                 moveTimeAgo.text = TimeAgo.DateTimeExtensions.TimeAgo(timestampDateTime, LocalizationManager.instance.cultureInfo);                

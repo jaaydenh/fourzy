@@ -16,10 +16,6 @@ namespace Fourzy
         public Text userNameLabel;
         public Image profilePictureImage;
 
-        void Start() {
-            //profilePicture = new Sprite();
-        }
-
         void Awake()
         {
             if (instance == null)
@@ -70,7 +66,7 @@ namespace Fourzy
 
                 if (www.isNetworkError || www.isHttpError)
                 {
-                    Debug.Log(www.error);
+                    Debug.Log("get_fb_picture_error: " + www.error);
                     AnalyticsManager.LogError("get_fb_picture_error", www.error);
                 }
                 else

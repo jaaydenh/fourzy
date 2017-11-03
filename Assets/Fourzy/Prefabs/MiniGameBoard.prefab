@@ -241,6 +241,8 @@ MonoBehaviour:
     type: 2}
   ninetyLeftArrowToken: {fileID: 1467034045519020, guid: 9f8d0f5a262fb4e459b04790f5461829,
     type: 2}
+  bumperToken: {fileID: 1581787741766162, guid: dba4630cc9752451bb282ba3125aa030,
+    type: 2}
   glow: {fileID: 1719585871036234}
   questionMark: {fileID: 1839717546775038}
 --- !u!114 &114512702855691298

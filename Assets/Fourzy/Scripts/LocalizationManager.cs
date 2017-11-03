@@ -38,25 +38,34 @@
         public void LoadLocalizedText(SystemLanguage language)
         {
             string fileName = language.ToString() + ".json";
+            //string fileName = "English" + ".json";
             localizedText = new Dictionary<string, string>();
+
             string filePath = Path.Combine(Application.streamingAssetsPath, fileName);
 
-            if (File.Exists(filePath))
+            string dataAsJson = "";
+
+            if (Application.platform == RuntimePlatform.Android)
             {
-                string dataAsJson = File.ReadAllText(filePath);
-                LocalizationData loadedData = JsonUtility.FromJson<LocalizationData>(dataAsJson);
+                // Android only use WWW to read file
+                WWW reader = new WWW(filePath);
+                while (!reader.isDone) { }
 
-                for (int i = 0; i < loadedData.items.Length; i++)
-                {
-                    localizedText.Add(loadedData.items[i].key, loadedData.items[i].value);
-                }
-
-                Debug.Log("Data loaded, dictionary contains: " + localizedText.Count + " entries");
+                dataAsJson = reader.text;
             }
             else
             {
-                Debug.LogError("Cannot find file!");
+                 dataAsJson = File.ReadAllText(filePath);
             }
+
+            LocalizationData loadedData = JsonUtility.FromJson<LocalizationData>(dataAsJson);
+
+            for (int i = 0; i < loadedData.items.Length; i++)
+            {
+                localizedText.Add(loadedData.items[i].key, loadedData.items[i].value);
+            }
+
+            //Debug.Log("Data loaded, dictionary contains: " + localizedText.Count + " entries");
 
             isReady = true;
         }
@@ -81,8 +90,10 @@
         {
             get
             {
-                return (SystemLanguage)PlayerPrefs.GetInt(STR_LOCALIZATION_KEY, (int)Application.systemLanguage);
-                //return SystemLanguage.Spanish;
+                if ((SystemLanguage) PlayerPrefs.GetInt(STR_LOCALIZATION_KEY, (int)Application.systemLanguage) == SystemLanguage.Spanish) {
+                    return SystemLanguage.Spanish;
+                }
+                return SystemLanguage.English;
             }
             set
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fourzy {
     public class GameBoard {
@@ -121,9 +122,9 @@ namespace Fourzy {
 
         public void ProcessBoardUpdate(IToken token, bool swapPiece) {
             bool pieceInSquare = false;
-
+            //Debug.Log("token: " + token.GetType());
             // process next moving piece at gameBoard.activeMovingPieces[0]
-            if (token.canEnter == true) {
+            if (!token.canEvaluateWithoutEntering) {
                 if (activeMovingPieces.Count > 0) {
                     MovingGamePiece piece = activeMovingPieces[0];
                     Position nextPosition = piece.GetNextPosition();
@@ -141,6 +142,7 @@ namespace Fourzy {
                     
                     if (token.isMoveable) {
                         if (GetCell(nextPosition.column, nextPosition.row) != 0) {
+                            Debug.Log("stick nextposition column: " + nextPosition.column + " row: " + nextPosition.row);
                             pieceInSquare = true;
                             Player player = (Player)GetCell(nextPosition.column, nextPosition.row);
                             Move move = new Move(nextPosition, piece.currentDirection, player);
@@ -173,9 +175,12 @@ namespace Fourzy {
                             switch (piece.currentDirection)
                             {
                                 case Direction.UP:
-                                    if (token.newPieceDirection == Direction.RIGHT) {
+                                    if (token.newPieceDirection == Direction.RIGHT)
+                                    {
                                         piece.currentDirection = Direction.RIGHT;
-                                    } else {
+                                    }
+                                    else if (token.newPieceDirection == Direction.LEFT)
+                                    {
                                         piece.currentDirection = Direction.LEFT;
                                     }
                                     break;
@@ -184,7 +189,7 @@ namespace Fourzy {
                                     {
                                         piece.currentDirection = Direction.LEFT;
                                     }
-                                    else
+                                    else if (token.newPieceDirection == Direction.LEFT)
                                     {
                                         piece.currentDirection = Direction.RIGHT;
                                     }
@@ -194,18 +199,17 @@ namespace Fourzy {
                                     {
                                         piece.currentDirection = Direction.UP;
                                     }
-                                    else
+                                    else if (token.newPieceDirection == Direction.LEFT)
                                     {
                                         piece.currentDirection = Direction.DOWN;
                                     }
                                     break;
-
                                 case Direction.RIGHT:
                                     if (token.newPieceDirection == Direction.RIGHT)
                                     {
                                         piece.currentDirection = Direction.DOWN;
                                     }
-                                    else
+                                    else if (token.newPieceDirection == Direction.LEFT)
                                     {
                                         piece.currentDirection = Direction.UP;
                                     }
@@ -221,6 +225,65 @@ namespace Fourzy {
                     if (pieceInSquare || token.mustStop || piece.isDestroyed) {
                         DisableNextMovingPiece();
                     }
+                }
+            } else if (token.canEvaluateWithoutEntering) {
+                
+                if (activeMovingPieces.Count > 0)
+                {
+                    MovingGamePiece piece = activeMovingPieces[0];
+                    Position nextPosition = piece.GetNextPosition();
+                    Position currentPosition = piece.GetCurrentPosition();
+
+                    if (token.useCurrentDirection)
+                    {
+                        switch (piece.currentDirection)
+                        {
+                            case Direction.UP:
+                                if (token.newPieceDirection == Direction.REVERSE)
+                                {
+                                    piece.currentDirection = Direction.DOWN;
+                                }
+                                break;
+                            case Direction.DOWN:
+                                if (token.newPieceDirection == Direction.REVERSE)
+                                {
+                                    piece.currentDirection = Direction.UP;
+                                }
+                                break;
+                            case Direction.LEFT:
+                                if (token.newPieceDirection == Direction.REVERSE)
+                                {
+                                    piece.currentDirection = Direction.RIGHT;
+                                }
+                                break;
+                            case Direction.RIGHT:
+                                if (token.newPieceDirection == Direction.REVERSE)
+                                {
+                                    piece.currentDirection = Direction.LEFT;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    //if (token.changePieceDirection && token.newPieceDirection == Direction.REVERSE)
+                    //{
+                    //    activeMovingPieces[0].positions.Add(piece.GetNextPosition());
+                    //}
+
+                    //if (piece.player != Player.NONE)
+                    //{
+                    //    SetCell(nextPosition.column, nextPosition.row, piece.player);
+                    //    piece.player = 0;
+                    //}
+                    //else
+                    //{
+                    //    if (swapPiece)
+                    //    {
+                    //        SwapPiecePosition(currentPosition, nextPosition);
+                    //    }
+                    //}
                 }
             } 
         }

@@ -17,16 +17,11 @@ namespace Fourzy
         public bool isMoveableRight = false;
         public bool isMoving;
         public bool didAnimateNextPiece;
+        bool animating;
         public GameManager gameManager;
         GameObject nextPiece = null;
         List<MovingGamePiece> movingPieces;
-        GameBoardView gameBoardView;
-
-        //void OnTriggerEnter2D(Collider2D coll) {
-        //    // if (coll.gameObject.tag == "GamePiece" && !isMoving) {
-        //    //     StartCoroutine(AnimatePiece());
-        //    // }
-        //}
+        public AnimationCurve moveCurve;
 
         private Direction findDirection(Position start, Position end) {
             if (start.column < end.column) {
@@ -44,7 +39,7 @@ namespace Fourzy
 
         public IEnumerator AnimatePiece(List<MovingGamePiece> movingPieces) {
             Debug.Log("Animatepiece movingpieces count: " + movingPieces.Count);
-
+             
             GameManager.instance.animatingGamePieces = true;
             didAnimateNextPiece = false;
 
@@ -57,45 +52,9 @@ namespace Fourzy
             }
 
             Position endPosition = movingGamePiece.positions[movingGamePiece.positions.Count - 1];
+
             nextPiece = GameManager.instance.gameBoardView.gamePieces[endPosition.row, endPosition.column];
 
-            Sequence mySequence = DOTween.Sequence();
-
-            int i = 0;
-            do
-            {
-                Vector3 start = new Vector3(positions[i].column, positions[i].row * -1);
-                Vector3 end = new Vector3(positions[i + 1].column, positions[i + 1].row * -1);
-                //Debug.Log("start column: " + column + " row: " + row * -1);
-                //Debug.Log("end column: " + positions[i].column + " row: " + positions[i].row * -1);
-                //mySequence.Append(transform.DOMove(end, dropTime, false).SetEase(Ease.Linear));
-                float distance = Vector3.Distance(start, end);
-                float t = 0;
-                while (t < 1)
-                {
-                    t += Time.deltaTime * GameManager.instance.moveSpeed;
-                    if (Constants.numRows - distance > 0)
-                    {
-                        t += (Constants.numRows - distance) / 500;
-                    }
-                    transform.position = Vector3.Lerp(start, end, t);
-
-                    yield return null;
-                }
-                start = end;
-                i++;
-            } while (i < positions.Count - 1);
-
-            while (i < positions.Count-1) {
-                yield return null;
-            }
-
-            //StartCoroutine(AfterMovementAnimations(mySequence, movingGamePiece));
-            Direction endMoveDirection = findDirection(positions[positions.Count - 2], positions[positions.Count - 1]);
-            Tweener tweener = AfterMovementAnimations(movingGamePiece, endMoveDirection);
-            if (tweener != null) {
-                yield return tweener.WaitForCompletion();
-            }
             if (movingGamePiece.isDestroyed)
             {
                 // pieceView.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
@@ -107,7 +66,54 @@ namespace Fourzy
                 GameManager.instance.gameBoardView.gamePieces[endPosition.row, endPosition.column] = gameObject;
             }
 
+            animating = true;
+            //Debug.Log("next piece end column: " + endPosition.column + " row: " + endPosition.row);
+            int i = 0;
+            do
+            {
+                Vector3 start = new Vector3(positions[i].column, positions[i].row * -1);
+                Vector3 end = new Vector3(positions[i + 1].column, positions[i + 1].row * -1);
+                float distance = Vector3.Distance(start, end);
+                //Debug.Log("Animation Start x: " + start.x + " y: " + start.y);
+                //Debug.Log("Animation End x: " + end.x + " y: " + end.y);
+
+                float t = 0;
+                while (t < 1)
+                {
+                    //t = t + Time.deltaTime;
+                    //float percent = Mathf.Clamp01(t / GameManager.instance.moveSpeed);
+                    //float curvePercent = moveCurve.Evaluate(percent);
+                    //transform.position = Vector3.LerpUnclamped(start, end, percent);
+
+                    t += Time.deltaTime * GameManager.instance.moveSpeed;
+                    if (Constants.numRows - distance > 0)
+                    {
+                        t += (Constants.numRows - distance) / 500;
+                    }
+                    //transform.position = Vector3.Lerp(start, end, t);
+                    transform.position = Vector3.MoveTowards(start, end, t);
+                    yield return null;
+                }
+
+                transform.position = end;
+
+                start = end;
+                i++;
+            } while (i < positions.Count - 1);
+
+            while (i < positions.Count-1) {
+                yield return null;
+            }
+            animating = false;
+            Direction endMoveDirection = findDirection(positions[positions.Count - 2], positions[positions.Count - 1]);
+            Tweener tweener = AfterMovementAnimations(movingGamePiece, endMoveDirection);
+            if (tweener != null) {
+                yield return tweener.WaitForCompletion();
+            }
+
             GameManager.instance.animatingGamePieces = false;
+
+            GameManager.instance.gameBoardView.PrintGameBoard();
         }
 
         void Update()
@@ -115,14 +121,22 @@ namespace Fourzy
             CircleCollider2D col = gameObject.GetComponent<CircleCollider2D>();
 
             if (nextPiece != null && !didAnimateNextPiece) {
+                GamePiece gamePiece1 = nextPiece.GetComponent<GamePiece>();
+                //Debug.Log("update nextpiece player: " + gamePiece1.player);
                 if (col.IsTouching(nextPiece.GetComponent<CircleCollider2D>()))
                 {
                     didAnimateNextPiece = true;
                     GamePiece gamePiece = nextPiece.GetComponent<GamePiece>();
-                    StartCoroutine(gamePiece.AnimatePiece(movingPieces));
+                    StartCoroutine(CallAnimatePiece());
                 }
             }
+        }
 
+        IEnumerator CallAnimatePiece() {
+            GamePiece gamePiece = nextPiece.GetComponent<GamePiece>();
+            while (gamePiece.animating)
+                yield return null;
+            StartCoroutine(gamePiece.AnimatePiece(movingPieces));
         }
 
         private Tweener AfterMovementAnimations(MovingGamePiece piece, Direction direction) {
