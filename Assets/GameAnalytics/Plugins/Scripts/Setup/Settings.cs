@@ -51,7 +51,10 @@ namespace GameAnalyticsSDK.Setup
         /// The version of the GA Unity Wrapper plugin
         /// </summary>
         [HideInInspector]
-        public static string VERSION = "3.9.3";
+        public static string VERSION = "3.10.3";
+
+        [HideInInspector]
+        public static bool CheckingForUpdates = false;
 
         #endregion
 
@@ -174,11 +177,12 @@ namespace GameAnalyticsSDK.Setup
         public GUIStyle SignupButton;
 
         public bool UseCustomId = false;
-		public bool UsePlayerSettingsBundleVersion = false;
+		public bool UsePlayerSettingsBuildNumber = false;
         public bool SubmitErrors = true;
         public int MaxErrorCount = 10;
         public bool SubmitFpsAverage = true;
         public bool SubmitFpsCritical = true;
+        public bool IncludeGooglePlay = true;
         public int FpsCriticalThreshold = 20;
         public int FpsCirticalSubmitInterval = 1;
 
@@ -242,7 +246,7 @@ namespace GameAnalyticsSDK.Setup
             this.Platforms.Add(platform);
         }
 
-        private static readonly RuntimePlatform[] AvailablePlatforms = new RuntimePlatform[]
+        public static readonly RuntimePlatform[] AvailablePlatforms = new RuntimePlatform[]
         {
             RuntimePlatform.Android,
             RuntimePlatform.IPhonePlayer,

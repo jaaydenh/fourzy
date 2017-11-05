@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0eddd50cb28548f5918a9539a099c0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 6
+  moveSpeed: 7
   gameScreenFadeInTime: 0.5
   challengeInstanceId: 
   challengedUserId: 
@@ -9504,7 +9504,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4c503dcfaa1ff41598ec836b12f69869, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d43c17a0e2a4a4cba93519cd06baac3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
