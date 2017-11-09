@@ -63,6 +63,7 @@ namespace Fourzy
         public GameObject CreateGameScreen;
         public GameObject ErrorPanel;
         public GameObject UIScreen;
+        public GameObject RewardsScreen;
         public Text playerNameLabel;
         public Image playerProfilePicture;
         public Text opponentNameLabel;
@@ -73,10 +74,12 @@ namespace Fourzy
         public Button createGameButton;
         public Button retryPuzzleChallengeButton;
         public Button nextPuzzleChallengeButton;
+        public Button rewardsButton;
+        public Button backButton;
         public GameObject moveHintArea;
         public GameIntroUI gameIntroUI;
         public AlertUI alertUI;
-
+        public GameObject HeaderUI;
 
         [Header("Game State")]
         public bool isMultiplayer = false;
@@ -142,6 +145,20 @@ namespace Fourzy
             }
         }
 
+        public void RewardsButton()
+        {
+            UserInputHandler.inputEnabled = false;
+            RewardsScreen.SetActive(true);
+            rewardsButton.gameObject.SetActive(false);
+            backButton.gameObject.SetActive(false);
+        }
+
+        public void RewardsScreenOkButton() {
+
+            RewardsScreen.SetActive(false);
+            TransitionToGamesListScreen();
+        }
+
         private void TransitionToGameScreen()
         {
             UserInputHandler.inputEnabled = false;
@@ -150,6 +167,7 @@ namespace Fourzy
             gameScreen.SetActive(true);
             FadeGameScreen(1.0f, gameScreenFadeInTime);
             StartCoroutine(WaitToEnableInput());
+            HeaderUI.SetActive(false);
         }
 
         public void TransitionToGamesListScreen()
@@ -163,6 +181,7 @@ namespace Fourzy
 
             ResetGameManagerState();
             ResetUI();
+            HeaderUI.SetActive(true);
         }
 
         private void ResetGameManagerState() {
@@ -723,6 +742,8 @@ namespace Fourzy
             createGameButton.gameObject.SetActive(false);
             nextPuzzleChallengeButton.gameObject.SetActive(false);
             retryPuzzleChallengeButton.gameObject.SetActive(false);
+            rewardsButton.gameObject.SetActive(false);
+            backButton.gameObject.SetActive(true);
             moveHintArea.SetActive(false);
             gameIntroUI.Close();
         }
@@ -766,16 +787,21 @@ namespace Fourzy
                 //         Debug.Log("gameState.isGameOver: " + game.gameState.isGameOver);
                 //         Debug.Log("gameState.isCurrentPlayerTurn: " + game.gameState.isCurrentPlayerTurn);
                 //     }
-                if (activeGame != null)
-                {
-                    nextGameButton.gameObject.SetActive(true);
-                    createGameButton.gameObject.SetActive(false);
-                }
-                else
-                {
-                    createGameButton.gameObject.SetActive(true);
-                    nextGameButton.gameObject.SetActive(false);
-                }
+
+                //if (gameState.isGameOver) {
+                //    rewardsButton.gameObject.SetActive(true);
+                //} else {
+                    if (activeGame != null)
+                    {
+                        nextGameButton.gameObject.SetActive(true);
+                        createGameButton.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        createGameButton.gameObject.SetActive(true);
+                        nextGameButton.gameObject.SetActive(false);
+                    }
+                //}
                 //}
             }
             else
@@ -791,6 +817,7 @@ namespace Fourzy
                 } else {
                     if (gameState.isGameOver) {
                         rematchButton.gameObject.SetActive(true);
+                        //rewardsButton.gameObject.SetActive(true);
                     }
                 }
             }

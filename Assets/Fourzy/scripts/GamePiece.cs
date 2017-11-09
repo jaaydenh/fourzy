@@ -90,8 +90,8 @@ namespace Fourzy
                     {
                         t += (Constants.numRows - distance) / 500;
                     }
-                    //transform.position = Vector3.Lerp(start, end, t);
-                    transform.position = Vector3.MoveTowards(start, end, t);
+                    transform.position = Vector3.Lerp(start, end, t);
+                    //transform.position = Vector3.MoveTowards(start, end, t);
                     yield return null;
                 }
 

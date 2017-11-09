@@ -41,9 +41,9 @@ namespace Fourzy
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("tokenBoardId", tokenBoard.id);
             customAttributes.Add("tokenBoardName", tokenBoard.name);
-            customAttributes.Add("winner", player);
-            Answers.LogCustom("game_over_" + gameType, customAttributes);
+            customAttributes.Add("winner", (int)player);
             AnalyticsEvent.GameOver("game_over_" + gameType, customAttributes);
+            Answers.LogCustom("game_over_" + gameType, customAttributes);
         }
     }
 }

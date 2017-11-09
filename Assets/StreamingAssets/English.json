@@ -32,6 +32,8 @@
     {"key":"waiting_opponent_text","value":"Waiting for Opponent"},
     {"key":"puzzle_challenge_win_instructions_singular","value":"Win in %1 move!"},
     {"key":"puzzle_challenge_win_instructions_plural","value":"Win in %1 moves!"},
-    {"key":"not_your_turn","value":"Umm... not your turn"}
+    {"key":"not_your_turn","value":"Umm... not your turn"},
+    {"key":"rewards_button","value":"Rewards"},
+    {"key":"ok_button","value":"OK"}
     ]
 }

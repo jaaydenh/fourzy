@@ -12,9 +12,11 @@ namespace Fourzy
         public static UserManager instance;
         public string userName;
         public string userId;
+        public long coins;
         public Sprite profilePicture;
         public Text userNameLabel;
         public Image profilePictureImage;
+        public Text coinsLabel;
 
         void Awake()
         {
@@ -37,16 +39,18 @@ namespace Fourzy
         public void UpdateInformation()
         {
             new AccountDetailsRequest().Send((response) =>
-                {
-                    UpdateGUI(response.DisplayName, response.UserId, response.ExternalIds.GetString("FB").ToString());
+                {    
+                UpdateGUI(response.DisplayName, response.UserId, response.ExternalIds.GetString("FB").ToString(), response.Currency1);
                 });
         }
 
-        public void UpdateGUI(string name, string uid, string fbId)
+        public void UpdateGUI(string name, string uid, string fbId, long? coins)
         {
             userName = name;
             userNameLabel.text = userName;
             userId = uid;
+            this.coins = coins.GetValueOrDefault(0);
+            coinsLabel.text = this.coins.ToString();
 
             if (fbId != null) {
                 StartCoroutine(UserManager.instance.GetFBPicture(fbId, (sprite) =>

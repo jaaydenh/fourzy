@@ -86,7 +86,7 @@ namespace Fourzy
                 .SetDisplayName(CreateNewName())
                 .Send((response) => {
                     if (!response.HasErrors) {
-                        UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null);
+                    UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null, null);
                         ChallengeManager.instance.GetChallenges();
                         LeaderboardManager.instance.GetLeaderboard();
                         //Debug.Log("Device Authenticated...UserId: " + response.UserId);
