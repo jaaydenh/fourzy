@@ -105,6 +105,20 @@ namespace Fourzy {
             return boardArray;
         }
 
+        public int PlayerPieceCount(Player player) {
+            int pieceCount = 0;
+            for (int row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < numColumns; col++)
+                {
+                    if (board[row,col] == (int)player) {
+                        pieceCount++;
+                    }
+                }
+            }
+            return pieceCount;
+        }
+
         public void SwapPiecePosition(Position oldPos, Position newPos) {
             //Debug.Log("OLDPIECE: " + oldPiece + " oldpos.col: " + oldPos.column + " oldpos row: " + oldPos.row);
             //Debug.Log("NEWPIECE: " + oldPiece + " newPos.col: " + newPos.column + " newPos row: " + newPos.row);

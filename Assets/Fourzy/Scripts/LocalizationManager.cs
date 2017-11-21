@@ -93,6 +93,10 @@
                 if ((SystemLanguage) PlayerPrefs.GetInt(STR_LOCALIZATION_KEY, (int)Application.systemLanguage) == SystemLanguage.Spanish) {
                     return SystemLanguage.Spanish;
                 }
+                if ((SystemLanguage)PlayerPrefs.GetInt(STR_LOCALIZATION_KEY, (int)Application.systemLanguage) == SystemLanguage.Thai)
+                {
+                    return SystemLanguage.Thai;
+                }
                 return SystemLanguage.English;
             }
             set

@@ -23,7 +23,7 @@
     {"key":"play_button","value":"Play"},
     {"key":"social_tab_header","value":"Challenge Friends"},
     {"key":"facebook_button","value":"Connect with Facebook"},
-    {"key":"rankings_tab_header","value":"Wins / Losses"},
+    {"key":"rankings_tab_header","value":"Weekly Coins Earned"},
     {"key":"all_challenges_completed","value":"All Challenges Completed. More coming soon..."},
     {"key":"draw_text","value":"Draw"},
     {"key":"won_suffix","value":" Won!"},
@@ -34,6 +34,7 @@
     {"key":"puzzle_challenge_win_instructions_plural","value":"Win in %1 moves!"},
     {"key":"not_your_turn","value":"Umm... not your turn"},
     {"key":"rewards_button","value":"Rewards"},
-    {"key":"ok_button","value":"OK"}
+    {"key":"ok_button","value":"OK"},
+    {"key":"expired_text","value":"Game Expired"}
     ]
 }

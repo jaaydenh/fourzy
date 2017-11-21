@@ -23,7 +23,7 @@
     {"key":"play_button","value":"Jugar"},
     {"key":"social_tab_header","value":"Reta a tus amigos"},
     {"key":"facebook_button","value":"Conéctate a Facebook"},
-    {"key":"rankings_tab_header","value":"Victorias / Derrotas"},
+    {"key":"rankings_tab_header","value":"Monedas Semanales"},
     {"key":"all_challenges_completed","value":"Retos finalizados. Mas retos pronto..."},
     {"key":"draw_text","value":"Empate"},
     {"key":"won_suffix","value":" Gano!"},
@@ -34,6 +34,7 @@
     {"key":"puzzle_challenge_win_instructions_plural","value":"Gana en %1 movimientos!"},
     {"key":"not_your_turn","value":"hmm... No es tu turno"},
     {"key":"rewards_button","value":"Rewards es"},
-    {"key":"ok_button","value":"OK"}
+    {"key":"ok_button","value":"OK"},
+    {"key":"expired_text","value":"Game Expired"}
     ]
 }

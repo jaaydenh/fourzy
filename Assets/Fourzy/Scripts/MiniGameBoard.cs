@@ -20,6 +20,8 @@ namespace Fourzy {
         public GameObject ninetyRightArrowToken;
         public GameObject ninetyLeftArrowToken;
         public GameObject bumperToken;
+        public GameObject coinToken;
+
         public GameObject glow;
         public GameObject questionMark;
         private GameObject tokens;
@@ -79,6 +81,9 @@ namespace Fourzy {
                             break;
                         case Token.BUMPER:
                             go = Instantiate(bumperToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
+                            break;
+                        case Token.COIN:
+                            go = Instantiate(coinToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
                             break;
                         default:
                             break;

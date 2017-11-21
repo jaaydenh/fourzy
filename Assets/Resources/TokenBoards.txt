@@ -1377,7 +1377,7 @@
         {
             "ID": "110801",
             "Name": "Center Bounce",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData":         [6,0,0,8,8,0,0,6,
                                   0,0,0,8,8,0,0,0,
                                   0,0,0,0,0,0,0,0,
@@ -1391,7 +1391,7 @@
         {
             "ID": "110802",
             "Name": "Center Bounce",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,10,10,0,0,0,
@@ -1446,7 +1446,7 @@
 		,
         {
             "ID": "110806",
-            "Name": "Center Pattern",
+            "Name": "Sticky Spaced Rows",
             "Enabled": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,

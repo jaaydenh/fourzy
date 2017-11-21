@@ -26,17 +26,22 @@ MonoBehaviour:
   CustomArea: 
   gameKey:
   - 8b41e7ccac905ec4cd0841321fb844ae
+  - c323b3814a06a9d7e2cf99115c62957a
   secretKey:
   - a826b76b706d43a098d69661d28e41310ef64a0c
+  - e87b1fab913f7033beafcd8063c202faa43cc1c8
   Build:
+  - 1.3
   - 1.3
   SelectedPlatformStudio:
   - SuperMove Games
+  - SuperMove Games
   SelectedPlatformGame:
   - Fourzy
-  SelectedPlatformGameID: 5d840000
-  SelectedStudio: 01000000
-  SelectedGame: 02000000
+  - Fourzy - Android
+  SelectedPlatformGameID: 5d84000070840000
+  SelectedStudio: 0100000001000000
+  SelectedGame: 0200000001000000
   NewVersion: 3.10.2
   Changes: '- Android manifest file fix for Android SDK Tools v26.0.2 (android)
 
@@ -64,7 +69,7 @@ MonoBehaviour:
   ResourceItemTypes: []
   ResourceCurrencies: []
   LastCreatedGamePlatform: -1
-  Platforms: 08000000
+  Platforms: 080000000b000000
   CurrentInspectorState: 1
   ClosedHints: 
   DisplayHints: 0
@@ -92,7 +97,7 @@ MonoBehaviour:
   IncludeGooglePlay: 1
   FpsCriticalThreshold: 20
   FpsCirticalSubmitInterval: 1
-  PlatformFoldOut: 01
+  PlatformFoldOut: 0101
   CustomDimensions01FoldOut: 1
   CustomDimensions02FoldOut: 1
   CustomDimensions03FoldOut: 1

@@ -410,7 +410,6 @@ namespace Fourzy {
 
     public class BumperToken : IToken
     {
-
         public int Row { get; set; }
         public int Column { get; set; }
         public bool canEnter { get; set; }
@@ -436,6 +435,39 @@ namespace Fourzy {
             useCurrentDirection = true;
             newPieceDirection = Direction.REVERSE;
             tokenType = Token.BUMPER;
+        }
+
+        public void UpdateBoard(GameBoard board, bool swapPiece)
+        {
+            board.ProcessBoardUpdate(this, swapPiece);
+        }
+    }
+
+    public class CoinToken : IToken
+    {
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public bool canEnter { get; set; }
+        public bool canEvaluateWithoutEntering { get; set; }
+        public bool canEndMove { get; set; }
+        public bool isMoveable { get; set; }
+        public bool mustStop { get; set; }
+        public float chanceDestroyOnEnd { get; set; }
+        public bool changePieceDirection { get; set; }
+        public bool useCurrentDirection { get; set; }
+        public Direction newPieceDirection { get; set; }
+        public Token tokenType { get; set; }
+
+        public CoinToken()
+        {
+            canEnter = true;
+            canEndMove = true;
+            isMoveable = false;
+            mustStop = false;
+            chanceDestroyOnEnd = 0.0f;
+            changePieceDirection = false;
+            newPieceDirection = Direction.NONE;
+            tokenType = Token.COIN;
         }
 
         public void UpdateBoard(GameBoard board, bool swapPiece)

@@ -36,6 +36,7 @@ namespace Fourzy
         public Texture2D defaultProfilePicture;
 
         public GameObject UIScreen;
+        public int daysUntilChallengeExpires = 14;
         private bool gettingChallenges = false;
         private bool pulledToRefresh = false;
         //private int yourMoveGames = 0;
@@ -128,7 +129,7 @@ namespace Fourzy
         }
 
         public void SetViewedCompletedGame(string challengeInstanceId) {
-            Debug.Log("SetViewedCompletedGame: UserManager.instance.userId: " + UserManager.instance.userId);
+            //Debug.Log("SetViewedCompletedGame: UserManager.instance.userId: " + UserManager.instance.userId);
             new LogEventRequest().SetEventKey("viewedGame")
                 .SetEventAttribute("challengeInstanceId", challengeInstanceId)
                 .SetEventAttribute("player", UserManager.instance.userId)
@@ -187,7 +188,7 @@ namespace Fourzy
             //we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
             new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
             .SetUsersToChallenge(gsId) //We supply the userIds of who we wish to challenge
-            .SetEndTime(System.DateTime.Today.AddDays(60)) //We set a date and time the challenge will end on
+            .SetEndTime(System.DateTime.Today.AddDays(daysUntilChallengeExpires)) //We set a date and time the challenge will end on
             .SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
             .SetScriptData(data)
             .SetDurable(true)
@@ -282,7 +283,7 @@ namespace Fourzy
                 .SetAutoStartJoinedChallengeOnMaxPlayers(true)
                 .SetMaxPlayers(2)
                 .SetMinPlayers(1)
-                .SetEndTime(System.DateTime.Today.AddDays(60)) //We set a date and time the challenge will end on
+                .SetEndTime(System.DateTime.Today.AddDays(daysUntilChallengeExpires)) //We set a date and time the challenge will end on
                 //.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
                 .SetScriptData(data)
                 .SetDurable(true)
@@ -373,11 +374,13 @@ namespace Fourzy
             GameManager.instance.playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
                 new Vector2(0.5f, 0.5f));
+            GameManager.instance.playerPiece.sprite = GameManager.instance.playerOneSprite;
             GameManager.instance.opponentNameLabel.text = "Red Player";
             GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture, 
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
                 new Vector2(0.5f, 0.5f));
-            
+            GameManager.instance.opponentPiece.sprite = GameManager.instance.playerTwoSprite;
+
             GameManager.instance.UpdatePlayersStatusView();
             GameManager.instance.ResetUI();
             GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("pnp_button"), true);
@@ -512,6 +515,7 @@ namespace Fourzy
             GameManager.instance.isNewRandomChallenge = true;
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.challengeInstanceId = null;
+            GameManager.instance.isCurrentPlayer_PlayerOne = true;
             GameManager.instance.opponentNameLabel.text = "Waiting for Opponent";
             GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
                 new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
@@ -525,6 +529,8 @@ namespace Fourzy
                     new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
                     new Vector2(0.5f, 0.5f));
             }
+
+            GameManager.instance.ResetUI();
 
             GameManager.instance.UpdatePlayersStatusView();
             GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("random_opponent_button"), true);
@@ -688,10 +694,10 @@ namespace Fourzy
                                     activeGame.winnerName = gsChallenge.ScriptData.GetString("winnerName");
                                     activeGame.winnerId = gsChallenge.ScriptData.GetString("winnerId");
 
-                                    //if (activeGame.winnerId == null && challenge.State == "COMPLETE") {
-                                        //activeGame.isExpired = true;
+                                    if (activeGame.winnerId == null && gsChallenge.State == "COMPLETE") {
+                                        activeGame.isExpired = true;
                                         //Debug.Log("WinnerName: " + activeGame.winnerName);
-                                    //}
+                                    }
 
                                     // List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
                                     // if (boardData != null) {

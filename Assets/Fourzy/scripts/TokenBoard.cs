@@ -121,6 +121,10 @@ namespace Fourzy {
                     {
                         tokens[row, col] = new BumperToken();
                     }
+                    else if (token == (int)Token.COIN)
+                    {
+                        tokens[row, col] = new CoinToken();
+                    }
                 }
             }
         }

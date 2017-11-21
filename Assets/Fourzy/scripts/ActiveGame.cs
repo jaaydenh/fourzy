@@ -161,9 +161,10 @@ namespace Fourzy
             GameManager.instance.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
-
+            GameManager.instance.isExpired = isExpired;
             GameManager.instance.opponentProfilePicture.sprite = opponentProfilePictureSprite;
             GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
+            GameManager.instance.playerNameLabel.text = UserManager.instance.userName;
             if (UserManager.instance.profilePicture) {
                 GameManager.instance.playerProfilePicture.sprite = UserManager.instance.profilePicture;
             } else {
@@ -179,10 +180,10 @@ namespace Fourzy
             GameManager.instance.ResetUI();
             GameManager.instance.SetupGame("", "");
 
-            if (!viewedResult && challengeState == "COMPLETE") {
-                ChallengeManager.instance.SetViewedCompletedGame(challengeId);
-                viewedResult = true;
-            }
+            //if (!viewedResult && challengeState == "COMPLETE") {
+            //    ChallengeManager.instance.SetViewedCompletedGame(challengeId);
+            //    viewedResult = true;
+            //}
 
             // Triggers GameManager TransitionToGameScreen
             if (OnActiveGame != null)

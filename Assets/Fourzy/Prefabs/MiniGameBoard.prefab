@@ -243,6 +243,7 @@ MonoBehaviour:
     type: 2}
   bumperToken: {fileID: 1581787741766162, guid: dba4630cc9752451bb282ba3125aa030,
     type: 2}
+  coinToken: {fileID: 1629414548793332, guid: aa92dd3c5d20a41b1ad805cb1fccb30d, type: 2}
   glow: {fileID: 1719585871036234}
   questionMark: {fileID: 1839717546775038}
 --- !u!114 &114512702855691298

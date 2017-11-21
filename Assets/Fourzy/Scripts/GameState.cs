@@ -320,6 +320,11 @@ namespace Fourzy
             return true;
         }
 
+        public int PlayerPieceCount(Player player)
+        {
+            return gameBoard.PlayerPieceCount(player);
+        }
+
         public void PrintGameState(string name) {
             string log = name + "\n";
 
