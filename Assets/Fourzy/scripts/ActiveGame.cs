@@ -162,6 +162,7 @@ namespace Fourzy
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.isExpired = isExpired;
+            GameManager.instance.viewedResult = viewedResult;
             GameManager.instance.opponentProfilePicture.sprite = opponentProfilePictureSprite;
             GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
             GameManager.instance.playerNameLabel.text = UserManager.instance.userName;

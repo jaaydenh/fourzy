@@ -48,8 +48,8 @@ namespace Fourzy
         public Sprite playerTwoSprite;
         private string bluePlayerWonText = "Blue Player Won!";
         private string redPlayerWonText = "Red Player Won!";
-        private string bluePlayerMoveText = "Blue Player's Move";
-        private string redPlayerMoveText = "Red Player's Move";
+        //private string bluePlayerMoveText = "Blue Player's Move";
+        //private string redPlayerMoveText = "Red Player's Move";
         public string winner;
         public string opponentFacebookId;
 
@@ -64,7 +64,6 @@ namespace Fourzy
         public GameObject CreateGameScreen;
         public GameObject ErrorPanel;
         public GameObject UIScreen;
-        //public GameObject RewardsScreen;
         public Text playerNameLabel;
         public Image playerProfilePicture;
         public Image playerPiece;
@@ -104,13 +103,16 @@ namespace Fourzy
         private bool isPuzzleChallengeCompleted = false;
         private bool isPuzzleChallengePassed = false;
         public bool isExpired;
+        public bool viewedResult;
 
         //int spacing = 1; //100
         //int offset = 0; //4
         public AudioClip clipMove;
         public AudioClip clipWin;
+        public AudioClip clipChest;
         private AudioSource audioMove;
         private AudioSource audioWin;
+        private AudioSource audioChest;
         public CreateGame createGameScript;
         public AiPlayer aiPlayer;
         public GameObject moveArrowLeft;
@@ -179,15 +181,18 @@ namespace Fourzy
                 currentPlayer = Player.TWO;
             }
             Debug.Log("currentPlayer: " + currentPlayer);
+            //audioChest.Play();
             rewardScreen.Open(isCurrentPlayerWinner, gameState.PlayerPieceCount(currentPlayer));
-            rewardsButton.gameObject.SetActive(false);
-            backButton.gameObject.SetActive(false);
+            //rewardsButton.gameObject.SetActive(false);
+            gameInfo.Close();
+            //backButton.gameObject.SetActive(false);
         }
 
         public void RewardsScreenOkButton() {
             //RewardsScreen.SetActive(false);
             rewardScreen.Close();
-            TransitionToGamesListScreen();
+
+            //TransitionToGamesListScreen();
         }
 
         private void TransitionToGameScreen()
@@ -506,6 +511,7 @@ namespace Fourzy
 
             audioMove = AddAudio(clipMove, false, false, 1);
             audioWin = AddAudio(clipWin, false, false, 1);
+            audioChest = AddAudio(clipChest, false, false, 1);
 
             replayedLastMove = false;
         }
@@ -824,7 +830,7 @@ namespace Fourzy
             createGameButton.gameObject.SetActive(false);
             nextPuzzleChallengeButton.gameObject.SetActive(false);
             retryPuzzleChallengeButton.gameObject.SetActive(false);
-            rewardsButton.gameObject.SetActive(false);
+            //rewardsButton.gameObject.SetActive(false);
             backButton.gameObject.SetActive(true);
             moveHintArea.SetActive(false);
             gameIntroUI.Close();
@@ -870,11 +876,11 @@ namespace Fourzy
                 //         Debug.Log("gameState.isCurrentPlayerTurn: " + game.gameState.isCurrentPlayerTurn);
                 //     }
 
-                if (gameState.isGameOver && !isExpired) {
-                    createGameButton.gameObject.SetActive(false);
-                    nextGameButton.gameObject.SetActive(false);
-                    rewardsButton.gameObject.SetActive(true);
-                } else {
+                //if (gameState.isGameOver && !isExpired) {
+                //    createGameButton.gameObject.SetActive(false);
+                //    nextGameButton.gameObject.SetActive(false);
+                //    rewardsButton.gameObject.SetActive(true);
+                //} else {
                     if (activeGame != null)
                     {
                         nextGameButton.gameObject.SetActive(true);
@@ -885,7 +891,7 @@ namespace Fourzy
                         createGameButton.gameObject.SetActive(true);
                         nextGameButton.gameObject.SetActive(false);
                     }
-                }
+                //}
                 //}
             }
             else
@@ -1211,8 +1217,8 @@ namespace Fourzy
                                 if (response.HasErrors)
                                 {
                                     Debug.Log("***** ChallengeEventRequest failed: " + response.Errors.JSON);
-                                    gameInfo.Open("There was a problem making your move.Please try again.", Color.red, true);
-                                    //gameStatusText.text = "There was a problem making your move. Please try again.";
+                                    //gameInfo.Open("There was a problem making your move.Please try again.", Color.red, true);
+                                    gameStatusText.text = "There was a problem making your move. Please try again.";
                                 }
                                 else
                                 {
@@ -1461,12 +1467,29 @@ namespace Fourzy
 
         public void DisplayGameOverView()
         {
-            if (isExpired) {
+            bool showRewardButton = false;
+
+            if (isExpired)
+            {
                 VisitedGameResults();
-                gameInfo.Open(LocalizationManager.instance.GetLocalizedValue("expired_text"), Color.white, false);
+                gameInfo.Open(LocalizationManager.instance.GetLocalizedValue("expired_text"), Color.white, false, showRewardButton);
                 return;
             }
 
+            //var activeGame = activeGames
+            //    .Where(t => t.challengeId == challengeInstanceId).FirstOrDefault();
+            //if (activeGame != null)
+            //{
+            //    if (!activeGame.viewedResult && gameState.isGameOver)
+            //    {
+            //        showRewardButton = true;
+            //    }
+            //}
+            if (!viewedResult) {
+                showRewardButton = true;
+            }
+            Debug.Log("viewedResult: " + viewedResult);
+            Debug.Log("showRewardButton: " + showRewardButton);
             Color winnerTextColor = gameState.winner == Player.ONE ? bluePlayerColor : redPlayerColor;
 
             if (gameState.winner == Player.ONE)
@@ -1503,7 +1526,7 @@ namespace Fourzy
             if (gameState.winner == Player.NONE || gameState.winner == Player.ALL)
             {
                 if (!isPuzzleChallenge) {
-                    gameInfo.Open(LocalizationManager.instance.GetLocalizedValue("draw_text"), Color.white, false);    
+                    gameInfo.Open(LocalizationManager.instance.GetLocalizedValue("draw_text"), Color.white, false, showRewardButton);    
                 }
 
                 if (isMultiplayer) {
@@ -1517,23 +1540,23 @@ namespace Fourzy
                 if (winner != null && winner.Length > 0)
                 {
                     //gameStatusText.text = winner + LocalizationManager.instance.GetLocalizedValue("won_suffix");
-                    gameInfo.Open(winner + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true);
+                    gameInfo.Open(winner + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                 }
                 else
                 {                    
                     if (isCurrentPlayer_PlayerOne && gameState.winner == Player.ONE)
                     {
                         audioWin.Play();
-                        gameInfo.Open(UserManager.instance.userName + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true);
+                        gameInfo.Open(UserManager.instance.userName + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
                     else if (!isCurrentPlayer_PlayerOne && gameState.winner == Player.TWO)
                     {
                         audioWin.Play();
-                        gameInfo.Open(UserManager.instance.userName + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true);
+                        gameInfo.Open(UserManager.instance.userName + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
                     else
                     {
-                        gameInfo.Open(opponentNameLabel.text + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true);
+                        gameInfo.Open(opponentNameLabel.text + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
 
                     //gameStatusText.color = gameState.winner == Player.ONE ? bluePlayerColor : redPlayerColor;
@@ -1547,7 +1570,7 @@ namespace Fourzy
                 if (!isPuzzleChallenge) {
                     AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
                     string winnerText = gameState.winner == Player.ONE ? bluePlayerWonText : redPlayerWonText;
-                    gameInfo.Open(winnerText, winnerTextColor, true);
+                    gameInfo.Open(winnerText, winnerTextColor, true, true);
                 }
             }
         }
