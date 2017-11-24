@@ -57,7 +57,7 @@ namespace Fourzy
             GameManager.instance.opponentNameLabel.text = userName;
             GameManager.instance.opponentProfilePicture.sprite = profilePicture.sprite;
 
-            GameManager.instance.UpdatePlayersStatusView();
+            GameManager.instance.UpdatePlayerUI();
 
             UIScreen.SetActive(false);
 

@@ -645,6 +645,8 @@ MonoBehaviour:
   opponentPieceUI: {fileID: 1480785228}
   rewardScreen: {fileID: 1489172839}
   gameInfo: {fileID: 718064535}
+  defaultProfilePicture: {fileID: 2800000, guid: e59dd586d917d4490bfbceec7e12ca4f,
+    type: 3}
   isMultiplayer: 0
   isNewChallenge: 0
   isNewRandomChallenge: 0
@@ -656,6 +658,7 @@ MonoBehaviour:
   isAnimating: 0
   animatingGamePieces: 0
   isExpired: 0
+  viewedResult: 0
   clipMove: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
   clipWin: {fileID: 8300000, guid: 2cda08f34c076490b8ec095a4f5d5256, type: 3}
   clipChest: {fileID: 8300000, guid: 84d5b31e59d0f43f29dfa2a0e8ea4d0d, type: 3}
@@ -809,8 +812,6 @@ MonoBehaviour:
   NoMovesPanel: {fileID: 1755481388}
   loadingSpinner: {fileID: 176489462}
   gamesListContainer: {fileID: 381019440}
-  defaultProfilePicture: {fileID: 2800000, guid: e59dd586d917d4490bfbceec7e12ca4f,
-    type: 3}
   UIScreen: {fileID: 204049811}
   daysUntilChallengeExpires: 14
 --- !u!114 &159214252
@@ -13022,13 +13023,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2052989938}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3fe984997ad302409b2ad4e270c1c8b, type: 3}
+  m_Script: {fileID: 11500000, guid: eea08375da243a441b88d1e6b0713006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab: {fileID: 174738, guid: edd52c6e9d75d420199836641a1473b2, type: 2}
-  Preload: 74
-  Capacity: 74
   Notification: 0
+  Preload: 5
+  Capacity: 80
+  Recycle: 0
+  Persist: 0
+  Stamp: 0
+  Warnings: 1
+  spawnedClones: []
+  despawnedClones: []
+  delays: []
 --- !u!1 &2070770103
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ using GameSparks.Api.Messages;
 using GameSparks.Core;
 using System.Linq;
 using DG.Tweening;
+using Lean.Pool;
 //using UnityEngine.SceneManagement;
 using System.Text.RegularExpressions;
 
@@ -48,8 +49,6 @@ namespace Fourzy
         public Sprite playerTwoSprite;
         private string bluePlayerWonText = "Blue Player Won!";
         private string redPlayerWonText = "Red Player Won!";
-        //private string bluePlayerMoveText = "Blue Player's Move";
-        //private string redPlayerMoveText = "Red Player's Move";
         public string winner;
         public string opponentFacebookId;
 
@@ -86,6 +85,7 @@ namespace Fourzy
         public GameObject opponentPieceUI;
         public Rewards rewardScreen;
         public GameInfo gameInfo;
+        public Texture2D defaultProfilePicture;
 
         [Header("Game State")]
         public bool isMultiplayer = false;
@@ -190,7 +190,8 @@ namespace Fourzy
 
         public void RewardsScreenOkButton() {
             //RewardsScreen.SetActive(false);
-            rewardScreen.Close();
+            //rewardScreen.Close();
+            rewardScreen.gameObject.SetActive(false);
 
             //TransitionToGamesListScreen();
         }
@@ -478,7 +479,7 @@ namespace Fourzy
 
             rematchButton.gameObject.SetActive(false);
             gameScreen.SetActive(false);
-            playerNameLabel.text = UserManager.instance.userName;
+            //playerNameLabel.text = UserManager.instance.userName;
 
             if (tokens == null)
             {
@@ -746,34 +747,58 @@ namespace Fourzy
             }
         }
 
-        public void UpdatePlayersStatusView()
+        public void InitPlayerUI(string opponentName = "", Sprite opponentProfileSprite = null)
         {
-            //Debug.Log("UpdatePlayersStatusView:isPlayerOneTurn: " + isPlayerOneTurn);
-            //Debug.Log("UpdatePlayersStatusView:isCurrentPlayerTurn: " + isCurrentPlayerTurn);
-            AnimatePlayerPieces();
-            //if (isMultiplayer)
-            //{
-            //    if (gameState.isCurrentPlayerTurn)
-            //    {
-            //        gameStatusText.text = LocalizationManager.instance.GetLocalizedValue("your_move_text");
-            //        gameStatusText.color = gameState.isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
-            //    }
-            //    else
-            //    {
-            //        gameStatusText.text = LocalizationManager.instance.GetLocalizedValue("their_move_text");
-            //        gameStatusText.color = gameState.isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
-            //    }
-            //}
-            //else
-            //{
-            //    gameStatusText.text = gameState.isPlayerOneTurn ? bluePlayerMoveText : redPlayerMoveText;
-            //    gameStatusText.color = gameState.isPlayerOneTurn ? bluePlayerColor : redPlayerColor;
-            //}
+            if (isMultiplayer) {
+                playerNameLabel.text = UserManager.instance.userName;
+                if (UserManager.instance.profilePicture)
+                {
+                    playerProfilePicture.sprite = UserManager.instance.profilePicture;
+                }
+                else
+                {
+                    playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
+                        new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
+                        new Vector2(0.5f, 0.5f));
+                }
+
+                if (opponentName != "") {
+                    opponentNameLabel.text = opponentName;
+                } else {
+                    opponentNameLabel.text = LocalizationManager.instance.GetLocalizedValue("waiting_opponent_text");
+                }
+
+                if (opponentProfileSprite != null) {
+                    opponentProfilePicture.sprite = opponentProfileSprite;
+                } else {
+                    opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
+                        new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
+                        new Vector2(0.5f, 0.5f));
+                }
+            } else {
+                playerNameLabel.text = "Blue Player";
+                playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
+                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
+                    new Vector2(0.5f, 0.5f));
+                playerPiece.sprite = playerOneSprite;
+
+                opponentNameLabel.text = "Red Player";
+                opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
+                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
+                    new Vector2(0.5f, 0.5f));
+                opponentPiece.sprite = playerTwoSprite;
+            }
+
         }
 
-        public void AnimatePlayerPieces() {
-            //Debug.Log("isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
-            //Debug.Log("isPlayerOneTurn: " + gameState.isPlayerOneTurn);
+        public void UpdatePlayerUI()
+        {
+            AnimatePlayerPieceUI();
+        }
+
+        public void AnimatePlayerPieceUI() {
+            Debug.Log("isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
+            Debug.Log("isPlayerOneTurn: " + gameState.isPlayerOneTurn);
             float animationSpeed = 0.8f;
             if ((gameState.isPlayerOneTurn && isCurrentPlayer_PlayerOne) || (!gameState.isPlayerOneTurn && !isCurrentPlayer_PlayerOne)) {
                 //Animate current player piece to center
@@ -816,8 +841,6 @@ namespace Fourzy
                 opponentPiece.sprite = playerOneSprite;
             }
             gameInfo.Close();
-            //playerNameLabel.color = isCurrentPlayer_PlayerOne ? bluePlayerColor : redPlayerColor;
-            //opponentNameLabel.color = isCurrentPlayer_PlayerOne ? redPlayerColor : bluePlayerColor;
             RectTransform pprt = playerPieceUI.GetComponent<RectTransform>();
             pprt.anchoredPosition = new Vector2(175, -83);
             pprt.localScale = new Vector3(1, 1, 1);
@@ -830,7 +853,6 @@ namespace Fourzy
             createGameButton.gameObject.SetActive(false);
             nextPuzzleChallengeButton.gameObject.SetActive(false);
             retryPuzzleChallengeButton.gameObject.SetActive(false);
-            //rewardsButton.gameObject.SetActive(false);
             backButton.gameObject.SetActive(true);
             moveHintArea.SetActive(false);
             gameIntroUI.Close();
@@ -851,7 +873,6 @@ namespace Fourzy
             if (activeGame != null)
             {
                 activeGame.OpenGame();
-                //Answers.LogCustom("next_game");
                 AnalyticsManager.LogCustom("next_game");
             }
         }
@@ -907,7 +928,6 @@ namespace Fourzy
                 } else {
                     if (gameState.isGameOver) {
                         rematchButton.gameObject.SetActive(true);
-                        //rewardsButton.gameObject.SetActive(true);
                     }
                 }
             }
@@ -915,14 +935,13 @@ namespace Fourzy
 
         public void ResetGamePiecesAndTokens()
         {
-            //Debug.Log("ResetGamePiecesAndTokens");
             if (gamePieces.transform.childCount > 0)
             {
                 for (int i = gamePieces.transform.childCount - 1; i >= 0; i--)
                 {
                     Transform piece = gamePieces.transform.GetChild(i);
                     piece.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    Lean.LeanPool.Despawn(piece.gameObject);
+                    LeanPool.Despawn(piece.gameObject);
                 }
             }
 
@@ -944,7 +963,6 @@ namespace Fourzy
         //     for(int row = 0; row < numRows; row++)
         //     {
         //         GameObject g;
-
         //         if (col == numColumns - 1 && row > 0 && row < numRows - 1) {
         //             g = Instantiate(moveArrowLeft, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
         //             g.transform.parent = gamePieces.transform;
@@ -989,7 +1007,7 @@ namespace Fourzy
             //new Vector3(Mathf.FloorToInt(posX),
                 //Mathf.FloorToInt(posY), 10),
                 //Quaternion.identity, gamePieces.transform) as GameObject;
-            GameObject gamePiece = Lean.LeanPool.Spawn(gamePiecePrefab, new Vector3(posX, posY, 10),
+            GameObject gamePiece = LeanPool.Spawn(gamePiecePrefab, new Vector3(posX, posY, 10),
                 Quaternion.identity, gamePieces.transform) as GameObject;
 
             //gamePiece.transform.position = new Vector3(Mathf.FloorToInt(posX),
@@ -1032,14 +1050,13 @@ namespace Fourzy
             gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
 
             CreateTokenViews();
-            UpdatePlayersStatusView();
+            UpdatePlayerUI();
             DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("pnp_button"), true);
             rematchButton.gameObject.SetActive(false);
             EnableTokenAudio();
             FadeGameScreen(1.0f, gameScreenFadeInTime);
             isLoading = false;
 
-            //Answers.LogCustom("rematch_pnp_game");
             AnalyticsManager.LogCustom("rematch_pnp_game");
         }
 
@@ -1063,7 +1080,7 @@ namespace Fourzy
 
                 isCurrentPlayer_PlayerOne = true;
                 isPuzzleChallenge = true;
-                UpdatePlayersStatusView();
+                UpdatePlayerUI();
 
                 string subtitle = "";
                 if (puzzleChallenge.MoveGoal > 1)
@@ -1108,7 +1125,7 @@ namespace Fourzy
 
                 isCurrentPlayer_PlayerOne = true;
                 isPuzzleChallenge = true;
-                UpdatePlayersStatusView();
+                UpdatePlayerUI();
 
                 string subtitle = "";
                 if (puzzleChallenge.MoveGoal > 1) {
@@ -1121,7 +1138,7 @@ namespace Fourzy
 
                 nextPuzzleChallengeButton.gameObject.SetActive(false);
 
-                GameManager.instance.EnableTokenAudio();
+                EnableTokenAudio();
                 FadeGameScreen(1.0f, gameScreenFadeInTime);
                 isLoading = false;
                 Dictionary<String, object> customAttributes = new Dictionary<String, object>();
@@ -1138,9 +1155,12 @@ namespace Fourzy
 
         private void ProcessPlayerInput(Vector3 mousePosition)
         {
+            //Debug.Log("ProcessPlayerInput");
             if (isLoading || isLoadingUI || isDropping || gameState.isGameOver || animatingGamePieces)
             {
+                Debug.Log("returned in process player input");
                 return;
+
             }
 
             Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
@@ -1430,7 +1450,7 @@ namespace Fourzy
                     }
                     //UpdatePlayersStatusView();
                 }
-                UpdatePlayersStatusView();
+                UpdatePlayerUI();
             }
         }
 
@@ -1570,7 +1590,7 @@ namespace Fourzy
                 if (!isPuzzleChallenge) {
                     AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
                     string winnerText = gameState.winner == Player.ONE ? bluePlayerWonText : redPlayerWonText;
-                    gameInfo.Open(winnerText, winnerTextColor, true, true);
+                    gameInfo.Open(winnerText, winnerTextColor, true, false);
                 }
             }
         }

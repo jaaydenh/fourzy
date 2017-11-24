@@ -59,7 +59,7 @@ namespace Fourzy
             GameManager.instance.opponentNameLabel.text = userName;
             GameManager.instance.opponentProfilePicture.sprite = profilePicture.sprite;
 
-            GameManager.instance.UpdatePlayersStatusView();
+            GameManager.instance.UpdatePlayerUI();
             GameManager.instance.ResetUI();
             GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("friend_challenge_text"), true);
 

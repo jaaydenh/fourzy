@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Lean
 {
@@ -9,72 +8,108 @@ namespace Lean
 	public static class LeanClassPool<T>
 		where T : class
 	{
+		// Store cache of all despanwed classes here, in a list so we can search it
 		private static List<T> cache = new List<T>();
-		
+
+		// This will either return a pooled class instance, or null
 		public static T Spawn()
 		{
-			return Spawn(null, null);
-		}
-		
-		public static T Spawn(System.Action<T> onSpawn)
-		{
-			return Spawn(null, onSpawn);
-		}
-		
-		public static T Spawn(System.Predicate<T> match)
-		{
-			return Spawn(match, null);
-		}
-		
-		// This will either return a pooled class instance, or null
-		// You can also specify a match for the exact class instance you're looking for
-		// You can also specify an action to run on the class instance (e.g. if you need to reset it)
-		// NOTE: Because it can return null, you should use it like this: Lean.LeanClassPool<Whatever>.Spawn(...) ?? new Whatever(...)
-		public static T Spawn(System.Predicate<T> match, System.Action<T> onSpawn)
-		{
-			// Get the matched index, or the last index
-			var index = match != null ? cache.FindIndex(match) : cache.Count - 1;
-			
-			// Was one found?
-			if (index >= 0)
+			var count = cache.Count;
+
+			if (count > 0)
 			{
-				// Get instance and remove it from cache
+				var index    = count - 1;
 				var instance = cache[index];
-				
+
 				cache.RemoveAt(index);
-				
-				// Run action?
-				if (onSpawn != null)
-				{
-					onSpawn(instance);
-				}
-				
+
 				return instance;
 			}
-			
-			// Return null?
+
 			return null;
 		}
-		
+
+		// This will either return a pooled class instance, or null
+		// If an instance it found, onSpawn will be called with it
+		// NOTE: onSpawn is expected to not be null
+		public static T Spawn(System.Action<T> onSpawn)
+		{
+			var count = cache.Count;
+
+			if (count > 0)
+			{
+				var index    = count - 1;
+				var instance = cache[index];
+
+				cache.RemoveAt(index);
+
+				onSpawn(instance);
+
+				return instance;
+			}
+
+			return null;
+		}
+
+		// This will either return a pooled class instance, or null
+		// All pooled classes will be checked with match to see if they qualify
+		// NOTE: match is expected to not be null
+		public static T Spawn(System.Predicate<T> match)
+		{
+			var index = cache.FindIndex(match);
+
+			if (index >= 0)
+			{
+				var instance = cache[index];
+
+				cache.RemoveAt(index);
+
+				return instance;
+			}
+
+			return null;
+		}
+
+		// This will either return a pooled class instance, or null
+		// All pooled classes will be checked with match to see if they qualify
+		// If an instance it found, onSpawn will be called with it
+		// NOTE: match is expected to not be null
+		// NOTE: onSpawn is expected to not be null
+		public static T Spawn(System.Predicate<T> match, System.Action<T> onSpawn)
+		{
+			var index = cache.FindIndex(match);
+
+			if (index >= 0)
+			{
+				var instance = cache[index];
+
+				cache.RemoveAt(index);
+
+				onSpawn(instance);
+
+				return instance;
+			}
+
+			return null;
+		}
+
+		// This will pool the passed class instance
 		public static void Despawn(T instance)
 		{
-			Despawn(instance, null);
-		}
-		
-		// This allows you to desapwn a class instance
-		// You can also specify an action to run on the class instance (e.g. if you need to reset it)
-		public static void Despawn(T instance, System.Action<T> onDespawn)
-		{
-			// Does it exist?
 			if (instance != null)
 			{
-				// Run action on it?
-				if (onDespawn != null)
-				{
-					onDespawn(instance);
-				}
-				
-				// Add to cache
+				cache.Add(instance);
+			}
+		}
+
+		// This will pool the passed class instance
+		// If you need to perform despawning code then you can do that via onDespawn
+		public static void Despawn(T instance, System.Action<T> onDespawn)
+		{
+			if (instance != null)
+			{
+				onDespawn(instance);
+
 				cache.Add(instance);
 			}
 		}

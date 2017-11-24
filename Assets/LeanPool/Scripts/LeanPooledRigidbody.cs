@@ -1,24 +1,22 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-namespace Lean
+namespace Lean.Pool
 {
-	// This component will automatically reset a Rigidbody when it gets spawned/despawned
+	// This component allows you to reset a Rigidbody's velocity via Messages or via Poolable
 	[RequireComponent(typeof(Rigidbody))]
 	public class LeanPooledRigidbody : MonoBehaviour
 	{
-		protected virtual void OnSpawn()
-		{
-			// Do nothing
-		}
-		
-		protected virtual void OnDespawn()
+		public void ResetVelocity()
 		{
 			var rigidbody = GetComponent<Rigidbody>();
-			
-			// Reset velocities
+
 			rigidbody.velocity        = Vector3.zero;
 			rigidbody.angularVelocity = Vector3.zero;
+		}
+
+		protected virtual void OnDespawn()
+		{
+			ResetVelocity();
 		}
 	}
 }

@@ -66,7 +66,7 @@ namespace Fourzy
 
                 string fbID = playerFacebookIds[opponentIndex];
                 if (fbID != null) {
-                    StartCoroutine(UserManager.instance.GetFBPicture(playerFacebookIds[opponentIndex], (sprite)=>
+                    StartCoroutine(UserManager.instance.GetFBPicture(fbID, (sprite)=>
                         {
                             opponentProfilePictureSprite = sprite;
                             opponentProfilePicture.sprite = sprite;
@@ -163,28 +163,15 @@ namespace Fourzy
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.isExpired = isExpired;
             GameManager.instance.viewedResult = viewedResult;
-            GameManager.instance.opponentProfilePicture.sprite = opponentProfilePictureSprite;
-            GameManager.instance.opponentNameLabel.text = opponentNameLabel.text;
-            GameManager.instance.playerNameLabel.text = UserManager.instance.userName;
-            if (UserManager.instance.profilePicture) {
-                GameManager.instance.playerProfilePicture.sprite = UserManager.instance.profilePicture;
-            } else {
-                GameManager.instance.playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
-                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
-                    new Vector2(0.5f, 0.5f));
-            }
             // -------------------------------------------------------------------------------------------
 
             GameManager.instance.winner = winnerName;
 
             GameManager.instance.ResetGamePiecesAndTokens();
             GameManager.instance.ResetUI();
+            GameManager.instance.InitPlayerUI(opponentNameLabel.text, opponentProfilePictureSprite);
+            GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame("", "");
-
-            //if (!viewedResult && challengeState == "COMPLETE") {
-            //    ChallengeManager.instance.SetViewedCompletedGame(challengeId);
-            //    viewedResult = true;
-            //}
 
             // Triggers GameManager TransitionToGameScreen
             if (OnActiveGame != null)
