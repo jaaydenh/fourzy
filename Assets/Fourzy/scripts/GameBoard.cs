@@ -156,7 +156,7 @@ namespace Fourzy {
                     
                     if (token.isMoveable) {
                         if (GetCell(nextPosition.column, nextPosition.row) != 0) {
-                            Debug.Log("stick nextposition column: " + nextPosition.column + " row: " + nextPosition.row);
+                            //Debug.Log("stick nextposition column: " + nextPosition.column + " row: " + nextPosition.row);
                             pieceInSquare = true;
                             Player player = (Player)GetCell(nextPosition.column, nextPosition.row);
                             Move move = new Move(nextPosition, piece.currentDirection, player);

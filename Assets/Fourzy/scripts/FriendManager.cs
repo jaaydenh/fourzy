@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GameSparks.Api.Requests;
 using Facebook.Unity;
+using UnityEngine.UI;
 
 namespace Fourzy
 {
@@ -12,11 +13,8 @@ namespace Fourzy
         public GameObject friendsList;
         public GameObject noFriendsText;
         public List<GameObject> friends = new List<GameObject>();
-
-        void Start()
-        {
-            //instance = this;
-        }
+        public Image onlineIndicator;
+        private bool isOnline;
 
         void Awake()
         {
@@ -36,6 +34,8 @@ namespace Fourzy
 
         public void GetFriends()
         {
+            isOnline = false;
+
             if (FB.IsLoggedIn) {
                 //Every time we call get friends we'll refresh the list
                 for (int i = 0; i < friends.Count; i++)
@@ -61,8 +61,11 @@ namespace Fourzy
                             friendEntry.id = friend.Id;
                             friendEntry.isOnline = friend.Online.Value;
                             friendEntry.facebookId = friend.ExternalIds.GetString("FB");
-
                             friendEntry.transform.localScale = new Vector3(1f,1f,1f);
+
+                            if (friend.Online.Value) {
+                                isOnline = true;
+                            }
 
                             //Add the gameObject to the list of friends
                             friends.Add(go);
@@ -73,6 +76,8 @@ namespace Fourzy
                         } else {
                             noFriendsText.SetActive(true);
                         }
+
+                        onlineIndicator.color = isOnline ? Color.green : Color.gray;
                     });
             }
         }

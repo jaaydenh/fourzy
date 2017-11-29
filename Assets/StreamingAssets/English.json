@@ -6,7 +6,7 @@
     {"key":"new_game_button","value":"New Game"},
     {"key":"random_opponent_button","value":"Random Opponent"},
     {"key":"pnp_button","value":"Pass and Play"},
-    {"key":"training_button","value":"Training Challenges"},
+    {"key":"training_button","value":"Puzzle Challenge"},
     {"key":"games_tab","value":"Games"},
     {"key":"social_tab","value":"Social"},
     {"key":"rankings_tab","value":"Rankings"},
@@ -35,6 +35,10 @@
     {"key":"not_your_turn","value":"Umm... not your turn"},
     {"key":"rewards_button","value":"Rewards"},
     {"key":"ok_button","value":"OK"},
-    {"key":"expired_text","value":"Game Expired"}
+    {"key":"expired_text","value":"Game Expired"},
+    {"key":"leaderboard_challenge_text","value":"Leaderboard Challenge"},
+    {"key":"play_game_button","value":"Play Game"},
+    {"key":"ai_button","value":"Training Bot"},
+    {"key":"ai_challenge_text","value":"Bot Challenge"}
     ]
 }

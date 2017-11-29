@@ -38,7 +38,7 @@ namespace Fourzy
         }
 
         public IEnumerator AnimatePiece(List<MovingGamePiece> movingPieces) {
-            Debug.Log("Animatepiece movingpieces count: " + movingPieces.Count);
+            //Debug.Log("Animatepiece movingpieces count: " + movingPieces.Count);
              
             GameManager.instance.animatingGamePieces = true;
             didAnimateNextPiece = false;
@@ -113,7 +113,7 @@ namespace Fourzy
 
             GameManager.instance.animatingGamePieces = false;
 
-            GameManager.instance.gameBoardView.PrintGameBoard();
+            //GameManager.instance.gameBoardView.PrintGameBoard();
         }
 
         void Update()

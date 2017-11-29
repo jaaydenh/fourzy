@@ -82,6 +82,11 @@ namespace Fourzy
             gameBoard.completedMovingPieces.Clear();
         }
 
+        public GameState Clone()
+        {
+            return new GameState(numRows, numColumns, isPlayerOneTurn, isCurrentPlayerTurn, tokenBoard, gameBoard.ToArray(), isGameOver, moveList);
+        }
+
         private void InitIsMovable() {
             for (int i = 0; i < numColumns * numRows; i++)
             {
@@ -90,6 +95,32 @@ namespace Fourzy
                 isMoveableLeft[i] = 1;
                 isMoveableRight[i] = 1;
             }
+        }
+
+        public List<Move> GetPossibleMoves()
+        {
+            Player curPlayer = isPlayerOneTurn ? Player.ONE : Player.TWO;
+
+            List<Move> moves = new List<Move>();
+            for (int r = 1; r < numRows - 1; r++)
+            {
+                //from left to right
+                Move m1 = new Move(new Position(-1, r), Direction.RIGHT, curPlayer);
+                if (CanMove(m1.GetNextPosition(), tokenBoard.tokens)) { moves.Add(m1); }
+                //from right to left
+                Move m2 = new Move(new Position(numRows, r), Direction.LEFT, curPlayer);
+                if (CanMove(m2.GetNextPosition(), tokenBoard.tokens)) { moves.Add(m2); }
+            }
+            for (int c = 1; c < numColumns - 1; c++)
+            {
+                //from up going down
+                Move m1 = new Move(new Position(c, -1), Direction.DOWN, curPlayer);
+                if (CanMove(m1.GetNextPosition(), tokenBoard.tokens)) { moves.Add(m1); }
+                //from down going up
+                Move m2 = new Move(new Position(c, numRows), Direction.UP, curPlayer);
+                if (CanMove(m2.GetNextPosition(), tokenBoard.tokens)) { moves.Add(m2); }
+            }
+            return moves;
         }
 
         public List<MovingGamePiece> MovePiece(Move move, bool isReplay) {

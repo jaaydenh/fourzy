@@ -35,6 +35,10 @@
     {"key":"not_your_turn","value":"hmm... No es tu turno"},
     {"key":"rewards_button","value":"Rewards es"},
     {"key":"ok_button","value":"OK"},
-    {"key":"expired_text","value":"Game Expired"}
+    {"key":"expired_text","value":"Game Expired"},
+    {"key":"leaderboard_challenge_text","value":"Leaderboard Challenge"},
+    {"key":"play_game_button","value":"Play Game"},
+    {"key":"ai_button","value":"Training Bot"},
+    {"key":"ai_challenge_text","value":"Bot Challenge"}
     ]
 }

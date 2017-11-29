@@ -11,27 +11,73 @@ namespace Fourzy
         public bool isCurrentPlayer_PlayerOne;
         public bool isExpired;
         public bool didViewResult;
-        public string opponentFBId;
+        //public string opponentFBId = "";
+        public PlayerData playerData;
+        public ChallengeState challengeState;
+        public ChallengeType challengeType;
 
-        private string opponentName;
+        public string opponentName;
         private string winner;
         private string winnerUserId;
-        private Sprite opponentProfilePictureSprite;
+        public Sprite opponentProfilePictureSprite;
 
-        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, string opponentFBId)
+        public delegate void GameActive();
+        public static event GameActive OnActiveGame;
+
+        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, PlayerData playerData, ChallengeState challengeState, ChallengeType challengeType)
         {
             this.challengeId = challengeId;
             this.gameState = gameState;
             this.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;
             this.isExpired = isExpired;
             this.didViewResult = didViewResult;
-            this.opponentFBId = opponentFBId;
+            this.playerData = playerData;
+            this.challengeState = challengeState;
+            this.challengeType = challengeType;
 
             InitGame();
         }
 
         private void InitGame() {
-            
+
+            opponentName = playerData.opponentName;
+
+            if (playerData.opponentFBId != "")
+            {
+                CoroutineHandler.StartStaticCoroutine(UserManager.instance.GetFBPicture(playerData.opponentFBId, (sprite) =>
+                {
+                    opponentProfilePictureSprite = sprite;
+                }));
+            }
+        }
+
+        public void OpenGame()
+        {
+            Debug.Log("Open Active Game: challengeInstanceId: " + challengeId);
+
+            GameManager.instance.isLoading = true;
+            GameManager.instance.gameState = gameState;
+
+            // All these properties of the Game will remain the same for the entire lifecycle of the game
+            GameManager.instance.challengeInstanceId = challengeId;
+            GameManager.instance.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;
+            GameManager.instance.isMultiplayer = true;
+            GameManager.instance.isNewChallenge = false;
+            GameManager.instance.isExpired = isExpired;
+            GameManager.instance.didViewResult = didViewResult;
+            // -------------------------------------------------------------------------------------------
+
+            GameManager.instance.winner = winner;
+
+            GameManager.instance.ResetGamePiecesAndTokens();
+            GameManager.instance.ResetUI();
+            GameManager.instance.InitPlayerUI(opponentName, opponentProfilePictureSprite);
+            //GameManager.instance.UpdatePlayerUI();
+            GameManager.instance.SetupGame("", "");
+
+            // Triggers GameManager TransitionToGameScreen
+            if (OnActiveGame != null)
+                OnActiveGame();
         }
     }
 }

@@ -42,38 +42,39 @@ namespace Fourzy
         //Open game gets called OnClick of the play button
         public void OpenNewFriendChallengeGame()
         {
-            GameManager.instance.ResetGamePiecesAndTokens();
+            GameManager.instance.TransitionToGameOptionsScreen(GameType.FRIEND, id, userName, profilePicture);
 
-            TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
+            //GameManager.instance.ResetGamePiecesAndTokens();
+            //TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
 
-            //If we initiated the challenge, we get to be player 1
-            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
-            GameManager.instance.gameState = gameState;
+            ////If we initiated the challenge, we get to be player 1
+            //GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
+            //GameManager.instance.gameState = gameState;
 
-            GameManager.instance.CreateTokenViews();
+            //GameManager.instance.CreateTokenViews();
 
-            GameManager.instance.isMultiplayer = true;
-            GameManager.instance.isNewChallenge = true;
-            GameManager.instance.challengedUserId = id;
-            GameManager.instance.challengeInstanceId = null;
-            GameManager.instance.opponentNameLabel.text = userName;
-            GameManager.instance.opponentProfilePicture.sprite = profilePicture.sprite;
+            //GameManager.instance.isMultiplayer = true;
+            //GameManager.instance.isNewChallenge = true;
+            //GameManager.instance.challengedUserId = id;
+            //GameManager.instance.challengeInstanceId = null;
+            //GameManager.instance.opponentNameLabel.text = userName;
+            //GameManager.instance.opponentProfilePicture.sprite = profilePicture.sprite;
 
-            GameManager.instance.UpdatePlayerUI();
-            GameManager.instance.ResetUI();
-            GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("friend_challenge_text"), true);
+            //GameManager.instance.UpdatePlayerUI();
+            //GameManager.instance.ResetUI();
+            //GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("friend_challenge_text"), true);
 
-            UIScreen.SetActive(false);
+            //UIScreen.SetActive(false);
 
-            if (OnActiveGame != null)
-                OnActiveGame();
+            //if (OnActiveGame != null)
+            //    OnActiveGame();
 
-            GameManager.instance.EnableTokenAudio();
+            ////GameManager.instance.EnableTokenAudio();
 
-            Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-            customAttributes.Add("TokenBoardId", tokenBoard.id);
-            customAttributes.Add("TokenBoardName", tokenBoard.name);
-            AnalyticsManager.LogCustom("open_new_friend_challenge", customAttributes);
+            //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+            //customAttributes.Add("TokenBoardId", tokenBoard.id);
+            //customAttributes.Add("TokenBoardName", tokenBoard.name);
+            //AnalyticsManager.LogCustom("open_new_friend_challenge", customAttributes);
         }
     }
 }

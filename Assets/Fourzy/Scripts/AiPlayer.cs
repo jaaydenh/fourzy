@@ -4,330 +4,395 @@ using UnityEngine;
 using System.Linq;
 
 namespace Fourzy {
+    
     public class AiPlayer {
 
-        string profile = "default";
+        AIPlayerSkill skill; 
 
-        public AiPlayer(string profile) {
-            this.profile = profile;
+        public AiPlayer(AIPlayerSkill skill) {
+            this.skill = skill;
         }
 
-        public static List<Move> PotentialMoves()
+        public IEnumerator MakeMove(Move playerMove)
         {
-            List<Move> moves = new List<Move>();
-            for (int r = 0; r < Constants.numRows; r++)
-            {
-                Move m1 = new Move (r, Direction.LEFT);
-                Move m2 = new Move (r, Direction.RIGHT);
-                moves.Add (m1);
-                moves.Add (m2);
+            if (skill == AIPlayerSkill.LEVEL1) {
+                MakeMoveLevel1(playerMove);
+            } else if (skill == AIPlayerSkill.LEVEL2) {
+                MakeMoveLevel2(playerMove);
             }
 
-            for (int c = 0; c < Constants.numColumns; c++)
-            {
-                Move m1 = new Move (c, Direction.UP);
-                Move m2 = new Move (c, Direction.DOWN);
-                moves.Add (m1);
-                moves.Add (m2);
-            }
-
-            return moves;
+            yield return null;
         }
 
-        public Move GetRandomMove(List<Move> availableMoves)
+        public void MakeMoveLevel1(Move playermove)
         {
-            //Move move = new Move(1, Direction.DOWN);
+            GameState gameState = GameManager.instance.gameState;
 
-            int move = Random.Range(0, availableMoves.Count-1);
+            List<Move> possibleMoves = gameState.GetPossibleMoves();
 
-            return availableMoves[move];
+            Debug.Log(string.Format("There are {0} Possible Moves", possibleMoves.Count));
 
-            //            int movePosition;
-            //            Move move;
-            //            Direction direction;
-            //            bool canMove = true;
-            //            do
-            //            {
-            //                movePosition = Random.Range(0, 7);
-            //                //int dir = Random.Range(0,3);
-            //                move = new Move(movePosition, Direction.DOWN);
-            //                MovingGamePiece piece = new MovingGamePiece(move.position, Direction.DOWN);
-            //                if (GameManager.instance.CanMoveInPosition(new Position(0,0), piece.GetNextPosition(), Direction.DOWN)) {
-            //                    canMove = true;
-            //                }
-            //            } while (!canMove);
-        }
+            Dictionary<Move, GameState> moveInfo = new Dictionary<Move, GameState>();
+            Debug.Log(string.Format("testing before loop"));
 
-        public int GetOpponent(int player) {
-            if (player == 1) {
-                return 2;
-            }
-            return 1;
-        }
-
-        // gameboard, tokenboard, player 1-2 turn, num rows, num cols
-        public Move GetMove(GameState gameState, int player)  {
-            //Debug.Log("GET MOVE");
-            Move move;
-            Dictionary<Move, AIGameState> goodMoves = new Dictionary<Move, AIGameState>();
-
-            AIGameState start = new AIGameState(gameState, player);
-             
-            //We will eventuall have a potential library here.
-            //  When we have it, we will look to see if the current state is in the library
-            //  and return the matching move
-
-            //List<AIGameState> lookAhead = new List<AIGameState> ();
-            Dictionary<Move, AIGameState> lookAhead = new Dictionary<Move, AIGameState>();
-
-            //for each move in start position
-            // add ai states to lookahead
-            // for each state in lookahead
-            //    for each move in state
-            //       make move and add to lookAhead
-            // this will give us a combination of all possible states from current player
-            //  and opponent
-
-            //RULE: IF you can make a winning move, make it!
-            Debug.Log("GetAvailableMoves: " + start.GetAvailableMoves().Count);
-            foreach (Move m in start.GetAvailableMoves()) {
-                //start.gameBoard.PrintBoard ();
-
-                AIGameState state = start.Copy();
-                state.MakeMove(m);
-
-                if (state.isWinForPlayer == player) {
-                    Debug.Log("MAKE FIRST WINNING MOVE for PLAYER=" + player);
-                    //state.gameBoard.PrintBoard ();
-
-                    return m;
-                }
-                lookAhead.Add(m, state);
-            }
-
-            //RULE: If the opponent can make a winning move, don't make a move that sets that up
-            foreach (var x in lookAhead)
+            bool found_move = false;
+            foreach (Move AiMove in possibleMoves)
             {
-                //Debug.Log("LOOKAHEAD NUM: " + x);
-                bool willLose = false;
+                Debug.Log("test1");
+                Debug.Log(string.Format("Looking at a move {0}:{1}", AiMove.position.column, AiMove.position.row));
 
-                AIGameState state = x.Value;
-                Move parentMove = x.Key;
+                bool AddMoveToList = true;
+                GameState testGameState = gameState.Clone();
+                testGameState.MovePiece(AiMove, false);
+                Debug.Log(string.Format("WINNING MOVE?{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                //Can I make a Move that Wins?
 
-                foreach (var m in lookAhead.Keys)
+                if (testGameState.isGameOver && testGameState.winner == Player.TWO)
                 {
-                    AIGameState newState = state.Copy();
-                    newState.MakeMove(m);
+                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                    found_move = true;
+                    GameManager.instance.CallMovePiece(AiMove, false, true);
+                    //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
+                    break;
+                }
+                else
+                {
+                    List<Move> PlayerPossibleMoves = testGameState.GetPossibleMoves();
+                    // Can My Opponent Make a Move that Wins?
+                    foreach (Move pm1 in PlayerPossibleMoves)
+                    {
+                        GameState pm1TestGameState = testGameState.Clone();
+                        pm1TestGameState.MovePiece(pm1, false);
 
-                    if (newState.isWinForPlayer == GetOpponent(player)) {
-                        Debug.Log("WILL LOSE is true");
-                        willLose = true;
+                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == Player.ONE)
+                        {
+
+                            AddMoveToList = false;
+                            break;
+                        }
+
+                    }
+                    if (AddMoveToList == true)
+                    {
+                        moveInfo.Add(AiMove, testGameState);
+                    }
+                }
+            }
+            if (!found_move)
+            {
+                // Make a Random move among the moves left.
+                if (moveInfo.Count > 0)
+                {
+                    Debug.Log(string.Format("make a random move."));
+
+                    Dictionary<Move, int> WeightedMove = new Dictionary<Move, int>();
+                    int total_weight = 0;
+                    foreach (Move x in moveInfo.Keys)
+                    {
+
+                        switch (x.direction)
+                        {
+                            case Direction.DOWN:
+                            case Direction.UP:
+                                if (new[] { 1, 6 }.Contains(x.position.column))
+                                {
+                                    WeightedMove.Add(x, 2);
+                                    total_weight += 2;
+                                }
+                                else if (new[] { 2, 5 }.Contains(x.position.column))
+                                {
+                                    WeightedMove.Add(x, 16);
+                                    total_weight += 16;
+                                }
+                                else if (new[] { 3, 4 }.Contains(x.position.column))
+                                {
+                                    WeightedMove.Add(x, 30);
+                                    total_weight += 30;
+                                }
+                                break;
+                            case Direction.LEFT:
+                            case Direction.RIGHT:
+                                if (new[] { 1, 6 }.Contains(x.position.row))
+                                {
+                                    WeightedMove.Add(x, 2);
+                                    total_weight += 2;
+                                }
+                                else if (new[] { 2, 5 }.Contains(x.position.row))
+                                {
+                                    WeightedMove.Add(x, 16);
+                                    total_weight += 16;
+                                }
+                                else if (new[] { 3, 4 }.Contains(x.position.row))
+                                {
+                                    WeightedMove.Add(x, 30);
+                                    total_weight += 30;
+                                }
+                                break;
+                        }
+                    }
+
+                    System.Random rnd = new System.Random();
+                    int random_move_weight = rnd.Next(0, total_weight);
+
+                    Debug.Log(string.Format("making random move: {0}:{1}", total_weight, random_move_weight));
+                    foreach (Move nm in WeightedMove.Keys)
+                    {
+                        random_move_weight -= WeightedMove[nm];
+                        if (random_move_weight <= 0)
+                        {
+                            GameManager.instance.CallMovePiece(nm, false, true);
+                            //StartCoroutine(MovePiece(nm, false, updatePlayer));
+                            break;
+                        }
+                    }
+
+                    //Simple Random Move
+                    //System.Random rnd = new System.Random();
+                    //int move_id = rnd.Next(0, moveInfo.Count);
+                    //Move TheAIMove = moveInfo.ElementAt(move_id).Key;
+
+                    //StartCoroutine(MovePiece(TheAIMove, false, updatePlayer));
+                }
+
+                else
+                {
+                    Debug.Log(string.Format("no good moves. make any move."));
+
+                    //No good moves.
+                    //Make a move from any of the possible moves.
+                    System.Random rnd = new System.Random();
+                    int move_id = rnd.Next(0, moveInfo.Count);
+                    Move TheAIMove = possibleMoves.ElementAt(move_id);
+                    GameManager.instance.CallMovePiece(TheAIMove, false, true);
+                }
+            }
+        }
+
+        public void MakeMoveLevel2(Move playerMove)
+        {
+            GameState gameState = GameManager.instance.gameState;
+
+            List<Move> possibleMoves = gameState.GetPossibleMoves();
+            Debug.Log(string.Format("There are {0} Possible Moves", possibleMoves.Count));
+
+            Dictionary<Move, int> WeightedMove = new Dictionary<Move, int>();
+
+            Move AiMove = null;
+            foreach (Move x in possibleMoves)
+            {
+                Debug.Log(string.Format("PossibleMove:{0}:{1},{2}", x.direction, x.position.row, x.position.column));
+                //Can I make a Move that Wins?
+                GameState testGameState = gameState.Clone();
+                testGameState.MovePiece(x, false);
+                if (testGameState.isGameOver && testGameState.winner == Player.TWO)
+                {
+                    AiMove = x;
+                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                    GameManager.instance.CallMovePiece(AiMove, false, true);
+                    //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
+                    break;
+                }
+
+                int match_bonus = 0;
+                if (playerMove.direction == x.direction && playerMove.position == x.position) { match_bonus += 10; }
+
+                switch (x.direction)
+                {
+                    case Direction.DOWN:
+                    case Direction.UP:
+                        if (new[] { 1, 6 }.Contains(x.position.column))
+                        {
+                            WeightedMove.Add(x, 2 + match_bonus);
+                        }
+                        else if (new[] { 2, 5 }.Contains(x.position.column))
+                        {
+                            WeightedMove.Add(x, 16 + match_bonus);
+                        }
+                        else if (new[] { 3, 4 }.Contains(x.position.column))
+                        {
+                            WeightedMove.Add(x, 30 + match_bonus);
+                        }
                         break;
+                    case Direction.LEFT:
+                    case Direction.RIGHT:
+                        if (new[] { 1, 6 }.Contains(x.position.row))
+                        {
+                            WeightedMove.Add(x, 2 + match_bonus);
+                        }
+                        else if (new[] { 2, 5 }.Contains(x.position.row))
+                        {
+                            WeightedMove.Add(x, 16 + match_bonus);
+                        }
+                        else if (new[] { 3, 4 }.Contains(x.position.row))
+                        {
+                            WeightedMove.Add(x, 30 + match_bonus);
+
+                        }
+                        break;
+                }
+            }
+
+            Move BestMove = new Move(new Position(0, 0), Direction.NONE, 0);
+            int BestMoveCount = 0;
+            //LOOP THROUGH A WEIGHTED LIST OF MOVES.
+            //  CHECK EACH MOVE AND IF OK, MAKE IT.
+            if (AiMove == null)
+            {
+                while (WeightedMove.Count > 0)
+                {
+                    //get a random move.
+                    int total_weight = 0;
+                    foreach (Move wm in WeightedMove.Keys)
+                    {
+                        total_weight += WeightedMove[wm];
+                    }
+
+                    System.Random rnd = new System.Random();
+                    int random_move_weight = rnd.Next(0, total_weight);
+
+                    foreach (Move nm in WeightedMove.Keys)
+                    {
+                        random_move_weight -= WeightedMove[nm];
+                        if (random_move_weight <= 0)
+                        {
+                            AiMove = nm;
+                            WeightedMove.Remove(nm);
+                            break;
+                        }
+                    }
+
+                    Debug.Log(string.Format("Looking at a move {0}:{1}", AiMove.position.column, AiMove.position.row));
+
+                    bool MakeThisMove = false;
+                    GameState testGameState = gameState.Clone();
+                    testGameState.MovePiece(AiMove, false);
+
+                    List<Move> PlayerPossibleMoves = testGameState.GetPossibleMoves();
+                    // Can My Opponent Make a Move that Wins?
+
+                    int player_win_count = 0;
+                    int move_ok_count = 0;
+                    foreach (Move pm1 in PlayerPossibleMoves)
+                    {
+                        GameState pm1TestGameState = testGameState.Clone();
+                        pm1TestGameState.MovePiece(pm1, false);
+
+                        //If I make this move, the player can win. 
+                        // Don't make this move.
+                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == Player.ONE)
+                        {
+                            Debug.Log("Don't Make Move.  Opponent Can Win In One Move!");
+                            break;
+                        }
+
+                        //if this case is true, opponent can force me to win on his turn.
+                        //   this is only good if all moves like this.
+                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == Player.TWO)
+                        {
+                            player_win_count++;
+                            move_ok_count++;
+
+                            if (player_win_count == PlayerPossibleMoves.Count)
+                            {
+                                Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                                GameManager.instance.CallMovePiece(AiMove, false, true);
+                                //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
+                                break;
+                            }
+                            continue;
+                        }
+
+                        //For each player move can I make a move that wins?
+                        //  or is at least ok?
+                        bool found_ok_move = false;
+                        List<Move> PlayerMoves = pm1TestGameState.GetPossibleMoves();
+                        foreach (Move aim2 in PlayerMoves)
+                        {
+                            GameState Aim2TestGameState = pm1TestGameState.Clone();
+                            Aim2TestGameState.MovePiece(aim2, false);
+
+                            if (!Aim2TestGameState.isGameOver)
+                            {
+
+                                //check if I make this move if a player can respond and win in the second move.
+                                bool player_can_win = false;
+                                foreach (Move Pm2 in Aim2TestGameState.GetPossibleMoves())
+                                {
+                                    GameState Pm2TestGameState = Aim2TestGameState.Clone();
+                                    Pm2TestGameState.MovePiece(Pm2, false);
+
+                                    if (Pm2TestGameState.isGameOver && Pm2TestGameState.winner == Player.ONE)
+                                    {
+                                        player_can_win = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!player_can_win)
+                                {
+                                    found_ok_move = true;
+                                }
+                            }
+                            else
+                            {
+                                if (Aim2TestGameState.winner == Player.TWO)
+                                {
+                                    found_ok_move = true;
+                                }
+                            }
+                        }
+                        Debug.Log(string.Format("ok?:{0}:{1}/{2}", found_ok_move, move_ok_count, PlayerMoves.Count));
+                        if (found_ok_move)
+                        {
+                            move_ok_count++;
+                            //ok. if we've looked through all moves and it's still ok, make this move.
+
+                            if (move_ok_count > BestMoveCount && AiMove != null)
+                            {
+                                Debug.Log(string.Format("New Best Move:{0}:{1},{2}", AiMove.direction, AiMove.position.row, AiMove.position.column));
+
+                                BestMove = new Move(AiMove.position, AiMove.direction, AiMove.player);
+                                BestMoveCount = move_ok_count;
+                            }
+
+                            if (move_ok_count >= PlayerMoves.Count)
+                            {
+                                MakeThisMove = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (MakeThisMove)
+                    {
+                        Debug.Log(string.Format("Checked the Move and I'm making it."));
+                        GameManager.instance.CallMovePiece(AiMove, false, true);
+                        //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
+                        break;
+                    }
+                    else
+                    {
+                        AiMove = null;
                     }
                 }
 
-                if (!willLose) {
-                    goodMoves.Add(parentMove, state);
+                // If we get to this block without making a move.  We have a problem...
+
+                if (AiMove == null)
+                {
+                    Debug.Log(string.Format("No Good Moves Just doing anything for now."));
+                    if (BestMoveCount > 0)
+                    {
+                        GameManager.instance.CallMovePiece(BestMove, false, true);
+                        //StartCoroutine(MovePiece(BestMove, false, updatePlayer));
+                    }
+                    else
+                    {
+                        GameManager.instance.CallMovePiece(gameState.GetPossibleMoves().First(), false, true);
+                        //StartCoroutine(MovePiece(gameState.GetPossibleMoves().First(), false, updatePlayer));
+                    }
                 }
             }
-
-            //IF there are NO good moves, then return ANY move
-            //IF there is ONLY ONE godd move, then return it.
-            Debug.Log("GOOD MOVES COUNT: " + goodMoves.Count);
-            if (goodMoves.Count == 0) {
-                Debug.Log("GetRandomMove");
-                return GetRandomMove(start.GetAvailableMoves());
-            } else if (goodMoves.Count == 1) {
-                Debug.Log("First good move");
-                return goodMoves.Keys.First();
-            }
-
-            //TO DO:
-            //
-            //  For each good move, look one more move deeper
-            //
- 
-            //TO DO:
-            //
-            //  Prioritize moves with three in a row
-            //
-
-            //TO DO:
-            //  Prioritize moves next to your own pieces.
-
-            //TEMPORARY RULE
-            //  Prioritize the available moves if they are on the center
-            //    Make the top move in the priority list
-
-            List<Move> priorityMoves = new List<Move>();
-            priorityMoves.Add(new Move(3, Direction.DOWN));
-            priorityMoves.Add(new Move(4, Direction.DOWN));
-            priorityMoves.Add(new Move(3, Direction.UP));
-            priorityMoves.Add(new Move(4, Direction.UP));
-            priorityMoves.Add(new Move(3, Direction.LEFT));
-            priorityMoves.Add(new Move(4, Direction.LEFT));
-            priorityMoves.Add(new Move(3, Direction.RIGHT));
-            priorityMoves.Add(new Move(4, Direction.RIGHT));
-
-            priorityMoves.Add(new Move(2, Direction.DOWN));
-            priorityMoves.Add(new Move(5, Direction.DOWN));
-            priorityMoves.Add(new Move(2, Direction.UP));
-            priorityMoves.Add(new Move(5, Direction.UP));
-            priorityMoves.Add(new Move(2, Direction.LEFT));
-            priorityMoves.Add(new Move(5, Direction.LEFT));
-            priorityMoves.Add(new Move(2, Direction.RIGHT));
-            priorityMoves.Add(new Move(5, Direction.RIGHT));
-
-            priorityMoves.Add(new Move(1, Direction.DOWN));
-            priorityMoves.Add(new Move(6, Direction.DOWN));
-            priorityMoves.Add(new Move(1, Direction.UP));
-            priorityMoves.Add(new Move(6, Direction.UP));
-            priorityMoves.Add(new Move(1, Direction.LEFT));
-            priorityMoves.Add(new Move(6, Direction.LEFT));
-            priorityMoves.Add(new Move(1, Direction.RIGHT));
-            priorityMoves.Add(new Move(6, Direction.RIGHT));
-
-            foreach (var mo in priorityMoves)
-            {
-                if (goodMoves.ContainsKey(mo)) {
-                    Debug.Log("MORE THAN 1 GOOD MOVE, RETURN THE BEST: col: " + mo.position.column + " row: " + mo.position.row);
-                    return mo;
-                }
-            }
-
-            move = GetRandomMove(start.GetAvailableMoves());
-
-            Debug.Log("return default move: col: " + move.position.column + " row: " + move.position.row);
-            return move;
-        }
-    }
-
-    public struct AIGameState
-    {
-        public int player;
-        public int depth;
-        public int isWinForPlayer;
-        public bool isEvaluated;
-        public GameBoard gameBoard;
-        public GameState gameState;
-        public TokenBoard tokenBoard;
-
-        public AIGameState(string defaultval)
-        {
-            depth = 0;
-            isWinForPlayer = 0;
-            player = 0;
-            isEvaluated = false;
-            tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-            gameBoard = new GameBoard (Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
-            gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
-        }
-
-        //TO DO: Need to think about pointers for pieces and token arrays.
-        public AIGameState(GameState gameState, int player)
-        {
-            depth = 0;
-            isWinForPlayer = 0;
-            //player = 0;
-            isEvaluated = false;
-            this.tokenBoard = gameState.tokenBoard;
-            this.player = player;
-            this.gameBoard = gameState.gameBoard;
-            this.gameState = gameState;
-        }
-
-//		public string GameStateId { get { 
-//				string id =  gameBoard.PrintBoard () + ":" + tokenBoard.ToString () + ":"+ player;
-//			} }
-
-		public AIGameState Copy()
-		{
-			//AIGameState gs = new AIGameState (this.gameBoard, this.tokenBoard, this.player);
-		
-			AIGameState gs = new AIGameState ("TEST");
-
-			//Debug.Log ("COPY NEW OBJECT");
-			//gs.gameBoard.PrintBoard ();
-			//Debug.Log ("COPY EXISTING");
-			//this.gameBoard.PrintBoard ();
-
-			gs.player = player;
-
-			gs.gameBoard.InitGameBoard ();
-
-            gs.gameBoard = gameBoard.Clone();
-
-			//for (int i = 0; i < gameBoard.board.Length; i++) {
-			//	gs.gameBoard.board [i] = gameBoard.board [i];
-			//}
-
-			for(int col = 0; col < Constants.numColumns; col++)
-			{
-				for(int row = 0; row < Constants.numRows; row++)
-				{
-					gs.tokenBoard.tokens [col, row] = tokenBoard.tokens [col, row];
-				}
-			}
-
-
-			return gs;
-		}
-
-        //not sure which of these to use: List or Dictionary.
-        // don't want to recalculate all of these.
-        public List<Move> GetAvailableMoves()
-        {
-            List<Move> moves = new List<Move>();
-            //gameBoard.PrintBoard();
-            foreach (Move m in AiPlayer.PotentialMoves ()) {
-
-                if (gameState.CanMove(new Move(Utility.GetNextPosition(m), m.direction, m.player), tokenBoard.tokens)) {
-                    moves.Add(m);
-                }
-            }
-
-            return moves;
-        }
-
-        //        public Dictionary<Move, Position> GetAllMoves()
-        //        {
-        //            Dictionary<Move, Position> moves = new Dictionary<Move, Position>();
-        //
-        //            foreach (Move m in AiPlayer.PotentialMoves ()) {
-        //                Position pos = GetEndPositionOfMove (m);
-        //                if (GetEndPositionOfMove != null) {
-        //                    moves.Add (m,pos);
-        //                }
-        //            }
-        //
-        //            return moves;
-        //        }
-
-        public AIGameState MakeMove(Move move) {
-            MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
-            gameBoard.activeMovingPieces.Add(activeMovingPiece);
-
-            Position movePosition = activeMovingPiece.GetNextPosition();
-
-            gameBoard.SetCell(movePosition.column, movePosition.row, (Player)player);
-
-            tokenBoard.tokens[movePosition.column, movePosition.row].UpdateBoard(gameBoard, false);    
-
-            while (gameBoard.activeMovingPieces.Count > 0) {
-                Position endPosition = gameBoard.activeMovingPieces[0].GetNextPosition();
-
-                if (gameState.CanMove(new Move(endPosition, move.direction, move.player), tokenBoard.tokens)) {
-                    tokenBoard.tokens[endPosition.column, endPosition.row].UpdateBoard(gameBoard, true);
-                } else {
-                    gameBoard.DisableNextMovingPiece();
-                }
-            }
-
-            //gameState.UpdateMoveablePieces();
-            gameBoard.completedMovingPieces.Clear();
-            //isWinForPlayer = IsEndGameState();
-
-            return this;
         }
     }
 }  

@@ -16,7 +16,7 @@ namespace Fourzy
 
         //We store the challengeId, next player's userId and the userId who initiated the challenge.
         public string challengeId;
-        public string nextPlayerId;
+        //public string nextPlayerId;
         public string challengerId;
         public string winnerName;
         public string winnerId;
@@ -29,6 +29,7 @@ namespace Fourzy
         public List<string> playerFacebookIds = new List<string>();
 
         public GameState gameState;
+        public Game game;
 
         [Header("Game UI")]
         public Text opponentNameLabel, statusLabel, moveTimeAgo;
@@ -45,7 +46,7 @@ namespace Fourzy
 
         void Start()
         {
-            if (challengeShortCode == "tournamentChallenge") {
+            if (game.challengeType == ChallengeType.TOURNAMENT) {
                 tournamentIcon.enabled = true;
             } else {
                 tournamentIcon.enabled = false;
@@ -95,7 +96,8 @@ namespace Fourzy
                 statusLabel.text = "Game Expired";
             } else {
                 //We then check if the userId of the next player is equal to ours
-                if (nextPlayerId == UserManager.instance.userId)
+                //if (nextPlayerId == UserManager.instance.userId)
+                if (gameState.isCurrentPlayerTurn)
                 {
                     statusLabel.text = LocalizationManager.instance.GetLocalizedValue("your_move_text");
                 } else {
@@ -103,7 +105,7 @@ namespace Fourzy
                 }
             }
 
-            GSData lastPlayerMove = gameState.moveList.LastOrDefault();
+            GSData lastPlayerMove = game.gameState.moveList.LastOrDefault();
             long timestamp = lastPlayerMove.GetLong("timestamp").GetValueOrDefault();
 
             Debug.Log("LocalizationManager.instance.cultureInfo: " + LocalizationManager.instance.cultureInfo);
@@ -113,40 +115,40 @@ namespace Fourzy
             }
         }
 
-        public void Initialize(int currentPlayerMove, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] lastGameBoard, bool isGameOver, List<GSData> moveList) {
-            bool isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
-            gameState = new GameState(Constants.numRows, Constants.numColumns, isPlayerOneTurn, isCurrentPlayerTurn, tokenBoard, lastGameBoard, isGameOver, moveList);
-        }
+        //public void Initialize(int currentPlayerMove, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] lastGameBoard, bool isGameOver, List<GSData> moveList) {
+        //    bool isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
+        //    gameState = new GameState(Constants.numRows, Constants.numColumns, isPlayerOneTurn, isCurrentPlayerTurn, tokenBoard, lastGameBoard, isGameOver, moveList);
+        //}
 
         private void OnEnable()
         {
-            GamesListManager.OnShowDeleteGame += ShowDeleteButton;
+            //GamesListManager.OnShowDeleteGame += ShowDeleteButton;
 
-            deleteGameButton = transform.Find("DeleteGameButton").gameObject;
-            deleteGameButton.SetActive(false);
+            //deleteGameButton = transform.Find("DeleteGameButton").gameObject;
+            //deleteGameButton.SetActive(false);
         }
 
-        private void ShowDeleteButton(bool show) {
-            if (challengeState == "COMPLETE" && deleteGameButton != null)
-            {
-                if (show)
-                {
-                    deleteGameButton.SetActive(true);
-                }
-                else
-                {
-                    deleteGameButton.SetActive(false);
-                }
-            }
-        }
+        //private void ShowDeleteButton(bool show) {
+        //    if (challengeState == "COMPLETE" && deleteGameButton != null)
+        //    {
+        //        if (show)
+        //        {
+        //            deleteGameButton.SetActive(true);
+        //        }
+        //        else
+        //        {
+        //            deleteGameButton.SetActive(false);
+        //        }
+        //    }
+        //}
 
-        public void DeleteGame() {
-            if (OnRemoveGame != null)
-            {
-                OnRemoveGame(challengeId);
-                gameObject.SetActive(false);
-            }
-        }
+        //public void DeleteGame() {
+        //    if (OnRemoveGame != null)
+        //    {
+        //        OnRemoveGame(challengeId);
+        //        gameObject.SetActive(false);
+        //    }
+        //}
 
         //Open game gets called OnClick of the play button which happens when selecting an active game in the games list
         public void OpenGame()
@@ -154,23 +156,23 @@ namespace Fourzy
             Debug.Log("Open Active Game: challengeInstanceId: " + challengeId);
 
             GameManager.instance.isLoading = true;
-            GameManager.instance.gameState = gameState;
+            GameManager.instance.gameState = game.gameState;
 
             // All these properties of the ActiveGame will remain the same for the entire lifecycle of the game
-            GameManager.instance.challengeInstanceId = challengeId;
-            GameManager.instance.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;
+            GameManager.instance.challengeInstanceId = game.challengeId;
+            GameManager.instance.isCurrentPlayer_PlayerOne = game.isCurrentPlayer_PlayerOne;
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
-            GameManager.instance.isExpired = isExpired;
-            GameManager.instance.viewedResult = viewedResult;
+            GameManager.instance.isExpired = game.isExpired;
+            GameManager.instance.didViewResult = game.didViewResult;
             // -------------------------------------------------------------------------------------------
 
             GameManager.instance.winner = winnerName;
 
             GameManager.instance.ResetGamePiecesAndTokens();
             GameManager.instance.ResetUI();
-            GameManager.instance.InitPlayerUI(opponentNameLabel.text, opponentProfilePictureSprite);
-            GameManager.instance.UpdatePlayerUI();
+            GameManager.instance.InitPlayerUI(game.opponentName, game.opponentProfilePictureSprite);
+            //GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame("", "");
 
             // Triggers GameManager TransitionToGameScreen

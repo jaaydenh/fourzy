@@ -15,7 +15,7 @@ namespace Fourzy
         public static event GameActive OnActiveGame;
         public static ChallengeManager instance;
 
-        TokenBoard tokenBoard;
+        public TokenBoard tokenBoard;
         public GameObject yourMoveGameGrid;
         public GameObject theirMoveGameGrid;
         public GameObject completedGameGrid;
@@ -77,9 +77,12 @@ namespace Fourzy
         }
 
         private void SetTokenBoard(TokenBoard tokenboard) {
+            
             if (tokenboard != null) {
+                Debug.Log("SetTokenBoard tokenboard.name: " + tokenboard.name);
                 this.tokenBoard = new TokenBoard(tokenboard.tokenData, tokenboard.id, tokenboard.name, true);
             } else {
+                Debug.Log("SetTokenBoard tokenboard is nul");
                 this.tokenBoard = null;
             }
         }
@@ -314,39 +317,40 @@ namespace Fourzy
 
         public void OpenPassAndPlayGame() 
         {
-            if (tokenBoard == null) {
-                TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-                tokenBoard = randomTokenBoard;
-            }
-            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
-            GameManager.instance.gameState = gameState;
+            GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
+            //if (tokenBoard == null) {
+            //    TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
+            //    tokenBoard = randomTokenBoard;
+            //}
+            //GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
+            //GameManager.instance.gameState = gameState;
 
-            GameManager.instance.ResetGamePiecesAndTokens();
-            GameManager.instance.CreateTokenViews();
+            //GameManager.instance.ResetGamePiecesAndTokens();
+            //GameManager.instance.CreateTokenViews();
 
-            GameManager.instance.challengeInstanceId = null;
-            GameManager.instance.isMultiplayer = false;
-            GameManager.instance.isNewRandomChallenge = false;
-            GameManager.instance.isNewChallenge = false;
-            GameManager.instance.isPuzzleChallenge = false;
-            GameManager.instance.isCurrentPlayer_PlayerOne = true;
+            //GameManager.instance.challengeInstanceId = null;
+            //GameManager.instance.isMultiplayer = false;
+            //GameManager.instance.isNewRandomChallenge = false;
+            //GameManager.instance.isNewChallenge = false;
+            //GameManager.instance.isPuzzleChallenge = false;
+            //GameManager.instance.isCurrentPlayer_PlayerOne = true;
 
-            GameManager.instance.InitPlayerUI();
-            GameManager.instance.UpdatePlayerUI();
-            GameManager.instance.ResetUI();
-            GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("pnp_button"), true);
+            //GameManager.instance.InitPlayerUI();
+            //GameManager.instance.UpdatePlayerUI();
+            //GameManager.instance.ResetUI();
+            //GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("pnp_button"), true);
 
-            UIScreen.SetActive(false);
+            //UIScreen.SetActive(false);
 
-            if (OnActiveGame != null)
-                OnActiveGame();
+            //if (OnActiveGame != null)
+            //    OnActiveGame();
 
-            GameManager.instance.EnableTokenAudio();
+            //GameManager.instance.EnableTokenAudio();
             
-            Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-            customAttributes.Add("TokenBoardId", tokenBoard.id);
-            customAttributes.Add("TokenBoardName", tokenBoard.name);
-            AnalyticsManager.LogCustom("open_pnp_game", customAttributes);
+            //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+            //customAttributes.Add("TokenBoardId", tokenBoard.id);
+            //customAttributes.Add("TokenBoardName", tokenBoard.name);
+            //AnalyticsManager.LogCustom("open_pnp_game", customAttributes);
         }
 
         public void OpenPuzzleChallengeGame() {
@@ -403,40 +407,45 @@ namespace Fourzy
         }
 
         public void OpenAiGame() {
-            GameManager.instance.ResetGamePiecesAndTokens();
 
-            if (tokenBoard == null) {
-                TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-                tokenBoard = randomTokenBoard;
-            }
+            GameManager.instance.TransitionToGameOptionsScreen(GameType.AI);
 
-            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
-            GameManager.instance.gameState = gameState;
+            //GameManager.instance.ResetGamePiecesAndTokens();
 
-            GameManager.instance.CreateTokenViews();
+            //if (tokenBoard == null) {
+            //    TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
+            //    tokenBoard = randomTokenBoard;
+            //}
 
-            GameManager.instance.aiPlayer = new AiPlayer("default");
+            //GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
+            //GameManager.instance.gameState = gameState;
 
-            GameManager.instance.challengeInstanceId = null;
-            GameManager.instance.isMultiplayer = false;
-            GameManager.instance.isNewRandomChallenge = false;
-            GameManager.instance.isNewChallenge = false;
-            GameManager.instance.isPuzzleChallenge = false;
-            GameManager.instance.isCurrentPlayer_PlayerOne = true;
-            GameManager.instance.isAiActive = true;
+            //GameManager.instance.CreateTokenViews();
 
-            GameManager.instance.InitPlayerUI();
-            GameManager.instance.UpdatePlayerUI();
-            GameManager.instance.ResetUI();
+            ////GameManager.instance.aiPlayer = new AiPlayer("default");
 
-            UIScreen.SetActive(false);
+            //GameManager.instance.challengeInstanceId = null;
+            //GameManager.instance.isMultiplayer = false;
+            //GameManager.instance.isNewRandomChallenge = false;
+            //GameManager.instance.isNewChallenge = false;
+            //GameManager.instance.isPuzzleChallenge = false;
+            //GameManager.instance.isCurrentPlayer_PlayerOne = true;
+            //GameManager.instance.isAiActive = true;
 
-            if (OnActiveGame != null)
-                OnActiveGame();
+            //GameManager.instance.InitPlayerUI();
+            //GameManager.instance.UpdatePlayerUI();
+            //GameManager.instance.ResetUI();
+
+            //UIScreen.SetActive(false);
+
+            //if (OnActiveGame != null)
+                //OnActiveGame();
         }
 
         public void OpenNewMultiplayerGame() {
             Debug.Log("Open New Multiplayer Game");
+
+
             GameManager.instance.ResetGamePiecesAndTokens();
 
             if (tokenBoard == null) {
@@ -548,7 +557,10 @@ namespace Fourzy
                 }
 
                 games.Clear();
-                GameManager.instance.activeGames.Clear();
+                if (GameManager.instance.games != null) {
+                    GameManager.instance.games.Clear();    
+                }
+
 
                 List<string> challengeStates = new List<string> {"RUNNING","COMPLETE","ISSUED"};
 
@@ -573,58 +585,24 @@ namespace Fourzy
                                     ActiveGame activeGame = go.GetComponent<ActiveGame>();
 
                                     bool? isVisible = gsChallenge.ScriptData.GetBoolean("isVisible");
-                                    bool viewedResult = false;
+                                    
+                                    bool didViewResult = false;
                                     List<String> playersViewedResult = gsChallenge.ScriptData.GetStringList("playersViewedResult");
-                                    if (playersViewedResult != null) {
+                                    if (playersViewedResult != null)
+                                    {
                                         for (int i = 0; i < playersViewedResult.Count; i++)
                                         {
-                                            if (String.Compare(playersViewedResult[i], UserManager.instance.userId) == 0) {
-                                                viewedResult = true;
+                                            if (String.Compare(playersViewedResult[i], UserManager.instance.userId) == 0)
+                                            {
+                                                didViewResult = true;
                                             }
                                         }
                                     }
+                                    activeGame.viewedResult = didViewResult;
 
-                                    activeGame.viewedResult = viewedResult;
-                                    activeGame.challengeState = gsChallenge.State;
-
-                                    if (gsChallenge.Challenger.Id == UserManager.instance.userId) {
-                                        activeGame.isCurrentPlayer_PlayerOne = true;
-                                    } else {
-                                        activeGame.isCurrentPlayer_PlayerOne = false;
-                                    }
-
-                                    activeGame.challengeId = gsChallenge.ChallengeId;
-                                    activeGame.nextPlayerId = gsChallenge.NextPlayer;
-                                    activeGame.challengeShortCode = gsChallenge.ShortCode;
-
-                                    foreach (var player in gsChallenge.Accepted)
-                                    {
-                                        activeGame.playerNames.Add(player.Name);
-                                        activeGame.playerIds.Add(player.Id);
-                                        activeGame.playerFacebookIds.Add(player.ExternalIds.GetString("FB"));
-                                    }
-
-                                    activeGame.challengerId = gsChallenge.Challenger.Id;
-
-                                    activeGame.winnerName = gsChallenge.ScriptData.GetString("winnerName");
-                                    activeGame.winnerId = gsChallenge.ScriptData.GetString("winnerId");
-
-                                    if (activeGame.winnerId == null && gsChallenge.State == "COMPLETE") {
-                                        activeGame.isExpired = true;
-                                        //Debug.Log("WinnerName: " + activeGame.winnerName);
-                                    }
-
-                                    // List<int> boardData = challenge.ScriptData.GetIntList("gameBoard");
-                                    // if (boardData != null) {
-                                    //     int[] gameboard = challenge.ScriptData.GetIntList("gameBoard").ToArray();
-                                    //     activeGame.gameBoard = gameboard;
-                                    // }
-
-                                    //int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
-                                    //bool isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
                                     bool isCurrentPlayerTurn = false;
-                                    //bool isGameOver = false;
-                                    if (gsChallenge.State == "RUNNING" || gsChallenge.State == "ISSUED") {
+                                    if (gsChallenge.State == "RUNNING" || gsChallenge.State == "ISSUED")
+                                    {
                                         //If the user Id of the next player is equal to the current player then it is the current player's turn
                                         if (gsChallenge.NextPlayer == UserManager.instance.userId)
                                         {
@@ -633,51 +611,108 @@ namespace Fourzy
                                             go.gameObject.transform.SetParent(yourMoveGameGrid.transform);
                                             activeGameIds.Add(gsChallenge.ChallengeId);
                                             //yourMoveGames++;
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             isCurrentPlayerTurn = false;
                                             go.gameObject.transform.SetParent(theirMoveGameGrid.transform);
                                         }
-                                    } else if (gsChallenge.State == "COMPLETE" && isVisible == true && viewedResult == true) {
+                                    }
+                                    else if (gsChallenge.State == "COMPLETE" && isVisible == true && didViewResult == true)
+                                    {
                                         isCurrentPlayerTurn = false;
-                                        //isGameOver = true;
                                         go.gameObject.transform.SetParent(completedGameGrid.transform);
-                                    } else if (gsChallenge.State == "COMPLETE" && isVisible == true && viewedResult == false) {
+                                    }
+                                    else if (gsChallenge.State == "COMPLETE" && isVisible == true && didViewResult == false)
+                                    {
                                         isCurrentPlayerTurn = false;
-                                        //isGameOver = true;
                                         go.gameObject.transform.SetParent(resultsGameGrid.transform);
                                     }
 
-                                    // int[] lastGameBoard;
-                                    // List<int> lastBoardData = gsChallenge.ScriptData.GetIntList("lastGameBoard");
-                                    // if (lastBoardData != null) {
-                                    //     int[] lastGameboard = gsChallenge.ScriptData.GetIntList("lastGameBoard").ToArray();
-                                    //     lastGameBoard = lastGameboard;
-                                    // } else {
-                                    //     lastGameBoard = new int[64];
-                                    // }
+                                    bool isCurrentPlayer_PlayerOne = false;
+                                    if (gsChallenge.Challenger.Id == UserManager.instance.userId)
+                                    {
+                                        activeGame.isCurrentPlayer_PlayerOne = true;
+                                        isCurrentPlayer_PlayerOne = true;
+                                    }
+                                    else
+                                    {
+                                        activeGame.isCurrentPlayer_PlayerOne = false;
+                                        isCurrentPlayer_PlayerOne = false;
+                                    }
 
-                                    // TokenBoard tokenBoard;
-                                    // string tokenBoardId = gsChallenge.ScriptData.GetString("tokenBoardId");
-                                    // string tokenBoardName = gsChallenge.ScriptData.GetString("tokenBoardName");
-                                    // List<int> tokenData = gsChallenge.ScriptData.GetIntList("tokenBoard");
-                                    // if (tokenData != null) {
-                                    //     int[] tokenBoardData = gsChallenge.ScriptData.GetIntList("tokenBoard").ToArray();
-                                    //     //activeGame.tokenBoardData = tokenBoardData;
-                                    //     tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
-                                    // } else {
-                                    //     int[] tokenBoardData = Enumerable.Repeat(0, 64).ToArray();
-                                    //     //activeGame.tokenBoardData = tokenBoardData;
-                                    //     tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
-                                    // }
+                                    activeGame.winnerName = gsChallenge.ScriptData.GetString("winnerName");
+                                    activeGame.winnerId = gsChallenge.ScriptData.GetString("winnerId");
+                                    bool isExpired = false;
+                                    if (activeGame.winnerId == null && gsChallenge.State == "COMPLETE")
+                                    {
+                                        activeGame.isExpired = true;
+                                        isExpired = true;
+                                    }
+                                
+                                    string opponentFBId = "";
+                                    string opponentName = "";
+                                    
+                                    if (gsChallenge.Accepted.Count() > 1)
+                                    {
+                                        if (gsChallenge.Accepted.ElementAt(0).Id == UserManager.instance.userId)
+                                        {
+                                            opponentFBId = gsChallenge.Accepted.ElementAt(1).Id;
+                                            opponentName = gsChallenge.Accepted.ElementAt(1).Name;
+                                        }
+                                        else
+                                        {
+                                            opponentFBId = gsChallenge.Accepted.ElementAt(0).Id;
+                                            opponentName = gsChallenge.Accepted.ElementAt(0).Name;
+                                        }
+                                    }
+                                    PlayerData playerData = new PlayerData(opponentName, opponentFBId);
 
-                                    //List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
+                                    activeGame.challengeId = gsChallenge.ChallengeId;
+                                    
+                                    activeGame.challengeState = gsChallenge.State;
+                                    ChallengeState challengeState = ChallengeState.NONE;
+                                    if (gsChallenge.State == "RUNNING") {
+                                        challengeState = ChallengeState.RUNNING;
+                                    }
+                                    else if (gsChallenge.State == "ISSUED") {
+                                        challengeState = ChallengeState.ISSUED;
+                                    }
+                                    else if (gsChallenge.State == "COMPLETE")
+                                    {
+                                        challengeState = ChallengeState.COMPLETE;
+                                    }
+
+                                    activeGame.challengeShortCode = gsChallenge.ShortCode;
+                                    ChallengeType challengeType = ChallengeType.NONE;
+                                    if (gsChallenge.ShortCode == "chalRanked")
+                                    {
+                                        challengeType = ChallengeType.STANDARD;
+                                    }
+                                    else if (gsChallenge.ShortCode == "tournamentChallenge")
+                                    {
+                                        challengeType = ChallengeType.TOURNAMENT;
+                                    }
 
                                     GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
                                     GameState gameState = new GameState(Constants.numRows, Constants.numColumns, challenge, isCurrentPlayerTurn);
-                                    
                                     activeGame.gameState = gameState;
+
+                                    Game game = new Game(gsChallenge.ChallengeId, gameState, isCurrentPlayer_PlayerOne, isExpired, didViewResult, playerData, challengeState, challengeType);
+                                    activeGame.game = game;
+                                    //activeGame.nextPlayerId = gsChallenge.NextPlayer;
+                                    
+                                    foreach (var player in gsChallenge.Accepted)
+                                    {
+                                        activeGame.playerNames.Add(player.Name);
+                                        activeGame.playerIds.Add(player.Id);
+                                        activeGame.playerFacebookIds.Add(player.ExternalIds.GetString("FB"));
+                                    }
+
+                                    activeGame.challengerId = gsChallenge.Challenger.Id;
+                                    
                                     activeGame.transform.localScale = new Vector3(1f,1f,1f);
-                                    GameManager.instance.activeGames.Add(activeGame);
+                                    GameManager.instance.games.Add(game);
                                     games.Add(go);
                                 }
 
