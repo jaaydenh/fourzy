@@ -160,6 +160,7 @@ namespace Fourzy
 
             // All these properties of the ActiveGame will remain the same for the entire lifecycle of the game
             GameManager.instance.challengeInstanceId = game.challengeId;
+            Debug.Log("Active game: isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
             GameManager.instance.isCurrentPlayer_PlayerOne = game.isCurrentPlayer_PlayerOne;
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
@@ -171,10 +172,10 @@ namespace Fourzy
 
             GameManager.instance.ResetGamePiecesAndTokens();
             GameManager.instance.ResetUI();
-            GameManager.instance.InitPlayerUI(game.opponentName, game.opponentProfilePictureSprite);
+
             //GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame("", "");
-
+            GameManager.instance.InitPlayerUI(game.opponentName, game.opponentProfilePictureSprite);
             // Triggers GameManager TransitionToGameScreen
             if (OnActiveGame != null)
                 OnActiveGame();

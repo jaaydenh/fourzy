@@ -2,10 +2,10 @@
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy
 {
-
     public class LeaderboardManager : MonoBehaviour {
 
         public static LeaderboardManager instance;
@@ -14,6 +14,7 @@ namespace Fourzy
         public GameObject leaderboardPlayersList;
         public GameObject leaderboardPlayerPrefab;
         private bool loadingLeaderboard = false;
+        public Text noPlayerText;
 
         void Start()
         {
@@ -51,6 +52,9 @@ namespace Fourzy
                 }
 
                 players.Clear();
+
+                int playerCount = 0;
+
                 //.SetLeaderboardShortCode("winLossLeaderboard")
                 new LeaderboardDataRequest()
                 .SetLeaderboardShortCode("coinsEarnedLeaderboard")
@@ -88,12 +92,20 @@ namespace Fourzy
 
                                 // leaderboardPlayer.ratingLabel.text = entry.JSONData["playerRating"].ToString();
                                 leaderboardPlayer.transform.localScale = new Vector3(1f,1f,1f);
+                                playerCount++;
                                 players.Add(go);
+                            }
+                            if (playerCount == 0) {
+                                noPlayerText.gameObject.SetActive(true);
+                            } else {
+                                noPlayerText.gameObject.SetActive(false);
                             }
                         }
                         else
                         {
                             Debug.Log("***** Error Retrieving Leaderboard Data: " + response.Errors.JSON);
+                            noPlayerText.text = "Error Retrieving Leaderboard Data: " + response.Errors.JSON;
+                            noPlayerText.gameObject.SetActive(true);
                         }
                         
                         loadingLeaderboard = false;

@@ -53,7 +53,7 @@ namespace Fourzy
 
         public void OpenGame()
         {
-            Debug.Log("Open Active Game: challengeInstanceId: " + challengeId);
+            Debug.Log("Open Game: challengeInstanceId: " + challengeId);
 
             GameManager.instance.isLoading = true;
             GameManager.instance.gameState = gameState;
@@ -71,9 +71,10 @@ namespace Fourzy
 
             GameManager.instance.ResetGamePiecesAndTokens();
             GameManager.instance.ResetUI();
-            GameManager.instance.InitPlayerUI(opponentName, opponentProfilePictureSprite);
+
             //GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame("", "");
+            GameManager.instance.InitPlayerUI(opponentName, opponentProfilePictureSprite);
 
             // Triggers GameManager TransitionToGameScreen
             if (OnActiveGame != null)

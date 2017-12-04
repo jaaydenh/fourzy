@@ -635,16 +635,12 @@ namespace Fourzy
             gameState = newGameState;
 
             ResetGamePiecesAndTokens();
+            ResetUI();
             CreateTokenViews();
 
             challengeInstanceId = null;
-
             isPuzzleChallenge = false;
             isCurrentPlayer_PlayerOne = true;
-
-            InitPlayerUI(opponentNameLabel.text, opponentProfilePicture.sprite);
-            UpdatePlayerUI();
-            ResetUI();
 
             string introUISubtitle = "";
             switch (gameType)
@@ -688,6 +684,8 @@ namespace Fourzy
                     break;
             }
 
+            InitPlayerUI(opponentNameLabel.text, opponentProfilePicture.sprite);
+            UpdatePlayerUI();
             DisplayIntroUI(tokenBoard.name, introUISubtitle, true);
             UIScreen.SetActive(false);
             TransitionToGameScreen();
@@ -889,7 +887,24 @@ namespace Fourzy
 
         public void InitPlayerUI(string opponentName = "", Sprite opponentProfileSprite = null)
         {
+            Debug.Log("isMultiplayer: "+ isMultiplayer);
             if (isMultiplayer) {
+                Debug.Log("isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
+                if (isCurrentPlayer_PlayerOne)
+                {
+                    playerNameLabel.color = bluePlayerColor;
+                    opponentNameLabel.color = redPlayerColor;
+                    playerPiece.sprite = playerOneSprite;
+                    opponentPiece.sprite = playerTwoSprite;
+                }
+                else
+                {
+                    playerNameLabel.color = redPlayerColor;
+                    opponentNameLabel.color = bluePlayerColor;
+                    playerPiece.sprite = playerTwoSprite;
+                    opponentPiece.sprite = playerOneSprite;
+                }
+
                 playerNameLabel.text = UserManager.instance.userName;
                 if (UserManager.instance.profilePicture)
                 {
@@ -969,17 +984,21 @@ namespace Fourzy
 
         public void ResetUI()
         {
-            if (isCurrentPlayer_PlayerOne) {
-                playerNameLabel.color = bluePlayerColor;
-                playerPiece.sprite = playerOneSprite;
-                opponentNameLabel.color = redPlayerColor;
-                opponentPiece.sprite = playerTwoSprite;
-            } else {
-                playerNameLabel.color = redPlayerColor;
-                playerPiece.sprite = playerTwoSprite;
-                opponentNameLabel.color = bluePlayerColor;
-                opponentPiece.sprite = playerOneSprite;
-            }
+            //if (isCurrentPlayer_PlayerOne) {
+            //    playerNameLabel.color = bluePlayerColor;
+            //    opponentNameLabel.color = redPlayerColor;
+            //    if (!isMultiplayer) {
+            //        playerPiece.sprite = playerOneSprite;
+            //        opponentPiece.sprite = playerTwoSprite;
+            //    }
+            //} else {
+            //    playerNameLabel.color = redPlayerColor;
+            //    opponentNameLabel.color = bluePlayerColor;
+            //    if (!isMultiplayer) {
+            //        playerPiece.sprite = playerTwoSprite;
+            //        opponentPiece.sprite = playerOneSprite;    
+            //    }
+            //}
             gameInfo.Close();
             RectTransform pprt = playerPieceUI.GetComponent<RectTransform>();
             pprt.anchoredPosition = new Vector2(175, -83);
@@ -1389,13 +1408,13 @@ namespace Fourzy
 
                     while (isDropping)
                         yield return null;
-                    var currentGame = games
-                        .Where(t => t.challengeId == challengeInstanceId)
-                        .FirstOrDefault();
-                    if (currentGame != null)
-                    {
-                        currentGame.gameState = gameState;
-                    }
+                    //var currentGame = games
+                    //    .Where(t => t.challengeId == challengeInstanceId)
+                    //    .FirstOrDefault();
+                    //if (currentGame != null)
+                    //{
+                    //    currentGame.gameState = gameState;
+                    //}
                 }
                 else if (isMultiplayer && isNewChallenge)
                 {
@@ -1429,7 +1448,7 @@ namespace Fourzy
                     isDropping = true;
                     yield return new WaitForSeconds(1f);
 
-                    AiPlayer aiPlayer = new AiPlayer(AIPlayerSkill.LEVEL1);
+                    AiPlayer aiPlayer = new AiPlayer(AIPlayerSkill.LEVEL2);
 
                     StartCoroutine(aiPlayer.MakeMove(move));
                 }
@@ -1580,6 +1599,16 @@ namespace Fourzy
                 SetActionButton();
             }
 
+            if (isMultiplayer) {
+                var currentGame = games
+                    .Where(t => t.challengeId == challengeInstanceId)
+                    .FirstOrDefault();
+                if (currentGame != null)
+                {
+                    currentGame.gameState = gameState;
+                }
+            }
+
             if (OnMoved != null)
                 OnMoved();
         }
@@ -1711,15 +1740,13 @@ namespace Fourzy
 
             if (gameState.winner == Player.NONE || gameState.winner == Player.ALL)
             {
-                if (!isPuzzleChallenge) {
+                if (isMultiplayer) {
                     gameInfo.Open(LocalizationManager.instance.GetLocalizedValue("draw_text"), Color.white, false, showRewardButton);    
+                } else {
+                    gameInfo.Open(LocalizationManager.instance.GetLocalizedValue("draw_text"), Color.white, false, false);    
                 }
 
-                if (isMultiplayer) {
-                    AnalyticsManager.LogGameOver("multiplayer", gameState.winner, gameState.tokenBoard);
-                } else {
-                    AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
-                }
+
             }
             else if (isMultiplayer)
             {
@@ -1747,17 +1774,39 @@ namespace Fourzy
 
                     //gameStatusText.color = gameState.winner == Player.ONE ? bluePlayerColor : redPlayerColor;
 
-                    AnalyticsManager.LogGameOver("multiplayer", gameState.winner, gameState.tokenBoard);
+                    //AnalyticsManager.LogGameOver("multiplayer", gameState.winner, gameState.tokenBoard);
                 }
             }
             else
             {
                 audioWin.Play();
                 if (!isPuzzleChallenge) {
-                    AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
+                    //AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
                     string winnerText = gameState.winner == Player.ONE ? bluePlayerWonText : redPlayerWonText;
                     gameInfo.Open(winnerText, winnerTextColor, true, false);
                 }
+            }
+
+            switch (gameType)
+            {
+                case GameType.FRIEND:
+                    AnalyticsManager.LogGameOver("friend", gameState.winner, gameState.tokenBoard);
+                    break;
+                case GameType.LEADERBOARD:
+                    AnalyticsManager.LogGameOver("leaderboard", gameState.winner, gameState.tokenBoard);
+                    break;
+                case GameType.AI:
+                    AnalyticsManager.LogGameOver("AI", gameState.winner, gameState.tokenBoard);
+                    break;
+                case GameType.PASSANDPLAY:
+                    AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
+                    break;
+                case GameType.PUZZLE:
+                    AnalyticsManager.LogGameOver("puzzle", gameState.winner, gameState.tokenBoard);
+                    break;
+                default:
+                    AnalyticsManager.LogGameOver("random", gameState.winner, gameState.tokenBoard);
+                    break;
             }
         }
 

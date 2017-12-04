@@ -82,7 +82,7 @@ namespace Fourzy
                 Debug.Log("SetTokenBoard tokenboard.name: " + tokenboard.name);
                 this.tokenBoard = new TokenBoard(tokenboard.tokenData, tokenboard.id, tokenboard.name, true);
             } else {
-                Debug.Log("SetTokenBoard tokenboard is nul");
+                Debug.Log("SetTokenBoard tokenboard is null");
                 this.tokenBoard = null;
             }
         }
@@ -318,39 +318,6 @@ namespace Fourzy
         public void OpenPassAndPlayGame() 
         {
             GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
-            //if (tokenBoard == null) {
-            //    TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-            //    tokenBoard = randomTokenBoard;
-            //}
-            //GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
-            //GameManager.instance.gameState = gameState;
-
-            //GameManager.instance.ResetGamePiecesAndTokens();
-            //GameManager.instance.CreateTokenViews();
-
-            //GameManager.instance.challengeInstanceId = null;
-            //GameManager.instance.isMultiplayer = false;
-            //GameManager.instance.isNewRandomChallenge = false;
-            //GameManager.instance.isNewChallenge = false;
-            //GameManager.instance.isPuzzleChallenge = false;
-            //GameManager.instance.isCurrentPlayer_PlayerOne = true;
-
-            //GameManager.instance.InitPlayerUI();
-            //GameManager.instance.UpdatePlayerUI();
-            //GameManager.instance.ResetUI();
-            //GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("pnp_button"), true);
-
-            //UIScreen.SetActive(false);
-
-            //if (OnActiveGame != null)
-            //    OnActiveGame();
-
-            //GameManager.instance.EnableTokenAudio();
-            
-            //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-            //customAttributes.Add("TokenBoardId", tokenBoard.id);
-            //customAttributes.Add("TokenBoardName", tokenBoard.name);
-            //AnalyticsManager.LogCustom("open_pnp_game", customAttributes);
         }
 
         public void OpenPuzzleChallengeGame() {
@@ -369,6 +336,7 @@ namespace Fourzy
 
                 GameManager.instance.ResetGamePiecesAndTokens();
 
+                GameManager.instance.gameType = GameType.PUZZLE;
                 GameManager.instance.challengeInstanceId = null;
                 GameManager.instance.isMultiplayer = false;
                 GameManager.instance.isNewRandomChallenge = false;
@@ -407,39 +375,7 @@ namespace Fourzy
         }
 
         public void OpenAiGame() {
-
             GameManager.instance.TransitionToGameOptionsScreen(GameType.AI);
-
-            //GameManager.instance.ResetGamePiecesAndTokens();
-
-            //if (tokenBoard == null) {
-            //    TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-            //    tokenBoard = randomTokenBoard;
-            //}
-
-            //GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
-            //GameManager.instance.gameState = gameState;
-
-            //GameManager.instance.CreateTokenViews();
-
-            ////GameManager.instance.aiPlayer = new AiPlayer("default");
-
-            //GameManager.instance.challengeInstanceId = null;
-            //GameManager.instance.isMultiplayer = false;
-            //GameManager.instance.isNewRandomChallenge = false;
-            //GameManager.instance.isNewChallenge = false;
-            //GameManager.instance.isPuzzleChallenge = false;
-            //GameManager.instance.isCurrentPlayer_PlayerOne = true;
-            //GameManager.instance.isAiActive = true;
-
-            //GameManager.instance.InitPlayerUI();
-            //GameManager.instance.UpdatePlayerUI();
-            //GameManager.instance.ResetUI();
-
-            //UIScreen.SetActive(false);
-
-            //if (OnActiveGame != null)
-                //OnActiveGame();
         }
 
         public void OpenNewMultiplayerGame() {
@@ -458,6 +394,7 @@ namespace Fourzy
 
             GameManager.instance.CreateTokenViews();
 
+            GameManager.instance.gameType = GameType.RANDOM;
             GameManager.instance.challengeInstanceId = null;
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewRandomChallenge = true;

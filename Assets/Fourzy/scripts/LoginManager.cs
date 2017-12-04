@@ -65,17 +65,13 @@ namespace Fourzy
                         if (response.HasErrors)
                         {
                             Debug.Log("***** PushRegistration Request Error: " + response.Errors.JSON);
-                            //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                            //customAttributes.Add("errorJSON", response.Errors.JSON);
-                            //AnalyticsEvent.Custom("PushRegistrationRequest:Error: ", customAttributes);
-                            //Answers.LogCustom("push_registration_request:error: " + response.Errors.JSON);
+
                             AnalyticsManager.LogError("push_registration_request_error: ", response.Errors.JSON);
                         } else {
                             Debug.Log("***** PushRegistration Successful: Device OS: " + deviceOS);
+
                             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                             customAttributes.Add("deviceOS", deviceOS);
-                            //AnalyticsEvent.Custom("PushRegistrationRequest", customAttributes);
-                            //Answers.LogCustom("push_registration_request", customAttributes);
                             AnalyticsManager.LogCustom("push_registration_request", customAttributes);
                         }
                     });
@@ -93,17 +89,13 @@ namespace Fourzy
                         //Debug.Log("DisplayName: " + response.DisplayName);
                         //Debug.Log("NewPlayer: " + response.NewPlayer);
                         //Debug.Log("SwitchSummary: " + response.SwitchSummary);
-                        //AnalyticsEvent.Custom("DeviceAuthenticationRequest");
-                        //Answers.LogCustom("device_authentication_request");
+
                         AnalyticsManager.LogCustom("device_authentication_request");
                     } else {
                         Debug.Log("***** Error Authenticating Device: " + response.Errors.JSON);
                         if (OnLoginError != null)
                             OnLoginError();
-                        //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                        //customAttributes.Add("errorJSON", response.Errors.JSON);
-                        //AnalyticsEvent.Custom("DeviceAuthenticationRequest:Error: ", customAttributes);
-                        //Answers.LogCustom("device_authentication_request:error");
+
                         AnalyticsManager.LogError("device_authentication_request_error", response.Errors.JSON);
                     }
                 });
@@ -170,8 +162,7 @@ namespace Fourzy
             if(FB.IsLoggedIn)
             {
                 Debug.Log("Logging into gamesparks with facebook details");
-                //AnalyticsEvent.Custom("PlayerConnectsWithFacebook");
-                //Answers.LogCustom("player_connects_with_facebook");
+
                 AnalyticsManager.LogCustom("player_connects_with_facebook");
                 GSFacebookLogin(AfterFBLogin);
             }
@@ -180,13 +171,9 @@ namespace Fourzy
                 Debug.LogWarning("Something went wrong with connectin to FaceBook: " + result.Error);
                 
                 if (OnLoginError != null) {
-                    //AnalyticsEvent.Custom("GameSparksFBConnect:Error");
-                    //Answers.LogCustom("gamesparks_fb_connect:error");
                     AnalyticsManager.LogError("gamesparks_fb_connect_error", result.Error);
                     OnLoginError();
                 } else {
-                    //AnalyticsEvent.Custom("GameSparksFBConnect:Decline");
-                    //Answers.LogCustom("gamesparks_fb_connect:decline");
                     AnalyticsManager.LogCustom("gamesparks_fb_connect_decline");
                 }
             }
@@ -233,10 +220,7 @@ namespace Fourzy
                         if (OnLoginError != null)
                             OnLoginError();
                     }
-                    //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                    //customAttributes.Add("success", success);
-                    //AnalyticsEvent.Custom("FacebookLogin", customAttributes);
-                    //Answers.LogLogin("facebook", success);
+
                     AnalyticsManager.LogLogin("facebook", success);
                 });
         }

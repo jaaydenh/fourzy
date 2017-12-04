@@ -14,6 +14,58 @@
                           6,0,0,0,0,0,0,6]
         },
         {
+            "ID": "999",
+            "Name": "Sticky Cornered Pillar",
+            "Enabled": true,
+            "TokenData": [6,0,0,0,0,0,0,6,
+                          0,0,0,0,0,0,0,0,
+                          0,0,5,0,0,5,0,0,
+                          0,0,0,6,6,0,0,0,
+                          0,0,0,6,6,0,0,0,
+                          0,0,5,0,0,5,0,0,
+                          0,0,0,0,0,0,0,0,
+                          6,0,0,0,0,0,0,6]
+        },
+        {
+            "ID": "998",
+            "Name": "Towards A Sticky Pattern",
+            "Enabled": true,
+            "TokenData": [6,0,0,0,0,0,0,6,
+                          0,0,5,0,0,0,5,0,
+                          0,5,0,5,5,5,0,0,
+                          4,0,5,0,5,5,0,0,
+                          4,0,5,5,0,5,0,0,
+                          4,0,5,5,5,0,5,0,
+                          0,5,0,0,0,5,0,0,
+                          6,0,1,1,1,0,0,6]
+        },
+        {
+            "ID": "997",
+            "Name": "Ghost Perimeter",
+            "Enabled": true,
+            "TokenData": [6,0,0,0,0,0,0,6,
+                          0,7,7,7,7,7,7,0,
+                          0,7,0,0,0,0,7,0,
+                          0,7,0,0,0,0,7,0,
+                          0,7,0,0,0,0,7,0,
+                          0,7,0,0,0,0,7,0,
+                          0,7,7,7,7,7,7,0,
+                          6,0,0,0,0,0,0,6]
+        },
+        {
+            "ID": "996",
+            "Name": "Icy Ghost Fence",
+            "Enabled": true,
+            "TokenData": [6,0,0,0,0,0,0,6,
+                          0,0,0,0,0,0,0,0,
+                          8,8,8,8,8,8,8,8,
+                          7,8,7,8,7,8,7,8,
+                          8,7,8,7,8,7,8,7,
+                          8,8,8,8,8,8,8,8,
+                          0,0,0,0,0,0,0,0,
+                          6,0,0,0,0,0,0,6]
+        },
+        {
             "ID": "1001",
             "Name": "GhostSticky Large Four",
             "Enabled": false,
@@ -29,7 +81,7 @@
         {
             "ID": "1002",
             "Name": "Ghosts Diagonal",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -55,7 +107,7 @@
         {
             "ID": "1004",
             "Name": "Ghost Circle With Center",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,7,0,7,0,0,0,
                           0,0,0,0,0,0,7,0,
@@ -328,7 +380,7 @@
         {
             "ID": "1025",
             "Name": "Sticky Ice Crossing",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,5,5,0,0,6,
                           0,0,0,5,5,0,0,0,
                           0,0,6,5,5,6,0,0,
@@ -367,7 +419,7 @@
         {
             "ID": "1028",
             "Name": "Slide in the Sticky",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           5,5,5,5,5,5,5,5,
                           5,4,4,2,5,4,4,2,
@@ -419,7 +471,7 @@
         {
             "ID": "1032",
             "Name": "Sticky Coated Snake",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,5,5,2,3,5,5,6,
                           0,5,5,4,2,5,5,0,
                           0,5,5,2,3,5,5,0,
@@ -432,7 +484,7 @@
         {
             "ID": "1033",
             "Name": "Up and Down Icy",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,8,8,8,8,8,8,6,
                           8,8,8,8,8,8,8,8,
                           8,8,8,8,8,8,8,8,
@@ -484,7 +536,7 @@
         {
             "ID": "0930034",
             "Name": "Big Checker",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [ 6, 0, 0, 0, 5, 0, 0, 6, 
                             0, 0, 0, 5, 8, 8, 8, 0,
                             0, 0, 5, 0, 8, 8, 8, 0,
@@ -523,7 +575,7 @@
         {
             "ID": "093011",
             "Name": "Diagonal Ice",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [  6, 8, 0, 0, 0, 0, 0, 6,
                             8, 8, 8, 0, 0, 0, 0, 0,
                             0, 8, 8, 8, 0, 0, 0, 0,
@@ -640,7 +692,7 @@
         {
             "ID": "093019",
             "Name": "Bobsled",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [  6, 0, 5, 8, 8, 5, 0, 6,
                             0, 0, 5, 8, 8, 5, 0, 0,
                             0, 0, 5, 8, 8, 5, 0, 0,
@@ -692,7 +744,7 @@
         {
             "ID": "093023",
             "Name": "Diamond",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [  6, 0, 0, 0, 5, 0, 0, 6, 
                             0, 0, 0, 5, 0, 5, 0, 0, 
                             0, 0, 5, 0, 0, 0, 5, 0,
@@ -731,7 +783,7 @@
         {
             "ID": "093026",
             "Name": "Upside Down T",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [  6, 7, 7, 5, 5, 7, 7, 6, 
                             7, 0, 0, 5, 5, 0, 0, 7, 
                             7, 0, 0, 5, 5, 0, 0, 7,
@@ -822,7 +874,7 @@
         {
             "ID": "101606",
             "Name": "Large Ice Checkers",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,8,8,0,0,6,
                           0,8,8,0,0,8,8,0,
                           0,8,8,0,0,8,8,0,
@@ -848,7 +900,7 @@
         {
             "ID": "101608",
             "Name": "Side Ice Spots",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,8,8,8,
                           0,0,0,0,0,8,6,8,
@@ -861,7 +913,7 @@
         {
             "ID": "101609",
             "Name": "Bulb",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,7,7,7,7,7,7,6,
                           5,5,5,5,5,5,5,5,
                           5,2,3,8,8,2,3,5,
@@ -926,7 +978,7 @@
         {
             "ID": "101619",
             "Name": "Ghost Corners",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,7,7,7,0,0,0,6,
                           7,7,7,0,0,0,0,0,
                           7,7,0,0,0,0,0,0,
@@ -939,7 +991,7 @@
         {
             "ID": "101620",
             "Name": "Ice Spear",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,

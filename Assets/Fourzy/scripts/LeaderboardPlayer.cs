@@ -41,6 +41,7 @@ namespace Fourzy
 
         public void OpenNewLeaderboardChallengeGame()
         {
+            Debug.Log("OpenNewLeaderboardChallengeGame userName: " + userName);
             GameManager.instance.TransitionToGameOptionsScreen(GameType.LEADERBOARD, id, userName, profilePicture);
 
             //GameManager.instance.ResetGamePiecesAndTokens();
