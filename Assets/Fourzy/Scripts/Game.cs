@@ -76,7 +76,7 @@ namespace Fourzy
             GameManager.instance.winner = winnerName;
 
             GameManager.instance.ResetGamePiecesAndTokens();
-            GameManager.instance.ResetUI();
+            GameManager.instance.ResetUIGameScreen();
 
             //GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame("", "");

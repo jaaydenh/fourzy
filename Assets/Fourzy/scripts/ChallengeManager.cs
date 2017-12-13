@@ -350,7 +350,7 @@ namespace Fourzy
 
                 GameManager.instance.InitPlayerUI();
                 GameManager.instance.UpdatePlayerUI();
-                GameManager.instance.ResetUI();
+                GameManager.instance.ResetUIGameScreen();
 
                 string subtitle = "";
                 if (puzzleChallenge.MoveGoal > 1)
@@ -406,7 +406,7 @@ namespace Fourzy
             GameManager.instance.isPuzzleChallenge = false;
             GameManager.instance.isCurrentPlayer_PlayerOne = true;
 
-            GameManager.instance.ResetUI();
+            GameManager.instance.ResetUIGameScreen();
             GameManager.instance.InitPlayerUI();
             GameManager.instance.UpdatePlayerUI();
             GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("random_opponent_button"), true);
@@ -464,7 +464,7 @@ namespace Fourzy
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, isPlayerOneTurn, true, tokenBoard, lastGameboard, false, moveList);
             GameManager.instance.gameState = gameState;
 
-            GameManager.instance.ResetUI();
+            GameManager.instance.ResetUIGameScreen();
             GameManager.instance.InitPlayerUI(challenge.Challenger.Name, null, challenge.Challenger.ExternalIds.GetString("FB"));
             GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame(tokenBoardName, "Multiplayer");

@@ -248,7 +248,7 @@ namespace Fourzy
             winner = null;
 
             ResetGameManagerState();
-            ResetUI();
+            ResetUIGameScreen();
             HeaderUI.SetActive(true);
             activeScreen = Screens.GAMES_LIST;
             ChallengeManager.instance.ReloadGames();
@@ -267,6 +267,7 @@ namespace Fourzy
 
         public void TransitionToGameOptionsScreen(GameType gameType, string opponentUserId = "", string opponentName = "", Image opponentProfilePicture = null, string opponentLeaderboardRank = "") 
         {
+            ResetUIGameScreen();
             challengeInstanceId = null;
             this.gameType = gameType;
             this.opponentUserId = opponentUserId;
@@ -753,7 +754,7 @@ namespace Fourzy
             gameState = newGameState;
 
             ResetGamePiecesAndTokens();
-            ResetUI();
+            ResetUIGameScreen();
             CreateTokenViews();
 
             challengeInstanceId = null;
@@ -1112,7 +1113,7 @@ namespace Fourzy
             }
         }
 
-        public void ResetUI()
+        public void ResetUIGameScreen()
         {
             //if (isCurrentPlayer_PlayerOne) {
             //    playerNameLabel.color = bluePlayerColor;
@@ -1330,21 +1331,23 @@ namespace Fourzy
 
         public void RematchPassAndPlayGame()
         {
-            isLoading = true;
-            gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
-            ResetGamePiecesAndTokens();
-            ResetUI();
+            GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
 
-            TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-            gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
+            //isLoading = true;
+            //gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
+            //ResetGamePiecesAndTokens();
+            //ResetUI();
 
-            CreateTokenViews();
-            UpdatePlayerUI();
-            DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("pnp_button"), true);
-            rematchButton.gameObject.SetActive(false);
-            EnableTokenAudio();
-            FadeGameScreen(1.0f, gameScreenFadeInTime);
-            isLoading = false;
+            //TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
+            //gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
+
+            //CreateTokenViews();
+            //UpdatePlayerUI();
+            //DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("pnp_button"), true);
+            //rematchButton.gameObject.SetActive(false);
+            //EnableTokenAudio();
+            //FadeGameScreen(1.0f, gameScreenFadeInTime);
+            //isLoading = false;
 
             AnalyticsManager.LogCustom("rematch_pnp_game");
         }
@@ -1358,7 +1361,7 @@ namespace Fourzy
 
                 puzzleChallengeInfo = puzzleChallenge;
                 //CloseIntroUI();
-                ResetUI();
+                ResetUIGameScreen();
                 gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
                 ResetGamePiecesAndTokens();
 
@@ -1404,7 +1407,7 @@ namespace Fourzy
                 ResetGameManagerState();
 
                 puzzleChallengeInfo = puzzleChallenge;
-                ResetUI();
+                ResetUIGameScreen();
                 gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
                 ResetGamePiecesAndTokens();
 
