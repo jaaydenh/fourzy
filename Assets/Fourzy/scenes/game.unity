@@ -571,7 +571,7 @@ MonoBehaviour:
   moveSpeed: 8
   gameScreenFadeInTime: 0.5
   challengeInstanceId: 
-  challengedUserId: 
+  opponentUserId: 
   upArrowToken: {fileID: 1837627827914946, guid: 160f51c71faf5416bbe70c6d4ca12a68,
     type: 2}
   downArrowToken: {fileID: 1623667900078134, guid: b50adf3cc91ed4ee590fd6bcc3fa79b9,
@@ -661,6 +661,7 @@ MonoBehaviour:
   isExpired: 0
   didViewResult: 0
   opponentLeaderboardRank: 
+  activeScreen: 0
   clipMove: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
   clipWin: {fileID: 8300000, guid: 2cda08f34c076490b8ec095a4f5d5256, type: 3}
   clipChest: {fileID: 8300000, guid: 84d5b31e59d0f43f29dfa2a0e8ea4d0d, type: 3}
@@ -2341,7 +2342,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &308658291
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7243,7 +7244,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 255.50002, y: -55}
+  m_AnchoredPosition: {x: 255.5, y: -55}
   m_SizeDelta: {x: 511, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1131531078
@@ -12755,7 +12756,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -130}
+  m_AnchoredPosition: {x: 0, y: -125}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1826414630
@@ -12775,7 +12776,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 0
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}

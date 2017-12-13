@@ -13,6 +13,24 @@ namespace Fourzy
             this.position = position;
             this.direction = direction;
             this.player = player;
+
+            switch (direction)
+            {
+                case Direction.UP:
+                    location = position.column;
+                    break;
+                case Direction.DOWN:
+                    location = position.column;
+                    break;
+                case Direction.LEFT:
+                    location = position.row;
+                    break;
+                case Direction.RIGHT:
+                    location = position.row;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public Move(int location, Direction direction, Player player) {

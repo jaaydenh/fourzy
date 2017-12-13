@@ -13,7 +13,7 @@ namespace Fourzy
         public bool isCurrentPlayerTurn;
         public bool isPlayerOneTurn;
         public bool isGameOver;
-        public Player winner;
+        public Player winner = Player.EMPTY;
         public GameBoard previousGameBoard;
         public GameBoard gameBoard;
         public TokenBoard tokenBoard;
@@ -31,6 +31,7 @@ namespace Fourzy
             this.tokenBoard = tokenBoard;
             this.isGameOver = isGameOver;
             this.moveList = moveList;
+
             player1MoveCount = 0;
             player2MoveCount = 0;
 
@@ -42,7 +43,7 @@ namespace Fourzy
             InitGameState(gameBoardData);
         }
 
-        public GameState(int numRows, int numColumns, GameSparksChallenge challenge, bool isCurrentPlayerTurn) {
+        public GameState(int numRows, int numColumns, GameSparksChallenge challenge, bool isCurrentPlayerTurn, Player winner) {
             this.numRows = numRows;
             this.numColumns = numColumns;
             this.isPlayerOneTurn = challenge.isPlayerOneTurn;
@@ -50,6 +51,7 @@ namespace Fourzy
             this.tokenBoard = challenge.tokenBoard;
             this.isGameOver = challenge.isGameOver;
             this.moveList = challenge.moveList;
+            this.winner = winner;
 
             isMoveableUp = new int[numColumns * numRows];
             isMoveableDown = new int[numColumns * numRows];
@@ -61,7 +63,6 @@ namespace Fourzy
 
         private void InitGameState(int[] gameBoardData) {
             gameBoard = new GameBoard(Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
-            winner = Player.NONE;
 
             InitIsMovable();
 
@@ -170,8 +171,10 @@ namespace Fourzy
                     player2MoveCount++;
                 }
 
-                isPlayerOneTurn = !isPlayerOneTurn;
+                //isPlayerOneTurn = !isPlayerOneTurn;
             }
+
+            //PrintMoveList();
 
             UpdateMoveablePieces();
 
@@ -195,6 +198,14 @@ namespace Fourzy
                 isGameOver = true;
                 isCurrentPlayerTurn = false;
                 winner = Player.NONE;
+            }
+            Debug.Log("GameState MovePiece Winner: " + winner);
+            Debug.Log("gameBoard.player1WinningPositions.Count: " + gameBoard.player1WinningPositions.Count);
+            Debug.Log("gameBoard.player2WinningPositions.Count: " + gameBoard.player2WinningPositions.Count);
+
+            if (!isReplay && winner == Player.EMPTY)
+            {
+                isPlayerOneTurn = !isPlayerOneTurn;
             }
 
             return gameBoard.completedMovingPieces;
@@ -354,6 +365,18 @@ namespace Fourzy
         public int PlayerPieceCount(Player player)
         {
             return gameBoard.PlayerPieceCount(player);
+        }
+
+        public void PrintMoveList() {
+            int i = 0;
+            Debug.Log("MoveList");
+            foreach (var move in moveList)
+            {
+                i++;
+                int position = move.GetInt("position").GetValueOrDefault();
+                Direction direction = (Direction)move.GetInt("direction").GetValueOrDefault();
+                Debug.Log("Move " + i + ": position: " + position + " direction: " + direction.ToString());
+            }
         }
 
         public void PrintGameState(string name) {

@@ -34,7 +34,7 @@ namespace Fourzy
         }
 
         private void Reset() {
-            transform.DOMoveY(originalY, 0f);
+            transform.DOMoveY(originalY, 0f).OnComplete(() => Close());
             //Close();
         }
 

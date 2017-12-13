@@ -75,6 +75,7 @@ namespace Fourzy
                 }
                 else
                 {
+                    //Debug.Log("get_fb_picture_success: ");
                     Texture2D tempPic = new Texture2D(25, 25);
                     tempPic = DownloadHandlerTexture.GetContent(www);
                     Sprite profilePictureSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
