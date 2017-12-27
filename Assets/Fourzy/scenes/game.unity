@@ -609,8 +609,14 @@ MonoBehaviour:
   gameBoardView: {fileID: 440620694}
   tokenViews: []
   gamePiecePrefab: {fileID: 174738, guid: edd52c6e9d75d420199836641a1473b2, type: 2}
-  playerOneSprite: {fileID: 21300002, guid: baa829ac81b434043bfc2463fc3a9f65, type: 3}
-  playerTwoSprite: {fileID: 21300000, guid: baa829ac81b434043bfc2463fc3a9f65, type: 3}
+  playerOneSpriteMoving: {fileID: 21300000, guid: b05bb068c72db4b2381b3be73894cb41,
+    type: 3}
+  playerOneSpriteAsleep: {fileID: 21300000, guid: b53fe11c89f5e43a9ac60f342f6efb42,
+    type: 3}
+  playerTwoSpriteAwake: {fileID: 21300000, guid: 08d0be452641746da96932bcdd9401cd,
+    type: 3}
+  playerTwoSpriteAsleep: {fileID: 21300000, guid: 15e506ef14c3744d4a77f1bed1fe842f,
+    type: 3}
   winner: 
   opponentFacebookId: 
   bluePlayerColor: {r: 0, g: 0.68235296, b: 1, a: 1}

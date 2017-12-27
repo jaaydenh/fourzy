@@ -148,7 +148,7 @@ namespace Fourzy {
 
                     if (isPieceDestroyed) {
                         piece.isDestroyed = true;
-                        piece.animationState = PieceAnimStates.DROPPING;
+                        piece.animationState = PieceAnimState.FALLING;
                     }
                     if (token.changePieceDirection) {
                         activeMovingPieces[0].positions.Add(piece.GetNextPosition());
@@ -245,8 +245,8 @@ namespace Fourzy {
                 if (activeMovingPieces.Count > 0)
                 {
                     MovingGamePiece piece = activeMovingPieces[0];
-                    Position nextPosition = piece.GetNextPosition();
-                    Position currentPosition = piece.GetCurrentPosition();
+                    //Position nextPosition = piece.GetNextPosition();
+                    //Position currentPosition = piece.GetCurrentPosition();
 
                     if (token.useCurrentDirection)
                     {

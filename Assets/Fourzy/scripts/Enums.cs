@@ -5,7 +5,7 @@
     public enum Piece { EMPTY, BLUE, RED };
     public enum Player { NONE, ONE, TWO, ALL, EMPTY};
     public enum Direction { UP, DOWN, LEFT, RIGHT, NONE, REVERSE };
-    public enum PieceAnimStates { NONE, DROPPING };
+    public enum PieceAnimState { NONE, FALLING, MOVING, ASLEEP };
     public enum ChallengeType { NONE, STANDARD, TOURNAMENT };
     public enum ChallengeState { NONE, RUNNING, ISSUED, COMPLETE };
     public enum GameType { NONE, RANDOM, PASSANDPLAY, FRIEND, LEADERBOARD, PUZZLE, AI };

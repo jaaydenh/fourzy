@@ -18,7 +18,7 @@ namespace Fourzy
         public bool isMoving;
         public bool didAnimateNextPiece;
         bool animating;
-        public GameManager gameManager;
+        //public GameManager gameManager;
         GameObject nextPiece = null;
         List<MovingGamePiece> movingPieces;
         public AnimationCurve moveCurve;
@@ -37,7 +37,7 @@ namespace Fourzy
             return Direction.NONE;
         }
 
-        public IEnumerator AnimatePiece(List<MovingGamePiece> movingPieces) {
+        public IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces) {
             //Debug.Log("Animatepiece movingpieces count: " + movingPieces.Count);
              
             GameManager.instance.animatingGamePieces = true;
@@ -110,6 +110,11 @@ namespace Fourzy
             if (tweener != null) {
                 yield return tweener.WaitForCompletion();
             }
+            if (player == Player.ONE) {
+                GetComponent<SpriteRenderer>().sprite = GameManager.instance.playerOneSpriteAsleep;
+            } else {
+                GetComponent<SpriteRenderer>().sprite = GameManager.instance.playerTwoSpriteAsleep;    
+            }
 
             GameManager.instance.animatingGamePieces = false;
 
@@ -121,12 +126,12 @@ namespace Fourzy
             CircleCollider2D col = gameObject.GetComponent<CircleCollider2D>();
 
             if (nextPiece != null && !didAnimateNextPiece) {
-                GamePiece gamePiece1 = nextPiece.GetComponent<GamePiece>();
+                //GamePiece gamePiece1 = nextPiece.GetComponent<GamePiece>();
                 //Debug.Log("update nextpiece player: " + gamePiece1.player);
                 if (col.IsTouching(nextPiece.GetComponent<CircleCollider2D>()))
                 {
                     didAnimateNextPiece = true;
-                    GamePiece gamePiece = nextPiece.GetComponent<GamePiece>();
+                    //GamePiece gamePiece = nextPiece.GetComponent<GamePiece>();
                     StartCoroutine(CallAnimatePiece());
                 }
             }
@@ -136,14 +141,14 @@ namespace Fourzy
             GamePiece gamePiece = nextPiece.GetComponent<GamePiece>();
             while (gamePiece.animating)
                 yield return null;
-            StartCoroutine(gamePiece.AnimatePiece(movingPieces));
+            StartCoroutine(gamePiece.MoveGamePiece(movingPieces));
         }
 
         private Tweener AfterMovementAnimations(MovingGamePiece piece, Direction direction) {
             float punchDistance = 0.12f;
             float punchDuration = 0.12f;
 
-            if (piece.animationState == PieceAnimStates.DROPPING)
+            if (piece.animationState == PieceAnimState.FALLING)
             {
                 return transform.DOScale(0.0f, 1.0f);
             } else {
@@ -160,7 +165,6 @@ namespace Fourzy
                     default:
                         return transform.DOPunchPosition(new Vector3(0.0f, 0.0f, 0), punchDuration, 7);
                 }
-
             }
         }
 

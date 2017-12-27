@@ -10,7 +10,7 @@ namespace Fourzy {
         public Player player = Player.NONE;
         public GameObject gamePieceObject;
         public bool isDestroyed;
-        public PieceAnimStates animationState;
+        public PieceAnimState animationState;
 
         public MovingGamePiece(Move move) {
             positions = new List<Position>();
@@ -19,7 +19,7 @@ namespace Fourzy {
             currentDirection = move.direction;
             this.player = move.player;
             this.isDestroyed = false;
-            this.animationState = PieceAnimStates.NONE;
+            this.animationState = PieceAnimState.NONE;
         }
 
         public Position GetCurrentPosition() {

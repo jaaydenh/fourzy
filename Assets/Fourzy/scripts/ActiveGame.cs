@@ -41,7 +41,7 @@ namespace Fourzy
         private int opponentIndex;
         public bool isCurrentPlayer_PlayerOne;
         public bool isExpired;
-        private Sprite opponentProfilePictureSprite;
+        //private Sprite opponentProfilePictureSprite;
         private Player currentplayer = Player.NONE;
 
         void Start()
@@ -59,7 +59,7 @@ namespace Fourzy
                     //Debug.Log("game.playerData.opponentFBId: " + game.playerData.opponentFBId);    
                     StartCoroutine(UserManager.instance.GetFBPicture(game.playerData.opponentFBId, (sprite)=>
                         {
-                            opponentProfilePictureSprite = sprite;
+                            //opponentProfilePictureSprite = sprite;
                             opponentProfilePicture.sprite = sprite;
                         }));
                 }

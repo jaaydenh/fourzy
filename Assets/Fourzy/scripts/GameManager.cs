@@ -43,11 +43,12 @@ namespace Fourzy
         public GameBoardView gameBoardView;
         public GameState gameState { get; set; }
         public List<GameObject> tokenViews;
-        //public List<ActiveGame> activeGames;
         public List<Game> games = new List<Game>();
         public GameObject gamePiecePrefab;
-        public Sprite playerOneSprite;
-        public Sprite playerTwoSprite;
+        public Sprite playerOneSpriteMoving;
+        public Sprite playerOneSpriteAsleep;
+        public Sprite playerTwoSpriteAwake;
+        public Sprite playerTwoSpriteAsleep;
         private string bluePlayerWonText = "Blue Player Won!";
         private string redPlayerWonText = "Red Player Won!";
         public string winner;
@@ -874,7 +875,7 @@ namespace Fourzy
 
                     if (piece == (int)Piece.BLUE)
                     {
-                        GameObject pieceObject = SpawnPiece(col, row * -1, Player.ONE);
+                        GameObject pieceObject = SpawnPiece(col, row * -1, Player.ONE, PieceAnimState.ASLEEP);
                         //TODO: Use player chosen sprite for gamepiece
                         SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
                         Color c = pieceSprite.color;
@@ -888,7 +889,7 @@ namespace Fourzy
                     }
                     else if (piece == (int)Piece.RED)
                     {
-                        GameObject pieceObject = SpawnPiece(col, row * -1, Player.TWO);
+                        GameObject pieceObject = SpawnPiece(col, row * -1, Player.TWO, PieceAnimState.ASLEEP);
                         SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
                         Color c = pieceSprite.color;
                         c.a = 0.0f;
@@ -1013,15 +1014,15 @@ namespace Fourzy
                 {
                     playerNameLabel.color = bluePlayerColor;
                     opponentNameLabel.color = redPlayerColor;
-                    playerPiece.sprite = playerOneSprite;
-                    opponentPiece.sprite = playerTwoSprite;
+                    playerPiece.sprite = playerOneSpriteMoving;
+                    opponentPiece.sprite = playerTwoSpriteAwake;
                 }
                 else
                 {
                     playerNameLabel.color = redPlayerColor;
                     opponentNameLabel.color = bluePlayerColor;
-                    playerPiece.sprite = playerTwoSprite;
-                    opponentPiece.sprite = playerOneSprite;
+                    playerPiece.sprite = playerTwoSpriteAwake;
+                    opponentPiece.sprite = playerOneSpriteMoving;
                 }
 
                 playerNameLabel.text = UserManager.instance.userName;
@@ -1066,13 +1067,13 @@ namespace Fourzy
                 playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
                     new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
                     new Vector2(0.5f, 0.5f));
-                playerPiece.sprite = playerOneSprite;
+                playerPiece.sprite = playerOneSpriteMoving;
 
                 opponentNameLabel.text = "Red Player";
                 opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
                     new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
                     new Vector2(0.5f, 0.5f));
-                opponentPiece.sprite = playerTwoSprite;
+                opponentPiece.sprite = playerTwoSpriteAwake;
             }
 
         }
@@ -1288,7 +1289,7 @@ namespace Fourzy
         /// Spawns a gamepiece at the given column and row
         /// </summary>
         /// <returns>The piece.</returns>
-        GameObject SpawnPiece(float posX, float posY, Player player)
+        GameObject SpawnPiece(float posX, float posY, Player player, PieceAnimState startingState)
         {
             //float xPos = (posX - ((Constants.numColumns - 1) / 2.0f)) * 1f;
             //float yPos = (posY - ((Constants.numColumns - 1) / 2.0f)) * 1f - .15f;
@@ -1297,34 +1298,33 @@ namespace Fourzy
             //new Vector3(Mathf.FloorToInt(posX),
                 //Mathf.FloorToInt(posY), 10),
                 //Quaternion.identity, gamePieces.transform) as GameObject;
-            GameObject gamePiece = LeanPool.Spawn(gamePiecePrefab, new Vector3(posX, posY, 10),
-                Quaternion.identity, gamePieces.transform) as GameObject;
 
-            //gamePiece.transform.position = new Vector3(Mathf.FloorToInt(posX),
-                //Mathf.FloorToInt(posY), 10);
-            gamePiece.transform.position = new Vector3(posX, posY, 10);
-            
             // GameObject gamePiece = Instantiate(
             //     isPlayerOneTurn ? pieceBlue : pieceRed,
             //     new Vector3(Mathf.FloorToInt(posX + 0.5f),
             //     Mathf.FloorToInt(posY + 0.5f), 10), // spawn it above the first row
             //     Quaternion.identity, gamePieces.transform) as GameObject;
 
-            if (player == Player.ONE)
-            {
-                gamePiece.GetComponent<SpriteRenderer>().sprite = playerOneSprite;
-                // Layer for player 1 pieces
-                gamePiece.layer = 8;
-            }
-            else
-            {
-                gamePiece.GetComponent<SpriteRenderer>().sprite = playerTwoSprite;
-                // Layer for player 2 pieces
-                gamePiece.layer = 9;
+
+            GameObject gamePiece = LeanPool.Spawn(gamePiecePrefab, new Vector3(posX, posY, 10),
+                Quaternion.identity, gamePieces.transform) as GameObject;
+
+            gamePiece.transform.position = new Vector3(posX, posY, 10);
+            //gamePiece.GetComponent<GamePiece>().gameManager = this;
+            if (player == Player.ONE) {
+                if (startingState == PieceAnimState.MOVING) {
+                    gamePiece.GetComponent<SpriteRenderer>().sprite = playerOneSpriteMoving;
+                } else {
+                    gamePiece.GetComponent<SpriteRenderer>().sprite = playerOneSpriteAsleep;    
+                }
+            } else {
+                if (startingState == PieceAnimState.MOVING) {
+                    gamePiece.GetComponent<SpriteRenderer>().sprite = playerTwoSpriteAwake;
+                } else {
+                    gamePiece.GetComponent<SpriteRenderer>().sprite = playerTwoSpriteAsleep;    
+                }
             }
             gamePiece.GetComponent<SpriteRenderer>().enabled = true;
-
-            gamePiece.GetComponent<GamePiece>().gameManager = this;
 
             return gamePiece;
         }
@@ -1800,15 +1800,14 @@ namespace Fourzy
             animatingGamePieces = true;
 
             // Create Game Piece View
-            GameObject g = SpawnPiece(move.position.column, move.position.row * -1, move.player);
+            GameObject g = SpawnPiece(move.position.column, move.position.row * -1, move.player, PieceAnimState.MOVING);
             GamePiece gamePiece = g.GetComponent<GamePiece>();
             gamePiece.player = move.player;
             gamePiece.column = move.position.column;
             gamePiece.row = move.position.row;
 
-            StartCoroutine(gamePiece.AnimatePiece(movingPieces));
+            StartCoroutine(gamePiece.MoveGamePiece(movingPieces));
 
-            //Debug.Log("Final Game board view");
             gameBoardView.PrintGameBoard();
         }
 
