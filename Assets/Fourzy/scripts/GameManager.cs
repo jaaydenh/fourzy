@@ -643,6 +643,12 @@ namespace Fourzy
             }
 
             activeScreen = Screens.GAMES_LIST;
+
+#if UNITY_IOS
+            UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
+            UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
+#endif
+
             // center camera
             //Camera.main.transform.position = new Vector3((Constants.numColumns - 1) / 2.0f, -((Constants.numRows - 1) / 2.0f) + .15f, Camera.main.transform.position.z);
         }

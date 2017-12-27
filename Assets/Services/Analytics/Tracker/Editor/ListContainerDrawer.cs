@@ -104,7 +104,7 @@ namespace UnityEngine.Analytics.Experimental.Tracker
             removeRect.yMax += 5;
             removeRect.width -= 5;
             removeRect.xMax += 5;
-            if (Event.current.type == EventType.repaint)
+            if (Event.current.type == EventType.Repaint)
             {
                 ReorderableList.defaultBehaviours.footerBackground.Draw(footerRect, false, false, false, false);
             }

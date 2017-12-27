@@ -201,8 +201,9 @@ namespace Fourzy
 
             new GameSparks.Api.Requests.FacebookConnectRequest()
                 .SetAccessToken(AccessToken.CurrentAccessToken.TokenString)
-                .SetMaxResponseTimeInSeconds(15)
-                .SetMaxQueueTimeInSeconds(15)
+                //.SetMaxResponseTimeInSeconds(15)
+                //.SetMaxQueueTimeInSeconds(15)
+                .SetMaxResponseTimeInMillis(15000)
                 .SetDoNotLinkToCurrentPlayer(false)// we don't want to create a new account so link to the player that is currently logged in
                 .SetSwitchIfPossible(true)//this will switch to the player with this FB account id if they already have an account from a separate login
                 .SetSyncDisplayName(true)

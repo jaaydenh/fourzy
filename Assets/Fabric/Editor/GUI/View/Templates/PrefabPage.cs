@@ -95,10 +95,10 @@
 			public static void PrepareDragAndDrop(string prefabName, EditorApplication.HierarchyWindowItemCallback acceptDragAndDrop, Action removeListener)
 			{
 				if (PrefabIconRect.Contains (Event.current.mousePosition)) {
-					if (Event.current.type == EventType.mouseDown) {
+					if (Event.current.type == EventType.MouseDown) {
 						pressed = true;
 					}
-					if (Event.current.type == EventType.mouseUp) {
+					if (Event.current.type == EventType.MouseUp) {
 						pressed = false;
 					}
 				}
