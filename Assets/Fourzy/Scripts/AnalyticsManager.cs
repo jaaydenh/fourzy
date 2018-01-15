@@ -37,7 +37,7 @@ namespace Fourzy
             Answers.LogCustom("complete_puzzle_challenge", customAttributes);
         }
 
-        public static void LogGameOver(string gameType, Player player, TokenBoard tokenBoard) {
+        public static void LogGameOver(string gameType, PlayerEnum player, TokenBoard tokenBoard) {
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("tokenBoardId", tokenBoard.id);
             customAttributes.Add("tokenBoardName", tokenBoard.name);

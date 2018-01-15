@@ -13,7 +13,7 @@ namespace Fourzy
         public bool isCurrentPlayerTurn;
         public bool isPlayerOneTurn;
         public bool isGameOver;
-        public Player winner = Player.EMPTY;
+        public PlayerEnum winner = PlayerEnum.EMPTY;
         public GameBoard previousGameBoard;
         public GameBoard gameBoard;
         public TokenBoard tokenBoard;
@@ -43,7 +43,7 @@ namespace Fourzy
             InitGameState(gameBoardData);
         }
 
-        public GameState(int numRows, int numColumns, GameSparksChallenge challenge, bool isCurrentPlayerTurn, Player winner) {
+        public GameState(int numRows, int numColumns, GameSparksChallenge challenge, bool isCurrentPlayerTurn, PlayerEnum winner) {
             this.numRows = numRows;
             this.numColumns = numColumns;
             this.isPlayerOneTurn = challenge.isPlayerOneTurn;
@@ -100,7 +100,7 @@ namespace Fourzy
 
         public List<Move> GetPossibleMoves()
         {
-            Player curPlayer = isPlayerOneTurn ? Player.ONE : Player.TWO;
+            PlayerEnum curPlayer = isPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
 
             List<Move> moves = new List<Move>();
             for (int r = 1; r < numRows - 1; r++)
@@ -179,7 +179,7 @@ namespace Fourzy
             UpdateMoveablePieces();
 
             if (gameBoard.didPlayerWin(1)) {
-                winner = Player.ONE;
+                winner = PlayerEnum.ONE;
                 isGameOver = true;
                 isCurrentPlayerTurn = false;
             }
@@ -187,23 +187,23 @@ namespace Fourzy
             if (gameBoard.didPlayerWin(2)) {
                 isGameOver = true;
                 isCurrentPlayerTurn = false;
-                if (winner == Player.ONE) {
-                    winner = Player.ALL;
+                if (winner == PlayerEnum.ONE) {
+                    winner = PlayerEnum.ALL;
                 } else {
-                    winner = Player.TWO;
+                    winner = PlayerEnum.TWO;
                 }
             }
 
             if (!gameBoard.hasValidMove()) {
                 isGameOver = true;
                 isCurrentPlayerTurn = false;
-                winner = Player.NONE;
+                winner = PlayerEnum.NONE;
             }
             Debug.Log("GameState MovePiece Winner: " + winner);
             Debug.Log("gameBoard.player1WinningPositions.Count: " + gameBoard.player1WinningPositions.Count);
             Debug.Log("gameBoard.player2WinningPositions.Count: " + gameBoard.player2WinningPositions.Count);
 
-            if (!isReplay && winner == Player.EMPTY)
+            if (!isReplay && winner == PlayerEnum.EMPTY)
             {
                 isPlayerOneTurn = !isPlayerOneTurn;
             }
@@ -241,22 +241,22 @@ namespace Fourzy
                     }
                     if (tokenBoard.tokens[currentPosition.row, currentPosition.column].isMoveable) {
 
-                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP, Player.NONE), tokenBoard.tokens)) {
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP, PlayerEnum.NONE), tokenBoard.tokens)) {
                             MakePieceMoveable(currentPosition, true, Direction.UP);
                         } else {
                             MakePieceMoveable(currentPosition, false, Direction.UP);
                         } 
-                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.DOWN), Direction.DOWN, Player.NONE), tokenBoard.tokens)) {
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.DOWN), Direction.DOWN, PlayerEnum.NONE), tokenBoard.tokens)) {
                             MakePieceMoveable(currentPosition, true, Direction.DOWN);
                         } else {
                             MakePieceMoveable(currentPosition, false, Direction.DOWN);
                         }
-                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.LEFT), Direction.LEFT, Player.NONE), tokenBoard.tokens)) {
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.LEFT), Direction.LEFT, PlayerEnum.NONE), tokenBoard.tokens)) {
                             MakePieceMoveable(currentPosition, true, Direction.LEFT);
                         } else {
                             MakePieceMoveable(currentPosition, false, Direction.LEFT);
                         }
-                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.RIGHT), Direction.RIGHT, Player.NONE), tokenBoard.tokens)) {
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.RIGHT), Direction.RIGHT, PlayerEnum.NONE), tokenBoard.tokens)) {
                             MakePieceMoveable(currentPosition, true, Direction.RIGHT);
                         } else {
                             MakePieceMoveable(currentPosition, false, Direction.RIGHT);
@@ -362,7 +362,7 @@ namespace Fourzy
             return true;
         }
 
-        public int PlayerPieceCount(Player player)
+        public int PlayerPieceCount(PlayerEnum player)
         {
             return gameBoard.PlayerPieceCount(player);
         }

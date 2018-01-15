@@ -7,7 +7,7 @@ namespace Fourzy
 {
     public class GamePiece : MonoBehaviour {
 
-        public Player player;
+        public PlayerEnum player;
         public int column;
         public int row;
         public List<Position> positions;
@@ -18,10 +18,22 @@ namespace Fourzy
         public bool isMoving;
         public bool didAnimateNextPiece;
         bool animating;
-        //public GameManager gameManager;
         GameObject nextPiece = null;
         List<MovingGamePiece> movingPieces;
         public AnimationCurve moveCurve;
+        Renderer rend;
+
+        public void SetAlternateColor(bool useAlternateColor) {
+            rend = GetComponent<Renderer>();
+            if (useAlternateColor)
+            {
+                rend.material.SetVector("_HSVAAdjust", new Vector4(0.3f, 0, 0, 0));
+            }
+            else
+            {
+                rend.material.SetVector("_HSVAAdjust", new Vector4(0, 0, 0, 0));
+            }
+        }
 
         private Direction findDirection(Position start, Position end) {
             if (start.column < end.column) {
@@ -110,11 +122,11 @@ namespace Fourzy
             if (tweener != null) {
                 yield return tweener.WaitForCompletion();
             }
-            if (player == Player.ONE) {
-                GetComponent<SpriteRenderer>().sprite = GameManager.instance.playerOneSpriteAsleep;
-            } else {
-                GetComponent<SpriteRenderer>().sprite = GameManager.instance.playerTwoSpriteAsleep;    
-            }
+            //if (player == PlayerEnum.ONE) {
+            //    GetComponent<SpriteRenderer>().sprite = GameManager.instance.playerOneSpriteAsleep;
+            //} else {
+            //    GetComponent<SpriteRenderer>().sprite = GameManager.instance.playerTwoSpriteAsleep;    
+            //}
 
             GameManager.instance.animatingGamePieces = false;
 

@@ -42,7 +42,7 @@ namespace Fourzy
         public bool isCurrentPlayer_PlayerOne;
         public bool isExpired;
         //private Sprite opponentProfilePictureSprite;
-        private Player currentplayer = Player.NONE;
+        private PlayerEnum currentplayer = PlayerEnum.NONE;
 
         void Start()
         {
@@ -52,12 +52,12 @@ namespace Fourzy
                 tournamentIcon.enabled = false;
             }
 
-            opponentNameLabel.text = game.playerData.opponentName;
+            opponentNameLabel.text = game.opponent.opponentName;
             //Debug.Log("game.opponentProfilePictureSprite: " + game.opponentProfilePictureSprite);
             if (game.opponentProfilePictureSprite == null) {
-                if (game.playerData.opponentFBId != null) {
+                if (game.opponent.opponentFBId != null) {
                     //Debug.Log("game.playerData.opponentFBId: " + game.playerData.opponentFBId);    
-                    StartCoroutine(UserManager.instance.GetFBPicture(game.playerData.opponentFBId, (sprite)=>
+                    StartCoroutine(UserManager.instance.GetFBPicture(game.opponent.opponentFBId, (sprite)=>
                         {
                             //opponentProfilePictureSprite = sprite;
                             opponentProfilePicture.sprite = sprite;
@@ -68,13 +68,13 @@ namespace Fourzy
             }
 
             if (game.isCurrentPlayer_PlayerOne) {
-                currentplayer = Player.ONE;
+                currentplayer = PlayerEnum.ONE;
             } else {
-                currentplayer = Player.TWO;
+                currentplayer = PlayerEnum.TWO;
             }
 
             //if (game.winnerUserId != null)
-            if (game.gameState.winner != Player.EMPTY)
+            if (game.gameState.winner != PlayerEnum.EMPTY)
             {
                 //Debug.Log("ActiveGame game.gameState.winner: " + game.gameState.winner);
                 //Debug.Log("ActiveGame currentplayer: " + currentplayer);
@@ -83,7 +83,7 @@ namespace Fourzy
                 {
                     statusLabel.text = LocalizationManager.instance.GetLocalizedValue("you_won_text");
                 }
-                else if (game.gameState.winner == Player.NONE || game.gameState.winner == Player.ALL)
+                else if (game.gameState.winner == PlayerEnum.NONE || game.gameState.winner == PlayerEnum.ALL)
                 {
                     statusLabel.text = LocalizationManager.instance.GetLocalizedValue("draw_text");
                 } else {
@@ -163,6 +163,8 @@ namespace Fourzy
             GameManager.instance.isExpired = game.isExpired;
             GameManager.instance.didViewResult = game.didViewResult;
             GameManager.instance.gameType = game.gameType;
+            GameManager.instance.challengerGamePieceId = game.challengerGamePieceId;
+            GameManager.instance.challengedGamePieceId = game.challengedGamePieceId;
             // -------------------------------------------------------------------------------------------
 
             GameManager.instance.winner = winnerName;
@@ -172,7 +174,7 @@ namespace Fourzy
 
             //GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame("", "");
-            GameManager.instance.InitPlayerUI(game.playerData.opponentName, game.opponentProfilePictureSprite);
+            GameManager.instance.InitPlayerUI(game.opponent.opponentName, game.opponentProfilePictureSprite);
             // Triggers GameManager TransitionToGameScreen
             if (OnActiveGame != null)
                 OnActiveGame();

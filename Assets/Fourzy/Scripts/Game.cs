@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 namespace Fourzy
 {
@@ -13,10 +12,12 @@ namespace Fourzy
         public bool didViewResult;
         public bool isVisible;
         //public string opponentFBId = "";
-        public PlayerData playerData;
+        public Opponent opponent;
         public ChallengeState challengeState;
         public ChallengeType challengeType;
         public GameType gameType;
+        public int challengerGamePieceId;
+        public int challengedGamePieceId;
 
         //public string opponentName;
         public string winnerName;
@@ -26,19 +27,24 @@ namespace Fourzy
         public delegate void GameActive();
         public static event GameActive OnActiveGame;
 
-        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, PlayerData playerData, ChallengeState challengeState, ChallengeType challengeType, GameType gameType)
+        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, GameType gameType, string challengerGamePieceId, string challengedGamePieceId)
         {
             this.challengeId = challengeId;
             this.gameState = gameState;
             this.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;
             this.isExpired = isExpired;
             this.didViewResult = didViewResult;
-            this.playerData = playerData;
+            this.opponent = opponent;
             this.challengeState = challengeState;
             this.challengeType = challengeType;
             this.gameType = gameType;
             // Always visible until deleting games is implemented
             this.isVisible = true;
+            this.challengerGamePieceId = 0;
+            Int32.TryParse(challengerGamePieceId, out this.challengerGamePieceId);
+            this.challengedGamePieceId = 0;
+            Int32.TryParse(challengedGamePieceId, out this.challengedGamePieceId);
+
             InitGame();
         }
 
@@ -46,9 +52,9 @@ namespace Fourzy
 
             //opponentName = playerData.opponentName;
 
-            if (playerData.opponentFBId != "")
+            if (opponent.opponentFBId != "")
             {
-                CoroutineHandler.StartStaticCoroutine(UserManager.instance.GetFBPicture(playerData.opponentFBId, (sprite) =>
+                CoroutineHandler.StartStaticCoroutine(UserManager.instance.GetFBPicture(opponent.opponentFBId, (sprite) =>
                 {
                     opponentProfilePictureSprite = sprite;
                 }));
@@ -70,7 +76,9 @@ namespace Fourzy
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.isExpired = isExpired;
             GameManager.instance.didViewResult = didViewResult;
-            GameManager.instance.gameType = gameType;   
+            GameManager.instance.gameType = gameType;
+            GameManager.instance.challengerGamePieceId = challengerGamePieceId;
+            GameManager.instance.challengedGamePieceId = challengedGamePieceId;
             // -------------------------------------------------------------------------------------------
 
             GameManager.instance.winner = winnerName;
@@ -80,7 +88,7 @@ namespace Fourzy
 
             //GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame("", "");
-            GameManager.instance.InitPlayerUI(playerData.opponentName, opponentProfilePictureSprite);
+            GameManager.instance.InitPlayerUI(opponent.opponentName, opponentProfilePictureSprite);
 
             // Triggers GameManager TransitionToGameScreen
             if (OnActiveGame != null)

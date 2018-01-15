@@ -31,7 +31,7 @@ namespace Fourzy
             if (Fourzy.GameManager.instance.gameState.isCurrentPlayerTurn && !Fourzy.GameManager.instance.gameState.isGameOver)
             {
                 int noMoves = 0;
-                Player player = GameManager.instance.gameState.isPlayerOneTurn ? Player.ONE : Player.TWO;
+                PlayerEnum player = GameManager.instance.gameState.isPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
 
                 if (rightArrowActive)
                 {

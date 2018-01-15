@@ -7,9 +7,9 @@ namespace Fourzy
         public int location;
         public Position position;
         public Direction direction;
-        public Player player;
+        public PlayerEnum player;
 
-        public Move(Position position, Direction direction, Player player) {
+        public Move(Position position, Direction direction, PlayerEnum player) {
             this.position = position;
             this.direction = direction;
             this.player = player;
@@ -33,7 +33,7 @@ namespace Fourzy
             }
         }
 
-        public Move(int location, Direction direction, Player player) {
+        public Move(int location, Direction direction, PlayerEnum player) {
             this.player = player;
             InitMove(location, direction);
         }

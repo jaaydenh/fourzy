@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace Fourzy {
     public class GameBoard {
@@ -58,7 +57,7 @@ namespace Fourzy {
             }
         }
 
-        public void SetCell(int col, int row, Player player) {
+        public void SetCell(int col, int row, PlayerEnum player) {
             board[row, col] = (int)player;
         }
 
@@ -72,7 +71,7 @@ namespace Fourzy {
                     board[row, col] = boardData[row * numRows + col];
                     if (board[row, col] != (int)Piece.EMPTY) {
                         Position pos = new Position(col, row);
-                        MovingGamePiece mgp = new MovingGamePiece(new Move(pos, Direction.UP, Player.NONE));
+                        MovingGamePiece mgp = new MovingGamePiece(new Move(pos, Direction.UP, PlayerEnum.NONE));
                         completedMovingPieces.Add(mgp);
                     }
                 }
@@ -84,7 +83,7 @@ namespace Fourzy {
                 for (int col = 0; col < numColumns; col++) {
                     if (board[row, col] != (int)Piece.EMPTY) {
                         Position pos = new Position(col, row);
-                        MovingGamePiece mgp = new MovingGamePiece(new Move(pos, Direction.UP, Player.NONE));
+                        MovingGamePiece mgp = new MovingGamePiece(new Move(pos, Direction.UP, PlayerEnum.NONE));
                         completedMovingPieces.Add(mgp);
                     }
                 }
@@ -105,7 +104,7 @@ namespace Fourzy {
             return boardArray;
         }
 
-        public int PlayerPieceCount(Player player) {
+        public int PlayerPieceCount(PlayerEnum player) {
             int pieceCount = 0;
             for (int row = 0; row < numRows; row++)
             {
@@ -158,14 +157,14 @@ namespace Fourzy {
                         if (GetCell(nextPosition.column, nextPosition.row) != 0) {
                             //Debug.Log("stick nextposition column: " + nextPosition.column + " row: " + nextPosition.row);
                             pieceInSquare = true;
-                            Player player = (Player)GetCell(nextPosition.column, nextPosition.row);
+                            PlayerEnum player = (PlayerEnum)GetCell(nextPosition.column, nextPosition.row);
                             Move move = new Move(nextPosition, piece.currentDirection, player);
                             MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
                             activeMovingPieces.Add(activeMovingPiece);
                         }
                     }
 
-                    if (piece.player != Player.NONE) {
+                    if (piece.player != PlayerEnum.NONE) {
                         SetCell(nextPosition.column, nextPosition.row, piece.player);
                         piece.player = 0;
                     } else {
@@ -176,7 +175,7 @@ namespace Fourzy {
 
                     if (piece.isDestroyed) {
                         if (InBoardBounds(nextPosition)) {
-                            SetCell(nextPosition.column, nextPosition.row, Player.NONE);
+                            SetCell(nextPosition.column, nextPosition.row, PlayerEnum.NONE);
                         }
                     }
 
@@ -286,7 +285,7 @@ namespace Fourzy {
                     //    activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                     //}
 
-                    //if (piece.player != Player.NONE)
+                    //if (piece.player != PlayerEnum.NONE)
                     //{
                     //    SetCell(nextPosition.column, nextPosition.row, piece.player);
                     //    piece.player = 0;
@@ -318,8 +317,8 @@ namespace Fourzy {
             }
         }
 
-        public Player PlayerAtPosition(Position position) {
-            return (Player)board[position.row, position.column];
+        public PlayerEnum PlayerAtPosition(Position position) {
+            return (PlayerEnum)board[position.row, position.column];
         }
 
         public List<long> GetGameBoardData() {

@@ -47,7 +47,7 @@ namespace Fourzy
         public GameObject gamePiecePrefab;
         public Sprite playerOneSpriteMoving;
         public Sprite playerOneSpriteAsleep;
-        public Sprite playerTwoSpriteAwake;
+        public Sprite playerTwoSpriteMoving;
         public Sprite playerTwoSpriteAsleep;
         private string bluePlayerWonText = "Blue Player Won!";
         private string redPlayerWonText = "Red Player Won!";
@@ -110,6 +110,8 @@ namespace Fourzy
         public bool didViewResult = false;
         public string opponentLeaderboardRank = "";
         public Screens activeScreen = Screens.NONE;
+        public int challengerGamePieceId;
+        public int challengedGamePieceId;
 
         //int spacing = 1; //100
         //int offset = 0; //4
@@ -130,7 +132,320 @@ namespace Fourzy
         //Static instance of GameManager which allows it to be accessed by any other script.
         public static GameManager instance = null;
 
-#if UNITY_EDITOR
+        private void OnEnable()
+        {
+            UserInputHandler.OnTap += ProcessPlayerInput;
+            ActiveGame.OnActiveGame += TransitionToGameScreen;
+            FriendEntry.OnActiveGame += TransitionToGameScreen;
+            LeaderboardPlayer.OnActiveGame += TransitionToGameScreen;
+            ChallengeManager.OnActiveGame += TransitionToGameScreen;
+            ChallengeManager.OnReceivedOpponentGamePiece += SetOpponentGamePiece;
+            LoginManager.OnLoginError += DisplayLoginError;
+            Game.OnActiveGame += TransitionToGameScreen;
+            //SceneManager.sceneLoaded += OnGameFinishedLoading;
+        }
+
+        private void OnDisable()
+        {
+            UserInputHandler.OnTap -= ProcessPlayerInput;
+            ActiveGame.OnActiveGame -= TransitionToGameScreen;
+            FriendEntry.OnActiveGame -= TransitionToGameScreen;
+            LeaderboardPlayer.OnActiveGame -= TransitionToGameScreen;
+            ChallengeManager.OnActiveGame -= TransitionToGameScreen;
+            ChallengeManager.OnReceivedOpponentGamePiece -= SetOpponentGamePiece;
+            LoginManager.OnLoginError -= DisplayLoginError;
+            Game.OnActiveGame -= TransitionToGameScreen;
+            //SceneManager.sceneLoaded -= OnGameFinishedLoading;
+        }
+
+        void Start()
+        {
+            //MatchFoundMessage.Listener = (message) =>
+            //{
+            //    createGameScript.SetButtonStateWrapper(false);
+            //    ChallengeManager.instance.GetChallenges();
+            //};
+
+            ChallengeWonMessage.Listener = (message) =>
+            {
+                var gsChallenge = message.Challenge;
+                if (UserManager.instance.userId != gsChallenge.NextPlayer)
+                {
+                    int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
+                    PlayerEnum player = currentPlayerMove == 1 ? PlayerEnum.ONE : PlayerEnum.TWO;
+
+                    // Only Replay the last move if the player is viewing the game screen for that game
+                    if (gsChallenge.ChallengeId == challengeInstanceId)
+                    {
+                        List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
+                        GSData lastMove = moveList.Last();
+
+                        StartCoroutine(ReplayIncomingOpponentMove(lastMove, player));
+                        //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
+                        SetActionButton();
+                    } else {
+                        var currentGame = games
+                            .Where(t => t.challengeId == gsChallenge.ChallengeId)
+                            .FirstOrDefault();
+                        if (currentGame != null)
+                        {
+                            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
+                            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
+                            currentGame.gameState = newGameState;
+                        }
+
+                        if (activeScreen == Screens.GAME)
+                        {
+                            SetActionButton();
+                        }
+
+                        if (activeScreen == Screens.GAMES_LIST)
+                        {
+                            //ChallengeManager.instance.GetChallenges();
+                            ChallengeManager.instance.ReloadGames();
+                        }
+                    }
+                }
+            };
+
+            ChallengeLostMessage.Listener = (message) =>
+            {
+                var gsChallenge = message.Challenge;
+                if (UserManager.instance.userId != gsChallenge.NextPlayer)
+                {
+                    int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
+                    PlayerEnum player = currentPlayerMove == 1 ? PlayerEnum.ONE : PlayerEnum.TWO;
+
+                    // Only Replay the last move if the player is viewing the game screen for that game
+                    if (gsChallenge.ChallengeId == challengeInstanceId)
+                    {
+                        List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
+                        GSData lastMove = moveList.Last();
+
+                        StartCoroutine(ReplayIncomingOpponentMove(lastMove, player));
+                        //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
+                        SetActionButton();
+                    } else {
+                        var currentGame = games
+                            .Where(t => t.challengeId == gsChallenge.ChallengeId)
+                            .FirstOrDefault();
+                        if (currentGame != null)
+                        {
+                            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
+                            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
+                            currentGame.gameState = newGameState;
+                        }
+
+                        if (activeScreen == Screens.GAME)
+                        {
+                            SetActionButton();
+                        }
+
+                        if (activeScreen == Screens.GAMES_LIST)
+                        {
+                            //ChallengeManager.instance.GetChallenges();
+                            ChallengeManager.instance.ReloadGames();
+                        }
+                    }
+
+                }
+            };
+
+            ChallengeTurnTakenMessage.Listener = (message) =>
+            {
+                Debug.Log("ChallengeTurnTakenMessage active screen: " + activeScreen.ToString());
+
+                var gsChallenge = message.Challenge;
+                // replayedLastMove is a workaround to avoid having the opponents move being replayed more than once
+                if (UserManager.instance.userId == gsChallenge.NextPlayer)
+                {
+                    // Only Replay the last move if the player is viewing the game screen for that game
+                    if (gsChallenge.ChallengeId == challengeInstanceId && !replayedLastMove)
+                    {
+                        replayedLastMove = true;
+                        List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
+                        GSData lastMove = moveList.Last();
+                        int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
+                        PlayerEnum opponent = currentPlayerMove == 1 ? PlayerEnum.TWO : PlayerEnum.ONE;
+                        StartCoroutine(ReplayIncomingOpponentMove(lastMove, opponent));
+                    }
+                    else
+                    {
+                        var currentGame = games
+                            .Where(t => t.challengeId == gsChallenge.ChallengeId)
+                            .FirstOrDefault();
+                        if (currentGame != null)
+                        {
+                            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
+                            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, PlayerEnum.EMPTY);
+                            currentGame.gameState = newGameState;
+                        }
+
+                        if (activeScreen == Screens.GAME) {
+                            SetActionButton();
+                        }
+
+                        if (activeScreen == Screens.GAMES_LIST)
+                        {
+                            //ChallengeManager.instance.GetChallenges();
+                            ChallengeManager.instance.ReloadGames();
+                        }
+                    }
+                }
+            };
+
+            // Called when another player joins a game you created that was waiting for a 2nd player
+            ChallengeJoinedMessage.Listener = (message) =>
+            {
+                Debug.Log("ChallengeJoinedMessage");
+                var gsChallenge = message.Challenge;
+                string opponentName = gsChallenge.Challenged.FirstOrDefault().Name;
+                string opponentFBId = gsChallenge.Challenger.ExternalIds.GetString("FB");
+
+                var currentGame = games
+                    .Where(t => t.challengeId == gsChallenge.ChallengeId)
+                    .FirstOrDefault();
+                if (currentGame != null)
+                {
+                    Debug.Log("ChallengeJoinedMessage set current games playerdata");
+
+                    Opponent opponent = new Opponent(opponentName, opponentFBId);
+
+                    currentGame.opponent = opponent;
+                    currentGame.InitGame();
+                }
+
+                if (gsChallenge.ChallengeId == challengeInstanceId)
+                {
+                    InitPlayerUI(opponentName, null, opponentFBId);
+                }
+                else
+                {
+                    if (activeScreen == Screens.GAMES_LIST)
+                    {
+                        ChallengeManager.instance.ReloadGames();
+                    }
+                }
+            };
+
+            // Called when directly challenged by another player
+            ChallengeIssuedMessage.Listener = (message) =>
+            {
+                var gsChallenge = message.Challenge;
+                Debug.Log("ChallengeIssuedMessage");
+                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
+
+                //bool isplayerOne = false;
+                //if (UserManager.instance.userId == gsChallenge.NextPlayer)
+                //{
+                //    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
+                //}
+
+                GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
+                GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, PlayerEnum.EMPTY);
+                Opponent opponent = new Opponent(gsChallenge.Challenger.Name, gsChallenge.Challenger.Id);
+
+                Game game = new Game(gsChallenge.ChallengeId, newGameState, false, false, false, opponent, ChallengeState.RUNNING, ChallengeType.STANDARD, challenge.gameType, challenge.challengerGamePieceId, challenge.challengedGamePieceId);
+                games.Add(game);
+
+                if (challengeInstanceId != null) {
+                    SetActionButton();    
+                }
+            };
+
+            ChallengeAcceptedMessage.Listener = (message) =>
+            {
+                var gsChallenge = message.Challenge;
+                Debug.Log("ChallengeAcceptedMessage");
+                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
+                Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
+                if (UserManager.instance.userId == gsChallenge.NextPlayer)
+                {
+                    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
+                }
+            };
+
+            ChallengeStartedMessage.Listener = (message) =>
+            {
+                var gsChallenge = message.Challenge;
+                Debug.Log("ChallengeStartedMessage");
+                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
+                Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
+                if (UserManager.instance.userId == gsChallenge.NextPlayer)
+                {
+                    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
+                }
+            };
+
+            rematchButton.gameObject.SetActive(false);
+            gameScreen.SetActive(false);
+            //playerNameLabel.text = UserManager.instance.userName;
+
+            if (tokens == null)
+            {
+                tokens = new GameObject("Tokens");
+                //tokens.transform.position = new Vector3(-315, 300);
+                //tokens.transform.localScale = new Vector3(90, 89);
+                tokens.transform.parent = gameScreen.transform;
+            }
+
+            activeScreen = Screens.GAMES_LIST;
+
+#if UNITY_IOS
+            UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
+            UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
+#endif
+
+            //GamePieceSelectionManager.instance.LoadGamePieces();
+            // center camera
+            //Camera.main.transform.position = new Vector3((Constants.numColumns - 1) / 2.0f, -((Constants.numRows - 1) / 2.0f) + .15f, Camera.main.transform.position.z);
+        }
+
+        void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+                Destroy(gameObject);
+            }
+
+            //Sets this to not be destroyed when reloading scene
+            DontDestroyOnLoad(gameObject);
+
+            GS.GameSparksAvailable += CheckConnectionStatus;
+
+            DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
+
+            audioMove = AddAudio(clipMove, false, false, 1);
+            audioWin = AddAudio(clipWin, false, false, 1);
+            audioChest = AddAudio(clipChest, false, false, 1);
+
+            replayedLastMove = false;
+        }
+
+        void Update()
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    if (challengeInstanceId != null)
+                    {
+                        TransitionToGamesListScreen();
+                    }
+                    else
+                    {
+                        Application.Quit();
+                    }
+                }
+            }
+        }
+
+        #if UNITY_EDITOR
         [UnityEditor.MenuItem("Screenshot/Take screenshot")]
         static void Screenshot()
         {
@@ -189,27 +504,38 @@ namespace Fourzy
 
             //RewardsScreen.SetActive(true);
             bool isCurrentPlayerWinner = false;
-            Player currentPlayer = Player.NONE;
+            PlayerEnum currentPlayer = PlayerEnum.NONE;
             Debug.Log("gameState.winner: " + gameState.winner);
             Debug.Log("isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
 
-            if (isCurrentPlayer_PlayerOne && gameState.winner == Player.ONE)
+            if (isCurrentPlayer_PlayerOne && gameState.winner == PlayerEnum.ONE)
             {
                 isCurrentPlayerWinner = true;
-            } else if (!isCurrentPlayer_PlayerOne && gameState.winner == Player.TWO) {
+            }
+            else if (!isCurrentPlayer_PlayerOne && gameState.winner == PlayerEnum.TWO)
+            {
                 isCurrentPlayerWinner = true;
-            } else if (isCurrentPlayer_PlayerOne && gameState.winner == Player.TWO) {
+            }
+            else if (isCurrentPlayer_PlayerOne && gameState.winner == PlayerEnum.TWO)
+            {
                 isCurrentPlayerWinner = false;
-            } else if (!isCurrentPlayer_PlayerOne && gameState.winner == Player.ONE) {
+            }
+            else if (!isCurrentPlayer_PlayerOne && gameState.winner == PlayerEnum.ONE)
+            {
                 isCurrentPlayerWinner = false;
-            } else if (gameState.winner == Player.ALL || gameState.winner == Player.NONE) {
+            }
+            else if (gameState.winner == PlayerEnum.ALL || gameState.winner == PlayerEnum.NONE)
+            {
                 isCurrentPlayerWinner = false;
             }
 
-            if (isCurrentPlayer_PlayerOne) {
-                currentPlayer = Player.ONE;
-            } else {
-                currentPlayer = Player.TWO;
+            if (isCurrentPlayer_PlayerOne)
+            {
+                currentPlayer = PlayerEnum.ONE;
+            }
+            else
+            {
+                currentPlayer = PlayerEnum.TWO;
             }
 
             //audioChest.Play();
@@ -218,7 +544,8 @@ namespace Fourzy
             gameInfo.Close();
         }
 
-        public void RewardsScreenOkButton() {
+        public void RewardsScreenOkButton()
+        {
             //RewardsScreen.SetActive(false);
             //rewardScreen.Close();
             rewardScreen.gameObject.SetActive(false);
@@ -266,15 +593,22 @@ namespace Fourzy
             activeScreen = Screens.CREATE_GAME;
         }
 
-        public void TransitionToGameOptionsScreen(GameType gameType, string opponentUserId = "", string opponentName = "", Image opponentProfilePicture = null, string opponentLeaderboardRank = "") 
+        public void TransitionToGameOptionsScreen(GameType gameType, string opponentUserId = "", string opponentName = "", Image opponentProfilePicture = null, string opponentLeaderboardRank = "")
         {
+            Debug.Log("TransitionToGameOptionsScreen: opponentUserId: " + opponentUserId);
+            challengerGamePieceId = Player.instance.gamePieceId;
+            if (opponentUserId != "") {
+                ChallengeManager.instance.GetOpponentGamePiece(opponentUserId);    
+            }
+
             ResetUIGameScreen();
             challengeInstanceId = null;
             this.gameType = gameType;
             this.opponentUserId = opponentUserId;
             this.opponentNameLabel.text = opponentName;
-            if (opponentProfilePicture != null) {
-                this.opponentProfilePicture.sprite = opponentProfilePicture.sprite;    
+            if (opponentProfilePicture != null)
+            {
+                this.opponentProfilePicture.sprite = opponentProfilePicture.sprite;
             }
             this.opponentLeaderboardRank = opponentLeaderboardRank;
 
@@ -303,6 +637,22 @@ namespace Fourzy
             UIScreen.SetActive(true);
             activeScreen = Screens.GAMES_LIST;
             ChallengeManager.instance.ReloadGames();
+        }
+
+        private void SetOpponentGamePiece(string gamePieceId) {
+            Debug.Log("GameManager: SetOpponentGamePiece: gamepieceid: " + gamePieceId);
+            challengedGamePieceId = int.Parse(gamePieceId);
+            opponentPiece.sprite = GamePieceSelectionManager.instance.gamePieces[challengedGamePieceId];
+
+            GamePieceUI opponent = opponentPiece.GetComponent<GamePieceUI>();
+            if (challengerGamePieceId == challengedGamePieceId)
+            {
+                opponent.SetAlternateColor(true);
+            }
+            else
+            {
+                opponent.SetAlternateColor(false);
+            }
         }
 
         private void FadeGameScreen(float alpha, float fadeTime)
@@ -384,317 +734,10 @@ namespace Fourzy
             UserInputHandler.inputEnabled = true;
         }
 
-        private void OnEnable()
-        {
-            UserInputHandler.OnTap += ProcessPlayerInput;
-            ActiveGame.OnActiveGame += TransitionToGameScreen;
-            FriendEntry.OnActiveGame += TransitionToGameScreen;
-            LeaderboardPlayer.OnActiveGame += TransitionToGameScreen;
-            ChallengeManager.OnActiveGame += TransitionToGameScreen;
-            LoginManager.OnLoginError += DisplayLoginError;
-            Game.OnActiveGame += TransitionToGameScreen;
-            //SceneManager.sceneLoaded += OnGameFinishedLoading;
-        }
-
-        private void OnDisable()
-        {
-            UserInputHandler.OnTap -= ProcessPlayerInput;
-            ActiveGame.OnActiveGame -= TransitionToGameScreen;
-            FriendEntry.OnActiveGame -= TransitionToGameScreen;
-            LeaderboardPlayer.OnActiveGame -= TransitionToGameScreen;
-            ChallengeManager.OnActiveGame -= TransitionToGameScreen;
-            LoginManager.OnLoginError -= DisplayLoginError;
-            Game.OnActiveGame -= TransitionToGameScreen;
-            //SceneManager.sceneLoaded -= OnGameFinishedLoading;
-        }
-
         private void CheckConnectionStatus(bool connected)
         {
             // TODO: inform the player they dont have a connection when connected is false
             Debug.Log("CheckConnectionStatus: " + connected);
-        }
-
-        void Start()
-        {
-            //MatchFoundMessage.Listener = (message) =>
-            //{
-            //    createGameScript.SetButtonStateWrapper(false);
-            //    ChallengeManager.instance.GetChallenges();
-            //};
-
-            ChallengeWonMessage.Listener = (message) =>
-            {
-                var gsChallenge = message.Challenge;
-                if (UserManager.instance.userId != gsChallenge.NextPlayer)
-                {
-                    int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
-                    Player player = currentPlayerMove == 1 ? Player.ONE : Player.TWO;
-
-                    // Only Replay the last move if the player is viewing the game screen for that game
-                    if (gsChallenge.ChallengeId == challengeInstanceId)
-                    {
-                        List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
-                        GSData lastMove = moveList.Last();
-
-                        StartCoroutine(ReplayIncomingOpponentMove(lastMove, player));
-                        //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
-                        SetActionButton();
-                    } else {
-                        var currentGame = games
-                            .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                            .FirstOrDefault();
-                        if (currentGame != null)
-                        {
-                            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
-                            currentGame.gameState = newGameState;
-                        }
-
-                        if (activeScreen == Screens.GAME)
-                        {
-                            SetActionButton();
-                        }
-
-                        if (activeScreen == Screens.GAMES_LIST)
-                        {
-                            //ChallengeManager.instance.GetChallenges();
-                            ChallengeManager.instance.ReloadGames();
-                        }
-                    }
-                }
-            };
-
-            ChallengeLostMessage.Listener = (message) =>
-            {
-                var gsChallenge = message.Challenge;
-                if (UserManager.instance.userId != gsChallenge.NextPlayer)
-                {
-                    int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
-                    Player player = currentPlayerMove == 1 ? Player.ONE : Player.TWO;
-
-                    // Only Replay the last move if the player is viewing the game screen for that game
-                    if (gsChallenge.ChallengeId == challengeInstanceId)
-                    {
-                        List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
-                        GSData lastMove = moveList.Last();
-
-                        StartCoroutine(ReplayIncomingOpponentMove(lastMove, player));
-                        //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
-                        SetActionButton();
-                    } else {
-                        var currentGame = games
-                            .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                            .FirstOrDefault();
-                        if (currentGame != null)
-                        {
-                            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
-                            currentGame.gameState = newGameState;
-                        }
-
-                        if (activeScreen == Screens.GAME)
-                        {
-                            SetActionButton();
-                        }
-
-                        if (activeScreen == Screens.GAMES_LIST)
-                        {
-                            //ChallengeManager.instance.GetChallenges();
-                            ChallengeManager.instance.ReloadGames();
-                        }
-                    }
-
-                }
-            };
-
-            ChallengeTurnTakenMessage.Listener = (message) =>
-            {
-                Debug.Log("ChallengeTurnTakenMessage active screen: " + activeScreen.ToString());
-
-                var gsChallenge = message.Challenge;
-                // replayedLastMove is a workaround to avoid having the opponents move being replayed more than once
-                if (UserManager.instance.userId == gsChallenge.NextPlayer)
-                {
-                    // Only Replay the last move if the player is viewing the game screen for that game
-                    if (gsChallenge.ChallengeId == challengeInstanceId && !replayedLastMove)
-                    {
-                        replayedLastMove = true;
-                        List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
-                        GSData lastMove = moveList.Last();
-                        int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
-                        Player opponent = currentPlayerMove == 1 ? Player.TWO : Player.ONE;
-                        StartCoroutine(ReplayIncomingOpponentMove(lastMove, opponent));
-                    }
-                    else
-                    {
-                        var currentGame = games
-                            .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                            .FirstOrDefault();
-                        if (currentGame != null)
-                        {
-                            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, Player.EMPTY);
-                            currentGame.gameState = newGameState;
-                        }
-
-                        if (activeScreen == Screens.GAME) {
-                            SetActionButton();
-                        }
-
-                        if (activeScreen == Screens.GAMES_LIST)
-                        {
-                            //ChallengeManager.instance.GetChallenges();
-                            ChallengeManager.instance.ReloadGames();
-                        }
-                    }
-                }
-            };
-
-            // Called when another player joins a game you created that was waiting for a 2nd player
-            ChallengeJoinedMessage.Listener = (message) =>
-            {
-                Debug.Log("ChallengeJoinedMessage");
-                var gsChallenge = message.Challenge;
-                string opponentName = gsChallenge.Challenged.FirstOrDefault().Name;
-                string opponentFBId = gsChallenge.Challenger.ExternalIds.GetString("FB");
-
-                var currentGame = games
-                    .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                    .FirstOrDefault();
-                if (currentGame != null)
-                {
-                    Debug.Log("ChallengeJoinedMessage set current games playerdata");
-
-                    PlayerData playerData = new PlayerData(opponentName, opponentFBId);
-
-                    currentGame.playerData = playerData;
-                    currentGame.InitGame();
-                }
-
-                if (gsChallenge.ChallengeId == challengeInstanceId)
-                {
-                    InitPlayerUI(opponentName, null, opponentFBId);
-                }
-                else
-                {
-                    if (activeScreen == Screens.GAMES_LIST)
-                    {
-                        ChallengeManager.instance.ReloadGames();
-                    }
-                }
-            };
-
-            // Called when directly challenged by another player
-            ChallengeIssuedMessage.Listener = (message) =>
-            {
-                var gsChallenge = message.Challenge;
-                Debug.Log("ChallengeIssuedMessage");
-                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
-
-                //bool isplayerOne = false;
-                //if (UserManager.instance.userId == gsChallenge.NextPlayer)
-                //{
-                //    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
-                //}
-
-                GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, Player.EMPTY);
-                PlayerData playerData = new PlayerData(gsChallenge.Challenger.Name, gsChallenge.Challenger.Id);
-                Game game = new Game(gsChallenge.ChallengeId, newGameState, false, false, false, playerData, ChallengeState.RUNNING, ChallengeType.STANDARD, challenge.gameType);
-                games.Add(game);
-
-                if (challengeInstanceId != null) {
-                    SetActionButton();    
-                }
-            };
-
-            ChallengeAcceptedMessage.Listener = (message) =>
-            {
-                var gsChallenge = message.Challenge;
-                Debug.Log("ChallengeAcceptedMessage");
-                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
-                Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
-                if (UserManager.instance.userId == gsChallenge.NextPlayer)
-                {
-                    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
-                }
-            };
-
-            ChallengeStartedMessage.Listener = (message) =>
-            {
-                var gsChallenge = message.Challenge;
-                Debug.Log("ChallengeStartedMessage");
-                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
-                Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
-                if (UserManager.instance.userId == gsChallenge.NextPlayer)
-                {
-                    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
-                }
-            };
-
-            rematchButton.gameObject.SetActive(false);
-            gameScreen.SetActive(false);
-            //playerNameLabel.text = UserManager.instance.userName;
-
-            if (tokens == null)
-            {
-                tokens = new GameObject("Tokens");
-                tokens.transform.parent = gameScreen.transform;
-            }
-
-            activeScreen = Screens.GAMES_LIST;
-
-#if UNITY_IOS
-            UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
-            UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
-#endif
-
-            // center camera
-            //Camera.main.transform.position = new Vector3((Constants.numColumns - 1) / 2.0f, -((Constants.numRows - 1) / 2.0f) + .15f, Camera.main.transform.position.z);
-        }
-
-        void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else if (instance != this)
-            {
-                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
-                Destroy(gameObject);
-            }
-
-            //Sets this to not be destroyed when reloading scene
-            DontDestroyOnLoad(gameObject);
-
-            GS.GameSparksAvailable += CheckConnectionStatus;
-
-            DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
-
-            audioMove = AddAudio(clipMove, false, false, 1);
-            audioWin = AddAudio(clipWin, false, false, 1);
-            audioChest = AddAudio(clipChest, false, false, 1);
-
-            replayedLastMove = false;
-        }
-
-        void Update()
-        {
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    if (challengeInstanceId != null)
-                    {
-                        TransitionToGamesListScreen();
-                    }
-                    else
-                    {
-                        Application.Quit();
-                    }
-                }
-            }
         }
 
         public AudioSource AddAudio(AudioClip clip, bool loop, bool playAwake, float vol)
@@ -707,7 +750,7 @@ namespace Fourzy
             return newAudio;
         }
 
-        private IEnumerator ReplayIncomingOpponentMove(GSData lastMove, Player player)
+        private IEnumerator ReplayIncomingOpponentMove(GSData lastMove, PlayerEnum player)
         {
             int position = lastMove.GetInt("position").GetValueOrDefault();
             Direction direction = (Direction)lastMove.GetInt("direction").GetValueOrDefault();
@@ -728,14 +771,14 @@ namespace Fourzy
                 int position = lastMove.GetInt("position").GetValueOrDefault();
                 Direction direction = (Direction)lastMove.GetInt("direction").GetValueOrDefault();
 
-                Player player = Player.NONE;
+                PlayerEnum player = PlayerEnum.NONE;
                 if (!gameState.isGameOver)
                 {
-                    player = gameState.isPlayerOneTurn ? Player.TWO : Player.ONE;
+                    player = gameState.isPlayerOneTurn ? PlayerEnum.TWO : PlayerEnum.ONE;
                 }
                 else
                 {
-                    player = gameState.isPlayerOneTurn ? Player.ONE : Player.TWO;
+                    player = gameState.isPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
                 }
                 Debug.Log("ReplayLastMove lastmove: position: " + position + " direction: " + direction + " player: " + player.ToString());
                 Move move = new Move(position, direction, player);
@@ -881,7 +924,7 @@ namespace Fourzy
 
                     if (piece == (int)Piece.BLUE)
                     {
-                        GameObject pieceObject = SpawnPiece(col, row * -1, Player.ONE, PieceAnimState.ASLEEP);
+                        GameObject pieceObject = SpawnPiece(col, row * -1, PlayerEnum.ONE, PieceAnimState.ASLEEP);
                         //TODO: Use player chosen sprite for gamepiece
                         SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
                         Color c = pieceSprite.color;
@@ -890,19 +933,19 @@ namespace Fourzy
                         //pieceSprite.sprite = new Sprite().texture.
 
                         GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
-                        pieceModel.player = Player.ONE;
+                        pieceModel.player = PlayerEnum.ONE;
                         gameBoardView.gamePieces[row, col] = pieceObject;
                     }
                     else if (piece == (int)Piece.RED)
                     {
-                        GameObject pieceObject = SpawnPiece(col, row * -1, Player.TWO, PieceAnimState.ASLEEP);
+                        GameObject pieceObject = SpawnPiece(col, row * -1, PlayerEnum.TWO, PieceAnimState.ASLEEP);
                         SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
                         Color c = pieceSprite.color;
                         c.a = 0.0f;
                         pieceSprite.color = c;
                         //pieceSprite.sprite = new Sprite().texture.
                         GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
-                        pieceModel.player = Player.TWO;
+                        pieceModel.player = PlayerEnum.TWO;
                         gameBoardView.gamePieces[row, col] = pieceObject;
                     }
                 }
@@ -919,7 +962,7 @@ namespace Fourzy
                 {
                     //float xPos = (col - ((Constants.numColumns - 1) / 2.0f)) * 1f;
                     //float yPos = (row - ((Constants.numColumns - 1) / 2.0f)) * 1f - .15f;
-                    float xPos = col ;
+                    float xPos = col;
                     //float yPos = (row * -1) * 1.008f;
                     float yPos = row * -1;
                     //Debug.Log("xPos: " + xPos);
@@ -1020,15 +1063,45 @@ namespace Fourzy
                 {
                     playerNameLabel.color = bluePlayerColor;
                     opponentNameLabel.color = redPlayerColor;
-                    playerPiece.sprite = playerOneSpriteMoving;
-                    opponentPiece.sprite = playerTwoSpriteAwake;
+                    //playerPiece.sprite = playerOneSpriteMoving;
+                    //opponentPiece.sprite = playerTwoSpriteMoving;
+                    int playerGamePieceId = challengerGamePieceId;
+                    int opponentGamePieceId = challengedGamePieceId;
+                    playerPiece.sprite = GamePieceSelectionManager.instance.gamePieces[playerGamePieceId];
+                    GamePieceUI player = playerPiece.GetComponent<GamePieceUI>();
+                    player.SetAlternateColor(false);
+
+                    if (opponentGamePieceId != -1) {
+                        opponentPiece.sprite = GamePieceSelectionManager.instance.gamePieces[opponentGamePieceId];
+                    } else {
+                        opponentPiece.sprite = GamePieceSelectionManager.instance.gamePieces[0];
+                    }
+
+                    GamePieceUI opponent = opponentPiece.GetComponent<GamePieceUI>();
+                    if (playerGamePieceId == opponentGamePieceId) {
+                        opponent.SetAlternateColor(true);    
+                    } else {
+                        opponent.SetAlternateColor(false);
+                    }
                 }
                 else
                 {
                     playerNameLabel.color = redPlayerColor;
                     opponentNameLabel.color = bluePlayerColor;
-                    playerPiece.sprite = playerTwoSpriteAwake;
+                    playerPiece.sprite = playerTwoSpriteMoving;
                     opponentPiece.sprite = playerOneSpriteMoving;
+                    int playerGamePieceId = challengedGamePieceId;
+                    int opponentGamePieceId = challengerGamePieceId;
+                    playerPiece.sprite = GamePieceSelectionManager.instance.gamePieces[playerGamePieceId];
+                    GamePieceUI player = playerPiece.GetComponent<GamePieceUI>();
+                    if (playerGamePieceId == opponentGamePieceId) {
+                        player.SetAlternateColor(true);
+                    } else {
+                        player.SetAlternateColor(false);
+                    }
+                    opponentPiece.sprite = GamePieceSelectionManager.instance.gamePieces[opponentGamePieceId];
+                    GamePieceUI opponent = opponentPiece.GetComponent<GamePieceUI>();
+                    opponent.SetAlternateColor(false);
                 }
 
                 playerNameLabel.text = UserManager.instance.userName;
@@ -1069,19 +1142,18 @@ namespace Fourzy
                         new Vector2(0.5f, 0.5f));
                 }
             } else {
-                playerNameLabel.text = "Blue Player";
+                playerNameLabel.text = "Player 1";
                 playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
                     new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
                     new Vector2(0.5f, 0.5f));
-                playerPiece.sprite = playerOneSpriteMoving;
+                playerPiece.sprite = GamePieceSelectionManager.instance.gamePieces[challengerGamePieceId];
 
-                opponentNameLabel.text = "Red Player";
+                opponentNameLabel.text = "Player 2";
                 opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
                     new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
                     new Vector2(0.5f, 0.5f));
-                opponentPiece.sprite = playerTwoSpriteAwake;
+                opponentPiece.sprite = GamePieceSelectionManager.instance.gamePieces[challengedGamePieceId];
             }
-
         }
 
         public void UpdatePlayerUI()
@@ -1098,7 +1170,7 @@ namespace Fourzy
                 Vector2 centerPos = new Vector2(439, -125);
                 RectTransform pprt = playerPieceUI.GetComponent<RectTransform>();
                 pprt.DOAnchorPos(centerPos, animationSpeed);
-                playerPieceUI.transform.DOScale(new Vector3(1.7f, 1.7f), 1);
+                playerPieceUI.transform.DOScale(new Vector3(1.3f, 1.3f), 1);
 
                 //Animate opponent piece to upper right
                 Vector3 startingPos = new Vector2(-130, -83);
@@ -1116,7 +1188,7 @@ namespace Fourzy
                 Vector2 centerPos = new Vector2(-370, -125);
                 RectTransform oprt = opponentPieceUI.GetComponent<RectTransform>();
                 oprt.DOAnchorPos(centerPos, 1);
-                opponentPieceUI.transform.DOScale(new Vector3(1.7f, 1.7f), animationSpeed);
+                opponentPieceUI.transform.DOScale(new Vector3(1.3f, 1.3f), animationSpeed);
             }
         }
 
@@ -1295,11 +1367,11 @@ namespace Fourzy
         /// Spawns a gamepiece at the given column and row
         /// </summary>
         /// <returns>The piece.</returns>
-        GameObject SpawnPiece(float posX, float posY, Player player, PieceAnimState startingState)
+        GameObject SpawnPiece(float posX, float posY, PlayerEnum player, PieceAnimState startingState)
         {
             //float xPos = (posX - ((Constants.numColumns - 1) / 2.0f)) * 1f;
             //float yPos = (posY - ((Constants.numColumns - 1) / 2.0f)) * 1f - .15f;
-            //Debug.Log("SpawnPiece: x: " + posX + " y: " + posY);
+            Debug.Log("SpawnPiece: x: " + posX + " y: " + posY);
             //GameObject gamePiece = Lean.LeanPool.Spawn(gamePiecePrefab,
             //new Vector3(Mathf.FloorToInt(posX),
                 //Mathf.FloorToInt(posY), 10),
@@ -1311,23 +1383,29 @@ namespace Fourzy
             //     Mathf.FloorToInt(posY + 0.5f), 10), // spawn it above the first row
             //     Quaternion.identity, gamePieces.transform) as GameObject;
 
-
             GameObject gamePiece = LeanPool.Spawn(gamePiecePrefab, new Vector3(posX, posY, 10),
                 Quaternion.identity, gamePieces.transform) as GameObject;
 
             gamePiece.transform.position = new Vector3(posX, posY, 10);
-            //gamePiece.GetComponent<GamePiece>().gameManager = this;
-            if (player == Player.ONE) {
+
+            if (challengerGamePieceId == challengedGamePieceId && player == PlayerEnum.TWO) {
+                gamePiece.GetComponent<GamePiece>().SetAlternateColor(true);
+
+            } else {
+                gamePiece.GetComponent<GamePiece>().SetAlternateColor(false);
+            }
+
+            if (player == PlayerEnum.ONE) {
                 if (startingState == PieceAnimState.MOVING) {
-                    gamePiece.GetComponent<SpriteRenderer>().sprite = playerOneSpriteMoving;
+                    gamePiece.GetComponent<SpriteRenderer>().sprite = GamePieceSelectionManager.instance.gamePieces[challengerGamePieceId];
                 } else {
-                    gamePiece.GetComponent<SpriteRenderer>().sprite = playerOneSpriteAsleep;    
+                    gamePiece.GetComponent<SpriteRenderer>().sprite = GamePieceSelectionManager.instance.gamePieces[challengerGamePieceId];
                 }
             } else {
                 if (startingState == PieceAnimState.MOVING) {
-                    gamePiece.GetComponent<SpriteRenderer>().sprite = playerTwoSpriteAwake;
+                    gamePiece.GetComponent<SpriteRenderer>().sprite = GamePieceSelectionManager.instance.gamePieces[challengedGamePieceId];
                 } else {
-                    gamePiece.GetComponent<SpriteRenderer>().sprite = playerTwoSpriteAsleep;    
+                    gamePiece.GetComponent<SpriteRenderer>().sprite = GamePieceSelectionManager.instance.gamePieces[challengedGamePieceId];
                 }
             }
             gamePiece.GetComponent<SpriteRenderer>().enabled = true;
@@ -1469,7 +1547,7 @@ namespace Fourzy
                 int column = Mathf.RoundToInt(pos.x);
                 int row = Mathf.RoundToInt(pos.y * -1);
                 Position position;
-                Player player = gameState.isPlayerOneTurn ? Player.ONE : Player.TWO;
+                PlayerEnum player = gameState.isPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
                 Debug.Log("ProcessPlayerInput: column: " + column + " row: " + row);
                 if (inTopRowBounds(pos.x, pos.y))
                 {
@@ -1621,7 +1699,7 @@ namespace Fourzy
 
                             if (Regex.IsMatch(gameBoardString, puzzleMoveBoardString)) {
                                 //Debug.Log("FOUND MOVE");
-                                Move newMove = new Move(puzzleMove.Location, (Direction)puzzleMove.Direction, Player.TWO);
+                                Move newMove = new Move(puzzleMove.Location, (Direction)puzzleMove.Direction, PlayerEnum.TWO);
                                 //Debug.Log("move direction: " + puzzleMove.Direction);
                                 //Debug.Log("move location: " + puzzleMove.Location);
                                 StartCoroutine(MovePiece(newMove, false, true));
@@ -1642,7 +1720,7 @@ namespace Fourzy
                                 //Debug.Log("cumulative: " + cumulative);
                                 if (random < cumulative)
                                 {
-                                    Move newMove = new Move(randomMove.Location, (Direction)randomMove.Direction, Player.TWO);
+                                    Move newMove = new Move(randomMove.Location, (Direction)randomMove.Direction, PlayerEnum.TWO);
                                     //Debug.Log("RandomMove");
                                     if (gameState.CanMove(newMove.GetNextPosition(), gameState.tokenBoard.tokens)) {
                                         StartCoroutine(MovePiece(newMove, false, true));
@@ -1662,8 +1740,8 @@ namespace Fourzy
         }
 
         public void CreateGame(string challengeId) {
-            PlayerData playerData = new PlayerData(opponentNameLabel.text, opponentFacebookId);
-            Game game = new Game(challengeId, gameState, isCurrentPlayer_PlayerOne, isExpired, didViewResult, playerData, ChallengeState.RUNNING, ChallengeType.STANDARD, gameType);
+            Opponent opponent = new Opponent(opponentNameLabel.text, opponentFacebookId);
+            Game game = new Game(challengeId, gameState, isCurrentPlayer_PlayerOne, isExpired, didViewResult, opponent, ChallengeState.RUNNING, ChallengeType.STANDARD, gameType, challengerGamePieceId.ToString(), challengedGamePieceId.ToString());
             games.Add(game);
         }
 
@@ -1690,7 +1768,7 @@ namespace Fourzy
             if (isPuzzleChallenge) {
                 if (gameState.player1MoveCount >= puzzleChallengeInfo.MoveGoal) {
                     isPuzzleChallengeCompleted = true;
-                    if (gameState.isGameOver && gameState.winner == Player.ONE) {
+                    if (gameState.isGameOver && gameState.winner == PlayerEnum.ONE) {
                         // Puzzle Challenge Completed
                         isPuzzleChallengePassed = true;
                         PlayerPrefs.SetInt("puzzleChallengeLevel", puzzleChallengeInfo.Level);
@@ -1707,7 +1785,7 @@ namespace Fourzy
                     isPuzzleChallengeCompleted = true;
                     //Debug.Log("isPuzzleChallengeCompleted: " + isPuzzleChallengeCompleted);
                     //Debug.Log("gameState.player1MoveCount: " + gameState.player1MoveCount);
-                    if (gameState.winner == Player.ONE) {
+                    if (gameState.winner == PlayerEnum.ONE) {
                         isPuzzleChallengePassed = true;
                         PlayerPrefs.SetInt("puzzleChallengeLevel", puzzleChallengeInfo.Level);
 
@@ -1833,9 +1911,9 @@ namespace Fourzy
             }
             //Debug.Log("viewedResult: " + didViewResult);
             //Debug.Log("showRewardButton: " + showRewardButton);
-            Color winnerTextColor = gameState.winner == Player.ONE ? bluePlayerColor : redPlayerColor;
+            Color winnerTextColor = gameState.winner == PlayerEnum.ONE ? bluePlayerColor : redPlayerColor;
             Debug.Log("DisplayGameOverView gameState.winner: " +  gameState.winner);
-            if (gameState.winner == Player.ONE)
+            if (gameState.winner == PlayerEnum.ONE)
             {
                 int size = gameState.gameBoard.player1WinningPositions.Count;
                 Vector3 startPos = new Vector3(gameState.gameBoard.player1WinningPositions[0].column, gameState.gameBoard.player1WinningPositions[0].row * -1, 12);
@@ -1850,7 +1928,7 @@ namespace Fourzy
                 }
             }
 
-            if (gameState.winner == Player.TWO)
+            if (gameState.winner == PlayerEnum.TWO)
             {
                 int size = gameState.gameBoard.player2WinningPositions.Count;
                 Vector3 startPos = new Vector3(gameState.gameBoard.player2WinningPositions[0].column, gameState.gameBoard.player2WinningPositions[0].row * -1, 12);
@@ -1866,7 +1944,7 @@ namespace Fourzy
             }
             WinLineSetActive(true);
 
-            if (gameState.winner == Player.NONE || gameState.winner == Player.ALL)
+            if (gameState.winner == PlayerEnum.NONE || gameState.winner == PlayerEnum.ALL)
             {
                 if (isMultiplayer) {
                     gameInfo.Open(LocalizationManager.instance.GetLocalizedValue("draw_text"), Color.white, false, showRewardButton);    
@@ -1886,12 +1964,12 @@ namespace Fourzy
                 }
                 else
                 {                    
-                    if (isCurrentPlayer_PlayerOne && gameState.winner == Player.ONE)
+                    if (isCurrentPlayer_PlayerOne && gameState.winner == PlayerEnum.ONE)
                     {
                         audioWin.Play();
                         gameInfo.Open(UserManager.instance.userName + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
-                    else if (!isCurrentPlayer_PlayerOne && gameState.winner == Player.TWO)
+                    else if (!isCurrentPlayer_PlayerOne && gameState.winner == PlayerEnum.TWO)
                     {
                         audioWin.Play();
                         gameInfo.Open(UserManager.instance.userName + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
@@ -1901,7 +1979,7 @@ namespace Fourzy
                         gameInfo.Open(opponentNameLabel.text + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
 
-                    //gameStatusText.color = gameState.winner == Player.ONE ? bluePlayerColor : redPlayerColor;
+                    //gameStatusText.color = gameState.winner == PlayerEnum.ONE ? bluePlayerColor : redPlayerColor;
 
                     //AnalyticsManager.LogGameOver("multiplayer", gameState.winner, gameState.tokenBoard);
                 }
@@ -1911,7 +1989,7 @@ namespace Fourzy
                 audioWin.Play();
                 if (!isPuzzleChallenge) {
                     //AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
-                    string winnerText = gameState.winner == Player.ONE ? bluePlayerWonText : redPlayerWonText;
+                    string winnerText = gameState.winner == PlayerEnum.ONE ? bluePlayerWonText : redPlayerWonText;
                     gameInfo.Open(winnerText, winnerTextColor, true, false);
                 }
             }

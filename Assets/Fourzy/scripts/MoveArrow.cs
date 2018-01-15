@@ -24,7 +24,7 @@ namespace Fourzy
                     pos.column = Constants.numColumns;
                 }
 
-                Player player = GameManager.instance.gameState.isPlayerOneTurn ? Player.ONE : Player.TWO;
+                PlayerEnum player = GameManager.instance.gameState.isPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
                 Move move = new Move(pos, direction, player);
 
                 StartCoroutine(GameManager.instance.ProcessMove(move, true));

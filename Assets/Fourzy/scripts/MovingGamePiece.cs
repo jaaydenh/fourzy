@@ -7,7 +7,7 @@ namespace Fourzy {
         public Direction currentDirection;
         public List<Position> positions;
         public Position position;
-        public Player player = Player.NONE;
+        public PlayerEnum player = PlayerEnum.NONE;
         public GameObject gamePieceObject;
         public bool isDestroyed;
         public PieceAnimState animationState;

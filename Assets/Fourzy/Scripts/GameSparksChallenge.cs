@@ -17,6 +17,8 @@ namespace Fourzy
         public GameType gameType;
         public TokenBoard tokenBoard;
         public List<GSData> moveList;
+        public string challengerGamePieceId;
+        public string challengedGamePieceId;
 
         public GameSparksChallenge(ChallengeTurnTakenMessage._Challenge challenge) {
             currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
@@ -53,6 +55,9 @@ namespace Fourzy
             } else {
                 gameType = GameType.NONE;
             }
+
+            challengerGamePieceId = challenge.ScriptData.GetString("challengerGamePieceId");
+            challengedGamePieceId = challenge.ScriptData.GetString("challengedGamePieceId");
         }
 
         public GameSparksChallenge(ListChallengeResponse._Challenge challenge) {
@@ -93,6 +98,9 @@ namespace Fourzy
             {
                 gameType = GameType.NONE;
             }
+
+            challengerGamePieceId = challenge.ScriptData.GetString("challengerGamePieceId");
+            challengedGamePieceId = challenge.ScriptData.GetString("challengedGamePieceId");
         }
 
         public GameSparksChallenge(ChallengeIssuedMessage._Challenge challenge)
@@ -143,6 +151,9 @@ namespace Fourzy
             {
                 gameType = GameType.NONE;
             }
+
+            challengerGamePieceId = challenge.ScriptData.GetString("challengerGamePieceId");
+            challengedGamePieceId = challenge.ScriptData.GetString("challengedGamePieceId");
         }
 
         public GameSparksChallenge(ChallengeLostMessage._Challenge challenge)
@@ -193,6 +204,9 @@ namespace Fourzy
             {
                 gameType = GameType.NONE;
             }
+
+            challengerGamePieceId = challenge.ScriptData.GetString("challengerGamePieceId");
+            challengedGamePieceId = challenge.ScriptData.GetString("challengedGamePieceId");
         }
 
         public GameSparksChallenge(ChallengeWonMessage._Challenge challenge)
@@ -243,6 +257,9 @@ namespace Fourzy
             {
                 gameType = GameType.NONE;
             }
+
+            challengerGamePieceId = challenge.ScriptData.GetString("challengerGamePieceId");
+            challengedGamePieceId = challenge.ScriptData.GetString("challengedGamePieceId");
         }
     }
 }

@@ -585,7 +585,6 @@ MonoBehaviour:
     type: 3}
   tournamentIcon: {fileID: 114830971282556652}
   isCurrentPlayer_PlayerOne: 0
-  viewedResult: 0
   isExpired: 0
 --- !u!114 &114830971282556652
 MonoBehaviour:
@@ -659,7 +658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8862745, g: 1, b: 0.5294118, a: 0.3137255}
+  m_Color: {r: 0.27058825, g: 0.7372549, b: 0.7294118, a: 0.60784316}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
