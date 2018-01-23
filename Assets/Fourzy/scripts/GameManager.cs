@@ -300,7 +300,11 @@ namespace Fourzy
                 Debug.Log("ChallengeJoinedMessage");
                 var gsChallenge = message.Challenge;
                 string opponentName = gsChallenge.Challenged.FirstOrDefault().Name;
-                string opponentFBId = gsChallenge.Challenger.ExternalIds.GetString("FB");
+                string opponentFBId = gsChallenge.Challenged.FirstOrDefault().ExternalIds.GetString("FB");
+                //Debug.Log("JSON: " + message.Challenge.JSONString);
+                Debug.Log("gsChallenge.Challenged.FirstOrDefault().Id: " + gsChallenge.Challenged.FirstOrDefault().Id);
+                //challengedGamePieceId = int.Parse(gsChallenge.Challenged.FirstOrDefault().Id);
+                ChallengeManager.instance.GetOpponentGamePiece(gsChallenge.Challenged.FirstOrDefault().Id);
 
                 var currentGame = games
                     .Where(t => t.challengeId == gsChallenge.ChallengeId)
@@ -962,11 +966,9 @@ namespace Fourzy
                 {
                     //float xPos = (col - ((Constants.numColumns - 1) / 2.0f)) * 1f;
                     //float yPos = (row - ((Constants.numColumns - 1) / 2.0f)) * 1f - .15f;
-                    float xPos = col;
-                    //float yPos = (row * -1) * 1.008f;
-                    float yPos = row * -1;
-                    //Debug.Log("xPos: " + xPos);
-                    //Debug.Log("yPos: " + yPos);
+                    float xPos = (col + .1f) * .972f;
+                    float yPos = (row * -1 + .09f) * .965f;
+
                     Token token = gameState.tokenBoard.tokens[row, col].tokenType;
                     GameObject go;
                     switch (token)
@@ -983,11 +985,13 @@ namespace Fourzy
                             break;
                         case Token.LEFT_ARROW:
                             go = Instantiate(leftArrowToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
+                            go.transform.Rotate(0, 0, -90);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
                         case Token.RIGHT_ARROW:
                             go = Instantiate(rightArrowToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
+                            go.transform.Rotate(0,0,90);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
                             break;
@@ -997,6 +1001,8 @@ namespace Fourzy
                             tokenViews.Add(go);
                             break;
                         case Token.BLOCKER:
+                            Debug.Log("xPos: " + xPos);
+                            Debug.Log("yPos: " + yPos);
                             go = Instantiate(blockerToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             tokenViews.Add(go);
@@ -1153,6 +1159,16 @@ namespace Fourzy
                     new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
                     new Vector2(0.5f, 0.5f));
                 opponentPiece.sprite = GamePieceSelectionManager.instance.gamePieces[challengedGamePieceId];
+
+                GamePieceUI opponent = opponentPiece.GetComponent<GamePieceUI>();
+                if (challengerGamePieceId == challengedGamePieceId)
+                {
+                    opponent.SetAlternateColor(true);
+                }
+                else
+                {
+                    opponent.SetAlternateColor(false);
+                }
             }
         }
 
@@ -1383,10 +1399,13 @@ namespace Fourzy
             //     Mathf.FloorToInt(posY + 0.5f), 10), // spawn it above the first row
             //     Quaternion.identity, gamePieces.transform) as GameObject;
 
-            GameObject gamePiece = LeanPool.Spawn(gamePiecePrefab, new Vector3(posX, posY, 10),
+            float xPos = (posX + .1f) * .972f;
+            float yPos = (posY + .05f) * .96f;
+
+            GameObject gamePiece = LeanPool.Spawn(gamePiecePrefab, new Vector3(xPos, yPos, 10),
                 Quaternion.identity, gamePieces.transform) as GameObject;
 
-            gamePiece.transform.position = new Vector3(posX, posY, 10);
+            gamePiece.transform.position = new Vector3(xPos, yPos, 10);
 
             if (challengerGamePieceId == challengedGamePieceId && player == PlayerEnum.TWO) {
                 gamePiece.GetComponent<GamePiece>().SetAlternateColor(true);
@@ -1394,7 +1413,8 @@ namespace Fourzy
             } else {
                 gamePiece.GetComponent<GamePiece>().SetAlternateColor(false);
             }
-
+            Debug.Log("SpawnPiece: challengerGamePieceId: " + challengerGamePieceId);
+            Debug.Log("SpawnPiece: challengedGamePieceId: " + challengedGamePieceId);
             if (player == PlayerEnum.ONE) {
                 if (startingState == PieceAnimState.MOVING) {
                     gamePiece.GetComponent<SpriteRenderer>().sprite = GamePieceSelectionManager.instance.gamePieces[challengerGamePieceId];
@@ -1544,15 +1564,17 @@ namespace Fourzy
             if (gameState.isCurrentPlayerTurn)
             {
                 // round to a grid square
+                //Debug.Log("Move Position: x: " + pos.x + " y: " + (pos.y * -1 - .3f));
                 int column = Mathf.RoundToInt(pos.x);
-                int row = Mathf.RoundToInt(pos.y * -1);
+                int row = Mathf.CeilToInt((pos.y * - 1 - .3f));
+
                 Position position;
                 PlayerEnum player = gameState.isPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
                 Debug.Log("ProcessPlayerInput: column: " + column + " row: " + row);
                 if (inTopRowBounds(pos.x, pos.y))
                 {
                     position = new Position(column, row - 1);
-                    Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
+                    //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                     Move move = new Move(position, Direction.DOWN, player);
                     StartCoroutine(ProcessMove(move, true));
                 }
@@ -1560,21 +1582,21 @@ namespace Fourzy
                 {
                     position = new Position(column, row + 1);
                     Move move = new Move(position, Direction.UP, player);
-                    Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
+                    //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                     StartCoroutine(ProcessMove(move, true));
                 }
                 else if (inRightRowBounds(pos.x, pos.y))
                 {
                     position = new Position(column + 1, row);
                     Move move = new Move(position, Direction.LEFT, player);
-                    Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
+                    //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                     StartCoroutine(ProcessMove(move, true));
                 }
                 else if (inLeftRowBounds(pos.x, pos.y))
                 {
                     position = new Position(column - 1, row);
                     Move move = new Move(position, Direction.RIGHT, player);
-                    Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
+                    //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                     StartCoroutine(ProcessMove(move, true));
                 }
             }
@@ -1916,8 +1938,8 @@ namespace Fourzy
             if (gameState.winner == PlayerEnum.ONE)
             {
                 int size = gameState.gameBoard.player1WinningPositions.Count;
-                Vector3 startPos = new Vector3(gameState.gameBoard.player1WinningPositions[0].column, gameState.gameBoard.player1WinningPositions[0].row * -1, 12);
-                Vector3 endPos = new Vector3(gameState.gameBoard.player1WinningPositions[size - 1].column, gameState.gameBoard.player1WinningPositions[size - 1].row * -1, 12);
+                Vector3 startPos = new Vector3((gameState.gameBoard.player1WinningPositions[0].column + .1f) *.972f, (gameState.gameBoard.player1WinningPositions[0].row * -1 + .05f) * .96f, 12);
+                Vector3 endPos = new Vector3((gameState.gameBoard.player1WinningPositions[size - 1].column+ .1f) * .972f, (gameState.gameBoard.player1WinningPositions[size - 1].row * -1 + .05f) * .96f, 12);
                 DrawLine(startPos, endPos, bluePlayerColor);
 
                 if (gameState.isCurrentPlayerTurn)
@@ -1931,8 +1953,8 @@ namespace Fourzy
             if (gameState.winner == PlayerEnum.TWO)
             {
                 int size = gameState.gameBoard.player2WinningPositions.Count;
-                Vector3 startPos = new Vector3(gameState.gameBoard.player2WinningPositions[0].column, gameState.gameBoard.player2WinningPositions[0].row * -1, 12);
-                Vector3 endPos = new Vector3(gameState.gameBoard.player2WinningPositions[size - 1].column, gameState.gameBoard.player2WinningPositions[size - 1].row * -1, 12);
+                Vector3 startPos = new Vector3((gameState.gameBoard.player2WinningPositions[0].column + .1f) * .972f, (gameState.gameBoard.player2WinningPositions[0].row * -1 + .05f) * .96f, 12);
+                Vector3 endPos = new Vector3((gameState.gameBoard.player2WinningPositions[size - 1].column + .1f) * .972f, (gameState.gameBoard.player2WinningPositions[size - 1].row * -1 + .05f) *.96f, 12);
                 DrawLine(startPos, endPos, redPlayerColor);
 
                 if (gameState.isCurrentPlayerTurn)
@@ -2041,22 +2063,22 @@ namespace Fourzy
 
         bool inTopRowBounds(float x, float y)
         {
-            return x > 0.5 && x < Constants.numColumns - 1.5 && y > -0.5 && y < 0.5;
+            return x > 0.5 && x < Constants.numColumns - 1.5 && y > -0.46 && y < 1.2;
         }
 
         bool inBottomRowBounds(float x, float y)
         {
-            return x > 0.5 && x < Constants.numColumns - 1.5 && y > -Constants.numColumns && y < -Constants.numColumns + 1.5;
+            return x > 0.5 && x < Constants.numColumns - 1.5 && y > -Constants.numColumns && y < -Constants.numColumns + 2;
         }
 
         bool inLeftRowBounds(float x, float y)
         {
-            return x > -0.5 && x < 0.5 && y > -Constants.numColumns + 1.5 && y < -0.5;
+            return x > -0.8 && x < 0.66 && y > -Constants.numColumns + 1.3 && y < -0.5;
         }
 
         bool inRightRowBounds(float x, float y)
         {
-            return x > Constants.numColumns - 1.5 && x < Constants.numColumns - 0.5 && y > -Constants.numColumns + 1.5 && y < -0.5;
+            return x > Constants.numColumns - 1.7 && x < Constants.numColumns - 0.5 && y > -Constants.numColumns + 1.5 && y < -0.5;
         }
     }
 }

@@ -83,8 +83,12 @@ namespace Fourzy
             int i = 0;
             do
             {
-                Vector3 start = new Vector3(positions[i].column, positions[i].row * -1);
-                Vector3 end = new Vector3(positions[i + 1].column, positions[i + 1].row * -1);
+                float startXPos = (positions[i].column + .1f) * .972f;
+                float startYPos = (positions[i].row * -1 + .05f) * .96f;
+                Vector3 start = new Vector3(startXPos, startYPos);
+                float endXPos = (positions[i + 1].column + .1f) * .972f;
+                float endYPos = (positions[i + 1].row * -1 + .05f) * .96f;
+                Vector3 end = new Vector3(endXPos, endYPos);
                 float distance = Vector3.Distance(start, end);
                 //Debug.Log("Animation Start x: " + start.x + " y: " + start.y);
                 //Debug.Log("Animation End x: " + end.x + " y: " + end.y);

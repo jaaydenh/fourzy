@@ -54,9 +54,11 @@ namespace Fourzy {
                             break;
                         case Token.LEFT_ARROW:
                             go = Instantiate(leftArrowToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
+                            go.transform.Rotate(0, 0, -90);
                             break;
                         case Token.RIGHT_ARROW:
                             go = Instantiate(rightArrowToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
+                            go.transform.Rotate(0, 0, 90);
                             break;
                         case Token.STICKY:
                             go = Instantiate(stickyToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);

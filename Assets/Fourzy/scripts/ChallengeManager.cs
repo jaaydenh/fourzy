@@ -41,7 +41,7 @@ namespace Fourzy
         //public Texture2D defaultProfilePicture;
 
         public GameObject UIScreen;
-        public int daysUntilChallengeExpires = 21;
+        public int daysUntilChallengeExpires = 25;
         private bool gettingChallenges = false;
         private bool pulledToRefresh = false;
         //private int yourMoveGames = 0;
@@ -486,7 +486,7 @@ namespace Fourzy
             GameManager.instance.isPuzzleChallenge = false;
             GameManager.instance.isCurrentPlayer_PlayerOne = true;
             GameManager.instance.challengerGamePieceId = Player.instance.gamePieceId;
-            GameManager.instance.challengedGamePieceId = -1;
+            GameManager.instance.challengedGamePieceId = 0;
 
             GameManager.instance.ResetUIGameScreen();
             GameManager.instance.InitPlayerUI();

@@ -199,9 +199,9 @@ namespace Fourzy
                 isCurrentPlayerTurn = false;
                 winner = PlayerEnum.NONE;
             }
-            Debug.Log("GameState MovePiece Winner: " + winner);
-            Debug.Log("gameBoard.player1WinningPositions.Count: " + gameBoard.player1WinningPositions.Count);
-            Debug.Log("gameBoard.player2WinningPositions.Count: " + gameBoard.player2WinningPositions.Count);
+            //Debug.Log("GameState MovePiece Winner: " + winner);
+            //Debug.Log("gameBoard.player1WinningPositions.Count: " + gameBoard.player1WinningPositions.Count);
+            //Debug.Log("gameBoard.player2WinningPositions.Count: " + gameBoard.player2WinningPositions.Count);
 
             if (!isReplay && winner == PlayerEnum.EMPTY)
             {

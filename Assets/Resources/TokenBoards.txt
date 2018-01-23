@@ -29,7 +29,7 @@
         {
             "ID": "998",
             "Name": "Towards A Sticky Pattern",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,5,0,0,0,5,0,
                           0,5,0,5,5,5,0,0,
@@ -380,7 +380,7 @@
         {
             "ID": "1026",
             "Name": "Ice vs Sticky",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,5,5,5,5,5,5,6,
                           0,5,5,5,5,5,5,0,
                           0,5,5,5,5,5,5,0,
@@ -588,7 +588,7 @@
         {
             "ID": "093013",
             "Name": "Sticky Corners",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [  6, 5, 5, 5, 0, 0, 0, 6,
                             5, 5, 5, 0, 0, 0, 0, 0,
                             5, 5, 8, 8, 0, 0, 0, 0,
@@ -822,7 +822,7 @@
         {
             "ID": "101603",
             "Name": "Sticky Top Left Diagonal",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,5,5,0,0,6,
                           0,0,5,5,0,0,0,0,
                           0,5,5,0,0,0,0,0,
@@ -835,7 +835,7 @@
         {
             "ID": "101604",
             "Name": "Sticky Lines",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,5,0,0,0,0,6,
                           0,0,5,0,0,0,0,0,
                           0,0,5,0,0,0,0,0,
@@ -874,7 +874,7 @@
         {
             "ID": "101607",
             "Name": "Even Face",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,5,0,0,5,0,0,
@@ -926,7 +926,7 @@
         {
             "ID": "101611",
             "Name": "Pit Lines",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,5,0,5,0,0,6,
                           0,0,5,0,5,0,0,0,
                           0,0,5,0,5,0,0,0,
@@ -952,7 +952,7 @@
         {
             "ID": "101618",
             "Name": "Spiraling",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,5,0,0,0,6,
                           0,0,0,5,0,0,0,0,
                           0,0,0,5,5,0,0,0,
@@ -1069,7 +1069,7 @@
         {
             "ID": "101627",
             "Name": "The Erik B Board",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,5,3,8,8,5,5,6,
                           5,8,8,7,7,8,8,2,
                           5,8,1,8,8,3,8,5,
@@ -1082,7 +1082,7 @@
         {
             "ID": "101628",
             "Name": "Sticky Edges",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,5,5,5,5,5,5,6,
                           5,5,5,5,5,5,5,5,
                           5,5,0,0,0,0,5,5,
@@ -1160,7 +1160,7 @@
         {
             "ID": "101804",
             "Name": "Right and Left",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           3,0,0,0,0,0,0,3,
                           3,0,0,0,0,0,0,3,
@@ -1173,7 +1173,7 @@
         {
             "ID": "101805",
             "Name": "Three Sides",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,6,6,6,6,6,6,6,
                           0,0,0,7,7,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -1212,7 +1212,7 @@
         {
             "ID": "103003",
             "Name": "Ears",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,5,5,0,0,5,5,0,
                                   0,5,5,0,0,5,5,0,
@@ -1330,7 +1330,7 @@
         {
             "ID": "103012",
             "Name": "Center Spin Twisted",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,0,0,0,0,0,
@@ -1447,7 +1447,7 @@
         {
             "ID": "110806",
             "Name": "Sticky Spaced Rows",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   5,0,5,0,5,0,5,0,
@@ -1500,7 +1500,7 @@
         {
             "ID": "120803",
             "Name": "Experiment 0",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData":         [6,0,0,0,8,8,0,6,
                                   0,0,0,0,8,8,0,0,
                                   0,0,0,0,8,8,0,0,
@@ -1526,7 +1526,7 @@
         {
             "ID": "120805",
             "Name": "Outsiders",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData":         [6,5,2,5,5,1,5,6,
                                   5,5,4,2,4,1,5,5,
                                   3,3,3,4,1,2,3,3,
@@ -1565,7 +1565,7 @@
         {
             "ID": "120808",
             "Name": "Icy X",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData":         [6,8,8,8,8,8,8,6,
                                   8,5,8,8,8,8,5,5,
                                   8,8,5,8,8,5,8,8,
