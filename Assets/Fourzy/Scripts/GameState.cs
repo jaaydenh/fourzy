@@ -16,12 +16,14 @@ namespace Fourzy
         public PlayerEnum winner = PlayerEnum.EMPTY;
         public GameBoard previousGameBoard;
         public GameBoard gameBoard;
+        public TokenBoard previousTokenBoard;
         public TokenBoard tokenBoard;
         public int[] isMoveableUp;
         public int[] isMoveableDown;
         public int[] isMoveableLeft;
         public int[] isMoveableRight;
         public List<GSData> moveList;
+        public List<IToken> activeTokenList;
 
         public GameState (int numRows, int numColumns, bool isPlayerOneTurn, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] gameBoardData, bool isGameOver, List<GSData> moveList) {
             this.numRows = numRows;
@@ -29,6 +31,7 @@ namespace Fourzy
             this.isPlayerOneTurn = isPlayerOneTurn;
             this.isCurrentPlayerTurn = isCurrentPlayerTurn;
             this.tokenBoard = tokenBoard;
+            this.previousTokenBoard = tokenBoard.Clone();
             this.isGameOver = isGameOver;
             this.moveList = moveList;
 
@@ -49,6 +52,7 @@ namespace Fourzy
             this.isPlayerOneTurn = challenge.isPlayerOneTurn;
             this.isCurrentPlayerTurn = isCurrentPlayerTurn;
             this.tokenBoard = challenge.tokenBoard;
+            this.previousTokenBoard = challenge.tokenBoard.Clone();
             this.isGameOver = challenge.isGameOver;
             this.moveList = challenge.moveList;
             this.winner = winner;
@@ -62,6 +66,8 @@ namespace Fourzy
         }
 
         private void InitGameState(int[] gameBoardData) {
+            GameBoard.OnUpdateTokenBoard += SetTokenBoardCell;
+
             gameBoard = new GameBoard(Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
             InitIsMovable();
@@ -81,6 +87,10 @@ namespace Fourzy
             gameBoard.GetCompletedPieces();
             UpdateMoveablePieces();
             gameBoard.completedMovingPieces.Clear();
+        }
+
+        public void SetTokenBoardCell(int row, int col, IToken token) {
+            tokenBoard.SetTokenBoardCell(row, col, token);
         }
 
         public GameState Clone()
@@ -124,12 +134,28 @@ namespace Fourzy
             return moves;
         }
 
-        public List<MovingGamePiece> MovePiece(Move move, bool isReplay) {
+        // For AI Player
+        public List<MovingGamePiece> MovePiece(Move move, bool isReplay)
+        {
+            List<IToken> activeTokens;
+
+            return MovePiece(move, isReplay, out activeTokens);
+        }
+
+        public List<MovingGamePiece> MovePiece(Move move, bool isReplay, out List<IToken> activeTokens) {
+
+            //Debug.Log("GameState: Movepiece: tokenBoard: " + tokenBoard.PrintBoard("TokenBoard"));
+            //Debug.Log("GameState: Movepiece: previousTokenBoard: " + previousTokenBoard.PrintBoard("previousTokenBoard"));
+
             if (isReplay) {
+                //Debug.Log("MovePiece isReplay:true");
                 gameBoard = previousGameBoard.Clone();
+                tokenBoard = previousTokenBoard.Clone();
                 InitMoveablePieces();
             } else {
+                //Debug.Log("MovePiece isReplay:false");
                 previousGameBoard = gameBoard.Clone();
+                previousTokenBoard = tokenBoard.Clone();
             }
 
             gameBoard.completedMovingPieces.Clear();
@@ -139,12 +165,17 @@ namespace Fourzy
 
             tokenBoard.tokens[activeMovingPiece.GetNextPosition().row, activeMovingPiece.GetNextPosition().column].UpdateBoard(gameBoard, false);
 
+            activeTokenList = new List<IToken>();
+
             while (gameBoard.activeMovingPieces.Count > 0) {
                 MovingGamePiece activePiece = gameBoard.activeMovingPieces[0];
                 Position nextPosition = activePiece.GetNextPosition();
                 Direction activeDirection = activePiece.currentDirection;
 
                 if (CanMove(new Move(nextPosition, activeDirection, move.player), tokenBoard.tokens)) {
+                    if (tokenBoard.tokens[nextPosition.row, nextPosition.column].isReplacable) {
+                        activeTokenList.Add(tokenBoard.tokens[nextPosition.row, nextPosition.column]);    
+                    }
                     tokenBoard.tokens[nextPosition.row, nextPosition.column].UpdateBoard(gameBoard, true);
                 } else {
                     gameBoard.DisableNextMovingPiece();
@@ -207,7 +238,7 @@ namespace Fourzy
             {
                 isPlayerOneTurn = !isPlayerOneTurn;
             }
-
+            activeTokens = activeTokenList;
             return gameBoard.completedMovingPieces;
         }
 
@@ -384,6 +415,7 @@ namespace Fourzy
 
             log += gameBoard.PrintBoard("Gameboard");
             log += previousGameBoard.PrintBoard("PreviousGameboard");
+            log += tokenBoard.PrintBoard("TokenBoard");
 
             log += "IsMoveableUp\n";
             for (int row = 0; row < numRows; row++) {

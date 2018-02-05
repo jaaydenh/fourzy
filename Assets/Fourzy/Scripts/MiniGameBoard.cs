@@ -21,6 +21,10 @@ namespace Fourzy {
         public GameObject ninetyLeftArrowToken;
         public GameObject bumperToken;
         public GameObject coinToken;
+        public GameObject fruitToken;
+        public GameObject fruitTreeToken;
+        public GameObject webToken;
+        public GameObject spiderToken;
 
         public GameObject glow;
         public GameObject questionMark;
@@ -42,7 +46,7 @@ namespace Fourzy {
             {
                 for(int col = 0; col < Constants.numColumns; col++)
                 {
-                    Token token = (Token)tokenBoard.tokenData[row, col];
+                    Token token = (Token)tokenBoard.tokenBoardData[row, col];
                     GameObject go;
                     switch (token)
                     {
@@ -86,6 +90,18 @@ namespace Fourzy {
                             break;
                         case Token.COIN:
                             go = Instantiate(coinToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
+                            break;
+                        case Token.FRUIT:
+                            go = Instantiate(fruitToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
+                            break;
+                        case Token.FRUIT_TREE:
+                            go = Instantiate(fruitTreeToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
+                            break;
+                        case Token.WEB:
+                            go = Instantiate(webToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
+                            break;
+                        case Token.SPIDER:
+                            go = Instantiate(spiderToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
                             break;
                         default:
                             break;

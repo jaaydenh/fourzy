@@ -3,6 +3,9 @@
 namespace Fourzy {
     public class GameBoard {
 
+        public delegate void UpdateTokenBoard(int row, int col, IToken token);
+        public static event UpdateTokenBoard OnUpdateTokenBoard;
+
         private int numRows;
         private int numColumns;
         private int numPiecesToWin;
@@ -149,6 +152,7 @@ namespace Fourzy {
                         piece.isDestroyed = true;
                         piece.animationState = PieceAnimState.FALLING;
                     }
+
                     if (token.changePieceDirection) {
                         activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                     }
@@ -237,6 +241,12 @@ namespace Fourzy {
 
                     if (pieceInSquare || token.mustStop || piece.isDestroyed) {
                         DisableNextMovingPiece();
+                    }
+
+                    if (token.isReplacable) {
+                        if (OnUpdateTokenBoard != null) {
+                            OnUpdateTokenBoard(nextPosition.row, nextPosition.column, token.replacedToken);    
+                        }
                     }
                 }
             } else if (token.canEvaluateWithoutEntering) {

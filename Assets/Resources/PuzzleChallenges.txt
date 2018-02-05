@@ -332,78 +332,9 @@
             ]
         },
         {
-            "ID": "1009",
-            "Name": "Crossing",
-            "Level": 9,
-            "Enabled": true,
-            "InitialGameBoard": [0,0,0,1,1,2,0,0,
-                                 0,0,0,1,2,1,0,0,
-                                 0,0,0,0,0,0,0,0,
-                                 0,0,0,0,0,0,0,2,
-                                 0,0,0,0,0,0,0,0,
-                                 0,0,1,1,2,2,0,0,
-                                 0,0,1,2,2,0,0,0,
-                                 0,0,2,1,0,0,0,0],
-            "MoveGoal": 2,
-            "FirstMove": 1,
-            "InitialTokenBoard": [6,0,0,0,0,0,0,6,
-                                  0,0,0,0,0,0,0,0,
-                                  0,0,0,0,0,0,0,0,
-                                  0,0,0,0,0,0,0,0,
-                                  0,0,0,0,0,0,0,0,
-                                  0,0,0,0,0,0,0,0,
-                                  0,0,0,0,0,0,0,0,
-                                  6,0,0,0,0,0,0,6],
-            "RandomMoves": [
-                {
-                    "Location": 4,
-                    "Direction": 3,
-                    "Weight": 1.0
-                }
-            ],
-            "Moves": [
-            {
-                    "BoardState": [0,0,0,1,1,2,0,0,
-                                   0,0,0,1,2,1,0,0,
-                                   0,0,0,0,0,0,0,0,
-                                   0,0,0,0,0,0,0,2,
-                                   1,0,0,0,0,0,0,0,
-                                   0,0,1,1,2,2,0,0,
-                                   0,0,1,2,2,0,0,0,
-                                   0,0,2,1,0,0,0,0],
-                    "Location": 5,
-                    "Direction": 3
-                },
-                {
-                    "BoardState": [0,0,0,1,1,2,0,0,
-                                   0,0,0,1,2,1,0,0,
-                                   0,0,0,0,0,0,0,0,
-                                   0,0,0,0,0,0,0,2,
-                                   0,0,0,0,0,0,0,0,
-                                   0,1,1,1,2,2,0,0,
-                                   0,0,1,2,2,0,0,0,
-                                   0,0,2,1,0,0,0,0],
-                    "Location": 5,
-                    "Direction": 3
-                },
-                {
-                    "BoardState": [0,0,0,1,1,2,0,0,
-                                   0,0,0,1,2,1,0,0,
-                                   0,0,0,0,0,0,0,0,
-                                   0,0,0,0,0,0,0,2,
-                                   0,0,1,0,0,0,0,0,
-                                   0,0,1,1,2,2,0,0,
-                                   0,0,1,2,2,0,0,0,
-                                   0,0,2,1,0,0,0,0],
-                    "Location": 2,
-                    "Direction": 1
-                }
-            ]
-        },
-        {
             "ID": "1010",
             "Name": "Icy Conga",
-            "Level": 10,
+            "Level": 9,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,2,1,0,0,0,
                                  0,0,0,2,2,0,0,0,
@@ -429,7 +360,7 @@
         {
             "ID": "1011",
             "Name": "Icy Side Swipe",
-            "Level": 11,
+            "Level": 10,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -455,7 +386,7 @@
         {
             "ID": "1012",
             "Name": "Icy Side Swipe 2",
-            "Level": 12,
+            "Level": 11,
             "Enabled": true,
             "InitialGameBoard": [0,0,2,2,1,0,0,0,
                                  0,0,2,2,1,0,0,0,
@@ -481,7 +412,7 @@
         {
             "ID": "1013",
             "Name": "Ice Push",
-            "Level": 13,
+            "Level": 12,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,2,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -507,7 +438,7 @@
         {
             "ID": "1014",
             "Name": "Another Challenge",
-            "Level": 14,
+            "Level": 13,
             "Enabled": true,
             "InitialGameBoard": [0,0,2,1,0,0,0,0,
                                  0,2,2,1,0,0,0,0,
@@ -786,7 +717,7 @@
         {
             "ID": "1015",
             "Name": "Ghost Crossing",
-            "Level": 15,
+            "Level": 14,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -832,7 +763,7 @@
         {
             "ID": "1016",
             "Name": "Through A Ghost",
-            "Level": 16,
+            "Level": 15,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -1009,7 +940,7 @@
         {
             "ID": "1017",
             "Name": "Center Sticky Cube",
-            "Level": 17,
+            "Level": 16,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -1069,7 +1000,7 @@
         {
             "ID": "1018",
             "Name": "Center Sticky Cube 2",
-            "Level": 18,
+            "Level": 17,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -1129,7 +1060,7 @@
         {
             "ID": "1019",
             "Name": "Center Sticky Cube 3",
-            "Level": 19,
+            "Level": 18,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,2,0,0,0,0,
@@ -1179,7 +1110,7 @@
         {
             "ID": "1020",
             "Name": "Sticky Checkers",
-            "Level": 20,
+            "Level": 19,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,1,0,0,
@@ -1357,7 +1288,7 @@
         {
             "ID": "103001",
             "Name": "Cant Stop Me",
-            "Level": 19,
+            "Level": 20,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,1,0,0,0,0,
                                  0,0,2,1,0,0,0,0,
@@ -1404,7 +1335,7 @@
         {
             "ID": "103002",
             "Name": "Cant Stop Me Too",
-            "Level": 20,
+            "Level": 21,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -1451,7 +1382,7 @@
         {
             "ID": "103003",
             "Name": "Compression",
-            "Level": 21,
+            "Level": 22,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -1498,7 +1429,7 @@
         {
             "ID": "103004",
             "Name": "Survive to Win",
-            "Level": 22,
+            "Level": 23,
             "Enabled": true,
             "InitialGameBoard": [0,0,1,2,0,0,0,0,
                                  0,0,1,0,0,0,1,0,
@@ -1640,7 +1571,7 @@
         {
             "ID": "103102",
             "Name": "Sneaky Spinner Move",
-            "Level": 23,
+            "Level": 24,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -1687,7 +1618,7 @@
         {
             "ID": "103102",
             "Name": "Spinners",
-            "Level": 24,
+            "Level": 25,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -1734,7 +1665,7 @@
         {
             "ID": "110101",
             "Name": "Spinner Test",
-            "Level": 25,
+            "Level": 26,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,1,0,0,0,
                                  0,0,0,0,2,0,0,0,
@@ -1796,7 +1727,7 @@
         {
             "ID": "110102",
             "Name": "Center Line Test",
-            "Level": 26,
+            "Level": 27,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,2,
@@ -1947,7 +1878,7 @@
         {
             "ID": "110103",
             "Name": "Test For Six with Arrows",
-            "Level": 27,
+            "Level": 28,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,1,2,0,2,0,
                                  0,2,1,1,1,2,0,0,
@@ -2233,7 +2164,7 @@
         {
             "ID": "110104",
             "Name": "Stop Abruptly",
-            "Level": 28,
+            "Level": 29,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,1,0,0,0,
                                  0,0,0,0,1,2,0,0,
@@ -2280,7 +2211,7 @@
         {
             "ID": "110201",
             "Name": "Pocket Arrow",
-            "Level": 29,
+            "Level": 30,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -2338,7 +2269,7 @@
         {
             "ID": "110301",
             "Name": "Careful Placement",
-            "Level": 30,
+            "Level": 31,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,1,1,0,0,0,
                                  0,0,0,2,2,0,0,0,
@@ -2395,7 +2326,7 @@
         {
             "ID": "110701",
             "Name": "A Trap is Set",
-            "Level": 31,
+            "Level": 32,
             "Enabled": true,
             "InitialGameBoard": [0,0,1,2,1,1,0,0,
                                  0,0,0,1,2,0,2,0,
@@ -2588,7 +2519,7 @@
         {
             "ID": "111001",
             "Name": "Introduce the Bounce",
-            "Level": 32,
+            "Level": 33,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -2616,7 +2547,7 @@
 		 {
             "ID": "111002",
             "Name": "Introduce the Bounce 2",
-            "Level": 33,
+            "Level": 34,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
@@ -2655,9 +2586,74 @@
             ],
             "Moves": [
            ]
+        },{
+            "ID": "1009",
+            "Name": "Crossing",
+            "Level": 35,
+            "Enabled": true,
+            "InitialGameBoard": [0,0,0,1,1,2,0,0,
+                                 0,0,0,1,2,1,0,0,
+                                 0,0,0,0,0,0,0,0,
+                                 0,0,0,0,0,0,0,2,
+                                 0,0,0,0,0,0,0,0,
+                                 0,0,1,1,2,2,0,0,
+                                 0,0,1,2,2,0,0,0,
+                                 0,0,2,1,0,0,0,0],
+            "MoveGoal": 2,
+            "FirstMove": 1,
+            "InitialTokenBoard": [6,0,0,0,0,0,0,6,
+                                  0,0,0,0,0,0,0,0,
+                                  0,0,0,0,0,0,0,0,
+                                  0,0,0,0,0,0,0,0,
+                                  0,0,0,0,0,0,0,0,
+                                  0,0,0,0,0,0,0,0,
+                                  0,0,0,0,0,0,0,0,
+                                  6,0,0,0,0,0,0,6],
+            "RandomMoves": [
+                {
+                    "Location": 4,
+                    "Direction": 3,
+                    "Weight": 1.0
+                }
+            ],
+            "Moves": [
+            {
+                    "BoardState": [0,0,0,1,1,2,0,0,
+                                   0,0,0,1,2,1,0,0,
+                                   0,0,0,0,0,0,0,0,
+                                   0,0,0,0,0,0,0,2,
+                                   1,0,0,0,0,0,0,0,
+                                   0,0,1,1,2,2,0,0,
+                                   0,0,1,2,2,0,0,0,
+                                   0,0,2,1,0,0,0,0],
+                    "Location": 5,
+                    "Direction": 3
+                },
+                {
+                    "BoardState": [0,0,0,1,1,2,0,0,
+                                   0,0,0,1,2,1,0,0,
+                                   0,0,0,0,0,0,0,0,
+                                   0,0,0,0,0,0,0,2,
+                                   0,0,0,0,0,0,0,0,
+                                   0,1,1,1,2,2,0,0,
+                                   0,0,1,2,2,0,0,0,
+                                   0,0,2,1,0,0,0,0],
+                    "Location": 5,
+                    "Direction": 3
+                },
+                {
+                    "BoardState": [0,0,0,1,1,2,0,0,
+                                   0,0,0,1,2,1,0,0,
+                                   0,0,0,0,0,0,0,0,
+                                   0,0,0,0,0,0,0,2,
+                                   0,0,1,0,0,0,0,0,
+                                   0,0,1,1,2,2,0,0,
+                                   0,0,1,2,2,0,0,0,
+                                   0,0,2,1,0,0,0,0],
+                    "Location": 2,
+                    "Direction": 1
+                }
+            ]
         }
-
-		
-
     ]
 }

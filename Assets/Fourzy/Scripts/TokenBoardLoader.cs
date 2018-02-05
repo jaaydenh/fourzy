@@ -73,6 +73,7 @@ namespace Fourzy
             //Debug.Log("tokenboard TokenData: " + tokenBoardInfo.TokenData);
 
             TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID, tokenBoardInfo.Name, true);
+
             return tokenboard;
         }
 

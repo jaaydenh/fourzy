@@ -38,10 +38,13 @@ namespace Fourzy
         {
             PuzzleChallengeInfo[] challengeCollection = LoadChallengeData();
             Debug.Log("puzzleChallengeLevel: " + PlayerPrefs.GetInt("puzzleChallengeLevel"));
-            int puzzleChalLengeLevel = PlayerPrefs.GetInt("puzzleChallengeLevel");
+            int puzzleChallengeLevel = PlayerPrefs.GetInt("puzzleChallengeLevel");
             IEnumerable<PuzzleChallengeInfo> enabledChallenges = challengeCollection
-                .Where(t => t.Enabled == true && t.Level == puzzleChalLengeLevel+1);
+                .Where(t => t.Enabled == true && t.Level == puzzleChallengeLevel+1);
 
+            //IEnumerable<PuzzleChallengeInfo> enabledChallenges = challengeCollection
+                //.Where(t => t.Enabled == true);
+            
             // ChallengeInfo[] challenges = new TokenBoard[enabledChallenges.Count()];
             // int i = 0;
             // foreach (var tokenBoardInfo in enabledChallenges)
@@ -53,6 +56,7 @@ namespace Fourzy
 
             if (enabledChallenges.Count() > 0) {
                 return enabledChallenges.FirstOrDefault();
+                //return enabledChallenges.ElementAtOrDefault(puzzleChallengeLevel);
             }
             Debug.Log("Return null puzzle challenge");
             return null;

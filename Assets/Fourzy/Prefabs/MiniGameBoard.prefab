@@ -196,6 +196,12 @@ MonoBehaviour:
   bumperToken: {fileID: 1581787741766162, guid: dba4630cc9752451bb282ba3125aa030,
     type: 2}
   coinToken: {fileID: 1629414548793332, guid: aa92dd3c5d20a41b1ad805cb1fccb30d, type: 2}
+  fruitToken: {fileID: 1011114628459856, guid: 22feb1168e98f4a4ca43fe3e586e82a2, type: 2}
+  fruitTreeToken: {fileID: 1578567910230490, guid: 399ed13c770784d6f9dc78a54823d6ae,
+    type: 2}
+  webToken: {fileID: 1671885646220764, guid: 245c473108a8543699540a258eb529c4, type: 2}
+  spiderToken: {fileID: 1329703408132306, guid: d481144ced4994d5096bb43cd2d58f83,
+    type: 2}
   glow: {fileID: 1719585871036234}
   questionMark: {fileID: 1839717546775038}
 --- !u!114 &114512702855691298

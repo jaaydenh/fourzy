@@ -15,7 +15,7 @@ namespace Fourzy
         public static event GameActive OnActiveGame;
         public delegate void ReceivedPlayerGamePiece(string gamePieceId);
         public static event ReceivedPlayerGamePiece OnReceivedPlayerGamePiece;
-        public delegate void ReceivedOpponentGamePiece(string gamePieceId);
+        public delegate void ReceivedOpponentGamePiece(string gamePieceId, string challengeId);
         public static event ReceivedOpponentGamePiece OnReceivedOpponentGamePiece;
         public delegate void SetGamePieceSuccess(string gamePieceId);
         public static event SetGamePieceSuccess OnSetGamePieceSuccess;
@@ -89,7 +89,7 @@ namespace Fourzy
             
             if (tokenboard != null) {
                 Debug.Log("SetTokenBoard tokenboard.name: " + tokenboard.name);
-                this.tokenBoard = new TokenBoard(tokenboard.tokenData, tokenboard.id, tokenboard.name, true);
+                this.tokenBoard = new TokenBoard(tokenboard.tokenBoardData, tokenboard.id, tokenboard.name, true);
             } else {
                 Debug.Log("SetTokenBoard tokenboard is null");
                 this.tokenBoard = null;
@@ -138,7 +138,7 @@ namespace Fourzy
                 });
         }
 
-        public void GetOpponentGamePiece(string userId)
+        public void GetOpponentGamePiece(string userId, string challengeId = "")
         {
             string gamePieceId = "0";
             new LogEventRequest().SetEventKey("getOpponentGamePiece")
@@ -156,12 +156,12 @@ namespace Fourzy
                         gamePieceId = response.ScriptData.GetString("gamePieceId");
                         Debug.Log("GetOpponentGamePiece was successful: gamePieceId: " + gamePieceId);
                         if (OnReceivedOpponentGamePiece != null)
-                            OnReceivedOpponentGamePiece(gamePieceId);
+                            OnReceivedOpponentGamePiece(gamePieceId, challengeId);
                     }
                 });
         }
 
-        public void GamesListPullToRefresh(Vector2 pos) {
+        public void GamesListPullToRefresh(Vector2 pos)     {
             //Debug.Log("pos x:" + pos.x + "pos y: " + pos.y + "magnitude: " + pos.magnitude + "normal: " + pos.normalized);
             if (!pulledToRefresh && pos.y > 1.06) {
                 pulledToRefresh = true;
@@ -240,6 +240,7 @@ namespace Fourzy
             Debug.Log("ChallengeUser gameState.tokenBoard.name: " + gameState.tokenBoard.name);
             GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameState.GetGameBoardData());
             data.AddNumberList("tokenBoard", gameState.tokenBoard.GetTokenBoardData());
+            data.AddNumberList("lastTokenBoard", gameState.tokenBoard.GetTokenBoardData());
             data.AddString("tokenBoardId", gameState.tokenBoard.id);
             data.AddString("tokenBoardName", gameState.tokenBoard.name);
             data.AddString("gameType", gameType.ToString());
@@ -278,6 +279,8 @@ namespace Fourzy
 
         public void FindRandomChallenge() {
             Debug.Log("FindRandomChallenge");
+            tokenBoard = null;
+
             new FindChallengeRequest()
                 .SetAccessType("PUBLIC")
                 .SetCount(50)
@@ -325,6 +328,7 @@ namespace Fourzy
 
             GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameState.GetGameBoardData());
             data.AddNumberList("tokenBoard", gameState.tokenBoard.GetTokenBoardData());
+            data.AddNumberList("lastTokenBoard", gameState.tokenBoard.GetTokenBoardData());
             data.AddString("tokenBoardId", gameState.tokenBoard.id);
             data.AddString("tokenBoardName", gameState.tokenBoard.name);
             data.AddString("gameType", gameType.ToString());

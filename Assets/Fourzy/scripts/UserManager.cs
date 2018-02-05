@@ -64,20 +64,22 @@ namespace Fourzy
 
         public IEnumerator GetFBPicture(string facebookId, Action<Sprite> callback)
         {
-            using (UnityWebRequest www = UnityWebRequestTexture.GetTexture("https://graph.facebook.com/" + facebookId + "/picture?width=210&height=210"))
+            using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture("https://graph.facebook.com/" + facebookId + "/picture?width=210&height=210"))
             {
-                yield return www.Send();
+                //yield return www.Send();
 
-                if (www.isNetworkError || www.isHttpError)
+                yield return uwr.SendWebRequest();
+
+                if (uwr.isNetworkError || uwr.isHttpError)
                 {
-                    Debug.Log("get_fb_picture_error: " + www.error);
-                    AnalyticsManager.LogError("get_fb_picture_error", www.error);
+                    Debug.Log("get_fb_picture_error: " + uwr.error);
+                    AnalyticsManager.LogError("get_fb_picture_error", uwr.error);
                 }
                 else
                 {
                     //Debug.Log("get_fb_picture_success: ");
                     Texture2D tempPic = new Texture2D(25, 25);
-                    tempPic = DownloadHandlerTexture.GetContent(www);
+                    tempPic = DownloadHandlerTexture.GetContent(uwr);
                     Sprite profilePictureSprite = Sprite.Create(tempPic, new Rect(0,0,tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
 
                     callback(profilePictureSprite);

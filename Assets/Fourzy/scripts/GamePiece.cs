@@ -20,6 +20,7 @@ namespace Fourzy
         bool animating;
         GameObject nextPiece = null;
         List<MovingGamePiece> movingPieces;
+        List<IToken> activeTokens;
         public AnimationCurve moveCurve;
         Renderer rend;
 
@@ -49,9 +50,18 @@ namespace Fourzy
             return Direction.NONE;
         }
 
-        public IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces) {
+        public IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces, List<IToken> activeTokens) {
             //Debug.Log("Animatepiece movingpieces count: " + movingPieces.Count);
-             
+            Debug.Log("MoveGamePiece activeTokens count: " + activeTokens.Count);
+
+            if (movingPieces.Count == 0) {
+                yield return false;
+
+                throw new UnityException("Method: MoveGamePiece - movingPieces is empty");
+                //yield break;
+            }
+            this.activeTokens = activeTokens;
+
             GameManager.instance.animatingGamePieces = true;
             didAnimateNextPiece = false;
 
@@ -134,30 +144,53 @@ namespace Fourzy
 
             GameManager.instance.animatingGamePieces = false;
 
+            yield return true;
             //GameManager.instance.gameBoardView.PrintGameBoard();
         }
 
         void Update()
         {
-            CircleCollider2D col = gameObject.GetComponent<CircleCollider2D>();
+            CircleCollider2D collider1 = gameObject.GetComponent<CircleCollider2D>();
+            int row1 = GetRowFromPosition(transform.position.y);
+            int col1 = GetColumnFromPosition(transform.position.x);
 
             if (nextPiece != null && !didAnimateNextPiece) {
-                //GamePiece gamePiece1 = nextPiece.GetComponent<GamePiece>();
-                //Debug.Log("update nextpiece player: " + gamePiece1.player);
-                if (col.IsTouching(nextPiece.GetComponent<CircleCollider2D>()))
+                if (collider1.IsTouching(nextPiece.GetComponent<CircleCollider2D>()))
                 {
                     didAnimateNextPiece = true;
-                    //GamePiece gamePiece = nextPiece.GetComponent<GamePiece>();
                     StartCoroutine(CallAnimatePiece());
                 }
             }
+            if (activeTokens != null) {
+                for (int i = 0; i < activeTokens.Count; i++)
+                {
+                    Position piecePos = GameManager.instance.GetPositonFromTransform(transform.position);
+                    //Debug.Log("nextPiecePosition row: " + piecePos.row + " col: " + piecePos.column);
+                    if (piecePos.column == activeTokens[i].Column && piecePos.row == activeTokens[i].Row)
+                    {
+                        Debug.Log("PIECE IS IN TOKENS POSITION: row: " + piecePos.row + " col: " + piecePos.column);
+                        GameManager.instance.CreateStickyToken(activeTokens[i].Row, activeTokens[i].Column);
+                        //activeTokens.Remove(token);
+                        activeTokens.RemoveAt(i);
+                    }
+                }
+            }
+
+        }
+
+        private int GetRowFromPosition(float y) {
+            return Mathf.CeilToInt((y * -1 - .3f));
+        }
+
+        private int GetColumnFromPosition(float x) {
+            return Mathf.RoundToInt(x);
         }
 
         IEnumerator CallAnimatePiece() {
             GamePiece gamePiece = nextPiece.GetComponent<GamePiece>();
             while (gamePiece.animating)
                 yield return null;
-            StartCoroutine(gamePiece.MoveGamePiece(movingPieces));
+            StartCoroutine(gamePiece.MoveGamePiece(movingPieces, this.activeTokens));
         }
 
         private Tweener AfterMovementAnimations(MovingGamePiece piece, Direction direction) {
