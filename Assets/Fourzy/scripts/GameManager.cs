@@ -1129,7 +1129,7 @@ namespace Fourzy
         {
             foreach (var item in tokenViews)
             {
-                if (item.GetComponent<AudioSource>())
+                if (item != null && item.GetComponent<AudioSource>())
                 {
                     item.GetComponent<AudioSource>().mute = false;
                 }

@@ -16,7 +16,7 @@
         {
             "ID": "101010101",
             "Name": "Fruits Test 1",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,14,0,0,0,0,0,0,
                           0,0,14,0,0,0,0,0,
@@ -29,7 +29,7 @@
         {
             "ID": "0206181",
             "Name": "Fruits Test 2",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,14,0,14,0,0,0,
@@ -42,7 +42,7 @@
         {
             "ID": "0206182",
             "Name": "Fruits Test 3",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,5,5,5,5,0,0,
@@ -55,7 +55,7 @@
         {
             "ID": "0206183",
             "Name": "Fruits Test 4",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,14,0,2,0,0,14,0,
                           0,0,14,0,1,14,0,0,
@@ -68,7 +68,7 @@
         {
             "ID": "0206184",
             "Name": "Fruits Test 5",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,14,14,0,0,0,0,0,
                           0,0,14,14,0,0,0,0,
@@ -81,7 +81,7 @@
         {
             "ID": "0206185",
             "Name": "Fruits Test 6",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,5,0,5,0,0,0,
                           0,5,14,5,14,5,0,0,
@@ -1186,7 +1186,7 @@
         {
             "ID": "101630",
             "Name": "Sticky Corners",
-            "Enabled": true,
+            "Enabled": false,
             "TokenData": [6,5,0,0,0,0,5,6,
                           5,5,0,0,0,0,5,5,
                           0,0,0,0,0,0,0,0,
