@@ -179,6 +179,7 @@ namespace Fourzy
                     tokenBoard.tokens[nextPosition.row, nextPosition.column].UpdateBoard(gameBoard, true);
                 } else {
                     gameBoard.DisableNextMovingPiece();
+
                 }
             }
 

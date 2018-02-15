@@ -6,7 +6,7 @@
     {"key":"new_game_button","value":"New Game"},
     {"key":"random_opponent_button","value":"Random Opponent"},
     {"key":"pnp_button","value":"Pass and Play"},
-    {"key":"training_button","value":"Puzzle Challenge"},
+    {"key":"training_button","value":"Training"},
     {"key":"games_tab","value":"Games"},
     {"key":"social_tab","value":"Social"},
     {"key":"rankings_tab","value":"Rankings"},
@@ -41,6 +41,9 @@
     {"key":"ai_button","value":"Training Bot"},
     {"key":"ai_challenge_text","value":"Bot Challenge"},
     {"key":"pieces_tab","value":"Fourzies"},
-    {"key":"pieces_tab_header","value":"Choose Your Fourzy!"}
+    {"key":"pieces_tab_header","value":"Choose Your Fourzy!"},
+    {"key":"home_tab","value":"Play"},
+    {"key":"reload_games_button","value":"Reload Games"},
+    {"key":"puzzle_challenge_button","value":"Puzzle Challenge"}
     ]
 }

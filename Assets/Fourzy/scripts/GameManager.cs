@@ -472,15 +472,14 @@ namespace Fourzy
             }
             else
             {
-                //createGameScript.ResetFindMatchButton();
-                new EndSessionRequest()
-                    .Send((response) =>
-                    {
-                        if (response.HasErrors)
-                        {
-                            Debug.Log("***** EndSessionRequest:Error: " + response.Errors.JSON);
-                        }
-                    });
+                //new EndSessionRequest()
+                    //.Send((response) =>
+                    //{
+                    //    if (response.HasErrors)
+                    //    {
+                    //        Debug.Log("***** EndSessionRequest:Error: " + response.Errors.JSON);
+                    //    }
+                    //});
             }
         }
 
@@ -777,7 +776,7 @@ namespace Fourzy
         private void CheckConnectionStatus(bool connected)
         {
             // TODO: inform the player they dont have a connection when connected is false
-            Debug.Log("CheckConnectionStatus: " + connected);
+            //Debug.Log("CheckConnectionStatus: " + connected);
         }
 
         public AudioSource AddAudio(AudioClip clip, bool loop, bool playAwake, float vol)

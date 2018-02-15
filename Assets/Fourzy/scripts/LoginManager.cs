@@ -4,6 +4,7 @@ using System;
 using Facebook.Unity;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
+using GameSparks.Core;
 
 namespace Fourzy
 {
@@ -15,6 +16,7 @@ namespace Fourzy
         public GameObject facebookButton;
         readonly string[] firstNameSyllables = { "mon","fay","shi","zag","blarg","rash","izen"};
         readonly string[] lastNameSyllables = { "malo","zak","abo","wonk","zig","wolf","cat"};
+        bool readyForDeviceLogin;
 
         void Start() {
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
@@ -36,6 +38,23 @@ namespace Fourzy
             DontDestroyOnLoad(gameObject);
 
             ConnectWithFacebook();
+        }
+
+        private void OnEnable() {
+            GS.GameSparksAvailable += GameSparksIsAvailable;
+        }
+
+        private void OnDisable() {
+            GS.GameSparksAvailable -= GameSparksIsAvailable;
+        }
+
+        private void GameSparksIsAvailable(bool connected) {
+            Debug.Log("LoginManager: GameSparksIsAvailable: connect: " + connected + " readyForDeviceLogin: "+ readyForDeviceLogin);
+            if (connected && readyForDeviceLogin) {
+                DeviceLogin();
+            } else if (connected) {
+                readyForDeviceLogin = true;
+            }
         }
 
         public void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token) {
@@ -130,9 +149,14 @@ namespace Fourzy
                 }
                 else
                 {
-                    Debug.Log("Not Logged into Facebook");
+                    Debug.Log("Not Logged into Facebook: readyForDeviceLogin: " + readyForDeviceLogin);
                     facebookButton.SetActive(true);
-                    Invoke("DeviceLogin", 0.5f);
+                    //Invoke("DeviceLogin", 0.5f);
+                    if (readyForDeviceLogin) {
+                        DeviceLogin();    
+                    } else {
+                        readyForDeviceLogin = true;
+                    }
                 }
             } else {
                 ConnectWithFacebook(); // if we are still not connected, then try to process again

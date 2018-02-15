@@ -177,8 +177,10 @@ namespace Fourzy {
                         }
                     }
 
-                    if (piece.isDestroyed) {
-                        if (InBoardBounds(nextPosition)) {
+                    if (piece.isDestroyed)
+                    {
+                        if (InBoardBounds(nextPosition))
+                        {
                             SetCell(nextPosition.column, nextPosition.row, PlayerEnum.NONE);
                         }
                     }

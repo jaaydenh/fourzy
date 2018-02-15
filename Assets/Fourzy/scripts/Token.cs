@@ -369,7 +369,7 @@ namespace Fourzy {
             canEnter = true;
             canEndMove = true;
             isMoveable = false;
-            mustStop = true;
+            mustStop = false;
             chanceDestroyOnEnd = 100.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;

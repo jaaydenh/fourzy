@@ -595,17 +595,18 @@ namespace Fourzy
                 }
 
                 List<string> challengeStates = new List<string> {"RUNNING","COMPLETE","ISSUED"};
+                System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
                 //We send a ListChallenge Request with the shortcode of our challenge, we set this in our GameSparks Portal
                 new ListChallengeRequest()
-                    //.SetShortCode("chalRanked")
-                    //.SetMaxQueueTimeInSeconds(25)
-                    //.SetMaxResponseTimeInSeconds(25)
-                    .SetMaxResponseTimeInMillis(25000)
+                    .SetShortCode("chalRanked")
+                    .SetMaxResponseTimeInMillis(20000)
                     .SetStates(challengeStates)
-                    .SetEntryCount(70) //We want to pull in the first 50
-                    .Send((Action<GameSparks.Api.Responses.ListChallengeResponse>)((response) =>
+                    .SetEntryCount(50) // get 50 games
+                    .Send(((response) =>
                         {
+                            Debug.Log("Time elapsed at response start: " + stopwatch.Elapsed);
+
                             if (response.HasErrors) {
                                 Debug.Log("***** Error Listing Challenge Request: " + response.Errors.JSON);
                                 AnalyticsManager.LogError("list_challenge_request_error", response.Errors.JSON);
@@ -773,6 +774,13 @@ namespace Fourzy
                                     // pulledToRefresh = false;
                                 }
                                 gettingChallenges = false;
+                                
+                                stopwatch.Stop();
+                                Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                                customAttributes.Add("endtime", stopwatch.Elapsed);
+                                AnalyticsManager.LogCustom("ListChallengeRequest_response_endtime", customAttributes);
+                                Debug.Log("Time elapsed at response end: " + stopwatch.Elapsed);
+                                stopwatch.Reset();
                             }
                         }));
                 //            Debug.Log("yourMoveGameGrid.transform.childCount: " + yourMoveGameGrid.transform.childCount);
