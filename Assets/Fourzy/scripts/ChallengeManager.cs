@@ -6,6 +6,7 @@ using GameSparks.Api.Requests;
 using GameSparks.Core;
 using System.Linq;
 using System;
+using Lean.Pool;
 
 namespace Fourzy
 {
@@ -586,7 +587,8 @@ namespace Fourzy
                 for (int i = 0; i < games.Count; i++)
                 {
                     //Destroy all runningGame gameObjects currently in the scene
-                    Destroy(games[i]);
+                    //Destroy(games[i]);
+                    LeanPool.Despawn(games[i].gameObject);
                 }
 
                 games.Clear();
@@ -615,7 +617,9 @@ namespace Fourzy
                                 foreach (var gsChallenge in response.ChallengeInstances)
                                 {
                                     challengeCount++;
-                                    GameObject go = Instantiate(activeGamePrefab) as GameObject;
+                                    //GameObject go = Instantiate(activeGamePrefab) as GameObject;
+                                    GameObject go = LeanPool.Spawn(activeGamePrefab) as GameObject;
+
                                     ActiveGame activeGame = go.GetComponent<ActiveGame>();
 
                                     bool? isVisible = gsChallenge.ScriptData.GetBoolean("isVisible");

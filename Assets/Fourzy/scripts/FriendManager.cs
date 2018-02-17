@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GameSparks.Api.Requests;
 using Facebook.Unity;
 using UnityEngine.UI;
+using Lean.Pool;
 
 namespace Fourzy
 {
@@ -41,7 +42,8 @@ namespace Fourzy
                 for (int i = 0; i < friends.Count; i++)
                 {
                     //Destroy all friend gameObjects currently in the scene
-                    Destroy(friends[i]);
+                    //Destroy(friends[i]);
+                    LeanPool.Despawn(friends[i].gameObject);
                 }
                 //Clear the list of friends so we don't have null reference errors
                 friends.Clear();
@@ -53,7 +55,9 @@ namespace Fourzy
                         foreach (var friend in response.Friends)
                         {
                             //Create a new gameObject, add friendEntryPrefab as a child of the Friend List GameObject
-                            GameObject go = Instantiate(friendEntryPrefab) as GameObject;
+                            //GameObject go = Instantiate(friendEntryPrefab) as GameObject;
+                            GameObject go = LeanPool.Spawn(friendEntryPrefab) as GameObject;
+
                             go.gameObject.transform.SetParent(friendsList.transform);
                             //Update all the gameObject's variables
                             FriendEntry friendEntry = go.GetComponent<FriendEntry>();

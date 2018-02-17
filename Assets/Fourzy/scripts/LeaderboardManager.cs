@@ -3,28 +3,21 @@ using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
 using UnityEngine;
 using UnityEngine.UI;
+using Lean.Pool;
 
 namespace Fourzy
 {
     public class LeaderboardManager : MonoBehaviour {
 
         public static LeaderboardManager instance;
-
         public List<GameObject> players = new List<GameObject>();
         public GameObject leaderboardPlayersList;
         public GameObject leaderboardPlayerPrefab;
         private bool loadingLeaderboard = false;
         public Text noPlayerText;
 
-        void Start()
-        {
-            //instance = this;
-        }
-
         void Awake()
         {
-            //instance = this;
-
             if (instance == null)
             {
                 instance = this;
@@ -38,6 +31,7 @@ namespace Fourzy
             //Sets this to not be destroyed when reloading scene
             DontDestroyOnLoad(gameObject);
         }
+
         public void GetLeaderboard()
         {
             if (!loadingLeaderboard)
@@ -48,7 +42,8 @@ namespace Fourzy
                 for (int i = 0; i < players.Count; i++)
                 {
                     //Destroy all runningGame gameObjects currently in the scene
-                    Destroy(players[i]);
+                    //Destroy(players[i]);
+                    LeanPool.Despawn(players[i].gameObject);
                 }
 
                 players.Clear();
@@ -65,7 +60,10 @@ namespace Fourzy
                         {
                             foreach (LeaderboardDataResponse._LeaderboardData entry in response.Data) // iterate through the leaderboard data
                             {                                
-                                GameObject go = Instantiate(leaderboardPlayerPrefab) as GameObject;
+                                //GameObject go = Instantiate(leaderboardPlayerPrefab) as GameObject;
+
+                                GameObject go = LeanPool.Spawn(leaderboardPlayerPrefab) as GameObject;
+
                                 go.gameObject.transform.SetParent(leaderboardPlayersList.transform);
                                 LeaderboardPlayer leaderboardPlayer = go.GetComponent<LeaderboardPlayer>();
 

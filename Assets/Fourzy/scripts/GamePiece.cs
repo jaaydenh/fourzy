@@ -17,12 +17,39 @@ namespace Fourzy
         public bool isMoveableRight = false;
         public bool isMoving;
         public bool didAnimateNextPiece;
-        bool animating;
+        public bool animating;
         GameObject nextPiece = null;
         List<MovingGamePiece> movingPieces;
         List<IToken> activeTokens;
-        public AnimationCurve moveCurve;
+        //public AnimationCurve moveCurve;
         Renderer rend;
+        public Coroutine coMoveGamePiece;
+        private bool reset;
+
+        public void Reset()
+        {
+            reset = true;
+            //player = PlayerEnum.NONE;
+            ////column = -1;
+            ////row = -1;
+            //if (positions != null) {
+            //    positions.Clear();    
+            //}
+            //isMoveableUp = false;
+            //isMoveableDown = false;
+            //isMoveableLeft = false;
+            //isMoveableRight = false;
+            //isMoving = false;
+            //didAnimateNextPiece = false;
+            //animating = false;
+            //nextPiece = null;
+            //if (movingPieces != null) {
+            //    movingPieces.Clear();    
+            //}
+            //if (activeTokens != null) {
+            //    activeTokens.Clear();    
+            //}
+        }
 
         public void SetAlternateColor(bool useAlternateColor) {
             rend = GetComponent<Renderer>();
@@ -52,6 +79,7 @@ namespace Fourzy
 
         public IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces, List<IToken> activeTokens) {
             //Debug.Log("Animatepiece movingpieces count: " + movingPieces.Count);
+
             Debug.Log("MoveGamePiece activeTokens count: " + activeTokens.Count);
 
             if (movingPieces.Count == 0) {
@@ -104,7 +132,7 @@ namespace Fourzy
                 //Debug.Log("Animation End x: " + end.x + " y: " + end.y);
 
                 float t = 0;
-                while (t < 1)
+                while (this != null && gameObject != null && t < 1)
                 {
                     //t = t + Time.deltaTime;
                     //float percent = Mathf.Clamp01(t / GameManager.instance.moveSpeed);
@@ -120,16 +148,19 @@ namespace Fourzy
                     //transform.position = Vector3.MoveTowards(start, end, t);
                     yield return null;
                 }
+                if (this != null) {
+                    transform.position = end;
 
-                transform.position = end;
+                    start = end;
+                    i++; 
+                }
 
-                start = end;
-                i++;
-            } while (i < positions.Count - 1);
+            } while (this != null && gameObject != null && i < positions.Count - 1);
 
             while (i < positions.Count-1) {
                 yield return null;
             }
+
             animating = false;
             Direction endMoveDirection = findDirection(positions[positions.Count - 2], positions[positions.Count - 1]);
             Tweener tweener = AfterMovementAnimations(movingGamePiece, endMoveDirection);
@@ -145,7 +176,6 @@ namespace Fourzy
             GameManager.instance.animatingGamePieces = false;
 
             yield return true;
-            //GameManager.instance.gameBoardView.PrintGameBoard();
         }
 
         void Update()

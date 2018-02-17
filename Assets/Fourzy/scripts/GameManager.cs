@@ -393,8 +393,6 @@ namespace Fourzy
             if (tokens == null)
             {
                 tokens = new GameObject("Tokens");
-                //tokens.transform.position = new Vector3(-315, 300);
-                //tokens.transform.localScale = new Vector3(90, 89);
                 tokens.transform.parent = gameScreen.transform;
             }
 
@@ -454,7 +452,7 @@ namespace Fourzy
             }
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [UnityEditor.MenuItem("Screenshot/Take screenshot")]
         static void Screenshot()
         {
@@ -472,14 +470,14 @@ namespace Fourzy
             }
             else
             {
-                //new EndSessionRequest()
-                    //.Send((response) =>
-                    //{
-                    //    if (response.HasErrors)
-                    //    {
-                    //        Debug.Log("***** EndSessionRequest:Error: " + response.Errors.JSON);
-                    //    }
-                    //});
+                new EndSessionRequest()
+                    .Send((response) =>
+                    {
+                        if (response.HasErrors)
+                        {
+                            Debug.Log("***** EndSessionRequest:Error: " + response.Errors.JSON);
+                        }
+                    });
             }
         }
 
@@ -557,7 +555,6 @@ namespace Fourzy
             //RewardsScreen.SetActive(false);
             //rewardScreen.Close();
             rewardScreen.gameObject.SetActive(false);
-
             //TransitionToGamesListScreen();
         }
 
@@ -583,6 +580,7 @@ namespace Fourzy
             challengeInstanceId = null;
             winner = null;
 
+            ResetGamePiecesAndTokens();
             ResetGameManagerState();
             ResetUIGameScreen();
             HeaderUI.SetActive(true);
@@ -592,7 +590,6 @@ namespace Fourzy
 
         public void TransitionToCreateGameScreen()
         {
-            //BoardSelectionManager.instance.LoadMiniBoards();
             ResetGameManagerState();
             UIScreen.SetActive(false);
             CreateGameScreen.SetActive(true);
@@ -1285,21 +1282,6 @@ namespace Fourzy
 
         public void ResetUIGameScreen()
         {
-            //if (isCurrentPlayer_PlayerOne) {
-            //    playerNameLabel.color = bluePlayerColor;
-            //    opponentNameLabel.color = redPlayerColor;
-            //    if (!isMultiplayer) {
-            //        playerPiece.sprite = playerOneSprite;
-            //        opponentPiece.sprite = playerTwoSprite;
-            //    }
-            //} else {
-            //    playerNameLabel.color = redPlayerColor;
-            //    opponentNameLabel.color = bluePlayerColor;
-            //    if (!isMultiplayer) {
-            //        playerPiece.sprite = playerTwoSprite;
-            //        opponentPiece.sprite = playerOneSprite;    
-            //    }
-            //}
             gameInfo.Close();
             RectTransform pprt = playerPieceUI.GetComponent<RectTransform>();
             pprt.anchoredPosition = new Vector2(175, -83);
@@ -1382,7 +1364,11 @@ namespace Fourzy
                 {
                     Transform piece = gamePieces.transform.GetChild(i);
                     piece.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    LeanPool.Despawn(piece.gameObject);
+                    //GamePiece p = piece.GetComponent<GamePiece>();
+                    //Debug.Log("ResetGamePiecesAndTokens: animating: " + p.animating);
+                    //p.Reset();
+                    Destroy(piece.gameObject);
+                    //LeanPool.Despawn(piece.gameObject);
                 }
             }
 
@@ -1398,63 +1384,13 @@ namespace Fourzy
             gameBoardView.Clear();
         }
 
-        //public void PopulateMoveArrows() {
-        // for(int col = 0; col < numColumns; col++)
-        // {
-        //     for(int row = 0; row < numRows; row++)
-        //     {
-        //         GameObject g;
-        //         if (col == numColumns - 1 && row > 0 && row < numRows - 1) {
-        //             g = Instantiate(moveArrowLeft, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
-        //             g.transform.parent = gamePieces.transform;
-        //         }
-        //         if (col == 0 && row > 0 && row < numRows - 1) {
-        //             g = Instantiate(moveArrowRight, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
-        //             g.transform.parent = gamePieces.transform;
-        //         }
-        //         if (row == 0 && col > 0 && col < numColumns - 1) {
-        //             if (gameBoard.GetCell(col, row) == 0) {
-        //                 g = Instantiate(moveArrowDown, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
-        //                 g.transform.parent = gamePieces.transform;
-        //             }
-        //         }
-        //         if (row == numRows - 1 && col > 0 && col < numColumns - 1) {
-        //             if (gameBoard.GetCell(col, row) == 0) {
-        //                 g = Instantiate(moveArrowUp, new Vector3((col - offset) * spacing, ((row - offset) * spacing) * -1, 10), Quaternion.identity) as GameObject;
-        //                 g.transform.parent = gamePieces.transform;
-        //             }
-        //         }
-        //     }
-        // }
-        //}
-
-        // public void AnimateEmptyEdgeSpots(bool animate) {
-        //     foreach (EmptySpot spot in gameScreen.GetComponentsInChildren<EmptySpot>())
-        //     {
-        //         StartCoroutine(spot.AnimateSpot(animate));
-        //     }
-        // }
-
         /// <summary>
         /// Spawns a gamepiece at the given column and row
         /// </summary>
         /// <returns>The piece.</returns>
         GameObject SpawnPiece(float posX, float posY, PlayerEnum player, PieceAnimState startingState)
         {
-            //float xPos = (posX - ((Constants.numColumns - 1) / 2.0f)) * 1f;
-            //float yPos = (posY - ((Constants.numColumns - 1) / 2.0f)) * 1f - .15f;
             //Debug.Log("SpawnPiece: x: " + posX + " y: " + posY);
-            //GameObject gamePiece = Lean.LeanPool.Spawn(gamePiecePrefab,
-            //new Vector3(Mathf.FloorToInt(posX),
-                //Mathf.FloorToInt(posY), 10),
-                //Quaternion.identity, gamePieces.transform) as GameObject;
-
-            // GameObject gamePiece = Instantiate(
-            //     isPlayerOneTurn ? pieceBlue : pieceRed,
-            //     new Vector3(Mathf.FloorToInt(posX + 0.5f),
-            //     Mathf.FloorToInt(posY + 0.5f), 10), // spawn it above the first row
-            //     Quaternion.identity, gamePieces.transform) as GameObject;
-
             float xPos = (posX + .1f) * .972f;
             float yPos = (posY + .05f) * .96f;
 
@@ -1493,22 +1429,6 @@ namespace Fourzy
         {
             GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
 
-            //isLoading = true;
-            //gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
-            //ResetGamePiecesAndTokens();
-            //ResetUI();
-
-            //TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-            //gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
-
-            //CreateTokenViews();
-            //UpdatePlayerUI();
-            //DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("pnp_button"), true);
-            //rematchButton.gameObject.SetActive(false);
-            //EnableTokenAudio();
-            //FadeGameScreen(1.0f, gameScreenFadeInTime);
-            //isLoading = false;
-
             AnalyticsManager.LogCustom("rematch_pnp_game");
         }
 
@@ -1518,13 +1438,10 @@ namespace Fourzy
                 alertUI.Open(LocalizationManager.instance.GetLocalizedValue("all_challenges_completed"));
             } else {
                 ResetGameManagerState();
-
                 puzzleChallengeInfo = puzzleChallenge;
-                //CloseIntroUI();
                 ResetUIGameScreen();
                 gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
                 ResetGamePiecesAndTokens();
-
 
                 TokenBoard initialTokenBoard = new TokenBoard(puzzleChallenge.InitialTokenBoard.ToArray(), "", "", true);
 
@@ -1604,7 +1521,6 @@ namespace Fourzy
         {
             ErrorPanel.SetActive(true);
         }
-
 
         public Position GetPositonFromTransform(Vector3 pos) {
             int column = Mathf.RoundToInt(pos.x);
@@ -1891,7 +1807,6 @@ namespace Fourzy
                 }
             }
 
-            //StartCoroutine(MovePieceGameView(move, movingPieces));
             MoveGamePieceViews(move, movingPieces, activeTokens);
 
             while (animatingGamePieces)
