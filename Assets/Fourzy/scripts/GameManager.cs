@@ -94,6 +94,7 @@ namespace Fourzy
         public Rewards rewardScreen;
         public GameInfo gameInfo;
         public Texture2D defaultProfilePicture;
+        public Badge homeScreenPlayBadge;
 
         [Header("Game State")]
         public GameType gameType;
@@ -434,6 +435,25 @@ namespace Fourzy
             replayedLastMove = false;
         }
 
+        public void UpdateBadgeCounts() {
+            int activeGamesCount = 0;
+
+            for (int i = 0; i < games.Count(); i++)
+            {
+                if (games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.isGameOver == true))
+                {
+                    activeGamesCount++;
+                }
+            }
+
+            homeScreenPlayBadge.SetGameCount(activeGamesCount);
+            if (activeGamesCount > 0) {
+                homeScreenPlayBadge.gameObject.SetActive(true);
+            } else {
+                homeScreenPlayBadge.gameObject.SetActive(false);    
+            }
+        }
+
         void Update()
         {
             if (Application.platform == RuntimePlatform.Android)
@@ -501,6 +521,27 @@ namespace Fourzy
             isPuzzleChallengePassed = false;
             puzzleChallengeInfo = null;
             gameType = GameType.NONE;
+        }
+
+        public void PlayButton() {
+            int activeGamesCount = 0;
+            Game game = null;
+            for (int i = 0; i < games.Count(); i++)
+            {
+                if (games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.isGameOver == true))
+                {
+                    activeGamesCount++;
+                    if (game == null) {
+                        game = games[i];
+                    }
+                }
+            }
+
+            if (game != null) {
+                game.OpenGame();
+            } else {
+                ChallengeManager.instance.FindRandomChallenge();
+            }
         }
 
         public void RewardsButton()
@@ -601,7 +642,7 @@ namespace Fourzy
         public void TransitionToGameOptionsScreen(GameType gameType, string opponentUserId = "", string opponentName = "", Image opponentProfilePicture = null, string opponentLeaderboardRank = "")
         {
             Debug.Log("TransitionToGameOptionsScreen: opponentUserId: " + opponentUserId);
-            challengerGamePieceId = Player.instance.gamePieceId;
+            challengerGamePieceId = UserManager.instance.gamePieceId;
             if (opponentUserId != "") {
                 ChallengeManager.instance.GetOpponentGamePiece(opponentUserId);    
             }
@@ -646,7 +687,7 @@ namespace Fourzy
 
         public void NextGame()
         {
-            challengeInstanceId = null;
+            //challengeInstanceId = null;
             gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
             // foreach (var game in activeGames)
             // {
@@ -654,14 +695,40 @@ namespace Fourzy
             //     Debug.Log("gameState.isGameOver: " + game.gameState.isGameOver);
             //     Debug.Log("gameState.isCurrentPlayerTurn: " + game.gameState.isCurrentPlayerTurn);
             // }
-            var nextGame = games
-                .Where(t => (t.gameState.isCurrentPlayerTurn == true || (t.didViewResult == false && t.gameState.isGameOver == true)) && t.challengeId != challengeInstanceId)
-                .FirstOrDefault();
-            if (nextGame != null)
+
+            for (int i = 0; i < games.Count; i++)
             {
-                nextGame.OpenGame();
-                AnalyticsManager.LogCustom("next_game");
+                if (games[i].challengeId == challengeInstanceId) {
+                    var game = games[i];
+                    games.RemoveAt(i);
+                    games.Add(game);
+                    break;
+                }
             }
+
+            for (int i = 0; i < games.Count; i++)
+            {
+                if ((games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.isGameOver == true)) && games[i].challengeId != challengeInstanceId)
+                {
+                    if (games[i] != null)
+                    {
+                        Debug.Log("NextGame: current game challengeid: "+ challengeInstanceId);
+                        Debug.Log("NextGame:    open game challengeid: " + games[i].challengeId);
+                        games[i].OpenGame();
+                        AnalyticsManager.LogCustom("next_game");
+                        break;
+                    }
+                }
+            }
+
+            //var nextGame = games
+            //    .Where(t => (t.gameState.isCurrentPlayerTurn == true || (t.didViewResult == false && t.gameState.isGameOver == true)) && t.challengeId != challengeInstanceId)
+            //    .FirstOrDefault();
+            //if (nextGame != null)
+            //{
+            //    nextGame.OpenGame();
+            //    AnalyticsManager.LogCustom("next_game");
+            //}
         }
 
         private void SetOpponentGamePiece(string gamePieceId, string challengeId) {
@@ -801,7 +868,7 @@ namespace Fourzy
         {
             if (gameState.moveList != null)
             {
-                Debug.Log("ReplayLastMove: gameState.moveList.count: " + gameState.moveList.Count());
+                //Debug.Log("ReplayLastMove: gameState.moveList.count: " + gameState.moveList.Count());
                 GSData lastMove = gameState.moveList.Last();
                 // Debug.Log("lastmove: " + lastMove.JSON.ToString());
                 int position = lastMove.GetInt("position").GetValueOrDefault();
@@ -816,7 +883,7 @@ namespace Fourzy
                 {
                     player = gameState.isPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
                 }
-                Debug.Log("ReplayLastMove lastmove: position: " + position + " direction: " + direction + " player: " + player.ToString());
+                //Debug.Log("ReplayLastMove lastmove: position: " + position + " direction: " + direction + " player: " + player.ToString());
                 Move move = new Move(position, direction, player);
 
                 StartCoroutine(MovePiece(move, true, false));
@@ -933,6 +1000,8 @@ namespace Fourzy
             SetGameBoardView(gameState.GetPreviousGameBoard());
             CreateTokenViews();
             DisplayIntroUI(title, subtitle, true);
+
+            SetActionButton();
 
             //if (isPuzzleChallenge && puzzleChallengeInfo.Level <= 2) {
             //    //moveHintArea.SetActive(true);
@@ -1202,7 +1271,7 @@ namespace Fourzy
 
                 if (opponentProfileSprite != null)
                 {
-                    Debug.Log("setting opponentProfilePicture is not null");
+                    //Debug.Log("setting opponentProfilePicture is not null");
                     opponentProfilePicture.sprite = opponentProfileSprite;
                 }
                 else if (opponentFacebookId != "")
@@ -1304,39 +1373,25 @@ namespace Fourzy
         {
             if (isMultiplayer)
             {
-                //if (!gameState.isCurrentPlayerTurn) {
-                var nextGame = games
-                    //.Where(t => t.gameState.isCurrentPlayerTurn == true && t.challengeId != challengeInstanceId)
-                    .Where(t => (t.gameState.isCurrentPlayerTurn == true || (t.didViewResult == false && t.gameState.isGameOver == true && t.gameState.isCurrentPlayerTurn == false)) && t.challengeId != challengeInstanceId)
-                    .FirstOrDefault();
-                // var activeGame2 = activeGames
-                //     //.Where(t => t.gameState.isCurrentPlayerTurn == true && t.challengeId != challengeInstanceId)
-                //     .Where(t => (t.gameState.isCurrentPlayerTurn == true || (t.viewedResult == false && t.gameState.isGameOver == true && t.gameState.isCurrentPlayerTurn == false)) && t.challengeId != challengeInstanceId);
-
-                //     foreach (var game in activeGame2)
-                //     {
-                //         Debug.Log("viewedResult: " + game.viewedResult);
-                //         Debug.Log("gameState.isGameOver: " + game.gameState.isGameOver);
-                //         Debug.Log("gameState.isCurrentPlayerTurn: " + game.gameState.isCurrentPlayerTurn);
-                //     }
-
-                //if (gameState.isGameOver && !isExpired) {
-                //    createGameButton.gameObject.SetActive(false);
-                //    nextGameButton.gameObject.SetActive(false);
-                //    rewardsButton.gameObject.SetActive(true);
-                //} else {
-                    if (nextGame != null)
-                    {
-                        nextGameButton.gameObject.SetActive(true);
-                        createGameButton.gameObject.SetActive(false);
+                bool hasNextGame = false;
+                //var nextGame = games
+                    //.Where(t => (t.gameState.isCurrentPlayerTurn == true || (t.didViewResult == false && t.gameState.isGameOver == true && t.gameState.isCurrentPlayerTurn == false)) && t.challengeId != challengeInstanceId)
+                    //.FirstOrDefault();
+                for (int i = 0; i < games.Count(); i++)
+                {
+                    if ((games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.isGameOver == true && games[i].gameState.isCurrentPlayerTurn == false)) && games[i].challengeId != challengeInstanceId) {
+                        hasNextGame = true;
                     }
-                    else
-                    {
-                        createGameButton.gameObject.SetActive(true);
-                        nextGameButton.gameObject.SetActive(false);
-                    }
-                //}
-                //}
+                }
+
+                //if (nextGame != null)
+                if (hasNextGame) {
+                    nextGameButton.gameObject.SetActive(true);
+                    createGameButton.gameObject.SetActive(false);
+                } else {
+                    createGameButton.gameObject.SetActive(true);
+                    nextGameButton.gameObject.SetActive(false);
+                }
             }
             else
             {
@@ -1550,7 +1605,7 @@ namespace Fourzy
 
                 Position position;
                 PlayerEnum player = gameState.isPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
-                Debug.Log("ProcessPlayerInput: column: " + column + " row: " + row);
+                //Debug.Log("ProcessPlayerInput: column: " + column + " row: " + row);
                 if (inTopRowBounds(pos.x, pos.y))
                 {
                     position = new Position(column, row - 1);

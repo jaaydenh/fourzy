@@ -9,6 +9,7 @@ namespace Fourzy
         public GameObject gamePieceGrid;
         public List<Sprite> gamePieces = new List<Sprite>();
         public GameObject gamePiecePrefab;
+        GamePieceData[] gamePieceData;
 
         private static GamePieceSelectionManager _instance;
         public static GamePieceSelectionManager instance
@@ -29,10 +30,19 @@ namespace Fourzy
             //ChallengeManager.instance.GetGamePiece();
         }
 
+        public string GetGamePieceName(int gamePieceId) {
+            for (int i = 0; i < gamePieceData.Length; i++)
+            {
+                if (gamePieceData[i].ID == gamePieceId.ToString()) {
+                    return gamePieceData[i].Name;
+                }
+            }
+            return "Error";
+        }
+
         public void LoadGamePieces(string gamePieceId)
         {
-            
-            GamePieceData[] gamePieceData = TokenBoardLoader.instance.GetAllGamePieces();
+            gamePieceData = TokenBoardLoader.instance.GetAllGamePieces();
 
             Debug.Log("LoadGamePieces gamePieceId: " + gamePieceId);
             foreach (var piece in gamePieceData)

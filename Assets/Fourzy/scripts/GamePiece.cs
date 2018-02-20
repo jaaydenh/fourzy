@@ -79,8 +79,7 @@ namespace Fourzy
 
         public IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces, List<IToken> activeTokens) {
             //Debug.Log("Animatepiece movingpieces count: " + movingPieces.Count);
-
-            Debug.Log("MoveGamePiece activeTokens count: " + activeTokens.Count);
+            //Debug.Log("MoveGamePiece activeTokens count: " + activeTokens.Count);
 
             if (movingPieces.Count == 0) {
                 yield return false;

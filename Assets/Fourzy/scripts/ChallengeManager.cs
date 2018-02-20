@@ -490,7 +490,7 @@ namespace Fourzy
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.isPuzzleChallenge = false;
             GameManager.instance.isCurrentPlayer_PlayerOne = true;
-            GameManager.instance.challengerGamePieceId = Player.instance.gamePieceId;
+            GameManager.instance.challengerGamePieceId = UserManager.instance.gamePieceId;
             GameManager.instance.challengedGamePieceId = 0;
 
             GameManager.instance.ResetUIGameScreen();
@@ -528,7 +528,7 @@ namespace Fourzy
             GameManager.instance.isPuzzleChallenge = false;
             GameManager.instance.isCurrentPlayer_PlayerOne = false;
             GameManager.instance.challengerGamePieceId = int.Parse(challenge.ScriptData.GetString("challengerGamePieceId"));
-            GameManager.instance.challengedGamePieceId = Player.instance.gamePieceId;
+            GameManager.instance.challengedGamePieceId = UserManager.instance.gamePieceId;
 
             GameManager.instance.winner = challenge.ScriptData.GetString("winnerName");
 
@@ -587,8 +587,8 @@ namespace Fourzy
                 for (int i = 0; i < games.Count; i++)
                 {
                     //Destroy all runningGame gameObjects currently in the scene
-                    //Destroy(games[i]);
-                    LeanPool.Despawn(games[i].gameObject);
+                    Destroy(games[i]);
+                    //LeanPool.Despawn(games[i].gameObject);
                 }
 
                 games.Clear();
@@ -617,8 +617,8 @@ namespace Fourzy
                                 foreach (var gsChallenge in response.ChallengeInstances)
                                 {
                                     challengeCount++;
-                                    //GameObject go = Instantiate(activeGamePrefab) as GameObject;
-                                    GameObject go = LeanPool.Spawn(activeGamePrefab) as GameObject;
+                                    GameObject go = Instantiate(activeGamePrefab) as GameObject;
+                                    //GameObject go = LeanPool.Spawn(activeGamePrefab) as GameObject;
 
                                     ActiveGame activeGame = go.GetComponent<ActiveGame>();
 
@@ -785,6 +785,7 @@ namespace Fourzy
                                 AnalyticsManager.LogCustom("ListChallengeRequest_response_endtime", customAttributes);
                                 Debug.Log("Time elapsed at response end: " + stopwatch.Elapsed);
                                 stopwatch.Reset();
+                                GameManager.instance.UpdateBadgeCounts();
                             }
                         }));
                 //            Debug.Log("yourMoveGameGrid.transform.childCount: " + yourMoveGameGrid.transform.childCount);
@@ -850,6 +851,7 @@ namespace Fourzy
                 }
 
                 gettingChallenges = false;
+                GameManager.instance.UpdateBadgeCounts();
             }
         }
 

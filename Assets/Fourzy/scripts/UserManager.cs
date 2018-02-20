@@ -13,10 +13,16 @@ namespace Fourzy
         public string userName;
         public string userId;
         public long coins;
+        public int gamePieceId;
+
         public Sprite profilePicture;
         public Text userNameLabel;
+        public Text gamePieceNameLabel;
         public Image profilePictureImage;
+        public Image gamePieceImage;
         public Text coinsLabel;
+
+        bool didLoadGamePieces;
 
         void Awake()
         {
@@ -36,12 +42,45 @@ namespace Fourzy
             profilePicture = new Sprite();
         }
 
+        void Start()
+        {
+            ChallengeManager.instance.GetPlayerGamePiece();
+        }
+
+        private void OnEnable()
+        {
+            ChallengeManager.OnReceivedPlayerGamePiece += SetPlayerGamePiece;
+            ChallengeManager.OnSetGamePieceSuccess += SetPlayerGamePiece;
+        }
+
+        private void OnDisable()
+        {
+            ChallengeManager.OnReceivedPlayerGamePiece -= SetPlayerGamePiece;
+            ChallengeManager.OnSetGamePieceSuccess -= SetPlayerGamePiece;
+        }
+
         public void UpdateInformation()
         {
             new AccountDetailsRequest().Send((response) =>
                 {    
-                UpdateGUI(response.DisplayName, response.UserId, response.ExternalIds.GetString("FB").ToString(), response.Currency1);
+                    UpdateGUI(response.DisplayName, response.UserId, response.ExternalIds.GetString("FB").ToString(), response.Currency1);
                 });
+        }
+
+        private void SetPlayerGamePiece(string id)
+        {
+            Debug.Log("SetPlayerGamePiece: gamepieceid: " + id);
+            gamePieceId = int.Parse(id);
+            gamePieceImage.sprite = GamePieceSelectionManager.instance.gamePieces[gamePieceId];
+            gamePieceImage.gameObject.SetActive(true);
+
+            Debug.Log("didLoadGamePieces: "+ didLoadGamePieces);
+            if (!didLoadGamePieces)
+            {
+                GamePieceSelectionManager.instance.LoadGamePieces(id);
+                didLoadGamePieces = true;
+            }
+            gamePieceNameLabel.text = GamePieceSelectionManager.instance.GetGamePieceName(gamePieceId);
         }
 
         public void UpdateGUI(string name, string uid, string fbId, long? coins)
@@ -66,8 +105,6 @@ namespace Fourzy
         {
             using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture("https://graph.facebook.com/" + facebookId + "/picture?width=210&height=210"))
             {
-                //yield return www.Send();
-
                 yield return uwr.SendWebRequest();
 
                 if (uwr.isNetworkError || uwr.isHttpError)

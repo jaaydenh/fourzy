@@ -49,8 +49,8 @@ namespace Fourzy
         }
 
         private void GameSparksIsAvailable(bool connected) {
-            Debug.Log("LoginManager: GameSparksIsAvailable: connect: " + connected + " readyForDeviceLogin: "+ readyForDeviceLogin);
-            if (connected && readyForDeviceLogin) {
+            //Debug.Log("LoginManager: GameSparksIsAvailable: connect: " + connected + " readyForDeviceLogin: "+ readyForDeviceLogin);
+            if (connected && readyForDeviceLogin && !FB.IsLoggedIn) {
                 DeviceLogin();
             } else if (connected) {
                 readyForDeviceLogin = true;
