@@ -98,6 +98,7 @@ namespace Fourzy
         public GameInfo gameInfo;
         public Texture2D defaultProfilePicture;
         public Badge homeScreenPlayBadge;
+        public Text challengeIdDebugText;
 
         [Header("Game State")]
         public GameType gameType;
@@ -475,13 +476,6 @@ namespace Fourzy
             }
         }
 
-#if UNITY_EDITOR
-        [UnityEditor.MenuItem("Screenshot/Take screenshot")]
-        static void Screenshot()
-        {
-            ScreenCapture.CaptureScreenshot("../test.png");
-        }
-#endif
         void OnApplicationPause(bool paused)
         {
             if (!paused)
@@ -1008,6 +1002,12 @@ namespace Fourzy
         public void SetupGame(string title, string subtitle)
         {
             //UpdatePlayersStatusView();
+            if (challengeInstanceId != null || challengeInstanceId != "") {
+                challengeIdDebugText.text = "ChallengeId: " + challengeInstanceId;    
+            } else {
+                challengeIdDebugText.text = "Error: missing challenge id";
+            }
+
             SetGameBoardView(gameState.GetPreviousGameBoard());
             CreateTokenViews();
             DisplayIntroUI(title, subtitle, true);

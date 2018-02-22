@@ -23,7 +23,6 @@ namespace Fourzy
         List<IToken> activeTokens;
         //public AnimationCurve moveCurve;
         Renderer rend;
-        public Coroutine coMoveGamePiece;
 
         public void Reset()
         {
