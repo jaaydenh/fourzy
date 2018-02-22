@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using System;
 
 namespace Fourzy
 {
@@ -20,7 +18,17 @@ namespace Fourzy
         void Start()
         {
             UIScreen = GameObject.Find("UI Screen");
-            UpdateFriend();
+            //UpdateFriend();
+        }
+
+        public void Reset()
+        {
+            nameLabel.text = "";
+            profilePicture.sprite = null;
+            isOnline = false;
+            userName = "";
+            id = "";
+            facebookId = "";
         }
 
         public void UpdateFriend()
@@ -43,38 +51,6 @@ namespace Fourzy
         public void OpenNewFriendChallengeGame()
         {
             GameManager.instance.TransitionToGameOptionsScreen(GameType.FRIEND, id, userName, profilePicture);
-
-            //GameManager.instance.ResetGamePiecesAndTokens();
-            //TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard();
-
-            ////If we initiated the challenge, we get to be player 1
-            //GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
-            //GameManager.instance.gameState = gameState;
-
-            //GameManager.instance.CreateTokenViews();
-
-            //GameManager.instance.isMultiplayer = true;
-            //GameManager.instance.isNewChallenge = true;
-            //GameManager.instance.challengedUserId = id;
-            //GameManager.instance.challengeInstanceId = null;
-            //GameManager.instance.opponentNameLabel.text = userName;
-            //GameManager.instance.opponentProfilePicture.sprite = profilePicture.sprite;
-
-            //GameManager.instance.UpdatePlayerUI();
-            //GameManager.instance.ResetUI();
-            //GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("friend_challenge_text"), true);
-
-            //UIScreen.SetActive(false);
-
-            //if (OnActiveGame != null)
-            //    OnActiveGame();
-
-            ////GameManager.instance.EnableTokenAudio();
-
-            //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-            //customAttributes.Add("TokenBoardId", tokenBoard.id);
-            //customAttributes.Add("TokenBoardName", tokenBoard.name);
-            //AnalyticsManager.LogCustom("open_new_friend_challenge", customAttributes);
         }
     }
 }

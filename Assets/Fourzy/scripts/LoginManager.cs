@@ -103,7 +103,8 @@ namespace Fourzy
                     if (!response.HasErrors) {
                     UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null, null);
                         ChallengeManager.instance.GetChallenges();
-                        LeaderboardManager.instance.GetLeaderboard();
+                        //LeaderboardManager.instance.GetLeaderboard();
+
                         //Debug.Log("Device Authenticated...UserId: " + response.UserId);
                         //Debug.Log("DisplayName: " + response.DisplayName);
                         //Debug.Log("NewPlayer: " + response.NewPlayer);
@@ -211,7 +212,7 @@ namespace Fourzy
             UserManager.instance.UpdateInformation();
             ChallengeManager.instance.GetChallenges();
             FriendManager.instance.GetFriends();
-            LeaderboardManager.instance.GetLeaderboard();
+            //LeaderboardManager.instance.GetLeaderboard();
         }
 
         //delegate for asynchronous callbacks

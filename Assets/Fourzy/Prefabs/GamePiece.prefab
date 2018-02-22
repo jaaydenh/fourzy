@@ -137,26 +137,9 @@ MonoBehaviour:
   column: 0
   row: 0
   isMoveableUp: 0
-  isMoveableDown: 1
+  isMoveableDown: 0
   isMoveableLeft: 0
   isMoveableRight: 0
   isMoving: 0
   didAnimateNextPiece: 0
-  moveCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0.0002880916
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.9989948
-      value: 1.0031803
-      inSlope: 3.2191203
-      outSlope: 3.2191203
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
+  animating: 0

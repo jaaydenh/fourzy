@@ -66,6 +66,7 @@ namespace Fourzy
 
                                 go.gameObject.transform.SetParent(leaderboardPlayersList.transform);
                                 LeaderboardPlayer leaderboardPlayer = go.GetComponent<LeaderboardPlayer>();
+                                leaderboardPlayer.Reset();
 
                                 //int rank = (int)entry.Rank; // we can get the rank directly
                                 //int? playerRating = entry.ScriptData.GetInt("playerRaing");
@@ -77,7 +78,7 @@ namespace Fourzy
                                 leaderboardPlayer.facebookId = entry.ExternalIds.GetString("FB");
                                 leaderboardPlayer.playerNameLabel.text = entry.UserName;
                                 leaderboardPlayer.rankLabel.text = entry.Rank.ToString();
-
+                                
                                 //string gamesCompleted = entry.JSONData["gamesCompleted"].ToString();
                                 //leaderboardPlayer.ratingLabel.text = gamesCompleted;
 
@@ -89,6 +90,7 @@ namespace Fourzy
                                 leaderboardPlayer.ratingLabel.text = coins;
 
                                 // leaderboardPlayer.ratingLabel.text = entry.JSONData["playerRating"].ToString();
+                                leaderboardPlayer.UpdatePlayer();
                                 leaderboardPlayer.transform.localScale = new Vector3(1f,1f,1f);
                                 playerCount++;
                                 players.Add(go);

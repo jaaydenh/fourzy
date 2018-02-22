@@ -78,12 +78,14 @@ namespace Fourzy
             ActiveGame.OnRemoveGame += RemoveGame;
             MiniGameBoard.OnSetTokenBoard += SetTokenBoard;
             GamePieceUI.OnSetGamePiece += SetGamePiece;
+            GameManager.OnResign += Resign;
         }
 
         private void OnDisable() {
             ActiveGame.OnRemoveGame -= RemoveGame;
             MiniGameBoard.OnSetTokenBoard -= SetTokenBoard;
             GamePieceUI.OnSetGamePiece -= SetGamePiece;
+            GameManager.OnResign -= Resign;
         }
 
         private void SetTokenBoard(TokenBoard tokenboard) {
@@ -174,6 +176,25 @@ namespace Fourzy
             if (!gettingChallenges && pos.y <= 1.015) {
                 pulledToRefresh = false;
             }
+        }
+
+        public void Resign(string challengeInstanceId) {
+            new LogEventRequest().SetEventKey("resign")
+                .SetEventAttribute("challengeInstanceId", challengeInstanceId)
+                .SetDurable(true)
+                .Send((response) => { 
+                    if (response.HasErrors)
+                    {
+                        Debug.Log("***** Error resigning: " + response.Errors.JSON);
+                        AnalyticsManager.LogError("resign_error", response.Errors.JSON);
+
+                    }
+                    else
+                    {
+                        Debug.Log("Resign was successful");
+                        AnalyticsManager.LogCustom("resign_game");
+                    }
+                });
         }
 
         private void RemoveGame(string challengeInstanceId) {

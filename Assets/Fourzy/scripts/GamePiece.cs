@@ -24,21 +24,19 @@ namespace Fourzy
         //public AnimationCurve moveCurve;
         Renderer rend;
         public Coroutine coMoveGamePiece;
-        private bool reset;
 
         public void Reset()
         {
-            reset = true;
-            //player = PlayerEnum.NONE;
-            ////column = -1;
-            ////row = -1;
+            player = PlayerEnum.NONE;
+            column = 0;
+            row = 0;
             //if (positions != null) {
             //    positions.Clear();    
             //}
-            //isMoveableUp = false;
-            //isMoveableDown = false;
-            //isMoveableLeft = false;
-            //isMoveableRight = false;
+            isMoveableUp = false;
+            isMoveableDown = false;
+            isMoveableLeft = false;
+            isMoveableRight = false;
             //isMoving = false;
             //didAnimateNextPiece = false;
             //animating = false;
@@ -197,7 +195,7 @@ namespace Fourzy
                     //Debug.Log("nextPiecePosition row: " + piecePos.row + " col: " + piecePos.column);
                     if (piecePos.column == activeTokens[i].Column && piecePos.row == activeTokens[i].Row)
                     {
-                        Debug.Log("PIECE IS IN TOKENS POSITION: row: " + piecePos.row + " col: " + piecePos.column);
+                        //Debug.Log("PIECE IS IN TOKENS POSITION: row: " + piecePos.row + " col: " + piecePos.column);
                         GameManager.instance.CreateStickyToken(activeTokens[i].Row, activeTokens[i].Column);
                         //activeTokens.Remove(token);
                         activeTokens.RemoveAt(i);

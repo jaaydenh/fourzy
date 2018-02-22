@@ -46,12 +46,18 @@ namespace Fourzy
 
         void Start()
         {
+            if (game == null) {
+                Debug.Log("game is null");
+            }
+
             if (game.challengeType == ChallengeType.TOURNAMENT) {
                 tournamentIcon.enabled = true;
             } else {
                 tournamentIcon.enabled = false;
             }
-
+            if (game.opponent == null) {
+                Debug.Log("game.opponent is null");
+            }
             opponentNameLabel.text = game.opponent.opponentName;
             //Debug.Log("game.opponentProfilePictureSprite: " + game.opponentProfilePictureSprite);
             if (game.opponentProfilePictureSprite == null) {
@@ -72,8 +78,7 @@ namespace Fourzy
             } else {
                 currentplayer = PlayerEnum.TWO;
             }
-
-            //if (game.winnerUserId != null)
+                
             if (game.gameState.winner != PlayerEnum.EMPTY)
             {
                 //Debug.Log("ActiveGame game.gameState.winner: " + game.gameState.winner);
@@ -102,8 +107,15 @@ namespace Fourzy
                 }
             }
 
+            if (game.gameState.moveList.LastOrDefault() == null) {
+                Debug.Log("game.gameState.moveList == null");
+            }
+
             GSData lastPlayerMove = game.gameState.moveList.LastOrDefault();
-            long timestamp = lastPlayerMove.GetLong("timestamp").GetValueOrDefault();
+            long timestamp = 0;
+            if (lastPlayerMove != null) {
+               timestamp = lastPlayerMove.GetLong("timestamp").GetValueOrDefault();    
+            }
 
             if (timestamp != 0) {
                 System.DateTime timestampDateTime = new System.DateTime (1970, 1, 1, 0, 0, 0,System.DateTimeKind.Utc).AddMilliseconds(timestamp).ToLocalTime();

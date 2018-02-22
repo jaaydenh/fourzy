@@ -18,6 +18,8 @@ namespace Fourzy
     {
         public delegate void MoveAction();
         public static event MoveAction OnMoved;
+        public delegate void Resign(string challengeInstanceId);
+        public static event Resign OnResign;
         public float moveSpeed = 8f;
         public float gameScreenFadeInTime = 0.6f;
         public string challengeInstanceId = null; // GameSparks Challenge Instance Id
@@ -85,6 +87,7 @@ namespace Fourzy
         public Button nextPuzzleChallengeButton;
         public Button rewardsButton;
         public Button backButton;
+        public Button resignButton;
         public GameObject moveHintArea;
         public GameIntroUI gameIntroUI;
         public AlertUI alertUI;
@@ -541,6 +544,14 @@ namespace Fourzy
                 game.OpenGame();
             } else {
                 ChallengeManager.instance.FindRandomChallenge();
+            }
+        }
+
+        public void ResignButton() {
+            if (OnResign != null)
+            {
+                OnResign(challengeInstanceId);
+                //resignButton.gameObject.SetActive(false);
             }
         }
 
@@ -1449,9 +1460,11 @@ namespace Fourzy
             float xPos = (posX + .1f) * .972f;
             float yPos = (posY + .05f) * .96f;
 
-            GameObject gamePiece = LeanPool.Spawn(gamePiecePrefab, new Vector3(xPos, yPos, 10),
+            //GameObject gamePiece = LeanPool.Spawn(gamePiecePrefab, new Vector3(xPos, yPos, 10),
+                //Quaternion.identity, gamePieces.transform) as GameObject;
+            GameObject gamePiece = Instantiate(gamePiecePrefab, new Vector3(xPos, yPos, 10),
                 Quaternion.identity, gamePieces.transform) as GameObject;
-
+            
             gamePiece.transform.position = new Vector3(xPos, yPos, 10);
 
             if (challengerGamePieceId == challengedGamePieceId && player == PlayerEnum.TWO) {

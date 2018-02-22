@@ -61,6 +61,8 @@ namespace Fourzy
                             go.gameObject.transform.SetParent(friendsList.transform);
                             //Update all the gameObject's variables
                             FriendEntry friendEntry = go.GetComponent<FriendEntry>();
+                            friendEntry.Reset();
+
                             friendEntry.userName = friend.DisplayName;
                             friendEntry.id = friend.Id;
                             friendEntry.isOnline = friend.Online.Value;
@@ -70,6 +72,8 @@ namespace Fourzy
                             if (friend.Online.Value) {
                                 isOnline = true;
                             }
+
+                            friendEntry.UpdateFriend();
 
                             //Add the gameObject to the list of friends
                             friends.Add(go);

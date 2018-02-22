@@ -44,6 +44,7 @@
     {"key":"pieces_tab_header","value":"Choose Your Fourzy!"},
     {"key":"home_tab","value":"Play"},
     {"key":"reload_games_button","value":"Reload Games"},
-    {"key":"puzzle_challenge_button","value":"Puzzle Challenge"}
+    {"key":"puzzle_challenge_button","value":"Puzzle Challenge"},
+    {"key":"resign_button","value":"Resign"}
     ]
 }
