@@ -75,7 +75,7 @@ namespace Fourzy
         }
 
         public GameSparksChallenge(ListChallengeResponse._Challenge challenge) {
-            Debug.Log("GameSparksChallenge(ListChallengeResponse._Challenge");
+            //Debug.Log("GameSparksChallenge(ListChallengeResponse._Challenge");
             currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
             isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
             if (challenge.State == "COMPLETE") {

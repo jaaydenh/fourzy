@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class CoinToken : MonoBehaviour
+public class tokenCoin : MonoBehaviour
 {
     private SpriteRenderer sprite;
     private AudioSource as1;

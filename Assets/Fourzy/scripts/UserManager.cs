@@ -69,12 +69,12 @@ namespace Fourzy
 
         private void SetPlayerGamePiece(string id)
         {
-            Debug.Log("SetPlayerGamePiece: gamepieceid: " + id);
+            //Debug.Log("SetPlayerGamePiece: gamepieceid: " + id);
             gamePieceId = int.Parse(id);
             gamePieceImage.sprite = GamePieceSelectionManager.instance.gamePieces[gamePieceId];
             gamePieceImage.gameObject.SetActive(true);
 
-            Debug.Log("didLoadGamePieces: "+ didLoadGamePieces);
+            //Debug.Log("didLoadGamePieces: "+ didLoadGamePieces);
             if (!didLoadGamePieces)
             {
                 GamePieceSelectionManager.instance.LoadGamePieces(id);

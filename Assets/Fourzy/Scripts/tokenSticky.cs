@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class StickyToken : MonoBehaviour {
+public class tokenSticky : MonoBehaviour {
 
     private AudioSource as1;
 

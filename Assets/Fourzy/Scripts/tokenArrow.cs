@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ArrowToken : MonoBehaviour {
+public class tokenArrow : MonoBehaviour {
 
     private AudioSource as1;
 
