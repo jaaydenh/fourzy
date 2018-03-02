@@ -70,10 +70,10 @@ namespace Fourzy
                 OpenPuzzleChallengeGame();
             }
 
-            ChallengeTurnTakenMessage.Listener += OnChallengeTurnTaken;
-            ChallengeJoinedMessage.Listener += OnChallengeJoined;
-            ChallengeWonMessage.Listener += OnChallengeWon;
-            ChallengeLostMessage.Listener += OnChallengeLost;
+            //ChallengeTurnTakenMessage.Listener += OnChallengeTurnTaken;
+            //ChallengeJoinedMessage.Listener += OnChallengeJoined;
+            //ChallengeWonMessage.Listener += OnChallengeWon;
+            //ChallengeLostMessage.Listener += OnChallengeLost;
         }
 
         void OnEnable() {
