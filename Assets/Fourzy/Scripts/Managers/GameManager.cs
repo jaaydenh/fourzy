@@ -1372,17 +1372,19 @@ namespace Fourzy
             if (isMultiplayer)
             {
                 bool hasNextGame = false;
-                //var nextGame = games
-                    //.Where(t => (t.gameState.isCurrentPlayerTurn == true || (t.didViewResult == false && t.gameState.isGameOver == true && t.gameState.isCurrentPlayerTurn == false)) && t.challengeId != challengeInstanceId)
-                    //.FirstOrDefault();
+
                 for (int i = 0; i < games.Count(); i++)
                 {
-                    if ((games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.isGameOver == true && games[i].gameState.isCurrentPlayerTurn == false)) && games[i].challengeId != challengeInstanceId) {
-                        hasNextGame = true;
+                    if (games[i].gameState != null) {
+                        if ((games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.isGameOver == true && games[i].gameState.isCurrentPlayerTurn == false)) && games[i].challengeId != challengeInstanceId)
+                        {
+                            hasNextGame = true;
+                        }
+                    } else {
+                        AnalyticsManager.LogError("set_action_button_error", "GameState is null for challengeId: " + games[i].challengeId);
                     }
                 }
 
-                //if (nextGame != null)
                 if (hasNextGame) {
                     nextGameButton.gameObject.SetActive(true);
                     createGameButton.gameObject.SetActive(false);
@@ -1730,7 +1732,7 @@ namespace Fourzy
                     isDropping = true;
                     yield return new WaitForSeconds(1f);
 
-                    AiPlayer aiPlayer = new AiPlayer(AIPlayerSkill.LEVEL2);
+                    AiPlayer aiPlayer = new AiPlayer(AIPlayerSkill.LEVEL1);
 
                     StartCoroutine(aiPlayer.MakeMove(move));
                 }

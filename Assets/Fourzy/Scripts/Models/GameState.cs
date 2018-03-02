@@ -412,6 +412,127 @@ namespace Fourzy
             }
         }
 
+        public int CountFours(int player = -1)
+        {
+            if (player < 0) player = isPlayerOneTurn ? 1 : 2;
+            int opponent = (player == 1) ? 1 : 2;
+            int four_count_for = 0;
+
+            for (var row = 0; row < numRows - 4; row++)
+            {
+                for (var col = 0; col < numColumns - 4; col++)
+                {
+                    //right
+                    for (var i = 0; i < 4; i++)
+                    {
+                        if (gameBoard.GetCell(row, col + i) != 0 || gameBoard.GetCell(row, col + i) == opponent)
+                        {
+                            break;
+                        }
+                        if (!tokenBoard.tokens[row, col].pieceCanEndMoveOn) break;
+
+                        four_count_for++;
+                    }
+
+                    //down
+                    for (var i = 0; i < 4; i++)
+                    {
+                        if (gameBoard.GetCell(row + i, col) != 0 || gameBoard.GetCell(row, col + i) == opponent) break;
+                        if (!tokenBoard.tokens[row + i, col].pieceCanEndMoveOn) break;
+                        four_count_for++;
+                    }
+
+                    //diagonal
+                    for (var i = 0; i < 4; i++)
+                    {
+                        if (gameBoard.GetCell(row + i, col + i) != 0 || gameBoard.GetCell(row, col + i) == opponent) break;
+                        if (!tokenBoard.tokens[row + i, col + i].pieceCanEndMoveOn) break;
+                        four_count_for++;
+                    }
+                }
+            }
+
+            return four_count_for;
+        }
+
+        public int EstimateScore(int player = -1)
+        {
+            if (player < 0) player = isPlayerOneTurn ? 1 : 2;
+            int opponent = (player == 1) ? 1 : 2;
+            int four_count_for = 0;
+            int four_count_against = 0;
+
+            for (var row = 0; row < numRows - 4; row++)
+            {
+                for (var col = 0; col < numColumns - 4; col++)
+                {
+                    //right
+                    for (var i = 0; i < 4; i++)
+                    {
+                        if (gameBoard.GetCell(row, col + i) != 0 || gameBoard.GetCell(row, col + i) == opponent)
+                        {
+                            break;
+                        }
+                        if (!tokenBoard.tokens[row, col].pieceCanEndMoveOn) break;
+
+                        four_count_for++;
+                    }
+
+                    //down
+                    for (var i = 0; i < 4; i++)
+                    {
+                        if (gameBoard.GetCell(row + i, col) != 0 || gameBoard.GetCell(row, col + i) == opponent) break;
+                        if (!tokenBoard.tokens[row + i, col].pieceCanEndMoveOn) break;
+                        four_count_for++;
+                    }
+
+                    //diagonal
+                    for (var i = 0; i < 4; i++)
+                    {
+                        if (gameBoard.GetCell(row + i, col + i) != 0 || gameBoard.GetCell(row, col + i) == opponent) break;
+                        if (!tokenBoard.tokens[row + i, col + i].pieceCanEndMoveOn) break;
+                        four_count_for++;
+                    }
+                }
+            }
+
+            for (var row = 0; row < numRows - 4; row++)
+            {
+                for (var col = 0; col < numColumns - 4; col++)
+                {
+                    //right
+                    for (var i = 0; i < 4; i++)
+                    {
+                        if (gameBoard.GetCell(row, col + i) != 0 || gameBoard.GetCell(row, col + i) == opponent)
+                        {
+                            break;
+                        }
+                        if (!tokenBoard.tokens[row, col].pieceCanEndMoveOn) break;
+
+                        four_count_against++;
+                    }
+
+                    //down
+                    for (var i = 0; i < 4; i++)
+                    {
+                        if (gameBoard.GetCell(row + i, col) != 0 || gameBoard.GetCell(row, col + i) == opponent) break;
+                        if (!tokenBoard.tokens[row + i, col].pieceCanEndMoveOn) break;
+                        four_count_against++;
+                    }
+
+                    //diagonal
+                    for (var i = 0; i < 4; i++)
+                    {
+                        if (gameBoard.GetCell(row + i, col + i) != 0 || gameBoard.GetCell(row, col + i) == opponent) break;
+                        if (!tokenBoard.tokens[row + i, col + i].pieceCanEndMoveOn) break;
+                        four_count_against++;
+                    }
+                }
+            }
+
+            return ((four_count_for * 5) - (four_count_against * 4));
+        }
+
         public void PrintGameState(string name) {
             string log = name + "\n";
 
