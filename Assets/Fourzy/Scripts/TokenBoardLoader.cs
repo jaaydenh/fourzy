@@ -4,21 +4,21 @@ using System.Collections.Generic;
 
 namespace Fourzy
 {
-    public class TokenBoardLoader : MonoBehaviour
+    public class TokenBoardLoader : Singleton<TokenBoardLoader>
     {
         //Singleton
-        private static TokenBoardLoader _instance;
-        public static TokenBoardLoader instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = GameObject.FindObjectOfType<TokenBoardLoader>();
-                }
-                return _instance;
-            }
-        }
+        //private static TokenBoardLoader _instance;
+        //public static TokenBoardLoader instance
+        //{
+        //    get
+        //    {
+        //        if (_instance == null)
+        //        {
+        //            _instance = GameObject.FindObjectOfType<TokenBoardLoader>();
+        //        }
+        //        return _instance;
+        //    }
+        //}
 
         private TokenBoardData[] LoadTokenBoardData()
         {

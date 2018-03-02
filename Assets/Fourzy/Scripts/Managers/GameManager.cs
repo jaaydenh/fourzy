@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 
 namespace Fourzy
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : Singleton<GameManager>
     {
         public delegate void MoveAction();
         public static event MoveAction OnMoved;
@@ -131,7 +131,7 @@ namespace Fourzy
         private AudioSource audioMove;
         private AudioSource audioWin;
         private AudioSource audioChest;
-        public CreateGame createGameScript;
+        //public CreateGame createGameScript;
         public GameObject moveArrowLeft;
         public GameObject moveArrowRight;
         public GameObject moveArrowDown;
@@ -140,233 +140,46 @@ namespace Fourzy
         public MoveHintTouchArea moveHintTouchArea;
 
         //Static instance of GameManager which allows it to be accessed by any other script.
-        public static GameManager instance = null;
+        //public static GameManager instance = null;
 
         private void OnEnable()
         {
             UserInputHandler.OnTap += ProcessPlayerInput;
-            ActiveGame.OnActiveGame += TransitionToGameScreen;
+            GameUI.OnActiveGame += TransitionToGameScreen;
             FriendEntry.OnActiveGame += TransitionToGameScreen;
             LeaderboardPlayer.OnActiveGame += TransitionToGameScreen;
             ChallengeManager.OnActiveGame += TransitionToGameScreen;
             ChallengeManager.OnReceivedOpponentGamePiece += SetOpponentGamePiece;
             LoginManager.OnLoginError += DisplayLoginError;
             Game.OnActiveGame += TransitionToGameScreen;
+            ChallengeManager.OnOpponentTurnTakenDelegate += OpponentTurnHandler;
+            ChallengeManager.OnChallengeJoinedDelegate += ChallengeJoinedHandler;
+            ChallengeManager.OnChallengeWonDelegate += ChallengeWonHandler;
+            ChallengeManager.OnChallengeLostDelegate += ChallengeLostHandler;
+            ChallengeManager.OnChallengeIssuedDelegate += ChallengeIssuedHandler;
             //SceneManager.sceneLoaded += OnGameFinishedLoading;
         }
 
         private void OnDisable()
         {
             UserInputHandler.OnTap -= ProcessPlayerInput;
-            ActiveGame.OnActiveGame -= TransitionToGameScreen;
+            GameUI.OnActiveGame -= TransitionToGameScreen;
             FriendEntry.OnActiveGame -= TransitionToGameScreen;
             LeaderboardPlayer.OnActiveGame -= TransitionToGameScreen;
             ChallengeManager.OnActiveGame -= TransitionToGameScreen;
             ChallengeManager.OnReceivedOpponentGamePiece -= SetOpponentGamePiece;
             LoginManager.OnLoginError -= DisplayLoginError;
             Game.OnActiveGame -= TransitionToGameScreen;
+            ChallengeManager.OnOpponentTurnTakenDelegate -= OpponentTurnHandler;
+            ChallengeManager.OnChallengeJoinedDelegate -= ChallengeJoinedHandler;
+            ChallengeManager.OnChallengeWonDelegate -= ChallengeWonHandler;
+            ChallengeManager.OnChallengeLostDelegate -= ChallengeLostHandler;
+            ChallengeManager.OnChallengeIssuedDelegate -= ChallengeIssuedHandler;
             //SceneManager.sceneLoaded -= OnGameFinishedLoading;
         }
 
         void Start()
         {
-            //MatchFoundMessage.Listener = (message) =>
-            //{
-            //    createGameScript.SetButtonStateWrapper(false);
-            //    ChallengeManager.instance.GetChallenges();
-            //};
-
-            ChallengeWonMessage.Listener = (message) =>
-            {
-                var gsChallenge = message.Challenge;
-                if (UserManager.instance.userId != gsChallenge.NextPlayer)
-                {
-                    int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
-                    PlayerEnum player = currentPlayerMove == 1 ? PlayerEnum.ONE : PlayerEnum.TWO;
-
-                    // Only Replay the last move if the player is viewing the game screen for that game
-                    if (gsChallenge.ChallengeId == challengeInstanceId)
-                    {
-                        List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
-                        GSData lastMove = moveList.Last();
-
-                        StartCoroutine(ReplayIncomingOpponentMove(lastMove, player));
-                        //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
-                        SetActionButton();
-                    } else {
-                        var currentGame = games
-                            .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                            .FirstOrDefault();
-                        if (currentGame != null)
-                        {
-                            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
-                            currentGame.gameState = newGameState;
-                        }
-
-                        if (activeScreen == Screens.GAME)
-                        {
-                            SetActionButton();
-                        }
-
-                        if (activeScreen == Screens.GAMES_LIST)
-                        {
-                            //ChallengeManager.instance.GetChallenges();
-                            ChallengeManager.instance.ReloadGames();
-                        }
-                    }
-                }
-            };
-
-            ChallengeLostMessage.Listener = (message) =>
-            {
-                var gsChallenge = message.Challenge;
-                if (UserManager.instance.userId != gsChallenge.NextPlayer)
-                {
-                    int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
-                    PlayerEnum player = currentPlayerMove == 1 ? PlayerEnum.ONE : PlayerEnum.TWO;
-
-                    // Only Replay the last move if the player is viewing the game screen for that game
-                    if (gsChallenge.ChallengeId == challengeInstanceId)
-                    {
-                        List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
-                        GSData lastMove = moveList.Last();
-
-                        StartCoroutine(ReplayIncomingOpponentMove(lastMove, player));
-                        //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
-                        SetActionButton();
-                    } else {
-                        var currentGame = games
-                            .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                            .FirstOrDefault();
-                        if (currentGame != null)
-                        {
-                            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
-                            currentGame.gameState = newGameState;
-                        }
-
-                        if (activeScreen == Screens.GAME)
-                        {
-                            SetActionButton();
-                        }
-
-                        if (activeScreen == Screens.GAMES_LIST)
-                        {
-                            //ChallengeManager.instance.GetChallenges();
-                            ChallengeManager.instance.ReloadGames();
-                        }
-                    }
-
-                }
-            };
-
-            ChallengeTurnTakenMessage.Listener = (message) =>
-            {
-                //Debug.Log("ChallengeTurnTakenMessage active screen: " + activeScreen.ToString());
-
-                var gsChallenge = message.Challenge;
-                // replayedLastMove is a workaround to avoid having the opponents move being replayed more than once
-                if (UserManager.instance.userId == gsChallenge.NextPlayer)
-                {
-                    // Only Replay the last move if the player is viewing the game screen for that game
-                    if (gsChallenge.ChallengeId == challengeInstanceId && !replayedLastMove)
-                    {
-                        replayedLastMove = true;
-                        List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
-                        GSData lastMove = moveList.Last();
-                        int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
-                        PlayerEnum opponent = currentPlayerMove == 1 ? PlayerEnum.TWO : PlayerEnum.ONE;
-                        StartCoroutine(ReplayIncomingOpponentMove(lastMove, opponent));
-                    }
-                    else
-                    {
-                        var currentGame = games
-                            .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                            .FirstOrDefault();
-                        if (currentGame != null)
-                        {
-                            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, PlayerEnum.EMPTY);
-                            currentGame.gameState = newGameState;
-                        }
-
-                        if (activeScreen == Screens.GAME) {
-                            SetActionButton();
-                        }
-
-                        if (activeScreen == Screens.GAMES_LIST)
-                        {
-                            //ChallengeManager.instance.GetChallenges();
-                            ChallengeManager.instance.ReloadGames();
-                        }
-                    }
-                }
-            };
-
-            // Called when another player joins a game you created that was waiting for a 2nd player
-            ChallengeJoinedMessage.Listener = (message) =>
-            {
-                Debug.Log("ChallengeJoinedMessage");
-                var gsChallenge = message.Challenge;
-                string opponentName = gsChallenge.Challenged.FirstOrDefault().Name;
-                string opponentFBId = gsChallenge.Challenged.FirstOrDefault().ExternalIds.GetString("FB");
-                //Debug.Log("JSON: " + message.Challenge.JSONString);
-                Debug.Log("gsChallenge.Challenged.FirstOrDefault().Id: " + gsChallenge.Challenged.FirstOrDefault().Id);
-                //challengedGamePieceId = int.Parse(gsChallenge.Challenged.FirstOrDefault().Id);
-                ChallengeManager.instance.GetOpponentGamePiece(gsChallenge.Challenged.FirstOrDefault().Id, gsChallenge.ChallengeId);
-
-                var currentGame = games
-                    .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                    .FirstOrDefault();
-                if (currentGame != null)
-                {
-                    Debug.Log("ChallengeJoinedMessage set current games playerdata");
-
-                    Opponent opponent = new Opponent(opponentName, opponentFBId);
-
-                    currentGame.opponent = opponent;
-                    currentGame.InitGame();
-                }
-
-                if (gsChallenge.ChallengeId == challengeInstanceId)
-                {
-                    InitPlayerUI(opponentName, null, opponentFBId);
-                }
-                else
-                {
-                    if (activeScreen == Screens.GAMES_LIST)
-                    {
-                        ChallengeManager.instance.ReloadGames();
-                    }
-                }
-            };
-
-            // Called when directly challenged by another player
-            ChallengeIssuedMessage.Listener = (message) =>
-            {
-                var gsChallenge = message.Challenge;
-                Debug.Log("ChallengeIssuedMessage");
-                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
-
-                //bool isplayerOne = false;
-                //if (UserManager.instance.userId == gsChallenge.NextPlayer)
-                //{
-                //    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
-                //}
-
-                GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, PlayerEnum.EMPTY);
-                Opponent opponent = new Opponent(gsChallenge.Challenger.Name, gsChallenge.Challenger.Id);
-
-                Game game = new Game(gsChallenge.ChallengeId, newGameState, false, false, false, opponent, ChallengeState.RUNNING, ChallengeType.STANDARD, challenge.gameType, challenge.challengerGamePieceId, challenge.challengedGamePieceId);
-                games.Add(game);
-
-                if (challengeInstanceId != null) {
-                    SetActionButton();    
-                }
-            };
-
             ChallengeAcceptedMessage.Listener = (message) =>
             {
                 var gsChallenge = message.Challenge;
@@ -393,7 +206,6 @@ namespace Fourzy
 
             rematchButton.gameObject.SetActive(false);
             gameScreen.SetActive(false);
-            //playerNameLabel.text = UserManager.instance.userName;
 
             if (tokens == null)
             {
@@ -413,20 +225,9 @@ namespace Fourzy
             //Camera.main.transform.position = new Vector3((Constants.numColumns - 1) / 2.0f, -((Constants.numRows - 1) / 2.0f) + .15f, Camera.main.transform.position.z);
         }
 
-        void Awake()
+        new void Awake()
         {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else if (instance != this)
-            {
-                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
-                Destroy(gameObject);
-            }
-
-            //Sets this to not be destroyed when reloading scene
-            DontDestroyOnLoad(gameObject);
+            base.Awake();
 
             GS.GameSparksAvailable += CheckConnectionStatus;
 
@@ -437,6 +238,192 @@ namespace Fourzy
             audioChest = AddAudio(clipChest, false, false, 1);
 
             replayedLastMove = false;
+        }
+
+        private void OpponentTurnHandler(ChallengeTurnTakenMessage message) {
+            //Debug.Log("ChallengeTurnTakenMessage active screen: " + activeScreen.ToString());
+
+            var gsChallenge = message.Challenge;
+            // replayedLastMove is a workaround to avoid having the opponents move being replayed more than once
+            if (UserManager.instance.userId == gsChallenge.NextPlayer)
+            {
+                // Only Replay the last move if the player is viewing the game screen for that game
+                if (gsChallenge.ChallengeId == challengeInstanceId && !replayedLastMove)
+                {
+                    replayedLastMove = true;
+                    List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
+                    GSData lastMove = moveList.Last();
+                    int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
+                    PlayerEnum opponent = currentPlayerMove == 1 ? PlayerEnum.TWO : PlayerEnum.ONE;
+                    StartCoroutine(ReplayIncomingOpponentMove(lastMove, opponent));
+                }
+                else
+                {
+                    var currentGame = games
+                        .Where(t => t.challengeId == gsChallenge.ChallengeId)
+                        .FirstOrDefault();
+                    if (currentGame != null)
+                    {
+                        GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
+                        GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, PlayerEnum.EMPTY);
+                        currentGame.gameState = newGameState;
+                    }
+
+                    if (activeScreen == Screens.GAME)
+                    {
+                        SetActionButton();
+                    }
+
+                    if (activeScreen == Screens.GAMES_LIST)
+                    {
+                        //ChallengeManager.instance.GetChallenges();
+                        ChallengeManager.instance.ReloadGames();
+                    }
+                }
+            }
+        }
+
+        private void ChallengeJoinedHandler(ChallengeJoinedMessage message) {
+            var gsChallenge = message.Challenge;
+            string opponentName = gsChallenge.Challenged.FirstOrDefault().Name;
+            string opponentFBId = gsChallenge.Challenged.FirstOrDefault().ExternalIds.GetString("FB");
+            //Debug.Log("JSON: " + message.Challenge.JSONString);
+            //Debug.Log("gsChallenge.Challenged.FirstOrDefault().Id: " + gsChallenge.Challenged.FirstOrDefault().Id);
+            //challengedGamePieceId = int.Parse(gsChallenge.Challenged.FirstOrDefault().Id);
+            ChallengeManager.instance.GetOpponentGamePiece(gsChallenge.Challenged.FirstOrDefault().Id, gsChallenge.ChallengeId);
+
+            var currentGame = games
+                .Where(t => t.challengeId == gsChallenge.ChallengeId)
+                .FirstOrDefault();
+            if (currentGame != null)
+            {
+                //Debug.Log("ChallengeJoinedMessage set current games playerdata");
+                Opponent opponent = new Opponent(opponentName, opponentFBId);
+                currentGame.opponent = opponent;
+                currentGame.InitGame();
+            }
+
+            if (gsChallenge.ChallengeId == challengeInstanceId)
+            {
+                InitPlayerUI(opponentName, null, opponentFBId);
+            }
+            else
+            {
+                if (activeScreen == Screens.GAMES_LIST)
+                {
+                    ChallengeManager.instance.ReloadGames();
+                }
+            }
+        }
+
+        private void ChallengeWonHandler(ChallengeWonMessage message) {
+            var gsChallenge = message.Challenge;
+            if (UserManager.instance.userId != gsChallenge.NextPlayer)
+            {
+                int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
+                PlayerEnum player = currentPlayerMove == 1 ? PlayerEnum.ONE : PlayerEnum.TWO;
+
+                // Only Replay the last move if the player is viewing the game screen for that game
+                if (gsChallenge.ChallengeId == challengeInstanceId)
+                {
+                    List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
+                    GSData lastMove = moveList.Last();
+
+                    StartCoroutine(ReplayIncomingOpponentMove(lastMove, player));
+                    //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
+                    SetActionButton();
+                }
+                else
+                {
+                    var currentGame = games
+                        .Where(t => t.challengeId == gsChallenge.ChallengeId)
+                        .FirstOrDefault();
+                    if (currentGame != null)
+                    {
+                        GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
+                        GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
+                        currentGame.gameState = newGameState;
+                    }
+
+                    if (activeScreen == Screens.GAME)
+                    {
+                        SetActionButton();
+                    }
+
+                    if (activeScreen == Screens.GAMES_LIST)
+                    {
+                        //ChallengeManager.instance.GetChallenges();
+                        ChallengeManager.instance.ReloadGames();
+                    }
+                }
+            }
+        }
+
+        private void ChallengeLostHandler(ChallengeLostMessage message) {
+            var gsChallenge = message.Challenge;
+            if (UserManager.instance.userId != gsChallenge.NextPlayer)
+            {
+                int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
+                PlayerEnum player = currentPlayerMove == 1 ? PlayerEnum.ONE : PlayerEnum.TWO;
+
+                // Only Replay the last move if the player is viewing the game screen for that game
+                if (gsChallenge.ChallengeId == challengeInstanceId)
+                {
+                    List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
+                    GSData lastMove = moveList.Last();
+
+                    StartCoroutine(ReplayIncomingOpponentMove(lastMove, player));
+                    //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
+                    SetActionButton();
+                }
+                else
+                {
+                    var currentGame = games
+                        .Where(t => t.challengeId == gsChallenge.ChallengeId)
+                        .FirstOrDefault();
+                    if (currentGame != null)
+                    {
+                        GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
+                        GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
+                        currentGame.gameState = newGameState;
+                    }
+
+                    if (activeScreen == Screens.GAME)
+                    {
+                        SetActionButton();
+                    }
+
+                    if (activeScreen == Screens.GAMES_LIST)
+                    {
+                        //ChallengeManager.instance.GetChallenges();
+                        ChallengeManager.instance.ReloadGames();
+                    }
+                }
+            }
+        }
+
+        private void ChallengeIssuedHandler(ChallengeIssuedMessage message) {
+            var gsChallenge = message.Challenge;
+            //Debug.Log("ChallengeIssuedMessage");
+            //Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
+
+            //bool isplayerOne = false;
+            //if (UserManager.instance.userId == gsChallenge.NextPlayer)
+            //{
+            //    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
+            //}
+
+            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
+            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, PlayerEnum.EMPTY);
+            Opponent opponent = new Opponent(gsChallenge.Challenger.Name, gsChallenge.Challenger.Id);
+
+            Game game = new Game(gsChallenge.ChallengeId, newGameState, false, false, false, opponent, ChallengeState.RUNNING, ChallengeType.STANDARD, challenge.gameType, challenge.challengerGamePieceId, challenge.challengedGamePieceId);
+            games.Add(game);
+
+            if (challengeInstanceId != null)
+            {
+                SetActionButton();
+            }
         }
 
         public void UpdateBadgeCounts() {

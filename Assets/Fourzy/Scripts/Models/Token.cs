@@ -5,15 +5,16 @@ namespace Fourzy {
     {
         int Row { get; set; }
         int Column { get; set; }
-        bool canEnter { get; set; }
+        bool pieceCanEnter { get; set; }
         bool canEvaluateWithoutEntering { get; set; }
-        bool canEndMove { get; set; }
+        bool pieceCanEndMoveOn { get; set; }
         bool isMoveable { get; set; }
-        bool mustStop { get; set; }
-        float chanceDestroyOnEnd { get; set; }
+        bool pieceMustStopOn { get; set; }
+        float chanceDestroyPieceOnEnd { get; set; }
         bool changePieceDirection { get; set; }
         bool useCurrentDirection { get; set; }
-        bool isReplacable { get; set; }
+        bool hasEffect { get; set; }
+        bool destroyTokenOnEnd { get; set; }
         IToken replacedToken { get; set; }
         Direction newPieceDirection { get; set;}
         Token tokenType { get; set; }
@@ -24,15 +25,16 @@ namespace Fourzy {
 
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -40,11 +42,11 @@ namespace Fourzy {
         public UpArrowToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = true;
             newPieceDirection = Direction.UP;
             tokenType = Token.UP_ARROW;
@@ -60,15 +62,16 @@ namespace Fourzy {
 
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -76,11 +79,11 @@ namespace Fourzy {
         public DownArrowToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = true;
             newPieceDirection = Direction.DOWN;
             tokenType = Token.DOWN_ARROW;
@@ -96,15 +99,16 @@ namespace Fourzy {
 
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -112,11 +116,11 @@ namespace Fourzy {
         public LeftArrowToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = true;
             newPieceDirection = Direction.LEFT;
             tokenType = Token.LEFT_ARROW;
@@ -132,15 +136,16 @@ namespace Fourzy {
 
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -148,11 +153,11 @@ namespace Fourzy {
         public RightArrowToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = true;
             newPieceDirection = Direction.RIGHT;
             tokenType = Token.RIGHT_ARROW;
@@ -168,15 +173,16 @@ namespace Fourzy {
 
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -184,11 +190,11 @@ namespace Fourzy {
         public EmptyToken (int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.EMPTY;
@@ -204,15 +210,16 @@ namespace Fourzy {
 
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -220,11 +227,11 @@ namespace Fourzy {
         public BlockerToken (int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = false;
-            canEndMove = false;
+            pieceCanEnter = false;
+            pieceCanEndMoveOn = false;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.BLOCKER;
@@ -242,15 +249,16 @@ namespace Fourzy {
 
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -258,11 +266,11 @@ namespace Fourzy {
         public GhostToken (int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = false;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = false;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.GHOST;
@@ -278,15 +286,16 @@ namespace Fourzy {
 
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -294,11 +303,11 @@ namespace Fourzy {
         public StickyToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = true;
-            mustStop = true;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = true;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.STICKY;
@@ -314,15 +323,16 @@ namespace Fourzy {
 
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -330,11 +340,11 @@ namespace Fourzy {
         public IceSheetToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = true;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.ICE_SHEET;
@@ -350,15 +360,16 @@ namespace Fourzy {
 
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -366,12 +377,13 @@ namespace Fourzy {
         public PitToken (int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
-            isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 100.0f;
-            changePieceDirection = false;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
+            pieceMustStopOn = true;
+            chanceDestroyPieceOnEnd = 100.0f;
+            destroyTokenOnEnd = true;
+            hasEffect = true;
+            replacedToken = new EmptyToken(row, column);
             newPieceDirection = Direction.NONE;
             tokenType = Token.PIT;
         }
@@ -386,15 +398,16 @@ namespace Fourzy {
     {
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -402,11 +415,11 @@ namespace Fourzy {
         public NinetyRightArrowToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = true;
             useCurrentDirection = true;
             newPieceDirection = Direction.RIGHT;
@@ -423,15 +436,16 @@ namespace Fourzy {
     {
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -439,11 +453,11 @@ namespace Fourzy {
         public NinetyLeftArrowToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = true;
             useCurrentDirection = true;
             newPieceDirection = Direction.LEFT;
@@ -460,15 +474,16 @@ namespace Fourzy {
     {
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -476,12 +491,12 @@ namespace Fourzy {
         public BumperToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
+            pieceCanEnter = true;
             canEvaluateWithoutEntering = true;
-            canEndMove = false;
+            pieceCanEndMoveOn = false;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = true;
             useCurrentDirection = true;
             newPieceDirection = Direction.REVERSE;
@@ -498,15 +513,16 @@ namespace Fourzy {
     {
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -514,11 +530,11 @@ namespace Fourzy {
         public CoinToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.COIN;
@@ -534,15 +550,16 @@ namespace Fourzy {
     {
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -550,13 +567,13 @@ namespace Fourzy {
         public FruitToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = false;
-            isReplacable = true;
+            hasEffect = true;
             replacedToken = new StickyToken(row, column);
             newPieceDirection = Direction.NONE;
             tokenType = Token.FRUIT;
@@ -572,15 +589,16 @@ namespace Fourzy {
     {
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -588,11 +606,11 @@ namespace Fourzy {
         public FruitTreeToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = false;
             newPieceDirection = Direction.NONE;
             tokenType = Token.FRUIT_TREE;
@@ -608,15 +626,16 @@ namespace Fourzy {
     {
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -624,13 +643,13 @@ namespace Fourzy {
         public WebToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = false;
-            isReplacable = true;
+            hasEffect = true;
             newPieceDirection = Direction.NONE;
             tokenType = Token.WEB;
         }
@@ -645,15 +664,16 @@ namespace Fourzy {
     {
         public int Row { get; set; }
         public int Column { get; set; }
-        public bool canEnter { get; set; }
+        public bool pieceCanEnter { get; set; }
         public bool canEvaluateWithoutEntering { get; set; }
-        public bool canEndMove { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
         public bool isMoveable { get; set; }
-        public bool mustStop { get; set; }
-        public float chanceDestroyOnEnd { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
         public bool changePieceDirection { get; set; }
         public bool useCurrentDirection { get; set; }
-        public bool isReplacable { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -661,13 +681,13 @@ namespace Fourzy {
         public SpiderToken(int row, int column) {
             this.Row = row;
             this.Column = column;
-            canEnter = true;
-            canEndMove = true;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
             isMoveable = false;
-            mustStop = false;
-            chanceDestroyOnEnd = 0.0f;
+            pieceMustStopOn = false;
+            chanceDestroyPieceOnEnd = 0.0f;
             changePieceDirection = false;
-            isReplacable = true;
+            hasEffect = true;
             newPieceDirection = Direction.NONE;
             tokenType = Token.SPIDER;
         }

@@ -7,9 +7,9 @@ using System;
 
 namespace Fourzy
 {
-    public class UserManager : MonoBehaviour
+    public class UserManager : Singleton<UserManager>
     {
-        public static UserManager instance;
+        //public static UserManager instance;
         public string userName;
         public string userId;
         public long coins;
@@ -24,20 +24,21 @@ namespace Fourzy
 
         bool didLoadGamePieces;
 
-        void Awake()
+        new void Awake()
         {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else if (instance != this)
-            {
-                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
-                Destroy(gameObject);
-            }
+            base.Awake();
+            //if (instance == null)
+            //{
+            //    instance = this;
+            //}
+            //else if (instance != this)
+            //{
+            //    //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+            //    Destroy(gameObject);
+            //}
 
-            //Sets this to not be destroyed when reloading scene
-            DontDestroyOnLoad(gameObject);
+            ////Sets this to not be destroyed when reloading scene
+            //DontDestroyOnLoad(gameObject);
 
             profilePicture = new Sprite();
         }

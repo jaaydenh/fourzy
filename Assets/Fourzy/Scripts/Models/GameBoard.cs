@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fourzy {
     public class GameBoard {
@@ -15,8 +16,10 @@ namespace Fourzy {
         public List<MovingGamePiece> completedMovingPieces;
         public List<Position> player1WinningPositions;
         public List<Position> player2WinningPositions;
+        private GameState gameState;
 
-        public GameBoard (int numRows, int numColumns, int numPiecesToWin) {
+        public GameBoard (GameState gameState, int numRows, int numColumns, int numPiecesToWin) {
+            this.gameState = gameState;
             this.numRows = numRows;
             this.numColumns = numColumns;
             this.numPiecesToWin = numPiecesToWin;
@@ -31,8 +34,9 @@ namespace Fourzy {
             InitGameBoard();
         }
 
-        public GameBoard (int numRows, int numColumns, int numPiecesToWin, int piecesCount, int[,] board)
+        public GameBoard (GameState gameState, int numRows, int numColumns, int numPiecesToWin, int piecesCount, int[,] board)
         {
+            this.gameState = gameState;
             this.numRows = numRows;
             this.numColumns = numColumns;
             this.numPiecesToWin = numPiecesToWin;
@@ -129,7 +133,7 @@ namespace Fourzy {
             board[newPos.row, newPos.column] = oldPiece;
         }
 
-        public void DisableNextMovingPiece() {
+        public void SetActivePieceAsComplete() {
             if (activeMovingPieces.Count > 0) {
                 completedMovingPieces.Add(activeMovingPieces[0]);
                 activeMovingPieces.RemoveAt(0);
@@ -145,13 +149,7 @@ namespace Fourzy {
                     MovingGamePiece piece = activeMovingPieces[0];
                     Position nextPosition = piece.GetNextPosition();
                     Position currentPosition = piece.GetCurrentPosition();
-                    bool isPieceDestroyed = piece.isDestroyed;
-                    isPieceDestroyed = CalculatePieceChanceOfDestruction(token.chanceDestroyOnEnd);
-
-                    if (isPieceDestroyed) {
-                        piece.isDestroyed = true;
-                        piece.animationState = PieceAnimState.FALLING;
-                    }
+                    //bool isPieceDestroyed = piece.isDestroyed;
 
                     if (token.changePieceDirection) {
                         activeMovingPieces[0].positions.Add(piece.GetNextPosition());
@@ -177,8 +175,13 @@ namespace Fourzy {
                         }
                     }
 
-                    if (piece.isDestroyed)
+                    bool isPieceDestroyed = CalculatePieceChanceOfDestruction(token.chanceDestroyPieceOnEnd);
+
+                    if (isPieceDestroyed)
                     {
+                        piece.isDestroyed = true;
+                        piece.animationState = PieceAnimState.FALLING;
+
                         if (InBoardBounds(nextPosition))
                         {
                             SetCell(nextPosition.column, nextPosition.row, PlayerEnum.NONE);
@@ -241,14 +244,16 @@ namespace Fourzy {
                         }
                     }
 
-                    if (pieceInSquare || token.mustStop || piece.isDestroyed) {
-                        DisableNextMovingPiece();
+                    if (pieceInSquare || token.pieceMustStopOn || piece.isDestroyed) {
+                        SetActivePieceAsComplete();
                     }
 
-                    if (token.isReplacable) {
-                        if (OnUpdateTokenBoard != null) {
-                            OnUpdateTokenBoard(nextPosition.row, nextPosition.column, token.replacedToken);    
-                        }
+                    if (token.hasEffect) {
+                        Debug.Log("token.hasEffect: token: " + token.tokenType);
+                        //if (OnUpdateTokenBoard != null) {
+                        //    OnUpdateTokenBoard(nextPosition.row, nextPosition.column, token.replacedToken);    
+                        //}
+                        gameState.SetTokenBoardCell(nextPosition.row, nextPosition.column, token.replacedToken);
                     }
                 }
             } else if (token.canEvaluateWithoutEntering) {
@@ -458,7 +463,7 @@ namespace Fourzy {
 
         public GameBoard Clone ()
         {
-            return new GameBoard (numRows, numColumns, numPiecesToWin, piecesCount, board);
+            return new GameBoard (gameState, numRows, numColumns, numPiecesToWin, piecesCount, board);
         }
 
         public string PrintBoard(string name) {

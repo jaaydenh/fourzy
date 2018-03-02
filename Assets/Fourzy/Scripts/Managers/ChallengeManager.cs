@@ -2,7 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using GameSparks.Api.Messages;
 using GameSparks.Api.Requests;
+using GameSparks.Api.Responses;
 using GameSparks.Core;
 using System.Linq;
 using System;
@@ -10,7 +12,7 @@ using Lean.Pool;
 
 namespace Fourzy
 {
-    public class ChallengeManager : MonoBehaviour
+    public class ChallengeManager : Singleton<ChallengeManager>
     {
         public delegate void GameActive();
         public static event GameActive OnActiveGame;
@@ -21,7 +23,18 @@ namespace Fourzy
         public delegate void SetGamePieceSuccess(string gamePieceId);
         public static event SetGamePieceSuccess OnSetGamePieceSuccess;
 
-        public static ChallengeManager instance;
+        public delegate void OpponentTurnTakenDelegate(ChallengeTurnTakenMessage message);
+        public static event OpponentTurnTakenDelegate OnOpponentTurnTakenDelegate;
+        public delegate void ChallengeJoinedDelegate(ChallengeJoinedMessage message);
+        public static event ChallengeJoinedDelegate OnChallengeJoinedDelegate;
+        public delegate void ChallengeWonDelegate(ChallengeWonMessage message);
+        public static event ChallengeWonDelegate OnChallengeWonDelegate;
+        public delegate void ChallengeLostDelegate(ChallengeLostMessage message);
+        public static event ChallengeLostDelegate OnChallengeLostDelegate;
+        public delegate void ChallengeIssuedDelegate(ChallengeIssuedMessage message);
+        public static event ChallengeIssuedDelegate OnChallengeIssuedDelegate;
+
+        //public static ChallengeManager instance;
 
         public TokenBoard tokenBoard;
         public GameObject yourMoveGameGrid;
@@ -56,36 +69,60 @@ namespace Fourzy
             {
                 OpenPuzzleChallengeGame();
             }
+
+            ChallengeTurnTakenMessage.Listener += OnChallengeTurnTaken;
+            ChallengeJoinedMessage.Listener += OnChallengeJoined;
+            ChallengeWonMessage.Listener += OnChallengeWon;
+            ChallengeLostMessage.Listener += OnChallengeLost;
         }
 
-        void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else if (instance != this)
-            {
-                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a ChallengeManager.
-                Destroy(gameObject);
-            }
-
-            //Sets this to not be destroyed when reloading scene
-            DontDestroyOnLoad(gameObject);
-        }
-
-        private void OnEnable() {
-            ActiveGame.OnRemoveGame += RemoveGame;
+        void OnEnable() {
+            GameUI.OnRemoveGame += RemoveGame;
             MiniGameBoard.OnSetTokenBoard += SetTokenBoard;
             GamePieceUI.OnSetGamePiece += SetGamePiece;
             GameManager.OnResign += Resign;
+            ChallengeTurnTakenMessage.Listener += OnChallengeTurnTaken;
+            ChallengeJoinedMessage.Listener += OnChallengeJoined;
+            ChallengeWonMessage.Listener += OnChallengeWon;
+            ChallengeLostMessage.Listener += OnChallengeLost;
+            ChallengeIssuedMessage.Listener += OnChallengeIssued;
         }
 
-        private void OnDisable() {
-            ActiveGame.OnRemoveGame -= RemoveGame;
+        void OnDisable() {
+            GameUI.OnRemoveGame -= RemoveGame;
             MiniGameBoard.OnSetTokenBoard -= SetTokenBoard;
             GamePieceUI.OnSetGamePiece -= SetGamePiece;
             GameManager.OnResign -= Resign;
+            ChallengeTurnTakenMessage.Listener -= OnChallengeTurnTaken;
+            ChallengeJoinedMessage.Listener -= OnChallengeJoined;
+            ChallengeWonMessage.Listener -= OnChallengeWon;
+            ChallengeLostMessage.Listener -= OnChallengeLost;
+            ChallengeIssuedMessage.Listener -= OnChallengeIssued;
+        }
+
+        private void OnChallengeTurnTaken(ChallengeTurnTakenMessage message)
+        {
+            OnOpponentTurnTakenDelegate(message);
+        }
+
+        private void OnChallengeJoined(ChallengeJoinedMessage message)
+        {
+            OnChallengeJoinedDelegate(message);
+        }
+
+        private void OnChallengeWon(ChallengeWonMessage message)
+        {
+            OnChallengeWonDelegate(message);
+        }
+
+        private void OnChallengeLost(ChallengeLostMessage message)
+        {
+            OnChallengeLostDelegate(message);
+        }
+
+        private void OnChallengeIssued(ChallengeIssuedMessage message) 
+        {
+            OnChallengeIssuedDelegate(message);
         }
 
         private void SetTokenBoard(TokenBoard tokenboard) {
@@ -112,7 +149,8 @@ namespace Fourzy
                     }
                     else
                     {
-                        Debug.Log("SetGamePiece was successful");
+                        Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                        customAttributes.Add("GamePieceId", gamePieceId);
                         AnalyticsManager.LogCustom("set_gamepiece");
                         if (OnSetGamePieceSuccess != null)
                             OnSetGamePieceSuccess(gamePieceId);
@@ -262,7 +300,7 @@ namespace Fourzy
             Debug.Log("ChallengeUser gameState.tokenBoard.name: " + gameState.tokenBoard.name);
             GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameState.GetGameBoardData());
             data.AddNumberList("tokenBoard", gameState.tokenBoard.GetTokenBoardData());
-            data.AddNumberList("lastTokenBoard", gameState.tokenBoard.GetTokenBoardData());
+            data.AddNumberList("lastTokenBoard", gameState.previousTokenBoard.GetTokenBoardData());
             data.AddString("tokenBoardId", gameState.tokenBoard.id);
             data.AddString("tokenBoardName", gameState.tokenBoard.name);
             data.AddString("gameType", gameType.ToString());
@@ -300,7 +338,6 @@ namespace Fourzy
         }
 
         public void FindRandomChallenge() {
-            Debug.Log("FindRandomChallenge");
             tokenBoard = null;
 
             new FindChallengeRequest()
@@ -309,40 +346,44 @@ namespace Fourzy
                 //.SetEligibility()
                 //.SetOffset()
                 //.SetShortCode()
-                .Send((response) => {
+                .Send(FindRandomChallengeSuccess, FindRandomChallengeError);
+        }
 
-                    if (response.HasErrors)
-                    {
-                        Debug.Log("***** Error Finding Random Challenge: " + response.Errors.JSON);
-                        AnalyticsManager.LogError("find_challenge_request_error", response.Errors.JSON);
-                    } else {
-                        GSEnumerable<GameSparks.Api.Responses.FindChallengeResponse._Challenge> challengeInstances = response.ChallengeInstances; 
-                        //GSData scriptData = response.ScriptData; 
+        private void FindRandomChallengeSuccess(FindChallengeResponse response) {
+            GSEnumerable<FindChallengeResponse._Challenge> challengeInstances = response.ChallengeInstances;
+            //GSData scriptData = response.ScriptData; 
 
-                        if (challengeInstances.Count() > 0) {
-                            List<string> challengeInstanceIds = new List<string>();
+            if (challengeInstances.Count() > 0)
+            {
+                List<string> challengeInstanceIds = new List<string>();
 
-                            //for every object in the challenges array, get the challengeId field and push to challengeInstanceId[]
-                            foreach (var chalInstance in challengeInstances)
-                            {
-                                challengeInstanceIds.Add(chalInstance.ChallengeId);
-                            }
+                //for every object in the challenges array, get the challengeId field and push to challengeInstanceId[]
+                foreach (var chalInstance in challengeInstances)
+                {
+                    challengeInstanceIds.Add(chalInstance.ChallengeId);
+                }
 
-                            int randNum = UnityEngine.Random.Range(0, challengeInstanceIds.Count-1);
+                int randNum = UnityEngine.Random.Range(0, challengeInstanceIds.Count - 1);
 
-                            //reference the id at that random numbers location
-                            string randomChallengeId = challengeInstanceIds[randNum];
-                            //each time you run this code, a different id is set in the scriptdata
-                            //Spark.setScriptData("challenge to join", randomChallengeId);
+                //reference the id at that random numbers location
+                string randomChallengeId = challengeInstanceIds[randNum];
+                //each time you run this code, a different id is set in the scriptdata
+                //Spark.setScriptData("challenge to join", randomChallengeId);
 
-                            // For now players are joined to a random challenge
-                            JoinChallenge(randomChallengeId);
-                        } else {
-                            //Send player to Game Screen to make the first move
-                            OpenNewMultiplayerGame();
-                        }
-                    }
-                });
+                // For now players are joined to a random challenge
+                JoinChallenge(randomChallengeId);
+            }
+            else
+            {
+                //Send player to Game Screen to make the first move
+                OpenNewMultiplayerGame();
+            }
+        }
+
+        private void FindRandomChallengeError(FindChallengeResponse response)
+        {
+            Debug.Log("***** Error Finding Random Challenge: " + response.Errors.JSON);
+            AnalyticsManager.LogError("find_challenge_request_error", response.Errors.JSON);
         }
 
         public void ChallengeRandomUser(GameState gameState, int position, Direction direction, GameType gameType ) {
@@ -531,7 +572,7 @@ namespace Fourzy
             AnalyticsManager.LogCustom("open_new_multiplayer_game", customAttributes);
         }
 
-        public void OpenJoinedMultiplayerGame(GameSparks.Api.Responses.GetChallengeResponse._Challenge challenge) {
+        public void OpenJoinedMultiplayerGame(GetChallengeResponse._Challenge challenge) {
             Debug.Log("Open Joined Multiplayer Game");
             GameManager.instance.isLoading = true;
 
@@ -641,7 +682,7 @@ namespace Fourzy
                                     GameObject go = Instantiate(activeGamePrefab) as GameObject;
                                     //GameObject go = LeanPool.Spawn(activeGamePrefab) as GameObject;
 
-                                    ActiveGame activeGame = go.GetComponent<ActiveGame>();
+                                    GameUI activeGame = go.GetComponent<GameUI>();
 
                                     bool? isVisible = gsChallenge.ScriptData.GetBoolean("isVisible");
                                     
@@ -840,7 +881,7 @@ namespace Fourzy
                 foreach (var game in GameManager.instance.games)
                 {
                     GameObject go = Instantiate(activeGamePrefab) as GameObject;
-                    ActiveGame activeGame = go.GetComponent<ActiveGame>();
+                    GameUI activeGame = go.GetComponent<GameUI>();
                     activeGame.game = game;
 
                     //if (game.challengeState == ChallengeState.RUNNING || game.challengeState == ChallengeState.ISSUED)

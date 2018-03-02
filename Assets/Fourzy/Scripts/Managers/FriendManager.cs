@@ -7,9 +7,9 @@ using Lean.Pool;
 
 namespace Fourzy
 {
-    public class FriendManager : MonoBehaviour 
+    public class FriendManager : Singleton<FriendManager> 
     {
-        public static FriendManager instance;
+        //public static FriendManager instance;
         public GameObject friendEntryPrefab;
         public GameObject friendsList;
         public GameObject noFriendsText;
@@ -17,21 +17,21 @@ namespace Fourzy
         public Image onlineIndicator;
         private bool isOnline;
 
-        void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else if (instance != this)
-            {
-                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
-                Destroy(gameObject);
-            }
+        //void Awake()
+        //{
+        //    if (instance == null)
+        //    {
+        //        instance = this;
+        //    }
+        //    else if (instance != this)
+        //    {
+        //        //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+        //        Destroy(gameObject);
+        //    }
 
-            //Sets this to not be destroyed when reloading scene
-            DontDestroyOnLoad(gameObject);
-        }
+        //    //Sets this to not be destroyed when reloading scene
+        //    DontDestroyOnLoad(gameObject);
+        //}
 
         public void GetFriends()
         {

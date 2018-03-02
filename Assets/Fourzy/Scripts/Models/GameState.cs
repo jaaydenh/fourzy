@@ -68,7 +68,7 @@ namespace Fourzy
         private void InitGameState(int[] gameBoardData) {
             GameBoard.OnUpdateTokenBoard += SetTokenBoardCell;
 
-            gameBoard = new GameBoard(Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
+            gameBoard = new GameBoard(this, Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
             InitIsMovable();
 
@@ -90,6 +90,7 @@ namespace Fourzy
         }
 
         public void SetTokenBoardCell(int row, int col, IToken token) {
+            Debug.Log("SetTokenBoardCell: row: " + row + " col: "+ col + " token: " + token.tokenType);
             tokenBoard.SetTokenBoardCell(row, col, token);
         }
 
@@ -173,12 +174,12 @@ namespace Fourzy
                 Direction activeDirection = activePiece.currentDirection;
 
                 if (CanMove(new Move(nextPosition, activeDirection, move.player), tokenBoard.tokens)) {
-                    if (tokenBoard.tokens[nextPosition.row, nextPosition.column].isReplacable) {
+                    if (tokenBoard.tokens[nextPosition.row, nextPosition.column].hasEffect) {
                         activeTokenList.Add(tokenBoard.tokens[nextPosition.row, nextPosition.column]);    
                     }
                     tokenBoard.tokens[nextPosition.row, nextPosition.column].UpdateBoard(gameBoard, true);
                 } else {
-                    gameBoard.DisableNextMovingPiece();
+                    gameBoard.SetActivePieceAsComplete();
 
                 }
             }
@@ -381,13 +382,13 @@ namespace Fourzy
 
             // if there is a token at the end position and canPassThrough is false then return false
             // MUST CHECK FOR canPassThrough before checking canStopOn
-            if (!tokens[endPosition.row, endPosition.column].canEnter) {
+            if (!tokens[endPosition.row, endPosition.column].pieceCanEnter) {
                 return false;
             }
 
             // if there is a token at the end position and canStopOn is false then check if the piece can move
             // to the next position, if not then return false
-            if (!tokens[endPosition.row, endPosition.column].canEndMove) {
+            if (!tokens[endPosition.row, endPosition.column].pieceCanEndMoveOn) {
                 return CanMove(new Move(Utility.GetNextPosition(move), move.direction, move.player), tokens);
             }
 

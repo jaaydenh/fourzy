@@ -293,6 +293,7 @@ GameObject:
   - component: {fileID: 17105712}
   - component: {fileID: 17105714}
   - component: {fileID: 17105713}
+  - component: {fileID: 17105715}
   m_Layer: 0
   m_Name: ChallengeIdText
   m_TagString: Untagged
@@ -315,8 +316,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 5}
-  m_SizeDelta: {x: 350, y: 29}
+  m_AnchoredPosition: {x: 0, y: 10}
+  m_SizeDelta: {x: 450, y: 29}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &17105713
 MonoBehaviour:
@@ -339,10 +340,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 3f9c7578ffe364c598bc7b5a408885a6, type: 3}
-    m_FontSize: 16
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 1
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 1
     m_AlignByGeometry: 0
@@ -357,6 +358,20 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 17105711}
+--- !u!114 &17105715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 17105711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &18955649
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,7 +853,6 @@ MonoBehaviour:
   clipMove: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
   clipWin: {fileID: 8300000, guid: 2cda08f34c076490b8ec095a4f5d5256, type: 3}
   clipChest: {fileID: 8300000, guid: 84d5b31e59d0f43f29dfa2a0e8ea4d0d, type: 3}
-  createGameScript: {fileID: 185923094}
   moveArrowLeft: {fileID: 1951836253388886, guid: 36d26fd20ba0f4f889d04038d1b5d6e4,
     type: 2}
   moveArrowRight: {fileID: 1459885036096070, guid: 36b21e6b584474efe8f008eb4a426bbc,
@@ -7014,7 +7028,6 @@ GameObject:
   - component: {fileID: 963059899}
   - component: {fileID: 963059898}
   - component: {fileID: 963059901}
-  - component: {fileID: 963059902}
   m_Layer: 5
   m_Name: Facebook Button
   m_TagString: Untagged
@@ -7132,82 +7145,9 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 963059899}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1674917785}
-        m_MethodName: FacebookLogin
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 963059902}
-        m_MethodName: TriggerEvent
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &963059902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 963059896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eb0edc33cd2e446fab64950ae3ae78e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Trigger:
-    m_IsTriggerExpanded: 1
-    m_Type: 1
-    m_LifecycleEvent: 0
-    m_ApplyRules: 0
-    m_Rules:
-      m_Rules: []
-    m_TriggerBool: 0
-    m_InitTime: 5
-    m_RepeatTime: 5
-    m_Repetitions: 0
-    repetitionCount: 0
-  m_EventPayload:
-    m_IsEventExpanded: 1
-    m_StandardEventType: Engagement/UserSignup
-    m_Parameters:
-      m_Parameters:
-      - m_RequirementType: 1
-        m_GroupID: 
-        m_Tooltip: The authorization network or login service provider (required).
-        m_Name: authorization_network
-        m_Value:
-          m_EditingCustomValue: 0
-          m_PopupIndex: 2
-          m_CustomValue: 
-          m_FixedType: 1
-          m_EnumType: UnityEngine.Analytics.Experimental.AuthorizationNetwork
-          m_EnumTypeIsCustomizable: 1
-          m_CanDisable: 0
-          m_PropertyType: 1
-          m_ValueType: enum
-          m_Value: facebook
-          m_Target:
-            m_Target: {fileID: 0}
-            m_Path: 
-            m_ValidTypeNames:
-            - enum
-            m_Type: enum
-            m_EnumType: UnityEngine.Analytics.Experimental.AuthorizationNetwork
-    m_Name: user_signup
 --- !u!1 &963101640
 GameObject:
   m_ObjectHideFlags: 0
@@ -7503,7 +7443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00013223561}
+  m_AnchoredPosition: {x: 0, y: -0.00015136797}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1018993804
@@ -12885,8 +12825,8 @@ GameObject:
   - component: {fileID: 1647859503}
   - component: {fileID: 1647859502}
   - component: {fileID: 1647859501}
-  - component: {fileID: 1647859506}
   - component: {fileID: 1647859510}
+  - component: {fileID: 1647859506}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -13507,7 +13447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5999039cf0a134af3898baed20c528d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  facebookButton: {fileID: 963059896}
+  facebookLoginButton: {fileID: 963059901}
 --- !u!4 &1674917786
 Transform:
   m_ObjectHideFlags: 0

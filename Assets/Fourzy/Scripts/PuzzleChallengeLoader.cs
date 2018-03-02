@@ -4,21 +4,21 @@ using System.Collections.Generic;
 
 namespace Fourzy
 {
-    public class PuzzleChallengeLoader : MonoBehaviour
+    public class PuzzleChallengeLoader : Singleton<PuzzleChallengeLoader>
     {
         //Singleton
-        private static PuzzleChallengeLoader _instance;
-        public static PuzzleChallengeLoader instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = GameObject.FindObjectOfType<PuzzleChallengeLoader>();
-                }
-                return _instance;
-            }
-        }
+        //private static PuzzleChallengeLoader _instance;
+        //public static PuzzleChallengeLoader instance
+        //{
+        //    get
+        //    {
+        //        if (_instance == null)
+        //        {
+        //            _instance = GameObject.FindObjectOfType<PuzzleChallengeLoader>();
+        //        }
+        //        return _instance;
+        //    }
+        //}
 
         private PuzzleChallengeInfo[] LoadChallengeData()
         {

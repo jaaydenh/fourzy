@@ -191,12 +191,18 @@ namespace Fourzy
                 for (int i = 0; i < activeTokens.Count; i++)
                 {
                     Position piecePos = GameManager.instance.GetPositonFromTransform(transform.position);
+
                     //Debug.Log("nextPiecePosition row: " + piecePos.row + " col: " + piecePos.column);
                     if (piecePos.column == activeTokens[i].Column && piecePos.row == activeTokens[i].Row)
                     {
-                        //Debug.Log("PIECE IS IN TOKENS POSITION: row: " + piecePos.row + " col: " + piecePos.column);
-                        GameManager.instance.CreateStickyToken(activeTokens[i].Row, activeTokens[i].Column);
-                        //activeTokens.Remove(token);
+                        Debug.Log("PIECE IS IN TOKENS POSITION: row: " + piecePos.row + " col: " + piecePos.column + " type: " + activeTokens[i].tokenType);
+                        if (activeTokens[i].tokenType == Token.FRUIT) {
+                            GameManager.instance.CreateStickyToken(activeTokens[i].Row, activeTokens[i].Column);    
+                        } else if (activeTokens[i].tokenType == Token.PIT) {
+                            SpriteRenderer sr = GameManager.instance.tokenViews[activeTokens[i].Row, activeTokens[i].Column].GetComponent<SpriteRenderer>();
+                            sr.DOFade(0f, 1.5f);
+                        }
+
                         activeTokens.RemoveAt(i);
                     }
                 }

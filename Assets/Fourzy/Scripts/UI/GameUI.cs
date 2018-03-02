@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Fourzy
 {
-    public class ActiveGame : MonoBehaviour
+    public class GameUI : MonoBehaviour
     {
         public delegate void GameActive();
         public static event GameActive OnActiveGame;
@@ -161,12 +161,12 @@ namespace Fourzy
         //Open game gets called OnClick of the play button which happens when selecting an active game in the games list
         public void OpenGame()
         {
-            Debug.Log("Open Active Game: challengeInstanceId: " + challengeId);
+            Debug.Log("Open GameUI: challengeInstanceId: " + challengeId);
 
             GameManager.instance.isLoading = true;
             GameManager.instance.gameState = game.gameState;
 
-            // All these properties of the ActiveGame will remain the same for the entire lifecycle of the game
+            // All these properties of the GameUI will remain the same for the entire lifecycle of the game
             GameManager.instance.challengeInstanceId = game.challengeId;
             //Debug.Log("Active game: isCurrentPlayer_PlayerOne: " + game.isCurrentPlayer_PlayerOne);
             GameManager.instance.isCurrentPlayer_PlayerOne = game.isCurrentPlayer_PlayerOne;

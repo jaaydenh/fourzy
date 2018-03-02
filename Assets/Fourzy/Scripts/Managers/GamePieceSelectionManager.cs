@@ -25,11 +25,6 @@ namespace Fourzy
             }
         }
 
-        private void Start()
-        {
-            //ChallengeManager.instance.GetGamePiece();
-        }
-
         public string GetGamePieceName(int gamePieceId) {
             for (int i = 0; i < gamePieceData.Length; i++)
             {

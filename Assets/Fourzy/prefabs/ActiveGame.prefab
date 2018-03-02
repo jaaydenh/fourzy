@@ -565,7 +565,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1494404121640076}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09c71ec73d86b47f1b3b96446f90f57e, type: 3}
+  m_Script: {fileID: 11500000, guid: b0c51e521483941a7a7721898a7b55dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   challengeId: 
@@ -882,7 +882,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -2.1104174, y: 5.471923}
+  m_AnchoredPosition: {x: 8.557368, y: 5.4747906}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224306249205009246

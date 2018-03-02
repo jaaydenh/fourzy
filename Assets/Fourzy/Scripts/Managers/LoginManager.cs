@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
 using Facebook.Unity;
@@ -8,12 +9,14 @@ using GameSparks.Core;
 
 namespace Fourzy
 {
-    public class LoginManager : MonoBehaviour {
+    public class LoginManager : Singleton<LoginManager> {
+
+        public delegate void FacebookLoginCallback(AuthenticationResponse _resp);
 
         public delegate void LoginError();
         public static event LoginError OnLoginError;
-        public static LoginManager instance;
-        public GameObject facebookButton;
+        [SerializeField]
+        private Button facebookLoginButton;
         readonly string[] firstNameSyllables = { "mon","fay","shi","zag","blarg","rash","izen"};
         readonly string[] lastNameSyllables = { "malo","zak","abo","wonk","zig","wolf","cat"};
         bool readyForDeviceLogin;
@@ -23,28 +26,17 @@ namespace Fourzy
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
         }
 
-        void Awake() {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else if (instance != this)
-            {
-                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
-                Destroy(gameObject);
-            }
-
-            //Sets this to not be destroyed when reloading scene
-            DontDestroyOnLoad(gameObject);
-
+        new void Awake() {
+            base.Awake();
+            facebookLoginButton.onClick.AddListener(FacebookLogin);
             ConnectWithFacebook();
         }
 
-        private void OnEnable() {
+        void OnEnable() {
             GS.GameSparksAvailable += GameSparksIsAvailable;
         }
 
-        private void OnDisable() {
+        void OnDisable() {
             GS.GameSparksAvailable -= GameSparksIsAvailable;
         }
 
@@ -57,13 +49,13 @@ namespace Fourzy
             }
         }
 
-        public void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token) {
+        private void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token) {
             Debug.Log("Firebase: Received Registration Token: " + token.Token);
 
             ManagePushNotifications(token.Token, "fcm");
         }
 
-        public void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e) {
+        private void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e) {
             Debug.Log("Firebase: Received a new message from: " + e.Message.From);
         }
 
@@ -98,7 +90,7 @@ namespace Fourzy
 
         void DeviceLogin() {
             new DeviceAuthenticationRequest()
-                .SetDisplayName(CreateNewName())
+                .SetDisplayName(CreateNewPlayerName())
                 .Send((response) => {
                     if (!response.HasErrors) {
                     UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null, null);
@@ -145,13 +137,14 @@ namespace Fourzy
                 if (FB.IsLoggedIn)
                 {
                     Debug.Log("Already Logged into Facebook");
-                    GSFacebookLogin(AfterFBLogin);
-                    facebookButton.SetActive(false);
+                    GameSparksFBLogin(AfterFBLogin);
+                    facebookLoginButton.gameObject.SetActive(false);
                 }
                 else
                 {
                     Debug.Log("Not Logged into Facebook: readyForDeviceLogin: " + readyForDeviceLogin);
-                    facebookButton.SetActive(true);
+                    facebookLoginButton.gameObject.SetActive(true);
+                    facebookLoginButton.interactable = true;
                     //Invoke("DeviceLogin", 0.5f);
                     if (readyForDeviceLogin) {
                         DeviceLogin();    
@@ -170,6 +163,7 @@ namespace Fourzy
         /// </summary>
         public void FacebookLogin()
         {
+            facebookLoginButton.interactable = false;
             if (!FB.IsLoggedIn)
             {
                 Debug.Log("Logging into Facebook");
@@ -178,7 +172,7 @@ namespace Fourzy
             }
             else
             {
-                GSFacebookLogin(AfterFBLogin);
+                GameSparksFBLogin(AfterFBLogin);
             }
         }
 
@@ -189,12 +183,13 @@ namespace Fourzy
                 Debug.Log("Logging into gamesparks with facebook details");
 
                 AnalyticsManager.LogCustom("player_connects_with_facebook");
-                GSFacebookLogin(AfterFBLogin);
+                GameSparksFBLogin(AfterFBLogin);
             }
             else
             {
                 Debug.LogWarning("Something went wrong with connectin to FaceBook: " + result.Error);
-                
+                facebookLoginButton.interactable = true;
+
                 if (OnLoginError != null) {
                     AnalyticsManager.LogError("gamesparks_fb_connect_error", result.Error);
                     OnLoginError();
@@ -204,30 +199,24 @@ namespace Fourzy
             }
         }
 
-        //this is the callback that happens when gamesparks has been connected with FB
-        private void AfterFBLogin(GameSparks.Api.Responses.AuthenticationResponse _resp)
+        //This is the callback that happens when gamesparks has been connected with FB
+        private void AfterFBLogin(AuthenticationResponse response)
         {
-            //Debug.Log(_resp.DisplayName );
-            facebookButton.SetActive(false);
+            facebookLoginButton.gameObject.SetActive(false);
             UserManager.instance.UpdateInformation();
             ChallengeManager.instance.GetChallenges();
             FriendManager.instance.GetFriends();
             //LeaderboardManager.instance.GetLeaderboard();
         }
 
-        //delegate for asynchronous callbacks
-        public delegate void FacebookLoginCallback(AuthenticationResponse _resp);
-
         //This method will connect GameSparks with FaceBook
-        public void GSFacebookLogin(FacebookLoginCallback _fbLoginCallback )
+        private void GameSparksFBLogin(FacebookLoginCallback _fbLoginCallback )
         {
             Debug.Log("Sending FacebookConnectRequest using AccessToken: " + AccessToken.CurrentAccessToken.TokenString);
             bool success = false;
 
-            new GameSparks.Api.Requests.FacebookConnectRequest()
+            new FacebookConnectRequest()
                 .SetAccessToken(AccessToken.CurrentAccessToken.TokenString)
-                //.SetMaxResponseTimeInSeconds(15)
-                //.SetMaxQueueTimeInSeconds(15)
                 .SetMaxResponseTimeInMillis(15000)
                 .SetDoNotLinkToCurrentPlayer(false)// we don't want to create a new account so link to the player that is currently logged in
                 .SetSwitchIfPossible(true)//this will switch to the player with this FB account id if they already have an account from a separate login
@@ -242,7 +231,8 @@ namespace Fourzy
                     else
                     {
                         Debug.LogWarning("***** Error Logging into facebook: " + response.Errors.JSON);
-                        facebookButton.SetActive(true);
+                        facebookLoginButton.gameObject.SetActive(true);
+                        facebookLoginButton.interactable = true;
                         if (OnLoginError != null)
                             OnLoginError();
                     }
@@ -251,7 +241,7 @@ namespace Fourzy
                 });
         }
 
-        string CreateNewName()
+        private string CreateNewPlayerName()
         {
             //Creates a first name with 2-3 syllables
             string firstName = "";

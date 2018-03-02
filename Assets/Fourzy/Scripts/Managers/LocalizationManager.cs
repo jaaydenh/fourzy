@@ -6,28 +6,28 @@
     using System.Globalization;
     using System.Linq;
 
-    public class LocalizationManager : MonoBehaviour
+    public class LocalizationManager : Singleton<LocalizationManager>
     {
         const string STR_LOCALIZATION_KEY = "locale";
-        public static LocalizationManager instance;
+        //public static LocalizationManager instance;
         public CultureInfo cultureInfo;
         private Dictionary<string, string> localizedText;
         private bool isReady = false;
         private string missingTextString = "Localized text not found";
 
-        void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else if (instance != this)
-            {
-                Destroy(gameObject);
-            }
+        //void Awake()
+        //{
+        //    if (instance == null)
+        //    {
+        //        instance = this;
+        //    }
+        //    else if (instance != this)
+        //    {
+        //        Destroy(gameObject);
+        //    }
 
-            DontDestroyOnLoad(gameObject);
-        }
+        //    DontDestroyOnLoad(gameObject);
+        //}
 
         private void Start()
         {

@@ -7,30 +7,30 @@ using Lean.Pool;
 
 namespace Fourzy
 {
-    public class LeaderboardManager : MonoBehaviour {
+    public class LeaderboardManager : Singleton<LeaderboardManager> {
 
-        public static LeaderboardManager instance;
+        //public static LeaderboardManager instance;
         public List<GameObject> players = new List<GameObject>();
         public GameObject leaderboardPlayersList;
         public GameObject leaderboardPlayerPrefab;
         private bool loadingLeaderboard = false;
         public Text noPlayerText;
 
-        void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else if (instance != this)
-            {
-                //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
-                Destroy(gameObject);
-            }
+        //void Awake()
+        //{
+        //    if (instance == null)
+        //    {
+        //        instance = this;
+        //    }
+        //    else if (instance != this)
+        //    {
+        //        //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+        //        Destroy(gameObject);
+        //    }
 
-            //Sets this to not be destroyed when reloading scene
-            DontDestroyOnLoad(gameObject);
-        }
+        //    //Sets this to not be destroyed when reloading scene
+        //    DontDestroyOnLoad(gameObject);
+        //}
 
         public void GetLeaderboard()
         {
