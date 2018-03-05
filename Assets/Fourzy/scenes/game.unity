@@ -1110,7 +1110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players: []
   leaderboardPlayersList: {fileID: 988853844}
-  leaderboardPlayerPrefab: {fileID: 1693106801000916, guid: a353a8d14079a4513a1bd698f00f2a9c,
+  leaderboardPlayerPrefab: {fileID: 1530972764864322, guid: 467dd3327df7640aba8fc7ad0296a1b2,
     type: 2}
   noPlayerText: {fileID: 141052923}
 --- !u!1 &163647221
@@ -1847,7 +1847,7 @@ Prefab:
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
@@ -1857,7 +1857,7 @@ Prefab:
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 145
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224453596427211202, guid: e1194a128740942a481833de0ce83eac,
         type: 2}
@@ -7195,7 +7195,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00007677239}
+  m_AnchoredPosition: {x: 0, y: -0.000049941278}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &988853846
@@ -7370,7 +7370,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00021018331}
+  m_AnchoredPosition: {x: 0, y: -0.00017413677}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1018993804

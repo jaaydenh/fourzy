@@ -42,6 +42,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: eec1cf8b683b24abca788236caa8c5d9, type: 3}
   - {fileID: 21300000, guid: 86ecbd0fa54d3483c85e350d98c368f6, type: 3}
   - {fileID: 21300000, guid: 8cd2355c95cdf4ed4a6347d85f98061c, type: 3}
+  - {fileID: 21300000, guid: a8aa2d01300d841fea86dfc1376ded36, type: 3}
   - {fileID: 21300000, guid: 66c710582a23e439e95f560533cc78f6, type: 3}
   - {fileID: 21300000, guid: 2030efc2f6b2d47c7b64b5faeb5c9d40, type: 3}
   - {fileID: 21300000, guid: 2c6934b4ccad844539ae931642e9c31d, type: 3}
@@ -294,6 +295,7 @@ SpriteAtlas:
   - uiPlayerInfo
   - uiTabBar
   - uiTabPanel
+  - listItemBackground
   - iconQuestion
   - FourzyIcon
   - buttonYellow
