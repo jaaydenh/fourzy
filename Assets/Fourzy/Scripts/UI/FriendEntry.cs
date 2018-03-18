@@ -51,6 +51,9 @@ namespace Fourzy
         public void OpenNewFriendChallengeGame()
         {
             GameManager.instance.TransitionToGameOptionsScreen(GameType.FRIEND, id, userName, profilePicture);
+            //ViewController.instance.SetActiveView();
+            ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
+            ViewController.instance.HideTabView();
         }
     }
 }

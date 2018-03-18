@@ -50,6 +50,10 @@ namespace Fourzy
         public void OpenNewLeaderboardChallengeGame()
         {
             Debug.Log("OpenNewLeaderboardChallengeGame userName: " + userName);
+
+            ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
+            ViewController.instance.HideTabView();
+            //BoardSelectionManager.instance.LoadMiniBoards();
             GameManager.instance.TransitionToGameOptionsScreen(GameType.LEADERBOARD, id, userName, profilePicture);
         }
     }

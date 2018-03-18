@@ -168,7 +168,6 @@ namespace Fourzy
 
             // All these properties of the GameUI will remain the same for the entire lifecycle of the game
             GameManager.instance.challengeInstanceId = game.challengeId;
-            //Debug.Log("Active game: isCurrentPlayer_PlayerOne: " + game.isCurrentPlayer_PlayerOne);
             GameManager.instance.isCurrentPlayer_PlayerOne = game.isCurrentPlayer_PlayerOne;
             GameManager.instance.isMultiplayer = true;
             GameManager.instance.isNewChallenge = false;
@@ -183,13 +182,14 @@ namespace Fourzy
 
             GameManager.instance.ResetGamePiecesAndTokens();
             GameManager.instance.ResetUIGameScreen();
-
-            //GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame("", "");
             GameManager.instance.InitPlayerUI(game.opponent.opponentName, game.opponentProfilePictureSprite);
+
+            ViewController.instance.view1.Hide();
+            ViewController.instance.HideTabView();
+            UITabManager.instance.ResetAllTabs();
             // Triggers GameManager TransitionToGameScreen
-            if (OnActiveGame != null)
-                OnActiveGame();
+            OnActiveGame();
         }
     }
 }

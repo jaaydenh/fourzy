@@ -50,12 +50,12 @@ namespace Fourzy
         public GameObject invitePrefab;
         public GameObject NoMovesPanel;
         public GameObject loadingSpinner;
-        public GameObject gamesListContainer;
+        public GameObject gamesListContainer; 
 
         //public Texture2D defaultProfilePicture;
 
         public GameObject UIScreen;
-        public int daysUntilChallengeExpires = 25;
+        public int daysUntilChallengeExpires = 40;
         private bool gettingChallenges = false;
         private bool pulledToRefresh = false;
         //private int yourMoveGames = 0;
@@ -67,7 +67,9 @@ namespace Fourzy
 
             if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 3)
             {
-                OpenPuzzleChallengeGame();
+                //OpenPuzzleChallengeGame();
+                //ViewController.instance.view3.Hide();
+                //ViewController.instance.HideTabView();
             }
 
             //ChallengeTurnTakenMessage.Listener += OnChallengeTurnTaken;
@@ -461,12 +463,12 @@ namespace Fourzy
                 });
         }
 
-        public void OpenPassAndPlayGame() 
-        {
-            GameManager.instance.challengerGamePieceId = 0;
-            GameManager.instance.challengedGamePieceId = 0;
-            GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
-        }
+        //public void OpenPassAndPlayGame() 
+        //{
+        //    GameManager.instance.challengerGamePieceId = 0;
+        //    GameManager.instance.challengedGamePieceId = 0;
+        //    GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
+        //}
 
         public void OpenPuzzleChallengeGame() {
             PuzzleChallengeInfo puzzleChallenge = PuzzleChallengeLoader.instance.GetChallenge();
@@ -479,23 +481,21 @@ namespace Fourzy
                 TokenBoard initialTokenBoard = new TokenBoard(puzzleChallenge.InitialTokenBoard.ToArray(), "", "", true);
                 tokenBoard = initialTokenBoard;
 
+                GameManager.instance.isLoading = true;
                 GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, puzzleChallenge.InitialGameBoard.ToArray(), false, null);
                 GameManager.instance.gameState = gameState;
 
-                GameManager.instance.ResetGamePiecesAndTokens();
-
-                GameManager.instance.gameType = GameType.PUZZLE;
                 GameManager.instance.challengeInstanceId = null;
-                GameManager.instance.isMultiplayer = false;
-                GameManager.instance.isNewRandomChallenge = false;
-                GameManager.instance.isNewChallenge = false;
-                GameManager.instance.isPuzzleChallenge = true;
                 GameManager.instance.isCurrentPlayer_PlayerOne = true;
-                GameManager.instance.challengerGamePieceId = 0;
-                GameManager.instance.challengedGamePieceId = 0;
+                GameManager.instance.isMultiplayer = false;
+                GameManager.instance.isNewChallenge = false;
+                GameManager.instance.isNewRandomChallenge = false;
+                GameManager.instance.isPuzzleChallenge = true;
+                GameManager.instance.gameType = GameType.PUZZLE;
+                //GameManager.instance.challengerGamePieceId = 0;
+                //GameManager.instance.challengedGamePieceId = 0;
 
-                GameManager.instance.InitPlayerUI();
-                GameManager.instance.UpdatePlayerUI();
+                GameManager.instance.ResetGamePiecesAndTokens();
                 GameManager.instance.ResetUIGameScreen();
 
                 string subtitle = "";
@@ -510,7 +510,9 @@ namespace Fourzy
 
                 GameManager.instance.SetupGame(puzzleChallenge.Name, subtitle.Replace("%1", puzzleChallenge.MoveGoal.ToString()));
 
-                UIScreen.SetActive(false);
+                GameManager.instance.InitPlayerUI();
+
+                //UIScreen.SetActive(false);
 
                 if (OnActiveGame != null)
                     OnActiveGame();
@@ -524,11 +526,11 @@ namespace Fourzy
             }
         }
 
-        public void OpenAiGame() {
-            GameManager.instance.challengerGamePieceId = 0;
-            GameManager.instance.challengedGamePieceId = 0;
-            GameManager.instance.TransitionToGameOptionsScreen(GameType.AI);
-        }
+        //public void OpenAiGame() {
+        //    GameManager.instance.challengerGamePieceId = 0;
+        //    GameManager.instance.challengedGamePieceId = 0;
+        //    GameManager.instance.TransitionToGameOptionsScreen(GameType.AI);
+        //}
 
         public void OpenNewMultiplayerGame() {
             Debug.Log("Open New Multiplayer Game");
@@ -560,7 +562,7 @@ namespace Fourzy
             GameManager.instance.UpdatePlayerUI();
             GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("random_opponent_button"), true);
 
-            UIScreen.SetActive(false);
+            //UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
                 OnActiveGame();
@@ -669,7 +671,7 @@ namespace Fourzy
                     .SetEntryCount(50) // get 50 games
                     .Send(((response) =>
                         {
-                            Debug.Log("Time elapsed at response start: " + stopwatch.Elapsed);
+                            //Debug.Log("Time elapsed at response start: " + stopwatch.Elapsed);
 
                             if (response.HasErrors) {
                                 Debug.Log("***** Error Listing Challenge Request: " + response.Errors.JSON);
@@ -845,7 +847,7 @@ namespace Fourzy
                                 Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                                 customAttributes.Add("endtime", stopwatch.Elapsed);
                                 AnalyticsManager.LogCustom("ListChallengeRequest_response_endtime", customAttributes);
-                                Debug.Log("Time elapsed at response end: " + stopwatch.Elapsed);
+                                //Debug.Log("Time elapsed at response end: " + stopwatch.Elapsed);
                                 stopwatch.Reset();
                                 GameManager.instance.UpdateBadgeCounts();
                             }

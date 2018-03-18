@@ -13,6 +13,8 @@ namespace Fourzy
         public bool isCurrentPlayerTurn;
         public bool isPlayerOneTurn;
         public bool isGameOver;
+        public bool isPuzzleChallengeCompleted;
+        public bool isPuzzleChallengePassed;
         public PlayerEnum winner = PlayerEnum.EMPTY;
         public GameBoard previousGameBoard;
         public GameBoard gameBoard;
@@ -241,6 +243,52 @@ namespace Fourzy
                 isPlayerOneTurn = !isPlayerOneTurn;
             }
             activeTokens = activeTokenList;
+
+            if (GameManager.instance.isPuzzleChallenge)
+            {
+                if (player1MoveCount >= GameManager.instance.puzzleChallengeInfo.MoveGoal)
+                {
+                    //Debug.Log("Puzzle Challenge >= puzzleChallengeInfo.MoveGoal");
+                    isPuzzleChallengeCompleted = true;
+                    if (isGameOver && winner == PlayerEnum.ONE)
+                    {
+                        //Debug.Log("Puzzle Challenge: gameState.isGameOver && gameState.winner == PlayerEnum.ONE TRUE");
+                        // Puzzle Challenge Completed
+                        isPuzzleChallengePassed = true;
+                        //PlayerPrefs.SetInt("puzzleChallengeLevel", puzzleChallengeInfo.Level);
+                        //AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, true);
+                    }
+                    else
+                    {
+                        //Debug.Log("Puzzle Challenge: gameState.isGameOver && gameState.winner == PlayerEnum.ONE False");
+                        // Puzzle Challenge Failed
+                        isPuzzleChallengePassed = false;
+                        isGameOver = true;
+                        //AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, false);
+                    }
+                }
+                else if (isGameOver)
+                {
+                    //Debug.Log("Puzzle Challenge gameState.isGameOver");
+                    isPuzzleChallengeCompleted = true;
+
+                    if (winner == PlayerEnum.ONE)
+                    {
+                        //Debug.Log("Puzzle Challenge: gameState.winner == PlayerEnum.ONE TRUE");
+                        isPuzzleChallengePassed = true;
+                        //PlayerPrefs.SetInt("puzzleChallengeLevel", puzzleChallengeInfo.Level);
+                        //AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, true);
+                    }
+                    else
+                    {
+                        //Debug.Log("Puzzle Challenge: gameState.winner == PlayerEnum.ONE FALSE");
+                        isPuzzleChallengePassed = false;
+                        isGameOver = true;
+                        //AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, false);
+                    }
+                }
+            }
+
             return gameBoard.completedMovingPieces;
         }
 

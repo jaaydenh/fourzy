@@ -35,7 +35,7 @@ namespace Fourzy {
 
             // Create Random Miniboard
             GameObject random = Instantiate(miniBoardPrefab1) as GameObject;
-            random.transform.localScale = new Vector3(1,1,1);
+            //random.transform.localScale = new Vector3(1,1,1);
             MiniGameBoard miniGameBoardr = random.GetComponent<MiniGameBoard>();
             miniGameBoardr.SetAsRandom();
             random.gameObject.transform.SetParent(createGameGameboardGrid.transform);
@@ -48,7 +48,7 @@ namespace Fourzy {
             foreach (var board in boards)
             {
                 GameObject go = Instantiate(miniBoardPrefab1) as GameObject;
-                go.transform.localScale = new Vector3(1,1,1);
+                //go.transform.localScale = new Vector3(1,1,1);
                 MiniGameBoard miniGameBoard = go.GetComponent<MiniGameBoard>();
                 miniGameBoard.tokenBoard = board;
                 miniGameBoard.CreateTokens();

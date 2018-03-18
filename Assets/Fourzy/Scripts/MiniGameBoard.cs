@@ -118,8 +118,9 @@ namespace Fourzy {
         }
 
         public void BoardSelect() {
+            Debug.Log("BoardSelect");
             Toggle toggle = this.GetComponentInChildren<Toggle>();
-            // Debug.Log("shader: " + gameboard.GetComponent<SpriteRenderer>().material.shader);
+
             if (toggle.isOn) {
                 //Debug.Log("GAME BOARD SELECTED ON");
                 glow.SetActive(true);
