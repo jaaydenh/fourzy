@@ -438,12 +438,13 @@ namespace Fourzy
                 }
             }
 
-            homeScreenPlayBadge.SetGameCount(activeGamesCount);
             if (activeGamesCount > 0) {
                 homeScreenPlayBadge.gameObject.SetActive(true);
             } else {
                 homeScreenPlayBadge.gameObject.SetActive(false);    
             }
+
+            homeScreenPlayBadge.SetGameCount(activeGamesCount);
         }
 
         void Update()
@@ -522,8 +523,9 @@ namespace Fourzy
             ResetUIGameScreen();
             HeaderUI.SetActive(true);
             activeScreen = Screens.GAMES_LIST;
+            Debug.Log("current view: " + ViewController.instance.GetCurrentView());
+            Debug.Log("previous view: " + ViewController.instance.GetPreviousView());
 
-            //Debug.Log("previous view: " + ViewController.instance.GetPreviousView().ToString());
             if (ViewController.instance.GetCurrentView() == ViewController.instance.viewGameboardSelection)
             {
                 ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
@@ -536,6 +538,8 @@ namespace Fourzy
             if (ViewController.instance.GetCurrentView() != ViewController.instance.viewTraining) {
                 ViewController.instance.ShowTabView();    
             }
+
+            ChallengeManager.instance.ReloadGames();
         }
 
         public void PlayButton() {
@@ -871,6 +875,10 @@ namespace Fourzy
                 {
                     game.challengedGamePieceId = int.Parse(gamePieceId);
                 }
+            }
+
+            if (challengedGamePieceId > 39) {
+                challengedGamePieceId = 0;
             }
 
             opponentPiece.sprite = GamePieceSelectionManager.instance.gamePieces[challengedGamePieceId];
@@ -1237,20 +1245,27 @@ namespace Fourzy
 
         public void InitPlayerUI(string opponentName = "", Sprite opponentProfileSprite = null, string opponentFacebookId = "")
         {
-            //Debug.Log("isMultiplayer: "+ isMultiplayer);
+            
             if (isMultiplayer) {
-                //Debug.Log("isCurrentPlayer_PlayerOne: " + isCurrentPlayer_PlayerOne);
                 if (isCurrentPlayer_PlayerOne)
                 {
                     playerNameLabel.color = bluePlayerColor;
                     opponentNameLabel.color = redPlayerColor;
-                    //playerPiece.sprite = playerOneSpriteMoving;
-                    //opponentPiece.sprite = playerTwoSpriteMoving;
                     int playerGamePieceId = challengerGamePieceId;
                     int opponentGamePieceId = challengedGamePieceId;
+
+                    if (playerGamePieceId > 39)
+                    {
+                        playerGamePieceId = 0;
+                    }
+
                     playerPiece.sprite = GamePieceSelectionManager.instance.gamePieces[playerGamePieceId];
                     GamePieceUI player = playerPiece.GetComponent<GamePieceUI>();
                     player.SetAlternateColor(false);
+
+                    if (opponentGamePieceId > 39) {
+                        opponentGamePieceId = 0;
+                    }
 
                     if (opponentGamePieceId != -1) {
                         opponentPiece.sprite = GamePieceSelectionManager.instance.gamePieces[opponentGamePieceId];
@@ -1273,6 +1288,12 @@ namespace Fourzy
                     opponentPiece.sprite = playerOneSpriteMoving;
                     int playerGamePieceId = challengedGamePieceId;
                     int opponentGamePieceId = challengerGamePieceId;
+
+                    if (playerGamePieceId > 39)
+                    {
+                        playerGamePieceId = 0;
+                    }
+
                     playerPiece.sprite = GamePieceSelectionManager.instance.gamePieces[playerGamePieceId];
                     GamePieceUI player = playerPiece.GetComponent<GamePieceUI>();
                     if (playerGamePieceId == opponentGamePieceId) {
@@ -1280,6 +1301,12 @@ namespace Fourzy
                     } else {
                         player.SetAlternateColor(false);
                     }
+
+                    if (opponentGamePieceId > 39)
+                    {
+                        opponentGamePieceId = 0;
+                    }
+
                     opponentPiece.sprite = GamePieceSelectionManager.instance.gamePieces[opponentGamePieceId];
                     GamePieceUI opponent = opponentPiece.GetComponent<GamePieceUI>();
                     opponent.SetAlternateColor(false);
@@ -1499,8 +1526,14 @@ namespace Fourzy
             } else {
                 gamePiece.GetComponent<GamePiece>().SetAlternateColor(false);
             }
-            //Debug.Log("SpawnPiece: challengerGamePieceId: " + challengerGamePieceId);
-            //Debug.Log("SpawnPiece: challengedGamePieceId: " + challengedGamePieceId);
+
+            if (challengerGamePieceId > 39) {
+                challengerGamePieceId = 0;
+            }
+            if (challengedGamePieceId > 39) {
+                challengedGamePieceId = 0;
+            }
+
             if (player == PlayerEnum.ONE) {
                 if (startingState == PieceAnimState.MOVING) {
                     gamePiece.GetComponent<SpriteRenderer>().sprite = GamePieceSelectionManager.instance.gamePieces[challengerGamePieceId];
@@ -1521,9 +1554,8 @@ namespace Fourzy
 
         public void RematchPassAndPlayGame()
         {
-            ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
-            GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
-
+            ViewController.instance.LoadSingleView(ViewController.instance.viewGameboardSelection);
+            TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
             AnalyticsManager.LogCustom("rematch_pnp_game");
         }
 

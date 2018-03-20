@@ -837,6 +837,8 @@ namespace Fourzy
                                     games.Add(go);
                                 }
 
+                                GameManager.instance.UpdateBadgeCounts();
+                                
                                 if (pulledToRefresh) {
                                     StartCoroutine(Wait());
                                     // pulledToRefresh = false;
@@ -848,8 +850,7 @@ namespace Fourzy
                                 customAttributes.Add("endtime", stopwatch.Elapsed);
                                 AnalyticsManager.LogCustom("ListChallengeRequest_response_endtime", customAttributes);
                                 //Debug.Log("Time elapsed at response end: " + stopwatch.Elapsed);
-                                stopwatch.Reset();
-                                GameManager.instance.UpdateBadgeCounts();
+                                stopwatch.Reset();   
                             }
                         }));
                 //            Debug.Log("yourMoveGameGrid.transform.childCount: " + yourMoveGameGrid.transform.childCount);
@@ -911,7 +912,6 @@ namespace Fourzy
 
                     activeGame.transform.localScale = new Vector3(1f, 1f, 1f);
                     games.Add(go);
-                    //Debug.Log("Add game");
                 }
 
                 gettingChallenges = false;

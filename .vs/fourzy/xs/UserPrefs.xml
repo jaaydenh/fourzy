@@ -1,19 +1,19 @@
 ﻿<Properties StartupConfiguration="{9AD793E4-7370-FB12-CE27-35FD78F1FC38}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Managers/GamePieceSelectionManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/UI/View3.cs">
     <Files>
-      <File FileName="Assets/Fourzy/Scripts/UI/ViewController.cs" Line="80" Column="25" />
-      <File FileName="Assets/Fourzy/Scripts/UI/ViewTabs.cs" Line="19" Column="30" />
-      <File FileName="Assets/Fourzy/Scripts/UI/UIView.cs" Line="55" Column="31" />
-      <File FileName="Assets/Fourzy/Scripts/UI/View1.cs" Line="23" Column="18" />
-      <File FileName="Assets/Fourzy/Scripts/UI/UITabButton.cs" Line="23" Column="42" />
-      <File FileName="Assets/Fourzy/Scripts/UI/View3.cs" Line="82" Column="47" />
-      <File FileName="Assets/Fourzy/Scripts/UI/ViewGameBoardSelection.cs" Line="28" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="100" Column="22" />
-      <File FileName="Assets/Fourzy/Scripts/Models/Game.cs" Line="64" Column="21" />
-      <File FileName="Assets/Fourzy/Scripts/UI/Badge.cs" Line="8" Column="24" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="918" Column="38" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/UserManager.cs" Line="87" Column="38" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/GamePieceSelectionManager.cs" Line="5" Column="1" />
+      <File FileName="Assets/Resources/PuzzleChallenges.txt" Line="33" Column="23" />
+      <File FileName="Assets/Fourzy/Scripts/MenuItems.cs" Line="70" Column="54" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="1357" Column="38" />
+      <File FileName="Assets/Fourzy/Scripts/UI/GameIntroUI.cs" Line="13" Column="38" />
+      <File FileName="Assets/Resources/GamePieces.txt" Line="199" Column="22" />
+      <File FileName="Assets/Fourzy/Scripts/UI/GameUI.cs" Line="186" Column="49" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/UserManager.cs" Line="78" Column="71" />
+      <File FileName="Assets/Fourzy/Scripts/UI/GamePiece.cs" Line="112" Column="51" />
+      <File FileName="Assets/Fourzy/Scripts/UI/View1.cs" Line="28" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/View2.cs" Line="28" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/View3.cs" Line="36" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/View4.cs" Line="28" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/View5.cs" Line="14" Column="29" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

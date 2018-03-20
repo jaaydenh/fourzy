@@ -51,6 +51,24 @@ public class MenuItems : MonoBehaviour {
     {
         PlayerPrefs.SetInt("puzzleChallengeLevel", 30);
     }
+
+    [UnityEditor.MenuItem("Fourzy/SetPuzzleToLevel35")]
+    static void SetPuzzleToLevel35()
+    {
+        PlayerPrefs.SetInt("puzzleChallengeLevel", 35);
+    }
+
+    [UnityEditor.MenuItem("Fourzy/SetPuzzleToLevel40")]
+    static void SetPuzzleToLevel40()
+    {
+        PlayerPrefs.SetInt("puzzleChallengeLevel", 40);
+    }
+
+    [UnityEditor.MenuItem("Fourzy/SetPuzzleToLevel45")]
+    static void SetPuzzleToLevel45()
+    {
+        PlayerPrefs.SetInt("puzzleChallengeLevel", 45);
+    }
 #endif
 
 }

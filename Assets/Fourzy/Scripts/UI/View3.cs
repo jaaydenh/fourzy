@@ -25,17 +25,17 @@ namespace Fourzy
         public override void Show()
         {
             Debug.Log("View 3 Show");
-            EasyTouch.On_SwipeStart += On_SwipeStart;
-            EasyTouch.On_Swipe += On_Swipe;
-            EasyTouch.On_SwipeEnd += On_SwipeEnd;
+            //EasyTouch.On_SwipeStart += On_SwipeStart;
+            //EasyTouch.On_Swipe += On_Swipe;
+            //EasyTouch.On_SwipeEnd += On_SwipeEnd;
             base.Show();
         }
 
         public override void Hide()
         {
-            EasyTouch.On_SwipeStart -= On_SwipeStart;
-            EasyTouch.On_Swipe -= On_Swipe;
-            EasyTouch.On_SwipeEnd -= On_SwipeEnd;
+            //EasyTouch.On_SwipeStart -= On_SwipeStart;
+            //EasyTouch.On_Swipe -= On_Swipe;
+            //EasyTouch.On_SwipeEnd -= On_SwipeEnd;
             base.Hide();
         }
 

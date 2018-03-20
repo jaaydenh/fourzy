@@ -72,6 +72,9 @@ namespace Fourzy
         {
             //Debug.Log("SetPlayerGamePiece: gamepieceid: " + id);
             gamePieceId = int.Parse(id);
+            if (gamePieceId > 39) {
+                gamePieceId = 0;
+            }
             gamePieceImage.sprite = GamePieceSelectionManager.instance.gamePieces[gamePieceId];
             gamePieceImage.gameObject.SetActive(true);
 

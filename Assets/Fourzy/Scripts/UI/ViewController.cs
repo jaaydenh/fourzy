@@ -80,6 +80,15 @@ namespace Fourzy
             currentView.Show();
         }
 
+        public void LoadSingleView(UIView targetView) {
+            if (currentView != null)
+            {
+                currentView.Hide();
+            }
+            currentView = targetView;
+            currentView.Show();
+        }
+
         public UIView GetPreviousView() {
             return previousView;
         }

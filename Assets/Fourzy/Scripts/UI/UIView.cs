@@ -28,6 +28,7 @@ namespace Fourzy
         public virtual void Show()
         {
             //Debug.Log("Base Show");
+            //this.gameObject.SetActive(true);
             ViewWillAppear();
             GameObject mainCanvas = this.transform.Find("UICanvas").gameObject;
             GameObject viewContent = mainCanvas.transform.Find("ViewContent").gameObject;
@@ -48,6 +49,7 @@ namespace Fourzy
                 canvas.enabled = false;
 
             Canvas.ForceUpdateCanvases();
+            //this.gameObject.SetActive(false);
         }
 
         public virtual void ShowAnimated(AnimationDirection sourceDirection)

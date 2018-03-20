@@ -52,607 +52,152 @@
         },
         {
             "ID": "10",
-            "Name": "Frost Fluff",
+            "Name": "Spongee",
             "Enabled": true
         },
         {
             "ID": "11",
-            "Name": "Green Fluff",
-            "Enabled": true
-        },
-        {
-            "ID": "12",
-            "Name": "Fire Fluff",
-            "Enabled": true
-        },
-        {
-            "ID": "13",
-            "Name": "LemonDrop",
-            "Enabled": true
-        },
-        {
-            "ID": "14",
             "Name": "GearHead",
             "Enabled": true
         },
         {
-            "ID": "15",
-            "Name": "HotHead",
-            "Enabled": true
-        },
-        {
-            "ID": "16",
+            "ID": "12",
             "Name": "Yellow Ginger",
             "Enabled": true
         },
         {
-            "ID": "17",
-            "Name": "Green Ginger",
-            "Enabled": true
-        },
-        {
-            "ID": "18",
-            "Name": "Purple Ginger",
-            "Enabled": true
-        },
-        {
-            "ID": "19",
+            "ID": "13",
             "Name": "Blue SquidMo",
             "Enabled": true
         },
         {
-            "ID": "20",
-            "Name": "Yellow SquidMo",
+            "ID": "14",
+            "Name": "Mewhisky",
             "Enabled": true
         },
         {
-            "ID": "21",
-            "Name": "Green SquidMo",
+            "ID": "15",
+            "Name": "Sentinal",
             "Enabled": true
         },
         {
-            "ID": "22",
-            "Name": "Red Mewhisky",
+            "ID": "16",
+            "Name": "Grumpster",
             "Enabled": true
         },
         {
-            "ID": "23",
-            "Name": "Pink Mewhisky",
+            "ID": "17",
+            "Name": "Boogidy",
             "Enabled": true
         },
         {
-            "ID": "24",
-            "Name": "Purple Mewhisky",
-            "Enabled": true
-        },
-        {
-            "ID": "25",
-            "Name": "Blue Mewhisky",
-            "Enabled": true
-        },
-        {
-            "ID": "26",
-            "Name": "Pink Sentinal",
-            "Enabled": true
-        },
-        {
-            "ID": "27",
-            "Name": "Purple Sentinal",
-            "Enabled": true
-        },
-        {
-            "ID": "28",
-            "Name": "Yellow Sentinal",
-            "Enabled": true
-        },
-        {
-            "ID": "29",
-            "Name": "Green Sentinal",
-            "Enabled": true
-        },
-        {
-            "ID": "30",
-            "Name": "Gumpster #1",
-            "Enabled": true
-        },
-        {
-            "ID": "31",
-            "Name": "Gumpster #2",
-            "Enabled": true
-        },
-        {
-            "ID": "32",
-            "Name": "Gumpster #3",
-            "Enabled": true
-        },
-        {
-            "ID": "33",
-            "Name": "Gumpster #4",
-            "Enabled": true
-        },
-        {
-            "ID": "34",
-            "Name": "Gumpster #5",
-            "Enabled": true
-        },
-        {
-            "ID": "35",
-            "Name": "Gumpster #6",
-            "Enabled": true
-        },
-        {
-            "ID": "36",
-            "Name": "GreenPea #1",
-            "Enabled": true
-        },
-        {
-            "ID": "37",
-            "Name": "GreenPea #2",
-            "Enabled": true
-        },
-        {
-            "ID": "38",
-            "Name": "GreenPea #3",
-            "Enabled": true
-        },
-        {
-            "ID": "39",
-            "Name": "GreenPea #4",
-            "Enabled": true
-        },
-        {
-            "ID": "40",
-            "Name": "Boogidy #1",
-            "Enabled": true
-        },
-        {
-            "ID": "41",
-            "Name": "Boogidy #2",
-            "Enabled": true
-        },
-        {
-            "ID": "42",
-            "Name": "Boogidy #3",
-            "Enabled": true
-        },
-        {
-            "ID": "43",
-            "Name": "Boogidy #4",
-            "Enabled": true
-        },
-        {
-            "ID": "44",
+            "ID": "18",
             "Name": "Chillwell",
             "Enabled": true
         },
         {
-            "ID": "45",
-            "Name": "FidgyFrost #1",
-            "Enabled": true
-        },
-        {
-            "ID": "46",
-            "Name": "FidgyFrost #2",
-            "Enabled": true
-        },
-        {
-            "ID": "47",
-            "Name": "FidgyFrost #3",
-            "Enabled": true
-        },
-        {
-            "ID": "48",
-            "Name": "Bunnyta #1",
-            "Enabled": true
-        },
-        {
-            "ID": "49",
-            "Name": "Bunnyta #2",
-            "Enabled": true
-        },
-        {
-            "ID": "50",
-            "Name": "TruffleBeat",
-            "Enabled": true
-        },
-        {
-            "ID": "51",
+            "ID": "19",
             "Name": "NiceDaisy",
             "Enabled": true
         },
         {
-            "ID": "52",
-            "Name": "AngryDaisy",
+            "ID": "20",
+            "Name": "SpokePop",
             "Enabled": true
         },
         {
-            "ID": "53",
-            "Name": "NastyDaisy",
+            "ID": "21",
+            "Name": "IronEye",
             "Enabled": true
         },
         {
-            "ID": "54",
-            "Name": "SpokePop #1",
+            "ID": "22",
+            "Name": "PinkyBlob",
             "Enabled": true
         },
         {
-            "ID": "55",
-            "Name": "SpokePop #2",
+            "ID": "23",
+            "Name": "Red Turrito #1",
             "Enabled": true
         },
         {
-            "ID": "56",
-            "Name": "IronEye #1",
+            "ID": "24",
+            "Name": "Blue Turrito",
             "Enabled": true
         },
         {
-            "ID": "57",
-            "Name": "IronEye #2",
+            "ID": "25",
+            "Name": "Red Turrito #2",
             "Enabled": true
         },
         {
-            "ID": "58",
-            "Name": "Don't Beat Me",
+            "ID": "26",
+            "Name": "WannaCry",
             "Enabled": true
         },
         {
-            "ID": "59",
-            "Name": "Purple IronEye",
+            "ID": "27",
+            "Name": "The Dude",
             "Enabled": true
         },
         {
-            "ID": "60",
-            "Name": "PinkyTest #1",
+            "ID": "28",
+            "Name": "Intenso",
             "Enabled": true
         },
         {
-            "ID": "61",
-            "Name": "PinkyTest #2",
+            "ID": "29",
+            "Name": "GearHead",
             "Enabled": true
         },
         {
-            "ID": "62",
-            "Name": "PinkyTest #3",
-            "Enabled": true
-        },
-        {
-            "ID": "63",
-            "Name": "AngstyYellow #1",
-            "Enabled": true
-        },
-        {
-            "ID": "64",
-            "Name": "AngstyYellow #2",
-            "Enabled": true
-        },
-        {
-            "ID": "65",
-            "Name": "AngstyYellow #3",
-            "Enabled": true
-        },
-        {
-            "ID": "66",
-            "Name": "AngstyYellow #4",
-            "Enabled": true
-        },
-        {
-            "ID": "67",
-            "Name": "Turrito #1",
-            "Enabled": true
-        },
-        {
-            "ID": "68",
-            "Name": "Turrito #2",
-            "Enabled": true
-        },
-        {
-            "ID": "69",
-            "Name": "Turrito #3",
-            "Enabled": true
-        },
-        {
-            "ID": "70",
-            "Name": "Turrito #4",
-            "Enabled": true
-        },
-        {
-            "ID": "71",
-            "Name": "Turrito #5",
-            "Enabled": true
-        },
-        {
-            "ID": "72",
-            "Name": "Turrito #6",
-            "Enabled": true
-        },
-        {
-            "ID": "73",
-            "Name": "Turrito #7",
-            "Enabled": true
-        },
-        {
-            "ID": "74",
-            "Name": "Basic Fourzy #1",
-            "Enabled": true
-        },
-        {
-            "ID": "75",
-            "Name": "Basic Fourzy #2",
-            "Enabled": true
-        },
-        {
-            "ID": "76",
-            "Name": "Basic Fourzy #3",
-            "Enabled": true
-        },
-        {
-            "ID": "77",
-            "Name": "Basic Fourzy #4",
-            "Enabled": true
-        },
-        {
-            "ID": "78",
-            "Name": "Basic Fourzy #5",
-            "Enabled": true
-        },
-        {
-            "ID": "79",
-            "Name": "Basic Fourzy #6",
-            "Enabled": true
-        },
-        {
-            "ID": "80",
-            "Name": "Basic Fourzy #7",
-            "Enabled": true
-        },
-        {
-            "ID": "81",
-            "Name": "Basic Fourzy #8",
-            "Enabled": true
-        },
-        {
-            "ID": "82",
-            "Name": "Basic Fourzy #9",
-            "Enabled": true
-        },
-        {
-            "ID": "83",
-            "Name": "Basic Fourzy #10",
-            "Enabled": true
-        },
-        {
-            "ID": "84",
-            "Name": "Basic Fourzy #11",
-            "Enabled": true
-        },
-        {
-            "ID": "85",
-            "Name": "Basic Fourzy #12",
-            "Enabled": true
-        },
-        {
-            "ID": "86",
-            "Name": "HeyaGuy",
-            "Enabled": true
-        },
-        {
-            "ID": "87",
-            "Name": "Emotion Test #1",
-            "Enabled": true
-        },
-        {
-            "ID": "88",
-            "Name": "One Sad Fourzy",
-            "Enabled": true
-        },
-        {
-            "ID": "89",
-            "Name": "The Watcher",
-            "Enabled": true
-        },
-        {
-            "ID": "90",
-            "Name": "Test Piece",
-            "Enabled": true
-        },
-        {
-            "ID": "91",
-            "Name": "Orange Test",
-            "Enabled": true
-        },
-        {
-            "ID": "92",
-            "Name": "Emotion Test 1",
-            "Enabled": true
-        },
-        {
-            "ID": "93",
-            "Name": "Emotion Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "94",
-            "Name": "Emotion Test 3",
-            "Enabled": true
-        },
-        {
-            "ID": "95",
-            "Name": "Emotion Test 4",
-            "Enabled": true
-        },
-        {
-            "ID": "96",
-            "Name": "Emotion Test 5",
-            "Enabled": true
-        },
-        {
-            "ID": "97",
-            "Name": "Basic Fourzy #13",
-            "Enabled": true
-        },
-        {
-            "ID": "98",
-            "Name": "Basic Fourzy #14",
-            "Enabled": true
-        },
-        {
-            "ID": "99",
-            "Name": "Basic Fourzy #15",
-            "Enabled": true
-        },
-        {
-            "ID": "100",
-            "Name": "Three Eyed Test 1",
-            "Enabled": true
-        },
-        {
-            "ID": "101",
-            "Name": "Three Eyed Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "102",
-            "Name": "Three Eyed Test 3",
-            "Enabled": true
-        },
-        {
-            "ID": "103",
-            "Name": "Gargles",
-            "Enabled": true
-        },
-        {
-            "ID": "104",
-            "Name": "Basil",
-            "Enabled": true
-        },
-        {
-            "ID": "105",
-            "Name": "LemonDrop",
-            "Enabled": true
-        },
-        {
-            "ID": "106",
-            "Name": "SadGear",
-            "Enabled": true
-        },
-        {
-            "ID": "107",
-            "Name": "Starpix",
-            "Enabled": true
-        },
-        {
-            "ID": "108",
+            "ID": "30",
             "Name": "MellowTeeth",
             "Enabled": true
         },
         {
-            "ID": "109",
-            "Name": "RoboRobo",
-            "Enabled": true
-        },
-        {
-            "ID": "110",
-            "Name": "Backpack",
-            "Enabled": true
-        },
-        {
-            "ID": "111",
-            "Name": "SumoRobo",
-            "Enabled": true
-        },
-        {
-            "ID": "112",
+            "ID": "31",
             "Name": "KareBattery",
             "Enabled": true
         },
         {
-            "ID": "113",
-            "Name": "Cyclops",
-            "Enabled": true
-        },
-        {
-            "ID": "114",
+            "ID": "32",
             "Name": "LordDroid",
             "Enabled": true
         },
         {
-            "ID": "115",
+            "ID": "33",
             "Name": "PixelBot",
             "Enabled": true
         },
         {
-            "ID": "116",
+            "ID": "34",
             "Name": "NightOwl",
             "Enabled": true
         },
         {
-            "ID": "117",
-            "Name": "Umber",
-            "Enabled": true
-        },
-        {
-            "ID": "118",
-            "Name": "Tempeh",
-            "Enabled": true
-        },
-        {
-            "ID": "119",
-            "Name": "WoofWu",
-            "Enabled": true
-        },
-        {
-            "ID": "120",
-            "Name": "Bubblebot",
-            "Enabled": true
-        },
-        {
-            "ID": "121",
-            "Name": "ChickoChee",
-            "Enabled": true
-        },
-        {
-            "ID": "122",
-            "Name": "Oalala",
-            "Enabled": true
-        },
-        {
-            "ID": "123",
+            "ID": "35",
             "Name": "BasilBeeps",
             "Enabled": true
         },
         {
-            "ID": "124",
+            "ID": "36",
             "Name": "RainbowBite",
             "Enabled": true
         },
         {
-            "ID": "125",
-            "Name": "PowWow",
+            "ID": "37",
+            "Name": "KittyDog",
             "Enabled": true
         },
         {
-            "ID": "126",
-            "Name": "BeetelNut",
-            "Enabled": true
-        },
-        {
-            "ID": "127",
-            "Name": "BadDayAl",
-            "Enabled": true
-        },
-        {
-            "ID": "128",
-            "Name": "CleverClover",
-            "Enabled": true
-        },
-        {
-            "ID": "129",
+            "ID": "38",
             "Name": "Assimilator",
             "Enabled": true
         },
         {
-            "ID": "130",
-            "Name": "PouPow",
+            "ID": "39",
+            "Name": "Oalala",
             "Enabled": true
         }
     ]
