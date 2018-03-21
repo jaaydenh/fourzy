@@ -35,6 +35,10 @@ android {
 	lintOptions {
 		abortOnError false
 	}
+
+	dexOptions {
+    preDexLibraries = false
+	}
 **SIGN**
 	buildTypes {
   		debug {
