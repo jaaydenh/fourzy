@@ -67,6 +67,11 @@ namespace Fourzy {
             }
         }
 
+        public void RefreshTokenBoard()
+        {
+            SetTokenBoardFromData(tokenBoardData);
+        }
+
         public List<long> GetTokenBoardData() {
             List<long> tokenBoardList = new List<long>();
             for(int row = 0; row < Constants.numRows; row++)
@@ -158,6 +163,10 @@ namespace Fourzy {
                     else if (token == (int)Token.SPIDER)
                     {
                         tokens[row, col] = new SpiderToken(row, col);
+                    }
+                    else if (token == (int)Token.SAND)
+                    {
+                        tokens[row, col] = new SandToken(row, col);
                     }
                 }
             }

@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 114776639584160398}
   - component: {fileID: 114491530601434740}
   m_Layer: 5
-  m_Name: Coins
+  m_Name: Type
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -340,6 +340,7 @@ MonoBehaviour:
   playerNameLabel: {fileID: 114524647908679330}
   rankLabel: {fileID: 114326382062275364}
   ratingLabel: {fileID: 114393488139577350}
+  typeLabel: {fileID: 114776639584160398}
   profilePicture: {fileID: 114678881004352026}
   defaultProfilePicture: {fileID: 2800000, guid: e59dd586d917d4490bfbceec7e12ca4f,
     type: 3}
@@ -631,7 +632,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Coins :'
+  m_Text: 
 --- !u!114 &114795239649358546
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -9,7 +9,7 @@ namespace Fourzy
         public static event GameActive OnActiveGame;
         public string userName, id, facebookId;
         public bool isOnline;
-        public Text playerNameLabel, rankLabel, ratingLabel;
+        public Text playerNameLabel, rankLabel, ratingLabel, typeLabel;
         public Image profilePicture;
         public Texture2D defaultProfilePicture;
         public Image onlineTexture;
@@ -17,7 +17,6 @@ namespace Fourzy
 
         void Start () {
             UIScreen = GameObject.Find("UI Screen");
-            //UpdatePlayer();
         }
 
         public void Reset() {
@@ -28,6 +27,7 @@ namespace Fourzy
             isOnline = false;
             userName = "";
             id = "";
+            typeLabel.text = "";
             facebookId = "";
         }
 
@@ -53,7 +53,6 @@ namespace Fourzy
 
             ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
             ViewController.instance.HideTabView();
-            //BoardSelectionManager.instance.LoadMiniBoards();
             GameManager.instance.TransitionToGameOptionsScreen(GameType.LEADERBOARD, id, userName, profilePicture);
         }
     }

@@ -43,6 +43,7 @@ namespace Fourzy
         public GameObject fruitTreeToken;
         public GameObject webToken;
         public GameObject spiderToken;
+        public GameObject sandToken;
         // ---------- End Token Views ----------
 
         public PuzzleChallengeInfo puzzleChallengeInfo;
@@ -1221,6 +1222,12 @@ namespace Fourzy
                             break;
                         case Token.SPIDER:
                             go = Instantiate(spiderToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            //tokenViews.Add(go);
+                            tokenViews[row, col] = go;
+                            break;
+                        case Token.SAND:
+                            go = Instantiate(sandToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
                             Utility.SetSpriteAlpha(go, 0.0f);
                             //tokenViews.Add(go);
                             tokenViews[row, col] = go;

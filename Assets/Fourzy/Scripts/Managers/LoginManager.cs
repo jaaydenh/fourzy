@@ -94,6 +94,7 @@ namespace Fourzy
                 .Send((response) => {
                     if (!response.HasErrors) {
                     UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null, null);
+                        UserManager.instance.UpdateInformation();
                         ChallengeManager.instance.GetChallenges();
                         //LeaderboardManager.instance.GetLeaderboard();
 

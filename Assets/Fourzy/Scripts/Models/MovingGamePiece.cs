@@ -11,6 +11,7 @@ namespace Fourzy {
         public GameObject gamePieceObject;
         public bool isDestroyed;
         public PieceAnimState animationState;
+        public float friction;
 
         public MovingGamePiece(Move move) {
             positions = new List<Position>();
@@ -20,6 +21,7 @@ namespace Fourzy {
             this.player = move.player;
             this.isDestroyed = false;
             this.animationState = PieceAnimState.NONE;
+            this.friction = 0.0f;
         }
 
         public Position GetCurrentPosition() {

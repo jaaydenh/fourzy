@@ -202,6 +202,7 @@ MonoBehaviour:
   webToken: {fileID: 1671885646220764, guid: 245c473108a8543699540a258eb529c4, type: 2}
   spiderToken: {fileID: 1329703408132306, guid: d481144ced4994d5096bb43cd2d58f83,
     type: 2}
+  sandToken: {fileID: 1911936378125422, guid: 40d8e7ce660604805853c4e89a856058, type: 2}
   glow: {fileID: 1719585871036234}
   questionMark: {fileID: 1839717546775038}
 --- !u!114 &114512702855691298

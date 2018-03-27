@@ -244,7 +244,9 @@ namespace Fourzy {
                         }
                     }
 
-                    if (pieceInSquare || token.pieceMustStopOn || piece.isDestroyed) {
+                    piece.friction += token.addFriction;
+
+                    if (pieceInSquare || token.pieceMustStopOn || piece.isDestroyed || piece.friction >= 1.0f) {
                         SetActivePieceAsComplete();
                     }
 

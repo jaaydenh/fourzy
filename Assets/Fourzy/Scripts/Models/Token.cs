@@ -15,6 +15,7 @@ namespace Fourzy {
         bool useCurrentDirection { get; set; }
         bool hasEffect { get; set; }
         bool destroyTokenOnEnd { get; set; }
+        float addFriction { get; set; }
         IToken replacedToken { get; set; }
         Direction newPieceDirection { get; set;}
         Token tokenType { get; set; }
@@ -35,6 +36,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -47,6 +49,7 @@ namespace Fourzy {
             isMoveable = false;
             pieceMustStopOn = false;
             chanceDestroyPieceOnEnd = 0.0f;
+            addFriction = 0f;
             changePieceDirection = true;
             newPieceDirection = Direction.UP;
             tokenType = Token.UP_ARROW;
@@ -72,6 +75,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -84,6 +88,7 @@ namespace Fourzy {
             isMoveable = false;
             pieceMustStopOn = false;
             chanceDestroyPieceOnEnd = 0.0f;
+            addFriction = 0f;
             changePieceDirection = true;
             newPieceDirection = Direction.DOWN;
             tokenType = Token.DOWN_ARROW;
@@ -109,6 +114,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -121,6 +127,7 @@ namespace Fourzy {
             isMoveable = false;
             pieceMustStopOn = false;
             chanceDestroyPieceOnEnd = 0.0f;
+            addFriction = 0f;
             changePieceDirection = true;
             newPieceDirection = Direction.LEFT;
             tokenType = Token.LEFT_ARROW;
@@ -146,6 +153,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -158,6 +166,7 @@ namespace Fourzy {
             isMoveable = false;
             pieceMustStopOn = false;
             chanceDestroyPieceOnEnd = 0.0f;
+            addFriction = 0f;
             changePieceDirection = true;
             newPieceDirection = Direction.RIGHT;
             tokenType = Token.RIGHT_ARROW;
@@ -183,6 +192,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -220,6 +230,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -259,6 +270,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -296,6 +308,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -333,6 +346,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -370,6 +384,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set;}
         public Token tokenType { get; set; }
@@ -408,6 +423,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -446,6 +462,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -484,6 +501,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -523,6 +541,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -560,6 +579,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -599,6 +619,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -636,6 +657,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -674,6 +696,7 @@ namespace Fourzy {
         public bool useCurrentDirection { get; set; }
         public bool hasEffect { get; set; }
         public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
         public IToken replacedToken { get; set; }
         public Direction newPieceDirection { get; set; }
         public Token tokenType { get; set; }
@@ -690,6 +713,46 @@ namespace Fourzy {
             hasEffect = true;
             newPieceDirection = Direction.NONE;
             tokenType = Token.SPIDER;
+        }
+
+        public void UpdateBoard(GameBoard board, bool swapPiece)
+        {
+            board.ProcessBoardUpdate(this, swapPiece);
+        }
+    }
+
+    public class SandToken : IToken
+    {
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public bool pieceCanEnter { get; set; }
+        public bool canEvaluateWithoutEntering { get; set; }
+        public bool pieceCanEndMoveOn { get; set; }
+        public bool isMoveable { get; set; }
+        public bool pieceMustStopOn { get; set; }
+        public float chanceDestroyPieceOnEnd { get; set; }
+        public bool changePieceDirection { get; set; }
+        public bool useCurrentDirection { get; set; }
+        public bool hasEffect { get; set; }
+        public bool destroyTokenOnEnd { get; set; }
+        public float addFriction { get; set; }
+        public IToken replacedToken { get; set; }
+        public Direction newPieceDirection { get; set; }
+        public Token tokenType { get; set; }
+
+        public SandToken(int row, int column)
+        {
+            this.Row = row;
+            this.Column = column;
+            pieceCanEnter = true;
+            pieceCanEndMoveOn = true;
+            isMoveable = true;
+            pieceMustStopOn = false;
+            addFriction = 0.5f;
+            chanceDestroyPieceOnEnd = 0.0f;
+            changePieceDirection = false;
+            newPieceDirection = Direction.NONE;
+            tokenType = Token.SAND;
         }
 
         public void UpdateBoard(GameBoard board, bool swapPiece)

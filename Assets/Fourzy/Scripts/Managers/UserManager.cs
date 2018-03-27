@@ -9,7 +9,6 @@ namespace Fourzy
 {
     public class UserManager : Singleton<UserManager>
     {
-        //public static UserManager instance;
         public string userName;
         public string userId;
         public long coins;
@@ -27,18 +26,6 @@ namespace Fourzy
         new void Awake()
         {
             base.Awake();
-            //if (instance == null)
-            //{
-            //    instance = this;
-            //}
-            //else if (instance != this)
-            //{
-            //    //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
-            //    Destroy(gameObject);
-            //}
-
-            ////Sets this to not be destroyed when reloading scene
-            //DontDestroyOnLoad(gameObject);
 
             profilePicture = new Sprite();
         }
@@ -48,13 +35,13 @@ namespace Fourzy
             ChallengeManager.instance.GetPlayerGamePiece();
         }
 
-        private void OnEnable()
+        void OnEnable()
         {
             ChallengeManager.OnReceivedPlayerGamePiece += SetPlayerGamePiece;
             ChallengeManager.OnSetGamePieceSuccess += SetPlayerGamePiece;
         }
 
-        private void OnDisable()
+        void OnDisable()
         {
             ChallengeManager.OnReceivedPlayerGamePiece -= SetPlayerGamePiece;
             ChallengeManager.OnSetGamePieceSuccess -= SetPlayerGamePiece;
@@ -63,8 +50,10 @@ namespace Fourzy
         public void UpdateInformation()
         {
             new AccountDetailsRequest().Send((response) =>
-                {    
-                    UpdateGUI(response.DisplayName, response.UserId, response.ExternalIds.GetString("FB").ToString(), response.Currency1);
+                {
+                    Debug.Log("COINS: " + response.Currency1);
+                    string facebookId = response.ExternalIds.GetString("FB");
+                    UpdateGUI(response.DisplayName, response.UserId, facebookId, response.Currency1);
                 });
         }
 

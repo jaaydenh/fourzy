@@ -60,21 +60,23 @@ namespace Fourzy
 
         public TokenBoard GetTokenBoard()
         {
-            TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
+            //TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
 
-            var tokenBoardInfo = tokenBoardCollection
-                .Where(t => t.Enabled == true)
-                .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
-            .FirstOrDefault();
+            //var tokenBoardInfo = tokenBoardCollection
+            //    .Where(t => t.Enabled == true)
+            //    .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
+            //.FirstOrDefault();
 
-            //Debug.Log("tokenboard ID: " + tokenBoardInfo.ID);
-            //Debug.Log("tokenboard Name: " + tokenBoardInfo.Name);
-            //Debug.Log("tokenboard Enabled: " + tokenBoardInfo.Enabled);
-            //Debug.Log("tokenboard TokenData: " + tokenBoardInfo.TokenData);
+            ////Debug.Log("tokenboard ID: " + tokenBoardInfo.ID);
+            ////Debug.Log("tokenboard Name: " + tokenBoardInfo.Name);
+            ////Debug.Log("tokenboard Enabled: " + tokenBoardInfo.Enabled);
+            ////Debug.Log("tokenboard TokenData: " + tokenBoardInfo.TokenData);
 
-            TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID, tokenBoardInfo.Name, true);
+            //TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID, tokenBoardInfo.Name, true);
 
-            return tokenboard;
+            //return tokenboard;
+
+            return RandomBoardGenerator.GenerateBoard();
         }
 
         public TokenBoard[] GetAllTokenBoards()

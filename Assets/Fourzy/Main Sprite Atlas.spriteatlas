@@ -55,6 +55,9 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 7d7b889540e944a9e9b3168b4c0a2a34, type: 3}
   - {fileID: 21300000, guid: ac08e5484679a81439eba491520bf464, type: 3}
   - {fileID: 21300002, guid: 58165e6d9a1ee0142b6f1175b01f36a1, type: 3}
+  - {fileID: 21300000, guid: 1dcc03776739b4ed09b5f1a345fcffc1, type: 3}
+  - {fileID: 21300000, guid: 945ffa44f52024d21ac9297edea6c81d, type: 3}
+  - {fileID: 21300000, guid: 8399a1ca389db43f4b5bae6e953dfaf2, type: 3}
   - {fileID: 21300030, guid: d23581fb3a0a22e498ccbc9eadabf197, type: 3}
   - {fileID: 21300034, guid: d23581fb3a0a22e498ccbc9eadabf197, type: 3}
   - {fileID: 21300032, guid: d23581fb3a0a22e498ccbc9eadabf197, type: 3}
@@ -83,6 +86,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: dd31813bada13433ea41906574fc41b7, type: 3}
   - {fileID: 21300000, guid: 3f2385a0ec8dc43b2bf9a0e1aa098f74, type: 3}
   - {fileID: 21300000, guid: 957f31dde68b14bb8a510213c89eabb1, type: 3}
+  - {fileID: 21300000, guid: 02dfbd849cc62490eae07f7e28e57782, type: 3}
   - {fileID: 21300000, guid: 79204262dc3a74772b5e31f000e0654b, type: 3}
   - {fileID: 21300000, guid: 7732e1a8e6d544f739dfbc78fb7055f4, type: 3}
   - {fileID: 21300000, guid: 2a1489a47606a4936a1cd25c52cebf37, type: 3}
@@ -310,6 +314,9 @@ SpriteAtlas:
   - uiGlow
   - LogoBackground
   - barAndButtonBack_1
+  - buttonLeaderboard 2
+  - buttonLeaderboard 1
+  - buttonLeaderboard
   - char_squareOne_15
   - char_squareOne_17
   - char_squareOne_16
@@ -338,6 +345,7 @@ SpriteAtlas:
   - tokenGhost2
   - tokenTrainingGardenFruit
   - tokenWild1
+  - tokenSand
   - tokenWild
   - tokenSpider
   - tokenBlocker

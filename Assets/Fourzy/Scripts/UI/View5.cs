@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using HedgehogTeam.EasyTouch;
 
 namespace Fourzy
@@ -7,6 +8,8 @@ namespace Fourzy
     {
         //Instance
         public static View5 instance;
+        public Text winTabText;
+        public Text coinsEarnedTabText;
 
         // Use this for initialization
         void Start()
@@ -33,10 +36,9 @@ namespace Fourzy
 
         public override void ShowAnimated(AnimationDirection sourceDirection)
         {
-            //ViewController.instance.currentActiveView = TotalView.view5;
             ViewController.instance.SetActiveView(TotalView.view5);
             base.ShowAnimated(sourceDirection);
-            LeaderboardManager.instance.GetLeaderboard();
+            LeaderboardManager.instance.GetWinsLeaderboard();
         }
 
         public override void HideAnimated(AnimationDirection getAwayDirection)
@@ -67,6 +69,22 @@ namespace Fourzy
                 HideAnimated(AnimationDirection.left);
                 View4.instance.ShowAnimated(AnimationDirection.left);
             }
+        }
+
+        public void WinsButton() {
+            LeaderboardManager.instance.GetWinsLeaderboard();
+            coinsEarnedTabText.fontSize = 35;
+            winTabText.fontSize = 40;
+            winTabText.GetComponent<Outline>().enabled = true;
+            coinsEarnedTabText.GetComponent<Outline>().enabled = false;
+        }
+
+        public void CoinsEarnedButton() {
+            LeaderboardManager.instance.GetCoinsEarnedLeaderboard();
+            coinsEarnedTabText.fontSize = 40;
+            winTabText.fontSize = 35;
+            winTabText.GetComponent<Outline>().enabled = false;
+            coinsEarnedTabText.GetComponent<Outline>().enabled = true;
         }
     }
 }

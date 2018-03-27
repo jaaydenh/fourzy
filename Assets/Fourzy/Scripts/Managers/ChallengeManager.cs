@@ -34,8 +34,6 @@ namespace Fourzy
         public delegate void ChallengeIssuedDelegate(ChallengeIssuedMessage message);
         public static event ChallengeIssuedDelegate OnChallengeIssuedDelegate;
 
-        //public static ChallengeManager instance;
-
         public TokenBoard tokenBoard;
         public GameObject yourMoveGameGrid;
         public GameObject theirMoveGameGrid;
@@ -52,8 +50,6 @@ namespace Fourzy
         public GameObject loadingSpinner;
         public GameObject gamesListContainer; 
 
-        //public Texture2D defaultProfilePicture;
-
         public GameObject UIScreen;
         public int daysUntilChallengeExpires = 40;
         private bool gettingChallenges = false;
@@ -64,18 +60,6 @@ namespace Fourzy
         {
             loadingSpinner.GetComponent<Animator>().enabled = false;
             loadingSpinner.GetComponent<Image>().enabled = false;
-
-            if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 3)
-            {
-                //OpenPuzzleChallengeGame();
-                //ViewController.instance.view3.Hide();
-                //ViewController.instance.HideTabView();
-            }
-
-            //ChallengeTurnTakenMessage.Listener += OnChallengeTurnTaken;
-            //ChallengeJoinedMessage.Listener += OnChallengeJoined;
-            //ChallengeWonMessage.Listener += OnChallengeWon;
-            //ChallengeLostMessage.Listener += OnChallengeLost;
         }
 
         void OnEnable() {
@@ -463,13 +447,6 @@ namespace Fourzy
                 });
         }
 
-        //public void OpenPassAndPlayGame() 
-        //{
-        //    GameManager.instance.challengerGamePieceId = 0;
-        //    GameManager.instance.challengedGamePieceId = 0;
-        //    GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
-        //}
-
         public void OpenPuzzleChallengeGame() {
             PuzzleChallengeInfo puzzleChallenge = PuzzleChallengeLoader.instance.GetChallenge();
             if (puzzleChallenge == null) {
@@ -492,8 +469,6 @@ namespace Fourzy
                 GameManager.instance.isNewRandomChallenge = false;
                 GameManager.instance.isPuzzleChallenge = true;
                 GameManager.instance.gameType = GameType.PUZZLE;
-                //GameManager.instance.challengerGamePieceId = 0;
-                //GameManager.instance.challengedGamePieceId = 0;
 
                 GameManager.instance.ResetGamePiecesAndTokens();
                 GameManager.instance.ResetUIGameScreen();
@@ -509,10 +484,8 @@ namespace Fourzy
                 }
 
                 GameManager.instance.SetupGame(puzzleChallenge.Name, subtitle.Replace("%1", puzzleChallenge.MoveGoal.ToString()));
-
                 GameManager.instance.InitPlayerUI();
 
-                //UIScreen.SetActive(false);
 
                 if (OnActiveGame != null)
                     OnActiveGame();
@@ -525,12 +498,6 @@ namespace Fourzy
                 AnalyticsManager.LogCustom("open_puzzle_challenge", customAttributes);
             }
         }
-
-        //public void OpenAiGame() {
-        //    GameManager.instance.challengerGamePieceId = 0;
-        //    GameManager.instance.challengedGamePieceId = 0;
-        //    GameManager.instance.TransitionToGameOptionsScreen(GameType.AI);
-        //}
 
         public void OpenNewMultiplayerGame() {
             Debug.Log("Open New Multiplayer Game");
@@ -561,8 +528,6 @@ namespace Fourzy
             GameManager.instance.InitPlayerUI();
             GameManager.instance.UpdatePlayerUI();
             GameManager.instance.DisplayIntroUI(tokenBoard.name, LocalizationManager.instance.GetLocalizedValue("random_opponent_button"), true);
-
-            //UIScreen.SetActive(false);
 
             if (OnActiveGame != null)
                 OnActiveGame();
@@ -871,8 +836,10 @@ namespace Fourzy
             
             if (!gettingChallenges)
             {
-                gettingChallenges = true;
                 //Debug.Log("ReloadActiveGames");
+
+                gettingChallenges = true;
+
                 //Every time we call GetChallengeInvites we'll refresh the list
                 for (int i = 0; i < games.Count; i++)
                 {
@@ -887,7 +854,6 @@ namespace Fourzy
                     GameUI activeGame = go.GetComponent<GameUI>();
                     activeGame.game = game;
 
-                    //if (game.challengeState == ChallengeState.RUNNING || game.challengeState == ChallengeState.ISSUED)
                     if (!game.gameState.isGameOver)
                     {
                         if (game.gameState.isCurrentPlayerTurn)
@@ -899,12 +865,10 @@ namespace Fourzy
                             go.gameObject.transform.SetParent(theirMoveGameGrid.transform);
                         }
                     }
-                    //else if (game.challengeState == ChallengeState.COMPLETE && game.isVisible == true && game.didViewResult == true)
                     else if (game.gameState.isGameOver && game.isVisible == true && game.didViewResult == true)
                     {
                         go.gameObject.transform.SetParent(completedGameGrid.transform);
                     }
-                    //else if (game.challengeState == ChallengeState.COMPLETE && game.isVisible == true && game.didViewResult == false)
                     else if (game.gameState.isGameOver && game.isVisible == true && game.didViewResult == false)
                     {
                         go.gameObject.transform.SetParent(resultsGameGrid.transform);
