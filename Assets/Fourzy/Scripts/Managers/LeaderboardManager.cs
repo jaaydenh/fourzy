@@ -44,10 +44,11 @@ namespace Fourzy
                             foreach (LeaderboardDataResponse._LeaderboardData entry in response.Data) // iterate through the leaderboard data
                             {                                
                                 //GameObject go = Instantiate(leaderboardPlayerPrefab) as GameObject;
+                                //GameObject go = LeanPool.Spawn(leaderboardPlayerPrefab) as GameObject;
 
-                                GameObject go = LeanPool.Spawn(leaderboardPlayerPrefab) as GameObject;
-
-                                go.gameObject.transform.SetParent(leaderboardPlayersList.transform);
+                                GameObject go = LeanPool.Spawn(leaderboardPlayerPrefab, Vector3.zero,Quaternion.identity, leaderboardPlayersList.transform) as GameObject;
+                                
+                                //go.gameObject.transform.SetParent(leaderboardPlayersList.transform);
                                 LeaderboardPlayer leaderboardPlayer = go.GetComponent<LeaderboardPlayer>();
                                 leaderboardPlayer.Reset();
 
@@ -62,7 +63,7 @@ namespace Fourzy
                                 leaderboardPlayer.ratingLabel.text = coins;
 
                                 leaderboardPlayer.UpdatePlayer();
-                                leaderboardPlayer.transform.localScale = new Vector3(1f,1f,1f);
+                                //leaderboardPlayer.transform.localScale = new Vector3(1f,1f,1f);
                                 playerCount++;
                                 players.Add(go);
                             }

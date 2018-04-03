@@ -22,13 +22,11 @@ namespace Fourzy
             cam = this.GetComponent<Camera>();
             canvases = this.GetComponentsInChildren<Canvas>();
 
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = 30;
         }
 
         public virtual void Show()
         {
-            //Debug.Log("Base Show");
-            //this.gameObject.SetActive(true);
             ViewWillAppear();
             GameObject mainCanvas = this.transform.Find("UICanvas").gameObject;
             GameObject viewContent = mainCanvas.transform.Find("ViewContent").gameObject;
@@ -43,13 +41,11 @@ namespace Fourzy
 
         public virtual void Hide()
         {
-            //Debug.Log("Base Hide");
             cam.enabled = false;
             foreach (Canvas canvas in canvases)
                 canvas.enabled = false;
 
             Canvas.ForceUpdateCanvases();
-            //this.gameObject.SetActive(false);
         }
 
         public virtual void ShowAnimated(AnimationDirection sourceDirection)

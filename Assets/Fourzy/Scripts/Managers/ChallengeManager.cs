@@ -158,7 +158,7 @@ namespace Fourzy
                     else
                     {
                         gamePieceId = response.ScriptData.GetString("gamePieceId");
-                        Debug.Log("GetGamePiece was successful: gamePieceId: " + gamePieceId);
+                        //Debug.Log("GetGamePiece was successful: gamePieceId: " + gamePieceId);
                         if (OnReceivedPlayerGamePiece != null)
                             OnReceivedPlayerGamePiece(gamePieceId);
                     }
@@ -181,7 +181,7 @@ namespace Fourzy
                     else
                     {
                         gamePieceId = response.ScriptData.GetString("gamePieceId");
-                        Debug.Log("GetOpponentGamePiece was successful: gamePieceId: " + gamePieceId);
+                        //Debug.Log("GetOpponentGamePiece was successful: gamePieceId: " + gamePieceId);
                         if (OnReceivedOpponentGamePiece != null)
                             OnReceivedOpponentGamePiece(gamePieceId, challengeId);
                     }

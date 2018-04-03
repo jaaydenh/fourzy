@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 61475597424940328}
   - component: {fileID: 82649771827386966}
   - component: {fileID: 114604048267626832}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: tokenSticky
   m_TagString: Token
   m_Icon: {fileID: 0}

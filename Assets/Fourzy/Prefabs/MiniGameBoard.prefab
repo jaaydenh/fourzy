@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 222732021239910436}
   - component: {fileID: 114512702855691298}
   - component: {fileID: 114176002686404462}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameBoard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,22 +173,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameboard: {fileID: 1626736944564096}
-  upArrowToken: {fileID: 1837627827914946, guid: 160f51c71faf5416bbe70c6d4ca12a68,
+  upArrowToken: {fileID: 1806330248261476, guid: 9ef466952f07d4109b11a7871b07f094,
     type: 2}
-  downArrowToken: {fileID: 1623667900078134, guid: b50adf3cc91ed4ee590fd6bcc3fa79b9,
+  downArrowToken: {fileID: 1357765274097856, guid: 2922d37e642fa430ab3810875dc94b5e,
     type: 2}
-  leftArrowToken: {fileID: 1627724474275400, guid: d0d8f6d161f314d7ebd0abe80f0c81ea,
+  leftArrowToken: {fileID: 1536349424123222, guid: e2de3d3aa36854a7cad288a76c6e845d,
     type: 2}
-  rightArrowToken: {fileID: 1923614959021622, guid: 33d3d900faebb4be681b73d3f70b7700,
+  rightArrowToken: {fileID: 1967416196779894, guid: e85481b55a268441589634a34d0126dc,
     type: 2}
-  stickyToken: {fileID: 1660667990289766, guid: 6b7f67346b9e845aca14c64f8e4ca2a3,
+  stickyToken: {fileID: 1475737749649912, guid: e85af67da89224bb8b68d669f09ec68e,
     type: 2}
   blockerToken: {fileID: 1187047679181528, guid: 0d7e3c7375ded49a2bc99d0e0d3584aa,
     type: 2}
   ghostToken: {fileID: 1727477774046648, guid: 6e4f94269d5d54d82b69d83f7028a2e5, type: 2}
   iceSheetToken: {fileID: 1419971408396618, guid: 3499a5e46e3be49a6a1cc9f3657fbff2,
     type: 2}
-  pitToken: {fileID: 1110577959621164, guid: a8e6195c9f07043dba35b16ee6e88c8d, type: 2}
+  pitToken: {fileID: 1362328359225074, guid: ce90d1f0a975f4b83b91c2ae8f0323e4, type: 2}
   ninetyRightArrowToken: {fileID: 1553599341637598, guid: ba678afbd416442d289f06b0d0ef4f89,
     type: 2}
   ninetyLeftArrowToken: {fileID: 1467034045519020, guid: 9f8d0f5a262fb4e459b04790f5461829,

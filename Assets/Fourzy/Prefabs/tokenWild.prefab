@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4294892845133012}
   - component: {fileID: 212278923530187024}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: tokenWild
-  m_TagString: Untagged
+  m_TagString: Token
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

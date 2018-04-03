@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 50894745997778300}
   - component: {fileID: 114287369474813196}
   - component: {fileID: 82757638790407192}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: tokenArrowDown
   m_TagString: Token
   m_Icon: {fileID: 0}

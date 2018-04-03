@@ -12,8 +12,14 @@ public class UserInputHandler : MonoBehaviour {
     public GameObject leftHintArea;
     public GameObject rightHintArea;
     Vector3 touchPosWorld;
+    Camera mainCamera;
 
-    void Update () {
+	void Start()
+	{
+        mainCamera = Camera.main;
+	}
+
+	void Update () {
         // TODO: use touch events
         if (Input.GetMouseButtonDown(0) && !mouseButtonPressed && inputEnabled) {
             mouseButtonPressed = true;
@@ -25,12 +31,12 @@ public class UserInputHandler : MonoBehaviour {
 
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
             //We transform the touch position into word space from screen space and store it.
-            touchPosWorld = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+            touchPosWorld = mainCamera.ScreenToWorldPoint(Input.GetTouch(0).position);
             //Debug.Log("Input.touchCount: " + Input.touchCount);
-             Vector2 touchPosWorld2D = new Vector2(touchPosWorld.x, touchPosWorld.y);
+            Vector2 touchPosWorld2D = new Vector2(touchPosWorld.x, touchPosWorld.y);
  
              //We now raycast with this information. If we have hit something we can process it.
-             RaycastHit2D hitInformation = Physics2D.Raycast(touchPosWorld2D, Camera.main.transform.forward);
+            RaycastHit2D hitInformation = Physics2D.Raycast(touchPosWorld2D, mainCamera.transform.forward);
  
              if (hitInformation.collider != null) {
                  //We should have hit something with a 2D Physics collider!

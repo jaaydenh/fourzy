@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4248502657328108}
   - component: {fileID: 212726832493647154}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: tokenFruitTree
   m_TagString: Token
   m_Icon: {fileID: 0}

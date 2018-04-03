@@ -23,8 +23,15 @@ namespace Fourzy
         List<IToken> activeTokens;
         //public AnimationCurve moveCurve;
         Renderer rend;
+        CircleCollider2D gamePieceCollider;
 
-        public void Reset()
+
+		private void Start()
+		{
+            gamePieceCollider = gameObject.GetComponent<CircleCollider2D>();
+		}
+
+		public void Reset()
         {
             player = PlayerEnum.NONE;
             column = 0;
@@ -176,12 +183,12 @@ namespace Fourzy
 
         void Update()
         {
-            CircleCollider2D collider1 = gameObject.GetComponent<CircleCollider2D>();
+            //CircleCollider2D collider1 = gameObject.GetComponent<CircleCollider2D>();
             int row1 = GetRowFromPosition(transform.position.y);
             int col1 = GetColumnFromPosition(transform.position.x);
 
             if (nextPiece != null && !didAnimateNextPiece) {
-                if (collider1.IsTouching(nextPiece.GetComponent<CircleCollider2D>()))
+                if (gamePieceCollider.IsTouching(nextPiece.GetComponent<CircleCollider2D>()))
                 {
                     didAnimateNextPiece = true;
                     StartCoroutine(CallAnimatePiece());
@@ -207,7 +214,6 @@ namespace Fourzy
                     }
                 }
             }
-
         }
 
         private int GetRowFromPosition(float y) {

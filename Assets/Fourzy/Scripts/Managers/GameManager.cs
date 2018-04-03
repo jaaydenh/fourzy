@@ -70,8 +70,8 @@ namespace Fourzy
         public GameObject gamePieces;
         public GameObject tokens;
         public GameObject gameScreen;
-        public GameObject CreateGameScreen;
-        public GameObject GameOptionsScreen;
+        //public GameObject CreateGameScreen;
+        //public GameObject GameOptionsScreen;
         public GameObject ErrorPanel;
         public GameObject UIScreen;
         public Text playerNameLabel;
@@ -139,9 +139,7 @@ namespace Fourzy
         public GameObject moveArrowUp;
         public GameObject cornerSpot;
         public MoveHintTouchArea moveHintTouchArea;
-
-        //Static instance of GameManager which allows it to be accessed by any other script.
-        //public static GameManager instance = null;
+        Camera mainCamera;
 
         private void OnEnable()
         {
@@ -205,8 +203,10 @@ namespace Fourzy
                 }
             };
 
+            mainCamera = Camera.main;
+
             rematchButton.gameObject.SetActive(false);
-            gameScreen.SetActive(false);
+            //gameScreen.SetActive(false);
 
             if (tokens == null)
             {
@@ -221,10 +221,6 @@ namespace Fourzy
             UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
             UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
 #endif
-
-            //GamePieceSelectionManager.instance.LoadGamePieces();
-            // center camera
-            //Camera.main.transform.position = new Vector3((Constants.numColumns - 1) / 2.0f, -((Constants.numRows - 1) / 2.0f) + .15f, Camera.main.transform.position.z);
         }
 
         new void Awake()
@@ -629,9 +625,6 @@ namespace Fourzy
         private void TransitionToGameScreen()
         {
             UserInputHandler.inputEnabled = false;
-            //UIScreen.SetActive(false);
-            //CreateGameScreen.SetActive(false);
-            //GameOptionsScreen.SetActive(false);
             gameScreen.SetActive(true);
 
             FadeGameScreen(1.0f, gameScreenFadeInTime);
@@ -639,44 +632,6 @@ namespace Fourzy
             HeaderUI.SetActive(false);
             activeScreen = Screens.GAME;
         }
-
-        //public void TransitionToGamesListScreen()
-        //{
-        //    UserInputHandler.inputEnabled = false;
-        //    //UIScreen.SetActive(true);
-        //    gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
-        //    gameScreen.SetActive(false);
-        //    challengeInstanceId = null;
-        //    winner = null;
-
-        //    ResetGamePiecesAndTokens();
-        //    ResetGameManagerState();
-        //    ResetUIGameScreen();
-        //    HeaderUI.SetActive(true);
-        //    activeScreen = Screens.GAMES_LIST;
-
-        //    //ViewController.instance.ChangeView(ViewController.instance.view3);
-        //    //Debug.Log("previous view: " + ViewController.instance.GetPreviousView().ToString());
-        //    if (ViewController.instance.GetCurrentView() == ViewController.instance.viewGameboardSelection) {
-        //        ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());    
-        //    } else {
-        //        ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());    
-        //    }
-
-        //    ViewController.instance.ShowTabView();
-        //    //ViewController.instance.view3.tabButton.TabButtonTapped();
-        //    //ChallengeManager.instance.ReloadGames();
-        //}
-
-        //public void TransitionToCreateGameScreen()
-        //{
-        //    ResetGameManagerState();
-        //    UIScreen.SetActive(false);
-        //    CreateGameScreen.SetActive(true);
-        //    gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
-        //    gameScreen.SetActive(false);
-        //    activeScreen = Screens.CREATE_GAME;
-        //}
 
         public void TransitionToGameOptionsScreen(GameType gameType, string opponentUserId = "", string opponentName = "", Image opponentProfilePicture = null, string opponentLeaderboardRank = "")
         {
@@ -704,7 +659,6 @@ namespace Fourzy
             BoardSelectionManager.instance.LoadMiniBoards();
             gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
             gameScreen.SetActive(false);
-            //activeScreen = Screens.GAME_OPTIONS;
         }
 
         public void OpenNewGame()
@@ -774,7 +728,7 @@ namespace Fourzy
             InitPlayerUI(opponentNameLabel.text, opponentProfilePicture.sprite);
             UpdatePlayerUI();
             DisplayIntroUI(tokenBoard.name, introUISubtitle, true);
-            //UIScreen.SetActive(false);
+
             TransitionToGameScreen();
 
             //GameManager.instance.EnableTokenAudio();
@@ -878,7 +832,7 @@ namespace Fourzy
                 }
             }
 
-            if (challengedGamePieceId > 39) {
+            if (challengedGamePieceId > GamePieceSelectionManager.instance.gamePieces.Count - 1) {
                 challengedGamePieceId = 0;
             }
 
@@ -1261,7 +1215,7 @@ namespace Fourzy
                     int playerGamePieceId = challengerGamePieceId;
                     int opponentGamePieceId = challengedGamePieceId;
 
-                    if (playerGamePieceId > 39)
+                    if (playerGamePieceId > GamePieceSelectionManager.instance.gamePieces.Count - 1)
                     {
                         playerGamePieceId = 0;
                     }
@@ -1270,7 +1224,7 @@ namespace Fourzy
                     GamePieceUI player = playerPiece.GetComponent<GamePieceUI>();
                     player.SetAlternateColor(false);
 
-                    if (opponentGamePieceId > 39) {
+                    if (opponentGamePieceId > GamePieceSelectionManager.instance.gamePieces.Count - 1) {
                         opponentGamePieceId = 0;
                     }
 
@@ -1296,7 +1250,7 @@ namespace Fourzy
                     int playerGamePieceId = challengedGamePieceId;
                     int opponentGamePieceId = challengerGamePieceId;
 
-                    if (playerGamePieceId > 39)
+                    if (playerGamePieceId > GamePieceSelectionManager.instance.gamePieces.Count - 1)
                     {
                         playerGamePieceId = 0;
                     }
@@ -1309,7 +1263,7 @@ namespace Fourzy
                         player.SetAlternateColor(false);
                     }
 
-                    if (opponentGamePieceId > 39)
+                    if (opponentGamePieceId > GamePieceSelectionManager.instance.gamePieces.Count - 1)
                     {
                         opponentGamePieceId = 0;
                     }
@@ -1534,10 +1488,10 @@ namespace Fourzy
                 gamePiece.GetComponent<GamePiece>().SetAlternateColor(false);
             }
 
-            if (challengerGamePieceId > 39) {
+            if (challengerGamePieceId > GamePieceSelectionManager.instance.gamePieces.Count - 1) {
                 challengerGamePieceId = 0;
             }
-            if (challengedGamePieceId > 39) {
+            if (challengedGamePieceId > GamePieceSelectionManager.instance.gamePieces.Count - 1) {
                 challengedGamePieceId = 0;
             }
 
@@ -1673,7 +1627,7 @@ namespace Fourzy
 
             }
 
-            Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
+            Vector3 pos = mainCamera.ScreenToWorldPoint(mousePosition);
 
             if (gameState.isCurrentPlayerTurn)
             {

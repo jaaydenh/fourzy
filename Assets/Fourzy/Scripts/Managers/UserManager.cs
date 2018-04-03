@@ -15,11 +15,14 @@ namespace Fourzy
         public int gamePieceId;
 
         public Sprite profilePicture;
-        public Text userNameLabel;
+        [SerializeField]
+        Text userNameLabel;
         public Text gamePieceNameLabel;
         public Image profilePictureImage;
-        public Image gamePieceImage;
-        public Text coinsLabel;
+        [SerializeField]
+        Image gamePieceImage;
+        [SerializeField]
+        Text coinsLabel;
 
         bool didLoadGamePieces;
 
@@ -61,7 +64,7 @@ namespace Fourzy
         {
             //Debug.Log("SetPlayerGamePiece: gamepieceid: " + id);
             gamePieceId = int.Parse(id);
-            if (gamePieceId > 39) {
+            if (gamePieceId > GamePieceSelectionManager.instance.gamePieces.Count - 1) {
                 gamePieceId = 0;
             }
             gamePieceImage.sprite = GamePieceSelectionManager.instance.gamePieces[gamePieceId];

@@ -27,7 +27,7 @@ namespace Fourzy
         }
 
         private IEnumerator FadeOut()    {
-            transform.DOMoveY(transform.position.y+100,1.4f).OnComplete(() => Reset());
+            transform.DOMoveY(originalY + 100, 1.4f).OnComplete(() => Reset());
             yield return new WaitForSeconds(timeBeforeFade);
             alertText.CrossFadeAlpha(0.0f, fadeOutSpeed, false);
             //alertText.DOFade(0f,fadeOutSpeed).OnComplete(() => transform.DOMoveY(originalY, 0f));

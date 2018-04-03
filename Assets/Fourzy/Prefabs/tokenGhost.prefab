@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4984902512537036}
   - component: {fileID: 212006476065632806}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: tokenGhost
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -34,7 +34,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1727477774046648}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.4736977, y: 8.472105, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
