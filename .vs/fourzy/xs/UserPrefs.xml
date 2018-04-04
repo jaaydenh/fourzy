@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{9AD793E4-7370-FB12-CE27-35FD78F1FC38}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Managers/SoundManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/UI/ViewGameBoardSelection.cs">
     <Files>
-      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="2046" Column="14" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/SoundManager.cs" Line="27" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="614" Column="21" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/SoundManager.cs" Line="24" Column="43" />
       <File FileName="Assets/Fourzy/Scripts/tokenSticky.cs" Line="13" Column="57" />
       <File FileName="Assets/Fourzy/Scripts/tokenArrow.cs" Line="13" Column="57" />
       <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="597" Column="51" />
+      <File FileName="Assets/Fourzy/Scripts/UI/ViewGameBoardSelection.cs" Line="26" Column="35" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

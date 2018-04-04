@@ -4,10 +4,8 @@ namespace Fourzy
 {
     public class ViewGameBoardSelection : UIView
     {
-        //Instance
         public static ViewGameBoardSelection instance;
 
-        // Use this for initialization
         void Start()
         {
             instance = this;
@@ -24,7 +22,6 @@ namespace Fourzy
         }
 
         public void PlayButton() {
-            Debug.Log("ViewGameBoardSelection PlayButton");
             Hide();
             GameManager.instance.OpenNewGame();
         }

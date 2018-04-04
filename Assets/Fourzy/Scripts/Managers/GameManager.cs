@@ -483,15 +483,12 @@ namespace Fourzy
             isExpired = false;
             animatingGamePieces = false;
             replayedLastMove = false;
-            //isPuzzleChallengeCompleted = false;
-            //isPuzzleChallengePassed = false;
             puzzleChallengeInfo = null;
             gameType = GameType.NONE;
         }
 
         public void GameScreenBackButton() {
             UserInputHandler.inputEnabled = false;
-            //UIScreen.SetActive(true);
             gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
             gameScreen.SetActive(false);
             challengeInstanceId = null;
@@ -645,6 +642,8 @@ namespace Fourzy
         public void OpenNewGame()
         {
             Debug.Log("GameManager OpenNewGame");
+            ResetGameManagerState();
+
             TokenBoard tokenBoard = ChallengeManager.instance.tokenBoard;
 
             if (tokenBoard == null)
@@ -711,8 +710,6 @@ namespace Fourzy
             DisplayIntroUI(tokenBoard.name, introUISubtitle, true);
 
             TransitionToGameScreen();
-
-            //GameManager.instance.EnableTokenAudio();
 
             if (gameType == GameType.FRIEND)
             {
