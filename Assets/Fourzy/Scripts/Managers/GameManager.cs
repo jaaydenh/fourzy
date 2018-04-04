@@ -49,7 +49,6 @@ namespace Fourzy
         public PuzzleChallengeInfo puzzleChallengeInfo;
         public GameBoardView gameBoardView;
         public GameState gameState { get; set; }
-        //public List<GameObject> tokenViews;
         public GameObject[,] tokenViews;
         public List<Game> games = new List<Game>();
         public GameObject gamePiecePrefab;
@@ -70,8 +69,6 @@ namespace Fourzy
         public GameObject gamePieces;
         public GameObject tokens;
         public GameObject gameScreen;
-        //public GameObject CreateGameScreen;
-        //public GameObject GameOptionsScreen;
         public GameObject ErrorPanel;
         public GameObject UIScreen;
         public Text playerNameLabel;
@@ -115,8 +112,6 @@ namespace Fourzy
         public bool isAnimating = false;
         public bool animatingGamePieces = false;
         private bool replayedLastMove = false;
-        //public bool isPuzzleChallengeCompleted = false;
-        //public bool isPuzzleChallengePassed = false;
         public bool isExpired = false;
         public bool didViewResult = false;
         public string opponentLeaderboardRank = "";
@@ -129,10 +124,7 @@ namespace Fourzy
         public AudioClip clipMove;
         public AudioClip clipWin;
         public AudioClip clipChest;
-        private AudioSource audioMove;
-        private AudioSource audioWin;
-        private AudioSource audioChest;
-        //public CreateGame createGameScript;
+
         public GameObject moveArrowLeft;
         public GameObject moveArrowRight;
         public GameObject moveArrowDown;
@@ -206,7 +198,6 @@ namespace Fourzy
             mainCamera = Camera.main;
 
             rematchButton.gameObject.SetActive(false);
-            //gameScreen.SetActive(false);
 
             if (tokens == null)
             {
@@ -226,21 +217,12 @@ namespace Fourzy
         new void Awake()
         {
             base.Awake();
-
             GS.GameSparksAvailable += CheckConnectionStatus;
-
             DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
-
-            audioMove = AddAudio(clipMove, false, false, 1);
-            audioWin = AddAudio(clipWin, false, false, 1);
-            audioChest = AddAudio(clipChest, false, false, 1);
-
             replayedLastMove = false;
         }
 
         private void OpponentTurnHandler(ChallengeTurnTakenMessage message) {
-            //Debug.Log("ChallengeTurnTakenMessage active screen: " + activeScreen.ToString());
-
             var gsChallenge = message.Challenge;
             // replayedLastMove is a workaround to avoid having the opponents move being replayed more than once
             if (UserManager.instance.userId == gsChallenge.NextPlayer)
@@ -609,7 +591,6 @@ namespace Fourzy
                 currentPlayer = PlayerEnum.TWO;
             }
 
-            //audioChest.Play();
             //Debug.Log("RewardsButton gameState.PlayerPieceCount(currentPlayer): " + gameState.PlayerPieceCount(currentPlayer));
             rewardScreen.Open(isCurrentPlayerWinner, gameState.PlayerPieceCount(currentPlayer));
             gameInfo.Close();
@@ -869,7 +850,7 @@ namespace Fourzy
 
         private void FadePieces(float alpha, float fadeTime)
         {
-
+            SoundManager.instance.Mute(false);
             GameObject[] pieces = GameObject.FindGameObjectsWithTag("GamePiece");
             if (pieces.Length > 0)
             {
@@ -934,15 +915,15 @@ namespace Fourzy
             //Debug.Log("CheckConnectionStatus: " + connected);
         }
 
-        public AudioSource AddAudio(AudioClip clip, bool loop, bool playAwake, float vol)
-        {
-            AudioSource newAudio = gameObject.AddComponent<AudioSource>();
-            newAudio.clip = clip;
-            newAudio.loop = loop;
-            newAudio.playOnAwake = playAwake;
-            newAudio.volume = vol;
-            return newAudio;
-        }
+        //public AudioSource AddAudio(AudioClip clip, bool loop, bool playAwake, float vol)
+        //{
+        //    AudioSource newAudio = gameObject.AddComponent<AudioSource>();
+        //    newAudio.clip = clip;
+        //    newAudio.loop = loop;
+        //    newAudio.playOnAwake = playAwake;
+        //    newAudio.volume = vol;
+        //    return newAudio;
+        //}
 
         private IEnumerator ReplayIncomingOpponentMove(GSData lastMove, PlayerEnum player)
         {
@@ -988,6 +969,7 @@ namespace Fourzy
         public void SetupGame(string title, string subtitle)
         {
             //UpdatePlayersStatusView();
+            SoundManager.instance.Mute(true);
             if (challengeInstanceId != null || challengeInstanceId != "") {
                 challengeIdDebugText.text = "ChallengeId: " + challengeInstanceId;    
             } else {
@@ -996,6 +978,7 @@ namespace Fourzy
 
             SetGameBoardView(gameState.GetPreviousGameBoard());
             CreateTokenViews();
+
             DisplayIntroUI(title, subtitle, true);
 
             SetActionButton();
@@ -1193,17 +1176,6 @@ namespace Fourzy
             }
         }
 
-        public void EnableTokenAudio()
-        {
-            foreach (var item in tokenViews)
-            {
-                if (item != null && item.GetComponent<AudioSource>())
-                {
-                    item.GetComponent<AudioSource>().mute = false;
-                }
-            }
-        }
-
         public void InitPlayerUI(string opponentName = "", Sprite opponentProfileSprite = null, string opponentFacebookId = "")
         {
             
@@ -1298,14 +1270,11 @@ namespace Fourzy
                 }
                 else if (opponentFacebookId != "")
                 {
-                    Debug.Log("has opponent facebook id");
                     StartCoroutine(UserManager.instance.GetFBPicture(opponentFacebookId, (sprite) =>
                     {
-                        Debug.Log("setting opponentProfilePicture.sprite");
                         opponentProfilePicture.sprite = sprite;
                     }));
                 } else {
-                    Debug.Log("setting default opponentProfilePicture.sprite");
                     opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
                         new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
                         new Vector2(0.5f, 0.5f));
@@ -1553,7 +1522,7 @@ namespace Fourzy
 
                 retryPuzzleChallengeButton.gameObject.SetActive(false);
 
-                EnableTokenAudio();
+                //EnableTokenAudio();
                 FadeGameScreen(1.0f, gameScreenFadeInTime);
                 isLoading = false;
 
@@ -1595,7 +1564,7 @@ namespace Fourzy
 
                 nextPuzzleChallengeButton.gameObject.SetActive(false);
 
-                EnableTokenAudio();
+                //EnableTokenAudio();
                 FadeGameScreen(1.0f, gameScreenFadeInTime);
                 isLoading = false;
                 Dictionary<String, object> customAttributes = new Dictionary<String, object>();
@@ -1619,12 +1588,10 @@ namespace Fourzy
 
         private void ProcessPlayerInput(Vector3 mousePosition)
         {
-            //Debug.Log("ProcessPlayerInput");
             if (isLoading || isLoadingUI || isDropping || gameState.isGameOver || animatingGamePieces)
             {
                 //Debug.Log("returned in process player input");
                 return;
-
             }
 
             Vector3 pos = mainCamera.ScreenToWorldPoint(mousePosition);
@@ -1851,7 +1818,7 @@ namespace Fourzy
             // }
 
             isDropping = true;
-            audioMove.Play();
+            SoundManager.instance.PlayRandomizedSfx(clipMove);
 
             List<IToken> activeTokens;
 
@@ -2057,12 +2024,12 @@ namespace Fourzy
                 {                    
                     if (isCurrentPlayer_PlayerOne && gameState.winner == PlayerEnum.ONE)
                     {
-                        audioWin.Play();
+                        SoundManager.instance.PlayRandomizedSfx(clipWin);
                         gameInfo.Open(UserManager.instance.userName + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
                     else if (!isCurrentPlayer_PlayerOne && gameState.winner == PlayerEnum.TWO)
                     {
-                        audioWin.Play();
+                        SoundManager.instance.PlayRandomizedSfx(clipWin);
                         gameInfo.Open(UserManager.instance.userName + LocalizationManager.instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
                     else
@@ -2077,7 +2044,7 @@ namespace Fourzy
             }
             else
             {
-                audioWin.Play();
+                SoundManager.instance.PlayRandomizedSfx(clipWin);
                 if (!isPuzzleChallenge) {
                     //AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
                     string winnerText = gameState.winner == PlayerEnum.ONE ? bluePlayerWonText : redPlayerWonText;

@@ -1,19 +1,11 @@
 ﻿<Properties StartupConfiguration="{9AD793E4-7370-FB12-CE27-35FD78F1FC38}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/UI/UIView.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Managers/SoundManager.cs">
     <Files>
-      <File FileName="Assets/Fourzy/Scripts/UI/GamePieceUI.cs" Line="1" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="852" Column="48" />
-      <File FileName="Assets/Resources/GamePieces.txt" Line="198" Column="10" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/UserManager.cs" Line="67" Column="82" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/LeaderboardManager.cs" Line="49" Column="157" />
-      <File FileName="Assets/Fourzy/Scripts/UI/LeaderboardPlayer.cs" Line="34" Column="21" />
-      <File FileName="Assets/Fourzy/Scripts/UI/GamePiece.cs" Line="194" Column="56" />
-      <File FileName="Assets/Fourzy/Scripts/MiniGameBoard.cs" Line="69" Column="41" />
-      <File FileName="Assets/Fourzy/Scripts/Models/GameState.cs" Line="114" Column="27" />
-      <File FileName="Assets/Fourzy/Scripts/AiPlayer.cs" Line="112" Column="74" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/BoardSelectionManager.cs" Line="50" Column="63" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="184" Column="65" />
-      <File FileName="Assets/Fourzy/Scripts/UI/UIView.cs" Line="25" Column="41" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="2046" Column="14" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/SoundManager.cs" Line="27" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/tokenSticky.cs" Line="13" Column="57" />
+      <File FileName="Assets/Fourzy/Scripts/tokenArrow.cs" Line="13" Column="57" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="597" Column="51" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

@@ -594,7 +594,7 @@ namespace Fourzy
 
             GameManager.instance.CreateGame(challenge.ChallengeId);
 
-            GameManager.instance.EnableTokenAudio();
+            //GameManager.instance.EnableTokenAudio();
 
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("ChallengeId", challenge.ChallengeId);

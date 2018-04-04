@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 
-public class tokenArrow : MonoBehaviour {
+namespace Fourzy
+{
+    public class tokenArrow : MonoBehaviour
+    {
+        public AudioClip soundEffect;
 
-    private AudioSource as1;
-
-    void Start () {
-        as1 = gameObject.GetComponent<AudioSource>();
-    }
-
-    void OnTriggerEnter2D(Collider2D coll) {
-        if (coll.gameObject.tag == "GamePiece") {
-            as1.Play();
+        void OnTriggerEnter2D(Collider2D coll)
+        {
+            if (coll.gameObject.tag == "GamePiece")
+            {
+                SoundManager.instance.PlayRandomizedSfx(soundEffect);
+            }
         }
     }
 }
+
