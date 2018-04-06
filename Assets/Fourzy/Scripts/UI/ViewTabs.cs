@@ -50,8 +50,8 @@ namespace Fourzy
 
         private void SwipeScreen(int screenNumber)
         {
-            Debug.Log("currentActiveView: " + (int)ViewController.instance.currentActiveView);
-            Debug.Log("new screen number: " + screenNumber);
+            //Debug.Log("currentActiveView: " + (int)ViewController.instance.currentActiveView);
+            //Debug.Log("new screen number: " + screenNumber);
 
             if (screenNumber != (int)ViewController.instance.currentActiveView)
             {

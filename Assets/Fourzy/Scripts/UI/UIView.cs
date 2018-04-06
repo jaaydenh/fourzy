@@ -50,7 +50,7 @@ namespace Fourzy
 
         public virtual void ShowAnimated(AnimationDirection sourceDirection)
         {
-            Debug.Log("UIView ShowAnimated");
+            //Debug.Log("UIView ShowAnimated");
             cam.enabled = true;
             foreach (Canvas canvas in canvases)
                 canvas.enabled = true;

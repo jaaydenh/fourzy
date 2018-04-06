@@ -24,14 +24,14 @@ namespace Fourzy
         }
 
         public void PassAndPlayButton() {
-            Debug.Log("PassAndPlayButton");
+            //Debug.Log("PassAndPlayButton");
             ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
             GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
         }
 
         public void PuzzleChallengeButton()
         {
-            Debug.Log("PuzzleChallengeButton");
+            //Debug.Log("PuzzleChallengeButton");
             Hide();
             ChallengeManager.instance.OpenPuzzleChallengeGame();
             //ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);

@@ -83,6 +83,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6fc2a2d4c239146b4b81f33b1b7f4da8, type: 3}
   - {fileID: 21300000, guid: f7598df3d82cf49edbd0714764ddf448, type: 3}
   - {fileID: 21300000, guid: f79cc01d2354c4908b9fe6a5cde1c91a, type: 3}
+  - {fileID: 21300000, guid: 81f46881e51ec41218881e63d565fd5c, type: 3}
   - {fileID: 21300000, guid: db7b4a68569c64f2ab1ef70fac2986ef, type: 3}
   - {fileID: 21300000, guid: 2a388679cb20442be9eae172db2046dd, type: 3}
   - {fileID: 21300000, guid: dd31813bada13433ea41906574fc41b7, type: 3}
@@ -94,10 +95,9 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 7732e1a8e6d544f739dfbc78fb7055f4, type: 3}
   - {fileID: 21300000, guid: a682b86608f0b445087d5031315efb83, type: 3}
   - {fileID: 21300000, guid: 3afd237b6813946bbbc7c57286b01172, type: 3}
+  - {fileID: 21300000, guid: 24ecb05ecb3bf49fcab7e19d807948eb, type: 3}
   - {fileID: 21300000, guid: 2a1489a47606a4936a1cd25c52cebf37, type: 3}
   - {fileID: 21300000, guid: 7f3fefa8f9777451ca0f4e5af0ede456, type: 3}
-  - {fileID: 21300000, guid: 24ecb05ecb3bf49fcab7e19d807948eb, type: 3}
-  - {fileID: 21300000, guid: 81f46881e51ec41218881e63d565fd5c, type: 3}
   - {fileID: 21300000, guid: 683cb2a59ffac4c1eba63de821b18174, type: 3}
   - {fileID: 21300000, guid: 6df284fe672c042d5bf8d8c17404a562, type: 3}
   - {fileID: 21300002, guid: 683cb2a59ffac4c1eba63de821b18174, type: 3}
@@ -178,6 +178,7 @@ SpriteAtlas:
   - tokenBumper
   - tokenFruitTree
   - tokenIceSheet
+  - token90RightArrow 1
   - tokenGhost1
   - tokenGhost3
   - tokenGhost2
@@ -189,10 +190,9 @@ SpriteAtlas:
   - tokenSpider
   - tokenSticky
   - tokenWeb
+  - token90LeftArrow 1
   - tokenBlocker
   - Coin
-  - token90LeftArrow 1
-  - token90RightArrow 1
   - CoinSheet_0
   - iconList
   - CoinSheet_1

@@ -28,7 +28,7 @@ namespace Fourzy
 
         public void BackButton()
         {
-            Debug.Log("previous view type: " + ViewController.instance.GetPreviousView().GetType());
+            //Debug.Log("previous view type: " + ViewController.instance.GetPreviousView().GetType());
             if (ViewController.instance.GetPreviousView().GetType() != typeof(ViewTraining)) {
                 ViewController.instance.ShowTabView();
             }

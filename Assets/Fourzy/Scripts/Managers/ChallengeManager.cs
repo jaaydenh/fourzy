@@ -125,7 +125,6 @@ namespace Fourzy
         private void SetGamePiece(string gamePieceId) {
             new LogEventRequest().SetEventKey("setGamePiece")
                 .SetEventAttribute("gamePieceId", gamePieceId)
-                //.SetDurable(true)
                 .Send((response) =>
                 {
                     if (response.HasErrors)
@@ -135,11 +134,11 @@ namespace Fourzy
                     }
                     else
                     {
+                        OnSetGamePieceSuccess(gamePieceId);    
                         Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                         customAttributes.Add("GamePieceId", gamePieceId);
                         AnalyticsManager.LogCustom("set_gamepiece");
-                        if (OnSetGamePieceSuccess != null)
-                            OnSetGamePieceSuccess(gamePieceId);
+                        //if (OnSetGamePieceSuccess != null)
                     }
                 });
         }
@@ -147,7 +146,6 @@ namespace Fourzy
         public void GetPlayerGamePiece() {
             string gamePieceId = "0";
             new LogEventRequest().SetEventKey("getGamePiece")
-                //.SetDurable(true)
                 .Send((response) =>
                 {
                     if (response.HasErrors)

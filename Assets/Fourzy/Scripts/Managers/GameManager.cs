@@ -614,7 +614,7 @@ namespace Fourzy
         public void TransitionToGameOptionsScreen(GameType gameType, string opponentUserId = "", string opponentName = "", Image opponentProfilePicture = null, string opponentLeaderboardRank = "")
         {
             Debug.Log("TransitionToGameOptionsScreen: opponentUserId: " + opponentUserId);
-
+            Debug.Log("TransitionToGameOptionsScreen: gameType: " + gameType.ToString());
             challengerGamePieceId = 0;
             challengedGamePieceId = 0;
 
@@ -642,7 +642,7 @@ namespace Fourzy
         public void OpenNewGame()
         {
             Debug.Log("GameManager OpenNewGame");
-            ResetGameManagerState();
+            //ResetGameManagerState();
 
             TokenBoard tokenBoard = ChallengeManager.instance.tokenBoard;
 
@@ -1651,7 +1651,7 @@ namespace Fourzy
             if (gameState.CanMove(move.GetNextPosition(), gameState.tokenBoard.tokens))
             {
                 moveHintArea.SetActive(false);
-
+                Console.Log("isMultiplayer: ", isMultiplayer, "isNewChallenge", isNewChallenge, "isNewRandomChallenge", isNewRandomChallenge);
                 if (isMultiplayer && !isNewChallenge && !isNewRandomChallenge)
                 {
                     replayedLastMove = false;
