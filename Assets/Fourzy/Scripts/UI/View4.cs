@@ -16,7 +16,7 @@ namespace Fourzy
 
         public override void Show()
         {
-            Debug.Log("View 4 Show");
+            //Debug.Log("View 4 Show");
             //EasyTouch.On_SwipeStart += On_SwipeStart;
             //EasyTouch.On_Swipe += On_Swipe;
             //EasyTouch.On_SwipeEnd += On_SwipeEnd;

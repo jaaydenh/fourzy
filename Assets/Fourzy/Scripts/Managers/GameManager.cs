@@ -1503,6 +1503,8 @@ namespace Fourzy
 
                 isCurrentPlayer_PlayerOne = true;
                 isPuzzleChallenge = true;
+                gameType = GameType.PUZZLE;
+
                 UpdatePlayerUI();
 
                 string subtitle = "";
@@ -1861,11 +1863,11 @@ namespace Fourzy
                     if (gameState.isPuzzleChallengePassed)
                     {
                         PlayerPrefs.SetInt("puzzleChallengeLevel", puzzleChallengeInfo.Level);
-                        AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, true);
+                        AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, true, gameState.player1MoveCount);
                     }
                     else
                     {
-                        AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, false);
+                        AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, false, gameState.player1MoveCount);
                     }
                 }
             }
@@ -2064,7 +2066,7 @@ namespace Fourzy
                     AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
                     break;
                 case GameType.PUZZLE:
-                    AnalyticsManager.LogGameOver("puzzle", gameState.winner, gameState.tokenBoard);
+                    //AnalyticsManager.LogGameOver("puzzle", gameState.winner, gameState.tokenBoard);
                     break;
                 default:
                     AnalyticsManager.LogGameOver("random", gameState.winner, gameState.tokenBoard);

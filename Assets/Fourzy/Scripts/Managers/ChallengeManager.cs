@@ -368,6 +368,8 @@ namespace Fourzy
         {
             Debug.Log("***** Error Finding Random Challenge: " + response.Errors.JSON);
             AnalyticsManager.LogError("find_challenge_request_error", response.Errors.JSON);
+            //TODO: show user facing error
+            GameManager.instance.GameScreenBackButton();
         }
 
         public void ChallengeRandomUser(GameState gameState, int position, Direction direction, GameType gameType ) {
