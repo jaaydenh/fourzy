@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics.Experimental;
-using Fabric.Answers;
+//using Fabric.Answers;
 using Firebase.Analytics;
 using GameAnalyticsSDK;
 
@@ -12,7 +12,7 @@ namespace Fourzy
     {
         public static void LogCustom(string eventName, Dictionary<string, object> customAttributes = null)
         {
-            Answers.LogCustom(eventName, customAttributes);
+            //Answers.LogCustom(eventName, customAttributes);
             //AnalyticsEvent.Custom(eventName, customAttributes);
 
             if (customAttributes != null) {
@@ -35,7 +35,7 @@ namespace Fourzy
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("errorJSON", errorJSON);
             //AnalyticsEvent.Custom(eventName, customAttributes);
-            Answers.LogCustom(eventName, customAttributes);
+            //Answers.LogCustom(eventName, customAttributes);
             FirebaseAnalytics.LogEvent(eventName, "errorJSON", errorJSON);
             GameAnalytics.NewErrorEvent(GAErrorSeverity.Error, errorJSON);
         }
@@ -44,7 +44,7 @@ namespace Fourzy
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("success", success);
             //AnalyticsEvent.Custom(method + "_login", customAttributes);
-            Answers.LogLogin("facebook", success);
+            //Answers.LogLogin("facebook", success);
             FirebaseAnalytics.LogEvent(FirebaseAnalytics.EventLogin);
             float successF = 0;
             if (success) {
@@ -59,7 +59,7 @@ namespace Fourzy
             customAttributes.Add("id", puzzleChallenge.ID);
             customAttributes.Add("level", puzzleChallenge.Level);
             customAttributes.Add("success", success);
-            Answers.LogCustom("complete_puzzle_challenge", customAttributes);
+            //Answers.LogCustom("complete_puzzle_challenge", customAttributes);
 
             Parameter[] PuzzleChallengeParameters = {
                 new Parameter("id", puzzleChallenge.ID),
@@ -89,7 +89,7 @@ namespace Fourzy
             customAttributes.Add("tokenBoardName", tokenBoard.name);
             customAttributes.Add("winner", (int)player);
             AnalyticsEvent.GameOver("game_over_" + gameType, customAttributes);
-            Answers.LogCustom("game_over_" + gameType, customAttributes);
+            //Answers.LogCustom("game_over_" + gameType, customAttributes);
 
             Parameter[] GameOverParameters = {
                 new Parameter("tokenBoardId", tokenBoard.id),
