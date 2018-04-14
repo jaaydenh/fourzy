@@ -3,7 +3,7 @@
     "array": [
         {
             "ID": "1001",
-            "Name": "#1 Winning Vertically",
+            "Name": "1 Winning Vertically",
             "Level": 1,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -29,7 +29,7 @@
         },
         {
             "ID": "1002",
-            "Name": "#2 Winning Horizontally",
+            "Name": "2 Winning Horizontally",
             "Level": 2,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,2,0,0,0,
@@ -55,7 +55,7 @@
         },
         {
             "ID": "1003",
-            "Name": "#3 Winning Diagonally",
+            "Name": "3 Winning Diagonally",
             "Level": 3,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -81,7 +81,7 @@
         },
         {
             "ID": "1004",
-            "Name": "#4 Vertically - Up or Down",
+            "Name": "4 Vertically - Up or Down",
             "Level": 4,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -138,7 +138,7 @@
         },
         {
             "ID": "1005",
-            "Name": "#5 Horizontally - Left or Right",
+            "Name": "5 Horizontally - Left or Right",
             "Level": 5,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -195,7 +195,7 @@
         },
         {
             "ID": "1006",
-            "Name": "#6 Win Diagonally 2",
+            "Name": "6 Win Diagonally 2",
             "Level": 6,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -257,7 +257,7 @@
         },
         {
             "ID": "1007",
-            "Name": "#7 Push It to Win It",
+            "Name": "7 Push It to Win It",
             "Level": 7,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -289,7 +289,7 @@
         },
         {
             "ID": "1008",
-            "Name": "#8 Use the Arrows",
+            "Name": "8 Use the Arrows",
             "Level": 8,
             "Enabled": true,
             "InitialGameBoard": [0,0,2,1,0,0,0,0,
@@ -334,7 +334,7 @@
         },
         {
             "ID": "1010",
-            "Name": "#9 Icy Conga",
+            "Name": "9 Icy Conga",
             "Level": 9,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,2,1,0,0,0,
@@ -360,7 +360,7 @@
         },
         {
             "ID": "1011",
-            "Name": "#10 Icy Side Swipe",
+            "Name": "10 Icy Side Swipe",
             "Level": 10,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -386,7 +386,7 @@
         },
         {
             "ID": "1012",
-            "Name": "#11 Icy Side Swipe 2",
+            "Name": "11 Icy Side Swipe 2",
             "Level": 11,
             "Enabled": true,
             "InitialGameBoard": [0,0,2,2,1,0,0,0,
@@ -412,7 +412,7 @@
         },
         {
             "ID": "1013",
-            "Name": "#12 Ice Push",
+            "Name": "12 Ice Push",
             "Level": 12,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,2,0,0,0,0,
@@ -438,7 +438,7 @@
         },
         {
             "ID": "1014",
-            "Name": "#13 Another Challenge",
+            "Name": "13 Another Challenge",
             "Level": 13,
             "Enabled": true,
             "InitialGameBoard": [0,0,2,1,0,0,0,0,
@@ -717,7 +717,7 @@
         },
         {
             "ID": "1015",
-            "Name": "#14 Ghost Crossing",
+            "Name": "14 Ghost Crossing",
             "Level": 14,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -763,7 +763,7 @@
         },
         {
             "ID": "1016",
-            "Name": "#15 Through A Ghost",
+            "Name": "15 Through A Ghost",
             "Level": 15,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -940,7 +940,7 @@
         },
         {
             "ID": "1017",
-            "Name": "#16 Center Sticky Cube",
+            "Name": "16 Center Sticky Cube",
             "Level": 16,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -1000,7 +1000,7 @@
         },
         {
             "ID": "1018",
-            "Name": "#17 Center Sticky Cube 2",
+            "Name": "17 Center Sticky Cube 2",
             "Level": 17,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -1060,7 +1060,7 @@
         },
         {
             "ID": "1019",
-            "Name": "#18 Center Sticky Cube 3",
+            "Name": "18 Center Sticky Cube 3",
             "Level": 18,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -1110,7 +1110,7 @@
         },
         {
             "ID": "1020",
-            "Name": "#19 Sticky Checkers",
+            "Name": "19 Sticky Checkers",
             "Level": 19,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -1288,7 +1288,7 @@
         ,
         {
             "ID": "103001",
-            "Name": "#20 Cant Stop Me",
+            "Name": "20 Cant Stop Me",
             "Level": 20,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,1,0,0,0,0,
@@ -1335,7 +1335,7 @@
         ,
         {
             "ID": "103002",
-            "Name": "#21 Cant Stop Me Too",
+            "Name": "21 Cant Stop Me Too",
             "Level": 21,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -1382,7 +1382,7 @@
         ,
         {
             "ID": "103003",
-            "Name": "#22 Compression",
+            "Name": "22 Compression",
             "Level": 22,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -1429,7 +1429,7 @@
         ,
         {
             "ID": "103004",
-            "Name": "#23 Survive to Win",
+            "Name": "23 Survive to Win",
             "Level": 23,
             "Enabled": true,
             "InitialGameBoard": [0,0,1,2,0,0,0,0,
@@ -1571,7 +1571,7 @@
         ,
         {
             "ID": "103102",
-            "Name": "#24 Sneaky Spinner Move",
+            "Name": "24 Sneaky Spinner Move",
             "Level": 24,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -1618,7 +1618,7 @@
         ,
         {
             "ID": "103102",
-            "Name": "#25 Spinners",
+            "Name": "25 Spinners",
             "Level": 25,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -1665,7 +1665,7 @@
         ,
         {
             "ID": "110101",
-            "Name": "#26 Spinner Test",
+            "Name": "26 Spinner Test",
             "Level": 26,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,1,0,0,0,
@@ -1727,7 +1727,7 @@
         ,
         {
             "ID": "110102",
-            "Name": "#27 Center Line Test",
+            "Name": "27 Center Line Test",
             "Level": 27,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -1878,7 +1878,7 @@
         ,
         {
             "ID": "110103",
-            "Name": "#28 Test For Six with Arrows",
+            "Name": "28 Test For Six with Arrows",
             "Level": 28,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,1,2,0,2,0,
@@ -2164,7 +2164,7 @@
         ,
         {
             "ID": "110104",
-            "Name": "#29 Stop Abruptly",
+            "Name": "29 Stop Abruptly",
             "Level": 29,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,1,0,0,0,
@@ -2211,7 +2211,7 @@
         ,
         {
             "ID": "110201",
-            "Name": "#30 Pocket Arrow",
+            "Name": "30 Pocket Arrow",
             "Level": 30,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -2269,7 +2269,7 @@
         ,
         {
             "ID": "110301",
-            "Name": "#31 Careful Placement",
+            "Name": "31 Careful Placement",
             "Level": 31,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,1,1,0,0,0,
@@ -2326,7 +2326,7 @@
         },
         {
             "ID": "110701",
-            "Name": "#32 A Trap is Set",
+            "Name": "32 A Trap is Set",
             "Level": 32,
             "Enabled": true,
             "InitialGameBoard": [0,0,1,2,1,1,0,0,
@@ -2519,7 +2519,7 @@
         ,
         {
             "ID": "111001",
-            "Name": "#33 Introduce the Bounce",
+            "Name": "33 Introduce the Bounce",
             "Level": 33,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -2547,7 +2547,7 @@
         },
          {
             "ID": "111002",
-            "Name": "#34 Introduce the Bounce 2",
+            "Name": "34 Introduce the Bounce 2",
             "Level": 34,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -2589,7 +2589,7 @@
            ]
         },{
             "ID": "1009",
-            "Name": "#35 Crossing",
+            "Name": "35 Crossing",
             "Level": 35,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,1,1,2,0,0,
@@ -2658,7 +2658,7 @@
         }
         ,{
             "ID": "02241802",
-            "Name": "#36 FourSquare 1",
+            "Name": "36 FourSquare 1",
             "Level": 36,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -2691,7 +2691,7 @@
         }
         ,{
             "ID": "02241802",
-            "Name": "#37 FourSquare 2",
+            "Name": "37 FourSquare 2",
             "Level": 37,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,1,0,0,0,0,
@@ -2723,7 +2723,7 @@
         }
         ,{
             "ID": "02241803",
-            "Name": "#38 FourSquare 3",
+            "Name": "38 FourSquare 3",
             "Level": 38,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -2804,7 +2804,7 @@
         }
         ,{
             "ID": "02241804",
-            "Name": "#39 FourSquare 4",
+            "Name": "39 FourSquare 4",
             "Level": 39,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -2836,7 +2836,7 @@
         }
         ,{
             "ID": "02241805",
-            "Name": "#40 FourSquare 5",
+            "Name": "40 FourSquare 5",
             "Level": 40,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -2998,7 +2998,7 @@
         }
         ,{
             "ID": "030721802",
-            "Name": "#41 Smile 1",
+            "Name": "41 Smile 1",
             "Level": 41,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,1,1,0,0,0,
@@ -3031,7 +3031,7 @@
         }
         ,{
             "ID": "03071803",
-            "Name": "#42 Checker - 1",
+            "Name": "42 Checker - 1",
             "Level": 42,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,2,0,0,0,
@@ -3112,7 +3112,7 @@
         }
         ,{
             "ID": "03071804",
-            "Name": "#43 Checker - 2",
+            "Name": "43 Checker - 2",
             "Level": 43,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -3182,7 +3182,7 @@
         }
         ,{
             "ID": "03071804",
-            "Name": "#44 Pile - 1",
+            "Name": "44 Pile - 1",
             "Level": 44,
             "Enabled": true,
             "InitialGameBoard": [0,0,0,0,0,0,0,0,
@@ -3252,7 +3252,7 @@
         }
         ,{
             "ID": "03071805",
-            "Name": "#45 Make It Happen",
+            "Name": "45 Make It Happen",
             "Level": 45,
             "Enabled": true,
             "InitialGameBoard": [0,0,2,0,0,0,0,0,
@@ -3348,7 +3348,7 @@
         }
         ,{
             "ID": "03071806",
-            "Name": "#46 Tough It Out",
+            "Name": "46 Tough It Out",
             "Level": 46,
             "Enabled": true,
             "InitialGameBoard": [0,0,2,2,1,0,0,0,

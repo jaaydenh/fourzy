@@ -70,15 +70,14 @@ namespace Fourzy
 
             GAProgressionStatus status = success ? GAProgressionStatus.Complete : GAProgressionStatus.Fail;
 
-            float successF = 0;
             if (success)
             {
-                successF = 1;
+                GameAnalytics.NewDesignEvent("puzzle:" + puzzleChallenge.Name.Truncate(32) + ":pass");
+            } else {
+                GameAnalytics.NewDesignEvent("puzzle:" + puzzleChallenge.Name.Truncate(32) + ":fail"); 
             }
-            GameAnalytics.NewDesignEvent("puzzle:" + puzzleChallenge.ID + ":" + puzzleChallenge.Level + ":success", successF);
-            Debug.Log("design event puzzle: " + "puzzle:" + puzzleChallenge.ID + ":" + puzzleChallenge.Level + ":success:" + success.ToString());
-            GameAnalytics.NewDesignEvent("puzzle:" + puzzleChallenge.ID + ":" + puzzleChallenge.Level + ":success:" + success.ToString());
-            GameAnalytics.NewProgressionEvent(status, "puzzle", puzzleChallenge.ID, moveCount);
+            //Debug.Log("design event puzzle: " + "puzzle:" + puzzleChallenge.Name + ":" + puzzleChallenge.Level + ":success:" + success.ToString());
+            GameAnalytics.NewProgressionEvent(status, "puzzle", puzzleChallenge.Name.Truncate(64), moveCount);
         }
 
         public static void LogGameOver(string gameType, PlayerEnum player, TokenBoard tokenBoard) {
@@ -98,11 +97,9 @@ namespace Fourzy
             };
             FirebaseAnalytics.LogEvent("game_over_" + gameType, GameOverParameters);
 
-            Debug.Log("design event game over: " + tokenBoard.id + ":" + tokenBoard.name + ":winner:" + winner.ToString());
-            GameAnalytics.NewDesignEvent(gameType + ":" + tokenBoard.id + ":" + tokenBoard.name + ":winner", (float)winner);
-            GameAnalytics.NewDesignEvent(gameType + ":" + tokenBoard.id + ":winner", (float)winner);
-            GameAnalytics.NewDesignEvent(gameType + ":" + tokenBoard.id + ":" + tokenBoard.name + ":winner:" + winner.ToString());
-            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, gameType, tokenBoard.id, winner);
+            //Debug.Log("design event game over: " + tokenBoard.id + ":" + tokenBoard.name + ":winner:" + winner.ToString());
+            GameAnalytics.NewDesignEvent(gameType + ":" + tokenBoard.name.Truncate(32) + ":winner:" + player.ToString());
+            //GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, gameType, tokenBoard.id, winner);
         }
     }
 }

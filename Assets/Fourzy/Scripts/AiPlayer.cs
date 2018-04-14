@@ -91,17 +91,17 @@ namespace Fourzy
             foreach (Move AiMove in possibleMoves)
             {
                 Debug.Log("test1");
-                Debug.Log(string.Format("Looking at a move {0}:{1}", AiMove.position.column, AiMove.position.row));
+                //Debug.Log(string.Format("Looking at a move {0}:{1}", AiMove.position.column, AiMove.position.row));
 
                 bool AddMoveToList = true;
                 GameState testGameState = gameState.Clone();
                 testGameState.MovePiece(AiMove, false);
-                Debug.Log(string.Format("WINNING MOVE?{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                //Debug.Log(string.Format("WINNING MOVE?{0}:{1}", testGameState.isGameOver, testGameState.winner));
                 //Can I make a Move that Wins?
 
                 if (testGameState.isGameOver && testGameState.winner == this.AiPlayerId)
                 {
-                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                    //Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
                     found_move = true;
                     GameManager.instance.CallMovePiece(AiMove, false, true);
                     //StartCoroutine(MovePiece(AiMove, false, updatePlayer));

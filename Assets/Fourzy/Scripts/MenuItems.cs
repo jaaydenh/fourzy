@@ -10,6 +10,24 @@ public class MenuItems : MonoBehaviour {
         ScreenCapture.CaptureScreenshot("../test.png");
     }
 
+    [UnityEditor.MenuItem("Fourzy/DeleteAllPlayerPrefs")]
+    static void DeleteAllPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
+    [UnityEditor.MenuItem("Fourzy/ResetOnboarding")]
+    static void ResetOnboarding()
+    {
+        PlayerPrefs.DeleteKey("onboardingStage");
+    }
+
+    [UnityEditor.MenuItem("Fourzy/CompleteOnboarding")]
+    static void CompleteOnboarding()
+    {
+        PlayerPrefs.SetInt("onboardingStage", 5);
+    }
+
     [UnityEditor.MenuItem("Fourzy/SetPuzzleToLevel0")]
     static void SetPuzzleToLevel1()
     {

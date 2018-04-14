@@ -22,6 +22,8 @@ namespace Fourzy
         public static event ReceivedOpponentGamePiece OnReceivedOpponentGamePiece;
         public delegate void SetGamePieceSuccess(string gamePieceId);
         public static event SetGamePieceSuccess OnSetGamePieceSuccess;
+        public delegate void FindChallengeResult(bool success);
+        public static event FindChallengeResult OnFindChallengeResult;
 
         public delegate void OpponentTurnTakenDelegate(ChallengeTurnTakenMessage message);
         public static event OpponentTurnTakenDelegate OnOpponentTurnTakenDelegate;
@@ -50,7 +52,6 @@ namespace Fourzy
         public GameObject loadingSpinner;
         public GameObject gamesListContainer; 
 
-        public GameObject UIScreen;
         public int daysUntilChallengeExpires = 40;
         private bool gettingChallenges = false;
         private bool pulledToRefresh = false;
@@ -321,56 +322,53 @@ namespace Fourzy
                 });
         }
 
-        public void FindRandomChallenge() {
+        public void FindRandomChallenge(Action<FindChallengeResponse> successCallback, Action<FindChallengeResponse> errorCallback) {
             tokenBoard = null;
 
             new FindChallengeRequest()
                 .SetAccessType("PUBLIC")
                 .SetCount(50)
-                //.SetEligibility()
-                //.SetOffset()
-                //.SetShortCode()
-                .Send(FindRandomChallengeSuccess, FindRandomChallengeError);
+                .Send(successCallback, errorCallback);
         }
 
-        private void FindRandomChallengeSuccess(FindChallengeResponse response) {
-            GSEnumerable<FindChallengeResponse._Challenge> challengeInstances = response.ChallengeInstances;
-            //GSData scriptData = response.ScriptData; 
+        //private void FindChallengeSuccess(FindChallengeResponse response) {
+        //    GSEnumerable<FindChallengeResponse._Challenge> challengeInstances = response.ChallengeInstances;
+        //    //GSData scriptData = response.ScriptData; 
 
-            if (challengeInstances.Count() > 0)
-            {
-                List<string> challengeInstanceIds = new List<string>();
+        //    if (challengeInstances.Count() > 0)
+        //    {
+        //        List<string> challengeInstanceIds = new List<string>();
 
-                //for every object in the challenges array, get the challengeId field and push to challengeInstanceId[]
-                foreach (var chalInstance in challengeInstances)
-                {
-                    challengeInstanceIds.Add(chalInstance.ChallengeId);
-                }
+        //        //for every object in the challenges array, get the challengeId field and push to challengeInstanceId[]
+        //        foreach (var chalInstance in challengeInstances)
+        //        {
+        //            challengeInstanceIds.Add(chalInstance.ChallengeId);
+        //        }
 
-                int randNum = UnityEngine.Random.Range(0, challengeInstanceIds.Count - 1);
+        //        int randNum = UnityEngine.Random.Range(0, challengeInstanceIds.Count - 1);
 
-                //reference the id at that random numbers location
-                string randomChallengeId = challengeInstanceIds[randNum];
-                //each time you run this code, a different id is set in the scriptdata
-                //Spark.setScriptData("challenge to join", randomChallengeId);
+        //        //reference the id at that random numbers location
+        //        string randomChallengeId = challengeInstanceIds[randNum];
+        //        //each time you run this code, a different id is set in the scriptdata
+        //        //Spark.setScriptData("challenge to join", randomChallengeId);
 
-                // For now players are joined to a random challenge
-                JoinChallenge(randomChallengeId);
-            }
-            else
-            {
-                //Send player to Game Screen to make the first move
-                OpenNewMultiplayerGame();
-            }
-        }
+        //        // For now players are joined to a random challenge
+        //        JoinChallenge(randomChallengeId);
+        //    }
+        //    else
+        //    {
+        //        //Send player to Game Screen to make the first move
+        //        OpenNewMultiplayerGame();
+        //    }
+        //}
 
-        private void FindRandomChallengeError(FindChallengeResponse response)
-        {
-            Debug.Log("***** Error Finding Random Challenge: " + response.Errors.JSON);
-            AnalyticsManager.LogError("find_challenge_request_error", response.Errors.JSON);
-            //TODO: show user facing error
-            GameManager.instance.GameScreenBackButton();
-        }
+        //private void FindChallengeError(FindChallengeResponse response)
+        //{
+        //    Debug.Log("***** Error Finding Random Challenge: " + response.Errors.JSON);
+        //    AnalyticsManager.LogError("find_challenge_request_error", response.Errors.JSON);
+        //    //TODO: show user facing error
+        //    //GameManager.instance.GameScreenBackButton();
+        //}
 
         public void ChallengeRandomUser(GameState gameState, int position, Direction direction, GameType gameType ) {
             Debug.Log("ChallengeRandomUser");
@@ -413,38 +411,49 @@ namespace Fourzy
                     });
         }
 
-        public void JoinChallenge(string challengeInstanceId) {
-            Debug.Log("JoinChallenge");
+        public void JoinChallenge(string challengeInstanceId, Action<JoinChallengeResponse> successCallback, Action<JoinChallengeResponse> errorCallback) {
+            Debug.Log("ChallengeManager : JoinChallenge");
+
             new JoinChallengeRequest()
                 .SetChallengeInstanceId(challengeInstanceId)
-                .Send((response) => {
-                    if (response.HasErrors)
-                    {
-                        Debug.Log("***** Error Joining Challenge: " + response.Errors.JSON);
-                        AnalyticsManager.LogError("join_challenge_request_error", response.Errors.JSON);
-                    }
-                    else
-                    {
-                        GameManager.instance.challengeInstanceId = challengeInstanceId;
-                        //Send Player to Game Screen to make a move
-                        GetChallenge(challengeInstanceId);
-                    }
-                });
+                .SetMaxResponseTimeInMillis(20000)
+                .Send(successCallback, errorCallback);
+
+            //new JoinChallengeRequest()
+                //.SetChallengeInstanceId(challengeInstanceId)
+                //.SetMaxResponseTimeInMillis(20000)
+                //.Send((response) => {
+                //    if (response.HasErrors)
+                //    {
+                //        Debug.Log("***** Error Joining Challenge: " + response.Errors.JSON);
+                //        AnalyticsManager.LogError("join_challenge_request_error", response.Errors.JSON);
+                //    }
+                //    else
+                //    {
+                //        GameManager.instance.challengeInstanceId = challengeInstanceId;
+                //        //Send Player to Game Screen to make a move
+                //        GetChallenge(challengeInstanceId);
+                //    }
+                //});
         }
 
-        public void GetChallenge(string challengeInstanceId) {
+        public void GetChallenge(string challengeInstanceId, Action<GetChallengeResponse> successCallback, Action<GetChallengeResponse> errorCallback) {
             new GetChallengeRequest()
                 .SetChallengeInstanceId(challengeInstanceId)
-                .Send((response) => {
-                    if (response.HasErrors) {
-                        Debug.Log("***** Error Getting Challenge: " + response.Errors);
-                        AnalyticsManager.LogError("get_challenge_request_error", response.Errors.JSON);
-                    } else {
-                        var challenge = response.Challenge;
-                        GSData scriptData = response.ScriptData;
-                        OpenJoinedMultiplayerGame(challenge);
-                    }
-                });
+                .Send(successCallback, errorCallback);
+
+            //new GetChallengeRequest()
+                //.SetChallengeInstanceId(challengeInstanceId)
+                //.Send((response) => {
+                //    if (response.HasErrors) {
+                //        Debug.Log("***** Error Getting Challenge: " + response.Errors);
+                //        AnalyticsManager.LogError("get_challenge_request_error", response.Errors.JSON);
+                //    } else {
+                //        var challenge = response.Challenge;
+                //        GSData scriptData = response.ScriptData;
+                //        OpenJoinedMultiplayerGame(challenge);
+                //    }
+                //});
         }
 
         public void OpenPuzzleChallengeGame() {
@@ -452,7 +461,7 @@ namespace Fourzy
             if (puzzleChallenge == null) {
                 // no more puzzle challenges
                 GameManager.instance.alertUI.Open(LocalizationManager.instance.GetLocalizedValue("all_challenges_completed"));
-                PlayerPrefs.DeleteAll();
+                PlayerPrefs.DeleteKey("puzzleChallengeLevel");
             } else {
                 GameManager.instance.puzzleChallengeInfo = puzzleChallenge;
                 TokenBoard initialTokenBoard = new TokenBoard(puzzleChallenge.InitialTokenBoard.ToArray(), "", "", true);
@@ -505,7 +514,7 @@ namespace Fourzy
             GameManager.instance.ResetGamePiecesAndTokens();
 
             if (tokenBoard == null) {
-                TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard();
+                TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
                 tokenBoard = randomTokenBoard;
             }
 
@@ -587,8 +596,6 @@ namespace Fourzy
             GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame(tokenBoardName, "Multiplayer");
 
-            UIScreen.SetActive(false);
-
             if (OnActiveGame != null)
                 OnActiveGame();
 
@@ -622,7 +629,7 @@ namespace Fourzy
 
                 games.Clear();
                 if (GameManager.instance.games.Count > 0) {
-                    GameManager.instance.games.Clear();    
+                    GameManager.instance.games.Clear();
                 }
 
                 List<string> challengeStates = new List<string> {"RUNNING","COMPLETE","ISSUED"};

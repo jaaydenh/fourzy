@@ -50,9 +50,11 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a7808e2d1e66e4370b30a2ac0d36ad46, type: 3}
   - {fileID: 21300000, guid: f5c45e0c7d6134dd5915636c42d085a9, type: 3}
   - {fileID: 21300000, guid: 6bec12e9c39f244fbaf24bdc6baa2852, type: 3}
+  - {fileID: 21300000, guid: 050d4ce86cf29451da51a5594596189a, type: 3}
   - {fileID: 21300000, guid: 69dac7905af2144198ec89d72aabf0f3, type: 3}
   - {fileID: 21300000, guid: 05ac52c8088864a79bf64979672f6ddd, type: 3}
   - {fileID: 21300000, guid: 5e87a301d6a104210918553937942022, type: 3}
+  - {fileID: 21300000, guid: c0628743887e44121b31e3adfa2ea35b, type: 3}
   - {fileID: 21300000, guid: eec1cf8b683b24abca788236caa8c5d9, type: 3}
   - {fileID: 21300000, guid: a8aa2d01300d841fea86dfc1376ded36, type: 3}
   - {fileID: 21300000, guid: 66c710582a23e439e95f560533cc78f6, type: 3}
@@ -98,6 +100,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 24ecb05ecb3bf49fcab7e19d807948eb, type: 3}
   - {fileID: 21300000, guid: 2a1489a47606a4936a1cd25c52cebf37, type: 3}
   - {fileID: 21300000, guid: 7f3fefa8f9777451ca0f4e5af0ede456, type: 3}
+  - {fileID: 21300000, guid: bf16876b1febc43fab8fce7dd46c4127, type: 3}
   - {fileID: 21300000, guid: 683cb2a59ffac4c1eba63de821b18174, type: 3}
   - {fileID: 21300000, guid: 6df284fe672c042d5bf8d8c17404a562, type: 3}
   - {fileID: 21300002, guid: 683cb2a59ffac4c1eba63de821b18174, type: 3}
@@ -145,9 +148,11 @@ SpriteAtlas:
   - backgroundPatternUI
   - boardTrainingGarden
   - backgroundUI
+  - Wizard 1
   - windowTrainingGarden
   - MiniGameBoardGlow
   - MiniGameBoard
+  - WIZARD
   - uiPlayerInfo
   - listItemBackground
   - iconQuestion
@@ -193,6 +198,7 @@ SpriteAtlas:
   - token90LeftArrow 1
   - tokenBlocker
   - Coin
+  - hand
   - CoinSheet_0
   - iconList
   - CoinSheet_1

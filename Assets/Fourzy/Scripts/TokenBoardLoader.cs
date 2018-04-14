@@ -6,19 +6,7 @@ namespace Fourzy
 {
     public class TokenBoardLoader : Singleton<TokenBoardLoader>
     {
-        //Singleton
-        //private static TokenBoardLoader _instance;
-        //public static TokenBoardLoader instance
-        //{
-        //    get
-        //    {
-        //        if (_instance == null)
-        //        {
-        //            _instance = GameObject.FindObjectOfType<TokenBoardLoader>();
-        //        }
-        //        return _instance;
-        //    }
-        //}
+
 
         private TokenBoardData[] LoadTokenBoardData()
         {
@@ -58,7 +46,7 @@ namespace Fourzy
             return gamePieceData;
         }
 
-        public TokenBoard GetTokenBoard()
+        public TokenBoard GetRandomTokenBoard()
         {
             //TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
 
@@ -77,6 +65,18 @@ namespace Fourzy
             //return tokenboard;
 
             return RandomBoardGenerator.GenerateBoard();
+        }
+
+        public TokenBoard GetTokenBoard(string id) {
+            TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
+
+            var tokenBoardInfo = tokenBoardCollection
+                .Where(t => t.ID == id)
+            .FirstOrDefault();
+
+            TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID, tokenBoardInfo.Name, true);
+
+            return tokenboard;
         }
 
         public TokenBoard[] GetAllTokenBoards()

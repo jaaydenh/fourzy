@@ -14,8 +14,15 @@ namespace Fourzy
             instance = this;
             ViewController.instance.currentActiveView = TotalView.view3;
 
-            if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 3)
-            {
+            //if (PlayerPrefs.GetInt("onboardingStage") <= 1)
+            //{
+            //    ViewController.instance.view3.Hide();
+            //    ViewController.instance.HideTabView();
+            //    GameManager.instance.gameType = GameType.AI;
+            //    GameManager.instance.OpenNewGame(false, "1000");
+            //} else 
+
+            if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 3) {
                 ViewController.instance.view3.Hide();
                 ViewController.instance.HideTabView();
                 ChallengeManager.instance.OpenPuzzleChallengeGame();
@@ -24,10 +31,6 @@ namespace Fourzy
 
         public override void Show()
         {
-            //Debug.Log("View 3 Show");
-            //EasyTouch.On_SwipeStart += On_SwipeStart;
-            //EasyTouch.On_Swipe += On_Swipe;
-            //EasyTouch.On_SwipeEnd += On_SwipeEnd;
             base.Show();
         }
 
@@ -79,8 +82,19 @@ namespace Fourzy
 
         public void PlayButton()
         {
-            GameManager.instance.PlayButton();
-            Hide();
+            //GameManager.instance.PlayButton();
+
+            Game game = GameManager.instance.GetActiveGame();
+            if (game != null)
+            {
+                game.OpenGame();
+                Hide();
+            }
+            else
+            {
+                ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
+            }
+
             ViewController.instance.HideTabView();
         }
 

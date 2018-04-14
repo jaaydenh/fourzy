@@ -32,7 +32,7 @@ namespace Fourzy
         }
             
         void Start () {
-            GameManager.OnMoved += setMouseButtonPressed;
+            GameManager.OnStartMove += setMouseButtonPressed;
         }
 
         void setMouseButtonPressed() {

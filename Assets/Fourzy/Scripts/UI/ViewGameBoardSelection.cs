@@ -29,11 +29,17 @@ namespace Fourzy
         public void BackButton()
         {
             //Debug.Log("previous view type: " + ViewController.instance.GetPreviousView().GetType());
-            if (ViewController.instance.GetPreviousView().GetType() != typeof(ViewTraining)) {
-                ViewController.instance.ShowTabView();
-            }
+            if (ViewController.instance.GetPreviousView() != null) {
+                if (ViewController.instance.GetPreviousView().GetType() != typeof(ViewTraining))
+                {
+                    ViewController.instance.ShowTabView();
+                }
 
-            ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
+                ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
+            } else {
+                ViewController.instance.ShowTabView();
+                ViewController.instance.ChangeView(ViewController.instance.view3);
+            }
         }
     }
 }

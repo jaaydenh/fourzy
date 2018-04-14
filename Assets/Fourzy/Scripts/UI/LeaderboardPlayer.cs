@@ -13,10 +13,10 @@ namespace Fourzy
         public Image profilePicture;
         public Texture2D defaultProfilePicture;
         public Image onlineTexture;
-        private GameObject UIScreen;
+        //private GameObject UIScreen;
 
         void Start () {
-            UIScreen = GameObject.Find("UI Screen");
+            //UIScreen = GameObject.Find("UI Screen");
         }
 
         public void Reset() {
