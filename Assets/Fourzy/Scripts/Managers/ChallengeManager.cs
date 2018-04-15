@@ -52,6 +52,8 @@ namespace Fourzy
         public GameObject loadingSpinner;
         public GameObject gamesListContainer; 
 
+        public GetChallengeResponse._Challenge challenge;
+
         public int daysUntilChallengeExpires = 40;
         private bool gettingChallenges = false;
         private bool pulledToRefresh = false;
@@ -328,6 +330,7 @@ namespace Fourzy
             new FindChallengeRequest()
                 .SetAccessType("PUBLIC")
                 .SetCount(50)
+                .SetMaxResponseTimeInMillis(17000)
                 .Send(successCallback, errorCallback);
         }
 
@@ -416,7 +419,7 @@ namespace Fourzy
 
             new JoinChallengeRequest()
                 .SetChallengeInstanceId(challengeInstanceId)
-                .SetMaxResponseTimeInMillis(20000)
+                .SetMaxResponseTimeInMillis(17000)
                 .Send(successCallback, errorCallback);
 
             //new JoinChallengeRequest()
@@ -440,6 +443,7 @@ namespace Fourzy
         public void GetChallenge(string challengeInstanceId, Action<GetChallengeResponse> successCallback, Action<GetChallengeResponse> errorCallback) {
             new GetChallengeRequest()
                 .SetChallengeInstanceId(challengeInstanceId)
+                .SetMaxResponseTimeInMillis(17000)
                 .Send(successCallback, errorCallback);
 
             //new GetChallengeRequest()
@@ -548,7 +552,7 @@ namespace Fourzy
             AnalyticsManager.LogCustom("open_new_multiplayer_game", customAttributes);
         }
 
-        public void OpenJoinedMultiplayerGame(GetChallengeResponse._Challenge challenge) {
+        public void OpenJoinedMultiplayerGame() {
             Debug.Log("Open Joined Multiplayer Game");
             GameManager.instance.isLoading = true;
 

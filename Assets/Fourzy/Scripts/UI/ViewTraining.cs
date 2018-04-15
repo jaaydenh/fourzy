@@ -11,6 +11,7 @@ namespace Fourzy
         void Start()
         {
             instance = this;
+            keepHistory = true;
         }
 
         public override void Show()
@@ -47,6 +48,7 @@ namespace Fourzy
 
         public void BackButton()
         {
+            Debug.Log("View Training Back Button");
             ViewController.instance.ChangeView(ViewController.instance.view3);
             ViewController.instance.ShowTabView();
         }

@@ -15,6 +15,7 @@ namespace Fourzy
         void Start()
         {
             instance = this;
+            keepHistory = true;
         }
 
         public override void Show()

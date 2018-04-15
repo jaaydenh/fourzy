@@ -1,15 +1,11 @@
 ﻿<Properties StartupConfiguration="{9AD793E4-7370-FB12-CE27-35FD78F1FC38}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/UI/LeaderboardPlayer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/UI/ViewMatchMaking.cs">
     <Files>
-      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="638" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="597" Column="75" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="934" Column="12" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="553" Column="29" />
       <File FileName="Assets/Fourzy/Scripts/Managers/Onboarding.cs" Line="72" Column="35" />
-      <File FileName="Assets/Fourzy/Scripts/UI/View3.cs" Line="25" Column="13" />
-      <File FileName="Assets/Fourzy/Scripts/UI/ViewMatchMaking.cs" Line="123" Column="57" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/LeaderboardManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/UI/ViewController.cs" Line="75" Column="21" />
-      <File FileName="Assets/Fourzy/Scripts/UI/FriendEntry.cs" Line="20" Column="37" />
-      <File FileName="Assets/Fourzy/Scripts/UI/LeaderboardPlayer.cs" Line="16" Column="28" />
+      <File FileName="Assets/Fourzy/Scripts/UI/View3.cs" Line="30" Column="14" />
+      <File FileName="Assets/Fourzy/Scripts/UI/ViewMatchMaking.cs" Line="8" Column="16" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

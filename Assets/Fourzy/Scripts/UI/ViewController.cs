@@ -44,7 +44,6 @@ namespace Fourzy
         void Awake()
         {
             instance = this;
-            //currentActiveView = TotalView.view3;
         }
 
         void Start()
@@ -57,6 +56,7 @@ namespace Fourzy
             viewTraining.Hide();
             viewGameboardSelection.Hide();
             viewMatchMaking.Hide();
+            view3.keepHistory = true;
 
             if (debugView != null)
                 ChangeView(debugView);
@@ -74,13 +74,23 @@ namespace Fourzy
         /// <param name="targetView">Target view.</param>
         public void ChangeView(UIView targetView)
         {
+            //Debug.Log("targetView: " + targetView.name);
+
             if (currentView != null) {
-                //Debug.Log("CurrentView: " + currentView.ToString());
+                //Debug.Log("CurrentView: " + currentView.name);
                 currentView.Hide();
+            } else if (previousView != null) {
+                //Debug.Log("PreviousView: " + previousView.name);
+                previousView.Hide();
             }
-            previousView = currentView;    
-            currentView = targetView;
-            currentView.Show();
+            //Debug.Log("ChangeView keep history: " + targetView.keepHistory.ToString());
+            if (targetView.keepHistory) {
+                previousView = currentView;
+                currentView = targetView;
+                currentView.Show();
+            } else {
+                targetView.Show();
+            }
         }
 
         public void LoadSingleView(UIView targetView) {

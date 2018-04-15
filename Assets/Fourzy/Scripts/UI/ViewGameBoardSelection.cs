@@ -9,6 +9,7 @@ namespace Fourzy
         void Start()
         {
             instance = this;
+            keepHistory = false;
         }
 
         public override void Show()
@@ -28,14 +29,15 @@ namespace Fourzy
 
         public void BackButton()
         {
-            //Debug.Log("previous view type: " + ViewController.instance.GetPreviousView().GetType());
-            if (ViewController.instance.GetPreviousView() != null) {
-                if (ViewController.instance.GetPreviousView().GetType() != typeof(ViewTraining))
+            Debug.Log("viewgameboardselection current view: " + ViewController.instance.GetCurrentView().name);
+            Hide();
+            if (ViewController.instance.GetCurrentView() != null) {
+                if (ViewController.instance.GetCurrentView().GetType() != typeof(ViewTraining))
                 {
                     ViewController.instance.ShowTabView();
                 }
 
-                ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
+                ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());
             } else {
                 ViewController.instance.ShowTabView();
                 ViewController.instance.ChangeView(ViewController.instance.view3);

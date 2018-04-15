@@ -507,19 +507,25 @@ namespace Fourzy
             //Debug.Log("current view: " + ViewController.instance.GetCurrentView());
             //Debug.Log("previous view: " + ViewController.instance.GetPreviousView());
 
-            if (ViewController.instance.GetCurrentView() == ViewController.instance.viewGameboardSelection)
-            {
-                ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
-            } else if (ViewController.instance.GetCurrentView() == ViewController.instance.viewMatchMaking) {
-                ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
-            }
-            else
-            {
-                ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());
-            }
+            //if (ViewController.instance.GetCurrentView() == ViewController.instance.viewGameboardSelection)
+            //{
+            //    ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
+            //} else if (ViewController.instance.GetCurrentView() == ViewController.instance.viewMatchMaking) {
+            //    ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
+            //}
+            //else
+            //{
+                //ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());
+            //}
 
-            if (ViewController.instance.GetCurrentView() != ViewController.instance.viewTraining) {
-                ViewController.instance.ShowTabView();    
+            if (ViewController.instance.GetCurrentView() != null) {
+                ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());
+                if (ViewController.instance.GetCurrentView() != ViewController.instance.viewTraining)
+                {
+                    ViewController.instance.ShowTabView();
+                }
+            } else if (ViewController.instance.GetPreviousView() != null) {
+                ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
             }
 
             ChallengeManager.instance.ReloadGames();
@@ -616,6 +622,19 @@ namespace Fourzy
             //Debug.Log("RewardsButton gameState.PlayerPieceCount(currentPlayer): " + gameState.PlayerPieceCount(currentPlayer));
             rewardScreen.Open(isCurrentPlayerWinner, gameState.PlayerPieceCount(currentPlayer));
             gameInfo.Close();
+        }
+
+        public void CreateGameButton()
+        {
+            Game game = GetActiveGame();
+            if (game != null)
+            {
+                game.OpenGame();
+            }
+            else
+            {
+                ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
+            }
         }
 
         public void RewardsScreenOkButton()
@@ -912,11 +931,6 @@ namespace Fourzy
         //private void GameScreenSetActive(bool isActive)
         //{
         //    gameScreen.SetActive(isActive);
-        //}
-
-        //private void UIScreenSetActive(bool isActive)
-        //{
-        //    UIScreen.SetActive(isActive);
         //}
 
         IEnumerator WaitToEnableInput()
@@ -1500,7 +1514,8 @@ namespace Fourzy
 
         public void RematchPassAndPlayGame()
         {
-            ViewController.instance.LoadSingleView(ViewController.instance.viewGameboardSelection);
+            //ViewController.instance.LoadSingleView(ViewController.instance.viewGameboardSelection);
+            ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
             TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
             AnalyticsManager.LogCustom("rematch_pnp_game");
         }

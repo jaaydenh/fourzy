@@ -54,7 +54,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 69dac7905af2144198ec89d72aabf0f3, type: 3}
   - {fileID: 21300000, guid: 05ac52c8088864a79bf64979672f6ddd, type: 3}
   - {fileID: 21300000, guid: 5e87a301d6a104210918553937942022, type: 3}
-  - {fileID: 21300000, guid: c0628743887e44121b31e3adfa2ea35b, type: 3}
   - {fileID: 21300000, guid: eec1cf8b683b24abca788236caa8c5d9, type: 3}
   - {fileID: 21300000, guid: a8aa2d01300d841fea86dfc1376ded36, type: 3}
   - {fileID: 21300000, guid: 66c710582a23e439e95f560533cc78f6, type: 3}
@@ -148,11 +147,10 @@ SpriteAtlas:
   - backgroundPatternUI
   - boardTrainingGarden
   - backgroundUI
-  - Wizard 1
+  - Wizard
   - windowTrainingGarden
   - MiniGameBoardGlow
   - MiniGameBoard
-  - WIZARD
   - uiPlayerInfo
   - listItemBackground
   - iconQuestion

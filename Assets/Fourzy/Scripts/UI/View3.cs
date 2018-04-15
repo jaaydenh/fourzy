@@ -12,6 +12,7 @@ namespace Fourzy
         void Start()
         {
             instance = this;
+            keepHistory = true;
             ViewController.instance.currentActiveView = TotalView.view3;
 
             //if (PlayerPrefs.GetInt("onboardingStage") <= 1)

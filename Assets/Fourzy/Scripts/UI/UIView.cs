@@ -16,6 +16,8 @@ namespace Fourzy
         private Canvas[] canvases;
         public float animSpeed = 0.5f;
         public UITabButton tabButton;
+        public bool keepHistory;
+        public bool isVisible;
 
         public virtual void Awake()
         {
@@ -37,6 +39,7 @@ namespace Fourzy
                 canvas.enabled = true;
 
             Canvas.ForceUpdateCanvases();
+            isVisible = true;
         }
 
         public virtual void Hide()
@@ -46,6 +49,7 @@ namespace Fourzy
                 canvas.enabled = false;
 
             Canvas.ForceUpdateCanvases();
+            isVisible = false;
         }
 
         public virtual void ShowAnimated(AnimationDirection sourceDirection)
