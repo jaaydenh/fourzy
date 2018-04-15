@@ -1,0 +1,94 @@
+{
+    "array": [
+        {
+            "ID": "0",
+            "Name": "Arrow",
+            "Enabled": true
+        },
+        {
+            "ID": "1",
+            "Name": "Sticky",
+            "Enabled": true
+        },
+        {
+            "ID": "2",
+            "Name": "Bush Blocker",
+            "Enabled": true
+        },
+        {
+            "ID": "3",
+            "Name": "Ghost",
+            "Enabled": true
+        },
+        {
+            "ID": "4",
+            "Name": "Ice Sheet",
+            "Enabled": true
+        },
+        {
+            "ID": "5",
+            "Name": "Pit",
+            "Enabled": true
+        },
+        {
+            "ID": "6",
+            "Name": "Sand",
+            "Enabled": true
+        },
+        {
+            "ID": "7",
+            "Name": "90 Turn Arrow",
+            "Enabled": true
+        },
+        {
+            "ID": "8",
+            "Name": "Fruit",
+            "Enabled": true
+        },
+        {
+            "ID": "9",
+            "Name": "Fruit Tree",
+            "Enabled": true
+        },
+        {
+            "ID": "10",
+            "Name": "Spider",
+            "Enabled": true
+        },
+        {
+            "ID": "11",
+            "Name": "Web",
+            "Enabled": true
+        },
+        {
+            "ID": "12",
+            "Name": "Water",
+            "Enabled": true
+        },
+        {
+            "ID": "13",
+            "Name": "Bumper",
+            "Enabled": true
+        },
+        {
+            "ID": "14",
+            "Name": "Bomb",
+            "Enabled": true
+        },
+        {
+            "ID": "15",
+            "Name": "Lava",
+            "Enabled": true
+        },
+        {
+            "ID": "16",
+            "Name": "Puddle",
+            "Enabled": true
+        },
+        {
+            "ID": "17",
+            "Name": "Rock",
+            "Enabled": true
+        }
+    ]
+}

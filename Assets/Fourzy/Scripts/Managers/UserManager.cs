@@ -74,6 +74,7 @@ namespace Fourzy
             if (!didLoadGamePieces)
             {
                 GamePieceSelectionManager.instance.LoadGamePieces(id);
+                TokenSelectionManager.instance.LoadTokens();
                 didLoadGamePieces = true;
             }
             gamePieceNameLabel.text = GamePieceSelectionManager.instance.GetGamePieceName(gamePieceId);

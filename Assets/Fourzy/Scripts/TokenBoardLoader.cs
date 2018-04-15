@@ -46,6 +46,22 @@ namespace Fourzy
             return gamePieceData;
         }
 
+        private TokenData[] LoadTokenData()
+        {
+            TokenData[] tokenData = new TokenData[0];
+            TextAsset dataAsJson = Resources.Load<TextAsset>("Tokens");
+            if (dataAsJson)
+            {
+                tokenData = JsonHelper.getJsonArray<TokenData>(dataAsJson.text);
+            }
+            else
+            {
+                AnalyticsManager.LogError("load_token_json_error");
+            }
+
+            return tokenData;
+        }
+
         public TokenBoard GetRandomTokenBoard()
         {
             //TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
@@ -103,6 +119,15 @@ namespace Fourzy
                 .Where(t => t.Enabled == true);
 
             return enabledGamePieces.ToArray();
+        }
+
+        public TokenData[] GetAllTokens()
+        {
+            TokenData[] tokenCollection = LoadTokenData();
+            IEnumerable<TokenData> enabledTokens = tokenCollection
+                .Where(t => t.Enabled == true);
+
+            return enabledTokens.ToArray();
         }
 
         private TokenBoardData GetDefaultTokenBoard()

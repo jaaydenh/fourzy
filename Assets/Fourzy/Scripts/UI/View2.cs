@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using HedgehogTeam.EasyTouch;
 
 namespace Fourzy
@@ -7,6 +8,12 @@ namespace Fourzy
     {
         //Instance
         public static View2 instance;
+        public Text gamePiecesTabText;
+        public Text tokensTabText;
+        public GameObject gamePiecesGrid;
+        public GameObject tokensGrid;
+        public RectTransform test;
+        public ScrollRect scrollRect;
 
         // Use this for initialization
         void Start()
@@ -68,6 +75,28 @@ namespace Fourzy
                 View2.instance.HideAnimated(AnimationDirection.left);
                 View1.instance.ShowAnimated(AnimationDirection.left);
             }
+        }
+
+        public void LoadGamePiecesButton() {
+            //GamePieceSelectionManager.instance.LoadGamePieces(UserManager.instance.gamePieceId.ToString());
+            gamePiecesGrid.SetActive(true);
+            tokensGrid.SetActive(false);
+            scrollRect.content = gamePiecesGrid.GetComponent<RectTransform>();
+            tokensTabText.fontSize = 35;
+            gamePiecesTabText.fontSize = 40;
+            gamePiecesTabText.GetComponent<Outline>().enabled = true;
+            tokensTabText.GetComponent<Outline>().enabled = false;
+        }
+
+        public void LoadTokensButton() {
+            //TokenSelectionManager.instance.LoadTokens();
+            gamePiecesGrid.SetActive(false);
+            tokensGrid.SetActive(true);
+            scrollRect.content = tokensGrid.GetComponent<RectTransform>();
+            tokensTabText.fontSize = 40;
+            gamePiecesTabText.fontSize = 35;
+            gamePiecesTabText.GetComponent<Outline>().enabled = false;
+            tokensTabText.GetComponent<Outline>().enabled = true;
         }
     }
 }

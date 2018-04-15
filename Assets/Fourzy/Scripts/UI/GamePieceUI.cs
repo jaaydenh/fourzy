@@ -13,6 +13,7 @@ namespace Fourzy
         public bool isLocked;
         public bool isSelected;
         public GameObject selector;
+        public Image gamePieceImage;
 
         public void SetAlternateColor(bool isAlternate) {
             Image rend = GetComponent<Image>();

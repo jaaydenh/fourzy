@@ -43,18 +43,13 @@ namespace Fourzy
             foreach (var piece in gamePieceData)
             {
                 GameObject go = Instantiate(gamePiecePrefab) as GameObject;
-                go.transform.localScale = new Vector3(1, 1, 1);
                 GamePieceUI gamePieceUI = go.GetComponent<GamePieceUI>();
                 gamePieceUI.id = piece.ID;
                 gamePieceUI.name = piece.Name;
-                go.GetComponentInChildren<Image>().sprite = gamePieces[int.Parse(piece.ID)];
+                gamePieceUI.gamePieceImage.sprite = gamePieces[int.Parse(piece.ID)];
+                //go.GetComponentInChildren<Image>().sprite = gamePieces[int.Parse(piece.ID)];
 
-                //gamePieceUI.GetComponent<Image>().sprite = gamePieces[int.Parse(piece.ID)];
-                //gamePieceUI.GetComponent<SpriteRenderer>().sprite = gamePieces[int.Parse(piece.ID)];
-
-                //go.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-
-                go.gameObject.transform.SetParent(gamePieceGrid.transform);
+                go.gameObject.transform.SetParent(gamePieceGrid.transform, false);
 
                 var toggle = go.GetComponent<Toggle>();
                 ToggleGroup tg = gamePieceGrid.GetComponent<ToggleGroup>();
