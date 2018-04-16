@@ -49,7 +49,10 @@ namespace Fourzy
                 tokenUI.id = token.ID;
                 tokenUI.name = token.Name;
                 tokenUI.tokenNameText.text = token.Name;
-                tokenUI.tokenImage.sprite = tokens[int.Parse(token.ID)]; 
+                tokenUI.tokenImage.sprite = tokens[int.Parse(token.ID)];
+                if (token.showBackgroundTile) {
+                    tokenUI.tileBGImage.SetActive(true);
+                }
                 //go.GetComponentInChildren<Image>().sprite = tokens[int.Parse(piece.ID)];
 
                 go.gameObject.transform.SetParent(tokenGrid.transform, false);

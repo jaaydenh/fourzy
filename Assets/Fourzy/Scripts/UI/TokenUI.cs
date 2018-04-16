@@ -13,5 +13,6 @@ namespace Fourzy
         public bool isLocked;
         public Text tokenNameText;
         public Image tokenImage;
+        public GameObject tileBGImage;
     }
 }

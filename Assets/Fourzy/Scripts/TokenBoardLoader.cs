@@ -64,23 +64,20 @@ namespace Fourzy
 
         public TokenBoard GetRandomTokenBoard()
         {
-            //TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
+            if (UnityEngine.Random.Range(0, 100) < 40) {
+                return RandomBoardGenerator.GenerateBoard();
+            } 
 
-            //var tokenBoardInfo = tokenBoardCollection
-            //    .Where(t => t.Enabled == true)
-            //    .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
-            //.FirstOrDefault();
+            TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
 
-            ////Debug.Log("tokenboard ID: " + tokenBoardInfo.ID);
-            ////Debug.Log("tokenboard Name: " + tokenBoardInfo.Name);
-            ////Debug.Log("tokenboard Enabled: " + tokenBoardInfo.Enabled);
-            ////Debug.Log("tokenboard TokenData: " + tokenBoardInfo.TokenData);
+            var tokenBoardInfo = tokenBoardCollection
+                .Where(t => t.Enabled == true)
+                .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
+            .FirstOrDefault();
 
-            //TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID, tokenBoardInfo.Name, true);
+            TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID, tokenBoardInfo.Name, true);
 
-            //return tokenboard;
-
-            return RandomBoardGenerator.GenerateBoard();
+            return tokenboard;
         }
 
         public TokenBoard GetTokenBoard(string id) {

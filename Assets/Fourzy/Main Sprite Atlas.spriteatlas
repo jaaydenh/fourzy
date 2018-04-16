@@ -66,6 +66,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: b137e826caf1444e091ce74f4bda3083, type: 3}
   - {fileID: 21300000, guid: e59dd586d917d4490bfbceec7e12ca4f, type: 3}
   - {fileID: 21300000, guid: ac08e5484679a81439eba491520bf464, type: 3}
+  - {fileID: 21300000, guid: ca2e879fd2e6e4e4b887f42c36a3a42b, type: 3}
   - {fileID: 21300000, guid: 1dcc03776739b4ed09b5f1a345fcffc1, type: 3}
   - {fileID: 21300000, guid: 945ffa44f52024d21ac9297edea6c81d, type: 3}
   - {fileID: 21300000, guid: 8399a1ca389db43f4b5bae6e953dfaf2, type: 3}
@@ -74,6 +75,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: cbed2515e53714785840b9ebaa9a3c5a, type: 3}
   - {fileID: 21300000, guid: 96092efcbbf274f2f9315e910640cf5a, type: 3}
   - {fileID: 21300000, guid: 96a8e1f97b0c542ab80f516de7b49385, type: 3}
+  - {fileID: 21300000, guid: 66563ebefaed04110b5040ca8999b0bd, type: 3}
   - {fileID: 21300000, guid: 0f6422c302db04965ac0f62a90d4c43e, type: 3}
   - {fileID: 21300000, guid: 7eb66b370b9794ce5845206582f25947, type: 3}
   - {fileID: 21300000, guid: 9f24f1ded2a53464082b3976aa8272c8, type: 3}
@@ -88,18 +90,23 @@ SpriteAtlas:
   - {fileID: 21300000, guid: db7b4a68569c64f2ab1ef70fac2986ef, type: 3}
   - {fileID: 21300000, guid: 2a388679cb20442be9eae172db2046dd, type: 3}
   - {fileID: 21300000, guid: dd31813bada13433ea41906574fc41b7, type: 3}
+  - {fileID: 21300000, guid: 727c33d7a79074a80bf83232b5779f8b, type: 3}
   - {fileID: 21300000, guid: 3f2385a0ec8dc43b2bf9a0e1aa098f74, type: 3}
   - {fileID: 21300000, guid: 957f31dde68b14bb8a510213c89eabb1, type: 3}
   - {fileID: 21300000, guid: a2c2996baa8a54178be732284e466991, type: 3}
+  - {fileID: 21300000, guid: 0738a67aa20204c1a9f177165d7914e1, type: 3}
   - {fileID: 21300000, guid: 02dfbd849cc62490eae07f7e28e57782, type: 3}
   - {fileID: 21300000, guid: 79204262dc3a74772b5e31f000e0654b, type: 3}
   - {fileID: 21300000, guid: 7732e1a8e6d544f739dfbc78fb7055f4, type: 3}
   - {fileID: 21300000, guid: a682b86608f0b445087d5031315efb83, type: 3}
   - {fileID: 21300000, guid: 3afd237b6813946bbbc7c57286b01172, type: 3}
   - {fileID: 21300000, guid: 24ecb05ecb3bf49fcab7e19d807948eb, type: 3}
+  - {fileID: 21300000, guid: aba50d9fa10a847e1baa9823e2bb6b5f, type: 3}
   - {fileID: 21300000, guid: 2a1489a47606a4936a1cd25c52cebf37, type: 3}
+  - {fileID: 21300000, guid: 6bd56ed1d8ae94a5fb83dcd2e341072d, type: 3}
   - {fileID: 21300000, guid: 7f3fefa8f9777451ca0f4e5af0ede456, type: 3}
   - {fileID: 21300000, guid: bf16876b1febc43fab8fce7dd46c4127, type: 3}
+  - {fileID: 21300000, guid: d39a949f4163648f2ac826ac5b963441, type: 3}
   - {fileID: 21300000, guid: 683cb2a59ffac4c1eba63de821b18174, type: 3}
   - {fileID: 21300000, guid: 6df284fe672c042d5bf8d8c17404a562, type: 3}
   - {fileID: 21300002, guid: 683cb2a59ffac4c1eba63de821b18174, type: 3}
@@ -163,6 +170,7 @@ SpriteAtlas:
   - buttonYellowRounded
   - DefaultFourzy
   - LogoBackground
+  - gridTile
   - buttonLeaderboard 2
   - buttonLeaderboard 1
   - buttonLeaderboard
@@ -171,6 +179,7 @@ SpriteAtlas:
   - buttonBack
   - Chest
   - HintArea
+  - tokenSpider1
   - token90LeftArrow
   - tokenWater
   - token90RightArrow
@@ -185,18 +194,23 @@ SpriteAtlas:
   - tokenGhost1
   - tokenGhost3
   - tokenGhost2
+  - tokenLava
   - tokenTrainingGardenFruit
   - tokenWild1
   - tokenPit
+  - tokenPuddle
   - tokenSand
   - tokenWild
   - tokenSpider
   - tokenSticky
   - tokenWeb
   - token90LeftArrow 1
+  - darkTile
   - tokenBlocker
+  - tokenRock
   - Coin
   - hand
+  - tokenBomb
   - CoinSheet_0
   - iconList
   - CoinSheet_1

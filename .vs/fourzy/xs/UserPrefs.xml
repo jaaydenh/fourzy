@@ -1,18 +1,17 @@
 ﻿<Properties StartupConfiguration="{9AD793E4-7370-FB12-CE27-35FD78F1FC38}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/UI/View2.cs">
     <Files>
-      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="934" Column="12" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="449" Column="40" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/Onboarding.cs" Line="72" Column="35" />
-      <File FileName="Assets/Fourzy/Scripts/UI/View2.cs" Line="85" Column="59" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/GamePieceSelectionManager.cs" Line="38" Column="21" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/TokenSelectionManager.cs" Line="49" Column="39" />
-      <File FileName="Assets/Fourzy/Scripts/UI/GamePieceUI.cs" Line="50" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/TokenBoardLoader.cs" Line="160" Column="10" />
-      <File FileName="Assets/Fourzy/Scripts/UI/View5.cs" Line="11" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/UI/TokenUI.cs" Line="15" Column="33" />
-      <File FileName="Assets/Resources/Tokens.txt" Line="37" Column="10" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/UserManager.cs" Line="77" Column="61" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="690" Column="27" />
+      <File FileName="Assets/Resources/TokenBoards.txt" Line="2311" Column="37" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="521" Column="77" />
+      <File FileName="Assets/Fourzy/Scripts/UI/View3.cs" Line="30" Column="14" />
+      <File FileName="Assets/Fourzy/Scripts/UI/ViewMatchMaking.cs" Line="98" Column="60" />
+      <File FileName="Assets/Fourzy/Scripts/TokenBoardLoader.cs" Line="67" Column="53" />
+      <File FileName="Assets/Fourzy/Scripts/UI/ViewGameBoardSelection.cs" Line="27" Column="34" />
+      <File FileName="Assets/Fourzy/Scripts/UI/ViewController.cs" Line="83" Column="44" />
+      <File FileName="Assets/Fourzy/Scripts/UI/ViewTabs.cs" Line="1" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/UIView.cs" Line="27" Column="40" />
+      <File FileName="Assets/Fourzy/Scripts/UI/View2.cs" Line="67" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

@@ -6,5 +6,6 @@
         public string ID;
         public string Name;
         public bool Enabled;
+        public bool showBackgroundTile;
     }
 }

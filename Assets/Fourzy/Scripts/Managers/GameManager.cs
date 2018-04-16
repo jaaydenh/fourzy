@@ -207,7 +207,7 @@ namespace Fourzy
             if (tokens == null)
             {
                 tokens = new GameObject("Tokens");
-                tokens.transform.parent = gameScreenSprites.transform;
+                tokens.transform.parent = gameScreen.transform;
                 tokens.transform.position.Set(-324f, 307f, 0f);
             }
 
@@ -2107,9 +2107,9 @@ namespace Fourzy
 
         void DrawLine(Vector3 start, Vector3 end, Color color)
         {
-            //Debug.Log("START X: " + start.x + " START Y: " + start.y);
-            //Debug.Log("END X: " + end.x + " END Y: " + end.y);
-            //Debug.Log("DRAWLINE");
+            Debug.Log("START X: " + start.x + " START Y: " + start.y);
+            Debug.Log("END X: " + end.x + " END Y: " + end.y);
+            Debug.Log("DRAWLINE");
             GameObject myLine = new GameObject("WinLine");
             myLine.tag = "WinLine";
             myLine.transform.parent = tokens.transform;
