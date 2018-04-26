@@ -4,7 +4,7 @@
         {
             "ID": "1000",
             "Name": "The Basic Game",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -15,9 +15,52 @@
                           6,0,0,0,0,0,0,6]
         },
         {
+            "ID": "100",
+            "Name": "How to Play",
+            "Enabled": true, "EnabledGallery": false,
+            "TokenData": [6,0,0,0,0,0,0,6,
+                          0,0,0,0,0,0,0,0,
+                          0,0,0,0,0,0,0,0,
+                          0,0,0,0,0,0,0,0,
+                          0,0,0,0,0,0,0,0,
+                          0,0,0,0,0,0,0,0,
+                          0,0,0,0,0,0,0,0,
+                          6,0,0,0,0,0,0,6],
+            "InitialMoves": [
+                { "Location": 3, "Direction": 2 },
+                { "Location": 3, "Direction": 1 },
+                { "Location": 3, "Direction": 2 },
+                { "Location": 4, "Direction": 0 },
+                { "Location": 3, "Direction": 2 },
+                { "Location": 5, "Direction": 3 },
+                { "Location": 3, "Direction": 2 }
+            ]
+        },
+        {
+            "ID": "101",
+            "Name": "How to Win",
+            "Enabled": true, "EnabledGallery": false,
+            "TokenData": [6,0,0,0,0,0,0,6,
+                          0,0,0,0,0,0,0,0,
+                          0,0,0,0,0,0,0,0,
+                          0,0,0,0,0,0,0,0,
+                          0,0,0,0,0,0,0,0,
+                          0,0,0,0,0,0,0,0,
+                          0,0,0,0,0,0,0,0,
+                          6,0,0,0,0,0,0,6],
+            "InitialGameBoard": [0,0,0,0,0,0,0,0,
+                                 0,0,0,0,0,0,0,0,
+                                 0,0,0,0,0,0,0,0,
+                                 0,0,0,0,0,0,0,0,
+                                 0,0,0,0,0,0,0,0,
+                                 0,0,2,2,1,2,0,0,
+                                 0,0,0,0,1,0,0,0,
+                                 0,0,0,0,1,0,0,0]
+        },
+        {
             "ID": "0326201801",
             "Name": "Almost a Desert",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,18,18,18,18,18,18,0,
                           0,18,18,18,18,18,18,0,
@@ -30,7 +73,7 @@
         {
             "ID": "0326201802",
             "Name": "Ring of Sand",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,18,18,18,18,18,18,0,
                           0,18,18,18,18,18,18,0,
@@ -43,7 +86,7 @@
         {
             "ID": "0326201803",
             "Name": "Sandy Cross",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,18,18,0,0,0,
                           0,0,0,18,18,0,0,0,
@@ -56,7 +99,7 @@
         {
             "ID": "9812389",
             "Name": "One Big Pit",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,5,5,5,5,5,5,0,
                           0,5,9,9,9,9,5,0,
@@ -69,7 +112,7 @@
         {
             "ID": "021920181",
             "Name": "The Letter E",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,4,5,5,5,5,0,0,
                           0,4,5,0,0,0,0,0,
@@ -82,7 +125,7 @@
         {
             "ID": "021920182",
             "Name": "The Letter A",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,5,5,5,5,0,0,
                           0,0,5,2,2,5,0,0,
@@ -95,7 +138,7 @@
         {
             "ID": "021920183",
             "Name": "The Letter G",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,5,5,5,5,0,0,
                           0,0,5,0,0,0,0,0,
@@ -108,7 +151,7 @@
         {
             "ID": "021920184",
             "Name": "The Letter L",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,2,2,2,2,0,6,
                           0,0,5,0,0,0,0,0,
                           0,0,5,0,0,0,0,0,
@@ -121,7 +164,7 @@
         {
             "ID": "021920185",
             "Name": "The Letter E",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,2,0,0,0,0,6,
                           0,0,5,5,5,5,0,0,
                           0,0,5,1,0,0,0,0,
@@ -134,7 +177,7 @@
         {
             "ID": "021920186",
             "Name": "The Letter S",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,5,5,5,5,3,0,
                           0,0,5,4,4,0,0,0,
@@ -147,7 +190,7 @@
         {
             "ID": "021920187",
             "Name": "Alternating Sticky Center",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,1,2,1,2,0,0,
                           0,0,0,0,0,0,0,0,
@@ -160,7 +203,7 @@
         {
             "ID": "021920188",
             "Name": "Four Ways Staggered",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,2,0,0,0,0,
                           0,0,0,0,1,0,0,0,
@@ -173,7 +216,7 @@
         {
             "ID": "101010101",
             "Name": "Fruits Test 1",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,14,0,0,0,0,0,0,
                           0,0,14,0,0,0,0,0,
@@ -186,7 +229,7 @@
         {
             "ID": "0206181",
             "Name": "Fruits Test 2",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,14,0,14,0,0,0,
@@ -199,7 +242,7 @@
         {
             "ID": "0206182",
             "Name": "Fruits Test 3",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,5,5,5,5,0,0,
@@ -212,7 +255,7 @@
         {
             "ID": "0206183",
             "Name": "Fruits Test 4",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,14,0,2,0,0,14,0,
                           0,0,14,0,1,14,0,0,
@@ -225,7 +268,7 @@
         {
             "ID": "0206184",
             "Name": "Fruits Test 5",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,14,14,0,0,0,0,0,
                           0,0,14,14,0,0,0,0,
@@ -238,7 +281,7 @@
         {
             "ID": "0206185",
             "Name": "Fruits Test 6",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,5,0,5,0,0,0,
                           0,5,14,5,14,5,0,0,
@@ -251,7 +294,7 @@
         {
             "ID": "999",
             "Name": "Sticky Cornered Pillar",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,5,0,0,5,0,0,
@@ -264,7 +307,7 @@
         {
             "ID": "998",
             "Name": "Towards A Sticky Pattern",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,5,0,0,0,5,0,
                           0,5,0,5,5,5,0,0,
@@ -277,7 +320,7 @@
         {
             "ID": "996",
             "Name": "Icy Ghost Fence",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           8,8,8,8,8,8,8,8,
@@ -290,7 +333,7 @@
         {
             "ID": "1001",
             "Name": "GhostSticky Large Four",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,7,8,0,0,8,0,
                           0,0,8,0,0,8,7,0,
@@ -303,7 +346,7 @@
         {
             "ID": "1002",
             "Name": "Ghosts Diagonal",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -316,7 +359,7 @@
         {
             "ID": "1003",
             "Name": "GhostSticky Hanging Light",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,7,7,0,0,6,
                           0,0,0,7,7,0,0,0,
                           0,0,0,7,7,0,0,0,
@@ -329,7 +372,7 @@
         {
             "ID": "1004",
             "Name": "Ghost Circle With Center",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,7,0,7,0,0,0,
                           0,0,0,0,0,0,7,0,
@@ -342,7 +385,7 @@
         {
             "ID": "1005",
             "Name": "Up and Down",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -355,7 +398,7 @@
         {
             "ID": "1006",
             "Name": "A Sticky Escape",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,2,2,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -368,7 +411,7 @@
         {
             "ID": "1007",
             "Name": "Ghost Coated Shuriken",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,7,5,0,0,0,
                           0,0,0,7,5,0,0,0,
@@ -381,7 +424,7 @@
         {
             "ID": "1008",
             "Name": "Sticky Donut",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,5,5,5,5,0,0,
@@ -394,7 +437,7 @@
         {
             "ID": "1009",
             "Name": "Sticky Checkers",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,5,0,5,0,5,0,0,
                           0,0,5,0,5,0,5,0,
@@ -407,7 +450,7 @@
         {
             "ID": "1010",
             "Name": "Big Sticky Block",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,5,5,5,5,0,0,
@@ -420,7 +463,7 @@
         {
             "ID": "1011",
             "Name": "Sticky Checkers",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,5,0,5,0,5,0,0,
                           0,0,5,0,5,0,5,0,
@@ -433,7 +476,7 @@
         {
             "ID": "1012",
             "Name": "Covered Sticky Stick",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,6,0,0,6,0,0,
                           0,6,0,3,4,0,6,0,
@@ -446,7 +489,7 @@
         {
             "ID": "1013",
             "Name": "Skyscraper",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,5,5,0,0,0,
                           7,7,5,5,5,5,7,7,
@@ -459,7 +502,7 @@
         {
             "ID": "1014",
             "Name": "Smiley",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,7,7,0,0,7,7,0,
                           0,0,1,0,0,1,0,0,
@@ -472,7 +515,7 @@
         {
             "ID": "1015",
             "Name": "Push Out",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,5,5,0,0,0,
@@ -485,7 +528,7 @@
         {
             "ID": "1016",
             "Name": "Big J",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,5,5,0,0,
                           0,0,0,0,5,5,0,0,
@@ -498,7 +541,7 @@
         {
             "ID": "1017",
             "Name": "Blocked Ice Flow",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,8,8,8,8,8,8,6,
                           8,8,8,8,6,8,8,8,
                           8,8,6,8,8,8,8,8,
@@ -511,7 +554,7 @@
         {
             "ID": "1018",
             "Name": "Directed Ice Flow",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,8,8,8,8,8,8,6,
                           8,8,8,8,8,8,8,8,
                           8,8,8,2,8,8,8,8,
@@ -524,7 +567,7 @@
         {
             "ID": "1019",
             "Name": "It's All Sticky",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,5,5,5,5,5,5,6,
                           5,5,5,5,5,5,5,5,
                           5,5,5,5,5,5,5,5,
@@ -537,7 +580,7 @@
         {
             "ID": "1020",
             "Name": "Sticky Pit of Death",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,5,5,0,0,0,
                           0,0,5,5,5,5,0,0,
@@ -550,7 +593,7 @@
         {
             "ID": "1021",
             "Name": "Pit to the Right",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,5,5,5,5,9,
                           0,0,0,5,5,5,5,9,
@@ -563,7 +606,7 @@
         {
             "ID": "1022",
             "Name": "Just One Pit",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -576,7 +619,7 @@
         {
             "ID": "1023",
             "Name": "Blocked Pits",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,5,5,5,5,0,0,
@@ -589,7 +632,7 @@
         {
             "ID": "1024",
             "Name": "Sticky Ice Rivers",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,8,5,8,5,8,5,6,
                           5,5,5,8,5,8,5,8,
                           8,8,8,8,5,8,5,5,
@@ -602,7 +645,7 @@
         {
             "ID": "1025",
             "Name": "Sticky Ice Crossing",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,5,5,0,0,6,
                           0,0,0,5,5,0,0,0,
                           0,0,6,5,5,6,0,0,
@@ -615,7 +658,7 @@
         {
             "ID": "1026",
             "Name": "Ice vs Sticky",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,5,5,5,5,5,5,6,
                           0,5,5,5,5,5,5,0,
                           0,5,5,5,5,5,5,0,
@@ -628,7 +671,7 @@
         {
             "ID": "1027",
             "Name": "Surrounded by Stickiness",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,5,5,5,5,5,5,6,
                           5,0,0,0,0,0,0,5,
                           5,0,0,0,0,0,0,5,
@@ -641,7 +684,7 @@
         {
             "ID": "1028",
             "Name": "Slide in the Sticky",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           5,5,5,5,5,5,5,5,
                           5,4,4,2,5,4,4,2,
@@ -654,7 +697,7 @@
         {
             "ID": "1029",
             "Name": "Sticky Tic-Tac-Toe",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,5,0,0,5,0,6,
                           0,0,5,0,0,5,0,0,
                           5,5,9,5,5,9,5,5,
@@ -667,7 +710,7 @@
         {
             "ID": "1030",
             "Name": "Directional Pinwheel",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,5,1,5,0,6,
                           0,0,0,5,1,5,0,0,
                           5,5,5,5,1,5,0,0,
@@ -680,7 +723,7 @@
         {
             "ID": "1031",
             "Name": "Sticky Stripes",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,5,0,5,0,5,6,
                           5,0,5,0,5,0,5,0,
                           5,0,5,0,5,0,5,0,
@@ -693,7 +736,7 @@
         {
             "ID": "1032",
             "Name": "Sticky Coated Snake",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,5,5,2,3,5,5,6,
                           0,5,5,4,2,5,5,0,
                           0,5,5,2,3,5,5,0,
@@ -706,7 +749,7 @@
         {
             "ID": "1033",
             "Name": "Up and Down Icy",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,8,8,8,8,8,8,6,
                           8,8,8,8,8,8,8,8,
                           8,8,8,8,8,8,8,8,
@@ -719,7 +762,7 @@
         {
             "ID": "093001",
             "Name": "Plus Pits",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 8, 8, 5, 5, 8, 8, 6, 
                             8, 8, 8, 5, 5, 8, 8, 8,
                             8, 8, 8, 5, 5, 8, 8, 8,
@@ -732,7 +775,7 @@
         {
             "ID": "093002",
             "Name": "Ice Sticky Border",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 5, 5, 5, 5, 5, 5, 6, 
                             5, 5, 8, 8, 8, 8, 5, 5,
                             5, 8, 8, 8, 8, 8, 8, 5,
@@ -745,7 +788,7 @@
         {
             "ID": "093003",
             "Name": "Alternating Patterns",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 1, 1, 1, 1, 1, 1, 6, 
                             8, 8, 8, 8, 5, 5, 5, 5,
                             8, 8, 8, 8, 5, 5, 5, 5,
@@ -758,7 +801,7 @@
         {
             "ID": "0930034",
             "Name": "Big Checker",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [ 6, 0, 0, 0, 5, 0, 0, 6, 
                             0, 0, 0, 5, 8, 8, 8, 0,
                             0, 0, 5, 0, 8, 8, 8, 0,
@@ -771,7 +814,7 @@
         {
             "ID": "0930035",
             "Name": "Tree",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 5, 5, 5, 5, 5, 5, 6, 
                             5, 5, 5, 5, 5, 5, 5, 5,
                             5, 5, 5, 5, 5, 5, 5, 5,
@@ -784,7 +827,7 @@
         {
             "ID": "093010",
             "Name": "Smattering of Ghosts",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 0, 0, 0, 0, 0, 0, 6, 
                             0, 0, 0, 0, 7, 0, 0, 0, 
                             0, 0, 7, 0, 0, 0, 0, 0,
@@ -797,7 +840,7 @@
         {
             "ID": "093011",
             "Name": "Diagonal Ice",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 8, 0, 0, 0, 0, 0, 6,
                             8, 8, 8, 0, 0, 0, 0, 0,
                             0, 8, 8, 8, 0, 0, 0, 0,
@@ -810,7 +853,7 @@
         {
             "ID": "093012",
             "Name": "Spiral on Ice",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 8, 8, 8, 8, 8, 8, 6,
                             8, 8, 8, 8, 8, 8, 8, 8,
                             8, 8, 8, 8, 4, 8, 8, 8,
@@ -823,7 +866,7 @@
         {
             "ID": "093013",
             "Name": "Sticky Corners",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 5, 5, 5, 0, 0, 0, 6,
                             5, 5, 5, 0, 0, 0, 0, 0,
                             5, 5, 8, 8, 0, 0, 0, 0,
@@ -836,7 +879,7 @@
         {
             "ID": "093014",
             "Name": "The Turn",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 0, 0, 0, 0, 0, 0, 6,
                             0, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, 0, 5, 5, 5, 5, 5,
@@ -849,7 +892,7 @@
         {
             "ID": "093015",
             "Name": "Air Hockey",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 1, 1, 1, 1, 1, 1, 6,
                             8, 8, 8, 8, 8, 8, 8, 8,
                             8, 8, 8, 8, 8, 8, 8, 8,
@@ -862,7 +905,7 @@
         {
             "ID": "093016",
             "Name": "Ghosts On Ice",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 7, 8, 7, 8, 7, 8, 6,
                             8, 7, 8, 7, 8, 7, 8, 8,
                             8, 8, 8, 7, 8, 8, 8, 8,
@@ -875,7 +918,7 @@
         {
             "ID": "093017",
             "Name": "Sticky Ceiling",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 5, 5, 5, 5, 5, 5, 6,
                             0, 0, 5, 0, 5, 0, 5, 0,
                             0, 0, 0, 0, 0, 0, 0, 0,
@@ -888,7 +931,7 @@
         {
             "ID": "093018",
             "Name": "House Attempt 1",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 0, 0, 1, 1, 0, 0, 6,
                             0, 0, 1, 8, 8, 1, 0, 0,
                             0, 1, 8, 8, 8, 8, 1, 0,
@@ -901,7 +944,7 @@
         {
             "ID": "093019",
             "Name": "Big Diagonal Stripe",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 8, 8, 5, 8, 8, 8, 6,
                             8, 8, 8, 8, 5, 8, 8, 8,
                             8, 8, 8, 8, 8, 5, 8, 8,
@@ -914,7 +957,7 @@
         {
             "ID": "093019",
             "Name": "Bobsled",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 0, 5, 8, 8, 5, 0, 6,
                             0, 0, 5, 8, 8, 5, 0, 0,
                             0, 0, 5, 8, 8, 5, 0, 0,
@@ -927,7 +970,7 @@
         {
             "ID": "093020",
             "Name": "Sticky Ceiling 2",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 5, 5, 5, 5, 5, 5, 6,
                             0, 0, 5, 0, 5, 0, 5, 0,
                             0, 0, 0, 0, 0, 0, 0, 0,
@@ -940,7 +983,7 @@
         {
             "ID": "093021",
             "Name": "Center Splots",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 0, 0, 0, 0, 0, 0, 6,
                             0, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, 0, 0, 5, 5, 5, 0,
@@ -953,7 +996,7 @@
         {
             "ID": "093022",
             "Name": "Thick Line on Ice",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 8, 8, 8, 8, 8, 8, 6,
                             8, 8, 8, 8, 8, 8, 8, 8,
                             8, 8, 8, 8, 8, 8, 8, 8,
@@ -966,7 +1009,7 @@
         {
             "ID": "093023",
             "Name": "Diamond",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 0, 0, 0, 5, 0, 0, 6, 
                             0, 0, 0, 5, 0, 5, 0, 0, 
                             0, 0, 5, 0, 0, 0, 5, 0,
@@ -979,7 +1022,7 @@
         {
             "ID": "093024",
             "Name": "Sticky Ceiling 3",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 5, 5, 5, 5, 5, 5, 6, 
                             0, 0, 5, 0, 5, 0, 5, 0, 
                             0, 0, 0, 0, 0, 0, 0, 0,
@@ -992,7 +1035,7 @@
         {
             "ID": "093025",
             "Name": "Center Splots 2",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 0, 0, 0, 0, 0, 0, 6, 
                             0, 0, 0, 0, 0, 0, 0, 0, 
                             5, 0, 5, 0, 5, 0, 5, 0,
@@ -1005,7 +1048,7 @@
         {
             "ID": "093026",
             "Name": "Upside Down T",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 7, 7, 5, 5, 7, 7, 6, 
                             7, 0, 0, 5, 5, 0, 0, 7, 
                             7, 0, 0, 5, 5, 0, 0, 7,
@@ -1018,7 +1061,7 @@
         {
             "ID": "093027",
             "Name": "Ice Checkerboard",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [  6, 8, 0, 8, 0, 8, 0, 6, 
                             8, 0, 8, 0, 8, 0, 8, 0, 
                             0, 8, 0, 8, 0, 8, 0, 8,
@@ -1031,7 +1074,7 @@
         {
             "ID": "101601",
             "Name": "Some Arrows",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,11,0,0,
@@ -1044,7 +1087,7 @@
         {
             "ID": "101602",
             "Name": "GhostSpot",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -1057,7 +1100,7 @@
         {
             "ID": "101603",
             "Name": "Sticky Top Left Diagonal",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,5,5,0,0,6,
                           0,0,5,5,0,0,0,0,
                           0,5,5,0,0,0,0,0,
@@ -1070,7 +1113,7 @@
         {
             "ID": "101604",
             "Name": "Sticky Lines",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,5,0,0,0,0,6,
                           0,0,5,0,0,0,0,0,
                           0,0,5,0,0,0,0,0,
@@ -1083,7 +1126,7 @@
         {
             "ID": "101605",
             "Name": "Sticky Spots",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,5,0,0,
                           0,0,0,0,5,5,5,0,
@@ -1096,7 +1139,7 @@
         {
             "ID": "101606",
             "Name": "Large Ice Checkers",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,8,8,0,0,6,
                           0,8,8,0,0,8,8,0,
                           0,8,8,0,0,8,8,0,
@@ -1109,7 +1152,7 @@
         {
             "ID": "101607",
             "Name": "Even Face",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,5,0,0,5,0,0,
@@ -1122,7 +1165,7 @@
         {
             "ID": "101608",
             "Name": "Side Ice Spots",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,8,8,8,
                           0,0,0,0,0,8,6,8,
@@ -1135,7 +1178,7 @@
         {
             "ID": "101609",
             "Name": "Bulb",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,7,7,7,7,7,7,6,
                           5,5,5,5,5,5,5,5,
                           5,2,3,8,8,2,3,5,
@@ -1148,7 +1191,7 @@
         {
             "ID": "101610",
             "Name": "Crossing",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,5,0,0,0,0,6,
                           0,0,5,0,0,0,0,0,
                           5,5,9,5,5,5,5,5,
@@ -1161,7 +1204,7 @@
         {
             "ID": "101611",
             "Name": "Pit Lines",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,5,0,5,0,0,6,
                           0,0,5,0,5,0,0,0,
                           0,0,5,0,5,0,0,0,
@@ -1174,7 +1217,7 @@
         {
             "ID": "101617",
             "Name": "Center Diagonal Blockers",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,6,0,0,
@@ -1187,7 +1230,7 @@
         {
             "ID": "101618",
             "Name": "Spiraling",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,5,0,0,0,6,
                           0,0,0,5,0,0,0,0,
                           0,0,0,5,5,0,0,0,
@@ -1200,7 +1243,7 @@
         {
             "ID": "101619",
             "Name": "Ghost Corners",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,7,7,7,0,0,0,6,
                           7,7,7,0,0,0,0,0,
                           7,7,0,0,0,0,0,0,
@@ -1213,7 +1256,7 @@
         {
             "ID": "101620",
             "Name": "Ice Spear",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -1226,7 +1269,7 @@
         {
             "ID": "101621",
             "Name": "Some Dots",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,5,0,5,0,5,0,0,
                           0,0,5,0,5,0,5,0,
@@ -1239,7 +1282,7 @@
         {
             "ID": "101622",
             "Name": "Big Ice Block",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -1252,7 +1295,7 @@
         {
             "ID": "101623",
             "Name": "Sets of Arrows",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,2,2,0,6,
                           0,0,0,0,2,2,0,0,
                           3,3,3,0,2,2,0,0,
@@ -1265,7 +1308,7 @@
         {
             "ID": "101624",
             "Name": "Square Layers",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,5,5,5,5,5,5,0,
                           0,5,8,8,8,8,5,0,
@@ -1278,7 +1321,7 @@
         {
             "ID": "101625",
             "Name": "Bloxes",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           5,5,5,5,0,0,0,0,
                           5,7,7,5,0,0,0,0,
@@ -1291,7 +1334,7 @@
         {
             "ID": "101626",
             "Name": "Ice Pattern",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,8,0,8,0,8,6,
                           0,0,8,0,8,0,8,8,
                           8,8,8,0,8,0,0,0,
@@ -1304,7 +1347,7 @@
         {
             "ID": "101627",
             "Name": "The Erik B Board",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,5,3,8,8,5,5,6,
                           5,8,8,7,7,8,8,2,
                           5,8,1,8,8,3,8,5,
@@ -1317,7 +1360,7 @@
         {
             "ID": "101628",
             "Name": "Sticky Edges",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,5,5,5,5,5,5,6,
                           5,5,5,5,5,5,5,5,
                           5,5,0,0,0,0,5,5,
@@ -1330,7 +1373,7 @@
         {
             "ID": "101629",
             "Name": "Outside To In",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,7,6,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -1343,7 +1386,7 @@
         {
             "ID": "101630",
             "Name": "Sticky Corners",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,5,0,0,0,0,5,6,
                           5,5,0,0,0,0,5,5,
                           0,0,0,0,0,0,0,0,
@@ -1356,7 +1399,7 @@
         {
             "ID": "101801",
             "Name": "Waves",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,3,0,0,0,6,
                           0,0,0,3,0,0,0,0,
                           0,0,0,3,0,0,0,0,
@@ -1369,7 +1412,7 @@
         {
             "ID": "101802",
             "Name": "Bump",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -1382,7 +1425,7 @@
         {
             "ID": "101803",
             "Name": "Spinning Around",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,5,5,0,0,0,0,6,
                           0,1,5,0,0,0,4,5,
                           0,0,1,0,0,4,5,5,
@@ -1395,7 +1438,7 @@
         {
             "ID": "101804",
             "Name": "Right and Left",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           3,0,0,0,0,0,0,3,
                           3,0,0,0,0,0,0,3,
@@ -1408,7 +1451,7 @@
         {
             "ID": "101805",
             "Name": "Three Sides",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,6,6,6,6,6,6,6,
                           0,0,0,7,7,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -1421,7 +1464,7 @@
         {
             "ID": "103001",
             "Name": "Swirled",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":        [6,0,0,0,0,0,0,6,
                                   0,5,0,0,5,5,5,0,
                                   0,5,0,0,0,0,0,0,
@@ -1434,7 +1477,7 @@
         {
             "ID": "103002",
             "Name": "Misdirect",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,6,6,
                                   0,0,0,0,0,6,2,0,
                                   0,0,0,0,6,2,0,0,
@@ -1447,7 +1490,7 @@
         {
             "ID": "103003",
             "Name": "Ears",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,5,5,0,0,5,5,0,
                                   0,5,5,0,0,5,5,0,
@@ -1460,7 +1503,7 @@
         {
             "ID": "103004",
             "Name": "Ears",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,0,0,0,0,0,
@@ -1473,7 +1516,7 @@
         {
             "ID": "103005",
             "Name": "Twisted Sticky Grid",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,5,0,6,
                                   0,0,0,5,0,0,0,0,
                                   0,5,0,0,0,0,5,0,
@@ -1486,7 +1529,7 @@
         {
             "ID": "103006",
             "Name": "Face 3",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,5,5,0,0,5,5,0,
                                   0,5,5,0,0,5,5,0,
@@ -1499,7 +1542,7 @@
         {
             "ID": "103007",
             "Name": "Outward",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,5,5,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,5,5,0,0,0,
@@ -1512,7 +1555,7 @@
         {
             "ID": "103008",
             "Name": "Filled",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   6,5,0,0,0,0,0,0,
                                   6,5,5,0,0,0,0,0,
@@ -1525,7 +1568,7 @@
         {
             "ID": "103009",
             "Name": "Filled Bucket",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   6,0,0,0,0,0,0,6,
                                   6,0,0,0,0,0,0,6,
@@ -1539,7 +1582,7 @@
         {
             "ID": "103010",
             "Name": "Drop",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,0,0,0,0,0,
@@ -1552,7 +1595,7 @@
         {
             "ID": "103011",
             "Name": "Center Spin",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,0,0,0,0,0,
@@ -1565,7 +1608,7 @@
         {
             "ID": "103012",
             "Name": "Center Spin Twisted",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,0,0,0,0,0,
@@ -1578,7 +1621,7 @@
         {
             "ID": "103013",
             "Name": "Center Spin On Ice",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,8,8,8,8,8,8,6,
                                   8,8,8,8,8,8,8,8,
                                   8,8,8,8,8,8,8,8,
@@ -1591,7 +1634,7 @@
         {
             "ID": "103014",
             "Name": "Center Spin On Ice",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,8,8,8,8,8,8,6,
                                   5,8,8,8,8,8,8,5,
                                   5,8,8,8,8,8,8,5,
@@ -1604,7 +1647,7 @@
         {
             "ID": "103015",
             "Name": "Center Warp",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,10,0,0,11,0,0,
@@ -1617,7 +1660,7 @@
         {
             "ID": "110801",
             "Name": "Center Bounce",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,8,8,0,0,6,
                                   0,0,0,8,8,0,0,0,
                                   0,0,0,0,0,0,0,0,
@@ -1630,7 +1673,7 @@
         {
             "ID": "110802",
             "Name": "Center Bounce",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,10,10,0,0,0,
@@ -1643,7 +1686,7 @@
         {
             "ID": "110803",
             "Name": "Spiralling",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,5,0,0,0,0,
                                   0,0,0,5,0,0,0,0,
@@ -1656,7 +1699,7 @@
         {
             "ID": "110804",
             "Name": "Square",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,5,0,0,5,0,0,
@@ -1669,7 +1712,7 @@
         {
             "ID": "110805",
             "Name": "Center Pattern",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,7,0,0,5,0,0,
@@ -1682,7 +1725,7 @@
         {
             "ID": "110806",
             "Name": "Sticky Spaced Rows",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   5,0,5,0,5,0,5,0,
@@ -1696,7 +1739,7 @@
         {
             "ID": "110807",
             "Name": "Center Square",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,5,5,5,5,0,0,
@@ -1709,7 +1752,7 @@
         {
             "ID": "120801",
             "Name": "Twisted",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,5,0,0,5,0,6,
                                   0,0,0,5,0,0,5,0,
                                   5,0,0,0,5,0,0,5,
@@ -1722,7 +1765,7 @@
         {
             "ID": "120802",
             "Name": "Windy Road",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,5,5,5,5,5,5,6,
                                   5,5,5,5,4,4,4,4,
                                   5,5,5,5,1,3,5,5,
@@ -1735,7 +1778,7 @@
         {
             "ID": "120803",
             "Name": "Experiment 0",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,8,8,0,6,
                                   0,0,0,0,8,8,0,0,
                                   0,0,0,0,8,8,0,0,
@@ -1748,7 +1791,7 @@
         {
             "ID": "120804",
             "Name": "Levels",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,5,5,5,5,
                                   5,5,5,5,0,0,0,0,
@@ -1761,7 +1804,7 @@
         {
             "ID": "120805",
             "Name": "Outsiders",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,5,2,5,5,1,5,6,
                                   5,5,4,2,4,1,5,5,
                                   3,3,3,4,1,2,3,3,
@@ -1774,7 +1817,7 @@
         {
             "ID": "120806",
             "Name": "Experiment 1",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,7,7,0,0,6,
                                   8,0,0,7,7,0,0,8,
                                   8,0,0,5,5,0,0,8,
@@ -1787,7 +1830,7 @@
         {
             "ID": "120807",
             "Name": "Center Stones",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,8,8,8,8,5,5,6,
                                   8,8,8,8,8,5,6,5,
                                   8,8,8,5,5,5,5,5,
@@ -1800,7 +1843,7 @@
         {
             "ID": "120808",
             "Name": "Icy X",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,8,8,8,8,8,8,6,
                                   8,5,8,8,8,8,5,5,
                                   8,8,5,8,8,5,8,8,
@@ -1813,7 +1856,7 @@
         {
             "ID": "120809",
             "Name": "Target",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,5,0,0,0,6,
                                   0,5,5,5,5,5,0,0,
                                   0,5,8,8,8,5,0,0,
@@ -1826,7 +1869,7 @@
         {
             "ID": "120810",
             "Name": "Experiment 2",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,8,1,8,8,1,8,6,
                                   8,8,1,8,8,1,8,8,
                                   4,4,1,8,8,1,3,3,
@@ -1839,7 +1882,7 @@
         {
             "ID": "030701",
             "Name": "Tree 1",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,5,5,5,5,0,0,
                                   0,0,5,3,4,5,0,0,
@@ -1852,7 +1895,7 @@
         {
             "ID": "030702",
             "Name": "Arrow Thru",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,5,5,5,5,5,5,0,
                                   0,5,0,0,0,0,5,0,
@@ -1865,7 +1908,7 @@
         {
             "ID": "030703",
             "Name": "Mirror",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,5,5,5,0,5,5,5,
                                   5,5,1,5,5,5,1,5,
@@ -1878,7 +1921,7 @@
         {
             "ID": "030704",
             "Name": "Robot Head",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,5,5,5,5,0,0,
                                   0,0,5,2,2,5,0,0,
@@ -1891,7 +1934,7 @@
         {
             "ID": "030705",
             "Name": "Attachment",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,7,7,0,6,
                                   0,0,0,0,7,7,0,0,
                                   0,5,5,0,7,7,0,0,
@@ -1904,7 +1947,7 @@
         {
             "ID": "030706",
             "Name": "Plus Pattern",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,5,0,0,6,
                                   0,0,0,5,7,5,0,0,
                                   0,5,0,0,5,0,0,0,
@@ -1917,7 +1960,7 @@
         {
             "ID": "030707",
             "Name": "Plus Power",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,2,1,5,5,2,3,0,
                                   0,2,1,5,5,3,1,0,
@@ -1930,7 +1973,7 @@
         {
             "ID": "030708",
             "Name": "Attachment 2",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,0,0,0,0,0,
@@ -1943,7 +1986,7 @@
         {
             "ID": "030709",
             "Name": "Sticky Tree 2 With a little wind",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   4,4,0,0,5,0,0,0,
                                   4,4,0,5,5,0,5,0,
@@ -1956,7 +1999,7 @@
         {
             "ID": "030710",
             "Name": "Pittiful",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,8,8,8,8,8,8,6,
                                   8,5,5,5,5,5,5,8,
                                   8,5,9,5,9,5,5,8,
@@ -1969,7 +2012,7 @@
         {
             "ID": "030711",
             "Name": "Pit Plus",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,7,7,0,0,6,
                                   0,5,0,5,5,0,5,0,
                                   0,0,0,5,5,0,0,0,
@@ -1982,7 +2025,7 @@
         {
             "ID": "03111801",
             "Name": "Ice Crosshair",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,8,8,0,0,6,
                                   0,5,5,8,8,5,5,0,
                                   0,5,8,8,8,8,5,0,
@@ -1995,7 +2038,7 @@
         {
             "ID": "03111802",
             "Name": "Target 2",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,8,8,0,0,6,
                                   0,5,5,5,5,5,5,0,
                                   0,5,8,8,8,8,5,0,
@@ -2008,7 +2051,7 @@
         {
             "ID": "03111803",
             "Name": "Uplift",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,1,1,0,0,6,
                                   0,0,5,5,5,5,0,0,
                                   0,0,0,1,1,0,0,0,
@@ -2021,7 +2064,7 @@
         {
             "ID": "03111804",
             "Name": "Levels",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,8,8,0,0,6,
                                   0,0,0,5,5,5,5,5,
                                   0,0,0,8,8,0,0,0,
@@ -2034,7 +2077,7 @@
         {
             "ID": "03111805",
             "Name": "Lattice",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,8,0,8,0,8,6,
                                   5,8,5,8,5,8,5,8,
                                   8,0,8,0,8,0,8,0,
@@ -2047,7 +2090,7 @@
         {
             "ID": "03111806",
             "Name": "Surrounded",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,7,7,5,5,5,7,6,
                                   7,7,5,0,0,5,5,7,
                                   7,5,0,0,0,0,5,5,
@@ -2060,7 +2103,7 @@
         {
             "ID": "03111807",
             "Name": "Diagonal Lattice",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,5,0,5,0,5,6,
                                   0,5,0,0,0,5,0,0,
                                   5,0,5,0,5,0,5,0,
@@ -2073,7 +2116,7 @@
         {
             "ID": "03111809",
             "Name": "Diagonal Pit Line",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,5,5,0,0,0,0,6,
                                   5,9,5,5,0,0,0,0,
                                   5,5,9,5,5,0,0,0,
@@ -2086,7 +2129,7 @@
         {
             "ID": "03111810",
             "Name": "Pit Levels",
-            "Enabled": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,5,5,5,5,5,5,6,
                                   4,5,9,9,9,9,5,0,
                                   4,5,5,5,5,5,5,0,
@@ -2099,7 +2142,7 @@
         {
             "ID": "03111811",
             "Name": "Center Stuck",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,7,7,0,0,6,
                                   0,0,0,7,7,0,0,0,
                                   0,0,0,5,5,0,0,0,
@@ -2113,7 +2156,7 @@
         {
             "ID": "04071801",
             "Name": "Sand Checkers",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   18,0,18,0,18,0,18,0,
                                   0,18,0,18,0,18,0,18,
@@ -2127,7 +2170,7 @@
         {
             "ID": "04071802",
             "Name": "Sand Quarters",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,18,18,18,0,0,0,6,
                                   18,18,18,18,0,0,0,0,
                                   18,18,18,18,0,0,0,0,
@@ -2141,7 +2184,7 @@
         {
             "ID": "04071803",
             "Name": "Sand Castle",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,18,18,18,18,18,18,6,
                                   18,0,0,0,0,0,0,18,
                                   18,0,18,0,18,0,0,18,
@@ -2155,7 +2198,7 @@
         {
             "ID": "04071804",
             "Name": "Sand In Middle",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,5,5,0,0,6,
                                   0,0,0,5,5,0,0,0,
                                   0,0,18,18,18,18,0,0,
@@ -2169,7 +2212,7 @@
         {
             "ID": "04071805",
             "Name": "Garden 01",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,1,0,0,0,0,1,6,
                                   3,0,0,0,0,0,0,4,
                                   0,0,0,0,0,0,0,0,
@@ -2183,7 +2226,7 @@
         {
             "ID": "04071806",
             "Name": "Garden 02",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,1,0,0,0,0,4,0,
                                   0,0,0,0,0,0,0,0,
@@ -2197,7 +2240,7 @@
         {
             "ID": "04071807",
             "Name": "Garden 03",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,6,0,0,0,0,0,
                                   0,0,0,0,0,0,6,0,
@@ -2211,7 +2254,7 @@
         {
             "ID": "04071808",
             "Name": "Garden 04",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,6,0,0,0,0,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,0,0,0,0,6,
@@ -2225,7 +2268,7 @@
         {
             "ID": "04071809",
             "Name": "Garden 05",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,0,0,0,0,0,0,6,
                                   0,0,0,0,0,0,6,0,
                                   0,0,0,0,0,0,0,0,
@@ -2239,7 +2282,7 @@
         {
             "ID": "04071810",
             "Name": "Garden 06",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,7,0,0,0,7,7,6,
                                   7,7,0,0,0,0,7,7,
                                   7,0,0,0,0,0,0,0,
@@ -2253,7 +2296,7 @@
         {
             "ID": "04071811",
             "Name": "Garden 07",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,1,1,1,1,1,1,6,
                                   0,0,0,0,0,0,0,0,
                                   0,0,0,0,0,0,0,0,
@@ -2267,7 +2310,7 @@
         {
             "ID": "04071812",
             "Name": "Garden 08",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,2,2,2,2,2,2,6,
                                   4,0,0,0,0,0,0,0,
                                   4,0,0,0,0,0,0,0,
@@ -2281,7 +2324,7 @@
         {
             "ID": "04071813",
             "Name": "Directional Checkers",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,2,2,2,2,2,2,6,
                                   4,0,5,0,5,0,5,0,
                                   4,5,0,5,0,5,0,5,
@@ -2295,7 +2338,7 @@
         {
             "ID": "04071814",
             "Name": "Directional Diagonal",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,2,2,2,2,2,2,6,
                                   0,0,0,0,0,5,5,3,
                                   0,0,0,0,5,5,5,3,
@@ -2309,7 +2352,7 @@
         {
             "ID": "04071811",
             "Name": "East West Ice",
-            "Enabled": true,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData":         [6,1,1,1,1,1,1,6,
                                   0,0,0,0,0,0,0,0,
                                   8,8,8,0,0,8,8,8,

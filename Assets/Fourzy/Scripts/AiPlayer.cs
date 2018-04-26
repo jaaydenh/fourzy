@@ -90,7 +90,7 @@ namespace Fourzy
             bool found_move = false;
             foreach (Move AiMove in possibleMoves)
             {
-                Debug.Log("test1");
+                //Debug.Log("test1");
                 //Debug.Log(string.Format("Looking at a move {0}:{1}", AiMove.position.column, AiMove.position.row));
 
                 bool AddMoveToList = true;

@@ -123,11 +123,6 @@ namespace Fourzy
             }
         }
 
-        //public void Initialize(int currentPlayerMove, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] lastGameBoard, bool isGameOver, List<GSData> moveList) {
-        //    bool isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
-        //    gameState = new GameState(Constants.numRows, Constants.numColumns, isPlayerOneTurn, isCurrentPlayerTurn, tokenBoard, lastGameBoard, isGameOver, moveList);
-        //}
-
         private void OnEnable()
         {
             //GamesListManager.OnShowDeleteGame += ShowDeleteButton;

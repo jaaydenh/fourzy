@@ -15,15 +15,15 @@ namespace Fourzy
             keepHistory = true;
             ViewController.instance.currentActiveView = TotalView.view3;
 
-            //if (PlayerPrefs.GetInt("onboardingStage") <= 1)
-            //{
-            //    ViewController.instance.view3.Hide();
-            //    ViewController.instance.HideTabView();
-            //    GameManager.instance.gameType = GameType.AI;
-            //    GameManager.instance.OpenNewGame(false, "1000");
-            //} else 
-
-            if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 3) {
+            if (PlayerPrefs.GetInt("onboardingStage") <= 1)
+            {
+                ViewController.instance.view3.Hide();
+                ViewController.instance.HideTabView();
+                GameManager.instance.gameType = GameType.PASSANDPLAY;
+                GameManager.instance.OpenNewGame(false, "100");
+                GameManager.instance.onboardingScreen.StartOnboarding();
+            } else if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 2)
+            {
                 ViewController.instance.view3.Hide();
                 ViewController.instance.HideTabView();
                 ChallengeManager.instance.OpenPuzzleChallengeGame();

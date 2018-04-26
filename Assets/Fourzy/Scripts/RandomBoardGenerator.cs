@@ -45,11 +45,11 @@ namespace Fourzy
 
             }
 
-            AddFeatures(ref newBoard.tokenBoardData, 1, 4);
-            AddNoise(ref newBoard.tokenBoardData, 5, 12);
-            SetCorners(ref newBoard.tokenBoardData);
-            CheckArrows(ref newBoard.tokenBoardData);
-            CheckPits(ref newBoard.tokenBoardData);
+            AddFeatures(ref newBoard.tokenBoard, 1, 4);
+            AddNoise(ref newBoard.tokenBoard, 5, 12);
+            SetCorners(ref newBoard.tokenBoard);
+            CheckArrows(ref newBoard.tokenBoard);
+            CheckPits(ref newBoard.tokenBoard);
 
             newBoard.RefreshTokenBoard();
 
@@ -109,7 +109,7 @@ namespace Fourzy
                 }
             }
 
-            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Board", true);
+            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Board", null, null, true);
             return newBoard;
         }
 
@@ -131,7 +131,7 @@ namespace Fourzy
 
             SetCorners(ref tokenData);
 
-            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Horizontal Lines Board", true);
+            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Horizontal Lines Board", null, null, true);
             return newBoard;
         }
 
@@ -163,7 +163,7 @@ namespace Fourzy
                 }
             }
 
-            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Centric Board", true);
+            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Centric Board", null, null, true);
             return newBoard;
         }
 
@@ -185,7 +185,7 @@ namespace Fourzy
 
             SetCorners(ref tokenData);
 
-            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Vertical Lines Board", true);
+            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Vertical Lines Board", null, null, true);
             return newBoard;
         }
 
@@ -220,7 +220,7 @@ namespace Fourzy
 
             SetCorners(ref tokenData);
 
-            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Half Up/Down", true);
+            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Half Up/Down", null, null, true);
             return newBoard;
         }
 
@@ -254,7 +254,7 @@ namespace Fourzy
 
             //SetCorners(ref tokenData);
 
-            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Half Left/Right Board", true);
+            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Half Left/Right Board", null, null, true);
             return newBoard;
         }
 
@@ -312,7 +312,7 @@ namespace Fourzy
 
 
 
-            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Quadrants", true);
+            TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Quadrants", null, null, true);
             return newBoard;
         }
 

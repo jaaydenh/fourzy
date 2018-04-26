@@ -118,7 +118,7 @@ namespace Fourzy
             
             if (tokenboard != null) {
                 Debug.Log("SetTokenBoard tokenboard.name: " + tokenboard.name);
-                this.tokenBoard = new TokenBoard(tokenboard.tokenBoardData, tokenboard.id, tokenboard.name, true);
+                this.tokenBoard = new TokenBoard(tokenboard.tokenBoard, tokenboard.id, tokenboard.name, tokenboard.initialMoves, tokenboard.initialGameBoard, true);
             } else {
                 Debug.Log("SetTokenBoard tokenboard is null");
                 this.tokenBoard = null;
@@ -288,6 +288,7 @@ namespace Fourzy
             GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameState.GetGameBoardData());
             data.AddNumberList("tokenBoard", gameState.tokenBoard.GetTokenBoardData());
             data.AddNumberList("lastTokenBoard", gameState.previousTokenBoard.GetTokenBoardData());
+            data.AddNumberList("initialGameBoard", gameState.tokenBoard.GetInitialGameBoardData());
             data.AddString("tokenBoardId", gameState.tokenBoard.id);
             data.AddString("tokenBoardName", gameState.tokenBoard.name);
             data.AddString("gameType", gameType.ToString());
@@ -334,51 +335,13 @@ namespace Fourzy
                 .Send(successCallback, errorCallback);
         }
 
-        //private void FindChallengeSuccess(FindChallengeResponse response) {
-        //    GSEnumerable<FindChallengeResponse._Challenge> challengeInstances = response.ChallengeInstances;
-        //    //GSData scriptData = response.ScriptData; 
-
-        //    if (challengeInstances.Count() > 0)
-        //    {
-        //        List<string> challengeInstanceIds = new List<string>();
-
-        //        //for every object in the challenges array, get the challengeId field and push to challengeInstanceId[]
-        //        foreach (var chalInstance in challengeInstances)
-        //        {
-        //            challengeInstanceIds.Add(chalInstance.ChallengeId);
-        //        }
-
-        //        int randNum = UnityEngine.Random.Range(0, challengeInstanceIds.Count - 1);
-
-        //        //reference the id at that random numbers location
-        //        string randomChallengeId = challengeInstanceIds[randNum];
-        //        //each time you run this code, a different id is set in the scriptdata
-        //        //Spark.setScriptData("challenge to join", randomChallengeId);
-
-        //        // For now players are joined to a random challenge
-        //        JoinChallenge(randomChallengeId);
-        //    }
-        //    else
-        //    {
-        //        //Send player to Game Screen to make the first move
-        //        OpenNewMultiplayerGame();
-        //    }
-        //}
-
-        //private void FindChallengeError(FindChallengeResponse response)
-        //{
-        //    Debug.Log("***** Error Finding Random Challenge: " + response.Errors.JSON);
-        //    AnalyticsManager.LogError("find_challenge_request_error", response.Errors.JSON);
-        //    //TODO: show user facing error
-        //    //GameManager.instance.GameScreenBackButton();
-        //}
-
         public void ChallengeRandomUser(GameState gameState, int position, Direction direction, GameType gameType ) {
             Debug.Log("ChallengeRandomUser");
 
             GSRequestData data = new GSRequestData().AddNumberList("gameBoard", gameState.GetGameBoardData());
             data.AddNumberList("tokenBoard", gameState.tokenBoard.GetTokenBoardData());
             data.AddNumberList("lastTokenBoard", gameState.tokenBoard.GetTokenBoardData());
+            data.AddNumberList("initialGameBoard", gameState.tokenBoard.GetInitialGameBoardData());
             data.AddString("tokenBoardId", gameState.tokenBoard.id);
             data.AddString("tokenBoardName", gameState.tokenBoard.name);
             data.AddString("gameType", gameType.ToString());
@@ -415,29 +378,10 @@ namespace Fourzy
         }
 
         public void JoinChallenge(string challengeInstanceId, Action<JoinChallengeResponse> successCallback, Action<JoinChallengeResponse> errorCallback) {
-            Debug.Log("ChallengeManager : JoinChallenge");
-
             new JoinChallengeRequest()
                 .SetChallengeInstanceId(challengeInstanceId)
                 .SetMaxResponseTimeInMillis(17000)
                 .Send(successCallback, errorCallback);
-
-            //new JoinChallengeRequest()
-                //.SetChallengeInstanceId(challengeInstanceId)
-                //.SetMaxResponseTimeInMillis(20000)
-                //.Send((response) => {
-                //    if (response.HasErrors)
-                //    {
-                //        Debug.Log("***** Error Joining Challenge: " + response.Errors.JSON);
-                //        AnalyticsManager.LogError("join_challenge_request_error", response.Errors.JSON);
-                //    }
-                //    else
-                //    {
-                //        GameManager.instance.challengeInstanceId = challengeInstanceId;
-                //        //Send Player to Game Screen to make a move
-                //        GetChallenge(challengeInstanceId);
-                //    }
-                //});
         }
 
         public void GetChallenge(string challengeInstanceId, Action<GetChallengeResponse> successCallback, Action<GetChallengeResponse> errorCallback) {
@@ -445,19 +389,6 @@ namespace Fourzy
                 .SetChallengeInstanceId(challengeInstanceId)
                 .SetMaxResponseTimeInMillis(17000)
                 .Send(successCallback, errorCallback);
-
-            //new GetChallengeRequest()
-                //.SetChallengeInstanceId(challengeInstanceId)
-                //.Send((response) => {
-                //    if (response.HasErrors) {
-                //        Debug.Log("***** Error Getting Challenge: " + response.Errors);
-                //        AnalyticsManager.LogError("get_challenge_request_error", response.Errors.JSON);
-                //    } else {
-                //        var challenge = response.Challenge;
-                //        GSData scriptData = response.ScriptData;
-                //        OpenJoinedMultiplayerGame(challenge);
-                //    }
-                //});
         }
 
         public void OpenPuzzleChallengeGame() {
@@ -468,7 +399,7 @@ namespace Fourzy
                 PlayerPrefs.DeleteKey("puzzleChallengeLevel");
             } else {
                 GameManager.instance.puzzleChallengeInfo = puzzleChallenge;
-                TokenBoard initialTokenBoard = new TokenBoard(puzzleChallenge.InitialTokenBoard.ToArray(), "", "", true);
+                TokenBoard initialTokenBoard = new TokenBoard(puzzleChallenge.InitialTokenBoard.ToArray(), "", "", null, null, true);
                 tokenBoard = initialTokenBoard;
 
                 GameManager.instance.isLoading = true;
@@ -522,7 +453,7 @@ namespace Fourzy
                 tokenBoard = randomTokenBoard;
             }
 
-            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, null, false, null);
+            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
             GameManager.instance.gameState = gameState;
 
             GameManager.instance.CreateTokenViews();
@@ -586,7 +517,7 @@ namespace Fourzy
 
             int[] tokenBoardArray = Enumerable.Repeat(0, 64).ToArray();
             tokenBoardArray = challenge.ScriptData.GetIntList("tokenBoard").ToArray();  
-            tokenBoard = new TokenBoard(tokenBoardArray, tokenBoardId, tokenBoardName, true);
+            tokenBoard = new TokenBoard(tokenBoardArray, tokenBoardId, tokenBoardName, null, null, true);
 
             List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
             int currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
@@ -800,8 +731,7 @@ namespace Fourzy
 
                                     string challengerGamePieceId = challenge.challengerGamePieceId;
                                     string challengedGamePieceId = challenge.challengedGamePieceId;
-                                    //Debug.Log("challengerGamePieceId: "+ challengerGamePieceId);
-                                    //Debug.Log("challengedGamePieceId: " + challengedGamePieceId);
+
                                     Game game = new Game(gsChallenge.ChallengeId, gameState, isCurrentPlayer_PlayerOne, isExpired, didViewResult, opponent, challengeState, challengeType, challenge.gameType, challengerGamePieceId, challengedGamePieceId);
                                     activeGame.game = game;
                                     //activeGame.nextPlayerId = gsChallenge.NextPlayer;

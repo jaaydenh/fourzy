@@ -47,7 +47,7 @@ namespace Fourzy {
             {
                 for(int col = 0; col < Constants.numColumns; col++)
                 {
-                    Token token = (Token)tokenBoard.tokenBoardData[row, col];
+                    Token token = (Token)tokenBoard.tokenBoard[row, col];
                     GameObject go;
                     switch (token)
                     {

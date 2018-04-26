@@ -9,34 +9,31 @@ namespace Fourzy
     public class Onboarding : MonoBehaviour
     {
         public GameObject bg_dim;
+        public GameObject fullscreenButton;
         public GameObject infoTextObject;
         public GameObject hintTextObject;
         public GameObject hand;
         public GameObject gameScreenBackButton;
-        public GameObject tabAreaAnim;
+        public GameObject tapAreaAnim;
         public GameObject dialogBox;
         public GameObject wizard;
         private int moveCount;
+        private int onboardingStep;
+        private int onboardingStage;
         TextMeshProUGUI infoText;
         TextMeshProUGUI hintText;
         GameObject onboarding;
 
-        void Start()
-        {
-            Button btn = bg_dim.GetComponent<Button>();
-            btn.onClick.AddListener(ContinueFlow);
-
-            infoText = infoTextObject.GetComponent<TextMeshProUGUI>();
-            hintText = hintTextObject.GetComponent<TextMeshProUGUI>();
-
-            gameScreenBackButton.SetActive(false);
-            onboarding = this.gameObject;
-        }
+        //void Awake()
+        //{
+        //    Debug.Log("Onboarding:Awake");
+        //}
 
 		private void OnEnable()
 		{
             GameManager.OnStartMove += MoveStarted;
             GameManager.OnEndMove += MoveEnded;
+            GameManager.OnGameOver += OnGameOver;
 		}
 
 		private void OnDisable()
@@ -47,61 +44,227 @@ namespace Fourzy
 
 		public void StartOnboarding()
         {
-            GameManager.instance.disableInput = true;
+            Debug.Log("Onboarding:StartOnboarding");
             GameManager.instance.isOnboardingActive = true;
-            Debug.Log("GameManager.instance.isLoadingUI: " + GameManager.instance.isLoadingUI);
+
+            onboardingStep = PlayerPrefs.GetInt("onboardingStep");
+            onboardingStage = PlayerPrefs.GetInt("onboardingStage");
+
+            Debug.Log("onboardingStage: " + onboardingStage + ", onboardingStep: " + onboardingStep);
+
+            AnalyticsManager.LogOnboardingStart(onboardingStage, onboardingStep);
+
+            Button btn = fullscreenButton.GetComponent<Button>();
+            btn.onClick.AddListener(NextStep);
+
+            infoText = infoTextObject.GetComponent<TextMeshProUGUI>();
+            hintText = hintTextObject.GetComponent<TextMeshProUGUI>();
+
+            gameScreenBackButton.SetActive(false);
+            onboarding = this.gameObject;
+
+            //onboardingStep = 0;
+            if (onboardingStep == 0) {
+                onboardingStep = 1;
+            }
             this.gameObject.SetActive(true);
+            DoNextStep();
         }
 
         public void CompleteOnboarding() {
             gameScreenBackButton.SetActive(true);
         }
 
-        void ContinueFlow()
-        {
-            bg_dim.SetActive(false);
-            infoText.SetText("Tap any square on the perimeter of the board to make a move.");
-            hintText.SetText("");
-            hand.SetActive(true);
-            tabAreaAnim.SetActive(true);
-            GameManager.instance.disableInput = false;
+        void NextStep() {
+            onboardingStep++;
+            DoNextStep();
         }
 
-        void MoveStarted() {
-            moveCount++;
-            Debug.Log("MoveStarted movecount: " + moveCount);
-            switch (moveCount)
+        void DoNextStep()
+        {
+            Debug.Log("NextStep: step:" + onboardingStep);
+            PlayerPrefs.SetInt("onboardingStep", onboardingStep);
+            AnalyticsManager.LogOnboardingStart(onboardingStage, onboardingStep);
+
+            switch (onboardingStep)
             {
                 case 1:
-                    dialogBox.SetActive(false);
-                    hand.SetActive(false);
-                    tabAreaAnim.SetActive(false);
-                    wizard.SetActive(false);
+                    wizard.transform.localPosition = new Vector3(0, 221);
+                    dialogBox.transform.localPosition = new Vector3(0, -118);
+                    GameManager.instance.disableInput = true;
+                    bg_dim.SetActive(true);
+                    fullscreenButton.SetActive(true);
+                    wizard.SetActive(true);
+                    dialogBox.SetActive(true);
+                    infoText.SetText("Welcome to Fourzy!");
+                    hintText.SetText("tap to continue...");
+                    break;
+                case 2:
+                    infoText.SetText("First let's watch a quick game to learn how to play.");
+                    hintText.SetText("tap to continue...");
                     break;
                 case 3:
+                    bg_dim.SetActive(false);
+                    fullscreenButton.SetActive(false);
+                    dialogBox.SetActive(false);
+                    wizard.SetActive(false);
+                    StartCoroutine(GameManager.instance.PlayInitialMoves());
+                    break;
+                case 4:
+                    GameManager.instance.OpenNewGame(false, "1000");
+                    moveCount = 0;
+                    gameScreenBackButton.SetActive(false);
+                    bg_dim.SetActive(false);
+                    fullscreenButton.SetActive(false);
+                    dialogBox.SetActive(true);
+                    wizard.SetActive(true);
+                    infoText.SetText("Now you try it. Tap this square on the perimeter of the board to make a move.");
+                    hintText.SetText("");
+                    hand.SetActive(true);
+                    tapAreaAnim.SetActive(true);
+                    GameManager.instance.disableInput = false;
+                    break;
+                case 6:
+                    GameManager.instance.disableInput = true;
                     hand.SetActive(false);
-                    tabAreaAnim.SetActive(false);
+                    tapAreaAnim.SetActive(false);
+                    bg_dim.SetActive(true);
+                    fullscreenButton.SetActive(true);
+                    wizard.SetActive(true);
+                    dialogBox.SetActive(true);
+                    infoText.SetText("To win Fourzy you must get 4 in a row, horizontally, vertically, or diagonally. Try to win vertically.");
+                    hintText.SetText("tap to continue...");
+                    break;
+                case 7:
+                    GameManager.instance.OpenNewGame(false, "101");
+                    moveCount = 0;
+                    gameScreenBackButton.SetActive(false);
+                    GameManager.instance.disableInput = false;
+                    bg_dim.SetActive(false);
+                    fullscreenButton.SetActive(false);
+                    wizard.SetActive(false);
+                    dialogBox.SetActive(false);
+                    break;
+                case 8:
+                    ShowWizardWithDialog("Congratulations!!! Now you know the basics of Fourzy.");
+                    break;
+                case 9:
+                    GameManager.instance.GameScreenBackButton();
+                    wizard.transform.localPosition = new Vector3(0, 360);
+                    dialogBox.transform.localPosition = new Vector3(0, 15);
+                    ShowWizardWithDialog("Try challenging other players by pressing Play or press Training for more practice.");
+                    break;
+                case 10:
+                    HideWizardDialog();
+                    PlayerPrefs.SetInt("onboardingStage", 2);
                     break;
                 default:
                     break;
+            }
+        }
+
+        void MoveStarted() {
+            
+            Debug.Log("MoveStarted: onboardingStep: " + onboardingStep);
+            if (onboardingStep >= 4 && onboardingStep <= 6) {
+                moveCount++;
+                Debug.Log("MoveStarted movecount: " + moveCount);
+                switch (moveCount)
+                {
+                    case 1:
+                        dialogBox.SetActive(false);
+                        hand.SetActive(false);
+                        tapAreaAnim.SetActive(false);
+                        wizard.SetActive(false);
+                        NextStep();
+                        break;
+                    case 3:
+                        hand.SetActive(false);
+                        tapAreaAnim.SetActive(false);
+                        onboardingStep++;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
         void MoveEnded() {
-            Debug.Log("MoveEnded movecount: " + moveCount);
-            switch (moveCount)
+            Debug.Log("MoveEnded: onboardingStep: " + onboardingStep);
+            if (onboardingStep >= 4 && onboardingStep <= 6)
             {
-                case 2:
-                    hand.SetActive(true);
-                    tabAreaAnim.SetActive(true);
-                    break;
-                case 4:
-                    hand.SetActive(true);
-                    tabAreaAnim.SetActive(true);
-                    break;
-                default:
-                    break;
+                Debug.Log("MoveEnded movecount: " + moveCount);
+                switch (moveCount)
+                {
+                    case 1:
+                        Move move1 = new Move(4, Direction.UP, PlayerEnum.TWO);
+                        GameManager.instance.CallMovePiece(move1, false, false); 
+                        break;
+                    case 2:
+                        MoveHintPosition2();
+                        break;
+                    case 3:
+                        Move move2 = new Move(2, Direction.DOWN, PlayerEnum.TWO);
+                        GameManager.instance.CallMovePiece(move2, false, false);
+                        break;
+                    case 4:
+                        hand.SetActive(true);
+                        tapAreaAnim.SetActive(true);
+                        DoNextStep();
+                        break;
+                    default:
+                        break;
+                }
+            } else if (onboardingStep == 7 && GameManager.instance.gameState.winner != PlayerEnum.ONE) {
+                AnalyticsManager.LogOnboardingComplete(false, onboardingStage, onboardingStep);
+                onboardingStep--;
+                ShowWizardWithDialog("Try Again, you must get 4 in a row to win");
+                //GameManager.instance.OpenNewGame(false, "101");
+                //moveCount = 0;
+            } 
+        }
+
+        void MoveHintPosition2() {
+            hand.SetActive(true);
+            tapAreaAnim.SetActive(true);
+            hand.transform.localPosition = new Vector3(122, -390);
+            tapAreaAnim.transform.localPosition = new Vector3(44, -302, -5);
+        }
+
+        void OnGameOver() {
+            Debug.Log("Onboarding:OnGameOver: " + onboardingStep);
+            if (onboardingStep == 3) {
+                StartCoroutine(NextStepWithWait(2));
+            } else if (onboardingStep == 7) {
+                if (GameManager.instance.gameState.winner == PlayerEnum.ONE) {
+                    Debug.Log("GameManager.instance.gameState.winner: " + GameManager.instance.gameState.winner);
+                    AnalyticsManager.LogOnboardingComplete(true, onboardingStage, onboardingStep);
+                    StartCoroutine(NextStepWithWait(2));
+                }
             }
+        }
+
+        IEnumerator NextStepWithWait(int seconds) {
+            yield return new WaitForSeconds(seconds);
+            NextStep();
+        }
+        
+        void ShowWizardWithDialog(string dialog) {
+            GameManager.instance.disableInput = true;
+            bg_dim.SetActive(true);
+            fullscreenButton.SetActive(true);
+            wizard.SetActive(true);
+            dialogBox.SetActive(true);
+            infoText.SetText(dialog);
+            hintText.SetText("tap to continue...");
+        }
+
+        void HideWizardDialog() {
+            GameManager.instance.disableInput = false;
+            bg_dim.SetActive(false);
+            fullscreenButton.SetActive(false);
+            wizard.SetActive(false);
+            dialogBox.SetActive(false);
         }
 
         void Complete()

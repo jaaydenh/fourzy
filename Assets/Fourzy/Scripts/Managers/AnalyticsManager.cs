@@ -72,9 +72,9 @@ namespace Fourzy
 
             if (success)
             {
-                GameAnalytics.NewDesignEvent("puzzle:" + puzzleChallenge.Name.Truncate(32) + ":pass");
+                GameAnalytics.NewDesignEvent("puzzle:0" + puzzleChallenge.Name.Truncate(32) + ":pass");
             } else {
-                GameAnalytics.NewDesignEvent("puzzle:" + puzzleChallenge.Name.Truncate(32) + ":fail"); 
+                GameAnalytics.NewDesignEvent("puzzle:0" + puzzleChallenge.Name.Truncate(32) + ":fail"); 
             }
             //Debug.Log("design event puzzle: " + "puzzle:" + puzzleChallenge.Name + ":" + puzzleChallenge.Level + ":success:" + success.ToString());
             GameAnalytics.NewProgressionEvent(status, "puzzle", puzzleChallenge.Name.Truncate(64), moveCount);
@@ -100,6 +100,44 @@ namespace Fourzy
             //Debug.Log("design event game over: " + tokenBoard.id + ":" + tokenBoard.name + ":winner:" + winner.ToString());
             GameAnalytics.NewDesignEvent(gameType + ":" + tokenBoard.name.Truncate(32) + ":winner:" + player.ToString());
             //GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, gameType, tokenBoard.id, winner);
+        }
+
+        public static void LogOnboardingStart(int stage, int step) {
+            string stepString;
+            if (step < 10)
+            {
+                stepString = "Step0";
+                stepString += step.ToString();
+            }
+            else
+            {
+                stepString = "Step";
+                stepString += step.ToString();
+            }
+
+            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "onboarding", stage.ToString(), step.ToString());
+            GameAnalytics.NewDesignEvent("Onboarding:Stage0" + stage.ToString() + ":" + stepString + ":Start");
+        }
+
+        public static void LogOnboardingComplete(bool success, int stage, int step)
+        {
+            string stepString;
+            if (step < 10) {
+                stepString = "Step0";
+                stepString += step.ToString();
+            } else {
+                stepString = "Step";
+                stepString += step.ToString();                
+            }
+
+            if (success)
+            {
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "onboarding", stage.ToString(), step.ToString());
+                GameAnalytics.NewDesignEvent("Onboarding:Stage0" + stage.ToString() + ":" + stepString + ":Complete");
+            } else {
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, "onboarding", stage.ToString(), step.ToString());
+                GameAnalytics.NewDesignEvent("Onboarding:Stage0" + stage.ToString() + ":" + stepString + ":Fail");
+            }
         }
     }
 }

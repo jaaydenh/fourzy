@@ -20,6 +20,7 @@ public class MenuItems : MonoBehaviour {
     static void ResetOnboarding()
     {
         PlayerPrefs.DeleteKey("onboardingStage");
+        PlayerPrefs.DeleteKey("onboardingStep");
     }
 
     [UnityEditor.MenuItem("Fourzy/CompleteOnboarding")]

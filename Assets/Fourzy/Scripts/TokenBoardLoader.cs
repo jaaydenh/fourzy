@@ -6,8 +6,6 @@ namespace Fourzy
 {
     public class TokenBoardLoader : Singleton<TokenBoardLoader>
     {
-
-
         private TokenBoardData[] LoadTokenBoardData()
         {
             //string filePath = Application.streamingAssetsPath + gameDataProjectFilePath;
@@ -70,12 +68,12 @@ namespace Fourzy
 
             TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
 
-            var tokenBoardInfo = tokenBoardCollection
+            var tokenBoardData = tokenBoardCollection
                 .Where(t => t.Enabled == true)
                 .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
             .FirstOrDefault();
 
-            TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID, tokenBoardInfo.Name, true);
+            TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), true);
 
             return tokenboard;
         }
@@ -83,26 +81,26 @@ namespace Fourzy
         public TokenBoard GetTokenBoard(string id) {
             TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
 
-            var tokenBoardInfo = tokenBoardCollection
+            var tokenBoardData = tokenBoardCollection
                 .Where(t => t.ID == id)
             .FirstOrDefault();
 
-            TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID, tokenBoardInfo.Name, true);
+            TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), true);
 
             return tokenboard;
         }
 
-        public TokenBoard[] GetAllTokenBoards()
+        public TokenBoard[] GetTokenBoardsForBoardSelection()
         {
             TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
             IEnumerable<TokenBoardData> enabledTokenBoards = tokenBoardCollection
-                .Where(t => t.Enabled == true);
+                .Where(t => t.EnabledGallery == true);
 
             TokenBoard[] tokenBoards = new TokenBoard[enabledTokenBoards.Count()];
             int i = 0;
-            foreach (var tokenBoardInfo in enabledTokenBoards)
+            foreach (var tokenBoardData in enabledTokenBoards)
             {
-                TokenBoard tokenboard = new TokenBoard(tokenBoardInfo.TokenData.ToArray(), tokenBoardInfo.ID, tokenBoardInfo.Name, false);
+                TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), false);
                 tokenBoards[i] = tokenboard;
                 i++;
             }
@@ -129,11 +127,11 @@ namespace Fourzy
 
         private TokenBoardData GetDefaultTokenBoard()
         {
-            TokenBoardData tokenBoardInfo = new TokenBoardData();
-            tokenBoardInfo.ID = "1000";
-            tokenBoardInfo.Name = "The Basic Game";
-            tokenBoardInfo.Enabled = true;
-            tokenBoardInfo.TokenData = new List<int> {
+            TokenBoardData tokenBoardData = new TokenBoardData();
+            tokenBoardData.ID = "1000";
+            tokenBoardData.Name = "The Basic Game";
+            tokenBoardData.Enabled = true;
+            tokenBoardData.TokenData = new List<int> {
                 6,0,0,0,0,0,0,6,
                 0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,
@@ -143,7 +141,7 @@ namespace Fourzy
                 0,0,0,0,0,0,0,0,
                 6,0,0,0,0,0,0,6};
 
-            return tokenBoardInfo;
+            return tokenBoardData;
         }
 
         private GamePieceData GetDefaultGamePiece()

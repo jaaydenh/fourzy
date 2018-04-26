@@ -1,17 +1,10 @@
 ﻿<Properties StartupConfiguration="{9AD793E4-7370-FB12-CE27-35FD78F1FC38}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/UI/View2.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Managers/GameManager.cs">
     <Files>
-      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="690" Column="27" />
-      <File FileName="Assets/Resources/TokenBoards.txt" Line="2311" Column="37" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="521" Column="77" />
-      <File FileName="Assets/Fourzy/Scripts/UI/View3.cs" Line="30" Column="14" />
-      <File FileName="Assets/Fourzy/Scripts/UI/ViewMatchMaking.cs" Line="98" Column="60" />
-      <File FileName="Assets/Fourzy/Scripts/TokenBoardLoader.cs" Line="67" Column="53" />
-      <File FileName="Assets/Fourzy/Scripts/UI/ViewGameBoardSelection.cs" Line="27" Column="34" />
-      <File FileName="Assets/Fourzy/Scripts/UI/ViewController.cs" Line="83" Column="44" />
-      <File FileName="Assets/Fourzy/Scripts/UI/ViewTabs.cs" Line="1" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/UI/UIView.cs" Line="27" Column="40" />
-      <File FileName="Assets/Fourzy/Scripts/UI/View2.cs" Line="67" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/Onboarding.cs" Line="49" Column="13" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="2142" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/View3.cs" Line="18" Column="52" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/AnalyticsManager.cs" Line="16" Column="66" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

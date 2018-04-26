@@ -85,8 +85,6 @@ namespace Fourzy
 
             GameManager.instance.ResetGamePiecesAndTokens();
             GameManager.instance.ResetUIGameScreen();
-
-            //GameManager.instance.UpdatePlayerUI();
             GameManager.instance.SetupGame("", "");
             GameManager.instance.InitPlayerUI(opponent.opponentName, opponentProfilePictureSprite);
 

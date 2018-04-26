@@ -22,7 +22,7 @@ namespace Fourzy {
         }
 
         public void LoadMiniBoards() {
-            TokenBoard[] boards = TokenBoardLoader.instance.GetAllTokenBoards();
+            TokenBoard[] boards = TokenBoardLoader.instance.GetTokenBoardsForBoardSelection();
 
             if (createGameGameboardGrid.transform.childCount > 0) {
                 for (int i = createGameGameboardGrid.transform.childCount-1; i >= 0; i--) {

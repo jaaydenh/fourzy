@@ -43,7 +43,7 @@ namespace Fourzy
             if (tokenData != null)
             {
                 tokenBoardData = challenge.ScriptData.GetIntList("lastTokenBoard").ToArray();
-                tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
             }
             else
             {
@@ -51,13 +51,13 @@ namespace Fourzy
                 if (tokenData != null)
                 {
                     tokenBoardData = challenge.ScriptData.GetIntList("tokenBoard").ToArray();
-                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
                 }
                 else
                 {
                     // should never get here as the corners would be missing blocker tokens
                     tokenBoardData = Enumerable.Repeat(0, 64).ToArray();
-                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
                 }
             }
 
@@ -97,16 +97,16 @@ namespace Fourzy
             int[] tokenBoardData;
             if (tokenData != null) {
                 tokenBoardData = challenge.ScriptData.GetIntList("lastTokenBoard").ToArray();
-                tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
             } else {
                 tokenData = challenge.ScriptData.GetIntList("tokenBoard");
                 if (tokenData != null) {
                     tokenBoardData = challenge.ScriptData.GetIntList("tokenBoard").ToArray();
-                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
                 } else {
                     // should never get here as the corners would be missing blocker tokens
                     tokenBoardData = Enumerable.Repeat(0, 64).ToArray();
-                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
                 }
             }
 
@@ -156,7 +156,7 @@ namespace Fourzy
             if (tokenData != null)
             {
                 tokenBoardData = challenge.ScriptData.GetIntList("lastTokenBoard").ToArray();
-                tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
             }
             else
             {
@@ -164,13 +164,13 @@ namespace Fourzy
                 if (tokenData != null)
                 {
                     tokenBoardData = challenge.ScriptData.GetIntList("tokenBoard").ToArray();
-                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
                 }
                 else
                 {
                     // should never get here as the corners would be missing blocker tokens
                     tokenBoardData = Enumerable.Repeat(0, 64).ToArray();
-                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
                 }
             }
 
@@ -220,7 +220,7 @@ namespace Fourzy
             if (tokenData != null)
             {
                 tokenBoardData = challenge.ScriptData.GetIntList("lastTokenBoard").ToArray();
-                tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
             }
             else
             {
@@ -228,13 +228,13 @@ namespace Fourzy
                 if (tokenData != null)
                 {
                     tokenBoardData = challenge.ScriptData.GetIntList("tokenBoard").ToArray();
-                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
                 }
                 else
                 {
                     // should never get here as the corners would be missing blocker tokens
                     tokenBoardData = Enumerable.Repeat(0, 64).ToArray();
-                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
                 }
             }
 
@@ -284,7 +284,7 @@ namespace Fourzy
             if (tokenData != null)
             {
                 tokenBoardData = challenge.ScriptData.GetIntList("lastTokenBoard").ToArray();
-                tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
             }
             else
             {
@@ -292,13 +292,13 @@ namespace Fourzy
                 if (tokenData != null)
                 {
                     tokenBoardData = challenge.ScriptData.GetIntList("tokenBoard").ToArray();
-                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
                 }
                 else
                 {
                     // should never get here as the corners would be missing blocker tokens
                     tokenBoardData = Enumerable.Repeat(0, 64).ToArray();
-                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, true);
+                    tokenBoard = new TokenBoard(tokenBoardData, tokenBoardId, tokenBoardName, null, null, true);
                 }
             }
 
