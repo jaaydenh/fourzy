@@ -49,12 +49,8 @@ MonoBehaviour:
 
     - Added stack traces for non-development builds'
   SignUpOpen: 0
-  FirstName: 
-  LastName: 
   StudioName: SuperMove Games
   GameName: Fourzy
-  PasswordConfirm: 
-  EmailOptIn: 1
   EmailGA: jaayden.halko@gmail.com
   IntroScreen: 0
   InfoLogEditor: 0
@@ -88,7 +84,6 @@ MonoBehaviour:
   iosIcon: {fileID: 0}
   macIcon: {fileID: 0}
   windowsPhoneIcon: {fileID: 0}
-  UseCustomId: 0
   UsePlayerSettingsBuildNumber: 1
   SubmitErrors: 1
   MaxErrorCount: 10
