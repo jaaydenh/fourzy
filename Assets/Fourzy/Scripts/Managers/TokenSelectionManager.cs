@@ -47,9 +47,12 @@ namespace Fourzy
                 //go.transform.localScale = new Vector3(1, 1, 1);
                 TokenUI tokenUI = go.GetComponent<TokenUI>();
                 tokenUI.id = token.ID;
-                tokenUI.name = token.Name;
+                tokenUI.tokenName = token.Name;
                 tokenUI.tokenNameText.text = token.Name;
                 tokenUI.tokenImage.sprite = tokens[int.Parse(token.ID)];
+                tokenUI.showBackgroundTile = token.showBackgroundTile;
+                tokenUI.arenaName = token.Arena;
+                tokenUI.description = token.Description;
                 if (token.showBackgroundTile) {
                     tokenUI.tileBGImage.SetActive(true);
                 }

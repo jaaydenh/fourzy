@@ -102,6 +102,7 @@ namespace Fourzy
         public Texture2D defaultProfilePicture;
         public Badge homeScreenPlayBadge;
         public Text challengeIdDebugText;
+        public GameObject tokenPopupUI;
 
         [Header("Game State")]
         public GameType gameType;

@@ -20,6 +20,7 @@ namespace Fourzy
         private int moveCount;
         private int onboardingStep;
         private int onboardingStage;
+        private int step7Attempts;
         TextMeshProUGUI infoText;
         TextMeshProUGUI hintText;
         GameObject onboarding;
@@ -67,6 +68,7 @@ namespace Fourzy
             if (onboardingStep == 0) {
                 onboardingStep = 1;
             }
+            step7Attempts = 0;
             this.gameObject.SetActive(true);
             DoNextStep();
         }
@@ -120,8 +122,7 @@ namespace Fourzy
                     wizard.SetActive(true);
                     infoText.SetText("Now you try it. Tap this square on the perimeter of the board to make a move.");
                     hintText.SetText("");
-                    hand.SetActive(true);
-                    tapAreaAnim.SetActive(true);
+                    TapHintPosition(-313, 136);
                     GameManager.instance.disableInput = false;
                     break;
                 case 6:
@@ -144,6 +145,9 @@ namespace Fourzy
                     fullscreenButton.SetActive(false);
                     wizard.SetActive(false);
                     dialogBox.SetActive(false);
+                    if (step7Attempts > 0) {
+                        TapHintPosition(45, 313);
+                    }
                     break;
                 case 8:
                     ShowWizardWithDialog("Congratulations!!! Now you know the basics of Fourzy.");
@@ -155,6 +159,10 @@ namespace Fourzy
                     ShowWizardWithDialog("Try challenging other players by pressing Play or press Training for more practice.");
                     break;
                 case 10:
+                    GameManager.instance.GameScreenBackButton();
+                    ShowWizardWithDialog("Fourzy is an Early Access turn-based game. We recommended you start several games as it can take extra time to find an opponent.");
+                    break;
+                case 11:
                     HideWizardDialog();
                     PlayerPrefs.SetInt("onboardingStage", 2);
                     break;
@@ -186,10 +194,14 @@ namespace Fourzy
                     default:
                         break;
                 }
+            } else if (onboardingStep == 7) {
+                hand.SetActive(false);
+                tapAreaAnim.SetActive(false);
             }
         }
 
-        void MoveEnded() {
+        void MoveEnded()
+        {
             Debug.Log("MoveEnded: onboardingStep: " + onboardingStep);
             if (onboardingStep >= 4 && onboardingStep <= 6)
             {
@@ -198,10 +210,10 @@ namespace Fourzy
                 {
                     case 1:
                         Move move1 = new Move(4, Direction.UP, PlayerEnum.TWO);
-                        GameManager.instance.CallMovePiece(move1, false, false); 
+                        GameManager.instance.CallMovePiece(move1, false, false);
                         break;
                     case 2:
-                        MoveHintPosition2();
+                        TapHintPosition(44, -302);
                         break;
                     case 3:
                         Move move2 = new Move(2, Direction.DOWN, PlayerEnum.TWO);
@@ -215,20 +227,21 @@ namespace Fourzy
                     default:
                         break;
                 }
-            } else if (onboardingStep == 7 && GameManager.instance.gameState.winner != PlayerEnum.ONE) {
+            }
+            else if (onboardingStep == 7 && GameManager.instance.gameState.winner != PlayerEnum.ONE)
+            {
                 AnalyticsManager.LogOnboardingComplete(false, onboardingStage, onboardingStep);
                 onboardingStep--;
                 ShowWizardWithDialog("Try Again, you must get 4 in a row to win");
-                //GameManager.instance.OpenNewGame(false, "101");
-                //moveCount = 0;
-            } 
+                step7Attempts++;
+            }
         }
 
-        void MoveHintPosition2() {
+        void TapHintPosition(int x, int y) {
             hand.SetActive(true);
             tapAreaAnim.SetActive(true);
-            hand.transform.localPosition = new Vector3(122, -390);
-            tapAreaAnim.transform.localPosition = new Vector3(44, -302, -5);
+            tapAreaAnim.transform.localPosition = new Vector3(x, y, -5);
+            hand.transform.localPosition = new Vector3(x + 102, y - 107);
         }
 
         void OnGameOver() {

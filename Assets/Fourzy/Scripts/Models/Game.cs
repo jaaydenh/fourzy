@@ -29,6 +29,7 @@ namespace Fourzy
 
         public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, GameType gameType, string challengerGamePieceId, string challengedGamePieceId)
         {
+            Debug.Log("challengeId: " + challengeId);
             this.challengeId = challengeId;
             this.gameState = gameState;
             this.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;

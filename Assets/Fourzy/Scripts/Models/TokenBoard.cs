@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fourzy {
     public class TokenBoard {
@@ -16,17 +17,31 @@ namespace Fourzy {
             this.name = name;
             this.initialMoves = initialMoves;
 
-            //int[,] convertedTokenData = new int [8,8];
             tokenBoard = new int[Constants.numRows, Constants.numColumns];
-            //initialGameBoard = new int[Constants.numRows, Constants.numColumns];
-            this.initialGameBoard = initialGameBoardData;
+
+            if (initialGameBoardData != null && initialGameBoardData.Length > 0)
+            {
+                this.initialGameBoard = initialGameBoardData;
+            }
+            else
+            {
+                Debug.Log("Initialize initialGameBoard");
+                initialGameBoard = new int[Constants.numRows * Constants.numColumns];
+
+                for (int row = 0; row < Constants.numRows; row++)
+                {
+                    for (int col = 0; col < Constants.numColumns; col++)
+                    {
+                        initialGameBoard[row * Constants.numRows + col] = 0;
+                    }
+                }
+            }
 
             for(int row = 0; row < Constants.numRows; row++)
             {
                 for(int col = 0; col < Constants.numColumns; col++)
                 {
                     tokenBoard[row, col] = tokenData[row * Constants.numRows + col];
-                    //initialGameBoard[row, col] = initialGameBoardData[row * Constants.numRows + col];
                 }
             }
 
@@ -41,17 +56,21 @@ namespace Fourzy {
             this.id = id;
             this.name = name;
             this.initialMoves = initialMoves;
-            this.initialGameBoard = initialGameBoardData;
 
-            //initialGameBoard = new int[Constants.numRows, Constants.numColumns];
+            if (initialGameBoardData != null && initialGameBoardData.Length > 0) {
+                this.initialGameBoard = initialGameBoardData;    
+            } else {
+                Debug.Log("Initialize initialGameBoard");
+                initialGameBoard = new int[Constants.numRows * Constants.numColumns];
 
-            //for (int row = 0; row < Constants.numRows; row++)
-            //{
-            //    for (int col = 0; col < Constants.numColumns; col++)
-            //    {
-            //        initialGameBoard[row, col] = initialGameBoardData[row * Constants.numRows + col];
-            //    }
-            //}
+                for (int row = 0; row < Constants.numRows; row++)
+                {
+                    for (int col = 0; col < Constants.numColumns; col++)
+                    {
+                        initialGameBoard[row * Constants.numRows + col] = 0;
+                    }
+                }
+            }
 
             this.tokenBoard = tokenData;
             if (instantiateTokenBoard) {
@@ -62,7 +81,7 @@ namespace Fourzy {
         }
 
         // Only used for Cloning the TokenBoard
-        public TokenBoard(IToken[,] tokens, string id, string name, List<MoveInfo> initialMoves) {
+        public TokenBoard(IToken[,] tokens, string id, string name, List<MoveInfo> initialMoves, int[] initialGameBoard) {
             InitTokenBoard();
             this.id = id;
             this.name = name;
@@ -73,6 +92,26 @@ namespace Fourzy {
                 for (int col = 0; col < Constants.numColumns; col++)
                 {
                     this.tokens[row, col] = tokens[row, col];
+                }
+            }
+
+            this.initialGameBoard = new int[Constants.numRows * Constants.numColumns];
+            Debug.Log("initialGameBoard: " + initialGameBoard.Length);
+            if (initialGameBoard.Length > 0) {
+                for (int row = 0; row < Constants.numRows; row++)
+                {
+                    for (int col = 0; col < Constants.numColumns; col++)
+                    {
+                        this.initialGameBoard[row * Constants.numRows + col] = initialGameBoard[row * Constants.numRows + col];
+                    }
+                }
+            } else {
+                for (int row = 0; row < Constants.numRows; row++)
+                {
+                    for (int col = 0; col < Constants.numColumns; col++)
+                    {
+                        this.initialGameBoard[row * Constants.numRows + col] = 0;
+                    }
                 }
             }
         }
@@ -209,7 +248,7 @@ namespace Fourzy {
 
         public TokenBoard Clone()
         {
-            return new TokenBoard(tokens, id, name, initialMoves);
+            return new TokenBoard(tokens, id, name, initialMoves, initialGameBoard);
         }
 
         public string PrintBoard(string name)

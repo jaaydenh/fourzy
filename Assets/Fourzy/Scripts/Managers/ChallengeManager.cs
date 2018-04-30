@@ -723,6 +723,8 @@ namespace Fourzy
                                     else if (gsChallenge.ShortCode == "tournamentChallenge")
                                     {
                                         challengeType = ChallengeType.TOURNAMENT;
+                                    } else {
+                                        challengeType = ChallengeType.STANDARD;
                                     }
 
                                     GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);

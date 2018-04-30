@@ -30,10 +30,14 @@
                 { "Location": 3, "Direction": 2 },
                 { "Location": 3, "Direction": 1 },
                 { "Location": 3, "Direction": 2 },
-                { "Location": 4, "Direction": 0 },
                 { "Location": 3, "Direction": 2 },
-                { "Location": 5, "Direction": 3 },
-                { "Location": 3, "Direction": 2 }
+                { "Location": 1, "Direction": 0 },
+                { "Location": 1, "Direction": 1 },
+                { "Location": 4, "Direction": 2 },
+                { "Location": 4, "Direction": 2 },
+                { "Location": 2, "Direction": 0 },
+                { "Location": 2, "Direction": 0 },
+                { "Location": 6, "Direction": 2 }
             ]
         },
         {

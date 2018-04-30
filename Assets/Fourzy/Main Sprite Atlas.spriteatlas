@@ -49,6 +49,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 51d86dda53ccf4eb9831e84c249298fa, type: 3}
   - {fileID: 21300000, guid: a7808e2d1e66e4370b30a2ac0d36ad46, type: 3}
   - {fileID: 21300000, guid: f5c45e0c7d6134dd5915636c42d085a9, type: 3}
+  - {fileID: 21300000, guid: 84fe40e7948c54c57995635a2d5f081a, type: 3}
   - {fileID: 21300000, guid: 6bec12e9c39f244fbaf24bdc6baa2852, type: 3}
   - {fileID: 21300000, guid: 050d4ce86cf29451da51a5594596189a, type: 3}
   - {fileID: 21300000, guid: 69dac7905af2144198ec89d72aabf0f3, type: 3}
@@ -65,6 +66,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: c3c14fff86a6f4a48b149b5fa24d002a, type: 3}
   - {fileID: 21300000, guid: e59dd586d917d4490bfbceec7e12ca4f, type: 3}
   - {fileID: 21300000, guid: ac08e5484679a81439eba491520bf464, type: 3}
+  - {fileID: 21300000, guid: 45838539ed69e42d9858a4a07c4a410b, type: 3}
   - {fileID: 21300000, guid: ca2e879fd2e6e4e4b887f42c36a3a42b, type: 3}
   - {fileID: 21300000, guid: 1dcc03776739b4ed09b5f1a345fcffc1, type: 3}
   - {fileID: 21300000, guid: 945ffa44f52024d21ac9297edea6c81d, type: 3}
@@ -107,6 +109,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 0f6422c302db04965ac0f62a90d4c43e, type: 3}
   - {fileID: 21300000, guid: 9f24f1ded2a53464082b3976aa8272c8, type: 3}
   - {fileID: 21300000, guid: 683cb2a59ffac4c1eba63de821b18174, type: 3}
+  - {fileID: 21300000, guid: 73d688c62e9cf409896ff14f8edd1cec, type: 3}
   - {fileID: 21300000, guid: 6df284fe672c042d5bf8d8c17404a562, type: 3}
   - {fileID: 21300002, guid: 683cb2a59ffac4c1eba63de821b18174, type: 3}
   - {fileID: 21300030, guid: 683cb2a59ffac4c1eba63de821b18174, type: 3}
@@ -153,6 +156,7 @@ SpriteAtlas:
   - backgroundTrainingGarden
   - backgroundPatternUI
   - boardTrainingGarden
+  - PopupBackground
   - backgroundUI
   - Wizard
   - windowTrainingGarden
@@ -169,6 +173,7 @@ SpriteAtlas:
   - buttonPinkRounded
   - DefaultFourzy
   - LogoBackground
+  - TokenBackground
   - gridTile
   - buttonLeaderboard 2
   - buttonLeaderboard 1
@@ -211,6 +216,7 @@ SpriteAtlas:
   - token90LeftArrow
   - token90RightArrow
   - CoinSheet_0
+  - CloseButton
   - iconList
   - CoinSheet_1
   - CoinSheet_15

@@ -48,6 +48,7 @@ namespace Fourzy
         {
             if (game == null) {
                 Debug.Log("game is null");
+                return;
             }
 
             if (game.challengeType == ChallengeType.TOURNAMENT) {
