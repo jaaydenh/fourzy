@@ -1,0 +1,80 @@
+Pomodoro Goals
+
+Goal for May 6, 2018: 2 poms
+
+Pom 1:
+  - [X] Fix bug getting gamePieceId in JoinChallengeRequest
+ 
+
+Goal for May 7, 2018: 3 poms
+
+Pom 1:
+  - [X] Load Elo rating in User Manager
+  - [X] Display and Update players Elo rating on home screen
+  
+Pom 2:
+  - [X] Create method to calculate Elo rating change in Unity
+
+
+Goal for May 8, 2018: 3 poms
+
+Pom 1:
+  - [ ] Create random number based on hash
+  - [ ] Integrate random board generator
+
+Pom 2:
+  - [ ] Decide where and how to display Elo rating change when a game is completed
+  - [ ] Display players Elo rating change on game completed
+
+
+  
+
+Invited Friend Rewards Feature
+Ability to invite people to game by sending an email, text, facebook share, this sends a deeplink
+New player sees onboarding
+New player sees invited interface
+Invited friends list maybe combined with friends list
+invited friends list shows some kind of last activity indicator for each
+List shows the cumulative reward for active friends in the last day
+When user logs in for the first time in a day, the invited friend rewards popup displays
+
+Get points for # invited friends in the game
+Get points for # invited friends that played a game in the last week, day, month
+Get points for # invited friends that you are ahead of
+
+
+Redo Button
+
+Token Placement
+
+Share GameReplays
+
+Make InitialGameBoard work for multiplayer games
+
+20% Bonus to 2nd player to rating or coins
+
+Puzzle Challenge Leaderboard
+Track # of challenges of completed
+//Highest level challenge completed?
+Daily puzzle challenges, record fist 10 people who complete it first, boards released at 9pm EST
+
+ThumbUps or ThumbDowns game boards at the end of a game
+
+
+
+
+pieces starts moving, give the piece a very large momemtum.
+each move reduce the momentum by 1, if the momentum is 0, stop the piece
+tokesn can adjust momentum
+
+
+random
+Convert game id into number  - convert hexadecimal
+min number + (gameid + position in gameid matching the current move number + move number) mod (max number - min number)
+
+
+
+
+
+
+

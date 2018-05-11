@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -160,7 +159,7 @@ namespace Fourzy
                     break;
                 case 10:
                     GameManager.instance.GameScreenBackButton();
-                    ShowWizardWithDialog("Fourzy is an Early Access turn-based game. We recommended you start several games as it can take extra time to find an opponent.");
+                    ShowWizardWithDialog("Fourzy is an early access turn-based game. We recommended starting several games as it can take extra time to find an opponent.");
                     break;
                 case 11:
                     HideWizardDialog();

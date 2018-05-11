@@ -6,6 +6,7 @@ using Facebook.Unity;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
 using GameSparks.Core;
+using GameAnalyticsSDK;
 
 namespace Fourzy
 {
@@ -22,6 +23,7 @@ namespace Fourzy
         bool readyForDeviceLogin;
 
         void Start() {
+            GameAnalytics.Initialize();
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
         }
@@ -93,7 +95,7 @@ namespace Fourzy
                 .SetDisplayName(CreateNewPlayerName())
                 .Send((response) => {
                     if (!response.HasErrors) {
-                    UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null, null);
+                    UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null, null, null);
                         UserManager.instance.UpdateInformation();
                         ChallengeManager.instance.GetChallenges();
                         //LeaderboardManager.instance.GetLeaderboard();
@@ -203,6 +205,7 @@ namespace Fourzy
         //This is the callback that happens when gamesparks has been connected with FB
         private void AfterFBLogin(AuthenticationResponse response)
         {
+            Debug.Log("AfterFBLogin:UserId: " + response.UserId);
             facebookLoginButton.gameObject.SetActive(false);
             UserManager.instance.UpdateInformation();
             ChallengeManager.instance.GetChallenges();

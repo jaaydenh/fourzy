@@ -11,6 +11,7 @@ namespace Fourzy
     {
         public string userName;
         public string userId;
+        public int? ratingElo;
         public long coins;
         public int gamePieceId;
 
@@ -18,6 +19,7 @@ namespace Fourzy
         [SerializeField]
         Text userNameLabel;
         public Text gamePieceNameLabel;
+        public Text ratingEloLabel;
         public Image profilePictureImage;
         [SerializeField]
         Image gamePieceImage;
@@ -56,7 +58,8 @@ namespace Fourzy
                 {
                     Debug.Log("COINS: " + response.Currency1);
                     string facebookId = response.ExternalIds.GetString("FB");
-                    UpdateGUI(response.DisplayName, response.UserId, facebookId, response.Currency1);
+                    ratingElo = response.ScriptData.GetInt("ratingElo");
+                    UpdateGUI(response.DisplayName, response.UserId, facebookId, response.Currency1, ratingElo);
                 });
         }
 
@@ -80,11 +83,17 @@ namespace Fourzy
             gamePieceNameLabel.text = GamePieceSelectionManager.instance.GetGamePieceName(gamePieceId);
         }
 
-        public void UpdateGUI(string name, string uid, string fbId, long? coins)
+        public void UpdateGUI(string name, string uid, string fbId, long? coins, int? rating)
         {
             userName = name;
             userNameLabel.text = userName;
             userId = uid;
+            if (rating != null) {
+                ratingEloLabel.text = rating.ToString();    
+            } else {
+                ratingEloLabel.text = "0";
+            }
+
             this.coins = coins.GetValueOrDefault(0);
             coinsLabel.text = this.coins.ToString();
 

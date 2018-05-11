@@ -12,7 +12,8 @@ namespace Fourzy
         view5 = 4,
         viewTraining,
         viewGameboardSelection,
-        viewMatchMaking
+        viewMatchMaking,
+        viewSettings
     };
 
     public class ViewController : MonoBehaviour
@@ -32,6 +33,7 @@ namespace Fourzy
         public UIView viewTraining;
         public UIView viewGameboardSelection;
         public UIView viewMatchMaking;
+        public UIView viewSettings;
 
         public UIView viewCommon;
         public UIView debugView;
@@ -56,6 +58,7 @@ namespace Fourzy
             viewTraining.Hide();
             viewGameboardSelection.Hide();
             viewMatchMaking.Hide();
+            viewSettings.Hide();
             view3.keepHistory = true;
 
             if (debugView != null)
@@ -152,7 +155,12 @@ namespace Fourzy
                 case TotalView.viewMatchMaking:
                     currentActiveView = TotalView.viewMatchMaking;
                     previousView = currentView;
-                    currentView = viewTraining;
+                    currentView = viewMatchMaking;
+                    break;
+                case TotalView.viewSettings:
+                    currentActiveView = TotalView.viewSettings;
+                    previousView = currentView;
+                    currentView = viewSettings;
                     break;
                 default:
                     break;

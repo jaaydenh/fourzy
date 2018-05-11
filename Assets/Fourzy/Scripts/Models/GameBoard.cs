@@ -154,14 +154,15 @@ namespace Fourzy {
                     if (token.changePieceDirection) {
                         activeMovingPieces[0].positions.Add(piece.GetNextPosition());
                     }
-                    
+
                     if (token.isMoveable) {
                         if (GetCell(nextPosition.column, nextPosition.row) != 0) {
                             //Debug.Log("stick nextposition column: " + nextPosition.column + " row: " + nextPosition.row);
                             pieceInSquare = true;
                             PlayerEnum player = (PlayerEnum)GetCell(nextPosition.column, nextPosition.row);
                             Move move = new Move(nextPosition, piece.currentDirection, player);
-                            MovingGamePiece activeMovingPiece = new MovingGamePiece(move);
+
+                            MovingGamePiece activeMovingPiece = new MovingGamePiece(move, token.setMomentum);
                             activeMovingPieces.Add(activeMovingPiece);
                         }
                     }
@@ -246,8 +247,15 @@ namespace Fourzy {
 
                     piece.friction += token.addFriction;
 
-                    if (pieceInSquare || token.pieceMustStopOn || piece.isDestroyed || piece.friction >= 1.0f) {
+                    piece.momentum -= 1;
+                    Debug.Log("piece.momentum: " + piece.momentum);
+                    if (pieceInSquare || token.pieceMustStopOn || piece.isDestroyed || piece.friction >= 1.0f || piece.momentum <= 0) {
                         SetActivePieceAsComplete();
+                    }
+
+                    if (token.setMomentum > 0)
+                    {
+                        piece.momentum = token.setMomentum;
                     }
 
                     if (token.hasEffect) {

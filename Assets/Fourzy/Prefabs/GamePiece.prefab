@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5836388}
   - component: {fileID: 114455832749552324}
   - component: {fileID: 50450882592354128}
+  - component: {fileID: 95146299165651888}
   m_Layer: 8
   m_Name: GamePiece
   m_TagString: GamePiece
@@ -122,6 +123,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &95146299165651888
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174738}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114455832749552324
 MonoBehaviour:
   m_ObjectHideFlags: 1

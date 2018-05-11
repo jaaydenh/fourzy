@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using GameAnalyticsSDK;
 
 public class LoadingScreenControl : MonoBehaviour {
 
@@ -12,6 +13,8 @@ public class LoadingScreenControl : MonoBehaviour {
 
     void Start() {
         //StartCoroutine(Loading());
+        Debug.Log("GameAnalytics.Initialize();");
+        GameAnalytics.Initialize();
     }
 
     IEnumerator Loading() {

@@ -48,6 +48,7 @@ namespace Fourzy
         public GameObject webToken;
         public GameObject spiderToken;
         public GameObject sandToken;
+        public GameObject waterToken;
         // ---------- End Token Views ----------
 
         public PuzzleChallengeInfo puzzleChallengeInfo;
@@ -103,6 +104,8 @@ namespace Fourzy
         public Badge homeScreenPlayBadge;
         public Text challengeIdDebugText;
         public GameObject tokenPopupUI;
+
+        public GameObject particleEffect;
 
         [Header("Game State")]
         public GameType gameType;
@@ -346,6 +349,9 @@ namespace Fourzy
                     }
                 }
             }
+
+            // Update players coins and rating when a game is completed
+            UserManager.instance.UpdateInformation();
         }
 
         private void ChallengeLostHandler(ChallengeLostMessage message) {
@@ -389,6 +395,9 @@ namespace Fourzy
                     }
                 }
             }
+
+            // Update players coins and rating when a game is completed
+            UserManager.instance.UpdateInformation();
         }
 
         private void ChallengeIssuedHandler(ChallengeIssuedMessage message) {
@@ -1206,6 +1215,12 @@ namespace Fourzy
                             //tokenViews.Add(go);
                             tokenViews[row, col] = go;
                             break;
+                        case Token.WATER:
+                            go = Instantiate(waterToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
+                            Utility.SetSpriteAlpha(go, 0.0f);
+                            //tokenViews.Add(go);
+                            tokenViews[row, col] = go;
+                            break;
                         default:
                             break;
                     }
@@ -1625,6 +1640,37 @@ namespace Fourzy
             return new Position(column, row);
         }
 
+        private GameObject SpawnParticle()
+        {
+            GameObject particles = (GameObject)Instantiate(particleEffect);
+            particles.transform.position = new Vector3(particles.transform.position.x, particles.transform.position.y, 0);
+//#if UNITY_3_5
+//            particles.SetActiveRecursively(true);
+//#else
+            particles.SetActive(true);
+            //          for(int i = 0; i < particles.transform.childCount; i++)
+            //              particles.transform.GetChild(i).gameObject.SetActive(true);
+//#endif
+
+            ParticleSystem ps = particles.GetComponent<ParticleSystem>();
+
+//#if UNITY_5_5_OR_NEWER
+//            if (ps != null)
+//            {
+//                var main = ps.main;
+//                if (main.loop)
+//                {
+//                    ps.gameObject.AddComponent<CFX_AutoStopLoopedEffect>();
+//                    ps.gameObject.AddComponent<CFX_AutoDestructShuriken>();
+//                }
+//            }
+//#endif
+
+            //onScreenParticles.Add(particles);
+
+            return particles;
+        }
+
         private void ProcessPlayerInput(Vector3 mousePosition)
         {
             Debug.Log("Gamemanager: disableInput: " + disableInput);
@@ -1634,13 +1680,15 @@ namespace Fourzy
             //Debug.Log("Gamemanager: gameState.isGameOver: " + gameState.isGameOver);
             Debug.Log("Gamemanager: animatingGamePieces: " + animatingGamePieces);
 
+            Vector3 pos = mainCamera.ScreenToWorldPoint(mousePosition);
+            //GameObject particle = SpawnParticle();
+            //particle.transform.position = new Vector3(Mathf.RoundToInt(pos.x), Mathf.CeilToInt((pos.y * -1 - .3f))*-1);
+
             if (disableInput || isLoading || isLoadingUI || isDropping || gameState.isGameOver || animatingGamePieces)
             {
                 Debug.Log("returned in process player input");
                 return;
             }
-
-            Vector3 pos = mainCamera.ScreenToWorldPoint(mousePosition);
 
             Debug.Log("Gamemanager: gameState.isCurrentPlayerTurn: " + gameState.isCurrentPlayerTurn);
 
@@ -1838,7 +1886,7 @@ namespace Fourzy
                 isDropping = false;
             }
 
-            yield return 0;
+            yield return null;
         }
 
         public void CreateGame(string challengeId) {

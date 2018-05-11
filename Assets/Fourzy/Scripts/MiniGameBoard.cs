@@ -26,6 +26,7 @@ namespace Fourzy {
         public GameObject webToken;
         public GameObject spiderToken;
         public GameObject sandToken;
+        public GameObject waterToken;
 
         public GameObject glow;
         public GameObject questionMark;
@@ -106,6 +107,9 @@ namespace Fourzy {
                             break;
                         case Token.SAND:
                             go = Instantiate(sandToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
+                            break;
+                        case Token.WATER:
+                            go = Instantiate(waterToken, new Vector3(col, row * -1, -5), Quaternion.identity, tokens.transform);
                             break;
                         default:
                             break;

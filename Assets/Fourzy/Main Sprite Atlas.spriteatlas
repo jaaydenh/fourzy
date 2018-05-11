@@ -73,6 +73,8 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 8399a1ca389db43f4b5bae6e953dfaf2, type: 3}
   - {fileID: 21300000, guid: 66c710582a23e439e95f560533cc78f6, type: 3}
   - {fileID: 21300000, guid: 43b93fb97a234480c888ec0c1eb28435, type: 3}
+  - {fileID: 21300000, guid: 0d3cecd8433384410a95918cb0879c61, type: 3}
+  - {fileID: 21300000, guid: 8201a508122e74ddc88e4b280bb09d31, type: 3}
   - {fileID: 21300000, guid: a5fff9523274d4f1d9cd08bde771f7e7, type: 3}
   - {fileID: 21300000, guid: cbed2515e53714785840b9ebaa9a3c5a, type: 3}
   - {fileID: 21300000, guid: 96092efcbbf274f2f9315e910640cf5a, type: 3}
@@ -180,6 +182,8 @@ SpriteAtlas:
   - buttonLeaderboard
   - iconQuestion
   - tokenIceBlock
+  - SettingsButton
+  - SettingsButton2
   - uiPieceSelector
   - buttonBack
   - Chest

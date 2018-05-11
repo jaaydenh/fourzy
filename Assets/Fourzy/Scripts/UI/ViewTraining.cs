@@ -35,8 +35,6 @@ namespace Fourzy
             //Debug.Log("PuzzleChallengeButton");
             Hide();
             ChallengeManager.instance.OpenPuzzleChallengeGame();
-            //ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
-            //GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
         }
 
         public void AIGameButton()

@@ -24,11 +24,13 @@ namespace Fourzy
         //public AnimationCurve moveCurve;
         Renderer rend;
         CircleCollider2D gamePieceCollider;
+        private Animator gamePieceAnimator;
 
 
 		private void Start()
 		{
             gamePieceCollider = gameObject.GetComponent<CircleCollider2D>();
+            gamePieceAnimator = gameObject.GetComponent<Animator>();
 		}
 
 		public void Reset()
@@ -242,12 +244,16 @@ namespace Fourzy
                 switch (direction)
                 {
                     case Direction.UP:
+                        //gamePieceAnimator.Play("movetest");
                         return transform.DOPunchPosition(new Vector3(0.0f, punchDistance, 0), punchDuration, 7);
                     case Direction.DOWN:
+                        //gamePieceAnimator.Play("movetest");
                         return transform.DOPunchPosition(new Vector3(0.0f, punchDistance * -1, 0), punchDuration, 7);
                     case Direction.LEFT:
+                        //gamePieceAnimator.Play("movetest");
                         return transform.DOPunchPosition(new Vector3(punchDistance * -1, 0.0f, 0), punchDuration, 7);
                     case Direction.RIGHT:
+                        //gamePieceAnimator.Play("movetest");
                         return transform.DOPunchPosition(new Vector3(punchDistance, 0.0f, 0), punchDuration, 7);
                     default:
                         return transform.DOPunchPosition(new Vector3(0.0f, 0.0f, 0), punchDuration, 7);

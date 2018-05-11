@@ -25,7 +25,7 @@ namespace Fourzy {
             }
             else
             {
-                Debug.Log("Initialize initialGameBoard");
+                //Debug.Log("Initialize initialGameBoard");
                 initialGameBoard = new int[Constants.numRows * Constants.numColumns];
 
                 for (int row = 0; row < Constants.numRows; row++)
@@ -96,7 +96,7 @@ namespace Fourzy {
             }
 
             this.initialGameBoard = new int[Constants.numRows * Constants.numColumns];
-            Debug.Log("initialGameBoard: " + initialGameBoard.Length);
+            //Debug.Log("initialGameBoard: " + initialGameBoard.Length);
             if (initialGameBoard.Length > 0) {
                 for (int row = 0; row < Constants.numRows; row++)
                 {
@@ -241,6 +241,10 @@ namespace Fourzy {
                     else if (token == (int)Token.SAND)
                     {
                         tokens[row, col] = new SandToken(row, col);
+                    }
+                    else if (token == (int)Token.WATER)
+                    {
+                        tokens[row, col] = new WaterToken(row, col);
                     }
                 }
             }

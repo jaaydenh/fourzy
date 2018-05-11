@@ -103,5 +103,10 @@ namespace Fourzy
             ViewController.instance.ChangeView(ViewController.instance.viewTraining);
             ViewController.instance.HideTabView();
         }
+
+        public void SettingsButton() {
+            ViewController.instance.ChangeView(ViewController.instance.viewSettings);
+            ViewController.instance.HideTabView();
+        }
     }
 }

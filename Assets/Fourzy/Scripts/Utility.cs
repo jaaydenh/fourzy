@@ -4,6 +4,13 @@ namespace Fourzy
 {
     public class Utility {
 
+        public static float GetEloRatingDelta(int myRating, int opponentRating, float gameResult) {
+
+            float myChanceToWin = 1 / (1 + Mathf.Pow(10, (opponentRating - myRating) / 400));
+
+            return Mathf.Floor(60 * (gameResult - myChanceToWin));
+        }
+
         public static void SetSpriteAlpha(GameObject go, float alpha) {
             SpriteRenderer sprite = go.GetComponent<SpriteRenderer>();
             Color c = sprite.color;
