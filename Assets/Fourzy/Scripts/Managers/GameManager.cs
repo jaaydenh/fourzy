@@ -259,7 +259,7 @@ namespace Fourzy
                     if (currentGame != null)
                     {
                         GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                        GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, PlayerEnum.EMPTY);
+                        GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, PlayerEnum.EMPTY, ChallengeManager.instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
                         currentGame.gameState = newGameState;
                     }
 
@@ -321,7 +321,8 @@ namespace Fourzy
             if (currentGame != null)
             {
                 GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
+                // GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
+                GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, player, ChallengeManager.instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
                 currentGame.gameState = newGameState;
                 currentGame.challengerRatingDelta = gsChallenge.ScriptData.GetInt("challengerRatingDelta").GetValueOrDefault();
                 currentGame.challengedRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();
@@ -347,18 +348,6 @@ namespace Fourzy
                 }
                 else
                 {
-                    // var currentGame = games
-                    //     .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                    //     .FirstOrDefault();
-                    // if (currentGame != null)
-                    // {
-                    //     GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                    //     GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
-                    //     currentGame.gameState = newGameState;
-                    //     currentGame.challengerRatingDelta = gsChallenge.ScriptData.GetInt("challengerRatingDelta").GetValueOrDefault();
-                    //     currentGame.challengedRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();
-                    // }
-
                     if (activeScreen == Screens.GAME)
                     {
                         SetActionButton();
@@ -389,7 +378,8 @@ namespace Fourzy
             if (currentGame != null)
             {
                 GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
+                // GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
+                GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, player, ChallengeManager.instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
                 currentGame.gameState = newGameState;
                 currentGame.challengerRatingDelta = gsChallenge.ScriptData.GetInt("challengerRatingDelta").GetValueOrDefault();
                 currentGame.challengedRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();
@@ -415,18 +405,6 @@ namespace Fourzy
                 }
                 else
                 {
-                    // var currentGame = games
-                    //     .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                    //     .FirstOrDefault();
-                    // if (currentGame != null)
-                    // {
-                    //     GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                    //     GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
-                    //     currentGame.gameState = newGameState;
-                    //     currentGame.challengerRatingDelta = gsChallenge.ScriptData.GetInt("challengerRatingDelta").GetValueOrDefault();
-                    //     currentGame.challengedRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();
-                    // }
-
                     if (activeScreen == Screens.GAME)
                     {
                         SetActionButton();
@@ -447,7 +425,8 @@ namespace Fourzy
             var gsChallenge = message.Challenge;
             Debug.Log("ChallengeIssuedHandler");
             GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, PlayerEnum.EMPTY);
+            // public GameState(int numRows, int numColumns, bool isPlayerOneTurn, bool isCurrentPlayerTurn, bool isGameOver, TokenBoard tokenBoard, PlayerEnum winner, List<Move> moveList, int[] previousGameboardData) {
+            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, PlayerEnum.EMPTY, ChallengeManager.instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
             string opponentFBId = gsChallenge.Challenger.ExternalIds.GetString("FB");
             Opponent opponent = new Opponent(gsChallenge.Challenger.Id, gsChallenge.Challenger.Name, opponentFBId);
 
@@ -937,11 +916,14 @@ namespace Fourzy
             //Debug.Log("gameState.moveList = " + gameState.moveList.Count);
             if (gameState.moveList != null)
             {
+                // GSData lastMove = gameState.moveList.Last();
+                Move lastMove = gameState.moveList.Last();
+
+                // int position = lastMove.GetInt("position").GetValueOrDefault();
+                // Direction direction = (Direction)lastMove.GetInt("direction").GetValueOrDefault();
                 
-                GSData lastMove = gameState.moveList.Last();
-                // Debug.Log("lastmove: " + lastMove.JSON.ToString());
-                int position = lastMove.GetInt("position").GetValueOrDefault();
-                Direction direction = (Direction)lastMove.GetInt("direction").GetValueOrDefault();
+                // int position = lastMove.location; 
+                // Direction direction = lastMove.direction;
 
                 PlayerEnum player = PlayerEnum.NONE;
                 if (!gameState.isGameOver)
@@ -952,10 +934,11 @@ namespace Fourzy
                 {
                     player = gameState.isPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
                 }
-                //Debug.Log("ReplayLastMove lastmove: position: " + position + " direction: " + direction + " player: " + player.ToString());
-                Move move = new Move(position, direction, player);
 
-                StartCoroutine(MovePiece(move, true, false));
+                // Move move = new Move(position, direction, player);
+                lastMove.player = player;
+
+                StartCoroutine(MovePiece(lastMove, true, false));
             }
             else if (initialMoves.Count > 0)
             {

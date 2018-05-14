@@ -545,10 +545,11 @@ namespace Fourzy
             tokenBoard = new TokenBoard(tokenBoardArray, tokenBoardId, tokenBoardName, null, null, true);
 
             List<GSData> moveList = challenge.ScriptData.GetGSDataList("moveList");
+
             int currentPlayerMove = challenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
             bool isPlayerOneTurn = currentPlayerMove == (int)Piece.BLUE ? true : false;
 
-            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, isPlayerOneTurn, true, tokenBoard, lastGameboard, false, moveList);
+            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, isPlayerOneTurn, true, tokenBoard, lastGameboard, false, ConvertMoveList(moveList));
             GameManager.instance.gameState = gameState;
 
             GameManager.instance.ResetUIGameScreen();
@@ -570,6 +571,22 @@ namespace Fourzy
             customAttributes.Add("TokenBoardId", tokenBoardId);
             customAttributes.Add("TokenBoardName", tokenBoardName);
             AnalyticsManager.LogCustom("joined_multiplayer_game", customAttributes);
+        }
+
+        public List<Move> ConvertMoveList(List<GSData> moveList) {
+            List<Move> newMoveList = new List<Move>();
+            for (int i = 0; i < moveList.Count; i++)
+            {
+                int position = moveList[i].GetInt("position").GetValueOrDefault();
+                Direction direction = (Direction)moveList[i].GetInt("direction").GetValueOrDefault();
+                PlayerEnum player = (PlayerEnum)moveList[i].GetInt("player").GetValueOrDefault();
+                long timestamp = moveList[i].GetLong("timestamp").GetValueOrDefault();
+                Move move = new Move(position, direction, player);
+                move.timeStamp = timestamp;
+                newMoveList.Add(move);
+            }
+
+            return newMoveList;
         }
 
         public void GetChallenges() {
@@ -755,7 +772,8 @@ namespace Fourzy
                                     }
 
                                     GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                                    GameState gameState = new GameState(Constants.numRows, Constants.numColumns, challenge, isCurrentPlayerTurn, winner);
+                                    // GameState gameState = new GameState(Constants.numRows, Constants.numColumns, challenge, isCurrentPlayerTurn, winner);
+                                    GameState gameState = new GameState(Constants.numRows, Constants.numColumns, challenge.isPlayerOneTurn, isCurrentPlayerTurn, challenge.isGameOver, challenge.tokenBoard, winner, ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
                                     gameUI.gameState = gameState;
 
                                     string challengerGamePieceId = challenge.challengerGamePieceId;

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using GameSparks.Core;
 
 namespace Fourzy
 {
@@ -24,10 +23,10 @@ namespace Fourzy
         public int[] isMoveableDown;
         public int[] isMoveableLeft;
         public int[] isMoveableRight;
-        public List<GSData> moveList;
+        public List<Move> moveList;
         public List<IToken> activeTokenList;
 
-        public GameState (int numRows, int numColumns, bool isPlayerOneTurn, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] gameBoardData, bool isGameOver, List<GSData> moveList) {
+        public GameState (int numRows, int numColumns, bool isPlayerOneTurn, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] gameBoardData, bool isGameOver, List<Move> moveList) {
             this.numRows = numRows;
             this.numColumns = numColumns;
             this.isPlayerOneTurn = isPlayerOneTurn;
@@ -48,15 +47,15 @@ namespace Fourzy
             InitGameState(gameBoardData);
         }
 
-        public GameState(int numRows, int numColumns, GameSparksChallenge challenge, bool isCurrentPlayerTurn, PlayerEnum winner) {
+        public GameState(int numRows, int numColumns, bool isPlayerOneTurn, bool isCurrentPlayerTurn, bool isGameOver, TokenBoard tokenBoard, PlayerEnum winner, List<Move> moveList, int[] previousGameboardData) {
             this.numRows = numRows;
             this.numColumns = numColumns;
-            this.isPlayerOneTurn = challenge.isPlayerOneTurn;
+            this.isPlayerOneTurn = isPlayerOneTurn;
             this.isCurrentPlayerTurn = isCurrentPlayerTurn;
-            this.tokenBoard = challenge.tokenBoard;
-            this.previousTokenBoard = challenge.tokenBoard.Clone();
-            this.isGameOver = challenge.isGameOver;
-            this.moveList = challenge.moveList;
+            this.tokenBoard = tokenBoard;
+            this.previousTokenBoard = tokenBoard.Clone();
+            this.isGameOver = isGameOver;
+            this.moveList = moveList;
             this.winner = winner;
 
             isMoveableUp = new int[numColumns * numRows];
@@ -64,7 +63,7 @@ namespace Fourzy
             isMoveableLeft = new int[numColumns * numRows];
             isMoveableRight = new int[numColumns * numRows];
 
-            InitGameState(challenge.previousGameboardData);
+            InitGameState(previousGameboardData);
         }
 
         private void InitGameState(int[] gameBoardData) {
@@ -92,7 +91,7 @@ namespace Fourzy
         }
 
         public void SetTokenBoardCell(int row, int col, IToken token) {
-            Debug.Log("SetTokenBoardCell: row: " + row + " col: "+ col + " token: " + token.tokenType);
+            // Debug.Log("SetTokenBoardCell: row: " + row + " col: "+ col + " token: " + token.tokenType);
             tokenBoard.SetTokenBoardCell(row, col, token);
         }
 
@@ -187,18 +186,21 @@ namespace Fourzy
             }
 
             if (!isReplay) {
-                Dictionary<string, object> moveData = new Dictionary<string, object>();
-                moveData.Add("position", move.location);
-                moveData.Add("direction", (int)move.direction);
-                moveData.Add("player", (int)move.player);
+                // Dictionary<string, object> moveData = new Dictionary<string, object>();
+                // moveData.Add("position", move.location);
+                // moveData.Add("direction", (int)move.direction);
+                // moveData.Add("player", (int)move.player);
                 System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
                 int currentTime = (int)(System.DateTime.UtcNow - epochStart).TotalMilliseconds;
-                moveData.Add("timestamp", currentTime);
-                GSData data = new GSData(moveData);
+                // moveData.Add("timestamp", currentTime);
+                // GSData data = new GSData(moveData);
+
+                move.timeStamp = currentTime;
+
                 if (moveList ==  null) {
-                    moveList = new List<GSData>();
+                    moveList = new List<Move>();
                 }
-                moveList.Add(data);
+                moveList.Add(move);
 
                 if (isPlayerOneTurn) {
                     player1MoveCount++;
@@ -348,11 +350,11 @@ namespace Fourzy
                 if (!piece.isDestroyed) {
                     Position currentPosition = piece.GetCurrentPosition();
                     if (currentPosition.row > 7 || currentPosition.column < 0 || currentPosition.column > 7 || currentPosition.column < 0) {
-                        Debug.Log("currentPosition.row: " + currentPosition.row);
-                        Debug.Log("currentPosition.column: " + currentPosition.column);
+                        // Debug.Log("currentPosition.row: " + currentPosition.row);
+                        // Debug.Log("currentPosition.column: " + currentPosition.column);
                     }
                     if (tokenBoard.tokens == null) {
-                        Debug.Log("Tokenboard tokens is null");
+                        // Debug.Log("Tokenboard tokens is null");
                     }
                     if (tokenBoard.tokens[currentPosition.row, currentPosition.column].isMoveable) {
 
@@ -484,13 +486,15 @@ namespace Fourzy
 
         public void PrintMoveList() {
             int i = 0;
-            Debug.Log("MoveList");
+            // Debug.Log("MoveList");
             foreach (var move in moveList)
             {
                 i++;
-                int position = move.GetInt("position").GetValueOrDefault();
-                Direction direction = (Direction)move.GetInt("direction").GetValueOrDefault();
-                Debug.Log("Move " + i + ": position: " + position + " direction: " + direction.ToString());
+                // int position = move.GetInt("position").GetValueOrDefault();
+                int position = move.location;
+                // Direction direction = (Direction)move.GetInt("direction").GetValueOrDefault();
+                Direction direction = move.direction;
+                // Debug.Log("Move " + i + ": position: " + position + " direction: " + direction.ToString());
             }
         }
 

@@ -8,6 +8,7 @@ namespace Fourzy
         public Position position;
         public Direction direction;
         public PlayerEnum player;
+        public long timeStamp;
 
         public Move(Position position, Direction direction, PlayerEnum player) {
             this.position = position;

@@ -110,10 +110,12 @@ namespace Fourzy
                 Debug.Log("game.gameState.moveList == null");
             }
 
-            GSData lastPlayerMove = game.gameState.moveList.LastOrDefault();
+            // GSData lastPlayerMove = game.gameState.moveList.LastOrDefault();
+            Move lastPlayerMove = game.gameState.moveList.LastOrDefault();
             long timestamp = 0;
             if (lastPlayerMove != null) {
-               timestamp = lastPlayerMove.GetLong("timestamp").GetValueOrDefault();    
+            //    timestamp = lastPlayerMove.GetLong("timestamp").GetValueOrDefault();
+                timestamp = lastPlayerMove.timeStamp;
             }
 
             if (timestamp != 0) {
