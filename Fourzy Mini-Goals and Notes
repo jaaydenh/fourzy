@@ -4,7 +4,6 @@ Goal for May 6, 2018: 2 poms
 
 Pom 1:
   - [X] Fix bug getting gamePieceId in JoinChallengeRequest
- 
 
 Goal for May 7, 2018: 3 poms
 
@@ -15,19 +14,24 @@ Pom 1:
 Pom 2:
   - [X] Create method to calculate Elo rating change in Unity
 
-
-Goal for May 8, 2018: 3 poms
+Goal for May 12, 2018
 
 Pom 1:
-  - [ ] Create random number based on hash
-  - [ ] Integrate random board generator
+  - [X] Create server side function to calculate Elo rating delta
+  - [X] Decide where and how to display Elo rating change when a game is completed
+  - [X] Display players Elo rating change on game completed
+
+Goal for May 13, 2018
+
+Pom 1:
+  - [X] Integrate random board generator
 
 Pom 2:
-  - [ ] Decide where and how to display Elo rating change when a game is completed
-  - [ ] Display players Elo rating change on game completed
+  - [ ] Fix bug to make draws work correctly with ghosts on edge of board
+  - [ ] Handle draws for rating change
+  - [ ] Create function to generate random number
+  - [ ] Handle momentum transfers between arrow loops with sticky, water, sand, and ice
 
-
-  
 
 Invited Friend Rewards Feature
 Ability to invite people to game by sending an email, text, facebook share, this sends a deeplink
@@ -48,6 +52,8 @@ Redo Button
 Token Placement
 
 Share GameReplays
+
+GameReplays List - only games with min 10 moves
 
 Make InitialGameBoard work for multiplayer games
 
@@ -73,7 +79,8 @@ Convert game id into number  - convert hexadecimal
 min number + (gameid + position in gameid matching the current move number + move number) mod (max number - min number)
 
 
-
+5af654442f481f04d6334d60
+5af654442f481f04d6334d60
 
 
 

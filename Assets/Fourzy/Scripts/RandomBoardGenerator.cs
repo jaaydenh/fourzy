@@ -45,11 +45,12 @@ namespace Fourzy
 
             }
 
-            AddFeatures(ref newBoard.tokenBoard, 1, 4);
-            AddNoise(ref newBoard.tokenBoard, 5, 12);
+            AddFeatures(ref newBoard.tokenBoard, 3, 6);
+            AddNoise(ref newBoard.tokenBoard, 3, 7);
             SetCorners(ref newBoard.tokenBoard);
             CheckArrows(ref newBoard.tokenBoard);
             CheckPits(ref newBoard.tokenBoard);
+            CheckMaxBlockers(ref newBoard.tokenBoard, 6);
 
             newBoard.RefreshTokenBoard();
 
@@ -324,10 +325,39 @@ namespace Fourzy
             TokenData[Constants.numRows - 1, Constants.numColumns - 1] = (int)Token.BLOCKER;
         }
 
-        private static void CheckPits(ref int[,] TokenData) {
+        private static void CheckMaxBlockers(ref int[,] TokenData, int MaxBlockers)
+        {
+            //count up any blockers not on the edge.
+            List<Position> BlockerList = new List<Position>();
             for (int r = 1; r < Constants.numRows - 1; r++)
             {
-                if (TokenData[r, 0] == (int)Token.PIT) {
+                for (int c = 1; c < Constants.numColumns - 1; c++)
+                {
+                    if (IsBlockerToken(TokenData[r, c]))
+                    {
+                        BlockerList.Add(new Position(c, r));
+                    }
+                }
+            }
+            if (BlockerList.Count <= MaxBlockers) return;
+
+            //Convert a random blocker to a random space.
+            while (BlockerList.Count > MaxBlockers)
+            {
+                int choose_one = UnityEngine.Random.Range(0, BlockerList.Count - 1);
+                Position pos = BlockerList[choose_one];
+                TokenData[pos.row, pos.column] = (int)Token.EMPTY;
+                BlockerList.RemoveAt(choose_one);
+            }
+
+        }
+
+        private static void CheckPits(ref int[,] TokenData)
+        {
+            for (int r = 1; r < Constants.numRows - 1; r++)
+            {
+                if (TokenData[r, 0] == (int)Token.PIT)
+                {
                     TokenData[r, 0] = (int)Token.EMPTY;
                 }
                 if (TokenData[r, Constants.numColumns - 1] == (int)Token.PIT)
@@ -415,7 +445,7 @@ namespace Fourzy
         private static void AddRandomFeature(ref int[,] TokenData)
         {
             string feature = GetRandomMember(BoardFeatures.FeatureTypes);
-            string defaultFeatureTokenName = GetRandomMember(BoardFeatures.TokenTypes);
+            string defaultFeatureTokenName = GetRandomMember(BoardFeatures.FeatureTokens[feature]);
             int defaultTokenId = ConvertTokenNameToTokenId(defaultFeatureTokenName);
             int insert_column = 0;
             int insert_row = 0;
@@ -484,15 +514,327 @@ namespace Fourzy
                     }
 
                     break;
+
+                case "steps":
+
+                    int steps_height = UnityEngine.Random.Range(2, Constants.numRows / 2);
+
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - steps_height);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - steps_height);
+
+                    for (int r = 0; r < steps_height; r++)
+                    {
+                        for (int c = 0; c < steps_height; c++)
+                        {
+                            if (c <= r) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+
+                case "smiley":
+
+                    int smile_spacing = UnityEngine.Random.Range(1, 2);
+                    int smile_height = smile_spacing + 3;
+                    int smile_width = smile_spacing + 4;
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - smile_height);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - smile_width);
+
+                    TokenData[insert_row, insert_column + 1] = defaultTokenId;
+                    TokenData[insert_row, (insert_column + smile_width - 1)] = defaultTokenId;
+                    TokenData[(insert_row + smile_height - 1), insert_column] = defaultTokenId;
+                    TokenData[(insert_row + smile_height - 1), (insert_column + smile_width)] = defaultTokenId;
+
+                    for (int c = 0; c < smile_width; c++)
+                    {
+                        TokenData[insert_row + smile_height, insert_column + c] = defaultTokenId;
+                    }
+
+                    break;
+
+                case "vdoubleline":
+
+                    insert_column = UnityEngine.Random.Range(2, Constants.numColumns - 2);
+
+                    for (int r = 0; r < Constants.numRows; r++)
+                    {
+                        TokenData[r, insert_column] = defaultTokenId;
+                        TokenData[r, insert_column + 1] = defaultTokenId;
+                    }
+
+                    break;
+
+                case "hdoubleline":
+
+                    insert_row = UnityEngine.Random.Range(2, Constants.numRows - 2);
+
+                    for (int c = 0; c < Constants.numColumns; c++)
+                    {
+                        TokenData[insert_row, c] = defaultTokenId;
+                        TokenData[insert_row + 1, c] = defaultTokenId;
+                    }
+                    break;
+
+
+
+                case "letter":
+
+                    int letter_size = 5;
+                    int[,] letter_definition = LetterDefinitions.GetRandomLetterDefinition();
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - letter_size);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - letter_size);
+
+                    for (int r = 0; r < letter_size; r++)
+                    {
+                        for (int c = 0; c < letter_size; c++)
+                        {
+                            if (letter_definition[r, c] == 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+                case "drops":
+
+                    int drops_height = UnityEngine.Random.Range(4, Constants.numRows - 2);
+                    int drops_width = UnityEngine.Random.Range(4, Constants.numColumns - 2);
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - drops_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - drops_height);
+
+                    int count = drops_height + drops_width;
+                    while (count > 0)
+                    {
+                        for (int r = 0; r < drops_height; r++)
+                        {
+                            for (int c = 0; c < drops_width; c++)
+                            {
+                                if (UnityEngine.Random.Range(1, drops_height + drops_width) <= 1)
+                                {
+                                    TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                                    count--;
+                                }
+
+                                if (count == 0) break;
+                            }
+
+                            if (count == 0) break;
+                        }
+                    }
+
+                    break;
+
+                case "dotsquare":
+
+                    int dotsquare_height = UnityEngine.Random.Range(3, Constants.numRows - 2);
+                    int dotsquare_width = UnityEngine.Random.Range(3, Constants.numColumns - 2);
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - dotsquare_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - dotsquare_height);
+
+                    TokenData[insert_row, insert_column] = defaultTokenId;
+                    TokenData[insert_row, insert_column + dotsquare_width] = defaultTokenId;
+                    TokenData[insert_row + dotsquare_height, insert_column] = defaultTokenId;
+                    TokenData[insert_row + dotsquare_height, insert_column + dotsquare_width] = defaultTokenId;
+
+                    break;
+
+
+                case "cornerbrackets":
+
+                    int cornerbracket_spacing = UnityEngine.Random.Range(1, 2);
+                    int cornerbracket_height = 4 + cornerbracket_spacing;
+                    int cornerbracket_width = 4 + cornerbracket_spacing;
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - cornerbracket_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - cornerbracket_height);
+
+                    TokenData[insert_row, insert_column] = defaultTokenId;
+                    TokenData[insert_row + 1, insert_column] = defaultTokenId;
+                    TokenData[insert_row, insert_column + 1] = defaultTokenId;
+
+                    TokenData[insert_row, insert_column + cornerbracket_width] = defaultTokenId;
+                    TokenData[insert_row, insert_column + cornerbracket_width - 1] = defaultTokenId;
+                    TokenData[insert_row + 1, insert_column + cornerbracket_width] = defaultTokenId;
+
+                    TokenData[insert_row + cornerbracket_height, insert_column] = defaultTokenId;
+                    TokenData[insert_row + cornerbracket_height, insert_column + 1] = defaultTokenId;
+                    TokenData[insert_row + cornerbracket_height - 1, insert_column] = defaultTokenId;
+
+                    TokenData[insert_row + cornerbracket_height, insert_column + cornerbracket_width] = defaultTokenId;
+                    TokenData[insert_row - 1 + cornerbracket_height, insert_column + cornerbracket_width] = defaultTokenId;
+                    TokenData[insert_row + cornerbracket_height, insert_column + cornerbracket_width - 1] = defaultTokenId;
+
+
+                    break;
+
                 case "o_shape":
+                    int o_height = UnityEngine.Random.Range(3, 6);
+                    int o_width = UnityEngine.Random.Range(3, 6);
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - o_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - o_height);
+
+                    for (int r = 0; r < o_height; r++)
+                    {
+                        for (int c = 0; c < o_width; c++)
+                        {
+                            if (c == 0 || r == 0 || c == o_width - 1 || r == o_height - 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
                     break;
                 case "l_shape":
+                    int l_height = UnityEngine.Random.Range(2, 6);
+                    int l_width = UnityEngine.Random.Range(2, 6);
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - l_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - l_height);
+
+                    for (int r = 0; r < l_height; r++)
+                    {
+                        for (int c = 0; c < l_width; c++)
+                        {
+                            if (c == 0 || r == l_height - 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
                     break;
+
                 case "u_shape":
+
+                    int u_height = UnityEngine.Random.Range(3, 5);
+                    int u_width = UnityEngine.Random.Range(3, 5);
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - u_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - u_height);
+
+                    for (int r = 0; r < u_height; r++)
+                    {
+                        for (int c = 0; c < u_width; c++)
+                        {
+                            if (c == 0 || c == u_width - 1 || r == u_height - 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
                     break;
-                case "riverofarrows":
+                case "checkers":
+
+                    int check_height = UnityEngine.Random.Range(3, 6);
+                    int check_width = UnityEngine.Random.Range(3, 6);
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - check_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - check_height);
+
+                    for (int r = 0; r < check_height; r++)
+                    {
+                        for (int c = 0; c < check_width; c++)
+                        {
+                            if ((c + r) % 2 == 0) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
                     break;
+
+                case "cross":
+
+                    int cross_width = UnityEngine.Random.Range(3, 6);
+                    int cross_center = (int)(cross_width / 2);
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - cross_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - cross_width);
+
+                    for (int r = 0; r < cross_width; r++)
+                    {
+                        for (int c = 0; c < cross_width; c++)
+                        {
+                            if (c == cross_center || r == cross_center) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+                    break;
+
+                case "corners":
+
+                    for (int r = 0; r < Constants.numRows; r++)
+                    {
+                        for (int c = 0; c < Constants.numColumns; c++)
+                        {
+                            if ((r < 2 && c < 2) || (r > Constants.numRows - 3 && c > Constants.numColumns - 3) || (r > Constants.numRows - 3 && c < 2) || (r < 2 && c > Constants.numColumns - 3)) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+                    break;
+
+
+                case "diagcross":
+
+                    int diagcross_width = UnityEngine.Random.Range(3, 6);
+                    int diagcross_center = (int)(diagcross_width / 2);
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - diagcross_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - diagcross_width);
+
+                    for (int r = 0; r < diagcross_width; r++)
+                    {
+                        for (int c = 0; c < diagcross_width; c++)
+                        {
+                            if (r == c || r + c == (diagcross_width - 1)) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+                    break;
+
+                case "diaglines":
+
+                    for (int r = 0; r < Constants.numRows; r++)
+                    {
+                        for (int c = 0; c < Constants.numColumns; c++)
+                        {
+                            if ((r + c) % 3 == 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+                    break;
+
                 case "blockedge":
+
+                    int direction = UnityEngine.Random.Range(0, 3);
+                    switch (direction)
+                    {
+                        //top
+                        case 0:
+                            for (int c = 0; c < Constants.numColumns; c++)
+                            {
+                                TokenData[0, c] = defaultTokenId;
+                            }
+                            break;
+                        //bottom
+                        case 1:
+                            for (int c = 0; c < Constants.numColumns; c++)
+                            {
+                                TokenData[Constants.numRows - 1, c] = defaultTokenId;
+                            }
+
+                            break;
+
+                        //left
+                        case 2:
+
+                            for (int r = 0; r < Constants.numRows; r++)
+                            {
+                                TokenData[r, 0] = defaultTokenId;
+                            }
+
+
+                            break;
+
+                        //right
+                        case 3:
+                            for (int r = 0; r < Constants.numRows; r++)
+                            {
+                                TokenData[r, Constants.numColumns - 1] = defaultTokenId;
+                            }
+
+                            break;
+                    }
                     break;
             }
 
@@ -500,7 +842,13 @@ namespace Fourzy
 
         private static string GetRandomMember(Dictionary<string, int> WeightedValues)
         {
-            int rnd_value = UnityEngine.Random.Range(0, 100);
+            int total_weight = 0;
+            foreach (string s in WeightedValues.Keys)
+            {
+                total_weight += WeightedValues[s];
+            }
+
+            int rnd_value = UnityEngine.Random.Range(0, total_weight);
             string value = "";
 
             foreach (string s in WeightedValues.Keys)
@@ -514,31 +862,49 @@ namespace Fourzy
             return value;
         }
 
+        private static bool IsBlockerToken(int EvalToken)
+        {
+            switch (EvalToken)
+            {
+                case (int)Token.BLOCKER:
+                case (int)Token.BUMPER:
+                case (int)Token.GHOST:
+                    {
+                        return true;
+                    }
+            }
+            return false;
+        }
+
         private static int ConvertTokenNameToTokenId(string TokenName)
         {
             switch (TokenName)
             {
                 case "clear":
                 case "empty":
-                    return 0;
+                    return (int)Token.EMPTY;
                 case "up_arrow":
-                    return 1;
+                    return (int)Token.UP_ARROW;
                 case "down_arrow":
-                    return 2;
+                    return (int)Token.DOWN_ARROW;
                 case "left_arrow":
-                    return 3;
+                    return (int)Token.LEFT_ARROW;
                 case "right_arrow":
-                    return 4;
+                    return (int)Token.RIGHT_ARROW;
                 case "sticky":
-                    return 5;
+                    return (int)Token.STICKY;
                 case "blocker":
-                    return 6;
+                    return (int)Token.BLOCKER;
                 case "ghost":
-                    return 7;
+                    return (int)Token.GHOST;
                 case "ice":
-                    return 8;
+                    return (int)Token.ICE_SHEET;
                 case "pit":
-                    return 9;
+                    return (int)Token.PIT;
+                case "sand":
+                    return (int)Token.SAND;
+                case "water":
+                    return (int)Token.WATER;
             }
             return 0;
         }
@@ -595,10 +961,16 @@ namespace Fourzy
             switch (base_terrain)
             {
                 case "sticky":
-                    base_terrain_code = 5;
+                    base_terrain_code = (int)Token.STICKY;
                     break;
                 case "ice":
-                    base_terrain_code = 8;
+                    base_terrain_code = (int)Token.ICE_SHEET;
+                    break;
+                case "sand":
+                    base_terrain_code = (int)Token.SAND;
+                    break;
+                case "water":
+                    base_terrain_code = (int)Token.WATER;
                     break;
             }
 
@@ -607,11 +979,18 @@ namespace Fourzy
             switch (overlay_terrain)
             {
                 case "sticky":
-                    overlay_terrain_code = 5;
+                    overlay_terrain_code = (int)Token.STICKY;
                     break;
                 case "ice":
-                    overlay_terrain_code = 8;
+                    overlay_terrain_code = (int)Token.ICE_SHEET;
                     break;
+                case "sand":
+                    overlay_terrain_code = (int)Token.SAND;
+                    break;
+                case "water":
+                    overlay_terrain_code = (int)Token.WATER;
+                    break;
+
             }
 
             int density_percentage = 0;
@@ -643,68 +1022,150 @@ namespace Fourzy
         {
             public static Dictionary<string, int> CompositionTypes = new Dictionary<string, int>()
             {
-             { "uniform", 25},
-             { "centric", 20},
-             { "quads", 25},
-             { "halfud", 5},
-             { "halflr",5},
-             { "vlines", 10},
-             { "hlines", 10}
+             { "uniform", 30},
+             { "centric", 30},
+             { "quads", 10},
+             { "halfud", 10},
+             { "halflr",10},
+             { "vlines", 5},
+             { "hlines", 5}
             };
 
             public static Dictionary<string, int> TerrainTypes = new Dictionary<string, int>()
             {
-             { "none", 40},
-             { "sticky", 40 },
-             { "ice", 20}
+             { "none", 20},
+             { "sticky", 30 },
+             { "ice", 25},
+             { "sand", 25},
+             { "water", 10}
             };
 
             public static Dictionary<string, int> BaseTerrainTypes = new Dictionary<string, int>()
             {
-             { "none", 70},
-             { "sticky", 5 },
-             { "ice", 25}
+             { "none", 40},
+             { "sticky", 10 },
+             { "ice", 25},
+             { "sand", 25}
             };
 
             public static Dictionary<string, int> DensityTypes = new Dictionary<string, int>()
             {
-             { "filled", 10},
-             { "light", 30 },
-             { "medium", 20},
-             { "heavy", 10}
+             { "filled", 45},
+             { "light", 7 },
+             { "medium", 3},
+             { "heavy", 45}
             };
         }
 
+
         static class BoardFeatures
         {
-            public static Dictionary<string, int> FeatureTypes = new Dictionary<string, int>()
-            {
-             { "line", 50},
-             { "rectangle", 50},
-             { "o_shape", 30 },
-             { "l_shape", 30 },
-             { "u_shape", 20},
-             { "block_the_edge", 20},
-             { "riverofarrows", 10}
-            };
+
 
             public static Dictionary<string, int> LineTypes = new Dictionary<string, int>()
             {
-             { "vertical", 35},
-             { "horizontal", 35 },
-             { "diagonal", 30}
+             { "vertical", 34},
+             { "horizontal", 34 },
+             { "diagonal", 35}
             };
 
             public static Dictionary<string, int> TokenTypes = new Dictionary<string, int>()
             {
              { "ghost", 15},
-             { "pit", 10 },
-             { "up_arrow", 15},
-             { "down_arrow", 15},
-             { "left_arrow", 15},
-             { "right_arrow", 15},
-             { "blocker", 15}
+             { "pit", 15 },
+             { "up_arrow", 10},
+             { "down_arrow", 10},
+             { "left_arrow", 10},
+             { "right_arrow", 10},
+             { "blocker", 15},
+             { "sticky", 15}
             };
+
+            public static Dictionary<string, int> LargeShapeTokenTypes = new Dictionary<string, int>()
+            {
+                { "pit", 15 },
+                { "sticky", 15},
+                { "ice", 15},
+                { "sand", 15}
+            };
+
+            public static Dictionary<string, int> SmallShapeTokenTypes = new Dictionary<string, int>()
+            {
+                { "pit", 15 },
+                { "sticky", 15},
+                { "ice", 15},
+                { "water", 15}
+            };
+
+            public static Dictionary<string, int> BlockEdge = new Dictionary<string, int>()
+            {
+                { "pit", 5 },
+                { "blocker", 20},
+                { "up_arrow", 5},
+                { "down_arrow", 5},
+                { "left_arrow", 5},
+                { "right_arrow", 5}
+            };
+
+            public static Dictionary<string, int> CornerTokens = new Dictionary<string, int>()
+            {
+                { "sticky", 15},
+                { "ice", 15}
+            };
+
+
+            public static Dictionary<string, int> FeatureTypes = new Dictionary<string, int>()
+            {
+             { "line", 200},
+             { "rectangle", 50},
+             { "o_shape", 50 },
+             { "l_shape", 50 },
+             { "u_shape", 10 },
+             { "checkers", 50 },
+             { "cross", 200},
+             { "diagcross", 200},
+             { "drops", 50},
+             { "steps", 50},
+             { "dotsquare", 300},
+             { "letter", 50},
+             { "smiley", 0}, //smiley is broken...  
+             { "vdoubleline", 100},
+             { "hdoubleline", 100},
+             { "diaglines", 25},
+             { "blockedge", 25},
+             { "corners", 50},
+             { "cornerbrackets", 100},
+             { "riverofarrows", 0}, //not implemented
+             { "cycle", 0}, //not implemented
+             { "faceoff", 0} //not implemented
+            };
+
+            public static Dictionary<string, Dictionary<string, int>> FeatureTokens = new Dictionary<string, Dictionary<string, int>>() {
+                { "line", TokenTypes },
+                { "drops", SmallShapeTokenTypes },
+                { "rectangle", TokenTypes },
+                { "o_shape", SmallShapeTokenTypes },
+                { "l_shape", TokenTypes },
+                { "u_shape", TokenTypes  },
+                { "checkers", TokenTypes },
+                { "cross", SmallShapeTokenTypes },
+                { "diagcross", TokenTypes },
+                { "dotsquare", TokenTypes },
+                { "smiley", TokenTypes },
+                { "steps", LargeShapeTokenTypes },
+                { "hdoubleline", LargeShapeTokenTypes },
+                { "vdoubleline", LargeShapeTokenTypes },
+                { "diaglines", LargeShapeTokenTypes },
+                { "letter", TokenTypes },
+                { "blockedge", TokenTypes },
+                { "corners", CornerTokens},
+                { "cornerbrackets", SmallShapeTokenTypes},
+                { "riverofarrows", TokenTypes },
+                { "cycle", TokenTypes },
+                { "faceoff", TokenTypes }
+            };
+
+
         }
 
         static class BoardNoise
@@ -712,7 +1173,7 @@ namespace Fourzy
             public static Dictionary<string, int> TokenTypes = new Dictionary<string, int>()
             {
              { "clear", 20 },
-             { "sticy", 10 },
+             { "sticky", 10 },
              { "ice", 10 },
              { "ghost", 20},
              { "pit", 10 },
@@ -720,10 +1181,10 @@ namespace Fourzy
              { "right_arrow", 5},
              { "up_arrow", 5},
              { "down_arrow", 5},
-             { "blocker", 10}
+             { "blocker", 10},
+             { "water", 10}
             };
         }
-
 
     }
 }

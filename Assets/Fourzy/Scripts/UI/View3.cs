@@ -83,8 +83,6 @@ namespace Fourzy
 
         public void PlayButton()
         {
-            //GameManager.instance.PlayButton();
-
             Game game = GameManager.instance.GetActiveGame();
             if (game != null)
             {

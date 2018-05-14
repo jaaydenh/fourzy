@@ -292,6 +292,40 @@ namespace Fourzy
             return gameBoard.completedMovingPieces;
         }
 
+        public float GetGameResult(bool isCurrentPlayerPlayerOne) {
+            float result = -1;
+            switch (winner)
+            {
+                case PlayerEnum.ONE:
+                    if (isCurrentPlayerPlayerOne) {
+                        result = 1;
+                    } else {
+                        result = 0;
+                    }
+                    break;
+                case PlayerEnum.TWO:
+                    if (isCurrentPlayerPlayerOne) {
+                        result = 0;
+                    } else {
+                        result = 1;    
+                    }
+                    break;
+                case PlayerEnum.NONE:
+                    result = 0.5f;
+                    break;
+                case PlayerEnum.ALL:
+                    result = 0.5f;
+                    break;
+                case PlayerEnum.EMPTY:
+                    result = -1;
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
+        }
+
         public int[,] GetPreviousGameBoard() {
             return  previousGameBoard.GetGameBoard();
         }

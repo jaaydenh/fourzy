@@ -4,6 +4,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using GameSparks.Api.Requests;
 using System;
+using Facebook.Unity;
 
 namespace Fourzy
 {
@@ -98,6 +99,9 @@ namespace Fourzy
             coinsLabel.text = this.coins.ToString();
 
             if (fbId != null) {
+
+                // GetFBPicture(fbId, UpdateProfileImage);
+
                 StartCoroutine(UserManager.instance.GetFBPicture(fbId, (sprite) =>
                     {
                         if (sprite) {
@@ -107,8 +111,20 @@ namespace Fourzy
             }
         }
 
+        // private void UpdateProfileImage(IGraphResult result) {
+        //     if(result.Texture != null) {
+        //         profilePicture = Sprite.Create(result.Texture, new Rect(0,0,result.Texture.width, result.Texture.height), new Vector2(0.5f, 0.5f));
+        //     }
+        // }
+
+        // public IEnumerator GetFBPicture(string facebookId, FacebookDelegate<IGraphResult> callback = null) {
+        //     FB.API("/" + facebookId + "/picture?type=square&height=210&width=210", HttpMethod.GET, callback);
+        // }
+
         public IEnumerator GetFBPicture(string facebookId, Action<Sprite> callback)
         {
+            // FB.API("/" + facebookId + "/picture?type=square&height=210&width=210", HttpMethod.GET, UpdateProfileImage);
+
             using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture("https://graph.facebook.com/" + facebookId + "/picture?width=210&height=210"))
             {
                 yield return uwr.SendWebRequest();

@@ -35,7 +35,7 @@ namespace Fourzy
                 int playerCount = 0;
 
                 new LeaderboardDataRequest()
-                .SetLeaderboardShortCode("coinsEarnedLeaderboard")
+                .SetLeaderboardShortCode("ratingEloLeaderboard")
                 .SetEntryCount(150) // we need to parse this text input, since the entry count only takes long
                 .Send((response) =>
                     {
@@ -57,9 +57,9 @@ namespace Fourzy
                                 leaderboardPlayer.facebookId = entry.ExternalIds.GetString("FB");
                                 leaderboardPlayer.playerNameLabel.text = entry.UserName;
                                 leaderboardPlayer.rankLabel.text = entry.Rank.ToString();
-                                leaderboardPlayer.typeLabel.text = "Coins :";    
+                                leaderboardPlayer.typeLabel.text = "Trophies :";    
 
-                                string coins = entry.JSONData["coins"].ToString();
+                                string coins = entry.JSONData["playerRatingElo"].ToString();
                                 leaderboardPlayer.ratingLabel.text = coins;
 
                                 leaderboardPlayer.UpdatePlayer();

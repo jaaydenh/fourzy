@@ -27,7 +27,7 @@ namespace Fourzy {
             if (momentum == 0) {
                 if (GameManager.instance.isMultiplayer) {
                     //int numMoves = GameManager.instance.gameState.moveList.Count;
-                    long tempMomentum = 20 + System.Int64.Parse(GameManager.instance.challengeInstanceId.Substring(0, 10), System.Globalization.NumberStyles.HexNumber) % 20;
+                    //long tempMomentum = 20 + System.Int64.Parse(GameManager.instance.challengeInstanceId.Substring(0, 10), System.Globalization.NumberStyles.HexNumber) % 20;
                     //this.momentum = (int)tempMomentum;
                     this.momentum = 30;
                     //Debug.Log("MovingGamePiece: Momentum: " + this.momentum);

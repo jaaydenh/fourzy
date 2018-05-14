@@ -11,17 +11,16 @@ namespace Fourzy
         public bool isExpired;
         public bool didViewResult;
         public bool isVisible;
-        //public string opponentFBId = "";
         public Opponent opponent;
         public ChallengeState challengeState;
         public ChallengeType challengeType;
         public GameType gameType;
         public int challengerGamePieceId;
         public int challengedGamePieceId;
-
-        //public string opponentName;
         public string winnerName;
         public string winnerUserId;
+        public int challengerRatingDelta;
+        public int challengedRatingDelta;
         public Sprite opponentProfilePictureSprite;
 
         public delegate void GameActive();
@@ -29,7 +28,7 @@ namespace Fourzy
 
         public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, GameType gameType, string challengerGamePieceId, string challengedGamePieceId)
         {
-            Debug.Log("challengeId: " + challengeId);
+            //Debug.Log("challengeId: " + challengeId);
             this.challengeId = challengeId;
             this.gameState = gameState;
             this.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;
@@ -80,6 +79,8 @@ namespace Fourzy
             GameManager.instance.gameType = gameType;
             GameManager.instance.challengerGamePieceId = challengerGamePieceId;
             GameManager.instance.challengedGamePieceId = challengedGamePieceId;
+            GameManager.instance.opponentUserId = opponent.opponentId;
+            GameManager.instance.activeGame = this;
             // -------------------------------------------------------------------------------------------
 
             GameManager.instance.winner = winnerName;

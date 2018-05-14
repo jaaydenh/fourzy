@@ -41,7 +41,6 @@ namespace Fourzy
         private int opponentIndex;
         public bool isCurrentPlayer_PlayerOne;
         public bool isExpired;
-        //private Sprite opponentProfilePictureSprite;
         private PlayerEnum currentplayer = PlayerEnum.NONE;
 
         void Start()
@@ -66,7 +65,6 @@ namespace Fourzy
                     //Debug.Log("game.playerData.opponentFBId: " + game.playerData.opponentFBId);    
                     StartCoroutine(UserManager.instance.GetFBPicture(game.opponent.opponentFBId, (sprite)=>
                         {
-                            //opponentProfilePictureSprite = sprite;
                             opponentProfilePicture.sprite = sprite;
                         }));
                 }
@@ -172,7 +170,11 @@ namespace Fourzy
             GameManager.instance.gameType = game.gameType;
             GameManager.instance.challengerGamePieceId = game.challengerGamePieceId;
             GameManager.instance.challengedGamePieceId = game.challengedGamePieceId;
+            GameManager.instance.opponentUserId = game.opponent.opponentId;
+            GameManager.instance.activeGame = game;
             // -------------------------------------------------------------------------------------------
+            Debug.Log("GameUI:OpenGame:game.challengerRatingDelta" + game.challengerRatingDelta);
+            Debug.Log("GameUI:OpenGame:game.challengedRatingDelta" + game.challengedRatingDelta);
 
             GameManager.instance.winner = winnerName;
 

@@ -24,6 +24,8 @@ namespace Fourzy
         public static event SetGamePieceSuccess OnSetGamePieceSuccess;
         public delegate void FindChallengeResult(bool success);
         public static event FindChallengeResult OnFindChallengeResult;
+        public delegate void ReceivedRatingDelta(int ratingDelta);
+        public static event ReceivedRatingDelta OnReceivedRatingDelta;
 
         public delegate void OpponentTurnTakenDelegate(ChallengeTurnTakenMessage message);
         public static event OpponentTurnTakenDelegate OnOpponentTurnTakenDelegate;
@@ -54,7 +56,7 @@ namespace Fourzy
 
         public GetChallengeResponse._Challenge challenge;
 
-        public int daysUntilChallengeExpires = 40;
+        public double daysUntilChallengeExpires = 60;
         private bool gettingChallenges = false;
         private bool pulledToRefresh = false;
         //private int yourMoveGames = 0;
@@ -189,6 +191,31 @@ namespace Fourzy
                 });
         }
 
+        public void GetRatingDelta(string challengeId)
+        {
+            int ratingDelta = 0;
+            new LogEventRequest().SetEventKey("getRatingDelta")
+                //.SetEventAttribute("opponentId", opponentId)
+                //.SetEventAttribute("gameResult", gameResult.ToString())
+                .SetEventAttribute("challengeId", challengeId)
+                .SetDurable(true)
+                .Send((response) =>
+                {
+                    if (response.HasErrors)
+                    {
+                        Debug.Log("***** Error for GetRatingDelta: " + response.Errors.JSON);
+                        AnalyticsManager.LogError("get_rating_delta_error", response.Errors.JSON);
+                    }
+                    else
+                    {
+                        ratingDelta = response.ScriptData.GetInt("ratingDelta").GetValueOrDefault(-1);
+                        Debug.Log("GetRatingDelta was successful: ratingDelta: " + ratingDelta);
+                        if (OnReceivedRatingDelta != null)
+                            OnReceivedRatingDelta(ratingDelta);
+                    }
+                });
+        }
+
         public void GamesListPullToRefresh(Vector2 pos)     {
             //Debug.Log("pos x:" + pos.x + "pos y: " + pos.y + "magnitude: " + pos.magnitude + "normal: " + pos.normalized);
             if (!pulledToRefresh && pos.y > 1.06) {
@@ -300,7 +327,7 @@ namespace Fourzy
             //we use CreateChallengeRequest with the shortcode of our challenge, we set this in our GameSparks Portal
             new CreateChallengeRequest().SetChallengeShortCode("chalRanked")
             .SetUsersToChallenge(gsId) //We supply the userIds of who we wish to challenge
-            .SetEndTime(System.DateTime.Today.AddDays(daysUntilChallengeExpires)) //We set a date and time the challenge will end on
+            .SetEndTime(System.DateTime.Today.AddMonths(1)) //We set a date and time the challenge will end on
             .SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
             .SetScriptData(data)
             .SetDurable(true)
@@ -313,9 +340,8 @@ namespace Fourzy
                     }
                     else
                     {
-                        //TODO: Create an active game and add it to the list of ActiveGames
                         GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
-                        GameManager.instance.CreateGame(response.ChallengeInstanceId);
+                        GameManager.instance.CreateGame(response.ChallengeInstanceId, userId);
                         Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                         customAttributes.Add("ChallengedId", userId);
                         customAttributes.Add("TokenBoardId", gameState.tokenBoard.id);
@@ -355,7 +381,7 @@ namespace Fourzy
                 .SetAutoStartJoinedChallengeOnMaxPlayers(true)
                 .SetMaxPlayers(2)
                 .SetMinPlayers(1)
-                .SetEndTime(System.DateTime.Today.AddDays(daysUntilChallengeExpires)) //We set a date and time the challenge will end on
+                .SetEndTime(System.DateTime.Today.AddMonths(1)) //We set a date and time the challenge will end on
                 //.SetChallengeMessage("I've challenged you to Fourzy!") // We can send a message along with the invite
                 .SetScriptData(data)
                 .SetDurable(true)
@@ -365,9 +391,8 @@ namespace Fourzy
                             Debug.Log("***** Error Challenging Random User: " + response.Errors.JSON);
                             AnalyticsManager.LogError("create_challenge_request_error", response.Errors.JSON);
                         } else {
-                            //TODO: Create an active game and add it to the list of ActiveGames
                             GameManager.instance.challengeInstanceId = response.ChallengeInstanceId;
-                            GameManager.instance.CreateGame(response.ChallengeInstanceId);
+                            GameManager.instance.CreateGame(response.ChallengeInstanceId, "");
                             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                             customAttributes.Add("ChallengeInstanceId", response.ChallengeInstanceId);
                             customAttributes.Add("TokenBoardId", gameState.tokenBoard.id);
@@ -534,7 +559,7 @@ namespace Fourzy
             if (OnActiveGame != null)
                 OnActiveGame();
 
-            GameManager.instance.CreateGame(challenge.ChallengeId);
+            GameManager.instance.CreateGame(challenge.ChallengeId, challenge.Challenger.Id);
 
             //GameManager.instance.EnableTokenAudio();
 
@@ -591,7 +616,7 @@ namespace Fourzy
                                     GameObject go = Instantiate(activeGamePrefab) as GameObject;
                                     //GameObject go = LeanPool.Spawn(activeGamePrefab) as GameObject;
 
-                                    GameUI activeGame = go.GetComponent<GameUI>();
+                                    GameUI gameUI = go.GetComponent<GameUI>();
 
                                     bool? isVisible = gsChallenge.ScriptData.GetBoolean("isVisible");
                                     
@@ -607,7 +632,6 @@ namespace Fourzy
                                             }
                                         }
                                     }
-                                    //activeGame.viewedResult = didViewResult;
 
                                     bool isCurrentPlayerTurn = false;
                                     if (gsChallenge.State == "RUNNING" || gsChallenge.State == "ISSUED")
@@ -641,22 +665,22 @@ namespace Fourzy
                                     bool isCurrentPlayer_PlayerOne = false;
                                     if (gsChallenge.Challenger.Id == UserManager.instance.userId)
                                     {
-                                        activeGame.isCurrentPlayer_PlayerOne = true;
+                                        gameUI.isCurrentPlayer_PlayerOne = true;
                                         isCurrentPlayer_PlayerOne = true;
                                     }
                                     else
                                     {
-                                        activeGame.isCurrentPlayer_PlayerOne = false;
+                                        gameUI.isCurrentPlayer_PlayerOne = false;
                                         isCurrentPlayer_PlayerOne = false;
                                     }
 
-                                    activeGame.winnerName = gsChallenge.ScriptData.GetString("winnerName");
+                                    gameUI.winnerName = gsChallenge.ScriptData.GetString("winnerName");
                                     string winnerId = gsChallenge.ScriptData.GetString("winnerId");
-                                    activeGame.winnerId = winnerId;
+                                    gameUI.winnerId = winnerId;
                                     bool isExpired = false;
-                                    if (activeGame.winnerId == null && gsChallenge.State == "COMPLETE")
+                                    if (gameUI.winnerId == null && gsChallenge.State == "COMPLETE")
                                     {
-                                        activeGame.isExpired = true;
+                                        gameUI.isExpired = true;
                                         isExpired = true;
                                     }
 
@@ -673,16 +697,19 @@ namespace Fourzy
 
                                     string opponentFBId = "";
                                     string opponentName = "";
+                                    string opponentId = "";
                                     
                                     if (gsChallenge.Accepted.Count() > 1)
                                     {
                                         if (gsChallenge.Accepted.ElementAt(0).Id == UserManager.instance.userId)
                                         {
+                                            opponentId = gsChallenge.Accepted.ElementAt(1).Id;
                                             opponentFBId = gsChallenge.Accepted.ElementAt(1).ExternalIds.GetString("FB");
                                             opponentName = gsChallenge.Accepted.ElementAt(1).Name;
                                         }
                                         else
                                         {
+                                            opponentId = gsChallenge.Accepted.ElementAt(0).Id;        
                                             opponentFBId = gsChallenge.Accepted.ElementAt(0).ExternalIds.GetString("FB");
                                             opponentName = gsChallenge.Accepted.ElementAt(0).Name;
                                         }
@@ -691,17 +718,17 @@ namespace Fourzy
                                     List<string> playerFacebookIds = new List<string>();
                                     foreach (var player in gsChallenge.Accepted)
                                     {
-                                        activeGame.playerNames.Add(player.Name);
-                                        activeGame.playerIds.Add(player.Id);
+                                        gameUI.playerNames.Add(player.Name);
+                                        gameUI.playerIds.Add(player.Id);
                                         playerFacebookIds.Add(player.ExternalIds.GetString("FB"));
-                                        activeGame.playerFacebookIds.Add(player.ExternalIds.GetString("FB"));
+                                        gameUI.playerFacebookIds.Add(player.ExternalIds.GetString("FB"));
                                     }
 
-                                    Opponent opponent = new Opponent(opponentName, opponentFBId);
+                                    Opponent opponent = new Opponent(opponentId, opponentName, opponentFBId);
 
-                                    activeGame.challengeId = gsChallenge.ChallengeId;
+                                    gameUI.challengeId = gsChallenge.ChallengeId;
                                     
-                                    activeGame.challengeState = gsChallenge.State;
+                                    gameUI.challengeState = gsChallenge.State;
                                     ChallengeState challengeState = ChallengeState.NONE;
                                     if (gsChallenge.State == "RUNNING") {
                                         challengeState = ChallengeState.RUNNING;
@@ -714,7 +741,7 @@ namespace Fourzy
                                         challengeState = ChallengeState.COMPLETE;
                                     }
 
-                                    activeGame.challengeShortCode = gsChallenge.ShortCode;
+                                    gameUI.challengeShortCode = gsChallenge.ShortCode;
                                     ChallengeType challengeType = ChallengeType.NONE;
                                     if (gsChallenge.ShortCode == "chalRanked")
                                     {
@@ -729,18 +756,25 @@ namespace Fourzy
 
                                     GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
                                     GameState gameState = new GameState(Constants.numRows, Constants.numColumns, challenge, isCurrentPlayerTurn, winner);
-                                    activeGame.gameState = gameState;
+                                    gameUI.gameState = gameState;
 
                                     string challengerGamePieceId = challenge.challengerGamePieceId;
                                     string challengedGamePieceId = challenge.challengedGamePieceId;
 
                                     Game game = new Game(gsChallenge.ChallengeId, gameState, isCurrentPlayer_PlayerOne, isExpired, didViewResult, opponent, challengeState, challengeType, challenge.gameType, challengerGamePieceId, challengedGamePieceId);
-                                    activeGame.game = game;
-                                    //activeGame.nextPlayerId = gsChallenge.NextPlayer;
-
-                                    activeGame.challengerId = gsChallenge.Challenger.Id;
                                     
-                                    activeGame.transform.localScale = new Vector3(1f,1f,1f);
+                                    Debug.Log("ChallengeState: " + challengeState.ToString());
+
+                                    if (challengeState == ChallengeState.COMPLETE) {
+                                        Debug.Log("ChallengeState.COMPLETE");
+                                        game.challengerRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();
+                                        game.challengedRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();
+                                    }
+                                    gameUI.game = game;
+
+                                    gameUI.challengerId = gsChallenge.Challenger.Id;
+                                    
+                                    gameUI.transform.localScale = new Vector3(1f,1f,1f);
                                     GameManager.instance.games.Add(game);
                                     games.Add(go);
                                 }
@@ -779,7 +813,7 @@ namespace Fourzy
             
             if (!gettingChallenges)
             {
-                //Debug.Log("ReloadActiveGames");
+                Debug.Log("ReloadActiveGames");
 
                 gettingChallenges = true;
 

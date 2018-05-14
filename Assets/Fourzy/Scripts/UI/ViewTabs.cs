@@ -89,6 +89,7 @@ namespace Fourzy
         IEnumerator fastScrollBetweenScreen(int screenNumber, int tempNumber, AnimationDirection direction)
         {
             //Debug.Log("fastScroll");
+            //yield return new WaitForEndOfFrame();
             yield return new WaitForSeconds(0.15f);
             ViewController.instance.TabsViewList[tempNumber].HideAnimated(direction);
             ViewController.instance.TabsViewList[screenNumber].ShowAnimated(direction);

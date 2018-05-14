@@ -248,7 +248,7 @@ namespace Fourzy {
                     piece.friction += token.addFriction;
 
                     piece.momentum -= 1;
-                    Debug.Log("piece.momentum: " + piece.momentum);
+                    //Debug.Log("piece.momentum: " + piece.momentum);
                     if (pieceInSquare || token.pieceMustStopOn || piece.isDestroyed || piece.friction >= 1.0f || piece.momentum <= 0) {
                         SetActivePieceAsComplete();
                     }
