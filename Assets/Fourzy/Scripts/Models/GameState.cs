@@ -231,7 +231,8 @@ namespace Fourzy
                 }
             }
 
-            if (!gameBoard.hasValidMove()) {
+            // if (!gameBoard.hasValidMove()) {
+            if (GetPossibleMoves().Count <= 0) {
                 isGameOver = true;
                 isCurrentPlayerTurn = false;
                 winner = PlayerEnum.NONE;

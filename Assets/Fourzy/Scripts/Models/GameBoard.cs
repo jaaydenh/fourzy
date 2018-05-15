@@ -445,31 +445,30 @@ namespace Fourzy {
             return true;
         }
 
-        // TODO: Need to move this to GameState to also check the tokenboard incase there are tokens on the edge of the board
-        public bool hasValidMove() {
-            // check the left edge for empty spaces
-            for(var row = 1; row < numRows - 1; row++)
-            {
-                if (board[row, 0] == 0) { return true; }
-            }
-            // check the right edge for empty spaces
-            for(var row = 1; row < numRows - 1; row++)
-            {
-                if (board[row, numColumns - 1] == 0) { return true; }
-            }
-            // check the top edge for empty spaces
-            for(var col = 1; col < numColumns - 1; col++)
-            {
-                if (board[0, col] == 0) { return true; }
-            }
-            // check the bottom edge for empty spaces
-            for(var col = 1; col < numColumns - 1; col++)
-            {
-                if (board[numRows - 1, col] == 0) { return true; }
-            }
+        // public bool hasValidMove() {
+        //     // check the left edge for empty spaces
+        //     for(var row = 1; row < numRows - 1; row++)
+        //     {
+        //         if (board[row, 0] == 0) { return true; }
+        //     }
+        //     // check the right edge for empty spaces
+        //     for(var row = 1; row < numRows - 1; row++)
+        //     {
+        //         if (board[row, numColumns - 1] == 0) { return true; }
+        //     }
+        //     // check the top edge for empty spaces
+        //     for(var col = 1; col < numColumns - 1; col++)
+        //     {
+        //         if (board[0, col] == 0) { return true; }
+        //     }
+        //     // check the bottom edge for empty spaces
+        //     for(var col = 1; col < numColumns - 1; col++)
+        //     {
+        //         if (board[numRows - 1, col] == 0) { return true; }
+        //     }
 
-            return false;
-        }
+        //     return false;
+        // }
 
         public GameBoard Clone ()
         {

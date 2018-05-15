@@ -26,12 +26,17 @@ Goal for May 13, 2018
 Pom 1:
   - [X] Integrate random board generator
 
-Pom 2:
+Goal for May 15, 2018
+
+Pom 1:
+  - [X] Update gamestate to remove all references to unity or gamesparks
+
+
+Pom 1:
   - [ ] Fix bug to make draws work correctly with ghosts on edge of board
   - [ ] Handle draws for rating change
   - [ ] Create function to generate random number
   - [ ] Handle momentum transfers between arrow loops with sticky, water, sand, and ice
-
 
 Invited Friend Rewards Feature
 Ability to invite people to game by sending an email, text, facebook share, this sends a deeplink
@@ -55,13 +60,14 @@ Share GameReplays
 
 GameReplays List - only games with min 10 moves
 
-Make InitialGameBoard work for multiplayer games
+
 
 20% Bonus to 2nd player to rating or coins
 
 Puzzle Challenge Leaderboard
 Track # of challenges of completed
-//Highest level challenge completed?
+Keep list of challenges each player completed, challengeid, timestamp, attempts
+
 Daily puzzle challenges, record fist 10 people who complete it first, boards released at 9pm EST
 
 ThumbUps or ThumbDowns game boards at the end of a game
@@ -79,9 +85,12 @@ Convert game id into number  - convert hexadecimal
 min number + (gameid + position in gameid matching the current move number + move number) mod (max number - min number)
 
 
-5af654442f481f04d6334d60
-5af654442f481f04d6334d60
+
+Make InitialGameBoard work for multiplayer games
+2.random number function for momentum
+separate unity scene for game screen
 
 
+Patreon
 
 

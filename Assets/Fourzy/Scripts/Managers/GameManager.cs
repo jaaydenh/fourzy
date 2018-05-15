@@ -1873,16 +1873,6 @@ namespace Fourzy
             List<MovingGamePiece> movingPieces = gameState.MovePiece(move, replayMove, out activeTokens);
             gameState.PrintGameState("AfterMove");
 
-            //ChallengeManager.instance.GetRatingDelta(opponentUserId, 1);
-
-            //if (gameState.isGameOver && isMultiplayer)
-            //{
-            //    float gameResult = gameState.GetGameResult(isCurrentPlayer_PlayerOne);
-            //    Debug.Log("GameResult: " + gameResult.ToString());
-            //    ChallengeManager.instance.GetRatingDelta(challengeInstanceId);
-            //    ChallengeManager.instance.GetChallenge(challengeInstanceId, GetChallengeSuccess, GetChallengeError);
-            //}
-
             MoveGamePieceViews(move, movingPieces, activeTokens);
 
             yield return new WaitWhile(() => animatingGamePieces == true);

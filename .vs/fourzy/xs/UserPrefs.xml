@@ -1,12 +1,12 @@
 ﻿<Properties StartupConfiguration="{9AD793E4-7370-FB12-CE27-35FD78F1FC38}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Managers/UserManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Models/GameState.cs">
     <Files>
       <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="1086" Column="34" />
       <File FileName="Assets/Fourzy/Scripts/UI/GameUI.cs" Line="177" Column="31" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="473" Column="28" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="473" Column="1" />
       <File FileName="Assets/Fourzy/Scripts/Models/Game.cs" Line="23" Column="28" />
       <File FileName="Assets/Fourzy/Scripts/Utility.cs" Line="13" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Models/GameState.cs" Line="311" Column="22" />
+      <File FileName="Assets/Fourzy/Scripts/Models/GameState.cs" Line="244" Column="1" />
       <File FileName="Assets/Fourzy/Scripts/Models/GameBoard.cs" Line="251" Column="23" />
       <File FileName="Assets/Fourzy/Scripts/UI/Rewards.cs" Line="41" Column="40" />
       <File FileName="Assets/Fourzy/Scripts/UI/ViewMatchMaking.cs" Line="147" Column="1" />
