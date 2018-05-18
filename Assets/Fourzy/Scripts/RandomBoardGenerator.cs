@@ -11,47 +11,49 @@ namespace Fourzy
         {
             int comp = UnityEngine.Random.Range(0, 100);
             TokenBoard newBoard = null;
-            string composition_name = GetRandomMember(BoardComposition.CompositionTypes);
+            //string composition_name = GetRandomMember(BoardComposition.CompositionTypes);
 
-            switch (composition_name)
-            {
-                case "uniform":
-                    newBoard = GenerateUniformBoard();
-                    break;
+            //switch (composition_name)
+            //{
+            //    case "uniform":
+            //        newBoard = GenerateUniformBoard();
+            //        break;
 
-                case "centric":
-                    newBoard = GenerateCentricBoard();
-                    break;
+            //    case "centric":
+            //        newBoard = GenerateCentricBoard();
+            //        break;
 
-                case "quads":
-                    newBoard = GenerateQuads();
-                    break;
+            //    case "quads":
+            //        newBoard = GenerateQuads();
+            //        break;
 
-                case "halfud":
-                    newBoard = GenerateHalfUpDownBoard();
-                    break;
+            //    case "halfud":
+            //        newBoard = GenerateHalfUpDownBoard();
+            //        break;
 
-                case "halflr":
-                    newBoard = GenerateHalfRightLeftBoard();
-                    break;
+            //    case "halflr":
+            //        newBoard = GenerateHalfRightLeftBoard();
+            //        break;
 
-                case "hlines":
-                    newBoard = GenerateHorizontalLinesBoard();
-                    break;
+            //    case "hlines":
+            //        newBoard = GenerateHorizontalLinesBoard();
+            //        break;
 
-                case "vlines":
-                    newBoard = GenerateVerticalLinesBoard();
-                    break;
+            //    case "vlines":
+            //        newBoard = GenerateVerticalLinesBoard();
+            //        break;
 
-            }
+            //}
 
-            AddFeatures(ref newBoard.tokenBoard, 3, 6);
-            AddNoise(ref newBoard.tokenBoard, 3, 7);
+            newBoard = GenerateBaseBoard();
+            AddLargeFeatures(ref newBoard.tokenBoard, 1, 3);
+            AddFeatures(ref newBoard.tokenBoard, 1, 3);
+            AddNoise(ref newBoard.tokenBoard, 0, 6);
             SetCorners(ref newBoard.tokenBoard);
             CheckArrows(ref newBoard.tokenBoard);
             CheckPits(ref newBoard.tokenBoard);
             CheckMaxBlockers(ref newBoard.tokenBoard, 6);
-
+            
             newBoard.RefreshTokenBoard();
 
             return newBoard;
@@ -81,7 +83,6 @@ namespace Fourzy
                     }
                 }
             }
-
         }
 
         //private static int GenerateRandomFeature(int DefaultTokenId, int FeatureTokenId, int percentage)
@@ -114,6 +115,26 @@ namespace Fourzy
             return newBoard;
         }
 
+        public static TokenBoard GenerateBaseBoard()
+        {
+            int[,] tokenData = new int[Constants.numRows, Constants.numColumns];
+
+            string default_terrain = "empty";
+            string overlay_terrain = RandomTerrain();
+            string density = "light";
+
+            for (int r = 0; r < Constants.numRows; r++)
+            {
+                for (int c = 0; c < Constants.numColumns; c++)
+                {
+                    tokenData[r, c] = GenerateRandomTerrain(default_terrain, overlay_terrain, density);
+                }
+            }
+
+            TokenBoard newBoard = new TokenBoard(tokenData, "Base", "Random Board", null, null, true);
+            return newBoard;
+        }
+
         public static TokenBoard GenerateHorizontalLinesBoard()
         {
             int[,] tokenData = new int[Constants.numRows, Constants.numColumns];
@@ -140,7 +161,6 @@ namespace Fourzy
         {
             return Math.Min(Math.Min(r, Constants.numRows - r - 1), Math.Min(c, Constants.numColumns - c - 1));
         }
-
 
         public static TokenBoard GenerateCentricBoard()
         {
@@ -189,7 +209,6 @@ namespace Fourzy
             TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Vertical Lines Board", null, null, true);
             return newBoard;
         }
-
 
         public static TokenBoard GenerateHalfUpDownBoard()
         {
@@ -311,8 +330,6 @@ namespace Fourzy
                 }
             }
 
-
-
             TokenBoard newBoard = new TokenBoard(tokenData, "SomeId", "Random Quadrants", null, null, true);
             return newBoard;
         }
@@ -329,14 +346,13 @@ namespace Fourzy
         {
             //count up any blockers not on the edge.
             List<Position> BlockerList = new List<Position>();
-            for (int r = 1; r < Constants.numRows - 1; r++)
+            for (int r = 1; r < Constants.numRows -1 ; r++)
             {
-                for (int c = 1; c < Constants.numColumns - 1; c++)
+                for (int c = 1; c < Constants.numColumns -1; c++)
                 {
-                    if (IsBlockerToken(TokenData[r, c]))
-                    {
+                    if (IsBlockerToken(TokenData[r,c])) {
                         BlockerList.Add(new Position(c, r));
-                    }
+                    } 
                 }
             }
             if (BlockerList.Count <= MaxBlockers) return;
@@ -344,20 +360,17 @@ namespace Fourzy
             //Convert a random blocker to a random space.
             while (BlockerList.Count > MaxBlockers)
             {
-                int choose_one = UnityEngine.Random.Range(0, BlockerList.Count - 1);
+                int choose_one = UnityEngine.Random.Range(0, BlockerList.Count -1 );
                 Position pos = BlockerList[choose_one];
-                TokenData[pos.row, pos.column] = (int)Token.EMPTY;
+                TokenData[pos.row, pos.column] = (int) Token.EMPTY;
                 BlockerList.RemoveAt(choose_one);
             }
-
         }
 
-        private static void CheckPits(ref int[,] TokenData)
-        {
+        private static void CheckPits(ref int[,] TokenData) {
             for (int r = 1; r < Constants.numRows - 1; r++)
             {
-                if (TokenData[r, 0] == (int)Token.PIT)
-                {
+                if (TokenData[r, 0] == (int)Token.PIT) {
                     TokenData[r, 0] = (int)Token.EMPTY;
                 }
                 if (TokenData[r, Constants.numColumns - 1] == (int)Token.PIT)
@@ -442,6 +455,15 @@ namespace Fourzy
             }
         }
 
+        private static void AddLargeFeatures(ref int[,] TokenData, int MinNumberOfFeatures, int MaxNumberOfFeatures)
+        {
+            int feature_count = UnityEngine.Random.Range(MinNumberOfFeatures, MaxNumberOfFeatures);
+            for (int i = 0; i < feature_count; i++)
+            {
+                AddRandomLargeFeature(ref TokenData);
+            }
+        }
+
         private static void AddRandomFeature(ref int[,] TokenData)
         {
             string feature = GetRandomMember(BoardFeatures.FeatureTypes);
@@ -518,7 +540,7 @@ namespace Fourzy
                 case "steps":
 
                     int steps_height = UnityEngine.Random.Range(2, Constants.numRows / 2);
-
+                   
 
                     insert_column = UnityEngine.Random.Range(0, Constants.numColumns - steps_height);
                     insert_row = UnityEngine.Random.Range(0, Constants.numRows - steps_height);
@@ -527,7 +549,7 @@ namespace Fourzy
                     {
                         for (int c = 0; c < steps_height; c++)
                         {
-                            if (c <= r) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            if (c <= r ) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
                         }
                     }
 
@@ -544,39 +566,18 @@ namespace Fourzy
                     insert_row = UnityEngine.Random.Range(0, Constants.numRows - smile_width);
 
                     TokenData[insert_row, insert_column + 1] = defaultTokenId;
-                    TokenData[insert_row, (insert_column + smile_width - 1)] = defaultTokenId;
-                    TokenData[(insert_row + smile_height - 1), insert_column] = defaultTokenId;
+                    TokenData[insert_row, (insert_column + smile_width -1) ] = defaultTokenId;
+                    TokenData[(insert_row+smile_height-1), insert_column ] = defaultTokenId;
                     TokenData[(insert_row + smile_height - 1), (insert_column + smile_width)] = defaultTokenId;
 
                     for (int c = 0; c < smile_width; c++)
-                    {
-                        TokenData[insert_row + smile_height, insert_column + c] = defaultTokenId;
-                    }
+                        {
+                             TokenData[insert_row + smile_height, insert_column + c] = defaultTokenId;
+                        }
 
                     break;
 
-                case "vdoubleline":
-
-                    insert_column = UnityEngine.Random.Range(2, Constants.numColumns - 2);
-
-                    for (int r = 0; r < Constants.numRows; r++)
-                    {
-                        TokenData[r, insert_column] = defaultTokenId;
-                        TokenData[r, insert_column + 1] = defaultTokenId;
-                    }
-
-                    break;
-
-                case "hdoubleline":
-
-                    insert_row = UnityEngine.Random.Range(2, Constants.numRows - 2);
-
-                    for (int c = 0; c < Constants.numColumns; c++)
-                    {
-                        TokenData[insert_row, c] = defaultTokenId;
-                        TokenData[insert_row + 1, c] = defaultTokenId;
-                    }
-                    break;
+   
 
 
 
@@ -591,7 +592,7 @@ namespace Fourzy
                     {
                         for (int c = 0; c < letter_size; c++)
                         {
-                            if (letter_definition[r, c] == 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            if (letter_definition[r,c]==1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
                         }
                     }
 
@@ -637,36 +638,36 @@ namespace Fourzy
 
                     TokenData[insert_row, insert_column] = defaultTokenId;
                     TokenData[insert_row, insert_column + dotsquare_width] = defaultTokenId;
-                    TokenData[insert_row + dotsquare_height, insert_column] = defaultTokenId;
+                    TokenData[insert_row + dotsquare_height, insert_column ] = defaultTokenId;
                     TokenData[insert_row + dotsquare_height, insert_column + dotsquare_width] = defaultTokenId;
-
+                    
                     break;
 
 
                 case "cornerbrackets":
 
                     int cornerbracket_spacing = UnityEngine.Random.Range(1, 2);
-                    int cornerbracket_height = 4 + cornerbracket_spacing;
+                    int cornerbracket_height = 4+cornerbracket_spacing;
                     int cornerbracket_width = 4 + cornerbracket_spacing;
 
                     insert_column = UnityEngine.Random.Range(0, Constants.numColumns - cornerbracket_width);
                     insert_row = UnityEngine.Random.Range(0, Constants.numRows - cornerbracket_height);
 
                     TokenData[insert_row, insert_column] = defaultTokenId;
-                    TokenData[insert_row + 1, insert_column] = defaultTokenId;
-                    TokenData[insert_row, insert_column + 1] = defaultTokenId;
-
+                    TokenData[insert_row+1, insert_column] = defaultTokenId;
+                    TokenData[insert_row, insert_column+1] = defaultTokenId;
+                    
                     TokenData[insert_row, insert_column + cornerbracket_width] = defaultTokenId;
-                    TokenData[insert_row, insert_column + cornerbracket_width - 1] = defaultTokenId;
-                    TokenData[insert_row + 1, insert_column + cornerbracket_width] = defaultTokenId;
-
+                    TokenData[insert_row, insert_column + cornerbracket_width-1] = defaultTokenId;
+                    TokenData[insert_row+1, insert_column + cornerbracket_width] = defaultTokenId;
+                    
                     TokenData[insert_row + cornerbracket_height, insert_column] = defaultTokenId;
-                    TokenData[insert_row + cornerbracket_height, insert_column + 1] = defaultTokenId;
-                    TokenData[insert_row + cornerbracket_height - 1, insert_column] = defaultTokenId;
+                    TokenData[insert_row + cornerbracket_height, insert_column +1] = defaultTokenId;
+                    TokenData[insert_row + cornerbracket_height-1, insert_column] = defaultTokenId;
 
                     TokenData[insert_row + cornerbracket_height, insert_column + cornerbracket_width] = defaultTokenId;
-                    TokenData[insert_row - 1 + cornerbracket_height, insert_column + cornerbracket_width] = defaultTokenId;
-                    TokenData[insert_row + cornerbracket_height, insert_column + cornerbracket_width - 1] = defaultTokenId;
+                    TokenData[insert_row -1 + cornerbracket_height, insert_column + cornerbracket_width] = defaultTokenId;
+                    TokenData[insert_row + cornerbracket_height, insert_column + cornerbracket_width -1] = defaultTokenId;
 
 
                     break;
@@ -682,7 +683,7 @@ namespace Fourzy
                     {
                         for (int c = 0; c < o_width; c++)
                         {
-                            if (c == 0 || r == 0 || c == o_width - 1 || r == o_height - 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            if (c==0 || r==0 || c==o_width-1 || r==o_height-1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
                         }
                     }
 
@@ -702,7 +703,7 @@ namespace Fourzy
                         }
                     }
                     break;
-
+                    
                 case "u_shape":
 
                     int u_height = UnityEngine.Random.Range(3, 5);
@@ -715,7 +716,7 @@ namespace Fourzy
                     {
                         for (int c = 0; c < u_width; c++)
                         {
-                            if (c == 0 || c == u_width - 1 || r == u_height - 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            if (c == 0 || c == u_width -1 || r == u_height - 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
                         }
                     }
                     break;
@@ -731,7 +732,7 @@ namespace Fourzy
                     {
                         for (int c = 0; c < check_width; c++)
                         {
-                            if ((c + r) % 2 == 0) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            if ((c+r)%2==0) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
                         }
                     }
 
@@ -749,18 +750,18 @@ namespace Fourzy
                     {
                         for (int c = 0; c < cross_width; c++)
                         {
-                            if (c == cross_center || r == cross_center) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            if (c==cross_center || r==cross_center) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
                         }
                     }
                     break;
 
                 case "corners":
-
+                                   
                     for (int r = 0; r < Constants.numRows; r++)
                     {
                         for (int c = 0; c < Constants.numColumns; c++)
                         {
-                            if ((r < 2 && c < 2) || (r > Constants.numRows - 3 && c > Constants.numColumns - 3) || (r > Constants.numRows - 3 && c < 2) || (r < 2 && c > Constants.numColumns - 3)) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            if ((r<2 && c<2) || (r > Constants.numRows -3 && c > Constants.numColumns -3) || (r > Constants.numRows - 3 && c < 2) || (r < 2 && c > Constants.numColumns - 3)) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
                         }
                     }
                     break;
@@ -778,7 +779,7 @@ namespace Fourzy
                     {
                         for (int c = 0; c < diagcross_width; c++)
                         {
-                            if (r == c || r + c == (diagcross_width - 1)) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            if ( r==c || r+c == (diagcross_width-1)) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
                         }
                     }
                     break;
@@ -789,7 +790,7 @@ namespace Fourzy
                     {
                         for (int c = 0; c < Constants.numColumns; c++)
                         {
-                            if ((r + c) % 3 == 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            if ((r+c)%3==1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
                         }
                     }
                     break;
@@ -797,6 +798,559 @@ namespace Fourzy
                 case "blockedge":
 
                     int direction = UnityEngine.Random.Range(0, 3);
+                    switch(direction)
+                    {
+                        //top
+                        case 0:
+                            for (int c = 0; c < Constants.numColumns; c++)
+                            {
+                                TokenData[0, c] = defaultTokenId;
+                            }
+                                break;
+                        //bottom
+                        case 1:
+                            for (int c = 0; c < Constants.numColumns; c++)
+                            {
+                                TokenData[Constants.numRows-1, c] = defaultTokenId;
+                            }
+
+                            break;
+
+                            //left
+                        case 2:
+
+                            for (int r = 0; r < Constants.numRows; r++)
+                            {
+                                TokenData[r,0] = defaultTokenId;
+                            }
+
+
+                            break;
+
+                            //right
+                        case 3:
+                            for (int r = 0; r < Constants.numRows; r++)
+                            {
+                                TokenData[r, Constants.numColumns-1] = defaultTokenId;
+                            }
+
+                            break;
+                    }
+                    break;
+            }
+
+        }
+
+        private static void AddRandomLargeFeature(ref int[,] TokenData)
+        {
+            string feature = GetRandomMember(BoardFeatures.LargeFeatureTypes);
+            string defaultFeatureTokenName = GetRandomMember(BoardFeatures.FeatureTokens[feature]);
+            int defaultTokenId = ConvertTokenNameToTokenId(defaultFeatureTokenName);
+            int insert_column = 0;
+            int insert_row = 0;
+
+            switch (feature)
+            {
+                case "quads":
+                    int quad = UnityEngine.Random.Range(1, 4);
+
+                    int rect_height = Constants.numRows / 2;
+                    int rect_width = Constants.numColumns / 2;
+
+                    switch (quad)
+                    {
+                        case 1:
+                            insert_column = 0;
+                            insert_row = 0;
+                            break;
+
+                        case 2:
+                            insert_column = Constants.numColumns / 2;
+                            insert_row = 0;
+                            break;
+
+                        case 3:
+                            insert_column = 0;
+                            insert_row = Constants.numRows / 2; ;
+                            break;
+
+                        case 4:
+                            insert_column = Constants.numColumns / 2;
+                            insert_row = Constants.numRows / 2; ;
+                            break;
+
+                    }
+
+                    for (int r = 0; r < rect_height; r++)
+                    {
+                        for (int c = 0; c < rect_width; c++)
+                        {
+                            TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+
+                case "half":
+                    int half = UnityEngine.Random.Range(1, 4);
+
+                    rect_height = Constants.numRows / 2;
+                    rect_width = Constants.numColumns / 2;
+
+                    switch (half)
+                    {
+                        case 1:
+                            insert_column = 0;
+                            insert_row = 0;
+                            rect_height = Constants.numRows;
+                            rect_width = Constants.numColumns / 2;
+                            break;
+
+                        case 2:
+                            insert_column = Constants.numColumns / 2;
+                            insert_row = 0;
+                            rect_height = Constants.numRows;
+                            rect_width = Constants.numColumns / 2;
+                            break;
+
+                        case 3:
+                            insert_column = 0;
+                            insert_row = 0;
+                            rect_height = Constants.numRows/2;
+                            rect_width = Constants.numColumns;
+                            break;
+
+                        case 4:
+                            insert_column = 0;
+                            insert_row = Constants.numRows / 2; ;
+                            rect_height = Constants.numRows / 2;
+                            rect_width = Constants.numColumns;
+                            break;
+
+                    }
+
+                    for (int r = 0; r < rect_height; r++)
+                    {
+                        for (int c = 0; c < rect_width; c++)
+                        {
+                            TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+                case "full":
+
+                    insert_column = 0;
+                    insert_row = 0;
+                    rect_height = Constants.numRows;
+                    rect_width = Constants.numColumns;
+                    
+                    for (int r = 0; r < rect_height; r++)
+                    {
+                        for (int c = 0; c < rect_width; c++)
+                        {
+                            TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+                case "mostlyfull":
+
+                    insert_column = 1;
+                    insert_row = 1;
+                    rect_height = Constants.numRows -2;
+                    rect_width = Constants.numColumns -2;
+
+                    for (int r = 0; r < rect_height; r++)
+                    {
+                        for (int c = 0; c < rect_width; c++)
+                        {
+                            TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+
+                    break;
+
+                case "centersquare":
+ 
+                    insert_column = Constants.numRows/2-2;
+                    insert_row = Constants.numColumns / 2 - 2;
+                    rect_height = 4;
+                    rect_width = 4;
+
+                    for (int r = 0; r < rect_height; r++)
+                    {
+                        for (int c = 0; c < rect_width; c++)
+                        {
+                            TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+
+                case "centerplus":
+
+                    insert_column = Constants.numRows / 2 - 2;
+                    insert_row = Constants.numColumns / 2 - 2;
+                    rect_height = 4;
+                    rect_width = 4;
+                    int[,] pattern = { { 0, 1, 1, 0 }, { 1, 1, 1, 1 }, { 1, 1, 1, 1 }, { 0, 1, 1, 0 } };
+
+                    for (int r = 0; r < rect_height; r++)
+                    {
+                        for (int c = 0; c < rect_width; c++)
+                        {
+                            if (pattern[r,c] == 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+
+                case "crosshair":
+
+                    insert_column = Constants.numRows / 2 - 4;
+                    insert_row = Constants.numColumns / 2 - 4;
+                    rect_height = 8;
+                    rect_width = 8;
+                    int[,] crosshair_pattern = { { 0, 0, 0, 1, 1, 0, 0, 0 }, { 0, 0, 0, 1, 1, 0, 0, 0 }, { 0, 0, 1, 1, 1, 1, 0, 0 }, { 1, 1, 1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, 1, 1, 1 }, { 0, 0, 1, 1, 1, 1, 0, 0 }, { 0, 0, 0, 1, 1, 0, 0, 0 }, { 0, 0, 0, 1, 1, 0, 0, 0 } };
+
+                    for (int r = 0; r < rect_height; r++)
+                    {
+                        for (int c = 0; c < rect_width; c++)
+                        {
+                            if (crosshair_pattern[r, c] == 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+
+                case "wheel":
+
+                    insert_column = Constants.numRows / 2 - 4;
+                    insert_row = Constants.numColumns / 2 - 4;
+                    rect_height = 8;
+                    rect_width = 8;
+                    int[,] wheel_pattern = { { 0, 0, 0, 1, 1, 0, 0, 0 }, { 0, 0, 1, 0, 0, 1, 0, 0 }, { 0, 1, 0, 0, 0, 0, 1, 0 }, { 1, 0, 0, 1, 1, 0, 0, 1 }, { 1, 0, 0, 1, 1, 0, 0, 1 }, { 0, 1, 0, 0, 0, 0, 1, 0 }, { 0, 0, 1, 0, 0, 0, 1, 0 }, { 0, 0, 0, 1, 1, 0, 0, 0 } };
+
+                    for (int r = 0; r < rect_height; r++)
+                    {
+                        for (int c = 0; c < rect_width; c++)
+                        {
+                            if (wheel_pattern[r, c] == 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+
+                case "donuts":
+
+                    insert_column = Constants.numRows / 2 - 4;
+                    insert_row = Constants.numColumns / 2 - 4;
+                    rect_height = 8;
+                    rect_width = 8;
+                    int[,] donut_pattern = { { 0, 1, 1, 1, 0, 0, 0, 0 }, { 0, 1, 0, 1, 0, 1, 1, 1 }, { 0, 1, 1, 1, 0, 1, 0, 1 }, { 0, 0, 0, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, 0, 0, 0 }, { 1, 0, 1, 0, 1, 1, 1, 0 }, { 1, 1, 1, 0, 1, 0, 1, 0 }, { 0, 0, 0, 0, 1, 1, 1, 0 } };
+
+                    for (int r = 0; r < rect_height; r++)
+                    {
+                        for (int c = 0; c < rect_width; c++)
+                        {
+                            if (donut_pattern[r, c] == 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+
+                case "crookedlines":
+
+                    //This shows a pattern on how to make lines that follow a set pattern.
+
+                    int row = 0;
+                    int col = 1;
+                    int[] r_pattern = { 1, 0, 0, 0, 1, 1 };
+                    int[] c_pattern = { 0, -1, -1, -1 ,0, 0};
+                    int pattern_length = 6;
+                    int pattern_lines = 3;
+                    List<Position> Start = new List<Position>() { new Position(3, 0), new Position(6, 0), new Position(7, 2) };
+                    int[] line_offset = { 0, 3, 4 };
+
+                    for (int line = 0; line < pattern_lines; line++)
+                    {
+                        row = Start[line].row;
+                        col = Start[line].column;
+                        for (int i = 0; i <= 20; i++)
+                        {
+                            if (row >=0 && row < Constants.numRows && col >=0 && col < Constants.numColumns)
+                            {
+                                TokenData[row, col] = defaultTokenId;
+                            }
+
+                            int index = (i + line_offset[line]) % pattern_length;
+                            row += r_pattern[index];
+                            col += c_pattern[index];
+                        }
+                    }
+
+
+                    break;
+
+                case "fatdiagonal":
+
+                    int leftright = UnityEngine.Random.Range(0, 2);
+
+                    for (int r = 0; r < Constants.numRows; r++)
+                    {
+                        for (int c = 0; c < Constants.numColumns; c++)
+                        {
+                            if (leftright == 1)
+                            {
+                                if (c - r == -1 || c - r == 0 || c - r == 1) TokenData[r, c] = defaultTokenId;
+                            } else
+                            {
+                                if (c + r == Constants.numColumns -2 || c + r == Constants.numColumns - 1 || r + c == Constants.numColumns) TokenData[r, c] = defaultTokenId;
+                            }
+                        }
+                    }
+
+                    break;
+
+
+                case "diagonalwaves":
+
+                    int waveleftright = UnityEngine.Random.Range(1, 3);
+                    int waveoffset = UnityEngine.Random.Range(0, 4);
+
+                    for (int r = 0; r < Constants.numRows; r++)
+                    {
+                        for (int c = 0; c < Constants.numColumns; c++)
+                        {
+                            if (waveleftright == 1)
+                            {
+                                if ((c - r + waveoffset) % 4 == 0 || (c - r + waveoffset) % 4 == 1 ) TokenData[r, c] = defaultTokenId;
+                            }
+                            else
+                            {
+                                if ((c + r + waveoffset) % 4 == 0 || (c + r + waveoffset) % 4 == 1) TokenData[r, c] = defaultTokenId;
+                            }
+                        }
+                    }
+
+                    break;
+
+                case "bigsteps":
+
+                    int steps_height = UnityEngine.Random.Range(Constants.numRows-2, Constants.numRows);
+                    
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - steps_height);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - steps_height);
+
+                    for (int r = 0; r < steps_height; r++)
+                    {
+                        for (int c = 0; c < steps_height; c++)
+                        {
+                            if (c <= r) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+                case "vdoubleline":
+
+                    insert_column = UnityEngine.Random.Range(2, Constants.numColumns - 2);
+
+                    for (int r = 0; r < Constants.numRows; r++)
+                    {
+                        TokenData[r, insert_column] = defaultTokenId;
+                        TokenData[r, insert_column + 1] = defaultTokenId;
+                    }
+
+                    break;
+
+                case "hdoubleline":
+
+                    insert_row = UnityEngine.Random.Range(2, Constants.numRows - 2);
+
+                    for (int c = 0; c < Constants.numColumns; c++)
+                    {
+                        TokenData[insert_row, c] = defaultTokenId;
+                        TokenData[insert_row + 1, c] = defaultTokenId;
+                    }
+                    break;
+
+                case "doublecross":
+
+                    insert_column = UnityEngine.Random.Range(2, Constants.numColumns - 2);
+
+                    for (int r = 0; r < Constants.numRows; r++)
+                    {
+                        TokenData[r, insert_column] = defaultTokenId;
+                        TokenData[r, insert_column + 1] = defaultTokenId;
+                    }
+
+                    insert_row = UnityEngine.Random.Range(2, Constants.numRows - 2);
+
+                    for (int c = 0; c < Constants.numColumns; c++)
+                    {
+                        TokenData[insert_row, c] = defaultTokenId;
+                        TokenData[insert_row + 1, c] = defaultTokenId;
+                    }
+                    break;
+
+                case "lotsofdrops":
+
+                    int drops_height = UnityEngine.Random.Range(5, Constants.numRows);
+                    int drops_width = UnityEngine.Random.Range(5, Constants.numColumns);
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - drops_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - drops_height);
+
+                    int count = (drops_height + drops_width) *2;
+                    while (count > 0)
+                    {
+                        for (int r = 0; r < drops_height; r++)
+                        {
+                            for (int c = 0; c < drops_width; c++)
+                            {
+                                if (UnityEngine.Random.Range(1, drops_height + drops_width) <= 1)
+                                {
+                                    TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                                    count--;
+                                }
+
+                                if (count == 0) break;
+                            }
+
+                            if (count == 0) break;
+                        }
+                    }
+
+                    break;
+
+                case "blockalledges":
+                    int o_height = Constants.numRows;
+                    int o_width = Constants.numColumns;
+
+                    insert_column = 0;
+                    insert_row = 0;
+
+                    for (int r = 0; r < o_height; r++)
+                    {
+                        for (int c = 0; c < o_width; c++)
+                        {
+                            if (c == 0 || r == 0 || c == o_width - 1 || r == o_height - 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+                
+                case "fullcheckers":
+
+                    int check_height = UnityEngine.Random.Range(6, Constants.numRows);
+                    int check_width = UnityEngine.Random.Range(6, Constants.numColumns);
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - check_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - check_height);
+
+                    for (int r = 0; r < check_height; r++)
+                    {
+                        for (int c = 0; c < check_width; c++)
+                        {
+                            if ((c + r) % 2 == 0) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+                case "diagcross":
+
+                    int diagcross_width = Constants.numColumns;
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numRows);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numColumns);
+
+                    for (int r = 0; r < diagcross_width; r++)
+                    {
+                        for (int c = 0; c < diagcross_width; c++)
+                        {
+                            if (r == c || r + c == (diagcross_width - 1)) TokenData[(insert_row + r)%Constants.numRows, (insert_column + c) % Constants.numColumns] = defaultTokenId;
+                        }
+                    }
+                    break;
+
+                case "diaglines":
+
+                    int insertrow = UnityEngine.Random.Range(0, 2);
+                    for (int r = 0; r < Constants.numRows; r++)
+                    {
+                        for (int c = 0; c < Constants.numColumns; c++)
+                        {
+                            if ((r + c) % 3 == 1) TokenData[r, c] = defaultTokenId;
+                        }
+                    }
+                    break;
+
+                case "hlines":
+
+                    int inserth = UnityEngine.Random.Range(0, 2);
+                    int hspacing = UnityEngine.Random.Range(2, 4);
+
+                    for (int r = inserth; r < Constants.numRows; r++)
+                    {
+                        if (r % hspacing == inserth)
+                        {
+                            for (int c = 0; c < Constants.numColumns; c++)
+                            {
+                                TokenData[r, c] = defaultTokenId;
+                            }
+                        }
+                    }
+                    break;
+
+                case "vlines":
+
+                    int insertv = UnityEngine.Random.Range(0, 2);
+                    int vspacing = UnityEngine.Random.Range(2, 4);
+
+                    for (int c = insertv; c < Constants.numColumns; c++)
+                    {
+                        if (c % vspacing == insertv)
+                        {
+                            for (int r = 0; r < Constants.numRows; r++)
+                            {
+                                TokenData[r, c] = defaultTokenId;
+                            }
+                        }
+                    }
+                    break;
+
+
+                case "largering":
+                    o_height = Constants.numRows - 2;
+                    o_width = Constants.numColumns - 2;
+
+                    insert_column = UnityEngine.Random.Range(0, Constants.numColumns - o_width);
+                    insert_row = UnityEngine.Random.Range(0, Constants.numRows - o_height);
+
+                    for (int r = 0; r < o_height; r++)
+                    {
+                        for (int c = 0; c < o_width; c++)
+                        {
+                            if (c == 0 || r == 0 || c == o_width - 1 || r == o_height - 1) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                        }
+                    }
+
+                    break;
+
+                case "blockedge":
+
+                    int direction = UnityEngine.Random.Range(0, 4);
                     switch (direction)
                     {
                         //top
@@ -842,13 +1396,13 @@ namespace Fourzy
 
         private static string GetRandomMember(Dictionary<string, int> WeightedValues)
         {
-            int total_weight = 0;
-            foreach (string s in WeightedValues.Keys)
-            {
-                total_weight += WeightedValues[s];
-            }
+			int total_weight = 0;
+			foreach (string s in WeightedValues.Keys)
+			{
+				total_weight += WeightedValues[s];
+			}
 
-            int rnd_value = UnityEngine.Random.Range(0, total_weight);
+			int rnd_value = UnityEngine.Random.Range(0, total_weight);
             string value = "";
 
             foreach (string s in WeightedValues.Keys)
@@ -882,29 +1436,29 @@ namespace Fourzy
             {
                 case "clear":
                 case "empty":
-                    return (int)Token.EMPTY;
+				return (int)Token.EMPTY;
                 case "up_arrow":
-                    return (int)Token.UP_ARROW;
+				return (int)Token.UP_ARROW;
                 case "down_arrow":
-                    return (int)Token.DOWN_ARROW;
+				return (int)Token.DOWN_ARROW;
                 case "left_arrow":
-                    return (int)Token.LEFT_ARROW;
+				return (int)Token.LEFT_ARROW;
                 case "right_arrow":
-                    return (int)Token.RIGHT_ARROW;
+				return (int)Token.RIGHT_ARROW;
                 case "sticky":
-                    return (int)Token.STICKY;
+				return (int)Token.STICKY;
                 case "blocker":
-                    return (int)Token.BLOCKER;
+				return (int)Token.BLOCKER;
                 case "ghost":
-                    return (int)Token.GHOST;
+				return (int)Token.GHOST;
                 case "ice":
-                    return (int)Token.ICE_SHEET;
+				return (int)Token.ICE_SHEET;
                 case "pit":
-                    return (int)Token.PIT;
+				return (int)Token.PIT;
                 case "sand":
-                    return (int)Token.SAND;
-                case "water":
-                    return (int)Token.WATER;
+				return (int)Token.SAND;
+				case "water":
+				return (int)Token.WATER;
             }
             return 0;
         }
@@ -964,7 +1518,7 @@ namespace Fourzy
                     base_terrain_code = (int)Token.STICKY;
                     break;
                 case "ice":
-                    base_terrain_code = (int)Token.ICE_SHEET;
+                   base_terrain_code = (int)Token.ICE_SHEET;
                     break;
                 case "sand":
                     base_terrain_code = (int)Token.SAND;
@@ -1057,10 +1611,10 @@ namespace Fourzy
             };
         }
 
-
-        static class BoardFeatures
+        
+            static class BoardFeatures
         {
-
+           
 
             public static Dictionary<string, int> LineTypes = new Dictionary<string, int>()
             {
@@ -1072,34 +1626,43 @@ namespace Fourzy
             public static Dictionary<string, int> TokenTypes = new Dictionary<string, int>()
             {
              { "ghost", 15},
-             { "pit", 15 },
-             { "up_arrow", 10},
-             { "down_arrow", 10},
-             { "left_arrow", 10},
-             { "right_arrow", 10},
-             { "blocker", 15},
+             { "pit", 1 },
+             { "water", 2 },
+             { "up_arrow", 7},
+             { "down_arrow", 7},
+             { "left_arrow", 7},
+             { "right_arrow", 7},
+             { "blocker", 5},
              { "sticky", 15}
             };
 
-            public static Dictionary<string, int> LargeShapeTokenTypes = new Dictionary<string, int>()
+            public static Dictionary<string, int> TerrainTokenTypes = new Dictionary<string, int>()
             {
-                { "pit", 15 },
+                { "water", 15 },
                 { "sticky", 15},
                 { "ice", 15},
                 { "sand", 15}
             };
 
-            public static Dictionary<string, int> SmallShapeTokenTypes = new Dictionary<string, int>()
-            {
-                { "pit", 15 },
-                { "sticky", 15},
-                { "ice", 15},
-                { "water", 15}
+            public static Dictionary<string, int> LargeShapeTokenTypes = new Dictionary<string, int>()
+			{
+				{ "pit", 1 },
+				{ "sticky", 25},
+				{ "ice", 20},
+				{ "sand", 20}
+			};
+
+			public static Dictionary<string, int> SmallShapeTokenTypes = new Dictionary<string, int>()
+			{
+				{ "pit", 1 },
+				{ "sticky", 20},
+				{ "ice", 20},
+				{ "water", 20}
             };
 
-            public static Dictionary<string, int> BlockEdge = new Dictionary<string, int>()
+            public static Dictionary<string, int> BlockEdgeTokens = new Dictionary<string, int>()
             {
-                { "pit", 5 },
+                { "pit", 2 },
                 { "blocker", 20},
                 { "up_arrow", 5},
                 { "down_arrow", 5},
@@ -1113,12 +1676,43 @@ namespace Fourzy
                 { "ice", 15}
             };
 
+            public static Dictionary<string, int> LargeFeatureTypes = new Dictionary<string, int>()
+            {
+             { "bigsteps", 10},
+             { "lotsofdrops", 20},
+             { "hlines", 50},
+             { "vlines", 50},
+             { "quads", 50},
+             { "half", 50 },
+             { "full", 50 },
+             { "diagcross", 50},
+             { "mostlyfull", 50 },
+             { "centersquare", 50 },
+             { "blockedge", 50},
+             { "vdoubleline", 50},
+             { "hdoubleline", 50},
+             { "doublecross", 50},
+             { "fullcheckers", 50},
+             { "diaglines", 50},
+             { "blockalledges", 100},
+             { "blocktwo", 0},
+             { "blockcorner", 0 },
+             { "centerplus", 50},
+             { "fatdiagonal", 50},
+             { "largering", 70},
+             { "fullbigcheckers", 0},
+             { "crosshair", 50},
+             { "diagonalwaves", 60},
+             { "donuts", 50},
+             { "crookedlines", 50},
+             { "wheel", 50}
+            };
 
             public static Dictionary<string, int> FeatureTypes = new Dictionary<string, int>()
             {
              { "line", 200},
              { "rectangle", 50},
-             { "o_shape", 50 },
+             { "o_shape", 100 },
              { "l_shape", 50 },
              { "u_shape", 10 },
              { "checkers", 50 },
@@ -1127,17 +1721,13 @@ namespace Fourzy
              { "drops", 50},
              { "steps", 50},
              { "dotsquare", 300},
-             { "letter", 50},
-             { "smiley", 0}, //smiley is broken...  
-             { "vdoubleline", 100},
-             { "hdoubleline", 100},
-             { "diaglines", 25},
-             { "blockedge", 25},
-             { "corners", 50},
+             { "letter", 100},
+             { "smiley", 0}, 
+             { "corners", 100},
              { "cornerbrackets", 100},
-             { "riverofarrows", 0}, //not implemented
-             { "cycle", 0}, //not implemented
-             { "faceoff", 0} //not implemented
+             { "riverofarrows", 0}, 
+             { "cycle", 0}, 
+             { "faceoff", 0} 
             };
 
             public static Dictionary<string, Dictionary<string, int>> FeatureTokens = new Dictionary<string, Dictionary<string, int>>() {
@@ -1155,14 +1745,37 @@ namespace Fourzy
                 { "steps", LargeShapeTokenTypes },
                 { "hdoubleline", LargeShapeTokenTypes },
                 { "vdoubleline", LargeShapeTokenTypes },
+                { "hlines", LargeShapeTokenTypes },
+                { "vlines", LargeShapeTokenTypes },
+                { "crookedlines", LargeShapeTokenTypes },
                 { "diaglines", LargeShapeTokenTypes },
+                { "donuts", LargeShapeTokenTypes },
+                { "diagonalwaves", LargeShapeTokenTypes },
                 { "letter", TokenTypes },
                 { "blockedge", TokenTypes },
                 { "corners", CornerTokens},
                 { "cornerbrackets", SmallShapeTokenTypes},
                 { "riverofarrows", TokenTypes },
                 { "cycle", TokenTypes },
-                { "faceoff", TokenTypes }
+                { "faceoff", TokenTypes },
+                { "lotsofdrops", LargeFeatureTypes},
+             { "quads", TerrainTokenTypes},
+             { "half", TerrainTokenTypes },
+             { "full", TerrainTokenTypes },
+             { "mostlyfull", TerrainTokenTypes },
+             { "centersquare", TerrainTokenTypes },
+             { "centerplus", TerrainTokenTypes},
+             { "fatdiagonal", TerrainTokenTypes},
+             { "largering", TerrainTokenTypes},
+             { "blockalledges", LargeShapeTokenTypes},
+             { "blockcorner", LargeShapeTokenTypes}, //smiley is broken...  
+             { "blocktwo", BlockEdgeTokens},
+             { "doublecross", TerrainTokenTypes},
+             { "crosshair", TerrainTokenTypes},
+             { "fullcheckers", LargeShapeTokenTypes},
+             { "fullbigcheckers", LargeShapeTokenTypes},
+             { "wheel", LargeShapeTokenTypes}, 
+             { "bigsteps", LargeShapeTokenTypes}
             };
 
 
@@ -1174,15 +1787,15 @@ namespace Fourzy
             {
              { "clear", 20 },
              { "sticky", 10 },
-             { "ice", 10 },
-             { "ghost", 20},
-             { "pit", 10 },
-             { "left_arrow", 5},
-             { "right_arrow", 5},
-             { "up_arrow", 5},
-             { "down_arrow", 5},
+             { "ice", 5 },
+             { "ghost", 10},
+             { "pit", 2 },
+             { "left_arrow", 10},
+             { "right_arrow", 10},
+             { "up_arrow", 10},
+             { "down_arrow", 10},
              { "blocker", 10},
-             { "water", 10}
+			 { "water", 10}
             };
         }
 

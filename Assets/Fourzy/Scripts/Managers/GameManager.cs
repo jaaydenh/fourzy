@@ -161,6 +161,7 @@ namespace Fourzy
             ChallengeManager.OnChallengeJoinedDelegate += ChallengeJoinedHandler;
             ChallengeManager.OnChallengeWonDelegate += ChallengeWonHandler;
             ChallengeManager.OnChallengeLostDelegate += ChallengeLostHandler;
+            ChallengeManager.OnChallengeDrawnDelegate += ChallengeDrawnHandler;
             ChallengeManager.OnChallengeIssuedDelegate += ChallengeIssuedHandler;
             //SceneManager.sceneLoaded += OnGameFinishedLoading;
         }
@@ -179,6 +180,7 @@ namespace Fourzy
             ChallengeManager.OnChallengeJoinedDelegate -= ChallengeJoinedHandler;
             ChallengeManager.OnChallengeWonDelegate -= ChallengeWonHandler;
             ChallengeManager.OnChallengeLostDelegate -= ChallengeLostHandler;
+            ChallengeManager.OnChallengeDrawnDelegate -= ChallengeDrawnHandler;
             ChallengeManager.OnChallengeIssuedDelegate -= ChallengeIssuedHandler;
             //SceneManager.sceneLoaded -= OnGameFinishedLoading;
         }
@@ -189,8 +191,8 @@ namespace Fourzy
             {
                 var gsChallenge = message.Challenge;
                 Debug.Log("ChallengeAcceptedMessage");
-                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
-                Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
+                // Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
+                // Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
                 if (UserManager.instance.userId == gsChallenge.NextPlayer)
                 {
                     Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
@@ -201,8 +203,8 @@ namespace Fourzy
             {
                 var gsChallenge = message.Challenge;
                 Debug.Log("ChallengeStartedMessage");
-                Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
-                Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
+                // Debug.Log("gsChallenge.Challenger.Id: " + gsChallenge.Challenger.Id);
+                // Debug.Log("gsChallenge.Challenged: " + gsChallenge.Challenged);
                 if (UserManager.instance.userId == gsChallenge.NextPlayer)
                 {
                     Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
@@ -307,111 +309,57 @@ namespace Fourzy
             }
         }
 
+        private void ChallengeDrawnHandler(ChallengeDrawnMessage message) {
+            GameSparksChallenge challenge = new GameSparksChallenge(message.Challenge);
+            GameCompletedHandler(challenge);
+        }
+
         private void ChallengeWonHandler(ChallengeWonMessage message) {
-            var gsChallenge = message.Challenge;
-            Debug.Log("ChallengeWonHandler: UserManager.instance.userId: " + UserManager.instance.userId);
-            Debug.Log("ChallengeWonHandler: gsChallenge.NextPlayer: " + gsChallenge.NextPlayer);
-
-            int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
-            PlayerEnum player = currentPlayerMove == 1 ? PlayerEnum.ONE : PlayerEnum.TWO;
-
-            var currentGame = games
-                .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                .FirstOrDefault();
-            if (currentGame != null)
-            {
-                GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                // GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
-                GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, player, ChallengeManager.instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
-                currentGame.gameState = newGameState;
-                currentGame.challengerRatingDelta = gsChallenge.ScriptData.GetInt("challengerRatingDelta").GetValueOrDefault();
-                currentGame.challengedRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();
-            }
-
-            if (gsChallenge.ChallengeId == challengeInstanceId)
-            {
-                ChallengeManager.instance.GetRatingDelta(challengeInstanceId);
-            }
-
-            // Only for the player who didn't make the last move
-            if (UserManager.instance.userId != gsChallenge.NextPlayer)
-            {
-                // Only Replay the last move if the player is viewing the game screen for that game
-                if (gsChallenge.ChallengeId == challengeInstanceId)
-                {
-                    List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
-                    GSData lastMove = moveList.Last();
-
-                    StartCoroutine(ReplayIncomingOpponentMove(lastMove, player));
-                    //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
-                    SetActionButton();
-                }
-                else
-                {
-                    if (activeScreen == Screens.GAME)
-                    {
-                        SetActionButton();
-                    }
-
-                    if (activeScreen == Screens.GAMES_LIST)
-                    {
-                        ChallengeManager.instance.ReloadGames();
-                    }
-                }
-            }
-
-            // Update players coins and rating when a game is completed
-            UserManager.instance.UpdateInformation();
+            GameSparksChallenge challenge = new GameSparksChallenge(message.Challenge);
+            GameCompletedHandler(challenge);
         }
 
         private void ChallengeLostHandler(ChallengeLostMessage message) {
-            var gsChallenge = message.Challenge;
-            // Debug.Log("ChallengeLostHandler: UserManager.instance.userId: " + UserManager.instance.userId);
-            // Debug.Log("ChallengeLostHandler: gsChallenge.NextPlayer: " + gsChallenge.NextPlayer);
+            GameSparksChallenge challenge = new GameSparksChallenge(message.Challenge);
+            GameCompletedHandler(challenge);
+        }
 
-            int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
-            PlayerEnum player = currentPlayerMove == 1 ? PlayerEnum.ONE : PlayerEnum.TWO;
+        private void GameCompletedHandler(GameSparksChallenge challenge) {
+            PlayerEnum player = challenge.currentPlayerMove == 1 ? PlayerEnum.ONE : PlayerEnum.TWO;
 
             var currentGame = games
-                .Where(t => t.challengeId == gsChallenge.ChallengeId)
+                .Where(t => t.challengeId == challenge.challengeId)
                 .FirstOrDefault();
             if (currentGame != null)
             {
-                GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                // GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge, true, player);
                 GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, player, ChallengeManager.instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
                 currentGame.gameState = newGameState;
-                currentGame.challengerRatingDelta = gsChallenge.ScriptData.GetInt("challengerRatingDelta").GetValueOrDefault();
-                currentGame.challengedRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();
+                currentGame.challengerRatingDelta = challenge.challengerRatingDelta;
+                currentGame.challengedRatingDelta = challenge.challengedRatingDelta;
             }
 
-            if (gsChallenge.ChallengeId == challengeInstanceId)
+            if (challenge.challengeId == challengeInstanceId)
             {
                 ChallengeManager.instance.GetRatingDelta(challengeInstanceId);
             } 
 
             // Only for the player who didn't make the last move
-            if (UserManager.instance.userId != gsChallenge.NextPlayer)
+            if (UserManager.instance.userId != challenge.nextPlayer)
             {
                 // Only Replay the last move if the player is viewing the game screen for that game
-                if (gsChallenge.ChallengeId == challengeInstanceId)
+                if (challenge.challengeId == challengeInstanceId)
                 {
-                    List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
-                    GSData lastMove = moveList.Last();
-
+                    GSData lastMove = challenge.moveList.Last();
                     StartCoroutine(ReplayIncomingOpponentMove(lastMove, player));
-                    //ChallengeManager.instance.SetViewedCompletedGame(challenge.ChallengeId);
                     SetActionButton();
                 }
                 else
                 {
-                    if (activeScreen == Screens.GAME)
-                    {
+                    if (activeScreen == Screens.GAME) {
                         SetActionButton();
                     }
 
-                    if (activeScreen == Screens.GAMES_LIST)
-                    {
+                    if (activeScreen == Screens.GAMES_LIST) {
                         ChallengeManager.instance.ReloadGames();
                     }
                 }
@@ -433,13 +381,11 @@ namespace Fourzy
             Game game = new Game(gsChallenge.ChallengeId, newGameState, false, false, false, opponent, ChallengeState.RUNNING, ChallengeType.STANDARD, challenge.gameType, challenge.challengerGamePieceId, challenge.challengedGamePieceId);
             games.Add(game);
 
-            if (activeScreen == Screens.GAME)
-            {
+            if (activeScreen == Screens.GAME) {
                 SetActionButton();
             }
 
-            if (activeScreen == Screens.GAMES_LIST)
-            {
+            if (activeScreen == Screens.GAMES_LIST) {
                 ChallengeManager.instance.ReloadGames();
             }
         }
@@ -2025,8 +1971,7 @@ namespace Fourzy
             if (!didViewResult) {
                 showRewardButton = true;
             }
-            //Debug.Log("viewedResult: " + didViewResult);
-            //Debug.Log("showRewardButton: " + showRewardButton);
+
             Color winnerTextColor = gameState.winner == PlayerEnum.ONE ? bluePlayerColor : redPlayerColor;
             Debug.Log("DisplayGameOverView gameState.winner: " +  gameState.winner);
             if (gameState.winner == PlayerEnum.ONE)
@@ -2058,7 +2003,6 @@ namespace Fourzy
 #endif
                 }
             }
-            WinLineSetActive(true);
 
             if (gameState.winner == PlayerEnum.NONE || gameState.winner == PlayerEnum.ALL)
             {
@@ -2069,6 +2013,20 @@ namespace Fourzy
                     {
                         gameInfo.Open(LocalizationManager.instance.GetLocalizedValue("draw_text"), Color.white, false, false);
                     }
+                }
+
+                if (gameState.winner == PlayerEnum.ALL) {
+                    int size = gameState.gameBoard.player1WinningPositions.Count;
+                    Debug.Log("player1WinningPositions.Count: " + gameState.gameBoard.player1WinningPositions.Count);
+                    Debug.Log("player2WinningPositions.Count: " + gameState.gameBoard.player2WinningPositions.Count);
+                    Vector3 startPos = new Vector3((gameState.gameBoard.player1WinningPositions[0].column + .1f) *.972f, (gameState.gameBoard.player1WinningPositions[0].row * -1 + .05f) * .96f, 12);
+                    Vector3 endPos = new Vector3((gameState.gameBoard.player1WinningPositions[size - 1].column+ .1f) * .972f, (gameState.gameBoard.player1WinningPositions[size - 1].row * -1 + .05f) * .96f, 12);
+                    DrawLine(startPos, endPos, bluePlayerColor);
+
+                    int size2 = gameState.gameBoard.player2WinningPositions.Count;
+                    Vector3 startPos2 = new Vector3((gameState.gameBoard.player2WinningPositions[0].column + .1f) * .972f, (gameState.gameBoard.player2WinningPositions[0].row * -1 + .05f) * .96f, 12);
+                    Vector3 endPos2 = new Vector3((gameState.gameBoard.player2WinningPositions[size2 - 1].column + .1f) * .972f, (gameState.gameBoard.player2WinningPositions[size2 - 1].row * -1 + .05f) *.96f, 12);
+                    DrawLine(startPos2, endPos2, redPlayerColor); 
                 }
             }
             else if (isMultiplayer)
@@ -2107,6 +2065,8 @@ namespace Fourzy
                     gameInfo.Open(winnerText, winnerTextColor, true, false);
                 }
             }
+
+            WinLineSetActive(true);
 
             switch (gameType)
             {

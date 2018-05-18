@@ -94,7 +94,7 @@ namespace Fourzy
                     statusLabel.text = LocalizationManager.instance.GetLocalizedValue("they_won_text");
                 }
             } else if (game.isExpired == true) {
-                statusLabel.text = "Game Expired";
+                statusLabel.text = LocalizationManager.instance.GetLocalizedValue("expired_text");
             } else {
                 //We then check if the userId of the next player is equal to ours
                 //if (nextPlayerId == UserManager.instance.userId)
@@ -175,8 +175,8 @@ namespace Fourzy
             GameManager.instance.opponentUserId = game.opponent.opponentId;
             GameManager.instance.activeGame = game;
             // -------------------------------------------------------------------------------------------
-            Debug.Log("GameUI:OpenGame:game.challengerRatingDelta" + game.challengerRatingDelta);
-            Debug.Log("GameUI:OpenGame:game.challengedRatingDelta" + game.challengedRatingDelta);
+            // Debug.Log("GameUI:OpenGame:game.challengerRatingDelta" + game.challengerRatingDelta);
+            // Debug.Log("GameUI:OpenGame:game.challengedRatingDelta" + game.challengedRatingDelta);
 
             GameManager.instance.winner = winnerName;
 

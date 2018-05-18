@@ -26,17 +26,30 @@ Goal for May 13, 2018
 Pom 1:
   - [X] Integrate random board generator
 
-Goal for May 15, 2018
+Goal for May 14, 2018
 
 Pom 1:
   - [X] Update gamestate to remove all references to unity or gamesparks
 
+Goal for May 15, 2018
 
 Pom 1:
-  - [ ] Fix bug to make draws work correctly with ghosts on edge of board
-  - [ ] Handle draws for rating change
+  - [X] Fix bug to make draws work correctly with ghosts on edge of board
+  - [X] Show draws correctly when a game is completed on the game screen
+  - [X] Reset all players rating to 200
+  - [X] Handle draws for rating change
+
+Goal for May 17, 2018
+
+  - [X] Update server code to create a draw when both players win at the same time
   - [ ] Create function to generate random number
   - [ ] Handle momentum transfers between arrow loops with sticky, water, sand, and ice
+  - [ ] Board selection list doesnt load correctly
+  - [ ] Separate unity scene for game screen
+  - [ ] Make InitialGameBoard work for multiplayer games
+
+
+
 
 Invited Friend Rewards Feature
 Ability to invite people to game by sending an email, text, facebook share, this sends a deeplink
@@ -75,20 +88,12 @@ ThumbUps or ThumbDowns game boards at the end of a game
 
 
 
-pieces starts moving, give the piece a very large momemtum.
-each move reduce the momentum by 1, if the momentum is 0, stop the piece
-tokesn can adjust momentum
-
-
 random
 Convert game id into number  - convert hexadecimal
 min number + (gameid + position in gameid matching the current move number + move number) mod (max number - min number)
 
 
 
-Make InitialGameBoard work for multiplayer games
-2.random number function for momentum
-separate unity scene for game screen
 
 
 Patreon

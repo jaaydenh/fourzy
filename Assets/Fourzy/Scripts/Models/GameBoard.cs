@@ -271,8 +271,6 @@ namespace Fourzy {
                 if (activeMovingPieces.Count > 0)
                 {
                     MovingGamePiece piece = activeMovingPieces[0];
-                    //Position nextPosition = piece.GetNextPosition();
-                    //Position currentPosition = piece.GetCurrentPosition();
 
                     if (token.useCurrentDirection)
                     {

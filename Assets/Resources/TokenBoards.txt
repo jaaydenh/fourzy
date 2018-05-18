@@ -4,7 +4,7 @@
         {
             "ID": "1000",
             "Name": "The Basic Game",
-            "Enabled": false, "EnabledGallery": false,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,

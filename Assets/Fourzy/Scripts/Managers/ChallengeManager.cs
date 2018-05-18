@@ -36,6 +36,8 @@ namespace Fourzy
         public delegate void ChallengeLostDelegate(ChallengeLostMessage message);
         public static event ChallengeLostDelegate OnChallengeLostDelegate;
         public delegate void ChallengeIssuedDelegate(ChallengeIssuedMessage message);
+        public static event ChallengeDrawnDelegate OnChallengeDrawnDelegate;
+        public delegate void ChallengeDrawnDelegate(ChallengeDrawnMessage message);
         public static event ChallengeIssuedDelegate OnChallengeIssuedDelegate;
 
         public TokenBoard tokenBoard;
@@ -77,6 +79,7 @@ namespace Fourzy
             ChallengeWonMessage.Listener += OnChallengeWon;
             ChallengeLostMessage.Listener += OnChallengeLost;
             ChallengeIssuedMessage.Listener += OnChallengeIssued;
+            ChallengeDrawnMessage.Listener += OnChallengeDrawn;
         }
 
         void OnDisable() {
@@ -89,6 +92,7 @@ namespace Fourzy
             ChallengeWonMessage.Listener -= OnChallengeWon;
             ChallengeLostMessage.Listener -= OnChallengeLost;
             ChallengeIssuedMessage.Listener -= OnChallengeIssued;
+            ChallengeDrawnMessage.Listener -= OnChallengeDrawn;
         }
 
         private void OnChallengeTurnTaken(ChallengeTurnTakenMessage message)
@@ -109,6 +113,11 @@ namespace Fourzy
         private void OnChallengeLost(ChallengeLostMessage message)
         {
             OnChallengeLostDelegate(message);
+        }
+
+        private void OnChallengeDrawn(ChallengeDrawnMessage message)
+        {
+            OnChallengeDrawnDelegate(message);
         }
 
         private void OnChallengeIssued(ChallengeIssuedMessage message) 
@@ -693,9 +702,14 @@ namespace Fourzy
 
                                     gameUI.winnerName = gsChallenge.ScriptData.GetString("winnerName");
                                     string winnerId = gsChallenge.ScriptData.GetString("winnerId");
+                                    string winnerString = gsChallenge.ScriptData.GetString("winner");
                                     gameUI.winnerId = winnerId;
                                     bool isExpired = false;
-                                    if (gameUI.winnerId == null && gsChallenge.State == "COMPLETE")
+                                    Debug.Log("ChallengeId: " + gsChallenge.ChallengeId + " winnerString: " + winnerString);
+                                    if (winnerString == null) {
+                                        Debug.Log("winnerString is null");
+                                    }
+                                    if (gameUI.winnerId == null && winnerString == null && gsChallenge.State == "COMPLETE")
                                     {
                                         gameUI.isExpired = true;
                                         isExpired = true;
@@ -710,6 +724,10 @@ namespace Fourzy
                                         } else {
                                             winner = PlayerEnum.TWO;
                                         }
+                                    }
+
+                                    if (winnerString == "Draw") {
+                                        winner = PlayerEnum.NONE;
                                     }
 
                                     string opponentFBId = "";
@@ -780,11 +798,8 @@ namespace Fourzy
                                     string challengedGamePieceId = challenge.challengedGamePieceId;
 
                                     Game game = new Game(gsChallenge.ChallengeId, gameState, isCurrentPlayer_PlayerOne, isExpired, didViewResult, opponent, challengeState, challengeType, challenge.gameType, challengerGamePieceId, challengedGamePieceId);
-                                    
-                                    Debug.Log("ChallengeState: " + challengeState.ToString());
 
                                     if (challengeState == ChallengeState.COMPLETE) {
-                                        Debug.Log("ChallengeState.COMPLETE");
                                         game.challengerRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();
                                         game.challengedRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();
                                     }
