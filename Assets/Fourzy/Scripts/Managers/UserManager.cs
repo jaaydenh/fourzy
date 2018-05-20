@@ -33,7 +33,7 @@ namespace Fourzy
         {
             base.Awake();
 
-            profilePicture = new Sprite();
+			//profilePicture = new Sprite();
         }
 
         void Start()

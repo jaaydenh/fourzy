@@ -1,5 +1,6 @@
-﻿<Properties StartupConfiguration="{9AD793E4-7370-FB12-CE27-35FD78F1FC38}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/MiniGameBoard.cs">
+﻿<Properties StartupConfiguration="{E3095890-3415-8A5A-9212-99BFB3551353}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Managers/LoginManager.cs">
     <Files>
       <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="1086" Column="34" />
       <File FileName="Assets/Fourzy/Scripts/UI/GameUI.cs" Line="177" Column="31" />
@@ -10,15 +11,18 @@
       <File FileName="Assets/Fourzy/Scripts/Models/GameBoard.cs" Line="251" Column="23" />
       <File FileName="Assets/Fourzy/Scripts/UI/Rewards.cs" Line="41" Column="40" />
       <File FileName="Assets/Fourzy/Scripts/UI/ViewMatchMaking.cs" Line="147" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/UserManager.cs" Line="118" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/UserManager.cs" Line="36" Column="34" />
       <File FileName="Assets/Resources/TokenBoards.txt" Line="7" Column="29" />
       <File FileName="Assets/Fourzy/Scripts/Models/MovingGamePiece.cs" Line="32" Column="40" />
-      <File FileName="Assets/Fourzy/Scripts/MiniGameBoard.cs" Line="87" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/GamePiece.cs" Line="90" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/LoginManager.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/Jaayden/projects/fourzy/Assets/Fourzy/Scripts/UI/GamePiece.cs" relfile="Assets/Fourzy/Scripts/UI/GamePiece.cs" line="90" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.fourzy PreferredExecutionTarget="Unity.Editor" />
