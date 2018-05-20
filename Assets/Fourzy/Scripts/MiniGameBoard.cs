@@ -31,12 +31,74 @@ namespace Fourzy {
         public GameObject glow;
         public GameObject questionMark;
         private GameObject tokens;
+        private GameObject gamePieces;
+        public Sprite Player1Piece;
+        public Sprite Player2Piece;
+        public GameObject gamePiecePrefab;
 
         public void SetToggleGroup() {
             Transform parent = this.GetComponentInParent<Transform>();
 
             var toggle = this.GetComponent<Toggle>();
             toggle.group = parent.gameObject.GetComponent<ToggleGroup>();
+        }
+
+        public void CreateGamePieces() {
+            gamePieces = new GameObject("GamePieces");
+            gamePieces.transform.parent = gameObject.transform;
+
+            for (int row = 0; row < Constants.numRows; row++)
+            {
+                for (int col = 0; col < Constants.numColumns; col++)
+                {
+                    int piece = tokenBoard.initialGameBoard[row * Constants.numRows + col];
+
+                    if (piece == (int)Piece.BLUE)
+                    {
+                        GameObject pieceObject = SpawnPiece(col, row * -1, PlayerEnum.ONE);
+                        // SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
+                        // Color c = pieceSprite.color;
+                        // c.a = 0.0f;
+                        // pieceSprite.color = c;
+
+                        // gameBoardView.gamePieces[row, col] = pieceObject;
+                    }
+                    else if (piece == (int)Piece.RED)
+                    {
+                        GameObject pieceObject = SpawnPiece(col, row * -1, PlayerEnum.TWO);
+                        // SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
+                        // Color c = pieceSprite.color;
+                        // c.a = 0.0f;
+                        // pieceSprite.color = c;
+
+                        // gameBoardView.gamePieces[row, col] = pieceObject;
+                    }
+                }
+            }
+
+            gamePieces.transform.localPosition = new Vector3(-1.63f,1.63f);
+            gamePieces.transform.localScale = new Vector3(0.46f,0.46f,1);
+        }
+
+        GameObject SpawnPiece(float posX, float posY, PlayerEnum player)
+        {
+            //Debug.Log("SpawnPiece: x: " + posX + " y: " + posY);
+            // float xPos = (posX + .1f) * .972f;
+            // float yPos = (posY + .05f) * .96f;
+
+            GameObject gamePiece = Instantiate(gamePiecePrefab, new Vector3(posX, posY, -5),
+                Quaternion.identity, gamePieces.transform) as GameObject;
+            
+            // gamePiece.transform.position = new Vector3(xPos, yPos, 10);
+
+            if (player == PlayerEnum.ONE) {
+                gamePiece.GetComponent<SpriteRenderer>().sprite = Player1Piece;
+            } else {
+                gamePiece.GetComponent<SpriteRenderer>().sprite = Player2Piece;
+            }
+            gamePiece.GetComponent<SpriteRenderer>().enabled = true;
+
+            return gamePiece;
         }
 
         public void CreateTokens() {

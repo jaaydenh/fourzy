@@ -206,6 +206,10 @@ MonoBehaviour:
   waterToken: {fileID: 1264728522864378, guid: ed2219bcab6984100806f0122971febe, type: 2}
   glow: {fileID: 1719585871036234}
   questionMark: {fileID: 1839717546775038}
+  Player1Piece: {fileID: 21300002, guid: baa829ac81b434043bfc2463fc3a9f65, type: 3}
+  Player2Piece: {fileID: 21300000, guid: baa829ac81b434043bfc2463fc3a9f65, type: 3}
+  gamePiecePrefab: {fileID: 1919694097138286, guid: 2a3330f2c1e614609aabd0bb86916d2e,
+    type: 2}
 --- !u!114 &114512702855691298
 MonoBehaviour:
   m_ObjectHideFlags: 1

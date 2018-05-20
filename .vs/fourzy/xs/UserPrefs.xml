@@ -1,5 +1,5 @@
 ﻿<Properties StartupConfiguration="{9AD793E4-7370-FB12-CE27-35FD78F1FC38}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Models/GameState.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/MiniGameBoard.cs">
     <Files>
       <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="1086" Column="34" />
       <File FileName="Assets/Fourzy/Scripts/UI/GameUI.cs" Line="177" Column="31" />
@@ -13,6 +13,7 @@
       <File FileName="Assets/Fourzy/Scripts/Managers/UserManager.cs" Line="118" Column="1" />
       <File FileName="Assets/Resources/TokenBoards.txt" Line="7" Column="29" />
       <File FileName="Assets/Fourzy/Scripts/Models/MovingGamePiece.cs" Line="32" Column="40" />
+      <File FileName="Assets/Fourzy/Scripts/MiniGameBoard.cs" Line="87" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

@@ -25,6 +25,7 @@ namespace Fourzy
         public int[] isMoveableRight;
         public List<Move> moveList;
         public List<IToken> activeTokenList;
+        private string randomGuid;
 
         public GameState (int numRows, int numColumns, bool isPlayerOneTurn, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] gameBoardData, bool isGameOver, List<Move> moveList) {
             this.numRows = numRows;
@@ -82,6 +83,8 @@ namespace Fourzy
                 gameBoard.completedMovingPieces.Clear();
             }
             previousGameBoard = gameBoard.Clone();
+
+            randomGuid = System.Guid.NewGuid().ToString();
         }
 
         private void InitMoveablePieces() {
@@ -90,8 +93,28 @@ namespace Fourzy
             gameBoard.completedMovingPieces.Clear();
         }
 
+        public void SetRandomGuid(string guid) {
+            randomGuid = guid;
+        }
+
+        public int GetRandomNumber(int min, int max, int move = 0, int random_id=0)
+        {
+            int number = 0;
+            int number_space = max - min;
+            int window_length = 5;
+            int window_start = move % (randomGuid.Length - window_length);
+
+            string window = randomGuid.Substring(window_start, window_length);
+            foreach (char c in window)
+            {
+                number += (c % number_space);
+            }
+
+            number += min;
+            return number;
+        }
+
         public void SetTokenBoardCell(int row, int col, IToken token) {
-            // Debug.Log("SetTokenBoardCell: row: " + row + " col: "+ col + " token: " + token.tokenType);
             tokenBoard.SetTokenBoardCell(row, col, token);
         }
 
@@ -145,17 +168,14 @@ namespace Fourzy
         }
 
         public List<MovingGamePiece> MovePiece(Move move, bool isReplay, out List<IToken> activeTokens) {
-
             //Debug.Log("GameState: Movepiece: tokenBoard: " + tokenBoard.PrintBoard("TokenBoard"));
             //Debug.Log("GameState: Movepiece: previousTokenBoard: " + previousTokenBoard.PrintBoard("previousTokenBoard"));
 
             if (isReplay) {
-                //Debug.Log("MovePiece isReplay:true");
                 gameBoard = previousGameBoard.Clone();
                 tokenBoard = previousTokenBoard.Clone();
                 InitMoveablePieces();
             } else {
-                //Debug.Log("MovePiece isReplay:false");
                 previousGameBoard = gameBoard.Clone();
                 previousTokenBoard = tokenBoard.Clone();
             }
@@ -176,7 +196,7 @@ namespace Fourzy
 
                 if (CanMove(new Move(nextPosition, activeDirection, move.player), tokenBoard.tokens)) {
                     if (tokenBoard.tokens[nextPosition.row, nextPosition.column].hasEffect) {
-                        activeTokenList.Add(tokenBoard.tokens[nextPosition.row, nextPosition.column]);    
+                        activeTokenList.Add(tokenBoard.tokens[nextPosition.row, nextPosition.column]);
                     }
                     tokenBoard.tokens[nextPosition.row, nextPosition.column].UpdateBoard(gameBoard, true);
                 } else {
@@ -186,14 +206,8 @@ namespace Fourzy
             }
 
             if (!isReplay) {
-                // Dictionary<string, object> moveData = new Dictionary<string, object>();
-                // moveData.Add("position", move.location);
-                // moveData.Add("direction", (int)move.direction);
-                // moveData.Add("player", (int)move.player);
                 System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
                 int currentTime = (int)(System.DateTime.UtcNow - epochStart).TotalMilliseconds;
-                // moveData.Add("timestamp", currentTime);
-                // GSData data = new GSData(moveData);
 
                 move.timeStamp = currentTime;
 
@@ -207,11 +221,7 @@ namespace Fourzy
                 } else {
                     player2MoveCount++;
                 }
-
-                //isPlayerOneTurn = !isPlayerOneTurn;
             }
-
-            //PrintMoveList();
 
             UpdateMoveablePieces();
 
@@ -231,15 +241,11 @@ namespace Fourzy
                 }
             }
 
-            // if (!gameBoard.hasValidMove()) {
             if (isGameOver == false && GetPossibleMoves().Count <= 0) {
                 isGameOver = true;
                 isCurrentPlayerTurn = false;
                 winner = PlayerEnum.NONE;
             }
-            //Debug.Log("GameState MovePiece Winner: " + winner);
-            //Debug.Log("gameBoard.player1WinningPositions.Count: " + gameBoard.player1WinningPositions.Count);
-            //Debug.Log("gameBoard.player2WinningPositions.Count: " + gameBoard.player2WinningPositions.Count);
 
             if (!isReplay && winner == PlayerEnum.EMPTY)
             {
@@ -251,7 +257,6 @@ namespace Fourzy
             {
                 if (player1MoveCount >= GameManager.instance.puzzleChallengeInfo.MoveGoal)
                 {
-                    //Debug.Log("Puzzle Challenge >= puzzleChallengeInfo.MoveGoal");
                     isPuzzleChallengeCompleted = true;
                     if (isGameOver && winner == PlayerEnum.ONE)
                     {
@@ -272,7 +277,6 @@ namespace Fourzy
                 }
                 else if (isGameOver)
                 {
-                    //Debug.Log("Puzzle Challenge gameState.isGameOver");
                     isPuzzleChallengeCompleted = true;
 
                     if (winner == PlayerEnum.ONE)
@@ -487,13 +491,11 @@ namespace Fourzy
 
         public void PrintMoveList() {
             int i = 0;
-            // Debug.Log("MoveList");
+
             foreach (var move in moveList)
             {
                 i++;
-                // int position = move.GetInt("position").GetValueOrDefault();
                 int position = move.location;
-                // Direction direction = (Direction)move.GetInt("direction").GetValueOrDefault();
                 Direction direction = move.direction;
                 // Debug.Log("Move " + i + ": position: " + position + " direction: " + direction.ToString());
             }

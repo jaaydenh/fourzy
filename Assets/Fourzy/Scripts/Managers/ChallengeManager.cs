@@ -798,6 +798,7 @@ namespace Fourzy
                                     string challengedGamePieceId = challenge.challengedGamePieceId;
 
                                     Game game = new Game(gsChallenge.ChallengeId, gameState, isCurrentPlayer_PlayerOne, isExpired, didViewResult, opponent, challengeState, challengeType, challenge.gameType, challengerGamePieceId, challengedGamePieceId);
+                                    game.gameState.SetRandomGuid(gsChallenge.ChallengeId);
 
                                     if (challengeState == ChallengeState.COMPLETE) {
                                         game.challengerRatingDelta = gsChallenge.ScriptData.GetInt("challengedRatingDelta").GetValueOrDefault();

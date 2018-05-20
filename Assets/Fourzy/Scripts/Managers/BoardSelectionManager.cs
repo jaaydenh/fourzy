@@ -51,7 +51,9 @@ namespace Fourzy {
                 //go.transform.localScale = new Vector3(1,1,1);
                 MiniGameBoard miniGameBoard = go.GetComponent<MiniGameBoard>();
                 miniGameBoard.tokenBoard = board;
+                
                 miniGameBoard.CreateTokens();
+                miniGameBoard.CreateGamePieces();
 
                 go.gameObject.transform.SetParent(createGameGameboardGrid.transform);
 

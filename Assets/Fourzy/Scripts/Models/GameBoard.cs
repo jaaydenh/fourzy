@@ -157,12 +157,18 @@ namespace Fourzy {
 
                     if (token.isMoveable) {
                         if (GetCell(nextPosition.column, nextPosition.row) != 0) {
-                            //Debug.Log("stick nextposition column: " + nextPosition.column + " row: " + nextPosition.row);
                             pieceInSquare = true;
                             PlayerEnum player = (PlayerEnum)GetCell(nextPosition.column, nextPosition.row);
                             Move move = new Move(nextPosition, piece.currentDirection, player);
 
-                            MovingGamePiece activeMovingPiece = new MovingGamePiece(move, token.setMomentum);
+                            var newMomentum = 0;
+                            if (token.setMomentum > 0) {
+                                newMomentum = token.setMomentum;  
+                            } else {
+                                newMomentum = piece.momentum;
+                            }
+
+                            MovingGamePiece activeMovingPiece = new MovingGamePiece(move, newMomentum);
                             activeMovingPieces.Add(activeMovingPiece);
                         }
                     }
@@ -248,7 +254,7 @@ namespace Fourzy {
                     piece.friction += token.addFriction;
 
                     piece.momentum -= 1;
-                    //Debug.Log("piece.momentum: " + piece.momentum);
+
                     if (pieceInSquare || token.pieceMustStopOn || piece.isDestroyed || piece.friction >= 1.0f || piece.momentum <= 0) {
                         SetActivePieceAsComplete();
                     }
@@ -442,31 +448,6 @@ namespace Fourzy {
 
             return true;
         }
-
-        // public bool hasValidMove() {
-        //     // check the left edge for empty spaces
-        //     for(var row = 1; row < numRows - 1; row++)
-        //     {
-        //         if (board[row, 0] == 0) { return true; }
-        //     }
-        //     // check the right edge for empty spaces
-        //     for(var row = 1; row < numRows - 1; row++)
-        //     {
-        //         if (board[row, numColumns - 1] == 0) { return true; }
-        //     }
-        //     // check the top edge for empty spaces
-        //     for(var col = 1; col < numColumns - 1; col++)
-        //     {
-        //         if (board[0, col] == 0) { return true; }
-        //     }
-        //     // check the bottom edge for empty spaces
-        //     for(var col = 1; col < numColumns - 1; col++)
-        //     {
-        //         if (board[numRows - 1, col] == 0) { return true; }
-        //     }
-
-        //     return false;
-        // }
 
         public GameBoard Clone ()
         {

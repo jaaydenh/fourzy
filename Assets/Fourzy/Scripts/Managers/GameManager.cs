@@ -379,6 +379,7 @@ namespace Fourzy
             Opponent opponent = new Opponent(gsChallenge.Challenger.Id, gsChallenge.Challenger.Name, opponentFBId);
 
             Game game = new Game(gsChallenge.ChallengeId, newGameState, false, false, false, opponent, ChallengeState.RUNNING, ChallengeType.STANDARD, challenge.gameType, challenge.challengerGamePieceId, challenge.challengedGamePieceId);
+            game.gameState.SetRandomGuid(gsChallenge.ChallengeId);
             games.Add(game);
 
             if (activeScreen == Screens.GAME) {
@@ -653,7 +654,7 @@ namespace Fourzy
             ResetGamePiecesAndTokens();
             ResetUIGameScreen();
 
-            SetGameBoardView(gameState.GetGameBoard());
+            CreateGamePieceViews(gameState.GetGameBoard());
             CreateTokenViews();
 
             challengeInstanceId = null;
@@ -950,7 +951,7 @@ namespace Fourzy
                 challengeIdDebugText.text = "Error: missing challenge id";
             }
 
-            SetGameBoardView(gameState.GetPreviousGameBoard());
+            CreateGamePieceViews(gameState.GetPreviousGameBoard());
             CreateTokenViews();
 
             DisplayIntroUI(title, subtitle, true);
@@ -986,7 +987,7 @@ namespace Fourzy
             }
         }
 
-        public void SetGameBoardView(int[,] board)
+        public void CreateGamePieceViews(int[,] board)
         {
             gameBoardView.gamePieces = new GameObject[Constants.numRows, Constants.numColumns];
 
@@ -1791,6 +1792,7 @@ namespace Fourzy
         public void CreateGame(string challengeId, string opponentId) {
             Opponent opponent = new Opponent(opponentId, opponentNameLabel.text, opponentFacebookId);
             Game game = new Game(challengeId, gameState, isCurrentPlayer_PlayerOne, isExpired, didViewResult, opponent, ChallengeState.RUNNING, ChallengeType.STANDARD, gameType, challengerGamePieceId.ToString(), challengedGamePieceId.ToString());
+            game.gameState.SetRandomGuid(challengeId);
             games.Add(game);
         }
 

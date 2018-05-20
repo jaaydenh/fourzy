@@ -6,6 +6,8 @@ namespace Fourzy
 {
     public class TokenBoardLoader : Singleton<TokenBoardLoader>
     {
+        private int randomGeneratedBoardPercentage = 70;
+
         private TokenBoardData[] LoadTokenBoardData()
         {
             //string filePath = Application.streamingAssetsPath + gameDataProjectFilePath;
@@ -62,7 +64,7 @@ namespace Fourzy
 
         public TokenBoard GetRandomTokenBoard()
         {
-            if (UnityEngine.Random.Range(0, 100) < 40) {
+            if (UnityEngine.Random.Range(0, 100) < randomGeneratedBoardPercentage) {
                 return RandomBoardGenerator.GenerateBoard();
             } 
 
