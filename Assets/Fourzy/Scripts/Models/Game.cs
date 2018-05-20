@@ -14,7 +14,7 @@ namespace Fourzy
         public Opponent opponent;
         public ChallengeState challengeState;
         public ChallengeType challengeType;
-        public GameType gameType;
+        // public GameType gameType;
         public int challengerGamePieceId;
         public int challengedGamePieceId;
         public string winnerName;
@@ -26,7 +26,7 @@ namespace Fourzy
         public delegate void GameActive();
         public static event GameActive OnActiveGame;
 
-        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, GameType gameType, string challengerGamePieceId, string challengedGamePieceId)
+        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, string challengerGamePieceId, string challengedGamePieceId)
         {
             //Debug.Log("challengeId: " + challengeId);
             this.challengeId = challengeId;
@@ -37,7 +37,8 @@ namespace Fourzy
             this.opponent = opponent;
             this.challengeState = challengeState;
             this.challengeType = challengeType;
-            this.gameType = gameType;
+            // this.gameType = gameType;
+
             // Always visible until deleting games is implemented
             this.isVisible = true;
             this.challengerGamePieceId = 0;
@@ -76,7 +77,7 @@ namespace Fourzy
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.isExpired = isExpired;
             GameManager.instance.didViewResult = didViewResult;
-            GameManager.instance.gameType = gameType;
+            // GameManager.instance.gameType = gameType;
             GameManager.instance.challengerGamePieceId = challengerGamePieceId;
             GameManager.instance.challengedGamePieceId = challengedGamePieceId;
             GameManager.instance.opponentUserId = opponent.opponentId;

@@ -6,11 +6,12 @@
     using System.Globalization;
     using System.Linq;
 
-    public class LocalizationManager : Singleton<LocalizationManager>
+    [UnitySingleton(UnitySingletonAttribute.Type.CreateOnNewGameObject, false)]
+    public class LocalizationManager : UnitySingleton<LocalizationManager>
     {
         const string STR_LOCALIZATION_KEY = "locale";
         public CultureInfo cultureInfo;
-        private Dictionary<string, string> localizedText;
+        private static Dictionary<string, string> localizedText;
         private bool isReady = false;
         private string missingTextString = "Localized text not found";
 

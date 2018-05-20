@@ -24,10 +24,10 @@ namespace Fourzy
                     pos.column = Constants.numColumns;
                 }
 
-                PlayerEnum player = GameManager.instance.gameState.isPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
+                PlayerEnum player = GameManager.instance.gameState.IsPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
                 Move move = new Move(pos, direction, player);
 
-                StartCoroutine(GameManager.instance.ProcessMove(move, true));
+                StartCoroutine(GameManager.instance.ProcessMove(move));
             }
         }
             

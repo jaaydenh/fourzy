@@ -99,7 +99,7 @@ namespace Fourzy
                 //Debug.Log(string.Format("WINNING MOVE?{0}:{1}", testGameState.isGameOver, testGameState.winner));
                 //Can I make a Move that Wins?
 
-                if (testGameState.isGameOver && testGameState.winner == this.AiPlayerId)
+                if (testGameState.IsGameOver && testGameState.Winner == this.AiPlayerId)
                 {
                     //Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
                     found_move = true;
@@ -116,7 +116,7 @@ namespace Fourzy
                         GameState pm1TestGameState = testGameState.Clone();
                         pm1TestGameState.MovePiece(pm1, false);
 
-                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == PlayerEnum.ONE)
+                        if (pm1TestGameState.IsGameOver && pm1TestGameState.Winner == PlayerEnum.ONE)
                         {
 
                             AddMoveToList = false;
@@ -236,10 +236,10 @@ namespace Fourzy
                 //Can I make a Move that Wins?
                 GameState testGameState = gameState.Clone();
                 testGameState.MovePiece(x, false);
-                if (testGameState.isGameOver && testGameState.winner == this.AiPlayerId)
+                if (testGameState.IsGameOver && testGameState.Winner == this.AiPlayerId)
                 {
                     AiMove = x;
-                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
                     GameManager.instance.CallMovePiece(AiMove, false, true);
                     //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                     break;
@@ -332,7 +332,7 @@ namespace Fourzy
 
                         //If I make this move, the player can win. 
                         // Don't make this move.
-                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == PlayerEnum.ONE)
+                        if (pm1TestGameState.IsGameOver && pm1TestGameState.Winner == PlayerEnum.ONE)
                         {
                             Debug.Log("Don't Make Move.  Opponent Can Win In One Move!");
                             break;
@@ -340,14 +340,14 @@ namespace Fourzy
 
                         //if this case is true, opponent can force me to win on his turn.
                         //   this is only good if all moves like this.
-                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == this.AiPlayerId)
+                        if (pm1TestGameState.IsGameOver && pm1TestGameState.Winner == this.AiPlayerId)
                         {
                             player_win_count++;
                             move_ok_count++;
 
                             if (player_win_count == PlayerPossibleMoves.Count)
                             {
-                                Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                                Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
                                 GameManager.instance.CallMovePiece(AiMove, false, true);
                                 //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                                 break;
@@ -364,7 +364,7 @@ namespace Fourzy
                             GameState Aim2TestGameState = pm1TestGameState.Clone();
                             Aim2TestGameState.MovePiece(aim2, false);
 
-                            if (!Aim2TestGameState.isGameOver)
+                            if (!Aim2TestGameState.IsGameOver)
                             {
 
                                 //check if I make this move if a player can respond and win in the second move.
@@ -374,7 +374,7 @@ namespace Fourzy
                                     GameState Pm2TestGameState = Aim2TestGameState.Clone();
                                     Pm2TestGameState.MovePiece(Pm2, false);
 
-                                    if (Pm2TestGameState.isGameOver && Pm2TestGameState.winner == PlayerEnum.ONE)
+                                    if (Pm2TestGameState.IsGameOver && Pm2TestGameState.Winner == PlayerEnum.ONE)
                                     {
                                         player_can_win = true;
                                         break;
@@ -388,7 +388,7 @@ namespace Fourzy
                             }
                             else
                             {
-                                if (Aim2TestGameState.winner == this.AiPlayerId)
+                                if (Aim2TestGameState.Winner == this.AiPlayerId)
                                 {
                                     found_ok_move = true;
                                 }
@@ -452,14 +452,14 @@ namespace Fourzy
         {
 
             GameState gameState = GameManager.instance.gameState;
-            int player = gameState.isPlayerOneTurn ? 1 : 2;
-            int opponent = gameState.isPlayerOneTurn ? 2 : 1;
+            int player = gameState.IsPlayerOneTurn ? 1 : 2;
+            int opponent = gameState.IsPlayerOneTurn ? 2 : 1;
 
 
             List<Move> possibleMoves = gameState.GetPossibleMoves();
             Debug.Log(string.Format("There are {0} Possible Moves", possibleMoves.Count));
 
-            if (gameState.moveList.Count < 3)
+            if (gameState.MoveList.Count < 3)
             {
                 List<Move> PossibleMoves = gameState.GetPossibleMoves();
 
@@ -507,10 +507,10 @@ namespace Fourzy
                 //Can I make a Move that Wins?
                 GameState testGameState = gameState.Clone();
                 testGameState.MovePiece(x, false);
-                if (testGameState.isGameOver && testGameState.winner == this.AiPlayerId)
+                if (testGameState.IsGameOver && testGameState.Winner == this.AiPlayerId)
                 {
                     AiMove = x;
-                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
                     GameManager.instance.CallMovePiece(AiMove, false, true);
                     break;
                 }
@@ -569,7 +569,7 @@ namespace Fourzy
 
                         //If I make this move, the player can win. 
                         // Don't make this move.
-                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == PlayerEnum.ONE)
+                        if (pm1TestGameState.IsGameOver && pm1TestGameState.Winner == PlayerEnum.ONE)
                         {
                             Debug.Log("Don't Make Move.  Opponent Can Win In One Move!");
                             break;
@@ -577,14 +577,14 @@ namespace Fourzy
 
                         //if this case is true, opponent can force me to win on his turn.
                         //   this is only good if all moves like this.
-                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == this.AiPlayerId)
+                        if (pm1TestGameState.IsGameOver && pm1TestGameState.Winner == this.AiPlayerId)
                         {
                             player_win_count++;
                             move_ok_count++;
 
                             if (player_win_count == PlayerPossibleMoves.Count)
                             {
-                                Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                                Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
                                 GameManager.instance.CallMovePiece(AiMove, false, true);
                                 //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                                 break;
@@ -601,7 +601,7 @@ namespace Fourzy
                             GameState Aim2TestGameState = pm1TestGameState.Clone();
                             Aim2TestGameState.MovePiece(aim2, false);
 
-                            if (!Aim2TestGameState.isGameOver)
+                            if (!Aim2TestGameState.IsGameOver)
                             {
 
                                 //check if I make this move if a player can respond and win in the second move.
@@ -611,7 +611,7 @@ namespace Fourzy
                                     GameState Pm2TestGameState = Aim2TestGameState.Clone();
                                     Pm2TestGameState.MovePiece(Pm2, false);
 
-                                    if (Pm2TestGameState.isGameOver && Pm2TestGameState.winner == PlayerEnum.ONE)
+                                    if (Pm2TestGameState.IsGameOver && Pm2TestGameState.Winner == PlayerEnum.ONE)
                                     {
                                         player_can_win = true;
                                         break;
@@ -625,7 +625,7 @@ namespace Fourzy
                             }
                             else
                             {
-                                if (Aim2TestGameState.winner == this.AiPlayerId)
+                                if (Aim2TestGameState.Winner == this.AiPlayerId)
                                 {
                                     found_ok_move = true;
                                 }
@@ -689,14 +689,14 @@ namespace Fourzy
         {
 
             GameState gameState = GameManager.instance.gameState;
-            int player = gameState.isPlayerOneTurn ? 1 : 2;
-            int opponent = gameState.isPlayerOneTurn ? 2 : 1;
+            int player = gameState.IsPlayerOneTurn ? 1 : 2;
+            int opponent = gameState.IsPlayerOneTurn ? 2 : 1;
 
 
             List<Move> possibleMoves = gameState.GetPossibleMoves();
             Debug.Log(string.Format("There are {0} Possible Moves", possibleMoves.Count));
 
-            if (gameState.moveList.Count < 3)
+            if (gameState.MoveList.Count < 3)
             {
                 List<Move> PossibleMoves = gameState.GetPossibleMoves();
 
@@ -744,10 +744,10 @@ namespace Fourzy
                 //Can I make a Move that Wins?
                 GameState testGameState = gameState.Clone();
                 testGameState.MovePiece(x, false);
-                if (testGameState.isGameOver && testGameState.winner == this.AiPlayerId)
+                if (testGameState.IsGameOver && testGameState.Winner == this.AiPlayerId)
                 {
                     AiMove = x;
-                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
                     GameManager.instance.CallMovePiece(AiMove, false, true);
                     break;
                 }
@@ -787,7 +787,7 @@ namespace Fourzy
 
                         //If I make this move, the player can win. 
                         // Don't make this move.
-                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == PlayerEnum.ONE)
+                        if (pm1TestGameState.IsGameOver && pm1TestGameState.Winner == PlayerEnum.ONE)
                         {
                             Debug.Log("Don't Make Move.  Opponent Can Win In One Move!");
                             break;
@@ -795,14 +795,14 @@ namespace Fourzy
 
                         //if this case is true, opponent can force me to win on his turn.
                         //   this is only good if all moves like this.
-                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == this.AiPlayerId)
+                        if (pm1TestGameState.IsGameOver && pm1TestGameState.Winner == this.AiPlayerId)
                         {
                             player_win_count++;
                             move_ok_count++;
 
                             if (player_win_count == PlayerPossibleMoves.Count)
                             {
-                                Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                                Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
                                 GameManager.instance.CallMovePiece(AiMove, false, true);
                                 //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                                 break;
@@ -819,7 +819,7 @@ namespace Fourzy
                             GameState Aim2TestGameState = pm1TestGameState.Clone();
                             Aim2TestGameState.MovePiece(aim2, false);
 
-                            if (!Aim2TestGameState.isGameOver)
+                            if (!Aim2TestGameState.IsGameOver)
                             {
 
                                 //check if I make this move if a player can respond and win in the second move.
@@ -829,7 +829,7 @@ namespace Fourzy
                                     GameState Pm2TestGameState = Aim2TestGameState.Clone();
                                     Pm2TestGameState.MovePiece(Pm2, false);
 
-                                    if (Pm2TestGameState.isGameOver && Pm2TestGameState.winner == PlayerEnum.ONE)
+                                    if (Pm2TestGameState.IsGameOver && Pm2TestGameState.Winner == PlayerEnum.ONE)
                                     {
                                         player_can_win = true;
                                         break;
@@ -843,7 +843,7 @@ namespace Fourzy
                             }
                             else
                             {
-                                if (Aim2TestGameState.winner == this.AiPlayerId)
+                                if (Aim2TestGameState.Winner == this.AiPlayerId)
                                 {
                                     found_ok_move = true;
                                 }
@@ -907,14 +907,14 @@ namespace Fourzy
         {
 
             GameState gameState = GameManager.instance.gameState;
-            int player = gameState.isPlayerOneTurn ? 1 : 2;
-            int opponent = gameState.isPlayerOneTurn ? 2 : 1;
+            int player = gameState.IsPlayerOneTurn ? 1 : 2;
+            int opponent = gameState.IsPlayerOneTurn ? 2 : 1;
 
 
             List<Move> possibleMoves = gameState.GetPossibleMoves();
             Debug.Log(string.Format("There are {0} Possible Moves", possibleMoves.Count));
 
-            if (gameState.moveList.Count < 3)
+            if (gameState.MoveList.Count < 3)
             {
                 List<Move> PossibleMoves = gameState.GetPossibleMoves();
 
@@ -962,10 +962,10 @@ namespace Fourzy
                 //Can I make a Move that Wins?
                 GameState testGameState = gameState.Clone();
                 testGameState.MovePiece(x, false);
-                if (testGameState.isGameOver && testGameState.winner == this.AiPlayerId)
+                if (testGameState.IsGameOver && testGameState.Winner == this.AiPlayerId)
                 {
                     AiMove = x;
-                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
                     GameManager.instance.CallMovePiece(AiMove, false, true);
                     break;
                 }
@@ -1005,7 +1005,7 @@ namespace Fourzy
 
                         //If I make this move, the player can win. 
                         // Don't make this move.
-                        if (pm1TestGameState.isGameOver && pm1TestGameState.winner == PlayerEnum.ONE)
+                        if (pm1TestGameState.IsGameOver && pm1TestGameState.Winner == PlayerEnum.ONE)
                         {
                             Debug.Log("Don't Make Move.  Opponent Can Win In One Move!");
                             break;
@@ -1013,14 +1013,14 @@ namespace Fourzy
 
                         //if this case is true, opponent can force me to win on his turn.
                         //   this is only good if all moves like this.
-                        if (pm1TestGameState.isGameOver && (int)pm1TestGameState.winner == player)
+                        if (pm1TestGameState.IsGameOver && (int)pm1TestGameState.Winner == player)
                         {
                             player_win_count++;
                             move_ok_count++;
 
                             if (player_win_count == PlayerPossibleMoves.Count)
                             {
-                                Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                                Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
                                 GameManager.instance.CallMovePiece(AiMove, false, true);
                                 //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                                 break;
@@ -1037,7 +1037,7 @@ namespace Fourzy
                             GameState Aim2TestGameState = pm1TestGameState.Clone();
                             Aim2TestGameState.MovePiece(aim2, false);
 
-                            if (!Aim2TestGameState.isGameOver)
+                            if (!Aim2TestGameState.IsGameOver)
                             {
 
                                 //check if I make this move if a player can respond and win in the second move.
@@ -1047,7 +1047,7 @@ namespace Fourzy
                                     GameState Pm2TestGameState = Aim2TestGameState.Clone();
                                     Pm2TestGameState.MovePiece(Pm2, false);
 
-                                    if (Pm2TestGameState.isGameOver && (int)Pm2TestGameState.winner == opponent)
+                                    if (Pm2TestGameState.IsGameOver && (int)Pm2TestGameState.Winner == opponent)
                                     {
                                         player_can_win = true;
                                         break;
@@ -1062,7 +1062,7 @@ namespace Fourzy
                                         aim3TestGameState.MovePiece(aim3, false);
 
                                         //I found a good move. This is a good path.
-                                        if (aim3TestGameState.isGameOver && (int)aim3TestGameState.winner == player)
+                                        if (aim3TestGameState.IsGameOver && (int)aim3TestGameState.Winner == player)
                                         {
                                             is_good_level3_path = true;
                                             break;
@@ -1076,7 +1076,7 @@ namespace Fourzy
                                             GameState Pm3TestGameState = aim3TestGameState.Clone();
                                             Pm3TestGameState.MovePiece(Pm3, false);
 
-                                            if (Pm3TestGameState.isGameOver && (int)Pm3TestGameState.winner == opponent)
+                                            if (Pm3TestGameState.IsGameOver && (int)Pm3TestGameState.Winner == opponent)
                                             {
                                                 break;
                                             }
@@ -1106,7 +1106,7 @@ namespace Fourzy
                             }
                             else
                             {
-                                if ((int)Aim2TestGameState.winner == player)
+                                if ((int)Aim2TestGameState.Winner == player)
                                 {
                                     found_ok_move = true;
                                 }
@@ -1175,7 +1175,7 @@ namespace Fourzy
             //   either make the opposite move if available.
             //   make the same move the player made
             //   or use a center space if available.
-            if (gameState.moveList.Count < 3)
+            if (gameState.MoveList.Count < 3)
             {
                 List<Move> PossibleMoves = gameState.GetPossibleMoves();
 
@@ -1226,11 +1226,11 @@ namespace Fourzy
         private AiMove GetBestMove(GameState testGameState, int CurrentDepth = 1)
         {
             move_review_count++;
-            int player = testGameState.isPlayerOneTurn ? 1 : 2;
-            int opponent = testGameState.isPlayerOneTurn ? 2 : 1;
+            int player = testGameState.IsPlayerOneTurn ? 1 : 2;
+            int opponent = testGameState.IsPlayerOneTurn ? 2 : 1;
 
             AiMove BestMove = null;
-            Debug.Log(string.Format("GetBestMove Depth={0}: playerone?={1}", CurrentDepth, testGameState.isPlayerOneTurn));
+            Debug.Log(string.Format("GetBestMove Depth={0}: playerone?={1}", CurrentDepth, testGameState.IsPlayerOneTurn));
 
             if (testGameState == null) { testGameState = GameManager.instance.gameState; }
 
@@ -1250,9 +1250,9 @@ namespace Fourzy
                 //Can I make a Move that Wins?
                 GameState AiMoveGameState = testGameState.Clone();
                 AiMoveGameState.MovePiece(aim, false);
-                if (AiMoveGameState.isGameOver && (int)AiMoveGameState.winner == player)
+                if (AiMoveGameState.IsGameOver && (int)AiMoveGameState.Winner == player)
                 {
-                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                    Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
                     BestMove = new AiMove(aim, AiMove.AI_SCORE_WINNING_MOVE, AiMoveType.Winning);
                     return BestMove;
                 }
@@ -1294,7 +1294,7 @@ namespace Fourzy
 
                     //If I make this move, the player can win. 
                     // Don't make this move.
-                    if (pm1TestGameState.isGameOver && (int)pm1TestGameState.winner == opponent)
+                    if (pm1TestGameState.IsGameOver && (int)pm1TestGameState.Winner == opponent)
                     {
                         player_win_count++;
                         Debug.Log("Don't Make Move.  Opponent Can Win In One Move!");
@@ -1303,14 +1303,14 @@ namespace Fourzy
 
                     //if this case is true, opponent can force me to win on his turn.
                     //   this is only good if all moves like this.
-                    if (pm1TestGameState.isGameOver && (int)pm1TestGameState.winner == player)
+                    if (pm1TestGameState.IsGameOver && (int)pm1TestGameState.Winner == player)
                     {
                         force_ai_win_count++;
                         move_ok_count++;
 
                         if (force_ai_win_count == PlayerPossibleMoves.Count)
                         {
-                            Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
+                            Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
                             break;
                         }
                         continue;

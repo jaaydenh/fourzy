@@ -26,7 +26,7 @@
 
         IEnumerator LoadScene()
         {
-            while (!LocalizationManager.instance.GetIsReady())
+            while (!LocalizationManager.Instance.GetIsReady())
             {
                 yield return null;
             }

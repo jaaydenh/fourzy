@@ -43,9 +43,10 @@ namespace Fourzy
         //Open game gets called OnClick of the play button
         public void OpenNewFriendChallengeGame()
         {
-            GameManager.instance.TransitionToGameOptionsScreen(GameType.FRIEND, id, userName, profilePicture);
+            // GameManager.instance.TransitionToGameOptionsScreen(GameType.FRIEND, id, userName, profilePicture);
             ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
             ViewController.instance.HideTabView();
+            ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.FRIEND, id, userName, profilePicture);
         }
     }
 }

@@ -48,7 +48,8 @@ namespace Fourzy
 
             ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
             ViewController.instance.HideTabView();
-            GameManager.instance.TransitionToGameOptionsScreen(GameType.LEADERBOARD, id, userName, profilePicture);
+            ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.LEADERBOARD, id, userName, profilePicture);
+            // GameManager.instance.TransitionToGameOptionsScreen(GameType.LEADERBOARD, id, userName, profilePicture);
         }
     }
 }

@@ -6,20 +6,6 @@ namespace Fourzy
 {
     public class PuzzleChallengeLoader : Singleton<PuzzleChallengeLoader>
     {
-        //Singleton
-        //private static PuzzleChallengeLoader _instance;
-        //public static PuzzleChallengeLoader instance
-        //{
-        //    get
-        //    {
-        //        if (_instance == null)
-        //        {
-        //            _instance = GameObject.FindObjectOfType<PuzzleChallengeLoader>();
-        //        }
-        //        return _instance;
-        //    }
-        //}
-
         private PuzzleChallengeInfo[] LoadChallengeData()
         {
             PuzzleChallengeInfo[] challengeData = new PuzzleChallengeInfo[0];

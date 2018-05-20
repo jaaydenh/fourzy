@@ -112,7 +112,8 @@ namespace Fourzy
                     StartCoroutine(GameManager.instance.PlayInitialMoves());
                     break;
                 case 4:
-                    GameManager.instance.OpenNewGame(false, "1000");
+                    // GameManager.instance.gameType = GameType.PASSANDPLAY;
+                    GameManager.instance.OpenNewGame(GameType.PASSANDPLAY, false, "1000");
                     moveCount = 0;
                     gameScreenBackButton.SetActive(false);
                     bg_dim.SetActive(false);
@@ -136,7 +137,8 @@ namespace Fourzy
                     hintText.SetText("tap to continue...");
                     break;
                 case 7:
-                    GameManager.instance.OpenNewGame(false, "101");
+                    // GameManager.instance.gameType = GameType.PASSANDPLAY;
+                    GameManager.instance.OpenNewGame(GameType.PASSANDPLAY, false, "101");
                     moveCount = 0;
                     gameScreenBackButton.SetActive(false);
                     GameManager.instance.disableInput = false;
@@ -164,6 +166,7 @@ namespace Fourzy
                 case 11:
                     HideWizardDialog();
                     PlayerPrefs.SetInt("onboardingStage", 2);
+                    GameManager.instance.isOnboardingActive = false;
                     break;
                 default:
                     break;
@@ -227,7 +230,7 @@ namespace Fourzy
                         break;
                 }
             }
-            else if (onboardingStep == 7 && GameManager.instance.gameState.winner != PlayerEnum.ONE)
+            else if (onboardingStep == 7 && GameManager.instance.gameState.Winner != PlayerEnum.ONE)
             {
                 AnalyticsManager.LogOnboardingComplete(false, onboardingStage, onboardingStep);
                 onboardingStep--;
@@ -248,8 +251,8 @@ namespace Fourzy
             if (onboardingStep == 3) {
                 StartCoroutine(NextStepWithWait(2));
             } else if (onboardingStep == 7) {
-                if (GameManager.instance.gameState.winner == PlayerEnum.ONE) {
-                    Debug.Log("GameManager.instance.gameState.winner: " + GameManager.instance.gameState.winner);
+                if (GameManager.instance.gameState.Winner == PlayerEnum.ONE) {
+                    Debug.Log("GameManager.instance.gameState.winner: " + GameManager.instance.gameState.Winner);
                     AnalyticsManager.LogOnboardingComplete(true, onboardingStage, onboardingStep);
                     StartCoroutine(NextStepWithWait(2));
                 }

@@ -16,7 +16,7 @@
 
         public void UpdateLocale()
         {
-            text.text = LocalizationManager.instance.GetLocalizedValue(key);
+            text.text = LocalizationManager.Instance.GetLocalizedValue(key);
         }
     }
 }

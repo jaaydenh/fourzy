@@ -10,20 +10,16 @@ namespace Fourzy
     {
         public delegate void GameActive();
         public static event GameActive OnActiveGame;
-
         public delegate void RemoveGame(string challengeInstanceId);
         public static event RemoveGame OnRemoveGame;
 
-        //We store the challengeId, next player's userId and the userId who initiated the challenge.
         public string challengeId;
-        //public string nextPlayerId;
         public string challengerId;
         public string winnerName;
         public string winnerId;
         public string challengeState;
         public string challengeShortCode;
 
-        //We create a list for playerNames and Ids
         public List<string> playerNames = new List<string>();
         public List<string> playerIds = new List<string>();
         public List<string> playerFacebookIds = new List<string>();
@@ -78,40 +74,40 @@ namespace Fourzy
                 currentplayer = PlayerEnum.TWO;
             }
                 
-            if (game.gameState.winner != PlayerEnum.EMPTY)
+            if (game.gameState.Winner != PlayerEnum.EMPTY)
             {
                 //Debug.Log("ActiveGame game.gameState.winner: " + game.gameState.winner);
                 //Debug.Log("ActiveGame currentplayer: " + currentplayer);
 
-                if (game.gameState.winner == currentplayer)
+                if (game.gameState.Winner == currentplayer)
                 {
-                    statusLabel.text = LocalizationManager.instance.GetLocalizedValue("you_won_text");
+                    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("you_won_text");
                 }
-                else if (game.gameState.winner == PlayerEnum.NONE || game.gameState.winner == PlayerEnum.ALL)
+                else if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
                 {
-                    statusLabel.text = LocalizationManager.instance.GetLocalizedValue("draw_text");
+                    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("draw_text");
                 } else {
-                    statusLabel.text = LocalizationManager.instance.GetLocalizedValue("they_won_text");
+                    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("they_won_text");
                 }
             } else if (game.isExpired == true) {
-                statusLabel.text = LocalizationManager.instance.GetLocalizedValue("expired_text");
+                statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("expired_text");
             } else {
                 //We then check if the userId of the next player is equal to ours
                 //if (nextPlayerId == UserManager.instance.userId)
                 if (game.gameState.isCurrentPlayerTurn)
                 {
-                    statusLabel.text = LocalizationManager.instance.GetLocalizedValue("your_move_text");
+                    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("your_move_text");
                 } else {
-                    statusLabel.text = LocalizationManager.instance.GetLocalizedValue("their_move_text");
+                    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("their_move_text");
                 }
             }
 
-            if (game.gameState.moveList.LastOrDefault() == null) {
+            if (game.gameState.MoveList.LastOrDefault() == null) {
                 Debug.Log("game.gameState.moveList == null");
             }
 
             // GSData lastPlayerMove = game.gameState.moveList.LastOrDefault();
-            Move lastPlayerMove = game.gameState.moveList.LastOrDefault();
+            Move lastPlayerMove = game.gameState.MoveList.LastOrDefault();
             long timestamp = 0;
             if (lastPlayerMove != null) {
             //    timestamp = lastPlayerMove.GetLong("timestamp").GetValueOrDefault();
@@ -120,7 +116,7 @@ namespace Fourzy
 
             if (timestamp != 0) {
                 System.DateTime timestampDateTime = new System.DateTime (1970, 1, 1, 0, 0, 0,System.DateTimeKind.Utc).AddMilliseconds(timestamp).ToLocalTime();
-                moveTimeAgo.text = TimeAgo.DateTimeExtensions.TimeAgo(timestampDateTime, LocalizationManager.instance.cultureInfo);                
+                moveTimeAgo.text = TimeAgo.DateTimeExtensions.TimeAgo(timestampDateTime, LocalizationManager.Instance.cultureInfo);                
             }
         }
 
@@ -169,7 +165,7 @@ namespace Fourzy
             GameManager.instance.isNewChallenge = false;
             GameManager.instance.isExpired = game.isExpired;
             GameManager.instance.didViewResult = game.didViewResult;
-            GameManager.instance.gameType = game.gameType;
+            // GameManager.instance.gameType = game.gameType;
             GameManager.instance.challengerGamePieceId = game.challengerGamePieceId;
             GameManager.instance.challengedGamePieceId = game.challengedGamePieceId;
             GameManager.instance.opponentUserId = game.opponent.opponentId;

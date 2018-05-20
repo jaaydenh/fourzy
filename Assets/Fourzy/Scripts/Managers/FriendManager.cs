@@ -70,6 +70,7 @@ namespace Fourzy
                             friendEntry.transform.localScale = new Vector3(1f,1f,1f);
 
                             if (friend.Online.Value) {
+                                Debug.Log("online online online");
                                 isOnline = true;
                             }
 
@@ -85,7 +86,7 @@ namespace Fourzy
                             noFriendsText.SetActive(true);
                         }
 
-                        onlineIndicator.color = isOnline ? Color.green : Color.gray;
+                        onlineIndicator.color = isOnline ? Color.green : new Color(11.0f / 255.0f, 49.0f / 255.0f, 82.0f / 255.0f);
                     });
             }
         }
