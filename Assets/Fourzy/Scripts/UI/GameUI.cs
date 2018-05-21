@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using GameSparks.Core;
 using System.Linq;
+using GameSparks.Api.Responses;
 
 namespace Fourzy
 {
@@ -55,18 +56,17 @@ namespace Fourzy
                 Debug.Log("game.opponent is null");
             }
             opponentNameLabel.text = game.opponent.opponentName;
-            //Debug.Log("game.opponentProfilePictureSprite: " + game.opponentProfilePictureSprite);
-            if (game.opponentProfilePictureSprite == null) {
-                if (game.opponent.opponentFBId != null) {
-                    //Debug.Log("game.playerData.opponentFBId: " + game.playerData.opponentFBId);    
-                    StartCoroutine(UserManager.instance.GetFBPicture(game.opponent.opponentFBId, (sprite)=>
-                        {
-                            opponentProfilePicture.sprite = sprite;
-                        }));
-                }
-            } else {
-                opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
-            }
+
+            // if (game.opponentProfilePictureSprite == null) {
+            //     if (game.opponent.opponentFBId != null) {
+            //         StartCoroutine(UserManager.instance.GetFBPicture(game.opponent.opponentFBId, (sprite)=>
+            //             {
+            //                 opponentProfilePicture.sprite = sprite;
+            //             }));
+            //     }
+            // } else {
+            //     opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
+            // }
 
             if (game.isCurrentPlayer_PlayerOne) {
                 currentplayer = PlayerEnum.ONE;
@@ -118,6 +118,22 @@ namespace Fourzy
                 System.DateTime timestampDateTime = new System.DateTime (1970, 1, 1, 0, 0, 0,System.DateTimeKind.Utc).AddMilliseconds(timestamp).ToLocalTime();
                 moveTimeAgo.text = TimeAgo.DateTimeExtensions.TimeAgo(timestampDateTime, LocalizationManager.Instance.cultureInfo);                
             }
+        }
+
+        public void UpdateGamesListItemUI() {
+            ChallengeManager.instance.GetGamePiece(game.opponent.opponentId, GetGamePieceIdSuccess, GetGamePieceIdFailure);
+        }
+
+        private void GetGamePieceIdSuccess(LogEventResponse response) {
+            int gamePieceId = int.Parse(response.ScriptData.GetString("gamePieceId"));
+            // Debug.Log("GetGamePieceIdSuccess: " + response.ScriptData.GetString("gamePieceId"));
+            opponentProfilePicture.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(gamePieceId);
+        }
+
+        private void GetGamePieceIdFailure(LogEventResponse response) {
+            Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
+            AnalyticsManager.LogError("get_player_gamepiece_error", response.Errors.JSON);
+            opponentProfilePicture.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(0);
         }
 
         private void OnEnable()

@@ -37,13 +37,21 @@ Goal for May 17, 2018
   - [X] Update server code to create a draw when both players win at the same time
 
 Goal for May 19, 2018
-- [X] Make InitialGameBoard work for multiplayer games
-- [X] Make initial game pieces appear in token board selection
-- [X] Handle momentum transfers between arrow loops with sticky, water, sand, and ice
-- [X] Create function to generate random number
+  - [X] Make InitialGameBoard work for multiplayer games
+  - [X] Make initial game pieces appear in token board selection
+  - [X] Handle momentum transfers between arrow loops with sticky, water, sand, and ice
+  - [X] Create function to generate random number
 
-- [ ] Board selection list doesnt load correctly
-- [ ] Separate unity scene for game screen
+
+Goal for May 21, 2018
+  - [X] Move gameType from Game and GameManager to GameState
+  - [X] Refactor GameState, update access type for variables
+  - [X] Use player piece instead of facebook profile pic for games list and leaderboard
+  - [X] Update to Unity 2018.1.1f1
+
+
+  - [ ] Board selection list doesnt load correctly
+  - [ ] Separate unity scene for game screen
 
 
 Rating Changes:

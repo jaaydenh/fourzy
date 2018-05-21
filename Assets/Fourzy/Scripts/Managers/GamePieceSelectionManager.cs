@@ -12,7 +12,7 @@ namespace Fourzy
         GamePieceData[] gamePieceData;
 
         private static GamePieceSelectionManager _instance;
-        public static GamePieceSelectionManager instance
+        public static GamePieceSelectionManager Instance
         {
             get
             {
@@ -47,7 +47,6 @@ namespace Fourzy
                 gamePieceUI.id = piece.ID;
                 gamePieceUI.name = piece.Name;
                 gamePieceUI.gamePieceImage.sprite = gamePieces[int.Parse(piece.ID)];
-                //go.GetComponentInChildren<Image>().sprite = gamePieces[int.Parse(piece.ID)];
 
                 go.gameObject.transform.SetParent(gamePieceGrid.transform, false);
 
@@ -60,6 +59,11 @@ namespace Fourzy
                     gamePieceUI.ActivateSelector();
                 }
             }
+        }
+
+        public Sprite GetGamePieceSprite(int gamePieceId) {
+            Debug.Log("GetGamePieceSprite: " + gamePieceId);
+            return gamePieces[gamePieceId];
         }
     }
 }

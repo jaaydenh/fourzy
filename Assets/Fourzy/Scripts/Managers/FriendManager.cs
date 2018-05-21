@@ -17,22 +17,6 @@ namespace Fourzy
         public Image onlineIndicator;
         private bool isOnline;
 
-        //void Awake()
-        //{
-        //    if (instance == null)
-        //    {
-        //        instance = this;
-        //    }
-        //    else if (instance != this)
-        //    {
-        //        //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
-        //        Destroy(gameObject);
-        //    }
-
-        //    //Sets this to not be destroyed when reloading scene
-        //    DontDestroyOnLoad(gameObject);
-        //}
-
         public void GetFriends()
         {
             isOnline = false;

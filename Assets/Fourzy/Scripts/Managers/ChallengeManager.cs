@@ -157,6 +157,13 @@ namespace Fourzy
                 });
         }
 
+        public void GetGamePiece(string userId, Action<LogEventResponse> successCallback, Action<LogEventResponse> errorCallback) {
+            new LogEventRequest().SetEventKey("getOpponentGamePiece")
+            .SetEventAttribute("userId", userId)
+            .SetDurable(true)
+            .Send(successCallback, errorCallback);
+        }
+
         public void GetPlayerGamePiece() {
             string gamePieceId = "0";
             new LogEventRequest().SetEventKey("getGamePiece")
@@ -809,6 +816,8 @@ namespace Fourzy
                                     gameUI.challengerId = gsChallenge.Challenger.Id;
                                     
                                     gameUI.transform.localScale = new Vector3(1f,1f,1f);
+                                    gameUI.UpdateGamesListItemUI();
+
                                     GameManager.instance.games.Add(game);
                                     games.Add(go);
                                 }
@@ -847,7 +856,7 @@ namespace Fourzy
             
             if (!gettingChallenges)
             {
-                Debug.Log("ReloadActiveGames");
+                // Debug.Log("ReloadActiveGames");
 
                 gettingChallenges = true;
 
@@ -862,8 +871,8 @@ namespace Fourzy
                 foreach (var game in GameManager.instance.games)
                 {
                     GameObject go = Instantiate(activeGamePrefab) as GameObject;
-                    GameUI activeGame = go.GetComponent<GameUI>();
-                    activeGame.game = game;
+                    GameUI gameUI = go.GetComponent<GameUI>();
+                    gameUI.game = game;
 
                     if (!game.gameState.IsGameOver)
                     {
@@ -885,7 +894,7 @@ namespace Fourzy
                         go.gameObject.transform.SetParent(resultsGameGrid.transform);
                     }
 
-                    activeGame.transform.localScale = new Vector3(1f, 1f, 1f);
+                    gameUI.transform.localScale = new Vector3(1f, 1f, 1f);
                     games.Add(go);
                 }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using GameSparks.Api.Responses;
 
 namespace Fourzy
 {
@@ -30,16 +31,18 @@ namespace Fourzy
         {
             onlineTexture.color = isOnline ? Color.green : Color.gray;
 
-            if (facebookId != null) {
-                StartCoroutine(UserManager.instance.GetFBPicture(facebookId, (sprite)=>
-                    {
-                        profilePicture.sprite = sprite;
-                    }));
-            } else {
-                profilePicture.sprite = Sprite.Create(defaultProfilePicture, 
-                    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
-                    new Vector2(0.5f, 0.5f));
-            }
+            ChallengeManager.instance.GetGamePiece(id, GetGamePieceIdSuccess, GetGamePieceIdFailure);
+
+            // if (facebookId != null) {
+            //     StartCoroutine(UserManager.instance.GetFBPicture(facebookId, (sprite)=>
+            //         {
+            //             profilePicture.sprite = sprite;
+            //         }));
+            // } else {
+            //     profilePicture.sprite = Sprite.Create(defaultProfilePicture, 
+            //         new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height), 
+            //         new Vector2(0.5f, 0.5f));
+            // }
         }
 
         public void OpenNewLeaderboardChallengeGame()
@@ -50,6 +53,18 @@ namespace Fourzy
             ViewController.instance.HideTabView();
             ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.LEADERBOARD, id, userName, profilePicture);
             // GameManager.instance.TransitionToGameOptionsScreen(GameType.LEADERBOARD, id, userName, profilePicture);
+        }
+
+        private void GetGamePieceIdSuccess(LogEventResponse response) {
+            int gamePieceId = int.Parse(response.ScriptData.GetString("gamePieceId"));
+            Debug.Log("GetGamePieceIdSuccess: " + response.ScriptData.GetString("gamePieceId"));
+            profilePicture.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(gamePieceId);
+        }
+
+        private void GetGamePieceIdFailure(LogEventResponse response) {
+            Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
+            AnalyticsManager.LogError("get_player_gamepiece_error", response.Errors.JSON);
+            profilePicture.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(0);
         }
     }
 }
