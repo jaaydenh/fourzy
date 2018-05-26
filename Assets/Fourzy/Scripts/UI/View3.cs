@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using HedgehogTeam.EasyTouch;
 
 namespace Fourzy
@@ -7,6 +8,7 @@ namespace Fourzy
     {
         //Instance
         public static View3 instance;
+        public GameObject areaSelectButton;
 
         // Use this for initialization
         void Start()
@@ -28,6 +30,9 @@ namespace Fourzy
                 ViewController.instance.HideTabView();
                 ChallengeManager.instance.OpenPuzzleChallengeGame();
             }
+
+            Button btn = areaSelectButton.GetComponent<Button>();
+            btn.onClick.AddListener(AreaSelectButtonPress);
         }
 
         public override void Show()
@@ -104,6 +109,11 @@ namespace Fourzy
 
         public void SettingsButton() {
             ViewController.instance.ChangeView(ViewController.instance.viewSettings);
+            ViewController.instance.HideTabView();
+        }
+
+        public void AreaSelectButtonPress() {
+            ViewController.instance.ChangeView(ViewController.instance.viewAreaSelect);
             ViewController.instance.HideTabView();
         }
     }
