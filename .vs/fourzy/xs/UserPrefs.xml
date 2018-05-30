@@ -1,6 +1,6 @@
 ﻿<Properties StartupConfiguration="{E3095890-3415-8A5A-9212-99BFB3551353}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Managers/GameManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Models/LocalizedText.cs">
     <Files>
       <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="1" Column="1" />
@@ -13,6 +13,7 @@
       <File FileName="Assets/Fourzy/Scripts/Common/UnitySingletonAttribute.cs" Line="1" Column="1" />
       <File FileName="Assets/Fourzy/Scripts/UI/ViewTraining.cs" Line="1" Column="1" />
       <File FileName="Assets/Fourzy/Scripts/Managers/Onboarding.cs" Line="1" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/Models/LocalizedText.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

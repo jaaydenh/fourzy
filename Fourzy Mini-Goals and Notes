@@ -48,10 +48,18 @@ Goal for May 21, 2018
   - [X] Refactor GameState, update access type for variables
   - [X] Use player piece instead of facebook profile pic for games list and leaderboard
   - [X] Update to Unity 2018.1.1f1
+  - [X] Export graphics for area windows
+  - [X] Update 90 right and left turn arrow colors
+  
 
 
+Goal for May 30, 2018
+  - [ ] Create ExitState function to correctly the GameUI when leaving a game
+  - [ ] Create EnterState function to correctly set the GameUI when entering a game
   - [ ] Board selection list doesnt load correctly
   - [ ] Separate unity scene for game screen
+
+
 
 
 Rating Changes:
@@ -60,7 +68,7 @@ update players rating to higher number
 rating points for completing challenges
 2nd player adjustment - 20% Bonus to 2nd player to rating or coins
 
-Title system = achivement + rating
+Title system = achievement + rating
 
 
 Invited Friend Rewards Feature
@@ -84,12 +92,19 @@ Todo:
 - GameReplays List - only games with min 10 moves
 
 
+1. Unlock Arenas
+2. Collect Fourzies
+3. New Puzzle Challenges
+4. Real-time
+
 
 Puzzle Challenge Leaderboard
 Track # of challenges of completed
 Keep list of challenges each player completed, challengeid, timestamp, attempts
 
 Daily puzzle challenges, record fist 10 people who complete it first, boards released at 9pm EST
+
+
 
 ThumbUps or ThumbDowns game boards at the end of a game
 

@@ -61,8 +61,8 @@ namespace Fourzy
         public Sprite playerOneSpriteAsleep;
         public Sprite playerTwoSpriteMoving;
         public Sprite playerTwoSpriteAsleep;
-        private string bluePlayerWonText = "Blue Player Won!";
-        private string redPlayerWonText = "Red Player Won!";
+        private string playerOneWonText = "Player 1 Wins!";
+        private string playerTwoWonText = "Player 2 Wins!";
         public string winner;
         public string opponentFacebookId;
 
@@ -596,32 +596,6 @@ namespace Fourzy
             activeScreen = Screens.GAME;
         }
 
-        // public void TransitionToGameOptionsScreen(GameType gameType, string opponentUserId = "", string opponentName = "", Image opponentProfilePicture = null, string opponentLeaderboardRank = "")
-        // {
-        //     challengerGamePieceId = 0;
-        //     challengedGamePieceId = 0;
-
-        //     challengerGamePieceId = UserManager.instance.gamePieceId;
-        //     if (opponentUserId != "") {
-        //         ChallengeManager.instance.GetOpponentGamePiece(opponentUserId);
-        //     }
-
-        //     ResetUIGameScreen();
-        //     challengeInstanceId = null;
-        //     this.gameType = gameType;
-        //     this.opponentUserId = opponentUserId;
-        //     this.opponentNameLabel.text = opponentName;
-        //     if (opponentProfilePicture != null)
-        //     {
-        //         this.opponentProfilePicture.sprite = opponentProfilePicture.sprite;
-        //     }
-        //     this.opponentLeaderboardRank = opponentLeaderboardRank;
-
-        //     BoardSelectionManager.instance.LoadMiniBoards();
-        //     gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
-        //     gameScreen.SetActive(false);
-        // }
-
         public void OpenNewGame(GameType gameType, bool displayIntroUI = true, string tokenBoardId = null)
         {
             Debug.Log("GameManager OpenNewGame tokenboardId: "+ tokenBoardId);
@@ -1153,8 +1127,8 @@ namespace Fourzy
             if (isMultiplayer) {
                 if (isCurrentPlayer_PlayerOne)
                 {
-                    playerNameLabel.color = bluePlayerColor;
-                    opponentNameLabel.color = redPlayerColor;
+                    // playerNameLabel.color = bluePlayerColor;
+                    // opponentNameLabel.color = redPlayerColor;
                     int playerGamePieceId = challengerGamePieceId;
                     int opponentGamePieceId = challengedGamePieceId;
 
@@ -1186,8 +1160,8 @@ namespace Fourzy
                 }
                 else
                 {
-                    playerNameLabel.color = redPlayerColor;
-                    opponentNameLabel.color = bluePlayerColor;
+                    // playerNameLabel.color = redPlayerColor;
+                    // opponentNameLabel.color = bluePlayerColor;
                     playerPiece.sprite = playerTwoSpriteMoving;
                     opponentPiece.sprite = playerOneSpriteMoving;
                     int playerGamePieceId = challengedGamePieceId;
@@ -1277,7 +1251,7 @@ namespace Fourzy
 
         public void UpdatePlayerUI()
         {
-            AnimatePlayerPieceUI();
+            //AnimatePlayerPieceUI();
         }
 
         public void AnimatePlayerPieceUI() {
@@ -1314,12 +1288,12 @@ namespace Fourzy
         public void ResetUIGameScreen()
         {
             gameInfo.Close();
-            RectTransform pprt = playerPieceUI.GetComponent<RectTransform>();
-            pprt.anchoredPosition = new Vector2(175, -83);
-            pprt.localScale = new Vector3(1, 1, 1);
-            RectTransform oprt = opponentPieceUI.GetComponent<RectTransform>();
-            oprt.anchoredPosition = new Vector2(-130, -83);
-            oprt.localScale = new Vector3(1, 1, 1);
+            // RectTransform pprt = playerPieceUI.GetComponent<RectTransform>();
+            // pprt.anchoredPosition = new Vector2(175, -83);
+            // pprt.localScale = new Vector3(1, 1, 1);
+            // RectTransform oprt = opponentPieceUI.GetComponent<RectTransform>();
+            // oprt.anchoredPosition = new Vector2(-130, -83);
+            // oprt.localScale = new Vector3(1, 1, 1);
 
             rematchButton.gameObject.SetActive(false);
             nextGameButton.gameObject.SetActive(false);
@@ -1972,7 +1946,8 @@ namespace Fourzy
                 showRewardButton = true;
             }
 
-            Color winnerTextColor = gameState.Winner == PlayerEnum.ONE ? bluePlayerColor : redPlayerColor;
+            // Color winnerTextColor = gameState.Winner == PlayerEnum.ONE ? bluePlayerColor : redPlayerColor;
+            Color winnerTextColor = Color.white;
             Debug.Log("DisplayGameOverView gameState.winner: " +  gameState.Winner);
             if (gameState.Winner == PlayerEnum.ONE)
             {
@@ -2061,7 +2036,7 @@ namespace Fourzy
                 SoundManager.instance.PlayRandomizedSfx(clipWin);
                 if (!isPuzzleChallenge) {
                     //AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
-                    string winnerText = gameState.Winner == PlayerEnum.ONE ? bluePlayerWonText : redPlayerWonText;
+                    string winnerText = gameState.Winner == PlayerEnum.ONE ? playerOneWonText : playerTwoWonText;
                     gameInfo.Open(winnerText, winnerTextColor, true, false);
                 }
             }
