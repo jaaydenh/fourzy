@@ -343,7 +343,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: e59dd586d917d4490bfbceec7e12ca4f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 498997e7f8aa348beb13de6bf9f77066, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -581,8 +581,6 @@ MonoBehaviour:
   statusLabel: {fileID: 114682710283357558}
   moveTimeAgo: {fileID: 114843971592416040}
   opponentProfilePicture: {fileID: 114146463613210984}
-  defaultProfilePicture: {fileID: 2800000, guid: e59dd586d917d4490bfbceec7e12ca4f,
-    type: 3}
   tournamentIcon: {fileID: 114830971282556652}
   isCurrentPlayer_PlayerOne: 0
   isExpired: 0
@@ -882,7 +880,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 22.636688, y: 31.950813}
+  m_AnchoredPosition: {x: 15677.994, y: 11260.404}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224306249205009246

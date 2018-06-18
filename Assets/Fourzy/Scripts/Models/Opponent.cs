@@ -5,6 +5,7 @@
         public string opponentId = "";
         public string opponentName = "";
         public string opponentFBId = "";
+        public string opponentLeaderboardRank = "";
 
         public Opponent(string opponentId, string opponentName, string opponentFBId) {
             this.opponentId = opponentId;

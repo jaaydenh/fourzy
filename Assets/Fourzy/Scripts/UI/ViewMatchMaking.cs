@@ -123,7 +123,7 @@ namespace Fourzy
 
         private void JoinChallengeSuccess(JoinChallengeResponse response) {
             //Debug.Log("ViewMatchMaking : JoinChallengeSuccess");
-            GameManager.instance.challengeInstanceId = challengeIdToJoin;
+            // GameManager.instance.challengeInstanceId = challengeIdToJoin;
             //Send Player to Game Screen to make a move
             ChallengeManager.instance.GetChallenge(challengeIdToJoin, GetChallengeSuccess, GetChallengeError);
         }

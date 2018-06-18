@@ -4,26 +4,27 @@ using UnityEngine.UI;
 
 namespace Fourzy
 {
-    public class GamePieceSelectionManager : MonoBehaviour
+ [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene, false)]
+    public class GamePieceSelectionManager : UnitySingleton<GamePieceSelectionManager>
     {
         public GameObject gamePieceGrid;
         public List<Sprite> gamePieces = new List<Sprite>();
         public GameObject gamePiecePrefab;
         GamePieceData[] gamePieceData;
 
-        private static GamePieceSelectionManager _instance;
-        public static GamePieceSelectionManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = FindObjectOfType<GamePieceSelectionManager>();
-                    DontDestroyOnLoad(_instance.gameObject);
-                }
-                return _instance;
-            }
-        }
+        // private static GamePieceSelectionManager _instance;
+        // public static GamePieceSelectionManager Instance
+        // {
+        //     get
+        //     {
+        //         if (_instance == null)
+        //         {
+        //             _instance = FindObjectOfType<GamePieceSelectionManager>();
+        //             DontDestroyOnLoad(_instance.gameObject);
+        //         }
+        //         return _instance;
+        //     }
+        // }
 
         public string GetGamePieceName(int gamePieceId) {
             for (int i = 0; i < gamePieceData.Length; i++)
@@ -62,7 +63,7 @@ namespace Fourzy
         }
 
         public Sprite GetGamePieceSprite(int gamePieceId) {
-            Debug.Log("GetGamePieceSprite: " + gamePieceId);
+            //Debug.Log("GetGamePieceSprite: " + gamePieceId);
             return gamePieces[gamePieceId];
         }
     }

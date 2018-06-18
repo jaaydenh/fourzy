@@ -42,7 +42,6 @@ Goal for May 19, 2018
   - [X] Handle momentum transfers between arrow loops with sticky, water, sand, and ice
   - [X] Create function to generate random number
 
-
 Goal for May 21, 2018
   - [X] Move gameType from Game and GameManager to GameState
   - [X] Refactor GameState, update access type for variables
@@ -50,14 +49,20 @@ Goal for May 21, 2018
   - [X] Update to Unity 2018.1.1f1
   - [X] Export graphics for area windows
   - [X] Update 90 right and left turn arrow colors
-  
+  - [X] Separate Game Screen into separate scene
 
-
-Goal for May 30, 2018
-  - [ ] Create ExitState function to correctly the GameUI when leaving a game
-  - [ ] Create EnterState function to correctly set the GameUI when entering a game
+Backlog
+  - [ ] Challenging a player directly does not show the correct game piece for the opponent
   - [ ] Board selection list doesnt load correctly
-  - [ ] Separate unity scene for game screen
+  - [ ] Get list of gamePieceIds based on a list of userIds in one server call
+  - [ ] Game expiration is set to X days from the last completed move
+  - [ ] Reminder notifications sent when a player is running out of time to make their move
+  - [ ] Puzzle Challenge Leaderboard - total challenges completed
+  - [ ] For each player track total # of puzzle challenges completed, puzzle challengeid, timestamp, attempts
+  - [ ] Implement Undo Button
+  - [ ] Share game replay
+  - [ ] Player can place token on the board as part of their move
+  - [ ] GameReplays List - only games with min 10 moves
 
 
 
@@ -85,30 +90,8 @@ Get points for # invited friends that played a game in the last week, day, month
 Get points for # invited friends that you are ahead of
 
 
-Todo:
-- Redo Button
-- Token Placement
-- Share GameReplays
-- GameReplays List - only games with min 10 moves
-
-
-1. Unlock Arenas
-2. Collect Fourzies
-3. New Puzzle Challenges
-4. Real-time
-
-
-Puzzle Challenge Leaderboard
-Track # of challenges of completed
-Keep list of challenges each player completed, challengeid, timestamp, attempts
-
-Daily puzzle challenges, record fist 10 people who complete it first, boards released at 9pm EST
-
-
-
+Daily puzzle challenges, record first 10 people who complete it first, boards released at 9pm EST
 ThumbUps or ThumbDowns game boards at the end of a game
-
-
 
 
 

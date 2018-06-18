@@ -86,7 +86,7 @@ namespace Fourzy
 		/// </summary>
 		private static void Generate()
 		{
-			Debug.Log("UnitySingle Generate");
+			//Debug.Log("UnitySingle Generate");
 			UnitySingletonAttribute attribute = Attribute.GetCustomAttribute(typeof(T), typeof(UnitySingletonAttribute)) as UnitySingletonAttribute;
 			if (attribute == null)
 			{
@@ -110,7 +110,7 @@ namespace Fourzy
 		/// <returns></returns>
 		private static bool TryGenerateInstance(UnitySingletonAttribute.Type type, bool destroyOnLoad, string resourcesLoadPath, bool warn)
 		{
-			Debug.Log("UnitySingle TryGenerateInstance");
+			//Debug.Log("UnitySingle TryGenerateInstance");
 			if (type == UnitySingletonAttribute.Type.ExistsInScene)
 			{
 				instance = GameObject.FindObjectOfType<T>();

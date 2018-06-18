@@ -1,26 +1,24 @@
 ﻿<Properties StartupConfiguration="{E3095890-3415-8A5A-9212-99BFB3551353}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Models/LocalizedText.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Fourzy/Scripts/Models/TokenBoard.cs">
     <Files>
-      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Fourzy/Scripts/Managers/ChallengeManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Models/GameState.cs" Line="1" Column="1" />
-      <File FileName="Assets/Resources/TokenBoards.txt" Line="7" Column="29" />
-      <File FileName="Assets/Fourzy/Scripts/Models/MovingGamePiece.cs" Line="28" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/UI/GamePiece.cs" Line="121" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/LocalizationManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Common/UnitySingleton.cs" Line="1" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Common/UnitySingletonAttribute.cs" Line="1" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/UI/ViewTraining.cs" Line="1" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Managers/Onboarding.cs" Line="1" Column="1" />
-      <File FileName="Assets/Fourzy/Scripts/Models/LocalizedText.cs" Line="1" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/Managers/GameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/GamePieceUI.cs" Line="1" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/PieceUIGameScreen.cs" Line="1" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/PuzzlePlayer.cs" Line="1" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/Models/GameState.cs" Line="178" Column="60" />
+      <File FileName="Assets/Fourzy/Scripts/UI/GamePiece.cs" Line="1" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/ViewTraining.cs" Line="40" Column="71" />
+      <File FileName="Assets/Fourzy/Scripts/UI/ViewGameBoardSelection.cs" Line="30" Column="38" />
+      <File FileName="Assets/Fourzy/Scripts/UI/GameUI.cs" Line="1" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/UI/AlertUI.cs" Line="1" Column="1" />
+      <File FileName="Assets/Fourzy/Scripts/Models/TokenBoard.cs" Line="158" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/Jaayden/projects/fourzy/Assets/Fourzy/Scripts/Models/MovingGamePiece.cs" relfile="Assets/Fourzy/Scripts/Models/MovingGamePiece.cs" line="28" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.fourzy PreferredExecutionTarget="Unity.Editor" />

@@ -55,6 +55,7 @@ namespace Fourzy
         public GameState(int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, bool isGameOver, TokenBoard tokenBoard, PlayerEnum winner, List<Move> moveList, int[] previousGameboardData) {
             this.numRows = numRows;
             this.numColumns = numColumns;
+            this.GameType = gameType;
             this.IsPlayerOneTurn = isPlayerOneTurn;
             this.isCurrentPlayerTurn = isCurrentPlayerTurn;
             this.TokenBoard = tokenBoard;
@@ -172,9 +173,6 @@ namespace Fourzy
         }
 
         public List<MovingGamePiece> MovePiece(Move move, bool isReplay, out List<IToken> activeTokens) {
-            //Debug.Log("GameState: Movepiece: tokenBoard: " + tokenBoard.PrintBoard("TokenBoard"));
-            //Debug.Log("GameState: Movepiece: previousTokenBoard: " + previousTokenBoard.PrintBoard("previousTokenBoard"));
-
             if (isReplay) {
                 GameBoard = previousGameBoard.Clone();
                 TokenBoard = PreviousTokenBoard.Clone();
@@ -210,11 +208,11 @@ namespace Fourzy
             }
 
             if (!isReplay) {
-                System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
-                int currentTime = (int)(System.DateTime.UtcNow - epochStart).TotalMilliseconds;
-
-                move.timeStamp = currentTime;
-
+                // System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
+                // int currentTime = (int)(System.DateTime.UtcNow - epochStart).TotalMilliseconds;
+                move.timeStamp = System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond;
+                // move.timeStamp = currentTime;
+                // Debug.Log("timstamp: " + move.timeStamp.ToString());
                 if (MoveList ==  null) {
                     MoveList = new List<Move>();
                 }
@@ -257,9 +255,9 @@ namespace Fourzy
             }
             activeTokens = activeTokenList;
 
-            if (GameManager.instance.isPuzzleChallenge)
+            if (GameType == GameType.PUZZLE)
             {
-                if (Player1MoveCount >= GameManager.instance.puzzleChallengeInfo.MoveGoal)
+                if (Player1MoveCount >= GameManager.instance.activeGame.puzzleChallengeInfo.MoveGoal)
                 {
                     IsPuzzleChallengeCompleted = true;
                     if (IsGameOver && Winner == PlayerEnum.ONE)

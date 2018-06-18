@@ -20,18 +20,15 @@ namespace Fourzy
         public string winnerId;
         public string challengeState;
         public string challengeShortCode;
-
         public List<string> playerNames = new List<string>();
         public List<string> playerIds = new List<string>();
         public List<string> playerFacebookIds = new List<string>();
-
-        public GameState gameState;
         public Game game;
 
         [Header("Game UI")]
         public Text opponentNameLabel, statusLabel, moveTimeAgo;
         public Image opponentProfilePicture;
-        public Texture2D defaultProfilePicture;
+        // public Texture2D defaultProfilePicture;
         public Image tournamentIcon;
 
         private GameObject deleteGameButton;
@@ -54,8 +51,10 @@ namespace Fourzy
             }
             if (game.opponent == null) {
                 Debug.Log("game.opponent is null");
+                opponentNameLabel.text = LocalizationManager.Instance.GetLocalizedValue("waiting_opponent_text");
+            } else {
+                opponentNameLabel.text = game.opponent.opponentName;
             }
-            opponentNameLabel.text = game.opponent.opponentName;
 
             // if (game.opponentProfilePictureSprite == null) {
             //     if (game.opponent.opponentFBId != null) {
@@ -67,6 +66,10 @@ namespace Fourzy
             // } else {
             //     opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
             // }
+
+            if (game.opponentProfilePictureSprite != null) {
+                opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
+            }
 
             if (game.isCurrentPlayer_PlayerOne) {
                 currentplayer = PlayerEnum.ONE;
@@ -106,11 +109,9 @@ namespace Fourzy
                 Debug.Log("game.gameState.moveList == null");
             }
 
-            // GSData lastPlayerMove = game.gameState.moveList.LastOrDefault();
             Move lastPlayerMove = game.gameState.MoveList.LastOrDefault();
             long timestamp = 0;
             if (lastPlayerMove != null) {
-            //    timestamp = lastPlayerMove.GetLong("timestamp").GetValueOrDefault();
                 timestamp = lastPlayerMove.timeStamp;
             }
 
@@ -125,15 +126,21 @@ namespace Fourzy
         }
 
         private void GetGamePieceIdSuccess(LogEventResponse response) {
-            int gamePieceId = int.Parse(response.ScriptData.GetString("gamePieceId"));
-            // Debug.Log("GetGamePieceIdSuccess: " + response.ScriptData.GetString("gamePieceId"));
-            opponentProfilePicture.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(gamePieceId);
+            if (response.ScriptData != null) {
+                var gamePieceIdString = response.ScriptData.GetString("gamePieceId");
+                int gamePieceId = int.Parse(gamePieceIdString);
+                game.opponentProfilePictureSprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(gamePieceId);
+                opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
+                opponentProfilePicture.enabled = true;
+            }
         }
 
         private void GetGamePieceIdFailure(LogEventResponse response) {
             Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
             AnalyticsManager.LogError("get_player_gamepiece_error", response.Errors.JSON);
-            opponentProfilePicture.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(0);
+            game.opponentProfilePictureSprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(0);
+            opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
+            opponentProfilePicture.enabled = true;
         }
 
         private void OnEnable()
@@ -171,31 +178,7 @@ namespace Fourzy
         {
             Debug.Log("Open GameUI: challengeInstanceId: " + challengeId);
 
-            GameManager.instance.isLoading = true;
-            GameManager.instance.gameState = game.gameState;
-
-            // All these properties of the GameUI will remain the same for the entire lifecycle of the game
-            GameManager.instance.challengeInstanceId = game.challengeId;
-            GameManager.instance.isCurrentPlayer_PlayerOne = game.isCurrentPlayer_PlayerOne;
-            GameManager.instance.isMultiplayer = true;
-            GameManager.instance.isNewChallenge = false;
-            GameManager.instance.isExpired = game.isExpired;
-            GameManager.instance.didViewResult = game.didViewResult;
-            // GameManager.instance.gameType = game.gameType;
-            GameManager.instance.challengerGamePieceId = game.challengerGamePieceId;
-            GameManager.instance.challengedGamePieceId = game.challengedGamePieceId;
-            GameManager.instance.opponentUserId = game.opponent.opponentId;
             GameManager.instance.activeGame = game;
-            // -------------------------------------------------------------------------------------------
-            // Debug.Log("GameUI:OpenGame:game.challengerRatingDelta" + game.challengerRatingDelta);
-            // Debug.Log("GameUI:OpenGame:game.challengedRatingDelta" + game.challengedRatingDelta);
-
-            GameManager.instance.winner = winnerName;
-
-            GameManager.instance.ResetGamePiecesAndTokens();
-            GameManager.instance.ResetUIGameScreen();
-            GameManager.instance.SetupGame("", "");
-            GameManager.instance.InitPlayerUI(game.opponent.opponentName, game.opponentProfilePictureSprite);
 
             ViewController.instance.view1.Hide();
             ViewController.instance.HideTabView();

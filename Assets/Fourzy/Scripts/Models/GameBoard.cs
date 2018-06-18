@@ -142,7 +142,7 @@ namespace Fourzy {
 
         public void ProcessBoardUpdate(IToken token, bool swapPiece) {
             bool pieceInSquare = false;
-            //Debug.Log("token: " + token.GetType());
+
             // process next moving piece at gameBoard.activeMovingPieces[0]
             if (!token.canEvaluateWithoutEntering) {
                 if (activeMovingPieces.Count > 0) {
@@ -397,6 +397,7 @@ namespace Fourzy {
             if (board[row + (rowShift * 3), col + (colShift * 3)] != player) { return false; }
 
             if (player == 1) {
+                Debug.Log("add player1WinningPositions");
                 player1WinningPositions.Clear();
                 player1WinningPositions.Add(new Position(col, row));
                 player1WinningPositions.Add(new Position(col + colShift, row + rowShift));
@@ -422,6 +423,7 @@ namespace Fourzy {
             }
 
             if (player == 2) {
+                Debug.Log("add player2WinningPositions");
                 player2WinningPositions.Clear();
                 player2WinningPositions.Add(new Position(col, row));
                 player2WinningPositions.Add(new Position(col + colShift, row + rowShift));

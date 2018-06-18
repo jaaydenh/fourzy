@@ -8,7 +8,7 @@ namespace Fourzy
         bool mouseButtonPressed = false;
 
         void OnMouseDown() {
-            if (!mouseButtonPressed && Fourzy.GameManager.instance.gameState.isCurrentPlayerTurn)
+            if (!mouseButtonPressed && GameManager.instance.activeGame.gameState.isCurrentPlayerTurn)
             {
                 mouseButtonPressed = true;
                 int row = gameObject.GetComponentInParent<CornerSpot>().row;
@@ -24,15 +24,15 @@ namespace Fourzy
                     pos.column = Constants.numColumns;
                 }
 
-                PlayerEnum player = GameManager.instance.gameState.IsPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
+                PlayerEnum player = GameManager.instance.activeGame.gameState.IsPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
                 Move move = new Move(pos, direction, player);
 
-                StartCoroutine(GameManager.instance.ProcessMove(move));
+                StartCoroutine(GamePlayManager.Instance.ProcessMove(move));
             }
         }
             
         void Start () {
-            GameManager.OnStartMove += setMouseButtonPressed;
+            GamePlayManager.OnStartMove += setMouseButtonPressed;
         }
 
         void setMouseButtonPressed() {

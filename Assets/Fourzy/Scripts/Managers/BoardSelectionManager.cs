@@ -22,6 +22,7 @@ namespace Fourzy {
         }
 
         public void LoadMiniBoards() {
+            Debug.Log("LoadMiniBoards");
             TokenBoard[] boards = TokenBoardLoader.instance.GetTokenBoardsForBoardSelection();
 
             if (createGameGameboardGrid.transform.childCount > 0) {

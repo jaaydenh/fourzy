@@ -139,5 +139,48 @@ namespace Fourzy
                 GameAnalytics.NewDesignEvent("Onboarding:Stage0" + stage.ToString() + ":" + stepString + ":Fail");
             }
         }
+
+        public static void LogOpenGame(Game game) {
+            
+            if (game.gameState.GameType == GameType.FRIEND)
+            {
+                Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                customAttributes.Add("TokenBoardId", game.gameState.TokenBoard.id);
+                customAttributes.Add("TokenBoardName", game.gameState.TokenBoard.name);
+                AnalyticsManager.LogCustom("open_new_friend_challenge", customAttributes);
+            }
+            else if (game.gameState.GameType == GameType.LEADERBOARD)
+            {
+                Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                customAttributes.Add("TokenBoardId", game.gameState.TokenBoard.id);
+                customAttributes.Add("TokenBoardName", game.gameState.TokenBoard.name);
+                if (game.opponent != null && game.opponent.opponentLeaderboardRank != null) {
+                    customAttributes.Add("Rank", game.opponent.opponentLeaderboardRank);
+                }
+                AnalyticsManager.LogCustom("open_new_leaderboard_challenge", customAttributes);
+            }
+            else if (game.gameState.GameType == GameType.PASSANDPLAY)
+            {
+                Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                customAttributes.Add("TokenBoardId", game.gameState.TokenBoard.id);
+                customAttributes.Add("TokenBoardName", game.gameState.TokenBoard.name);
+                AnalyticsManager.LogCustom("open_pnp_game", customAttributes);
+            }
+            else if (game.gameState.GameType == GameType.RANDOM)
+            {
+                Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                customAttributes.Add("PlayerName", UserManager.instance.userName);
+                customAttributes.Add("TokenBoardId", game.gameState.TokenBoard.id);
+                customAttributes.Add("TokenBoardName", game.gameState.TokenBoard.name);
+                AnalyticsManager.LogCustom("open_new_multiplayer_game", customAttributes);
+            }
+            else if (game.gameState.GameType == GameType.AI)
+            {
+                Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                customAttributes.Add("TokenBoardId", game.gameState.TokenBoard.id);
+                customAttributes.Add("TokenBoardName", game.gameState.TokenBoard.name);
+                AnalyticsManager.LogCustom("open_new_ai_challenge", customAttributes);
+            }
+        }
     }
 }

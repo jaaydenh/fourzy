@@ -21,14 +21,14 @@ namespace Fourzy
             {
                 ViewController.instance.view3.Hide();
                 ViewController.instance.HideTabView();
-                // GameManager.instance.gameType = GameType.PASSANDPLAY;
-                GameManager.instance.OpenNewGame(GameType.PASSANDPLAY, false, "100");
+
+                GameManager.instance.OpenNewGame(GameType.PASSANDPLAY, null, false, "100");
                 GameManager.instance.onboardingScreen.StartOnboarding();
             } else if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 2)
             {
                 ViewController.instance.view3.Hide();
                 ViewController.instance.HideTabView();
-                ChallengeManager.instance.OpenPuzzleChallengeGame();
+                GameManager.instance.OpenPuzzleChallengeGame();
             }
 
             Button btn = areaSelectButton.GetComponent<Button>();
@@ -38,6 +38,7 @@ namespace Fourzy
         public override void Show()
         {
             base.Show();
+            GameManager.instance.headerUI.SetActive(true);
         }
 
         public override void Hide()
@@ -88,7 +89,7 @@ namespace Fourzy
 
         public void PlayButton()
         {
-            Game game = GameManager.instance.GetActiveGame();
+            Game game = GameManager.instance.GetNextActiveGame();
             if (game != null)
             {
                 game.OpenGame();
@@ -100,11 +101,13 @@ namespace Fourzy
             }
 
             ViewController.instance.HideTabView();
+            GameManager.instance.headerUI.SetActive(false);
         }
 
         public void TrainingButton() {
             ViewController.instance.ChangeView(ViewController.instance.viewTraining);
             ViewController.instance.HideTabView();
+            GameManager.instance.headerUI.SetActive(false);
         }
 
         public void SettingsButton() {

@@ -56,7 +56,7 @@ namespace Fourzy
             //    activeTokens.Clear();    
             //}
         }
-
+        
         public void SetAlternateColor(bool useAlternateColor) {
             rend = GetComponent<Renderer>();
             if (useAlternateColor)
@@ -95,7 +95,7 @@ namespace Fourzy
             }
             this.activeTokens = activeTokens;
 
-            GameManager.instance.animatingGamePieces = true;
+            GamePlayManager.Instance.numPiecesAnimating++;
             didAnimateNextPiece = false;
 
             var movingGamePiece = movingPieces[0];
@@ -108,7 +108,7 @@ namespace Fourzy
 
             Position endPosition = movingGamePiece.positions[movingGamePiece.positions.Count - 1];
 
-            nextPiece = GameManager.instance.gameBoardView.gamePieces[endPosition.row, endPosition.column];
+            nextPiece = GamePlayManager.Instance.gameBoardView.gamePieces[endPosition.row, endPosition.column];
 
             if (movingGamePiece.isDestroyed)
             {
@@ -118,7 +118,7 @@ namespace Fourzy
             else
             {
                 // Update the state of the game board views
-                GameManager.instance.gameBoardView.gamePieces[endPosition.row, endPosition.column] = gameObject;
+                GamePlayManager.Instance.gameBoardView.gamePieces[endPosition.row, endPosition.column] = gameObject;
             }
 
             animating = true;
@@ -144,7 +144,7 @@ namespace Fourzy
                     //float curvePercent = moveCurve.Evaluate(percent);
                     //transform.position = Vector3.LerpUnclamped(start, end, percent);
 
-                    t += Time.deltaTime * GameManager.instance.moveSpeed;
+                    t += Time.deltaTime * Constants.moveSpeed;
                     if (Constants.numRows - distance > 0)
                     {
                         t += (Constants.numRows - distance) / 500;
@@ -175,10 +175,10 @@ namespace Fourzy
             //if (player == PlayerEnum.ONE) {
             //    GetComponent<SpriteRenderer>().sprite = GameManager.instance.playerOneSpriteAsleep;
             //} else {
-            //    GetComponent<SpriteRenderer>().sprite = GameManager.instance.playerTwoSpriteAsleep;    
+            //    GetComponent<SpriteRenderer>().sprite = GameManager.instance.playerTwoSpriteAsleep;
             //}
 
-            GameManager.instance.animatingGamePieces = false;
+            GamePlayManager.Instance.numPiecesAnimating--;
 
             yield return true;
         }
@@ -199,16 +199,16 @@ namespace Fourzy
             if (activeTokens != null) {
                 for (int i = 0; i < activeTokens.Count; i++)
                 {
-                    Position piecePos = GameManager.instance.GetPositonFromTransform(transform.position);
+                    Position piecePos = Utility.GetPositonFromTransform(transform.position);
 
                     //Debug.Log("nextPiecePosition row: " + piecePos.row + " col: " + piecePos.column);
                     if (piecePos.column == activeTokens[i].Column && piecePos.row == activeTokens[i].Row)
                     {
                         Debug.Log("PIECE IS IN TOKENS POSITION: row: " + piecePos.row + " col: " + piecePos.column + " type: " + activeTokens[i].tokenType);
                         if (activeTokens[i].tokenType == Token.FRUIT) {
-                            GameManager.instance.CreateStickyToken(activeTokens[i].Row, activeTokens[i].Column);    
+                            GamePlayManager.Instance.CreateStickyToken(activeTokens[i].Row, activeTokens[i].Column);    
                         } else if (activeTokens[i].tokenType == Token.PIT) {
-                            SpriteRenderer sr = GameManager.instance.tokenViews[activeTokens[i].Row, activeTokens[i].Column].GetComponent<SpriteRenderer>();
+                            SpriteRenderer sr = GamePlayManager.Instance.tokenViews[activeTokens[i].Row, activeTokens[i].Column].GetComponent<SpriteRenderer>();
                             sr.DOFade(0f, 1.5f);
                         }
 

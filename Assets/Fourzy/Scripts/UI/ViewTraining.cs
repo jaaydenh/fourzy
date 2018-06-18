@@ -26,20 +26,18 @@ namespace Fourzy
         {
             ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
             ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.PASSANDPLAY);
-            // GameManager.instance.TransitionToGameOptionsScreen(GameType.PASSANDPLAY);
         }
 
         public void PuzzleChallengeButton()
         {
             Hide();
-            ChallengeManager.instance.OpenPuzzleChallengeGame();
+            GameManager.instance.OpenPuzzleChallengeGame();
         }
 
         public void AIGameButton()
         {
             ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
             ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.AI);
-            // GameManager.instance.TransitionToGameOptionsScreen(GameType.AI);
         }
 
         public void BackButton()

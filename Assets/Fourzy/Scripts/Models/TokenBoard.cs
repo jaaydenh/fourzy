@@ -25,7 +25,6 @@ namespace Fourzy {
             }
             else
             {
-                //Debug.Log("Initialize initialGameBoard");
                 initialGameBoard = new int[Constants.numRows * Constants.numColumns];
 
                 for (int row = 0; row < Constants.numRows; row++)
@@ -60,7 +59,6 @@ namespace Fourzy {
             if (initialGameBoardData != null && initialGameBoardData.Length > 0) {
                 this.initialGameBoard = initialGameBoardData;    
             } else {
-                Debug.Log("Initialize initialGameBoard");
                 initialGameBoard = new int[Constants.numRows * Constants.numColumns];
 
                 for (int row = 0; row < Constants.numRows; row++)
@@ -91,12 +89,75 @@ namespace Fourzy {
             {
                 for (int col = 0; col < Constants.numColumns; col++)
                 {
-                    this.tokens[row, col] = tokens[row, col];
+                    // this.tokens[row, col] = tokens[row, col];
+                    switch (tokens[row, col].tokenType)
+                    {
+                        case Token.BLOCKER:
+                            this.tokens[row, col] = new BlockerToken(row, col);
+                        break;
+                        case Token.BUMPER:
+                            this.tokens[row, col] = new BumperToken(row, col);
+                        break;
+                        case Token.COIN:
+                            this.tokens[row, col] = new CoinToken(row, col);
+                        break;
+                        case Token.DOWN_ARROW:
+                            this.tokens[row, col] = new DownArrowToken(row, col);
+                        break;
+                        case Token.EMPTY:
+                            this.tokens[row, col] = new EmptyToken(row, col);
+                        break;
+                        case Token.FRUIT:
+                            this.tokens[row, col] = new FruitToken(row, col);
+                        break;
+                        case Token.FRUIT_TREE:
+                            this.tokens[row, col] = new FruitTreeToken(row, col);
+                        break;
+                        case Token.GHOST:
+                            this.tokens[row, col] = new GhostToken(row, col);
+                        break;
+                        case Token.ICE_SHEET:
+                            this.tokens[row, col] = new IceSheetToken(row, col);
+                        break;
+                        case Token.LEFT_ARROW:
+                            this.tokens[row, col] = new LeftArrowToken(row, col);
+                        break;
+                        case Token.NINETY_LEFT_ARROW:
+                            this.tokens[row, col] = new NinetyLeftArrowToken(row, col);
+                        break;
+                        case Token.NINETY_RIGHT_ARROW:
+                            this.tokens[row, col] = new NinetyRightArrowToken(row, col);
+                        break;
+                        case Token.PIT:
+                            this.tokens[row, col] = new PitToken(row, col);
+                        break;
+                        case Token.RIGHT_ARROW:
+                            this.tokens[row, col] = new RightArrowToken(row, col);
+                        break;
+                        case Token.SAND:
+                            this.tokens[row, col] = new SandToken(row, col);
+                        break;
+                        case Token.SPIDER:
+                            this.tokens[row, col] = new SpiderToken(row, col);
+                        break;
+                        case Token.STICKY:
+                            this.tokens[row, col] = new StickyToken(row, col);
+                        break;
+                        case Token.UP_ARROW:
+                            this.tokens[row, col] = new UpArrowToken(row, col);
+                        break;
+                        case Token.WATER:
+                            this.tokens[row, col] = new WaterToken(row, col);
+                        break;
+                        case Token.WEB:
+                            this.tokens[row, col] = new WebToken(row, col);
+                        break;
+                    }
                 }
             }
 
             this.initialGameBoard = new int[Constants.numRows * Constants.numColumns];
-            //Debug.Log("initialGameBoard: " + initialGameBoard.Length);
+
             if (initialGameBoard.Length > 0) {
                 for (int row = 0; row < Constants.numRows; row++)
                 {

@@ -19,7 +19,7 @@ public class LoadingScreenControl : MonoBehaviour {
 
     IEnumerator Loading() {
         loadingScreenObj.SetActive(true);
-        async = SceneManager.LoadSceneAsync("game");
+        async = SceneManager.LoadSceneAsync("tabbedUI");
         async.allowSceneActivation = false;
         yield return new WaitForSeconds(1f);
         while (async.isDone == false) {

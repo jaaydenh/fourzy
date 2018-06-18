@@ -7,6 +7,7 @@ namespace Fourzy
     {
         public static ViewGameBoardSelection instance;
         private GameType gameType;
+        private Opponent opponent;
 
         void Start()
         {
@@ -26,7 +27,7 @@ namespace Fourzy
 
         public void PlayButton() {
             Hide();
-            GameManager.instance.OpenNewGame(gameType);
+            GameManager.instance.OpenNewGame(gameType, opponent, true, null);
         }
 
         public void BackButton()
@@ -56,23 +57,22 @@ namespace Fourzy
                 ChallengeManager.instance.GetOpponentGamePiece(opponentId);
             }
 
-            GameManager.instance.ResetUIGameScreen();
+            // GameManager.instance.ResetUIGameScreen();
             // challengeInstanceId = null;
             this.gameType = gameType;
 
-            // Opponent o = new Opponent(opponentId, opponentName, "");
+            this.opponent = new Opponent(opponentId, opponentName, "");
             
-            GameManager.instance.opponentUserId = opponentId;
-            GameManager.instance.opponentNameLabel.text = opponentName;
-            if (opponentProfilePicture != null)
-            {
-                GameManager.instance.opponentProfilePicture.sprite = opponentProfilePicture.sprite;
-            }
-            GameManager.instance.opponentLeaderboardRank = opponentLeaderboardRank;
+            // GameManager.instance.opponentUserId = opponentId;
+            // GameManager.instance.opponentNameLabel.text = opponentName;
+
+            // if (opponentProfilePicture != null)
+            // {
+            //     GameManager.instance.opponentProfilePicture.sprite = opponentProfilePicture.sprite;
+            // }
+            this.opponent.opponentLeaderboardRank = opponentLeaderboardRank;
 
             BoardSelectionManager.instance.LoadMiniBoards();
-            // gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
-            // gameScreen.SetActive(false);
         }
     }
 }

@@ -10,5 +10,5 @@
     public enum ChallengeState { NONE, RUNNING, ISSUED, COMPLETE };
     public enum GameType { NONE, RANDOM, PASSANDPLAY, FRIEND, LEADERBOARD, PUZZLE, AI };
     public enum AIPlayerSkill { LEVEL1, LEVEL2, LEVEL3 };
-    public enum Screens { NONE, GAME, GAMES_LIST, SOCIAL, LEADERBOARD, CREATE_GAME, GAME_OPTIONS };
+    public enum Screens { NONE, GAME_PLAY, GAMES_LIST, SOCIAL, LEADERBOARD, CREATE_GAME, GAME_OPTIONS };
 }

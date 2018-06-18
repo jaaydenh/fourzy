@@ -14,6 +14,12 @@ namespace Fourzy
         public Image profilePicture;
         public Texture2D defaultProfilePicture;
         public Image onlineTexture;
+        public GameObject playButton;
+
+        void Start() {
+            Button playBtn = playButton.GetComponent<Button>();
+            playBtn.onClick.AddListener(OpenNewLeaderboardChallengeGame);
+        }
 
         public void Reset() {
             playerNameLabel.text = "";
@@ -25,13 +31,18 @@ namespace Fourzy
             id = "";
             typeLabel.text = "";
             facebookId = "";
+            playButton.SetActive(true);
+        }
+
+        public void HidePlayButton() {
+            playButton.SetActive(false);
         }
 
         public void UpdatePlayer()
         {
             onlineTexture.color = isOnline ? Color.green : Color.gray;
 
-            ChallengeManager.instance.GetGamePiece(id, GetGamePieceIdSuccess, GetGamePieceIdFailure);
+            //ChallengeManager.instance.GetGamePiece(id, GetGamePieceIdSuccess, GetGamePieceIdFailure);
 
             // if (facebookId != null) {
             //     StartCoroutine(UserManager.instance.GetFBPicture(facebookId, (sprite)=>
@@ -52,7 +63,6 @@ namespace Fourzy
             ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
             ViewController.instance.HideTabView();
             ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.LEADERBOARD, id, userName, profilePicture);
-            // GameManager.instance.TransitionToGameOptionsScreen(GameType.LEADERBOARD, id, userName, profilePicture);
         }
 
         private void GetGamePieceIdSuccess(LogEventResponse response) {

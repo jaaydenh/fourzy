@@ -343,9 +343,10 @@ MonoBehaviour:
   ratingLabel: {fileID: 114393488139577350}
   typeLabel: {fileID: 114776639584160398}
   profilePicture: {fileID: 114678881004352026}
-  defaultProfilePicture: {fileID: 2800000, guid: e59dd586d917d4490bfbceec7e12ca4f,
+  defaultProfilePicture: {fileID: 2800000, guid: 498997e7f8aa348beb13de6bf9f77066,
     type: 3}
   onlineTexture: {fileID: 114117016557701848}
+  playButton: {fileID: 1695864920768902}
 --- !u!114 &114393488139577350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -471,8 +472,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114384830480098610}
-        m_MethodName: OpenNewLeaderboardChallengeGame
+      - m_Target: {fileID: 0}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -779,7 +780,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 22.779936, y: 32.571556}
+  m_AnchoredPosition: {x: 15687.54, y: 11231.072}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224367282689968334

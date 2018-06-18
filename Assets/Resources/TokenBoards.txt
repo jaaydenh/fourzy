@@ -117,7 +117,7 @@
         {
             "ID": "9812389",
             "Name": "One Big Pit",
-            "Enabled": false, "EnabledGallery": false,
+            "Enabled": true, "EnabledGallery": true,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,5,5,5,5,5,5,0,
                           0,5,9,9,9,9,5,0,

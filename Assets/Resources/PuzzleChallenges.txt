@@ -3205,8 +3205,18 @@
                                   6,6,6,6,6,6,6,6],
             "RandomMoves": [
                 {
+                    "Location": 1,
+                    "Direction": 2,
+                    "Weight": 1.0
+                },
+                {
                     "Location": 3,
-                    "Direction": 3,
+                    "Direction": 1,
+                    "Weight": 1.0
+                },
+                {
+                    "Location": 2,
+                    "Direction": 2,
                     "Weight": 1.0
                 }
             ],

@@ -61,6 +61,10 @@ namespace Fourzy
 
                                 string coins = entry.JSONData["playerRatingElo"].ToString();
                                 leaderboardPlayer.ratingLabel.text = coins;
+                                
+                                if (entry.UserId == UserManager.instance.userId) {
+                                    leaderboardPlayer.HidePlayButton();
+                                }
 
                                 leaderboardPlayer.UpdatePlayer();
                                 //leaderboardPlayer.transform.localScale = new Vector3(1f,1f,1f);
@@ -126,6 +130,10 @@ namespace Fourzy
 
                             string wins = entry.JSONData["wins"].ToString();
                             leaderboardPlayer.ratingLabel.text = wins;
+
+                            if (entry.UserId == UserManager.instance.userId) {
+                                leaderboardPlayer.HidePlayButton();
+                            }
 
                             leaderboardPlayer.UpdatePlayer();
                             leaderboardPlayer.transform.localScale = new Vector3(1f, 1f, 1f);

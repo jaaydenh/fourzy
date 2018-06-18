@@ -188,7 +188,7 @@ namespace Fourzy {
         }
 
         public void BoardSelect() {
-            Debug.Log("BoardSelect");
+            // Debug.Log("BoardSelect");
             Toggle toggle = this.GetComponentInChildren<Toggle>();
 
             if (toggle.isOn) {

@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Fourzy/scenes/logo.unity
+    path: Assets/Fourzy/Scenes/logo.unity
+    guid: 3d7de46172b55e6428ad01b7276860e0
   - enabled: 1
-    path: Assets/Fourzy/scenes/game.unity
+    path: Assets/Fourzy/Scenes/tabbedUI.unity
+    guid: 597ec1fce0a578f45bdff75cc5cf89e3
+  - enabled: 1
+    path: Assets/Fourzy/Scenes/gamePlay.unity
+    guid: dd711d21fcaf0483786e4f25c274c267
+  m_configObjects: {}

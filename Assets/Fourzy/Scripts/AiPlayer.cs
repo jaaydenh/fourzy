@@ -78,7 +78,7 @@ namespace Fourzy
 
         public void MakeMoveLevel1(Move playermove)
         {
-            GameState gameState = GameManager.instance.gameState;
+            GameState gameState = GameManager.instance.activeGame.gameState;
 
             List<Move> possibleMoves = gameState.GetPossibleMoves();
 
@@ -222,7 +222,7 @@ namespace Fourzy
 
         public void MakeMoveLevel2(Move playerMove)
         {
-            GameState gameState = GameManager.instance.gameState;
+            GameState gameState = GameManager.instance.activeGame.gameState;
 
             List<Move> possibleMoves = gameState.GetPossibleMoves();
             Debug.Log(string.Format("There are {0} Possible Moves", possibleMoves.Count));
@@ -451,7 +451,7 @@ namespace Fourzy
         public void MakeMoveLevel3(Move playerMove)
         {
 
-            GameState gameState = GameManager.instance.gameState;
+            GameState gameState = GameManager.instance.activeGame.gameState;
             int player = gameState.IsPlayerOneTurn ? 1 : 2;
             int opponent = gameState.IsPlayerOneTurn ? 2 : 1;
 
@@ -688,7 +688,7 @@ namespace Fourzy
         public void MakeMoveLevel3Sorted(Move playerMove)
         {
 
-            GameState gameState = GameManager.instance.gameState;
+            GameState gameState = GameManager.instance.activeGame.gameState;
             int player = gameState.IsPlayerOneTurn ? 1 : 2;
             int opponent = gameState.IsPlayerOneTurn ? 2 : 1;
 
@@ -906,7 +906,7 @@ namespace Fourzy
         public void MakeMoveLevel3Deeper(Move playerMove)
         {
 
-            GameState gameState = GameManager.instance.gameState;
+            GameState gameState = GameManager.instance.activeGame.gameState;
             int player = gameState.IsPlayerOneTurn ? 1 : 2;
             int opponent = gameState.IsPlayerOneTurn ? 2 : 1;
 
@@ -1168,7 +1168,7 @@ namespace Fourzy
 
         public void MakeMoveLevel3Broken(Move playerMove)
         {
-            GameState gameState = GameManager.instance.gameState;
+            GameState gameState = GameManager.instance.activeGame.gameState;
             Debug.Log("AIMODE = LEVEL 3");
             //we should be making better some library moves...
             // if it's the first computer move going second, or the first two moves if going first
@@ -1232,7 +1232,7 @@ namespace Fourzy
             AiMove BestMove = null;
             Debug.Log(string.Format("GetBestMove Depth={0}: playerone?={1}", CurrentDepth, testGameState.IsPlayerOneTurn));
 
-            if (testGameState == null) { testGameState = GameManager.instance.gameState; }
+            if (testGameState == null) { testGameState = GameManager.instance.activeGame.gameState;; }
 
             List<Move> possibleMoves = testGameState.GetPossibleMoves();
             Debug.Log(string.Format("There are {0} Possible Moves", possibleMoves.Count));

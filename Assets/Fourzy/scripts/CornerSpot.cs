@@ -28,16 +28,16 @@ namespace Fourzy
         }
 
         void OnMouseDown() {
-            if (Fourzy.GameManager.instance.gameState.isCurrentPlayerTurn && !Fourzy.GameManager.instance.gameState.IsGameOver)
+            if (GameManager.instance.activeGame.gameState.isCurrentPlayerTurn && !GameManager.instance.activeGame.gameState.IsGameOver)
             {
                 int noMoves = 0;
-                PlayerEnum player = GameManager.instance.gameState.IsPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
+                PlayerEnum player = GameManager.instance.activeGame.gameState.IsPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
 
                 if (rightArrowActive)
                 {
                     if (column == 0) {
                         Move move = new Move(new Position(column + 1, row), Direction.RIGHT, player);
-                        if (GameManager.instance.gameState.CanMove(move, GameManager.instance.gameState.TokenBoard.tokens)) {
+                        if (GameManager.instance.activeGame.gameState.CanMove(move, GameManager.instance.activeGame.gameState.TokenBoard.tokens)) {
                             RightArrow.SetActive(true);    
                         } else {
                             noMoves++;
@@ -48,7 +48,7 @@ namespace Fourzy
                 {
                     if (column == 7) {
                         Move move = new Move(new Position(column - 1, row), Direction.LEFT, player);
-                        if (GameManager.instance.gameState.CanMove(move, GameManager.instance.gameState.TokenBoard.tokens)) {
+                        if (GameManager.instance.activeGame.gameState.CanMove(move, GameManager.instance.activeGame.gameState.TokenBoard.tokens)) {
                             LeftArrow.SetActive(true);
                         } else {
                             noMoves++;
@@ -59,7 +59,7 @@ namespace Fourzy
                 {
                     if (row == 7) {
                         Move move = new Move(new Position(column, row - 1), Direction.UP, player);
-                        if (GameManager.instance.gameState.CanMove(move, GameManager.instance.gameState.TokenBoard.tokens)) {
+                        if (GameManager.instance.activeGame.gameState.CanMove(move, GameManager.instance.activeGame.gameState.TokenBoard.tokens)) {
                             UpArrow.SetActive(true);
                         } else {
                             noMoves++;
@@ -70,7 +70,7 @@ namespace Fourzy
                 {
                     if (row == 0) {
                         Move move = new Move(new Position(column, row + 1), Direction.DOWN, player);
-                        if (GameManager.instance.gameState.CanMove(move, GameManager.instance.gameState.TokenBoard.tokens)) {
+                        if (GameManager.instance.activeGame.gameState.CanMove(move, GameManager.instance.activeGame.gameState.TokenBoard.tokens)) {
                             DownArrow.SetActive(true);
                         } else {
                             noMoves++;
@@ -91,7 +91,7 @@ namespace Fourzy
 
                     Move move = new Move(pos, direction, player);
 
-                    StartCoroutine(GameManager.instance.ProcessMove(move));
+                    StartCoroutine(GamePlayManager.Instance.ProcessMove(move));
                 }
             }
         }

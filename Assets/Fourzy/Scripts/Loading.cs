@@ -31,7 +31,9 @@
                 yield return null;
             }
 
-            SceneManager.LoadScene("game");
+            SceneManager.LoadScene("tabbedUI");
+            // SceneManager.SetActiveScene(SceneManager.GetSceneByName("tabbedUI"));
+            
 
             //loadingScreenObj.SetActive(true);
             //async = SceneManager.LoadSceneAsync("game");

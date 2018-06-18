@@ -15,7 +15,7 @@ namespace Fourzy
 
         public void Open(string title, string subTitle, bool fade)
         {
-            GameManager.instance.isLoadingUI = true;
+            GamePlayManager.Instance.isLoadingUI = true;
             titleText.text = title;
             subTitleText.text = subTitle;
             gameObject.SetActive(true);
@@ -43,7 +43,7 @@ namespace Fourzy
             }
 
             Close();
-            GameManager.instance.isLoadingUI = false;
+            GamePlayManager.Instance.isLoadingUI = false;
         }
 
         public void Close()

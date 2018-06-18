@@ -181,6 +181,7 @@ namespace Fourzy
 
         void GameSparksFBConnect(ILoginResult result)
         {
+            Debug.Log("GameSparksFBConnect");
             if(FB.IsLoggedIn)
             {
                 Debug.Log("Logging into gamesparks with facebook details");
@@ -190,7 +191,7 @@ namespace Fourzy
             }
             else
             {
-                Debug.LogWarning("Something went wrong with connectin to FaceBook: " + result.Error);
+                Debug.LogWarning("Something went wrong with connecting to FaceBook: " + result.Error);
                 facebookLoginButton.interactable = true;
 
                 if (OnLoginError != null) {

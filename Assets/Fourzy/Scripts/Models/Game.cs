@@ -11,24 +11,26 @@ namespace Fourzy
         public bool isExpired;
         public bool didViewResult;
         public bool isVisible;
+        public bool displayIntroUI;
         public Opponent opponent;
         public ChallengeState challengeState;
         public ChallengeType challengeType;
-        // public GameType gameType;
         public int challengerGamePieceId;
         public int challengedGamePieceId;
         public string winnerName;
         public string winnerUserId;
         public int challengerRatingDelta;
         public int challengedRatingDelta;
+        public string title;
+        public string subtitle;
+        public PuzzleChallengeInfo puzzleChallengeInfo;
         public Sprite opponentProfilePictureSprite;
 
         public delegate void GameActive();
         public static event GameActive OnActiveGame;
 
-        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, string challengerGamePieceId, string challengedGamePieceId)
+        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, string challengerGamePieceId, string challengedGamePieceId, PuzzleChallengeInfo puzzleChallengeInfo, string winnerName, string title, string subtitle, bool displayIntroUI)
         {
-            //Debug.Log("challengeId: " + challengeId);
             this.challengeId = challengeId;
             this.gameState = gameState;
             this.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;
@@ -37,7 +39,11 @@ namespace Fourzy
             this.opponent = opponent;
             this.challengeState = challengeState;
             this.challengeType = challengeType;
-            // this.gameType = gameType;
+            this.puzzleChallengeInfo = puzzleChallengeInfo;
+            this.winnerName = winnerName;
+            this.title = title;
+            this.subtitle = subtitle;
+            this.displayIntroUI = displayIntroUI;
 
             // Always visible until deleting games is implemented
             this.isVisible = true;
@@ -51,45 +57,20 @@ namespace Fourzy
 
         public void InitGame() {
 
-            //opponentName = playerData.opponentName;
-
-            if (opponent.opponentFBId != "")
-            {
-                CoroutineHandler.StartStaticCoroutine(UserManager.instance.GetFBPicture(opponent.opponentFBId, (sprite) =>
-                {
-                    opponentProfilePictureSprite = sprite;
-                }));
-            }
+            // if (opponent.opponentFBId != "")
+            // {
+            //     CoroutineHandler.StartStaticCoroutine(UserManager.instance.GetFBPicture(opponent.opponentFBId, (sprite) =>
+            //     {
+            //         opponentProfilePictureSprite = sprite;
+            //     }));
+            // }
         }
 
         public void OpenGame()
         {
-            Debug.Log("Open Game: challengeInstanceId: " + challengeId);
+            Debug.Log("Open Game: challengeId: " + challengeId);
 
-            GameManager.instance.isLoading = true;
-            GameManager.instance.gameState = gameState;
-
-            // All these properties of the Game will remain the same for the entire lifecycle of the game
-            GameManager.instance.challengeInstanceId = challengeId;
-            GameManager.instance.isCurrentPlayer_PlayerOne = isCurrentPlayer_PlayerOne;
-            GameManager.instance.isMultiplayer = true;
-            GameManager.instance.isNewRandomChallenge = false;
-            GameManager.instance.isNewChallenge = false;
-            GameManager.instance.isExpired = isExpired;
-            GameManager.instance.didViewResult = didViewResult;
-            // GameManager.instance.gameType = gameType;
-            GameManager.instance.challengerGamePieceId = challengerGamePieceId;
-            GameManager.instance.challengedGamePieceId = challengedGamePieceId;
-            GameManager.instance.opponentUserId = opponent.opponentId;
             GameManager.instance.activeGame = this;
-            // -------------------------------------------------------------------------------------------
-
-            GameManager.instance.winner = winnerName;
-
-            GameManager.instance.ResetGamePiecesAndTokens();
-            GameManager.instance.ResetUIGameScreen();
-            GameManager.instance.SetupGame("", "");
-            GameManager.instance.InitPlayerUI(opponent.opponentName, opponentProfilePictureSprite);
 
             // Triggers GameManager TransitionToGameScreen
             if (OnActiveGame != null)
