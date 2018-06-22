@@ -350,7 +350,6 @@ namespace Fourzy
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            // Debug.Log("OnSceneLoaded: " + scene.name + " Active Scene: " + SceneManager.GetActiveScene().name);
             SceneManager.SetActiveScene(scene);
         }
 
@@ -390,14 +389,7 @@ namespace Fourzy
                 }
                 // no more puzzle challenges
                 PlayerPrefs.DeleteKey("puzzleChallengeLevel");
-                // if (SceneManager.GetActiveScene().name == "gamePlay")
-                // {
-                //     Debug.Log("Alertui gameplay");
-                //     GamePlayManager.Instance.alertUI.OpenStatic(LocalizationManager.Instance.GetLocalizedValue("all_challenges_completed"));
-                // } else {
-                    // Debug.Log("Alertui not gameplay");
-                    alertUI.Open(LocalizationManager.Instance.GetLocalizedValue("all_challenges_completed"));
-                // }
+                alertUI.Open(LocalizationManager.Instance.GetLocalizedValue("all_challenges_completed"));
                 
             } else {
                 string subtitle = "";
@@ -421,7 +413,6 @@ namespace Fourzy
 
         public void OpenNextGame()
         {
-            // Debug.Log("OpenNextGame");
             SceneManager.UnloadSceneAsync("gamePlay");
             
             for (int i = 0; i < games.Count; i++)
@@ -451,7 +442,6 @@ namespace Fourzy
 
         private void SetOpponentGamePiece(string gamePieceId, string challengeId) {
             // Debug.Log("GameManager: SetOpponentGamePiece: gamepieceid: " + gamePieceId);
-
             if (challengeId != "") {
                 var game = games
                     .Where(t => t.challengeId == challengeId)
