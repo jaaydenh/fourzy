@@ -39,8 +39,8 @@ namespace Fourzy
         public void LoadGamePieces(string gamePieceId)
         {
             gamePieceData = TokenBoardLoader.instance.GetAllGamePieces();
-
-            Debug.Log("LoadGamePieces gamePieceId: " + gamePieceId);
+    
+            //Debug.Log("LoadGamePieces gamePieceId: " + gamePieceId);
             foreach (var piece in gamePieceData)
             {
                 GameObject go = Instantiate(gamePiecePrefab) as GameObject;

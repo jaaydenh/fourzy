@@ -24,13 +24,13 @@ namespace Fourzy
         //public AnimationCurve moveCurve;
         Renderer rend;
         CircleCollider2D gamePieceCollider;
-        private Animator gamePieceAnimator;
+        //private Animator gamePieceAnimator;
 
 
 		private void Start()
 		{
             gamePieceCollider = gameObject.GetComponent<CircleCollider2D>();
-            gamePieceAnimator = gameObject.GetComponent<Animator>();
+            //gamePieceAnimator = gameObject.GetComponent<Animator>();
 		}
 
 		public void Reset()
