@@ -6,12 +6,12 @@ namespace Fourzy
 {
     public class PuzzleChallengeLoader : Singleton<PuzzleChallengeLoader>
     {
-        private PuzzleChallengeInfo[] LoadChallengeData()
+        private PuzzleChallengeLevel[] LoadChallengeData()
         {
-            PuzzleChallengeInfo[] challengeData = new PuzzleChallengeInfo[0];
+            PuzzleChallengeLevel[] challengeData = new PuzzleChallengeLevel[0];
             TextAsset dataAsJson = Resources.Load<TextAsset>("PuzzleChallenges");
             if (dataAsJson) {
-                challengeData = JsonHelper.getJsonArray<PuzzleChallengeInfo> (dataAsJson.text);
+                challengeData = JsonHelper.getJsonArray<PuzzleChallengeLevel> (dataAsJson.text);
             } else {
                 Debug.Log("default challenge");
                 challengeData[0] = GetDefaultChallenge();
@@ -20,16 +20,37 @@ namespace Fourzy
             return challengeData;
         }
 
-        public PuzzleChallengeInfo GetChallenge()
+        public PuzzlePack[] GetPuzzlePacks() {
+            TextAsset[] dataAsJson = Resources.LoadAll<TextAsset>("PuzzlePacks");
+            PuzzlePack[] puzzlePacks = new PuzzlePack[dataAsJson.Length];
+            if (dataAsJson.Length > 0) {
+                for (int i = 0; i < dataAsJson.Length; i++)
+                {
+                    puzzlePacks[i] = JsonUtility.FromJson<PuzzlePack>(dataAsJson[i].text);
+                }
+            }
+            Debug.Log("puzzlePacks.length" +  puzzlePacks.Length);
+            return puzzlePacks;
+        }
+
+        public PuzzlePack GetPuzzlePack(string fileName) {
+            TextAsset dataAsJson = Resources.Load<TextAsset>("PuzzlePacks\\" + fileName);
+            PuzzlePack puzzlePack = new PuzzlePack();
+            if (dataAsJson) {
+                puzzlePack = JsonUtility.FromJson<PuzzlePack>(dataAsJson.text);
+            }
+
+            return puzzlePack;
+        }
+
+        public PuzzleChallengeLevel GetChallenge()
         {
-            PuzzleChallengeInfo[] challengeCollection = LoadChallengeData();
+            PuzzleChallengeLevel[] challengeCollection = LoadChallengeData();
             Debug.Log("puzzleChallengeLevel: " + PlayerPrefs.GetInt("puzzleChallengeLevel"));
             int puzzleChallengeLevel = PlayerPrefs.GetInt("puzzleChallengeLevel");
-            IEnumerable<PuzzleChallengeInfo> enabledChallenges = challengeCollection
+            IEnumerable<PuzzleChallengeLevel> enabledChallenges = challengeCollection
                 .Where(t => t.Enabled == true && t.Level == puzzleChallengeLevel+1);
 
-            //IEnumerable<PuzzleChallengeInfo> enabledChallenges = challengeCollection
-                //.Where(t => t.Enabled == true);
             
             // ChallengeInfo[] challenges = new TokenBoard[enabledChallenges.Count()];
             // int i = 0;
@@ -48,9 +69,9 @@ namespace Fourzy
             return null;
         }
 
-        private PuzzleChallengeInfo GetDefaultChallenge()
+        private PuzzleChallengeLevel GetDefaultChallenge()
         {
-            PuzzleChallengeInfo challengeInfo = new PuzzleChallengeInfo();
+            PuzzleChallengeLevel challengeInfo = new PuzzleChallengeLevel();
             challengeInfo.ID = "1000";
             challengeInfo.Name = "The Basic Game";
             challengeInfo.MoveGoal = 2;

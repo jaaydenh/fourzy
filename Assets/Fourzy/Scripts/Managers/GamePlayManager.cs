@@ -92,6 +92,8 @@ namespace Fourzy
         public static event EndMove OnEndMove;
         public delegate void GameOver();
         public static event GameOver OnGameOver;
+        public delegate void PuzzleCompleted(PuzzleChallengeLevel puzzleChallengeLevel);
+        public static event PuzzleCompleted OnPuzzleCompleted;
         public AudioClip clipMove;
         public AudioClip clipWin;
         public Color bluePlayerColor = new Color(0f / 255f, 176.0f / 255f, 255.0f / 255.0f);
@@ -657,7 +659,8 @@ namespace Fourzy
 
             if (ViewController.instance.GetCurrentView() != null) {
                 ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());
-                if (ViewController.instance.GetCurrentView() != ViewController.instance.viewTraining)
+                // Debug.Log("BackButtonOnClick: " + ViewController.instance.GetCurrentView().name);
+                if (ViewController.instance.GetCurrentView() != ViewController.instance.viewTraining && ViewController.instance.GetCurrentView() != ViewController.instance.viewPuzzleSelection)
                 {
                     ViewController.instance.ShowTabView();
                 }
@@ -1034,7 +1037,7 @@ namespace Fourzy
                                 if (response.HasErrors)
                                 {
                                     Debug.Log("***** ChallengeEventRequest failed: " + response.Errors.JSON);
-                                    alertUI.Open("There was a problem making your move. Please try again.");
+                                    alertUI.Open("Server Error: " + response.Errors.JSON);
                                 }
                                 else
                                 {
@@ -1154,7 +1157,11 @@ namespace Fourzy
                 {
                     if (game.gameState.IsPuzzleChallengePassed)
                     {
-                        PlayerPrefs.SetInt("puzzleChallengeLevel", game.puzzleChallengeInfo.Level);
+                        PlayerPrefs.SetInt("PuzzleChallengeID:" + game.puzzleChallengeInfo.ID, 1);
+                        if (OnPuzzleCompleted != null)
+                            OnPuzzleCompleted(game.puzzleChallengeInfo);
+                        // PlayerPrefs.SetInt("puzzleChallengeLevel", game.puzzleChallengeInfo.Level);
+                        GameManager.instance.SetNextActivePuzzleLevel();
                         AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, true, game.gameState.Player1MoveCount);
                     }
                     else

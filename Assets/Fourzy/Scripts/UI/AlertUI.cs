@@ -9,7 +9,7 @@ namespace Fourzy
     {
         public Text alertText;
         public float fadeOutSpeed = 1f;
-        public float timeBeforeFade = 1.5f;
+        public float timeBeforeFade = 2.0f;
         private float originalY;
 
         void Start() {
@@ -40,7 +40,7 @@ namespace Fourzy
         }
 
         private IEnumerator FadeOut()    {
-            transform.DOMoveY(transform.position.y + 50, 1.5f).OnComplete(() => Reset());
+            transform.DOMoveY(transform.position.y + 50, 2.0f).OnComplete(() => Reset());
             yield return new WaitForSeconds(timeBeforeFade);
             alertText.CrossFadeAlpha(0.0f, fadeOutSpeed, false);
             //alertText.DOFade(0f,fadeOutSpeed).OnComplete(() => transform.DOMoveY(originalY, 0f));

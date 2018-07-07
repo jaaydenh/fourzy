@@ -58,7 +58,7 @@ namespace Fourzy
             this.GameType = gameType;
             this.IsPlayerOneTurn = isPlayerOneTurn;
             this.isCurrentPlayerTurn = isCurrentPlayerTurn;
-            this.TokenBoard = tokenBoard;
+            this.TokenBoard = tokenBoard.Clone();
             this.PreviousTokenBoard = tokenBoard.Clone();
             this.IsGameOver = isGameOver;
             this.MoveList = moveList;

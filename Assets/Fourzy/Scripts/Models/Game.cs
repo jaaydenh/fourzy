@@ -23,13 +23,13 @@ namespace Fourzy
         public int challengedRatingDelta;
         public string title;
         public string subtitle;
-        public PuzzleChallengeInfo puzzleChallengeInfo;
+        public PuzzleChallengeLevel puzzleChallengeInfo;
         public Sprite opponentProfilePictureSprite;
 
         public delegate void GameActive();
         public static event GameActive OnActiveGame;
 
-        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, string challengerGamePieceId, string challengedGamePieceId, PuzzleChallengeInfo puzzleChallengeInfo, string winnerName, string title, string subtitle, bool displayIntroUI)
+        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, string challengerGamePieceId, string challengedGamePieceId, PuzzleChallengeLevel puzzleChallengeInfo, string winnerName, string title, string subtitle, bool displayIntroUI)
         {
             this.challengeId = challengeId;
             this.gameState = gameState;

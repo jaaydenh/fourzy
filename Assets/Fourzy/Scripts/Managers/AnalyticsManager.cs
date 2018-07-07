@@ -54,7 +54,7 @@ namespace Fourzy
             GameAnalytics.NewDesignEvent("login:" + method + ":success:" + success.ToString());
         }
 
-        public static void LogPuzzleChallenge(PuzzleChallengeInfo puzzleChallenge, bool success, int moveCount) {
+        public static void LogPuzzleChallenge(PuzzleChallengeLevel puzzleChallenge, bool success, int moveCount) {
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("id", puzzleChallenge.ID);
             customAttributes.Add("level", puzzleChallenge.Level);

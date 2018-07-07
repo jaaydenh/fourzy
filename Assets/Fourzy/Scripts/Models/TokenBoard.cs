@@ -15,7 +15,12 @@ namespace Fourzy {
             InitTokenBoard();
             this.id = id;
             this.name = name;
-            this.initialMoves = initialMoves;
+            
+            if (initialMoves != null) {
+                this.initialMoves = initialMoves;
+            } else {
+                this.initialMoves = new List<MoveInfo>();
+            }
 
             tokenBoard = new int[Constants.numRows, Constants.numColumns];
 

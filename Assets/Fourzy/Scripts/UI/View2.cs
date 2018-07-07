@@ -12,7 +12,7 @@ namespace Fourzy
         public Text tokensTabText;
         public GameObject gamePiecesGrid;
         public GameObject tokensGrid;
-        public RectTransform test;
+        //public RectTransform test;
         public ScrollRect scrollRect;
 
         // Use this for initialization

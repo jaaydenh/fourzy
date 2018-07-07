@@ -13,6 +13,7 @@ namespace Fourzy
     {
         public List<Game> games = new List<Game>();
         public Game activeGame;
+        public PuzzlePack ActivePuzzlePack { get; private set; }
         public bool isOnboardingActive = false;
 
         [Header("Game UI")]
@@ -97,7 +98,7 @@ namespace Fourzy
         }
 
         private void OpponentTurnHandler(ChallengeTurnTakenMessage message) {
-            Debug.Log("OpponentTurnHandler: active scene: " + SceneManager.GetActiveScene().name);
+            //Debug.Log("OpponentTurnHandler: active scene: " + SceneManager.GetActiveScene().name);
             var gsChallenge = message.Challenge;
             
             // Only do this for the opponent, not the player who just made the move
@@ -376,38 +377,53 @@ namespace Fourzy
         }
 
         public void OpenPuzzleChallengeGame(string type = "open") {
-            PuzzleChallengeInfo puzzleChallenge = PuzzleChallengeLoader.instance.GetChallenge();
-            if (puzzleChallenge == null) {
-                if (ViewController.instance.GetCurrentView() != null) {
-                    ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());
-                    if (ViewController.instance.GetCurrentView() != ViewController.instance.viewTraining)
-                    {
-                        ViewController.instance.ShowTabView();
-                    }
-                } else if (ViewController.instance.GetPreviousView() != null) {
-                    ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
-                }
-                // no more puzzle challenges
-                PlayerPrefs.DeleteKey("puzzleChallengeLevel");
-                alertUI.Open(LocalizationManager.Instance.GetLocalizedValue("all_challenges_completed"));
+            //PuzzleChallengeLevel puzzleChallengeLevel = PuzzleChallengeLoader.instance.GetChallenge();
+
+            PuzzleChallengeLevel puzzleChallengeLevel = ActivePuzzlePack.PuzzleChallengeLevels[ActivePuzzlePack.ActiveLevel-1];
+
+            // if (puzzleChallengeLevel == null) {
+            //     if (ViewController.instance.GetCurrentView() != null) {
+            //         ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());
+            //         if (ViewController.instance.GetCurrentView() != ViewController.instance.viewTraining)
+            //         {
+            //             ViewController.instance.ShowTabView();
+            //         }
+            //     } else if (ViewController.instance.GetPreviousView() != null) {
+            //         ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
+            //     }
+            //     // no more puzzle challenges
+            //     PlayerPrefs.DeleteKey("puzzleChallengeLevel");
+            //     alertUI.Open(LocalizationManager.Instance.GetLocalizedValue("all_challenges_completed"));
                 
-            } else {
+            // } else {
                 string subtitle = "";
-                if (puzzleChallenge.MoveGoal > 1) {
+                if (puzzleChallengeLevel.MoveGoal > 1) {
                     subtitle = LocalizationManager.Instance.GetLocalizedValue("puzzle_challenge_win_instructions_plural");
                 } else {
                     subtitle = LocalizationManager.Instance.GetLocalizedValue("puzzle_challenge_win_instructions_singular");
                 }
-                TokenBoard tokenBoard = new TokenBoard(puzzleChallenge.InitialTokenBoard.ToArray(), "", "", null, null, true);
-                GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.PUZZLE, true, true, tokenBoard, puzzleChallenge.InitialGameBoard.ToArray(), false, null);
-                Game newGame = new Game(null, gameState, true, false, false, null, ChallengeState.NONE, ChallengeType.NONE, null, null, puzzleChallenge, null, puzzleChallenge.Name, subtitle.Replace("%1", puzzleChallenge.MoveGoal.ToString()), true);
+                TokenBoard tokenBoard = new TokenBoard(puzzleChallengeLevel.InitialTokenBoard.ToArray(), "", "", null, null, true);
+                GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.PUZZLE, true, true, tokenBoard, puzzleChallengeLevel.InitialGameBoard.ToArray(), false, null);
+                Game newGame = new Game(null, gameState, true, false, false, null, ChallengeState.NONE, ChallengeType.NONE, null, null, puzzleChallengeLevel, null, puzzleChallengeLevel.Name, subtitle.Replace("%1", puzzleChallengeLevel.MoveGoal.ToString()), true);
                 activeGame = newGame;
                 TransitionToGamePlayScene();
 
                 Dictionary<string, object> customAttributes = new Dictionary<string, object>();
-                customAttributes.Add("id", puzzleChallenge.ID);
-                customAttributes.Add("level", puzzleChallenge.Level);
+                customAttributes.Add("id", puzzleChallengeLevel.ID);
+                customAttributes.Add("level", puzzleChallengeLevel.Level);
                 AnalyticsManager.LogCustom(type + "_puzzle_challenge", customAttributes);
+            // }
+        }
+
+        public void SetActivePuzzlePack(PuzzlePack puzzlePack) {
+            ActivePuzzlePack = puzzlePack;
+        }
+
+        public void SetNextActivePuzzleLevel() {
+            if (ActivePuzzlePack.ActiveLevel < ActivePuzzlePack.PuzzleChallengeLevels.Count) {
+                ActivePuzzlePack.ActiveLevel++;
+            } else {
+                ActivePuzzlePack.ActiveLevel = 1;
             }
         }
 

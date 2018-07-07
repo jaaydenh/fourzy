@@ -12,20 +12,6 @@ namespace Fourzy
         public GameObject gamePiecePrefab;
         GamePieceData[] gamePieceData;
 
-        // private static GamePieceSelectionManager _instance;
-        // public static GamePieceSelectionManager Instance
-        // {
-        //     get
-        //     {
-        //         if (_instance == null)
-        //         {
-        //             _instance = FindObjectOfType<GamePieceSelectionManager>();
-        //             DontDestroyOnLoad(_instance.gameObject);
-        //         }
-        //         return _instance;
-        //     }
-        // }
-
         public string GetGamePieceName(int gamePieceId) {
             for (int i = 0; i < gamePieceData.Length; i++)
             {

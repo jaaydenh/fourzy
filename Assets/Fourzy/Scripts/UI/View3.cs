@@ -26,9 +26,9 @@ namespace Fourzy
                 GameManager.instance.onboardingScreen.StartOnboarding();
             } else if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 2)
             {
-                ViewController.instance.view3.Hide();
-                ViewController.instance.HideTabView();
-                GameManager.instance.OpenPuzzleChallengeGame();
+                //ViewController.instance.view3.Hide();
+                //ViewController.instance.HideTabView();
+                //GameManager.instance.OpenPuzzleChallengeGame();
             }
 
             Button btn = areaSelectButton.GetComponent<Button>();
