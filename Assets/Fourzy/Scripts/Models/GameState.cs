@@ -30,13 +30,17 @@ namespace Fourzy
         public int Player2MoveCount { get; private set; }
 
         public GameState (int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] gameBoardData, bool isGameOver, List<Move> moveList) {
+            // Debug.Log("GameState 1");
             this.numRows = numRows;
             this.numColumns = numColumns;
             this.GameType = gameType;
             this.IsPlayerOneTurn = isPlayerOneTurn;
             this.isCurrentPlayerTurn = isCurrentPlayerTurn;
-            this.TokenBoard = tokenBoard;
+            this.TokenBoard = tokenBoard.Clone();
+            // this.TokenBoard = ObjectCopier.Clone(tokenBoard);
             this.PreviousTokenBoard = tokenBoard.Clone();
+            // this.PreviousTokenBoard = ObjectCopier.Clone(tokenBoard);
+            // this.PreviousTokenBoard = tokenBoard;
             this.IsGameOver = isGameOver;
             this.MoveList = moveList;
             this.Winner = PlayerEnum.EMPTY;
@@ -53,13 +57,16 @@ namespace Fourzy
         }
 
         public GameState(int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, bool isGameOver, TokenBoard tokenBoard, PlayerEnum winner, List<Move> moveList, int[] previousGameboardData) {
+            Debug.Log("GameState 2");
             this.numRows = numRows;
             this.numColumns = numColumns;
             this.GameType = gameType;
             this.IsPlayerOneTurn = isPlayerOneTurn;
             this.isCurrentPlayerTurn = isCurrentPlayerTurn;
             this.TokenBoard = tokenBoard.Clone();
+            // this.TokenBoard = ObjectCopier.Clone(tokenBoard);
             this.PreviousTokenBoard = tokenBoard.Clone();
+            // this.PreviousTokenBoard = ObjectCopier.Clone(tokenBoard);
             this.IsGameOver = isGameOver;
             this.MoveList = moveList;
             this.Winner = winner;
@@ -70,6 +77,11 @@ namespace Fourzy
             isMoveableRight = new int[numColumns * numRows];
 
             InitGameState(previousGameboardData);
+        }
+
+        public GameState Clone()
+        {
+            return new GameState(numRows, numColumns, GameType, IsPlayerOneTurn, isCurrentPlayerTurn, TokenBoard, GameBoard.ToArray(), IsGameOver, MoveList);
         }
 
         private void InitGameState(int[] gameBoardData) {
@@ -123,11 +135,6 @@ namespace Fourzy
             TokenBoard.SetTokenBoardCell(row, col, token);
         }
 
-        public GameState Clone()
-        {
-            return new GameState(numRows, numColumns, GameType, IsPlayerOneTurn, isCurrentPlayerTurn, TokenBoard, GameBoard.ToArray(), IsGameOver, MoveList);
-        }
-
         private void InitIsMovable() {
             for (int i = 0; i < numColumns * numRows; i++)
             {
@@ -173,6 +180,7 @@ namespace Fourzy
         }
 
         public List<MovingGamePiece> MovePiece(Move move, bool isReplay, out List<IToken> activeTokens) {
+            // Debug.Log("MovePiece");
             if (isReplay) {
                 GameBoard = previousGameBoard.Clone();
                 TokenBoard = PreviousTokenBoard.Clone();

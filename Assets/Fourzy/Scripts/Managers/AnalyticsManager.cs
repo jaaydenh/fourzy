@@ -177,9 +177,11 @@ namespace Fourzy
             else if (game.gameState.GameType == GameType.AI)
             {
                 Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                Debug.Log("game.gameState.TokenBoard.id: " + game.gameState.TokenBoard.id);
+                Debug.Log("game.gameState.TokenBoard.name: " + game.gameState.TokenBoard.name);
                 customAttributes.Add("TokenBoardId", game.gameState.TokenBoard.id);
                 customAttributes.Add("TokenBoardName", game.gameState.TokenBoard.name);
-                AnalyticsManager.LogCustom("open_new_ai_challenge", customAttributes);
+                // AnalyticsManager.LogCustom("open_new_ai_challenge", customAttributes);
             }
         }
     }

@@ -486,73 +486,82 @@ namespace Fourzy
                     // float gridSize = Screen.width - 20;
                     bool rotateRight = false;
                     bool rotateLeft = false;
-                    Token token = game.gameState.PreviousTokenBoard.tokens[row, col].tokenType;
                     GameObject go;
                     GameObject tokenPrefab = null;
-                    switch (token)
-                    {
-                        case Token.UP_ARROW:
-                            tokenPrefab = upArrowToken;
-                            break;
-                        case Token.DOWN_ARROW:
-                            tokenPrefab = downArrowToken;
-                            break;
-                        case Token.LEFT_ARROW:
-                            rotateLeft = true;
-                            tokenPrefab = leftArrowToken;
-                            break;
-                        case Token.RIGHT_ARROW:
-                            rotateRight = true;
-                            tokenPrefab = rightArrowToken;
-                            break;
-                        case Token.STICKY:
-                            tokenPrefab = stickyToken;
-                            break;
-                        case Token.BLOCKER:
-                            tokenPrefab = blockerToken;
-                            break;
-                        case Token.GHOST:
-                            tokenPrefab = ghostToken;
-                            break;
-                        case Token.ICE_SHEET:
-                            tokenPrefab = iceSheetToken;
-                            break;
-                        case Token.PIT:
-                            tokenPrefab = pitToken;
-                            break;
-                        case Token.NINETY_RIGHT_ARROW:
-                            tokenPrefab = ninetyRightArrowToken;
-                            break;
-                        case Token.NINETY_LEFT_ARROW:
-                            tokenPrefab = ninetyLeftArrowToken;
-                            break;
-                        case Token.BUMPER:
-                            tokenPrefab = bumperToken;
-                            break;
-                        case Token.COIN:
-                            tokenPrefab = coinToken;
-                            break;
-                        case Token.FRUIT:
-                            tokenPrefab = fruitToken;
-                            break;
-                        case Token.FRUIT_TREE:
-                            tokenPrefab = fruitTreeToken;
-                            break;
-                        case Token.WEB:
-                            tokenPrefab = webToken;
-                            break;
-                        case Token.SPIDER:
-                            tokenPrefab = spiderToken;
-                            break;
-                        case Token.SAND:
-                            tokenPrefab = sandToken;
-                            break;
-                        case Token.WATER:
-                            tokenPrefab = waterToken;
-                            break;
-                        default:
-                            break;
+                    GameState gameState = game.gameState;
+                    TokenBoard previousTokenBoard = game.gameState.PreviousTokenBoard;
+                    IToken[,] previousTokenBoardTokens = previousTokenBoard.tokens;
+                    if (previousTokenBoardTokens[row, col] != null) {
+                        Token token = previousTokenBoardTokens[row, col].tokenType;
+
+                        switch (token)
+                        {
+                            case Token.UP_ARROW:
+                                tokenPrefab = upArrowToken;
+                                break;
+                            case Token.DOWN_ARROW:
+                                tokenPrefab = downArrowToken;
+                                break;
+                            case Token.LEFT_ARROW:
+                                rotateLeft = true;
+                                tokenPrefab = leftArrowToken;
+                                break;
+                            case Token.RIGHT_ARROW:
+                                rotateRight = true;
+                                tokenPrefab = rightArrowToken;
+                                break;
+                            case Token.STICKY:
+                                tokenPrefab = stickyToken;
+                                break;
+                            case Token.BLOCKER:
+                                tokenPrefab = blockerToken;
+                                break;
+                            case Token.GHOST:
+                                tokenPrefab = ghostToken;
+                                break;
+                            case Token.ICE_SHEET:
+                                tokenPrefab = iceSheetToken;
+                                break;
+                            case Token.PIT:
+                                tokenPrefab = pitToken;
+                                break;
+                            case Token.NINETY_RIGHT_ARROW:
+                                tokenPrefab = ninetyRightArrowToken;
+                                break;
+                            case Token.NINETY_LEFT_ARROW:
+                                tokenPrefab = ninetyLeftArrowToken;
+                                break;
+                            case Token.BUMPER:
+                                tokenPrefab = bumperToken;
+                                break;
+                            case Token.COIN:
+                                tokenPrefab = coinToken;
+                                break;
+                            case Token.FRUIT:
+                                tokenPrefab = fruitToken;
+                                break;
+                            case Token.FRUIT_TREE:
+                                tokenPrefab = fruitTreeToken;
+                                break;
+                            case Token.WEB:
+                                tokenPrefab = webToken;
+                                break;
+                            case Token.SPIDER:
+                                tokenPrefab = spiderToken;
+                                break;
+                            case Token.SAND:
+                                tokenPrefab = sandToken;
+                                break;
+                            case Token.WATER:
+                                tokenPrefab = waterToken;
+                                break;
+                            default:
+                                break;
+                        }
+                    } else {
+                        Debug.Log("previousTokenBoardTokens is null");
                     }
+
                     if (tokenPrefab) {
                         go = Instantiate(tokenPrefab, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
                         if (rotateRight) {
@@ -1158,8 +1167,8 @@ namespace Fourzy
                     if (game.gameState.IsPuzzleChallengePassed)
                     {
                         PlayerPrefs.SetInt("PuzzleChallengeID:" + game.puzzleChallengeInfo.ID, 1);
-                        if (OnPuzzleCompleted != null)
-                            OnPuzzleCompleted(game.puzzleChallengeInfo);
+                        // if (OnPuzzleCompleted != null)
+                            // OnPuzzleCompleted(game.puzzleChallengeInfo);
                         // PlayerPrefs.SetInt("puzzleChallengeLevel", game.puzzleChallengeInfo.Level);
                         GameManager.instance.SetNextActivePuzzleLevel();
                         AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, true, game.gameState.Player1MoveCount);

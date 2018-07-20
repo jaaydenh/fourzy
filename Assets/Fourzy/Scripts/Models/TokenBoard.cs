@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace Fourzy {
+    
+    [Serializable]
     public class TokenBoard {
 
         public string id;
@@ -12,6 +15,7 @@ namespace Fourzy {
         public List<MoveInfo> initialMoves;
 
         public TokenBoard(int[] tokenData, string id, string name, List<MoveInfo> initialMoves, int[] initialGameBoardData, bool instantiateTokenBoard) {
+            // Debug.Log("TokenBoard Constructor 1");
             InitTokenBoard();
             this.id = id;
             this.name = name;
@@ -56,6 +60,7 @@ namespace Fourzy {
 
         // Used by Random Board Generator and for setting the mini game boards
         public TokenBoard(int[,] tokenData, string id, string name, List<MoveInfo> initialMoves, int[] initialGameBoardData, bool instantiateTokenBoard) {
+            Debug.Log("TokenBoard Constructor 2");
             InitTokenBoard();
             this.id = id;
             this.name = name;
@@ -83,103 +88,67 @@ namespace Fourzy {
             }
         }
 
-        // Only used for Cloning the TokenBoard
-        public TokenBoard(IToken[,] tokens, string id, string name, List<MoveInfo> initialMoves, int[] initialGameBoard) {
-            InitTokenBoard();
-            this.id = id;
-            this.name = name;
-            this.initialMoves = initialMoves;
+        public TokenBoard(TokenBoard tokenBoardToCopy)
+        {
+            // Debug.Log("TokenBoard Constructor 3");
+            if (tokenBoardToCopy == null) return;
 
-            for (int row = 0; row < Constants.numRows; row++)
-            {
-                for (int col = 0; col < Constants.numColumns; col++)
-                {
-                    // this.tokens[row, col] = tokens[row, col];
-                    switch (tokens[row, col].tokenType)
-                    {
-                        case Token.BLOCKER:
-                            this.tokens[row, col] = new BlockerToken(row, col);
-                        break;
-                        case Token.BUMPER:
-                            this.tokens[row, col] = new BumperToken(row, col);
-                        break;
-                        case Token.COIN:
-                            this.tokens[row, col] = new CoinToken(row, col);
-                        break;
-                        case Token.DOWN_ARROW:
-                            this.tokens[row, col] = new DownArrowToken(row, col);
-                        break;
-                        case Token.EMPTY:
-                            this.tokens[row, col] = new EmptyToken(row, col);
-                        break;
-                        case Token.FRUIT:
-                            this.tokens[row, col] = new FruitToken(row, col);
-                        break;
-                        case Token.FRUIT_TREE:
-                            this.tokens[row, col] = new FruitTreeToken(row, col);
-                        break;
-                        case Token.GHOST:
-                            this.tokens[row, col] = new GhostToken(row, col);
-                        break;
-                        case Token.ICE_SHEET:
-                            this.tokens[row, col] = new IceSheetToken(row, col);
-                        break;
-                        case Token.LEFT_ARROW:
-                            this.tokens[row, col] = new LeftArrowToken(row, col);
-                        break;
-                        case Token.NINETY_LEFT_ARROW:
-                            this.tokens[row, col] = new NinetyLeftArrowToken(row, col);
-                        break;
-                        case Token.NINETY_RIGHT_ARROW:
-                            this.tokens[row, col] = new NinetyRightArrowToken(row, col);
-                        break;
-                        case Token.PIT:
-                            this.tokens[row, col] = new PitToken(row, col);
-                        break;
-                        case Token.RIGHT_ARROW:
-                            this.tokens[row, col] = new RightArrowToken(row, col);
-                        break;
-                        case Token.SAND:
-                            this.tokens[row, col] = new SandToken(row, col);
-                        break;
-                        case Token.SPIDER:
-                            this.tokens[row, col] = new SpiderToken(row, col);
-                        break;
-                        case Token.STICKY:
-                            this.tokens[row, col] = new StickyToken(row, col);
-                        break;
-                        case Token.UP_ARROW:
-                            this.tokens[row, col] = new UpArrowToken(row, col);
-                        break;
-                        case Token.WATER:
-                            this.tokens[row, col] = new WaterToken(row, col);
-                        break;
-                        case Token.WEB:
-                            this.tokens[row, col] = new WebToken(row, col);
-                        break;
-                    }
-                }
-            }
+            this.id = tokenBoardToCopy.id;
+            this.name = tokenBoardToCopy.name;
 
-            this.initialGameBoard = new int[Constants.numRows * Constants.numColumns];
+            tokenBoard = new int[Constants.numRows, Constants.numColumns];
+            initialGameBoard = new int[Constants.numRows * Constants.numColumns];
 
-            if (initialGameBoard.Length > 0) {
+            if (tokenBoardToCopy.initialGameBoard != null) {
                 for (int row = 0; row < Constants.numRows; row++)
                 {
                     for (int col = 0; col < Constants.numColumns; col++)
                     {
-                        this.initialGameBoard[row * Constants.numRows + col] = initialGameBoard[row * Constants.numRows + col];
+                        initialGameBoard[row * Constants.numRows + col] = tokenBoardToCopy.initialGameBoard[row * Constants.numRows + col];
                     }
                 }
             } else {
+                Debug.Log("TokenBoard Clone Constructor: initialGameBoard is null");
+            }
+
+            if (tokenBoardToCopy.tokenBoard != null) {
                 for (int row = 0; row < Constants.numRows; row++)
                 {
                     for (int col = 0; col < Constants.numColumns; col++)
                     {
-                        this.initialGameBoard[row * Constants.numRows + col] = 0;
+                        tokenBoard[row, col] = tokenBoardToCopy.tokenBoard[row, col];
                     }
                 }
+            } else {
+                Debug.Log("TokenBoard Clone Constructor: tokenBoard is null");
             }
+
+            tokens = new IToken[Constants.numRows, Constants.numColumns];
+            if (tokenBoardToCopy.tokens != null) {
+                for (int row = 0; row < Constants.numRows; row++)
+                {
+                    for (int col = 0; col < Constants.numColumns; col++)
+                    {
+                        tokens[row, col] = tokenBoardToCopy.tokens[row, col];
+                    }
+                }
+            } else {
+                Debug.Log("TokenBoard Clone Constructor: tokens is null");
+            }
+
+            initialMoves = new List<MoveInfo>();
+            if (tokenBoardToCopy.initialMoves != null)
+            {
+                foreach (MoveInfo m in tokenBoardToCopy.initialMoves)
+                {
+                    initialMoves.Add(m);
+                }
+            }
+        }
+
+        public TokenBoard Clone()
+        {
+            return new TokenBoard(this);
         }
 
         public void InitTokenBoard() {
@@ -314,11 +283,6 @@ namespace Fourzy {
                     }
                 }
             }
-        }
-
-        public TokenBoard Clone()
-        {
-            return new TokenBoard(tokens, id, name, initialMoves, initialGameBoard);
         }
 
         public string PrintBoard(string name)

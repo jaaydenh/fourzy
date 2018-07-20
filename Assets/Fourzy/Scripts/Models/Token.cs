@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using System;
 
 namespace Fourzy {
+
     public interface IToken 
     {
         int Row { get; set; }
@@ -22,7 +24,7 @@ namespace Fourzy {
         Token tokenType { get; set; }
         void UpdateBoard(GameBoard board, bool swapPiece);
     }
-
+    [Serializable]
     public class UpArrowToken : IToken {
 
         public int Row { get; set; }
@@ -63,6 +65,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class DownArrowToken : IToken {
 
         public int Row { get; set; }
@@ -103,6 +106,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class LeftArrowToken : IToken {
 
         public int Row { get; set; }
@@ -143,6 +147,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class RightArrowToken : IToken {
 
         public int Row { get; set; }
@@ -183,6 +188,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class EmptyToken : IToken {
 
         public int Row { get; set; }
@@ -222,6 +228,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class BlockerToken : IToken {
 
         public int Row { get; set; }
@@ -263,6 +270,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class GhostToken : IToken {
 
         public int Row { get; set; }
@@ -302,6 +310,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class StickyToken : IToken {
 
         public int Row { get; set; }
@@ -341,6 +350,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class IceSheetToken : IToken {
 
         public int Row { get; set; }
@@ -380,6 +390,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class PitToken : IToken {
 
         public int Row { get; set; }
@@ -420,6 +431,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class NinetyRightArrowToken : IToken
     {
         public int Row { get; set; }
@@ -460,6 +472,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class NinetyLeftArrowToken : IToken
     {
         public int Row { get; set; }
@@ -500,6 +513,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class BumperToken : IToken
     {
         public int Row { get; set; }
@@ -541,6 +555,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class CoinToken : IToken
     {
         public int Row { get; set; }
@@ -580,6 +595,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class FruitToken : IToken
     {
         public int Row { get; set; }
@@ -621,6 +637,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class FruitTreeToken : IToken
     {
         public int Row { get; set; }
@@ -660,6 +677,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class WebToken : IToken
     {
         public int Row { get; set; }
@@ -700,6 +718,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class SpiderToken : IToken
     {
         public int Row { get; set; }
@@ -740,6 +759,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class SandToken : IToken
     {
         public int Row { get; set; }
@@ -781,6 +801,7 @@ namespace Fourzy {
         }
     }
 
+    [Serializable]
     public class WaterToken : IToken
     {
         public int Row { get; set; }

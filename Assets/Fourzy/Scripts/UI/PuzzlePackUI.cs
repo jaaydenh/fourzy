@@ -17,18 +17,18 @@ namespace Fourzy
             btn.onClick.AddListener(OpenPuzzlePack);
         }
 
-        private void OnEnable()
-        {
-            GamePlayManager.OnPuzzleCompleted += UpdatePuzzlePack;
-        }
+        // private void OnEnable()
+        // {
+        //     GamePlayManager.OnPuzzleCompleted += UpdatePuzzlePack;
+        // }
 
-        private void OnDisable()
-        {
-            GamePlayManager.OnPuzzleCompleted -= UpdatePuzzlePack;
-        }
+        // private void OnDisable()
+        // {
+        //     GamePlayManager.OnPuzzleCompleted -= UpdatePuzzlePack;
+        // }
 
         public void InitPuzzlePack(PuzzlePack puzzlePack) {
-            
+            Debug.Log("InitPuzzlePack");
             this.PuzzlePack = puzzlePack;
             //TODO: set active level based off of levels already completed
             this.PuzzlePack.ActiveLevel = GetNextLevel();
@@ -45,13 +45,16 @@ namespace Fourzy
             GameManager.instance.OpenPuzzleChallengeGame("open");
         }
 
-        void UpdatePuzzlePack(PuzzleChallengeLevel puzzleChallengeLevel) {
-            Debug.Log("UpdatePuzzlePack: GameManager.instance.ActivePuzzlePack.ID: " + GameManager.instance.ActivePuzzlePack.ID);
-            Debug.Log("UpdatePuzzlePack: PuzzlePack.ID: " + PuzzlePack.ID);
-            if (GameManager.instance.ActivePuzzlePack.ID == PuzzlePack.ID) {
-                completedAndTotalCount.text = GetCompletedCount() + " / " + PuzzlePack.PuzzleChallengeLevels.Count.ToString();
-            }
-        }
+        // void UpdatePuzzlePack(PuzzleChallengeLevel puzzleChallengeLevel) {
+        //     Debug.Log("UpdatePuzzlePack: GameManager.instance.ActivePuzzlePack.ID: " + GameManager.instance.ActivePuzzlePack.ID);
+        //     // Debug.Log("UpdatePuzzlePack: PuzzlePack.ID: " + PuzzlePack.ID);
+        //     if (PuzzlePack == null) {
+        //         Debug.Log("Puzzle Pack is null");
+        //     }
+        //     if (GameManager.instance.ActivePuzzlePack.ID == PuzzlePack.ID) {
+        //         completedAndTotalCount.text = GetCompletedCount() + " / " + PuzzlePack.PuzzleChallengeLevels.Count.ToString();
+        //     }
+        // }
 
         int GetCompletedCount() {
             int completedCount = 0;

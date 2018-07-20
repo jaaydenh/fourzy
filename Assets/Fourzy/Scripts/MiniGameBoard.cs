@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace Fourzy {
     public class MiniGameBoard : MonoBehaviour {
 
-        public delegate void SetTokenBoard(TokenBoard tokenboard);
+        public delegate void SetTokenBoard(string tokenBoardId);
         public static event SetTokenBoard OnSetTokenBoard;
         public GameObject gameboard;
         public TokenBoard tokenBoard;
@@ -192,10 +192,10 @@ namespace Fourzy {
             Toggle toggle = this.GetComponentInChildren<Toggle>();
 
             if (toggle.isOn) {
-                //Debug.Log("GAME BOARD SELECTED ON");
+                Debug.Log("GAME BOARD SELECTED ON: tokenboard.id: " + tokenBoard.id);
                 glow.SetActive(true);
-                if (OnSetTokenBoard != null)
-                    OnSetTokenBoard(tokenBoard);
+                if (OnSetTokenBoard != null && tokenBoard != null)
+                    OnSetTokenBoard(tokenBoard.id);
             } else {
                 //Debug.Log("GAME BOARD SELECTED OFF");
                 glow.SetActive(false);

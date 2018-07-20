@@ -16,6 +16,22 @@ public class MenuItems : MonoBehaviour {
         PlayerPrefs.DeleteAll();
     }
 
+    [UnityEditor.MenuItem("Fourzy/ResetPuzzlePacks")]
+    static void ResetPuzzlePacks()
+    {
+        for (int x = 1; x < 10; x++)
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                if (i < 10) {
+                    PlayerPrefs.DeleteKey("PuzzleChallengeID:" + x + "00"+i);
+                } else {
+                    PlayerPrefs.DeleteKey("PuzzleChallengeID:" + x + "0"+i);
+                }
+            }
+        }
+    }
+
     [UnityEditor.MenuItem("Fourzy/ResetOnboarding")]
     static void ResetOnboarding()
     {

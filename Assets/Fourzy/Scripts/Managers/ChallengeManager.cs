@@ -41,6 +41,7 @@ namespace Fourzy
         public static event ChallengeIssuedDelegate OnChallengeIssuedDelegate;
 
         public TokenBoard tokenBoard;
+        public string tokenBoardId;
         public GameObject yourMoveGameGrid;
         public GameObject theirMoveGameGrid;
         public GameObject completedGameGrid;
@@ -125,28 +126,38 @@ namespace Fourzy
             OnChallengeIssuedDelegate(message);
         }
 
-        private void SetTokenBoard(TokenBoard tokenboard) {
+        private void SetTokenBoard(string tokenBoardId) {
             
-            if (tokenboard != null) {
-                Debug.Log("SetTokenBoard tokenboard.name: " + tokenboard.name);
-                this.tokenBoard = new TokenBoard(tokenboard.tokenBoard, tokenboard.id, tokenboard.name, tokenboard.initialMoves, tokenboard.initialGameBoard, true);
+            if (tokenBoardId != null) {
+                Debug.Log("SetTokenBoard tokenboardid: " + tokenBoardId);
+                // this.tokenBoard = new TokenBoard(tokenBoard);
+                this.tokenBoardId = tokenBoardId;
+                //   ObjectCopier.Clone(tokenboard);
+                // this.tokenBoard = new TokenBoard(tokenboard.tokenBoard, tokenboard.id, tokenboard.name, tokenboard.initialMoves, tokenboard.initialGameBoard, true);
             } else {
-                Debug.Log("SetTokenBoard tokenboard is null");
-                this.tokenBoard = null;
+                Debug.Log("SetTokenBoard tokenboardid is null");
+                // this.tokenBoard = null;
+                this.tokenBoardId = null;
             }
         }
 
         public TokenBoard GetTokenBoard(string tokenBoardId = null) {
-            Debug.Log("ChallengeManager: GetTokenBoard");
+            // Debug.Log("ChallengeManager: GetTokenBoard: " + tokenBoardId);
             if (tokenBoardId != null) {
-                Debug.Log("ChallengeManager: tokenBoardId: " + tokenBoardId);
+                // Debug.Log("ChallengeManager: tokenBoardId: " + tokenBoardId);
                 return TokenBoardLoader.instance.GetTokenBoard(tokenBoardId);
             }
-            if (tokenBoard == null)
-            {
+            if (this.tokenBoardId != null && this.tokenBoardId != "") {
+                // Debug.Log("ChallengeManager: this.tokenBoardId: " + this.tokenBoardId);
+                return TokenBoardLoader.instance.GetTokenBoard(this.tokenBoardId);
+            } else {
                 Debug.Log("GetRandomTokenBoard");
                 return tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
             }
+            // if (tokenBoard == null) {
+            //     Debug.Log("GetRandomTokenBoard");
+            //     return tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
+            // }
 
             return tokenBoard;
         }

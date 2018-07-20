@@ -56,6 +56,35 @@ namespace Fourzy {
             player2WinningPositions = new List<Position>(); 
         }
 
+        public GameBoard(GameBoard ObjectToCopy)
+        {
+            if (ObjectToCopy == null) return;
+
+            this.gameState = ObjectToCopy.gameState;
+            this.numRows = ObjectToCopy.numRows;
+            this.numColumns = ObjectToCopy.numColumns;
+            this.numPiecesToWin = ObjectToCopy.numPiecesToWin;
+
+            board = new int[numColumns, numRows];
+            for (int row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < numColumns; col++)
+                {
+                    this.board[row, col] = ObjectToCopy.board[row, col];
+                }
+            }
+
+            activeMovingPieces = new List<MovingGamePiece>();
+            completedMovingPieces = new List<MovingGamePiece>();
+            player1WinningPositions = new List<Position>();
+            player2WinningPositions = new List<Position>();
+        }
+
+        public GameBoard Clone ()
+        {
+            return new GameBoard (this);
+        }
+
         public void InitGameBoard() {
             for (int row = 0; row < numRows; row++) {
                 for (int col = 0; col < numColumns; col++) {
@@ -265,7 +294,7 @@ namespace Fourzy {
                     }
 
                     if (token.hasEffect) {
-                        Debug.Log("token.hasEffect: token: " + token.tokenType);
+                        // Debug.Log("token.hasEffect: token: " + token.tokenType);
                         //if (OnUpdateTokenBoard != null) {
                         //    OnUpdateTokenBoard(nextPosition.row, nextPosition.column, token.replacedToken);    
                         //}
@@ -449,11 +478,6 @@ namespace Fourzy {
             }
 
             return true;
-        }
-
-        public GameBoard Clone ()
-        {
-            return new GameBoard (gameState, numRows, numColumns, numPiecesToWin, piecesCount, board);
         }
 
         public string PrintBoard(string name) {

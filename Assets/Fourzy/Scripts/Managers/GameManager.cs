@@ -365,7 +365,7 @@ namespace Fourzy
             Debug.Log("GameManager OpenNewGame tokenboardId: " + tokenBoardId);
 
             TokenBoard tokenBoard = ChallengeManager.instance.GetTokenBoard(tokenBoardId);
-
+            Debug.Log("OpenNewGame: tokenboard name: " + tokenBoard.name);
             //If we initiated the challenge, we get to be player 1
             GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, gameType, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
             Game newGame = new Game(null, newGameState, true, false, false, opponent, ChallengeState.NONE, ChallengeType.NONE, UserManager.instance.gamePieceId.ToString(), null, null, null, null, null, displayIntroUI);
