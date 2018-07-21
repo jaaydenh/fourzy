@@ -22,8 +22,10 @@ namespace Fourzy
                 ViewController.instance.view3.Hide();
                 ViewController.instance.HideTabView();
 
+                GameManager.instance.isOnboardingActive = true;
+                GameManager.instance.shouldLoadOnboarding = true;
                 GameManager.instance.OpenNewGame(GameType.PASSANDPLAY, null, false, "100");
-                GameManager.instance.onboardingScreen.StartOnboarding();
+                // GameManager.instance.onboardingScreen.StartOnboarding();
             } else if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 2)
             {
                 //ViewController.instance.view3.Hide();

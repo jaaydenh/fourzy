@@ -54,6 +54,7 @@ namespace Fourzy
         public Button nextPuzzleChallengeButton;
         public Button rewardsButton;
         public Button backButton;
+        public GameObject backButtonObject;
         public Button resignButton;
         public GameObject moveHintAreaObject;
         public GameIntroUI gameIntroUI;
@@ -178,6 +179,11 @@ namespace Fourzy
             }
 
             challengeIdDebugText.text = "ChallengeId: " + game.challengeId;
+
+            if (GameManager.instance.shouldLoadOnboarding) {
+                GameManager.instance.shouldLoadOnboarding = false;
+                GameManager.instance.onboardingScreen.StartOnboarding();
+            }
         }
 
         private void OnEnable()
@@ -684,6 +690,10 @@ namespace Fourzy
             SceneManager.UnloadSceneAsync("gamePlay");
         }
 
+        public void UnloadGamePlayScreen() {
+            SceneManager.UnloadSceneAsync("gamePlay");
+        }
+
         public void ResignButtonOnClick() {
             if (OnResign != null)
             {
@@ -1166,6 +1176,12 @@ namespace Fourzy
                 {
                     if (game.gameState.IsPuzzleChallengePassed)
                     {
+                        Debug.Log("test test: " + PlayerPrefs.GetInt("PuzzleChallengeID:" + game.puzzleChallengeInfo.ID, 0));
+                        if (PlayerPrefs.GetInt("PuzzleChallengeID:" + game.puzzleChallengeInfo.ID, 0) == 0) {
+                            Debug.Log("Succssfully submitted puzzle complted");
+                            ChallengeManager.instance.SubmitPuzzleCompleted();
+                        }
+                        
                         PlayerPrefs.SetInt("PuzzleChallengeID:" + game.puzzleChallengeInfo.ID, 1);
                         // if (OnPuzzleCompleted != null)
                             // OnPuzzleCompleted(game.puzzleChallengeInfo);

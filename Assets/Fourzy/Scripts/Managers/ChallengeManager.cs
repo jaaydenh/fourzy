@@ -162,6 +162,23 @@ namespace Fourzy
             return tokenBoard;
         }
 
+        public void SubmitPuzzleCompleted() {
+            new LogEventRequest().SetEventKey("submitPuzzleCompleted")
+                .SetEventAttribute("completed", 1)
+                .Send((response) =>
+                {
+                    if (response.HasErrors)
+                    {
+                        Debug.Log("***** Error submitting puzzle completed for leaderboard: " + response.Errors.JSON);
+                        AnalyticsManager.LogError("set_puzzle_completed_error", response.Errors.JSON);
+                    }
+                    else
+                    {
+                        Debug.Log("Succssfully submitted puzzle complted");
+                    }
+                });
+        }
+
         private void SetGamePiece(string gamePieceId) {
             new LogEventRequest().SetEventKey("setGamePiece")
                 .SetEventAttribute("gamePieceId", gamePieceId)

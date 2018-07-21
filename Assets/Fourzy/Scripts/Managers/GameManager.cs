@@ -15,6 +15,7 @@ namespace Fourzy
         public Game activeGame;
         public PuzzlePack ActivePuzzlePack { get; private set; }
         public bool isOnboardingActive = false;
+        public bool shouldLoadOnboarding = false;
 
         [Header("Game UI")]
         public AlertUI alertUI;

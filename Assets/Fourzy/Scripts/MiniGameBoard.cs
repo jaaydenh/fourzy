@@ -179,8 +179,8 @@ namespace Fourzy {
                 }
             }
 
-            tokens.transform.localPosition = new Vector3(-1.63f,1.63f);
-            tokens.transform.localScale = new Vector3(0.46f,0.46f,1);
+            tokens.transform.localPosition = new Vector3(-1.68f,1.68f,4);
+            tokens.transform.localScale = new Vector3(0.48f,0.48f,1);
         }
 
         public void SetAsRandom() {
