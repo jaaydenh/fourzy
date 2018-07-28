@@ -3,7 +3,7 @@
     "ID": "5000",
     "Name": "Ghostly Pack",
     "FileName": "PuzzlePack5",
-    "CompletedToUnlock": 10,
+    "CompletedToUnlock": 20,
     "Enabled": true,
     "PuzzleChallengeLevels": [
         {

@@ -9,6 +9,7 @@
         public string Name;
         public int Level;
         public int ActiveLevel;
+        public int CompletedToUnlock;
         public bool Enabled  = false;
         public List<PuzzleChallengeLevel> PuzzleChallengeLevels = new List<PuzzleChallengeLevel>();
     }

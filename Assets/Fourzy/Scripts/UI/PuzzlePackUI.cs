@@ -11,10 +11,16 @@ namespace Fourzy
         public PuzzlePack PuzzlePack { get; private set; }
         public Text puzzlePackName;
         public Text completedAndTotalCount;
+        public Text starsToUnlockText;
+        public GameObject lockInfo;
+        private int puzzlesCompletedCount;
+        private bool isLocked = true;
+        public Image packImage;
 
         void Start () {
             Button btn = this.GetComponent<Button>();
             btn.onClick.AddListener(OpenPuzzlePack);
+            // packImage = this.GetComponent<Image>();
         }
 
         // private void OnEnable()
@@ -27,22 +33,42 @@ namespace Fourzy
         //     GamePlayManager.OnPuzzleCompleted -= UpdatePuzzlePack;
         // }
 
-        public void InitPuzzlePack(PuzzlePack puzzlePack) {
-            Debug.Log("InitPuzzlePack");
+        public void InitPuzzlePack(PuzzlePack puzzlePack, int puzzlesCompletedCount) {
+            // Debug.Log("InitPuzzlePack");
+            
             this.PuzzlePack = puzzlePack;
             //TODO: set active level based off of levels already completed
             this.PuzzlePack.ActiveLevel = GetNextLevel();
+            this.puzzlesCompletedCount = puzzlesCompletedCount;
 
             // Debug.Log("puzzlePack.Name: " + puzzlePack.Name);
             puzzlePackName.text = puzzlePack.Name;
             // Debug.Log("puzzlePack.PuzzleChallengeLevels.Count: " + puzzlePack.PuzzleChallengeLevels.Count);
-            completedAndTotalCount.text = GetCompletedCount() + " / " + puzzlePack.PuzzleChallengeLevels.Count.ToString();
+
+            // Debug.Log("puzzlesCompletedCount: " + puzzlesCompletedCount);
+
+            if (puzzlesCompletedCount >= puzzlePack.CompletedToUnlock) {
+                lockInfo.SetActive(false);
+                isLocked = false;
+                completedAndTotalCount.enabled = true;
+                completedAndTotalCount.text = GetCompletedCount() + " / " + puzzlePack.PuzzleChallengeLevels.Count.ToString();
+            } else {
+                lockInfo.SetActive(true);
+                isLocked = true;
+                starsToUnlockText.text = puzzlePack.CompletedToUnlock.ToString();
+                completedAndTotalCount.enabled = false;
+
+                Color c = new Color(1f,1f,1f,0.75f);
+                packImage.color = c;
+            }
         }
 
         void OpenPuzzlePack() {
-            ViewController.instance.viewPuzzleSelection.Hide();
-            GameManager.instance.SetActivePuzzlePack(PuzzlePack);
-            GameManager.instance.OpenPuzzleChallengeGame("open");
+            if (!isLocked) {
+                ViewController.instance.viewPuzzleSelection.Hide();
+                GameManager.instance.SetActivePuzzlePack(PuzzlePack);
+                GameManager.instance.OpenPuzzleChallengeGame("open");
+            }
         }
 
         // void UpdatePuzzlePack(PuzzleChallengeLevel puzzleChallengeLevel) {

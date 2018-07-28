@@ -21,10 +21,7 @@ namespace Fourzy {
             }
         }
 
-        public void LoadMiniBoards() {
-            Debug.Log("LoadMiniBoards");
-            TokenBoard[] boards = TokenBoardLoader.instance.GetTokenBoardsForBoardSelection();
-
+        public void ClearMiniBoards() {
             if (createGameGameboardGrid.transform.childCount > 0) {
                 for (int i = createGameGameboardGrid.transform.childCount-1; i >= 0; i--) {
                     Transform board = createGameGameboardGrid.transform.GetChild(i);
@@ -33,6 +30,13 @@ namespace Fourzy {
                     //Lean.LeanPool.Despawn(piece.gameObject);
                 }
             }
+        }
+
+        public void LoadMiniBoards() {
+            Debug.Log("LoadMiniBoards");
+            TokenBoard[] boards = TokenBoardLoader.instance.GetTokenBoardsForBoardSelection();
+
+            ClearMiniBoards();
 
             // Create Random Miniboard
             GameObject random = Instantiate(miniBoardPrefab1) as GameObject;

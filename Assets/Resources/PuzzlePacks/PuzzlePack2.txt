@@ -3,7 +3,7 @@
     "ID": "2000",
     "Name": "Arrow Pack",
     "FileName": "PuzzlePack2",
-    "CompletedToUnlock": 3,
+    "CompletedToUnlock": 6,
     "Enabled": true,
     "PuzzleChallengeLevels": [
         {

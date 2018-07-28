@@ -95,6 +95,8 @@ namespace Fourzy
         public static event GameOver OnGameOver;
         public delegate void PuzzleCompleted(PuzzleChallengeLevel puzzleChallengeLevel);
         public static event PuzzleCompleted OnPuzzleCompleted;
+        public delegate void GamePlayMessage(string message);
+        public static event GamePlayMessage OnGamePlayMessage;
         public AudioClip clipMove;
         public AudioClip clipWin;
         public Color bluePlayerColor = new Color(0f / 255f, 176.0f / 255f, 255.0f / 255.0f);
@@ -411,6 +413,7 @@ namespace Fourzy
                 challengeIdDebugText.text = "ChallengeId: " + game.challengeId;    
             } else {
                 challengeIdDebugText.text = "Error: missing challenge id";
+                OnGamePlayMessage("Error: missing challenge id");
             }
 
             CreateGamePieceViews(game.gameState.GetPreviousGameBoard());
@@ -1056,7 +1059,8 @@ namespace Fourzy
                                 if (response.HasErrors)
                                 {
                                     Debug.Log("***** ChallengeEventRequest failed: " + response.Errors.JSON);
-                                    alertUI.Open("Server Error: " + response.Errors.JSON);
+                                    // alertUI.Open("Server Error: " + response.Errors.JSON);
+                                    OnGamePlayMessage("Error: " + response.Errors.JSON);
                                 }
                                 else
                                 {

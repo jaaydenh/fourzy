@@ -130,8 +130,10 @@ namespace Fourzy
                 var gamePieceIdString = response.ScriptData.GetString("gamePieceId");
                 int gamePieceId = int.Parse(gamePieceIdString);
                 game.opponentProfilePictureSprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(gamePieceId);
-                opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
-                opponentProfilePicture.enabled = true;
+                if (opponentProfilePicture != null) {
+                    opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
+                    opponentProfilePicture.enabled = true;
+                }
             }
         }
 

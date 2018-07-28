@@ -20,10 +20,12 @@ namespace Fourzy
         [Header("Game UI")]
         public AlertUI alertUI;
         public GameObject ErrorPanel;
+        // public InfoBanner InfoBanner;
         public Onboarding onboardingScreen;
         public Badge homeScreenPlayBadge;
         public GameObject tokenPopupUI;
         public GameObject headerUI;
+        public GameObject infoBannerPrefab;
 
         private void OnEnable()
         {
@@ -32,7 +34,8 @@ namespace Fourzy
             LeaderboardPlayer.OnActiveGame += TransitionToGamePlayScene;
             ChallengeManager.OnActiveGame += TransitionToGamePlayScene;
             ChallengeManager.OnReceivedOpponentGamePiece += SetOpponentGamePiece;
-            LoginManager.OnLoginError += DisplayLoginError;
+            LoginManager.OnLoginMessage += ShowInfoBanner;
+            GamePlayManager.OnGamePlayMessage += ShowInfoBanner;
             Game.OnActiveGame += TransitionToGamePlayScene;
             ChallengeManager.OnOpponentTurnTakenDelegate += OpponentTurnHandler;
             ChallengeManager.OnChallengeJoinedDelegate += ChallengeJoinedHandler;
@@ -50,7 +53,8 @@ namespace Fourzy
             LeaderboardPlayer.OnActiveGame -= TransitionToGamePlayScene;
             ChallengeManager.OnActiveGame -= TransitionToGamePlayScene;
             ChallengeManager.OnReceivedOpponentGamePiece -= SetOpponentGamePiece;
-            LoginManager.OnLoginError -= DisplayLoginError;
+            LoginManager.OnLoginMessage -= ShowInfoBanner;
+            GamePlayManager.OnGamePlayMessage -= ShowInfoBanner;
             Game.OnActiveGame -= TransitionToGamePlayScene;
             ChallengeManager.OnOpponentTurnTakenDelegate -= OpponentTurnHandler;
             ChallengeManager.OnChallengeJoinedDelegate -= ChallengeJoinedHandler;
@@ -492,11 +496,21 @@ namespace Fourzy
         {
             // TODO: inform the player they dont have a connection when connected is false
             //Debug.Log("CheckConnectionStatus: " + connected);
+            if (connected) {
+                // ShowInfoBanner("Connected Successfully");
+            } else {
+                ShowInfoBanner("Error connecting to server");
+            }
         }
 
-        private void DisplayLoginError()
+        private void ShowInfoBanner(string message)
         {
-            ErrorPanel.SetActive(true);
+            Debug.Log("ShowInfoBanner");
+            GameObject infoBannerObject = Instantiate(infoBannerPrefab) as GameObject;
+            InfoBanner infoBanner = infoBannerObject.GetComponent<InfoBanner>();
+            // infoBannerObject.gameObject.transform.SetParent(createGameGameboardGrid.transform);
+            //ErrorPanel.SetActive(true);
+            StartCoroutine(infoBanner.ShowText(message));
         }
 
         public void AddGame(Game game) {

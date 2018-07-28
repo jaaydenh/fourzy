@@ -104,6 +104,7 @@ namespace Fourzy {
         public void CreateTokens() {
 
             tokens = new GameObject("Tokens");
+            tokens.layer = 5;
             tokens.transform.parent = gameObject.transform;
 
             for(int row = 0; row < Constants.numRows; row++)

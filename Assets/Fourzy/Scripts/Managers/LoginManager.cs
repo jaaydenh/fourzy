@@ -14,12 +14,13 @@ namespace Fourzy
 
         public delegate void FacebookLoginCallback(AuthenticationResponse _resp);
 
-        public delegate void LoginError();
-        public static event LoginError OnLoginError;
+        public delegate void LoginMessage(string message);
+        public static event LoginMessage OnLoginMessage;
+        public InfoBanner infoBanner;
         [SerializeField]
         private Button facebookLoginButton;
-        readonly string[] firstNameSyllables = { "mon","fay","shi","zag","blarg","rash","izen"};
-        readonly string[] lastNameSyllables = { "malo","zak","abo","wonk","zig","wolf","cat"};
+        readonly string[] firstNameSyllables = { "kit","mon","fay","shi","zag","blarg","rash","izen","boop","pop","moop","foop"};
+        readonly string[] lastNameSyllables = { "malo","zak","abo","wonk","zig","wolf","cat","dog","sheep","goat"};
         bool readyForDeviceLogin;
 
         void Start() {
@@ -61,14 +62,6 @@ namespace Fourzy
             Debug.Log("Firebase: Received a new message from: " + e.Message.From);
         }
 
-        // private void DidFinishRegisterForRemoteNotificationEvent (string _deviceToken, string _error)
-        // {
-        //     // print("Request to register for remote notification finished. Error = " + _error.GetPrintableString());
-        //     print("DeviceToken = " + _deviceToken);
-
-        //     ManagePushNotifications(_deviceToken, "ios");
-        // }
-
         private void ManagePushNotifications(string token, string deviceOS)
         {       
             new PushRegistrationRequest().SetDeviceOS(deviceOS)
@@ -95,21 +88,23 @@ namespace Fourzy
                 .SetDisplayName(CreateNewPlayerName())
                 .Send((response) => {
                     if (!response.HasErrors) {
-                    UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null, null, null);
+                        UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null, null, null);
                         UserManager.instance.UpdateInformation();
                         ChallengeManager.instance.GetChallenges();
                         //LeaderboardManager.instance.GetLeaderboard();
 
-                        //Debug.Log("Device Authenticated...UserId: " + response.UserId);
-                        //Debug.Log("DisplayName: " + response.DisplayName);
-                        //Debug.Log("NewPlayer: " + response.NewPlayer);
-                        //Debug.Log("SwitchSummary: " + response.SwitchSummary);
+                        // Debug.Log("Device Authenticated...UserId: " + response.UserId);
+                        // Debug.Log("DisplayName: " + response.DisplayName);
+                        // Debug.Log("NewPlayer: " + response.NewPlayer);
+                        // Debug.Log("SwitchSummary: " + response.SwitchSummary);
 
                         AnalyticsManager.LogCustom("device_authentication_request");
+                        if (OnLoginMessage != null)
+                            OnLoginMessage("Device Authentication Success: " + response.DisplayName);
                     } else {
                         Debug.Log("***** Error Authenticating Device: " + response.Errors.JSON);
-                        if (OnLoginError != null)
-                            OnLoginError();
+                        if (OnLoginMessage != null)
+                            OnLoginMessage("Error Authenticating Device: " + response.Errors.JSON);
 
                         AnalyticsManager.LogError("device_authentication_request_error", response.Errors.JSON);
                     }
@@ -150,7 +145,7 @@ namespace Fourzy
                     facebookLoginButton.interactable = true;
                     //Invoke("DeviceLogin", 0.5f);
                     if (readyForDeviceLogin) {
-                        DeviceLogin();    
+                        DeviceLogin();
                     } else {
                         readyForDeviceLogin = true;
                     }
@@ -194,11 +189,13 @@ namespace Fourzy
                 Debug.LogWarning("Something went wrong with connecting to FaceBook: " + result.Error);
                 facebookLoginButton.interactable = true;
 
-                if (OnLoginError != null) {
+                if (OnLoginMessage != null) {
                     AnalyticsManager.LogError("gamesparks_fb_connect_error", result.Error);
-                    OnLoginError();
+                    OnLoginMessage("Gamesparks login error: " + result.Error);
                 } else {
                     AnalyticsManager.LogCustom("gamesparks_fb_connect_decline");
+                    // infoBanner.ShowText("Declined Facebook Login");
+                    OnLoginMessage("Declined Facebook Login");
                 }
             }
         }
@@ -207,6 +204,9 @@ namespace Fourzy
         private void AfterFBLogin(AuthenticationResponse response)
         {
             Debug.Log("AfterFBLogin:UserId: " + response.UserId);
+            // infoBanner.ShowText("Succesfully Logged into Facebook");
+            OnLoginMessage("Succesfully Logged into Facebook");
+
             facebookLoginButton.gameObject.SetActive(false);
             UserManager.instance.UpdateInformation();
             ChallengeManager.instance.GetChallenges();
@@ -235,11 +235,12 @@ namespace Fourzy
                     }
                     else
                     {
-                        Debug.LogWarning("***** Error Logging into facebook: " + response.Errors.JSON);
+                        Debug.LogWarning("***** Error Logging into Facebook: " + response.Errors.JSON);
+                        // infoBanner.ShowText("Error Logging into Facebook: " + response.Errors.JSON);
                         facebookLoginButton.gameObject.SetActive(true);
                         facebookLoginButton.interactable = true;
-                        if (OnLoginError != null)
-                            OnLoginError();
+                        if (OnLoginMessage != null)
+                            OnLoginMessage("Error Logging into Facebook: " + response.Errors.JSON);
                     }
 
                     AnalyticsManager.LogLogin("facebook", success);

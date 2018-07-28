@@ -3,7 +3,7 @@
     "ID": "4000",
     "Name": "Icy Pack",
     "FileName": "PuzzlePack4",
-    "CompletedToUnlock": 3,
+    "CompletedToUnlock": 12,
     "Enabled": true,
     "PuzzleChallengeLevels": [
         {

@@ -27,6 +27,7 @@ namespace Fourzy
 
         public void PlayButton() {
             Hide();
+            BoardSelectionManager.instance.ClearMiniBoards();
             GameManager.instance.OpenNewGame(gameType, opponent, true, null);
         }
 
@@ -45,14 +46,12 @@ namespace Fourzy
                 ViewController.instance.ShowTabView();
                 ViewController.instance.ChangeView(ViewController.instance.view3);
             }
+
+            BoardSelectionManager.instance.ClearMiniBoards();
         }
 
         public void TransitionToViewGameBoardSelection(GameType gameType, string opponentId = "", string opponentName = "", Image opponentProfilePicture = null, string opponentLeaderboardRank = "")
         {
-            // challengerGamePieceId = 0;
-            // challengedGamePieceId = 0;
-
-            // challengerGamePieceId = UserManager.instance.gamePieceId;
             if (opponentId != "") {
                 ChallengeManager.instance.GetOpponentGamePiece(opponentId);
             }

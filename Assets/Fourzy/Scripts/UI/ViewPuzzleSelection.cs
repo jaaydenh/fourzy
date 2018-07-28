@@ -53,17 +53,23 @@ namespace Fourzy
                 }
             }
 
-            GameObject puzzlePackObject = Instantiate(puzzlePackPrefab) as GameObject;
-
             foreach (var puzzlePack in puzzlePacks)
             {
                 puzzlesCompletedCount += GetCompletedCount(puzzlePack);
                 puzzlesTotalCount += puzzlePack.PuzzleChallengeLevels.Count;
+            }
+
+            GameObject puzzlePackObject = Instantiate(puzzlePackPrefab) as GameObject;
+
+            foreach (var puzzlePack in puzzlePacks)
+            {
+                // puzzlesCompletedCount += GetCompletedCount(puzzlePack);
+                // puzzlesTotalCount += puzzlePack.PuzzleChallengeLevels.Count;
 
                 GameObject go = Instantiate(puzzlePackPrefab) as GameObject;
                 PuzzlePackUI puzzlePackUI = go.GetComponent<PuzzlePackUI>();
                 Debug.Log("LoadPuzzlePacks: puzzlePack.ID: " + puzzlePack.ID);
-                puzzlePackUI.InitPuzzlePack(puzzlePack);
+                puzzlePackUI.InitPuzzlePack(puzzlePack, puzzlesCompletedCount);
 
                 go.gameObject.transform.SetParent(puzzlePackGrid.transform);
             }
