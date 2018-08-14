@@ -29,6 +29,7 @@ namespace Fourzy
 
         private void OnEnable()
         {
+            // GS.GameSparksAvailable += CheckConnectionStatus;
             GameUI.OnActiveGame += TransitionToGamePlayScene;
             FriendEntry.OnActiveGame += TransitionToGamePlayScene;
             LeaderboardPlayer.OnActiveGame += TransitionToGamePlayScene;
@@ -48,6 +49,7 @@ namespace Fourzy
 
         private void OnDisable()
         {
+            // GS.GameSparksAvailable -= CheckConnectionStatus;
             GameUI.OnActiveGame -= TransitionToGamePlayScene;
             FriendEntry.OnActiveGame -= TransitionToGamePlayScene;
             LeaderboardPlayer.OnActiveGame -= TransitionToGamePlayScene;
@@ -67,6 +69,8 @@ namespace Fourzy
 
         void Start()
         {
+            GS.GameSparksAvailable += CheckConnectionStatus;
+
             ChallengeAcceptedMessage.Listener = (message) =>
             {
                 var gsChallenge = message.Challenge;
@@ -98,7 +102,7 @@ namespace Fourzy
         new void Awake()
         {
             base.Awake();
-            GS.GameSparksAvailable += CheckConnectionStatus;
+            // GS.GameSparksAvailable += CheckConnectionStatus;
             DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
         }
 
@@ -497,13 +501,13 @@ namespace Fourzy
             // TODO: inform the player they dont have a connection when connected is false
             //Debug.Log("CheckConnectionStatus: " + connected);
             if (connected) {
-                // ShowInfoBanner("Connected Successfully");
+                ShowInfoBanner("Connected Successfully");
             } else {
                 ShowInfoBanner("Error connecting to server");
             }
         }
 
-        private void ShowInfoBanner(string message)
+        public void ShowInfoBanner(string message)
         {
             Debug.Log("ShowInfoBanner");
             GameObject infoBannerObject = Instantiate(infoBannerPrefab) as GameObject;

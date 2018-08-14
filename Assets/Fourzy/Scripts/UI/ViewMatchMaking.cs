@@ -15,6 +15,7 @@ namespace Fourzy
         public TextMeshProUGUI userFacingMessage;
         public TextMeshProUGUI timerText;
         public GameObject backButton;
+        public bool isRealtime;
         private int findChallengerErrorCount = 0;
         private int joinChallengeErrorCount = 0;
         private int getChallengeError = 0;
@@ -30,13 +31,27 @@ namespace Fourzy
             keepHistory = false;
         }
 
+        void OnEnable() {
+            RealtimeManager.OnRealtimeReady += StartRealtimeGame;
+            RealtimeManager.OnRealtimeMatchNotFound += RealtimeMatchNotFound;
+        }
+
+        void OnDisable() {
+            RealtimeManager.OnRealtimeReady -= StartRealtimeGame;
+            RealtimeManager.OnRealtimeMatchNotFound -= RealtimeMatchNotFound;
+        }
+
         public override void Show()
         {
             base.Show();
             startTime = Time.time;
             userFacingMessage.text = "Finding Match...";
             backButton.SetActive(false);
-            ChallengeManager.instance.FindRandomChallenge(FindChallengeSuccess, FindChallengeError);
+            if (isRealtime) {
+                RealtimeManager.Instance.FindPlayers();
+            } else {
+                ChallengeManager.instance.FindRandomChallenge(FindChallengeSuccess, FindChallengeError);
+            }
         }
 
         public override void Hide()
@@ -99,6 +114,18 @@ namespace Fourzy
                     Hide();
                 }
             }
+        }
+
+        private void StartRealtimeGame(int firstPlayerPeerId, int tokenBoardIndex) {
+            ChallengeManager.instance.OpenNewRealtimeGame(firstPlayerPeerId, tokenBoardIndex);
+            Hide();
+        }
+
+        private void RealtimeMatchNotFound() {
+            userFacingMessage.text = "No one is playing now, try again later.";
+            isVisible = false;
+            timerText.text = "";
+            backButton.SetActive(true);
         }
 
         private void OpenNewMultiplayerGame() {

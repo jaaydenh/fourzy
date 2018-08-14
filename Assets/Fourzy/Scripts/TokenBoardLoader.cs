@@ -80,6 +80,16 @@ namespace Fourzy
             return tokenboard;
         }
 
+        public TokenBoard GetRandomTokenBoardByIndex(int index) {
+            TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
+
+            var tokenBoardData = tokenBoardCollection[index];
+
+            TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), true);
+
+            return tokenboard;
+        }
+
         public TokenBoard GetTokenBoard(string id) {
             TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
 

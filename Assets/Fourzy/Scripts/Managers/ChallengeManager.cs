@@ -81,6 +81,7 @@ namespace Fourzy
             ChallengeLostMessage.Listener += OnChallengeLost;
             ChallengeIssuedMessage.Listener += OnChallengeIssued;
             ChallengeDrawnMessage.Listener += OnChallengeDrawn;
+            // RealtimeManager.OnRealtimeReady += OpenNewRealtimeGame;
         }
 
         void OnDisable() {
@@ -94,6 +95,7 @@ namespace Fourzy
             ChallengeLostMessage.Listener -= OnChallengeLost;
             ChallengeIssuedMessage.Listener -= OnChallengeIssued;
             ChallengeDrawnMessage.Listener -= OnChallengeDrawn;
+            // RealtimeManager.OnRealtimeReady -= OpenNewRealtimeGame;
         }
 
         private void OnChallengeTurnTaken(ChallengeTurnTakenMessage message)
@@ -484,6 +486,78 @@ namespace Fourzy
                 .SetChallengeInstanceId(challengeInstanceId)
                 .SetMaxResponseTimeInMillis(17000)
                 .Send(successCallback, errorCallback);
+        }
+
+        public void OpenNewRealtimeGame(int firstPlayerPeerId, int tokenBoardIndex) {
+            
+            Debug.Log("Open New Realtime Game");
+            bool isFirstPlayer = false;
+            if (RealtimeManager.Instance.GetRTSession().PeerId == firstPlayerPeerId) {
+                isFirstPlayer = true;
+            }
+            
+            string opponentId = string.Empty;
+            string opponentName = string.Empty;
+
+            for (int playerIndex = 0; playerIndex < RealtimeManager.Instance.GetSessionInfo().GetPlayerList().Count; playerIndex++) { // loop through all players
+                // If the player's peerId is the same as this player's peerId then we know this is the player and we can setup players and opponents //
+                if (RealtimeManager.Instance.GetSessionInfo().GetPlayerList()[playerIndex].peerId == RealtimeManager.Instance.GetRTSession().PeerId) {
+                    // Current player
+                    string playerId = RealtimeManager.Instance.GetSessionInfo ().GetPlayerList () [playerIndex].id;
+                    string playerName = RealtimeManager.Instance.GetSessionInfo ().GetPlayerList () [playerIndex].displayName;
+                    Debug.Log("playerName: " + playerName);
+                } else {
+                    // The opponent
+                    opponentId = RealtimeManager.Instance.GetSessionInfo ().GetPlayerList () [playerIndex].id;
+                    opponentName = RealtimeManager.Instance.GetSessionInfo ().GetPlayerList () [playerIndex].displayName;
+                    Debug.Log("Oppnent Name: " + opponentName);
+                }
+            }
+            
+            Opponent opponent = new Opponent(opponentId, opponentName, null);
+
+            // if (tokenBoard == null) {
+                // TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
+                // TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard("1000");
+
+                tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoardByIndex(tokenBoardIndex);
+            // }
+
+            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.REALTIME, true, isFirstPlayer, tokenBoard, tokenBoard.initialGameBoard, false, null);
+            Game game = new Game(null, gameState, isFirstPlayer, false, false, opponent, ChallengeState.NONE, ChallengeType.STANDARD, UserManager.instance.gamePieceId.ToString(), "0", null, null, null, null, true);
+            GameManager.instance.activeGame = game;
+
+            GetGamePiece(game.opponent.opponentId, GetGamePieceIdSuccess, GetGamePieceIdFailure);
+
+            if (OnActiveGame != null)
+                OnActiveGame();
+            
+            Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+            customAttributes.Add("PlayerName", UserManager.instance.userName);
+            customAttributes.Add("TokenBoardId", tokenBoard.id);
+            customAttributes.Add("TokenBoardName", tokenBoard.name);
+            AnalyticsManager.LogCustom("open_new_realtime_game", customAttributes);
+        }
+
+        private void GetGamePieceIdSuccess(LogEventResponse response) {
+            if (response.ScriptData != null) {
+                
+                var gamePieceIdString = response.ScriptData.GetString("gamePieceId");
+                Debug.Log("GetGamePieceIdSuccess: " + gamePieceIdString);
+
+                int gamePieceId = int.Parse(gamePieceIdString);
+                GameManager.instance.activeGame.opponent.gamePieceId = gamePieceId;
+                if (gamePieceId != -1) {
+                    GamePlayManager.Instance.opponentPieceImage.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(gamePieceId);
+                } else {
+                    GamePlayManager.Instance.opponentPieceImage.sprite = GamePieceSelectionManager.Instance.gamePieces[0];
+                }
+            }
+        }
+
+        private void GetGamePieceIdFailure(LogEventResponse response) {
+            Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
+            AnalyticsManager.LogError("get_player_gamepiece_error", response.Errors.JSON);
         }
 
         public void OpenNewMultiplayerGame() {

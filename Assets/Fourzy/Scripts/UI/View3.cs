@@ -89,8 +89,32 @@ namespace Fourzy
             }
         }
 
-        public void PlayButton()
+        public void TurnPlayButton()
         {
+            Game game = GameManager.instance.GetNextActiveGame();
+            if (game != null)
+            {
+                game.OpenGame();
+                Hide();
+            }
+            else
+            {
+                ViewMatchMaking.instance.isRealtime = false;
+                ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
+            }
+
+            ViewController.instance.HideTabView();
+            GameManager.instance.headerUI.SetActive(false);
+        }
+
+        public void FastPlayButton() {
+            ViewMatchMaking.instance.isRealtime = true;
+            ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
+            ViewController.instance.HideTabView();
+            GameManager.instance.headerUI.SetActive(false);
+        }
+
+        public void PlayButtonOld() {
             Game game = GameManager.instance.GetNextActiveGame();
             if (game != null)
             {
