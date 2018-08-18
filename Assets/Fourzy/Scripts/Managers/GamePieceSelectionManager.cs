@@ -7,6 +7,9 @@ namespace Fourzy
  [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene, false)]
     public class GamePieceSelectionManager : UnitySingleton<GamePieceSelectionManager>
     {
+        [SerializeField]
+        private List<GamePiece> gamePiecePrefabs = new List<GamePiece>(); 
+
         public GameObject gamePieceGrid;
         public List<Sprite> gamePieces = new List<Sprite>();
         public GameObject gamePiecePrefab;
@@ -51,6 +54,11 @@ namespace Fourzy
         public Sprite GetGamePieceSprite(int gamePieceId) {
             //Debug.Log("GetGamePieceSprite: " + gamePieceId);
             return gamePieces[gamePieceId];
+        }
+
+        public GameObject GetGamePiecePrefab(int gamePieceId)
+        {
+            return gamePiecePrefabs[gamePieceId].gameObject;
         }
     }
 }

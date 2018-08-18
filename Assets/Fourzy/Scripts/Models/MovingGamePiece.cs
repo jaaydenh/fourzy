@@ -14,7 +14,8 @@ namespace Fourzy {
         public float friction;
         public int momentum;
 
-        public MovingGamePiece(Move move, int momentum = 0) {
+        public MovingGamePiece(Move move, int momentum = 0) 
+        {
             positions = new List<Position>();
             this.position = move.position;
             positions.Add(position);
@@ -25,7 +26,8 @@ namespace Fourzy {
             this.friction = 0.0f;
             var game = GameManager.instance.activeGame;
 
-            if (momentum == 0) {
+            if (momentum == 0) 
+            {
                 // if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD) {
                     //int numMoves = GameManager.instance.gameState.moveList.Count;
                     //long tempMomentum = 20 + System.Int64.Parse(GameManager.instance.challengeInstanceId.Substring(0, 10), System.Globalization.NumberStyles.HexNumber) % 20;
@@ -35,7 +37,9 @@ namespace Fourzy {
                 // } else {
                     // this.momentum = Random.Range(20, 40);
                 // }
-            } else {
+            } 
+            else 
+            {
                 this.momentum = momentum;
             }
         }

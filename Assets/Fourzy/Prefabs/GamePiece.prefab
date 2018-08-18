@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 21211242}
   - component: {fileID: 5836388}
   - component: {fileID: 114455832749552324}
-  - component: {fileID: 50450882592354128}
   - component: {fileID: 95146299165651888}
+  - component: {fileID: 50260365087733692}
   m_Layer: 8
   m_Name: GamePiece
   m_TagString: GamePiece
@@ -61,6 +61,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: cf67727ab0e2f4b2eb15dc6e7fe68067, type: 2}
   m_StaticBatchInfo:
@@ -103,7 +104,7 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 174738}
   m_IsPrefabParent: 1
---- !u!50 &50450882592354128
+--- !u!50 &50260365087733692
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 1
@@ -114,10 +115,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
-  m_Mass: 0.01
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -140,6 +141,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114455832749552324
 MonoBehaviour:
   m_ObjectHideFlags: 1

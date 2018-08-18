@@ -236,7 +236,8 @@ namespace Fourzy
             gameBoardView.Clear();
         }
 
-        private void InitIntroUI() {
+        private void InitIntroUI() 
+        {
             string title = game.title;
             string subtitle = game.subtitle;
             if (subtitle == "") {
@@ -436,7 +437,7 @@ namespace Fourzy
 
         public void CreateGamePieceViews(int[,] board)
         {
-            gameBoardView.gamePieces = new GameObject[Constants.numRows, Constants.numColumns];
+            gameBoardView.gamePieces = new GamePiece[Constants.numRows, Constants.numColumns];
 
             for (int row = 0; row < Constants.numRows; row++)
             {
@@ -446,26 +447,14 @@ namespace Fourzy
 
                     if (piece == (int)Piece.BLUE)
                     {
-                        GameObject pieceObject = SpawnPiece(col, row * -1, PlayerEnum.ONE, PieceAnimState.ASLEEP);
-                        SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
-                        Color c = pieceSprite.color;
-                        c.a = 0.0f;
-                        pieceSprite.color = c;
-
-                        GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
-                        pieceModel.player = PlayerEnum.ONE;
+                        GamePiece pieceObject = SpawnPiece(col, row * -1, PlayerEnum.ONE, PieceAnimState.ASLEEP);
+                        pieceObject.player = PlayerEnum.ONE;
                         gameBoardView.gamePieces[row, col] = pieceObject;
                     }
                     else if (piece == (int)Piece.RED)
                     {
-                        GameObject pieceObject = SpawnPiece(col, row * -1, PlayerEnum.TWO, PieceAnimState.ASLEEP);
-                        SpriteRenderer pieceSprite = pieceObject.GetComponent<SpriteRenderer>();
-                        Color c = pieceSprite.color;
-                        c.a = 0.0f;
-                        pieceSprite.color = c;
-
-                        GamePiece pieceModel = pieceObject.GetComponent<GamePiece>();
-                        pieceModel.player = PlayerEnum.TWO;
+                        GamePiece pieceObject = SpawnPiece(col, row * -1, PlayerEnum.TWO, PieceAnimState.ASLEEP);
+                        pieceObject.player = PlayerEnum.TWO;
                         gameBoardView.gamePieces[row, col] = pieceObject;
                     }
                 }
@@ -804,46 +793,30 @@ namespace Fourzy
         /// Spawns a gamepiece at the given column and row
         /// </summary>
         /// <returns>The piece.</returns>
-        GameObject SpawnPiece(float posX, float posY, PlayerEnum player, PieceAnimState startingState)
+        GamePiece SpawnPiece(float posX, float posY, PlayerEnum player, PieceAnimState startingState)
         {
+            if (game.challengerGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1)
+            {
+                game.challengerGamePieceId = 0;
+            }
+            if (game.challengedGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1)
+            {
+                game.challengedGamePieceId = 0;
+            }
+
             //Debug.Log("SpawnPiece: x: " + posX + " y: " + posY);
             float xPos = (posX + .1f) * .972f;
             float yPos = (posY + .05f) * .96f;
 
             //GameObject gamePiece = LeanPool.Spawn(gamePiecePrefab, new Vector3(xPos, yPos, 10),
-                //Quaternion.identity, gamePieces.transform) as GameObject;
-            GameObject gamePiece = Instantiate(gamePiecePrefab, new Vector3(xPos, yPos, 10),
-                Quaternion.identity, gamePieces.transform) as GameObject;
+            //Quaternion.identity, gamePieces.transform) as GameObject;
+            GameObject gamePiecePrefab = GamePieceSelectionManager.Instance.GetGamePiecePrefab(game.challengerGamePieceId);
+            GameObject go = Instantiate(gamePiecePrefab, new Vector3(xPos, yPos, 10),
+                                                Quaternion.identity, gamePieces.transform);
+            GamePiece gamePiece = go.GetComponent<GamePiece>();
             
             gamePiece.transform.position = new Vector3(xPos, yPos, 10);
-
-            if (game.challengerGamePieceId == game.challengedGamePieceId && player == PlayerEnum.TWO) {
-                gamePiece.GetComponent<GamePiece>().SetAlternateColor(true);
-            } else {
-                gamePiece.GetComponent<GamePiece>().SetAlternateColor(false);
-            }
-
-            if (game.challengerGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1) {
-                game.challengerGamePieceId = 0;
-            }
-            if (game.challengedGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1) {
-                game.challengedGamePieceId = 0;
-            }
-
-            if (player == PlayerEnum.ONE) {
-                if (startingState == PieceAnimState.MOVING) {
-                    gamePiece.GetComponent<SpriteRenderer>().sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(game.challengerGamePieceId);
-                } else {
-                    gamePiece.GetComponent<SpriteRenderer>().sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(game.challengerGamePieceId);
-                }
-            } else {
-                if (startingState == PieceAnimState.MOVING) {
-                    gamePiece.GetComponent<SpriteRenderer>().sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(game.challengedGamePieceId);
-                } else {
-                    gamePiece.GetComponent<SpriteRenderer>().sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(game.challengedGamePieceId);
-                }
-            }
-            gamePiece.GetComponent<SpriteRenderer>().enabled = true;
+            gamePiece.SetupPlayer(player, startingState);
 
             return gamePiece;
         }
@@ -1251,8 +1224,7 @@ namespace Fourzy
             // animatingGamePieces = true;
 
             // Create Game Piece View
-            GameObject g = SpawnPiece(move.position.column, move.position.row * -1, move.player, PieceAnimState.MOVING);
-            GamePiece gamePiece = g.GetComponent<GamePiece>();
+            GamePiece gamePiece = SpawnPiece(move.position.column, move.position.row * -1, move.player, PieceAnimState.MOVING);
             gamePiece.player = move.player;
             gamePiece.column = move.position.column;
             gamePiece.row = move.position.row;
