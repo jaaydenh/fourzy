@@ -46,6 +46,8 @@
     {"key":"reload_games_button","value":"Reload Games"},
     {"key":"puzzle_challenge_button","value":"Puzzle Challenge"},
     {"key":"resign_button","value":"Resign"},
-    {"key":"back_button","value":"Back"}
+    {"key":"back_button","value":"Back"},
+    {"key":"turn_play_button","value":"Turn Play"},
+    {"key":"fast_play_button","value":"Fast Play"}
     ]
 }

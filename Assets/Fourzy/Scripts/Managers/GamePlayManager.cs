@@ -8,6 +8,7 @@ using System;
 using System.Text.RegularExpressions;
 using GameSparks.Api.Requests;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 namespace Fourzy
 {
@@ -23,6 +24,10 @@ namespace Fourzy
         public bool disableInput = false;
         private bool replayedLastMove = false;
         private float gameScreenFadeInTime = 0.7f;
+        private DateTime serverClock;
+        private DateTime playerMoveCountdown;
+        private bool clockStarted = false;
+        private int playerMoveCountDown_LastTime;
 
         [Header("Game UI")]
         public GameObject gameScreen;
@@ -61,6 +66,7 @@ namespace Fourzy
         public Text challengeIdDebugText;
         public GameBoardView gameBoardView;
         public GameObject particleEffect;
+        public TextMeshProUGUI timerText;
 
 
         // ---------- Token Views ----------
@@ -112,6 +118,8 @@ namespace Fourzy
             
             //SoundManager.instance.Mute(true);
             UserInputHandler.inputEnabled = false;
+
+            // timerText = GetComponent<TextMeshProUGUI>();
 
             Utility.SetSpriteAlpha(gameBoard, 0.0f);
             gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
@@ -186,6 +194,12 @@ namespace Fourzy
                 GameManager.instance.shouldLoadOnboarding = false;
                 GameManager.instance.onboardingScreen.StartOnboarding();
             }
+
+            if (game.gameState.GameType == GameType.REALTIME) {
+                StartCoroutine(SendTimeStamp());
+            }
+
+            playerMoveCountDown_LastTime = 30000;
         }
 
         private void OnEnable()
@@ -196,6 +210,44 @@ namespace Fourzy
         private void OnDisable()
         {
             UserInputHandler.OnTap -= ProcessPlayerInput;
+        }
+
+        /// <summary>
+        /// Sends a Unix timestamp in milliseconds to the server
+        /// </summary>
+        private IEnumerator SendTimeStamp() {
+            RealtimeManager.Instance.SendTimeStamp();
+            yield return new WaitForSeconds(5f);
+            StartCoroutine(SendTimeStamp());
+        }
+
+        /// <summary>
+        /// Syncs the local clock to server-time
+        /// </summary>
+        /// <param name="_packet">Packet.</param>
+        public void SyncClock(long milliseconds){
+            DateTime dateNow = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc); // get the current time
+            serverClock = dateNow.AddMilliseconds(milliseconds + RealtimeManager.Instance.timeDelta).ToLocalTime(); // adjust current time to match clock from server
+
+            if (game.gameState.isCurrentPlayerTurn) {
+                if (!clockStarted) { // make sure that we only calculate the endtime once
+                    // playerMoveCountdown = serverClock.AddMilliseconds(playerMoveCountDown_LastTime + RealtimeManager.Instance.timeDelta); // endtime is 60seconds plus the time-offset
+                    playerMoveCountdown = serverClock.AddMilliseconds(playerMoveCountDown_LastTime + RealtimeManager.Instance.timeDelta); // endtime is 60seconds plus the time-offset
+                    clockStarted = true;
+                }
+
+                // set the timer each time a new update from the server comes in
+                Debug.Log("Total miliseconds: " + (playerMoveCountdown-serverClock).TotalMilliseconds);
+                TimeSpan timeDifference = playerMoveCountdown-serverClock;
+                timerText.text = new System.DateTime(timeDifference.Ticks).ToString("m:ss");
+                // .Minutes.ToString() + ":" + (playerMoveCountdown-serverClock).Seconds.ToString();
+                if((playerMoveCountdown-serverClock).TotalMilliseconds <= 0){ // if the time is out, return to the lobby
+                    Debug.Log ("player ran out of time to make a move!");
+                    // RealtimeManager.Instance.GetRTSession().Disconnect();
+                }
+            } else {
+                // playerMoveCountdown = serverClock;
+            }
         }
 
         public void ResetUI()
@@ -285,11 +337,21 @@ namespace Fourzy
         public void InitPlayerUI()
         {
             Debug.Log("game.gameState.GameType: " + game.gameState.GameType);
-            if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD) {
+            if (game.gameState.GameType == GameType.REALTIME || game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD) {
+                int playerGamePieceId = 0;
+                int opponentGamePieceId = 0;
+
+                if (game.gameState.GameType == GameType.REALTIME) {
+                    playerGamePieceId = UserManager.instance.gamePieceId;
+                    opponentGamePieceId = game.opponent.gamePieceId;
+                }
+
                 if (game.isCurrentPlayer_PlayerOne)
                 {
-                    int playerGamePieceId = game.challengerGamePieceId;
-                    int opponentGamePieceId = game.challengedGamePieceId;
+                    if (game.gameState.GameType != GameType.REALTIME) {
+                        playerGamePieceId = game.challengerGamePieceId;
+                        opponentGamePieceId = game.challengedGamePieceId;
+                    }
 
                     if (playerGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1)
                     {
@@ -321,8 +383,11 @@ namespace Fourzy
                 {
                     playerPieceImage.sprite = playerTwoDefaultSprite;
                     opponentPieceImage.sprite = playerOneDefaultSprite;
-                    int playerGamePieceId = game.challengedGamePieceId;
-                    int opponentGamePieceId = game.challengerGamePieceId;
+
+                    if (game.gameState.GameType != GameType.REALTIME) {
+                        playerGamePieceId = game.challengedGamePieceId;
+                        opponentGamePieceId = game.challengerGamePieceId;
+                    }
 
                     if (playerGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1)
                     {
@@ -680,6 +745,9 @@ namespace Fourzy
             Scene uiScene = SceneManager.GetSceneByName("tabbedUI");
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync("gamePlay");
+
+            
+            RealtimeManager.Instance.GetRTSession().Disconnect();
         }
 
         public void UnloadGamePlayScreen() {
@@ -808,9 +876,34 @@ namespace Fourzy
             float xPos = (posX + .1f) * .972f;
             float yPos = (posY + .05f) * .96f;
 
-            //GameObject gamePiece = LeanPool.Spawn(gamePiecePrefab, new Vector3(xPos, yPos, 10),
-            //Quaternion.identity, gamePieces.transform) as GameObject;
-            GameObject gamePiecePrefab = GamePieceSelectionManager.Instance.GetGamePiecePrefab(game.challengerGamePieceId);
+            int gamePieceID = game.challengerGamePieceId;
+            if (game.gameState.GameType == GameType.REALTIME)
+            {
+                if (game.isCurrentPlayer_PlayerOne)
+                {
+                    if (player == PlayerEnum.ONE)
+                    {
+                        gamePieceID = UserManager.instance.gamePieceId;
+                    }
+                    else
+                    {
+                        gamePieceID = game.opponent.gamePieceId;
+                    }
+                }
+                else
+                {
+                    if (player == PlayerEnum.ONE)
+                    {
+                        gamePieceID = game.opponent.gamePieceId;
+                    }
+                    else
+                    {
+                        gamePieceID = UserManager.instance.gamePieceId;
+                    }
+                }
+            }
+
+            GameObject gamePiecePrefab = GamePieceSelectionManager.Instance.GetGamePiecePrefab(gamePieceID);
             GameObject go = Instantiate(gamePiecePrefab, new Vector3(xPos, yPos, 10),
                                                 Quaternion.identity, gamePieces.transform);
             GamePiece gamePiece = go.GetComponent<GamePiece>();
@@ -1038,11 +1131,33 @@ namespace Fourzy
                                 else
                                 {
                                     Debug.Log("ChallengeEventRequest was successful");
+                                    OnGamePlayMessage("Move was successful");
                                 }
                             });
 
                     while (isDropping)
                         yield return null;
+                }
+                else if (game.gameState.GameType == GameType.REALTIME)
+                {
+                    replayedLastMove = false;
+                    StartCoroutine(MovePiece(move, false, updatePlayer));
+                    move.player = game.isCurrentPlayer_PlayerOne ? PlayerEnum.ONE : PlayerEnum.TWO;
+                    Debug.Log("Send Realtime move");
+                    RealtimeManager.Instance.SendRealTimeMove(move);
+                    while (isDropping) {
+                        yield return null;
+                    }
+
+                    playerMoveCountDown_LastTime = (int)(playerMoveCountdown - serverClock).TotalMilliseconds + 15000;
+                    Debug.Log("playerMoveCountDown_LastTime millisecond: "+ playerMoveCountDown_LastTime);
+                    
+                    TimeSpan ts = playerMoveCountdown - serverClock;
+                    TimeSpan ts2 = ts.Add(TimeSpan.FromMilliseconds(15000));
+                    timerText.text = new System.DateTime(ts2.Ticks).ToString("m:ss");
+
+                    // timerText.text = (playerMoveCountDown_LastTime/1000).ToString();
+                    clockStarted = false;
                 }
                 // else if (isMultiplayer && isNewChallenge)
                 else if (game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
@@ -1208,7 +1323,7 @@ namespace Fourzy
                 //Debug.Log("UpdateGameStatus: updatePlayer: " + updatePlayer + ", gameState.isCurrentPlayerTurn: "+ game.gameState.isCurrentPlayerTurn);
                 if (updatePlayer)
                 {
-                    if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD || game.gameState.GameType == GameType.AI)
+                    if (game.gameState.GameType == GameType.REALTIME || game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD || game.gameState.GameType == GameType.AI)
                     {
                         game.gameState.isCurrentPlayerTurn = !game.gameState.isCurrentPlayerTurn;
                     }

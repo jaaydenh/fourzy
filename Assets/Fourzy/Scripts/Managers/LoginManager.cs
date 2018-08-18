@@ -27,6 +27,7 @@ namespace Fourzy
             GameAnalytics.Initialize();
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
+            GS.GameSparksAvailable += GameSparksIsAvailable;
         }
 
         new void Awake() {
@@ -35,13 +36,13 @@ namespace Fourzy
             ConnectWithFacebook();
         }
 
-        void OnEnable() {
-            GS.GameSparksAvailable += GameSparksIsAvailable;
-        }
+        // void OnEnable() {
+        //     GS.GameSparksAvailable += GameSparksIsAvailable;
+        // }
 
-        void OnDisable() {
-            GS.GameSparksAvailable -= GameSparksIsAvailable;
-        }
+        // void OnDisable() {
+        //     GS.GameSparksAvailable -= GameSparksIsAvailable;
+        // }
 
         private void GameSparksIsAvailable(bool connected) {
             //Debug.Log("LoginManager: GameSparksIsAvailable: connect: " + connected + " readyForDeviceLogin: "+ readyForDeviceLogin);
@@ -117,7 +118,8 @@ namespace Fourzy
         /// </summary>
         public void ConnectWithFacebook()
         {
-            Debug.Log("Connecting Facebook With GameSparks...");// first check if FB is ready, and then login //
+            if (OnLoginMessage != null)
+                OnLoginMessage("Connecting to Facebook With GameSparks...");// first check if FB is ready, and then login //
             // if its not ready we just init FB and use the login method as the callback for the init method //
             if (!FB.IsInitialized) {
                 Debug.Log("Initializing Facebook...");
@@ -192,11 +194,11 @@ namespace Fourzy
                 if (OnLoginMessage != null) {
                     AnalyticsManager.LogError("gamesparks_fb_connect_error", result.Error);
                     OnLoginMessage("Gamesparks login error: " + result.Error);
-                } else {
-                    AnalyticsManager.LogCustom("gamesparks_fb_connect_decline");
-                    // infoBanner.ShowText("Declined Facebook Login");
-                    OnLoginMessage("Declined Facebook Login");
-                }
+                } 
+                // else {
+                //     AnalyticsManager.LogCustom("gamesparks_fb_connect_decline");
+                //     OnLoginMessage("Declined Facebook Login");
+                // }
             }
         }
 
