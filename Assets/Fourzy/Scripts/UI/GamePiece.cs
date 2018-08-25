@@ -21,7 +21,6 @@ namespace Fourzy
         public bool isMoving;
         public bool animating;
 
-
         private CircleCollider2D gamePieceCollider;
 
         private Transform cachedTransform;
@@ -86,7 +85,7 @@ namespace Fourzy
             return Direction.NONE;
         }
 
-        public IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces, List<IToken> activeTokens) 
+        public IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true) 
         {
             if (movingPieces.Count == 0) 
             {
@@ -155,6 +154,12 @@ namespace Fourzy
                     this.CheckNextPieceCollision(nextPiece, movingPieces, activeTokens);
                     this.CheckActiveTokenCollision(activeTokens);
 
+                    if (nextPos == positions.Count - 1 && t + 2 * Time.deltaTime * Constants.moveSpeed / distance > 1)
+                    {
+                        bool playHitAnimation = (nextPiece == null && (firstPiece || positions.Count > 2));
+                        View.PlayFinishMovement(playHitAnimation);
+                    }
+
                     yield return null;
                 }
 
@@ -163,9 +168,15 @@ namespace Fourzy
                 i = nextPos - 1;
             }
 
-            animating = false;
+            this.CheckActiveTokenCollision(activeTokens);
 
-            View.PlayFinishMovement();
+            animating = false;
+            column = positions[positions.Count - 1].column;
+            row = positions[positions.Count - 1].row;
+            //if (nextPiece != null)
+            //{
+            //    nextPiece.StartCoroutine(nextPiece.MoveGamePiece(movingPieces, activeTokens));
+            //}
 
             //Tweener tweener = AfterMovementAnimations(movingGamePiece, endMoveDirection);
             //if (tweener != null)
@@ -173,7 +184,7 @@ namespace Fourzy
             //    yield return tweener.WaitForCompletion();
             //}
 
-            View.SetupAsleep();
+            //View.SetupAsleep();
 
             GamePlayManager.Instance.numPiecesAnimating--;
 
@@ -186,7 +197,7 @@ namespace Fourzy
             {
                 // Animate punch and hit for both pieces
 
-                nextPiece.StartCoroutine(nextPiece.MoveGamePiece(movingPieces, activeTokens));
+                nextPiece.StartCoroutine(nextPiece.MoveGamePiece(movingPieces, activeTokens, false));
             }
         }
 
@@ -217,7 +228,7 @@ namespace Fourzy
                         SpriteRenderer sr = GamePlayManager.Instance.tokenViews[activeTokens[i].Row, activeTokens[i].Column].GetComponent<SpriteRenderer>();
                         sr.DOFade(0f, 1.5f);
 
-                        // GamePiece animation
+                        this.View.FadeAfterPit();
                     }
 
                     activeTokens.RemoveAt(i);
