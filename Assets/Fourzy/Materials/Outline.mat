@@ -4,11 +4,11 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Outline
   m_Shader: {fileID: 4800000, guid: e824bef477aec4a3a97f9e1550a6010f, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -65,11 +65,11 @@ Material:
     - _GlossyReflections: 1
     - _HSVRangeMax: 1
     - _HSVRangeMin: 0
-    - _Intencity: 0.77
+    - _Intencity: 0.73
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _OutlineBorder: 1.16
+    - _OutlineBorder: 1.07
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

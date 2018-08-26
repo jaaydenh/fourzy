@@ -184,7 +184,7 @@ namespace Fourzy
             //    yield return tweener.WaitForCompletion();
             //}
 
-            //View.SetupAsleep();
+            View.SetupAsleep();
 
             GamePlayManager.Instance.numPiecesAnimating--;
 

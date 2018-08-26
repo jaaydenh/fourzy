@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Anima2D;
 using DG.Tweening;
 
 namespace Fourzy
@@ -9,13 +8,31 @@ namespace Fourzy
     public class GamePieceView : MonoBehaviour
     {
         [SerializeField]
-        private SpriteMeshInstance body;
+        private SpriteRenderer body;
+
+        [SerializeField]
+        private SpriteRenderer eye;
+
+        [SerializeField]
+        private SpriteRenderer mouth;
 
         [SerializeField]
         private Animator pieceAnimator;
 
         [SerializeField]
         public AnimationCurve movementCurve;
+
+        [SerializeField]
+        private Sprite openEye;
+
+        [SerializeField]
+        private Sprite closedEye;
+
+        [SerializeField]
+        private Sprite openMouth;
+
+        [SerializeField]
+        private Sprite closedMouth;
 
         private Transform cachedTransform;
 
@@ -31,7 +48,7 @@ namespace Fourzy
             }
             if (body == null)
             {
-                body = this.transform.Find("Sprites").Find("Body").GetComponent<SpriteMeshInstance>();
+                body = this.transform.Find("Sprites").Find("Body").GetComponent<SpriteRenderer>();
             }
 
             cachedTransform = transform;
@@ -92,6 +109,27 @@ namespace Fourzy
             //this.gameObject.SetActive(false);
             // GamePiece animation
         }
+
+        public void SetupClosedEye()
+        {
+            eye.sprite = closedEye;
+        }
+
+        public void SetupOpenEye()
+        {
+            eye.sprite = openEye;
+        }
+
+        public void SetupClosedMouth()
+        {
+            mouth.sprite = closedMouth;
+        }
+
+        public void SetupOpenMouth()
+        {
+            mouth.sprite = openMouth;
+        }
+
     }
 
 }
