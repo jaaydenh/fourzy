@@ -355,6 +355,23 @@ MonoBehaviour:
   eye: {fileID: 212371771514571664}
   mouth: {fileID: 212381555344706356}
   pieceAnimator: {fileID: 95998321732833044}
+  outlineShader: {fileID: 4800000, guid: e824bef477aec4a3a97f9e1550a6010f, type: 3}
+  openEye: {fileID: 21300000, guid: 13fffbfe7f19d453fb21a782e61f43be, type: 3}
+  closedEye: {fileID: 21300000, guid: ea0163ca52d5f43cf98e9a6508a65bf0, type: 3}
+  openMouth: {fileID: 21300000, guid: d4e04de9edbb940698b7e8fef804caa1, type: 3}
+  closedMouth: {fileID: 21300000, guid: 5a428db23de85448ea61f41f9d99f942, type: 3}
+--- !u!114 &114920343002454044
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1199207463086934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c45a8ccec88446a2b606295173d3562, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  View: {fileID: 114231632219896700}
   movementCurve:
     serializedVersion: 2
     m_Curve:
@@ -379,22 +396,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  openEye: {fileID: 21300000, guid: 13fffbfe7f19d453fb21a782e61f43be, type: 3}
-  closedEye: {fileID: 21300000, guid: ea0163ca52d5f43cf98e9a6508a65bf0, type: 3}
-  openMouth: {fileID: 21300000, guid: d4e04de9edbb940698b7e8fef804caa1, type: 3}
-  closedMouth: {fileID: 21300000, guid: 5a428db23de85448ea61f41f9d99f942, type: 3}
---- !u!114 &114920343002454044
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1199207463086934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c45a8ccec88446a2b606295173d3562, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  View: {fileID: 114231632219896700}
   player: 0
   column: 0
   row: 0

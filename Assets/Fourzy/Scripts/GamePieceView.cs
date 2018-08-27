@@ -20,7 +20,7 @@ namespace Fourzy
         private Animator pieceAnimator;
 
         [SerializeField]
-        public AnimationCurve movementCurve;
+        private Shader outlineShader;
 
         [SerializeField]
         private Sprite openEye;
@@ -36,11 +36,14 @@ namespace Fourzy
 
         private Transform cachedTransform;
 
+        private Material bodyMaterial;
+        private Material bodyOutlineMaterial;
 
         private void Awake()
         {
             Debug.Assert(pieceAnimator != null, "Setup pieceAnimator for GamePieceView in editor");
             Debug.Assert(body != null, "Setup body for GamePieceView in editor");
+            Debug.Assert(eye != null, "Setup eye for GamePieceView in Editor");
 
             if (pieceAnimator == null)
             {
@@ -52,12 +55,14 @@ namespace Fourzy
             }
 
             cachedTransform = transform;
-            body.sharedMaterial = new Material(body.sharedMaterial);
+            bodyMaterial = body.material;
+            bodyOutlineMaterial = new Material(outlineShader);
         }
 
         public void SetupHSVColor(Vector4 vec)
         {
-            body.sharedMaterial.SetVector("_HSVAAdjust", vec);
+            bodyMaterial.SetVector("_HSVAAdjust", vec);
+            bodyOutlineMaterial.SetVector("_HSVAAdjust", vec);
         }
 
         public void PlayMovement()
@@ -108,6 +113,27 @@ namespace Fourzy
 
             //this.gameObject.SetActive(false);
             // GamePiece animation
+        }
+
+        public void SetupZOrder(int zorder)
+        {
+            body.sortingOrder = zorder;
+            eye.sortingOrder = zorder + 1;
+            mouth.sortingOrder = zorder + 1;
+        }
+
+        public void ShowWinOutline(Color color)
+        {
+            bodyOutlineMaterial.SetColor("_OutlineColor", color);
+            bodyOutlineMaterial.SetFloat("_OutlineBorder", 1.15f);
+            body.sharedMaterial = bodyOutlineMaterial;
+        }
+
+        public void ShowTurnOutline(Color color)
+        {
+            bodyOutlineMaterial.SetColor("_OutlineColor", color);
+            bodyOutlineMaterial.SetFloat("_OutlineBorder", 1.15f);
+            body.sharedMaterial = bodyOutlineMaterial;
         }
 
         public void SetupClosedEye()

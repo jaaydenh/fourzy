@@ -10,6 +10,9 @@ namespace Fourzy
         [SerializeField]
         public GamePieceView View;
 
+        [SerializeField]
+        private AnimationCurve movementCurve;
+
         public PlayerEnum player;
         public int column;
         public int row;
@@ -148,7 +151,7 @@ namespace Fourzy
 
                 for (float t = 0; t < 1; t += Time.deltaTime * Constants.moveSpeed / distance)
                 {
-                    float interpolation = View.movementCurve.Evaluate(t);
+                    float interpolation = movementCurve.Evaluate(t);
                     cachedTransform.position = Vector3.Lerp(start, end, interpolation);
 
                     this.CheckNextPieceCollision(nextPiece, movingPieces, activeTokens);
@@ -184,6 +187,7 @@ namespace Fourzy
             //    yield return tweener.WaitForCompletion();
             //}
 
+            View.SetupZOrder(row * 2);
             View.SetupAsleep();
 
             GamePlayManager.Instance.numPiecesAnimating--;

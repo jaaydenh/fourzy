@@ -109,7 +109,6 @@ namespace Fourzy
         public Color redPlayerColor = new Color(254.0f / 255.0f, 40.0f / 255.0f, 81.0f / 255.0f);
         private string playerOneWonText = "Player 1 Wins!";
         private string playerTwoWonText = "Player 2 Wins!";
-        public Shader lineShader = null;
 
         void Start () {
             game = GameManager.instance.activeGame;
@@ -1354,101 +1353,80 @@ namespace Fourzy
             gameBoardView.PrintGameBoard();
         }
 
-        private void WinLineSetActive(bool active)
-        {
-            LineRenderer[] winLines = gameScreen.GetComponentsInChildren<LineRenderer>(true);
-
-            foreach (var line in winLines)
-            {
-                if (line)
-                {
-                    line.gameObject.SetActive(active);
-                }
-            }
-        }
-
         public void DisplayGameOverView()
         {
-            bool showRewardButton = false;
-
             if (game.isExpired)
             {
                 GameManager.instance.VisitedGameResults(game);
-                gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("expired_text"), Color.white, false, showRewardButton);
+                gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("expired_text"), Color.white, false, !game.didViewResult);
                 return;
             }
 
-            if (!game.didViewResult) {
-                showRewardButton = true;
+            Debug.Log("DisplayGameOverView gameState.winner: " +  game.gameState.Winner);
+
+            this.ShowWinnerAnimation();
+            this.ShowWinnerTextAndPlaySound();
+            this.LogGameWinner();
+
+#if UNITY_IOS || UNITY_ANDROID
+            if (game.gameState.Winner == PlayerEnum.ONE || game.gameState.Winner == PlayerEnum.TWO)
+            {
+                if (game.gameState.isCurrentPlayerTurn)
+                {
+                    Handheld.Vibrate();
+                }
             }
+#endif
+
+        }
+
+        private void ShowWinnerAnimation()
+        {
+            for (int i = 0; i < game.gameState.GameBoard.player1WinningPositions.Count; i++)
+            {
+                Position position = game.gameState.GameBoard.player1WinningPositions[i];
+                GamePiece gamePiece = gameBoardView.GamePieceAt(position);
+                gamePiece.View.ShowWinOutline(bluePlayerColor);
+            }
+
+            for (int i = 0; i < game.gameState.GameBoard.player2WinningPositions.Count; i++)
+            {
+                Position position = game.gameState.GameBoard.player2WinningPositions[i];
+                GamePiece gamePiece = gameBoardView.GamePieceAt(position);
+                gamePiece.View.ShowWinOutline(redPlayerColor);
+            }
+        }
+
+        private void ShowWinnerTextAndPlaySound()
+        {
+            bool showRewardButton = !game.didViewResult;
 
             // Color winnerTextColor = gameState.Winner == PlayerEnum.ONE ? bluePlayerColor : redPlayerColor;
             Color winnerTextColor = Color.white;
-            Debug.Log("DisplayGameOverView gameState.winner: " +  game.gameState.Winner);
-            if (game.gameState.Winner == PlayerEnum.ONE)
-            {
-                int size = game.gameState.GameBoard.player1WinningPositions.Count;
-                Vector3 startPos = new Vector3((game.gameState.GameBoard.player1WinningPositions[0].column + .1f) *.972f, (game.gameState.GameBoard.player1WinningPositions[0].row * -1 + .05f) * .96f, 12);
-                Vector3 endPos = new Vector3((game.gameState.GameBoard.player1WinningPositions[size - 1].column+ .1f) * .972f, (game.gameState.GameBoard.player1WinningPositions[size - 1].row * -1 + .05f) * .96f, 12);
-                DrawLine(startPos, endPos, bluePlayerColor);
-
-                if (game.gameState.isCurrentPlayerTurn)
-                {
-#if UNITY_IOS || UNITY_ANDROID
-                    Handheld.Vibrate();
-#endif
-                }
-            }
-
-            if (game.gameState.Winner == PlayerEnum.TWO)
-            {
-                int size = game.gameState.GameBoard.player2WinningPositions.Count;
-                Vector3 startPos = new Vector3((game.gameState.GameBoard.player2WinningPositions[0].column + .1f) * .972f, (game.gameState.GameBoard.player2WinningPositions[0].row * -1 + .05f) * .96f, 12);
-                Vector3 endPos = new Vector3((game.gameState.GameBoard.player2WinningPositions[size - 1].column + .1f) * .972f, (game.gameState.GameBoard.player2WinningPositions[size - 1].row * -1 + .05f) *.96f, 12);
-                DrawLine(startPos, endPos, redPlayerColor);
-
-                if (game.gameState.isCurrentPlayerTurn)
-                {
-#if UNITY_IOS || UNITY_ANDROID
-                    Handheld.Vibrate();
-#endif
-                }
-            }
 
             if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
             {
-                if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD) {
+                if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
+                {
                     gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), Color.white, false, showRewardButton);
-                } else {
+                }
+                else
+                {
                     if (game.gameState.GameType != GameType.PUZZLE)
                     {
                         gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), Color.white, false, false);
                     }
                 }
-
-                if (game.gameState.Winner == PlayerEnum.ALL) {
-                    int size = game.gameState.GameBoard.player1WinningPositions.Count;
-                    // Debug.Log("player1WinningPositions.Count: " + game.gameState.GameBoard.player1WinningPositions.Count);
-                    // Debug.Log("player2WinningPositions.Count: " + game.gameState.GameBoard.player2WinningPositions.Count);
-                    Vector3 startPos = new Vector3((game.gameState.GameBoard.player1WinningPositions[0].column + .1f) *.972f, (game.gameState.GameBoard.player1WinningPositions[0].row * -1 + .05f) * .96f, 12);
-                    Vector3 endPos = new Vector3((game.gameState.GameBoard.player1WinningPositions[size - 1].column+ .1f) * .972f, (game.gameState.GameBoard.player1WinningPositions[size - 1].row * -1 + .05f) * .96f, 12);
-                    DrawLine(startPos, endPos, bluePlayerColor);
-
-                    int size2 = game.gameState.GameBoard.player2WinningPositions.Count;
-                    Vector3 startPos2 = new Vector3((game.gameState.GameBoard.player2WinningPositions[0].column + .1f) * .972f, (game.gameState.GameBoard.player2WinningPositions[0].row * -1 + .05f) * .96f, 12);
-                    Vector3 endPos2 = new Vector3((game.gameState.GameBoard.player2WinningPositions[size2 - 1].column + .1f) * .972f, (game.gameState.GameBoard.player2WinningPositions[size2 - 1].row * -1 + .05f) *.96f, 12);
-                    DrawLine(startPos2, endPos2, redPlayerColor); 
-                }
             }
             else if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
             {
-                if (game.winnerName != null && game.winnerName.Length > 0)
+                if (!string.IsNullOrEmpty(game.winnerName))
                 {
                     gameInfo.Open(game.winnerName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     //SoundManager.instance.PlayRandomizedSfx(clipWin);
                 }
                 else
-                {                    
+                {
                     if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
                     {
                         SoundManager.instance.PlayRandomizedSfx(clipWin);
@@ -1470,15 +1448,17 @@ namespace Fourzy
             else
             {
                 SoundManager.instance.PlayRandomizedSfx(clipWin);
-                if (game.gameState.GameType != GameType.PUZZLE) {
+                if (game.gameState.GameType != GameType.PUZZLE)
+                {
                     //AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
                     string winnerText = game.gameState.Winner == PlayerEnum.ONE ? playerOneWonText : playerTwoWonText;
                     gameInfo.Open(winnerText, winnerTextColor, true, false);
                 }
             }
+        }
 
-            WinLineSetActive(true);
-
+        private void LogGameWinner()
+        {
             switch (game.gameState.GameType)
             {
                 case GameType.FRIEND:
@@ -1500,28 +1480,6 @@ namespace Fourzy
                     AnalyticsManager.LogGameOver("random", game.gameState.Winner, game.gameState.TokenBoard);
                     break;
             }
-        }
-
-        void DrawLine(Vector3 start, Vector3 end, Color color)
-        {
-            //Debug.Log("START X: " + start.x + " START Y: " + start.y);
-            //Debug.Log("END X: " + end.x + " END Y: " + end.y);
-            //Debug.Log("DRAWLINE");
-            GameObject myLine = new GameObject("WinLine");
-            myLine.tag = "WinLine";
-            myLine.transform.parent = tokens.transform;
-            myLine.transform.position = start;
-            myLine.AddComponent<LineRenderer>();
-            LineRenderer lr = myLine.GetComponent<LineRenderer>();
-            lr.material = new Material(lineShader);
-            lr.startColor = color;
-            lr.endColor = color;
-            lr.startWidth = 0.15f;
-            lr.endWidth = 0.15f;
-            lr.SetPosition(0, start);
-            lr.SetPosition(1, end);
-            myLine.SetActive(false);
-            //GameObject.Destroy(myLine, duration);
         }
 
 		// public void AnimatePlayerPieceUI() {

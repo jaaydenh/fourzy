@@ -29,6 +29,11 @@ namespace Fourzy
             gamePieces[newPos.row, newPos.column] = gamePiece;
         }
 
+        public GamePiece GamePieceAt(Position position)
+        {            
+            return gamePieces[position.row, position.column];
+        }
+
         public void Clear() {
             gamePieces = new GamePiece[numRows, numColumns];
         }
