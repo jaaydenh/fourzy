@@ -15,7 +15,7 @@
         private bool isReady = false;
         private string missingTextString = "Localized text not found";
 
-        private void Start()
+        private void Awake()
         {
             cultureInfo = GetCultureInfo(PlayerLanguage);
             LoadLocalizedText(PlayerLanguage);
