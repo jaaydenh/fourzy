@@ -82,10 +82,6 @@ namespace Fourzy {
 
         GameObject SpawnPiece(float posX, float posY, PlayerEnum player)
         {
-            //Debug.Log("SpawnPiece: x: " + posX + " y: " + posY);
-            // float xPos = (posX + .1f) * .972f;
-            // float yPos = (posY + .05f) * .96f;
-
             GameObject gamePiece = Instantiate(gamePiecePrefab, new Vector3(posX, posY, -5),
                 Quaternion.identity, gamePieces.transform) as GameObject;
             

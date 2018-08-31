@@ -189,7 +189,7 @@ namespace Fourzy
             //}
 
             View.SetupZOrder(5 + row * 2);
-            View.SetupAsleep();
+            //View.SetupAsleep();
 
             GamePlayManager.Instance.numPiecesAnimating--;
 

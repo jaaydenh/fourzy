@@ -37,7 +37,7 @@ namespace Fourzy
         public Rewards rewardScreen;
         public GameObject gameBoard;
         public GameObject gamePieces;
-        private GameObject tokens;
+        public GameObject tokens;
         public GameObject[,] tokenViews;
 
         [SerializeField]
@@ -110,6 +110,8 @@ namespace Fourzy
             game = GameManager.instance.activeGame;
 
             //TODO: Create a game if activeGame is null
+
+            CalculatePositions();
             
             //SoundManager.instance.Mute(true);
             UserInputHandler.inputEnabled = false;
@@ -123,13 +125,6 @@ namespace Fourzy
 
             FadeGameScreen(1.0f, gameScreenFadeInTime);
             StartCoroutine(WaitToEnableInput());
-
-            if (tokens == null)
-            {
-                tokens = new GameObject("Tokens");
-                tokens.transform.parent = gameScreen.transform;
-                // tokens.transform.position.Set(-324f, 307f, 0f);
-            }
 
             replayedLastMove = false;
 
@@ -219,6 +214,25 @@ namespace Fourzy
             } else {
                 // playerMoveCountdown = serverClock;
             }
+        }
+
+        private void CalculatePositions()
+        {
+            BoxCollider2D boxCollider = (BoxCollider2D)gameBoard.GetComponent<Collider2D>();
+
+            float top = boxCollider.offset.y + (boxCollider.size.y / 2f);
+            float btm = boxCollider.offset.y - (boxCollider.size.y / 2f);
+            float left = boxCollider.offset.x - (boxCollider.size.x / 2f);
+            float right = boxCollider.offset.x + (boxCollider.size.x / 2f);
+
+            Vector3 topLeft = gameBoard.transform.TransformPoint(new Vector3(left, top, 0f));
+            Vector3 btmRight = gameBoard.transform.TransformPoint(new Vector3(right, btm, 0f));
+
+            float stepX = (btmRight.x - topLeft.x) / Constants.numColumns;
+            float stepY = (topLeft.y - btmRight.y) / Constants.numRows;
+
+            Position.topLeft = topLeft;
+            Position.step = new Vector3(stepX, stepY);
         }
 
         private void InitButtonListeners()
@@ -461,11 +475,10 @@ namespace Fourzy
             }
         }
 
-        public void CreateStickyToken(int row, int col) {
-            float tokenScale = .96f;
-            float xPos = (col + .15f) * tokenScale;
-            float yPos = (row * -1 + .075f) * tokenScale;
-            GameObject go = Instantiate(stickyToken, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
+        public void CreateStickyToken(int row, int col) 
+        {
+            Vector3 position = new Position(row, col).ConvertToVec3();
+            GameObject go = Instantiate(stickyToken, position, Quaternion.identity, tokens.transform);
             Destroy(tokenViews[row, col]);
             tokenViews[row, col] = go;
         }
@@ -473,15 +486,13 @@ namespace Fourzy
         public void CreateTokenViews()
         {
             tokenViews = new GameObject[Constants.numRows, Constants.numColumns];
-            float tokenScale = .96f;
             
             for (int row = 0; row < Constants.numRows; row++)
             {
                 for (int col = 0; col < Constants.numColumns; col++)
                 {
-                    float xPos = (col + .15f) * tokenScale;
-                    float yPos = (row * -1 + .075f) * tokenScale;
-                    // float gridSize = Screen.width - 20;
+                    Vector3 position = new Position(col, row).ConvertToVec3();
+
                     bool rotateRight = false;
                     bool rotateLeft = false;
                     GameObject go;
@@ -561,7 +572,7 @@ namespace Fourzy
                     }
 
                     if (tokenPrefab) {
-                        go = Instantiate(tokenPrefab, new Vector3(xPos, yPos, 15), Quaternion.identity, tokens.transform);
+                        go = Instantiate(tokenPrefab, position, Quaternion.identity, tokens.transform);
                         if (rotateRight) {
                             go.transform.Rotate(0,0,90);
                         }
@@ -809,6 +820,7 @@ namespace Fourzy
             go.SetActive(true);
             go.transform.parent = gamePieces.transform;
             go.transform.position = position;
+            go.transform.localScale = Vector3.one;
 
             GamePiece gamePiece = go.GetComponent<GamePiece>();
             gamePiece.SetupPlayer(player, startingState);
