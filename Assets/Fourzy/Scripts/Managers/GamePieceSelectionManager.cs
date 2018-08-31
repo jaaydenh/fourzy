@@ -58,7 +58,14 @@ namespace Fourzy
 
         public GameObject GetGamePiecePrefab(int gamePieceId)
         {
-            return gamePiecePrefabs[gamePieceId].gameObject;
+            if (gamePieceId < gamePiecePrefabs.Count && gamePieceId >= 0)
+            {
+                return gamePiecePrefabs[gamePieceId].gameObject;
+            }
+            else
+            {
+                return gamePiecePrefabs[0].gameObject;
+            }
         }
     }
 }

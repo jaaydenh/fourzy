@@ -29,6 +29,9 @@ namespace Fourzy
         private bool clockStarted = false;
         private int playerMoveCountDown_LastTime;
 
+        private GameObject playerGamePiecePrefab;
+        private GameObject opponentGamePiecePrefab;
+
         [Header("Game UI")]
         public GameObject gameScreen;
         public Rewards rewardScreen;
@@ -36,19 +39,12 @@ namespace Fourzy
         public GameObject gamePieces;
         private GameObject tokens;
         public GameObject[,] tokenViews;
-        public GameObject gamePiecePrefab;
-        public Image playerPieceImage;
-        public Image opponentPieceImage;
-        public GameObject playerPieceUI;
-        // private Animator playerPieceUIAnimator;
-        private PieceUIGameScreen playerPieceUIScript;
-        public GameObject opponentPieceUI;
-        // private Animator opponentPieceUIAnimator;
-        private PieceUIGameScreen opponentPieceUIScript;
-        public Sprite playerOneDefaultSprite;
-        public Sprite playerTwoDefaultSprite;
-        public Text playerNameText;
-        public Text opponentNameText;
+
+        [SerializeField]
+        private PlayerUIPanel playerUIPanel;
+        [SerializeField]
+        public PlayerUIPanel opponentUIPanel;
+
         public Text ratingDeltaText;
         public GameInfo gameInfo;
         public AlertUI alertUI;
@@ -123,32 +119,7 @@ namespace Fourzy
             Utility.SetSpriteAlpha(gameBoard, 0.0f);
             gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
 
-            Button backBtn = backButton.GetComponent<Button>();
-            backBtn.onClick.AddListener(BackButtonOnClick);
-
-            Button rematchBtn = rematchButton.GetComponent<Button>();
-            rematchBtn.onClick.AddListener(RematchPassAndPlayGameButtonOnClick);
-
-            Button nextGameBtn = nextGameButton.GetComponent<Button>();
-            nextGameBtn.onClick.AddListener(NextGameButtonOnClick);
-
-            Button createGameBtn = createGameButton.GetComponent<Button>();
-            createGameBtn.onClick.AddListener(CreateGameButtonOnClick);
-
-            Button nextPuzzleChallengeBtn = nextPuzzleChallengeButton.GetComponent<Button>();
-            nextPuzzleChallengeBtn.onClick.AddListener(NextPuzzleChallengeButtonOnClick);
-
-            Button retryPuzzleChallengeBtn = retryPuzzleChallengeButton.GetComponent<Button>();
-            retryPuzzleChallengeBtn.onClick.AddListener(RetryPuzzleChallengeButtonOnClick);
-
-            Button rewardsBtn = rewardsButton.GetComponent<Button>();
-            rewardsButton.onClick.AddListener(RewardsButtonOnClick);
-
-            // playerPieceUIAnimator = playerPieceUI.GetComponent<Animator>();
-            // opponentPieceUIAnimator = opponentPieceUI.GetComponent<Animator>();
-
-            playerPieceUIScript = playerPieceUI.GetComponent<PieceUIGameScreen>();
-            opponentPieceUIScript = opponentPieceUI.GetComponent<PieceUIGameScreen>();
+            this.InitButtonListeners();
 
             FadeGameScreen(1.0f, gameScreenFadeInTime);
             StartCoroutine(WaitToEnableInput());
@@ -163,6 +134,7 @@ namespace Fourzy
             replayedLastMove = false;
 
             // ResetGamePiecesAndTokens();
+            InitPlayerPrefabs();
             ResetUI();
             if (game.gameState != null) {
                 CreateGamePieceViews(game.gameState.GetPreviousGameBoard());
@@ -249,6 +221,30 @@ namespace Fourzy
             }
         }
 
+        private void InitButtonListeners()
+        {
+            Button backBtn = backButton.GetComponent<Button>();
+            backBtn.onClick.AddListener(BackButtonOnClick);
+
+            Button rematchBtn = rematchButton.GetComponent<Button>();
+            rematchBtn.onClick.AddListener(RematchPassAndPlayGameButtonOnClick);
+
+            Button nextGameBtn = nextGameButton.GetComponent<Button>();
+            nextGameBtn.onClick.AddListener(NextGameButtonOnClick);
+
+            Button createGameBtn = createGameButton.GetComponent<Button>();
+            createGameBtn.onClick.AddListener(CreateGameButtonOnClick);
+
+            Button nextPuzzleChallengeBtn = nextPuzzleChallengeButton.GetComponent<Button>();
+            nextPuzzleChallengeBtn.onClick.AddListener(NextPuzzleChallengeButtonOnClick);
+
+            Button retryPuzzleChallengeBtn = retryPuzzleChallengeButton.GetComponent<Button>();
+            retryPuzzleChallengeBtn.onClick.AddListener(RetryPuzzleChallengeButtonOnClick);
+
+            Button rewardsBtn = rewardsButton.GetComponent<Button>();
+            rewardsButton.onClick.AddListener(RewardsButtonOnClick);
+        }
+
         public void ResetUI()
         {
             gameInfo.Close();
@@ -333,142 +329,82 @@ namespace Fourzy
             // TODO: complete this
         }
 
-        public void InitPlayerUI()
+        private void InitPlayerPrefabs()
         {
-            Debug.Log("game.gameState.GameType: " + game.gameState.GameType);
-            if (game.gameState.GameType == GameType.REALTIME || game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD) {
-                int playerGamePieceId = 0;
-                int opponentGamePieceId = 0;
+            int playerGamePieceId = 0;
+            int opponentGamePieceId = 0;
 
-                if (game.gameState.GameType == GameType.REALTIME) {
+            PlayerEnum player = PlayerEnum.ONE;
+            PlayerEnum opponent = PlayerEnum.TWO;
+
+            if (game.gameState.GameType == GameType.REALTIME
+                || game.gameState.GameType == GameType.RANDOM
+                || game.gameState.GameType == GameType.FRIEND
+                || game.gameState.GameType == GameType.LEADERBOARD)
+            {
+                if (game.gameState.GameType == GameType.REALTIME)
+                {
                     playerGamePieceId = UserManager.instance.gamePieceId;
                     opponentGamePieceId = game.opponent.gamePieceId;
                 }
-
-                if (game.isCurrentPlayer_PlayerOne)
+                else if (game.isCurrentPlayer_PlayerOne)
                 {
-                    if (game.gameState.GameType != GameType.REALTIME) {
-                        playerGamePieceId = game.challengerGamePieceId;
-                        opponentGamePieceId = game.challengedGamePieceId;
-                    }
-
-                    if (playerGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1)
-                    {
-                        playerGamePieceId = 0;
-                    }
-
-                    playerPieceImage.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(playerGamePieceId);
-                    GamePieceUI player = playerPieceImage.GetComponent<GamePieceUI>();
-                    player.SetAlternateColor(false);
-
-                    if (opponentGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1) {
-                        opponentGamePieceId = 0;
-                    }
-
-                    if (opponentGamePieceId != -1) {
-                        opponentPieceImage.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(opponentGamePieceId);
-                    } else {
-                        opponentPieceImage.sprite = GamePieceSelectionManager.Instance.gamePieces[0];
-                    }
-
-                    GamePieceUI opponent = opponentPieceImage.GetComponent<GamePieceUI>();
-                    if (playerGamePieceId == opponentGamePieceId) {
-                        opponent.SetAlternateColor(true);    
-                    } else {
-                        opponent.SetAlternateColor(false);
-                    }
+                    playerGamePieceId = game.challengerGamePieceId;
+                    opponentGamePieceId = game.challengedGamePieceId;
                 }
                 else
                 {
-                    playerPieceImage.sprite = playerTwoDefaultSprite;
-                    opponentPieceImage.sprite = playerOneDefaultSprite;
+                    playerGamePieceId = game.challengedGamePieceId;
+                    opponentGamePieceId = game.challengerGamePieceId;
 
-                    if (game.gameState.GameType != GameType.REALTIME) {
-                        playerGamePieceId = game.challengedGamePieceId;
-                        opponentGamePieceId = game.challengerGamePieceId;
-                    }
-
-                    if (playerGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1)
-                    {
-                        playerGamePieceId = 0;
-                    }
-
-                    playerPieceImage.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(playerGamePieceId);
-                    GamePieceUI player = playerPieceImage.GetComponent<GamePieceUI>();
-                    if (playerGamePieceId == opponentGamePieceId) {
-                        player.SetAlternateColor(true);
-                    } else {
-                        player.SetAlternateColor(false);
-                    }
-
-                    if (opponentGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1)
-                    {
-                        opponentGamePieceId = 0;
-                    }
-
-                    opponentPieceImage.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(opponentGamePieceId);
-                    GamePieceUI opponent = opponentPieceImage.GetComponent<GamePieceUI>();
-                    opponent.SetAlternateColor(false);
+                    player = PlayerEnum.TWO;
+                    opponent = PlayerEnum.ONE;
                 }
+            }  
 
-                playerNameText.text = UserManager.instance.userName;
+            GameObject prefab = GamePieceSelectionManager.Instance.GetGamePiecePrefab(playerGamePieceId);
+            playerGamePiecePrefab = Instantiate(prefab);
+            GamePiece gamePiece = playerGamePiecePrefab.GetComponent<GamePiece>();
+            gamePiece.SetupPlayer(player, PieceAnimState.ASLEEP);
+            playerGamePiecePrefab.SetActive(false);
 
-                // if (UserManager.instance.profilePicture)
-                // {
-                //     playerProfilePicture.sprite = UserManager.instance.profilePicture;
-                // }
-                // else
-                // {
-                //     playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
-                //         new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
-                //         new Vector2(0.5f, 0.5f));
-                // }
-                
-                if (game.opponent != null && game.opponent.opponentName != null && game.opponent.opponentName != "") {
+            prefab = GamePieceSelectionManager.Instance.GetGamePiecePrefab(opponentGamePieceId);
+            opponentGamePiecePrefab = Instantiate(prefab);
+            gamePiece = opponentGamePiecePrefab.GetComponent<GamePiece>();
+            gamePiece.SetupPlayer(opponent, PieceAnimState.ASLEEP);
+            opponentGamePiecePrefab.SetActive(false);
+        }
+
+        public void InitPlayerUI()
+        {
+            Debug.Log("game.gameState.GameType: " + game.gameState.GameType);
+            if (game.gameState.GameType == GameType.REALTIME 
+                || game.gameState.GameType == GameType.RANDOM 
+                || game.gameState.GameType == GameType.FRIEND 
+                || game.gameState.GameType == GameType.LEADERBOARD) 
+            {
+                string opponentName;
+                if (game.opponent != null && game.opponent.opponentName != null && game.opponent.opponentName != "")
+                {
                     Debug.Log("game.opponent.opponentName: " + game.opponent.opponentName);
-                    opponentNameText.text = game.opponent.opponentName;
-                } else {
-                    opponentNameText.text = LocalizationManager.Instance.GetLocalizedValue("waiting_opponent_text");
-                }
-
-                // if (opponentProfileSprite != null)
-                // {
-                //     opponentProfilePicture.sprite = opponentProfileSprite;
-                // }
-                // else if (opponentFacebookId != "")
-                // {
-                //     StartCoroutine(UserManager.instance.GetFBPicture(opponentFacebookId, (sprite) =>
-                //     {
-                //         opponentProfilePicture.sprite = sprite;
-                //     }));
-                // } else {
-                //     opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
-                //         new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
-                //         new Vector2(0.5f, 0.5f));
-                // }
-            } else {
-                playerNameText.text = "Player 1";
-                // playerProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
-                //     new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
-                //     new Vector2(0.5f, 0.5f));
-                playerPieceImage.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(game.challengerGamePieceId);
-
-                opponentNameText.text = "Player 2";
-                // opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
-                //     new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
-                //     new Vector2(0.5f, 0.5f));
-                opponentPieceImage.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(game.challengedGamePieceId);
-
-                GamePieceUI opponent = opponentPieceImage.GetComponent<GamePieceUI>();
-                if (game.challengerGamePieceId == game.challengedGamePieceId)
-                {
-                    opponent.SetAlternateColor(true);
+                    opponentName = game.opponent.opponentName;
                 }
                 else
                 {
-                    opponent.SetAlternateColor(false);
+                    opponentName = LocalizationManager.Instance.GetLocalizedValue("waiting_opponent_text");
                 }
+
+                playerUIPanel.SetupPlayerName(UserManager.instance.userName);
+                opponentUIPanel.SetupPlayerName(opponentName);
+            } 
+            else 
+            {
+                playerUIPanel.SetupPlayerName("Player 1");
+                opponentUIPanel.SetupPlayerName("Player 2");
             }
+
+            playerUIPanel.InitPlayerIcon(playerGamePiecePrefab);
+            opponentUIPanel.InitPlayerIcon(opponentGamePiecePrefab);
         }
 
         public void SetupGame(string title, string subtitle)
@@ -511,13 +447,13 @@ namespace Fourzy
 
                     if (piece == (int)Piece.BLUE)
                     {
-                        GamePiece pieceObject = SpawnPiece(col, row * -1, PlayerEnum.ONE, PieceAnimState.ASLEEP);
+                        GamePiece pieceObject = SpawnPiece(col, row, PlayerEnum.ONE, PieceAnimState.ASLEEP);
                         pieceObject.player = PlayerEnum.ONE;
                         gameBoardView.gamePieces[row, col] = pieceObject;
                     }
                     else if (piece == (int)Piece.RED)
                     {
-                        GamePiece pieceObject = SpawnPiece(col, row * -1, PlayerEnum.TWO, PieceAnimState.ASLEEP);
+                        GamePiece pieceObject = SpawnPiece(col, row, PlayerEnum.TWO, PieceAnimState.ASLEEP);
                         pieceObject.player = PlayerEnum.TWO;
                         gameBoardView.gamePieces[row, col] = pieceObject;
                     }
@@ -860,54 +796,21 @@ namespace Fourzy
         /// Spawns a gamepiece at the given column and row
         /// </summary>
         /// <returns>The piece.</returns>
-        GamePiece SpawnPiece(float posX, float posY, PlayerEnum player, PieceAnimState startingState)
+        GamePiece SpawnPiece(int posX, int posY, PlayerEnum player, PieceAnimState startingState)
         {
-            if (game.challengerGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1)
-            {
-                game.challengerGamePieceId = 0;
-            }
-            if (game.challengedGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1)
-            {
-                game.challengedGamePieceId = 0;
-            }
-
             //Debug.Log("SpawnPiece: x: " + posX + " y: " + posY);
-            float xPos = (posX + .1f) * .972f;
-            float yPos = (posY + .05f) * .96f;
+            Vector3 position = new Position(posX, posY).ConvertToVec3();
+            position.z = 10;
 
-            int gamePieceID = game.challengerGamePieceId;
-            if (game.gameState.GameType == GameType.REALTIME)
-            {
-                if (game.isCurrentPlayer_PlayerOne)
-                {
-                    if (player == PlayerEnum.ONE)
-                    {
-                        gamePieceID = UserManager.instance.gamePieceId;
-                    }
-                    else
-                    {
-                        gamePieceID = game.opponent.gamePieceId;
-                    }
-                }
-                else
-                {
-                    if (player == PlayerEnum.ONE)
-                    {
-                        gamePieceID = game.opponent.gamePieceId;
-                    }
-                    else
-                    {
-                        gamePieceID = UserManager.instance.gamePieceId;
-                    }
-                }
-            }
+            GameObject gamePiecePrefab = (game.gameState.IsPlayerOneTurn == game.isCurrentPlayer_PlayerOne) 
+                ? playerGamePiecePrefab : opponentGamePiecePrefab;
 
-            GameObject gamePiecePrefab = GamePieceSelectionManager.Instance.GetGamePiecePrefab(gamePieceID);
-            GameObject go = Instantiate(gamePiecePrefab, new Vector3(xPos, yPos, 10),
-                                                Quaternion.identity, gamePieces.transform);
+            GameObject go = Instantiate(gamePiecePrefab);
+            go.SetActive(true);
+            go.transform.parent = gamePieces.transform;
+            go.transform.position = position;
+
             GamePiece gamePiece = go.GetComponent<GamePiece>();
-            
-            gamePiece.transform.position = new Vector3(xPos, yPos, 10);
             gamePiece.SetupPlayer(player, startingState);
 
             return gamePiece;
@@ -918,16 +821,17 @@ namespace Fourzy
             AnimatePlayerPieceUI();
         }
 
-		public void AnimatePlayerPieceUI() {
-            float animationSpeed = 0.8f;
-            if ((game.gameState.IsPlayerOneTurn && game.isCurrentPlayer_PlayerOne) || (!game.gameState.IsPlayerOneTurn && !game.isCurrentPlayer_PlayerOne)) {
-                playerPieceUIScript.PlayAnimation();
-                // Animation jump = playerPieceUI.GetComponent<Animation>();
-                opponentPieceUIScript.StopAnimation();
-            } else if ((game.gameState.IsPlayerOneTurn && !game.isCurrentPlayer_PlayerOne) || (!game.gameState.IsPlayerOneTurn && game.isCurrentPlayer_PlayerOne)) {
-                opponentPieceUIScript.PlayAnimation();
-                // Animation jump = opponentPieceUIAnimator.GetComponent<Animation>();
-                playerPieceUIScript.StopAnimation();
+		public void AnimatePlayerPieceUI() 
+        {
+            if (game.gameState.IsPlayerOneTurn == game.isCurrentPlayer_PlayerOne)
+            {
+                playerUIPanel.ShowPlayerTurnAnimation(bluePlayerColor);
+                opponentUIPanel.StopPlayerTurnAnimation();
+            } 
+            else if (game.gameState.IsPlayerOneTurn != game.isCurrentPlayer_PlayerOne)
+            {
+                opponentUIPanel.ShowPlayerTurnAnimation(redPlayerColor);
+                playerUIPanel.StopPlayerTurnAnimation();
             }
         }
 
@@ -1338,7 +1242,7 @@ namespace Fourzy
             // animatingGamePieces = true;
 
             // Create Game Piece View
-            GamePiece gamePiece = SpawnPiece(move.position.column, move.position.row * -1, move.player, PieceAnimState.MOVING);
+            GamePiece gamePiece = SpawnPiece(move.position.column, move.position.row, move.player, PieceAnimState.MOVING);
             gamePiece.player = move.player;
             gamePiece.column = move.position.column;
             gamePiece.row = move.position.row;
@@ -1439,7 +1343,7 @@ namespace Fourzy
                     }
                     else
                     {
-                        gameInfo.Open(opponentNameText.text + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
+                        gameInfo.Open(opponentUIPanel.GetPlayerName() + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
 
                     //AnalyticsManager.LogGameOver("multiplayer", gameState.winner, gameState.tokenBoard);

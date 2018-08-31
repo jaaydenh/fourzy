@@ -547,11 +547,8 @@ namespace Fourzy
 
                 int gamePieceId = int.Parse(gamePieceIdString);
                 GameManager.instance.activeGame.opponent.gamePieceId = gamePieceId;
-                if (gamePieceId != -1) {
-                    GamePlayManager.Instance.opponentPieceImage.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(gamePieceId);
-                } else {
-                    GamePlayManager.Instance.opponentPieceImage.sprite = GamePieceSelectionManager.Instance.gamePieces[0];
-                }
+
+                GamePlayManager.Instance.opponentUIPanel.InitPlayerIcon(PlayerEnum.TWO, gamePieceId);
             }
         }
 

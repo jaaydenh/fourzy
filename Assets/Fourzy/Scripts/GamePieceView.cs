@@ -57,6 +57,7 @@ namespace Fourzy
             cachedTransform = transform;
             bodyMaterial = body.material;
             bodyOutlineMaterial = new Material(outlineShader);
+            bodyOutlineMaterial.SetVector("_HSVAAdjust", bodyMaterial.GetVector("_HSVAAdjust"));
         }
 
         public void SetupHSVColor(Vector4 vec)
@@ -129,11 +130,19 @@ namespace Fourzy
             body.sharedMaterial = bodyOutlineMaterial;
         }
 
-        public void ShowTurnOutline(Color color)
+        public void ShowTurnAnimation(Color color)
         {
             bodyOutlineMaterial.SetColor("_OutlineColor", color);
             bodyOutlineMaterial.SetFloat("_OutlineBorder", 1.15f);
             body.sharedMaterial = bodyOutlineMaterial;
+
+            this.SetupAsleep();
+        }
+
+        public void StopTurnAnimation()
+        {
+            body.sharedMaterial = bodyMaterial;
+            this.StopAllCoroutines();
         }
 
         public void SetupClosedEye()
