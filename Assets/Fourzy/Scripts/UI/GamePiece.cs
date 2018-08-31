@@ -160,6 +160,7 @@ namespace Fourzy
                     if (nextPos == positions.Count - 1 && t + 2 * Time.deltaTime * Constants.moveSpeed / distance > 1)
                     {
                         bool playHitAnimation = (nextPiece == null && (firstPiece || positions.Count > 2));
+                        playHitAnimation = ((nextPiece == null && positions.Count > 2) || firstPiece);
                         View.PlayFinishMovement(playHitAnimation);
                     }
 
@@ -187,7 +188,7 @@ namespace Fourzy
             //    yield return tweener.WaitForCompletion();
             //}
 
-            View.SetupZOrder(row * 2);
+            View.SetupZOrder(5 + row * 2);
             View.SetupAsleep();
 
             GamePlayManager.Instance.numPiecesAnimating--;
