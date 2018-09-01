@@ -123,26 +123,48 @@ namespace Fourzy
             mouth.sortingOrder = zorder + 1;
         }
 
+        public void PlayWinAnimation(Color color, float delay)
+        {
+            bodyOutlineMaterial.SetColor("_OutlineColor", color);
+            body.sharedMaterial = bodyOutlineMaterial;
+
+            pieceAnimator.Play("ShowWinningOutline");
+
+            this.StartCoroutine(PlayWinAnimationWithDelay(delay));
+        }
+
+        IEnumerator PlayWinAnimationWithDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            pieceAnimator.SetBool("win", true);
+        }
+
         public void ShowWinOutline(Color color)
         {
             bodyOutlineMaterial.SetColor("_OutlineColor", color);
-            bodyOutlineMaterial.SetFloat("_OutlineBorder", 1.15f);
             body.sharedMaterial = bodyOutlineMaterial;
+
+            pieceAnimator.Play("ShowOutline");
+            pieceAnimator.SetBool("win", true);
         }
 
         public void ShowTurnAnimation(Color color)
         {
             bodyOutlineMaterial.SetColor("_OutlineColor", color);
-            bodyOutlineMaterial.SetFloat("_OutlineBorder", 1.15f);
             body.sharedMaterial = bodyOutlineMaterial;
 
             this.SetupAsleep();
+
+            pieceAnimator.Play("ShowOutline");
         }
 
         public void StopTurnAnimation()
-        {
-            body.sharedMaterial = bodyMaterial;
+        {            
             this.StopAllCoroutines();
+
+            pieceAnimator.Play("HideOutline");
+            //this.StartCoroutine(HideOutlineAnimation());
         }
 
         public void SetupClosedEye()

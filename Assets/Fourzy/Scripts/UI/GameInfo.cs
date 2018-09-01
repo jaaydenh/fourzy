@@ -29,6 +29,29 @@ public class GameInfo : MonoBehaviour {
         }
 
         gameObject.SetActive(true);
+
+        this.ShowGameInfo();
+    }
+
+    private void ShowGameInfo()
+    {
+        Image backgroundImage = this.GetComponent<Image>();
+        float finishAlpha = backgroundImage.color.a;
+        Color color = backgroundImage.color;
+        color.a = 0.0f;
+        backgroundImage.color = color;
+        Tween showPanel = backgroundImage.DOFade(finishAlpha, 0.25f).SetEase(Ease.InOutBack);
+
+        Transform textTransform = this.infoText.transform;
+        float posX = textTransform.position.x;
+        Vector3 pos = textTransform.position;
+        pos.x = 1000;
+        textTransform.position = pos;
+        Tween showText = textTransform.DOMoveX(posX, 0.5f).SetEase(Ease.OutBack);
+
+        Sequence gameInfoAppear = DOTween.Sequence();
+        gameInfoAppear.Append(showPanel);
+        gameInfoAppear.Append(showText);
     }
 
     public void Close()

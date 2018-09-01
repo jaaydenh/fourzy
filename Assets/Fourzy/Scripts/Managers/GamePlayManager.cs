@@ -274,24 +274,18 @@ namespace Fourzy
 
         public void ResetGamePiecesAndTokens()
         {
-            if (gamePieces.transform.childCount > 0)
+            for (int i = gamePieces.transform.childCount - 1; i >= 0; i--)
             {
-                for (int i = gamePieces.transform.childCount - 1; i >= 0; i--)
-                {
-                    Transform piece = gamePieces.transform.GetChild(i);
-                    piece.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    Destroy(piece.gameObject);
-                    //LeanPool.Despawn(piece.gameObject);
-                }
+                Transform piece = gamePieces.transform.GetChild(i);
+                piece.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                Destroy(piece.gameObject);
+                //LeanPool.Despawn(piece.gameObject);
             }
 
-            if (tokens.transform.childCount > 0)
+            for (int i = tokens.transform.childCount - 1; i >= 0; i--)
             {
-                for (int i = tokens.transform.childCount - 1; i >= 0; i--)
-                {
-                    Transform token = tokens.transform.GetChild(i);
-                    DestroyImmediate(token.gameObject);
-                }
+                Transform token = tokens.transform.GetChild(i);
+                DestroyImmediate(token.gameObject);
             }
 
             gameBoardView.Clear();
@@ -1231,7 +1225,7 @@ namespace Fourzy
         {
             if (game.gameState.IsGameOver || game.isExpired)
             {
-                DisplayGameOverView();
+                this.StartCoroutine(DisplayGameOverView());
             }
             else
             {
@@ -1264,23 +1258,26 @@ namespace Fourzy
             //yield return cd.coroutine;
             //Debug.Log("MoveGamePiece success: " + cd.result.ToString());
 
-            StartCoroutine(gamePiece.MoveGamePiece(movingPieces, activeTokens));
+            gamePiece.Move(movingPieces, activeTokens);
 
             gameBoardView.PrintGameBoard();
         }
 
-        public void DisplayGameOverView()
+        private IEnumerator DisplayGameOverView()
         {
             if (game.isExpired)
             {
                 GameManager.instance.VisitedGameResults(game);
                 gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("expired_text"), Color.white, false, !game.didViewResult);
-                return;
+                yield return true;
             }
 
             Debug.Log("DisplayGameOverView gameState.winner: " +  game.gameState.Winner);
 
             this.ShowWinnerAnimation();
+
+            yield return new WaitForSeconds(1.5f);
+
             this.ShowWinnerTextAndPlaySound();
             this.LogGameWinner();
 
@@ -1298,18 +1295,24 @@ namespace Fourzy
 
         private void ShowWinnerAnimation()
         {
+            float delay = 0.3f;
             for (int i = 0; i < game.gameState.GameBoard.player1WinningPositions.Count; i++)
             {
                 Position position = game.gameState.GameBoard.player1WinningPositions[i];
                 GamePiece gamePiece = gameBoardView.GamePieceAt(position);
-                gamePiece.View.ShowWinOutline(bluePlayerColor);
+                //gamePiece.View.ShowWinOutline(bluePlayerColor);
+                gamePiece.View.PlayWinAnimation(bluePlayerColor, delay);
+                delay += 0.12f;
             }
 
+            delay = 0.3f;
             for (int i = 0; i < game.gameState.GameBoard.player2WinningPositions.Count; i++)
             {
                 Position position = game.gameState.GameBoard.player2WinningPositions[i];
                 GamePiece gamePiece = gameBoardView.GamePieceAt(position);
-                gamePiece.View.ShowWinOutline(redPlayerColor);
+                //gamePiece.View.ShowWinOutline(redPlayerColor);
+                gamePiece.View.PlayWinAnimation(redPlayerColor, delay);
+                delay += 0.12f;
             }
         }
 

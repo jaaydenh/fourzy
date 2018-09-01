@@ -332,7 +332,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 22100000, guid: 00eacbfbdec734cab975b264b19a74e2, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
@@ -399,11 +399,6 @@ MonoBehaviour:
   player: 0
   column: 0
   row: 0
-  isMoveableUp: 0
-  isMoveableDown: 0
-  isMoveableLeft: 0
-  isMoveableRight: 0
-  isMoving: 0
   animating: 0
 --- !u!212 &212371771514571664
 SpriteRenderer:

@@ -16,10 +16,6 @@ namespace Fourzy
             gamePieces = new GamePiece[numRows, numColumns];
         }
 
-        public void MakePieceMoveable(Position pos, bool moveable, Direction direction) {
-            gamePieces[pos.row, pos.column].MakeMoveable(moveable, direction);
-        }
-
         public void SwapPiecePosition(Position oldPos, Position newPos) {
             GamePiece gamePiece = gamePieces[oldPos.row, oldPos.column];
             

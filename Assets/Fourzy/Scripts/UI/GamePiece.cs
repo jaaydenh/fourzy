@@ -16,12 +16,7 @@ namespace Fourzy
         public PlayerEnum player;
         public int column;
         public int row;
-        //public List<Position> positions;
-        public bool isMoveableUp = false;
-        public bool isMoveableDown = false;
-        public bool isMoveableLeft = false;
-        public bool isMoveableRight = false;
-        public bool isMoving;
+
         public bool animating;
 
         private CircleCollider2D gamePieceCollider;
@@ -35,30 +30,6 @@ namespace Fourzy
             cachedTransform = this.transform;
             View = this.GetComponent<GamePieceView>();
 		}
-
-		//public void Reset()
-        //{
-        //    player = PlayerEnum.NONE;
-        //    column = 0;
-        //    row = 0;
-        //    //if (positions != null) {
-        //    //    positions.Clear();    
-        //    //}
-        //    isMoveableUp = false;
-        //    isMoveableDown = false;
-        //    isMoveableLeft = false;
-        //    isMoveableRight = false;
-        //    //isMoving = false;
-        //    //didAnimateNextPiece = false;
-        //    //animating = false;
-        //    //nextPiece = null;
-        //    //if (movingPieces != null) {
-        //    //    movingPieces.Clear();    
-        //    //}
-        //    //if (activeTokens != null) {
-        //    //    activeTokens.Clear();    
-        //    //}
-        //}
 
         public void SetupPlayer(PlayerEnum playerEnum, PieceAnimState animState)
         {          
@@ -88,7 +59,12 @@ namespace Fourzy
             return Direction.NONE;
         }
 
-        public IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true) 
+        public void Move(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true)
+        {
+            this.StartCoroutine(MoveGamePiece(movingPieces, activeTokens, firstPiece));
+        }
+
+        private IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true) 
         {
             if (movingPieces.Count == 0) 
             {
@@ -202,7 +178,7 @@ namespace Fourzy
             {
                 // Animate punch and hit for both pieces
 
-                nextPiece.StartCoroutine(nextPiece.MoveGamePiece(movingPieces, activeTokens, false));
+                nextPiece.Move(movingPieces, activeTokens, false);
             }
         }
 
@@ -281,24 +257,5 @@ namespace Fourzy
             }
         }
 
-        public void MakeMoveable(bool moveable, Direction direction) {
-            switch (direction)
-            {
-                case Direction.UP:
-                    isMoveableUp = moveable;
-                    break;
-                case Direction.DOWN:
-                    isMoveableDown = moveable;
-                    break;
-                case Direction.LEFT:
-                    isMoveableLeft = moveable;
-                    break;
-                case Direction.RIGHT:
-                    isMoveableRight = moveable;
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 }

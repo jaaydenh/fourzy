@@ -5,9 +5,10 @@ Shader "Custom/HSVRangeOutlineShader"
     {
        _MainTex ("Sprite Texture", 2D) = "white" {}
        _ColorRampTex("Color ramp Texture", 2D) = "white" {}
-       _Intencity ("Intencity", Range(0, 3)) = 1
+       _Intensity ("Intensity", Range(0, 3)) = 1
        _OutlineColor ("Outline Color", Color) = (0,0,0,1)
        _OutlineBorder ("Outline Border", float) = 1
+       _BlurSize ("Blur size", float) = 2
 
        _HSVRangeMin ("HSV Affect Range Min", Range(0, 1)) = 0
        _HSVRangeMax ("HSV Affect Range Max", Range(0, 1)) = 1
@@ -59,7 +60,8 @@ Shader "Custom/HSVRangeOutlineShader"
             sampler2D _MainTex;
             float4 _MainTex_TexelSize;
             half4 _OutlineColor;
-            float _Intencity;
+            float _Intensity;
+            float _BlurSize;
 
             sampler2D _ColorRampTex;
 
@@ -84,8 +86,8 @@ Shader "Custom/HSVRangeOutlineShader"
 
                 float _Size = 2;
 
-                #define GRABPIXELY(weight,kernely) tex2D( _MainTex, float2(IN.uv_MainTex.x, IN.uv_MainTex.y + _MainTex_TexelSize.y * kernely *_Size)).a * weight
-                #define GRABPIXELX(weight,kernelx) tex2D( _MainTex, float2(IN.uv_MainTex.x + kernelx * _Size * _MainTex_TexelSize.x, IN.uv_MainTex.y)).a * weight
+                #define GRABPIXELY(weight,kernely) tex2D( _MainTex, float2(IN.uv_MainTex.x, IN.uv_MainTex.y + _MainTex_TexelSize.y * kernely *_BlurSize)).a * weight
+                #define GRABPIXELX(weight,kernelx) tex2D( _MainTex, float2(IN.uv_MainTex.x + kernelx * _BlurSize * _MainTex_TexelSize.x, IN.uv_MainTex.y)).a * weight
 
 //                    sum += GRABPIXELY(0.05, -4.0);
 //                    sum += GRABPIXELY(0.09, -3.0);
@@ -107,9 +109,9 @@ Shader "Custom/HSVRangeOutlineShader"
 //                    sum += GRABPIXELX(0.09, +3.0);
 //                    sum += GRABPIXELX(0.05, +4.0);
 
-                    _OutlineColor.a *= sum;
+                    _OutlineColor.a = _OutlineColor.a * sum * _Intensity;
 
-                return _OutlineColor * _Intencity;
+                return _OutlineColor;
             }
 
             ENDCG
