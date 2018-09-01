@@ -1300,7 +1300,6 @@ namespace Fourzy
             {
                 Position position = game.gameState.GameBoard.player1WinningPositions[i];
                 GamePiece gamePiece = gameBoardView.GamePieceAt(position);
-                //gamePiece.View.ShowWinOutline(bluePlayerColor);
                 gamePiece.View.PlayWinAnimation(bluePlayerColor, delay);
                 delay += 0.12f;
             }
@@ -1310,7 +1309,6 @@ namespace Fourzy
             {
                 Position position = game.gameState.GameBoard.player2WinningPositions[i];
                 GamePiece gamePiece = gameBoardView.GamePieceAt(position);
-                //gamePiece.View.ShowWinOutline(redPlayerColor);
                 gamePiece.View.PlayWinAnimation(redPlayerColor, delay);
                 delay += 0.12f;
             }

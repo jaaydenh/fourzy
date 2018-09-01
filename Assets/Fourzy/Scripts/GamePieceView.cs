@@ -11,30 +11,15 @@ namespace Fourzy
         private SpriteRenderer body;
 
         [SerializeField]
-        private SpriteRenderer eye;
-
-        [SerializeField]
-        private SpriteRenderer mouth;
-
-        [SerializeField]
         private Animator pieceAnimator;
 
         [SerializeField]
         private Shader outlineShader;
 
-        [SerializeField]
-        private Sprite openEye;
-
-        [SerializeField]
-        private Sprite closedEye;
-
-        [SerializeField]
-        private Sprite openMouth;
-
-        [SerializeField]
-        private Sprite closedMouth;
 
         private Transform cachedTransform;
+
+        private SpriteRenderer[] sprites;
 
         private Material bodyMaterial;
         private Material bodyOutlineMaterial;
@@ -43,7 +28,6 @@ namespace Fourzy
         {
             Debug.Assert(pieceAnimator != null, "Setup pieceAnimator for GamePieceView in editor");
             Debug.Assert(body != null, "Setup body for GamePieceView in editor");
-            Debug.Assert(eye != null, "Setup eye for GamePieceView in Editor");
 
             if (pieceAnimator == null)
             {
@@ -58,6 +42,8 @@ namespace Fourzy
             bodyMaterial = body.material;
             bodyOutlineMaterial = new Material(outlineShader);
             bodyOutlineMaterial.SetVector("_HSVAAdjust", bodyMaterial.GetVector("_HSVAAdjust"));
+
+            sprites = this.GetComponentsInChildren<SpriteRenderer>(true);
         }
 
         public void SetupHSVColor(Vector4 vec)
@@ -79,8 +65,6 @@ namespace Fourzy
 
         public void PlayFinishMovement(bool animateHit)
         {
-            // 2 samples, 0.58 scale
-            // hit animation = 20 samples
             pieceAnimator.SetBool("animateHit", animateHit);
             pieceAnimator.SetBool("isMoving", false);
         }
@@ -118,9 +102,12 @@ namespace Fourzy
 
         public void SetupZOrder(int zorder)
         {
+            foreach(SpriteRenderer sr in sprites)
+            {
+                sr.sortingOrder = zorder + 1;
+            }
+
             body.sortingOrder = zorder;
-            eye.sortingOrder = zorder + 1;
-            mouth.sortingOrder = zorder + 1;
         }
 
         public void PlayWinAnimation(Color color, float delay)
@@ -130,23 +117,11 @@ namespace Fourzy
 
             pieceAnimator.Play("ShowWinningOutline");
 
-            this.StartCoroutine(PlayWinAnimationWithDelay(delay));
-        }
-
-        IEnumerator PlayWinAnimationWithDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-
-            pieceAnimator.SetBool("win", true);
-        }
-
-        public void ShowWinOutline(Color color)
-        {
-            bodyOutlineMaterial.SetColor("_OutlineColor", color);
-            body.sharedMaterial = bodyOutlineMaterial;
-
-            pieceAnimator.Play("ShowOutline");
-            pieceAnimator.SetBool("win", true);
+            Sequence sequence = DOTween.Sequence();
+            sequence.AppendInterval(delay);
+            sequence.AppendCallback(() => {
+                pieceAnimator.SetBool("win", true);
+            });
         }
 
         public void ShowTurnAnimation(Color color)
@@ -164,29 +139,7 @@ namespace Fourzy
             this.StopAllCoroutines();
 
             pieceAnimator.Play("HideOutline");
-            //this.StartCoroutine(HideOutlineAnimation());
         }
-
-        public void SetupClosedEye()
-        {
-            eye.sprite = closedEye;
-        }
-
-        public void SetupOpenEye()
-        {
-            eye.sprite = openEye;
-        }
-
-        public void SetupClosedMouth()
-        {
-            mouth.sprite = closedMouth;
-        }
-
-        public void SetupOpenMouth()
-        {
-            mouth.sprite = openMouth;
-        }
-
     }
 
 }

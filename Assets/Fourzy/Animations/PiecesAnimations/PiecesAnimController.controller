@@ -1424,7 +1424,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -1899,7 +1899,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: HideOutline
-  m_Speed: 2
+  m_Speed: 5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101057684895227844}
@@ -2110,7 +2110,7 @@ AnimatorStateMachine:
     m_Position: {x: 432, y: 348, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102069226797085688}
-    m_Position: {x: -60, y: 408, z: 0}
+    m_Position: {x: -48, y: 300, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
