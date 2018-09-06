@@ -165,7 +165,6 @@ namespace Fourzy
             //}
 
             View.SetupZOrder(5 + row * 2);
-            //View.SetupAsleep();
 
             GamePlayManager.Instance.numPiecesAnimating--;
 
@@ -189,12 +188,9 @@ namespace Fourzy
                 return;
             }
 
-            int row1 = GetRowFromPosition(transform.position.y);
-            int col1 = GetColumnFromPosition(transform.position.x);
-
             for (int i = 0; i < activeTokens.Count; i++)
             {
-                Position piecePos = Utility.GetPositonFromTransform(transform.position);
+                Position piecePos = Position.Vec3ToPosition(transform.position);
 
                 //Debug.Log("nextPiecePosition row: " + piecePos.row + " col: " + piecePos.column);
                 if (piecePos.column == activeTokens[i].Column && piecePos.row == activeTokens[i].Row)
@@ -215,15 +211,6 @@ namespace Fourzy
                     activeTokens.RemoveAt(i);
                 }
             }
-        }
-
-
-        private int GetRowFromPosition(float y) {
-            return Mathf.CeilToInt((y * -1 - .3f));
-        }
-
-        private int GetColumnFromPosition(float x) {
-            return Mathf.RoundToInt(x);
         }
 
         private Tweener AfterMovementAnimations(MovingGamePiece piece, Direction direction) 

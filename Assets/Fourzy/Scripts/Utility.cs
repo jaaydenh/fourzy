@@ -69,33 +69,6 @@ namespace Fourzy
 
             return movePosition;
         }
-
-        public static Position GetPositonFromTransform(Vector3 pos) {
-            int column = Mathf.RoundToInt(pos.x);
-            int row = Mathf.CeilToInt((pos.y * -1 - .3f));
-
-            return new Position(column, row);
-        }
-
-        public static bool inTopRowBounds(float x, float y)
-        {
-            return x > 0.5 && x < Constants.numColumns - 1.5 && y > -0.46 && y < 1.2;
-        }
-
-        public static bool inBottomRowBounds(float x, float y)
-        {
-            return x > 0.5 && x < Constants.numColumns - 1.5 && y > -Constants.numColumns && y < -Constants.numColumns + 2;
-        }
-
-        public static bool inLeftRowBounds(float x, float y)
-        {
-            return x > -0.8 && x < 0.66 && y > -Constants.numColumns + 1.3 && y < -0.5;
-        }
-
-        public static bool inRightRowBounds(float x, float y)
-        {
-            return x > Constants.numColumns - 1.7 && x < Constants.numColumns - 0.5 && y > -Constants.numColumns + 1.5 && y < -0.5;
-        }
     }
 }
 

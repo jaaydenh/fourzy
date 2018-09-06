@@ -35,9 +35,7 @@ namespace Fourzy
         [Header("Game UI")]
         public GameObject gameScreen;
         public Rewards rewardScreen;
-        public GameObject gameBoard;
-        public GameObject gamePieces;
-        public GameObject tokens;
+        public GameBoardView gameBoardView;
         public GameObject[,] tokenViews;
 
         [SerializeField]
@@ -60,7 +58,6 @@ namespace Fourzy
         public GameObject moveHintAreaObject;
         public GameIntroUI gameIntroUI;
         public Text challengeIdDebugText;
-        public GameBoardView gameBoardView;
         public GameObject particleEffect;
         public TextMeshProUGUI timerText;
 
@@ -111,14 +108,13 @@ namespace Fourzy
 
             //TODO: Create a game if activeGame is null
 
-            CalculatePositions();
-            
             //SoundManager.instance.Mute(true);
             UserInputHandler.inputEnabled = false;
 
             // timerText = GetComponent<TextMeshProUGUI>();
 
-            Utility.SetSpriteAlpha(gameBoard, 0.0f);
+            gameBoardView.SetupAlpha(0);
+            gameBoardView.CalculatePositions();
             gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
 
             this.InitButtonListeners();
@@ -128,7 +124,7 @@ namespace Fourzy
 
             replayedLastMove = false;
 
-            // ResetGamePiecesAndTokens();
+            // gameBoardView.ResetGamePiecesAndTokens();
             InitPlayerPrefabs();
             ResetUI();
             if (game.gameState != null) {
@@ -216,25 +212,6 @@ namespace Fourzy
             }
         }
 
-        private void CalculatePositions()
-        {
-            BoxCollider2D boxCollider = (BoxCollider2D)gameBoard.GetComponent<Collider2D>();
-
-            float top = boxCollider.offset.y + (boxCollider.size.y / 2f);
-            float btm = boxCollider.offset.y - (boxCollider.size.y / 2f);
-            float left = boxCollider.offset.x - (boxCollider.size.x / 2f);
-            float right = boxCollider.offset.x + (boxCollider.size.x / 2f);
-
-            Vector3 topLeft = gameBoard.transform.TransformPoint(new Vector3(left, top, 0f));
-            Vector3 btmRight = gameBoard.transform.TransformPoint(new Vector3(right, btm, 0f));
-
-            float stepX = (btmRight.x - topLeft.x) / Constants.numColumns;
-            float stepY = (topLeft.y - btmRight.y) / Constants.numRows;
-
-            Position.topLeft = topLeft;
-            Position.step = new Vector3(stepX, stepY);
-        }
-
         private void InitButtonListeners()
         {
             Button backBtn = backButton.GetComponent<Button>();
@@ -270,25 +247,6 @@ namespace Fourzy
             backButton.gameObject.SetActive(true);
             moveHintAreaObject.SetActive(false);
             gameIntroUI.Close();
-        }
-
-        public void ResetGamePiecesAndTokens()
-        {
-            for (int i = gamePieces.transform.childCount - 1; i >= 0; i--)
-            {
-                Transform piece = gamePieces.transform.GetChild(i);
-                piece.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                Destroy(piece.gameObject);
-                //LeanPool.Despawn(piece.gameObject);
-            }
-
-            for (int i = tokens.transform.childCount - 1; i >= 0; i--)
-            {
-                Transform token = tokens.transform.GetChild(i);
-                DestroyImmediate(token.gameObject);
-            }
-
-            gameBoardView.Clear();
         }
 
         private void InitIntroUI() 
@@ -472,7 +430,7 @@ namespace Fourzy
         public void CreateStickyToken(int row, int col) 
         {
             Vector3 position = new Position(row, col).ConvertToVec3();
-            GameObject go = Instantiate(stickyToken, position, Quaternion.identity, tokens.transform);
+            GameObject go = Instantiate(stickyToken, position, Quaternion.identity, gameBoardView.tokensRootTransform);
             Destroy(tokenViews[row, col]);
             tokenViews[row, col] = go;
         }
@@ -566,7 +524,7 @@ namespace Fourzy
                     }
 
                     if (tokenPrefab) {
-                        go = Instantiate(tokenPrefab, position, Quaternion.identity, tokens.transform);
+                        go = Instantiate(tokenPrefab, position, Quaternion.identity, gameBoardView.tokensRootTransform);
                         if (rotateRight) {
                             go.transform.Rotate(0,0,90);
                         }
@@ -583,7 +541,7 @@ namespace Fourzy
 
         private void FadeGameScreen(float alpha, float fadeTime)
         {
-            gameBoard.GetComponent<SpriteRenderer>().DOFade(alpha, fadeTime);
+            gameBoardView.Fade(alpha, fadeTime);
             gameScreen.GetComponent<CanvasGroup>().DOFade(alpha, fadeTime).OnComplete(() => FadeTokens(alpha, fadeTime));
         }
 
@@ -812,7 +770,7 @@ namespace Fourzy
 
             GameObject go = Instantiate(gamePiecePrefab);
             go.SetActive(true);
-            go.transform.parent = gamePieces.transform;
+            go.transform.parent = gameBoardView.gamePiecesRootTransform;
             go.transform.position = position;
             go.transform.localScale = Vector3.one;
 
@@ -953,52 +911,43 @@ namespace Fourzy
                 return;
             }
 
-            // Debug.Log("Gamemanager: gameState.isCurrentPlayerTurn: " + gameState.isCurrentPlayerTurn);
+            Position position = Position.Vec3ToPosition(pos);
 
             if (game.gameState.isCurrentPlayerTurn)
-            {
-                // round to a grid square
-                // Debug.Log("Move Position: x: " + pos.x + " y: " + (pos.y * -1 - .3f));
-                int column = Mathf.RoundToInt(pos.x);
-                int row = Mathf.CeilToInt((pos.y * - 1 - .3f));
-
-                Position position;
+            {                
                 PlayerEnum player = game.gameState.IsPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
-                //Debug.Log("ProcessPlayerInput: column: " + column + " row: " + row);
-                if (Utility.inTopRowBounds(pos.x, pos.y))
+                Debug.Log("ProcessPlayerInput: column: " + position.column + "   row = " + position.row);
+                if (position.IsTopRow())
                 {
-                    position = new Position(column, row - 1);
-                    //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
+                    position.row -= 1;
                     Move move = new Move(position, Direction.DOWN, player);
                     StartCoroutine(ProcessMove(move));
                 }
-                else if (Utility.inBottomRowBounds(pos.x, pos.y))
+                else if (position.IsBottomRow())
                 {
-                    position = new Position(column, row + 1);
+                    position.row += 1;
                     Move move = new Move(position, Direction.UP, player);
-                    //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                     StartCoroutine(ProcessMove(move));
                 }
-                else if (Utility.inRightRowBounds(pos.x, pos.y))
+                else if (position.IsRightColumn())
                 {
-                    position = new Position(column + 1, row);
+                    position.column += 1;
                     Move move = new Move(position, Direction.LEFT, player);
-                    //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                     StartCoroutine(ProcessMove(move));
                 }
-                else if (Utility.inLeftRowBounds(pos.x, pos.y))
+                else if (position.IsLeftColumn())
                 {
-                    position = new Position(column - 1, row);
+                    position.column -= 1;
                     Move move = new Move(position, Direction.RIGHT, player);
-                    //Debug.Log("Move Position: col: " + position.column + " row: " + position.row);
                     StartCoroutine(ProcessMove(move));
                 }
             }
             else
             {
                 Debug.Log("Not isCurrentPlayerTurn: challengeInstanceId: " + game.challengeId);
-                if (game.challengeId != null) {
-                    if (Utility.inTopRowBounds(pos.x, pos.y) || Utility.inBottomRowBounds(pos.x, pos.y) || Utility.inRightRowBounds(pos.x, pos.y) || Utility.inLeftRowBounds(pos.x, pos.y))
+                if (game.challengeId != null) 
+                {
+                    if (position.IsTopRow() || position.IsBottomRow() || position.IsLeftColumn() || position.IsRightColumn())
                     {
                         alertUI.Open(LocalizationManager.Instance.GetLocalizedValue("not_your_turn"));
                     }

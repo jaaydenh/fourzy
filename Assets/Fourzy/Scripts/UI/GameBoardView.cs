@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 
 namespace Fourzy
 {
-    public class GameBoardView : MonoBehaviour {
+    public class GameBoardView : MonoBehaviour 
+    {
+        public Transform gamePiecesRootTransform;
+        public Transform tokensRootTransform;
 
         public GamePiece[,] gamePieces; //Collection of GamePiece Views
         public GameObject[,] tokens; //Collection of Token Views
@@ -11,12 +15,51 @@ namespace Fourzy
         [Range(3, 8)]
         public int numColumns = Constants.numRows;
 
-        void Start () {
+        private SpriteRenderer spriteRenderer;
+        private BoxCollider2D cellsArea;
+        private Transform cachedTransform;
+
+        void Awake () 
+        {
             tokens = new GameObject[numRows, numColumns];
             gamePieces = new GamePiece[numRows, numColumns];
+
+            cachedTransform = this.transform;
+            cellsArea = this.GetComponent<BoxCollider2D>();
+            spriteRenderer = this.GetComponent<SpriteRenderer>();
         }
 
-        public void SwapPiecePosition(Position oldPos, Position newPos) {
+#if UNITY_EDITOR
+        private void Update()
+        {
+            if (cachedTransform.hasChanged)
+            {
+                CalculatePositions();
+            }
+        }
+#endif
+
+        public void CalculatePositions()
+        {
+            BoxCollider2D boxCollider = cellsArea;
+
+            float top = boxCollider.offset.y + (boxCollider.size.y / 2f);
+            float btm = boxCollider.offset.y - (boxCollider.size.y / 2f);
+            float left = boxCollider.offset.x - (boxCollider.size.x / 2f);
+            float right = boxCollider.offset.x + (boxCollider.size.x / 2f);
+
+            Vector3 topLeft = cachedTransform.TransformPoint(new Vector3(left, top, 0f));
+            Vector3 btmRight = cachedTransform.TransformPoint(new Vector3(right, btm, 0f));
+
+            float stepX = (btmRight.x - topLeft.x) / Constants.numColumns;
+            float stepY = (topLeft.y - btmRight.y) / Constants.numRows;
+
+            Position.topLeft = topLeft;
+            Position.step = new Vector3(stepX, stepY);
+        }
+
+        public void SwapPiecePosition(Position oldPos, Position newPos) 
+        {
             GamePiece gamePiece = gamePieces[oldPos.row, oldPos.column];
             
             gamePiece.column = newPos.column;
@@ -30,11 +73,32 @@ namespace Fourzy
             return gamePieces[position.row, position.column];
         }
 
-        public void Clear() {
+        public void ResetGamePiecesAndTokens()
+        {
+            for (int i = gamePiecesRootTransform.childCount - 1; i >= 0; i--)
+            {
+                Transform piece = gamePiecesRootTransform.GetChild(i);
+                piece.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                Destroy(piece.gameObject);
+                //LeanPool.Despawn(piece.gameObject);
+            }
+
+            for (int i = tokensRootTransform.childCount - 1; i >= 0; i--)
+            {
+                Transform token = tokensRootTransform.GetChild(i);
+                DestroyImmediate(token.gameObject);
+            }
+
+            this.Clear();
+        }
+
+        public void Clear() 
+        {
             gamePieces = new GamePiece[numRows, numColumns];
         }
 
-        public void PrintGameBoard() {
+        public void PrintGameBoard() 
+        {
             string gameboard = "GameboardView: \n";
 
             for (int row = 0; row < numRows; row++)
@@ -50,6 +114,18 @@ namespace Fourzy
                 gameboard += "\n";
             }
             Debug.Log(gameboard);
+        }
+
+        public void SetupAlpha(float alpha)
+        {
+            Color c = spriteRenderer.color;
+            c.a = alpha;
+            spriteRenderer.color = c;
+        }
+
+        public void Fade(float alpha, float time)
+        {
+            spriteRenderer.DOFade(alpha, time);
         }
     }
 }
