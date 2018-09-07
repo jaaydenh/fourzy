@@ -17,7 +17,7 @@ namespace Fourzy
         public int column;
         public int row;
 
-        public bool animating;
+        public bool isMoving;
 
         private CircleCollider2D gamePieceCollider;
 
@@ -64,7 +64,7 @@ namespace Fourzy
             this.StartCoroutine(MoveGamePiece(movingPieces, activeTokens, firstPiece));
         }
 
-        private IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true) 
+        private IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece) 
         {
             if (movingPieces.Count == 0) 
             {
@@ -96,9 +96,7 @@ namespace Fourzy
                 GamePlayManager.Instance.gameBoardView.gamePieces[endPosition.row, endPosition.column] = this;
             }
 
-            Direction endMoveDirection = findDirection(positions[positions.Count - 2], positions[positions.Count - 1]);
-
-            animating = true;
+            isMoving = true;
 
             View.PlayMovement();
 
@@ -150,7 +148,7 @@ namespace Fourzy
 
             this.CheckActiveTokenCollision(activeTokens);
 
-            animating = false;
+            isMoving = false;
             column = positions[positions.Count - 1].column;
             row = positions[positions.Count - 1].row;
             //if (nextPiece != null)
@@ -158,6 +156,7 @@ namespace Fourzy
             //    nextPiece.StartCoroutine(nextPiece.MoveGamePiece(movingPieces, activeTokens));
             //}
 
+            //Direction endMoveDirection = findDirection(positions[positions.Count - 2], positions[positions.Count - 1]);
             //Tweener tweener = AfterMovementAnimations(movingGamePiece, endMoveDirection);
             //if (tweener != null)
             //{
@@ -173,7 +172,13 @@ namespace Fourzy
 
         private void CheckNextPieceCollision(GamePiece nextPiece, List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
         {
-            if (nextPiece != null && !nextPiece.animating && gamePieceCollider.bounds.Intersects(nextPiece.gamePieceCollider.bounds))
+            if (nextPiece == null || nextPiece.isMoving)
+            {
+                return;
+            }
+
+            //if (gamePieceCollider.bounds.Intersects(nextPiece.gamePieceCollider.bounds))
+            if (gamePieceCollider.Distance(nextPiece.gamePieceCollider).isOverlapped)
             {
                 // Animate punch and hit for both pieces
 
@@ -227,16 +232,12 @@ namespace Fourzy
                 switch (direction)
                 {
                     case Direction.UP:
-                        //gamePieceAnimator.Play("movetest");
                         return cachedTransform.DOPunchPosition(new Vector3(0.0f, punchDistance, 0), punchDuration, 7);
                     case Direction.DOWN:
-                        //gamePieceAnimator.Play("movetest");
                         return cachedTransform.DOPunchPosition(new Vector3(0.0f, punchDistance * -1, 0), punchDuration, 7);
                     case Direction.LEFT:
-                        //gamePieceAnimator.Play("movetest");
                         return cachedTransform.DOPunchPosition(new Vector3(punchDistance * -1, 0.0f, 0), punchDuration, 7);
                     case Direction.RIGHT:
-                        //gamePieceAnimator.Play("movetest");
                         return cachedTransform.DOPunchPosition(new Vector3(punchDistance, 0.0f, 0), punchDuration, 7);
                     default:
                         return cachedTransform.DOPunchPosition(new Vector3(0.0f, 0.0f, 0), punchDuration, 7);

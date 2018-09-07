@@ -24,10 +24,33 @@ namespace Fourzy
         private Material bodyMaterial;
         private Material bodyOutlineMaterial;
 
+        private int h_HSVAAdjust = Shader.PropertyToID("_HSVAAdjust");
+        private int h_OutlineColor = Shader.PropertyToID("_OutlineColor");
+
+        private int h_isMoving = Animator.StringToHash("isMoving");
+        private int h_directionX = Animator.StringToHash("directionX");
+        private int h_directionY = Animator.StringToHash("directionY");
+        private int h_animateHit = Animator.StringToHash("animteHit");
+        private int h_win = Animator.StringToHash("win");
+        private int h_blink = Animator.StringToHash("blink");
+
+        private int h_Idle = Animator.StringToHash("Idle");
+        private int h_ShowWinningOutline = Animator.StringToHash("ShowWinningOutline");
+        private int h_HideOutline = Animator.StringToHash("HideOutline");
+        private int h_ShowOutline = Animator.StringToHash("ShowOutline");
+        private int h_Jumping = Animator.StringToHash("Jumping");
+        private int h_Sleep = Animator.StringToHash("Sleep");
+        private int h_WakeUp = Animator.StringToHash("WakeUp");
+
+        private const int indexBaseLayer = 0;
+        private const int indexEyeMouthLayer = 1;
+        private const int indexMaterialLayer = 2;
+
         private void Awake()
         {
             Debug.Assert(pieceAnimator != null, "Setup pieceAnimator for GamePieceView in editor");
             Debug.Assert(body != null, "Setup body for GamePieceView in editor");
+            Debug.Assert(outlineShader != null, "Setup OutlineShader for GamePieceView in editor");
 
             if (pieceAnimator == null)
             {
@@ -41,55 +64,32 @@ namespace Fourzy
             cachedTransform = transform;
             bodyMaterial = body.material;
             bodyOutlineMaterial = new Material(outlineShader);
-            bodyOutlineMaterial.SetVector("_HSVAAdjust", bodyMaterial.GetVector("_HSVAAdjust"));
+            bodyOutlineMaterial.SetVector(h_HSVAAdjust, bodyMaterial.GetVector(h_HSVAAdjust));
 
             sprites = this.GetComponentsInChildren<SpriteRenderer>(true);
         }
 
         public void SetupHSVColor(Vector4 vec)
         {
-            bodyMaterial.SetVector("_HSVAAdjust", vec);
-            bodyOutlineMaterial.SetVector("_HSVAAdjust", vec);
+            bodyMaterial.SetVector(h_HSVAAdjust, vec);
+            bodyOutlineMaterial.SetVector(h_HSVAAdjust, vec);
         }
 
         public void PlayMovement()
         {
-            pieceAnimator.SetBool("isMoving", true);
+            pieceAnimator.SetBool(h_isMoving, true);
         }
 
         public void PutMovementDirection(int x, int y)
         {
-            pieceAnimator.SetFloat("directionX", x);
-            pieceAnimator.SetFloat("directionY", y);
+            pieceAnimator.SetFloat(h_directionX, x);
+            pieceAnimator.SetFloat(h_directionY, y);
         }
 
         public void PlayFinishMovement(bool animateHit)
         {
-            pieceAnimator.SetBool("animateHit", animateHit);
-            pieceAnimator.SetBool("isMoving", false);
-        }
-
-
-        public void SetupAsleep()
-        {
-            this.StartCoroutine(Blinking());
-        }
-
-        private IEnumerator Blinking()
-        {
-            float t = 0;
-            float nextBlink = 5.0f;
-            while(true)
-            {
-                t += Time.deltaTime;
-                if (t > nextBlink)
-                {
-                    pieceAnimator.SetTrigger("blink");
-                    nextBlink = Random.Range(5.0f, 15.0f);
-                    t = 0;
-                }
-                yield return null;
-            }
+            pieceAnimator.SetBool(h_animateHit, animateHit);
+            pieceAnimator.SetBool(h_isMoving, false);
         }
 
         public void FadeAfterPit()
@@ -112,33 +112,73 @@ namespace Fourzy
 
         public void PlayWinAnimation(Color color, float delay)
         {
-            bodyOutlineMaterial.SetColor("_OutlineColor", color);
+            bodyOutlineMaterial.SetColor(h_OutlineColor, color);
             body.sharedMaterial = bodyOutlineMaterial;
 
-            pieceAnimator.Play("ShowWinningOutline");
+            pieceAnimator.Play(h_ShowWinningOutline);
 
             Sequence sequence = DOTween.Sequence();
             sequence.AppendInterval(delay);
             sequence.AppendCallback(() => {
-                pieceAnimator.SetBool("win", true);
+                pieceAnimator.SetBool(h_win, true);
             });
         }
 
         public void ShowTurnAnimation(Color color)
         {
-            bodyOutlineMaterial.SetColor("_OutlineColor", color);
+            bodyOutlineMaterial.SetColor(h_OutlineColor, color);
             body.sharedMaterial = bodyOutlineMaterial;
 
-            this.SetupAsleep();
-
-            pieceAnimator.Play("ShowOutline");
+            this.StartCoroutine(ShowTurnAnimation());
         }
 
         public void StopTurnAnimation()
-        {            
+        {
             this.StopAllCoroutines();
 
-            pieceAnimator.Play("HideOutline");
+            pieceAnimator.Play(h_HideOutline);
+            pieceAnimator.Play(h_Sleep, indexEyeMouthLayer);
+            pieceAnimator.CrossFade(h_Idle, 0.35f, indexBaseLayer);
+        }
+
+        private IEnumerator ShowTurnAnimation()
+        {
+            pieceAnimator.Play(h_ShowOutline);
+            pieceAnimator.Play(h_WakeUp, indexEyeMouthLayer);
+
+            int countOfJumps = 3;
+            yield return this.StartCoroutine(Jump(countOfJumps));
+            yield return this.StartCoroutine(Blinking());
+        }
+
+        private IEnumerator Jump(int count)
+        {
+            pieceAnimator.Play(h_Jumping);
+
+            while (pieceAnimator.GetCurrentAnimatorStateInfo(indexBaseLayer).shortNameHash != h_Jumping) yield return true;
+
+            AnimatorStateInfo stateInfo = pieceAnimator.GetCurrentAnimatorStateInfo(indexBaseLayer);
+
+            yield return new WaitForSeconds(stateInfo.length * count);
+
+            pieceAnimator.Play(h_Idle, indexBaseLayer);
+        }
+
+        private IEnumerator Blinking()
+        {
+            float t = 0;
+            float nextBlink = 2.0f;
+            while (true)
+            {
+                t += Time.deltaTime;
+                if (t > nextBlink)
+                {
+                    pieceAnimator.SetTrigger(h_blink);
+                    nextBlink = Random.Range(5.0f, 15.0f);
+                    t = 0;
+                }
+                yield return null;
+            }
         }
     }
 

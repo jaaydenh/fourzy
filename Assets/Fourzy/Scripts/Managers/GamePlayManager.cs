@@ -110,35 +110,31 @@ namespace Fourzy
 
             //SoundManager.instance.Mute(true);
             UserInputHandler.inputEnabled = false;
-
+            replayedLastMove = false;
             // timerText = GetComponent<TextMeshProUGUI>();
 
+            InitButtonListeners();
+            SetActionButton();
+
             gameBoardView.SetupAlpha(0);
-            gameBoardView.CalculatePositions();
             gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
-
-            this.InitButtonListeners();
-
             FadeGameScreen(1.0f, gameScreenFadeInTime);
-            StartCoroutine(WaitToEnableInput());
 
-            replayedLastMove = false;
-
+            gameBoardView.CalculatePositions();
             // gameBoardView.ResetGamePiecesAndTokens();
             InitPlayerPrefabs();
             ResetUI();
-            if (game.gameState != null) {
+            if (game.gameState != null)
+            {
                 CreateGamePieceViews(game.gameState.GetPreviousGameBoard());
             }
-
             CreateTokenViews();
-
             InitPlayerUI();
-            UpdatePlayerUI();
-
             InitIntroUI();
 
-            SetActionButton();
+            StartCoroutine(WaitToEnableInput());
+            StartCoroutine(ShowPlayTurnWithDelay(1.2f));
+
 
             ratingDeltaText.text = "0";
             if (game.isCurrentPlayer_PlayerOne)
@@ -251,9 +247,15 @@ namespace Fourzy
 
         private void InitIntroUI() 
         {
+            if (!game.displayIntroUI)
+            {
+                return;
+            }
+
             string title = game.title;
             string subtitle = game.subtitle;
-            if (subtitle == "") {
+            if (subtitle == "") 
+            {
                 switch (game.gameState.GameType)
                 {
                     case GameType.PASSANDPLAY:
@@ -276,13 +278,12 @@ namespace Fourzy
                 }
             }
 
-            if (title == "") {
+            if (title == "") 
+            {
                 title = game.gameState.TokenBoard.name;
             }
 
-            if (game.displayIntroUI) {
-                DisplayIntroUI(title, subtitle, true);
-            }
+            DisplayIntroUI(title, subtitle, true);
         }
 
         public void DisplayIntroUI(string title, string subtitle, bool fade) {
@@ -780,12 +781,17 @@ namespace Fourzy
             return gamePiece;
         }
 
-        public void UpdatePlayerUI()
+        private IEnumerator ShowPlayTurnWithDelay(float delay)
         {
-            AnimatePlayerPieceUI();
+            playerUIPanel.StopPlayerTurnAnimation();
+            opponentUIPanel.StopPlayerTurnAnimation();
+
+            yield return new WaitForSeconds(delay);
+
+            UpdatePlayerTurn();
         }
 
-		public void AnimatePlayerPieceUI() 
+        private void UpdatePlayerTurn() 
         {
             if (game.gameState.IsPlayerOneTurn == game.isCurrentPlayer_PlayerOne)
             {
@@ -1186,7 +1192,7 @@ namespace Fourzy
                         game.gameState.isCurrentPlayerTurn = !game.gameState.isCurrentPlayerTurn;
                     }
                 }
-                UpdatePlayerUI();
+                UpdatePlayerTurn();
             }
         }
 
