@@ -9,22 +9,31 @@ namespace Fourzy
         public static event SetGamePiece OnSetGamePiece;
         public string id;
         public string gamePieceName;
+        public bool isEnabledPieceSelector;
         public bool isEnabled;
         public bool isLocked;
         public bool isSelected;
         public GameObject selector;
         public Image gamePieceImage;
 
-        public void SetAlternateColor(bool isAlternate) {
+        public void SetAlternateColor(bool isAlternate) 
+        {
             Image rend = GetComponent<Image>();
-            if (isAlternate) {
+            if (isAlternate) 
+            {
                 rend.material.SetVector("_HSVAAdjust", new Vector4(0.3f, 0, 0, 0));
             } else {
                 rend.material.SetVector("_HSVAAdjust", new Vector4(0, 0, 0, 0));    
             }
         }
 
-        public void PieceSelect() {
+        public void PieceSelect() 
+        {
+            if (!isEnabledPieceSelector)
+            {
+                return;
+            }
+
             Toggle toggle = this.GetComponent<Toggle>();
 
             if (toggle.isOn)
@@ -41,7 +50,13 @@ namespace Fourzy
             }
         }
 
-        public void ActivateSelector() {
+        public void ActivateSelector() 
+        {
+            if (!isEnabledPieceSelector)
+            {
+                return;
+            }
+
             Toggle toggle = this.GetComponent<Toggle>();
             toggle.isOn = true;
             selector.SetActive(true);

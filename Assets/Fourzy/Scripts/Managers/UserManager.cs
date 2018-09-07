@@ -39,6 +39,9 @@ namespace Fourzy
         void Start()
         {
             ChallengeManager.instance.GetPlayerGamePiece();
+
+            GamePieceSelectionManager.Instance.LoadGamePieces(string.Empty, false);
+            TokenSelectionManager.instance.LoadTokens();
         }
 
         void OnEnable()

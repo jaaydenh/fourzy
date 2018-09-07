@@ -25,7 +25,7 @@ namespace Fourzy
             return "Error";
         }
 
-        public void LoadGamePieces(string gamePieceId)
+        public void LoadGamePieces(string gamePieceId, bool isEnabledPieceSelector = true)
         {
             gamePieceData = TokenBoardLoader.instance.GetAllGamePieces();
     
@@ -37,16 +37,20 @@ namespace Fourzy
                 gamePieceUI.id = piece.ID;
                 gamePieceUI.name = piece.Name;
                 gamePieceUI.gamePieceImage.sprite = gamePieces[int.Parse(piece.ID)];
+                gamePieceUI.isEnabledPieceSelector = isEnabledPieceSelector;
 
                 go.gameObject.transform.SetParent(gamePieceGrid.transform, false);
 
-                var toggle = go.GetComponent<Toggle>();
-                ToggleGroup tg = gamePieceGrid.GetComponent<ToggleGroup>();
-                toggle.group = tg;
-
-                if (string.Equals(piece.ID, gamePieceId))
+                if (isEnabledPieceSelector)
                 {
-                    gamePieceUI.ActivateSelector();
+                    var toggle = go.GetComponent<Toggle>();
+                    ToggleGroup tg = gamePieceGrid.GetComponent<ToggleGroup>();
+                    toggle.group = tg;
+
+                    if (string.Equals(piece.ID, gamePieceId))
+                    {
+                        gamePieceUI.ActivateSelector();
+                    }
                 }
             }
         }
