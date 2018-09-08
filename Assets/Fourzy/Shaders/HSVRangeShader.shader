@@ -45,23 +45,26 @@ Shader "Custom/HSVRangeShader"
     {
         Tags
         {
-            "RenderType" = "Transparent"
-            "Queue" = "Transparent"
+            "Queue"="Transparent"
+            "IgnoreProjector"="True"
+            "RenderType"="Transparent"
+            "PreviewType"="Plane"
+            "CanUseSpriteAtlas"="True"
         }
 
         Pass
         {
             Name "HSVRANGE"
             Cull Off
+            Lighting Off
             ZWrite Off
-            Blend SrcAlpha OneMinusSrcAlpha
+            Blend One OneMinusSrcAlpha
 
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma multi_compile DUMMY PIXELSNAP_ON
 
-            sampler2D _MainTex;
+            #include "UnityCG.cginc"
 
             float _HSVRangeMin;
             float _HSVRangeMax;
@@ -75,7 +78,7 @@ Shader "Custom/HSVRangeShader"
 
             struct Fragment
             {
-                float4 vertex : POSITION;
+                float4 vertex : SV_POSITION;
                 float2 uv_MainTex : TEXCOORD0;
             };
 
@@ -89,34 +92,37 @@ Shader "Custom/HSVRangeShader"
                 return o;
             }
 
-            half3 rgb2hsv(half3 c) 
+            fixed3 rgb2hsv(fixed3 c) 
             {
-              half4 K = half4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
-              half4 p = lerp(half4(c.bg, K.wz), half4(c.gb, K.xy), step(c.b, c.g));
-              half4 q = lerp(half4(p.xyw, c.r), half4(c.r, p.yzx), step(p.x, c.r));
+              fixed4 K = fixed4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+              fixed4 p = lerp(fixed4(c.bg, K.wz), fixed4(c.gb, K.xy), step(c.b, c.g));
+              fixed4 q = lerp(fixed4(p.xyw, c.r), fixed4(c.r, p.yzx), step(p.x, c.r));
 
-              half d = q.x - min(q.w, q.y);
-              half e = 1.0e-10;
-              return half3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+              fixed d = q.x - min(q.w, q.y);
+              fixed e = 1.0e-3;
+              return fixed3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
             }
 
-            half3 hsv2rgb(half3 c) 
+            fixed3 hsv2rgb(fixed3 c) 
             {
-              c = half3(c.x, clamp(c.yz, 0.0, 1.0));
-              half4 K = half4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-              half3 p = abs(frac(c.xxx + K.xyz) * 6.0 - K.www);
+              c = fixed3(c.x, clamp(c.yz, 0.0, 1.0));
+              fixed4 K = fixed4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+              fixed3 p = abs(frac(c.xxx + K.xyz) * 6.0 - K.www);
               return c.z * lerp(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
             }
 
-            half4 frag(Fragment IN) : COLOR
-            {
-                half4 o = half4(1, 0, 0, 0.2);
+            sampler2D _MainTex;
 
-                half4 color = tex2D (_MainTex, IN.uv_MainTex);
-                half3 hsv = rgb2hsv(color.rgb);
-                half affectMult = step(_HSVRangeMin, hsv.r) * step(hsv.r, _HSVRangeMax);
-                half3 rgb = hsv2rgb(hsv + _HSVAAdjust.xyz * affectMult);
-                return half4(rgb, color.a + _HSVAAdjust.a);
+            fixed4 frag(Fragment IN) : COLOR
+            {
+                fixed4 color = tex2D (_MainTex, IN.uv_MainTex);
+
+                fixed3 hsv = rgb2hsv(color.rgb);
+                fixed affectMult = step(_HSVRangeMin, hsv.r) * step(hsv.r, _HSVRangeMax);
+                fixed3 rgb = hsv2rgb(hsv + _HSVAAdjust.xyz * affectMult);
+
+                color.rgb = rgb * color.a;
+                return color;
             }
 
             ENDCG

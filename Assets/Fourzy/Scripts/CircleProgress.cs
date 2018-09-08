@@ -16,29 +16,43 @@ public class CircleProgress : MonoBehaviour
     [SerializeField]
     private float currentValue = 0;
 
+    [HideInInspector]
+    [SerializeField]
+    private Material circleProgressMaterialCopy;
+
     private Coroutine progressCoroutine;
 
     private int progressUniform = Shader.PropertyToID("_Progress");
-    private int colorUniform;
+    private int colorUniform = Shader.PropertyToID("_Color");
 
     private void Awake()
     {
-        progressMaterial = new Material(progressMaterial);
+        circleProgressMaterialCopy = new Material(progressMaterial);
+
+        Sprite sprite = null;
 
         Image image = this.GetComponent<Image>();
         if (image)
         {
-            image.material = progressMaterial;
+            image.material = circleProgressMaterialCopy;
+            sprite = image.sprite;
         }
 
         SpriteRenderer spriteRenderer = this.GetComponent<SpriteRenderer>();
         if (spriteRenderer)
         {
-            spriteRenderer.sharedMaterial = progressMaterial;
+            spriteRenderer.sharedMaterial = circleProgressMaterialCopy;
+            sprite = spriteRenderer.sprite;
         }
 
-        progressUniform = Shader.PropertyToID("_Progress");
-        colorUniform = Shader.PropertyToID("_Color");
+        if (sprite != null)
+        {
+            Vector4 rectMainTex = new Vector4(sprite.textureRect.min.x / sprite.texture.width,
+                             sprite.textureRect.min.y / sprite.texture.height,
+                             sprite.textureRect.max.x / sprite.texture.width,
+                             sprite.textureRect.max.y / sprite.texture.height);
+            circleProgressMaterialCopy.SetVector("_RectMainTex", rectMainTex);
+        }
     }
 
     public void SetupNewValue(float value, bool animated = true, float animationDuration = 1.5f)
@@ -76,8 +90,8 @@ public class CircleProgress : MonoBehaviour
     private void SetupNewValue(float value)
     {
         currentValue = value;
-        progressMaterial.SetFloat(progressUniform, currentValue * Mathf.PI * 2);
-        progressMaterial.SetColor(colorUniform, progressColor);
+        circleProgressMaterialCopy.SetFloat(progressUniform, currentValue * Mathf.PI * 2);
+        circleProgressMaterialCopy.SetColor(colorUniform, progressColor);
     }
 
     void OnValidate()

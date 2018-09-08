@@ -8,11 +8,7 @@ Shader "Sprites/CircleTimer"
         _HeadTex ("Head Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
         _Progress ("Circle progress", Float) = 0
-        [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
-        [HideInInspector] _RendererColor ("RendererColor", Color) = (1,1,1,1)
-        [HideInInspector] _Flip ("Flip", Vector) = (1,1,1,1)
-        [PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
-        [PerRendererData] _EnableExternalAlpha ("Enable External Alpha", Float) = 0
+        _RectMainTex ("Rect main texture in Atlas", Vector) = (0, 0, 1, 1)
     }
 
     SubShader
@@ -37,42 +33,14 @@ Shader "Sprites/CircleTimer"
             #pragma vertex SpriteVert
             #pragma fragment SpriteFrag
             #pragma target 2.0
-            #pragma multi_compile_instancing
-            #pragma multi_compile _ PIXELSNAP_ON
-            #pragma multi_compile _ ETC1_EXTERNAL_ALPHA
+
             #include "UnityCG.cginc"
-
-            #ifdef UNITY_INSTANCING_ENABLED
-
-                UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
-                // SpriteRenderer.Color while Non-Batched/Instanced.
-                UNITY_DEFINE_INSTANCED_PROP(fixed4, unity_SpriteRendererColorArray)
-                // this could be smaller but that's how bit each entry is regardless of type
-                UNITY_DEFINE_INSTANCED_PROP(fixed2, unity_SpriteFlipArray)
-                UNITY_INSTANCING_BUFFER_END(PerDrawSprite)
-
-                #define _RendererColor  UNITY_ACCESS_INSTANCED_PROP(PerDrawSprite, unity_SpriteRendererColorArray)
-                #define _Flip           UNITY_ACCESS_INSTANCED_PROP(PerDrawSprite, unity_SpriteFlipArray)
-
-            #endif // instancing
-
-            CBUFFER_START(UnityPerDrawSprite)
-            #ifndef UNITY_INSTANCING_ENABLED
-                fixed4 _RendererColor;
-                fixed2 _Flip;
-            #endif
-            float _EnableExternalAlpha;
-            CBUFFER_END
-
-            // Material Color.
-            fixed4 _Color;
 
             struct appdata_t
             {
                 float4 vertex   : POSITION;
                 float4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
@@ -81,7 +49,7 @@ Shader "Sprites/CircleTimer"
                 fixed4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
                 float2 texcoord1 : TEXCOORD1;
-                UNITY_VERTEX_OUTPUT_STEREO
+                float2 uv : TEXCOORD2;
             };
 
             inline float4 UnityFlipSprite(in float3 pos, in fixed2 flip)
@@ -89,31 +57,34 @@ Shader "Sprites/CircleTimer"
                 return float4(pos.xy * flip, pos.z, 1.0);
             }
 
+            fixed4 _Color;
             float _Progress;
+            float4 _RectMainTex;
 
             v2f SpriteVert(appdata_t IN)
             {
                 v2f OUT;
 
-                UNITY_SETUP_INSTANCE_ID (IN);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
-
-                OUT.vertex = UnityFlipSprite(IN.vertex, _Flip);
-                OUT.vertex = UnityObjectToClipPos(OUT.vertex);
+                OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
-                OUT.texcoord1 = IN.texcoord;
 
-                OUT.texcoord1.xy -=0.5;
                 float s = sin ( -_Progress );
                 float c = cos ( -_Progress );
                 float2x2 rotationMatrix = float2x2( c, -s, s, c);
-                rotationMatrix *=0.5;
-                rotationMatrix +=0.5;
+                rotationMatrix *= 0.5;
+                rotationMatrix += 0.5;
                 rotationMatrix = rotationMatrix * 2 - 1;
-                OUT.texcoord1.xy = mul ( OUT.texcoord1.xy, rotationMatrix );
-                OUT.texcoord1.xy += 0.5;
 
-                OUT.color = IN.color * _Color * _RendererColor;
+                float2 uv = (IN.texcoord - _RectMainTex.xy) / (_RectMainTex.zw - _RectMainTex.xy);
+                OUT.uv = uv;
+                  
+                uv -= 0.5;
+                uv = mul ( uv, rotationMatrix );
+                uv += 0.5;
+
+                OUT.texcoord1 = uv;
+
+                OUT.color = IN.color * _Color;
 
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap (OUT.vertex);
@@ -124,7 +95,6 @@ Shader "Sprites/CircleTimer"
 
             sampler2D _MainTex;
             sampler2D _HeadTex;
-            sampler2D _AlphaTex;
   
             fixed4 SpriteFrag(v2f IN) : SV_Target
             {
@@ -133,12 +103,14 @@ Shader "Sprites/CircleTimer"
                     return fixed4(0, 0, 0, 0);
                 }
 
+                float2 uv = IN.uv;
+
                 const float PI = 3.14159;
 
-                fixed2 interpolatedTexCoord = normalize(IN.texcoord * 2 - 1);   // make it [-1, 1];
-                float angle = acos(-interpolatedTexCoord.x);
+                uv = normalize(uv * 2 - 1);   // make it [-1, 1];
+                float angle = acos(-uv.x);
 
-                if (interpolatedTexCoord.y < 0)
+                if (uv.y < 0)
                 {
                     angle =  ( 2 * PI - angle);
                 }
