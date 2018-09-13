@@ -168,12 +168,12 @@ GameObject:
   m_Component:
   - component: {fileID: 124707854}
   m_Layer: 5
-  m_Name: Timer
+  m_Name: PlayerTimer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &124707854
 RectTransform:
   m_ObjectHideFlags: 0
@@ -189,10 +189,10 @@ RectTransform:
   m_Father: {fileID: 408577561}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -193.08997}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 62, y: 82}
+  m_SizeDelta: {x: 100, y: 161.08997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &346044481
 GameObject:
@@ -579,6 +579,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 
   gamePieceName: 
+  isEnabledPieceSelector: 0
   isEnabled: 0
   isLocked: 0
   isSelected: 0
@@ -741,6 +742,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 
   gamePieceName: 
+  isEnabledPieceSelector: 0
   isEnabled: 0
   isLocked: 0
   isSelected: 0
@@ -1935,6 +1937,7 @@ MonoBehaviour:
   challengeIdDebugText: {fileID: 1633794806}
   particleEffect: {fileID: 0}
   timerText: {fileID: 1398324021}
+  playerTimer: {fileID: 124707853}
   upArrowToken: {fileID: 1837627827914946, guid: 160f51c71faf5416bbe70c6d4ca12a68,
     type: 2}
   downArrowToken: {fileID: 1623667900078134, guid: b50adf3cc91ed4ee590fd6bcc3fa79b9,

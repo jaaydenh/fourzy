@@ -1,4 +1,4 @@
-#if DEBUG && !UNITY_WP_8_1 && !UNITY_WSA_8_1
+#if DEBUG && !UNITY_WP_8_1 && !UNITY_WSA
 using FlyingWormConsole3.LiteNetLib.Utils;
 
 namespace FlyingWormConsole3.LiteNetLib

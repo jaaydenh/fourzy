@@ -8,7 +8,7 @@ namespace Fourzy
     public class GamePieceView : MonoBehaviour
     {
         [SerializeField]
-        private SpriteRenderer body;
+        public SpriteRenderer body;
 
         [SerializeField]
         private Animator pieceAnimator;
