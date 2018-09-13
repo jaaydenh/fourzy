@@ -60,6 +60,7 @@ namespace Fourzy
         public Text challengeIdDebugText;
         public GameObject particleEffect;
         public TextMeshProUGUI timerText;
+        public GameObject playerTimer;
 
 
         // ---------- Token Views ----------
@@ -154,6 +155,7 @@ namespace Fourzy
             }
 
             if (game.gameState.GameType == GameType.REALTIME) {
+                playerTimer.SetActive(true);
                 StartCoroutine(SendTimeStamp());
             }
 
@@ -564,6 +566,7 @@ namespace Fourzy
 
         private void FadePieces(float alpha, float fadeTime)
         {
+            Debug.Log("FadePieces");
             SoundManager.instance.Mute(false);
             GameObject[] pieces = GameObject.FindGameObjectsWithTag("GamePiece");
             if (pieces.Length > 0)
@@ -588,8 +591,10 @@ namespace Fourzy
 
         private void ReplayLastMove()
         {
+            Debug.Log("ReplayLastMove");
             if (game.gameState.MoveList != null)
             {
+                Debug.Log("ReplayLastMove: has move");
                 Move lastMove = game.gameState.MoveList.Last();
 
                 PlayerEnum player = PlayerEnum.NONE;
@@ -645,8 +650,9 @@ namespace Fourzy
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync("gamePlay");
 
-            
-            RealtimeManager.Instance.GetRTSession().Disconnect();
+            if (game.gameState.GameType == GameType.REALTIME) {
+                RealtimeManager.Instance.GetRTSession().Disconnect();
+            }
         }
 
         public void UnloadGamePlayScreen() {
@@ -1178,6 +1184,7 @@ namespace Fourzy
 
         private void UpdateGameStatus(bool updatePlayer)
         {
+            Debug.Log("UpdateGameStatus:isExpired: " + game.isExpired);
             if (game.gameState.IsGameOver || game.isExpired)
             {
                 this.StartCoroutine(DisplayGameOverView());

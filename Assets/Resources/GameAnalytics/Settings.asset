@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -42,12 +42,39 @@ MonoBehaviour:
   SelectedPlatformGameID: 5d84000070840000
   SelectedStudio: 0100000001000000
   SelectedGame: 0200000001000000
-  NewVersion: 3.10.2
-  Changes: '- Android manifest file fix for Android SDK Tools v26.0.2 (android)
+  NewVersion: 4.0.4
+  Changes: '4.0.4
 
-    - Send build number option fixed for Unity 5.6 and up (ios, android)
+    - fixes to android session handling
 
-    - Added stack traces for non-development builds'
+    - added custom dimensions to design and error events
+
+    - fixes to sqlite db path for windows and linux platforms
+
+
+    4.0.3
+
+    - small uwp bug fix (uwp)
+
+
+    4.0.2
+
+    - small editor bug fixes for stop showing log warnings after calling initialize
+    function
+
+
+    4.0.1
+
+    - small update for wehn signing up in editor
+
+
+    4.0.0
+
+    - dumped major version to emphasize the need to use manual initialization of the
+    SDK now
+
+    - added log warnings to warn if the SDK has not been manually initialized before
+    sending events'
   SignUpOpen: 0
   StudioName: SuperMove Games
   GameName: Fourzy
