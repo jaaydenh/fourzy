@@ -24,8 +24,26 @@ public class CircleProgress : MonoBehaviour
 
     private int progressUniform = Shader.PropertyToID("_Progress");
     private int colorUniform = Shader.PropertyToID("_Color");
+    private int rectMainTexUniform = Shader.PropertyToID("_RectMainTex");
 
     private void Awake()
+    {
+        this.Init();
+    }
+
+    void OnValidate()
+    {
+        if (circleProgressMaterialCopy != null)
+        {
+            this.SetupNewValue(currentValue);
+        }
+        else
+        {
+            this.Init();
+        }
+    }
+
+    private void Init()
     {
         circleProgressMaterialCopy = new Material(progressMaterial);
 
@@ -51,7 +69,7 @@ public class CircleProgress : MonoBehaviour
                              sprite.textureRect.min.y / sprite.texture.height,
                              sprite.textureRect.max.x / sprite.texture.width,
                              sprite.textureRect.max.y / sprite.texture.height);
-            circleProgressMaterialCopy.SetVector("_RectMainTex", rectMainTex);
+            circleProgressMaterialCopy.SetVector(rectMainTexUniform, rectMainTex);
         }
     }
 
@@ -92,10 +110,5 @@ public class CircleProgress : MonoBehaviour
         currentValue = value;
         circleProgressMaterialCopy.SetFloat(progressUniform, currentValue * Mathf.PI * 2);
         circleProgressMaterialCopy.SetColor(colorUniform, progressColor);
-    }
-
-    void OnValidate()
-    {
-        this.SetupNewValue(currentValue);
     }
 }
