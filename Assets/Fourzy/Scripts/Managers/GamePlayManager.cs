@@ -1236,11 +1236,12 @@ namespace Fourzy
 
             Debug.Log("DisplayGameOverView gameState.winner: " +  game.gameState.Winner);
 
+            this.PlayWinnerSound();
             this.ShowWinnerAnimation();
 
             yield return new WaitForSeconds(1.5f);
 
-            this.ShowWinnerTextAndPlaySound();
+            this.ShowWinnerText();
             this.LogGameWinner();
 
 #if UNITY_IOS || UNITY_ANDROID
@@ -1254,6 +1255,31 @@ namespace Fourzy
 #endif
 
         }
+
+        private void PlayWinnerSound()
+        {
+            if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
+            {
+                return;
+            }
+
+            if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
+            {
+                if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
+                {
+                    SoundManager.instance.PlayRandomizedSfx(clipWin);
+                }
+                else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
+                {
+                    SoundManager.instance.PlayRandomizedSfx(clipWin);
+                }
+            }
+            else
+            {
+                SoundManager.instance.PlayRandomizedSfx(clipWin);
+            }
+        }
+
 
         private void ShowWinnerAnimation()
         {
@@ -1276,7 +1302,7 @@ namespace Fourzy
             }
         }
 
-        private void ShowWinnerTextAndPlaySound()
+        private void ShowWinnerText()
         {
             bool showRewardButton = !game.didViewResult;
 
@@ -1302,18 +1328,15 @@ namespace Fourzy
                 if (!string.IsNullOrEmpty(game.winnerName))
                 {
                     gameInfo.Open(game.winnerName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
-                    //SoundManager.instance.PlayRandomizedSfx(clipWin);
                 }
                 else
                 {
                     if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
                     {
-                        SoundManager.instance.PlayRandomizedSfx(clipWin);
                         gameInfo.Open(UserManager.instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
                     else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
                     {
-                        SoundManager.instance.PlayRandomizedSfx(clipWin);
                         gameInfo.Open(UserManager.instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
                     else
@@ -1326,7 +1349,6 @@ namespace Fourzy
             }
             else
             {
-                SoundManager.instance.PlayRandomizedSfx(clipWin);
                 if (game.gameState.GameType != GameType.PUZZLE)
                 {
                     //AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
