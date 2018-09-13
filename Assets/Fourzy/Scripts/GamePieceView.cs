@@ -100,6 +100,15 @@ namespace Fourzy
             // GamePiece animation
         }
 
+        public void Fade(float alpha, float fadeTime)
+        {
+            body.DOFade(alpha, fadeTime);
+            foreach (SpriteRenderer sr in sprites)
+            {
+                sr.DOFade(alpha, fadeTime);
+            }
+        }
+
         public void SetupZOrder(int zorder)
         {
             foreach(SpriteRenderer sr in sprites)

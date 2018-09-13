@@ -40,6 +40,7 @@ Shader "Custom/HSVRangeShader"
        _HSVRangeMin ("HSV Affect Range Min", Range(0, 1)) = 0
        _HSVRangeMax ("HSV Affect Range Max", Range(0, 1)) = 1
        _HSVAAdjust ("HSVA Adjust", Vector) = (0, 0, 0, 0)
+       _Color("Tint", Color) = (1, 1, 1, 1)
     }
     SubShader
     {
@@ -73,14 +74,18 @@ Shader "Custom/HSVRangeShader"
             struct Vertex
             {
                 float4 vertex : POSITION;
+                float4 color    : COLOR;
                 float2 uv_MainTex : TEXCOORD0;
             };
 
             struct Fragment
             {
                 float4 vertex : SV_POSITION;
+                fixed4 color    : COLOR;
                 float2 uv_MainTex : TEXCOORD0;
             };
+
+            fixed4 _Color;
 
             Fragment vert(Vertex v)
             {
@@ -88,6 +93,7 @@ Shader "Custom/HSVRangeShader"
 
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv_MainTex = v.uv_MainTex;
+                o.color = v.color * _Color;
 
                 return o;
             }
@@ -115,7 +121,7 @@ Shader "Custom/HSVRangeShader"
 
             fixed4 frag(Fragment IN) : COLOR
             {
-                fixed4 color = tex2D (_MainTex, IN.uv_MainTex);
+                fixed4 color = tex2D (_MainTex, IN.uv_MainTex) * IN.color;
 
                 fixed3 hsv = rgb2hsv(color.rgb);
                 fixed affectMult = step(_HSVRangeMin, hsv.r) * step(hsv.r, _HSVRangeMax);

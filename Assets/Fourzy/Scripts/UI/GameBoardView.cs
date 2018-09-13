@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
 
 namespace Fourzy
 {
@@ -71,6 +72,24 @@ namespace Fourzy
         public GamePiece GamePieceAt(Position position)
         {            
             return gamePieces[position.row, position.column];
+        }
+
+        public List<GamePiece> GetGamePiecesList()
+        {
+            List<GamePiece> list = new List<GamePiece>();
+
+            for (int i = 0; i < Constants.numColumns; i++)
+            {
+                for (int j = 0; j < Constants.numRows; j++)
+                {
+                    if (gamePieces[i, j] != null)
+                    {
+                        list.Add(gamePieces[i, j]);
+                    }
+                }
+            }
+
+            return list;
         }
 
         public void ResetGamePiecesAndTokens()

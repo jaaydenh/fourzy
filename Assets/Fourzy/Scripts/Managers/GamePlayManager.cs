@@ -565,20 +565,20 @@ namespace Fourzy
         private void FadePieces(float alpha, float fadeTime)
         {
             SoundManager.instance.Mute(false);
-            GameObject[] pieces = GameObject.FindGameObjectsWithTag("GamePiece");
-            if (pieces.Length > 0)
+
+            var pieces = gameBoardView.GetGamePiecesList();
+            if (pieces.Count > 0)
             {
-                for (int i = 0; i < pieces.Length; i++)
+                for (int i = 0; i < pieces.Count; i++)
                 {
-                    if (i < pieces.Length - 1)
-                    {
-                        pieces[i].GetComponent<SpriteRenderer>().DOFade(alpha, fadeTime);
-                    }
-                    else
-                    {
-                        pieces[i].GetComponent<SpriteRenderer>().DOFade(alpha, fadeTime).OnComplete(() => ReplayLastMove());
-                    }
+                    pieces[i].View.Fade(alpha, fadeTime);
                 }
+
+                Sequence sequence = DOTween.Sequence();
+                sequence.AppendInterval(fadeTime);
+                sequence.AppendCallback(() => {
+                    ReplayLastMove();
+                });
             }
             else
             {

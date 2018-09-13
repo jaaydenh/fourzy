@@ -13,6 +13,7 @@ Shader "Custom/HSVRangeOutlineShader"
        _HSVRangeMin ("HSV Affect Range Min", Range(0, 1)) = 0
        _HSVRangeMax ("HSV Affect Range Max", Range(0, 1)) = 1
        _HSVAAdjust ("HSVA Adjust", Vector) = (0, 0, 0, 0)
+       _Color("Tint", Color) = (1, 1, 1, 1)
     }
     SubShader
     {
