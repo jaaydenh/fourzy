@@ -109,6 +109,15 @@ namespace Fourzy
             }
         }
 
+        public void SetAlpha(float alpha)
+        {
+            body.SetAlpha(alpha);
+            foreach (SpriteRenderer sr in sprites)
+            {
+                sr.SetAlpha(alpha);
+            }
+        }
+
         public void SetupZOrder(int zorder)
         {
             foreach(SpriteRenderer sr in sprites)

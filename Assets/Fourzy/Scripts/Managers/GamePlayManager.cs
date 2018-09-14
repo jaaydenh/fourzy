@@ -115,8 +115,8 @@ namespace Fourzy
             InitButtonListeners();
             SetActionButton();
 
-            gameBoardView.SetupAlpha(0);
-            backgroundImage.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            gameBoardView.SetAlpha(0);
+            backgroundImage.SetAlpha(0);
             fadeUICanvasGroup.alpha = 0.0f;
 
             FadeGameScreen(1.0f, gameScreenFadeInTime);
@@ -419,12 +419,14 @@ namespace Fourzy
                         GamePiece pieceObject = SpawnPiece(col, row, PlayerEnum.ONE, PieceAnimState.ASLEEP);
                         pieceObject.player = PlayerEnum.ONE;
                         gameBoardView.gamePieces[row, col] = pieceObject;
+                        pieceObject.View.SetAlpha(0.0f);
                     }
                     else if (piece == (int)Piece.RED)
                     {
                         GamePiece pieceObject = SpawnPiece(col, row, PlayerEnum.TWO, PieceAnimState.ASLEEP);
                         pieceObject.player = PlayerEnum.TWO;
                         gameBoardView.gamePieces[row, col] = pieceObject;
+                        pieceObject.View.SetAlpha(0.0f);
                     }
                 }
             }
@@ -534,7 +536,7 @@ namespace Fourzy
                         if (rotateLeft) {
                             go.transform.Rotate(0, 0, -90);
                         }
-                        Utility.SetSpriteAlpha(go, 0.0f);
+                        go.GetComponent<SpriteRenderer>().SetAlpha(0.0f);
                         tokenViews[row, col] = go;
                         // go.transform.localScale = new Vector2(rectHeight/8, rectHeight/8);
                     }
@@ -712,7 +714,7 @@ namespace Fourzy
         }
 
         public void NextGameButtonOnClick() {
-            backgroundImage.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            backgroundImage.SetAlpha(0.0f);
             fadeUICanvasGroup.alpha = 0.0f;
             GameManager.instance.OpenNextGame();
         }

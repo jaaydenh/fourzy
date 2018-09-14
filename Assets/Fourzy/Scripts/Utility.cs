@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy
 {
-    public class Utility {
+    public static class Utility {
 
         public static float GetEloRatingDelta(int myRating, int opponentRating, float gameResult) {
 
@@ -11,11 +12,18 @@ namespace Fourzy
             return Mathf.Floor(60 * (gameResult - myChanceToWin));
         }
 
-        public static void SetSpriteAlpha(GameObject go, float alpha) {
-            SpriteRenderer sprite = go.GetComponent<SpriteRenderer>();
-            Color c = sprite.color;
-            c.a = 0.0f;
-            sprite.color = c;
+        public static void SetAlpha(this SpriteRenderer sr, float alpha)
+        {
+            Color color = sr.color;
+            color.a = alpha;
+            sr.color = color;
+        }
+
+        public static void SetAlpha(this Image image, float alpha)
+        {
+            Color color = image.color;
+            color.a = alpha;
+            image.color = color;
         }
 
         public static Position GetNextPosition(Move move) {

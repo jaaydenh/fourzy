@@ -135,7 +135,7 @@ namespace Fourzy
             Debug.Log(gameboard);
         }
 
-        public void SetupAlpha(float alpha)
+        public void SetAlpha(float alpha)
         {
             Color c = spriteRenderer.color;
             c.a = alpha;
