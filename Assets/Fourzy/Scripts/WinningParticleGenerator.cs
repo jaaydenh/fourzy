@@ -40,7 +40,7 @@ public class WinningParticleGenerator : MonoBehaviour
     private IEnumerator StartSpawningParticles()
     {
         float t = 0;
-        float nextExplose = 0.0f;
+        float nextExplose = 1.0f;
         while (true)
         {
             t += Time.deltaTime;
