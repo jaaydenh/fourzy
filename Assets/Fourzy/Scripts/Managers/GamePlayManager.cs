@@ -33,15 +33,14 @@ namespace Fourzy
         private GameObject opponentGamePiecePrefab;
 
         [Header("Game UI")]
-        public GameObject gameScreen;
+        public Image backgroundImage;
+        public CanvasGroup fadeUICanvasGroup;
         public Rewards rewardScreen;
         public GameBoardView gameBoardView;
         public GameObject[,] tokenViews;
-
-        [SerializeField]
-        private PlayerUIPanel playerUIPanel;
-        [SerializeField]
+        public PlayerUIPanel playerUIPanel;
         public PlayerUIPanel opponentUIPanel;
+        public WinningParticleGenerator winningParticleGenerator;
 
         public Text ratingDeltaText;
         public GameInfo gameInfo;
@@ -58,7 +57,6 @@ namespace Fourzy
         public GameObject moveHintAreaObject;
         public GameIntroUI gameIntroUI;
         public Text challengeIdDebugText;
-        public GameObject particleEffect;
         public TextMeshProUGUI timerText;
         public GameObject playerTimer;
 
@@ -118,7 +116,9 @@ namespace Fourzy
             SetActionButton();
 
             gameBoardView.SetupAlpha(0);
-            gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
+            backgroundImage.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            fadeUICanvasGroup.alpha = 0.0f;
+
             FadeGameScreen(1.0f, gameScreenFadeInTime);
 
             gameBoardView.CalculatePositions();
@@ -545,7 +545,8 @@ namespace Fourzy
         private void FadeGameScreen(float alpha, float fadeTime)
         {
             gameBoardView.Fade(alpha, fadeTime);
-            gameScreen.GetComponent<CanvasGroup>().DOFade(alpha, fadeTime).OnComplete(() => FadeTokens(alpha, fadeTime));
+            backgroundImage.DOFade(alpha, fadeTime);
+            fadeUICanvasGroup.DOFade(alpha, fadeTime).OnComplete(() => FadeTokens(alpha, fadeTime));
         }
 
         private void FadeTokens(float alpha, float fadeTime)
@@ -711,7 +712,8 @@ namespace Fourzy
         }
 
         public void NextGameButtonOnClick() {
-            gameScreen.GetComponent<CanvasGroup>().alpha = 0.0f;
+            backgroundImage.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            fadeUICanvasGroup.alpha = 0.0f;
             GameManager.instance.OpenNextGame();
         }
 
@@ -809,37 +811,6 @@ namespace Fourzy
                 opponentUIPanel.ShowPlayerTurnAnimation(redPlayerColor);
                 playerUIPanel.StopPlayerTurnAnimation();
             }
-        }
-
-        private GameObject SpawnParticle()
-        {
-            GameObject particles = (GameObject)Instantiate(particleEffect);
-            particles.transform.position = new Vector3(particles.transform.position.x, particles.transform.position.y, 0);
-//#if UNITY_3_5
-//            particles.SetActiveRecursively(true);
-//#else
-            particles.SetActive(true);
-            //          for(int i = 0; i < particles.transform.childCount; i++)
-            //              particles.transform.GetChild(i).gameObject.SetActive(true);
-//#endif
-
-            ParticleSystem ps = particles.GetComponent<ParticleSystem>();
-
-//#if UNITY_5_5_OR_NEWER
-//            if (ps != null)
-//            {
-//                var main = ps.main;
-//                if (main.loop)
-//                {
-//                    ps.gameObject.AddComponent<CFX_AutoStopLoopedEffect>();
-//                    ps.gameObject.AddComponent<CFX_AutoDestructShuriken>();
-//                }
-//            }
-//#endif
-
-            //onScreenParticles.Add(particles);
-
-            return particles;
         }
 
         public void SetActionButton()
@@ -1241,6 +1212,8 @@ namespace Fourzy
 
             yield return new WaitForSeconds(1.5f);
 
+            winningParticleGenerator.ShowParticles();
+
             this.ShowWinnerText();
             this.LogGameWinner();
 
@@ -1382,35 +1355,6 @@ namespace Fourzy
                     break;
             }
         }
-
-		// public void AnimatePlayerPieceUI() {
-        //     float animationSpeed = 0.8f;
-        //     if ((gameState.IsPlayerOneTurn && isCurrentPlayer_PlayerOne) || (!gameState.IsPlayerOneTurn && !isCurrentPlayer_PlayerOne)) {
-        //         //Animate current player piece to center
-        //         Vector2 centerPos = new Vector2(439, -125);
-        //         RectTransform pprt = playerPieceUI.GetComponent<RectTransform>();
-        //         pprt.DOAnchorPos(centerPos, animationSpeed);
-        //         playerPieceUI.transform.DOScale(new Vector3(1.3f, 1.3f), 1);
-
-        //         //Animate opponent piece to upper right
-        //         Vector3 startingPos = new Vector2(-130, -83);
-        //         RectTransform oprt = opponentPieceUI.GetComponent<RectTransform>();
-        //         oprt.DOAnchorPos(startingPos, animationSpeed);
-        //         opponentPieceUI.transform.DOScale(new Vector3(1, 1), animationSpeed);
-        //     } else if ((gameState.IsPlayerOneTurn && !isCurrentPlayer_PlayerOne) || (!gameState.IsPlayerOneTurn && isCurrentPlayer_PlayerOne)) {
-        //         //Animate player piece to upper left
-        //         Vector2 startingPos = new Vector2(175, -83);
-        //         RectTransform pprt = playerPieceUI.GetComponent<RectTransform>();
-        //         pprt.DOAnchorPos(startingPos, 1);
-        //         playerPieceUI.transform.DOScale(new Vector3(1, 1), animationSpeed);
-
-        //         // Animate opponent piece to center
-        //         Vector2 centerPos = new Vector2(-370, -125);
-        //         RectTransform oprt = opponentPieceUI.GetComponent<RectTransform>();
-        //         oprt.DOAnchorPos(centerPos, 1);
-        //         opponentPieceUI.transform.DOScale(new Vector3(1.3f, 1.3f), animationSpeed);
-        //     }
-        // }
 	}
 }
 
