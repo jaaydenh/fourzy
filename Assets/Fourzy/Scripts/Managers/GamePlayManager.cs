@@ -292,6 +292,11 @@ namespace Fourzy
 
         private IEnumerator ShowTokenInstructionPopupRoutine()
         {
+            if (!game.displayIntroUI)
+            {
+                yield break;
+            }
+
             yield return new WaitForSeconds(0.5f);
 
             TokenBoard previousTokenBoard = game.gameState.PreviousTokenBoard;
@@ -1146,16 +1151,15 @@ namespace Fourzy
                 {
                     if (game.gameState.IsPuzzleChallengePassed)
                     {
-                        Debug.Log("test test: " + PlayerPrefs.GetInt("PuzzleChallengeID:" + game.puzzleChallengeInfo.ID, 0));
-                        if (PlayerPrefs.GetInt("PuzzleChallengeID:" + game.puzzleChallengeInfo.ID, 0) == 0) {
+                        Debug.Log("test test: " + PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID));
+                        if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID))
+                        {
                             Debug.Log("Succssfully submitted puzzle complted");
                             ChallengeManager.instance.SubmitPuzzleCompleted();
                         }
-                        
-                        PlayerPrefs.SetInt("PuzzleChallengeID:" + game.puzzleChallengeInfo.ID, 1);
-                        // if (OnPuzzleCompleted != null)
-                            // OnPuzzleCompleted(game.puzzleChallengeInfo);
-                        // PlayerPrefs.SetInt("puzzleChallengeLevel", game.puzzleChallengeInfo.Level);
+
+                        PlayerPrefsWrapper.SetPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID, true);
+
                         GameManager.instance.SetNextActivePuzzleLevel();
                         AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, true, game.gameState.Player1MoveCount);
                     }
@@ -1239,7 +1243,7 @@ namespace Fourzy
             {
                 GameManager.instance.VisitedGameResults(game);
                 gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("expired_text"), Color.white, false, !game.didViewResult);
-                yield return true;
+                yield break;
             }
 
             Debug.Log("DisplayGameOverView gameState.winner: " +  game.gameState.Winner);

@@ -86,7 +86,8 @@ namespace Fourzy
             int completedCount = 0;
             foreach (var level in PuzzlePack.PuzzleChallengeLevels)
             {
-                if (PlayerPrefs.GetInt("PuzzleChallengeID:" + level.ID) == 1) {
+                if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(level.ID))
+                {
                     completedCount++;
                 }
             }
@@ -101,9 +102,12 @@ namespace Fourzy
             for (int i = 0; i < PuzzlePack.PuzzleChallengeLevels.Count; i++)
             {
                 Debug.Log("PuzzlePackID: " + PuzzlePack.ID + ",GetNextLevel: " + PuzzlePack.PuzzleChallengeLevels[i].ID);
-                if (PlayerPrefs.GetInt("PuzzleChallengeID:" + PuzzlePack.PuzzleChallengeLevels[i].ID) == 1) {
+                if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(PuzzlePack.PuzzleChallengeLevels[i].ID))
+                {
                     highestCompletedLevel++;
-                } else {
+                }
+                else
+                {
                     break;
                 }
             }

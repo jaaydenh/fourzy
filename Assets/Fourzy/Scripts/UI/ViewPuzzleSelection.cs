@@ -83,7 +83,8 @@ namespace Fourzy
             int completedCount = 0;
             foreach (var level in pack.PuzzleChallengeLevels)
             {
-                if (PlayerPrefs.GetInt("PuzzleChallengeID:" + level.ID) == 1) {
+                if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(level.ID))
+                {
                     completedCount++;
                 }
             }
