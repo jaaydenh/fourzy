@@ -32,6 +32,12 @@ namespace Fourzy
 
         private GamePieceData[] LoadGamePieceData()
         {
+            GamePieceData data = new GamePieceData();
+            data.OutlineColorWrapper = Color.red;
+            data.SecondaryColorWrapper = new Vector3(1.0f, 0.0f, 0.3f);
+            string json = JsonUtility.ToJson(data);
+
+
             GamePieceData[] gamePieceData = new GamePieceData[0];
             TextAsset dataAsJson = Resources.Load<TextAsset>("GamePieces");
             if (dataAsJson)

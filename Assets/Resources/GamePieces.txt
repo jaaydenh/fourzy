@@ -3,12 +3,16 @@
         {
             "ID": "0",
             "Name": "BlobbyBlob",
-            "Enabled": true
+            "Enabled": true,
+            "OutlineColor": "0, 1, 0, 1",
+            "SecondaryColor": "0.9, 0, 0, 0"
         },
         {
             "ID": "1",
             "Name": "SpongeRay",
-            "Enabled": true
+            "Enabled": true,
+            "OutlineColor": "1, 1, 0, 1",
+            "SecondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "2",

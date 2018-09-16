@@ -7,15 +7,16 @@ namespace Fourzy
 {
     public class GamePieceView : MonoBehaviour
     {
+        public Color OutlineColor;
+
         [SerializeField]
-        public SpriteRenderer body;
+        private SpriteRenderer body;
 
         [SerializeField]
         private Animator pieceAnimator;
 
         [SerializeField]
         private Shader outlineShader;
-
 
         private Transform cachedTransform;
 
@@ -65,6 +66,7 @@ namespace Fourzy
             bodyMaterial = body.material;
             bodyOutlineMaterial = new Material(outlineShader);
             bodyOutlineMaterial.SetVector(h_HSVAAdjust, bodyMaterial.GetVector(h_HSVAAdjust));
+            bodyOutlineMaterial.SetColor(h_OutlineColor, OutlineColor);
 
             sprites = this.GetComponentsInChildren<SpriteRenderer>(true);
         }
@@ -73,6 +75,11 @@ namespace Fourzy
         {
             bodyMaterial.SetVector(h_HSVAAdjust, vec);
             bodyOutlineMaterial.SetVector(h_HSVAAdjust, vec);
+        }
+
+        public void SetupOutlineColor(Color color)
+        {
+            bodyOutlineMaterial.SetColor(h_OutlineColor, color);
         }
 
         public void PlayMovement()
@@ -128,9 +135,8 @@ namespace Fourzy
             body.sortingOrder = zorder;
         }
 
-        public void PlayWinAnimation(Color color, float delay)
+        public void PlayWinAnimation(float delay)
         {
-            bodyOutlineMaterial.SetColor(h_OutlineColor, color);
             body.sharedMaterial = bodyOutlineMaterial;
 
             pieceAnimator.Play(h_ShowWinningOutline);
@@ -142,12 +148,11 @@ namespace Fourzy
             });
         }
 
-        public void ShowTurnAnimation(Color color)
+        public void ShowTurnAnimation()
         {
-            bodyOutlineMaterial.SetColor(h_OutlineColor, color);
             body.sharedMaterial = bodyOutlineMaterial;
 
-            this.StartCoroutine(ShowTurnAnimation());
+            this.StartCoroutine(ShowTurnAnimationRoutine());
         }
 
         public void StopTurnAnimation()
@@ -159,17 +164,17 @@ namespace Fourzy
             pieceAnimator.CrossFade(h_Idle, 0.35f, indexBaseLayer);
         }
 
-        private IEnumerator ShowTurnAnimation()
+        private IEnumerator ShowTurnAnimationRoutine()
         {
             pieceAnimator.Play(h_ShowOutline);
             pieceAnimator.Play(h_WakeUp, indexEyeMouthLayer);
 
             int countOfJumps = 3;
-            yield return this.StartCoroutine(Jump(countOfJumps));
-            yield return this.StartCoroutine(Blinking());
+            yield return this.StartCoroutine(JumpRoutine(countOfJumps));
+            yield return this.StartCoroutine(BlinkingRoutine());
         }
 
-        private IEnumerator Jump(int count)
+        private IEnumerator JumpRoutine(int count)
         {
             pieceAnimator.Play(h_Jumping);
 
@@ -182,7 +187,7 @@ namespace Fourzy
             pieceAnimator.Play(h_Idle, indexBaseLayer);
         }
 
-        private IEnumerator Blinking()
+        private IEnumerator BlinkingRoutine()
         {
             float t = 0;
             float nextBlink = 2.0f;

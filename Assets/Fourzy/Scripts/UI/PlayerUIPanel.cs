@@ -58,9 +58,9 @@ namespace Fourzy
             playerIcon = go.GetComponent<GamePiece>();
         }
 
-        public void ShowPlayerTurnAnimation(Color outlineColor)
+        public void ShowPlayerTurnAnimation()
         {
-            playerIcon.View.ShowTurnAnimation(outlineColor);
+            playerIcon.View.ShowTurnAnimation();
         }
 
         public void StopPlayerTurnAnimation()

@@ -15,23 +15,19 @@ namespace Fourzy
         public GameObject gamePiecePrefab;
         GamePieceData[] gamePieceData;
 
-        public string GetGamePieceName(int gamePieceId) {
-            for (int i = 0; i < gamePieceData.Length; i++)
-            {
-                if (gamePieceData[i].ID == gamePieceId.ToString()) {
-                    return gamePieceData[i].Name;
-                }
-            }
-            return "Error";
-        }
-
         public void LoadGamePieces(string gamePieceId, bool isEnabledPieceSelector = true)
         {
             gamePieceData = TokenBoardLoader.instance.GetAllGamePieces();
-    
-            //Debug.Log("LoadGamePieces gamePieceId: " + gamePieceId);
-            foreach (var piece in gamePieceData)
+
+            this.UpdateGamePieceSelectionView(gamePieceId, isEnabledPieceSelector);
+            this.UpdatePrefabsWithGamePieceData();
+        }
+
+        private void UpdateGamePieceSelectionView(string gamePieceId, bool isEnabledPieceSelector)
+        {
+            for (int i = 0; i < gamePieceData.Length; i++)
             {
+                var piece = gamePieceData[i];
                 GameObject go = Instantiate(gamePiecePrefab) as GameObject;
                 GamePieceUI gamePieceUI = go.GetComponent<GamePieceUI>();
                 gamePieceUI.id = piece.ID;
@@ -39,7 +35,7 @@ namespace Fourzy
                 gamePieceUI.gamePieceImage.sprite = gamePieces[int.Parse(piece.ID)];
                 gamePieceUI.isEnabledPieceSelector = isEnabledPieceSelector;
 
-                go.gameObject.transform.SetParent(gamePieceGrid.transform, false);
+                go.transform.SetParent(gamePieceGrid.transform, false);
 
                 if (isEnabledPieceSelector)
                 {
@@ -55,9 +51,31 @@ namespace Fourzy
             }
         }
 
-        public Sprite GetGamePieceSprite(int gamePieceId) {
-            //Debug.Log("GetGamePieceSprite: " + gamePieceId);
+        private void UpdatePrefabsWithGamePieceData()
+        {
+            for (int i = 0; i < gamePiecePrefabs.Count; i++)
+            {
+                var piece = gamePieceData[i];
+                gamePiecePrefabs[i].View.OutlineColor = piece.OutlineColorWrapper;
+                gamePiecePrefabs[i].SecondaryColor = piece.SecondaryColorWrapper;
+            }
+        }
+
+        public Sprite GetGamePieceSprite(int gamePieceId) 
+        {
             return gamePieces[gamePieceId];
+        }
+
+        public string GetGamePieceName(int gamePieceId)
+        {
+            for (int i = 0; i < gamePieceData.Length; i++)
+            {
+                if (gamePieceData[i].ID == gamePieceId.ToString())
+                {
+                    return gamePieceData[i].Name;
+                }
+            }
+            return "Error";
         }
 
         public GameObject GetGamePiecePrefab(int gamePieceId)
@@ -70,6 +88,7 @@ namespace Fourzy
             {
                 return gamePiecePrefabs[0].gameObject;
             }
+
         }
     }
 }

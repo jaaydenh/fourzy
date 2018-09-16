@@ -805,12 +805,12 @@ namespace Fourzy
         {
             if (game.gameState.IsPlayerOneTurn == game.isCurrentPlayer_PlayerOne)
             {
-                playerUIPanel.ShowPlayerTurnAnimation(bluePlayerColor);
+                playerUIPanel.ShowPlayerTurnAnimation();
                 opponentUIPanel.StopPlayerTurnAnimation();
             } 
             else if (game.gameState.IsPlayerOneTurn != game.isCurrentPlayer_PlayerOne)
             {
-                opponentUIPanel.ShowPlayerTurnAnimation(redPlayerColor);
+                opponentUIPanel.ShowPlayerTurnAnimation();
                 playerUIPanel.StopPlayerTurnAnimation();
             }
         }
@@ -1263,7 +1263,7 @@ namespace Fourzy
             {
                 Position position = game.gameState.GameBoard.player1WinningPositions[i];
                 GamePiece gamePiece = gameBoardView.GamePieceAt(position);
-                gamePiece.View.PlayWinAnimation(bluePlayerColor, delay);
+                gamePiece.View.PlayWinAnimation(delay);
                 delay += 0.12f;
             }
 
@@ -1272,7 +1272,7 @@ namespace Fourzy
             {
                 Position position = game.gameState.GameBoard.player2WinningPositions[i];
                 GamePiece gamePiece = gameBoardView.GamePieceAt(position);
-                gamePiece.View.PlayWinAnimation(redPlayerColor, delay);
+                gamePiece.View.PlayWinAnimation(delay);
                 delay += 0.12f;
             }
         }

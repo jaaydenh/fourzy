@@ -13,6 +13,7 @@ namespace Fourzy
         [SerializeField]
         private AnimationCurve movementCurve;
 
+        public Vector4 SecondaryColor = Vector4.zero;
         public PlayerEnum player;
         public int column;
         public int row;
@@ -37,34 +38,20 @@ namespace Fourzy
 
             if (playerEnum == PlayerEnum.TWO)
             {
-                View.SetupHSVColor(new Vector4(0.3f, 0, 0, 0));
+                View.SetupHSVColor(SecondaryColor);
             }
             else
             {
-                View.SetupHSVColor(new Vector4(0, 0, 0, 0));
+                View.SetupHSVColor(Vector4.zero);
             }
-        }
-
-        private Direction findDirection(Position start, Position end) {
-            if (start.column < end.column) {
-                return Direction.RIGHT;
-            } else if (start.column > end.column) {
-                return Direction.LEFT;
-            } else if (start.row < end.row) {
-                return Direction.DOWN;
-            } else if (start.row > end.row) {
-                return Direction.UP;
-            }
-
-            return Direction.NONE;
         }
 
         public void Move(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true)
         {
-            this.StartCoroutine(MoveGamePiece(movingPieces, activeTokens, firstPiece));
+            this.StartCoroutine(MoveRoutine(movingPieces, activeTokens, firstPiece));
         }
 
-        private IEnumerator MoveGamePiece(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece) 
+        private IEnumerator MoveRoutine(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece) 
         {
             if (movingPieces.Count == 0) 
             {
@@ -146,22 +133,12 @@ namespace Fourzy
                 i = nextPos - 1;
             }
 
-            this.CheckActiveTokenCollision(activeTokens);
-
             isMoving = false;
             column = positions[positions.Count - 1].column;
             row = positions[positions.Count - 1].row;
-            //if (nextPiece != null)
-            //{
-            //    nextPiece.StartCoroutine(nextPiece.MoveGamePiece(movingPieces, activeTokens));
-            //}
 
-            //Direction endMoveDirection = findDirection(positions[positions.Count - 2], positions[positions.Count - 1]);
-            //Tweener tweener = AfterMovementAnimations(movingGamePiece, endMoveDirection);
-            //if (tweener != null)
-            //{
-            //    yield return tweener.WaitForCompletion();
-            //}
+            this.CheckActiveTokenCollision(activeTokens);
+            this.CheckNextPieceCollision(nextPiece, movingPieces, activeTokens);
 
             View.SetupZOrder(5 + row * 2);
 
@@ -177,7 +154,6 @@ namespace Fourzy
                 return;
             }
 
-            //if (gamePieceCollider.bounds.Intersects(nextPiece.gamePieceCollider.bounds))
             if (gamePieceCollider.Distance(nextPiece.gamePieceCollider).isOverlapped)
             {
                 // Animate punch and hit for both pieces
@@ -214,33 +190,6 @@ namespace Fourzy
                     }
 
                     activeTokens.RemoveAt(i);
-                }
-            }
-        }
-
-        private Tweener AfterMovementAnimations(MovingGamePiece piece, Direction direction) 
-        {
-            float punchDistance = 0.12f;
-            float punchDuration = 0.12f;
-
-            if (piece.animationState == PieceAnimState.FALLING)
-            {
-                return cachedTransform.DOScale(0.0f, 1.0f);
-            } 
-            else 
-            {
-                switch (direction)
-                {
-                    case Direction.UP:
-                        return cachedTransform.DOPunchPosition(new Vector3(0.0f, punchDistance, 0), punchDuration, 7);
-                    case Direction.DOWN:
-                        return cachedTransform.DOPunchPosition(new Vector3(0.0f, punchDistance * -1, 0), punchDuration, 7);
-                    case Direction.LEFT:
-                        return cachedTransform.DOPunchPosition(new Vector3(punchDistance * -1, 0.0f, 0), punchDuration, 7);
-                    case Direction.RIGHT:
-                        return cachedTransform.DOPunchPosition(new Vector3(punchDistance, 0.0f, 0), punchDuration, 7);
-                    default:
-                        return cachedTransform.DOPunchPosition(new Vector3(0.0f, 0.0f, 0), punchDuration, 7);
                 }
             }
         }
