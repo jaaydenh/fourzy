@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Fourzy;
 
 public class MenuItems : MonoBehaviour {
 
@@ -37,6 +38,16 @@ public class MenuItems : MonoBehaviour {
     {
         PlayerPrefs.DeleteKey("onboardingStage");
         PlayerPrefs.DeleteKey("onboardingStep");
+    }
+
+    [UnityEditor.MenuItem("Fourzy/ResetTokenInstructionPopups")]
+    static void ResetTokenInstructionPopups()
+    {
+        int count = System.Enum.GetNames(typeof(Token)).Length;
+        for (int i = 0; i < count; i++)
+        {
+            PlayerPrefsWrapper.SetInstructionPopupDisplayed(i, false);
+        }
     }
 
     [UnityEditor.MenuItem("Fourzy/CompleteOnboarding")]
