@@ -520,7 +520,7 @@ namespace Fourzy
                 // TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
                 // TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard("1000");
 
-                tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoardByIndex(tokenBoardIndex);
+            tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoardByIndex(tokenBoardIndex);
             // }
 
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.REALTIME, true, isFirstPlayer, tokenBoard, tokenBoard.initialGameBoard, false, null);

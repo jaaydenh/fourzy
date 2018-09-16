@@ -68,13 +68,13 @@ namespace Fourzy
         private void GetGamePieceIdSuccess(LogEventResponse response) {
             int gamePieceId = int.Parse(response.ScriptData.GetString("gamePieceId"));
             Debug.Log("GetGamePieceIdSuccess: " + response.ScriptData.GetString("gamePieceId"));
-            profilePicture.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(gamePieceId);
+            profilePicture.sprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceId);
         }
 
         private void GetGamePieceIdFailure(LogEventResponse response) {
             Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
             AnalyticsManager.LogError("get_player_gamepiece_error", response.Errors.JSON);
-            profilePicture.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(0);
+            profilePicture.sprite = GameContentManager.Instance.GetGamePieceSprite(0);
         }
     }
 }

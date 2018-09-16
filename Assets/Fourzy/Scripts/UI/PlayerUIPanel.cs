@@ -32,7 +32,7 @@ namespace Fourzy
         {
             testPlayerIcon.SetActive(false);
 
-            GameObject gamePiecePrefab = GamePieceSelectionManager.Instance.GetGamePiecePrefab(playerGamePieceId);
+            GameObject gamePiecePrefab = GameContentManager.Instance.GetGamePiecePrefab(playerGamePieceId);
             GameObject go = Instantiate(gamePiecePrefab, new Vector3(0, 0, 10),
                                         Quaternion.identity, playerIconParent);
             playerIcon = go.GetComponent<GamePiece>();

@@ -1,13 +1,16 @@
-﻿namespace Fourzy
+﻿using System.Collections.Generic;
+
+namespace Fourzy
 {
     [System.Serializable]
     public class TokenData
     {
-        public string ID;
+        public int ID;
         public string Name;
         public string Arena;
         public string Description;
         public bool Enabled;
         public bool showBackgroundTile;
+        public List<int> InGameTokenTypes;
     }
 }

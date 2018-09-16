@@ -8,64 +8,54 @@ namespace Fourzy
     {
         private int randomGeneratedBoardPercentage = 70;
 
-        private TokenBoardData[] LoadTokenBoardData()
+        private TokenBoardData[] tokenBoards = new TokenBoardData[0];
+        private GamePieceData[] gamePieces = new GamePieceData[0];
+        private TokenData[] tokens = new TokenData[0];
+
+        public void LoadData()
         {
-            //string filePath = Application.streamingAssetsPath + gameDataProjectFilePath;
-            //Debug.Log("filepath: " + filePath);
-            // if (File.Exists (filePath)) {
-            //     string dataAsJson = File.ReadAllText (filePath);
-            //     tokenBoardData = JsonHelper.getJsonArray<TokenBoardInfo> (dataAsJson);
-            // } else {
-            //     tokenBoardData[0] = GetDefaultTokenBoard();
-            // }
-
-            TokenBoardData[] tokenBoardData = new TokenBoardData[0];
-            TextAsset dataAsJson = Resources.Load<TextAsset>("TokenBoards");
-            if (dataAsJson) {
-                tokenBoardData = JsonHelper.getJsonArray<TokenBoardData> (dataAsJson.text);
-            } else {
-                tokenBoardData[0] = GetDefaultTokenBoard();
-            }
-
-            return tokenBoardData;
+            this.LoadTokenBoardData();
+            this.LoadGamePieceData();
+            this.LoadTokenData();
         }
 
-        private GamePieceData[] LoadGamePieceData()
+        private void LoadTokenBoardData()
         {
-            GamePieceData data = new GamePieceData();
-            data.OutlineColorWrapper = Color.red;
-            data.SecondaryColorWrapper = new Vector3(1.0f, 0.0f, 0.3f);
-            string json = JsonUtility.ToJson(data);
-
-
-            GamePieceData[] gamePieceData = new GamePieceData[0];
-            TextAsset dataAsJson = Resources.Load<TextAsset>("GamePieces");
+            TextAsset dataAsJson = Resources.Load<TextAsset>("TokenBoards");
             if (dataAsJson)
             {
-                gamePieceData = JsonHelper.getJsonArray<GamePieceData>(dataAsJson.text);
+                tokenBoards = JsonHelper.getJsonArray<TokenBoardData>(dataAsJson.text);
             }
             else
             {
-                gamePieceData[0] = GetDefaultGamePiece();
+                tokenBoards[0] = GetDefaultTokenBoard();
             }
-
-            return gamePieceData;
         }
 
-        private TokenData[] LoadTokenData()
+        private void LoadGamePieceData()
         {
-            TokenData[] tokenData = new TokenData[0];
+            TextAsset dataAsJson = Resources.Load<TextAsset>("GamePieces");
+            if (dataAsJson)
+            {
+                gamePieces = JsonHelper.getJsonArray<GamePieceData>(dataAsJson.text);
+            }
+            else
+            {
+                gamePieces[0] = GetDefaultGamePiece();
+            }
+        }
+
+        private void LoadTokenData()
+        {
             TextAsset dataAsJson = Resources.Load<TextAsset>("Tokens");
             if (dataAsJson)
             {
-                tokenData = JsonHelper.getJsonArray<TokenData>(dataAsJson.text);
+                tokens = JsonHelper.getJsonArray<TokenData>(dataAsJson.text);
             }
             else
             {
                 AnalyticsManager.LogError("load_token_json_error");
             }
-
-            return tokenData;
         }
 
         public TokenBoard GetRandomTokenBoard()
@@ -74,9 +64,7 @@ namespace Fourzy
                 return RandomBoardGenerator.GenerateBoard();
             } 
 
-            TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
-
-            var tokenBoardData = tokenBoardCollection
+            var tokenBoardData = tokenBoards
                 .Where(t => t.Enabled == true)
                 .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
             .FirstOrDefault();
@@ -86,20 +74,18 @@ namespace Fourzy
             return tokenboard;
         }
 
-        public TokenBoard GetRandomTokenBoardByIndex(int index) {
-            TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
-
-            var tokenBoardData = tokenBoardCollection[index];
+        public TokenBoard GetRandomTokenBoardByIndex(int index) 
+        {
+            var tokenBoardData = tokenBoards[index];
 
             TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), true);
 
             return tokenboard;
         }
 
-        public TokenBoard GetTokenBoard(string id) {
-            TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
-
-            var tokenBoardData = tokenBoardCollection
+        public TokenBoard GetTokenBoard(string id) 
+        {
+            var tokenBoardData = tokenBoards
                 .Where(t => t.ID == id)
             .FirstOrDefault();
 
@@ -110,25 +96,22 @@ namespace Fourzy
 
         public TokenBoard[] GetTokenBoardsForBoardSelection()
         {
-            TokenBoardData[] tokenBoardCollection = LoadTokenBoardData();
-            IEnumerable<TokenBoardData> enabledTokenBoards = tokenBoardCollection
-                .Where(t => t.EnabledGallery == true);
+            IEnumerable<TokenBoardData> enabledTokenBoards = tokenBoards.Where(t => t.EnabledGallery == true);
 
-            TokenBoard[] tokenBoards = new TokenBoard[enabledTokenBoards.Count()];
+            TokenBoard[] selectedTokenBoards = new TokenBoard[enabledTokenBoards.Count()];
             int i = 0;
             foreach (var tokenBoardData in enabledTokenBoards)
             {
                 TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), false);
-                tokenBoards[i] = tokenboard;
+                selectedTokenBoards[i] = tokenboard;
                 i++;
             }
-            return tokenBoards;
+            return selectedTokenBoards;
         }
 
         public GamePieceData[] GetAllGamePieces()
         {
-            GamePieceData[] gamepieceCollection = LoadGamePieceData();
-            IEnumerable<GamePieceData> enabledGamePieces = gamepieceCollection
+            IEnumerable<GamePieceData> enabledGamePieces = gamePieces
                 .Where(t => t.Enabled == true);
 
             return enabledGamePieces.ToArray();
@@ -136,8 +119,7 @@ namespace Fourzy
 
         public TokenData[] GetAllTokens()
         {
-            TokenData[] tokenCollection = LoadTokenData();
-            IEnumerable<TokenData> enabledTokens = tokenCollection
+            IEnumerable<TokenData> enabledTokens = tokens
                 .Where(t => t.Enabled == true);
 
             return enabledTokens.ToArray();
@@ -165,9 +147,11 @@ namespace Fourzy
         private GamePieceData GetDefaultGamePiece()
         {
             GamePieceData gamePieceData = new GamePieceData();
-            gamePieceData.ID = "01";
+            gamePieceData.ID = 1;
             gamePieceData.Name = "Test Piece 1";
             gamePieceData.Enabled = true;
+            gamePieceData.OutlineColorWrapper = Color.blue;
+            gamePieceData.SecondaryColorWrapper = new Vector4(0.3f, 0, 0, 0);
 
             return gamePieceData;
         }

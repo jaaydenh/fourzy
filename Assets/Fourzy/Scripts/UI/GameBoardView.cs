@@ -28,6 +28,8 @@ namespace Fourzy
             cachedTransform = this.transform;
             cellsArea = this.GetComponent<BoxCollider2D>();
             spriteRenderer = this.GetComponent<SpriteRenderer>();
+
+            this.CalculatePositions();
         }
 
 #if UNITY_EDITOR

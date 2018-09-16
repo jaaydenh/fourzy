@@ -6,7 +6,7 @@ namespace Fourzy
     [System.Serializable]
     public class GamePieceData : ISerializationCallbackReceiver
     {
-        public string ID;
+        public int ID;
         public string Name;
         public bool Enabled;
         [SerializeField] string OutlineColor = string.Empty;

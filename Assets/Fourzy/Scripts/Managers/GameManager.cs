@@ -23,7 +23,7 @@ namespace Fourzy
         // public InfoBanner InfoBanner;
         public Onboarding onboardingScreen;
         public Badge homeScreenPlayBadge;
-        public GameObject tokenPopupUI;
+        public TokenPopupUI tokenPopupUI;
         public GameObject headerUI;
         public GameObject infoBannerPrefab;
 
@@ -477,13 +477,13 @@ namespace Fourzy
                     game.challengedGamePieceId = int.Parse(gamePieceId);
                 }
 
-                if (game.challengedGamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1)
+                if (game.challengedGamePieceId > GameContentManager.Instance.GetGamePieceCount() - 1)
                 {
                     game.challengedGamePieceId = 0;
                 }
             }
 
-            // opponentPiece.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(challengedGamePieceId);
+            // opponentPiece.sprite = GameContentManager.Instance.GetGamePieceSprite(challengedGamePieceId);
 
             // GamePieceUI opponent = opponentPiece.GetComponent<GamePieceUI>();
             // if (challengerGamePieceId == challengedGamePieceId)

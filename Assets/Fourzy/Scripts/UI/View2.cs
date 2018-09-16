@@ -6,37 +6,35 @@ namespace Fourzy
 {
     public class View2 : UIView
     {
-        //Instance
         public static View2 instance;
-        public Text gamePiecesTabText;
-        public Text tokensTabText;
-        public GameObject gamePiecesGrid;
-        public GameObject tokensGrid;
-        //public RectTransform test;
-        public ScrollRect scrollRect;
 
-        // Use this for initialization
+        [SerializeField]
+        private Text gamePiecesTabText;
+
+        [SerializeField]
+        private Text tokensTabText;
+
+        [SerializeField]
+        private GameObject gamePiecesGrid;
+
+        [SerializeField]
+        private GamePieceUI gamePiecePrefab;
+
+        [SerializeField]
+        private GameObject tokensGrid;
+
+        [SerializeField]
+        private TokenUI tokenPrefab;
+
+        [SerializeField]
+        private ScrollRect scrollRect;
+
+        private bool wasContentLoaded = false;
+
         void Start()
         {
             instance = this;
             keepHistory = true;
-        }
-
-        public override void Show()
-        {
-            //Debug.Log("View 2 Show");
-            //EasyTouch.On_SwipeStart += On_SwipeStart;
-            //EasyTouch.On_Swipe += On_Swipe;
-            //EasyTouch.On_SwipeEnd += On_SwipeEnd;
-            base.Show();
-        }
-
-        public override void Hide()
-        {
-            //EasyTouch.On_SwipeStart -= On_SwipeStart;
-            //EasyTouch.On_Swipe -= On_Swipe;
-            //EasyTouch.On_SwipeEnd -= On_SwipeEnd;
-            base.Hide();
         }
 
         public override void ShowAnimated(AnimationDirection sourceDirection)
@@ -46,39 +44,20 @@ namespace Fourzy
             base.ShowAnimated(sourceDirection);
         }
 
-        public override void HideAnimated(AnimationDirection getAwayDirection)
+        public override void ViewWillAppear()
         {
-            base.HideAnimated(getAwayDirection);
-        }
+            base.ViewWillAppear();
 
-        // At the swipe beginning 
-        private void On_SwipeStart(Gesture gesture)
-        {
-        }
-
-        // During the swipe
-        private void On_Swipe(Gesture gesture)
-        {
-        }
-
-        // At the swipe end 
-        private void On_SwipeEnd(Gesture gesture)
-        {
-            float angles = gesture.GetSwipeOrDragAngle();
-            if (gesture.swipe == EasyTouch.SwipeDirection.Left)
+            if (!wasContentLoaded)
             {
-                View2.instance.HideAnimated(AnimationDirection.right);
-                View3.instance.ShowAnimated(AnimationDirection.right);
-            }
-            if (gesture.swipe == EasyTouch.SwipeDirection.Right)
-            {
-                View2.instance.HideAnimated(AnimationDirection.left);
-                View1.instance.ShowAnimated(AnimationDirection.left);
+                this.LoadTokens();
+                this.LoadGamePieces();
+                wasContentLoaded = true;
             }
         }
 
-        public void LoadGamePiecesButton() {
-            //GamePieceSelectionManager.instance.LoadGamePieces(UserManager.instance.gamePieceId.ToString());
+        public void LoadGamePiecesButton() 
+        {
             gamePiecesGrid.SetActive(true);
             tokensGrid.SetActive(false);
             scrollRect.content = gamePiecesGrid.GetComponent<RectTransform>();
@@ -88,8 +67,8 @@ namespace Fourzy
             tokensTabText.GetComponent<Outline>().enabled = false;
         }
 
-        public void LoadTokensButton() {
-            //TokenSelectionManager.instance.LoadTokens();
+        public void LoadTokensButton() 
+        {
             gamePiecesGrid.SetActive(false);
             tokensGrid.SetActive(true);
             scrollRect.content = tokensGrid.GetComponent<RectTransform>();
@@ -97,6 +76,59 @@ namespace Fourzy
             gamePiecesTabText.fontSize = 35;
             gamePiecesTabText.GetComponent<Outline>().enabled = false;
             tokensTabText.GetComponent<Outline>().enabled = true;
+        }
+
+        private void LoadTokens()
+        {
+            Transform tokenGridTransform = tokensGrid.transform;
+            var tokensData = GameContentManager.Instance.GetAllTokens();
+            foreach (var token in tokensData)
+            {
+                TokenUI tokenUI = Instantiate(tokenPrefab);
+                tokenUI.id = token.ID;
+                tokenUI.tokenName = token.Name;
+                tokenUI.tokenNameText.text = token.Name;
+                tokenUI.tokenImage.sprite = GameContentManager.Instance.GetTokenSprite(token.ID);
+                tokenUI.showBackgroundTile = token.showBackgroundTile;
+                tokenUI.arenaName = token.Arena;
+                tokenUI.description = token.Description;
+                if (token.showBackgroundTile)
+                {
+                    tokenUI.tileBGImage.SetActive(true);
+                }
+                tokenUI.transform.SetParent(tokenGridTransform, false);
+            }
+        }
+
+        private void LoadGamePieces()
+        {
+            bool isEnabledPieceSelector = false;
+            int gamePieceId = UserManager.instance.gamePieceId;
+            Transform gamePieceGridTransform = gamePiecesGrid.transform;
+            var gamePieceData = GameContentManager.Instance.GetAllGamePieces();
+            for (int i = 0; i < gamePieceData.Length; i++)
+            {
+                var piece = gamePieceData[i];
+                GamePieceUI gamePieceUI = Instantiate(gamePiecePrefab);
+                gamePieceUI.id = piece.ID.ToString();
+                gamePieceUI.name = piece.Name;
+                gamePieceUI.gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(piece.ID);
+                gamePieceUI.isEnabledPieceSelector = isEnabledPieceSelector;
+
+                gamePieceUI.transform.SetParent(gamePieceGridTransform, false);
+
+                if (isEnabledPieceSelector)
+                {
+                    var toggle = gamePieceUI.GetComponent<Toggle>();
+                    ToggleGroup tg = gamePiecesGrid.GetComponent<ToggleGroup>();
+                    toggle.group = tg;
+
+                    if (piece.ID == gamePieceId)
+                    {
+                        gamePieceUI.ActivateSelector();
+                    }
+                }
+            }
         }
     }
 }

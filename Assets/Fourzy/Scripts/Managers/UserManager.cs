@@ -40,8 +40,8 @@ namespace Fourzy
         {
             ChallengeManager.instance.GetPlayerGamePiece();
 
-            GamePieceSelectionManager.Instance.LoadGamePieces(string.Empty, false);
-            TokenSelectionManager.instance.LoadTokens();
+            TokenBoardLoader.instance.LoadData();
+            GameContentManager.Instance.UpdateContentData();
         }
 
         void OnEnable()
@@ -71,19 +71,17 @@ namespace Fourzy
         {
             //Debug.Log("SetPlayerGamePiece: gamepieceid: " + id);
             gamePieceId = int.Parse(id);
-            if (gamePieceId > GamePieceSelectionManager.Instance.gamePieces.Count - 1) {
+            if (gamePieceId > GameContentManager.Instance.GetGamePieceCount() - 1) {
                 gamePieceId = 0;
             }
-            gamePieceImage.sprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(gamePieceId);
+            gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceId);
             gamePieceImage.gameObject.SetActive(true);
 
             if (!didLoadGamePieces)
             {
-                GamePieceSelectionManager.Instance.LoadGamePieces(id);
-                TokenSelectionManager.instance.LoadTokens();
                 didLoadGamePieces = true;
             }
-            gamePieceNameLabel.text = GamePieceSelectionManager.Instance.GetGamePieceName(gamePieceId);
+            gamePieceNameLabel.text = GameContentManager.Instance.GetGamePieceName(gamePieceId);
         }
 
         public void UpdateGUI(string name, string uid, string fbId, long? coins, int? rating)

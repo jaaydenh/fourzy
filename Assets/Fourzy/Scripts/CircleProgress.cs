@@ -29,6 +29,7 @@ public class CircleProgress : MonoBehaviour
     private void Awake()
     {
         this.Init();
+        this.SetupNewValue(currentValue);
     }
 
     void OnValidate()

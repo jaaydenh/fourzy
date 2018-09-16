@@ -129,7 +129,7 @@ namespace Fourzy
             if (response.ScriptData != null) {
                 var gamePieceIdString = response.ScriptData.GetString("gamePieceId");
                 int gamePieceId = int.Parse(gamePieceIdString);
-                game.opponentProfilePictureSprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(gamePieceId);
+                game.opponentProfilePictureSprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceId);
                 if (opponentProfilePicture != null) {
                     opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
                     opponentProfilePicture.enabled = true;
@@ -140,7 +140,7 @@ namespace Fourzy
         private void GetGamePieceIdFailure(LogEventResponse response) {
             Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
             AnalyticsManager.LogError("get_player_gamepiece_error", response.Errors.JSON);
-            game.opponentProfilePictureSprite = GamePieceSelectionManager.Instance.GetGamePieceSprite(0);
+            game.opponentProfilePictureSprite = GameContentManager.Instance.GetGamePieceSprite(0);
             opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
             opponentProfilePicture.enabled = true;
         }
