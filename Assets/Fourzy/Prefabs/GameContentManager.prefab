@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 114920343002454044, guid: 9c26418e7b2024aaaaf26cdf4775c6b4, type: 2}
   - {fileID: 114728382540131844, guid: 729906e28f6094e7bbd571faf746e39f, type: 2}
   - {fileID: 114513462052452064, guid: 10c424c4e1e3f467b824f0e020cf6808, type: 2}
+  - {fileID: 114274035791886202, guid: 5fbeb8ef6f23a4764936a450d8ec872a, type: 2}
   gamePieceSprites:
   - {fileID: 21300000, guid: 498997e7f8aa348beb13de6bf9f77066, type: 3}
   - {fileID: 21300000, guid: 99b6934162ceb469892f2924206b38ac, type: 3}
