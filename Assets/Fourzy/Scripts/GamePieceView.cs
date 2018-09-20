@@ -110,7 +110,7 @@ namespace Fourzy
         {
             moveDirection = this.ChooseDirection(x, y);
 
-            float transitionTime = 0.03f;
+            float transitionTime = 0.1f;
             switch(moveDirection)
             {
                 case MoveDirection.RIGHT:
@@ -158,7 +158,7 @@ namespace Fourzy
                 pieceAnimator.CrossFade(h_Idle, transitionTime, indexBaseLayer);
             }
 
-            pieceAnimator.CrossFade(h_Idle, transitionTime, indexEyeMouthLayer);
+            pieceAnimator.CrossFade(h_Idle, 0.1f, indexEyeMouthLayer);
         }
 
         private MoveDirection ChooseDirection(int x, int y)
