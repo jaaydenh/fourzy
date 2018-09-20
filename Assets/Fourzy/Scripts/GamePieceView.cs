@@ -5,6 +5,15 @@ using DG.Tweening;
 
 namespace Fourzy
 {
+    enum MoveDirection
+    {
+        LEFT,
+        RIGHT,
+        TOP,
+        DOWN,
+        IDLE
+    }
+
     public class GamePieceView : MonoBehaviour
     {
         public Color OutlineColor;
@@ -28,10 +37,6 @@ namespace Fourzy
         private int h_HSVAAdjust = Shader.PropertyToID("_HSVAAdjust");
         private int h_OutlineColor = Shader.PropertyToID("_OutlineColor");
 
-        private int h_isMoving = Animator.StringToHash("isMoving");
-        private int h_directionX = Animator.StringToHash("directionX");
-        private int h_directionY = Animator.StringToHash("directionY");
-        private int h_animateHit = Animator.StringToHash("animteHit");
         private int h_win = Animator.StringToHash("win");
         private int h_blink = Animator.StringToHash("blink");
 
@@ -43,9 +48,23 @@ namespace Fourzy
         private int h_Sleep = Animator.StringToHash("Sleep");
         private int h_WakeUp = Animator.StringToHash("WakeUp");
 
+        private int h_MovingHorizontal = Animator.StringToHash("MovingHorizontal");
+        private int h_MovingVertical = Animator.StringToHash("MovingHorizontal");
+        private int h_RightHit = Animator.StringToHash("RightHit");
+        private int h_LeftHit = Animator.StringToHash("LeftHit");
+        private int h_BottomHit = Animator.StringToHash("BottomHit");
+        private int h_TopHit = Animator.StringToHash("TopHit");
+
+        private int h_MoveLeft = Animator.StringToHash("MoveLeft");
+        private int h_MoveRight = Animator.StringToHash("MoveRight");
+        private int h_MoveTop = Animator.StringToHash("MoveTop");
+        private int h_MoveBottom = Animator.StringToHash("MoveDown");
+
         private const int indexBaseLayer = 0;
         private const int indexEyeMouthLayer = 1;
         private const int indexMaterialLayer = 2;
+
+        MoveDirection moveDirection = MoveDirection.IDLE;
 
         private void Awake()
         {
@@ -75,6 +94,11 @@ namespace Fourzy
         {
             bodyMaterial.SetVector(h_HSVAAdjust, vec);
             bodyOutlineMaterial.SetVector(h_HSVAAdjust, vec);
+
+            foreach (SpriteRenderer s in sprites)
+            {
+                s.material.SetVector(h_HSVAAdjust, vec);
+            }
         }
 
         public void SetupOutlineColor(Color color)
@@ -82,21 +106,83 @@ namespace Fourzy
             bodyOutlineMaterial.SetColor(h_OutlineColor, color);
         }
 
-        public void PlayMovement()
-        {
-            pieceAnimator.SetBool(h_isMoving, true);
-        }
-
         public void PutMovementDirection(int x, int y)
         {
-            pieceAnimator.SetFloat(h_directionX, x);
-            pieceAnimator.SetFloat(h_directionY, y);
+            moveDirection = this.ChooseDirection(x, y);
+
+            float transitionTime = 0.03f;
+            switch(moveDirection)
+            {
+                case MoveDirection.RIGHT:
+                    pieceAnimator.CrossFade(h_MovingHorizontal, transitionTime, indexBaseLayer);
+                    pieceAnimator.CrossFade(h_MoveRight, transitionTime, indexEyeMouthLayer);
+                    break;
+                case MoveDirection.LEFT:
+                    pieceAnimator.CrossFade(h_MovingHorizontal, transitionTime, indexBaseLayer);
+                    pieceAnimator.CrossFade(h_MoveLeft, transitionTime, indexEyeMouthLayer);
+                    break;
+                case MoveDirection.DOWN:
+                    pieceAnimator.CrossFade(h_MovingVertical, transitionTime, indexBaseLayer);
+                    pieceAnimator.CrossFade(h_MoveBottom, transitionTime, indexEyeMouthLayer);
+                    break;
+                case MoveDirection.TOP:
+                    pieceAnimator.CrossFade(h_MovingVertical, transitionTime, indexBaseLayer);
+                    pieceAnimator.CrossFade(h_MoveTop, transitionTime, indexEyeMouthLayer);
+                    break;
+            }
         }
 
         public void PlayFinishMovement(bool animateHit)
         {
-            pieceAnimator.SetBool(h_animateHit, animateHit);
-            pieceAnimator.SetBool(h_isMoving, false);
+            float transitionTime = 0.03f;
+            if (animateHit)
+            {
+                switch (moveDirection)
+                {
+                    case MoveDirection.RIGHT:
+                        pieceAnimator.CrossFade(h_RightHit, transitionTime, indexBaseLayer);
+                        break;
+                    case MoveDirection.LEFT:
+                        pieceAnimator.CrossFade(h_LeftHit, transitionTime, indexBaseLayer);
+                        break;
+                    case MoveDirection.DOWN:
+                        pieceAnimator.CrossFade(h_BottomHit, transitionTime, indexBaseLayer);
+                        break;
+                    case MoveDirection.TOP:
+                        pieceAnimator.CrossFade(h_TopHit, transitionTime, indexBaseLayer);
+                        break;
+                }
+            }
+            else
+            {
+                pieceAnimator.CrossFade(h_Idle, transitionTime, indexBaseLayer);
+            }
+
+            pieceAnimator.CrossFade(h_Idle, transitionTime, indexEyeMouthLayer);
+        }
+
+        private MoveDirection ChooseDirection(int x, int y)
+        {
+            MoveDirection direction = MoveDirection.IDLE;
+            if (x > 0)
+            {
+                direction = MoveDirection.RIGHT;
+            }
+            else if (x < 0)
+            {
+                direction = MoveDirection.LEFT;
+            }
+
+            if (y > 0)
+            {
+                direction = MoveDirection.DOWN;
+            }
+            else if (y < 0)
+            {
+                direction = MoveDirection.TOP;
+            }
+
+            return direction;
         }
 
         public void FadeAfterPit()

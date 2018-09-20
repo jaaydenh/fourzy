@@ -85,8 +85,6 @@ namespace Fourzy
 
             isMoving = true;
 
-            View.PlayMovement();
-
             for (int i = 0; i < positions.Count - 1; i++)
             {
                 int nextPos = i + 1;
@@ -120,8 +118,7 @@ namespace Fourzy
 
                     if (nextPos == positions.Count - 1 && t + 2 * Time.deltaTime * Constants.moveSpeed / distance > 1)
                     {
-                        bool playHitAnimation = (nextPiece == null && (firstPiece || positions.Count > 2));
-                        playHitAnimation = ((nextPiece == null && positions.Count > 2) || firstPiece);
+                        bool playHitAnimation = ((nextPiece == null && positions.Count > 2) || firstPiece);
                         View.PlayFinishMovement(playHitAnimation);
                     }
 
