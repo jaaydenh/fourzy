@@ -282,12 +282,17 @@ namespace Fourzy
                 t += Time.deltaTime;
                 if (t > nextBlink)
                 {
-                    pieceAnimator.SetTrigger(h_blink);
+                    this.Blink();
                     nextBlink = Random.Range(5.0f, 15.0f);
                     t = 0;
                 }
                 yield return null;
             }
+        }
+
+        public void Blink()
+        {
+            pieceAnimator.SetTrigger(h_blink);
         }
     }
 

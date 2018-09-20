@@ -83,7 +83,6 @@ namespace Fourzy
 
         public GameObject GetGamePiecePrefab(int gamePieceId)
         {
-            Debug.LogError("GetGamePiecePrefab");
             test = (test + 1) % gamePiecePrefabs.Count;
             return gamePiecePrefabs[test].gameObject;
 

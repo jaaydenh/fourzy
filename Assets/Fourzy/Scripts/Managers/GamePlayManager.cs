@@ -155,6 +155,7 @@ namespace Fourzy
             yield return StartCoroutine(ShowTokenInstructionPopupRoutine());
             yield return StartCoroutine(ShowPlayTurnWithDelay(0.3f));
 
+            StartCoroutine(RandomGamePiecesBlinkingRoutine());
             UserInputHandler.inputEnabled = true;
         }
 
@@ -1107,13 +1108,6 @@ namespace Fourzy
 
         public IEnumerator MovePiece(Move move, bool replayMove, bool updatePlayer)
         {
-            // GameObject[] cornerArrows = GameObject.FindGameObjectsWithTag("Arrow");
-            // foreach (GameObject cornerArrow in cornerArrows) {
-            //     SpriteRenderer sr = cornerArrow.GetComponentInChildren<SpriteRenderer>();
-            //     sr.enabled = false;
-            // }
-
-            // numPiecesAnimating = 0;
             isDropping = true;
 
             if (OnStartMove != null)
@@ -1242,6 +1236,28 @@ namespace Fourzy
             gamePiece.Move(movingPieces, activeTokens);
 
             gameBoardView.PrintGameBoard();
+        }
+
+        private IEnumerator RandomGamePiecesBlinkingRoutine()
+        {
+            float blinkTime = 3.0f;
+            float t = 0.0f;
+            while (true)
+            {
+                t += Time.deltaTime;
+                if (t > blinkTime)
+                {
+                    var piecesForBlink = gameBoardView.GetWaitingGamePiecesList();
+                    if (piecesForBlink.Count > 0)
+                    {
+                        int randomIndex = UnityEngine.Random.Range(0, piecesForBlink.Count);
+                        GamePiece gamePiece = piecesForBlink[randomIndex];
+                        gamePiece.View.Blink();     
+                    }
+                    t = 0;
+                }
+                yield return null;
+            }
         }
 
         private IEnumerator DisplayGameOverView()

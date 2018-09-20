@@ -94,6 +94,24 @@ namespace Fourzy
             return list;
         }
 
+        public List<GamePiece> GetWaitingGamePiecesList()
+        {
+            List<GamePiece> list = new List<GamePiece>();
+
+            for (int i = 0; i < Constants.numColumns; i++)
+            {
+                for (int j = 0; j < Constants.numRows; j++)
+                {
+                    if (gamePieces[i, j] != null && !gamePieces[i, j].isMoving)
+                    {
+                        list.Add(gamePieces[i, j]);
+                    }
+                }
+            }
+
+            return list;
+        }
+
         public void ResetGamePiecesAndTokens()
         {
             for (int i = gamePiecesRootTransform.childCount - 1; i >= 0; i--)
