@@ -819,8 +819,15 @@ namespace Fourzy
             Vector3 position = new Position(posX, posY).ConvertToVec3();
             position.z = 10;
 
-            GameObject gamePiecePrefab = (game.gameState.IsPlayerOneTurn == game.isCurrentPlayer_PlayerOne) 
-                ? playerGamePiecePrefab : opponentGamePiecePrefab;
+            GameObject gamePiecePrefab;
+            if (player == PlayerEnum.ONE && game.isCurrentPlayer_PlayerOne)
+            {
+                gamePiecePrefab = playerGamePiecePrefab;
+            }
+            else 
+            {
+                gamePiecePrefab = opponentGamePiecePrefab;
+            }
 
             GameObject go = Instantiate(gamePiecePrefab);
             go.SetActive(true);
