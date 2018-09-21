@@ -20,6 +20,9 @@ namespace Fourzy
         private BoxCollider2D cellsArea;
         private Transform cachedTransform;
 
+        private Vector3 topLeft;
+        private Vector3 step;
+
         void Awake () 
         {
             tokens = new GameObject[numRows, numColumns];
@@ -51,14 +54,33 @@ namespace Fourzy
             float left = boxCollider.offset.x - (boxCollider.size.x / 2f);
             float right = boxCollider.offset.x + (boxCollider.size.x / 2f);
 
-            Vector3 topLeft = cachedTransform.TransformPoint(new Vector3(left, top, 0f));
+            topLeft = cachedTransform.TransformPoint(new Vector3(left, top, 0f));
             Vector3 btmRight = cachedTransform.TransformPoint(new Vector3(right, btm, 0f));
 
             float stepX = (btmRight.x - topLeft.x) / Constants.numColumns;
             float stepY = (topLeft.y - btmRight.y) / Constants.numRows;
 
-            Position.topLeft = topLeft;
-            Position.step = new Vector3(stepX, stepY);
+            step = new Vector3(stepX, stepY);
+        }
+
+        public Vector3 PositionToVec3(Position position)
+        {
+            return this.PositionToVec3(position.row, position.column);
+        }
+
+        public Vector3 PositionToVec3(int row, int column)
+        {
+            float posX = topLeft.x + step.x * 0.5f + step.x * column;
+            float posY = topLeft.y - step.y * 0.5f - step.y * row;
+            return new Vector3(posX, posY);
+        }
+
+        public Position Vec3ToPosition(Vector3 position)
+        {
+            int x = Mathf.FloorToInt((position.x - topLeft.x) / step.x);
+            int y = Mathf.FloorToInt(-(position.y - topLeft.y) / step.y);
+
+            return new Position(x, y);
         }
 
         public void SwapPiecePosition(Position oldPos, Position newPos) 
@@ -128,11 +150,6 @@ namespace Fourzy
                 DestroyImmediate(token.gameObject);
             }
 
-            this.Clear();
-        }
-
-        public void Clear() 
-        {
             gamePieces = new GamePiece[numRows, numColumns];
         }
 

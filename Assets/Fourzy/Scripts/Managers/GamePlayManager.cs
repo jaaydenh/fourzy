@@ -377,12 +377,14 @@ namespace Fourzy
             playerGamePiecePrefab = Instantiate(prefab);
             GamePiece gamePiece = playerGamePiecePrefab.GetComponent<GamePiece>();
             gamePiece.SetupPlayer(player, PieceAnimState.ASLEEP);
+            gamePiece.gameBoardView = gameBoardView;
             playerGamePiecePrefab.SetActive(false);
 
             prefab = GameContentManager.Instance.GetGamePiecePrefab(opponentGamePieceId);
             opponentGamePiecePrefab = Instantiate(prefab);
             gamePiece = opponentGamePiecePrefab.GetComponent<GamePiece>();
             gamePiece.SetupPlayer(opponent, PieceAnimState.ASLEEP);
+            gamePiece.gameBoardView = gameBoardView;
             opponentGamePiecePrefab.SetActive(false);
         }
 
@@ -418,41 +420,8 @@ namespace Fourzy
             opponentUIPanel.InitPlayerIcon(opponentGamePiecePrefab);
         }
 
-        public void SetupGame(string title, string subtitle)
-        {
-            SoundManager.instance.Mute(true);
-            if (game.challengeId != null || game.challengeId != "") {
-                challengeIdDebugText.text = "ChallengeId: " + game.challengeId;    
-            } else {
-                challengeIdDebugText.text = "Error: missing challenge id";
-                OnGamePlayMessage("Error: missing challenge id");
-            }
-
-            CreateGamePieceViews();
-            CreateTokenViews();
-
-            DisplayIntroUI(title, subtitle, true);
-
-            SetActionButton();
-
-            ratingDeltaText.text = "0";
-            if (game.isCurrentPlayer_PlayerOne)
-            {
-                ratingDeltaText.text = game.challengerRatingDelta.ToString();
-            }
-            else
-            {
-                ratingDeltaText.text = game.challengedRatingDelta.ToString();
-            }
-        }
-
         public void CreateGamePieceViews()
         {
-            if (game.gameState == null)
-            {
-                return;
-            }
-
             int[,] board = game.gameState.GetPreviousGameBoard();
             gameBoardView.gamePieces = new GamePiece[Constants.numRows, Constants.numColumns];
 
@@ -482,7 +451,7 @@ namespace Fourzy
 
         public void CreateStickyToken(int row, int col) 
         {
-            Vector3 position = new Position(row, col).ConvertToVec3();
+            Vector3 position = gameBoardView.PositionToVec3(row, col);
             GameObject go = Instantiate(stickyToken, position, Quaternion.identity, gameBoardView.tokensRootTransform);
             Destroy(tokenViews[row, col]);
             tokenViews[row, col] = go;
@@ -577,7 +546,7 @@ namespace Fourzy
 
                     if (tokenPrefab) 
                     {
-                        Vector3 position = new Position(col, row).ConvertToVec3();
+                        Vector3 position = gameBoardView.PositionToVec3(row, col);
                         GameObject go = Instantiate(tokenPrefab, position, Quaternion.identity, gameBoardView.tokensRootTransform);
                         if (rotateRight) {
                             go.transform.Rotate(0,0,90);
@@ -817,7 +786,7 @@ namespace Fourzy
         GamePiece SpawnPiece(int posX, int posY, PlayerEnum player, PieceAnimState startingState)
         {
             //Debug.Log("SpawnPiece: x: " + posX + " y: " + posY);
-            Vector3 position = new Position(posX, posY).ConvertToVec3();
+            Vector3 position = gameBoardView.PositionToVec3(posX, posY);
             position.z = 10;
 
             GameObject gamePiecePrefab;
@@ -944,7 +913,7 @@ namespace Fourzy
                 return;
             }
 
-            Position position = Position.Vec3ToPosition(pos);
+            Position position = gameBoardView.Vec3ToPosition(pos);
 
             if (game.gameState.isCurrentPlayerTurn)
             {                

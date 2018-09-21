@@ -17,6 +17,7 @@ namespace Fourzy
         public PlayerEnum player;
         public int column;
         public int row;
+        public GameBoardView gameBoardView;
 
         public bool isMoving;
 
@@ -102,9 +103,9 @@ namespace Fourzy
                     nextPos = j;
                 }
                 View.PutMovementDirection(columnDir, rowDir);
-               
-                Vector3 start = positions[i].ConvertToVec3();
-                Vector3 end = positions[nextPos].ConvertToVec3();
+
+                Vector3 start = gameBoardView.PositionToVec3(positions[i]);
+                Vector3 end = gameBoardView.PositionToVec3(positions[nextPos]);
 
                 float distance = Vector3.Distance(start, end);
 
@@ -168,7 +169,7 @@ namespace Fourzy
 
             for (int i = 0; i < activeTokens.Count; i++)
             {
-                Position piecePos = Position.Vec3ToPosition(transform.position);
+                Position piecePos = gameBoardView.Vec3ToPosition(transform.position);
 
                 //Debug.Log("nextPiecePosition row: " + piecePos.row + " col: " + piecePos.column);
                 if (piecePos.column == activeTokens[i].Column && piecePos.row == activeTokens[i].Row)

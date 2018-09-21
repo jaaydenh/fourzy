@@ -12,12 +12,10 @@ public class CircleProgress : MonoBehaviour
     [SerializeField]
     private Color progressColor = Color.white;
 
-    [Range(0.0f, 1.0f)]
-    [SerializeField]
+    [SerializeField, Range(0.0f, 1.0f)]
     private float currentValue = 0;
 
-    [HideInInspector]
-    [SerializeField]
+    [SerializeField, HideInInspector]
     private Material circleProgressMaterialCopy;
 
     private Coroutine progressCoroutine;
