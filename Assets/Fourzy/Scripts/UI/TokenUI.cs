@@ -5,13 +5,8 @@ namespace Fourzy
 {
     public class TokenUI : MonoBehaviour
     {
-        public int id;
-        public string tokenName;
-        public string description;
-        public string arenaName;
-        public bool isEnabled;
-        public bool isLocked;
-        public bool showBackgroundTile;
+        public TokenData tokenData;
+
         public Text tokenNameText;
         public Image tokenImage;
         public GameObject tileBGImage;
@@ -26,20 +21,23 @@ namespace Fourzy
             btn.onClick.AddListener(OpenTokenPopup);
         }
 
+        public void InitWithTokenData(TokenData token)
+        {
+            this.tokenData = token;
+
+            tokenNameText.text = token.Name;
+            tokenImage.sprite = GameContentManager.Instance.GetTokenSprite(token.ID);
+
+            if (token.showBackgroundTile)
+            {
+                tileBGImage.SetActive(true);
+            }
+        }
+
         public void OpenTokenPopup() 
         {
-            Debug.Log("OpenTokenPopup:tokenName: " + tokenName);
-            tokenPopupUI.Open();
-            tokenPopupUI.tokenName.text = tokenName;
-            tokenPopupUI.tokenArena.text = arenaName;
-            tokenPopupUI.description.text = description;
-            tokenPopupUI.tokenImage.sprite = tokenImage.sprite;
-            if (showBackgroundTile)
-            {
-                tokenPopupUI.tileBGImage.SetActive(true);
-            } else {
-                tokenPopupUI.tileBGImage.SetActive(false);
-            }
+            Debug.Log("OpenTokenPopup:tokenName: " + tokenData.Name);
+            tokenPopupUI.Open(tokenData);
         }
     }
 }

@@ -14,6 +14,9 @@ namespace Fourzy
 
         public GameObject closeButton;
 
+        [SerializeField]
+        private TokenInstructionGameboardManager tokenInstruction;
+
         private GameObject cachedGO;
 
         void Awake()
@@ -22,13 +25,9 @@ namespace Fourzy
             btn.onClick.AddListener(Close);
         }
 
-        public void Open()
-        {
-            gameObject.SetActive(true);
-        }
-
         public void Close()
         {
+            tokenInstruction.Close();
             gameObject.SetActive(false);
         }
 
@@ -51,6 +50,8 @@ namespace Fourzy
 
         public void Open(TokenData tokenData)
         {
+            gameObject.SetActive(true);
+
             Sprite sprite = GameContentManager.Instance.GetTokenSprite(tokenData.ID);
 
             tokenName.text = tokenData.Name;
@@ -59,7 +60,7 @@ namespace Fourzy
             tokenImage.sprite = sprite;
             tileBGImage.SetActive(tokenData.showBackgroundTile);
 
-            gameObject.SetActive(true);
+            tokenInstruction.Init(tokenData.GameBoardInstructionID);
         }
     }
 }

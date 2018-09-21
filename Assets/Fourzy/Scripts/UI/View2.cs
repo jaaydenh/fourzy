@@ -85,17 +85,7 @@ namespace Fourzy
             foreach (var token in tokensData)
             {
                 TokenUI tokenUI = Instantiate(tokenPrefab);
-                tokenUI.id = token.ID;
-                tokenUI.tokenName = token.Name;
-                tokenUI.tokenNameText.text = token.Name;
-                tokenUI.tokenImage.sprite = GameContentManager.Instance.GetTokenSprite(token.ID);
-                tokenUI.showBackgroundTile = token.showBackgroundTile;
-                tokenUI.arenaName = token.Arena;
-                tokenUI.description = token.Description;
-                if (token.showBackgroundTile)
-                {
-                    tokenUI.tileBGImage.SetActive(true);
-                }
+                tokenUI.InitWithTokenData(token);
                 tokenUI.transform.SetParent(tokenGridTransform, false);
             }
         }

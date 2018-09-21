@@ -11,6 +11,9 @@ namespace Fourzy
         private List<GamePiece> gamePiecePrefabs = new List<GamePiece>();
 
         [SerializeField]
+        private List<TokenView> tokenPrefabs = new List<TokenView>();
+
+        [SerializeField]
         private List<Sprite> gamePieceSprites = new List<Sprite>();
 
         [SerializeField]
@@ -19,6 +22,15 @@ namespace Fourzy
         private GamePieceData[] gamePieceData = new GamePieceData[0];
         private TokenData[] tokenData = new TokenData[0];
         private Dictionary<int, TokenData> inGameTokensData = new Dictionary<int, TokenData>();
+        private Dictionary<Token, TokenView> sortedTokenPrefabs = new Dictionary<Token, TokenView>();
+
+        private void Awake()
+        {
+            foreach (TokenView token in tokenPrefabs)
+            {
+                sortedTokenPrefabs[token.tokenType] = token;
+            }
+        }
 
         public void UpdateContentData()
         {
@@ -36,7 +48,7 @@ namespace Fourzy
             {
                 foreach(int tokenType in t.InGameTokenTypes)
                 {
-                    inGameTokensData.Add(tokenType, t);
+                    inGameTokensData[tokenType] = t;
                 }
             }
         }
@@ -81,6 +93,8 @@ namespace Fourzy
             return gamePieceData[gamePieceId].Name;
         }
 
+        static int test = 0;
+
         public GameObject GetGamePiecePrefab(int gamePieceId)
         {
             test = (test + 1) % gamePiecePrefabs.Count;
@@ -97,7 +111,20 @@ namespace Fourzy
 
         }
 
-        static int test = 0;
+        public GameObject GetTokenPrefab(Token tokenType, bool justForDisplaying = false)
+        {
+            TokenView tokenView;
+            sortedTokenPrefabs.TryGetValue(tokenType, out tokenView);
+            if (tokenView)
+            {
+                tokenView.justDisplaying = justForDisplaying;
+                return tokenView.gameObject;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
 

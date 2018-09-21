@@ -24,7 +24,6 @@ namespace Fourzy {
             this.isDestroyed = false;
             this.animationState = PieceAnimState.NONE;
             this.friction = 0.0f;
-            var game = GameManager.instance.activeGame;
 
             if (momentum == 0) 
             {

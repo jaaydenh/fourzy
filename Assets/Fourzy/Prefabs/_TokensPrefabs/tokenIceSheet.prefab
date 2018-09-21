@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4234717449557288}
   - component: {fileID: 212528224736824704}
   - component: {fileID: 61881333511036468}
+  - component: {fileID: 114147369826523774}
   m_Layer: 5
   m_Name: tokenIceSheet
   m_TagString: Token
@@ -66,6 +67,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.28, y: 1.28}
   m_EdgeRadius: 0
+--- !u!114 &114147369826523774
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1419971408396618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e25e70828c5a84aaca65935b760e06e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tokenType: 8
+  justDisplaying: 0
 --- !u!212 &212528224736824704
 SpriteRenderer:
   m_ObjectHideFlags: 1

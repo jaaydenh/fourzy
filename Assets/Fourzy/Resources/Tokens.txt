@@ -7,7 +7,8 @@
             "Description": "When a piece enters a space with an Arrow, it continue in the direction of the Arrow.",
             "Enabled": true,
             "showBackgroundTile": true,
-            "InGameTokenTypes" : [1, 2, 3, 4]
+            "InGameTokenTypes" : [1, 2, 3, 4],
+            "GameBoardInstructionID" : "200"
         },
         {
             "ID": "1",
@@ -16,7 +17,8 @@
             "Description": "A piece will stop when entering a Sticky. A piece already on a Sticky can be pushed off a sticky by another piece.",
             "Enabled": true,
             "showBackgroundTile": false,
-            "InGameTokenTypes" : [5]
+            "InGameTokenTypes" : [5],
+            "GameBoardInstructionID" : "201"
         },
         {
             "ID": "2",
@@ -25,7 +27,8 @@
             "Description": "Blocker. No Piece may pass through or enter this space.",
             "Enabled": true,
             "showBackgroundTile": false,
-            "InGameTokenTypes" : [6]
+            "InGameTokenTypes" : [6],
+            "GameBoardInstructionID" : "202"
         },
         {
             "ID": "3",
@@ -34,7 +37,8 @@
             "Description": "A piece can pass through a Ghost but cannot stop on a Ghost.",
             "Enabled": true,
             "showBackgroundTile": true,
-            "InGameTokenTypes" : [7]
+            "InGameTokenTypes" : [7],
+            "GameBoardInstructionID" : "203"
         },
         {
             "ID": "4",
@@ -43,7 +47,8 @@
             "Description": "Pieces move normally over an Ice Sheet. A piece stopped on an Ice Sheet can be pushed and the new piece will take its place.",
             "Enabled": true,
             "showBackgroundTile": false,
-            "InGameTokenTypes" : [8]
+            "InGameTokenTypes" : [8],
+            "GameBoardInstructionID" : "204"
         },
         {
             "ID": "5",
@@ -52,7 +57,8 @@
             "Description": "A piece entering a Pit is removed from the game and the pit then disappears.",
             "Enabled": true,
             "showBackgroundTile": true,
-            "InGameTokenTypes" : [9]
+            "InGameTokenTypes" : [9],
+            "GameBoardInstructionID" : "205"
         },
         {
             "ID": "6",
@@ -61,7 +67,8 @@
             "Description": "Sand creates friction. A piece can pass through the 1st Sand but will stop on the 2nd Sand it reaches. Another piece can push a piece out of Sand and take it's place.",
             "Enabled": true,
             "showBackgroundTile": false,
-            "InGameTokenTypes" : [18]
+            "InGameTokenTypes" : [18],
+            "GameBoardInstructionID" : "206"
         },
         {
             "ID": "7",
@@ -70,7 +77,8 @@
             "Description": "Can be either Left or Right. Will cause a piece to always turn either right or left when passing through this space.",
             "Enabled": true,
             "showBackgroundTile": true,
-            "InGameTokenTypes" : [10, 11]
+            "InGameTokenTypes" : [10, 11],
+            "GameBoardInstructionID" : "207"
         },
         {
             "ID": "8",
@@ -79,7 +87,8 @@
             "Description": "Fruit are dropped from Fruit Trees. When a piece passes over a Fruit, the Fruit is squished and turns into a Sticky.",
             "Enabled": true,
             "showBackgroundTile": false,
-            "InGameTokenTypes" : [14]
+            "InGameTokenTypes" : [14],
+            "GameBoardInstructionID" : "208"
         },
         {
             "ID": "9",
@@ -88,7 +97,8 @@
             "Description": "Blocker. Every time a piece is stopped by a Fruit Tree, a new Fruit drops from the Fruit Tree and appears randomly on the board.",
             "Enabled": true,
             "showBackgroundTile": false,
-            "InGameTokenTypes" : [15]
+            "InGameTokenTypes" : [15],
+            "GameBoardInstructionID" : "209"
         },
         {
             "ID": "10",
@@ -97,7 +107,8 @@
             "Description": "Spiders can be squished and removed if a piece passes over them. A Spider will travel 1 space each turn towards the nearest Web. When a spider reaches a Web, any pieces in the Web will be removed from the game and the Spider will disappear.",
             "Enabled": true,
             "showBackgroundTile": false,
-            "InGameTokenTypes" : [17]
+            "InGameTokenTypes" : [17],
+            "GameBoardInstructionID" : "210"
         },
         {
             "ID": "11",
@@ -106,7 +117,8 @@
             "Description": "A piece entering a Web will stop and a Spider will appear randomly on the board unless a Spider is already on the board. Another piece can push a piece out of a Web and takes it's place.",
             "Enabled": true,
             "showBackgroundTile": false,
-            "InGameTokenTypes" : [16]
+            "InGameTokenTypes" : [16],
+            "GameBoardInstructionID" : "211"
         },
         {
             "ID": "12",
@@ -115,7 +127,8 @@
             "Description": "A piece entering a Water will stop. A piece can be pushed out of Water but will only move 1 space.",
             "Enabled": true,
             "showBackgroundTile": false,
-            "InGameTokenTypes" : [19]
+            "InGameTokenTypes" : [19],
+            "GameBoardInstructionID" : "212"
         },
         {
             "ID": "13",
@@ -124,7 +137,8 @@
             "Description": "A piece moving into a Bumper will bounce and move in the opposite direction.",
             "Enabled": true,
             "showBackgroundTile": false,
-            "InGameTokenTypes" : [12]
+            "InGameTokenTypes" : [12],
+            "GameBoardInstructionID" : "213"
         },
         {
             "ID": "14",
@@ -132,7 +146,8 @@
             "Arena": "Island",
             "Description": "When a piece enters a Bomb, the Bomb will explode and remove that piece and any pieces in the 8 surrounding spaces from the game.",
             "Enabled": true,
-            "showBackgroundTile": false
+            "showBackgroundTile": false,
+            "GameBoardInstructionID" : "214"
         },
         {
             "ID": "15",
@@ -140,7 +155,8 @@
             "Arena": "Island",
             "Description": "A piece passing over a Lava space has a chance of burning. If a piece ends it move on Lava, there is a 100% chance it start burning. After 3 moves, a piece on fire will burn completely and be removed from the game.",
             "Enabled": true,
-            "showBackgroundTile": false
+            "showBackgroundTile": false,
+            "GameBoardInstructionID" : "215"
         },
         {
             "ID": "16",
@@ -148,7 +164,8 @@
             "Arena": "Forest",
             "Description": "A piece will stop on a Puddle. The Puddle then disappears from the game.",
             "Enabled": true,
-            "showBackgroundTile": false
+            "showBackgroundTile": false,
+            "GameBoardInstructionID" : "216"
         },
         {
             "ID": "17",
@@ -156,7 +173,8 @@
             "Arena": "Island",
             "Description": "Blocker. No Piece may pass through or enter this space.",
             "Enabled": true,
-            "showBackgroundTile": false
+            "showBackgroundTile": false,
+            "GameBoardInstructionID" : "217"
         }
     ]
 }

@@ -22,7 +22,6 @@ namespace Fourzy
         public bool isMoving;
 
         private CircleCollider2D gamePieceCollider;
-
         private Transform cachedTransform;
 
 
@@ -62,27 +61,16 @@ namespace Fourzy
                 throw new UnityException("Method: MoveGamePiece - movingPieces is empty");
             }
 
-            GamePlayManager.Instance.numPiecesAnimating++;
+            gameBoardView.NumPiecesAnimating++;
 
             var movingGamePiece = movingPieces[0];
             movingPieces.RemoveAt(0);
 
             List<Position> positions = movingGamePiece.positions;
+            Position endPosition = positions[positions.Count - 1];
+            GamePiece nextPiece = gameBoardView.GamePieceAt(endPosition);
 
-            Position endPosition = movingGamePiece.positions[movingGamePiece.positions.Count - 1];
-
-            GamePiece nextPiece = GamePlayManager.Instance.gameBoardView.gamePieces[endPosition.row, endPosition.column];
-
-            if (movingGamePiece.isDestroyed)
-            {
-                // pieceView.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                // Lean.LeanPool.Despawn(pieceView);
-            }
-            else
-            {
-                // Update the state of the game board views
-                GamePlayManager.Instance.gameBoardView.gamePieces[endPosition.row, endPosition.column] = this;
-            }
+            gameBoardView.gamePieces[endPosition.row, endPosition.column] = this;
 
             isMoving = true;
 
@@ -107,7 +95,7 @@ namespace Fourzy
                 Vector3 start = gameBoardView.PositionToVec3(positions[i]);
                 Vector3 end = gameBoardView.PositionToVec3(positions[nextPos]);
 
-                float distance = Vector3.Distance(start, end);
+                float distance = Position.Distance(positions[i], positions[nextPos]);
 
                 for (float t = 0; t < 1; t += Time.deltaTime * Constants.moveSpeed / distance)
                 {
@@ -140,7 +128,7 @@ namespace Fourzy
 
             View.SetupZOrder(5 + row * 2);
 
-            GamePlayManager.Instance.numPiecesAnimating--;
+            gameBoardView.NumPiecesAnimating--;
 
             yield return true;
         }
@@ -171,17 +159,15 @@ namespace Fourzy
             {
                 Position piecePos = gameBoardView.Vec3ToPosition(transform.position);
 
-                //Debug.Log("nextPiecePosition row: " + piecePos.row + " col: " + piecePos.column);
                 if (piecePos.column == activeTokens[i].Column && piecePos.row == activeTokens[i].Row)
                 {
-                    Debug.Log("PIECE IS IN TOKENS POSITION: row: " + piecePos.row + " col: " + piecePos.column + " type: " + activeTokens[i].tokenType);
                     if (activeTokens[i].tokenType == Token.FRUIT)
                     {
-                        GamePlayManager.Instance.CreateStickyToken(activeTokens[i].Row, activeTokens[i].Column);
+                        gameBoardView.CreateToken(activeTokens[i].Row, activeTokens[i].Column, Token.STICKY);
                     }
                     else if (activeTokens[i].tokenType == Token.PIT)
                     {
-                        SpriteRenderer sr = GamePlayManager.Instance.tokenViews[activeTokens[i].Row, activeTokens[i].Column].GetComponent<SpriteRenderer>();
+                        SpriteRenderer sr = gameBoardView.TokenAt(activeTokens[i].Row, activeTokens[i].Column).GetComponent<SpriteRenderer>();
                         sr.DOFade(0f, 1.5f);
 
                         this.View.FadeAfterPit();

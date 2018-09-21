@@ -12,5 +12,6 @@ namespace Fourzy
         public bool Enabled;
         public bool showBackgroundTile;
         public List<int> InGameTokenTypes;
+        public string GameBoardInstructionID;
     }
 }

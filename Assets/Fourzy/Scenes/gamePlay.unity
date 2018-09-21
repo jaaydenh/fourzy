@@ -696,13 +696,13 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 823
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
-  m_AllowMSAA: 1
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -837,37 +837,6 @@ MonoBehaviour:
   challengeIdDebugText: {fileID: 1633794806}
   timerText: {fileID: 1398324021}
   playerTimer: {fileID: 124707853}
-  upArrowToken: {fileID: 1837627827914946, guid: 160f51c71faf5416bbe70c6d4ca12a68,
-    type: 2}
-  downArrowToken: {fileID: 1623667900078134, guid: b50adf3cc91ed4ee590fd6bcc3fa79b9,
-    type: 2}
-  leftArrowToken: {fileID: 1627724474275400, guid: d0d8f6d161f314d7ebd0abe80f0c81ea,
-    type: 2}
-  rightArrowToken: {fileID: 1923614959021622, guid: 33d3d900faebb4be681b73d3f70b7700,
-    type: 2}
-  stickyToken: {fileID: 1660667990289766, guid: 6b7f67346b9e845aca14c64f8e4ca2a3,
-    type: 2}
-  blockerToken: {fileID: 1187047679181528, guid: 0d7e3c7375ded49a2bc99d0e0d3584aa,
-    type: 2}
-  ghostToken: {fileID: 1727477774046648, guid: 6e4f94269d5d54d82b69d83f7028a2e5, type: 2}
-  iceSheetToken: {fileID: 1419971408396618, guid: 3499a5e46e3be49a6a1cc9f3657fbff2,
-    type: 2}
-  pitToken: {fileID: 1110577959621164, guid: a8e6195c9f07043dba35b16ee6e88c8d, type: 2}
-  ninetyRightArrowToken: {fileID: 1553599341637598, guid: ba678afbd416442d289f06b0d0ef4f89,
-    type: 2}
-  ninetyLeftArrowToken: {fileID: 1467034045519020, guid: 9f8d0f5a262fb4e459b04790f5461829,
-    type: 2}
-  bumperToken: {fileID: 1581787741766162, guid: dba4630cc9752451bb282ba3125aa030,
-    type: 2}
-  coinToken: {fileID: 1629414548793332, guid: aa92dd3c5d20a41b1ad805cb1fccb30d, type: 2}
-  fruitToken: {fileID: 1011114628459856, guid: 22feb1168e98f4a4ca43fe3e586e82a2, type: 2}
-  fruitTreeToken: {fileID: 1578567910230490, guid: 399ed13c770784d6f9dc78a54823d6ae,
-    type: 2}
-  webToken: {fileID: 1671885646220764, guid: 245c473108a8543699540a258eb529c4, type: 2}
-  spiderToken: {fileID: 1329703408132306, guid: d481144ced4994d5096bb43cd2d58f83,
-    type: 2}
-  sandToken: {fileID: 1911936378125422, guid: 40d8e7ce660604805853c4e89a856058, type: 2}
-  waterToken: {fileID: 1264728522864378, guid: ed2219bcab6984100806f0122971febe, type: 2}
   clipMove: {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
   clipWin: {fileID: 8300000, guid: 30654a4dce318459486d329481c93747, type: 3}
   bluePlayerColor: {r: 0, g: 0.6901961, b: 1, a: 1}

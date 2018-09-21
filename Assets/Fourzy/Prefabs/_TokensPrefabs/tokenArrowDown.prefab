@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212195942844289088}
   - component: {fileID: 61278958040703926}
   - component: {fileID: 114287369474813196}
+  - component: {fileID: 114662430344853364}
   m_Layer: 8
   m_Name: tokenArrowDown
   m_TagString: Token
@@ -79,6 +80,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundEffect: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
+--- !u!114 &114662430344853364
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1623667900078134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e25e70828c5a84aaca65935b760e06e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tokenType: 2
+  justDisplaying: 0
 --- !u!212 &212195942844289088
 SpriteRenderer:
   m_ObjectHideFlags: 1

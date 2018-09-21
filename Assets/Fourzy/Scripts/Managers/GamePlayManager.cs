@@ -13,14 +13,13 @@ using TMPro;
 namespace Fourzy
 {
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene, true)]
-    public class GamePlayManager : UnitySingleton<GamePlayManager> {
-
+    public class GamePlayManager : UnitySingleton<GamePlayManager> 
+    {
         public Game game;
-        private bool isNewGame;
+
         private bool isLoading = false;
         public bool isLoadingUI = false;
         private bool isDropping = false;
-        public int numPiecesAnimating = 0;
         public bool disableInput = false;
         private bool replayedLastMove = false;
         private float gameScreenFadeInTime = 0.7f;
@@ -37,7 +36,6 @@ namespace Fourzy
         public CanvasGroup fadeUICanvasGroup;
         public Rewards rewardScreen;
         public GameBoardView gameBoardView;
-        public GameObject[,] tokenViews;
         public PlayerUIPanel playerUIPanel;
         public PlayerUIPanel opponentUIPanel;
         public WinningParticleGenerator winningParticleGenerator;
@@ -59,29 +57,6 @@ namespace Fourzy
         public Text challengeIdDebugText;
         public TextMeshProUGUI timerText;
         public GameObject playerTimer;
-
-
-        // ---------- Token Views ----------
-        public GameObject upArrowToken;
-        public GameObject downArrowToken;
-        public GameObject leftArrowToken;
-        public GameObject rightArrowToken;
-        public GameObject stickyToken;
-        public GameObject blockerToken;
-        public GameObject ghostToken;
-        public GameObject iceSheetToken;
-        public GameObject pitToken;
-        public GameObject ninetyRightArrowToken;
-        public GameObject ninetyLeftArrowToken;
-        public GameObject bumperToken;
-        public GameObject coinToken;
-        public GameObject fruitToken;
-        public GameObject fruitTreeToken;
-        public GameObject webToken;
-        public GameObject spiderToken;
-        public GameObject sandToken;
-        public GameObject waterToken;
-        // ---------- End Token Views ----------
 
         public delegate void Resign(string challengeInstanceId);
         public static event Resign OnResign;
@@ -145,8 +120,6 @@ namespace Fourzy
 
             playerMoveCountDown_LastTime = 30000;
 
-            //StartCoroutine(WaitToEnableInput());
-
             playerUIPanel.StopPlayerTurnAnimation();
             opponentUIPanel.StopPlayerTurnAnimation();
 
@@ -156,6 +129,7 @@ namespace Fourzy
             yield return StartCoroutine(ShowPlayTurnWithDelay(0.3f));
 
             StartCoroutine(RandomGamePiecesBlinkingRoutine());
+
             UserInputHandler.inputEnabled = true;
         }
 
@@ -231,7 +205,7 @@ namespace Fourzy
             rewardsButton.onClick.AddListener(RewardsButtonOnClick);
         }
 
-        public void ResetUI()
+        private void ResetUI()
         {
             gameInfo.Close();
             rematchButton.gameObject.SetActive(false);
@@ -285,10 +259,14 @@ namespace Fourzy
             DisplayIntroUI(title, subtitle, true);
         }
 
-        public void DisplayIntroUI(string title, string subtitle, bool fade) {
-            if (title != null && title != "" && subtitle != null && subtitle != "") {
-                gameIntroUI.Open(title, subtitle, fade);
+        private void DisplayIntroUI(string title, string subtitle, bool fade) 
+        {
+            if(string.IsNullOrEmpty(title) || string.IsNullOrEmpty(subtitle))
+            {
+                return;
             }
+
+            gameIntroUI.Open(title, subtitle, fade);
         }
 
         private IEnumerator ShowTokenInstructionPopupRoutine()
@@ -388,7 +366,7 @@ namespace Fourzy
             opponentGamePiecePrefab.SetActive(false);
         }
 
-        public void InitPlayerUI()
+        private void InitPlayerUI()
         {
             Debug.Log("game.gameState.GameType: " + game.gameState.GameType);
             if (game.gameState.GameType == GameType.REALTIME 
@@ -420,7 +398,7 @@ namespace Fourzy
             opponentUIPanel.InitPlayerIcon(opponentGamePiecePrefab);
         }
 
-        public void CreateGamePieceViews()
+        private void CreateGamePieceViews()
         {
             int[,] board = game.gameState.GetPreviousGameBoard();
             gameBoardView.gamePieces = new GamePiece[Constants.numRows, Constants.numColumns];
@@ -430,37 +408,29 @@ namespace Fourzy
                 for (int col = 0; col < Constants.numColumns; col++)
                 {
                     int piece = board[row, col];
+                    if (piece == (int)Piece.EMPTY)
+                    {
+                        continue;
+                    }
 
-                    if (piece == (int)Piece.BLUE)
-                    {
-                        GamePiece pieceObject = SpawnPiece(col, row, PlayerEnum.ONE, PieceAnimState.ASLEEP);
-                        pieceObject.player = PlayerEnum.ONE;
-                        gameBoardView.gamePieces[row, col] = pieceObject;
-                        pieceObject.View.SetAlpha(0.0f);
-                    }
-                    else if (piece == (int)Piece.RED)
-                    {
-                        GamePiece pieceObject = SpawnPiece(col, row, PlayerEnum.TWO, PieceAnimState.ASLEEP);
-                        pieceObject.player = PlayerEnum.TWO;
-                        gameBoardView.gamePieces[row, col] = pieceObject;
-                        pieceObject.View.SetAlpha(0.0f);
-                    }
+                    PlayerEnum player = (piece == (int)Piece.BLUE) ? PlayerEnum.ONE : PlayerEnum.TWO;
+
+                    GamePiece pieceObject = SpawnPiece(col, row, player);
+                    pieceObject.player = player;
+                    gameBoardView.gamePieces[row, col] = pieceObject;
+                    pieceObject.View.SetAlpha(0.0f);
                 }
             }
         }
 
         public void CreateStickyToken(int row, int col) 
         {
-            Vector3 position = gameBoardView.PositionToVec3(row, col);
-            GameObject go = Instantiate(stickyToken, position, Quaternion.identity, gameBoardView.tokensRootTransform);
-            Destroy(tokenViews[row, col]);
-            tokenViews[row, col] = go;
+            GameObject stickyToken = GameContentManager.Instance.GetTokenPrefab(Token.STICKY);
+            gameBoardView.CreateToken(row, col, stickyToken);
         }
 
-        public void CreateTokenViews()
+        private void CreateTokenViews()
         {
-            tokenViews = new GameObject[Constants.numRows, Constants.numColumns];
-
             TokenBoard previousTokenBoard = game.gameState.PreviousTokenBoard;
             IToken[,] previousTokenBoardTokens = previousTokenBoard.tokens;
             
@@ -473,90 +443,14 @@ namespace Fourzy
                         continue;
                     }
 
-                    bool rotateRight = false;
-                    bool rotateLeft = false;
-
-                    GameObject tokenPrefab = null;
                     Token token = previousTokenBoardTokens[row, col].tokenType;
 
-                    switch (token)
-                    {
-                        case Token.UP_ARROW:
-                            tokenPrefab = upArrowToken;
-                            break;
-                        case Token.DOWN_ARROW:
-                            tokenPrefab = downArrowToken;
-                            break;
-                        case Token.LEFT_ARROW:
-                            rotateLeft = true;
-                            tokenPrefab = leftArrowToken;
-                            break;
-                        case Token.RIGHT_ARROW:
-                            rotateRight = true;
-                            tokenPrefab = rightArrowToken;
-                            break;
-                        case Token.STICKY:
-                            tokenPrefab = stickyToken;
-                            break;
-                        case Token.BLOCKER:
-                            tokenPrefab = blockerToken;
-                            break;
-                        case Token.GHOST:
-                            tokenPrefab = ghostToken;
-                            break;
-                        case Token.ICE_SHEET:
-                            tokenPrefab = iceSheetToken;
-                            break;
-                        case Token.PIT:
-                            tokenPrefab = pitToken;
-                            break;
-                        case Token.NINETY_RIGHT_ARROW:
-                            tokenPrefab = ninetyRightArrowToken;
-                            break;
-                        case Token.NINETY_LEFT_ARROW:
-                            tokenPrefab = ninetyLeftArrowToken;
-                            break;
-                        case Token.BUMPER:
-                            tokenPrefab = bumperToken;
-                            break;
-                        case Token.COIN:
-                            tokenPrefab = coinToken;
-                            break;
-                        case Token.FRUIT:
-                            tokenPrefab = fruitToken;
-                            break;
-                        case Token.FRUIT_TREE:
-                            tokenPrefab = fruitTreeToken;
-                            break;
-                        case Token.WEB:
-                            tokenPrefab = webToken;
-                            break;
-                        case Token.SPIDER:
-                            tokenPrefab = spiderToken;
-                            break;
-                        case Token.SAND:
-                            tokenPrefab = sandToken;
-                            break;
-                        case Token.WATER:
-                            tokenPrefab = waterToken;
-                            break;
-                        default:
-                            break;
-                    }
+                    GameObject tokenPrefab = GameContentManager.Instance.GetTokenPrefab(token);
 
                     if (tokenPrefab) 
                     {
-                        Vector3 position = gameBoardView.PositionToVec3(row, col);
-                        GameObject go = Instantiate(tokenPrefab, position, Quaternion.identity, gameBoardView.tokensRootTransform);
-                        if (rotateRight) {
-                            go.transform.Rotate(0,0,90);
-                        }
-                        if (rotateLeft) {
-                            go.transform.Rotate(0, 0, -90);
-                        }
-                        go.GetComponent<SpriteRenderer>().SetAlpha(0.0f);
-                        tokenViews[row, col] = go;
-                        // go.transform.localScale = new Vector2(rectHeight/8, rectHeight/8);
+                        gameBoardView.CreateToken(row, col, tokenPrefab);
+                        gameBoardView.TokenAt(row, col).GetComponent<SpriteRenderer>().SetAlpha(0.0f);
                     }
                 }
             }
@@ -783,12 +677,8 @@ namespace Fourzy
         /// Spawns a gamepiece at the given column and row
         /// </summary>
         /// <returns>The piece.</returns>
-        GamePiece SpawnPiece(int posX, int posY, PlayerEnum player, PieceAnimState startingState)
+        GamePiece SpawnPiece(int col, int row, PlayerEnum player)
         {
-            //Debug.Log("SpawnPiece: x: " + posX + " y: " + posY);
-            Vector3 position = gameBoardView.PositionToVec3(posX, posY);
-            position.z = 10;
-
             GameObject gamePiecePrefab;
             if (player == PlayerEnum.ONE && game.isCurrentPlayer_PlayerOne)
             {
@@ -799,16 +689,7 @@ namespace Fourzy
                 gamePiecePrefab = opponentGamePiecePrefab;
             }
 
-            GameObject go = Instantiate(gamePiecePrefab);
-            go.SetActive(true);
-            go.transform.parent = gameBoardView.gamePiecesRootTransform;
-            go.transform.position = position;
-            go.transform.localScale = Vector3.one;
-
-            GamePiece gamePiece = go.GetComponent<GamePiece>();
-            gamePiece.SetupPlayer(player, startingState);
-
-            return gamePiece;
+            return gameBoardView.SpawnPiece(row, col, gamePiecePrefab);
         }
 
         private IEnumerator ShowPlayTurnWithDelay(float delay)
@@ -893,21 +774,15 @@ namespace Fourzy
             isLoading = false;
         }
 
-        IEnumerator WaitToEnableInput()
-        {
-            yield return new WaitForSeconds(1.5f);
-            UserInputHandler.inputEnabled = true;
-        }
-
         private void ProcessPlayerInput(Vector3 mousePosition)
         {
-            Debug.Log("Gamemanager: disableInput: " + disableInput + ", isLoading: " + isLoading + ", isLoadingUI: " + isLoadingUI + ",isDropping: " + isDropping + ", numPiecesAnimating: " + numPiecesAnimating + ", isGameOver: "+ game.gameState.IsGameOver);
+            Debug.Log("Gamemanager: disableInput: " + disableInput + ", isLoading: " + isLoading + ", isLoadingUI: " + isLoadingUI + ",isDropping: " + isDropping + ", numPiecesAnimating: " + gameBoardView.NumPiecesAnimating + ", isGameOver: "+ game.gameState.IsGameOver);
 
             Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
             //GameObject particle = SpawnParticle();
             //particle.transform.position = new Vector3(Mathf.RoundToInt(pos.x), Mathf.CeilToInt((pos.y * -1 - .3f))*-1);
 
-            if (disableInput || isLoading || isLoadingUI || isDropping || game.gameState.IsGameOver || numPiecesAnimating > 0)
+            if (disableInput || isLoading || isLoadingUI || isDropping || game.gameState.IsGameOver || gameBoardView.NumPiecesAnimating > 0)
             {
                 Debug.Log("returned in process player input");
                 return;
@@ -1057,7 +932,7 @@ namespace Fourzy
                     if (game.gameState.GameType == GameType.PUZZLE && !game.gameState.IsGameOver && !game.gameState.IsPuzzleChallengeCompleted) {
 
                         // yield return new WaitWhile(() => isDropping == true);
-                        while (isDropping && numPiecesAnimating > 0)
+                        while (isDropping && gameBoardView.NumPiecesAnimating > 0)
                             yield return null;
 
                         isDropping = true;
@@ -1092,7 +967,7 @@ namespace Fourzy
 
             MoveGamePieceViews(move, movingPieces, activeTokens);
 
-            yield return new WaitWhile(() => numPiecesAnimating > 0);
+            yield return new WaitWhile(() => gameBoardView.NumPiecesAnimating > 0);
 
             if (!replayMove || game.gameState.IsGameOver || game.gameState.IsPuzzleChallengeCompleted)
             {
@@ -1185,22 +1060,12 @@ namespace Fourzy
             }
         }
 
-
-
         private void MoveGamePieceViews(Move move, List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
         {
-            // animatingGamePieces = true;
-
-            // Create Game Piece View
-            GamePiece gamePiece = SpawnPiece(move.position.column, move.position.row, move.player, PieceAnimState.MOVING);
+            GamePiece gamePiece = SpawnPiece(move.position.column, move.position.row, move.player);
             gamePiece.player = move.player;
             gamePiece.column = move.position.column;
             gamePiece.row = move.position.row;
-
-            //var x = new List<MovingGamePiece>(0);
-            //CoroutineWithData cd = new CoroutineWithData(this, gamePiece.MoveGamePiece(x));
-            //yield return cd.coroutine;
-            //Debug.Log("MoveGamePiece success: " + cd.result.ToString());
 
             gamePiece.Move(movingPieces, activeTokens);
 

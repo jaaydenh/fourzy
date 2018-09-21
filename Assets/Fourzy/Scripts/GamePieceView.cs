@@ -90,6 +90,14 @@ namespace Fourzy
             sprites = this.GetComponentsInChildren<SpriteRenderer>(true);
         }
 
+        public void SetSortingLayer(int layer)
+        {
+            foreach (SpriteRenderer s in sprites)
+            {
+                s.sortingLayerID = layer;
+            }
+        }
+
         public void SetupHSVColor(Vector4 vec)
         {
             bodyMaterial.SetVector(h_HSVAAdjust, vec);

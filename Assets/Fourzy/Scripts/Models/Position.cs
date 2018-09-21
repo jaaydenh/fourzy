@@ -30,5 +30,10 @@
         {
             return (column == Constants.numColumns - 1 && row >= 0 && row < Constants.numRows);
         }
+
+        public static float Distance(Position one, Position two)
+        {
+            return UnityEngine.Mathf.Sqrt((two.row - one.row) * (two.row - one.row) + (two.column - one.column) * (two.column - one.column));
+        }
     }
 }

@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212260782764476244}
   - component: {fileID: 61989920613184464}
   - component: {fileID: 114162294597613858}
+  - component: {fileID: 114928738167902642}
   m_Layer: 8
   m_Name: tokenArrowUp
   m_TagString: Token
@@ -35,13 +36,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1837627827914946}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &61989920613184464
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -79,6 +80,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundEffect: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
+--- !u!114 &114928738167902642
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1837627827914946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e25e70828c5a84aaca65935b760e06e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tokenType: 1
+  displayForUI: 0
 --- !u!212 &212260782764476244
 SpriteRenderer:
   m_ObjectHideFlags: 1
