@@ -67,6 +67,18 @@ namespace Fourzy
                 });
         }
 
+        public void UpdatePlayerDisplayName(string name) {
+            new ChangeUserDetailsRequest()
+                .SetDisplayName(name)
+                .Send((response) => {
+                    if (response.HasErrors) {
+                        Debug.Log("Error updating player display name: "+ response.Errors.ToString());
+                    } else {
+                        Debug.Log("Successfully updated player display name");
+                    }
+                });
+        }
+
         private void SetPlayerGamePiece(string id)
         {
             //Debug.Log("SetPlayerGamePiece: gamepieceid: " + id);
