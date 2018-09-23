@@ -390,21 +390,30 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: 0.11418475
+      outSlope: 0.11418475
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.10171707
+    - serializedVersion: 3
+      time: 0.62797946
+      value: 0.44493657
+      inSlope: 1.206413
+      outSlope: 1.206413
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: 2.210747
+      outSlope: 2.210747
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.089822605
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -412,6 +421,7 @@ MonoBehaviour:
   player: 0
   column: 0
   row: 0
+  gameBoardView: {fileID: 0}
   isMoving: 0
 --- !u!114 &114526981300818094
 MonoBehaviour:

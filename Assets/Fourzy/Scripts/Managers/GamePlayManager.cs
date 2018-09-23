@@ -1074,7 +1074,7 @@ namespace Fourzy
 
         private IEnumerator RandomGamePiecesBlinkingRoutine()
         {
-            float blinkTime = 3.0f;
+            float blinkTime = 2.5f;
             float t = 0.0f;
             while (true)
             {
