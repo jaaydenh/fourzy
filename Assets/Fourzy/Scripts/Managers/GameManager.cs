@@ -23,7 +23,6 @@ namespace Fourzy
         // public InfoBanner InfoBanner;
         public Onboarding onboardingScreen;
         public Badge homeScreenPlayBadge;
-        public TokenPopupUI tokenPopupUI;
         public GameObject headerUI;
         public GameObject infoBannerPrefab;
 

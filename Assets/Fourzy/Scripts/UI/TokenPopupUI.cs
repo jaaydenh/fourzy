@@ -4,8 +4,10 @@ using TMPro;
 
 namespace Fourzy
 {
-    public class TokenPopupUI : MonoBehaviour
+    public class TokenPopupUI : MonoBehaviour, IPopup
     {
+        public TokenData tokenData;
+
         public Text tokenName;
         public Text tokenArena;
         public TextMeshProUGUI description;
@@ -29,6 +31,8 @@ namespace Fourzy
         {
             tokenInstruction.Close();
             gameObject.SetActive(false);
+
+            PopupManager.Instance.ClosePopup();
         }
 
         public bool IsOpen()
@@ -36,19 +40,7 @@ namespace Fourzy
             return gameObject.activeSelf;
         }
 
-        public void Open(int tokenId)
-        {
-            TokenData tokenData = GameContentManager.Instance.GetTokenData(tokenId);
-            Open(tokenData);
-        }
-
-        public void Open(Token tokenType)
-        {
-            TokenData tokenData = GameContentManager.Instance.GetTokenDataWithType(tokenType);
-            Open(tokenData);
-        }
-
-        public void Open(TokenData tokenData)
+        void IPopup.Open()
         {
             gameObject.SetActive(true);
 

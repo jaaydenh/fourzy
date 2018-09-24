@@ -7,8 +7,8 @@ namespace Fourzy
     {
         //Instance
         public static ViewSettings instance;
-        public GameObject resetTutorialButton;
-        public GameObject changeNameButton;
+        public Button resetTutorialButton;
+        public Button changeNameButton;
 
         // Use this for initialization
         void Start()
@@ -16,11 +16,8 @@ namespace Fourzy
             instance = this;
             keepHistory = true;
 
-            Button btn = resetTutorialButton.GetComponent<Button>();
-            btn.onClick.AddListener(ResetTutorial);
-
-            Button changeNamebtn = changeNameButton.GetComponent<Button>();
-            changeNamebtn.onClick.AddListener(ChangeName);
+            resetTutorialButton.onClick.AddListener(ResetTutorial);
+            changeNameButton.onClick.AddListener(ChangeName);
         }
 
         public override void Show()
@@ -40,8 +37,9 @@ namespace Fourzy
             PlayerPrefs.DeleteKey("onboardingStep");
         }
 
-        public void ChangeName() {
-            Debug.Log("Change Name");
+        public void ChangeName() 
+        {
+            PopupManager.Instance.OpenPopup<ChangeNamePopup>();
         }
 
         public void BackButton() 

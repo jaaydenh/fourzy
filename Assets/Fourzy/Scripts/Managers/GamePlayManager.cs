@@ -300,11 +300,13 @@ namespace Fourzy
                 }
             }
 
-            TokenPopupUI popupUI = GameManager.instance.tokenPopupUI;
+            TokenPopupUI popupUI = PopupManager.Instance.GetPopup<TokenPopupUI>();
 
             foreach(TokenData token in tokens)
             {
-                popupUI.Open(token);
+                popupUI.tokenData = token;
+
+                PopupManager.Instance.OpenPopup<TokenPopupUI>();
 
                 yield return new WaitWhile(() => popupUI.IsOpen());
 

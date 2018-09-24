@@ -11,12 +11,9 @@ namespace Fourzy
         public Image tokenImage;
         public GameObject tileBGImage;
         public GameObject selectButton;
-        private TokenPopupUI tokenPopupUI;
 
         void Start()
         {
-            tokenPopupUI = GameManager.instance.tokenPopupUI;
-
             Button btn = selectButton.GetComponent<Button>();
             btn.onClick.AddListener(OpenTokenPopup);
         }
@@ -36,8 +33,8 @@ namespace Fourzy
 
         public void OpenTokenPopup() 
         {
-            Debug.Log("OpenTokenPopup:tokenName: " + tokenData.Name);
-            tokenPopupUI.Open(tokenData);
+            PopupManager.Instance.GetPopup<TokenPopupUI>().tokenData = tokenData;
+            PopupManager.Instance.OpenPopup<TokenPopupUI>();
         }
     }
 }
