@@ -42,10 +42,12 @@ namespace Fourzy
         private IEnumerator StartSpawningParticles()
         {
             float t = 0;
-            float nextExplose = 1.0f;
-            while (true)
+            float totalTime = 0;
+            float nextExplose = 0.0f;
+            while (totalTime < 5)
             {
                 t += Time.deltaTime;
+                totalTime += Time.deltaTime;
                 if (t > nextExplose)
                 {
                     GameObject go = Instantiate(particlePrefab, this.transform);
@@ -57,7 +59,7 @@ namespace Fourzy
 
                     Destroy(go, 6.0f);
 
-                    nextExplose = Random.Range(1.0f, 2.0f);
+                    nextExplose = Random.Range(0.3f, 0.5f);
                     t = 0;
                 }
                 yield return null;

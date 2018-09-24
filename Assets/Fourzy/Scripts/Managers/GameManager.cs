@@ -6,6 +6,7 @@ using GameSparks.Core;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -69,6 +70,8 @@ namespace Fourzy
         void Start()
         {
             GS.GameSparksAvailable += CheckConnectionStatus;
+
+            Mixpanel.Track("Game Started");
 
             ChallengeAcceptedMessage.Listener = (message) =>
             {
