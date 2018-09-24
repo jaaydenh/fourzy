@@ -40,8 +40,9 @@ namespace Fourzy
             for (int i = 0; i < gamePiecePrefabs.Count; i++)
             {
                 var piece = gamePieceData[i];
+                gamePiecePrefabs[i].gamePieceID = i;
                 gamePiecePrefabs[i].View.OutlineColor = piece.OutlineColorWrapper;
-                gamePiecePrefabs[i].SecondaryColor = piece.SecondaryColorWrapper;
+                gamePiecePrefabs[i].View.SecondaryColor = piece.SecondaryColorWrapper;
             }
 
             foreach(TokenData t in tokenData)
@@ -65,7 +66,7 @@ namespace Fourzy
 
         public int GetGamePieceCount()
         {
-            return gamePieceSprites.Count;
+            return gamePiecePrefabs.Count;
         }
 
         public Sprite GetGamePieceSprite(int gamePieceId)
@@ -93,13 +94,8 @@ namespace Fourzy
             return gamePieceData[gamePieceId].Name;
         }
 
-        static int test = 0;
-
         public GameObject GetGamePiecePrefab(int gamePieceId)
         {
-            test = (test + 1) % gamePiecePrefabs.Count;
-            return gamePiecePrefabs[test].gameObject;
-
             if (gamePieceId < gamePiecePrefabs.Count && gamePieceId >= 0)
             {
                 return gamePiecePrefabs[gamePieceId].gameObject;
@@ -108,7 +104,6 @@ namespace Fourzy
             {
                 return gamePiecePrefabs[0].gameObject;
             }
-
         }
 
         public GameObject GetTokenPrefab(Token tokenType, bool justForDisplaying = false)

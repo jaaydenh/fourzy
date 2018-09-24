@@ -19,29 +19,35 @@
             "Name": "ChilliPepper",
             "Enabled": true,
             "OutlineColor": "1, 0, 0, 1",
-            "SecondaryColor": "0.0, 0, 0, 0"
+            "SecondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "3",
             "Name": "Mr. BunWiggle",
             "Enabled": true,
             "OutlineColor": "1, 1, 0, 1",
-            "SecondaryColor": "0.0, 0, 0, 0"
+            "SecondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "4",
             "Name": "Wipeout",
-            "Enabled": true
+            "Enabled": true,
+            "OutlineColor": "0, 0, 1, 1",
+            "SecondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "5",
             "Name": "Spooked",
-            "Enabled": true
+            "Enabled": true,
+            "OutlineColor": "0, 0, 1, 1",
+            "SecondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "6",
             "Name": "Cyclops",
-            "Enabled": true
+            "Enabled": true,
+            "OutlineColor": "0, 0, 1, 1",
+            "SecondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "7",

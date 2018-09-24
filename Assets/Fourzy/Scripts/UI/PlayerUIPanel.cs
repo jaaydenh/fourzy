@@ -38,7 +38,7 @@ namespace Fourzy
             playerIcon = go.GetComponent<GamePiece>();
 
             playerIcon.transform.localPosition = new Vector3(0, 0, 10);
-            playerIcon.SetupPlayer(player, PieceAnimState.ASLEEP);
+            playerIcon.player = player;
         }
 
         public void InitPlayerIcon(GameObject gamePiecePrefab)

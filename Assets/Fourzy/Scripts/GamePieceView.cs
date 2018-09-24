@@ -17,6 +17,7 @@ namespace Fourzy
     public class GamePieceView : MonoBehaviour
     {
         public Color OutlineColor;
+        public Vector4 SecondaryColor = Vector4.zero;
 
         [SerializeField]
         private SpriteRenderer body;
@@ -26,6 +27,9 @@ namespace Fourzy
 
         [SerializeField]
         private Shader outlineShader;
+
+        [SerializeField, HideInInspector]
+        private bool useSecondaryColor;
 
         private Transform cachedTransform;
 
@@ -84,7 +88,10 @@ namespace Fourzy
             cachedTransform = transform;
             bodyMaterial = body.material;
             bodyOutlineMaterial = new Material(outlineShader);
-            bodyOutlineMaterial.SetVector(h_HSVAAdjust, bodyMaterial.GetVector(h_HSVAAdjust));
+            if (useSecondaryColor)
+            {
+                bodyOutlineMaterial.SetVector(h_HSVAAdjust, SecondaryColor);
+            }
             bodyOutlineMaterial.SetColor(h_OutlineColor, OutlineColor);
 
             sprites = this.GetComponentsInChildren<SpriteRenderer>(true);
@@ -98,7 +105,20 @@ namespace Fourzy
             }
         }
 
-        public void SetupHSVColor(Vector4 vec)
+        public void UseSecondaryColor(bool value)
+        {
+            useSecondaryColor = value;
+            if (value)
+            {
+                this.SetupHSVColor(SecondaryColor);
+            }
+            else
+            {
+                this.SetupHSVColor(Vector4.zero);
+            }
+        }
+
+        private void SetupHSVColor(Vector4 vec)
         {
             bodyMaterial.SetVector(h_HSVAAdjust, vec);
             bodyOutlineMaterial.SetVector(h_HSVAAdjust, vec);

@@ -13,7 +13,7 @@ namespace Fourzy
         [SerializeField]
         private AnimationCurve movementCurve;
 
-        public Vector4 SecondaryColor = Vector4.zero;
+        public int gamePieceID;
         public PlayerEnum player;
         public int column;
         public int row;
@@ -31,20 +31,6 @@ namespace Fourzy
             cachedTransform = this.transform;
             View = this.GetComponent<GamePieceView>();
 		}
-
-        public void SetupPlayer(PlayerEnum playerEnum, PieceAnimState animState)
-        {          
-            this.player = playerEnum;
-
-            if (playerEnum == PlayerEnum.TWO)
-            {
-                View.SetupHSVColor(SecondaryColor);
-            }
-            else
-            {
-                View.SetupHSVColor(Vector4.zero);
-            }
-        }
 
         public void Move(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true)
         {

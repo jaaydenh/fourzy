@@ -349,20 +349,27 @@ namespace Fourzy
                     player = PlayerEnum.TWO;
                     opponent = PlayerEnum.ONE;
                 }
-            }  
+            }
+
+            // For test
+            int numPieces = GameContentManager.Instance.GetGamePieceCount();
+            playerGamePieceId = UnityEngine.Random.Range(0, numPieces);
+            opponentGamePieceId = UnityEngine.Random.Range(0, numPieces);
 
             GameObject prefab = GameContentManager.Instance.GetGamePiecePrefab(playerGamePieceId);
             playerGamePiecePrefab = Instantiate(prefab);
             GamePiece gamePiece = playerGamePiecePrefab.GetComponent<GamePiece>();
-            gamePiece.SetupPlayer(player, PieceAnimState.ASLEEP);
+            gamePiece.player = player;
             gamePiece.gameBoardView = gameBoardView;
+            gamePiece.View.UseSecondaryColor(false);
             playerGamePiecePrefab.SetActive(false);
 
             prefab = GameContentManager.Instance.GetGamePiecePrefab(opponentGamePieceId);
             opponentGamePiecePrefab = Instantiate(prefab);
             gamePiece = opponentGamePiecePrefab.GetComponent<GamePiece>();
-            gamePiece.SetupPlayer(opponent, PieceAnimState.ASLEEP);
+            gamePiece.player = player;
             gamePiece.gameBoardView = gameBoardView;
+            gamePiece.View.UseSecondaryColor(playerGamePieceId == opponentGamePieceId);
             opponentGamePiecePrefab.SetActive(false);
         }
 
