@@ -750,17 +750,21 @@ namespace Fourzy
             }
             else
             {
-                if (game.gameState.GameType == GameType.PUZZLE) {
-                    if (game.gameState.IsPuzzleChallengeCompleted) {
-                        if (game.gameState.IsPuzzleChallengePassed) {
+                if (game.gameState.IsGameOver)
+                {
+                    if (game.gameState.GameType == GameType.PUZZLE)
+                    {
+                        if (game.gameState.IsPuzzleChallengePassed)
+                        {
                             nextPuzzleChallengeButton.gameObject.SetActive(true);
-                        } else {
+                        }
+                        else
+                        {
                             retryPuzzleChallengeButton.gameObject.SetActive(true);
                         }
                     }
-                } else {
-                    if (game.gameState.IsGameOver && !GameManager.instance.isOnboardingActive) {
-                        // Debug.Log("set rematch button active");
+                    else if (!GameManager.instance.isOnboardingActive)
+                    {
                         rematchButton.gameObject.SetActive(true);
                     }
                 }
@@ -936,7 +940,7 @@ namespace Fourzy
                 else
                 {
                     StartCoroutine(MovePiece(move, false, updatePlayer));
-                    if (game.gameState.GameType == GameType.PUZZLE && !game.gameState.IsGameOver && !game.gameState.IsPuzzleChallengeCompleted) {
+                    if (game.gameState.GameType == GameType.PUZZLE && !game.gameState.IsGameOver) {
 
                         // yield return new WaitWhile(() => isDropping == true);
                         while (isDropping && gameBoardView.NumPiecesAnimating > 0)
@@ -973,15 +977,15 @@ namespace Fourzy
             game.gameState.PrintGameState("AfterMove");
 
             MoveGamePieceViews(move, movingPieces, activeTokens);
-
+            
             yield return new WaitWhile(() => gameBoardView.NumPiecesAnimating > 0);
 
-            if (!replayMove || game.gameState.IsGameOver || game.gameState.IsPuzzleChallengeCompleted)
+            if (!replayMove || game.gameState.IsGameOver)
             {
                 SetActionButton();
             }
 
-            if (game.gameState.IsPuzzleChallengeCompleted)
+            if (game.gameState.GameType == GameType.PUZZLE && game.gameState.IsGameOver)
             {
                 if (game.gameState.IsPuzzleChallengePassed)
                 {
@@ -995,30 +999,24 @@ namespace Fourzy
                     string subtitle = LocalizationManager.Instance.GetLocalizedValue("challenge_failed_subtitle");
                     DisplayIntroUI(title, subtitle, false);
                 }
-            }
 
-            if (game.gameState.GameType == GameType.PUZZLE)
-            {
-                if (game.gameState.IsPuzzleChallengeCompleted)
+                if (game.gameState.IsPuzzleChallengePassed)
                 {
-                    if (game.gameState.IsPuzzleChallengePassed)
+                    Debug.Log("test test: " + PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID));
+                    if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID))
                     {
-                        Debug.Log("test test: " + PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID));
-                        if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID))
-                        {
-                            Debug.Log("Succssfully submitted puzzle complted");
-                            ChallengeManager.instance.SubmitPuzzleCompleted();
-                        }
-
-                        PlayerPrefsWrapper.SetPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID, true);
-
-                        GameManager.instance.SetNextActivePuzzleLevel();
-                        AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, true, game.gameState.Player1MoveCount);
+                        Debug.Log("Succssfully submitted puzzle complted");
+                        ChallengeManager.instance.SubmitPuzzleCompleted();
                     }
-                    else
-                    {
-                        AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, false, game.gameState.Player1MoveCount);
-                    }
+
+                    PlayerPrefsWrapper.SetPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID, true);
+
+                    GameManager.instance.SetNextActivePuzzleLevel();
+                    AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, true, game.gameState.Player1MoveCount);
+                }
+                else
+                {
+                    AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, false, game.gameState.Player1MoveCount);
                 }
             }
 
@@ -1055,10 +1053,13 @@ namespace Fourzy
             }
             else
             {
-                //Debug.Log("UpdateGameStatus: updatePlayer: " + updatePlayer + ", gameState.isCurrentPlayerTurn: "+ game.gameState.isCurrentPlayerTurn);
                 if (updatePlayer)
                 {
-                    if (game.gameState.GameType == GameType.REALTIME || game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD || game.gameState.GameType == GameType.AI)
+                    if (game.gameState.GameType == GameType.REALTIME 
+                        || game.gameState.GameType == GameType.RANDOM 
+                        || game.gameState.GameType == GameType.FRIEND 
+                        || game.gameState.GameType == GameType.LEADERBOARD 
+                        || game.gameState.GameType == GameType.AI)
                     {
                         game.gameState.isCurrentPlayerTurn = !game.gameState.isCurrentPlayerTurn;
                     }
@@ -1117,8 +1118,7 @@ namespace Fourzy
 
             yield return new WaitForSeconds(1.5f);
 
-            winningParticleGenerator.ShowParticles();
-
+            this.ShowWinnerParticles();
             this.ShowWinnerText();
             this.LogGameWinner();
 
@@ -1131,33 +1131,58 @@ namespace Fourzy
                 }
             }
 #endif
+        }
 
+        private bool IsPlayerWinner()
+        {
+            if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
+            {
+                return false;
+            }
+
+            bool isPlayerWinner = false;
+            GameType gameType = game.gameState.GameType;
+            if (gameType == GameType.PASSANDPLAY)
+            {
+                isPlayerWinner = true;
+            }
+            else if (gameType == GameType.PUZZLE)
+            {
+                isPlayerWinner = game.gameState.IsPuzzleChallengePassed;
+            }
+            else
+            {
+                if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
+                {
+                    isPlayerWinner = true;
+                }
+                else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
+                {
+                    isPlayerWinner = true;
+                }
+            }
+            return isPlayerWinner;
         }
 
         private void PlayWinnerSound()
         {
-            if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
+            if (!IsPlayerWinner())
             {
                 return;
             }
 
-            if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
-            {
-                if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
-                {
-                    SoundManager.instance.PlayRandomizedSfx(clipWin);
-                }
-                else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
-                {
-                    SoundManager.instance.PlayRandomizedSfx(clipWin);
-                }
-            }
-            else
-            {
-                SoundManager.instance.PlayRandomizedSfx(clipWin);
-            }
+            SoundManager.instance.PlayRandomizedSfx(clipWin);
         }
 
+        private void ShowWinnerParticles()
+        {
+            if (!IsPlayerWinner())
+            {
+                return;
+            }
+
+            winningParticleGenerator.ShowParticles();
+        }
 
         private void ShowWinnerAnimation()
         {

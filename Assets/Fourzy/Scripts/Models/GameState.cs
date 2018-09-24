@@ -12,14 +12,12 @@ namespace Fourzy
         private int[] isMoveableDown;
         private int[] isMoveableLeft;
         private int[] isMoveableRight;
-        private List<IToken> activeTokenList;
         private string randomGuid;
         public GameType GameType { get; private set; }
         // TODO: isCurrentPlayerTurn should not be updated outside of GameState
         public bool isCurrentPlayerTurn;
         public bool IsPlayerOneTurn { get; private set; }
         public bool IsGameOver { get; private set; }
-        public bool IsPuzzleChallengeCompleted { get; private set; }
         public bool IsPuzzleChallengePassed { get; private set; }
         public PlayerEnum Winner { get; private set; }
         public GameBoard GameBoard { get; private set; }
@@ -192,23 +190,28 @@ namespace Fourzy
 
             TokenBoard.tokens[activeMovingPiece.GetNextPosition().row, activeMovingPiece.GetNextPosition().column].UpdateBoard(GameBoard, false);
 
-            activeTokenList = new List<IToken>();
-
-            while (GameBoard.activeMovingPieces.Count > 0) {
+            List<IToken> activeTokenList = new List<IToken>();
+            while (GameBoard.activeMovingPieces.Count > 0)
+            {
                 MovingGamePiece activePiece = GameBoard.activeMovingPieces[0];
                 Position nextPosition = activePiece.GetNextPosition();
                 Direction activeDirection = activePiece.currentDirection;
 
-                if (CanMove(new Move(nextPosition, activeDirection, move.player), TokenBoard.tokens)) {
-                    if (TokenBoard.tokens[nextPosition.row, nextPosition.column].hasEffect) {
+                if (CanMove(new Move(nextPosition, activeDirection, move.player), TokenBoard.tokens))
+                {
+                    if (TokenBoard.tokens[nextPosition.row, nextPosition.column].hasEffect)
+                    {
                         activeTokenList.Add(TokenBoard.tokens[nextPosition.row, nextPosition.column]);
                     }
                     TokenBoard.tokens[nextPosition.row, nextPosition.column].UpdateBoard(GameBoard, true);
-                } else {
+                }
+                else
+                {
                     GameBoard.SetActivePieceAsComplete();
 
                 }
             }
+            activeTokens = activeTokenList;
 
             if (!isReplay) {
                 // System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
@@ -256,45 +259,23 @@ namespace Fourzy
             {
                 IsPlayerOneTurn = !IsPlayerOneTurn;
             }
-            activeTokens = activeTokenList;
 
             if (GameType == GameType.PUZZLE)
             {
                 if (Player1MoveCount >= GameManager.instance.activeGame.puzzleChallengeInfo.MoveGoal)
                 {
-                    IsPuzzleChallengeCompleted = true;
-                    if (IsGameOver && Winner == PlayerEnum.ONE)
-                    {
-                        // Puzzle Challenge Completed
-                        IsPuzzleChallengePassed = true;
-                        //PlayerPrefs.SetInt("puzzleChallengeLevel", puzzleChallengeInfo.Level);
-                        //AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, true);
-                    }
-                    else
-                    {
-                        // Puzzle Challenge Failed
-                        IsPuzzleChallengePassed = false;
-                        IsGameOver = true;
-                        //AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, false);
-                    }
+                    IsGameOver = true;
                 }
-                else if (IsGameOver)
-                {
-                    IsPuzzleChallengeCompleted = true;
 
+                if (IsGameOver)
+                {
                     if (Winner == PlayerEnum.ONE)
                     {
-                        //Debug.Log("Puzzle Challenge: gameState.winner == PlayerEnum.ONE TRUE");
                         IsPuzzleChallengePassed = true;
-                        //PlayerPrefs.SetInt("puzzleChallengeLevel", puzzleChallengeInfo.Level);
-                        //AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, true);
                     }
                     else
                     {
-                        //Debug.Log("Puzzle Challenge: gameState.winner == PlayerEnum.ONE FALSE");
                         IsPuzzleChallengePassed = false;
-                        IsGameOver = true;
-                        //AnalyticsManager.LogPuzzleChallenge(puzzleChallengeInfo, false);
                     }
                 }
             }
