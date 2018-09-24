@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,16 @@ namespace Fourzy
 
         [SerializeField]
         private InputField inputField;
+
+        private void Awake()
+        {
+            UserManager.OnUpdateName += UserManagerOnUpdateName;
+        }
+
+        private void UserManagerOnUpdateName()
+        {
+            currentNameText.text = "Current name: " + UserManager.instance.userName;
+        }
 
         public void ChangeNameOnClick()
         {

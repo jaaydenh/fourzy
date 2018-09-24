@@ -17,17 +17,21 @@ namespace Fourzy
         public int gamePieceId;
 
         public Sprite profilePicture;
-        [SerializeField]
-        Text userNameLabel;
         public Text gamePieceNameLabel;
         public Text ratingEloLabel;
         public Image profilePictureImage;
+
+        [SerializeField]
+        Text userNameLabel;
         [SerializeField]
         Image gamePieceImage;
         [SerializeField]
         Text coinsLabel;
 
         bool didLoadGamePieces;
+
+        public delegate void UpdateName();
+        public static event UpdateName OnUpdateName;
 
         new void Awake()
         {
@@ -67,14 +71,19 @@ namespace Fourzy
                 });
         }
 
-        public void UpdatePlayerDisplayName(string name) {
+        public void UpdatePlayerDisplayName(string name) 
+        {
             new ChangeUserDetailsRequest()
                 .SetDisplayName(name)
                 .Send((response) => {
-                    if (response.HasErrors) {
-                        Debug.Log("Error updating player display name: "+ response.Errors.ToString());
-                    } else {
+                    if (response.HasErrors)
+                    {
+                        Debug.Log("Error updating player display name: " + response.Errors.ToString());
+                    }
+                    else
+                    {
                         Debug.Log("Successfully updated player display name");
+                        this.ChangeName(name);    
                     }
                 });
         }
@@ -98,12 +107,14 @@ namespace Fourzy
 
         public void UpdateGUI(string name, string uid, string fbId, long? coins, int? rating)
         {
-            userName = name;
-            userNameLabel.text = userName;
+            this.ChangeName(name);
             userId = uid;
-            if (rating != null) {
-                ratingEloLabel.text = rating.ToString();    
-            } else {
+            if (rating != null)
+            {
+                ratingEloLabel.text = rating.ToString();
+            }
+            else
+            {
                 ratingEloLabel.text = "0";
             }
 
@@ -121,6 +132,16 @@ namespace Fourzy
                         }
                     }));
             }
+
+
+        }
+
+        private void ChangeName(string name)
+        {
+            userName = name;
+            userNameLabel.text = userName;
+            if (OnUpdateName != null)
+                OnUpdateName();
         }
 
         // private void UpdateProfileImage(IGraphResult result) {
