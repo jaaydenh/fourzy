@@ -9,28 +9,28 @@
         },
         {
             "ID": "1",
-            "Name": "SpongeRay",
+            "Name": "Crossy",
             "Enabled": true,
             "OutlineColor": "0, 0, 1, 1",
             "SecondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "2",
-            "Name": "ChilliPepper",
+            "Name": "Triangry",
             "Enabled": true,
             "OutlineColor": "1, 0, 0, 1",
             "SecondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "3",
-            "Name": "Mr. BunWiggle",
+            "Name": "Mr. Bun",
             "Enabled": true,
             "OutlineColor": "1, 1, 0, 1",
             "SecondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "4",
-            "Name": "Wipeout",
+            "Name": "Daisy",
             "Enabled": true,
             "OutlineColor": "0, 0, 1, 1",
             "SecondaryColor": "0.3, 0, 0, 0"
@@ -45,9 +45,7 @@
         {
             "ID": "6",
             "Name": "Cyclops",
-            "Enabled": true,
-            "OutlineColor": "0, 0, 1, 1",
-            "SecondaryColor": "0.3, 0, 0, 0"
+            "Enabled": true
         },
         {
             "ID": "7",
@@ -56,7 +54,7 @@
         },
         {
             "ID": "8",
-            "Name": "DartStone",
+            "Name": "Masked",
             "Enabled": true
         },
         {
@@ -66,287 +64,47 @@
         },
         {
             "ID": "10",
-            "Name": "Spongee",
-            "Enabled": true
-        },
-        {
-            "ID": "11",
-            "Name": "GearHead",
-            "Enabled": true
-        },
-        {
-            "ID": "12",
-            "Name": "Yellow Ginger",
-            "Enabled": true
-        },
-        {
-            "ID": "13",
-            "Name": "Blue SquidMo",
-            "Enabled": true
-        },
-        {
-            "ID": "14",
             "Name": "Mewhisky",
             "Enabled": true
         },
         {
-            "ID": "15",
+            "ID": "11",
             "Name": "Sentinal",
             "Enabled": true
         },
         {
+            "ID": "12",
+            "Name": "Ginger",
+            "Enabled": true
+        },
+        {
+            "ID": "13",
+            "Name": "SquidMo",
+            "Enabled": true
+        },
+        {
+            "ID": "14",
+            "Name": "The Bot",
+            "Enabled": true
+        },
+        {
+            "ID": "15",
+            "Name": "Lord Droid",
+            "Enabled": true
+        },
+        {
             "ID": "16",
-            "Name": "Grumpster",
-            "Enabled": true
-        },
-        {
-            "ID": "17",
-            "Name": "Boogidy",
-            "Enabled": true
-        },
-        {
-            "ID": "18",
-            "Name": "Chillwell",
-            "Enabled": true
-        },
-        {
-            "ID": "19",
-            "Name": "NiceDaisy",
-            "Enabled": true
-        },
-        {
-            "ID": "20",
-            "Name": "SpokePop",
-            "Enabled": true
-        },
-        {
-            "ID": "21",
-            "Name": "IronEye",
-            "Enabled": true
-        },
-        {
-            "ID": "22",
-            "Name": "PinkyBlob",
-            "Enabled": true
-        },
-        {
-            "ID": "23",
-            "Name": "Red Turrito #1",
-            "Enabled": true
-        },
-        {
-            "ID": "24",
-            "Name": "Blue Turrito",
-            "Enabled": true
-        },
-        {
-            "ID": "25",
-            "Name": "Red Turrito #2",
-            "Enabled": true
-        },
-        {
-            "ID": "26",
-            "Name": "WannaCry",
-            "Enabled": true
-        },
-        {
-            "ID": "27",
-            "Name": "The Dude",
-            "Enabled": true
-        },
-        {
-            "ID": "28",
-            "Name": "Intenso",
-            "Enabled": true
-        },
-        {
-            "ID": "29",
-            "Name": "GearHead",
-            "Enabled": true
-        },
-        {
-            "ID": "30",
-            "Name": "MellowTeeth",
-            "Enabled": true
-        },
-        {
-            "ID": "31",
-            "Name": "KareBattery",
-            "Enabled": true
-        },
-        {
-            "ID": "32",
-            "Name": "LordDroid",
-            "Enabled": true
-        },
-        {
-            "ID": "33",
-            "Name": "PixelBot",
-            "Enabled": true
-        },
-        {
-            "ID": "34",
             "Name": "NightOwl",
             "Enabled": true
         },
         {
-            "ID": "35",
-            "Name": "BasilBeeps",
-            "Enabled": true
-        },
-        {
-            "ID": "36",
+            "ID": "17",
             "Name": "RainbowBite",
             "Enabled": true
         },
         {
-            "ID": "37",
-            "Name": "KittyDog",
-            "Enabled": true
-        },
-        {
-            "ID": "38",
-            "Name": "Assimilator",
-            "Enabled": true
-        },
-        {
-            "ID": "39",
-            "Name": "Oalala",
-            "Enabled": true
-        },
-        {
-            "ID": "40",
-            "Name": "Test 1",
-            "Enabled": true
-        },
-        {
-            "ID": "41",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "42",
-            "Name": "Test 3",
-            "Enabled": true
-        },
-        {
-            "ID": "43",
-            "Name": "Test 4",
-            "Enabled": true
-        },
-        {
-            "ID": "44",
-            "Name": "Test 5",
-            "Enabled": true
-        },
-        {
-            "ID": "45",
-            "Name": "Test 6",
-            "Enabled": true
-        },
-        {
-            "ID": "46",
-            "Name": "Test 7",
-            "Enabled": true
-        },
-        {
-            "ID": "47",
-            "Name": "Test 8",
-            "Enabled": true
-        },
-        {
-            "ID": "48",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "49",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "50",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "51",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "52",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "53",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "54",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "55   ",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "56",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "57",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "58",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "59",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "60",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "61",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "62",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "63",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "64",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "65",
-            "Name": "Test 2",
-            "Enabled": true
-        },
-        {
-            "ID": "66",
-            "Name": "Test 2",
+            "ID": "18",
+            "Name": "Munchy",
             "Enabled": true
         }
     ]

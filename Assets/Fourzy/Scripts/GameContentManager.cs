@@ -71,6 +71,9 @@ namespace Fourzy
 
         public Sprite GetGamePieceSprite(int gamePieceId)
         {
+            if (gamePieceId > 18) {
+                return gamePieceSprites[0];
+            }
             return gamePieceSprites[gamePieceId];
         }
 
