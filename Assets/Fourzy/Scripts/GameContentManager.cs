@@ -41,8 +41,8 @@ namespace Fourzy
             {
                 var piece = gamePieceData[i];
                 gamePiecePrefabs[i].gamePieceID = i;
-                gamePiecePrefabs[i].View.OutlineColor = piece.OutlineColorWrapper;
-                gamePiecePrefabs[i].View.SecondaryColor = piece.SecondaryColorWrapper;
+                gamePiecePrefabs[i].View.OutlineColor = piece.OutlineColor;
+                gamePiecePrefabs[i].View.SecondaryColor = piece.SecondaryColor;
             }
 
             foreach(TokenData t in tokenData)

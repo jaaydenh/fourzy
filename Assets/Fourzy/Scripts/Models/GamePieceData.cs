@@ -3,28 +3,49 @@ using UnityEngine.Serialization;
 
 namespace Fourzy
 {
+    public enum GamePieceState
+    {
+        FoundAndUnlocked,
+        FoundAndLocked,
+        NotFound
+    }
+
     [System.Serializable]
     public class GamePieceData : ISerializationCallbackReceiver
     {
         public int ID;
         public string Name;
         public bool Enabled;
-        [SerializeField] string OutlineColor = string.Empty;
-        [SerializeField] string SecondaryColor = string.Empty;
+        public int Rarity;
+        public Color OutlineColor { get; set; }
+        public Vector4 SecondaryColor { get; set; }
+        public Color BorderColor { get; set; }
 
-        public Color OutlineColorWrapper { get; set; }
-        public Vector4 SecondaryColorWrapper { get; set; }
+        //Server data
+        public int NumberOfPieces { get; set; }
+        public int TotalNumberOfPieces { get; set; }
+        public int NumberOfChampions { get; set; }
+        public int TotalNumberOfChampions { get; set; }
+        public int NumberOfStars { get; set; }
+        public int TotalNumberOfStars { get; set; }
+        public GamePieceState state { get; set; }
+
+        [SerializeField] string outlineColor = string.Empty;
+        [SerializeField] string secondaryColor = string.Empty;
+        [SerializeField] string borderColor = string.Empty;
 
         public void OnBeforeSerialize()
         {
-            OutlineColor = OutlineColorWrapper.ToJson();
-            SecondaryColor = SecondaryColorWrapper.ToJson();
+            outlineColor = OutlineColor.ToJson();
+            secondaryColor = SecondaryColor.ToJson();
+            borderColor = BorderColor.ToJson();
         }
 
         public void OnAfterDeserialize()
         {
-            OutlineColorWrapper = OutlineColor.ColorFromJson();
-            SecondaryColorWrapper = SecondaryColor.Vector4FromJson();
+            OutlineColor = outlineColor.ColorFromJson();
+            SecondaryColor = secondaryColor.Vector4FromJson();
+            BorderColor = borderColor.ColorFromJson();
         }
     }
 

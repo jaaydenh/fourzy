@@ -150,8 +150,8 @@ namespace Fourzy
             gamePieceData.ID = 1;
             gamePieceData.Name = "Test Piece 1";
             gamePieceData.Enabled = true;
-            gamePieceData.OutlineColorWrapper = Color.blue;
-            gamePieceData.SecondaryColorWrapper = new Vector4(0.3f, 0, 0, 0);
+            gamePieceData.OutlineColor = Color.blue;
+            gamePieceData.SecondaryColor = new Vector4(0.3f, 0, 0, 0);
 
             return gamePieceData;
         }

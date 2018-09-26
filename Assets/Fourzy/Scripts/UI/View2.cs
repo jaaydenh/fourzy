@@ -100,24 +100,10 @@ namespace Fourzy
             {
                 var piece = gamePieceData[i];
                 GamePieceUI gamePieceUI = Instantiate(gamePiecePrefab);
-                gamePieceUI.id = piece.ID.ToString();
-                gamePieceUI.name = piece.Name;
-                gamePieceUI.gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(piece.ID);
-                gamePieceUI.isEnabledPieceSelector = isEnabledPieceSelector;
-
+                gamePieceUI.InitWithGamePieceData(piece);
                 gamePieceUI.transform.SetParent(gamePieceGridTransform, false);
 
-                if (isEnabledPieceSelector)
-                {
-                    var toggle = gamePieceUI.GetComponent<Toggle>();
-                    ToggleGroup tg = gamePiecesGrid.GetComponent<ToggleGroup>();
-                    toggle.group = tg;
 
-                    if (piece.ID == gamePieceId)
-                    {
-                        gamePieceUI.ActivateSelector();
-                    }
-                }
             }
         }
     }

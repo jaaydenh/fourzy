@@ -1,20 +1,159 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy
 {
     public class GamePieceUI : MonoBehaviour
     {
+        public GamePieceData gamePieceData;
+
+        [SerializeField]
+        private Image gamePieceImage;
+
+        [SerializeField]
+        private Material grayscaleMaterial;
+
+        [SerializeField]
+        private TextMeshProUGUI totalNumberOfPieces;
+
+        [SerializeField]
+        private CircleProgress circleProgress;
+
+        [SerializeField]
+        private GameObject gamePieceInfoFrame;
+
+        [SerializeField]
+        private Text pieceName;
+
+        [SerializeField]
+        private Image borderImage;
+
+        [SerializeField]
+        private Text totalNumberOfChampions;
+
+        [SerializeField]
+        private List<Image> glowingStars = new List<Image>();
+
+        [SerializeField]
+        private List<Image> fadedStars = new List<Image>();
+
         public delegate void SetGamePiece(string gamePieceId);
         public static event SetGamePiece OnSetGamePiece;
-        public string id;
-        public string gamePieceName;
-        public bool isEnabledPieceSelector;
-        public bool isEnabled;
-        public bool isLocked;
-        public bool isSelected;
-        public GameObject selector;
-        public Image gamePieceImage;
+
+        public void InitWithGamePieceData(GamePieceData gamePieceData)
+        {
+            this.gamePieceData = gamePieceData;
+
+            gamePieceData.NumberOfStars = 3;
+            gamePieceData.TotalNumberOfStars = 5;
+
+            gamePieceData.NumberOfChampions = 0;
+            gamePieceData.TotalNumberOfChampions = 100;
+
+            gamePieceData.NumberOfPieces = 20;
+            gamePieceData.TotalNumberOfPieces = 60;
+
+            gamePieceData.state = GamePieceState.FoundAndUnlocked;
+
+
+            this.UpdateGamePieceImage();
+
+            if (gamePieceData.state == GamePieceState.NotFound)
+            {
+                totalNumberOfPieces.gameObject.SetActive(false);
+                gamePieceInfoFrame.SetActive(false);
+                circleProgress.gameObject.SetActive(false);
+            }
+            else
+            {
+                pieceName.text = gamePieceData.Name;
+                totalNumberOfPieces.text = gamePieceData.NumberOfPieces + "/" + gamePieceData.TotalNumberOfPieces;
+                totalNumberOfChampions.text = this.FormatedNumberOfChampions(gamePieceData.NumberOfChampions, gamePieceData.TotalNumberOfChampions);
+                borderImage.color = gamePieceData.BorderColor;
+
+                this.UpdateProgressBar();
+                this.UpdateStars();
+            }
+        }
+
+        string FormatedNumberOfChampions(int number, int total)
+        {
+            string formatedText = string.Empty;
+            if (number < 10)
+            {
+                formatedText += "0";
+            }
+            if (number < 100)
+            {
+                formatedText += "0";
+            }
+            formatedText += number + "/";
+            if (total < 10)
+            {
+                formatedText += "0";
+            }
+            if (total < 100)
+            {
+                formatedText += "0";
+            }
+            formatedText += total;
+            return formatedText;
+        }
+
+        private void UpdateGamePieceImage()
+        {
+            gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceData.ID);
+            if (gamePieceData.state == GamePieceState.NotFound)
+            {
+                gamePieceImage.material = grayscaleMaterial;
+            }
+            else
+            {
+                gamePieceImage.material = gamePieceImage.defaultMaterial;
+            }
+        }
+
+        private void UpdateProgressBar()
+        {
+            float collectionProgress = ((float)gamePieceData.NumberOfPieces) / gamePieceData.TotalNumberOfPieces;
+            circleProgress.SetupNewValue(collectionProgress);
+
+            if (collectionProgress < 1.0f)
+            {
+                if (gamePieceData.state == GamePieceState.FoundAndUnlocked)
+                {
+                    circleProgress.SetupNewColor(Color.green);
+                }
+                else
+                {
+                    circleProgress.SetupNewColor(Color.yellow);
+                }
+            }
+            else
+            {
+                circleProgress.SetupNewColor(Color.red);
+            }
+        }
+
+        private void UpdateStars()
+        {
+            Debug.Assert(glowingStars.Count == fadedStars.Count, "Setup the same count of stars in editor");
+            for (int i = 0; i < glowingStars.Count; i++)
+            {
+                if (i < gamePieceData.NumberOfStars)
+                {
+                    fadedStars[i].enabled = false;
+                    glowingStars[i].enabled = true;
+                }
+                else
+                {
+                    fadedStars[i].enabled = true;
+                    glowingStars[i].enabled = false;
+                }
+            }
+        }
 
         public void SetAlternateColor(bool isAlternate) 
         {
@@ -25,41 +164,6 @@ namespace Fourzy
             } else {
                 rend.material.SetVector("_HSVAAdjust", new Vector4(0, 0, 0, 0));    
             }
-        }
-
-        public void PieceSelect() 
-        {
-            if (!isEnabledPieceSelector)
-            {
-                return;
-            }
-
-            Toggle toggle = this.GetComponent<Toggle>();
-
-            if (toggle.isOn)
-            {
-                //Debug.Log("GAME PIECE SELECTED ON");
-                selector.SetActive(true);
-                if (OnSetGamePiece != null)
-                    OnSetGamePiece(id);
-            }
-            else
-            {
-                //Debug.Log("GAME PIECE SELECTED OFF");
-                selector.SetActive(false);
-            }
-        }
-
-        public void ActivateSelector() 
-        {
-            if (!isEnabledPieceSelector)
-            {
-                return;
-            }
-
-            Toggle toggle = this.GetComponent<Toggle>();
-            toggle.isOn = true;
-            selector.SetActive(true);
         }
     }
 }

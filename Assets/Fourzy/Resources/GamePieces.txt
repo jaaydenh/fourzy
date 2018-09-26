@@ -4,55 +4,71 @@
             "ID": "0",
             "Name": "BlobbyBlob",
             "Enabled": true,
-            "OutlineColor": "0, 1, 0, 1",
-            "SecondaryColor": "0.9, 0, 0, 0"
+            "Rarity": 30,
+            "outlineColor": "0, 1, 0, 1",
+            "secondaryColor": "0.9, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "1",
             "Name": "SpongeRay",
             "Enabled": true,
-            "OutlineColor": "0, 0, 1, 1",
-            "SecondaryColor": "0.3, 0, 0, 0"
+            "Rarity": 30,
+            "outlineColor": "0, 0, 1, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "1, 0, 0, 1"
         },
         {
             "ID": "2",
             "Name": "ChilliPepper",
             "Enabled": true,
-            "OutlineColor": "1, 0, 0, 1",
-            "SecondaryColor": "0.3, 0, 0, 0"
+            "Rarity": 30,
+            "outlineColor": "1, 0, 0, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "3",
             "Name": "Mr. BunWiggle",
             "Enabled": true,
-            "OutlineColor": "1, 1, 0, 1",
-            "SecondaryColor": "0.3, 0, 0, 0"
+            "Rarity": 30,
+            "outlineColor": "1, 1, 0, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "4",
             "Name": "Wipeout",
             "Enabled": true,
-            "OutlineColor": "0, 0, 1, 1",
-            "SecondaryColor": "0.3, 0, 0, 0"
+            "Rarity": 30,
+            "outlineColor": "0, 0, 1, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "5",
             "Name": "Spooked",
             "Enabled": true,
-            "OutlineColor": "0, 0, 1, 1",
-            "SecondaryColor": "0.3, 0, 0, 0"
+            "Rarity": 30,
+            "outlineColor": "0, 0, 1, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "6",
             "Name": "Cyclops",
             "Enabled": true,
-            "OutlineColor": "0, 0, 1, 1",
-            "SecondaryColor": "0.3, 0, 0, 0"
+            "outlineColor": "0, 0, 1, 1",
+            "secondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "7",
             "Name": "Moonpy",
-            "Enabled": true
+            "Enabled": true,
+            "Rarity": 30,
+            "outlineColor": "0, 0, 1, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "8",

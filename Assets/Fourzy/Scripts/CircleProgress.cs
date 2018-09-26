@@ -7,17 +7,12 @@ using UnityEngine.UI;
 public class CircleProgress : MonoBehaviour 
 {
     [SerializeField]
-    private Material progressMaterial;
-
-    [SerializeField]
     private Color progressColor = Color.white;
 
     [SerializeField, Range(0.0f, 1.0f)]
     private float currentValue = 0;
 
-    [SerializeField, HideInInspector]
-    private Material circleProgressMaterialCopy;
-
+    private Material progressMaterial;
     private Coroutine progressCoroutine;
 
     private int progressUniform = Shader.PropertyToID("_Progress");
@@ -32,7 +27,7 @@ public class CircleProgress : MonoBehaviour
 
     void OnValidate()
     {
-        if (circleProgressMaterialCopy != null)
+        if (progressMaterial != null)
         {
             this.SetupNewValue(currentValue);
         }
@@ -44,21 +39,19 @@ public class CircleProgress : MonoBehaviour
 
     private void Init()
     {
-        circleProgressMaterialCopy = new Material(progressMaterial);
-
         Sprite sprite = null;
 
         Image image = this.GetComponent<Image>();
         if (image)
         {
-            image.material = circleProgressMaterialCopy;
+            progressMaterial = image.material;
             sprite = image.sprite;
         }
 
         SpriteRenderer spriteRenderer = this.GetComponent<SpriteRenderer>();
         if (spriteRenderer)
         {
-            spriteRenderer.sharedMaterial = circleProgressMaterialCopy;
+            progressMaterial = spriteRenderer.material; 
             sprite = spriteRenderer.sprite;
         }
 
@@ -68,8 +61,10 @@ public class CircleProgress : MonoBehaviour
                              sprite.textureRect.min.y / sprite.texture.height,
                              sprite.textureRect.max.x / sprite.texture.width,
                              sprite.textureRect.max.y / sprite.texture.height);
-            circleProgressMaterialCopy.SetVector(rectMainTexUniform, rectMainTex);
+            progressMaterial.SetVector(rectMainTexUniform, rectMainTex);
         }
+
+        progressMaterial.SetColor(colorUniform, progressColor);
     }
 
     public void SetupNewValue(float value, bool animated = true, float animationDuration = 1.5f)
@@ -107,7 +102,13 @@ public class CircleProgress : MonoBehaviour
     private void SetupNewValue(float value)
     {
         currentValue = value;
-        circleProgressMaterialCopy.SetFloat(progressUniform, currentValue * Mathf.PI * 2);
-        circleProgressMaterialCopy.SetColor(colorUniform, progressColor);
+        progressMaterial.SetFloat(progressUniform, currentValue * Mathf.PI * 2);
+        progressMaterial.SetColor(colorUniform, progressColor);
+    }
+
+    public void SetupNewColor(Color color)
+    {
+        progressColor = color;
+        progressMaterial.SetColor(colorUniform, progressColor);
     }
 }
