@@ -91,8 +91,6 @@ namespace Fourzy
 
                 this.UpdateProgressBar();
                 this.UpdateStars();
-
-                pieceName.text = gamePieceImage.sprite.name;
             }
         }
 
