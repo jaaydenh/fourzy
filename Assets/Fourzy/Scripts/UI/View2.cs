@@ -92,7 +92,6 @@ namespace Fourzy
 
         private void LoadGamePieces()
         {
-            bool isEnabledPieceSelector = false;
             int gamePieceId = UserManager.instance.gamePieceId;
             Transform gamePieceGridTransform = gamePiecesGrid.transform;
             var gamePieceData = GameContentManager.Instance.GetAllGamePieces();
@@ -103,7 +102,14 @@ namespace Fourzy
                 gamePieceUI.InitWithGamePieceData(piece);
                 gamePieceUI.transform.SetParent(gamePieceGridTransform, false);
 
+                var toggle = gamePieceUI.GetComponent<Toggle>();
+                ToggleGroup tg = gamePiecesGrid.GetComponent<ToggleGroup>();
+                toggle.group = tg;
 
+                if (piece.ID == gamePieceId)
+                {
+                    gamePieceUI.ActivateSelector();
+                }
             }
         }
     }

@@ -323,7 +323,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.6
+  m_Radius: 0.65
 --- !u!95 &95998321732833044
 Animator:
   serializedVersion: 3
@@ -354,9 +354,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OutlineColor: {r: 0, g: 1, b: 0, a: 1}
+  SecondaryColor: {x: 0.9, y: 0, z: 0, w: 0}
   body: {fileID: 212902508001480938}
   pieceAnimator: {fileID: 95998321732833044}
   outlineShader: {fileID: 4800000, guid: e824bef477aec4a3a97f9e1550a6010f, type: 3}
+  useSecondaryColor: 0
 --- !u!114 &114920343002454044
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -375,34 +377,35 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.11418475
-      outSlope: 0.11418475
+      inSlope: 0.74341565
+      outSlope: 0.74341565
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.10171707
+      outWeight: 0.09731265
     - serializedVersion: 3
-      time: 0.62797946
-      value: 0.44493657
-      inSlope: 1.206413
-      outSlope: 1.206413
+      time: 0.59774673
+      value: 0.49997443
+      inSlope: 0.976477
+      outSlope: 0.976477
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0.08484706
+      outWeight: 0.16313003
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 2.210747
-      outSlope: 2.210747
+      inSlope: 1.7570684
+      outSlope: 1.7570684
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.089822605
+      inWeight: 0.089225166
       outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SecondaryColor: {x: 0.9, y: 0, z: 0, w: 0}
+  gamePieceID: 0
+  gamePieceIcon: {fileID: 21300000, guid: 2a68a8107e67346c9b8c950d6107f9dd, type: 3}
   player: 0
   column: 0
   row: 0

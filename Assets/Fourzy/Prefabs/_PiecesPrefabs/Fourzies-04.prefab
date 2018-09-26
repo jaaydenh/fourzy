@@ -417,7 +417,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SecondaryColor: {x: 0, y: 0, z: 0, w: 0}
+  gamePieceID: 3
+  gamePieceIcon: {fileID: 21300000, guid: 5f511fea87e764409ba817c728f7b0c5, type: 3}
   player: 0
   column: 0
   row: 0
@@ -435,9 +436,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OutlineColor: {r: 1, g: 1, b: 0, a: 1}
+  SecondaryColor: {x: 0.3, y: 0, z: 0, w: 0}
   body: {fileID: 212689604163326810}
   pieceAnimator: {fileID: 95029817891549152}
   outlineShader: {fileID: 4800000, guid: e824bef477aec4a3a97f9e1550a6010f, type: 3}
+  useSecondaryColor: 0
 --- !u!212 &212270719329350484
 SpriteRenderer:
   m_ObjectHideFlags: 1

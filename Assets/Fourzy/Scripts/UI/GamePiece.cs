@@ -14,6 +14,7 @@ namespace Fourzy
         private AnimationCurve movementCurve;
 
         public int gamePieceID;
+        public Sprite gamePieceIcon;
         public PlayerEnum player;
         public int column;
         public int row;

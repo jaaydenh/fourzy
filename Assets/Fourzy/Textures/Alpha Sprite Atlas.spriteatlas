@@ -57,16 +57,19 @@ SpriteAtlas:
   m_PackedSprites:
   - {fileID: 21300000, guid: 2a68a8107e67346c9b8c950d6107f9dd, type: 3}
   - {fileID: 21300000, guid: 05d10e30f9f934b31aa5db004b7a66fb, type: 3}
+  - {fileID: 21300000, guid: ec879060c18eb435483075a0576e6d0c, type: 3}
   - {fileID: 21300000, guid: 138a0e90f755544a4b3658f212c6aeb7, type: 3}
   - {fileID: 21300000, guid: 0af289b035d8a4250952292ad5791dbc, type: 3}
   - {fileID: 21300000, guid: 154d4fb01bcc4420daea5c94789b76fb, type: 3}
   - {fileID: 21300000, guid: 4d6925e06f61047a7916e4811aeab8ee, type: 3}
   - {fileID: 21300000, guid: f06c7be0333a541f3acbe3e6053d1154, type: 3}
   - {fileID: 21300000, guid: 4ac9fce064fb243edb38285e8cb9c5d6, type: 3}
+  - {fileID: 21300000, guid: 3ce18601ff6904fabb1b749a56f8ddd7, type: 3}
   - {fileID: 21300000, guid: d643e61167c5b4ea6b34982e3b9bf3ba, type: 3}
   - {fileID: 21300000, guid: d3ab1b21d3b8f45adbb9cbd8e394b061, type: 3}
   - {fileID: 21300000, guid: 99b6934162ceb469892f2924206b38ac, type: 3}
   - {fileID: 21300000, guid: b4cdc59151ae64ff4b83e8d6990e418a, type: 3}
+  - {fileID: 21300000, guid: 86a9dbf14c8634b27938bf4a41567ad7, type: 3}
   - {fileID: 21300000, guid: 5f8cb80212f6b480f8a97f22d1633864, type: 3}
   - {fileID: 21300000, guid: 83686e42b2004447bb0eb6f88bddd28f, type: 3}
   - {fileID: 21300000, guid: 66e6ea52eb2044e3f93a2f768cfe2305, type: 3}
@@ -74,6 +77,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 5a428db23de85448ea61f41f9d99f942, type: 3}
   - {fileID: 21300000, guid: 2035f1c260a5e41bfbf49d9884f48d61, type: 3}
   - {fileID: 21300000, guid: 07384c034ef8843749f3c7d14319aa84, type: 3}
+  - {fileID: 21300000, guid: bb280b23fd2cc418690b34d44e140ab5, type: 3}
   - {fileID: 21300000, guid: 80d55543ee6cb430fbd37f5f68a0c994, type: 3}
   - {fileID: 21300000, guid: bd05575347d9749c0aed8650d46c1253, type: 3}
   - {fileID: 21300000, guid: 397a088383d984f78b1075d9a8ff182f, type: 3}
@@ -113,13 +117,16 @@ SpriteAtlas:
   - {fileID: 21300000, guid: cb347398ad776482b9de948e45a0531a, type: 3}
   - {fileID: 21300000, guid: 7ebd7ad8c03e9477792d42884ad4cb97, type: 3}
   - {fileID: 21300000, guid: c45ab6e89b8654d8ba383052eff89292, type: 3}
+  - {fileID: 21300000, guid: fc4715491529447bda05a490a7c8c817, type: 3}
   - {fileID: 21300000, guid: 901d4269f148a4b1094fd0f5e415a3dd, type: 3}
+  - {fileID: 21300000, guid: 02fa1cb9f5ae045ddaa384e098a4a60f, type: 3}
   - {fileID: 21300000, guid: e3f3f9d93b09c4a4abf973d03a2336b1, type: 3}
   - {fileID: 21300000, guid: d4e04de9edbb940698b7e8fef804caa1, type: 3}
   - {fileID: 21300000, guid: 8051aa3af83e545e1b7e935afc8fa269, type: 3}
   - {fileID: 21300000, guid: a639c48a725f247a39a8d6e322eca6e5, type: 3}
   - {fileID: 21300000, guid: ea0163ca52d5f43cf98e9a6508a65bf0, type: 3}
   - {fileID: 21300000, guid: 5f511fea87e764409ba817c728f7b0c5, type: 3}
+  - {fileID: 21300000, guid: b3d28afa02db94e2b9ac0b61a57d3c9a, type: 3}
   - {fileID: 21300000, guid: d51efcfacc9c1465782f888bd0d3b92a, type: 3}
   - {fileID: 21300000, guid: 731d102b06223425e91ec545829bea4f, type: 3}
   - {fileID: 21300000, guid: b9d5143b451e54acdb6f08e2b83b25ea, type: 3}
@@ -155,6 +162,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 568b308e1b0c64f0dbaf6a5f00e61294, type: 3}
   - {fileID: 21300000, guid: b25a089ee5c68497581c9fbf2dd56729, type: 3}
   - {fileID: 21300000, guid: 13fffbfe7f19d453fb21a782e61f43be, type: 3}
+  - {fileID: 21300000, guid: 67e3000f46f9f45bcb1469843521d980, type: 3}
   - {fileID: 21300000, guid: 85699b5f51d2b40149ab3e44ec61ea7d, type: 3}
   - {fileID: 21300000, guid: 3ad0d87fb738941698d893b32a150547, type: 3}
   - {fileID: 21300000, guid: daa8ae8fc9a124ee9ba2169e1f17f3cc, type: 3}
@@ -163,16 +171,19 @@ SpriteAtlas:
   m_PackedSpriteNamesToIndex:
   - 7
   - Asset 12
+  - FrameBackground
   - 6
   - triangry_body
   - 5
   - Asset 7
   - Asset 17
   - Asset 9
+  - NotFoundBackground
   - 122
   - 10
   - 2
   - 44
+  - Star_1
   - crossy_body2
   - Asset 27
   - Asset 18
@@ -180,6 +191,7 @@ SpriteAtlas:
   - cyclops_mouth1
   - Asset 10
   - Asset 13
+  - Frame
   - 58
   - 45
   - 23
@@ -219,13 +231,16 @@ SpriteAtlas:
   - crossy_mouth2
   - triangry_eyes1
   - Asset 6
+  - CrownIcon
   - 114
+  - ProgressBackground
   - 32
   - cyclops_mouth
   - 125
   - Asset 24
   - cyclops_eyelid
   - 3
+  - Star_0
   - 69
   - 95
   - Asset 23
@@ -261,6 +276,7 @@ SpriteAtlas:
   - blue_mouth1
   - 9
   - cyclops_eye
+  - FourzyIcon
   - Asset 5
   - Glow
   - 123

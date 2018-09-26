@@ -316,8 +316,25 @@ namespace Fourzy
             }
         }
 
-        public void UpdateOpponentUI(Opponent opponent) {
-            // TODO: complete this
+        public void UpdateOpponentUI(Opponent opponent) 
+        {
+            game.opponent = opponent;
+
+            this.UpdateOpponentUI(opponent.gamePieceId);
+        }
+
+        public void UpdateOpponentUI(int gamePieceID)
+        {
+            game.opponent.gamePieceId = gamePieceID;
+
+            if (opponentGamePiecePrefab != null)
+            {
+                Destroy(playerGamePiecePrefab);
+                Destroy(opponentGamePiecePrefab);
+            }
+
+            this.InitPlayerPrefabs();
+            this.InitPlayerUI();
         }
 
         private void InitPlayerPrefabs()
@@ -328,35 +345,27 @@ namespace Fourzy
             PlayerEnum player = PlayerEnum.ONE;
             PlayerEnum opponent = PlayerEnum.TWO;
 
-            if (game.gameState.GameType == GameType.REALTIME
-                || game.gameState.GameType == GameType.RANDOM
+            if (game.gameState.GameType == GameType.REALTIME 
+                || game.gameState.GameType == GameType.LEADERBOARD 
                 || game.gameState.GameType == GameType.FRIEND
-                || game.gameState.GameType == GameType.LEADERBOARD)
+                || game.gameState.GameType == GameType.RANDOM)
             {
-                if (game.gameState.GameType == GameType.REALTIME)
-                {
-                    playerGamePieceId = UserManager.instance.gamePieceId;
-                    opponentGamePieceId = game.opponent.gamePieceId;
-                }
-                else if (game.isCurrentPlayer_PlayerOne)
-                {
-                    playerGamePieceId = game.challengerGamePieceId;
-                    opponentGamePieceId = game.challengedGamePieceId;
-                }
-                else
-                {
-                    playerGamePieceId = game.challengedGamePieceId;
-                    opponentGamePieceId = game.challengerGamePieceId;
-
-                    player = PlayerEnum.TWO;
-                    opponent = PlayerEnum.ONE;
-                }
+                playerGamePieceId = UserManager.instance.gamePieceId;
+                opponentGamePieceId = game.opponent.gamePieceId;
             }
+            else if (game.isCurrentPlayer_PlayerOne)
+            {
+                playerGamePieceId = game.challengerGamePieceId;
+                opponentGamePieceId = game.challengedGamePieceId;
+            }
+            else
+            {
+                playerGamePieceId = game.challengedGamePieceId;
+                opponentGamePieceId = game.challengerGamePieceId;
 
-            // For test
-            int numPieces = GameContentManager.Instance.GetGamePieceCount();
-            playerGamePieceId = UnityEngine.Random.Range(0, numPieces);
-            opponentGamePieceId = UnityEngine.Random.Range(0, numPieces);
+                player = PlayerEnum.TWO;
+                opponent = PlayerEnum.ONE;
+            }
 
             GameObject prefab = GameContentManager.Instance.GetGamePiecePrefab(playerGamePieceId);
             playerGamePiecePrefab = Instantiate(prefab);
@@ -369,7 +378,7 @@ namespace Fourzy
             prefab = GameContentManager.Instance.GetGamePiecePrefab(opponentGamePieceId);
             opponentGamePiecePrefab = Instantiate(prefab);
             gamePiece = opponentGamePiecePrefab.GetComponent<GamePiece>();
-            gamePiece.player = player;
+            gamePiece.player = opponent;
             gamePiece.gameBoardView = gameBoardView;
             gamePiece.View.UseSecondaryColor(playerGamePieceId == opponentGamePieceId);
             opponentGamePiecePrefab.SetActive(false);

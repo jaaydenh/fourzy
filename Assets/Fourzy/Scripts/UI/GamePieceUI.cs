@@ -10,6 +10,9 @@ namespace Fourzy
         public GamePieceData gamePieceData;
 
         [SerializeField]
+        private GameObject selectionBorder;
+
+        [SerializeField]
         private Image gamePieceImage;
 
         [SerializeField]
@@ -54,7 +57,6 @@ namespace Fourzy
 
             // Test values
             gamePieceData.NumberOfStars = 3;
-            gamePieceData.TotalNumberOfStars = 5;
             gamePieceData.NumberOfChampions = 0;
             gamePieceData.TotalNumberOfChampions = 100;
             gamePieceData.NumberOfPieces = 20;
@@ -89,6 +91,8 @@ namespace Fourzy
 
                 this.UpdateProgressBar();
                 this.UpdateStars();
+
+                pieceName.text = gamePieceImage.sprite.name;
             }
         }
 
@@ -156,15 +160,27 @@ namespace Fourzy
             }
         }
 
-        public void SetAlternateColor(bool isAlternate) 
+        public void PieceSelect()
         {
-            Image rend = GetComponent<Image>();
-            if (isAlternate) 
+            Toggle toggle = this.GetComponent<Toggle>();
+
+            if (toggle.isOn)
             {
-                rend.material.SetVector("_HSVAAdjust", new Vector4(0.3f, 0, 0, 0));
-            } else {
-                rend.material.SetVector("_HSVAAdjust", new Vector4(0, 0, 0, 0));    
+                selectionBorder.SetActive(true);
+                if (OnSetGamePiece != null)
+                    OnSetGamePiece(gamePieceData.ID.ToString());
             }
+            else
+            {
+                selectionBorder.SetActive(false);
+            }
+        }
+
+        public void ActivateSelector()
+        {
+            Toggle toggle = this.GetComponent<Toggle>();
+            toggle.isOn = true;
+            selectionBorder.SetActive(true);
         }
     }
 }

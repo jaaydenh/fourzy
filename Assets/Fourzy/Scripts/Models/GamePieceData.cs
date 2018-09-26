@@ -27,7 +27,6 @@ namespace Fourzy
         public int NumberOfChampions { get; set; }
         public int TotalNumberOfChampions { get; set; }
         public int NumberOfStars { get; set; }
-        public int TotalNumberOfStars { get; set; }
         public GamePieceState state { get; set; }
 
         [SerializeField] string outlineColor = string.Empty;

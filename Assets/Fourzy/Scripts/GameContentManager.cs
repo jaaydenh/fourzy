@@ -14,9 +14,6 @@ namespace Fourzy
         private List<TokenView> tokenPrefabs = new List<TokenView>();
 
         [SerializeField]
-        private List<Sprite> gamePieceSprites = new List<Sprite>();
-
-        [SerializeField]
         private List<Sprite> tokenSprites = new List<Sprite>();
 
         private GamePieceData[] gamePieceData = new GamePieceData[0];
@@ -71,10 +68,11 @@ namespace Fourzy
 
         public Sprite GetGamePieceSprite(int gamePieceId)
         {
-            if (gamePieceId > 18) {
-                return gamePieceSprites[0];
+            if (gamePieceId > gamePiecePrefabs.Count - 1) 
+            {
+                return gamePiecePrefabs[0].gamePieceIcon;
             }
-            return gamePieceSprites[gamePieceId];
+            return gamePiecePrefabs[gamePieceId].gamePieceIcon;
         }
 
         public Sprite GetTokenSprite(int tokenID)
