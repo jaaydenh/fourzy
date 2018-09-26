@@ -1,0 +1,133 @@
+{
+    "array": [
+        {
+            "ID": "0",
+            "Name": "BlobbyBlob",
+            "Enabled": true,
+            "Rarity": 30,
+            "outlineColor": "0, 1, 0, 1",
+            "secondaryColor": "0.9, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
+        },
+        {
+            "ID": "1",
+            "Name": "Crossy",
+            "Enabled": true,
+            "Rarity": 30,
+            "outlineColor": "0, 0, 1, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "1, 0, 0, 1"
+        },
+        {
+            "ID": "2",
+            "Name": "Triangry",
+            "Enabled": true,
+            "Rarity": 30,
+            "outlineColor": "1, 0, 0, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
+        },
+        {
+            "ID": "3",
+            "Name": "Mr. Bun",
+            "Enabled": true,
+            "Rarity": 30,
+            "outlineColor": "1, 1, 0, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
+        },
+        {
+            "ID": "4",
+            "Name": "Daisy",
+            "Enabled": true,
+            "Rarity": 30,
+            "outlineColor": "0, 0, 1, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
+        },
+        {
+            "ID": "5",
+            "Name": "Spooked",
+            "Enabled": true,
+            "Rarity": 30,
+            "outlineColor": "0, 0, 1, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
+        },
+        {
+            "ID": "6",
+            "Name": "Cyclops",
+<<<<<<< HEAD
+            "Enabled": true,
+            "outlineColor": "0, 0, 1, 1",
+            "secondaryColor": "0.3, 0, 0, 0"
+=======
+            "Enabled": true
+>>>>>>> 57a7bad19cba08cf92025eb8df84a872167a18e3
+        },
+        {
+            "ID": "7",
+            "Name": "Moonpy",
+            "Enabled": true,
+            "Rarity": 30,
+            "outlineColor": "0, 0, 1, 1",
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
+        },
+        {
+            "ID": "8",
+            "Name": "Masked",
+            "Enabled": true
+        },
+        {
+            "ID": "9",
+            "Name": "WizzleWisp",
+            "Enabled": true
+        },
+        {
+            "ID": "10",
+            "Name": "Mewhisky",
+            "Enabled": true
+        },
+        {
+            "ID": "11",
+            "Name": "Sentinal",
+            "Enabled": true
+        },
+        {
+            "ID": "12",
+            "Name": "Ginger",
+            "Enabled": true
+        },
+        {
+            "ID": "13",
+            "Name": "SquidMo",
+            "Enabled": true
+        },
+        {
+            "ID": "14",
+            "Name": "The Bot",
+            "Enabled": true
+        },
+        {
+            "ID": "15",
+            "Name": "Lord Droid",
+            "Enabled": true
+        },
+        {
+            "ID": "16",
+            "Name": "NightOwl",
+            "Enabled": true
+        },
+        {
+            "ID": "17",
+            "Name": "RainbowBite",
+            "Enabled": true
+        },
+        {
+            "ID": "18",
+            "Name": "Munchy",
+            "Enabled": true
+        }
+    ]
+}

@@ -5,6 +5,7 @@ using System.Collections;
 using GameSparks.Api.Requests;
 using System;
 using Facebook.Unity;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -67,6 +68,7 @@ namespace Fourzy
                     Debug.Log("COINS: " + response.Currency1);
                     string facebookId = response.ExternalIds.GetString("FB");
                     ratingElo = response.ScriptData.GetInt("ratingElo");
+                    Mixpanel.Identify(response.UserId);
                     UpdateGUI(response.DisplayName, response.UserId, facebookId, response.Currency1, ratingElo);
                 });
         }
