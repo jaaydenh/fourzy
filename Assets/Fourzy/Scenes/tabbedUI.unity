@@ -1045,7 +1045,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -1552,8 +1552,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 904.7273, y: -85}
-  m_SizeDelta: {x: 226.18182, y: 170}
+  m_AnchoredPosition: {x: 905.4337, y: -85}
+  m_SizeDelta: {x: 226.35844, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &147185699
 MonoBehaviour:
@@ -1981,7 +1981,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1242, y: 2208}
   m_ScreenMatchMode: 0
@@ -2056,7 +2056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -2623,7 +2623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -3368,7 +3368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -3434,8 +3434,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1130.909, y: -85}
-  m_SizeDelta: {x: 226.18182, y: 170}
+  m_AnchoredPosition: {x: 1131.7922, y: -85}
+  m_SizeDelta: {x: 226.35844, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &289465725
 MonoBehaviour:
@@ -3753,7 +3753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -4553,11 +4553,11 @@ MonoBehaviour:
     lineCount: 6
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -4840,7 +4840,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 427567275}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -5523,8 +5523,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 622, y: -85}
-  m_SizeDelta: {x: 339.27274, y: 170}
+  m_AnchoredPosition: {x: 622.4857, y: -85}
+  m_SizeDelta: {x: 339.53766, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &567945115
 MonoBehaviour:
@@ -6081,9 +6081,9 @@ GameObject:
   m_Component:
   - component: {fileID: 617668433}
   - component: {fileID: 617668437}
-  - component: {fileID: 617668436}
   - component: {fileID: 617668434}
   - component: {fileID: 617668435}
+  - component: {fileID: 617668436}
   m_Layer: 5
   m_Name: PiecesGrid
   m_TagString: Untagged
@@ -6106,8 +6106,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00004551245}
-  m_SizeDelta: {x: 0, y: 260}
+  m_AnchoredPosition: {x: 0, y: 0.00012207031}
+  m_SizeDelta: {x: 0, y: 355}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &617668434
 MonoBehaviour:
@@ -6115,7 +6115,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 617668432}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -1184210157, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -6142,21 +6142,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 617668432}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2095666955, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 558b109da67a27b4686138b955f3a7e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 50
-    m_Right: 0
-    m_Top: 190
-    m_Bottom: 120
+    m_Left: 40
+    m_Right: 40
+    m_Top: 200
+    m_Bottom: 155
   m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 196, y: 400}
-  m_Spacing: {x: 40, y: 50}
-  m_Constraint: 1
-  m_ConstraintCount: 3
+  SpacingX: 35
+  SpacingY: 50
+  ExpandHorizontalSpacing: 0
+  ChildForceExpandWidth: 0
+  ChildForceExpandHeight: 0
 --- !u!222 &617668437
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7653,234 +7652,9 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224294611925037128, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -62.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 224294611925037128, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224294611925037128, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224294611925037128, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 132.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 224405198001564884, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224405198001564884, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224405198001564884, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -189.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 114623892956103322, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_FontSize
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114623892956103322, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_Font
-      value: 
-      objectReference: {fileID: 12800000, guid: 3f9c7578ffe364c598bc7b5a408885a6,
-        type: 3}
-    - target: {fileID: 114623892956103322, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_FontStyle
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114507749335404710, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_FontSize
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 114507749335404710, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_MinSize
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114507749335404710, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_Font
-      value: 
-      objectReference: {fileID: 12800000, guid: 3f9c7578ffe364c598bc7b5a408885a6,
-        type: 3}
-    - target: {fileID: 224157766817151582, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 224731204060644818, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 114007766782849930, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_UiScaleMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114007766782849930, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_ReferenceResolution.x
-      value: 750
-      objectReference: {fileID: 0}
-    - target: {fileID: 114007766782849930, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_ReferenceResolution.y
-      value: 1334
-      objectReference: {fileID: 0}
-    - target: {fileID: 114007766782849930, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_ReferencePixelsPerUnit
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 223753975847277248, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114080395055415884, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_Font
-      value: 
-      objectReference: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    - target: {fileID: 114080395055415884, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_FontSize
-      value: 28
-      objectReference: {fileID: 0}
-    - target: {fileID: 114080395055415884, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_FontStyle
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114814631807416556, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_FontSize
-      value: 28
-      objectReference: {fileID: 0}
-    - target: {fileID: 114525676644240806, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_FontSize
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 114525676644240806, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_MinSize
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114419793308824938, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_FontSize
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 114477796898511788, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_FontSize
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 114080395055415884, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_AlignByGeometry
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114080395055415884, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_FontData.m_RichText
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1330134896427848, guid: d7d403c27a1f7e9418edf2a7eb153728, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224294611925037128, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -12.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224405198001564884, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224294611925037128, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 114737850784201306, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114737850784201306, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_Color.g
-      value: 0.1462264
-      objectReference: {fileID: 0}
-    - target: {fileID: 114737850784201306, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_Color.b
-      value: 0.15334229
-      objectReference: {fileID: 0}
-    - target: {fileID: 114737850784201306, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114623892956103322, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114623892956103322, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114623892956103322, guid: d7d403c27a1f7e9418edf2a7eb153728,
-        type: 2}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7d403c27a1f7e9418edf2a7eb153728, type: 2}
   m_IsPrefabAsset: 0
---- !u!1 &738435184 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1601555676859110, guid: d7d403c27a1f7e9418edf2a7eb153728,
-    type: 2}
-  m_PrefabInternal: {fileID: 738435183}
---- !u!114 &738435185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 738435184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: -2}
-  m_UseGraphicAlpha: 1
 --- !u!1 &746808375
 GameObject:
   m_ObjectHideFlags: 0
@@ -8229,7 +8003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -9067,8 +8841,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 113.09091, y: -85}
-  m_SizeDelta: {x: 226.18182, y: 170}
+  m_AnchoredPosition: {x: 113.17922, y: -85}
+  m_SizeDelta: {x: 226.35844, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &887086619
 MonoBehaviour:
@@ -10484,7 +10258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -11088,7 +10862,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 163.6, y: -157.79999}
-  m_SizeDelta: {x: 200, y: 200}
+  m_SizeDelta: {x: 256, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1078228831
 MonoBehaviour:
@@ -11659,7 +11433,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.00014657869, y: 666.99994}
+  m_AnchoredPosition: {x: 0.00010404988, y: 666.99994}
   m_SizeDelta: {x: -705.77423, y: 1100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1149295667
@@ -12399,8 +12173,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 339.27274, y: -85}
-  m_SizeDelta: {x: 226.18182, y: 170}
+  m_AnchoredPosition: {x: 339.53766, y: -85}
+  m_SizeDelta: {x: 226.35844, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1213949947
 MonoBehaviour:
@@ -13377,7 +13151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -17724,7 +17498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -18492,105 +18266,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1839248371}
   m_CullTransparentMesh: 0
---- !u!21 &1857627067
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: CircleProgressMaterial
-  m_Shader: {fileID: 4800000, guid: ded1a08dcd2fa42738cdceae94c37392, type: 3}
-  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _BumpMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailAlbedoMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailMask:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailNormalMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmissionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _HeadTex:
-        m_Texture: {fileID: 2800000, guid: 58a3e6b71b59c4250ba52b7001f82c09, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _OcclusionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ParallaxMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - PixelSnap: 0
-    - _BumpScale: 1
-    - _ColorMask: 15
-    - _Cutoff: 0.169
-    - _DetailNormalMapScale: 1
-    - _DstBlend: 0
-    - _EnableExternalAlpha: 0
-    - _GlossMapScale: 1
-    - _Glossiness: 0.5
-    - _GlossyReflections: 1
-    - _Metallic: 0
-    - _Mode: 0
-    - _OcclusionStrength: 1
-    - _Parallax: 0.02
-    - _Progress: 3.5688496
-    - _Shininess: 1
-    - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UVSec: 0
-    - _UseUIAlphaClip: 0
-    - _ZWrite: 1
-    m_Colors:
-    - _Color: {r: 0, g: 1, b: 0, a: 1}
-    - _Emission: {r: 0, g: 0, b: 0, a: 0}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RectHeadTex: {r: 1, g: 1, b: 1, a: 1}
-    - _RectMainTex: {r: 0, g: 0, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SpecColor: {r: 1, g: 1, b: 1, a: 0}
 --- !u!1 &1865959127
 GameObject:
   m_ObjectHideFlags: 0
@@ -18731,7 +18406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -20080,7 +19755,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -20351,7 +20026,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
@@ -21245,7 +20920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 1
+  m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0

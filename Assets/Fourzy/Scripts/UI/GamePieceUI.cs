@@ -13,6 +13,9 @@ namespace Fourzy
         private Image gamePieceImage;
 
         [SerializeField]
+        private GameObject notFoundImage;
+
+        [SerializeField]
         private Material grayscaleMaterial;
 
         [SerializeField]
@@ -39,6 +42,9 @@ namespace Fourzy
         [SerializeField]
         private List<Image> fadedStars = new List<Image>();
 
+        private const float WithoutInfoFrameHeight = 200.0f;
+        private const float NormalHeight = 400.0f;
+
         public delegate void SetGamePiece(string gamePieceId);
         public static event SetGamePiece OnSetGamePiece;
 
@@ -46,28 +52,36 @@ namespace Fourzy
         {
             this.gamePieceData = gamePieceData;
 
+            // Test values
             gamePieceData.NumberOfStars = 3;
             gamePieceData.TotalNumberOfStars = 5;
-
             gamePieceData.NumberOfChampions = 0;
             gamePieceData.TotalNumberOfChampions = 100;
-
             gamePieceData.NumberOfPieces = 20;
             gamePieceData.TotalNumberOfPieces = 60;
-
             gamePieceData.state = GamePieceState.FoundAndUnlocked;
 
+            gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceData.ID);
 
-            this.UpdateGamePieceImage();
+            LayoutElement layoutElement = this.GetComponent<LayoutElement>();
 
             if (gamePieceData.state == GamePieceState.NotFound)
             {
+                layoutElement.preferredHeight = WithoutInfoFrameHeight;
+                gamePieceImage.material = grayscaleMaterial;
+
                 totalNumberOfPieces.gameObject.SetActive(false);
                 gamePieceInfoFrame.SetActive(false);
                 circleProgress.gameObject.SetActive(false);
+                notFoundImage.SetActive(true);
             }
             else
             {
+                layoutElement.preferredHeight = NormalHeight;
+                gamePieceImage.material = gamePieceImage.defaultMaterial;
+
+                notFoundImage.SetActive(false);
+                
                 pieceName.text = gamePieceData.Name;
                 totalNumberOfPieces.text = gamePieceData.NumberOfPieces + "/" + gamePieceData.TotalNumberOfPieces;
                 totalNumberOfChampions.text = this.FormatedNumberOfChampions(gamePieceData.NumberOfChampions, gamePieceData.TotalNumberOfChampions);
@@ -100,19 +114,6 @@ namespace Fourzy
             }
             formatedText += total;
             return formatedText;
-        }
-
-        private void UpdateGamePieceImage()
-        {
-            gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceData.ID);
-            if (gamePieceData.state == GamePieceState.NotFound)
-            {
-                gamePieceImage.material = grayscaleMaterial;
-            }
-            else
-            {
-                gamePieceImage.material = gamePieceImage.defaultMaterial;
-            }
         }
 
         private void UpdateProgressBar()
