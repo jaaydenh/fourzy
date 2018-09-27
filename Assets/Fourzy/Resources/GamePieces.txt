@@ -2,12 +2,11 @@
     "array": [
         {
             "ID": "0",
-            "Name": "BlobbyBlob",
+            "Name": "Cyclops",
             "Enabled": true,
             "Rarity": 30,
             "outlineColor": "0, 1, 0, 1",
-            "secondaryColor": "0.9, 0, 0, 0",
-            "borderColor": "0, 1, 0, 1"
+            "secondaryColor": "0.9, 0, 0, 0"
         },
         {
             "ID": "1",
@@ -15,26 +14,23 @@
             "Enabled": true,
             "Rarity": 30,
             "outlineColor": "0, 0, 1, 1",
-            "secondaryColor": "0.3, 0, 0, 0",
-            "borderColor": "1, 0, 0, 1"
+            "secondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "2",
-            "Name": "Triangry",
-            "Enabled": true,
-            "Rarity": 30,
-            "outlineColor": "1, 0, 0, 1",
-            "secondaryColor": "0.3, 0, 0, 0",
-            "borderColor": "0, 1, 0, 1"
-        },
-        {
-            "ID": "3",
             "Name": "Mr. Bun",
             "Enabled": true,
             "Rarity": 30,
+            "outlineColor": "1, 0, 0, 1",
+            "secondaryColor": "0.3, 0, 0, 0"
+        },
+        {
+            "ID": "3",
+            "Name": "Triangry",
+            "Enabled": true,
+            "Rarity": 30,
             "outlineColor": "1, 1, 0, 1",
-            "secondaryColor": "0.3, 0, 0, 0",
-            "borderColor": "0, 1, 0, 1"
+            "secondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "4",
@@ -42,8 +38,7 @@
             "Enabled": true,
             "Rarity": 30,
             "outlineColor": "0, 0, 1, 1",
-            "secondaryColor": "0.3, 0, 0, 0",
-            "borderColor": "0, 1, 0, 1"
+            "secondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "5",
@@ -51,15 +46,15 @@
             "Enabled": true,
             "Rarity": 30,
             "outlineColor": "0, 0, 1, 1",
-            "secondaryColor": "0.3, 0, 0, 0",
-            "borderColor": "0, 1, 0, 1"
+            "secondaryColor": "0.3, 0, 0, 0"
         },
         {
             "ID": "6",
-            "Name": "Cyclops",
+            "Name": "BlobbyBlob",
             "Enabled": true,
             "outlineColor": "0, 0, 1, 1",
-            "secondaryColor": "0.3, 0, 0, 0"
+            "secondaryColor": "0.3, 0, 0, 0",
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "7",
@@ -73,57 +68,68 @@
         {
             "ID": "8",
             "Name": "Masked",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "9",
             "Name": "WizzleWisp",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "10",
             "Name": "Mewhisky",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "11",
             "Name": "Sentinal",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "12",
             "Name": "Ginger",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "13",
             "Name": "SquidMo",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "14",
             "Name": "The Bot",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "15",
             "Name": "Lord Droid",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "16",
             "Name": "NightOwl",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "17",
             "Name": "RainbowBite",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         },
         {
             "ID": "18",
             "Name": "Munchy",
-            "Enabled": true
+            "Enabled": true,
+            "borderColor": "0, 1, 0, 1"
         }
     ]
 }
