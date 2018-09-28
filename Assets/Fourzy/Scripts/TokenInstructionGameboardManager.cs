@@ -79,7 +79,8 @@ namespace Fourzy
             this.CreateTokenViews();
 
             float repeatTime = 3.0f;
-            float t = 0.0f;
+            float t = 2.0f;
+
             while(true)
             {
                 t += Time.deltaTime;
