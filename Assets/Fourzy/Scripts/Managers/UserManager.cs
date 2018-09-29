@@ -63,12 +63,19 @@ namespace Fourzy
 
         public void UpdateInformation()
         {
+            
             new AccountDetailsRequest().Send((response) =>
                 {
                     Debug.Log("COINS: " + response.Currency1);
                     string facebookId = response.ExternalIds.GetString("FB");
                     ratingElo = response.ScriptData.GetInt("ratingElo");
                     Mixpanel.Identify(response.UserId);
+                    Mixpanel.people.Set("$name", response.DisplayName);
+
+    // "$email": "jsmith@example.com",    
+    // "$created": "2011-03-16 16:53:54",
+    // "$last_login": new Date(),         
+
                     UpdateGUI(response.DisplayName, response.UserId, facebookId, response.Currency1, ratingElo);
                 });
         }

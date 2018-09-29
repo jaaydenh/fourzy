@@ -158,7 +158,7 @@ PlayerSettings:
     tvOS: com.PartyTroll.Fourzy
   buildNumber:
     iOS: 36
-  AndroidBundleVersionCode: 35
+  AndroidBundleVersionCode: 36
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 0
@@ -494,6 +494,9 @@ PlayerSettings:
   - m_BuildTarget: Standalone
     m_StaticBatching: 1
     m_DynamicBatching: 1
+  - m_BuildTarget: Android
+    m_StaticBatching: 1
+    m_DynamicBatching: 0
   m_BuildTargetGraphicsAPIs:
   - m_BuildTarget: AndroidPlayer
     m_APIs: 08000000

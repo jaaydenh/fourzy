@@ -7,6 +7,7 @@ using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
 using GameSparks.Core;
 using GameAnalyticsSDK;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -89,6 +90,7 @@ namespace Fourzy
                 .SetDisplayName(CreateNewPlayerName())
                 .Send((response) => {
                     if (!response.HasErrors) {
+                        Mixpanel.Identify(response.UserId);
                         UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null, null, null);
                         UserManager.instance.UpdateInformation();
                         ChallengeManager.instance.GetChallenges();
