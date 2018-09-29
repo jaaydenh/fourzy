@@ -36,7 +36,7 @@ namespace Fourzy
             Debug.Log("viewgameboardselection current view: " + ViewController.instance.GetCurrentView().name);
             Hide();
             if (ViewController.instance.GetCurrentView() != null) {
-                if (ViewController.instance.GetCurrentView().GetType() != typeof(ViewTraining))
+                if (ViewController.instance.GetCurrentView().GetType() != typeof(ViewPuzzleSelection))
                 {
                     ViewController.instance.ShowTabView();
                 }

@@ -131,7 +131,7 @@ namespace Fourzy
         }
 
         public void TrainingButton() {
-            ViewController.instance.ChangeView(ViewController.instance.viewTraining);
+            ViewController.instance.ChangeView(ViewController.instance.viewPuzzleSelection);
             ViewController.instance.HideTabView();
             GameManager.instance.headerUI.SetActive(false);
         }

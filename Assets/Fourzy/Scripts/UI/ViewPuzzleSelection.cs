@@ -33,8 +33,14 @@ namespace Fourzy
 
         public void BackButton()
         {
-            ViewController.instance.ChangeView(ViewController.instance.viewTraining);
-            //ViewController.instance.ShowTabView();
+            ViewController.instance.ChangeView(ViewController.instance.view3);
+            ViewController.instance.ShowTabView();
+        }
+
+        public void PassAndPlayButton()
+        {
+            ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
+            ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.PASSANDPLAY);
         }
 
         public void LoadPuzzlePacks() {

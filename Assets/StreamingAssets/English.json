@@ -48,6 +48,7 @@
     {"key":"resign_button","value":"Resign"},
     {"key":"back_button","value":"Back"},
     {"key":"turn_play_button","value":"Turn Play"},
-    {"key":"fast_play_button","value":"Fast Play"}
+    {"key":"fast_play_button","value":"Fast Play"},
+    {"key":"puzzle_play_button","value":"Puzzle Play"}
     ]
 }

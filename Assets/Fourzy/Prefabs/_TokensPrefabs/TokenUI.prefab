@@ -179,13 +179,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ed8db42b84b844fe98a674b52fb245c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  tokenName: 
-  description: 
-  arenaName: 
-  isEnabled: 0
-  isLocked: 0
-  showBackgroundTile: 0
+  tokenData:
+    ID: 0
+    Name: 
+    Arena: 
+    Description: 
+    Enabled: 0
+    showBackgroundTile: 0
+    InGameTokenTypes: 
+    GameBoardInstructionID: 
   tokenNameText: {fileID: 114443995073853334}
   tokenImage: {fileID: 114107730217067956}
   tileBGImage: {fileID: 1216080831216782}
