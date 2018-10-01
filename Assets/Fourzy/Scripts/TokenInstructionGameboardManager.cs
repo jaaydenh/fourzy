@@ -10,13 +10,15 @@ namespace Fourzy
         private GameBoardView gameBoardView;
 
         private GameState gameState;
-        private GameObject[,] tokenViews;
 
         private string tokenBoardID;
 
         public void Init(string tokenBoardID)
         {
             this.tokenBoardID = tokenBoardID;
+
+            gameBoardView.PlayerPiece = GameContentManager.Instance.GetGamePiecePrefab(0);
+            gameBoardView.OpponentPiece = GameContentManager.Instance.GetGamePiecePrefab(1);
 
             this.StartCoroutine(PlayInstructionMovesRoutine());
         }
@@ -42,41 +44,14 @@ namespace Fourzy
                                                 null);
         }
 
-        private void CreateTokenViews()
-        {
-            tokenViews = new GameObject[Constants.numRows, Constants.numColumns];
-
-            TokenBoard previousTokenBoard = gameState.PreviousTokenBoard;
-            IToken[,] previousTokenBoardTokens = previousTokenBoard.tokens;
-
-            for (int row = 0; row < Constants.numRows; row++)
-            {
-                for (int col = 0; col < Constants.numColumns; col++)
-                {
-                    if (previousTokenBoardTokens[row, col] == null || previousTokenBoardTokens[row, col].tokenType == Token.EMPTY)
-                    {
-                        continue;
-                    }
-
-                    Token token = previousTokenBoardTokens[row, col].tokenType;
-
-                    GameObject tokenPrefab = GameContentManager.Instance.GetTokenPrefab(token);
-
-                    if (tokenPrefab)
-                    {
-                        gameBoardView.CreateToken(row, col, tokenPrefab);    
-                    }
-                }
-            }
-        }
-
         private IEnumerator PlayInstructionMovesRoutine()
         {
             yield return null;
 
-            gameBoardView.Init();
             this.CreateGameBoard();
-            this.CreateTokenViews();
+            gameBoardView.Init();
+            gameBoardView.CreateGamePieceViews(gameState.GetGameBoard());
+            gameBoardView.CreateTokenViews(gameState.PreviousTokenBoard.tokens);
 
             float repeatTime = 3.0f;
             float t = 2.0f;
@@ -86,9 +61,10 @@ namespace Fourzy
                 t += Time.deltaTime;
                 if (t > repeatTime)
                 {
-                    gameBoardView.ResetGamePiecesAndTokens();
                     this.CreateGameBoard();
-                    this.CreateTokenViews();
+                    gameBoardView.ResetGamePiecesAndTokens();
+                    gameBoardView.CreateGamePieceViews(gameState.GetGameBoard());
+                    gameBoardView.CreateTokenViews(gameState.PreviousTokenBoard.tokens);
                     this.StartCoroutine(PlayInitialMoves());
                     t = 0;
                 }
@@ -110,19 +86,10 @@ namespace Fourzy
         private IEnumerator MovePiece(Move move)
         {
             List<IToken> activeTokens;
-
             List<MovingGamePiece> movingPieces = gameState.MovePiece(move, false, out activeTokens);
+            gameBoardView.MoveGamePieceViews(move, movingPieces, activeTokens);
 
-            GamePiece gamePiecePrefab = GameContentManager.Instance.GetGamePiecePrefab(0);
-
-            GamePiece gamePiece = gameBoardView.SpawnPiece(move.position.row, move.position.column, gamePiecePrefab);
-            gamePiece.player = move.player;
-            gamePiece.column = move.position.column;
-            gamePiece.row = move.position.row;
-
-            gamePiece.Move(movingPieces, activeTokens);
-
-            yield return new WaitWhile(() => gamePiece.isMoving);
+            yield return new WaitWhile(() => gameBoardView.NumPiecesAnimating > 0);
         }
     }
 }

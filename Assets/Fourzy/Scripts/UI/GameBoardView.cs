@@ -13,6 +13,8 @@ namespace Fourzy
         private Transform tokensRootTransform;
 
         public int NumPiecesAnimating { get; set; }
+        public GamePiece PlayerPiece { get; set; }
+        public GamePiece OpponentPiece { get; set; }
 
         public GamePiece[,] gamePieces; 
         public GameObject[,] tokens; 
@@ -99,6 +101,79 @@ namespace Fourzy
             int y = Mathf.FloorToInt(-(vec3.y - topLeft.y) / step.y);
 
             return new Position(x, y);
+        }
+
+        public void CreateGamePieceViews(int[,] board, float initialAlpha = 1.0f)
+        {
+            gamePieces = new GamePiece[Constants.numRows, Constants.numColumns];
+
+            for (int row = 0; row < Constants.numRows; row++)
+            {
+                for (int col = 0; col < Constants.numColumns; col++)
+                {
+                    int piece = board[row, col];
+                    if (piece == (int)Piece.EMPTY)
+                    {
+                        continue;
+                    }
+
+                    PlayerEnum player = (piece == (int)Piece.BLUE) ? PlayerEnum.ONE : PlayerEnum.TWO;
+
+                    GamePiece pieceObject = SpawnPiece(col, row, player);
+                    pieceObject.player = player;
+                    gamePieces[row, col] = pieceObject;
+                    pieceObject.View.SetAlpha(initialAlpha);
+                }
+            }
+        }
+
+        public void CreateTokenViews(IToken[,] tokens, float initialAlpha = 1.0f)
+        {
+            for (int row = 0; row < Constants.numRows; row++)
+            {
+                for (int col = 0; col < Constants.numColumns; col++)
+                {
+                    if (tokens[row, col] == null || tokens[row, col].tokenType == Token.EMPTY)
+                    {
+                        continue;
+                    }
+
+                    Token token = tokens[row, col].tokenType;
+
+                    GameObject tokenPrefab = GameContentManager.Instance.GetTokenPrefab(token);
+
+                    if (tokenPrefab)
+                    {
+                        this.CreateToken(row, col, tokenPrefab);
+                        this.TokenAt(row, col).GetComponent<SpriteRenderer>().SetAlpha(initialAlpha);
+                    }
+                }
+            }
+        }
+
+        public void MoveGamePieceViews(Move move, List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
+        {
+            GamePiece gamePiece = this.SpawnPiece(move.position.column, move.position.row, move.player);
+            gamePiece.player = move.player;
+            gamePiece.column = move.position.column;
+            gamePiece.row = move.position.row;
+
+            gamePiece.Move(movingPieces, activeTokens);
+        }
+
+        public GamePiece SpawnPiece(int col, int row, PlayerEnum player)
+        {
+            GamePiece gamePiecePrefab;
+            if (player == PlayerPiece.player)
+            {
+                gamePiecePrefab = PlayerPiece;
+            }
+            else
+            {
+                gamePiecePrefab = OpponentPiece;
+            }
+
+            return this.SpawnPiece(row, col, gamePiecePrefab);
         }
 
         public GamePiece SpawnPiece(int row, int col, GamePiece prefab)

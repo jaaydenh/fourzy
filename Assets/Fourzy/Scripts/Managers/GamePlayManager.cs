@@ -92,8 +92,8 @@ namespace Fourzy
             SetActionButton();
             InitPlayerPrefabs();
             ResetUI();
-            CreateGamePieceViews();
-            CreateTokenViews();
+            gameBoardView.CreateGamePieceViews(game.gameState.GetPreviousGameBoard(), 0.0f);
+            gameBoardView.CreateTokenViews(game.gameState.PreviousTokenBoard.tokens, 0.0f);
             InitPlayerUI();
             InitIntroUI();
 
@@ -379,6 +379,9 @@ namespace Fourzy
             opponentGamePiecePrefab.gameBoardView = gameBoardView;
             opponentGamePiecePrefab.View.UseSecondaryColor(opponent == PlayerEnum.TWO && shouldUseSecondaryColor);
             opponentGamePiecePrefab.CachedGO.SetActive(false);
+
+            gameBoardView.PlayerPiece = playerGamePiecePrefab;
+            gameBoardView.OpponentPiece = opponentGamePiecePrefab;
         }
 
         private void InitPlayerUI()
@@ -411,64 +414,6 @@ namespace Fourzy
 
             playerUIPanel.InitPlayerIcon(playerGamePiecePrefab);
             opponentUIPanel.InitPlayerIcon(opponentGamePiecePrefab);
-        }
-
-        private void CreateGamePieceViews()
-        {
-            int[,] board = game.gameState.GetPreviousGameBoard();
-            gameBoardView.gamePieces = new GamePiece[Constants.numRows, Constants.numColumns];
-
-            for (int row = 0; row < Constants.numRows; row++)
-            {
-                for (int col = 0; col < Constants.numColumns; col++)
-                {
-                    int piece = board[row, col];
-                    if (piece == (int)Piece.EMPTY)
-                    {
-                        continue;
-                    }
-
-                    PlayerEnum player = (piece == (int)Piece.BLUE) ? PlayerEnum.ONE : PlayerEnum.TWO;
-
-                    GamePiece pieceObject = SpawnPiece(col, row, player);
-                    pieceObject.player = player;
-                    gameBoardView.gamePieces[row, col] = pieceObject;
-                    pieceObject.View.SetAlpha(0.0f);
-                }
-            }
-        }
-
-        public void CreateStickyToken(int row, int col) 
-        {
-            GameObject stickyToken = GameContentManager.Instance.GetTokenPrefab(Token.STICKY);
-            gameBoardView.CreateToken(row, col, stickyToken);
-        }
-
-        private void CreateTokenViews()
-        {
-            TokenBoard previousTokenBoard = game.gameState.PreviousTokenBoard;
-            IToken[,] previousTokenBoardTokens = previousTokenBoard.tokens;
-            
-            for (int row = 0; row < Constants.numRows; row++)
-            {
-                for (int col = 0; col < Constants.numColumns; col++)
-                {
-                    if (previousTokenBoardTokens[row, col] == null || previousTokenBoardTokens[row, col].tokenType == Token.EMPTY)
-                    {
-                        continue;
-                    }
-
-                    Token token = previousTokenBoardTokens[row, col].tokenType;
-
-                    GameObject tokenPrefab = GameContentManager.Instance.GetTokenPrefab(token);
-
-                    if (tokenPrefab) 
-                    {
-                        gameBoardView.CreateToken(row, col, tokenPrefab);
-                        gameBoardView.TokenAt(row, col).GetComponent<SpriteRenderer>().SetAlpha(0.0f);
-                    }
-                }
-            }
         }
 
         private IEnumerator FadeGameScreen(float startAlpha, float alpha, float fadeTime)
@@ -686,25 +631,6 @@ namespace Fourzy
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync("gamePlay");
             GameManager.instance.OpenPuzzleChallengeGame("next");
-        }
-
-        /// <summary>
-        /// Spawns a gamepiece at the given column and row
-        /// </summary>
-        /// <returns>The piece.</returns>
-        GamePiece SpawnPiece(int col, int row, PlayerEnum player)
-        {
-            GamePiece gamePiecePrefab;
-            if (player == playerGamePiecePrefab.player)
-            {
-                gamePiecePrefab = playerGamePiecePrefab;
-            }
-            else 
-            {
-                gamePiecePrefab = opponentGamePiecePrefab;
-            }
-
-            return gameBoardView.SpawnPiece(row, col, gamePiecePrefab);
         }
 
         private IEnumerator ShowPlayTurnWithDelay(float delay)
@@ -984,7 +910,8 @@ namespace Fourzy
             List<MovingGamePiece> movingPieces = game.gameState.MovePiece(move, replayMove, out activeTokens);
             game.gameState.PrintGameState("AfterMove");
 
-            MoveGamePieceViews(move, movingPieces, activeTokens);
+            gameBoardView.MoveGamePieceViews(move, movingPieces, activeTokens);
+            gameBoardView.PrintGameBoard();
             
             yield return new WaitWhile(() => gameBoardView.NumPiecesAnimating > 0);
 
@@ -1074,18 +1001,6 @@ namespace Fourzy
                 }
                 UpdatePlayerTurn();
             }
-        }
-
-        private void MoveGamePieceViews(Move move, List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
-        {
-            GamePiece gamePiece = SpawnPiece(move.position.column, move.position.row, move.player);
-            gamePiece.player = move.player;
-            gamePiece.column = move.position.column;
-            gamePiece.row = move.position.row;
-
-            gamePiece.Move(movingPieces, activeTokens);
-
-            gameBoardView.PrintGameBoard();
         }
 
         private IEnumerator RandomGamePiecesBlinkingRoutine()
