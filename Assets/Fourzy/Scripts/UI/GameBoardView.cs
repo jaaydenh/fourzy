@@ -195,13 +195,12 @@ namespace Fourzy
         {
             foreach (Transform piece in gamePiecesRootTransform)
             {
-                DestroyImmediate(piece.gameObject);
-                //LeanPool.Despawn(piece.gameObject);
+                Destroy(piece.gameObject);
             }
 
             foreach (Transform token in tokensRootTransform)
             {
-                DestroyImmediate(token.gameObject);
+                Destroy(token.gameObject);
             }
 
             gamePieces = new GamePiece[numRows, numColumns];
