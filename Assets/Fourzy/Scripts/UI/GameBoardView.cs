@@ -189,6 +189,16 @@ namespace Fourzy
             return gamePiece;
         }
 
+        public GameObject SpawnMinigameboardPiece(int row, int col, GameObject prefab)
+        {
+            GameObject gamePiece = Instantiate(prefab);
+            gamePiece.SetLayerRecursively(this.gameObject.layer);
+            gamePiece.transform.parent = this.gamePiecesRootTransform;
+            gamePiece.transform.position = this.PositionToVec3(row, col, 10.0f);
+            gamePiece.transform.localScale = Vector3.one;
+            return gamePiece;
+        }
+
         public void CreateToken(int row, int col, Token tokenType)
         {
             GameObject tokenPrefab = GameContentManager.Instance.GetTokenPrefab(tokenType);
