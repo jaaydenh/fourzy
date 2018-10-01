@@ -101,16 +101,14 @@ namespace Fourzy
             return new Position(x, y);
         }
 
-        public GamePiece SpawnPiece(int row, int col, GameObject prefab)
+        public GamePiece SpawnPiece(int row, int col, GamePiece prefab)
         {
-            GameObject go = Instantiate(prefab);
-            go.SetActive(true);
-            go.transform.parent = this.gamePiecesRootTransform;
-            go.transform.position = this.PositionToVec3(row, col, 10.0f);
-            go.transform.localScale = Vector3.one;
-            go.SetLayerRecursively(this.gameObject.layer);
-
-            GamePiece gamePiece = go.GetComponent<GamePiece>();
+            GamePiece gamePiece = Instantiate(prefab);
+            gamePiece.gameObject.SetActive(true);
+            gamePiece.CachedGO.SetLayerRecursively(this.gameObject.layer);
+            gamePiece.CachedTransform.parent = this.gamePiecesRootTransform;
+            gamePiece.CachedTransform.position = this.PositionToVec3(row, col, 10.0f);
+            gamePiece.CachedTransform.localScale = Vector3.one;
             gamePiece.gameBoardView = this;
             gamePiece.View.SetSortingLayer(spriteRenderer.sortingLayerID);
             return gamePiece;

@@ -23,14 +23,16 @@ namespace Fourzy
         public bool isMoving;
 
         private CircleCollider2D gamePieceCollider;
-        private Transform cachedTransform;
 
+        public Transform CachedTransform { get; private set; }
+        public GameObject CachedGO { get; private set; }
 
 		private void Awake()
 		{
             gamePieceCollider = gameObject.GetComponent<CircleCollider2D>();
-            cachedTransform = this.transform;
+            CachedTransform = this.transform;
             View = this.GetComponent<GamePieceView>();
+            CachedGO = this.gameObject;
 		}
 
         public void Move(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true)
@@ -87,7 +89,7 @@ namespace Fourzy
                 for (float t = 0; t < 1; t += Time.deltaTime * Constants.moveSpeed / distance)
                 {
                     float interpolation = movementCurve.Evaluate(t);
-                    cachedTransform.position = Vector3.Lerp(start, end, interpolation);
+                    CachedTransform.position = Vector3.Lerp(start, end, interpolation);
 
                     this.CheckNextPieceCollision(nextPiece, movingPieces, activeTokens);
                     this.CheckActiveTokenCollision(activeTokens);
@@ -101,7 +103,7 @@ namespace Fourzy
                     yield return null;
                 }
 
-                cachedTransform.position = end;
+                CachedTransform.position = end;
                 start = end;
                 i = nextPos - 1;
             }

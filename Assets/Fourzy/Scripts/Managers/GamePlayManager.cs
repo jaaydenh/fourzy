@@ -28,8 +28,8 @@ namespace Fourzy
         private bool clockStarted = false;
         private int playerMoveCountDown_LastTime;
 
-        private GameObject playerGamePiecePrefab;
-        private GameObject opponentGamePiecePrefab;
+        private GamePiece playerGamePiecePrefab;
+        private GamePiece opponentGamePiecePrefab;
 
         [Header("Game UI")]
         public Image backgroundImage;
@@ -345,10 +345,7 @@ namespace Fourzy
             PlayerEnum player = PlayerEnum.ONE;
             PlayerEnum opponent = PlayerEnum.TWO;
 
-            if (game.gameState.GameType == GameType.REALTIME 
-                || game.gameState.GameType == GameType.LEADERBOARD 
-                || game.gameState.GameType == GameType.FRIEND
-                || game.gameState.GameType == GameType.RANDOM)
+            if (game.gameState.GameType == GameType.REALTIME)
             {
                 playerGamePieceId = UserManager.instance.gamePieceId;
                 opponentGamePieceId = game.opponent.gamePieceId;
@@ -367,21 +364,21 @@ namespace Fourzy
                 opponent = PlayerEnum.ONE;
             }
 
-            GameObject prefab = GameContentManager.Instance.GetGamePiecePrefab(playerGamePieceId);
+            bool shouldUseSecondaryColor = (playerGamePieceId == opponentGamePieceId);
+
+            GamePiece prefab = GameContentManager.Instance.GetGamePiecePrefab(playerGamePieceId);
             playerGamePiecePrefab = Instantiate(prefab);
-            GamePiece gamePiece = playerGamePiecePrefab.GetComponent<GamePiece>();
-            gamePiece.player = player;
-            gamePiece.gameBoardView = gameBoardView;
-            gamePiece.View.UseSecondaryColor(false);
-            playerGamePiecePrefab.SetActive(false);
+            playerGamePiecePrefab.player = player;
+            playerGamePiecePrefab.gameBoardView = gameBoardView;
+            playerGamePiecePrefab.View.UseSecondaryColor(player == PlayerEnum.TWO && shouldUseSecondaryColor);
+            playerGamePiecePrefab.CachedGO.SetActive(false);
 
             prefab = GameContentManager.Instance.GetGamePiecePrefab(opponentGamePieceId);
             opponentGamePiecePrefab = Instantiate(prefab);
-            gamePiece = opponentGamePiecePrefab.GetComponent<GamePiece>();
-            gamePiece.player = opponent;
-            gamePiece.gameBoardView = gameBoardView;
-            gamePiece.View.UseSecondaryColor(playerGamePieceId == opponentGamePieceId);
-            opponentGamePiecePrefab.SetActive(false);
+            opponentGamePiecePrefab.player = opponent;
+            opponentGamePiecePrefab.gameBoardView = gameBoardView;
+            opponentGamePiecePrefab.View.UseSecondaryColor(opponent == PlayerEnum.TWO && shouldUseSecondaryColor);
+            opponentGamePiecePrefab.CachedGO.SetActive(false);
         }
 
         private void InitPlayerUI()
@@ -600,7 +597,7 @@ namespace Fourzy
             GameManager.instance.VisitedGameResults(game);
             UserInputHandler.inputEnabled = false;
 
-            bool isCurrentPlayerWinner = false;
+            bool isCurrentPlayerWinner = this.IsPlayerWinner();
             PlayerEnum currentPlayer = PlayerEnum.NONE;
 
             if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
@@ -697,8 +694,8 @@ namespace Fourzy
         /// <returns>The piece.</returns>
         GamePiece SpawnPiece(int col, int row, PlayerEnum player)
         {
-            GameObject gamePiecePrefab;
-            if (player == PlayerEnum.ONE && game.isCurrentPlayer_PlayerOne)
+            GamePiece gamePiecePrefab;
+            if (player == playerGamePiecePrefab.player)
             {
                 gamePiecePrefab = playerGamePiecePrefab;
             }

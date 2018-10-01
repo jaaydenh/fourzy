@@ -113,7 +113,7 @@ namespace Fourzy
 
             List<MovingGamePiece> movingPieces = gameState.MovePiece(move, false, out activeTokens);
 
-            GameObject gamePiecePrefab = GameContentManager.Instance.GetGamePiecePrefab(0);
+            GamePiece gamePiecePrefab = GameContentManager.Instance.GetGamePiecePrefab(0);
 
             GamePiece gamePiece = gameBoardView.SpawnPiece(move.position.row, move.position.column, gamePiecePrefab);
             gamePiece.player = move.player;

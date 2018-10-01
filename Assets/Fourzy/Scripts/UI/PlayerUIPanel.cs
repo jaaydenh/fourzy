@@ -32,16 +32,15 @@ namespace Fourzy
         {
             testPlayerIcon.SetActive(false);
 
-            GameObject gamePiecePrefab = GameContentManager.Instance.GetGamePiecePrefab(playerGamePieceId);
-            GameObject go = Instantiate(gamePiecePrefab, new Vector3(0, 0, 10),
+            GamePiece gamePiecePrefab = GameContentManager.Instance.GetGamePiecePrefab(playerGamePieceId);
+            playerIcon = Instantiate(gamePiecePrefab, new Vector3(0, 0, 10),
                                         Quaternion.identity, playerIconParent);
-            playerIcon = go.GetComponent<GamePiece>();
 
             playerIcon.transform.localPosition = new Vector3(0, 0, 10);
             playerIcon.player = player;
         }
 
-        public void InitPlayerIcon(GameObject gamePiecePrefab)
+        public void InitPlayerIcon(GamePiece gamePiecePrefab)
         {
             testPlayerIcon.SetActive(false);
 
@@ -50,12 +49,10 @@ namespace Fourzy
                 Destroy(playerIcon.gameObject);
             }
 
-            GameObject go = Instantiate(gamePiecePrefab);
-            go.SetActive(true);
-            go.transform.parent = playerIconParent;
-            go.transform.localPosition = new Vector3(0, 0, 10);
-
-            playerIcon = go.GetComponent<GamePiece>();
+            playerIcon = Instantiate(gamePiecePrefab);
+            playerIcon.gameObject.SetActive(true);
+            playerIcon.CachedTransform.parent = playerIconParent;
+            playerIcon.CachedTransform.localPosition = new Vector3(0, 0, 10);
         }
 
         public void ShowPlayerTurnAnimation()
