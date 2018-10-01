@@ -50,6 +50,8 @@ namespace Fourzy
                 throw new UnityException("Method: MoveGamePiece - movingPieces is empty");
             }
 
+            View.SetupZOrder(5);
+
             gameBoardView.NumPiecesAnimating++;
 
             var movingGamePiece = movingPieces[0];
