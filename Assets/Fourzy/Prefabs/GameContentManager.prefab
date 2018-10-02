@@ -94,14 +94,14 @@ MonoBehaviour:
   - {fileID: 114534274279232054, guid: bf4bb6db16c4d417ba6a16f317cfc77a, type: 2}
   tokenSprites:
   - {fileID: 21300000, guid: f5353a645dec944dbba7601104a19d8a, type: 3}
-  - {fileID: 21300000, guid: a682b86608f0b445087d5031315efb83, type: 3}
+  - {fileID: 21300000, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
   - {fileID: 21300000, guid: 3ae56ad6425124e559530a1e83895111, type: 3}
   - {fileID: 21300000, guid: db7b4a68569c64f2ab1ef70fac2986ef, type: 3}
   - {fileID: 21300000, guid: 66b8871bed2bb4643821fcc3b33d50d5, type: 3}
   - {fileID: 21300000, guid: a2c2996baa8a54178be732284e466991, type: 3}
   - {fileID: 21300000, guid: 02dfbd849cc62490eae07f7e28e57782, type: 3}
   - {fileID: 21300000, guid: 557037c7d96ad4c27b6cf4df8f70e5c3, type: 3}
-  - {fileID: 21300000, guid: 3f2385a0ec8dc43b2bf9a0e1aa098f74, type: 3}
+  - {fileID: 21300040, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
   - {fileID: 21300000, guid: f7598df3d82cf49edbd0714764ddf448, type: 3}
   - {fileID: 21300000, guid: 66563ebefaed04110b5040ca8999b0bd, type: 3}
   - {fileID: 21300000, guid: 3afd237b6813946bbbc7c57286b01172, type: 3}
