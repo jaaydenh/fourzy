@@ -33,6 +33,8 @@ namespace Fourzy
             CachedTransform = this.transform;
             View = this.GetComponent<GamePieceView>();
             CachedGO = this.gameObject;
+
+            View.SetupZOrder(5);
 		}
 
         public void Move(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true)
@@ -154,7 +156,7 @@ namespace Fourzy
                 {
                     if (activeTokens[i].tokenType == Token.FRUIT)
                     {
-                        gameBoardView.CreateToken(activeTokens[i].Row, activeTokens[i].Column, Token.STICKY);
+                        gameBoardView.TokenAt(activeTokens[i].Row, activeTokens[i].Column).GetComponent<FruitTokenView>().PlayFruitIntoStickyAnimation();
                     }
                     else if (activeTokens[i].tokenType == Token.PIT)
                     {

@@ -62,7 +62,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 03187700030ad41a4ba131859f5a43fe, type: 3}
   - {fileID: 21300000, guid: 2a93c550c6fe54b7bb6b17da68d908df, type: 3}
   - {fileID: 21300000, guid: 8314c970340ae4f018fd1364d52a00fd, type: 3}
-  - {fileID: 21300000, guid: 3f2385a0ec8dc43b2bf9a0e1aa098f74, type: 3}
   - {fileID: 21300000, guid: 4f4079e0b78496b459b29ca7953ff56b, type: 3}
   - {fileID: 21300000, guid: 5e87a301d6a104210918553937942022, type: 3}
   - {fileID: 21300000, guid: a8aa2d01300d841fea86dfc1376ded36, type: 3}
@@ -114,7 +113,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: ecc9e1168c677459cbf8a9f82d590e58, type: 3}
   - {fileID: 21300000, guid: b137e826caf1444e091ce74f4bda3083, type: 3}
   - {fileID: 21300000, guid: e06d65464f740244788c674838e4b234, type: 3}
-  - {fileID: 21300000, guid: a682b86608f0b445087d5031315efb83, type: 3}
   - {fileID: 21300000, guid: e59dd586d917d4490bfbceec7e12ca4f, type: 3}
   - {fileID: 21300000, guid: 73d688c62e9cf409896ff14f8edd1cec, type: 3}
   - {fileID: 21300000, guid: 3ae56ad6425124e559530a1e83895111, type: 3}
@@ -155,6 +153,27 @@ SpriteAtlas:
   - {fileID: 21300000, guid: eec1cf8b683b24abca788236caa8c5d9, type: 3}
   - {fileID: 21300000, guid: 5d62099b9c8c04edb9d1163592682ee0, type: 3}
   - {fileID: 21300000, guid: 4300ef9b252d240838007d47d8b224dc, type: 3}
+  - {fileID: 21300014, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300016, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300036, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300034, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300000, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300002, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300004, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300006, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300024, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300008, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300022, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300020, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300010, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300018, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300012, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300032, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300030, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300028, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300026, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300038, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  - {fileID: 21300040, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
   - {fileID: 21300000, guid: f5c45e0c7d6134dd5915636c42d085a9, type: 3}
   - {fileID: 21300000, guid: 96092efcbbf274f2f9315e910640cf5a, type: 3}
   - {fileID: 21300000, guid: f79cc01d2354c4908b9fe6a5cde1c91a, type: 3}
@@ -180,7 +199,6 @@ SpriteAtlas:
   - playerUIBackground
   - coin
   - iconFbLogo
-  - tokenTrainingGardenFruit
   - Loading_Type_004_2
   - MiniGameBoard
   - listItemBackground
@@ -232,7 +250,6 @@ SpriteAtlas:
   - ChampionStar
   - buttonYellowRounded
   - Loading_Type_004_3
-  - tokenSticky
   - DefaultFourzy
   - CloseButton
   - tokenBush
@@ -273,6 +290,27 @@ SpriteAtlas:
   - uiPlayerInfo
   - buttonBlue
   - lockIcon
+  - FruitIntoSticky0008
+  - FruitIntoSticky0009
+  - FruitIntoSticky0019
+  - FruitIntoSticky0018
+  - FruitIntoSticky0000
+  - FruitIntoSticky0001
+  - FruitIntoSticky0002
+  - FruitIntoSticky0003
+  - FruitIntoSticky0013
+  - FruitIntoSticky0004
+  - FruitIntoSticky0012
+  - FruitIntoSticky0011
+  - FruitIntoSticky0006
+  - FruitIntoSticky0010
+  - FruitIntoSticky0007
+  - FruitIntoSticky0017
+  - FruitIntoSticky0016
+  - FruitIntoSticky0015
+  - FruitIntoSticky0014
+  - FruitIntoSticky0020
+  - FruitIntoSticky0021
   - boardTrainingGarden
   - Chest
   - tokenIceSheet

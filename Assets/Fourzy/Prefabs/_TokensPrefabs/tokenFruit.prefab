@@ -20,7 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4888018569508108}
   - component: {fileID: 212342548853258528}
-  - component: {fileID: 114322553127774826}
+  - component: {fileID: 95167452109066022}
+  - component: {fileID: 114437155169781676}
   m_Layer: 5
   m_Name: tokenFruit
   m_TagString: Token
@@ -35,13 +36,31 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1011114628459856}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 4.47, y: -2.06, z: 0}
+  m_LocalScale: {x: 1.07, y: 1.07, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114322553127774826
+--- !u!95 &95167452109066022
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1011114628459856}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3c8da12f6a65249fc8fdf809104fdee2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114437155169781676
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49,11 +68,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1011114628459856}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e25e70828c5a84aaca65935b760e06e5, type: 3}
+  m_Script: {fileID: 11500000, guid: 75d038a2efdcb4402b46b59a7fdc8784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tokenType: 14
   justDisplaying: 0
+  animator: {fileID: 95167452109066022}
 --- !u!212 &212342548853258528
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -89,12 +109,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: 3f2385a0ec8dc43b2bf9a0e1aa098f74, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.28, y: 1.28}
+  m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

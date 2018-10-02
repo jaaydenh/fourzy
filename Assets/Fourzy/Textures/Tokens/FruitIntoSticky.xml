@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="FruitIntoSticky.png">
+	<!-- Created with Adobe Animate version 18.0.2.126 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="FruitIntoSticky0000" x="211" y="404" width="105" height="105" frameX="-54" frameY="-60" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0001" x="0" y="406" width="111" height="99" frameX="-51" frameY="-63" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0002" x="0" y="505" width="115" height="95" frameX="-49" frameY="-65" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0003" x="529" y="505" width="121" height="89" frameX="-46" frameY="-68" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0004" x="650" y="505" width="131" height="79" frameX="-41" frameY="-73" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0005" x="0" y="0" width="0" height="0" frameX="-106" frameY="-112" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0006" x="852" y="162" width="67" height="21" frameX="-73" frameY="-102" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0007" x="529" y="399" width="88" height="79" frameX="-62" frameY="-73" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0008" x="624" y="391" width="121" height="114" frameX="-44" frameY="-52" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0009" x="820" y="381" width="150" height="141" frameX="-30" frameY="-35" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0010" x="852" y="0" width="171" height="162" frameX="-20" frameY="-23" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0011" x="820" y="204" width="186" height="177" frameX="-13" frameY="-15" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0012" x="624" y="204" width="196" height="187" frameX="-8" frameY="-9" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0013" x="420" y="204" width="204" height="195" frameX="-4" frameY="-5" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0014" x="211" y="204" width="209" height="200" frameX="-2" frameY="-2" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0015" x="0" y="204" width="211" height="202" frameX="-1" frameY="-1" frameWidth="213" frameHeight="204"/>
+	<SubTexture name="FruitIntoSticky0016" x="0" y="0" width="213" height="204"/>
+	<SubTexture name="FruitIntoSticky0017" x="213" y="0" width="213" height="204"/>
+	<SubTexture name="FruitIntoSticky0018" x="426" y="0" width="213" height="204"/>
+	<SubTexture name="FruitIntoSticky0019" x="639" y="0" width="213" height="204"/>
+	<SubTexture name="FruitIntoSticky0020" x="639" y="0" width="213" height="204"/>
+	<SubTexture name="FruitIntoSticky0021" x="420" y="399" width="109" height="109" frameX="-52" frameY="-58" frameWidth="213" frameHeight="204"/>
+</TextureAtlas>
