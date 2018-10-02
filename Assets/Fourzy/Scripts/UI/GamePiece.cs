@@ -33,9 +33,12 @@ namespace Fourzy
             CachedTransform = this.transform;
             View = this.GetComponent<GamePieceView>();
             CachedGO = this.gameObject;
-
-            View.SetupZOrder(5);
 		}
+
+        private void Start()
+        {
+            View.SetupZOrder(5);
+        }
 
         public void Move(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true)
         {
@@ -51,8 +54,6 @@ namespace Fourzy
 
                 throw new UnityException("Method: MoveGamePiece - movingPieces is empty");
             }
-
-            View.SetupZOrder(5);
 
             gameBoardView.NumPiecesAnimating++;
 
