@@ -4,32 +4,62 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using GameAnalyticsSDK;
 
-public class LoadingScreenControl : MonoBehaviour {
+namespace Fourzy
+{
+    public class LoadingScreenControl : MonoBehaviour
+    {
+        [SerializeField]
+        private GameObject loadingScreenObj;
 
-    public GameObject loadingScreenObj;
-    public Slider slider;
+        [SerializeField]
+        private Slider slider;
 
-    AsyncOperation async;
+        [SerializeField]
+        private Animator logoAnimator;
 
-    void Start() {
-        //StartCoroutine(Loading());
-        Debug.Log("GameAnalytics.Initialize();");
-        GameAnalytics.Initialize();
-    }
+        private int h_Idle = Animator.StringToHash("Idle");
+        private int h_Logo = Animator.StringToHash("Logo");
 
-    IEnumerator Loading() {
-        loadingScreenObj.SetActive(true);
-        async = SceneManager.LoadSceneAsync("tabbedUI");
-        async.allowSceneActivation = false;
-        yield return new WaitForSeconds(1f);
-        while (async.isDone == false) {
-            slider.value = async.progress;
-            if (async.progress == 0.9f) {
-                slider.value = 1f;
-                yield return new WaitForSeconds(2f);
-                async.allowSceneActivation = true;
+        private void Start()
+        {
+            GameAnalytics.Initialize();
+
+            this.StartCoroutine(LoadingRoutine());
+        }
+
+        private IEnumerator LoadingRoutine()
+        {
+            AsyncOperation async = SceneManager.LoadSceneAsync("tabbedUI");
+            async.allowSceneActivation = false;
+
+            yield return this.StartCoroutine(LogoAnimationRoutine());
+
+            while (!LocalizationManager.Instance.GetIsReady()) yield return null;
+
+            async.allowSceneActivation = true;
+
+            loadingScreenObj.SetActive(true);
+            while (!async.isDone)
+            {
+                slider.value = async.progress;
+                yield return null;
             }
-            yield return null;
+
+        }
+
+        private IEnumerator LogoAnimationRoutine()
+        {
+            int baseLayerIndex = 0;
+
+            logoAnimator.Play(h_Logo);
+
+            while (logoAnimator.GetCurrentAnimatorStateInfo(baseLayerIndex).shortNameHash != h_Logo) yield return true;
+
+            AnimatorStateInfo stateInfo = logoAnimator.GetCurrentAnimatorStateInfo(baseLayerIndex);
+
+            yield return new WaitForSeconds(stateInfo.length);
+
+            logoAnimator.Play(h_Idle, baseLayerIndex);
         }
     }
 }

@@ -11,100 +11,98 @@ using mixpanel;
 
 namespace Fourzy
 {
-    public class LoginManager : Singleton<LoginManager> {
+    public class LoginManager : Singleton<LoginManager>
+    {
+        private delegate void FacebookLoginCallback(AuthenticationResponse _resp);
 
-        public delegate void FacebookLoginCallback(AuthenticationResponse _resp);
+        readonly string[] firstNameSyllables = { "kit", "mon", "fay", "shi", "zag", "blarg", "rash", "izen", "boop", "pop", "moop", "foop" };
+        readonly string[] lastNameSyllables = { "malo", "zak", "abo", "wonk", "zig", "wolf", "cat", "dog", "sheep", "goat" };
+        private bool readyForDeviceLogin;
 
-        public delegate void LoginMessage(string message);
-        public static event LoginMessage OnLoginMessage;
-        public InfoBanner infoBanner;
-        [SerializeField]
-        private Button facebookLoginButton;
-        readonly string[] firstNameSyllables = { "kit","mon","fay","shi","zag","blarg","rash","izen","boop","pop","moop","foop"};
-        readonly string[] lastNameSyllables = { "malo","zak","abo","wonk","zig","wolf","cat","dog","sheep","goat"};
-        bool readyForDeviceLogin;
+        public static event Action<string> OnLoginMessage;
+        public static event Action<bool> OnFBLoginComplete;
 
-        void Start() {
+        new void Awake()
+        {
+            base.Awake();
+
+            ConnectWithFacebook();
+        }
+
+        private void Start()
+        {
             GameAnalytics.Initialize();
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
             GS.GameSparksAvailable += GameSparksIsAvailable;
         }
 
-        new void Awake() {
-            base.Awake();
-            facebookLoginButton.onClick.AddListener(FacebookLogin);
-            ConnectWithFacebook();
-        }
-
-        // void OnEnable() {
-        //     GS.GameSparksAvailable += GameSparksIsAvailable;
-        // }
-
-        // void OnDisable() {
-        //     GS.GameSparksAvailable -= GameSparksIsAvailable;
-        // }
-
-        private void GameSparksIsAvailable(bool connected) {
-            //Debug.Log("LoginManager: GameSparksIsAvailable: connect: " + connected + " readyForDeviceLogin: "+ readyForDeviceLogin);
-            if (connected && readyForDeviceLogin && !FB.IsLoggedIn) {
+        private void GameSparksIsAvailable(bool connected)
+        {
+            if (connected && readyForDeviceLogin && !FB.IsLoggedIn)
+            {
                 DeviceLogin();
-            } else if (connected) {
+            }
+            else if (connected)
+            {
                 readyForDeviceLogin = true;
             }
         }
 
-        private void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token) {
+        private void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token)
+        {
             Debug.Log("Firebase: Received Registration Token: " + token.Token);
 
             ManagePushNotifications(token.Token, "fcm");
         }
 
-        private void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e) {
+        private void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
+        {
             Debug.Log("Firebase: Received a new message from: " + e.Message.From);
         }
 
         private void ManagePushNotifications(string token, string deviceOS)
-        {       
+        {
             new PushRegistrationRequest().SetDeviceOS(deviceOS)
                 .SetPushId(token)
                 .Send((response) =>
+                {
+                    if (response.HasErrors)
                     {
-                        if (response.HasErrors)
-                        {
-                            Debug.Log("***** PushRegistration Request Error: " + response.Errors.JSON);
+                        Debug.Log("***** PushRegistration Request Error: " + response.Errors.JSON);
 
-                            AnalyticsManager.LogError("push_registration_request_error: ", response.Errors.JSON);
-                        } else {
-                            Debug.Log("***** PushRegistration Successful: Device OS: " + deviceOS);
+                        AnalyticsManager.LogError("push_registration_request_error: ", response.Errors.JSON);
+                    }
+                    else
+                    {
+                        Debug.Log("***** PushRegistration Successful: Device OS: " + deviceOS);
 
-                            Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                            customAttributes.Add("deviceOS", deviceOS);
-                            AnalyticsManager.LogCustom("push_registration_request", customAttributes);
-                        }
-                    });
+                        Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                        customAttributes.Add("deviceOS", deviceOS);
+                        AnalyticsManager.LogCustom("push_registration_request", customAttributes);
+                    }
+                });
         }
 
-        void DeviceLogin() {
+        void DeviceLogin()
+        {
             new DeviceAuthenticationRequest()
                 .SetDisplayName(CreateNewPlayerName())
                 .Send((response) => {
-                    if (!response.HasErrors) {
+                    if (!response.HasErrors)
+                    {
                         Mixpanel.Identify(response.UserId);
-                        UserManager.instance.UpdateGUI(response.DisplayName,response.UserId, null, null, null);
+                        UserManager.instance.UpdateUserInfo(response.DisplayName, response.UserId, null, null, null);
                         UserManager.instance.UpdateInformation();
                         ChallengeManager.instance.GetChallenges();
                         //LeaderboardManager.instance.GetLeaderboard();
 
-                        // Debug.Log("Device Authenticated...UserId: " + response.UserId);
-                        // Debug.Log("DisplayName: " + response.DisplayName);
-                        // Debug.Log("NewPlayer: " + response.NewPlayer);
-                        // Debug.Log("SwitchSummary: " + response.SwitchSummary);
-
                         AnalyticsManager.LogCustom("device_authentication_request");
                         if (OnLoginMessage != null)
                             OnLoginMessage("Device Authentication Success: " + response.DisplayName);
-                    } else {
+                    }
+                    else
+                    {
                         Debug.Log("***** Error Authenticating Device: " + response.Errors.JSON);
                         if (OnLoginMessage != null)
                             OnLoginMessage("Error Authenticating Device: " + response.Errors.JSON);
@@ -123,10 +121,13 @@ namespace Fourzy
             if (OnLoginMessage != null)
                 OnLoginMessage("Connecting to Facebook With GameSparks...");// first check if FB is ready, and then login //
             // if its not ready we just init FB and use the login method as the callback for the init method //
-            if (!FB.IsInitialized) {
+            if (!FB.IsInitialized)
+            {
                 Debug.Log("Initializing Facebook...");
                 FB.Init(CheckFacebookLogin, null);
-            } else {
+            }
+            else
+            {
                 FB.ActivateApp();
                 CheckFacebookLogin();
             }
@@ -134,27 +135,33 @@ namespace Fourzy
 
         void CheckFacebookLogin()
         {
-            if (FB.IsInitialized) {
+            if (FB.IsInitialized)
+            {
                 FB.ActivateApp();
                 if (FB.IsLoggedIn)
                 {
                     Debug.Log("Already Logged into Facebook");
                     GameSparksFBLogin(AfterFBLogin);
-                    facebookLoginButton.gameObject.SetActive(false);
+                    //facebookLoginButton.gameObject.SetActive(false);
                 }
                 else
                 {
                     Debug.Log("Not Logged into Facebook: readyForDeviceLogin: " + readyForDeviceLogin);
-                    facebookLoginButton.gameObject.SetActive(true);
-                    facebookLoginButton.interactable = true;
-                    //Invoke("DeviceLogin", 0.5f);
-                    if (readyForDeviceLogin) {
+                    //facebookLoginButton.gameObject.SetActive(true);
+                    //facebookLoginButton.interactable = true;
+
+                    if (readyForDeviceLogin)
+                    {
                         DeviceLogin();
-                    } else {
+                    }
+                    else
+                    {
                         readyForDeviceLogin = true;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 ConnectWithFacebook(); // if we are still not connected, then try to process again
             }
         }
@@ -165,11 +172,10 @@ namespace Fourzy
         /// </summary>
         public void FacebookLogin()
         {
-            facebookLoginButton.interactable = false;
             if (!FB.IsLoggedIn)
             {
                 Debug.Log("Logging into Facebook");
-                var perms = new List<string>(){"public_profile", "email", "user_friends"} ;
+                var perms = new List<string>() { "public_profile", "email", "user_friends" };
                 FB.LogInWithReadPermissions(perms, GameSparksFBConnect);
             }
             else
@@ -181,7 +187,7 @@ namespace Fourzy
         void GameSparksFBConnect(ILoginResult result)
         {
             Debug.Log("GameSparksFBConnect");
-            if(FB.IsLoggedIn)
+            if (FB.IsLoggedIn)
             {
                 Debug.Log("Logging into gamesparks with facebook details");
 
@@ -191,12 +197,17 @@ namespace Fourzy
             else
             {
                 Debug.LogWarning("Something went wrong with connecting to FaceBook: " + result.Error);
-                facebookLoginButton.interactable = true;
 
-                if (OnLoginMessage != null) {
+                if (OnFBLoginComplete != null)
+                {
+                    OnFBLoginComplete(false);
+                }
+
+                if (OnLoginMessage != null)
+                {
                     AnalyticsManager.LogError("gamesparks_fb_connect_error", result.Error);
                     OnLoginMessage("Gamesparks login error: " + result.Error);
-                } 
+                }
                 // else {
                 //     AnalyticsManager.LogCustom("gamesparks_fb_connect_decline");
                 //     OnLoginMessage("Declined Facebook Login");
@@ -208,10 +219,13 @@ namespace Fourzy
         private void AfterFBLogin(AuthenticationResponse response)
         {
             Debug.Log("AfterFBLogin:UserId: " + response.UserId);
-            // infoBanner.ShowText("Succesfully Logged into Facebook");
             OnLoginMessage("Succesfully Logged into Facebook");
 
-            facebookLoginButton.gameObject.SetActive(false);
+            if (OnFBLoginComplete != null)
+            {
+                OnFBLoginComplete(true);
+            }
+
             UserManager.instance.UpdateInformation();
             ChallengeManager.instance.GetChallenges();
             FriendManager.instance.GetFriends();
@@ -219,7 +233,7 @@ namespace Fourzy
         }
 
         //This method will connect GameSparks with FaceBook
-        private void GameSparksFBLogin(FacebookLoginCallback _fbLoginCallback )
+        private void GameSparksFBLogin(FacebookLoginCallback _fbLoginCallback)
         {
             Debug.Log("Sending FacebookConnectRequest using AccessToken: " + AccessToken.CurrentAccessToken.TokenString);
             bool success = false;
@@ -231,7 +245,7 @@ namespace Fourzy
                 .SetSwitchIfPossible(true)//this will switch to the player with this FB account id if they already have an account from a separate login
                 .SetSyncDisplayName(true)
                 .Send((response) => {
-                    if(!response.HasErrors)
+                    if (!response.HasErrors)
                     {
                         Debug.Log("Logged into gamesparks with facebook");
                         success = true;
@@ -240,9 +254,11 @@ namespace Fourzy
                     else
                     {
                         Debug.LogWarning("***** Error Logging into Facebook: " + response.Errors.JSON);
-                        // infoBanner.ShowText("Error Logging into Facebook: " + response.Errors.JSON);
-                        facebookLoginButton.gameObject.SetActive(true);
-                        facebookLoginButton.interactable = true;
+                        if (OnFBLoginComplete != null)
+                        {
+                            OnFBLoginComplete(false);
+                        }
+
                         if (OnLoginMessage != null)
                             OnLoginMessage("Error Logging into Facebook: " + response.Errors.JSON);
                     }
@@ -256,13 +272,14 @@ namespace Fourzy
             //Creates a first name with 2-3 syllables
             string firstName = "";
             int numberOfSyllablesInFirstName = UnityEngine.Random.Range(2, 4);
-            for (int i = 0; i < numberOfSyllablesInFirstName; i++) {
+            for (int i = 0; i < numberOfSyllablesInFirstName; i++)
+            {
                 firstName += firstNameSyllables[UnityEngine.Random.Range(0, firstNameSyllables.Length)];
             }
 
             string firstNameLetter = "";
-            firstNameLetter = firstName.Substring(0,1);
-            firstName = firstName.Remove(0,1);
+            firstNameLetter = firstName.Substring(0, 1);
+            firstName = firstName.Remove(0, 1);
             firstNameLetter = firstNameLetter.ToUpper();
             firstName = firstNameLetter + firstName;
 
@@ -274,13 +291,13 @@ namespace Fourzy
                 lastName += lastNameSyllables[UnityEngine.Random.Range(0, lastNameSyllables.Length)];
             }
             string lastNameLetter = "";
-            lastNameLetter = lastName.Substring(0,1);
-            lastName = lastName.Remove(0,1);
+            lastNameLetter = lastName.Substring(0, 1);
+            lastName = lastName.Remove(0, 1);
             lastNameLetter = lastNameLetter.ToUpper();
             lastName = lastNameLetter + lastName;
 
             //assembles the newly-created name
-            return firstName + " " + lastName + Mathf.CeilToInt(UnityEngine.Random.Range(0f,9999f)).ToString();
+            return firstName + " " + lastName + Mathf.CeilToInt(UnityEngine.Random.Range(0f, 9999f)).ToString();
         }
     }
 }

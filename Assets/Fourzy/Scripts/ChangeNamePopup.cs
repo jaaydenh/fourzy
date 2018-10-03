@@ -8,15 +8,17 @@ namespace Fourzy
 {
     public class ChangeNamePopup : MonoBehaviour, IPopup
     {
-        [SerializeField]
-        private Text currentNameText;
+        [SerializeField] Text currentNameText;
+        [SerializeField] InputField inputField;
 
-        [SerializeField]
-        private InputField inputField;
-
-        private void Awake()
+        private void OnEnable()
         {
-            UserManager.OnUpdateName += UserManagerOnUpdateName;
+            UserManager.OnUpdateUserInfo += UserManagerOnUpdateName;
+        }
+
+        private void OnDisable()
+        {
+            UserManager.OnUpdateUserInfo -= UserManagerOnUpdateName;
         }
 
         private void UserManagerOnUpdateName()

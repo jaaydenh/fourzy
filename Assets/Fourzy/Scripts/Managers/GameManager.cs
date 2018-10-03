@@ -514,8 +514,6 @@ namespace Fourzy
             Debug.Log("ShowInfoBanner");
             GameObject infoBannerObject = Instantiate(infoBannerPrefab) as GameObject;
             InfoBanner infoBanner = infoBannerObject.GetComponent<InfoBanner>();
-            // infoBannerObject.gameObject.transform.SetParent(createGameGameboardGrid.transform);
-            //ErrorPanel.SetActive(true);
             StartCoroutine(infoBanner.ShowText(message));
         }
 

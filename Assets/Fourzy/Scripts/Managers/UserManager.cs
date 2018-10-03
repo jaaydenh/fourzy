@@ -13,32 +13,17 @@ namespace Fourzy
     {
         public string userName;
         public string userId;
-        public int? ratingElo;
+        public int ratingElo;
         public long coins;
         public int gamePieceId;
-
         public Sprite profilePicture;
-        public Text gamePieceNameLabel;
-        public Text ratingEloLabel;
-        public Image profilePictureImage;
 
-        [SerializeField]
-        Text userNameLabel;
-        [SerializeField]
-        Image gamePieceImage;
-        [SerializeField]
-        Text coinsLabel;
-
-        bool didLoadGamePieces;
-
-        public delegate void UpdateName();
-        public static event UpdateName OnUpdateName;
+        public static event Action OnUpdateUserInfo;
+        public static event Action<int> OnUpdateUserGamePieceID;
 
         new void Awake()
         {
             base.Awake();
-
-			//profilePicture = new Sprite();
         }
 
         void Start()
@@ -63,21 +48,20 @@ namespace Fourzy
 
         public void UpdateInformation()
         {
-            
             new AccountDetailsRequest().Send((response) =>
-                {
-                    Debug.Log("COINS: " + response.Currency1);
-                    string facebookId = response.ExternalIds.GetString("FB");
-                    ratingElo = response.ScriptData.GetInt("ratingElo");
-                    Mixpanel.Identify(response.UserId);
-                    Mixpanel.people.Set("$name", response.DisplayName);
+            {
+                Debug.Log("COINS: " + response.Currency1);
+                string facebookId = response.ExternalIds.GetString("FB");
+                int? rateElo = response.ScriptData.GetInt("ratingElo");
+                Mixpanel.Identify(response.UserId);
+                Mixpanel.people.Set("$name", response.DisplayName);
 
-    // "$email": "jsmith@example.com",    
-    // "$created": "2011-03-16 16:53:54",
-    // "$last_login": new Date(),         
+                // "$email": "jsmith@example.com",    
+                // "$created": "2011-03-16 16:53:54",
+                // "$last_login": new Date(),         
 
-                    UpdateGUI(response.DisplayName, response.UserId, facebookId, response.Currency1, ratingElo);
-                });
+                UpdateUserInfo(response.DisplayName, response.UserId, facebookId, response.Currency1, rateElo);
+            });
         }
 
         public void UpdatePlayerDisplayName(string name) 
@@ -92,65 +76,51 @@ namespace Fourzy
                     else
                     {
                         Debug.Log("Successfully updated player display name");
-                        this.ChangeName(name);    
+                        this.userName = name;
+                        if (OnUpdateUserInfo != null)
+                        {
+                            OnUpdateUserInfo();
+                        }
                     }
                 });
         }
 
         private void SetPlayerGamePiece(string id)
         {
-            //Debug.Log("SetPlayerGamePiece: gamepieceid: " + id);
             gamePieceId = int.Parse(id);
-            if (gamePieceId > GameContentManager.Instance.GetGamePieceCount() - 1) {
+            if (gamePieceId > GameContentManager.Instance.GetGamePieceCount() - 1) 
+            {
                 gamePieceId = 0;
             }
-            gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceId);
-            gamePieceImage.gameObject.SetActive(true);
 
-            if (!didLoadGamePieces)
+            if (OnUpdateUserGamePieceID != null)
             {
-                didLoadGamePieces = true;
+                OnUpdateUserGamePieceID(gamePieceId);
             }
-            gamePieceNameLabel.text = GameContentManager.Instance.GetGamePieceName(gamePieceId);
         }
 
-        public void UpdateGUI(string name, string uid, string fbId, long? coins, int? rating)
+        public void UpdateUserInfo(string name, string uid, string fbId, long? coins, int? rating)
         {
-            this.ChangeName(name);
-            userId = uid;
-            if (rating != null)
-            {
-                ratingEloLabel.text = rating.ToString();
-            }
-            else
-            {
-                ratingEloLabel.text = "0";
-            }
-
+            this.userName = name;
+            this.userId = uid;
             this.coins = coins.GetValueOrDefault(0);
-            coinsLabel.text = this.coins.ToString();
+            this.ratingElo = rating.GetValueOrDefault(0);
 
-            if (fbId != null) {
-
-                // GetFBPicture(fbId, UpdateProfileImage);
-
-                StartCoroutine(UserManager.instance.GetFBPicture(fbId, (sprite) =>
+            if (fbId != null)
+            {
+                StartCoroutine(GetFBPicture(fbId, (sprite) =>
+                {
+                    if (sprite)
                     {
-                        if (sprite) {
-                            profilePicture = sprite;
-                        }
-                    }));
+                        this.profilePicture = sprite;
+                    }
+                }));
             }
 
-
-        }
-
-        private void ChangeName(string name)
-        {
-            userName = name;
-            userNameLabel.text = userName;
-            if (OnUpdateName != null)
-                OnUpdateName();
+            if (OnUpdateUserInfo != null)
+            {
+                OnUpdateUserInfo();
+            }
         }
 
         // private void UpdateProfileImage(IGraphResult result) {

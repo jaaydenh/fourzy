@@ -10,7 +10,11 @@ namespace Fourzy
         public static View3 instance;
         public GameObject areaSelectButton;
 
-        // Use this for initialization
+        [SerializeField] Text gamePieceNameLabel;
+        [SerializeField] Text ratingEloLabel;
+        [SerializeField] Text userNameLabel;
+        [SerializeField] Image gamePieceImage;
+
         void Start()
         {
             instance = this;
@@ -41,19 +45,23 @@ namespace Fourzy
         {
             base.Show();
             GameManager.instance.headerUI.SetActive(true);
+
+            UserManager.OnUpdateUserInfo += UserManager_OnUpdateUserInfo;
+            UserManager.OnUpdateUserGamePieceID += UserManager_OnUpdateUserGamePieceID;
+
+            UpdateUI();
         }
 
         public override void Hide()
         {
-            //EasyTouch.On_SwipeStart -= On_SwipeStart;
-            //EasyTouch.On_Swipe -= On_Swipe;
-            //EasyTouch.On_SwipeEnd -= On_SwipeEnd;
+            UserManager.OnUpdateUserInfo -= UserManager_OnUpdateUserInfo;
+            UserManager.OnUpdateUserGamePieceID -= UserManager_OnUpdateUserGamePieceID;
+
             base.Hide();
         }
 
         public override void ShowAnimated(AnimationDirection sourceDirection)
         {
-            //ViewController.instance.currentActiveView = TotalView.view3;
             ViewController.instance.SetActiveView(TotalView.view3);
             base.ShowAnimated(sourceDirection);
         }
@@ -61,32 +69,6 @@ namespace Fourzy
         public override void HideAnimated(AnimationDirection getAwayDirection)
         {
             base.HideAnimated(getAwayDirection);
-        }
-
-        // At the swipe beginning 
-        private void On_SwipeStart(Gesture gesture)
-        {
-        }
-
-        // During the swipe
-        private void On_Swipe(Gesture gesture)
-        {
-        }
-
-        // At the swipe end 
-        private void On_SwipeEnd(Gesture gesture)
-        {
-            float angles = gesture.GetSwipeOrDragAngle();
-            if (gesture.swipe == EasyTouch.SwipeDirection.Left)
-            {
-                View3.instance.HideAnimated(AnimationDirection.right);
-                View4.instance.ShowAnimated(AnimationDirection.right);
-            }
-            if (gesture.swipe == EasyTouch.SwipeDirection.Right)
-            {
-                View3.instance.HideAnimated(AnimationDirection.left);
-                View2.instance.ShowAnimated(AnimationDirection.left);
-            }
         }
 
         public void TurnPlayButton()
@@ -145,5 +127,34 @@ namespace Fourzy
             ViewController.instance.ChangeView(ViewController.instance.viewAreaSelect);
             ViewController.instance.HideTabView();
         }
+
+        void UpdateUI()
+        {
+            UserManager user = UserManager.instance;
+
+            ratingEloLabel.text = user.ratingElo.ToString();
+            if (user.userName != string.Empty)
+            {
+                userNameLabel.text = user.userName;
+            }
+
+            gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(user.gamePieceId);
+            gamePieceNameLabel.text = GameContentManager.Instance.GetGamePieceName(user.gamePieceId);
+        }
+
+        void UserManager_OnUpdateUserInfo()
+        {
+            UserManager user = UserManager.instance;
+
+            ratingEloLabel.text = user.ratingElo.ToString();
+            userNameLabel.text = user.userName;
+        }
+
+        void UserManager_OnUpdateUserGamePieceID(int gamePieceId)
+        {
+            gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceId);
+            gamePieceNameLabel.text = GameContentManager.Instance.GetGamePieceName(gamePieceId);
+        }
+
     }
 }

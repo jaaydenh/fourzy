@@ -5,7 +5,6 @@ namespace Fourzy
     public class SoundManager : Singleton<SoundManager>
     {
         public AudioSource efxSource;
-        public AudioSource musicSource;
         public float lowPitchRange = .9f;
         public float highPitchRange = 1.1f;
 
@@ -25,7 +24,8 @@ namespace Fourzy
             efxSource.PlayOneShot(clips[randomIndex]);
         }
 
-        public void Mute(bool shouldMute) {
+        public void Mute(bool shouldMute)
+        {
             efxSource.mute = shouldMute;
         }
     }
