@@ -11,6 +11,14 @@ using mixpanel;
 
 namespace Fourzy
 {
+    public class Friend
+    {
+        public string userName;
+        public string id;
+        public bool isOnline;
+        public string facebookId;
+    }
+
     public class LoginManager : Singleton<LoginManager>
     {
         private delegate void FacebookLoginCallback(AuthenticationResponse _resp);
@@ -19,8 +27,11 @@ namespace Fourzy
         readonly string[] lastNameSyllables = { "malo", "zak", "abo", "wonk", "zig", "wolf", "cat", "dog", "sheep", "goat" };
         private bool readyForDeviceLogin;
 
+        public List<Friend> Friends { get; private set; }
+
         public static event Action<string> OnLoginMessage;
         public static event Action<bool> OnFBLoginComplete;
+        public static event Action OnGetFriends;
 
         new void Awake()
         {
@@ -228,7 +239,7 @@ namespace Fourzy
 
             UserManager.instance.UpdateInformation();
             ChallengeManager.instance.GetChallenges();
-            FriendManager.instance.GetFriends();
+            this.GetFriendsRequest();
             //LeaderboardManager.instance.GetLeaderboard();
         }
 
@@ -298,6 +309,39 @@ namespace Fourzy
 
             //assembles the newly-created name
             return firstName + " " + lastName + Mathf.CeilToInt(UnityEngine.Random.Range(0f, 9999f)).ToString();
+        }
+
+        private void GetFriendsRequest()
+        {
+            if (!FB.IsLoggedIn)
+            {
+                return;
+            }
+
+            new ListGameFriendsRequest().Send((response) =>
+            {
+                if (Friends == null)
+                {
+                    Friends = new List<Friend>();
+                }
+                
+                Friends.Clear();
+
+                foreach (var friendResp in response.Friends)
+                {
+                    Friend friend = new Friend();
+                    friend.userName = friendResp.DisplayName;
+                    friend.id = friendResp.Id;
+                    friend.isOnline = friendResp.Online.Value;
+                    friend.facebookId = friendResp.ExternalIds.GetString("FB");
+                    Friends.Add(friend);
+                }
+
+                if (OnGetFriends != null)
+                {
+                    OnGetFriends();
+                }
+            });
         }
     }
 }

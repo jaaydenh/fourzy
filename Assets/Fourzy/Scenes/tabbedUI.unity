@@ -1303,7 +1303,7 @@ GameObject:
   - component: {fileID: 93910501}
   - component: {fileID: 93910500}
   m_Layer: 5
-  m_Name: View4
+  m_Name: ViewSocial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1325,6 +1325,12 @@ MonoBehaviour:
   keepHistory: 0
   isVisible: 0
   btnFBLogin: {fileID: 963059901}
+  friendEntryPrefab: {fileID: 1356825899643184, guid: fee19bf7f5f1e49d998d24590969e4f6,
+    type: 2}
+  friendsList: {fileID: 1018993801}
+  noFriendsText: {fileID: 1131531076}
+  friendViews: []
+  onlineIndicator: {fileID: 1017322924}
 --- !u!20 &93910501
 Camera:
   m_ObjectHideFlags: 0
@@ -1871,7 +1877,6 @@ GameObject:
   - component: {fileID: 159214247}
   - component: {fileID: 159214246}
   - component: {fileID: 159214249}
-  - component: {fileID: 159214250}
   - component: {fileID: 159214251}
   - component: {fileID: 159214253}
   - component: {fileID: 159214252}
@@ -1937,24 +1942,6 @@ MonoBehaviour:
   coins: 0
   gamePieceId: 0
   profilePicture: {fileID: 0}
-  coinsLabel: {fileID: 1385710278}
---- !u!114 &159214250
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 159214245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de1579b4426fc49738d0bf3256e018f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  friendEntryPrefab: {fileID: 1356825899643184, guid: fee19bf7f5f1e49d998d24590969e4f6,
-    type: 2}
-  friendsList: {fileID: 1018993801}
-  noFriendsText: {fileID: 1131531076}
-  friends: []
-  onlineIndicator: {fileID: 1017322924}
 --- !u!114 &159214251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11340,7 +11327,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.00018061502, y: 666.99994}
+  m_AnchoredPosition: {x: 0.00041338045, y: 666.99994}
   m_SizeDelta: {x: -705.77423, y: 1100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1149295667
@@ -13507,7 +13494,7 @@ MonoBehaviour:
   view1: {fileID: 678434221}
   view2: {fileID: 1019611730}
   view3: {fileID: 1633695111}
-  view4: {fileID: 93910500}
+  viewSocial: {fileID: 93910500}
   view5: {fileID: 349489274}
   viewTraining: {fileID: 62495812}
   viewGameboardSelection: {fileID: 1224700217}
@@ -18191,7 +18178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0.00010864883, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0.00000693283, y: -0.000061035156}
   m_SizeDelta: {x: 400, y: -27}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1839248373
