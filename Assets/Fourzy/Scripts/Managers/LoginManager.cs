@@ -11,14 +11,6 @@ using mixpanel;
 
 namespace Fourzy
 {
-    public class Friend
-    {
-        public string userName;
-        public string id;
-        public bool isOnline;
-        public string facebookId;
-    }
-
     public class LoginManager : Singleton<LoginManager>
     {
         private delegate void FacebookLoginCallback(AuthenticationResponse _resp);
@@ -342,6 +334,61 @@ namespace Fourzy
                     OnGetFriends();
                 }
             });
+        }
+
+        public void GetCoinsEarnedLeaderboard(Action<List<Leaderboard>, string> callback)
+        {
+            this.GetLeaderboard("puzzlesCompletedLeaderboard", callback, false);
+        }
+
+        public void GetWinsLeaderboard(Action<List<Leaderboard>, string> callback)
+        {
+            this.GetLeaderboard("winLossLeaderboard", callback, true);
+        }
+
+        private void GetLeaderboard(string leaderboardShortCode, Action<List<Leaderboard>, string> callback, bool isWinsLeaderboard)
+        {
+            new LeaderboardDataRequest()
+                .SetLeaderboardShortCode(leaderboardShortCode)
+                .SetEntryCount(100)
+                .Send((response) =>
+                {
+                    if (response.HasErrors)
+                    {
+                        Debug.Log("***** Error Retrieving Leaderboard Data: " + response.Errors.JSON);
+                        if (callback != null)
+                        {
+                            callback(null, "Error Retrieving Leaderboard Data: " + response.Errors.JSON);
+                        }
+                        return;
+                    }
+
+                    List<Leaderboard> leaderboards = new List<Leaderboard>();
+
+                    foreach (LeaderboardDataResponse._LeaderboardData entry in response.Data)
+                    {
+                        Leaderboard leaderboard = new Leaderboard();
+                        leaderboard.userId = entry.UserId;
+                        leaderboard.userName = entry.UserName;
+                        leaderboard.facebookId = entry.ExternalIds.GetString("FB");
+                        leaderboard.rank = entry.Rank.Value;
+                        leaderboard.isWinsLeaderboard = isWinsLeaderboard;
+                        if (isWinsLeaderboard)
+                        {
+                            leaderboard.wins = entry.JSONData["wins"].ToString();
+                        }
+                        else
+                        {
+                            leaderboard.coins = entry.JSONData["completed"].ToString();
+                        }
+                        leaderboards.Add(leaderboard);
+                    }
+
+                    if (callback != null)
+                    {
+                        callback(leaderboards, string.Empty);
+                    }
+                });
         }
     }
 }

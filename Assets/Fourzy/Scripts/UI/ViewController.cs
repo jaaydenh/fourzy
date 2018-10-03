@@ -9,7 +9,7 @@ namespace Fourzy
         view2 = 1,
         view3 = 2,
         viewSocial = 3,
-        view5 = 4,
+        viewRanking = 4,
         viewTraining,
         viewGameboardSelection,
         viewMatchMaking,
@@ -31,7 +31,7 @@ namespace Fourzy
         public UIView view2;
         public UIView view3;
         public UIView viewSocial;
-        public UIView view5;
+        public UIView viewRanking;
         public UIView viewTraining;
         public UIView viewGameboardSelection;
         public UIView viewMatchMaking;
@@ -57,7 +57,7 @@ namespace Fourzy
             view2.Hide();
             view3.Hide();
             viewSocial.Hide();
-            view5.Hide();
+            viewRanking.Hide();
             viewTraining.Hide();
             viewGameboardSelection.Hide();
             viewMatchMaking.Hide();
@@ -142,10 +142,10 @@ namespace Fourzy
                     previousView = currentView;
                     currentView = viewSocial;
                     break;
-                case TotalView.view5:
-                    currentActiveView = TotalView.view5;
+                case TotalView.viewRanking:
+                    currentActiveView = TotalView.viewRanking;
                     previousView = currentView;
-                    currentView = view5;
+                    currentView = viewRanking;
                     break;
                 case TotalView.viewGameboardSelection:
                     currentActiveView = TotalView.viewGameboardSelection;
