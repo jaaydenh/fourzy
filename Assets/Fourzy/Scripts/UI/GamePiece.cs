@@ -166,6 +166,70 @@ namespace Fourzy
 
                         this.View.FadeAfterPit();
                     }
+                    else if (activeTokens[i].tokenType == Token.CIRCLE_BOMB)
+                    {
+                        SpriteRenderer sr = gameBoardView.TokenAt(activeTokens[i].Row, activeTokens[i].Column).GetComponent<SpriteRenderer>();
+                        sr.DOFade(0f, 1.5f);
+
+                        if (activeTokens[i].Row > 0){
+                            // TopMiddle
+                            GamePiece gp = gameBoardView.GamePieceAt(activeTokens[i].Row-1, activeTokens[i].Column);
+                            if (gp) {
+                                gp.View.Fade(0f, 1f);
+                            }
+
+                            if (activeTokens[i].Column > 0) {
+                                //TopLeft
+                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row-1, activeTokens[i].Column-1);
+                                if (gp) {
+                                    gp.View.Fade(0f, 1f);
+                                }
+
+                                //Left
+                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row, activeTokens[i].Column-1);
+                                if (gp) {
+                                    gp.View.Fade(0f, 1f);
+                                }
+                            }
+                            if (activeTokens[i].Column < Constants.numColumns-1) {
+                                //TopRight
+                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row-1, activeTokens[i].Column+1);
+                                if (gp) {
+                                    gp.View.Fade(0f, 1f);
+                                }
+                                //Right
+                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row, activeTokens[i].Column+1);
+                                if (gp) {
+                                    gp.View.Fade(0f, 1f);
+                                }
+                            }
+                        }
+
+                        if (activeTokens[i].Row < Constants.numRows-1){
+                            //Bottom
+                            GamePiece gp = gameBoardView.GamePieceAt(activeTokens[i].Row+1, activeTokens[i].Column);
+                            if (gp) {
+                                gp.View.Fade(0f, 1f);
+                            }
+
+                            //BottomLeft
+                            if (activeTokens[i].Column > 0) {
+                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row+1, activeTokens[i].Column-1);
+                                if (gp) {
+                                    gp.View.Fade(0f, 1f);
+                                }
+                            }
+                            //BottomRight
+                            if (activeTokens[i].Column < Constants.numColumns-1) {
+                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row+1, activeTokens[i].Column+1);
+                                if (gp) {
+                                    gp.View.Fade(0f, 1f);
+                                }
+                            }
+                        }
+
+                        this.View.Fade(0f, 1.0f);
+                    }
 
                     activeTokens.RemoveAt(i);
                 }

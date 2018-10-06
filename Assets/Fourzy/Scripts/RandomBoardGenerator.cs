@@ -1456,9 +1456,11 @@ namespace Fourzy
                 case "pit":
 				return (int)Token.PIT;
                 case "sand":
-				return (int)Token.SAND;
-				case "water":
-				return (int)Token.WATER;
+                return (int)Token.SAND;
+                case "water":
+                return (int)Token.WATER;
+                case "circle_bomb":
+                return (int)Token.CIRCLE_BOMB;
             }
             return 0;
         }

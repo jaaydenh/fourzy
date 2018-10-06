@@ -235,6 +235,11 @@ namespace Fourzy
             return gamePieces[position.row, position.column];
         }
 
+        public GamePiece GamePieceAt(int row, int col)
+        {
+            return gamePieces[row, col];
+        }
+
         public GameObject TokenAt(int row, int col)
         {
             return tokens[row, col];
