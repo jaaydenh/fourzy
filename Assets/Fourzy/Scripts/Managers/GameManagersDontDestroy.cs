@@ -6,9 +6,19 @@ namespace Fourzy
 {
     public class GameManagersDontDestroy : MonoBehaviour
     {
+        private static bool activeGameManagers;
+
         private void Awake()
         {
-            DontDestroyOnLoad(this.gameObject);
+            if (activeGameManagers)
+            {
+                this.gameObject.SetActive(false);
+            }
+            else
+            {
+                activeGameManagers = true;
+                DontDestroyOnLoad(this.gameObject);
+            }
         }
     }
 }

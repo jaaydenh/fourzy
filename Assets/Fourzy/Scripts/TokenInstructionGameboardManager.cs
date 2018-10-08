@@ -35,7 +35,7 @@ namespace Fourzy
 
         private void CreateGameBoard()
         {
-            TokenBoard tokenBoard = TokenBoardLoader.instance.GetTokenBoard(tokenBoardID);
+            TokenBoard tokenBoard = TokenBoardLoader.Instance.GetTokenBoard(tokenBoardID);
             gameState = new GameState(Constants.numRows,
                                                 Constants.numColumns,
                                                 GameType.PASSANDPLAY,
@@ -78,6 +78,7 @@ namespace Fourzy
         private IEnumerator PlayInitialMoves()
         {
             List<MoveInfo> initialMoves = gameState.TokenBoard.initialMoves;
+            Debug.LogError("initialMoves.Count = " + initialMoves.Count);
 
             for (int i = 0; i < initialMoves.Count; i++)
             {
