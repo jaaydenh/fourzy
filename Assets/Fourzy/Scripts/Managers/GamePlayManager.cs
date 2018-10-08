@@ -349,6 +349,11 @@ namespace Fourzy
             {
                 playerGamePieceId = UserManager.instance.gamePieceId;
                 opponentGamePieceId = game.opponent.gamePieceId;
+
+                if (!game.isCurrentPlayer_PlayerOne) {
+                    player = PlayerEnum.TWO;
+                    opponent = PlayerEnum.ONE;
+                }
             }
             else if (game.isCurrentPlayer_PlayerOne)
             {
@@ -697,7 +702,7 @@ namespace Fourzy
                             retryPuzzleChallengeButton.gameObject.SetActive(true);
                         }
                     }
-                    else if (!GameManager.instance.isOnboardingActive)
+                    else if (!GameManager.instance.isOnboardingActive && game.gameState.GameType == GameType.PASSANDPLAY)
                     {
                         rematchButton.gameObject.SetActive(true);
                     }
@@ -1149,7 +1154,7 @@ namespace Fourzy
                     }
                 }
             }
-            else if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
+            else if (game.gameState.GameType ==  GameType.REALTIME || game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
             {
                 if (!string.IsNullOrEmpty(game.winnerName))
                 {
