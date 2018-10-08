@@ -48,7 +48,7 @@ namespace Fourzy
             puzzlesCompletedCount = 0;
             puzzlesTotalCount = 0;
 
-            PuzzlePack[] puzzlePacks = PuzzleChallengeLoader.instance.GetPuzzlePacks();
+            PuzzlePack[] puzzlePacks = PuzzleChallengeLoader.Instance.GetPuzzlePacks();
 
             if (puzzlePackGrid.transform.childCount > 0) {
                 for (int i = puzzlePackGrid.transform.childCount-1; i >= 0; i--) {

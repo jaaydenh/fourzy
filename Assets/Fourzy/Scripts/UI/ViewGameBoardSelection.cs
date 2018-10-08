@@ -35,7 +35,7 @@ namespace Fourzy
         {
             Hide();
             this.ClearMiniBoards();
-            GameManager.instance.OpenNewGame(gameType, opponent, true, null);
+            GameManager.Instance.OpenNewGame(gameType, opponent, true, null);
         }
 
         public void BackButton()
@@ -63,21 +63,21 @@ namespace Fourzy
         public void TransitionToViewGameBoardSelection(GameType gameType, string opponentId = "", string opponentName = "", Image opponentProfilePicture = null, string opponentLeaderboardRank = "")
         {
             if (opponentId != "") {
-                ChallengeManager.instance.GetOpponentGamePiece(opponentId);
+                ChallengeManager.Instance.GetOpponentGamePiece(opponentId);
             }
 
-            // GameManager.instance.ResetUIGameScreen();
+            // GameManager.Instance.ResetUIGameScreen();
             // challengeInstanceId = null;
             this.gameType = gameType;
 
             this.opponent = new Opponent(opponentId, opponentName, "");
             
-            // GameManager.instance.opponentUserId = opponentId;
-            // GameManager.instance.opponentNameLabel.text = opponentName;
+            // GameManager.Instance.opponentUserId = opponentId;
+            // GameManager.Instance.opponentNameLabel.text = opponentName;
 
             // if (opponentProfilePicture != null)
             // {
-            //     GameManager.instance.opponentProfilePicture.sprite = opponentProfilePicture.sprite;
+            //     GameManager.Instance.opponentProfilePicture.sprite = opponentProfilePicture.sprite;
             // }
             this.opponent.opponentLeaderboardRank = opponentLeaderboardRank;
 
@@ -87,7 +87,7 @@ namespace Fourzy
         private void LoadMiniBoards()
         {
             Debug.Log("LoadMiniBoards");
-            TokenBoard[] boards = TokenBoardLoader.instance.GetTokenBoardsForBoardSelection();
+            TokenBoard[] boards = TokenBoardLoader.Instance.GetTokenBoardsForBoardSelection();
 
             ClearMiniBoards();
 

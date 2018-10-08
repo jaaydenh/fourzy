@@ -50,7 +50,7 @@ namespace Fourzy
             if (isRealtime) {
                 RealtimeManager.Instance.FindPlayers();
             } else {
-                ChallengeManager.instance.FindRandomChallenge(FindChallengeSuccess, FindChallengeError);
+                ChallengeManager.Instance.FindRandomChallenge(FindChallengeSuccess, FindChallengeError);
             }
         }
 
@@ -101,7 +101,7 @@ namespace Fourzy
                 //Spark.setScriptData("challenge to join", randomChallengeId);
 
                 // For now players are joined to a random challenge
-                ChallengeManager.instance.JoinChallenge(challengeIdToJoin, JoinChallengeSuccess, JoinChallengeError);
+                ChallengeManager.Instance.JoinChallenge(challengeIdToJoin, JoinChallengeSuccess, JoinChallengeError);
             }
             else
             {
@@ -110,14 +110,14 @@ namespace Fourzy
                     Invoke("Hide", minimumTimerTime - elapsedTime);
                 } else {
                     //Send player to Game Screen to make the first move
-                    ChallengeManager.instance.OpenNewMultiplayerGame();
+                    ChallengeManager.Instance.OpenNewMultiplayerGame();
                     Hide();
                 }
             }
         }
 
         private void StartRealtimeGame(int firstPlayerPeerId, int tokenBoardIndex) {
-            ChallengeManager.instance.OpenNewRealtimeGame(firstPlayerPeerId, tokenBoardIndex);
+            ChallengeManager.Instance.OpenNewRealtimeGame(firstPlayerPeerId, tokenBoardIndex);
             Hide();
         }
 
@@ -129,7 +129,7 @@ namespace Fourzy
         }
 
         private void OpenNewMultiplayerGame() {
-            ChallengeManager.instance.OpenNewMultiplayerGame();
+            ChallengeManager.Instance.OpenNewMultiplayerGame();
         }
 
         private void FindChallengeError(FindChallengeResponse response)
@@ -139,7 +139,7 @@ namespace Fourzy
             AnalyticsManager.LogError("find_challenge_request_error", response.Errors.JSON);
 
             if (findChallengerErrorCount < 2) {
-                ChallengeManager.instance.FindRandomChallenge(FindChallengeSuccess, FindChallengeError);
+                ChallengeManager.Instance.FindRandomChallenge(FindChallengeSuccess, FindChallengeError);
             } else {
                 userFacingMessage.text = response.Errors.JSON;
                 isVisible = false;
@@ -150,9 +150,9 @@ namespace Fourzy
 
         private void JoinChallengeSuccess(JoinChallengeResponse response) {
             // Debug.Log("ViewMatchMaking : JoinChallengeSuccess");
-            // GameManager.instance.challengeInstanceId = challengeIdToJoin;
+            // GameManager.Instance.challengeInstanceId = challengeIdToJoin;
             //Send Player to Game Screen to make a move
-            ChallengeManager.instance.GetChallenge(challengeIdToJoin, GetChallengeSuccess, GetChallengeError);
+            ChallengeManager.Instance.GetChallenge(challengeIdToJoin, GetChallengeSuccess, GetChallengeError);
         }
 
         private void JoinChallengeError(JoinChallengeResponse response)
@@ -162,7 +162,7 @@ namespace Fourzy
             AnalyticsManager.LogError("join_challenge_request_error", response.Errors.JSON);
 
             if (joinChallengeErrorCount < 2) {
-                ChallengeManager.instance.JoinChallenge(challengeIdToJoin, JoinChallengeSuccess, JoinChallengeError);
+                ChallengeManager.Instance.JoinChallenge(challengeIdToJoin, JoinChallengeSuccess, JoinChallengeError);
             } else {
                 userFacingMessage.text = response.Errors.JSON;
                 isVisible = false;
@@ -176,20 +176,20 @@ namespace Fourzy
             var challenge = response.Challenge;
             GSData scriptData = response.ScriptData;
 
-            ChallengeManager.instance.challenge = challenge;
+            ChallengeManager.Instance.challenge = challenge;
 
             if (elapsedTime < minimumTimerTime)
             {
                 Invoke("OpenJoinedMultiplayerGame", minimumTimerTime - elapsedTime);
                 Invoke("Hide", minimumTimerTime - elapsedTime);
             } else {
-                ChallengeManager.instance.OpenJoinedMultiplayerGame();
+                ChallengeManager.Instance.OpenJoinedMultiplayerGame();
                 Hide();
             }
         }
 
         private void OpenJoinedMultiplayerGame() {
-            ChallengeManager.instance.OpenJoinedMultiplayerGame();
+            ChallengeManager.Instance.OpenJoinedMultiplayerGame();
         }
 
         private void GetChallengeError(GetChallengeResponse response) {
@@ -198,7 +198,7 @@ namespace Fourzy
             AnalyticsManager.LogError("get_challenge_request_error", response.Errors.JSON);
 
             if (getChallengeError < 2) {
-                ChallengeManager.instance.GetChallenge(challengeIdToJoin, GetChallengeSuccess, GetChallengeError);
+                ChallengeManager.Instance.GetChallenge(challengeIdToJoin, GetChallengeSuccess, GetChallengeError);
             } else {
                 userFacingMessage.text = response.Errors.JSON;
                 isVisible = false;

@@ -43,10 +43,10 @@ namespace Fourzy
         {
             onlineTexture.color = isOnline ? Color.green : Color.gray;
 
-            //ChallengeManager.instance.GetGamePiece(id, GetGamePieceIdSuccess, GetGamePieceIdFailure);
+            //ChallengeManager.Instance.GetGamePiece(id, GetGamePieceIdSuccess, GetGamePieceIdFailure);
 
             // if (facebookId != null) {
-            //     StartCoroutine(UserManager.instance.GetFBPicture(facebookId, (sprite)=>
+            //     StartCoroutine(UserManager.Instance.GetFBPicture(facebookId, (sprite)=>
             //         {
             //             profilePicture.sprite = sprite;
             //         }));

@@ -2,7 +2,8 @@
 
 namespace Fourzy
 {
-    public class SoundManager : Singleton<SoundManager>
+    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
+    public class SoundManager : UnitySingleton<SoundManager>
     {
         public AudioSource efxSource;
         public float lowPitchRange = .9f;

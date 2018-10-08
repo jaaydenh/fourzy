@@ -9,7 +9,7 @@ using System;
 
 namespace Fourzy
 {
-    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene, true)]
+    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class RealtimeManager : UnitySingleton<RealtimeManager> {
 
         public delegate void RealtimeReady(int firstPlayerPeerId, int tokenBoardIndex);
@@ -38,12 +38,12 @@ namespace Fourzy
         }
 
         void OnMatchNotFound (MatchNotFoundMessage _message) {
-            GameManager.instance.ShowInfoBanner("No Match Found");
+            GameManager.Instance.ShowInfoBanner("No Match Found");
             OnRealtimeMatchNotFound();
         }
 
         void OnMatchFound (MatchFoundMessage _message) {
-            GameManager.instance.ShowInfoBanner("Match Found");
+            GameManager.Instance.ShowInfoBanner("Match Found");
             rtSessionInfo = new RTSessionInfo(_message);
             StartNewRTSession(_message);
         }

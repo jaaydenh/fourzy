@@ -46,7 +46,7 @@ namespace Fourzy
         public void StartOnboarding()
         {
             Debug.Log("Onboarding:StartOnboarding");
-            GameManager.instance.isOnboardingActive = true;
+            GameManager.Instance.isOnboardingActive = true;
 
             onboardingStep = PlayerPrefs.GetInt("onboardingStep");
             onboardingStage = PlayerPrefs.GetInt("onboardingStage");
@@ -115,7 +115,7 @@ namespace Fourzy
                     break;
                 case 4:
                     GamePlayManager.Instance.UnloadGamePlayScreen();
-                    GameManager.instance.OpenNewGame(GameType.PASSANDPLAY, null, false, "1000");
+                    GameManager.Instance.OpenNewGame(GameType.PASSANDPLAY, null, false, "1000");
                     moveCount = 0;
                     bg_dim.SetActive(false);
                     fullscreenButton.SetActive(false);
@@ -140,7 +140,7 @@ namespace Fourzy
                     break;
                 case 7:
                     GamePlayManager.Instance.UnloadGamePlayScreen();
-                    GameManager.instance.OpenNewGame(GameType.PASSANDPLAY, null, false, "101");
+                    GameManager.Instance.OpenNewGame(GameType.PASSANDPLAY, null, false, "101");
                     moveCount = 0;
                     bg_dim.SetActive(false);
                     fullscreenButton.SetActive(false);
@@ -176,7 +176,7 @@ namespace Fourzy
                     }
                     HideWizardDialog();
                     PlayerPrefs.SetInt("onboardingStage", 2);
-                    GameManager.instance.isOnboardingActive = false;
+                    GameManager.Instance.isOnboardingActive = false;
                     break;
                 default:
                     break;
@@ -222,14 +222,14 @@ namespace Fourzy
                 {
                     case 1:
                         Move move1 = new Move(4, Direction.UP, PlayerEnum.TWO);
-                        GameManager.instance.CallMovePiece(move1, false, false);
+                        GameManager.Instance.CallMovePiece(move1, false, false);
                         break;
                     case 2:
                         TapHintPosition(44, -302);
                         break;
                     case 3:
                         Move move2 = new Move(2, Direction.DOWN, PlayerEnum.TWO);
-                        GameManager.instance.CallMovePiece(move2, false, false);
+                        GameManager.Instance.CallMovePiece(move2, false, false);
                         break;
                     case 4:
                         hand.SetActive(true);
@@ -240,7 +240,7 @@ namespace Fourzy
                         break;
                 }
             }
-            else if (onboardingStep == 7 && GameManager.instance.activeGame.gameState.Winner != PlayerEnum.ONE)
+            else if (onboardingStep == 7 && GameManager.Instance.activeGame.gameState.Winner != PlayerEnum.ONE)
             {
                 AnalyticsManager.LogOnboardingComplete(false, onboardingStage, onboardingStep);
                 onboardingStep--;
@@ -261,8 +261,8 @@ namespace Fourzy
             if (onboardingStep == 3) {
                 StartCoroutine(NextStepWithWait(2));
             } else if (onboardingStep == 7) {
-                if (GameManager.instance.activeGame.gameState.Winner == PlayerEnum.ONE) {
-                    Debug.Log("GameManager.instance.activeGame.gameState.winner: " + GameManager.instance.activeGame.gameState.Winner);
+                if (GameManager.Instance.activeGame.gameState.Winner == PlayerEnum.ONE) {
+                    Debug.Log("GameManager.Instance.activeGame.gameState.winner: " + GameManager.Instance.activeGame.gameState.Winner);
                     AnalyticsManager.LogOnboardingComplete(true, onboardingStage, onboardingStep);
                     StartCoroutine(NextStepWithWait(2));
                 }

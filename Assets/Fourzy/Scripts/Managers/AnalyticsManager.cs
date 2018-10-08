@@ -169,7 +169,7 @@ namespace Fourzy
             else if (game.gameState.GameType == GameType.RANDOM)
             {
                 Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                customAttributes.Add("PlayerName", UserManager.instance.userName);
+                customAttributes.Add("PlayerName", UserManager.Instance.userName);
                 customAttributes.Add("TokenBoardId", game.gameState.TokenBoard.id);
                 customAttributes.Add("TokenBoardName", game.gameState.TokenBoard.name);
                 AnalyticsManager.LogCustom("open_new_multiplayer_game", customAttributes);

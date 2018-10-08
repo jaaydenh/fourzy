@@ -11,7 +11,8 @@ using mixpanel;
 
 namespace Fourzy
 {
-    public class LoginManager : Singleton<LoginManager>
+    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
+    public class LoginManager : UnitySingleton<LoginManager>
     {
         private delegate void FacebookLoginCallback(AuthenticationResponse _resp);
 
@@ -26,18 +27,14 @@ namespace Fourzy
         public static event Action<bool> OnDeviceLoginComplete;
         public static event Action OnGetFriends;
 
-        new void Awake()
-        {
-            base.Awake();
-
-            ConnectWithFacebook();
-        }
-
         private void Start()
         {
+            GameAnalytics.Initialize();
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
             GS.GameSparksAvailable += GameSparksIsAvailable;
+
+            ConnectWithFacebook();
         }
 
         private void GameSparksIsAvailable(bool connected)
@@ -95,9 +92,9 @@ namespace Fourzy
                     if (!response.HasErrors)
                     {
                         Mixpanel.Identify(response.UserId);
-                        UserManager.instance.UpdateUserInfo(response.DisplayName, response.UserId, null, null, null);
-                        UserManager.instance.UpdateInformation();
-                    ChallengeManager.instance.GetChallengesRequest();
+                        UserManager.Instance.UpdateUserInfo(response.DisplayName, response.UserId, null, null, null);
+                        UserManager.Instance.UpdateInformation();
+                    ChallengeManager.Instance.GetChallengesRequest();
                         //LeaderboardManager.instance.GetLeaderboard();
 
                         AnalyticsManager.LogCustom("device_authentication_request");
@@ -234,8 +231,8 @@ namespace Fourzy
                 OnFBLoginComplete(true);
             }
 
-            UserManager.instance.UpdateInformation();
-            ChallengeManager.instance.GetChallengesRequest();
+            UserManager.Instance.UpdateInformation();
+            ChallengeManager.Instance.GetChallengesRequest();
             this.GetFriendsRequest();
             //LeaderboardManager.instance.GetLeaderboard();
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Fourzy
 {
-    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene, false)]
+    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class GameContentManager : UnitySingleton<GameContentManager>
     {
         [SerializeField]
@@ -21,8 +21,10 @@ namespace Fourzy
         private Dictionary<int, TokenData> inGameTokensData = new Dictionary<int, TokenData>();
         private Dictionary<Token, TokenView> sortedTokenPrefabs = new Dictionary<Token, TokenView>();
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             foreach (TokenView token in tokenPrefabs)
             {
                 sortedTokenPrefabs[token.tokenType] = token;
@@ -31,8 +33,8 @@ namespace Fourzy
 
         public void UpdateContentData()
         {
-            gamePieceData = TokenBoardLoader.instance.GetAllGamePieces();
-            tokenData = TokenBoardLoader.instance.GetAllTokens();
+            gamePieceData = TokenBoardLoader.Instance.GetAllGamePieces();
+            tokenData = TokenBoardLoader.Instance.GetAllTokens();
 
             for (int i = 0; i < gamePiecePrefabs.Count; i++)
             {

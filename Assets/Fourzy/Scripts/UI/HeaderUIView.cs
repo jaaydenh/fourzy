@@ -11,7 +11,7 @@ namespace Fourzy
 
         private void Start()
         {
-            coinsLabel.text = UserManager.instance.coins.ToString();
+            coinsLabel.text = UserManager.Instance.coins.ToString();
         }
 
         private void OnEnable()
@@ -26,7 +26,7 @@ namespace Fourzy
 
         void UserManager_OnUpdateUserInfo()
         {
-            coinsLabel.text = UserManager.instance.coins.ToString();
+            coinsLabel.text = UserManager.Instance.coins.ToString();
         }
 
     }

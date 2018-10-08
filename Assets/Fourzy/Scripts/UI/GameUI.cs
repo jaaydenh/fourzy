@@ -51,7 +51,7 @@ namespace Fourzy
 
             // if (game.opponentProfilePictureSprite == null) {
             //     if (game.opponent.opponentFBId != null) {
-            //         StartCoroutine(UserManager.instance.GetFBPicture(game.opponent.opponentFBId, (sprite)=>
+            //         StartCoroutine(UserManager.Instance.GetFBPicture(game.opponent.opponentFBId, (sprite)=>
             //             {
             //                 opponentProfilePicture.sprite = sprite;
             //             }));
@@ -89,7 +89,7 @@ namespace Fourzy
                 statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("expired_text");
             } else {
                 //We then check if the userId of the next player is equal to ours
-                //if (nextPlayerId == UserManager.instance.userId)
+                //if (nextPlayerId == UserManager.Instance.userId)
                 if (game.gameState.isCurrentPlayerTurn)
                 {
                     statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("your_move_text");
@@ -115,7 +115,7 @@ namespace Fourzy
         }
 
         public void UpdateGamesListItemUI() {
-            ChallengeManager.instance.GetGamePiece(game.opponent.opponentId, GetGamePieceIdSuccess, GetGamePieceIdFailure);
+            ChallengeManager.Instance.GetGamePiece(game.opponent.opponentId, GetGamePieceIdSuccess, GetGamePieceIdFailure);
         }
 
         private void GetGamePieceIdSuccess(LogEventResponse response) {
@@ -177,7 +177,7 @@ namespace Fourzy
             ViewController.instance.HideTabView();
             UITabManager.instance.ResetAllTabs();
 
-            GameManager.instance.OpenGame(game);
+            GameManager.Instance.OpenGame(game);
         }
     }
 }

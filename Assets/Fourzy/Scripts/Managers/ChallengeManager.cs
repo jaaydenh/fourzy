@@ -12,7 +12,8 @@ using Lean.Pool;
 
 namespace Fourzy
 {
-    public class ChallengeManager : Singleton<ChallengeManager>
+    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
+    public class ChallengeManager : UnitySingleton<ChallengeManager>
     {
         public delegate void ReceivedPlayerGamePiece(string gamePieceId);
         public static event ReceivedPlayerGamePiece OnReceivedPlayerGamePiece;
@@ -124,16 +125,16 @@ namespace Fourzy
             // Debug.Log("ChallengeManager: GetTokenBoard: " + tokenBoardId);
             if (tokenBoardId != null) 
             {
-                return TokenBoardLoader.instance.GetTokenBoard(tokenBoardId);
+                return TokenBoardLoader.Instance.GetTokenBoard(tokenBoardId);
             }
 
             if (!string.IsNullOrEmpty(this.tokenBoardId))
             {
-                return TokenBoardLoader.instance.GetTokenBoard(this.tokenBoardId);
+                return TokenBoardLoader.Instance.GetTokenBoard(this.tokenBoardId);
             }
 
             Debug.Log("GetRandomTokenBoard");
-            return tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
+            return tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard();
         }
 
         public void SubmitPuzzleCompleted() {
@@ -291,10 +292,10 @@ namespace Fourzy
         }
 
         public void SetViewedCompletedGame(string challengeInstanceId) {
-            //Debug.Log("SetViewedCompletedGame: UserManager.instance.userId: " + UserManager.instance.userId);
+            //Debug.Log("SetViewedCompletedGame: UserManager.Instance.userId: " + UserManager.Instance.userId);
             new LogEventRequest().SetEventKey("viewedGame")
                 .SetEventAttribute("challengeInstanceId", challengeInstanceId)
-                .SetEventAttribute("player", UserManager.instance.userId)
+                .SetEventAttribute("player", UserManager.Instance.userId)
                 .SetDurable(true)
                 .Send((response) =>
                     {
@@ -360,12 +361,12 @@ namespace Fourzy
                     }
                     else
                     {
-                        GameManager.instance.activeGame.challengeId = response.ChallengeInstanceId;
+                        GameManager.Instance.activeGame.challengeId = response.ChallengeInstanceId;
                         GamePlayManager.Instance.game.challengeId = response.ChallengeInstanceId;
-                        // GameManager.instance.CreateGame(response.ChallengeInstanceId, userId);
+                        // GameManager.Instance.CreateGame(response.ChallengeInstanceId, userId);
                         game.challengeId = response.ChallengeInstanceId;
                         game.gameState.SetRandomGuid(response.ChallengeInstanceId);
-                        GameManager.instance.Games.Add(game);
+                        GameManager.Instance.Games.Add(game);
 
                         Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                         customAttributes.Add("ChallengedId", game.opponent.opponentId);
@@ -416,12 +417,12 @@ namespace Fourzy
                             Debug.Log("***** Error Challenging Random User: " + response.Errors.JSON);
                             AnalyticsManager.LogError("create_challenge_request_error", response.Errors.JSON);
                         } else {
-                            GameManager.instance.activeGame.challengeId = response.ChallengeInstanceId;
+                            GameManager.Instance.activeGame.challengeId = response.ChallengeInstanceId;
                             GamePlayManager.Instance.game.challengeId = response.ChallengeInstanceId;
-                            // GameManager.instance.CreateGame(response.ChallengeInstanceId, "");
+                            // GameManager.Instance.CreateGame(response.ChallengeInstanceId, "");
                             game.challengeId = response.ChallengeInstanceId;
                             game.gameState.SetRandomGuid(response.ChallengeInstanceId);
-                            GameManager.instance.Games.Add(game);
+                            GameManager.Instance.Games.Add(game);
 
                             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                             customAttributes.Add("ChallengeInstanceId", response.ChallengeInstanceId);
@@ -473,14 +474,14 @@ namespace Fourzy
             GetGamePiece(opponentId, GetGamePieceIdSuccess, GetGamePieceIdFailure);
             Opponent opponent = new Opponent(opponentId, opponentName, null);
 
-            tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoardByIndex(tokenBoardIndex);
+            tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoardByIndex(tokenBoardIndex);
 
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.REALTIME, true, isFirstPlayer, tokenBoard, tokenBoard.initialGameBoard, false, null);
-            Game game = new Game(null, gameState, isFirstPlayer, false, false, opponent, ChallengeState.NONE, ChallengeType.STANDARD, UserManager.instance.gamePieceId.ToString(), "0", null, null, null, null, true);
-            GameManager.instance.activeGame = game;
+            Game game = new Game(null, gameState, isFirstPlayer, false, false, opponent, ChallengeState.NONE, ChallengeType.STANDARD, UserManager.Instance.gamePieceId.ToString(), "0", null, null, null, null, true);
+            GameManager.Instance.activeGame = game;
 
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-            customAttributes.Add("PlayerName", UserManager.instance.userName);
+            customAttributes.Add("PlayerName", UserManager.Instance.userName);
             customAttributes.Add("TokenBoardId", tokenBoard.id);
             customAttributes.Add("TokenBoardName", tokenBoard.name);
             AnalyticsManager.LogCustom("open_new_realtime_game", customAttributes);
@@ -495,8 +496,8 @@ namespace Fourzy
                 int gamePieceId = int.Parse(gamePieceIdString);
 
                 // GamePlayManager.Instance.UpdateOpponentUI(gamePieceId);
-                GameManager.instance.activeGame.opponent.gamePieceId = gamePieceId;
-                GameManager.instance.OpenGame(GameManager.instance.activeGame);
+                GameManager.Instance.activeGame.opponent.gamePieceId = gamePieceId;
+                GameManager.Instance.OpenGame(GameManager.Instance.activeGame);
             }
         }
 
@@ -509,16 +510,16 @@ namespace Fourzy
             Debug.Log("Open New Multiplayer Game");
 
             if (tokenBoard == null) {
-                TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
+                TokenBoard randomTokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard();
                 tokenBoard = randomTokenBoard;
             }
 
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
-            Game game = new Game(null, gameState, true, false, false, null, ChallengeState.NONE, ChallengeType.STANDARD, UserManager.instance.gamePieceId.ToString(), "0", null, null, null, null, true);
-            GameManager.instance.OpenGame(game);
+            Game game = new Game(null, gameState, true, false, false, null, ChallengeState.NONE, ChallengeType.STANDARD, UserManager.Instance.gamePieceId.ToString(), "0", null, null, null, null, true);
+            GameManager.Instance.OpenGame(game);
             
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-            customAttributes.Add("PlayerName", UserManager.instance.userName);
+            customAttributes.Add("PlayerName", UserManager.Instance.userName);
             customAttributes.Add("TokenBoardId", tokenBoard.id);
             customAttributes.Add("TokenBoardName", tokenBoard.name);
             AnalyticsManager.LogCustom("open_new_multiplayer_game", customAttributes);
@@ -527,12 +528,12 @@ namespace Fourzy
         public void OpenJoinedMultiplayerGame() {
             Debug.Log("Open Joined Multiplayer Game");
 
-            //GameManager.instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
+            //GameManager.Instance.opponentProfilePicture.sprite = Sprite.Create(defaultProfilePicture,
             //    new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
             //    new Vector2(0.5f, 0.5f));
 
             string challengerGamePieceId = challenge.ScriptData.GetString("challengerGamePieceId");
-            string challengedGamePieceId = UserManager.instance.gamePieceId.ToString();
+            string challengedGamePieceId = UserManager.Instance.gamePieceId.ToString();
             string winnerName = challenge.ScriptData.GetString("winnerName");
 
             string tokenBoardId = challenge.ScriptData.GetString("tokenBoardId");
@@ -557,12 +558,12 @@ namespace Fourzy
             Opponent opponent = new Opponent(challenge.Challenger.Id, challenge.Challenger.Name, challenge.Challenger.ExternalIds.GetString("FB"));
 
             Game game = new Game(challenge.ChallengeId, gameState, false, false, false, opponent, ChallengeState.RUNNING, ChallengeType.STANDARD, challengerGamePieceId, challengedGamePieceId, null, winnerName, null, null, true);
-            GameManager.instance.AddGame(game);
-            GameManager.instance.OpenGame(game);
+            GameManager.Instance.AddGame(game);
+            GameManager.Instance.OpenGame(game);
 
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("ChallengeId", challenge.ChallengeId);
-            customAttributes.Add("PlayerName", UserManager.instance.userName);
+            customAttributes.Add("PlayerName", UserManager.Instance.userName);
             customAttributes.Add("OpponentName", challenge.Challenger.Name);
             customAttributes.Add("TokenBoardId", tokenBoardId);
             customAttributes.Add("TokenBoardName", tokenBoardName);
@@ -622,7 +623,7 @@ namespace Fourzy
                         {
                             for (int i = 0; i < playersViewedResult.Count; i++)
                             {
-                                if (playersViewedResult[i] == UserManager.instance.userId)
+                                if (playersViewedResult[i] == UserManager.Instance.userId)
                                 {
                                     didViewResult = true;
                                     break;
@@ -647,7 +648,7 @@ namespace Fourzy
                         bool isCurrentPlayerTurn = false;
                         if (challengeState == ChallengeState.RUNNING || challengeState == ChallengeState.ISSUED)
                         {
-                            if (gsChallenge.NextPlayer == UserManager.instance.userId)
+                            if (gsChallenge.NextPlayer == UserManager.Instance.userId)
                             {
                                 isCurrentPlayerTurn = true;
                             }
@@ -658,7 +659,7 @@ namespace Fourzy
                         }
 
                         bool isCurrentPlayer_PlayerOne = false;
-                        if (gsChallenge.Challenger.Id == UserManager.instance.userId)
+                        if (gsChallenge.Challenger.Id == UserManager.Instance.userId)
                         {
                             isCurrentPlayer_PlayerOne = true;
                         }
@@ -699,7 +700,7 @@ namespace Fourzy
 
                         if (gsChallenge.Accepted.Count() > 1)
                         {
-                            if (gsChallenge.Accepted.ElementAt(0).Id == UserManager.instance.userId)
+                            if (gsChallenge.Accepted.ElementAt(0).Id == UserManager.Instance.userId)
                             {
                                 opponentId = gsChallenge.Accepted.ElementAt(1).Id;
                                 opponentFBId = gsChallenge.Accepted.ElementAt(1).ExternalIds.GetString("FB");
@@ -770,9 +771,9 @@ namespace Fourzy
                         games.Add(game);
                     }
 
-                    GameManager.instance.Games = games;
+                    GameManager.Instance.Games = games;
 
-                    //GameManager.instance.UpdatePlayButtonBadgeCount();
+                    //GameManager.Instance.UpdatePlayButtonBadgeCount();
 
                     gettingChallenges = false;
 

@@ -92,7 +92,7 @@ namespace Fourzy
 
         private void LoadGamePieces()
         {
-            int gamePieceId = UserManager.instance.gamePieceId;
+            int gamePieceId = UserManager.Instance.gamePieceId;
             Transform gamePieceGridTransform = gamePiecesGrid.transform;
             var gamePieceData = GameContentManager.Instance.GetAllGamePieces();
             for (int i = 0; i < gamePieceData.Length; i++)

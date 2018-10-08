@@ -58,18 +58,11 @@ namespace Fourzy
         public TextMeshProUGUI timerText;
         public GameObject playerTimer;
 
-        public delegate void Resign(string challengeInstanceId);
-        public static event Resign OnResign;
-        public delegate void StartMove();
-        public static event StartMove OnStartMove;
-        public delegate void EndMove();
-        public static event EndMove OnEndMove;
-        public delegate void GameOver();
-        public static event GameOver OnGameOver;
-        public delegate void PuzzleCompleted(PuzzleChallengeLevel puzzleChallengeLevel);
-        public static event PuzzleCompleted OnPuzzleCompleted;
-        public delegate void GamePlayMessage(string message);
-        public static event GamePlayMessage OnGamePlayMessage;
+        public static event Action<string> OnResign;
+        public static event Action OnStartMove;
+        public static event Action OnEndMove;
+        public static event Action OnGameOver;
+        public static event Action<string> OnGamePlayMessage;
         public AudioClip clipMove;
         public AudioClip clipWin;
         public Color bluePlayerColor = new Color(0f / 255f, 176.0f / 255f, 255.0f / 255.0f);
@@ -79,11 +72,14 @@ namespace Fourzy
 
         IEnumerator Start () 
         {
-            game = GameManager.instance.activeGame;
+            game = GameManager.Instance.activeGame;
 
-            //TODO: Create a game if activeGame is null
+            if (game == null)
+            {
+                game = GameManager.Instance.GetRandomGame();
+            }
 
-            //SoundManager.instance.Mute(true);
+            //SoundManager.Instance.Mute(true);
             UserInputHandler.inputEnabled = false;
             replayedLastMove = false;
             // timerText = GetComponent<TextMeshProUGUI>();
@@ -108,9 +104,9 @@ namespace Fourzy
 
             challengeIdDebugText.text = "ChallengeId: " + game.challengeId;
 
-            if (GameManager.instance.shouldLoadOnboarding) {
-                GameManager.instance.shouldLoadOnboarding = false;
-                GameManager.instance.onboardingScreen.StartOnboarding();
+            if (GameManager.Instance.shouldLoadOnboarding) {
+                GameManager.Instance.shouldLoadOnboarding = false;
+                GameManager.Instance.onboardingScreen.StartOnboarding();
             }
 
             if (game.gameState.GameType == GameType.REALTIME) {
@@ -347,7 +343,7 @@ namespace Fourzy
 
             if (game.gameState.GameType == GameType.REALTIME)
             {
-                playerGamePieceId = UserManager.instance.gamePieceId;
+                playerGamePieceId = UserManager.Instance.gamePieceId;
                 opponentGamePieceId = game.opponent.gamePieceId;
 
                 if (!game.isCurrentPlayer_PlayerOne) {
@@ -408,7 +404,7 @@ namespace Fourzy
                     opponentName = LocalizationManager.Instance.GetLocalizedValue("waiting_opponent_text");
                 }
 
-                playerUIPanel.SetupPlayerName(UserManager.instance.userName);
+                playerUIPanel.SetupPlayerName(UserManager.Instance.userName);
                 opponentUIPanel.SetupPlayerName(opponentName);
             } 
             else 
@@ -450,7 +446,7 @@ namespace Fourzy
 
         private IEnumerator FadePieces(float alpha, float fadeTime)
         {
-            SoundManager.instance.Mute(false);
+            SoundManager.Instance.Mute(false);
 
             var pieces = gameBoardView.GetGamePiecesList();
             for (int i = 0; i < pieces.Count; i++)
@@ -519,7 +515,7 @@ namespace Fourzy
                 ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
             }
 
-            //ChallengeManager.instance.ReloadGames();
+            //ChallengeManager.Instance.ReloadGames();
 
             Scene uiScene = SceneManager.GetSceneByName("tabbedUI");
             SceneManager.SetActiveScene(uiScene);
@@ -544,7 +540,7 @@ namespace Fourzy
 
         public void RewardsButtonOnClick()
         {
-            GameManager.instance.VisitedGameResults(game);
+            GameManager.Instance.VisitedGameResults(game);
             UserInputHandler.inputEnabled = false;
 
             bool isCurrentPlayerWinner = this.IsPlayerWinner();
@@ -588,7 +584,7 @@ namespace Fourzy
         public void NextGameButtonOnClick() {
             backgroundImage.SetAlpha(0.0f);
             fadeUICanvasGroup.alpha = 0.0f;
-            GameManager.instance.OpenNextGame();
+            GameManager.Instance.OpenNextGame();
         }
 
 
@@ -598,7 +594,7 @@ namespace Fourzy
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync("gamePlay");
 
-            // Game game = GameManager.instance.GetNextActiveGame();
+            // Game game = GameManager.Instance.GetNextActiveGame();
             // if (game != null)
             // {
             //     game.OpenGame();
@@ -628,14 +624,14 @@ namespace Fourzy
             Scene uiScene = SceneManager.GetSceneByName("tabbedUI");
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync("gamePlay");
-            GameManager.instance.OpenPuzzleChallengeGame("retry");
+            GameManager.Instance.OpenPuzzleChallengeGame("retry");
         }
 
         public void NextPuzzleChallengeButtonOnClick() {
             Scene uiScene = SceneManager.GetSceneByName("tabbedUI");
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync("gamePlay");
-            GameManager.instance.OpenPuzzleChallengeGame("next");
+            GameManager.Instance.OpenPuzzleChallengeGame("next");
         }
 
         private IEnumerator ShowPlayTurnWithDelay(float delay)
@@ -661,12 +657,10 @@ namespace Fourzy
 
         public void SetActionButton()
         {
-            var games = GameManager.instance.Games;
-
             if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
             {
                 bool hasNextGame = false;
-
+                var games = GameManager.Instance.Games;
                 for (int i = 0; i < games.Count(); i++)
                 {
                     if (games[i].gameState != null) {
@@ -702,7 +696,7 @@ namespace Fourzy
                             retryPuzzleChallengeButton.gameObject.SetActive(true);
                         }
                     }
-                    else if (!GameManager.instance.isOnboardingActive && game.gameState.GameType == GameType.PASSANDPLAY)
+                    else if (!GameManager.Instance.isOnboardingActive && game.gameState.GameType == GameType.PASSANDPLAY)
                     {
                         rematchButton.gameObject.SetActive(true);
                     }
@@ -849,14 +843,14 @@ namespace Fourzy
                 {
                     // isNewChallenge = false;
                     StartCoroutine(MovePiece(move, false, updatePlayer));
-                    ChallengeManager.instance.ChallengeUser(game, Utility.GetMoveLocation(move), move.direction);
+                    ChallengeManager.Instance.ChallengeUser(game, Utility.GetMoveLocation(move), move.direction);
                 }
                 // else if (isMultiplayer && isNewRandomChallenge)
                 else if (game.gameState.GameType == GameType.RANDOM)
                 {
                     // isNewRandomChallenge = false;
                     StartCoroutine(MovePiece(move, false, updatePlayer));
-                    ChallengeManager.instance.ChallengeRandomUser(game, Utility.GetMoveLocation(move), move.direction);
+                    ChallengeManager.Instance.ChallengeRandomUser(game, Utility.GetMoveLocation(move), move.direction);
                 }
                 else if (game.gameState.GameType == GameType.AI)
                 {
@@ -907,7 +901,7 @@ namespace Fourzy
             if (OnStartMove != null)
                 OnStartMove();
             
-            SoundManager.instance.PlayRandomizedSfx(clipMove);
+            SoundManager.Instance.PlayRandomizedSfx(clipMove);
 
             List<IToken> activeTokens;
 
@@ -946,12 +940,12 @@ namespace Fourzy
                     if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID))
                     {
                         Debug.Log("Succssfully submitted puzzle complted");
-                        ChallengeManager.instance.SubmitPuzzleCompleted();
+                        ChallengeManager.Instance.SubmitPuzzleCompleted();
                     }
 
                     PlayerPrefsWrapper.SetPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID, true);
 
-                    GameManager.instance.SetNextActivePuzzleLevel();
+                    GameManager.Instance.SetNextActivePuzzleLevel();
                     AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, true, game.gameState.Player1MoveCount);
                 }
                 else
@@ -970,7 +964,7 @@ namespace Fourzy
 
             // Retrieve the current game from the list of games and update its state with the changes from the current move
             if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD) {
-                GameManager.instance.UpdateGame(game);
+                GameManager.Instance.UpdateGame(game);
             }
 
             if (game.gameState.IsGameOver) {
@@ -1034,7 +1028,7 @@ namespace Fourzy
         {
             if (game.isExpired)
             {
-                GameManager.instance.VisitedGameResults(game);
+                GameManager.Instance.VisitedGameResults(game);
                 gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("expired_text"), Color.white, false, !game.didViewResult);
                 yield break;
             }
@@ -1099,7 +1093,7 @@ namespace Fourzy
                 return;
             }
 
-            SoundManager.instance.PlayRandomizedSfx(clipWin);
+            SoundManager.Instance.PlayRandomizedSfx(clipWin);
         }
 
         private void ShowWinnerParticles()
@@ -1164,11 +1158,11 @@ namespace Fourzy
                 {
                     if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
                     {
-                        gameInfo.Open(UserManager.instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
+                        gameInfo.Open(UserManager.Instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
                     else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
                     {
-                        gameInfo.Open(UserManager.instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
+                        gameInfo.Open(UserManager.Instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
                     }
                     else
                     {

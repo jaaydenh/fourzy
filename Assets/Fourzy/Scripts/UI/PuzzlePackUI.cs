@@ -66,18 +66,18 @@ namespace Fourzy
         void OpenPuzzlePack() {
             if (!isLocked) {
                 ViewController.instance.viewPuzzleSelection.Hide();
-                GameManager.instance.SetActivePuzzlePack(PuzzlePack);
-                GameManager.instance.OpenPuzzleChallengeGame("open");
+                GameManager.Instance.SetActivePuzzlePack(PuzzlePack);
+                GameManager.Instance.OpenPuzzleChallengeGame("open");
             }
         }
 
         // void UpdatePuzzlePack(PuzzleChallengeLevel puzzleChallengeLevel) {
-        //     Debug.Log("UpdatePuzzlePack: GameManager.instance.ActivePuzzlePack.ID: " + GameManager.instance.ActivePuzzlePack.ID);
+        //     Debug.Log("UpdatePuzzlePack: GameManager.Instance.ActivePuzzlePack.ID: " + GameManager.Instance.ActivePuzzlePack.ID);
         //     // Debug.Log("UpdatePuzzlePack: PuzzlePack.ID: " + PuzzlePack.ID);
         //     if (PuzzlePack == null) {
         //         Debug.Log("Puzzle Pack is null");
         //     }
-        //     if (GameManager.instance.ActivePuzzlePack.ID == PuzzlePack.ID) {
+        //     if (GameManager.Instance.ActivePuzzlePack.ID == PuzzlePack.ID) {
         //         completedAndTotalCount.text = GetCompletedCount() + " / " + PuzzlePack.PuzzleChallengeLevels.Count.ToString();
         //     }
         // }

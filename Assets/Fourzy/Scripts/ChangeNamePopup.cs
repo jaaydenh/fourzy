@@ -23,12 +23,12 @@ namespace Fourzy
 
         private void UserManagerOnUpdateName()
         {
-            currentNameText.text = "Current name: " + UserManager.instance.userName;
+            currentNameText.text = "Current name: " + UserManager.Instance.userName;
         }
 
         public void ChangeNameOnClick()
         {
-            UserManager.instance.UpdatePlayerDisplayName(inputField.text);
+            UserManager.Instance.UpdatePlayerDisplayName(inputField.text);
             this.Close();
         }
 
@@ -49,7 +49,7 @@ namespace Fourzy
         {
             this.gameObject.SetActive(true);
             inputField.text = string.Empty;
-            currentNameText.text = "Current name: " + UserManager.instance.userName;
+            currentNameText.text = "Current name: " + UserManager.Instance.userName;
             inputField.ActivateInputField();
         }
     }

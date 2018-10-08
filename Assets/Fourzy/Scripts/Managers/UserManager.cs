@@ -9,7 +9,8 @@ using mixpanel;
 
 namespace Fourzy
 {
-    public class UserManager : Singleton<UserManager>
+    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
+    public class UserManager : UnitySingleton<UserManager>
     {
         public string userName;
         public string userId;
@@ -21,16 +22,11 @@ namespace Fourzy
         public static event Action OnUpdateUserInfo;
         public static event Action<int> OnUpdateUserGamePieceID;
 
-        new void Awake()
-        {
-            base.Awake();
-        }
-
         void Start()
         {
-            ChallengeManager.instance.GetPlayerGamePiece();
+            ChallengeManager.Instance.GetPlayerGamePiece();
 
-            TokenBoardLoader.instance.LoadData();
+            TokenBoardLoader.Instance.LoadData();
             GameContentManager.Instance.UpdateContentData();
         }
 

@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace Fourzy
 {
-    public class PuzzleChallengeLoader : Singleton<PuzzleChallengeLoader>
+    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
+    public class PuzzleChallengeLoader : UnitySingleton<PuzzleChallengeLoader>
     {
         private PuzzleChallengeLevel[] LoadChallengeData()
         {

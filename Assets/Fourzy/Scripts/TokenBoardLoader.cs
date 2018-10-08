@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace Fourzy
 {
-    public class TokenBoardLoader : Singleton<TokenBoardLoader>
+    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
+    public class TokenBoardLoader : UnitySingleton<TokenBoardLoader>
     {
         private int randomGeneratedBoardPercentage = 70;
 

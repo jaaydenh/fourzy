@@ -67,9 +67,9 @@ namespace Fourzy
     }
 }
 
-// if (UserManager.instance.profilePicture)
+// if (UserManager.Instance.profilePicture)
 // {
-//     playerProfilePicture.sprite = UserManager.instance.profilePicture;
+//     playerProfilePicture.sprite = UserManager.Instance.profilePicture;
 // }
 // else
 // {
@@ -83,7 +83,7 @@ namespace Fourzy
 // }
 // else if (opponentFacebookId != "")
 // {
-//     StartCoroutine(UserManager.instance.GetFBPicture(opponentFacebookId, (sprite) =>
+//     StartCoroutine(UserManager.Instance.GetFBPicture(opponentFacebookId, (sprite) =>
 //     {
 //         opponentProfilePicture.sprite = sprite;
 //     }));

@@ -27,7 +27,7 @@ namespace Fourzy
 					//Debug.Log("move direction: " + puzzleMove.Direction);
 					//Debug.Log("move location: " + puzzleMove.Location);
 					//StartCoroutine(GamePlayManager.Instance.MovePiece(newMove, false, true));
-                    GameManager.instance.CallMovePiece(newMove, false, true);
+                    GameManager.Instance.CallMovePiece(newMove, false, true);
 					foundMove = true;
 					break;
 				}
@@ -52,7 +52,7 @@ namespace Fourzy
 						if (game.gameState.CanMove(newMove.GetNextPosition(), game.gameState.TokenBoard.tokens)) {
 							//StartCoroutine(GamePlayManager.Instance.MovePiece(newMove, false, true));
 							Debug.Log("make puzzle random move part 2");
-                            GameManager.instance.CallMovePiece(newMove, false, true);
+                            GameManager.Instance.CallMovePiece(newMove, false, true);
 							break;
 						}
 					}

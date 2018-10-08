@@ -11,7 +11,8 @@ using System;
 
 namespace Fourzy
 {
-    public class GameManager : Singleton<GameManager>
+    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
+    public class GameManager : UnitySingleton<GameManager>
     {
         private List<Game> games = new List<Game>();
 
@@ -43,9 +44,7 @@ namespace Fourzy
         public static event Action<List<Game>> OnUpdateGames;
         public static event Action<Game> OnUpdateGame;
 
-
-
-        new void Awake()
+        protected override void Awake()
         {
             base.Awake();
 
@@ -93,9 +92,9 @@ namespace Fourzy
                 var gsChallenge = message.Challenge;
                 Debug.Log("ChallengeAcceptedMessage");
 
-                if (UserManager.instance.userId == gsChallenge.NextPlayer)
+                if (UserManager.Instance.userId == gsChallenge.NextPlayer)
                 {
-                    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
+                    Debug.Log("UserManager.Instance.userId == gsChallenge.NextPlayer");
                 }
             };
 
@@ -104,9 +103,9 @@ namespace Fourzy
                 var gsChallenge = message.Challenge;
                 Debug.Log("ChallengeStartedMessage");
 
-                if (UserManager.instance.userId == gsChallenge.NextPlayer)
+                if (UserManager.Instance.userId == gsChallenge.NextPlayer)
                 {
-                    Debug.Log("UserManager.instance.userId == gsChallenge.NextPlayer");
+                    Debug.Log("UserManager.Instance.userId == gsChallenge.NextPlayer");
                 }
             };
 
@@ -121,7 +120,7 @@ namespace Fourzy
             var gsChallenge = message.Challenge;
             
             // Only do this for the opponent, not the player who just made the move
-            if (UserManager.instance.userId == gsChallenge.NextPlayer)
+            if (UserManager.Instance.userId == gsChallenge.NextPlayer)
             {
                 // Only Replay the last move if the player is viewing the game screen for that game
                 // replayedLastMove is a workaround to avoid having the opponents move being replayed more than once
@@ -149,7 +148,7 @@ namespace Fourzy
                     {
                         GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
                         // TODO: update with correct gameType
-                        GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, PlayerEnum.EMPTY, ChallengeManager.instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
+                        GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, PlayerEnum.EMPTY, ChallengeManager.Instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
                         currentGame.gameState = newGameState;
 
                         if (OnUpdateGame != null)
@@ -168,7 +167,7 @@ namespace Fourzy
             string opponentFBId = gsChallenge.Challenged.FirstOrDefault().ExternalIds.GetString("FB");
             Opponent opponent = new Opponent(opponentId, opponentName, opponentFBId);
 
-            ChallengeManager.instance.GetOpponentGamePiece(opponentId, gsChallenge.ChallengeId);
+            ChallengeManager.Instance.GetOpponentGamePiece(opponentId, gsChallenge.ChallengeId);
 
             var currentGame = games
                 .Where(t => t.challengeId == gsChallenge.ChallengeId)
@@ -210,18 +209,18 @@ namespace Fourzy
 
             if (challenge.challengeId == activeGame.challengeId)
             {
-                //ChallengeManager.instance.GetRatingDelta(activeGame.challengeId);
+                //ChallengeManager.Instance.GetRatingDelta(activeGame.challengeId);
             } 
 
             // Only for the player who didn't make the last move
-            if (UserManager.instance.userId != challenge.nextPlayer) {
+            if (UserManager.Instance.userId != challenge.nextPlayer) {
                 var currentGame = games
                 .Where(t => t.challengeId == challenge.challengeId)
                 .FirstOrDefault();
                 if (currentGame != null)
                 {
                     //TODO: update with correct game type
-                    GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, player, ChallengeManager.instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
+                    GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, player, ChallengeManager.Instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
                     currentGame.gameState = newGameState;
                     currentGame.challengerRatingDelta = challenge.challengerRatingDelta;
                     currentGame.challengedRatingDelta = challenge.challengedRatingDelta;
@@ -250,7 +249,7 @@ namespace Fourzy
             }
 
             // Update players coins and rating when a game is completed
-            UserManager.instance.UpdateInformation();
+            UserManager.Instance.UpdateInformation();
         }
 
         private void ChallengeIssuedHandler(ChallengeIssuedMessage message) {
@@ -258,7 +257,7 @@ namespace Fourzy
             Debug.Log("ChallengeIssuedHandler");
             GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
 
-            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, PlayerEnum.EMPTY, ChallengeManager.instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
+            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, PlayerEnum.EMPTY, ChallengeManager.Instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
             string opponentFBId = gsChallenge.Challenger.ExternalIds.GetString("FB");
             Opponent opponent = new Opponent(gsChallenge.Challenger.Id, gsChallenge.Challenger.Name, opponentFBId);
 
@@ -280,9 +279,9 @@ namespace Fourzy
         {
             if (!paused)
             {
-                if (ChallengeManager.instance)
+                if (ChallengeManager.Instance)
                 {
-                    ChallengeManager.instance.GetChallengesRequest();
+                    ChallengeManager.Instance.GetChallengesRequest();
                 }
             }
             else
@@ -330,7 +329,7 @@ namespace Fourzy
             {
                 if (!currentGame.didViewResult && game.gameState.IsGameOver)
                 {
-                    ChallengeManager.instance.SetViewedCompletedGame(game.challengeId);
+                    ChallengeManager.Instance.SetViewedCompletedGame(game.challengeId);
                     currentGame.didViewResult = true;
                 }
             }
@@ -347,15 +346,23 @@ namespace Fourzy
             SceneManager.LoadScene("gamePlay", LoadSceneMode.Additive);
         }
 
+        public Game GetRandomGame()
+        {
+            TokenBoard tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard();
+            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.PASSANDPLAY, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
+            Game newGame = new Game(null, newGameState, true, false, false, null, ChallengeState.NONE, ChallengeType.NONE, UserManager.Instance.gamePieceId.ToString(), null, null, null, null, null, false);
+            return newGame;
+        }
+
         public void OpenNewGame(GameType gameType, Opponent opponent, bool displayIntroUI = true, string tokenBoardId = null)
         {
             Debug.Log("GameManager OpenNewGame tokenboardId: " + tokenBoardId);
 
-            TokenBoard tokenBoard = ChallengeManager.instance.GetTokenBoard(tokenBoardId);
+            TokenBoard tokenBoard = ChallengeManager.Instance.GetTokenBoard(tokenBoardId);
             Debug.Log("OpenNewGame: tokenboard name: " + tokenBoard.name);
             //If we initiated the challenge, we get to be player 1
             GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, gameType, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
-            Game newGame = new Game(null, newGameState, true, false, false, opponent, ChallengeState.NONE, ChallengeType.NONE, UserManager.instance.gamePieceId.ToString(), null, null, null, null, null, displayIntroUI);
+            Game newGame = new Game(null, newGameState, true, false, false, opponent, ChallengeState.NONE, ChallengeType.NONE, UserManager.Instance.gamePieceId.ToString(), null, null, null, null, null, displayIntroUI);
             OpenGame(newGame);
 
             AnalyticsManager.LogOpenGame(newGame);

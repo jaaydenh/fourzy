@@ -56,7 +56,7 @@ namespace Fourzy
 
             // if (opponent.opponentFBId != "")
             // {
-            //     CoroutineHandler.StartStaticCoroutine(UserManager.instance.GetFBPicture(opponent.opponentFBId, (sprite) =>
+            //     CoroutineHandler.StartStaticCoroutine(UserManager.Instance.GetFBPicture(opponent.opponentFBId, (sprite) =>
             //     {
             //         opponentProfilePictureSprite = sprite;
             //     }));

@@ -28,15 +28,15 @@ namespace Fourzy
                 ViewController.instance.view3.Hide();
                 ViewController.instance.HideTabView();
 
-                GameManager.instance.isOnboardingActive = true;
-                GameManager.instance.shouldLoadOnboarding = true;
-                GameManager.instance.OpenNewGame(GameType.PASSANDPLAY, null, false, "100");
-                // GameManager.instance.onboardingScreen.StartOnboarding();
+                GameManager.Instance.isOnboardingActive = true;
+                GameManager.Instance.shouldLoadOnboarding = true;
+                GameManager.Instance.OpenNewGame(GameType.PASSANDPLAY, null, false, "100");
+                // GameManager.Instance.onboardingScreen.StartOnboarding();
             } else if (PlayerPrefs.GetInt("puzzleChallengeLevel") <= 2)
             {
                 //ViewController.instance.view3.Hide();
                 //ViewController.instance.HideTabView();
-                //GameManager.instance.OpenPuzzleChallengeGame();
+                //GameManager.Instance.OpenPuzzleChallengeGame();
             }
 
             Button btn = areaSelectButton.GetComponent<Button>();
@@ -80,10 +80,10 @@ namespace Fourzy
 
         public void TurnPlayButton()
         {
-            Game game = GameManager.instance.GetNextActiveGame();
+            Game game = GameManager.Instance.GetNextActiveGame();
             if (game != null)
             {
-                GameManager.instance.OpenGame(game);
+                GameManager.Instance.OpenGame(game);
                 Hide();
             }
             else
@@ -104,10 +104,10 @@ namespace Fourzy
         }
 
         public void PlayButtonOld() {
-            Game game = GameManager.instance.GetNextActiveGame();
+            Game game = GameManager.Instance.GetNextActiveGame();
             if (game != null)
             {
-                GameManager.instance.OpenGame(game);
+                GameManager.Instance.OpenGame(game);
                 Hide();
             }
             else
@@ -137,7 +137,7 @@ namespace Fourzy
 
         void UpdateUI()
         {
-            UserManager user = UserManager.instance;
+            UserManager user = UserManager.Instance;
 
             ratingEloLabel.text = user.ratingElo.ToString();
             if (user.userName != string.Empty)
@@ -151,7 +151,7 @@ namespace Fourzy
 
         void UserManager_OnUpdateUserInfo()
         {
-            UserManager user = UserManager.instance;
+            UserManager user = UserManager.Instance;
 
             ratingEloLabel.text = user.ratingElo.ToString();
             userNameLabel.text = user.userName;
@@ -170,7 +170,7 @@ namespace Fourzy
 
         private void UpdatePlayButtonBadgeCount()
         {
-            var games = GameManager.instance.Games;
+            var games = GameManager.Instance.Games;
 
             int activeGamesCount = 0;
 

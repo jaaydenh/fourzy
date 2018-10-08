@@ -62,7 +62,7 @@ namespace Fourzy
 
         public void ReloadGamesOnClick()
         {
-            ChallengeManager.instance.GetChallengesRequest();
+            ChallengeManager.Instance.GetChallengesRequest();
         }
 
         public void EditButtonOnClick()
@@ -78,7 +78,7 @@ namespace Fourzy
                 loadingSpinner.GetComponent<Animator>().enabled = true;
                 loadingSpinner.GetComponent<Image>().enabled = true;
                 gamesListContainer.GetComponent<VerticalLayoutGroup>().padding.top = 250;
-                ChallengeManager.instance.GetChallengesRequest();
+                ChallengeManager.Instance.GetChallengesRequest();
             }
             //if (!gettingChallenges && pos.y <= 1.015)
             //{
@@ -109,7 +109,7 @@ namespace Fourzy
             }
             gameViews.Clear();
 
-            foreach (var game in GameManager.instance.Games)
+            foreach (var game in GameManager.Instance.Games)
             {
                 GameObject go = Instantiate(activeGamePrefab) as GameObject;
                 GameUI gameUI = go.GetComponent<GameUI>();

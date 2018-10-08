@@ -75,7 +75,7 @@ namespace Fourzy
 
             loadingWinsLeaderboard = true;
 
-            LoginManager.instance.GetWinsLeaderboard(GetLeaderboardCallback);
+            LoginManager.Instance.GetWinsLeaderboard(GetLeaderboardCallback);
         }
 
         private void GetCoinsEarnedLeaderboard()
@@ -87,7 +87,7 @@ namespace Fourzy
 
             loadingCoinsEarnLeaderboard = true;
 
-            LoginManager.instance.GetCoinsEarnedLeaderboard(GetLeaderboardCallback);
+            LoginManager.Instance.GetCoinsEarnedLeaderboard(GetLeaderboardCallback);
         }
 
         private void GetLeaderboardCallback(List<Leaderboard> leaderboards, string errorMessage)
@@ -132,7 +132,7 @@ namespace Fourzy
                     loadingCoinsEarnLeaderboard = false;
                 }
 
-                if (leadboard.userId == UserManager.instance.userId)
+                if (leadboard.userId == UserManager.Instance.userId)
                 {
                     leaderboardPlayer.HidePlayButton();
                 }

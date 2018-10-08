@@ -262,7 +262,7 @@ namespace Fourzy
 
             if (GameType == GameType.PUZZLE)
             {
-                if (Player1MoveCount >= GameManager.instance.activeGame.puzzleChallengeInfo.MoveGoal)
+                if (Player1MoveCount >= GameManager.Instance.activeGame.puzzleChallengeInfo.MoveGoal)
                 {
                     IsGameOver = true;
                 }

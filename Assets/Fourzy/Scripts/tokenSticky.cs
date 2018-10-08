@@ -10,7 +10,7 @@ namespace Fourzy
         {
             if (coll.gameObject.tag == "GamePiece")
             {
-                SoundManager.instance.PlayRandomizedSfx(soundEffect);
+                SoundManager.Instance.PlayRandomizedSfx(soundEffect);
             }
         }
     }

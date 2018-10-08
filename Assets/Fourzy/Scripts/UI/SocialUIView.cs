@@ -69,7 +69,7 @@ namespace Fourzy
         {
             btnFBLogin.interactable = false;
 
-            LoginManager.instance.FacebookLogin();
+            LoginManager.Instance.FacebookLogin();
         }
 
         void LoginManager_OnFBLoginComplete(bool isSuccessful)
@@ -93,7 +93,7 @@ namespace Fourzy
 
         private void UpdateFriendViews()
         {
-            List<Friend> friends = LoginManager.instance.Friends;
+            List<Friend> friends = LoginManager.Instance.Friends;
             if (friends == null)
             {
                 return;

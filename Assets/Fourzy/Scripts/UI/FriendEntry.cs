@@ -27,7 +27,7 @@ namespace Fourzy
             nameLabel.text = userName;
             onlineTexture.color = isOnline ? Color.green : Color.gray;
             if (facebookId != null) {
-                StartCoroutine(UserManager.instance.GetFBPicture(facebookId, (sprite)=>
+                StartCoroutine(UserManager.Instance.GetFBPicture(facebookId, (sprite)=>
                     {
                         profilePicture.sprite = sprite;
                     }));
@@ -41,7 +41,7 @@ namespace Fourzy
         //Open game gets called OnClick of the play button
         public void OpenNewFriendChallengeGame()
         {
-            // GameManager.instance.TransitionToGameOptionsScreen(GameType.FRIEND, id, userName, profilePicture);
+            // GameManager.Instance.TransitionToGameOptionsScreen(GameType.FRIEND, id, userName, profilePicture);
             ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
             ViewController.instance.HideTabView();
             ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.FRIEND, id, userName, profilePicture);

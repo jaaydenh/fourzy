@@ -32,7 +32,7 @@ namespace Fourzy
         {
             //Hide();
             ViewController.instance.ChangeView(ViewController.instance.viewPuzzleSelection);
-            // GameManager.instance.OpenPuzzleChallengeGame();
+            // GameManager.Instance.OpenPuzzleChallengeGame();
         }
 
         public void AIGameButton()

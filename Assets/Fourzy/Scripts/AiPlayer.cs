@@ -78,7 +78,7 @@ namespace Fourzy
 
         public void MakeMoveLevel1(Move playermove)
         {
-            GameState gameState = GameManager.instance.activeGame.gameState;
+            GameState gameState = GameManager.Instance.activeGame.gameState;
 
             List<Move> possibleMoves = gameState.GetPossibleMoves();
 
@@ -103,7 +103,7 @@ namespace Fourzy
                 {
                     //Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.isGameOver, testGameState.winner));
                     found_move = true;
-                    GameManager.instance.CallMovePiece(AiMove, false, true);
+                    GameManager.Instance.CallMovePiece(AiMove, false, true);
                     //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                     break;
                 }
@@ -192,7 +192,7 @@ namespace Fourzy
                         random_move_weight -= WeightedMove[nm];
                         if (random_move_weight <= 0)
                         {
-                            GameManager.instance.CallMovePiece(nm, false, true);
+                            GameManager.Instance.CallMovePiece(nm, false, true);
                             //StartCoroutine(MovePiece(nm, false, updatePlayer));
                             break;
                         }
@@ -215,14 +215,14 @@ namespace Fourzy
                     System.Random rnd = new System.Random();
                     int move_id = rnd.Next(0, moveInfo.Count);
                     Move TheAIMove = possibleMoves.ElementAt(move_id);
-                    GameManager.instance.CallMovePiece(TheAIMove, false, true);
+                    GameManager.Instance.CallMovePiece(TheAIMove, false, true);
                 }
             }
         }
 
         public void MakeMoveLevel2(Move playerMove)
         {
-            GameState gameState = GameManager.instance.activeGame.gameState;
+            GameState gameState = GameManager.Instance.activeGame.gameState;
 
             List<Move> possibleMoves = gameState.GetPossibleMoves();
             Debug.Log(string.Format("There are {0} Possible Moves", possibleMoves.Count));
@@ -240,7 +240,7 @@ namespace Fourzy
                 {
                     AiMove = x;
                     Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
-                    GameManager.instance.CallMovePiece(AiMove, false, true);
+                    GameManager.Instance.CallMovePiece(AiMove, false, true);
                     //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                     break;
                 }
@@ -348,7 +348,7 @@ namespace Fourzy
                             if (player_win_count == PlayerPossibleMoves.Count)
                             {
                                 Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
-                                GameManager.instance.CallMovePiece(AiMove, false, true);
+                                GameManager.Instance.CallMovePiece(AiMove, false, true);
                                 //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                                 break;
                             }
@@ -419,7 +419,7 @@ namespace Fourzy
                     if (MakeThisMove)
                     {
                         Debug.Log(string.Format("Checked the Move and I'm making it."));
-                        GameManager.instance.CallMovePiece(AiMove, false, true);
+                        GameManager.Instance.CallMovePiece(AiMove, false, true);
                         //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                         break;
                     }
@@ -436,12 +436,12 @@ namespace Fourzy
                     Debug.Log(string.Format("No Good Moves Just doing anything for now."));
                     if (BestMoveCount > 0)
                     {
-                        GameManager.instance.CallMovePiece(BestMove, false, true);
+                        GameManager.Instance.CallMovePiece(BestMove, false, true);
                         //StartCoroutine(MovePiece(BestMove, false, updatePlayer));
                     }
                     else
                     {
-                        GameManager.instance.CallMovePiece(gameState.GetPossibleMoves().First(), false, true);
+                        GameManager.Instance.CallMovePiece(gameState.GetPossibleMoves().First(), false, true);
                         //StartCoroutine(MovePiece(gameState.GetPossibleMoves().First(), false, updatePlayer));
                     }
                 }
@@ -451,7 +451,7 @@ namespace Fourzy
         public void MakeMoveLevel3(Move playerMove)
         {
 
-            GameState gameState = GameManager.instance.activeGame.gameState;
+            GameState gameState = GameManager.Instance.activeGame.gameState;
             int player = gameState.IsPlayerOneTurn ? 1 : 2;
             int opponent = gameState.IsPlayerOneTurn ? 2 : 1;
 
@@ -494,7 +494,7 @@ namespace Fourzy
                 System.Random rnd = new System.Random();
                 int random_move_id = rnd.Next(0, AiMoves.Count - 1);
 
-                GameManager.instance.CallMovePiece(AiMoves[random_move_id], false, true);
+                GameManager.Instance.CallMovePiece(AiMoves[random_move_id], false, true);
                 return;
             }
 
@@ -511,7 +511,7 @@ namespace Fourzy
                 {
                     AiMove = x;
                     Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
-                    GameManager.instance.CallMovePiece(AiMove, false, true);
+                    GameManager.Instance.CallMovePiece(AiMove, false, true);
                     break;
                 }
 
@@ -585,7 +585,7 @@ namespace Fourzy
                             if (player_win_count == PlayerPossibleMoves.Count)
                             {
                                 Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
-                                GameManager.instance.CallMovePiece(AiMove, false, true);
+                                GameManager.Instance.CallMovePiece(AiMove, false, true);
                                 //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                                 break;
                             }
@@ -656,7 +656,7 @@ namespace Fourzy
                     if (MakeThisMove)
                     {
                         Debug.Log(string.Format("Checked the Move and I'm making it."));
-                        GameManager.instance.CallMovePiece(AiMove, false, true);
+                        GameManager.Instance.CallMovePiece(AiMove, false, true);
                         //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                         break;
                     }
@@ -673,12 +673,12 @@ namespace Fourzy
                     Debug.Log(string.Format("No Good Moves Just doing anything for now."));
                     if (BestMoveCount > 0)
                     {
-                        GameManager.instance.CallMovePiece(BestMove, false, true);
+                        GameManager.Instance.CallMovePiece(BestMove, false, true);
                         //StartCoroutine(MovePiece(BestMove, false, updatePlayer));
                     }
                     else
                     {
-                        GameManager.instance.CallMovePiece(gameState.GetPossibleMoves().First(), false, true);
+                        GameManager.Instance.CallMovePiece(gameState.GetPossibleMoves().First(), false, true);
                         //StartCoroutine(MovePiece(gameState.GetPossibleMoves().First(), false, updatePlayer));
                     }
                 }
@@ -688,7 +688,7 @@ namespace Fourzy
         public void MakeMoveLevel3Sorted(Move playerMove)
         {
 
-            GameState gameState = GameManager.instance.activeGame.gameState;
+            GameState gameState = GameManager.Instance.activeGame.gameState;
             int player = gameState.IsPlayerOneTurn ? 1 : 2;
             int opponent = gameState.IsPlayerOneTurn ? 2 : 1;
 
@@ -731,7 +731,7 @@ namespace Fourzy
                 System.Random rnd = new System.Random();
                 int random_move_id = rnd.Next(0, AiMoves.Count - 1);
 
-                GameManager.instance.CallMovePiece(AiMoves[random_move_id], false, true);
+                GameManager.Instance.CallMovePiece(AiMoves[random_move_id], false, true);
                 return;
             }
 
@@ -748,7 +748,7 @@ namespace Fourzy
                 {
                     AiMove = x;
                     Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
-                    GameManager.instance.CallMovePiece(AiMove, false, true);
+                    GameManager.Instance.CallMovePiece(AiMove, false, true);
                     break;
                 }
 
@@ -803,7 +803,7 @@ namespace Fourzy
                             if (player_win_count == PlayerPossibleMoves.Count)
                             {
                                 Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
-                                GameManager.instance.CallMovePiece(AiMove, false, true);
+                                GameManager.Instance.CallMovePiece(AiMove, false, true);
                                 //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                                 break;
                             }
@@ -874,7 +874,7 @@ namespace Fourzy
                     if (MakeThisMove)
                     {
                         Debug.Log(string.Format("Checked the Move and I'm making it."));
-                        GameManager.instance.CallMovePiece(AiMove, false, true);
+                        GameManager.Instance.CallMovePiece(AiMove, false, true);
                         //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                         break;
                     }
@@ -891,12 +891,12 @@ namespace Fourzy
                     Debug.Log(string.Format("No Good Moves Just doing anything for now."));
                     if (BestMoveCount > 0)
                     {
-                        GameManager.instance.CallMovePiece(BestMove, false, true);
+                        GameManager.Instance.CallMovePiece(BestMove, false, true);
                         //StartCoroutine(MovePiece(BestMove, false, updatePlayer));
                     }
                     else
                     {
-                        GameManager.instance.CallMovePiece(gameState.GetPossibleMoves().First(), false, true);
+                        GameManager.Instance.CallMovePiece(gameState.GetPossibleMoves().First(), false, true);
                         //StartCoroutine(MovePiece(gameState.GetPossibleMoves().First(), false, updatePlayer));
                     }
                 }
@@ -906,7 +906,7 @@ namespace Fourzy
         public void MakeMoveLevel3Deeper(Move playerMove)
         {
 
-            GameState gameState = GameManager.instance.activeGame.gameState;
+            GameState gameState = GameManager.Instance.activeGame.gameState;
             int player = gameState.IsPlayerOneTurn ? 1 : 2;
             int opponent = gameState.IsPlayerOneTurn ? 2 : 1;
 
@@ -949,7 +949,7 @@ namespace Fourzy
                 System.Random rnd = new System.Random();
                 int random_move_id = rnd.Next(0, AiMoves.Count - 1);
 
-                GameManager.instance.CallMovePiece(AiMoves[random_move_id], false, true);
+                GameManager.Instance.CallMovePiece(AiMoves[random_move_id], false, true);
                 return;
             }
 
@@ -966,7 +966,7 @@ namespace Fourzy
                 {
                     AiMove = x;
                     Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
-                    GameManager.instance.CallMovePiece(AiMove, false, true);
+                    GameManager.Instance.CallMovePiece(AiMove, false, true);
                     break;
                 }
 
@@ -1021,7 +1021,7 @@ namespace Fourzy
                             if (player_win_count == PlayerPossibleMoves.Count)
                             {
                                 Debug.Log(string.Format("MAKING THIS MOVE!!{0}:{1}", testGameState.IsGameOver, testGameState.Winner));
-                                GameManager.instance.CallMovePiece(AiMove, false, true);
+                                GameManager.Instance.CallMovePiece(AiMove, false, true);
                                 //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                                 break;
                             }
@@ -1137,7 +1137,7 @@ namespace Fourzy
                     if (MakeThisMove)
                     {
                         Debug.Log(string.Format("Checked the Move and I'm making it."));
-                        GameManager.instance.CallMovePiece(AiMove, false, true);
+                        GameManager.Instance.CallMovePiece(AiMove, false, true);
                         //StartCoroutine(MovePiece(AiMove, false, updatePlayer));
                         break;
                     }
@@ -1154,12 +1154,12 @@ namespace Fourzy
                     Debug.Log(string.Format("No Good Moves Just doing anything for now."));
                     if (BestMoveCount > 0)
                     {
-                        GameManager.instance.CallMovePiece(BestMove, false, true);
+                        GameManager.Instance.CallMovePiece(BestMove, false, true);
                         //StartCoroutine(MovePiece(BestMove, false, updatePlayer));
                     }
                     else
                     {
-                        GameManager.instance.CallMovePiece(gameState.GetPossibleMoves().First(), false, true);
+                        GameManager.Instance.CallMovePiece(gameState.GetPossibleMoves().First(), false, true);
                         //StartCoroutine(MovePiece(gameState.GetPossibleMoves().First(), false, updatePlayer));
                     }
                 }
@@ -1168,7 +1168,7 @@ namespace Fourzy
 
         public void MakeMoveLevel3Broken(Move playerMove)
         {
-            GameState gameState = GameManager.instance.activeGame.gameState;
+            GameState gameState = GameManager.Instance.activeGame.gameState;
             Debug.Log("AIMODE = LEVEL 3");
             //we should be making better some library moves...
             // if it's the first computer move going second, or the first two moves if going first
@@ -1210,14 +1210,14 @@ namespace Fourzy
                 System.Random rnd = new System.Random();
                 int random_move_id = rnd.Next(0, AiMoves.Count - 1);
 
-                GameManager.instance.CallMovePiece(AiMoves[random_move_id], false, true);
+                GameManager.Instance.CallMovePiece(AiMoves[random_move_id], false, true);
             }
             //Do a lookahead to check possibilities.
             else
             {
                 move_review_count = 0;
                 AiMove BestAiMove = GetBestMove(gameState);
-                GameManager.instance.CallMovePiece(BestAiMove.move, false, true);
+                GameManager.Instance.CallMovePiece(BestAiMove.move, false, true);
             }
 
 
@@ -1232,7 +1232,7 @@ namespace Fourzy
             AiMove BestMove = null;
             Debug.Log(string.Format("GetBestMove Depth={0}: playerone?={1}", CurrentDepth, testGameState.IsPlayerOneTurn));
 
-            if (testGameState == null) { testGameState = GameManager.instance.activeGame.gameState;; }
+            if (testGameState == null) { testGameState = GameManager.Instance.activeGame.gameState;; }
 
             List<Move> possibleMoves = testGameState.GetPossibleMoves();
             Debug.Log(string.Format("There are {0} Possible Moves", possibleMoves.Count));
