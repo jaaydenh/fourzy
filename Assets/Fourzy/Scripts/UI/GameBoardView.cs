@@ -283,6 +283,8 @@ namespace Fourzy
 
         public void ResetGamePiecesAndTokens()
         {
+            NumPiecesAnimating = 0;
+
             foreach (Transform piece in gamePiecesRootTransform)
             {
                 Destroy(piece.gameObject);
