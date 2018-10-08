@@ -20,6 +20,9 @@ namespace Fourzy
             gameBoardView.PlayerPiece = GameContentManager.Instance.GetGamePiecePrefab(0);
             gameBoardView.OpponentPiece = GameContentManager.Instance.GetGamePiecePrefab(1);
 
+            gameBoardView.PlayerPiece.player = PlayerEnum.ONE;
+            gameBoardView.OpponentPiece.player = PlayerEnum.TWO;
+
             this.StartCoroutine(PlayInstructionMovesRoutine());
         }
 
