@@ -76,7 +76,10 @@ namespace Fourzy
 
         public TokenBoard GetRandomTokenBoardByIndex(int index) 
         {
-            var tokenBoardData = tokenBoards[index];
+            // var tokenBoardData = tokenBoards[index];
+            var enabledTokenBoards = tokenBoards
+                .Where(t => t.Enabled == true);
+            var tokenBoardData = enabledTokenBoards.ElementAt<TokenBoardData>(index);
 
             TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), true);
 

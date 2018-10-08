@@ -147,6 +147,7 @@
             "Description": "When a piece enters a Bomb, the Bomb will explode and remove that piece and any pieces in the 8 surrounding spaces from the game.",
             "Enabled": true,
             "showBackgroundTile": false,
+            "InGameTokenTypes" : [20],
             "GameBoardInstructionID" : "214"
         },
         {

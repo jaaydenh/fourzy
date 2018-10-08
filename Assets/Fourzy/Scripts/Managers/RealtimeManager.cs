@@ -93,7 +93,7 @@ namespace Fourzy
         }
 
         private void OnPacketReceived(RTPacket _packet){
-            // Debug.Log("Packet Received: OpCode: " + _packet.OpCode);
+
             switch (_packet.OpCode) 
             {
                 // op-code 1 refers to any chat-messages being received by a player //
@@ -112,13 +112,14 @@ namespace Fourzy
                     Debug.Log("All players joined realtime session");
                     int firstPlayerPeerId = _packet.Data.GetInt(1).Value;
                     int tokenBoardIndex = _packet.Data.GetInt(2).Value;
+                    
                     OnRealtimeReady(firstPlayerPeerId, tokenBoardIndex);
                     break;
                 case 101:
                     CalculateTimeDelta(_packet);
                     break;
                 case 102:
-                     GamePlayManager.Instance.SyncClock(_packet.Data.GetLong(1).Value);
+                    GamePlayManager.Instance.SyncClock(_packet.Data.GetLong(1).Value);
                     break;
             }
         }

@@ -469,33 +469,22 @@ namespace Fourzy
                     // Current player
                     string playerId = RealtimeManager.Instance.GetSessionInfo ().GetPlayerList () [playerIndex].id;
                     string playerName = RealtimeManager.Instance.GetSessionInfo ().GetPlayerList () [playerIndex].displayName;
-                    Debug.Log("playerName: " + playerName);
                 } else {
                     // The opponent
                     opponentId = RealtimeManager.Instance.GetSessionInfo ().GetPlayerList () [playerIndex].id;
                     opponentName = RealtimeManager.Instance.GetSessionInfo ().GetPlayerList () [playerIndex].displayName;
-                    Debug.Log("Oppnent Name: " + opponentName);
                 }
             }
-            
+
+            GetGamePiece(opponentId, GetGamePieceIdSuccess, GetGamePieceIdFailure);
             Opponent opponent = new Opponent(opponentId, opponentName, null);
 
-            // if (tokenBoard == null) {
-                // TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
-                // TokenBoard randomTokenBoard = TokenBoardLoader.instance.GetTokenBoard("1000");
-
             tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoardByIndex(tokenBoardIndex);
-            // }
 
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.REALTIME, true, isFirstPlayer, tokenBoard, tokenBoard.initialGameBoard, false, null);
             Game game = new Game(null, gameState, isFirstPlayer, false, false, opponent, ChallengeState.NONE, ChallengeType.STANDARD, UserManager.instance.gamePieceId.ToString(), "0", null, null, null, null, true);
             GameManager.instance.activeGame = game;
 
-            GetGamePiece(game.opponent.opponentId, GetGamePieceIdSuccess, GetGamePieceIdFailure);
-
-            if (OnActiveGame != null)
-                OnActiveGame();
-            
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("PlayerName", UserManager.instance.userName);
             customAttributes.Add("TokenBoardId", tokenBoard.id);
@@ -510,9 +499,12 @@ namespace Fourzy
                 Debug.Log("GetGamePieceIdSuccess: " + gamePieceIdString);
 
                 int gamePieceId = int.Parse(gamePieceIdString);
+
+                // GamePlayManager.Instance.UpdateOpponentUI(gamePieceId);
                 GameManager.instance.activeGame.opponent.gamePieceId = gamePieceId;
 
-                GamePlayManager.Instance.opponentUIPanel.InitPlayerIcon(PlayerEnum.TWO, gamePieceId);
+                if (OnActiveGame != null)
+                    OnActiveGame();
             }
         }
 

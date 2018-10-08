@@ -299,6 +299,33 @@ namespace Fourzy {
                         //    OnUpdateTokenBoard(nextPosition.row, nextPosition.column, token.replacedToken);    
                         //}
                         gameState.SetTokenBoardCell(nextPosition.row, nextPosition.column, token.replacedToken);
+
+                        if (token.tokenType == Token.CIRCLE_BOMB) {
+                            if (InBoardBounds(new Position(nextPosition.column-1, nextPosition.row-1))) {
+                                SetCell(nextPosition.column-1, nextPosition.row-1, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column, nextPosition.row-1))) {
+                                SetCell(nextPosition.column, nextPosition.row-1, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column+1, nextPosition.row-1))) {
+                                SetCell(nextPosition.column+1, nextPosition.row-1, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column-1, nextPosition.row))) {
+                                SetCell(nextPosition.column-1, nextPosition.row, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column+1, nextPosition.row))) {
+                                SetCell(nextPosition.column+1, nextPosition.row, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column-1, nextPosition.row+1))) {
+                                SetCell(nextPosition.column-1, nextPosition.row+1, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column, nextPosition.row+1))) {
+                                SetCell(nextPosition.column, nextPosition.row+1, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column+1, nextPosition.row+1))) {
+                                SetCell(nextPosition.column+1, nextPosition.row+1, PlayerEnum.NONE);
+                            }
+                        }
                     }
                 }
             } else if (token.canEvaluateWithoutEntering) {

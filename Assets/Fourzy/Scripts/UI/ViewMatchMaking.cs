@@ -77,7 +77,7 @@ namespace Fourzy
 
         private void FindChallengeSuccess(FindChallengeResponse response)
         {
-            //Debug.Log("ViewMatchMaking : FindChallengeSuccess");
+            // Debug.Log("ViewMatchMaking : FindChallengeSuccess");
             challengeIdToJoin = "";
 
             GSEnumerable<FindChallengeResponse._Challenge> challengeInstances = response.ChallengeInstances;
@@ -149,7 +149,7 @@ namespace Fourzy
         }
 
         private void JoinChallengeSuccess(JoinChallengeResponse response) {
-            //Debug.Log("ViewMatchMaking : JoinChallengeSuccess");
+            // Debug.Log("ViewMatchMaking : JoinChallengeSuccess");
             // GameManager.instance.challengeInstanceId = challengeIdToJoin;
             //Send Player to Game Screen to make a move
             ChallengeManager.instance.GetChallenge(challengeIdToJoin, GetChallengeSuccess, GetChallengeError);
@@ -172,7 +172,7 @@ namespace Fourzy
         }
 
         private void GetChallengeSuccess(GetChallengeResponse response) {
-            //Debug.Log("ViewMatchMaking : GetChallengeSuccess");
+            // Debug.Log("ViewMatchMaking : GetChallengeSuccess");
             var challenge = response.Challenge;
             GSData scriptData = response.ScriptData;
 

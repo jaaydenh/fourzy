@@ -281,6 +281,10 @@ namespace Fourzy {
                     {
                         tokens[row, col] = new WaterToken(row, col);
                     }
+                    else if (token == (int)Token.CIRCLE_BOMB)
+                    {
+                        tokens[row, col] = new CircleBombToken(row, col);
+                    }
                 }
             }
         }
