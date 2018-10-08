@@ -20,9 +20,7 @@ namespace Fourzy
         public string winnerId;
         public string challengeState;
         public string challengeShortCode;
-        public List<string> playerNames = new List<string>();
-        public List<string> playerIds = new List<string>();
-        public List<string> playerFacebookIds = new List<string>();
+
         public Game game;
 
         [Header("Game UI")]

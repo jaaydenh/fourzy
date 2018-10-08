@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace Fourzy
 {
@@ -22,6 +23,8 @@ namespace Fourzy
     {
         //Instance
         public static ViewController instance;
+
+        public GameObject headerUI;
 
         //List of Views
         public List<UIView> TabsViewList = new List<UIView>();
@@ -70,6 +73,24 @@ namespace Fourzy
                 ChangeView(debugView);
             else
                 ChangeView(view3);
+        }
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += SceneManager_SceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= SceneManager_SceneLoaded;
+        }
+
+        void SceneManager_SceneLoaded(Scene scene, LoadSceneMode arg1)
+        {
+            if (scene.name == "gamePlay")
+            {
+                headerUI.SetActive(false);
+            }
         }
 
         public void WhatIsCurrentView() {

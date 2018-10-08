@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using HedgehogTeam.EasyTouch;
+using System.Collections.Generic;
 
 namespace Fourzy
 {
@@ -14,6 +15,7 @@ namespace Fourzy
         [SerializeField] Text ratingEloLabel;
         [SerializeField] Text userNameLabel;
         [SerializeField] Image gamePieceImage;
+        [SerializeField] Badge homeScreenPlayBadge;
 
         void Start()
         {
@@ -44,10 +46,14 @@ namespace Fourzy
         public override void Show()
         {
             base.Show();
-            GameManager.instance.headerUI.SetActive(true);
+
+            ViewController.instance.headerUI.SetActive(true);
 
             UserManager.OnUpdateUserInfo += UserManager_OnUpdateUserInfo;
             UserManager.OnUpdateUserGamePieceID += UserManager_OnUpdateUserGamePieceID;
+            GameManager.OnUpdateGames += GameManager_OnUpdateGames;
+
+            this.UpdatePlayButtonBadgeCount();
 
             UpdateUI();
         }
@@ -56,6 +62,7 @@ namespace Fourzy
         {
             UserManager.OnUpdateUserInfo -= UserManager_OnUpdateUserInfo;
             UserManager.OnUpdateUserGamePieceID -= UserManager_OnUpdateUserGamePieceID;
+            GameManager.OnUpdateGames -= GameManager_OnUpdateGames;
 
             base.Hide();
         }
@@ -86,14 +93,14 @@ namespace Fourzy
             }
 
             ViewController.instance.HideTabView();
-            GameManager.instance.headerUI.SetActive(false);
+            ViewController.instance.headerUI.SetActive(false);
         }
 
         public void FastPlayButton() {
             ViewMatchMaking.instance.isRealtime = true;
             ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
             ViewController.instance.HideTabView();
-            GameManager.instance.headerUI.SetActive(false);
+            ViewController.instance.headerUI.SetActive(false);
         }
 
         public void PlayButtonOld() {
@@ -109,13 +116,13 @@ namespace Fourzy
             }
 
             ViewController.instance.HideTabView();
-            GameManager.instance.headerUI.SetActive(false);
+            ViewController.instance.headerUI.SetActive(false);
         }
 
         public void TrainingButton() {
             ViewController.instance.ChangeView(ViewController.instance.viewPuzzleSelection);
             ViewController.instance.HideTabView();
-            GameManager.instance.headerUI.SetActive(false);
+            ViewController.instance.headerUI.SetActive(false);
         }
 
         public void SettingsButton() {
@@ -156,5 +163,35 @@ namespace Fourzy
             gamePieceNameLabel.text = GameContentManager.Instance.GetGamePieceName(gamePieceId);
         }
 
+        void GameManager_OnUpdateGames(List<Game> games)
+        {
+            this.UpdatePlayButtonBadgeCount();
+        }
+
+        private void UpdatePlayButtonBadgeCount()
+        {
+            var games = GameManager.instance.Games;
+
+            int activeGamesCount = 0;
+
+            for (int i = 0; i < games.Count; i++)
+            {
+                if (games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.IsGameOver == true))
+                {
+                    activeGamesCount++;
+                }
+            }
+
+            if (activeGamesCount > 0)
+            {
+                homeScreenPlayBadge.gameObject.SetActive(true);
+            }
+            else
+            {
+                homeScreenPlayBadge.gameObject.SetActive(false);
+            }
+
+            homeScreenPlayBadge.SetGameCount(activeGamesCount);
+        }
     }
 }

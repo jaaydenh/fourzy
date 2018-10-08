@@ -514,7 +514,7 @@ namespace Fourzy
                 ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
             }
 
-            ChallengeManager.instance.ReloadGames();
+            //ChallengeManager.instance.ReloadGames();
 
             Scene uiScene = SceneManager.GetSceneByName("tabbedUI");
             SceneManager.SetActiveScene(uiScene);
@@ -656,7 +656,7 @@ namespace Fourzy
 
         public void SetActionButton()
         {
-            var games = GameManager.instance.games;
+            var games = GameManager.instance.Games;
 
             if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
             {

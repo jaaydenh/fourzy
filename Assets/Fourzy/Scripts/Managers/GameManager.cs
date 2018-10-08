@@ -7,25 +7,48 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 using mixpanel;
+using System;
 
 namespace Fourzy
 {
     public class GameManager : Singleton<GameManager>
     {
-        public List<Game> games = new List<Game>();
+        private List<Game> games = new List<Game>();
+
+        public List<Game> Games
+        {
+            get
+            {
+                return games;
+            }
+            set
+            {
+                games = value;
+                OnUpdateGames(games);
+            }
+        }
+
         public Game activeGame;
         public PuzzlePack ActivePuzzlePack { get; private set; }
         public bool isOnboardingActive = false;
         public bool shouldLoadOnboarding = false;
 
-        [Header("Game UI")]
-        public AlertUI alertUI;
-        public GameObject ErrorPanel;
-        // public InfoBanner InfoBanner;
         public Onboarding onboardingScreen;
-        public Badge homeScreenPlayBadge;
-        public GameObject headerUI;
+
         public GameObject infoBannerPrefab;
+
+        public static event Action<List<Game>> OnUpdateGames;
+        public static event Action<Game> OnUpdateGame;
+
+
+
+        new void Awake()
+        {
+            base.Awake();
+
+            // GS.GameSparksAvailable += CheckConnectionStatus;
+            DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
+        }
 
         private void OnEnable()
         {
@@ -101,13 +124,6 @@ namespace Fourzy
     #endif
         }
 
-        new void Awake()
-        {
-            base.Awake();
-            // GS.GameSparksAvailable += CheckConnectionStatus;
-            DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
-        }
-
         private void OpponentTurnHandler(ChallengeTurnTakenMessage message) {
             //Debug.Log("OpponentTurnHandler: active scene: " + SceneManager.GetActiveScene().name);
             var gsChallenge = message.Challenge;
@@ -143,9 +159,12 @@ namespace Fourzy
                         // TODO: update with correct gameType
                         GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, PlayerEnum.EMPTY, ChallengeManager.instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
                         currentGame.gameState = newGameState;
-                    }
 
-                    ChallengeManager.instance.ReloadGames();
+                        if (OnUpdateGame != null)
+                        {
+                            OnUpdateGame(currentGame);
+                        }
+                    }
                 }
             }
         }
@@ -166,15 +185,16 @@ namespace Fourzy
             {
                 currentGame.opponent = opponent;
                 currentGame.InitGame();
+
+                if (OnUpdateGame != null)
+                {
+                    OnUpdateGame(currentGame);
+                }
             }
 
             if (SceneManager.GetActiveScene().name == "gamePlay" && gsChallenge.ChallengeId == activeGame.challengeId)
             {
                 GamePlayManager.Instance.UpdateOpponentUI(opponent);
-            }
-            else
-            {
-                ChallengeManager.instance.ReloadGames();
             }
         }
 
@@ -213,6 +233,11 @@ namespace Fourzy
                     currentGame.gameState = newGameState;
                     currentGame.challengerRatingDelta = challenge.challengerRatingDelta;
                     currentGame.challengedRatingDelta = challenge.challengedRatingDelta;
+
+                    if (OnUpdateGame != null)
+                    {
+                        OnUpdateGame(currentGame);
+                    }
                 }
 
                 // Only Replay the last move if the player is viewing the game screen for that game
@@ -229,10 +254,6 @@ namespace Fourzy
                     } 
 
                     GamePlayManager.Instance.SetActionButton();
-                }
-                else
-                {
-                    ChallengeManager.instance.ReloadGames();
                 }
             }
 
@@ -253,50 +274,15 @@ namespace Fourzy
             game.gameState.SetRandomGuid(gsChallenge.ChallengeId);
             games.Add(game);
 
+            if (OnUpdateGames != null)
+            {
+                OnUpdateGames(games);
+            }
+
             if (SceneManager.GetActiveScene().name == "gamePlay") {
                 GamePlayManager.Instance.SetActionButton();
-            } else {
-                ChallengeManager.instance.ReloadGames();
             }
         }
-
-        public void UpdatePlayButtonBadgeCount() {
-            int activeGamesCount = 0;
-
-            for (int i = 0; i < games.Count(); i++)
-            {
-                if (games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.IsGameOver == true))
-                {
-                    activeGamesCount++;
-                }
-            }
-
-            if (activeGamesCount > 0) {
-                homeScreenPlayBadge.gameObject.SetActive(true);
-            } else {
-                homeScreenPlayBadge.gameObject.SetActive(false);    
-            }
-
-            homeScreenPlayBadge.SetGameCount(activeGamesCount);
-        }
-
-        // void Update()
-        // {
-        //     if (Application.platform == RuntimePlatform.Android)
-        //     {
-        //         if (Input.GetKeyDown(KeyCode.Escape))
-        //         {
-        //             if (challengeInstanceId != null)
-        //             {
-        //                 GameScreenBackButton();
-        //             }
-        //             else
-        //             {
-        //                 Application.Quit();
-        //             }
-        //         }
-        //     }
-        // }
 
         void OnApplicationPause(bool paused)
         {
@@ -304,7 +290,7 @@ namespace Fourzy
             {
                 if (ChallengeManager.instance)
                 {
-                    ChallengeManager.instance.GetChallenges();
+                    ChallengeManager.instance.GetChallengesRequest();
                 }
             }
             else
@@ -320,18 +306,15 @@ namespace Fourzy
             }
         }
 
-        public Game GetNextActiveGame() {
-            int activeGamesCount = 0;
+        public Game GetNextActiveGame() 
+        {
             Game game = null;
             for (int i = 0; i < games.Count(); i++)
             {
                 if (games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.IsGameOver == true))
                 {
-                    activeGamesCount++;
-                    if (game == null)
-                    {
-                        game = games[i];
-                    }
+                    game = games[i];
+                    break;
                 }
             }
 
@@ -368,7 +351,6 @@ namespace Fourzy
         private void TransitionToGamePlayScene()
         {
             SceneManager.LoadScene("gamePlay", LoadSceneMode.Additive);
-            headerUI.SetActive(false);
         }
 
         public void OpenNewGame(GameType gameType, Opponent opponent, bool displayIntroUI = true, string tokenBoardId = null)

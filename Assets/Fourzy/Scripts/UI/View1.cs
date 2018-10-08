@@ -1,34 +1,51 @@
 ﻿using UnityEngine;
 using HedgehogTeam.EasyTouch;
+using System.Collections.Generic;
+using UnityEngine.UI;
+using System.Collections;
 
 namespace Fourzy
 {
     public class View1 : UIView
     {
-        //Instance
-        public static View1 instance;
+        [SerializeField] List<GameObject> gameViews = new List<GameObject>();
 
-        // Use this for initialization
+        [SerializeField] GameObject yourMoveGameGrid;
+        [SerializeField] GameObject theirMoveGameGrid;
+        [SerializeField] GameObject completedGameGrid;
+        [SerializeField] GameObject resultsGameGrid;
+        [SerializeField] GameObject activeGamePrefab;
+        [SerializeField] GameObject inviteGrid;
+        [SerializeField] GameObject invitePrefab;
+        [SerializeField] GameObject NoMovesPanel;
+        [SerializeField] GameObject loadingSpinner;
+        [SerializeField] GameObject gamesListContainer;
+
+        private bool pulledToRefresh;
+
         void Start()
         {
-            instance = this;
             keepHistory = true;
+
+            loadingSpinner.GetComponent<Animator>().enabled = false;
+            loadingSpinner.GetComponent<Image>().enabled = false;
         }
 
         public override void Show()
         {
-            //Debug.Log("View 1 Show");
-            //EasyTouch.On_SwipeStart += On_SwipeStart;
-            //EasyTouch.On_Swipe += On_Swipe;
-            //EasyTouch.On_SwipeEnd += On_SwipeEnd;
             base.Show();
+
+            GameManager.OnUpdateGames += GameManager_OnUpdateGames;
+            GameManager.OnUpdateGame += GameManager_OnUpdateGame;
+
+            this.ReloadGameViews();
         }
 
         public override void Hide()
         {
-            //EasyTouch.On_SwipeStart -= On_SwipeStart;
-            //EasyTouch.On_Swipe -= On_Swipe;
-            //EasyTouch.On_SwipeEnd -= On_SwipeEnd;
+            GameManager.OnUpdateGames -= GameManager_OnUpdateGames;
+            GameManager.OnUpdateGame -= GameManager_OnUpdateGame;
+
             base.Hide();
         }
 
@@ -43,24 +60,95 @@ namespace Fourzy
             base.HideAnimated (getAwayDirection);
         }
 
-        // At the swipe beginning 
-        private void On_SwipeStart( Gesture gesture){
+        public void ReloadGamesOnClick()
+        {
+            ChallengeManager.instance.GetChallengesRequest();
         }
 
-        // During the swipe
-        private void On_Swipe(Gesture gesture){
+        public void EditButtonOnClick()
+        {
+            
         }
 
-        // At the swipe end 
-        private void On_SwipeEnd(Gesture gesture){
-            float angles = gesture.GetSwipeOrDragAngle();
-            if (gesture.swipe == EasyTouch.SwipeDirection.Left) {
-                HideAnimated(AnimationDirection.right);
-                View2.instance.ShowAnimated(AnimationDirection.right);
+        public void ViewContentScrollRectOnValueChanged(Vector2 pos)
+        {
+            if (!pulledToRefresh && pos.y > 1.06)
+            {
+                pulledToRefresh = true;
+                loadingSpinner.GetComponent<Animator>().enabled = true;
+                loadingSpinner.GetComponent<Image>().enabled = true;
+                gamesListContainer.GetComponent<VerticalLayoutGroup>().padding.top = 250;
+                ChallengeManager.instance.GetChallengesRequest();
             }
-            if (gesture.swipe == EasyTouch.SwipeDirection.Right) {
+            //if (!gettingChallenges && pos.y <= 1.015)
+            //{
+            //    pulledToRefresh = false;
+            //}
+        }
 
+        void GameManager_OnUpdateGames(List<Game> games)
+        {
+            this.ReloadGameViews();
+
+            if (pulledToRefresh)
+            {
+                StartCoroutine(WaitRoutine());
             }
+        }
+
+        void GameManager_OnUpdateGame(Game game)
+        {
+            this.ReloadGameViews();
+        }
+
+        private void ReloadGameViews()
+        {
+            for (int i = 0; i < gameViews.Count; i++)
+            {
+                Destroy(gameViews[i]);
+            }
+            gameViews.Clear();
+
+            foreach (var game in GameManager.instance.Games)
+            {
+                GameObject go = Instantiate(activeGamePrefab) as GameObject;
+                GameUI gameUI = go.GetComponent<GameUI>();
+                gameUI.game = game;
+
+                if (!game.gameState.IsGameOver)
+                {
+                    if (game.gameState.isCurrentPlayerTurn)
+                    {
+                        go.transform.SetParent(yourMoveGameGrid.transform);
+                    }
+                    else
+                    {
+                        go.transform.SetParent(theirMoveGameGrid.transform);
+                    }
+                }
+                else if (game.gameState.IsGameOver && game.isVisible == true && game.didViewResult == true)
+                {
+                    go.transform.SetParent(completedGameGrid.transform);
+                }
+                else if (game.gameState.IsGameOver && game.isVisible == true && game.didViewResult == false)
+                {
+                    go.transform.SetParent(resultsGameGrid.transform);
+                }
+
+                gameUI.transform.localScale = Vector3.one;
+                gameViews.Add(go);
+            }
+        }
+
+        IEnumerator WaitRoutine()
+        {
+            yield return new WaitForSeconds(0.8f);
+            loadingSpinner.GetComponent<Animator>().enabled = false;
+            loadingSpinner.GetComponent<Image>().enabled = false;
+            gamesListContainer.GetComponent<VerticalLayoutGroup>().padding.top = 170;
+            gamesListContainer.GetComponent<VerticalLayoutGroup>().SetLayoutVertical();
+
+            pulledToRefresh = false;
         }
     }
 }

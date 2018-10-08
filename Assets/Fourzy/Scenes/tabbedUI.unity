@@ -1188,7 +1188,7 @@ RectTransform:
   - {fileID: 1457200516}
   - {fileID: 1772767259}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1488,11 +1488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOnboardingActive: 0
   shouldLoadOnboarding: 0
-  alertUI: {fileID: 1871430353}
-  ErrorPanel: {fileID: 192249069}
   onboardingScreen: {fileID: 1947138234}
-  homeScreenPlayBadge: {fileID: 37292603}
-  headerUI: {fileID: 1722251076}
   infoBannerPrefab: {fileID: 1375395073871002, guid: 2fa13cc6c3aa74203a81d3e13166ae1f,
     type: 2}
 --- !u!4 &137424724
@@ -1958,19 +1954,6 @@ MonoBehaviour:
     initialGameBoard: 
     initialMoves: []
   tokenBoardId: 
-  yourMoveGameGrid: {fileID: 1280329476}
-  theirMoveGameGrid: {fileID: 1825896594}
-  completedGameGrid: {fileID: 327297645}
-  resultsGameGrid: {fileID: 835035267}
-  activeGamePrefab: {fileID: 1494404121640076, guid: a83646e561f1f45c68eb0cf6a0a2d4e6,
-    type: 2}
-  games: []
-  activeGameIds: []
-  inviteGrid: {fileID: 0}
-  invitePrefab: {fileID: 0}
-  NoMovesPanel: {fileID: 1755481388}
-  loadingSpinner: {fileID: 176489462}
-  gamesListContainer: {fileID: 381019440}
   daysUntilChallengeExpires: 14
 --- !u!114 &159214253
 MonoBehaviour:
@@ -2164,7 +2147,7 @@ RectTransform:
   m_Children:
   - {fileID: 1722251077}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6531,7 +6514,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4175964339459294, guid: 729906e28f6094e7bbd571faf746e39f, type: 2}
       propertyPath: m_RootOrder
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 114728382540131844, guid: 729906e28f6094e7bbd571faf746e39f,
         type: 2}
@@ -6798,6 +6781,18 @@ MonoBehaviour:
   tabButton: {fileID: 887086619}
   keepHistory: 0
   isVisible: 0
+  gameViews: []
+  yourMoveGameGrid: {fileID: 1280329476}
+  theirMoveGameGrid: {fileID: 1825896594}
+  completedGameGrid: {fileID: 327297645}
+  resultsGameGrid: {fileID: 835035267}
+  activeGamePrefab: {fileID: 1494404121640076, guid: a83646e561f1f45c68eb0cf6a0a2d4e6,
+    type: 2}
+  inviteGrid: {fileID: 0}
+  invitePrefab: {fileID: 0}
+  NoMovesPanel: {fileID: 1755481388}
+  loadingSpinner: {fileID: 176489462}
+  gamesListContainer: {fileID: 381019440}
 --- !u!1 &688487626
 GameObject:
   m_ObjectHideFlags: 0
@@ -7524,7 +7519,7 @@ Prefab:
     - target: {fileID: 224535167193121672, guid: d7d403c27a1f7e9418edf2a7eb153728,
         type: 2}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 224535167193121672, guid: d7d403c27a1f7e9418edf2a7eb153728,
         type: 2}
@@ -9079,7 +9074,7 @@ RectTransform:
   m_Children:
   - {fileID: 1947138233}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -11315,7 +11310,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.00022258007, y: 666.99994}
+  m_AnchoredPosition: {x: 0.000204623, y: 666.99994}
   m_SizeDelta: {x: -705.77423, y: 1100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1149295667
@@ -11632,8 +11627,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 159214251}
-        m_MethodName: GetChallenges
+      - m_Target: {fileID: 678434221}
+        m_MethodName: ReloadGamesOnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11790,7 +11785,7 @@ RectTransform:
   m_Children:
   - {fileID: 1871430352}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -13351,7 +13346,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4636123263802118, guid: 5fbeb8ef6f23a4764936a450d8ec872a, type: 2}
       propertyPath: m_RootOrder
-      value: 17
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 114274035791886202, guid: 5fbeb8ef6f23a4764936a450d8ec872a,
         type: 2}
@@ -13460,7 +13455,7 @@ Transform:
   - {fileID: 349489276}
   - {fileID: 12040347}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1394821624
 MonoBehaviour:
@@ -13473,6 +13468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8321f22f961ba4428a2c176e03142ae3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  headerUI: {fileID: 1722251076}
   TabsViewList:
   - {fileID: 678434221}
   - {fileID: 1019611730}
@@ -15279,7 +15275,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1595508621
 GameObject:
@@ -15291,7 +15287,7 @@ GameObject:
   - component: {fileID: 1595508623}
   - component: {fileID: 1595508622}
   m_Layer: 0
-  m_Name: TokenBoard
+  m_Name: TokenBoardLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15358,7 +15354,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4888457821603458, guid: 10c424c4e1e3f467b824f0e020cf6808, type: 2}
       propertyPath: m_RootOrder
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 114513462052452064, guid: 10c424c4e1e3f467b824f0e020cf6808,
         type: 2}
@@ -15814,6 +15810,7 @@ MonoBehaviour:
   ratingEloLabel: {fileID: 1087567298}
   userNameLabel: {fileID: 608779832}
   gamePieceImage: {fileID: 720886916}
+  homeScreenPlayBadge: {fileID: 37292603}
 --- !u!20 &1633695112
 Camera:
   m_ObjectHideFlags: 0
@@ -15944,8 +15941,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1697901010}
-        m_MethodName: ShowDeleteButtons
+      - m_Target: {fileID: 678434221}
+        m_MethodName: EditButtonOnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16317,47 +16314,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1676346933}
   m_CullTransparentMesh: 0
---- !u!1 &1697901009
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1697901011}
-  - component: {fileID: 1697901010}
-  m_Layer: 0
-  m_Name: GamesListManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1697901010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1697901009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e158ab2a55944dbfaac60242b84ba0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  editButton: {fileID: 1640519909}
---- !u!4 &1697901011
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1697901009}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 284.98712, y: 683.1725, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1708559420
 GameObject:
   m_ObjectHideFlags: 0
@@ -18166,7 +18122,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0.00008619665, y: -0.000061035156}
+  m_AnchoredPosition: {x: -0.0000024912367, y: -0.000061035156}
   m_SizeDelta: {x: 400, y: -27}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1839248373
@@ -19563,7 +19519,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4154447140393346, guid: 9c26418e7b2024aaaaf26cdf4775c6b4, type: 2}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 114920343002454044, guid: 9c26418e7b2024aaaaf26cdf4775c6b4,
         type: 2}
@@ -20622,8 +20578,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 159214251}
-        m_MethodName: GamesListPullToRefresh
+      - m_Target: {fileID: 678434221}
+        m_MethodName: ViewContentScrollRectOnValueChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

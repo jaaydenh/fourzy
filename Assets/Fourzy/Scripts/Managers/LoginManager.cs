@@ -97,7 +97,7 @@ namespace Fourzy
                         Mixpanel.Identify(response.UserId);
                         UserManager.instance.UpdateUserInfo(response.DisplayName, response.UserId, null, null, null);
                         UserManager.instance.UpdateInformation();
-                        ChallengeManager.instance.GetChallenges();
+                    ChallengeManager.instance.GetChallengesRequest();
                         //LeaderboardManager.instance.GetLeaderboard();
 
                         AnalyticsManager.LogCustom("device_authentication_request");
@@ -230,7 +230,7 @@ namespace Fourzy
             }
 
             UserManager.instance.UpdateInformation();
-            ChallengeManager.instance.GetChallenges();
+            ChallengeManager.instance.GetChallengesRequest();
             this.GetFriendsRequest();
             //LeaderboardManager.instance.GetLeaderboard();
         }
