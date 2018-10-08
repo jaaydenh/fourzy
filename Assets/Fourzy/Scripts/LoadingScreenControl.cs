@@ -17,8 +17,11 @@ namespace Fourzy
         [SerializeField]
         private Animator logoAnimator;
 
-        private int h_Idle = Animator.StringToHash("Idle");
         private int h_Logo = Animator.StringToHash("Logo");
+        private float animLength = 1.0f;
+
+        private bool wasLoginProcessFinished;
+        private bool logoAnimationWasShown;
 
         private void Start()
         {
@@ -27,18 +30,40 @@ namespace Fourzy
             this.StartCoroutine(LoadingRoutine());
         }
 
+        private void OnEnable()
+        {
+            LoginManager.OnDeviceLoginComplete += LoginManager_OnDeviceLoginComplete;
+        }
+
+        private void OnDisable()
+        {
+            LoginManager.OnDeviceLoginComplete -= LoginManager_OnDeviceLoginComplete;
+        }
+
+        void LoginManager_OnDeviceLoginComplete(bool isSuccessful)
+        {
+            wasLoginProcessFinished = true;
+        }
+
         private IEnumerator LoadingRoutine()
         {
+            loadingScreenObj.SetActive(true);
+            this.StartCoroutine(LogoAnimationRoutine());
+
             AsyncOperation async = SceneManager.LoadSceneAsync("tabbedUI");
             async.allowSceneActivation = false;
 
-            yield return this.StartCoroutine(LogoAnimationRoutine());
+            float duration = 0;
 
-            while (!LocalizationManager.Instance.GetIsReady()) yield return null;
+            while (!logoAnimationWasShown || !LocalizationManager.Instance.GetIsReady() || !wasLoginProcessFinished)
+            {
+                duration += Time.deltaTime;
+                slider.value = duration / animLength * 0.9f;
+                yield return null;
+            }
 
             async.allowSceneActivation = true;
 
-            loadingScreenObj.SetActive(true);
             while (!async.isDone)
             {
                 slider.value = async.progress;
@@ -55,11 +80,12 @@ namespace Fourzy
 
             while (logoAnimator.GetCurrentAnimatorStateInfo(baseLayerIndex).shortNameHash != h_Logo) yield return true;
 
-            AnimatorStateInfo stateInfo = logoAnimator.GetCurrentAnimatorStateInfo(baseLayerIndex);
+            AnimatorStateInfo logoStateInfo = logoAnimator.GetCurrentAnimatorStateInfo(baseLayerIndex);
+            animLength = logoStateInfo.length;
 
-            yield return new WaitForSeconds(stateInfo.length);
+            yield return new WaitForSeconds(logoStateInfo.length);
 
-            logoAnimator.Play(h_Idle, baseLayerIndex);
+            logoAnimationWasShown = true;
         }
     }
 }

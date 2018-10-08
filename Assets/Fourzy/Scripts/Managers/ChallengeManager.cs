@@ -14,8 +14,6 @@ namespace Fourzy
 {
     public class ChallengeManager : Singleton<ChallengeManager>
     {
-        public delegate void GameActive();
-        public static event GameActive OnActiveGame;
         public delegate void ReceivedPlayerGamePiece(string gamePieceId);
         public static event ReceivedPlayerGamePiece OnReceivedPlayerGamePiece;
         public delegate void ReceivedOpponentGamePiece(string gamePieceId, string challengeId);
@@ -48,8 +46,8 @@ namespace Fourzy
         public double daysUntilChallengeExpires = 60;
         private bool gettingChallenges = false;
 
-        void OnEnable() {
-            GameUI.OnRemoveGame += RemoveGame;
+        void OnEnable() 
+        {
             MiniGameBoard.OnSetTokenBoard += SetTokenBoard;
             GamePieceUI.OnSetGamePiece += SetGamePiece;
             GamePlayManager.OnResign += Resign;
@@ -62,8 +60,8 @@ namespace Fourzy
             // RealtimeManager.OnRealtimeReady += OpenNewRealtimeGame;
         }
 
-        void OnDisable() {
-            GameUI.OnRemoveGame -= RemoveGame;
+        void OnDisable() 
+        {
             MiniGameBoard.OnSetTokenBoard -= SetTokenBoard;
             GamePieceUI.OnSetGamePiece -= SetGamePiece;
             GamePlayManager.OnResign -= Resign;
@@ -121,25 +119,21 @@ namespace Fourzy
             }
         }
 
-        public TokenBoard GetTokenBoard(string tokenBoardId = null) {
+        public TokenBoard GetTokenBoard(string tokenBoardId = null) 
+        {
             // Debug.Log("ChallengeManager: GetTokenBoard: " + tokenBoardId);
-            if (tokenBoardId != null) {
-                // Debug.Log("ChallengeManager: tokenBoardId: " + tokenBoardId);
+            if (tokenBoardId != null) 
+            {
                 return TokenBoardLoader.instance.GetTokenBoard(tokenBoardId);
             }
-            if (this.tokenBoardId != null && this.tokenBoardId != "") {
-                // Debug.Log("ChallengeManager: this.tokenBoardId: " + this.tokenBoardId);
-                return TokenBoardLoader.instance.GetTokenBoard(this.tokenBoardId);
-            } else {
-                Debug.Log("GetRandomTokenBoard");
-                return tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
-            }
-            // if (tokenBoard == null) {
-            //     Debug.Log("GetRandomTokenBoard");
-            //     return tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
-            // }
 
-            return tokenBoard;
+            if (!string.IsNullOrEmpty(this.tokenBoardId))
+            {
+                return TokenBoardLoader.instance.GetTokenBoard(this.tokenBoardId);
+            }
+
+            Debug.Log("GetRandomTokenBoard");
+            return tokenBoard = TokenBoardLoader.instance.GetRandomTokenBoard();
         }
 
         public void SubmitPuzzleCompleted() {
@@ -502,9 +496,7 @@ namespace Fourzy
 
                 // GamePlayManager.Instance.UpdateOpponentUI(gamePieceId);
                 GameManager.instance.activeGame.opponent.gamePieceId = gamePieceId;
-
-                if (OnActiveGame != null)
-                    OnActiveGame();
+                GameManager.instance.OpenGame(GameManager.instance.activeGame);
             }
         }
 
@@ -523,10 +515,7 @@ namespace Fourzy
 
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
             Game game = new Game(null, gameState, true, false, false, null, ChallengeState.NONE, ChallengeType.STANDARD, UserManager.instance.gamePieceId.ToString(), "0", null, null, null, null, true);
-            GameManager.instance.activeGame = game;
-
-            if (OnActiveGame != null)
-                OnActiveGame();
+            GameManager.instance.OpenGame(game);
             
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("PlayerName", UserManager.instance.userName);
@@ -569,10 +558,7 @@ namespace Fourzy
 
             Game game = new Game(challenge.ChallengeId, gameState, false, false, false, opponent, ChallengeState.RUNNING, ChallengeType.STANDARD, challengerGamePieceId, challengedGamePieceId, null, winnerName, null, null, true);
             GameManager.instance.AddGame(game);
-            GameManager.instance.activeGame = game;
-
-            if (OnActiveGame != null)
-                OnActiveGame();
+            GameManager.instance.OpenGame(game);
 
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("ChallengeId", challenge.ChallengeId);

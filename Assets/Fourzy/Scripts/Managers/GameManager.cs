@@ -24,7 +24,10 @@ namespace Fourzy
             set
             {
                 games = value;
-                OnUpdateGames(games);
+                if (OnUpdateGames != null)
+                {
+                    OnUpdateGames(games);
+                }
             }
         }
 
@@ -46,21 +49,15 @@ namespace Fourzy
         {
             base.Awake();
 
-            // GS.GameSparksAvailable += CheckConnectionStatus;
             DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
         }
 
         private void OnEnable()
         {
             // GS.GameSparksAvailable += CheckConnectionStatus;
-            GameUI.OnActiveGame += TransitionToGamePlayScene;
-            FriendEntry.OnActiveGame += TransitionToGamePlayScene;
-            LeaderboardPlayer.OnActiveGame += TransitionToGamePlayScene;
-            ChallengeManager.OnActiveGame += TransitionToGamePlayScene;
             ChallengeManager.OnReceivedOpponentGamePiece += SetOpponentGamePiece;
             LoginManager.OnLoginMessage += ShowInfoBanner;
             GamePlayManager.OnGamePlayMessage += ShowInfoBanner;
-            Game.OnActiveGame += TransitionToGamePlayScene;
             ChallengeManager.OnOpponentTurnTakenDelegate += OpponentTurnHandler;
             ChallengeManager.OnChallengeJoinedDelegate += ChallengeJoinedHandler;
             ChallengeManager.OnChallengeWonDelegate += ChallengeWonHandler;
@@ -73,14 +70,9 @@ namespace Fourzy
         private void OnDisable()
         {
             // GS.GameSparksAvailable -= CheckConnectionStatus;
-            GameUI.OnActiveGame -= TransitionToGamePlayScene;
-            FriendEntry.OnActiveGame -= TransitionToGamePlayScene;
-            LeaderboardPlayer.OnActiveGame -= TransitionToGamePlayScene;
-            ChallengeManager.OnActiveGame -= TransitionToGamePlayScene;
             ChallengeManager.OnReceivedOpponentGamePiece -= SetOpponentGamePiece;
             LoginManager.OnLoginMessage -= ShowInfoBanner;
             GamePlayManager.OnGamePlayMessage -= ShowInfoBanner;
-            Game.OnActiveGame -= TransitionToGamePlayScene;
             ChallengeManager.OnOpponentTurnTakenDelegate -= OpponentTurnHandler;
             ChallengeManager.OnChallengeJoinedDelegate -= ChallengeJoinedHandler;
             ChallengeManager.OnChallengeWonDelegate -= ChallengeWonHandler;
@@ -344,12 +336,14 @@ namespace Fourzy
             }
         }
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode) 
+        {
             SceneManager.SetActiveScene(scene);
         }
 
-        private void TransitionToGamePlayScene()
+        public void OpenGame(Game game)
         {
+            activeGame = game;
             SceneManager.LoadScene("gamePlay", LoadSceneMode.Additive);
         }
 
@@ -362,9 +356,7 @@ namespace Fourzy
             //If we initiated the challenge, we get to be player 1
             GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, gameType, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
             Game newGame = new Game(null, newGameState, true, false, false, opponent, ChallengeState.NONE, ChallengeType.NONE, UserManager.instance.gamePieceId.ToString(), null, null, null, null, null, displayIntroUI);
-            activeGame = newGame;
-
-            TransitionToGamePlayScene();
+            OpenGame(newGame);
 
             AnalyticsManager.LogOpenGame(newGame);
         }
@@ -398,8 +390,7 @@ namespace Fourzy
                 TokenBoard tokenBoard = new TokenBoard(puzzleChallengeLevel.InitialTokenBoard.ToArray(), "", "", null, null, true);
                 GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.PUZZLE, true, true, tokenBoard, puzzleChallengeLevel.InitialGameBoard.ToArray(), false, null);
                 Game newGame = new Game(null, gameState, true, false, false, null, ChallengeState.NONE, ChallengeType.NONE, null, null, puzzleChallengeLevel, null, puzzleChallengeLevel.Name, subtitle.Replace("%1", puzzleChallengeLevel.MoveGoal.ToString()), true);
-                activeGame = newGame;
-                TransitionToGamePlayScene();
+                OpenGame(newGame);    
 
                 Dictionary<string, object> customAttributes = new Dictionary<string, object>();
                 customAttributes.Add("id", puzzleChallengeLevel.ID);
@@ -440,8 +431,7 @@ namespace Fourzy
                 {
                     if (games[i] != null)
                     {
-                        activeGame = games[i];
-                        TransitionToGamePlayScene();
+                        OpenGame(games[i]);
                         AnalyticsManager.LogCustom("next_game");
                         break;
                     }

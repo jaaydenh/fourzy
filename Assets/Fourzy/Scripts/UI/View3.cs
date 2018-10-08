@@ -83,7 +83,7 @@ namespace Fourzy
             Game game = GameManager.instance.GetNextActiveGame();
             if (game != null)
             {
-                game.OpenGame();
+                GameManager.instance.OpenGame(game);
                 Hide();
             }
             else
@@ -107,7 +107,7 @@ namespace Fourzy
             Game game = GameManager.instance.GetNextActiveGame();
             if (game != null)
             {
-                game.OpenGame();
+                GameManager.instance.OpenGame(game);
                 Hide();
             }
             else

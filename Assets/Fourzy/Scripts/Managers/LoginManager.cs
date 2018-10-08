@@ -23,6 +23,7 @@ namespace Fourzy
 
         public static event Action<string> OnLoginMessage;
         public static event Action<bool> OnFBLoginComplete;
+        public static event Action<bool> OnDeviceLoginComplete;
         public static event Action OnGetFriends;
 
         new void Awake()
@@ -34,7 +35,6 @@ namespace Fourzy
 
         private void Start()
         {
-            GameAnalytics.Initialize();
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
             GS.GameSparksAvailable += GameSparksIsAvailable;
@@ -111,6 +111,11 @@ namespace Fourzy
                             OnLoginMessage("Error Authenticating Device: " + response.Errors.JSON);
 
                         AnalyticsManager.LogError("device_authentication_request_error", response.Errors.JSON);
+                    }
+                    
+                    if (OnDeviceLoginComplete != null)
+                    {
+                        OnDeviceLoginComplete(!response.HasErrors);
                     }
                 });
         }

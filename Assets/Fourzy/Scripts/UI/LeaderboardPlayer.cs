@@ -4,10 +4,8 @@ using GameSparks.Api.Responses;
 
 namespace Fourzy
 {
-    public class LeaderboardPlayer : MonoBehaviour {
-
-        public delegate void GameActive();
-        public static event GameActive OnActiveGame;
+    public class LeaderboardPlayer : MonoBehaviour 
+    {
         public string userName, id, facebookId;
         public bool isOnline;
         public Text playerNameLabel, rankLabel, ratingLabel, typeLabel;
@@ -16,12 +14,14 @@ namespace Fourzy
         public Image onlineTexture;
         public GameObject playButton;
 
-        void Start() {
+        void Start() 
+        {
             Button playBtn = playButton.GetComponent<Button>();
             playBtn.onClick.AddListener(OpenNewLeaderboardChallengeGame);
         }
 
-        public void Reset() {
+        public void Reset() 
+        {
             playerNameLabel.text = "";
             rankLabel.text = "";
             ratingLabel.text = "";
@@ -34,7 +34,8 @@ namespace Fourzy
             playButton.SetActive(true);
         }
 
-        public void HidePlayButton() {
+        public void HidePlayButton() 
+        {
             playButton.SetActive(false);
         }
 
@@ -65,13 +66,15 @@ namespace Fourzy
             ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.LEADERBOARD, id, userName, profilePicture);
         }
 
-        private void GetGamePieceIdSuccess(LogEventResponse response) {
+        private void GetGamePieceIdSuccess(LogEventResponse response) 
+        {
             int gamePieceId = int.Parse(response.ScriptData.GetString("gamePieceId"));
             Debug.Log("GetGamePieceIdSuccess: " + response.ScriptData.GetString("gamePieceId"));
             profilePicture.sprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceId);
         }
 
-        private void GetGamePieceIdFailure(LogEventResponse response) {
+        private void GetGamePieceIdFailure(LogEventResponse response) 
+        {
             Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
             AnalyticsManager.LogError("get_player_gamepiece_error", response.Errors.JSON);
             profilePicture.sprite = GameContentManager.Instance.GetGamePieceSprite(0);

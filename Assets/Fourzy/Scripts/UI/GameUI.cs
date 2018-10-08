@@ -9,11 +9,6 @@ namespace Fourzy
 {
     public class GameUI : MonoBehaviour
     {
-        public delegate void GameActive();
-        public static event GameActive OnActiveGame;
-        public delegate void RemoveGame(string challengeInstanceId);
-        public static event RemoveGame OnRemoveGame;
-
         public string challengeId;
         public string challengerId;
         public string winnerName;
@@ -178,13 +173,11 @@ namespace Fourzy
         {
             Debug.Log("Open GameUI: challengeInstanceId: " + challengeId);
 
-            GameManager.instance.activeGame = game;
-
             ViewController.instance.view1.Hide();
             ViewController.instance.HideTabView();
             UITabManager.instance.ResetAllTabs();
-            // Triggers GameManager TransitionToGameScreen
-            OnActiveGame();
+
+            GameManager.instance.OpenGame(game);
         }
     }
 }

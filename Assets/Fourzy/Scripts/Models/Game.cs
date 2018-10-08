@@ -26,9 +26,6 @@ namespace Fourzy
         public PuzzleChallengeLevel puzzleChallengeInfo;
         public Sprite opponentProfilePictureSprite;
 
-        public delegate void GameActive();
-        public static event GameActive OnActiveGame;
-
         public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, string challengerGamePieceId, string challengedGamePieceId, PuzzleChallengeLevel puzzleChallengeInfo, string winnerName, string title, string subtitle, bool displayIntroUI)
         {
             this.challengeId = challengeId;
@@ -64,17 +61,6 @@ namespace Fourzy
             //         opponentProfilePictureSprite = sprite;
             //     }));
             // }
-        }
-
-        public void OpenGame()
-        {
-            Debug.Log("Open Game: challengeId: " + challengeId);
-
-            GameManager.instance.activeGame = this;
-
-            // Triggers GameManager TransitionToGameScreen
-            if (OnActiveGame != null)
-                OnActiveGame();
         }
     }
 }

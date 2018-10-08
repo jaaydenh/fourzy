@@ -5,8 +5,6 @@ namespace Fourzy
 {
     public class FriendEntry : MonoBehaviour 
     {
-        public delegate void GameActive();
-        public static event GameActive OnActiveGame;
         public string userName, id, facebookId;
         public bool isOnline;
         public Text nameLabel;
