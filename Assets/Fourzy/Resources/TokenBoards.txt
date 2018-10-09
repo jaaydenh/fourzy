@@ -104,7 +104,7 @@
                           6,0,0,0,0,0,0,6],
             "InitialMoves": [
                 { "Location": 4, "Direction": 2 },
-                { "Location": 4, "Direction": 2 },
+                { "Location": 4, "Direction": 0 },
                 { "Location": 4, "Direction": 2 }
             ]
         },
@@ -121,7 +121,8 @@
                           0,0,0,0,0,0,0,0,
                           6,0,0,0,0,0,0,6],
             "InitialMoves": [
-                { "Location": 4, "Direction": 2 }
+                { "Location": 4, "Direction": 2 },
+                { "Location": 3, "Direction": 3 }
             ]
         },
         {
@@ -132,11 +133,12 @@
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
                           0,0,0,7,7,0,0,0,
-                          7,0,0,7,7,0,0,0,
+                          0,7,0,7,7,0,0,0,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
                           6,0,0,0,0,0,0,6],
             "InitialMoves": [
+                { "Location": 4, "Direction": 2 },
                 { "Location": 4, "Direction": 2 }
             ]
         },
@@ -156,12 +158,13 @@
                                  0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
                                  0,0,0,2,0,0,0,0,
-                                 0,0,0,1,0,0,0,0,
+                                 0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0,
                                  0,0,0,0,0,0,0,0],
             "InitialMoves": [
-                { "Location": 4, "Direction": 2 }
+                { "Location": 4, "Direction": 2 },
+                { "Location": 3, "Direction": 2 }
             ]
         },
         {
@@ -177,6 +180,7 @@
                           0,0,0,0,0,0,0,0,
                           6,0,0,0,0,0,0,6],
             "InitialMoves": [
+                { "Location": 4, "Direction": 2 },
                 { "Location": 4, "Direction": 2 }
             ]
         },
@@ -193,6 +197,7 @@
                           0,0,0,0,0,0,0,0,
                           6,0,0,0,0,0,0,6],
             "InitialMoves": [
+                { "Location": 4, "Direction": 1 },
                 { "Location": 4, "Direction": 2 },
                 { "Location": 4, "Direction": 2 }
             ]
@@ -227,7 +232,8 @@
                           6,0,0,0,0,0,0,6],
             "InitialMoves": [
                 { "Location": 4, "Direction": 2 },
-                { "Location": 4, "Direction": 2 }
+                { "Location": 4, "Direction": 2 },
+                { "Location": 4, "Direction": 1 }
             ]
         },
         {
@@ -303,7 +309,7 @@
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
-                          0,12,0,0,0,0,0,0,
+                          0,0,12,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
                           6,0,0,0,0,0,0,6],

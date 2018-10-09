@@ -78,7 +78,6 @@ namespace Fourzy
         private IEnumerator PlayInitialMoves()
         {
             List<MoveInfo> initialMoves = gameState.TokenBoard.initialMoves;
-            Debug.LogError("initialMoves.Count = " + initialMoves.Count);
 
             for (int i = 0; i < initialMoves.Count; i++)
             {
