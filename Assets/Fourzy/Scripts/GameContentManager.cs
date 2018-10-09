@@ -117,6 +117,11 @@ namespace Fourzy
 
         public string GetGamePieceName(int gamePieceId)
         {
+            if (gamePieceId >= gamePieceData.Length)
+            {
+                return string.Empty;
+            }
+
             return gamePieceData[gamePieceId].Name;
         }
 

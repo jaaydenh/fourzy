@@ -58,6 +58,7 @@ namespace Fourzy
                 ChallengeManager.Instance.FindRandomChallenge(FindChallengeSuccess, FindChallengeError);
             }
 
+            this.StartCoroutine(UpdateElapsedTimeRoutine());
             this.StartCoroutine(ShowRandomTextRoutine());
         }
 
@@ -67,6 +68,16 @@ namespace Fourzy
             timerText.text = string.Empty;
 
             this.StopAllCoroutines();
+        }
+
+        private IEnumerator UpdateElapsedTimeRoutine()
+        {
+            float startTime = Time.time;
+            while(true)
+            {
+                elapsedTime = Time.time - startTime;
+                yield return null;
+            }
         }
 
         private IEnumerator ShowRandomTextRoutine()
