@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: LargeSprites
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 16
+      compressionQuality: 50
+      maxTextureSize: 4096
+      textureCompression: 1
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 2
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 4096
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+    - serializedVersion: 2
+      m_BuildTarget: iPhone
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 33
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: b1bff9e0f3e044ab7bc1a05568b90cb0, type: 3}
+    - {fileID: 102900000, guid: b2b9b83ee13a743fcbf1504a88287776, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: c160e712160e34fe38fdb3a33069cd8b, type: 3}
+  - {fileID: 21300000, guid: 884e828293a874cd69156202e84b89ac, type: 3}
+  - {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
+  - {fileID: 21300000, guid: e8926444169da44ec8d1ca66ebe2040c, type: 3}
+  - {fileID: 21300000, guid: da7c6da7b42064dbe8eab340bab57390, type: 3}
+  - {fileID: 21300000, guid: 84fe40e7948c54c57995635a2d5f081a, type: 3}
+  - {fileID: 21300000, guid: 6bec12e9c39f244fbaf24bdc6baa2852, type: 3}
+  - {fileID: 21300000, guid: 51d86dda53ccf4eb9831e84c249298fa, type: 3}
+  - {fileID: 21300000, guid: b39f5b6b0369f44fda61246bd9a7090a, type: 3}
+  - {fileID: 21300000, guid: f5c45e0c7d6134dd5915636c42d085a9, type: 3}
+  - {fileID: 21300000, guid: a7808e2d1e66e4370b30a2ac0d36ad46, type: 3}
+  - {fileID: 21300000, guid: 1f21b1de07fbd4da09e8d68b039983d3, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - windowForest
+  - windowIsland
+  - windowTrainingGarden
+  - IslandBoard
+  - IslandBackground
+  - PopupBackground
+  - backgroundUI
+  - TrainingGardenBackground
+  - ForestBackground
+  - boardTrainingGarden
+  - backgroundPatternUI
+  - ForestBoard
+  m_Tag: LargeSprites
+  m_IsVariant: 0

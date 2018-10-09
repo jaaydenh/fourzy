@@ -88,6 +88,8 @@ namespace Fourzy
             SetActionButton();
             InitPlayerPrefabs();
             ResetUI();
+            backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackground;
+            gameBoardView.UpdateGameBoardSprite(GameContentManager.Instance.GetCurrentTheme().GameBoard);
             gameBoardView.CreateGamePieceViews(game.gameState.GetPreviousGameBoard(), 0.0f);
             gameBoardView.CreateTokenViews(game.gameState.PreviousTokenBoard.tokens, 0.0f);
             InitPlayerUI();

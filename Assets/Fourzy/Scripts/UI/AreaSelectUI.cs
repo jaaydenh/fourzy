@@ -4,17 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class AreaSelectUI : MonoBehaviour {
+namespace Fourzy
+{
+    public class AreaSelectUI : MonoBehaviour
+    {
+        public string AreaName { get; private set; }
 
-	// public GameObject areaButton;
-	public string AreaName {get; private set;}
-
-	void Start () {
-        Button btn = this.GetComponent<Button>();
-        btn.onClick.AddListener(OpenArea);
-	}
-	
-	void OpenArea () {
-		
-	}
+        public void OpenAreaOnClick(int index)
+        {
+            GameContentManager.Instance.CurrentTheme = index;
+            ViewController.instance.ChangeView(ViewController.instance.view3);
+            ViewController.instance.ShowTabView();
+        }
+    }
 }

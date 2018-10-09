@@ -4,22 +4,43 @@ using UnityEngine;
 
 namespace Fourzy
 {
+    [System.Serializable]
+    public class GameTheme
+    {
+        public string Name;
+        public Sprite Preview;
+        public Sprite GameBackground;
+        public GameBoardView GameBoardView;
+        public Sprite GameBoard;
+    }
+
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class GameContentManager : UnitySingleton<GameContentManager>
     {
-        [SerializeField]
-        private List<GamePiece> gamePiecePrefabs = new List<GamePiece>();
-
-        [SerializeField]
-        private List<TokenView> tokenPrefabs = new List<TokenView>();
-
-        [SerializeField]
-        private List<Sprite> tokenSprites = new List<Sprite>();
+        [SerializeField] List<GamePiece> gamePiecePrefabs = new List<GamePiece>();
+        [SerializeField] List<TokenView> tokenPrefabs = new List<TokenView>();
+        [SerializeField] List<Sprite> tokenSprites = new List<Sprite>();
+        [SerializeField] List<GameTheme> gameThemes = new List<GameTheme>();
 
         private GamePieceData[] gamePieceData = new GamePieceData[0];
         private TokenData[] tokenData = new TokenData[0];
         private Dictionary<int, TokenData> inGameTokensData = new Dictionary<int, TokenData>();
         private Dictionary<Token, TokenView> sortedTokenPrefabs = new Dictionary<Token, TokenView>();
+
+        public int CurrentTheme
+        {
+            get
+            {
+                return currentTheme;
+            }
+            set
+            {
+                currentTheme = value;
+                PlayerPrefsWrapper.SetCurrentGameTheme(currentTheme);
+            }
+        }
+
+        private int currentTheme;
 
         protected override void Awake()
         {
@@ -29,6 +50,8 @@ namespace Fourzy
             {
                 sortedTokenPrefabs[token.tokenType] = token;
             }
+
+            currentTheme = PlayerPrefsWrapper.GetCurrentTheme();
         }
 
         public void UpdateContentData()
@@ -44,9 +67,9 @@ namespace Fourzy
                 gamePiecePrefabs[i].View.SecondaryColor = piece.SecondaryColor;
             }
 
-            foreach(TokenData t in tokenData)
+            foreach (TokenData t in tokenData)
             {
-                foreach(int tokenType in t.InGameTokenTypes)
+                foreach (int tokenType in t.InGameTokenTypes)
                 {
                     inGameTokensData[tokenType] = t;
                 }
@@ -70,7 +93,7 @@ namespace Fourzy
 
         public Sprite GetGamePieceSprite(int gamePieceId)
         {
-            if (gamePieceId > gamePiecePrefabs.Count - 1) 
+            if (gamePieceId > gamePiecePrefabs.Count - 1)
             {
                 return gamePiecePrefabs[0].gamePieceIcon;
             }
@@ -113,15 +136,18 @@ namespace Fourzy
         {
             TokenView tokenView;
             sortedTokenPrefabs.TryGetValue(tokenType, out tokenView);
-            if (tokenView)
+            GameObject token = null;
+            if (tokenView != null)
             {
                 tokenView.justDisplaying = justForDisplaying;
-                return tokenView.gameObject;
+                token = tokenView.gameObject;
             }
-            else
-            {
-                return null;
-            }
+            return token;
+        }
+
+        public GameTheme GetCurrentTheme()
+        {
+            return gameThemes[currentTheme];
         }
     }
 }

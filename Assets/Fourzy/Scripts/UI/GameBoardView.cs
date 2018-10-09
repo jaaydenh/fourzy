@@ -328,5 +328,10 @@ namespace Fourzy
         {
             spriteRenderer.DOFade(alpha, time);
         }
+
+        public void UpdateGameBoardSprite(Sprite sprite)
+        {
+            spriteRenderer.sprite = sprite;
+        }
     }
 }

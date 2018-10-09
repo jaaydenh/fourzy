@@ -8,6 +8,7 @@ namespace Fourzy
     {
         static string kInstructionPopupDisplayed = "kInstructionPopupDisplayed_";
         static string kPuzzleChallengeCompleted = "PuzzleChallengeID:";
+        static string kCurrentTheme = "kCurrentTheme";
 
         public static bool InstructionPopupWasDisplayed(int tokenId)
         {
@@ -31,6 +32,21 @@ namespace Fourzy
         {
             int value = completed ? 1 : 0;
             PlayerPrefs.SetInt(kPuzzleChallengeCompleted + id, value);
+        }
+
+        public static void SetCurrentGameTheme(int currentTheme)
+        {
+            PlayerPrefs.SetInt(kCurrentTheme, currentTheme);
+        }
+
+        public static int GetCurrentTheme()
+        {
+            return PlayerPrefs.GetInt(kCurrentTheme, 0);
+        }
+
+        public static void Save()
+        {
+            PlayerPrefs.Save();
         }
     }
 }

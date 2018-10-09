@@ -147,6 +147,7 @@ namespace Fourzy
 
             gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(user.gamePieceId);
             gamePieceNameLabel.text = GameContentManager.Instance.GetGamePieceName(user.gamePieceId);
+            areaSelectButton.GetComponent<Image>().sprite = GameContentManager.Instance.GetCurrentTheme().Preview;
         }
 
         void UserManager_OnUpdateUserInfo()

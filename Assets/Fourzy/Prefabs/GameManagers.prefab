@@ -395,7 +395,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1768030957288146}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 20.104027, y: 8.502021, z: 1.0765747}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4134482284468884}
@@ -1133,6 +1133,22 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 727c33d7a79074a80bf83232b5779f8b, type: 3}
   - {fileID: 21300000, guid: 0738a67aa20204c1a9f177165d7914e1, type: 3}
   - {fileID: 21300000, guid: 6bd56ed1d8ae94a5fb83dcd2e341072d, type: 3}
+  gameThemes:
+  - Name: Training Garden
+    Preview: {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
+    GameBackground: {fileID: 21300000, guid: 51d86dda53ccf4eb9831e84c249298fa, type: 3}
+    GameBoardView: {fileID: 0}
+    GameBoard: {fileID: 21300000, guid: f5c45e0c7d6134dd5915636c42d085a9, type: 3}
+  - Name: Mystery Forest
+    Preview: {fileID: 21300000, guid: c160e712160e34fe38fdb3a33069cd8b, type: 3}
+    GameBackground: {fileID: 21300000, guid: b39f5b6b0369f44fda61246bd9a7090a, type: 3}
+    GameBoardView: {fileID: 0}
+    GameBoard: {fileID: 21300000, guid: 1f21b1de07fbd4da09e8d68b039983d3, type: 3}
+  - Name: Sandy Island
+    Preview: {fileID: 21300000, guid: 884e828293a874cd69156202e84b89ac, type: 3}
+    GameBackground: {fileID: 21300000, guid: da7c6da7b42064dbe8eab340bab57390, type: 3}
+    GameBoardView: {fileID: 0}
+    GameBoard: {fileID: 21300000, guid: e8926444169da44ec8d1ca66ebe2040c, type: 3}
 --- !u!114 &114651625545579072
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1325,7 +1341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOnboardingActive: 0
   shouldLoadOnboarding: 0
-  onboardingScreen: {fileID: 114706829214614028}
+  onboardingScreen: {fileID: 0}
   infoBannerPrefab: {fileID: 1375395073871002, guid: 2fa13cc6c3aa74203a81d3e13166ae1f,
     type: 2}
 --- !u!114 &114846030720094820

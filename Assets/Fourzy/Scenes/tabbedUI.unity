@@ -4173,7 +4173,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00003790395}
+  m_AnchoredPosition: {x: 0, y: -0.0000504544}
   m_SizeDelta: {x: 0, y: 680}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &381019442
@@ -4557,6 +4557,15 @@ Prefab:
         type: 2}
       propertyPath: m_Text
       value: Sandy Island
+      objectReference: {fileID: 0}
+    - target: {fileID: 1080555486615990, guid: 62d2d7bf04ec240829cf2699283a3741, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114980203556256274, guid: 62d2d7bf04ec240829cf2699283a3741,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62d2d7bf04ec240829cf2699283a3741, type: 2}
@@ -5662,7 +5671,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00003478074}
+  m_AnchoredPosition: {x: 0, y: -0.000074925}
   m_SizeDelta: {x: 0, y: 355}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &617668434
@@ -9816,7 +9825,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000037382422}
+  m_AnchoredPosition: {x: 0, y: -0.000050975927}
   m_SizeDelta: {x: 0, y: 310}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &988853846
@@ -10060,7 +10069,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00003797924}
+  m_AnchoredPosition: {x: 0, y: -0.00005037911}
   m_SizeDelta: {x: 0, y: 280}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1018993804
@@ -11101,8 +11110,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.00036859917, y: 666.99994}
-  m_SizeDelta: {x: -705.77423, y: 1100}
+  m_AnchoredPosition: {x: -0.000036930964, y: 666.99994}
+  m_SizeDelta: {x: -729.79034, y: 1100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1149295667
 MonoBehaviour:
@@ -17694,7 +17703,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -0.0000007098787, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0.000030517578, y: -0.000061035156}
   m_SizeDelta: {x: 400, y: -27}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1839248373
@@ -18639,10 +18648,6 @@ Prefab:
       propertyPath: onboardingScreen
       value: 
       objectReference: {fileID: 1947138234}
-    - target: {fileID: 1768030957288146, guid: 3b153745504954e599a747ae789ac703, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 224038955395718872, guid: 3b153745504954e599a747ae789ac703,
         type: 2}
       propertyPath: m_LocalPosition.z
@@ -18994,10 +18999,6 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1080555486615990, guid: 62d2d7bf04ec240829cf2699283a3741, type: 2}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62d2d7bf04ec240829cf2699283a3741, type: 2}
@@ -19934,6 +19935,15 @@ Prefab:
         type: 2}
       propertyPath: m_Text
       value: Mystery Forest
+      objectReference: {fileID: 0}
+    - target: {fileID: 1080555486615990, guid: 62d2d7bf04ec240829cf2699283a3741, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114980203556256274, guid: 62d2d7bf04ec240829cf2699283a3741,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62d2d7bf04ec240829cf2699283a3741, type: 2}
