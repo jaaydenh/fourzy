@@ -20,23 +20,28 @@ namespace Fourzy
         private int joinChallengeErrorCount = 0;
         private int getChallengeError = 0;
         private string challengeIdToJoin;
-        private float startTime;
         private float elapsedTime;
         private float minimumTimerTime = 3f;
+
+        private List<string> matchMakingStrings = new List<string>();
 
         // Use this for initialization
         void Start()
         {
             instance = this;
             keepHistory = false;
+
+            matchMakingStrings = GameStringsLoader.Instance.GetMatchMakingWaitingStrings();
         }
 
-        void OnEnable() {
+        void OnEnable() 
+        {
             RealtimeManager.OnRealtimeReady += StartRealtimeGame;
             RealtimeManager.OnRealtimeMatchNotFound += RealtimeMatchNotFound;
         }
 
-        void OnDisable() {
+        void OnDisable() 
+        {
             RealtimeManager.OnRealtimeReady -= StartRealtimeGame;
             RealtimeManager.OnRealtimeMatchNotFound -= RealtimeMatchNotFound;
         }
@@ -44,7 +49,7 @@ namespace Fourzy
         public override void Show()
         {
             base.Show();
-            startTime = Time.time;
+
             userFacingMessage.text = "Finding Match...";
             backButton.SetActive(false);
             if (isRealtime) {
@@ -52,22 +57,62 @@ namespace Fourzy
             } else {
                 ChallengeManager.Instance.FindRandomChallenge(FindChallengeSuccess, FindChallengeError);
             }
+
+            this.StartCoroutine(ShowRandomTextRoutine());
         }
 
         public override void Hide()
         {
             base.Hide();
-            timerText.text = "0";
+            timerText.text = string.Empty;
+
+            this.StopAllCoroutines();
         }
 
-		private void Update()
-		{
-            if (isVisible) {
-                elapsedTime = Time.time - startTime;
-                string seconds = (elapsedTime % 60).ToString("f0");
-                timerText.text = seconds;                
+        private IEnumerator ShowRandomTextRoutine()
+        {
+            const float timeToShow = 5.0f;
+            float time = 5.0f;
+
+            List<int> indices = new List<int>();
+
+            while(true)
+            {
+                time += Time.deltaTime;   
+                if (time > timeToShow)
+                {
+                    if (indices.Count == 0)
+                    {
+                        for (int i = 0; i < matchMakingStrings.Count; i++)
+                        {
+                            indices.Add(i);
+                        }
+                    }
+
+                    yield return this.StartCoroutine(FadeTimerTextRoutine(0.0f));
+
+                    int randIndex = Random.Range(0, indices.Count);
+                    timerText.text = matchMakingStrings[indices[randIndex]];
+                    indices.Remove(randIndex);
+                    time = 0;
+
+                    yield return this.StartCoroutine(FadeTimerTextRoutine(1.0f));
+                }
+                yield return null;
             }
-		}
+        }
+
+        private IEnumerator FadeTimerTextRoutine(float newAlpha)
+        {
+            const float fadeTime = 0.5f;
+            float oldAlpha = timerText.alpha;
+            for (float t = 0.0f; t < fadeTime; t += Time.deltaTime)
+            {
+                timerText.alpha = Mathf.Lerp(oldAlpha, newAlpha, t / fadeTime);
+                yield return null;
+            }
+            timerText.alpha = newAlpha;
+        }
 
 		public void BackButton()
         {

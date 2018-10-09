@@ -37,7 +37,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4134482284468884}
   - component: {fileID: 114771313682951538}
-  - component: {fileID: 114452588343551896}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -88,8 +87,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4209489647382502}
   - component: {fileID: 114943597000370452}
+  - component: {fileID: 114475764873288254}
+  - component: {fileID: 114888451277023158}
   m_Layer: 0
-  m_Name: TokenBoardLoader
+  m_Name: GameJsonsLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -885,17 +886,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114452588343551896
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1142780361699698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 366afe7dae7f74fa7bf367327f800ed1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114472474248125432
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -937,6 +927,17 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114475764873288254
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1198500759858124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 366afe7dae7f74fa7bf367327f800ed1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114492273747567098
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1389,6 +1390,17 @@ MonoBehaviour:
     initialMoves: []
   tokenBoardId: 
   daysUntilChallengeExpires: 14
+--- !u!114 &114888451277023158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1198500759858124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc354ae89930f485f97df384be91858a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114902134777033850
 MonoBehaviour:
   m_ObjectHideFlags: 1
