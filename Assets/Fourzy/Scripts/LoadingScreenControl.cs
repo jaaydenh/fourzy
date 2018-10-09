@@ -33,14 +33,21 @@ namespace Fourzy
         private void OnEnable()
         {
             LoginManager.OnDeviceLoginComplete += LoginManager_OnDeviceLoginComplete;
+            LoginManager.OnFBLoginComplete += LoginManager_OnFBLoginComplete;
         }
 
         private void OnDisable()
         {
             LoginManager.OnDeviceLoginComplete -= LoginManager_OnDeviceLoginComplete;
+            LoginManager.OnFBLoginComplete -= LoginManager_OnFBLoginComplete;
         }
 
         void LoginManager_OnDeviceLoginComplete(bool isSuccessful)
+        {
+            wasLoginProcessFinished = true;
+        }
+
+        void LoginManager_OnFBLoginComplete(bool isSuccessful)
         {
             wasLoginProcessFinished = true;
         }
@@ -57,8 +64,11 @@ namespace Fourzy
 
             while (!logoAnimationWasShown || !LocalizationManager.Instance.GetIsReady() || !wasLoginProcessFinished)
             {
-                duration += Time.deltaTime;
-                slider.value = duration / animLength * 0.9f;
+                if (!logoAnimationWasShown)
+                {
+                    duration += Time.deltaTime;
+                    slider.value = duration / animLength * 0.75f;
+                }
                 yield return null;
             }
 
