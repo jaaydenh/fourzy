@@ -163,6 +163,8 @@ namespace Fourzy {
         }
 
         public void SetActivePieceAsComplete() {
+
+
             if (activeMovingPieces.Count > 0) {
                 completedMovingPieces.Add(activeMovingPieces[0]);
                 activeMovingPieces.RemoveAt(0);
@@ -211,18 +213,7 @@ namespace Fourzy {
                         }
                     }
 
-                    bool isPieceDestroyed = CalculatePieceChanceOfDestruction(token.chanceDestroyPieceOnEnd);
-
-                    if (isPieceDestroyed)
-                    {
-                        piece.isDestroyed = true;
-                        piece.animationState = PieceAnimState.FALLING;
-
-                        if (InBoardBounds(nextPosition))
-                        {
-                            SetCell(nextPosition.column, nextPosition.row, PlayerEnum.NONE);
-                        }
-                    }
+                   
 
                     if (!token.changePieceDirection) {
                         activeMovingPieces[0].positions.Add(nextPosition);
@@ -284,7 +275,64 @@ namespace Fourzy {
 
                     piece.momentum -= 1;
 
+                    bool isPieceDestroyed = false;
+
                     if (pieceInSquare || token.pieceMustStopOn || piece.isDestroyed || piece.friction >= 1.0f || piece.momentum <= 0) {
+
+                        if (token.destroyTokenOnEnd)
+                        {
+                            isPieceDestroyed = CalculatePieceChanceOfDestruction(token.chanceDestroyPieceOnEnd);
+                        }
+
+                        if (isPieceDestroyed)
+                        {
+                            piece.isDestroyed = true;
+                            piece.animationState = PieceAnimState.FALLING;
+
+                            if (InBoardBounds(nextPosition))
+                            {
+                                SetCell(nextPosition.column, nextPosition.row, PlayerEnum.NONE);
+                            }
+                        }
+
+                        if ((token.tokenType == Token.CIRCLE_BOMB) && isPieceDestroyed)
+                        {
+                            gameState.SetTokenBoardCell(nextPosition.row, nextPosition.column, new EmptyToken(nextPosition.row, nextPosition.column));
+
+                            if (InBoardBounds(new Position(nextPosition.column - 1, nextPosition.row - 1)))
+                            {
+                                SetCell(nextPosition.column - 1, nextPosition.row - 1, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column, nextPosition.row - 1)))
+                            {
+                                SetCell(nextPosition.column, nextPosition.row - 1, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column + 1, nextPosition.row - 1)))
+                            {
+                                SetCell(nextPosition.column + 1, nextPosition.row - 1, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column - 1, nextPosition.row)))
+                            {
+                                SetCell(nextPosition.column - 1, nextPosition.row, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column + 1, nextPosition.row)))
+                            {
+                                SetCell(nextPosition.column + 1, nextPosition.row, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column - 1, nextPosition.row + 1)))
+                            {
+                                SetCell(nextPosition.column - 1, nextPosition.row + 1, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column, nextPosition.row + 1)))
+                            {
+                                SetCell(nextPosition.column, nextPosition.row + 1, PlayerEnum.NONE);
+                            }
+                            if (InBoardBounds(new Position(nextPosition.column + 1, nextPosition.row + 1)))
+                            {
+                                SetCell(nextPosition.column + 1, nextPosition.row + 1, PlayerEnum.NONE);
+                            }
+                        }
+
                         SetActivePieceAsComplete();
                     }
 
@@ -298,33 +346,9 @@ namespace Fourzy {
                         //if (OnUpdateTokenBoard != null) {
                         //    OnUpdateTokenBoard(nextPosition.row, nextPosition.column, token.replacedToken);    
                         //}
-                        gameState.SetTokenBoardCell(nextPosition.row, nextPosition.column, token.replacedToken);
-
-                        if (token.tokenType == Token.CIRCLE_BOMB) {
-                            if (InBoardBounds(new Position(nextPosition.column-1, nextPosition.row-1))) {
-                                SetCell(nextPosition.column-1, nextPosition.row-1, PlayerEnum.NONE);
-                            }
-                            if (InBoardBounds(new Position(nextPosition.column, nextPosition.row-1))) {
-                                SetCell(nextPosition.column, nextPosition.row-1, PlayerEnum.NONE);
-                            }
-                            if (InBoardBounds(new Position(nextPosition.column+1, nextPosition.row-1))) {
-                                SetCell(nextPosition.column+1, nextPosition.row-1, PlayerEnum.NONE);
-                            }
-                            if (InBoardBounds(new Position(nextPosition.column-1, nextPosition.row))) {
-                                SetCell(nextPosition.column-1, nextPosition.row, PlayerEnum.NONE);
-                            }
-                            if (InBoardBounds(new Position(nextPosition.column+1, nextPosition.row))) {
-                                SetCell(nextPosition.column+1, nextPosition.row, PlayerEnum.NONE);
-                            }
-                            if (InBoardBounds(new Position(nextPosition.column-1, nextPosition.row+1))) {
-                                SetCell(nextPosition.column-1, nextPosition.row+1, PlayerEnum.NONE);
-                            }
-                            if (InBoardBounds(new Position(nextPosition.column, nextPosition.row+1))) {
-                                SetCell(nextPosition.column, nextPosition.row+1, PlayerEnum.NONE);
-                            }
-                            if (InBoardBounds(new Position(nextPosition.column+1, nextPosition.row+1))) {
-                                SetCell(nextPosition.column+1, nextPosition.row+1, PlayerEnum.NONE);
-                            }
+                        if (token.replacedToken != null)
+                        {
+                            gameState.SetTokenBoardCell(nextPosition.row, nextPosition.column, token.replacedToken);
                         }
                     }
                 }
@@ -388,14 +412,14 @@ namespace Fourzy {
             } 
         }
 
-        private bool InBoardBounds(Position pos) {
+        public bool InBoardBounds(Position pos) {
             if (pos.column >= 0 && pos.column < numColumns && pos.row >= 0 && pos.row < numRows) {
                 return true;
             }
             return false;
         }
 
-        private bool CalculatePieceChanceOfDestruction(float chance) {
+        public bool CalculatePieceChanceOfDestruction(float chance) {
             //Debug.Log("Chance Destroyed: " + chance);
             if (chance > 0.0f) {
                 return true;
