@@ -25,7 +25,6 @@ namespace Fourzy
 
         private List<string> matchMakingStrings = new List<string>();
 
-        // Use this for initialization
         void Start()
         {
             instance = this;
@@ -187,9 +186,7 @@ namespace Fourzy
         {
             userFacingMessage.text = "No one is playing now, try again later.";
             timerText.text = "";
-
             //backButton.SetActive(true);
-
             this.StopAllCoroutines();
         }
 
@@ -209,9 +206,7 @@ namespace Fourzy
             } else {
                 userFacingMessage.text = response.Errors.JSON;
                 timerText.text = "";
-
                 //backButton.SetActive(true);
-
                 this.StopAllCoroutines();
             }
         }
@@ -234,9 +229,7 @@ namespace Fourzy
             } else {
                 userFacingMessage.text = response.Errors.JSON;
                 timerText.text = "";
-
                 //backButton.SetActive(true);
-
                 this.StopAllCoroutines();
             }
         }
@@ -274,7 +267,6 @@ namespace Fourzy
             } else {
                 userFacingMessage.text = response.Errors.JSON;
                 timerText.text = "";
-
                 //backButton.SetActive(true);
                 this.StopAllCoroutines();
             }
