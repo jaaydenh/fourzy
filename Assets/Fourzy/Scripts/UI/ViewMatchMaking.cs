@@ -25,7 +25,6 @@ namespace Fourzy
 
         private List<string> matchMakingStrings = new List<string>();
 
-        // Use this for initialization
         void Start()
         {
             instance = this;
@@ -132,6 +131,7 @@ namespace Fourzy
         {
             RealtimeManager.Instance.CancelMatchmakingRequest();
             ViewController.instance.ChangeView(ViewController.instance.view3);
+            Hide();
             ViewController.instance.ShowTabView();
         }
 
@@ -176,19 +176,22 @@ namespace Fourzy
             }
         }
 
-        private void StartRealtimeGame(int firstPlayerPeerId, int tokenBoardIndex) {
+        private void StartRealtimeGame(int firstPlayerPeerId, int tokenBoardIndex) 
+        {
             ChallengeManager.Instance.OpenNewRealtimeGame(firstPlayerPeerId, tokenBoardIndex);
             Hide();
         }
 
-        private void RealtimeMatchNotFound() {
+        private void RealtimeMatchNotFound() 
+        {
             userFacingMessage.text = "No one is playing now, try again later.";
-            isVisible = false;
             timerText.text = "";
-            // backButton.SetActive(true);
+            //backButton.SetActive(true);
+            this.StopAllCoroutines();
         }
 
-        private void OpenNewMultiplayerGame() {
+        private void OpenNewMultiplayerGame() 
+        {
             ChallengeManager.Instance.OpenNewMultiplayerGame();
         }
 
@@ -202,9 +205,9 @@ namespace Fourzy
                 ChallengeManager.Instance.FindRandomChallenge(FindChallengeSuccess, FindChallengeError);
             } else {
                 userFacingMessage.text = response.Errors.JSON;
-                isVisible = false;
                 timerText.text = "";
-                // backButton.SetActive(true);
+                //backButton.SetActive(true);
+                this.StopAllCoroutines();
             }
         }
 
@@ -225,9 +228,9 @@ namespace Fourzy
                 ChallengeManager.Instance.JoinChallenge(challengeIdToJoin, JoinChallengeSuccess, JoinChallengeError);
             } else {
                 userFacingMessage.text = response.Errors.JSON;
-                isVisible = false;
                 timerText.text = "";
-                // backButton.SetActive(true);
+                //backButton.SetActive(true);
+                this.StopAllCoroutines();
             }
         }
 
@@ -248,11 +251,13 @@ namespace Fourzy
             }
         }
 
-        private void OpenJoinedMultiplayerGame() {
+        private void OpenJoinedMultiplayerGame() 
+        {
             ChallengeManager.Instance.OpenJoinedMultiplayerGame();
         }
 
-        private void GetChallengeError(GetChallengeResponse response) {
+        private void GetChallengeError(GetChallengeResponse response) 
+        {
             getChallengeError++;
             Debug.Log("***** Error Getting Challenge: " + response.Errors);
             AnalyticsManager.LogError("get_challenge_request_error", response.Errors.JSON);
@@ -261,9 +266,9 @@ namespace Fourzy
                 ChallengeManager.Instance.GetChallenge(challengeIdToJoin, GetChallengeSuccess, GetChallengeError);
             } else {
                 userFacingMessage.text = response.Errors.JSON;
-                isVisible = false;
                 timerText.text = "";
-                // backButton.SetActive(true);
+                //backButton.SetActive(true);
+                this.StopAllCoroutines();
             }
         }
     }

@@ -51,28 +51,24 @@ namespace Fourzy
         {
             MiniGameBoard.OnSetTokenBoard += SetTokenBoard;
             GamePieceUI.OnSetGamePiece += SetGamePiece;
-            GamePlayManager.OnResign += Resign;
             ChallengeTurnTakenMessage.Listener += OnChallengeTurnTaken;
             ChallengeJoinedMessage.Listener += OnChallengeJoined;
             ChallengeWonMessage.Listener += OnChallengeWon;
             ChallengeLostMessage.Listener += OnChallengeLost;
             ChallengeIssuedMessage.Listener += OnChallengeIssued;
             ChallengeDrawnMessage.Listener += OnChallengeDrawn;
-            // RealtimeManager.OnRealtimeReady += OpenNewRealtimeGame;
         }
 
         void OnDisable() 
         {
             MiniGameBoard.OnSetTokenBoard -= SetTokenBoard;
             GamePieceUI.OnSetGamePiece -= SetGamePiece;
-            GamePlayManager.OnResign -= Resign;
             ChallengeTurnTakenMessage.Listener -= OnChallengeTurnTaken;
             ChallengeJoinedMessage.Listener -= OnChallengeJoined;
             ChallengeWonMessage.Listener -= OnChallengeWon;
             ChallengeLostMessage.Listener -= OnChallengeLost;
             ChallengeIssuedMessage.Listener -= OnChallengeIssued;
             ChallengeDrawnMessage.Listener -= OnChallengeDrawn;
-            // RealtimeManager.OnRealtimeReady -= OpenNewRealtimeGame;
         }
 
         private void OnChallengeTurnTaken(ChallengeTurnTakenMessage message)
@@ -489,17 +485,16 @@ namespace Fourzy
         }
 
         private void GetGamePieceIdSuccess(LogEventResponse response) {
+            Debug.Log("GetGamePieceIdSuccess: " + response.ScriptData);
+            int gamePieceId = 0;
+
             if (response.ScriptData != null) {
-                
                 var gamePieceIdString = response.ScriptData.GetString("gamePieceId");
-                Debug.Log("GetGamePieceIdSuccess: " + gamePieceIdString);
-
-                int gamePieceId = int.Parse(gamePieceIdString);
-
-                // GamePlayManager.Instance.UpdateOpponentUI(gamePieceId);
-                GameManager.Instance.activeGame.opponent.gamePieceId = gamePieceId;
-                GameManager.Instance.OpenGame(GameManager.Instance.activeGame);
+                gamePieceId = int.Parse(gamePieceIdString);
             }
+
+            GameManager.Instance.activeGame.opponent.gamePieceId = gamePieceId;
+            GameManager.Instance.OpenGame(GameManager.Instance.activeGame);
         }
 
         private void GetGamePieceIdFailure(LogEventResponse response) {
