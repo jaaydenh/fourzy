@@ -60,6 +60,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 884e828293a874cd69156202e84b89ac, type: 3}
   - {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
   - {fileID: 21300000, guid: e8926444169da44ec8d1ca66ebe2040c, type: 3}
+  - {fileID: 21300000, guid: 1a881a67ed54c476493a115db846f636, type: 3}
   - {fileID: 21300000, guid: da7c6da7b42064dbe8eab340bab57390, type: 3}
   - {fileID: 21300000, guid: 84fe40e7948c54c57995635a2d5f081a, type: 3}
   - {fileID: 21300000, guid: 6bec12e9c39f244fbaf24bdc6baa2852, type: 3}
@@ -73,6 +74,7 @@ SpriteAtlas:
   - windowIsland
   - windowTrainingGarden
   - IslandBoard
+  - boardTrainingGarden2
   - IslandBackground
   - PopupBackground
   - backgroundUI

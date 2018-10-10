@@ -485,17 +485,16 @@ namespace Fourzy
         }
 
         private void GetGamePieceIdSuccess(LogEventResponse response) {
+            Debug.Log("GetGamePieceIdSuccess: " + response.ScriptData);
+            int gamePieceId = 0;
+
             if (response.ScriptData != null) {
-                
                 var gamePieceIdString = response.ScriptData.GetString("gamePieceId");
-                Debug.Log("GetGamePieceIdSuccess: " + gamePieceIdString);
-
-                int gamePieceId = int.Parse(gamePieceIdString);
-
-                // GamePlayManager.Instance.UpdateOpponentUI(gamePieceId);
-                GameManager.Instance.activeGame.opponent.gamePieceId = gamePieceId;
-                GameManager.Instance.OpenGame(GameManager.Instance.activeGame);
+                gamePieceId = int.Parse(gamePieceIdString);
             }
+
+            GameManager.Instance.activeGame.opponent.gamePieceId = gamePieceId;
+            GameManager.Instance.OpenGame(GameManager.Instance.activeGame);
         }
 
         private void GetGamePieceIdFailure(LogEventResponse response) {
