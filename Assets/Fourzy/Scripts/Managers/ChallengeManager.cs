@@ -447,7 +447,7 @@ namespace Fourzy
                 .Send(successCallback, errorCallback);
         }
 
-        public void OpenNewRealtimeGame(int firstPlayerPeerId, int tokenBoardIndex) {
+        public void OpenNewRealtimeGame(int firstPlayerPeerId, int seed) {
             
             Debug.Log("Open New Realtime Game");
             bool isFirstPlayer = false;
@@ -474,7 +474,8 @@ namespace Fourzy
             GetGamePiece(opponentId, GetGamePieceIdSuccess, GetGamePieceIdFailure);
             Opponent opponent = new Opponent(opponentId, opponentName, null);
 
-            tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoardByIndex(tokenBoardIndex);
+            // tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoardByIndex(tokenBoardIndex);
+            tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard(seed);
 
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.REALTIME, true, isFirstPlayer, tokenBoard, tokenBoard.initialGameBoard, false, null);
             Game game = new Game(null, gameState, isFirstPlayer, false, false, opponent, ChallengeState.NONE, ChallengeType.STANDARD, UserManager.Instance.gamePieceId.ToString(), "0", null, null, null, null, true);

@@ -7,8 +7,6 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class TokenBoardLoader : UnitySingleton<TokenBoardLoader>
     {
-        private int randomGeneratedBoardPercentage = 70;
-
         private TokenBoardData[] tokenBoards = new TokenBoardData[0];
         private GamePieceData[] gamePieces = new GamePieceData[0];
         private TokenData[] tokens = new TokenData[0];
@@ -59,11 +57,15 @@ namespace Fourzy
             }
         }
 
-        public TokenBoard GetRandomTokenBoard()
+        public TokenBoard GetRandomTokenBoard(int seed = 0)
         {
-            if (UnityEngine.Random.Range(0, 100) < randomGeneratedBoardPercentage) {
-                return RandomBoardGenerator.GenerateBoard();
-            } 
+            if (seed != 0) {
+                UnityEngine.Random.InitState(seed);
+            }
+            
+            if (UnityEngine.Random.Range(0, 100) < Constants.randomGeneratedBoardPercentage) {
+                return RandomBoardGenerator.GenerateBoard(seed);
+            }
 
             var tokenBoardData = tokenBoards
                 .Where(t => t.Enabled == true)
