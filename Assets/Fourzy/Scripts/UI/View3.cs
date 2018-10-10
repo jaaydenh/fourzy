@@ -97,10 +97,24 @@ namespace Fourzy
         }
 
         public void FastPlayButton() {
-            ViewMatchMaking.instance.isRealtime = true;
-            ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
-            ViewController.instance.HideTabView();
-            ViewController.instance.headerUI.SetActive(false);
+            System.DayOfWeek today = System.DateTime.Now.DayOfWeek;
+            int hour = System.DateTime.UtcNow.Hour;
+            bool isDLS = System.DateTime.UtcNow.IsDaylightSavingTime();
+            // Debug.Log("utc hour: " + hour + " isDLS: "+ isDLS + " today: " + today);
+
+            if (today == System.DayOfWeek.Monday || today == System.DayOfWeek.Wednesday || today == System.DayOfWeek.Friday) {
+
+                if ((!isDLS && hour == 1) || (isDLS && hour == 0)) {
+                    ViewMatchMaking.instance.isRealtime = true;
+                    ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
+                    ViewController.instance.HideTabView();
+                    ViewController.instance.headerUI.SetActive(false);
+                } else {
+                    PopupManager.Instance.OpenPopup<ConfirmPopup>();
+                }
+            } else {
+                PopupManager.Instance.OpenPopup<ConfirmPopup>();
+            }
         }
 
         public void PlayButtonOld() {

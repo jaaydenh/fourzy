@@ -132,6 +132,7 @@ namespace Fourzy
         {
             RealtimeManager.Instance.CancelMatchmakingRequest();
             ViewController.instance.ChangeView(ViewController.instance.view3);
+            Hide();
             ViewController.instance.ShowTabView();
         }
 

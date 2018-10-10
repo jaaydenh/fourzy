@@ -18,6 +18,9 @@ namespace Fourzy
 
         [SerializeField]
         private ChangeNamePopup changeNamePopup;
+        
+        [SerializeField]
+        private ConfirmPopup confirmPopup;
 
         [SerializeField]
         private GameObject overlayImage;
@@ -31,6 +34,7 @@ namespace Fourzy
         {
             popups[tokenPopupUI.GetType()] = tokenPopupUI;
             popups[changeNamePopup.GetType()] = changeNamePopup;
+            popups[confirmPopup.GetType()] = confirmPopup;
         }
 
         public void OpenPopup<T>(bool overlay = true) where T : IPopup
