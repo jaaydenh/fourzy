@@ -18,6 +18,7 @@ namespace Fourzy
         {
             base.Awake();
 
+            btnFBLogin.gameObject.SetActive(!LoginManager.Instance.IsFBLoggedIn());
             this.UpdateFriendViews();
         }
 
@@ -44,6 +45,8 @@ namespace Fourzy
         public override void Show()
         {
             base.Show();
+
+            btnFBLogin.gameObject.SetActive(!LoginManager.Instance.IsFBLoggedIn());
         }
 
         public override void Hide()

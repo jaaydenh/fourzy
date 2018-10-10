@@ -84,6 +84,11 @@ namespace Fourzy
                 });
         }
 
+        public bool IsFBLoggedIn()
+        {
+            return FB.IsLoggedIn;
+        }
+
         void DeviceLogin()
         {
             new DeviceAuthenticationRequest()
