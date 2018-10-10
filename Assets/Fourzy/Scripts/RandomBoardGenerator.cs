@@ -1645,7 +1645,7 @@ namespace Fourzy
             public static Dictionary<string, int> TokenTypes = new Dictionary<string, int>()
             {
              { "ghost", 15},
-             { "pit", 1 },
+             { "pit", 0 },
              { "water", 2 },
              { "up_arrow", 7},
              { "down_arrow", 7},
@@ -1665,7 +1665,7 @@ namespace Fourzy
 
             public static Dictionary<string, int> LargeShapeTokenTypes = new Dictionary<string, int>()
 			{
-				{ "pit", 1 },
+				{ "pit", 0 },
 				{ "sticky", 25},
 				{ "ice", 20},
 				{ "sand", 20},
@@ -1674,20 +1674,20 @@ namespace Fourzy
 
 			public static Dictionary<string, int> SmallShapeTokenTypes = new Dictionary<string, int>()
 			{
-				{ "pit", 1 },
+				{ "pit", 0 },
 				{ "sticky", 20},
 				{ "ice", 20},
 				{ "water", 20},
                 { "fruit", 40 },
                 { "left_turn", 1 },
                 { "right_turn", 1 },
-                { "circle_bomb", 10 },
+                { "circle_bomb", 0 },
 
             };
 
             public static Dictionary<string, int> BlockEdgeTokens = new Dictionary<string, int>()
             {
-                { "pit", 2 },
+                { "pit", 0 },
                 { "blocker", 10},
                 { "up_arrow", 5},
                 { "down_arrow", 5},
@@ -1812,12 +1812,12 @@ namespace Fourzy
         {
             public static Dictionary<string, int> TokenTypes = new Dictionary<string, int>()
             {
-                { "circle_bomb", 500},
+                { "circle_bomb", 0},
                 { "clear", 20 },
                 { "sticky", 10 },
                 { "ice", 5 },
                 { "ghost", 10},
-                { "pit", 2 },
+                { "pit", 0 },
                 { "left_arrow", 10},
                 { "right_arrow", 10},
                 { "up_arrow", 10},

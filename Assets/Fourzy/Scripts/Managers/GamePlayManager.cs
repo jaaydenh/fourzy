@@ -1063,6 +1063,8 @@ namespace Fourzy
             this.ShowWinnerText();
             this.LogGameWinner();
 
+            backButtonObject.SetActive(true);
+
 #if UNITY_IOS || UNITY_ANDROID
             if (game.gameState.Winner == PlayerEnum.ONE || game.gameState.Winner == PlayerEnum.TWO)
             {
