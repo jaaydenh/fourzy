@@ -207,6 +207,70 @@ namespace Fourzy
                 }
                 else
                 {
+                    bool isPieceDestroyed = false;
+
+                    IToken t = TokenBoard.tokens[activePiece.GetCurrentPosition().row, activePiece.GetCurrentPosition().column];
+                    if (t.destroyTokenOnEnd)
+                    {
+                        isPieceDestroyed = GameBoard.CalculatePieceChanceOfDestruction(t.chanceDestroyPieceOnEnd);
+                    }
+
+                    if (isPieceDestroyed)
+                    {
+                        activePiece.isDestroyed = true;
+                        activePiece.animationState = PieceAnimState.FALLING;
+
+                        if (GameBoard.InBoardBounds(nextPosition))
+                        {
+                            GameBoard.SetCell(activePiece.GetCurrentPosition().column, activePiece.GetCurrentPosition().row, PlayerEnum.NONE);
+                        }
+                    }
+
+                    if ((t.tokenType == Token.PIT) && isPieceDestroyed)
+                    {
+                        activeTokenList.Add(TokenBoard.tokens[activePiece.GetCurrentPosition().row, activePiece.GetCurrentPosition().column]);
+                        SetTokenBoardCell(activePiece.GetCurrentPosition().row, activePiece.GetCurrentPosition().column, new EmptyToken(activePiece.GetCurrentPosition().row, activePiece.GetCurrentPosition().column));
+                    }
+
+                    if ((t.tokenType == Token.CIRCLE_BOMB) && isPieceDestroyed)
+                    {
+                        if (GameBoard.InBoardBounds(new Position(activePiece.GetCurrentPosition().column - 1, activePiece.GetCurrentPosition().row - 1)))
+                        {
+                            GameBoard.SetCell(activePiece.GetCurrentPosition().column - 1, activePiece.GetCurrentPosition().row - 1, PlayerEnum.NONE);
+                        }
+                        if (GameBoard.InBoardBounds(new Position(activePiece.GetCurrentPosition().column, activePiece.GetCurrentPosition().row - 1)))
+                        {
+                            GameBoard.SetCell(activePiece.GetCurrentPosition().column, activePiece.GetCurrentPosition().row - 1, PlayerEnum.NONE);
+                        }
+                        if (GameBoard.InBoardBounds(new Position(activePiece.GetCurrentPosition().column + 1, activePiece.GetCurrentPosition().row - 1)))
+                        {
+                            GameBoard.SetCell(activePiece.GetCurrentPosition().column + 1, activePiece.GetCurrentPosition().row - 1, PlayerEnum.NONE);
+                        }
+                        if (GameBoard.InBoardBounds(new Position(activePiece.GetCurrentPosition().column - 1, activePiece.GetCurrentPosition().row)))
+                        {
+                            GameBoard.SetCell(activePiece.GetCurrentPosition().column - 1, activePiece.GetCurrentPosition().row, PlayerEnum.NONE);
+                        }
+                        if (GameBoard.InBoardBounds(new Position(activePiece.GetCurrentPosition().column + 1, activePiece.GetCurrentPosition().row)))
+                        {
+                            GameBoard.SetCell(activePiece.GetCurrentPosition().column + 1, activePiece.GetCurrentPosition().row, PlayerEnum.NONE);
+                        }
+                        if (GameBoard.InBoardBounds(new Position(activePiece.GetCurrentPosition().column - 1, activePiece.GetCurrentPosition().row + 1)))
+                        {
+                            GameBoard.SetCell(activePiece.GetCurrentPosition().column - 1, activePiece.GetCurrentPosition().row + 1, PlayerEnum.NONE);
+                        }
+                        if (GameBoard.InBoardBounds(new Position(activePiece.GetCurrentPosition().column, activePiece.GetCurrentPosition().row + 1)))
+                        {
+                            GameBoard.SetCell(activePiece.GetCurrentPosition().column, activePiece.GetCurrentPosition().row + 1, PlayerEnum.NONE);
+                        }
+                        if (GameBoard.InBoardBounds(new Position(activePiece.GetCurrentPosition().column + 1, activePiece.GetCurrentPosition().row + 1)))
+                        {
+                            GameBoard.SetCell(activePiece.GetCurrentPosition().column + 1, activePiece.GetCurrentPosition().row + 1, PlayerEnum.NONE);
+                        }
+
+                        activeTokenList.Add(TokenBoard.tokens[activePiece.GetCurrentPosition().row, activePiece.GetCurrentPosition().column]);
+                        SetTokenBoardCell(activePiece.GetCurrentPosition().row, activePiece.GetCurrentPosition().column, new EmptyToken(activePiece.GetCurrentPosition().row, activePiece.GetCurrentPosition().column));
+                    }
+
                     GameBoard.SetActivePieceAsComplete();
 
                 }
