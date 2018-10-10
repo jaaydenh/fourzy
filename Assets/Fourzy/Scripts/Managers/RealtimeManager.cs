@@ -213,7 +213,8 @@ namespace Fourzy
                     if (OnChatMessageReceived != null)
                     {
                         //string chatMessage = player.displayName + ": " + _packet.Data.GetString(1) + "(" + _packet.Data.GetString(2) + ")";
-                        string chatMessage = player.displayName + "[" + _packet.Data.GetString(2) + "]: " + _packet.Data.GetString(1);
+                        // string chatMessage = player.displayName + "[" + _packet.Data.GetString(2) + "]: " + _packet.Data.GetString(1);
+                        string chatMessage = _packet.Data.GetString(1);
                         OnChatMessageReceived(chatMessage);
                     }
                 }

@@ -52,6 +52,7 @@ namespace Fourzy
         public Button backButton;
         public GameObject backButtonObject;
         public Button resignButton;
+        public GameObject resignButtonObject;
         public GameObject moveHintAreaObject;
         public GameIntroUI gameIntroUI;
         public Text challengeIdDebugText;
@@ -111,6 +112,10 @@ namespace Fourzy
             if (game.gameState.GameType == GameType.REALTIME) {
                 playerTimer.SetActive(true);
                 StartCoroutine(SendTimeStamp());
+                backButtonObject.SetActive(false);
+                resignButtonObject.SetActive(true);
+            } else {
+                resignButtonObject.SetActive(false);
             }
 
             playerMoveTimer_InitialTime = Constants.playerMoveTimer_InitialTime;
@@ -206,6 +211,9 @@ namespace Fourzy
         {
             Button backBtn = backButton.GetComponent<Button>();
             backBtn.onClick.AddListener(BackButtonOnClick);
+
+            Button resignBtn = resignButton.GetComponent<Button>();
+            resignBtn.onClick.AddListener(BackButtonOnClick);
 
             Button rematchBtn = rematchButton.GetComponent<Button>();
             rematchBtn.onClick.AddListener(RematchPassAndPlayGameButtonOnClick);
