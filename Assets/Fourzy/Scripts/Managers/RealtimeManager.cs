@@ -15,8 +15,10 @@ namespace Fourzy
         public delegate void RealtimeReady(int firstPlayerPeerId, int tokenBoardIndex);
         public static event RealtimeReady OnRealtimeReady;
 
-        public delegate void RealtimeMatchNotFound();
-        public static event RealtimeMatchNotFound OnRealtimeMatchNotFound;
+        public static Action OnRealtimeMatchNotFound;
+        public static Action<long> OnReceiveTimeStamp;
+        public static Action<Move> OnReceiveMove;
+
         private int currentPlayerPeerId;
         public int timeDelta;
         private int latency, roundTrip;
@@ -112,14 +114,16 @@ namespace Fourzy
                     Debug.Log("All players joined realtime session");
                     int firstPlayerPeerId = _packet.Data.GetInt(1).Value;
                     int tokenBoardIndex = _packet.Data.GetInt(2).Value;
-                    
                     OnRealtimeReady(firstPlayerPeerId, tokenBoardIndex);
                     break;
                 case 101:
                     CalculateTimeDelta(_packet);
                     break;
                 case 102:
-                    GamePlayManager.Instance.SyncClock(_packet.Data.GetLong(1).Value);
+                    if (OnReceiveTimeStamp != null)
+                    {
+                        OnReceiveTimeStamp(_packet.Data.GetLong(1).Value);
+                    }
                     break;
             }
         }
@@ -139,9 +143,10 @@ namespace Fourzy
             Direction direction = (Direction)_packet.Data.GetInt(2).Value;
             PlayerEnum player = (PlayerEnum)_packet.Data.GetInt(3).Value;
             Move move = new Move(location, direction, player);
-            StartCoroutine(GamePlayManager.Instance.ReplayIncomingOpponentMove(move));
-
-            
+            if (OnReceiveMove != null)
+            {
+                OnReceiveMove(move);
+            }
         }
 
         public void SendTimeStamp() {

@@ -58,7 +58,6 @@ namespace Fourzy
         public TextMeshProUGUI timerText;
         public GameObject playerTimer;
 
-        public static event Action<string> OnResign;
         public static event Action OnStartMove;
         public static event Action OnEndMove;
         public static event Action OnGameOver;
@@ -79,10 +78,8 @@ namespace Fourzy
                 game = GameManager.Instance.GetRandomGame();
             }
 
-            //SoundManager.Instance.Mute(true);
             UserInputHandler.inputEnabled = false;
             replayedLastMove = false;
-            // timerText = GetComponent<TextMeshProUGUI>();
 
             InitButtonListeners();
             SetActionButton();
@@ -134,47 +131,72 @@ namespace Fourzy
         private void OnEnable()
         {
             UserInputHandler.OnTap += ProcessPlayerInput;
+            RealtimeManager.OnReceiveTimeStamp += RealtimeManager_OnReceiveTimeStamp;
+            RealtimeManager.OnReceiveMove += RealtimeManager_OnReceiveMove;
         }
 
         private void OnDisable()
         {
             UserInputHandler.OnTap -= ProcessPlayerInput;
+            RealtimeManager.OnReceiveTimeStamp -= RealtimeManager_OnReceiveTimeStamp;
+            RealtimeManager.OnReceiveMove -= RealtimeManager_OnReceiveMove;
+        }
+
+        void RealtimeManager_OnReceiveTimeStamp(long milliseconds)
+        {
+            SyncClock(milliseconds);
+        }
+
+        void RealtimeManager_OnReceiveMove(Move move)
+        {
+            StartCoroutine(ReplayIncomingOpponentMove(move));
         }
 
         /// <summary>
         /// Sends a Unix timestamp in milliseconds to the server
         /// </summary>
-        private IEnumerator SendTimeStamp() {
-            RealtimeManager.Instance.SendTimeStamp();
-            yield return new WaitForSeconds(5f);
-            StartCoroutine(SendTimeStamp());
+        private IEnumerator SendTimeStamp() 
+        {
+            while(true)
+            {
+                RealtimeManager.Instance.SendTimeStamp();
+                yield return new WaitForSeconds(5f);
+            }
         }
 
         /// <summary>
         /// Syncs the local clock to server-time
         /// </summary>
-        /// <param name="_packet">Packet.</param>
-        public void SyncClock(long milliseconds){
+        private void SyncClock(long milliseconds)
+        {
             DateTime dateNow = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc); // get the current time
             serverClock = dateNow.AddMilliseconds(milliseconds + RealtimeManager.Instance.timeDelta).ToLocalTime(); // adjust current time to match clock from server
 
-            if (game.gameState.isCurrentPlayerTurn) {
-                if (!clockStarted) { // make sure that we only calculate the endtime once
-                    // playerMoveCountdown = serverClock.AddMilliseconds(playerMoveCountDown_LastTime + RealtimeManager.Instance.timeDelta); // endtime is 60seconds plus the time-offset
+            if (game.gameState.isCurrentPlayerTurn) 
+            {
+                // make sure that we only calculate the endtime once
+                if (!clockStarted) 
+                { 
                     playerMoveCountdown = serverClock.AddMilliseconds(playerMoveCountDown_LastTime + RealtimeManager.Instance.timeDelta); // endtime is 60seconds plus the time-offset
                     clockStarted = true;
                 }
 
                 // set the timer each time a new update from the server comes in
-                Debug.Log("Total miliseconds: " + (playerMoveCountdown-serverClock).TotalMilliseconds);
-                TimeSpan timeDifference = playerMoveCountdown-serverClock;
-                timerText.text = new System.DateTime(timeDifference.Ticks).ToString("m:ss");
-                // .Minutes.ToString() + ":" + (playerMoveCountdown-serverClock).Seconds.ToString();
-                if((playerMoveCountdown-serverClock).TotalMilliseconds <= 0){ // if the time is out, return to the lobby
-                    Debug.Log ("player ran out of time to make a move!");
-                    // RealtimeManager.Instance.GetRTSession().Disconnect();
+                Debug.Log("Total miliseconds: " + (playerMoveCountdown - serverClock).TotalMilliseconds);
+                TimeSpan timeDifference = playerMoveCountdown - serverClock;
+                if (timeDifference.TotalMilliseconds <= 0)
+                {
+                    List<Move> moves = game.gameState.GetPossibleMoves();
+                    Move move = moves[UnityEngine.Random.Range(0, moves.Count)];
+                    StartCoroutine(ProcessMove(move));
                 }
-            } else {
+                else
+                {
+                    timerText.text = new DateTime(timeDifference.Ticks).ToString("m:ss");
+                }
+            } 
+            else 
+            {
                 // playerMoveCountdown = serverClock;
             }
         }
@@ -494,26 +516,23 @@ namespace Fourzy
 
         public IEnumerator ReplayIncomingOpponentMove(Move move)
         {
-            // int position = lastMove.GetInt("position").GetValueOrDefault();
-            // Direction direction = (Direction)lastMove.GetInt("direction").GetValueOrDefault();
-            // Move move = new Move(position, direction, player);
-
             while (isDropping || isLoading)
                 yield return null;
             StartCoroutine(MovePiece(move, false, true));
         }
 
-        public void BackButtonOnClick() {
-            // SceneManager.LoadScene("tabbedUI");
-
-            if (ViewController.instance.GetCurrentView() != null) {
+        public void BackButtonOnClick() 
+        {
+            if (ViewController.instance.GetCurrentView() != null)
+            {
                 ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());
-                // Debug.Log("BackButtonOnClick: " + ViewController.instance.GetCurrentView().name);
                 if (ViewController.instance.GetCurrentView() != ViewController.instance.viewTraining && ViewController.instance.GetCurrentView() != ViewController.instance.viewPuzzleSelection)
                 {
                     ViewController.instance.ShowTabView();
                 }
-            } else if (ViewController.instance.GetPreviousView() != null) {
+            }
+            else if (ViewController.instance.GetPreviousView() != null)
+            {
                 ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
             }
 
@@ -523,21 +542,20 @@ namespace Fourzy
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync("gamePlay");
 
-            if (game.gameState.GameType == GameType.REALTIME) {
+            if (game.gameState.GameType == GameType.REALTIME) 
+            {
                 RealtimeManager.Instance.GetRTSession().Disconnect();
             }
         }
 
-        public void UnloadGamePlayScreen() {
+        public void UnloadGamePlayScreen() 
+        {
             SceneManager.UnloadSceneAsync("gamePlay");
         }
 
-        public void ResignButtonOnClick() {
-            if (OnResign != null)
-            {
-                OnResign(game.challengeId);
-                //resignButton.gameObject.SetActive(false);
-            }
+        public void ResignButtonOnClick() 
+        {
+            ChallengeManager.Instance.Resign(game.challengeId);
         }
 
         public void RewardsButtonOnClick()
@@ -578,12 +596,12 @@ namespace Fourzy
                 currentPlayer = PlayerEnum.TWO;
             }
 
-            //Debug.Log("RewardsButton gameState.PlayerPieceCount(currentPlayer): " + gameState.PlayerPieceCount(currentPlayer));
             rewardScreen.Open(isCurrentPlayerWinner, game.gameState.PlayerPieceCount(currentPlayer));
             gameInfo.Close();
         }
 
-        public void NextGameButtonOnClick() {
+        public void NextGameButtonOnClick() 
+        {
             backgroundImage.SetAlpha(0.0f);
             fadeUICanvasGroup.alpha = 0.0f;
             GameManager.Instance.OpenNextGame();
@@ -596,15 +614,7 @@ namespace Fourzy
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync("gamePlay");
 
-            // Game game = GameManager.Instance.GetNextActiveGame();
-            // if (game != null)
-            // {
-            //     game.OpenGame();
-            // }
-            // else
-            // {
-                ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
-            // }
+            ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
         }
 
         public void RewardsScreenOkButtonOnClick()
@@ -622,14 +632,16 @@ namespace Fourzy
             AnalyticsManager.LogCustom("rematch_pnp_game");
         }
 
-        public void RetryPuzzleChallengeButtonOnClick() {
+        public void RetryPuzzleChallengeButtonOnClick() 
+        {
             Scene uiScene = SceneManager.GetSceneByName("tabbedUI");
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync("gamePlay");
             GameManager.Instance.OpenPuzzleChallengeGame("retry");
         }
 
-        public void NextPuzzleChallengeButtonOnClick() {
+        public void NextPuzzleChallengeButtonOnClick() 
+        {
             Scene uiScene = SceneManager.GetSceneByName("tabbedUI");
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync("gamePlay");
@@ -706,8 +718,8 @@ namespace Fourzy
             }
         }
 
-        public IEnumerator PlayInitialMoves() {
-            // Debug.Log("PlayInitialMoves");
+        public IEnumerator PlayInitialMoves() 
+        {
             List<MoveInfo> initialMoves = game.gameState.TokenBoard.initialMoves;
 
             for (int i = 0; i < initialMoves.Count; i++)
@@ -724,16 +736,13 @@ namespace Fourzy
         {
             Debug.Log("Gamemanager: disableInput: " + disableInput + ", isLoading: " + isLoading + ", isLoadingUI: " + isLoadingUI + ",isDropping: " + isDropping + ", numPiecesAnimating: " + gameBoardView.NumPiecesAnimating + ", isGameOver: "+ game.gameState.IsGameOver);
 
-            Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
-            //GameObject particle = SpawnParticle();
-            //particle.transform.position = new Vector3(Mathf.RoundToInt(pos.x), Mathf.CeilToInt((pos.y * -1 - .3f))*-1);
-
             if (disableInput || isLoading || isLoadingUI || isDropping || game.gameState.IsGameOver || gameBoardView.NumPiecesAnimating > 0)
             {
                 Debug.Log("returned in process player input");
                 return;
             }
 
+            Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
             Position position = gameBoardView.Vec3ToPosition(pos);
 
             if (game.gameState.isCurrentPlayerTurn)
@@ -781,117 +790,121 @@ namespace Fourzy
         public IEnumerator ProcessMove(Move move)
         {
             Debug.Log("ProcessMove");
+            if (!game.gameState.CanMove(move.GetNextPosition(), game.gameState.TokenBoard.tokens))
+            {
+                alertUI.Open("Nope, not possible");
+                yield break;
+            }
+
+
             isDropping = true;
             bool updatePlayer = true;
 
-            if (game.gameState.CanMove(move.GetNextPosition(), game.gameState.TokenBoard.tokens))
+            Debug.Log("game.challengeId: " + game.challengeId);
+            if (game.challengeId != null && (game.gameState.GameType == GameType.RANDOM 
+                                             || game.gameState.GameType == GameType.FRIEND 
+                                             || game.gameState.GameType == GameType.LEADERBOARD))
             {
-                moveHintAreaObject.SetActive(false);
-                Debug.Log("game.challengeId: " + game.challengeId);
-                // Console.Log("isMultiplayer: ", isMultiplayer, "isNewChallenge", isNewChallenge, "isNewRandomChallenge", isNewRandomChallenge);
-                // if (isMultiplayer && !isNewChallenge && !isNewRandomChallenge)
-                if (game.challengeId != null && (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD))
-                {
-                    replayedLastMove = false;
-                    StartCoroutine(MovePiece(move, false, updatePlayer));
-                    Debug.Log("LogChallengeEventRequest: challengeInstanceId: " + game.challengeId);
-                    new LogChallengeEventRequest().SetChallengeInstanceId(game.challengeId)
-                        .SetEventKey("takeTurn") //The event we are calling is "takeTurn", we set this up on the GameSparks Portal
-                        .SetEventAttribute("pos", Utility.GetMoveLocation(move)) // pos is the row or column the piece was placed at depending on the direction
-                        .SetEventAttribute("direction", move.direction.GetHashCode()) // direction can be up, down, left, right
-                        .SetEventAttribute("player", game.gameState.IsPlayerOneTurn ? (int)Piece.BLUE : (int)Piece.RED)
-                        .SetDurable(true)
-                        .Send((response) =>
-                            {
-                                if (response.HasErrors)
-                                {
-                                    Debug.Log("***** ChallengeEventRequest failed: " + response.Errors.JSON);
-                                    // alertUI.Open("Server Error: " + response.Errors.JSON);
-                                    OnGamePlayMessage("Error: " + response.Errors.JSON);
-                                }
-                                else
-                                {
-                                    Debug.Log("ChallengeEventRequest was successful");
-                                    OnGamePlayMessage("Move was successful");
-                                }
-                            });
-
-                    while (isDropping)
-                        yield return null;
-                }
-                else if (game.gameState.GameType == GameType.REALTIME)
-                {
-                    replayedLastMove = false;
-                    StartCoroutine(MovePiece(move, false, updatePlayer));
-                    move.player = game.isCurrentPlayer_PlayerOne ? PlayerEnum.ONE : PlayerEnum.TWO;
-                    Debug.Log("Send Realtime move");
-                    RealtimeManager.Instance.SendRealTimeMove(move);
-                    while (isDropping) {
-                        yield return null;
-                    }
-
-                    playerMoveCountDown_LastTime = (int)(playerMoveCountdown - serverClock).TotalMilliseconds + 15000;
-                    Debug.Log("playerMoveCountDown_LastTime millisecond: "+ playerMoveCountDown_LastTime);
-                    
-                    TimeSpan ts = playerMoveCountdown - serverClock;
-                    TimeSpan ts2 = ts.Add(TimeSpan.FromMilliseconds(15000));
-                    timerText.text = new System.DateTime(ts2.Ticks).ToString("m:ss");
-
-                    // timerText.text = (playerMoveCountDown_LastTime/1000).ToString();
-                    clockStarted = false;
-                }
-                // else if (isMultiplayer && isNewChallenge)
-                else if (game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
-                {
-                    // isNewChallenge = false;
-                    StartCoroutine(MovePiece(move, false, updatePlayer));
-                    ChallengeManager.Instance.ChallengeUser(game, Utility.GetMoveLocation(move), move.direction);
-                }
-                // else if (isMultiplayer && isNewRandomChallenge)
-                else if (game.gameState.GameType == GameType.RANDOM)
-                {
-                    // isNewRandomChallenge = false;
-                    StartCoroutine(MovePiece(move, false, updatePlayer));
-                    ChallengeManager.Instance.ChallengeRandomUser(game, Utility.GetMoveLocation(move), move.direction);
-                }
-                else if (game.gameState.GameType == GameType.AI)
-                {
-                    StartCoroutine(MovePiece(move, false, updatePlayer));
-
-                    if (game.gameState.IsGameOver)
+                replayedLastMove = false;
+                StartCoroutine(MovePiece(move, false, updatePlayer));
+                Debug.Log("LogChallengeEventRequest: challengeInstanceId: " + game.challengeId);
+                new LogChallengeEventRequest().SetChallengeInstanceId(game.challengeId)
+                    .SetEventKey("takeTurn") //The event we are calling is "takeTurn", we set this up on the GameSparks Portal
+                    .SetEventAttribute("pos", Utility.GetMoveLocation(move)) // pos is the row or column the piece was placed at depending on the direction
+                    .SetEventAttribute("direction", move.direction.GetHashCode()) // direction can be up, down, left, right
+                    .SetEventAttribute("player", game.gameState.IsPlayerOneTurn ? (int)Piece.BLUE : (int)Piece.RED)
+                    .SetDurable(true)
+                    .Send((response) =>
                     {
-                        yield break;
-                    }
+                        if (response.HasErrors)
+                        {
+                            Debug.Log("***** ChallengeEventRequest failed: " + response.Errors.JSON);
+                                // alertUI.Open("Server Error: " + response.Errors.JSON);
+                                OnGamePlayMessage("Error: " + response.Errors.JSON);
+                        }
+                        else
+                        {
+                            Debug.Log("ChallengeEventRequest was successful");
+                            OnGamePlayMessage("Move was successful");
+                        }
+                    });
 
-                    while (isDropping)
+                while (isDropping)
+                    yield return null;
+            }
+            else if (game.gameState.GameType == GameType.REALTIME)
+            {
+                replayedLastMove = false;
+                StartCoroutine(MovePiece(move, false, updatePlayer));
+                move.player = game.isCurrentPlayer_PlayerOne ? PlayerEnum.ONE : PlayerEnum.TWO;
+                Debug.Log("Send Realtime move");
+                RealtimeManager.Instance.SendRealTimeMove(move);
+                while (isDropping)
+                {
+                    yield return null;
+                }
+
+                playerMoveCountDown_LastTime = (int)(playerMoveCountdown - serverClock).TotalMilliseconds + 15000;
+                Debug.Log("playerMoveCountDown_LastTime millisecond: " + playerMoveCountDown_LastTime);
+
+                TimeSpan ts = playerMoveCountdown - serverClock;
+                TimeSpan ts2 = ts.Add(TimeSpan.FromMilliseconds(15000));
+                timerText.text = new DateTime(ts2.Ticks).ToString("m:ss");
+
+                // timerText.text = (playerMoveCountDown_LastTime/1000).ToString();
+                clockStarted = false;
+            }
+            // else if (isMultiplayer && isNewChallenge)
+            else if (game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
+            {
+                // isNewChallenge = false;
+                StartCoroutine(MovePiece(move, false, updatePlayer));
+                ChallengeManager.Instance.ChallengeUser(game, Utility.GetMoveLocation(move), move.direction);
+            }
+            // else if (isMultiplayer && isNewRandomChallenge)
+            else if (game.gameState.GameType == GameType.RANDOM)
+            {
+                // isNewRandomChallenge = false;
+                StartCoroutine(MovePiece(move, false, updatePlayer));
+                ChallengeManager.Instance.ChallengeRandomUser(game, Utility.GetMoveLocation(move), move.direction);
+            }
+            else if (game.gameState.GameType == GameType.AI)
+            {
+                StartCoroutine(MovePiece(move, false, updatePlayer));
+
+                if (game.gameState.IsGameOver)
+                {
+                    yield break;
+                }
+
+                while (isDropping)
+                    yield return null;
+                isDropping = true;
+                // yield return new WaitForSeconds(0.5f);
+
+                AiPlayer aiPlayer = new AiPlayer(AIPlayerSkill.LEVEL1);
+
+                StartCoroutine(aiPlayer.MakeMove(move));
+            }
+            else
+            {
+                StartCoroutine(MovePiece(move, false, updatePlayer));
+                if (game.gameState.GameType == GameType.PUZZLE && !game.gameState.IsGameOver)
+                {
+
+                    // yield return new WaitWhile(() => isDropping == true);
+                    while (isDropping && gameBoardView.NumPiecesAnimating > 0)
                         yield return null;
+
                     isDropping = true;
                     // yield return new WaitForSeconds(0.5f);
+                    PuzzlePlayer puzzlePlayer = new PuzzlePlayer();
 
-                    AiPlayer aiPlayer = new AiPlayer(AIPlayerSkill.LEVEL1);
-
-                    StartCoroutine(aiPlayer.MakeMove(move));
+                    StartCoroutine(puzzlePlayer.MakeMove(game));
                 }
-                else
-                {
-                    StartCoroutine(MovePiece(move, false, updatePlayer));
-                    if (game.gameState.GameType == GameType.PUZZLE && !game.gameState.IsGameOver) {
-
-                        // yield return new WaitWhile(() => isDropping == true);
-                        while (isDropping && gameBoardView.NumPiecesAnimating > 0)
-                            yield return null;
-
-                        isDropping = true;
-                        // yield return new WaitForSeconds(0.5f);
-                        PuzzlePlayer puzzlePlayer = new PuzzlePlayer();
-
-                        StartCoroutine(puzzlePlayer.MakeMove(game));
-                    }
-                }
-            } else {
-                alertUI.Open("Nope, not possible");
-                isDropping = false;
             }
+
+            moveHintAreaObject.SetActive(false);
 
             yield return null;
         }
@@ -938,10 +951,8 @@ namespace Fourzy
 
                 if (game.gameState.IsPuzzleChallengePassed)
                 {
-                    Debug.Log("test test: " + PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID));
                     if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID))
                     {
-                        Debug.Log("Succssfully submitted puzzle complted");
                         ChallengeManager.Instance.SubmitPuzzleCompleted();
                     }
 
@@ -965,7 +976,10 @@ namespace Fourzy
             }
 
             // Retrieve the current game from the list of games and update its state with the changes from the current move
-            if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD) {
+            if (game.gameState.GameType == GameType.RANDOM 
+                || game.gameState.GameType == GameType.FRIEND 
+                || game.gameState.GameType == GameType.LEADERBOARD) 
+            {
                 GameManager.Instance.UpdateGame(game);
             }
 

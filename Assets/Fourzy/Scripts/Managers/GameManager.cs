@@ -446,8 +446,8 @@ namespace Fourzy
             }
         }
 
-        private void SetOpponentGamePiece(string gamePieceId, string challengeId) {
-            // Debug.Log("GameManager: SetOpponentGamePiece: gamepieceid: " + gamePieceId);
+        private void SetOpponentGamePiece(string gamePieceId, string challengeId) 
+        {
             if (challengeId != "") {
                 var game = games
                     .Where(t => t.challengeId == challengeId)
@@ -463,18 +463,6 @@ namespace Fourzy
                     game.challengedGamePieceId = 0;
                 }
             }
-
-            // opponentPiece.sprite = GameContentManager.Instance.GetGamePieceSprite(challengedGamePieceId);
-
-            // GamePieceUI opponent = opponentPiece.GetComponent<GamePieceUI>();
-            // if (challengerGamePieceId == challengedGamePieceId)
-            // {
-            //     opponent.SetAlternateColor(true);
-            // }
-            // else
-            // {
-            //     opponent.SetAlternateColor(false);
-            // }
         }
 
         private void CheckConnectionStatus(bool connected)
@@ -496,7 +484,8 @@ namespace Fourzy
             StartCoroutine(infoBanner.ShowText(message));
         }
 
-        public void AddGame(Game game) {
+        public void AddGame(Game game) 
+        {
             game.gameState.SetRandomGuid(game.challengeId);
             games.Add(game);
         }

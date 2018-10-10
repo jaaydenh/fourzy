@@ -51,7 +51,6 @@ namespace Fourzy
         {
             MiniGameBoard.OnSetTokenBoard += SetTokenBoard;
             GamePieceUI.OnSetGamePiece += SetGamePiece;
-            GamePlayManager.OnResign += Resign;
             ChallengeTurnTakenMessage.Listener += OnChallengeTurnTaken;
             ChallengeJoinedMessage.Listener += OnChallengeJoined;
             ChallengeWonMessage.Listener += OnChallengeWon;
@@ -65,7 +64,6 @@ namespace Fourzy
         {
             MiniGameBoard.OnSetTokenBoard -= SetTokenBoard;
             GamePieceUI.OnSetGamePiece -= SetGamePiece;
-            GamePlayManager.OnResign -= Resign;
             ChallengeTurnTakenMessage.Listener -= OnChallengeTurnTaken;
             ChallengeJoinedMessage.Listener -= OnChallengeJoined;
             ChallengeWonMessage.Listener -= OnChallengeWon;
