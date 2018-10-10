@@ -24,6 +24,9 @@ namespace Fourzy
         private void Start()
         {
             keepHistory = true;
+
+            Button btn = btnFBLogin.GetComponent<Button>();
+            btn.onClick.AddListener(ConnectFBOnClick);
         }
 
         private void OnEnable()

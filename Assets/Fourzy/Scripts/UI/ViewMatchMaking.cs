@@ -14,7 +14,7 @@ namespace Fourzy
         public static ViewMatchMaking instance;
         public TextMeshProUGUI userFacingMessage;
         public TextMeshProUGUI timerText;
-        public GameObject backButton;
+        [SerializeField] GameObject cancelButton;
         public bool isRealtime;
         private int findChallengerErrorCount = 0;
         private int joinChallengeErrorCount = 0;
@@ -30,6 +30,9 @@ namespace Fourzy
         {
             instance = this;
             keepHistory = false;
+
+            Button btn = cancelButton.GetComponent<Button>();
+            btn.onClick.AddListener(CancelMatchmaking);
 
             matchMakingStrings = GameStringsLoader.Instance.GetMatchMakingWaitingStrings();
         }
@@ -51,7 +54,7 @@ namespace Fourzy
             base.Show();
 
             userFacingMessage.text = "Finding Match...";
-            backButton.SetActive(false);
+            // backButton.SetActive(false);
             if (isRealtime) {
                 RealtimeManager.Instance.FindPlayers();
             } else {
@@ -82,7 +85,7 @@ namespace Fourzy
 
         private IEnumerator ShowRandomTextRoutine()
         {
-            const float timeToShow = 5.0f;
+            const float timeToShow = 3.5f;
             float time = 5.0f;
 
             List<int> indices = new List<int>();
@@ -125,9 +128,11 @@ namespace Fourzy
             timerText.alpha = newAlpha;
         }
 
-		public void BackButton()
+        public void CancelMatchmaking()
         {
+            RealtimeManager.Instance.CancelMatchmakingRequest();
             ViewController.instance.ChangeView(ViewController.instance.view3);
+            Hide();
             ViewController.instance.ShowTabView();
         }
 
@@ -174,7 +179,6 @@ namespace Fourzy
 
         private void StartRealtimeGame(int firstPlayerPeerId, int tokenBoardIndex) 
         {
-            Debug.LogError("Tokenboard index " + tokenBoardIndex);
             ChallengeManager.Instance.OpenNewRealtimeGame(firstPlayerPeerId, tokenBoardIndex);
             Hide();
         }
@@ -183,7 +187,8 @@ namespace Fourzy
         {
             userFacingMessage.text = "No one is playing now, try again later.";
             timerText.text = "";
-            backButton.SetActive(true);
+
+            //backButton.SetActive(true);
 
             this.StopAllCoroutines();
         }
@@ -204,7 +209,8 @@ namespace Fourzy
             } else {
                 userFacingMessage.text = response.Errors.JSON;
                 timerText.text = "";
-                backButton.SetActive(true);
+
+                //backButton.SetActive(true);
 
                 this.StopAllCoroutines();
             }
@@ -228,7 +234,8 @@ namespace Fourzy
             } else {
                 userFacingMessage.text = response.Errors.JSON;
                 timerText.text = "";
-                backButton.SetActive(true);
+
+                //backButton.SetActive(true);
 
                 this.StopAllCoroutines();
             }
@@ -267,8 +274,8 @@ namespace Fourzy
             } else {
                 userFacingMessage.text = response.Errors.JSON;
                 timerText.text = "";
-                backButton.SetActive(true);
 
+                //backButton.SetActive(true);
                 this.StopAllCoroutines();
             }
         }

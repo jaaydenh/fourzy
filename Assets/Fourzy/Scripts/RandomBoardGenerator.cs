@@ -7,8 +7,12 @@ namespace Fourzy
 {
     public static class RandomBoardGenerator
     {
-        public static TokenBoard GenerateBoard()
+        public static TokenBoard GenerateBoard(int seed = 0)
         {
+            if (seed != 0) {
+                UnityEngine.Random.InitState(seed);
+            }
+            
             int comp = UnityEngine.Random.Range(0, 100);
             TokenBoard newBoard = null;
             //string composition_name = GetRandomMember(BoardComposition.CompositionTypes);

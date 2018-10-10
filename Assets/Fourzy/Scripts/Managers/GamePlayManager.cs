@@ -189,6 +189,7 @@ namespace Fourzy
                     List<Move> moves = game.gameState.GetPossibleMoves();
                     Move move = moves[UnityEngine.Random.Range(0, moves.Count)];
                     StartCoroutine(ProcessMove(move));
+                    clockStarted = false;
                 }
                 else
                 {
