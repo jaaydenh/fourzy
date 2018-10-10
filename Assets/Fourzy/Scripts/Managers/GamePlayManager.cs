@@ -26,7 +26,7 @@ namespace Fourzy
         private DateTime serverClock;
         private DateTime playerMoveCountdown;
         private bool clockStarted = false;
-        private int playerMoveCountDown_LastTime;
+        private int playerMoveTimer_InitialTime;
 
         private GamePiece playerGamePiecePrefab;
         private GamePiece opponentGamePiecePrefab;
@@ -113,7 +113,7 @@ namespace Fourzy
                 StartCoroutine(SendTimeStamp());
             }
 
-            playerMoveCountDown_LastTime = 30000;
+            playerMoveTimer_InitialTime = Constants.playerMoveTimer_InitialTime;
 
             playerUIPanel.StopPlayerTurnAnimation();
             opponentUIPanel.StopPlayerTurnAnimation();
@@ -177,12 +177,12 @@ namespace Fourzy
                 // make sure that we only calculate the endtime once
                 if (!clockStarted) 
                 { 
-                    playerMoveCountdown = serverClock.AddMilliseconds(playerMoveCountDown_LastTime + RealtimeManager.Instance.timeDelta); // endtime is 60seconds plus the time-offset
+                    playerMoveCountdown = serverClock.AddMilliseconds(playerMoveTimer_InitialTime + RealtimeManager.Instance.timeDelta); // endtime is 60seconds plus the time-offset
                     clockStarted = true;
                 }
 
                 // set the timer each time a new update from the server comes in
-                Debug.Log("Total miliseconds: " + (playerMoveCountdown - serverClock).TotalMilliseconds);
+                // Debug.Log("Total miliseconds: " + (playerMoveCountdown - serverClock).TotalMilliseconds);
                 TimeSpan timeDifference = playerMoveCountdown - serverClock;
                 if (timeDifference.TotalMilliseconds <= 0)
                 {
@@ -838,34 +838,29 @@ namespace Fourzy
                 replayedLastMove = false;
                 StartCoroutine(MovePiece(move, false, updatePlayer));
                 move.player = game.isCurrentPlayer_PlayerOne ? PlayerEnum.ONE : PlayerEnum.TWO;
-                Debug.Log("Send Realtime move");
+                // Debug.Log("Send Realtime move");
                 RealtimeManager.Instance.SendRealTimeMove(move);
                 while (isDropping)
                 {
                     yield return null;
                 }
 
-                playerMoveCountDown_LastTime = (int)(playerMoveCountdown - serverClock).TotalMilliseconds + 15000;
-                Debug.Log("playerMoveCountDown_LastTime millisecond: " + playerMoveCountDown_LastTime);
+                playerMoveTimer_InitialTime = (int)(playerMoveCountdown - serverClock).TotalMilliseconds + Constants.playerMoveTimer_AdditionalTime;
 
                 TimeSpan ts = playerMoveCountdown - serverClock;
-                TimeSpan ts2 = ts.Add(TimeSpan.FromMilliseconds(15000));
+                TimeSpan ts2 = ts.Add(TimeSpan.FromMilliseconds(Constants.playerMoveTimer_AdditionalTime));
                 timerText.text = new DateTime(ts2.Ticks).ToString("m:ss");
 
                 // timerText.text = (playerMoveCountDown_LastTime/1000).ToString();
                 clockStarted = false;
             }
-            // else if (isMultiplayer && isNewChallenge)
             else if (game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
             {
-                // isNewChallenge = false;
                 StartCoroutine(MovePiece(move, false, updatePlayer));
                 ChallengeManager.Instance.ChallengeUser(game, Utility.GetMoveLocation(move), move.direction);
             }
-            // else if (isMultiplayer && isNewRandomChallenge)
             else if (game.gameState.GameType == GameType.RANDOM)
             {
-                // isNewRandomChallenge = false;
                 StartCoroutine(MovePiece(move, false, updatePlayer));
                 ChallengeManager.Instance.ChallengeRandomUser(game, Utility.GetMoveLocation(move), move.direction);
             }
@@ -881,7 +876,6 @@ namespace Fourzy
                 while (isDropping)
                     yield return null;
                 isDropping = true;
-                // yield return new WaitForSeconds(0.5f);
 
                 AiPlayer aiPlayer = new AiPlayer(AIPlayerSkill.LEVEL1);
 
@@ -997,7 +991,7 @@ namespace Fourzy
 
         private void UpdateGameStatus(bool updatePlayer)
         {
-            Debug.Log("UpdateGameStatus:isExpired: " + game.isExpired);
+            // Debug.Log("UpdateGameStatus:isExpired: " + game.isExpired);
             if (game.gameState.IsGameOver || game.isExpired)
             {
                 this.StartCoroutine(DisplayGameOverView());

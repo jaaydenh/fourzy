@@ -57,7 +57,6 @@ namespace Fourzy
             ChallengeLostMessage.Listener += OnChallengeLost;
             ChallengeIssuedMessage.Listener += OnChallengeIssued;
             ChallengeDrawnMessage.Listener += OnChallengeDrawn;
-            // RealtimeManager.OnRealtimeReady += OpenNewRealtimeGame;
         }
 
         void OnDisable() 
@@ -70,7 +69,6 @@ namespace Fourzy
             ChallengeLostMessage.Listener -= OnChallengeLost;
             ChallengeIssuedMessage.Listener -= OnChallengeIssued;
             ChallengeDrawnMessage.Listener -= OnChallengeDrawn;
-            // RealtimeManager.OnRealtimeReady -= OpenNewRealtimeGame;
         }
 
         private void OnChallengeTurnTaken(ChallengeTurnTakenMessage message)
