@@ -176,9 +176,9 @@ namespace Fourzy
             }
         }
 
-        private void StartRealtimeGame(int firstPlayerPeerId, int tokenBoardIndex) 
+        private void StartRealtimeGame(int firstPlayerPeerId, int seed) 
         {
-            ChallengeManager.Instance.OpenNewRealtimeGame(firstPlayerPeerId, tokenBoardIndex);
+            ChallengeManager.Instance.OpenNewRealtimeGame(firstPlayerPeerId, seed);
             Hide();
         }
 

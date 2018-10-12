@@ -12,7 +12,7 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class RealtimeManager : UnitySingleton<RealtimeManager> {
 
-        public delegate void RealtimeReady(int firstPlayerPeerId, int tokenBoardIndex);
+        public delegate void RealtimeReady(int firstPlayerPeerId, int seed);
         public static event RealtimeReady OnRealtimeReady;
 
         public static Action<string> OnChatMessageReceived;
@@ -121,8 +121,9 @@ namespace Fourzy
                 case 100:
                     Debug.Log("All players joined realtime session");
                     int firstPlayerPeerId = _packet.Data.GetInt(1).Value;
-                    int tokenBoardIndex = _packet.Data.GetInt(2).Value;
-                    OnRealtimeReady(firstPlayerPeerId, tokenBoardIndex);
+                    // This is the seed from the server, probably should rename it
+                    int seed = _packet.Data.GetInt(2).Value;
+                    OnRealtimeReady(firstPlayerPeerId, seed);
                     break;
                 case 101:
                     CalculateTimeDelta(_packet);

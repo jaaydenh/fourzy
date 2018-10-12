@@ -444,8 +444,7 @@ namespace Fourzy
         }
 
         public void OpenNewRealtimeGame(int firstPlayerPeerId, int seed) {
-            
-            Debug.Log("Open New Realtime Game");
+
             bool isFirstPlayer = false;
             if (RealtimeManager.Instance.GetRTSession().PeerId == firstPlayerPeerId) {
                 isFirstPlayer = true;
