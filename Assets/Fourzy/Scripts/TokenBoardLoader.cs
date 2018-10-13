@@ -64,7 +64,13 @@ namespace Fourzy
             }
             
             if (UnityEngine.Random.Range(0, 100) < Constants.randomGeneratedBoardPercentage) {
-                return RandomBoardGenerator.GenerateBoard(seed);
+                // return RandomBoardGenerator.GenerateBoard(seed);
+                // return new BeginnerGardenRandomGenerator().GenerateBoard(seed);
+                // return new IslandRandomGenerator().GenerateBoard(seed);
+                // return new ForestRandomGenerator().GenerateBoard(seed);
+                // return new IcePalaceRandomGenerator().GenerateBoard(seed);
+                // return new CastleRandomGenerator().GenerateBoard(seed);
+                return BoardGeneratorTools.GenerateBoard(seed, Area.ICE_PALACE);
             }
 
             var tokenBoardData = tokenBoards
