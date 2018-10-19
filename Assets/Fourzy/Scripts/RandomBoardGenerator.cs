@@ -15,49 +15,17 @@ namespace Fourzy
             
             int comp = UnityEngine.Random.Range(0, 100);
             TokenBoard newBoard = null;
-            //string composition_name = GetRandomMember(BoardComposition.CompositionTypes);
-
-            //switch (composition_name)
-            //{
-            //    case "uniform":
-            //        newBoard = GenerateUniformBoard();
-            //        break;
-
-            //    case "centric":
-            //        newBoard = GenerateCentricBoard();
-            //        break;
-
-            //    case "quads":
-            //        newBoard = GenerateQuads();
-            //        break;
-
-            //    case "halfud":
-            //        newBoard = GenerateHalfUpDownBoard();
-            //        break;
-
-            //    case "halflr":
-            //        newBoard = GenerateHalfRightLeftBoard();
-            //        break;
-
-            //    case "hlines":
-            //        newBoard = GenerateHorizontalLinesBoard();
-            //        break;
-
-            //    case "vlines":
-            //        newBoard = GenerateVerticalLinesBoard();
-            //        break;
-
-            //}
 
             newBoard = GenerateBaseBoard();
             AddLargeFeatures(ref newBoard.tokenBoard, 1, 3);
             AddFeatures(ref newBoard.tokenBoard, 1, 3);
-            AddNoise(ref newBoard.tokenBoard, 0, 6);
+            AddNoise(ref newBoard.tokenBoard, 0, 4);
             SetCorners(ref newBoard.tokenBoard);
             CheckArrows(ref newBoard.tokenBoard);
             CheckPits(ref newBoard.tokenBoard);
             CheckMaxBlockers(ref newBoard.tokenBoard, 6);
-            
+            CheckEdges(ref newBoard.tokenBoard);
+
             newBoard.RefreshTokenBoard();
 
             return newBoard;
@@ -68,7 +36,7 @@ namespace Fourzy
             int percentage = 1;
             int count = 0;
 
-            while (count < MinNoise)
+            while (count <= MinNoise)
             {
                 for (int r = 0; r < Constants.numRows; r++)
                 {
@@ -370,6 +338,41 @@ namespace Fourzy
                 BlockerList.RemoveAt(choose_one);
             }
         }
+
+        private static void CheckEdges(ref int[,] TokenData)
+        {
+            for (int r = 0; r < Constants.numRows; r++)
+            {
+                int c = 0;
+                if (BoardComposition.AvoidTheseTokensOnEdges.Contains((Token)TokenData[r, c])) {
+                    TokenData[r, c] = 0;
+                }
+                c = Constants.numColumns -1;
+                if (BoardComposition.AvoidTheseTokensOnEdges.Contains((Token)TokenData[r, c]))
+                {
+                    TokenData[r, c] = 0;
+                }
+
+
+            }
+
+            for (int c = 0; c < Constants.numColumns; c++)
+            {
+                int r = 0;
+                if (BoardComposition.AvoidTheseTokensOnEdges.Contains((Token)TokenData[r, c]))
+                {
+                    TokenData[r, c] = 0;
+                }
+                r = Constants.numRows - 1;
+                if (BoardComposition.AvoidTheseTokensOnEdges.Contains((Token)TokenData[r, c]))
+                {
+                    TokenData[r, c] = 0;
+                }
+
+
+            }
+        }
+
 
         private static void CheckPits(ref int[,] TokenData) {
             for (int r = 1; r < Constants.numRows - 1; r++)
@@ -1465,6 +1468,14 @@ namespace Fourzy
                 return (int)Token.WATER;
                 case "circle_bomb":
                 return (int)Token.CIRCLE_BOMB;
+                case "bumper":
+                return (int)Token.BUMPER;
+                case "left_turn":
+                return (int)Token.NINETY_LEFT_ARROW;
+                case "right_turn":
+                return (int)Token.NINETY_RIGHT_ARROW;
+                case "fruit":
+                return (int)Token.FRUIT;
             }
             return 0;
         }
@@ -1580,6 +1591,8 @@ namespace Fourzy
 
         static class BoardComposition
         {
+            public static List<Token> AvoidTheseTokensOnEdges = new List<Token>() {Token.FRUIT, Token.PIT, Token.CIRCLE_BOMB, Token.BUMPER };
+            
             public static Dictionary<string, int> CompositionTypes = new Dictionary<string, int>()
             {
              { "uniform", 30},
@@ -1632,7 +1645,7 @@ namespace Fourzy
             public static Dictionary<string, int> TokenTypes = new Dictionary<string, int>()
             {
              { "ghost", 15},
-             { "pit", 1 },
+             { "pit", 0 },
              { "water", 2 },
              { "up_arrow", 7},
              { "down_arrow", 7},
@@ -1652,34 +1665,42 @@ namespace Fourzy
 
             public static Dictionary<string, int> LargeShapeTokenTypes = new Dictionary<string, int>()
 			{
-				{ "pit", 1 },
+				{ "pit", 0 },
 				{ "sticky", 25},
 				{ "ice", 20},
-				{ "sand", 20}
+				{ "sand", 20},
+                { "fruit", 30 }
 			};
 
 			public static Dictionary<string, int> SmallShapeTokenTypes = new Dictionary<string, int>()
 			{
-				{ "pit", 1 },
+				{ "pit", 0 },
 				{ "sticky", 20},
 				{ "ice", 20},
-				{ "water", 20}
+				{ "water", 20},
+                { "fruit", 40 },
+                { "left_turn", 1 },
+                { "right_turn", 1 },
+                { "circle_bomb", 0 },
+
             };
 
             public static Dictionary<string, int> BlockEdgeTokens = new Dictionary<string, int>()
             {
-                { "pit", 2 },
-                { "blocker", 20},
+                { "pit", 0 },
+                { "blocker", 10},
                 { "up_arrow", 5},
                 { "down_arrow", 5},
                 { "left_arrow", 5},
-                { "right_arrow", 5}
+                { "right_arrow", 5},
+                { "fruit", 5}
             };
 
             public static Dictionary<string, int> CornerTokens = new Dictionary<string, int>()
             {
                 { "sticky", 15},
-                { "ice", 15}
+                { "ice", 15},
+                { "fruit", 15}
             };
 
             public static Dictionary<string, int> LargeFeatureTypes = new Dictionary<string, int>()
@@ -1791,17 +1812,21 @@ namespace Fourzy
         {
             public static Dictionary<string, int> TokenTypes = new Dictionary<string, int>()
             {
-             { "clear", 20 },
-             { "sticky", 10 },
-             { "ice", 5 },
-             { "ghost", 10},
-             { "pit", 2 },
-             { "left_arrow", 10},
-             { "right_arrow", 10},
-             { "up_arrow", 10},
-             { "down_arrow", 10},
-             { "blocker", 10},
-			 { "water", 10}
+                { "circle_bomb", 0},
+                { "clear", 20 },
+                { "sticky", 10 },
+                { "ice", 5 },
+                { "ghost", 10},
+                { "pit", 0 },
+                { "left_arrow", 10},
+                { "right_arrow", 10},
+                { "up_arrow", 10},
+                { "down_arrow", 10},
+                { "blocker", 10},
+			    { "water", 10},
+                { "left_turn", 1 },
+                { "right_turn", 1 },
+                { "bumper", 100 }
             };
         }
 

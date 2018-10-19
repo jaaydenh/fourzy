@@ -912,7 +912,7 @@
         {
             "ID": "1020",
             "Name": "Sticky Pit of Death",
-            "Enabled": true, "EnabledGallery": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,5,5,0,0,0,
                           0,0,5,5,5,5,0,0,
@@ -951,7 +951,7 @@
         {
             "ID": "1023",
             "Name": "Blocked Pits",
-            "Enabled": true, "EnabledGallery": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,5,5,5,5,0,0,
@@ -2331,7 +2331,7 @@
         {
             "ID": "030710",
             "Name": "Pittiful",
-            "Enabled": true, "EnabledGallery": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,8,8,8,8,8,8,6,
                                   8,5,5,5,5,5,5,8,
                                   8,5,9,5,9,5,5,8,
@@ -2344,7 +2344,7 @@
         {
             "ID": "030711",
             "Name": "Pit Plus",
-            "Enabled": true, "EnabledGallery": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,0,0,7,7,0,0,6,
                                   0,5,0,5,5,0,5,0,
                                   0,0,0,5,5,0,0,0,
@@ -2448,7 +2448,7 @@
         {
             "ID": "03111809",
             "Name": "Diagonal Pit Line",
-            "Enabled": true, "EnabledGallery": false,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData":         [6,5,5,0,0,0,0,6,
                                   5,9,5,5,0,0,0,0,
                                   5,5,9,5,5,0,0,0,
@@ -3138,7 +3138,7 @@
         },{
             "ID": "1009201801",
             "Name": "4 Bombs",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,20,0,0,20,0,0,
@@ -3150,7 +3150,7 @@
         },{
             "ID": "1009201802",
             "Name": "Bomb Cluster",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,20,0,0,0,0,0,
@@ -3162,7 +3162,7 @@
         },{
             "ID": "1009201803",
             "Name": "6 Bombs",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,20,0,20,0,20,0,
                           0,0,0,0,0,0,0,0,
@@ -3174,7 +3174,7 @@
         },{
             "ID": "1009201804",
             "Name": "Diagonal Bombs",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,20,0,0,0,0,0,0,
                           0,0,0,0,0,0,0,0,
@@ -3186,7 +3186,7 @@
         },{
             "ID": "1009201805",
             "Name": "Offset Bombs",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,20,0,0,0,0,0,0,
                           0,0,0,0,0,20,0,0,
@@ -3198,7 +3198,7 @@
         },{
             "ID": "1009201806",
             "Name": "Bomb Cluster with Arrows",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,0,0,20,0,0,
@@ -3210,7 +3210,7 @@
         },{
             "ID": "1009201807",
             "Name": "Hard to Avoid",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,0,20,0,0,0,0,
@@ -3222,7 +3222,7 @@
         },{
             "ID": "1009201808",
             "Name": "Fruity Bombs",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,0,14,0,0,0,0,0,
@@ -3234,7 +3234,7 @@
         },{
             "ID": "1009201809",
             "Name": "Explosive Stickiness",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,14,14,0,0,14,14,0,
                           0,14,5,5,5,5,14,0,
@@ -3342,7 +3342,7 @@
         },{
             "ID": "1009201821",
             "Name": "Bomb Fruit",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,0,0,0,0,
                           0,14,14,14,0,14,0,0,
@@ -3354,7 +3354,7 @@
         },{
             "ID": "1009201823",
             "Name": "A Bomb and Fruit",
-            "Enabled": true, "EnabledGallery": true,
+            "Enabled": false, "EnabledGallery": false,
             "TokenData": [6,0,0,0,0,0,0,6,
                           0,0,0,0,14,0,0,0,
                           0,14,0,14,0,0,0,0,

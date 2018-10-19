@@ -111,6 +111,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 66c710582a23e439e95f560533cc78f6, type: 3}
   - {fileID: 21300000, guid: db7b4a68569c64f2ab1ef70fac2986ef, type: 3}
   - {fileID: 21300000, guid: 7732e1a8e6d544f739dfbc78fb7055f4, type: 3}
+  - {fileID: 21300000, guid: bd251aa8f29c14bddbcde82e38845b6e, type: 3}
   - {fileID: 21300000, guid: 7f3fefa8f9777451ca0f4e5af0ede456, type: 3}
   - {fileID: 21300000, guid: 05ac52c8088864a79bf64979672f6ddd, type: 3}
   - {fileID: 21300000, guid: 0d3cecd8433384410a95918cb0879c61, type: 3}
@@ -240,6 +241,7 @@ SpriteAtlas:
   - iconQuestion
   - tokenGhost1
   - tokenSpider
+  - buttonChat
   - Coin
   - MiniGameBoardGlow
   - SettingsButton

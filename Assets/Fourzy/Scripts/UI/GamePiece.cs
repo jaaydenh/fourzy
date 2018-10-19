@@ -113,6 +113,112 @@ namespace Fourzy
                 i = nextPos - 1;
             }
 
+            if (activeTokens != null)
+            {
+
+                for (int t = 0; t < activeTokens.Count; t++)
+                {
+                    Position piecePos = gameBoardView.Vec3ToPosition(transform.position);
+
+                    if (piecePos.column == activeTokens[t].Column && piecePos.row == activeTokens[t].Row)
+                    {
+
+
+                        if (activeTokens[t].tokenType == Token.PIT)
+                        {
+                            SpriteRenderer sr = gameBoardView.TokenAt(activeTokens[t].Row, activeTokens[t].Column).GetComponent<SpriteRenderer>();
+                            sr.DOFade(0f, 1.5f);
+
+                            GamePiece gp = gameBoardView.GamePieceAt(activeTokens[t].Row, activeTokens[t].Column);
+                            if (gp)
+                            {
+                                gp.View.Fade(0f, 1f);
+                            }
+
+                            this.View.FadeAfterPit();
+                        }
+                        else if (activeTokens[t].tokenType == Token.CIRCLE_BOMB)
+                        {
+                            SpriteRenderer sr = gameBoardView.TokenAt(activeTokens[t].Row, activeTokens[t].Column).GetComponent<SpriteRenderer>();
+                            sr.DOFade(0f, 1.5f);
+
+                            if (activeTokens[t].Row > 0)
+                            {
+                                // TopMiddle
+                                GamePiece gp = gameBoardView.GamePieceAt(activeTokens[t].Row - 1, activeTokens[t].Column);
+                                if (gp)
+                                {
+                                    gp.View.Fade(0f, 1f);
+                                }
+
+                                if (activeTokens[t].Column > 0)
+                                {
+                                    //TopLeft
+                                    gp = gameBoardView.GamePieceAt(activeTokens[t].Row - 1, activeTokens[t].Column - 1);
+                                    if (gp)
+                                    {
+                                        gp.View.Fade(0f, 1f);
+                                    }
+
+                                    //Left
+                                    gp = gameBoardView.GamePieceAt(activeTokens[t].Row, activeTokens[t].Column - 1);
+                                    if (gp)
+                                    {
+                                        gp.View.Fade(0f, 1f);
+                                    }
+                                }
+                                if (activeTokens[t].Column < Constants.numColumns - 1)
+                                {
+                                    //TopRight
+                                    gp = gameBoardView.GamePieceAt(activeTokens[t].Row - 1, activeTokens[t].Column + 1);
+                                    if (gp)
+                                    {
+                                        gp.View.Fade(0f, 1f);
+                                    }
+                                    //Right
+                                    gp = gameBoardView.GamePieceAt(activeTokens[t].Row, activeTokens[t].Column + 1);
+                                    if (gp)
+                                    {
+                                        gp.View.Fade(0f, 1f);
+                                    }
+                                }
+                            }
+
+                            if (activeTokens[t].Row < Constants.numRows - 1)
+                            {
+                                //Bottom
+                                GamePiece gp = gameBoardView.GamePieceAt(activeTokens[t].Row + 1, activeTokens[t].Column);
+                                if (gp)
+                                {
+                                    gp.View.Fade(0f, 1f);
+                                }
+
+                                //BottomLeft
+                                if (activeTokens[t].Column > 0)
+                                {
+                                    gp = gameBoardView.GamePieceAt(activeTokens[t].Row + 1, activeTokens[t].Column - 1);
+                                    if (gp)
+                                    {
+                                        gp.View.Fade(0f, 1f);
+                                    }
+                                }
+                                //BottomRight
+                                if (activeTokens[t].Column < Constants.numColumns - 1)
+                                {
+                                    gp = gameBoardView.GamePieceAt(activeTokens[t].Row + 1, activeTokens[t].Column + 1);
+                                    if (gp)
+                                    {
+                                        gp.View.Fade(0f, 1f);
+                                    }
+                                }
+                            }
+
+                            this.View.Fade(0f, 1.0f);
+                        }
+                    }
+                }
+            }
+
             isMoving = false;
             column = positions[positions.Count - 1].column;
             row = positions[positions.Count - 1].row;
@@ -159,77 +265,7 @@ namespace Fourzy
                     {
                         gameBoardView.TokenAt(activeTokens[i].Row, activeTokens[i].Column).GetComponent<FruitTokenView>().PlayFruitIntoStickyAnimation();
                     }
-                    else if (activeTokens[i].tokenType == Token.PIT)
-                    {
-                        SpriteRenderer sr = gameBoardView.TokenAt(activeTokens[i].Row, activeTokens[i].Column).GetComponent<SpriteRenderer>();
-                        sr.DOFade(0f, 1.5f);
-
-                        this.View.FadeAfterPit();
-                    }
-                    else if (activeTokens[i].tokenType == Token.CIRCLE_BOMB)
-                    {
-                        SpriteRenderer sr = gameBoardView.TokenAt(activeTokens[i].Row, activeTokens[i].Column).GetComponent<SpriteRenderer>();
-                        sr.DOFade(0f, 1.5f);
-
-                        if (activeTokens[i].Row > 0){
-                            // TopMiddle
-                            GamePiece gp = gameBoardView.GamePieceAt(activeTokens[i].Row-1, activeTokens[i].Column);
-                            if (gp) {
-                                gp.View.Fade(0f, 1f);
-                            }
-
-                            if (activeTokens[i].Column > 0) {
-                                //TopLeft
-                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row-1, activeTokens[i].Column-1);
-                                if (gp) {
-                                    gp.View.Fade(0f, 1f);
-                                }
-
-                                //Left
-                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row, activeTokens[i].Column-1);
-                                if (gp) {
-                                    gp.View.Fade(0f, 1f);
-                                }
-                            }
-                            if (activeTokens[i].Column < Constants.numColumns-1) {
-                                //TopRight
-                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row-1, activeTokens[i].Column+1);
-                                if (gp) {
-                                    gp.View.Fade(0f, 1f);
-                                }
-                                //Right
-                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row, activeTokens[i].Column+1);
-                                if (gp) {
-                                    gp.View.Fade(0f, 1f);
-                                }
-                            }
-                        }
-
-                        if (activeTokens[i].Row < Constants.numRows-1){
-                            //Bottom
-                            GamePiece gp = gameBoardView.GamePieceAt(activeTokens[i].Row+1, activeTokens[i].Column);
-                            if (gp) {
-                                gp.View.Fade(0f, 1f);
-                            }
-
-                            //BottomLeft
-                            if (activeTokens[i].Column > 0) {
-                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row+1, activeTokens[i].Column-1);
-                                if (gp) {
-                                    gp.View.Fade(0f, 1f);
-                                }
-                            }
-                            //BottomRight
-                            if (activeTokens[i].Column < Constants.numColumns-1) {
-                                gp = gameBoardView.GamePieceAt(activeTokens[i].Row+1, activeTokens[i].Column+1);
-                                if (gp) {
-                                    gp.View.Fade(0f, 1f);
-                                }
-                            }
-                        }
-
-                        this.View.Fade(0f, 1.0f);
-                    }
+                   
 
                     activeTokens.RemoveAt(i);
                 }

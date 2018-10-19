@@ -416,11 +416,11 @@ namespace Fourzy {
             this.Column = column;
             pieceCanEnter = true;
             pieceCanEndMoveOn = true;
-            pieceMustStopOn = true;
+            pieceMustStopOn = false;
             chanceDestroyPieceOnEnd = 100.0f;
             destroyTokenOnEnd = true;
             hasEffect = true;
-            replacedToken = new EmptyToken(row, column);
+            //replacedToken = new EmptyToken(row, column);
             newPieceDirection = Direction.NONE;
             tokenType = Token.PIT;
         }
@@ -869,11 +869,11 @@ namespace Fourzy {
             this.Column = column;
             pieceCanEnter = true;
             pieceCanEndMoveOn = true;
-            pieceMustStopOn = true;
+            pieceMustStopOn = false;
             chanceDestroyPieceOnEnd = 100.0f;
             destroyTokenOnEnd = true;
             hasEffect = true;
-            replacedToken = new EmptyToken(row, column);
+            //replacedToken = new EmptyToken(row, column);
             newPieceDirection = Direction.NONE;
             tokenType = Token.CIRCLE_BOMB;
         }

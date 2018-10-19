@@ -73,9 +73,9 @@ namespace Fourzy
             opponentMessage.gameObject.SetActive(true);
             opponentMessage.text = chatMessage;
 
-            opponentMessage.rectTransform.DOMoveY(opponentText.rectTransform.position.y + 0.5f, 2.0f);
+            opponentMessage.rectTransform.DOMoveY(opponentText.rectTransform.position.y + 0.5f, 3.0f);
 
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(3.0f);
 
             opponentMessage.CrossFadeAlpha(0.0f, fadeTime, false);
 
