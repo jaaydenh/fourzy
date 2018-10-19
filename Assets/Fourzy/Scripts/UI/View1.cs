@@ -3,6 +3,7 @@ using HedgehogTeam.EasyTouch;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Collections;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -62,6 +63,7 @@ namespace Fourzy
 
         public void ReloadGamesOnClick()
         {
+            Mixpanel.Track("Reload Games Button Press");
             ChallengeManager.Instance.GetChallengesRequest();
         }
 

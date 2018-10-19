@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -24,6 +25,7 @@ namespace Fourzy
 
         public void PassAndPlayButton()
         {
+            Mixpanel.Track("Pass And Play Button Press");
             ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
             ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.PASSANDPLAY);
         }

@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using HedgehogTeam.EasyTouch;
 using System.Collections.Generic;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -83,11 +84,17 @@ namespace Fourzy
             Game game = GameManager.Instance.GetNextActiveGame();
             if (game != null)
             {
+                var props = new Value();
+                props["HasGameWithMove"] = "True";
+                Mixpanel.Track("Turn Play Button Press", props);
                 GameManager.Instance.OpenGame(game);
                 Hide();
             }
             else
             {
+                var props = new Value();
+                props["HasGameWithMove"] = "False";
+                Mixpanel.Track("Turn Play Button Press", props);
                 ViewMatchMaking.instance.isRealtime = false;
                 ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
             }
@@ -105,14 +112,20 @@ namespace Fourzy
             if (today == System.DayOfWeek.Monday || today == System.DayOfWeek.Wednesday || today == System.DayOfWeek.Friday) {
 
                 if ((!isDLS && hour == 1) || (isDLS && hour == 0)) {
+                    var props = new Value();
+                    props["Source"] = "Home Screen";
+                    Mixpanel.Track("Start Realtime Matchmaking", props);
+
                     ViewMatchMaking.instance.isRealtime = true;
                     ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
                     ViewController.instance.HideTabView();
                     ViewController.instance.headerUI.SetActive(false);
                 } else {
+                    Mixpanel.Track("Open Realtime Confirmation");
                     PopupManager.Instance.OpenPopup<ConfirmPopup>();
                 }
             } else {
+                Mixpanel.Track("Open Realtime Confirmation");
                 PopupManager.Instance.OpenPopup<ConfirmPopup>();
             }
         }
@@ -134,17 +147,20 @@ namespace Fourzy
         }
 
         public void TrainingButton() {
+            Mixpanel.Track("Puzzle Button Press");
             ViewController.instance.ChangeView(ViewController.instance.viewPuzzleSelection);
             ViewController.instance.HideTabView();
             ViewController.instance.headerUI.SetActive(false);
         }
 
         public void SettingsButton() {
+            Mixpanel.Track("Settings Button Press");
             ViewController.instance.ChangeView(ViewController.instance.viewSettings);
             ViewController.instance.HideTabView();
         }
 
         public void AreaSelectButtonPress() {
+            Mixpanel.Track("Area Select Button Press");
             ViewController.instance.ChangeView(ViewController.instance.viewAreaSelect);
             ViewController.instance.HideTabView();
         }

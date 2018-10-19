@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -86,6 +87,8 @@ namespace Fourzy
 
         public void OpenChatOnClick()
         {
+            Mixpanel.Track("Open Chat Button Press");
+
             isChatOpen = !isChatOpen;
 
             chatInputField.gameObject.SetActive(isChatOpen);
@@ -101,6 +104,7 @@ namespace Fourzy
         {
             if (chatInputField.text != string.Empty)
             {
+                Mixpanel.Track("Send Message Button Press");
                 RealtimeManager.Instance.SendChatMessage(chatInputField.text);
             }
 

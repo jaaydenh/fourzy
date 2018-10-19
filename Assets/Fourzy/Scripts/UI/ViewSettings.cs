@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -32,13 +33,14 @@ namespace Fourzy
 
         public void ResetTutorial()
         {
-            Debug.Log("Reset Tutorial");
+            Mixpanel.Track("Reset Tutorial Button Press");
             PlayerPrefs.DeleteKey("onboardingStage");
             PlayerPrefs.DeleteKey("onboardingStep");
         }
 
         public void ChangeName() 
         {
+            Mixpanel.Track("Change Name Button Press");
             PopupManager.Instance.OpenPopup<ChangeNamePopup>();
         }
 

@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using GameSparks.Api.Requests;
 using UnityEngine.SceneManagement;
 using TMPro;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -213,7 +214,7 @@ namespace Fourzy
             backBtn.onClick.AddListener(BackButtonOnClick);
 
             Button resignBtn = resignButton.GetComponent<Button>();
-            resignBtn.onClick.AddListener(BackButtonOnClick);
+            resignBtn.onClick.AddListener(RealtimeResignButtonOnClick);
 
             Button rematchBtn = rematchButton.GetComponent<Button>();
             rematchBtn.onClick.AddListener(RematchPassAndPlayGameButtonOnClick);
@@ -528,6 +529,12 @@ namespace Fourzy
             while (isDropping || isLoading)
                 yield return null;
             StartCoroutine(MovePiece(move, false, true));
+        }
+
+        public void RealtimeResignButtonOnClick() {
+            
+            Mixpanel.Track("Resign Button Press");
+            BackButtonOnClick();
         }
 
         public void BackButtonOnClick() 

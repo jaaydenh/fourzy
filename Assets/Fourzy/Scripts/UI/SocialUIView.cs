@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Lean.Pool;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -73,6 +74,7 @@ namespace Fourzy
 
         public void ConnectFBOnClick()
         {
+            Mixpanel.Track("Facebook Connect Button Press");
             btnFBLogin.interactable = false;
 
             LoginManager.Instance.FacebookLogin();

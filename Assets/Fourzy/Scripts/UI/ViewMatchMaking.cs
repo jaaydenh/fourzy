@@ -6,6 +6,7 @@ using GameSparks.Core;
 using GameSparks.Api.Responses;
 using System.Linq;
 using TMPro;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -55,6 +56,7 @@ namespace Fourzy
             userFacingMessage.text = "Finding Match...";
             // backButton.SetActive(false);
             if (isRealtime) {
+                Mixpanel.StartTimedEvent("Find Realtime Match");
                 RealtimeManager.Instance.FindPlayers();
             } else {
                 ChallengeManager.Instance.FindRandomChallenge(FindChallengeSuccess, FindChallengeError);
@@ -129,6 +131,9 @@ namespace Fourzy
 
         public void CancelMatchmaking()
         {
+            var props = new Value();
+            props["Status"] = "Cancel";
+            Mixpanel.Track("Find Realtime Match", props);
             RealtimeManager.Instance.CancelMatchmakingRequest();
             ViewController.instance.ChangeView(ViewController.instance.view3);
             Hide();
@@ -178,12 +183,18 @@ namespace Fourzy
 
         private void StartRealtimeGame(int firstPlayerPeerId, int seed) 
         {
+            var props = new Value();
+            props["Status"] = "Found";
+            Mixpanel.Track("Find Realtime Match", props);
             ChallengeManager.Instance.OpenNewRealtimeGame(firstPlayerPeerId, seed);
             Hide();
         }
 
         private void RealtimeMatchNotFound() 
         {
+            var props = new Value();
+            props["Status"] = "Not Found";
+            Mixpanel.Track("Find Realtime Match", props);
             userFacingMessage.text = "No one is playing now, try again later.";
             timerText.text = "";
             //backButton.SetActive(true);

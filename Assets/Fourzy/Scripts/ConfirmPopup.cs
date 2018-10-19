@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -29,6 +30,7 @@ namespace Fourzy
 
         private void Close()
         {
+            Mixpanel.Track("Realtime Confirm Close");
             this.gameObject.SetActive(false);
 
             PopupManager.Instance.ClosePopup();
@@ -36,6 +38,9 @@ namespace Fourzy
 
         void IPopup.Open()
         {
+            var props = new Value();
+            props["Source"] = "Confirm Popup";
+            Mixpanel.Track("Start Realtime Matchmaking", props);
             this.gameObject.SetActive(true);
         }
     }

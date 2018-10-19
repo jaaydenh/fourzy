@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -43,7 +44,10 @@ namespace Fourzy
         void IPopup.Open()
         {
             gameObject.SetActive(true);
-
+            var props = new Value();
+            props["Token Type"] = tokenData.Name;
+            Mixpanel.Track("Open Token Detail", props);
+            
             Sprite sprite = GameContentManager.Instance.GetTokenSprite(tokenData.ID);
 
             tokenName.text = tokenData.Name;

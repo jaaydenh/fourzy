@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using mixpanel;
 
 namespace Fourzy
 {
@@ -65,6 +66,10 @@ namespace Fourzy
 
         void OpenPuzzlePack() {
             if (!isLocked) {
+                var props = new Value();
+                props["ID"] = PuzzlePack.ID;
+                props["Name"] = PuzzlePack.Name;
+                Mixpanel.Track("Open Puzzle Pack", props);
                 ViewController.instance.viewPuzzleSelection.Hide();
                 GameManager.Instance.SetActivePuzzlePack(PuzzlePack);
                 GameManager.Instance.OpenPuzzleChallengeGame("open");
