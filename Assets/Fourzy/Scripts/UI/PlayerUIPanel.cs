@@ -53,6 +53,7 @@ namespace Fourzy
             playerIcon.gameObject.SetActive(true);
             playerIcon.CachedTransform.parent = playerIconParent;
             playerIcon.CachedTransform.localPosition = new Vector3(0, 0, 10);
+            playerIcon.transform.localScale = gamePiecePrefab.transform.localScale;
         }
 
         public void ShowPlayerTurnAnimation()
