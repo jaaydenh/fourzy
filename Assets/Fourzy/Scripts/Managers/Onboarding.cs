@@ -162,7 +162,7 @@ namespace Fourzy
                     }
                     wizard.transform.localPosition = new Vector3(0, 360);
                     dialogBox.transform.localPosition = new Vector3(0, 15);
-                    ShowWizardWithDialog("Try challenging other players by pressing Play or press Training for more practice.");
+                    ShowWizardWithDialog("Try challenging other players by pressing Turn Play/Realtime or press Puzzle Play for more practice.");
                     break;
                 case 10:
                     if (SceneManager.GetActiveScene().name == "gamePlay") {

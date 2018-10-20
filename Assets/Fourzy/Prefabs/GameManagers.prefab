@@ -703,7 +703,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: tap to continue...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
+  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
   m_sharedMaterial: {fileID: 0}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -783,7 +783,7 @@ MonoBehaviour:
   m_spriteAnimator: {fileID: 0}
   m_isInputParsingRequired: 1
   m_inputSource: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_subTextObjects:
   - {fileID: 0}
   - {fileID: 0}
@@ -959,7 +959,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Welcome to Fourzy!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
+  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
   m_sharedMaterial: {fileID: 0}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1039,7 +1039,7 @@ MonoBehaviour:
   m_spriteAnimator: {fileID: 0}
   m_isInputParsingRequired: 1
   m_inputSource: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_subTextObjects:
   - {fileID: 0}
   - {fileID: 0}
@@ -1139,7 +1139,7 @@ MonoBehaviour:
     Preview: {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
     GameBackground: {fileID: 21300000, guid: 51d86dda53ccf4eb9831e84c249298fa, type: 3}
     GameBoardView: {fileID: 0}
-    GameBoard: {fileID: 21300000, guid: f5c45e0c7d6134dd5915636c42d085a9, type: 3}
+    GameBoard: {fileID: 21300000, guid: 1a881a67ed54c476493a115db846f636, type: 3}
   - Name: Mystery Forest
     Preview: {fileID: 21300000, guid: c160e712160e34fe38fdb3a33069cd8b, type: 3}
     GameBackground: {fileID: 21300000, guid: b39f5b6b0369f44fda61246bd9a7090a, type: 3}
@@ -1553,7 +1553,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -65, y: 13}
+  m_AnchoredPosition: {x: -100, y: 13}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224038955395718872
