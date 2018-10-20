@@ -29,12 +29,21 @@ namespace Fourzy
 
         private void Start()
         {
-            GameAnalytics.Initialize();
+            ConnectWithFacebook();
+        }
+
+        private void OnEnable()
+        {
+            GS.GameSparksAvailable += GameSparksIsAvailable;
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
-            GS.GameSparksAvailable += GameSparksIsAvailable;
+        }
 
-            ConnectWithFacebook();
+        private void OnDisable()
+        {
+            GS.GameSparksAvailable -= GameSparksIsAvailable;
+            Firebase.Messaging.FirebaseMessaging.TokenReceived -= OnTokenReceived;
+            Firebase.Messaging.FirebaseMessaging.MessageReceived -= OnMessageReceived;
         }
 
         private void GameSparksIsAvailable(bool connected)
