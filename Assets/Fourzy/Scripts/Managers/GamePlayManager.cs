@@ -175,6 +175,11 @@ namespace Fourzy
         /// </summary>
         private void SyncClock(long milliseconds)
         {
+            if (isDropping)
+            {
+                return;
+            }
+
             DateTime dateNow = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc); // get the current time
             serverClock = dateNow.AddMilliseconds(milliseconds + RealtimeManager.Instance.timeDelta).ToLocalTime(); // adjust current time to match clock from server
 
@@ -192,6 +197,7 @@ namespace Fourzy
                 TimeSpan timeDifference = playerMoveCountdown - serverClock;
                 if (timeDifference.TotalMilliseconds <= 0)
                 {
+                    timerText.text = new DateTime(0).ToString("m:ss");
                     List<Move> moves = game.gameState.GetPossibleMoves();
                     Move move = moves[UnityEngine.Random.Range(0, moves.Count)];
                     StartCoroutine(ProcessMove(move));
@@ -554,9 +560,7 @@ namespace Fourzy
 
             //ChallengeManager.Instance.ReloadGames();
 
-            Scene uiScene = SceneManager.GetSceneByName("tabbedUI");
-            SceneManager.SetActiveScene(uiScene);
-            SceneManager.UnloadSceneAsync("gamePlay");
+            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
 
             if (game.gameState.GameType == GameType.REALTIME) 
             {

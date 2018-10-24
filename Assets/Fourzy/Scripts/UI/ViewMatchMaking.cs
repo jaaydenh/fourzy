@@ -37,21 +37,12 @@ namespace Fourzy
             matchMakingStrings = GameStringsLoader.Instance.GetMatchMakingWaitingStrings();
         }
 
-        void OnEnable() 
-        {
-            RealtimeManager.OnRealtimeReady += StartRealtimeGame;
-            RealtimeManager.OnRealtimeMatchNotFound += RealtimeMatchNotFound;
-        }
-
-        void OnDisable() 
-        {
-            RealtimeManager.OnRealtimeReady -= StartRealtimeGame;
-            RealtimeManager.OnRealtimeMatchNotFound -= RealtimeMatchNotFound;
-        }
-
         public override void Show()
         {
             base.Show();
+
+            RealtimeManager.OnRealtimeReady += StartRealtimeGame;
+            RealtimeManager.OnRealtimeMatchNotFound += RealtimeMatchNotFound;
 
             userFacingMessage.text = "Finding Match";
             // backButton.SetActive(false);
@@ -68,6 +59,9 @@ namespace Fourzy
 
         public override void Hide()
         {
+            RealtimeManager.OnRealtimeReady -= StartRealtimeGame;
+            RealtimeManager.OnRealtimeMatchNotFound -= RealtimeMatchNotFound;
+
             base.Hide();
             timerText.text = string.Empty;
 
