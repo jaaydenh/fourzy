@@ -53,7 +53,7 @@ namespace Fourzy
         {
             base.Show();
 
-            userFacingMessage.text = "Finding Match...";
+            userFacingMessage.text = "Finding Match";
             // backButton.SetActive(false);
             if (isRealtime) {
                 Mixpanel.StartTimedEvent("Find Realtime Match");
@@ -183,6 +183,7 @@ namespace Fourzy
 
         private void StartRealtimeGame(int firstPlayerPeerId, int seed) 
         {
+            GameManager.Instance.ShowInfoBanner("Start Realtime Game");
             var props = new Value();
             props["Status"] = "Found";
             Mixpanel.Track("Find Realtime Match", props);
