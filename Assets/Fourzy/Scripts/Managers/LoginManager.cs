@@ -30,6 +30,7 @@ namespace Fourzy
         private void Start()
         {
             ConnectWithFacebook();
+            GameAnalytics.Initialize();
         }
 
         private void OnEnable()

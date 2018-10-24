@@ -7,8 +7,16 @@ namespace Fourzy {
         public Direction currentDirection;
         public List<Position> positions;
         public Position position;
+        public Position endPosition 
+        { 
+            get
+            {
+                return positions[positions.Count - 1];
+            }
+        }
         public PlayerEnum player = PlayerEnum.NONE;
-        public GameObject gamePieceObject;
+        public GamePiece gamePiece;
+        public bool playHitAnimation;
         public bool isDestroyed;
         public PieceAnimState animationState;
         public float friction;
