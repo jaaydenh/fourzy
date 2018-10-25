@@ -3,7 +3,7 @@ using System;
 
 namespace Fourzy
 {
-    public class Game
+    public class GameArea
     {
         public string challengeId;
         public GameState gameState;
@@ -26,7 +26,7 @@ namespace Fourzy
         public PuzzleChallengeLevel puzzleChallengeInfo;
         public Sprite opponentProfilePictureSprite;
 
-        public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, string challengerGamePieceId, string challengedGamePieceId, PuzzleChallengeLevel puzzleChallengeInfo, string winnerName, string title, string subtitle, bool displayIntroUI)
+        public GameArea(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, string challengerGamePieceId, string challengedGamePieceId, PuzzleChallengeLevel puzzleChallengeInfo, string winnerName, string title, string subtitle, bool displayIntroUI)
         {
             this.challengeId = challengeId;
             this.gameState = gameState;
@@ -49,10 +49,10 @@ namespace Fourzy
             this.challengedGamePieceId = 0;
             Int32.TryParse(challengedGamePieceId, out this.challengedGamePieceId);
 
-            InitGame();
+            InitGameArea();
         }
 
-        public void InitGame() {
+        public void InitGameArea() {
 
             // if (opponent.opponentFBId != "")
             // {
