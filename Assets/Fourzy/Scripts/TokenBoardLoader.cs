@@ -57,30 +57,39 @@ namespace Fourzy
             }
         }
 
-        public TokenBoard GetRandomTokenBoard(int seed = 0)
+        public TokenBoard GetRandomTokenBoard(GameType gameType, int seed = 0)
         {
             if (seed != 0) {
                 UnityEngine.Random.InitState(seed);
             }
             
             if (UnityEngine.Random.Range(0, 100) < Constants.randomGeneratedBoardPercentage) {
-                // return RandomBoardGenerator.GenerateBoard(seed);
-                // return new BeginnerGardenRandomGenerator().GenerateBoard(seed);
-                // return new IslandRandomGenerator().GenerateBoard(seed);
-                // return new ForestRandomGenerator().GenerateBoard(seed);
-                // return new IcePalaceRandomGenerator().GenerateBoard(seed);
-                // return new CastleRandomGenerator().GenerateBoard(seed);
-                return BoardGeneratorTools.GenerateBoard(seed, Area.ICE_PALACE);
+                return BoardGeneratorTools.GenerateBoard(seed);
             }
 
-            var tokenBoardData = tokenBoards
-                .Where(t => t.Enabled == true)
-                .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
-            .FirstOrDefault();
+            if (gameType == GameType.REALTIME) {
+                var tokenBoardData = tokenBoards
+                    .Where(t => t.EnabledRealtime == true)
+                    //.OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
+                .FirstOrDefault();
 
-            TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), true);
+                TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), true);
 
-            return tokenboard;
+                return tokenboard;
+            } else {
+                var tokenBoardData = tokenBoards
+                    .Where(t => t.Enabled == true)
+                    .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
+                .FirstOrDefault();
+
+                TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), true);
+
+                return tokenboard;
+            }
+
+            //TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), true);
+
+            //return tokenboard;
         }
 
         public TokenBoard GetRandomTokenBoardByIndex(int index) 

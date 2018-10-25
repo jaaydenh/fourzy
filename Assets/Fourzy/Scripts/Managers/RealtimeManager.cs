@@ -23,6 +23,7 @@ namespace Fourzy
         private int currentPlayerPeerId;
         public int timeDelta;
         private int latency, roundTrip;
+        private bool startedGame;
         private GameSparksRTUnity gameSparksRTUnity;
 
         public GameSparksRTUnity GetRTSession(){
@@ -100,11 +101,24 @@ namespace Fourzy
 
         private void OnPlayerDisconnected(int _peerId){
             Debug.Log ("GSM| Player Disconnected, " + _peerId);
+            startedGame = false;
         }
 
         private void OnRTReady(bool _isReady){
             if (_isReady) {
                 Debug.Log ("GSM| RT Session Connected...");
+
+                StartCoroutine(CheckIfConnected());
+            }
+        }
+
+        private IEnumerator CheckIfConnected() {
+
+            yield return new WaitForSeconds(3.0f);
+
+            if (startedGame == false) {
+                GameManager.Instance.ShowInfoBanner("Realtime Connect Validation");
+                GetRTSession ().SendData(103, GameSparks.RT.GameSparksRT.DeliveryIntent.RELIABLE, null, new int[]{ 0 }); // send to peerId -> 0, which is the server
             }
         }
 
@@ -119,7 +133,9 @@ namespace Fourzy
                     ProcessOpponentMove(_packet);
                     break;
                 case 100:
+                    startedGame = true;
                     Debug.Log("All players joined realtime session");
+                    GameManager.Instance.ShowInfoBanner("Start Realtime Game");
                     int firstPlayerPeerId = _packet.Data.GetInt(1).Value;
                     // This is the seed from the server, probably should rename it
                     int seed = _packet.Data.GetInt(2).Value;

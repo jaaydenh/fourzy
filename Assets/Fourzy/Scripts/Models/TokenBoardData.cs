@@ -9,6 +9,7 @@ namespace Fourzy
         public string Name;
         public bool Enabled;
         public bool EnabledGallery;
+        public bool EnabledRealtime;
         public List<int> TokenData = new List<int>();
         public List<int> InitialGameBoard = new List<int>();
         public List<MoveInfo> InitialMoves;
