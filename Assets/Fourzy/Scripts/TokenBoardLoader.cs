@@ -70,7 +70,7 @@ namespace Fourzy
             if (gameType == GameType.REALTIME) {
                 var tokenBoardData = tokenBoards
                     .Where(t => t.EnabledRealtime == true)
-                    //.OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
+                    .OrderBy(t => UnityEngine.Random.Range(0, int.MaxValue))
                 .FirstOrDefault();
 
                 TokenBoard tokenboard = new TokenBoard(tokenBoardData.TokenData.ToArray(), tokenBoardData.ID, tokenBoardData.Name, tokenBoardData.InitialMoves, tokenBoardData.InitialGameBoard.ToArray(), true);
