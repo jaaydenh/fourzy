@@ -217,6 +217,11 @@ namespace Fourzy
             int number = 0;
             int number_space = max - min;
             int window_length = 5;
+            
+            if (RandomSeed > 0)
+            {
+                return UnityEngine.Random.Range(min, max);
+            }
 
             if (move == 0 && MoveList != null) move = MoveList.Count;
             int window_start = move % (randomGuid.Length - window_length);
