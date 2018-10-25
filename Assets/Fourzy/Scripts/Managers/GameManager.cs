@@ -348,7 +348,7 @@ namespace Fourzy
 
         public Game GetRandomGame()
         {
-            TokenBoard tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard();
+            TokenBoard tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard(GameType.RANDOM);
             GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.PASSANDPLAY, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
             Game newGame = new Game(null, newGameState, true, false, false, null, ChallengeState.NONE, ChallengeType.NONE, UserManager.Instance.gamePieceId.ToString(), null, null, null, null, null, false);
             return newGame;
@@ -358,7 +358,7 @@ namespace Fourzy
         {
             Debug.Log("GameManager OpenNewGame tokenboardId: " + tokenBoardId);
 
-            TokenBoard tokenBoard = ChallengeManager.Instance.GetTokenBoard(tokenBoardId);
+            TokenBoard tokenBoard = ChallengeManager.Instance.GetTokenBoard(gameType, tokenBoardId);
             Debug.Log("OpenNewGame: tokenboard name: " + tokenBoard.name);
             //If we initiated the challenge, we get to be player 1
             GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, gameType, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
