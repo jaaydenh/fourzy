@@ -291,7 +291,9 @@ namespace Fourzy
             }
             if (RandomSeed > 0)
             {
-                UnityEngine.Random.InitState(RandomSeed + MoveList.Count);
+                int m = 0;
+                if (MoveList != null) m = MoveList.Count;
+                UnityEngine.Random.InitState(RandomSeed + m );
             }
 
             GameBoard.completedMovingPieces.Clear();
