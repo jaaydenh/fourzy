@@ -28,11 +28,12 @@ namespace Fourzy {
             if (momentum == 0) 
             {
                 // if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD) {
-                    //int numMoves = GameManager.Instance.gameState.moveList.Count;
-                    //long tempMomentum = 20 + System.Int64.Parse(GameManager.Instance.challengeInstanceId.Substring(0, 10), System.Globalization.NumberStyles.HexNumber) % 20;
-                    //this.momentum = (int)tempMomentum;
-                    this.momentum = 30;
-                    //Debug.Log("MovingGamePiece: Momentum: " + this.momentum);
+                //int numMoves = GameManager.Instance.gameState.moveList.Count;
+                //long tempMomentum = 20 + System.Int64.Parse(GameManager.Instance.challengeInstanceId.Substring(0, 10), System.Globalization.NumberStyles.HexNumber) % 20;
+                //this.momentum = (int)tempMomentum;
+                //   this.momentum = Random.Range(20, 32);
+                this.momentum = GameManager.Instance.activeGame.gameState.GetRandomNumber(Constants.numColumns + Constants.numRows, Constants.numColumns + Constants.numRows + 10);
+                //Debug.Log("MovingGamePiece: Momentum: " + this.momentum);
                 // } else {
                     // this.momentum = Random.Range(20, 40);
                 // }
