@@ -224,6 +224,9 @@ namespace Fourzy
             }
 
             if (move == 0 && MoveList != null) move = MoveList.Count;
+
+            if (randomGuid.Length == 0) randomGuid = System.Guid.NewGuid().ToString();
+
             int window_start = move % (randomGuid.Length - window_length);
 
             string window = randomGuid.Substring(window_start, window_length);

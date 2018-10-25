@@ -40,10 +40,17 @@ namespace Fourzy {
                 //long tempMomentum = 20 + System.Int64.Parse(GameManager.Instance.challengeInstanceId.Substring(0, 10), System.Globalization.NumberStyles.HexNumber) % 20;
                 //this.momentum = (int)tempMomentum;
                 //   this.momentum = Random.Range(20, 32);
-                this.momentum = GameManager.Instance.activeGame.gameState.GetRandomNumber(Constants.numColumns + Constants.numRows, Constants.numColumns + Constants.numRows + 10);
+                if (GameManager.Instance.activeGame == null)
+                {
+                    this.momentum = Constants.numColumns + Constants.numRows;
+                }
+                else
+                {
+                    this.momentum = GameManager.Instance.activeGame.gameState.GetRandomNumber(Constants.numColumns + Constants.numRows, Constants.numColumns + Constants.numRows + 10);
+                }
                 //Debug.Log("MovingGamePiece: Momentum: " + this.momentum);
                 // } else {
-                    // this.momentum = Random.Range(20, 40);
+                // this.momentum = Random.Range(20, 40);
                 // }
             } 
             else 

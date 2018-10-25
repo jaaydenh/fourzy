@@ -1,0 +1,41 @@
+﻿{
+    "ID": "11000",
+    "Name": "Fruit Pack",
+    "FileName": "PuzzlePack11",
+    "CompletedToUnlock": 40,
+    "Enabled": true,
+    "PuzzleChallengeLevels": [
+        {
+            "ID": "102418101",
+            "Name": "Fruit1",
+            "Level": 1,
+            "Enabled": true,
+            "InitialGameBoard": [0,0,1,2,1,1,2,0,
+                                 0,0,0,1,2,2,0,0,
+                                 0,0,0,0,1,2,0,0,
+                                 0,0,0,0,0,0,0,0,
+                                 0,0,0,0,0,0,0,0,
+                                 0,0,0,0,0,0,0,0,
+                                 0,0,0,0,0,0,0,0,
+                                 0,0,0,0,0,2,0,0],
+            "MoveGoal": 2,
+            "FirstMove": 1,
+            "InitialTokenBoard": [6,0,0,0,0,0,0,6,
+                                  0,0,0,0,0,0,0,0,
+                                  0,0,0,0,0,0,0,0,
+                                  0,0,0,0,0,14,0,0,
+                                  0,0,0,0,0,0,0,0,
+                                  0,0,0,0,0,0,0,0,
+                                  0,0,0,0,0,0,0,0,
+                                  6,0,0,0,0,0,0,6],
+            "RandomMoves": [
+             {
+                    "Location": 3,
+                    "Direction": 3,
+                    "Weight": 1.0
+                }
+            ],
+            "Moves": []
+        }
+    ]
+}
