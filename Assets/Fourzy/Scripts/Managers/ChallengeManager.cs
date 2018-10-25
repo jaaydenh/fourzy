@@ -501,6 +501,7 @@ namespace Fourzy
         private void GetGamePieceIdFailure(LogEventResponse response) {
             Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
             AnalyticsManager.LogError("get_player_gamepiece_error", response.Errors.JSON);
+            GameManager.Instance.OpenGame(GameManager.Instance.activeGame);
         }
 
         public void OpenNewMultiplayerGame() {

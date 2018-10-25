@@ -37,23 +37,14 @@ namespace Fourzy
             matchMakingStrings = GameStringsLoader.Instance.GetMatchMakingWaitingStrings();
         }
 
-        void OnEnable() 
-        {
-            RealtimeManager.OnRealtimeReady += StartRealtimeGame;
-            RealtimeManager.OnRealtimeMatchNotFound += RealtimeMatchNotFound;
-        }
-
-        void OnDisable() 
-        {
-            RealtimeManager.OnRealtimeReady -= StartRealtimeGame;
-            RealtimeManager.OnRealtimeMatchNotFound -= RealtimeMatchNotFound;
-        }
-
         public override void Show()
         {
             base.Show();
 
-            userFacingMessage.text = "Finding Match...";
+            RealtimeManager.OnRealtimeReady += StartRealtimeGame;
+            RealtimeManager.OnRealtimeMatchNotFound += RealtimeMatchNotFound;
+
+            userFacingMessage.text = "Finding Match";
             // backButton.SetActive(false);
             if (isRealtime) {
                 Mixpanel.StartTimedEvent("Find Realtime Match");
@@ -68,6 +59,9 @@ namespace Fourzy
 
         public override void Hide()
         {
+            RealtimeManager.OnRealtimeReady -= StartRealtimeGame;
+            RealtimeManager.OnRealtimeMatchNotFound -= RealtimeMatchNotFound;
+
             base.Hide();
             timerText.text = string.Empty;
 
@@ -183,6 +177,7 @@ namespace Fourzy
 
         private void StartRealtimeGame(int firstPlayerPeerId, int seed) 
         {
+            GameManager.Instance.ShowInfoBanner("Start Realtime Game");
             var props = new Value();
             props["Status"] = "Found";
             Mixpanel.Track("Find Realtime Match", props);

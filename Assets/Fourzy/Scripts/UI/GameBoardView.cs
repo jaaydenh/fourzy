@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Fourzy
@@ -158,7 +159,48 @@ namespace Fourzy
             gamePiece.column = move.position.column;
             gamePiece.row = move.position.row;
 
-            gamePiece.Move(movingPieces, activeTokens);
+            var copyGamePieces = new GamePiece[numRows, numColumns];
+            for (int i = 0; i < numRows; i++)
+            {
+                for (int j = 0; j < numColumns; j++)
+                {
+                    copyGamePieces[i, j] = gamePieces[i, j];
+                }
+            }
+
+            GamePiece movingPiece = gamePiece;
+            for (int i = 0; i < movingPieces.Count; i++)
+            {
+                MovingGamePiece mgp = movingPieces[i];
+                Position end = mgp.endPosition;
+                mgp.gamePiece = movingPiece;
+                movingPiece = copyGamePieces[end.row, end.column];
+                copyGamePieces[end.row, end.column] = mgp.gamePiece;
+            }
+
+            this.StartCoroutine(MovePiecesRoutine(movingPieces, activeTokens));
+        }
+
+        private IEnumerator MovePiecesRoutine(List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
+        {
+            for (int i = 0; i < movingPieces.Count; i++)
+            {
+                MovingGamePiece mgp = movingPieces[i];
+                bool firstPiece = (i == 0);
+                bool nextPieceExists = (i + 1 < movingPieces.Count);
+                mgp.playHitAnimation = ((nextPieceExists && mgp.positions.Count > 2) || firstPiece);
+
+                mgp.gamePiece.Move(mgp, activeTokens);
+
+                if (nextPieceExists)
+                {
+                    GamePiece nextPiece = movingPieces[i + 1].gamePiece;
+                    while (!mgp.gamePiece.IsOverlapped(nextPiece))
+                    {
+                        yield return null;
+                    }
+                }
+            }
         }
 
         public GamePiece SpawnPiece(int col, int row, PlayerEnum player)

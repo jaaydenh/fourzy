@@ -40,31 +40,16 @@ namespace Fourzy
             View.SetupZOrder(5);
         }
 
-        public void Move(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece = true)
+        public void Move(MovingGamePiece mgp, List<IToken> activeTokens)
         {
-            this.StartCoroutine(MoveRoutine(movingPieces, activeTokens, firstPiece));
+            this.StartCoroutine(MoveRoutine(mgp, activeTokens));
         }
 
-        private IEnumerator MoveRoutine(List<MovingGamePiece> movingPieces, List<IToken> activeTokens, bool firstPiece) 
+        private IEnumerator MoveRoutine(MovingGamePiece mgp, List<IToken> activeTokens)
         {
-            if (movingPieces.Count == 0) 
-            {
-                Debug.LogError("movingPieces = 0");
-                yield return false;
-
-                throw new UnityException("Method: MoveGamePiece - movingPieces is empty");
-            }
-
             gameBoardView.NumPiecesAnimating++;
 
-            var movingGamePiece = movingPieces[0];
-            movingPieces.RemoveAt(0);
-
-            List<Position> positions = movingGamePiece.positions;
-            Position endPosition = positions[positions.Count - 1];
-            GamePiece nextPiece = gameBoardView.GamePieceAt(endPosition);
-
-            gameBoardView.gamePieces[endPosition.row, endPosition.column] = this;
+            List<Position> positions = mgp.positions;
 
             isMoving = true;
 
@@ -75,8 +60,8 @@ namespace Fourzy
                 int rowDir = positions[nextPos].row - positions[i].row;
                 for (int j = i + 1; j < positions.Count; j++)
                 {
-                    int newColumnDir = positions[j].column - positions[j-1].column;
-                    int newRowDir = positions[j].row - positions[j-1].row;
+                    int newColumnDir = positions[j].column - positions[j - 1].column;
+                    int newRowDir = positions[j].row - positions[j - 1].row;
                     bool isDirectionChanged = (newColumnDir != columnDir || newRowDir != rowDir);
                     if (isDirectionChanged)
                     {
@@ -96,13 +81,11 @@ namespace Fourzy
                     float interpolation = movementCurve.Evaluate(t);
                     CachedTransform.position = Vector3.Lerp(start, end, interpolation);
 
-                    this.CheckNextPieceCollision(nextPiece, movingPieces, activeTokens);
                     this.CheckActiveTokenCollision(activeTokens);
 
                     if (nextPos == positions.Count - 1 && t + 2 * Time.deltaTime * Constants.moveSpeed / distance > 1)
                     {
-                        bool playHitAnimation = ((nextPiece == null && positions.Count > 2) || firstPiece);
-                        View.PlayFinishMovement(playHitAnimation);
+                        View.PlayFinishMovement(mgp.playHitAnimation);
                     }
 
                     yield return null;
@@ -114,33 +97,20 @@ namespace Fourzy
             }
 
             isMoving = false;
+
+            Position endPosition = mgp.endPosition;
+            gameBoardView.gamePieces[endPosition.row, endPosition.column] = this;
             column = endPosition.column;
             row = endPosition.row;
 
-            this.CheckTokensAfterMove(activeTokens, endPosition);
             this.CheckActiveTokenCollision(activeTokens);
-            this.CheckNextPieceCollision(nextPiece, movingPieces, activeTokens);
+            this.CheckTokensAfterMove(activeTokens, endPosition);
 
             View.SetupZOrder(5 + row * 2);
 
             gameBoardView.NumPiecesAnimating--;
 
             yield return true;
-        }
-
-        private void CheckNextPieceCollision(GamePiece nextPiece, List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
-        {
-            if (nextPiece == null || nextPiece.isMoving)
-            {
-                return;
-            }
-
-            if (gamePieceCollider.Distance(nextPiece.gamePieceCollider).isOverlapped)
-            {
-                // Animate punch and hit for both pieces
-
-                nextPiece.Move(movingPieces, activeTokens, false);
-            }
         }
 
         private void CheckTokensAfterMove(List<IToken> activeTokens, Position piecePos)
@@ -166,6 +136,8 @@ namespace Fourzy
                     if (gp)
                     {
                         gp.View.Fade(0f, 1f);
+                        gameBoardView.gamePieces[activeTokens[i].Row, activeTokens[i].Column] = null;
+                        Destroy(gp.gameObject, 1.0f);
                     }
 
                     this.View.FadeAfterPit();
@@ -190,6 +162,8 @@ namespace Fourzy
                             if (gp)
                             {
                                 gp.View.Fade(0f, 1f);
+                                gameBoardView.gamePieces[activeTokens[i].Row, activeTokens[i].Column] = null;
+                                Destroy(gp.gameObject, 1.0f);
                             }
                         }
                     }
@@ -220,6 +194,11 @@ namespace Fourzy
                     activeTokens.RemoveAt(i--);
                 }
             }
+        }
+
+        public bool IsOverlapped(GamePiece gamePiece)
+        {
+            return this.gamePieceCollider.Distance(gamePiece.gamePieceCollider).isOverlapped;
         }
 
     }

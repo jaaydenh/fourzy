@@ -61,12 +61,12 @@ SpriteAtlas:
   - {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
   - {fileID: 21300000, guid: e8926444169da44ec8d1ca66ebe2040c, type: 3}
   - {fileID: 21300000, guid: 1a881a67ed54c476493a115db846f636, type: 3}
-  - {fileID: 21300000, guid: da7c6da7b42064dbe8eab340bab57390, type: 3}
   - {fileID: 21300000, guid: 84fe40e7948c54c57995635a2d5f081a, type: 3}
+  - {fileID: 21300000, guid: 67692cd97f41f4e4990551c6ce857e95, type: 3}
   - {fileID: 21300000, guid: 6bec12e9c39f244fbaf24bdc6baa2852, type: 3}
   - {fileID: 21300000, guid: 51d86dda53ccf4eb9831e84c249298fa, type: 3}
-  - {fileID: 21300000, guid: b39f5b6b0369f44fda61246bd9a7090a, type: 3}
   - {fileID: 21300000, guid: f5c45e0c7d6134dd5915636c42d085a9, type: 3}
+  - {fileID: 21300000, guid: e28f5e8c6a8f44c68a87123189c6ecab, type: 3}
   - {fileID: 21300000, guid: a7808e2d1e66e4370b30a2ac0d36ad46, type: 3}
   - {fileID: 21300000, guid: 1f21b1de07fbd4da09e8d68b039983d3, type: 3}
   m_PackedSpriteNamesToIndex:
@@ -75,12 +75,12 @@ SpriteAtlas:
   - windowTrainingGarden
   - IslandBoard
   - boardTrainingGarden2
-  - IslandBackground
   - PopupBackground
+  - ForestBackground
   - backgroundUI
   - TrainingGardenBackground
-  - ForestBackground
   - boardTrainingGarden
+  - IslandBackground
   - backgroundPatternUI
   - ForestBoard
   m_Tag: LargeSprites

@@ -438,7 +438,7 @@ Prefab:
     - target: {fileID: 224292842511163882, guid: 9fbe6e8816c39402aa2ec09a7a20bbdd,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 108.4
+      value: 108.400024
       objectReference: {fileID: 0}
     - target: {fileID: 224292842511163882, guid: 9fbe6e8816c39402aa2ec09a7a20bbdd,
         type: 2}
@@ -754,6 +754,12 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 114620369907094378, guid: 3b153745504954e599a747ae789ac703,
+        type: 2}
+      propertyPath: gameThemes.Array.data[2].GameBoard
+      value: 
+      objectReference: {fileID: 21300000, guid: e5c48d04ca1374c698544f2347a02129,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b153745504954e599a747ae789ac703, type: 2}
   m_IsPrefabAsset: 0

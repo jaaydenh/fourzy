@@ -157,8 +157,8 @@ PlayerSettings:
     iOS: com.PartyTroll.Fourzy
     tvOS: com.PartyTroll.Fourzy
   buildNumber:
-    iOS: 36
-  AndroidBundleVersionCode: 37
+    iOS: 38
+  AndroidBundleVersionCode: 38
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 0

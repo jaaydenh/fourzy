@@ -1142,12 +1142,12 @@ MonoBehaviour:
     GameBoard: {fileID: 21300000, guid: 1a881a67ed54c476493a115db846f636, type: 3}
   - Name: Mystery Forest
     Preview: {fileID: 21300000, guid: c160e712160e34fe38fdb3a33069cd8b, type: 3}
-    GameBackground: {fileID: 21300000, guid: b39f5b6b0369f44fda61246bd9a7090a, type: 3}
+    GameBackground: {fileID: 21300000, guid: 67692cd97f41f4e4990551c6ce857e95, type: 3}
     GameBoardView: {fileID: 0}
     GameBoard: {fileID: 21300000, guid: 1f21b1de07fbd4da09e8d68b039983d3, type: 3}
   - Name: Sandy Island
     Preview: {fileID: 21300000, guid: 884e828293a874cd69156202e84b89ac, type: 3}
-    GameBackground: {fileID: 21300000, guid: da7c6da7b42064dbe8eab340bab57390, type: 3}
+    GameBackground: {fileID: 21300000, guid: e28f5e8c6a8f44c68a87123189c6ecab, type: 3}
     GameBoardView: {fileID: 0}
     GameBoard: {fileID: 21300000, guid: e8926444169da44ec8d1ca66ebe2040c, type: 3}
 --- !u!114 &114651625545579072
