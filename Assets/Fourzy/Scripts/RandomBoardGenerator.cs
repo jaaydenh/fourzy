@@ -1721,7 +1721,7 @@ namespace Fourzy
              { "doublecross", 50},
              { "fullcheckers", 50},
              { "diaglines", 50},
-             { "blockalledges", 100},
+             { "blockalledges", 20},
              { "blocktwo", 0},
              { "blockcorner", 0 },
              { "centerplus", 50},

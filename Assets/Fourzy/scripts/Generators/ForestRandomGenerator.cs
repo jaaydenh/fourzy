@@ -15,7 +15,7 @@ public class ForestRandomGenerator : BoardGenerator {
             return new Dictionary<string, int>()
             {
                 { "circle_bomb", 0},
-                { "clear", 10 },
+                { "clear", 0 },
                 { "sticky", 10 },
                 { "ice", 0 },
                 { "ghost", 10},
@@ -78,7 +78,8 @@ public class ForestRandomGenerator : BoardGenerator {
              { "diagonalwaves", 0},
              { "donuts", 0},
              { "crookedlines", 0},
-             { "wheel", 20}
+             { "wheel", 20},
+             { "faceoff", 1000}
             };
         }
     }
@@ -104,13 +105,15 @@ public class ForestRandomGenerator : BoardGenerator {
             return new Dictionary<string, int>()
             {
              { "line", 200},
-             { "rectangle", 50},
-             { "o_shape", 100 },
+             { "rectangle", 100},
+             { "o_shape", 25 },
              { "l_shape", 50 },
              { "u_shape", 10 },
-             { "checkers", 50 },
+             { "checkers", 100 },
              { "cross", 200},
-             { "diagcross", 200},
+             { "smallplus", 100},
+             { "2x2", 200},
+             { "diagcross", 100},
              { "drops", 50},
              { "steps", 0},
              { "dotsquare", 0},
@@ -119,8 +122,8 @@ public class ForestRandomGenerator : BoardGenerator {
              { "corners", 100},
              { "cornerbrackets", 100},
              { "riverofarrows", 0},
-             { "cycle", 0},
-             { "faceoff", 0}
+             { "cycle", 500},
+             { "faceoff", 500}
             };
         }
     }
@@ -130,15 +133,15 @@ public class ForestRandomGenerator : BoardGenerator {
         {
             return new Dictionary<string, int>()
             {
-                { "up_arrow", 2 },
-                { "down_arrow", 2 },
-                { "left_arrow", 2 },
-                { "right_arrow", 2 },
+                { "up_arrow", 1 },
+                { "down_arrow", 1 },
+                { "left_arrow", 1 },
+                { "right_arrow", 1 },
                 { "pit", 5 },
                 { "sticky", 10},
                 { "ice", 0},
-                { "water", 10 },
-                { "fruit", 5 },
+                { "water", 20 },
+                { "fruit", 10 },
                 { "left_turn", 0 },
                 { "right_turn", 0 },
                 { "circle_bomb", 0 }

@@ -27,7 +27,9 @@ public abstract class BoardGenerator {
 
     public virtual List<string> BoardRules { get; set; }
 
-    public static List<Token> AvoidTheseTokensOnEdges = new List<Token>() { Token.FRUIT, Token.PIT, Token.CIRCLE_BOMB, Token.BUMPER, Token.WATER};
+    public static List<Token> AvoidTheseTokensOnEdges = new List<Token>() { Token.PIT, Token.CIRCLE_BOMB, Token.BUMPER};
+    //public static List<Token> AvoidTheseTokensOnEdges = new List<Token>() { Token.FRUIT, Token.PIT, Token.CIRCLE_BOMB, Token.BUMPER, Token.WATER };
+
 
     public static Dictionary<string, int> LineTypes = new Dictionary<string, int>()
             {
@@ -53,16 +55,19 @@ public abstract class BoardGenerator {
         SetCorners(ref newBoard.tokenBoard);
         //RunRules(ref newBoard.tokenBoard);
 
-        CheckArrows(ref newBoard.tokenBoard);
+        //CheckArrows(ref newBoard.tokenBoard);
         CheckPits(ref newBoard.tokenBoard);
         CheckMaxBlockers(ref newBoard.tokenBoard, 6);
         CheckEdges(ref newBoard.tokenBoard);
         CheckMaxTokenType(ref newBoard.tokenBoard, Token.GHOST, 8);
-        
-        CheckMaxArrows(ref newBoard.tokenBoard, 8);
-        int before_count = CountTokenType(ref newBoard.tokenBoard, Token.STICKY);
+        CheckMaxTokenType(ref newBoard.tokenBoard, Token.PIT, 8);
+        CheckMaxTokenType(ref newBoard.tokenBoard, Token.CIRCLE_BOMB, 8);
+
+
+        CheckMaxArrows(ref newBoard.tokenBoard, 12);
+        //int before_count = CountTokenType(ref newBoard.tokenBoard, Token.STICKY);
         CheckMaxStopTokens(ref newBoard.tokenBoard, 16);
-        int after_count = CountTokenType(ref newBoard.tokenBoard, Token.STICKY);
+        //int after_count = CountTokenType(ref newBoard.tokenBoard, Token.STICKY);
 
         //SetCorners(ref newBoard.tokenBoard);
         //CheckArrows(ref newBoard.tokenBoard);
@@ -146,6 +151,8 @@ public abstract class BoardGenerator {
         int defaultTokenId = BoardGeneratorTools.ConvertTokenNameToTokenId(defaultFeatureTokenName);
         int insert_column = 0;
         int insert_row = 0;
+
+        Console.Log("LargeFeature=" + feature + " with " + defaultTokenId);
 
         switch (feature)
         {
@@ -549,6 +556,29 @@ public abstract class BoardGenerator {
 
                 break;
 
+            case "halfalledges":
+                int hae_height = Constants.numRows;
+                int hae_width = Constants.numColumns;
+                int oddvseven = UnityEngine.Random.Range(1, 2);
+
+                insert_column = 0;
+                insert_row = 0;
+                
+                for (int r = 0; r < hae_height; r++)
+                {
+                    for (int c = 0; c < hae_width; c++)
+                    {
+                        if ((c == 0 || c == hae_width - 1) && (r % 2 == 0) || (r == 0 || r == hae_height - 1) && (c % 2 == 0))
+                        {
+                            TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            Console.Log("EDGE pos=" + r + "," + c);
+                        }
+                    }
+                }
+
+                int a = 0;
+                break;
+
 
             case "clearalledges":
                 int clear_height = Constants.numRows;
@@ -580,6 +610,28 @@ public abstract class BoardGenerator {
                     for (int c = 0; c < check_width; c++)
                     {
                         if ((c + r) % 2 == 0) TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                    }
+                }
+
+                break;
+
+
+            case "fullbigcheckers":
+
+                insert_column = 0;
+                insert_row = 0; 
+
+                for (int r = 0; r < Constants.numRows; r+=2)
+                {
+                    for (int c = 0; c < Constants.numColumns; c+=2)
+                    {
+                        if ((c + r) % 4 == 0)
+                        {
+                            TokenData[insert_row + r, insert_column + c] = defaultTokenId;
+                            TokenData[insert_row + r +1, insert_column + c] = defaultTokenId;
+                            TokenData[insert_row + r , insert_column + c +1] = defaultTokenId;
+                            TokenData[insert_row + r+1, insert_column + c+1] = defaultTokenId;
+                        }
                     }
                 }
 
@@ -707,6 +759,46 @@ public abstract class BoardGenerator {
                         break;
                 }
                 break;
+
+            case "faceoff":
+                int faceoff_height = Constants.numRows;
+                int faceoff_width = Constants.numColumns;
+                int faceoff_direction = UnityEngine.Random.Range(1, 2);
+
+                insert_column = 0;
+                insert_row = 0;
+
+                for (int r = 0; r < faceoff_height; r++)
+                {
+                    for (int c = 0; c < faceoff_width; c++)
+                    {
+                        if (faceoff_direction == 1)
+                        {
+                            if (c == 0)
+                            {
+                                TokenData[insert_row + r, insert_column + c] = (int)Token.RIGHT_ARROW;
+                            }
+                            if (c == faceoff_width - 1)
+                            {
+                                TokenData[insert_row + r, insert_column + c] = (int)Token.LEFT_ARROW;
+                            }
+                        }
+                        else
+                        {
+                            if (r == 0)
+                            {
+                                TokenData[insert_row + r, insert_column + c] = (int)Token.DOWN_ARROW;
+                            }
+                            if (r == faceoff_height - 1)
+                            {
+                                TokenData[insert_row + r, insert_column + c] = (int)Token.UP_ARROW;
+                            }
+
+                        }
+
+                    }
+                }
+                break;
         }
 
     }
@@ -730,6 +822,8 @@ public abstract class BoardGenerator {
         int defaultTokenId = BoardGeneratorTools.ConvertTokenNameToTokenId(defaultFeatureTokenName);
         int insert_column = 0;
         int insert_row = 0;
+
+        Console.Log("SmallFeature=" + feature + " with " + defaultTokenId);
 
         switch (feature)
         {
@@ -827,7 +921,7 @@ public abstract class BoardGenerator {
                 TokenData[insert_row, insert_column + 1] = defaultTokenId;
                 TokenData[insert_row, (insert_column + smile_width - 1)] = defaultTokenId;
                 TokenData[(insert_row + smile_height - 1), insert_column] = defaultTokenId;
-                TokenData[(insert_row + smile_height - 1), (insert_column + smile_width)] = defaultTokenId;
+                TokenData[(insert_row + smile_height - 1), (insert_column + smile_width - 1)] = defaultTokenId;
 
                 for (int c = 0; c < smile_width; c++)
                 {
@@ -899,6 +993,35 @@ public abstract class BoardGenerator {
                 TokenData[insert_row, insert_column + dotsquare_width] = defaultTokenId;
                 TokenData[insert_row + dotsquare_height, insert_column] = defaultTokenId;
                 TokenData[insert_row + dotsquare_height, insert_column + dotsquare_width] = defaultTokenId;
+
+                break;
+
+
+            case "smallplus":
+
+                int plus_height = 3;
+                int plus_width = 3;
+
+                insert_column = UnityEngine.Random.Range(0, Constants.numColumns - plus_width);
+                insert_row = UnityEngine.Random.Range(0, Constants.numRows - plus_height);
+
+                TokenData[insert_row, insert_column +1] = defaultTokenId;
+                TokenData[insert_row +1, insert_column] = defaultTokenId;
+                TokenData[insert_row +1, insert_column+2] = defaultTokenId;
+                TokenData[insert_row + plus_height, insert_column + 1] = defaultTokenId;
+
+                break;
+
+
+            case "2x2":
+
+                insert_column = UnityEngine.Random.Range(0, Constants.numColumns - 2);
+                insert_row = UnityEngine.Random.Range(0, Constants.numRows - 2);
+
+                TokenData[insert_row, insert_column] = defaultTokenId;
+                TokenData[insert_row , insert_column+1] = defaultTokenId;
+                TokenData[insert_row + 1, insert_column] = defaultTokenId;
+                TokenData[insert_row + 1, insert_column + 1] = defaultTokenId;
 
                 break;
 
@@ -1108,11 +1231,70 @@ public abstract class BoardGenerator {
                 {
                     for (int c = 0; c < clear_width; c++)
                     {
-                        if (c == 0 || r == 0 || c == clear_width - 1 || r == clear_height - 1) TokenData[insert_row + r, insert_column + c] = 0;
+                        if (c == 0 || r == 0 || c == clear_width - 1 || r == clear_height - 1) TokenData[insert_row + r, insert_column + c] = (int) Token.EMPTY;
                     }
                 }
 
                 break;
+
+
+            case "faceoff":
+                int faceoff_height = UnityEngine.Random.Range(2,Constants.numRows);
+                int faceoff_width = UnityEngine.Random.Range(2,Constants.numColumns);
+                int faceoff_direction = UnityEngine.Random.Range(1, 2);
+
+                insert_column = UnityEngine.Random.Range(0, Constants.numColumns - faceoff_width);
+                insert_row = UnityEngine.Random.Range(0, Constants.numRows - faceoff_height);
+
+                for (int r = 0; r < faceoff_height; r++)
+                {
+                    for (int c = 0; c < faceoff_width; c++)
+                    {
+                        if (faceoff_direction==1)
+                        {
+                            if (c == 0 )
+                            {
+                                TokenData[insert_row + r, insert_column + c] = (int)Token.RIGHT_ARROW;
+                            }
+                            if ( c == faceoff_width - 1)
+                            {
+                                TokenData[insert_row + r, insert_column + c] = (int)Token.LEFT_ARROW;
+                            }
+                        }
+                        else
+                        {
+                            if (r == 0)
+                            {
+                                TokenData[insert_row + r, insert_column + c] = (int)Token.DOWN_ARROW;
+                            }
+                            if (r == faceoff_height - 1)
+                            {
+                                TokenData[insert_row + r, insert_column + c] = (int)Token.UP_ARROW;
+                            }
+
+                        }
+
+                    }
+                }
+
+                break;
+
+
+            case "cycle":
+                int cycle_height = UnityEngine.Random.Range(1,Constants.numRows-2);
+                int cycle_width = UnityEngine.Random.Range(1, Constants.numColumns - 2);
+                int cycle_direction = UnityEngine.Random.Range(1, 2);
+
+                insert_column = UnityEngine.Random.Range(1, Constants.numColumns - cycle_width-1);
+                insert_row = UnityEngine.Random.Range(1, Constants.numRows - cycle_height-1);
+
+                TokenData[insert_row, insert_column] = cycle_direction==1?(int)Token.DOWN_ARROW:(int)Token.RIGHT_ARROW;
+                TokenData[insert_row, insert_column + cycle_width] = cycle_direction == 1 ? (int)Token.LEFT_ARROW : (int)Token.DOWN_ARROW;
+                TokenData[insert_row + cycle_height, insert_column] = cycle_direction == 1 ? (int)Token.RIGHT_ARROW : (int)Token.UP_ARROW;
+                TokenData[insert_row + cycle_height, insert_column + cycle_width] = cycle_direction == 1 ? (int)Token.UP_ARROW : (int)Token.LEFT_ARROW;
+
+                break;
+
         }
         
     }
@@ -1157,15 +1339,15 @@ public abstract class BoardGenerator {
 
     protected void RunRules(ref int[,] board)
     {
-        CheckArrows(ref board);
-        CheckPits(ref board);
-        CheckMaxBlockers(ref board, 6);
-        CheckMaxArrows(ref board, 10);
-        CheckMaxStopTokens(ref board, 16);
-        CheckEdges(ref board);
-        //CheckMaxTokenType(ref board, Token.WATER, 12);
-        //CheckMaxTokenType(ref board, Token.STICKY, 12);
-        CheckMaxTokenType(ref board, Token.GHOST, 8);
+        //CheckArrows(ref board);
+        //CheckPits(ref board);
+        //CheckMaxBlockers(ref board, 6);
+        //CheckMaxArrows(ref board, 10);
+        //CheckMaxStopTokens(ref board, 16);
+        //CheckEdges(ref board);
+        ////CheckMaxTokenType(ref board, Token.WATER, 12);
+        ////CheckMaxTokenType(ref board, Token.STICKY, 12);
+        //CheckMaxTokenType(ref board, Token.GHOST, 8);
       
     }
 
@@ -1506,7 +1688,7 @@ public abstract class BoardGenerator {
     {
         switch (EvalToken)
         {
-            case (int)Token.WATER:
+            //case (int)Token.WATER:
             case (int)Token.PIT:
             case (int)Token.BUMPER:
                 {
@@ -1633,6 +1815,7 @@ public static TokenBoard GenerateBoard(int seed = 0, Area GeneratorArea = Area.N
         switch (TokenName)
         {
             case "clear":
+                return (int)Token.EMPTY;
             case "empty":
                 return (int)Token.EMPTY;
             case "up_arrow":
