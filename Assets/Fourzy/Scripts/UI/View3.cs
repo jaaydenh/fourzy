@@ -175,9 +175,25 @@ namespace Fourzy
                 userNameLabel.text = user.userName;
             }
 
-            gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(user.gamePieceId);
+            UpdateGamePieceIcon(user.gamePieceId);
+
             gamePieceNameLabel.text = GameContentManager.Instance.GetGamePieceName(user.gamePieceId);
             areaSelectButton.GetComponent<Image>().sprite = GameContentManager.Instance.GetCurrentTheme().Preview;
+        }
+
+        void UpdateGamePieceIcon(int gamePieceId)
+        {
+            gamePieceImage.enabled = false;
+            foreach (Transform t in gamePieceImage.transform)
+            {
+                Destroy(t.gameObject);
+            }
+            GamePiece prefab = GameContentManager.Instance.GetGamePiecePrefab(gamePieceId);
+            GamePiece pieceIcon = Instantiate(prefab, gamePieceImage.transform, false);
+            pieceIcon.CachedTransform.localPosition = Vector3.zero;
+            pieceIcon.CachedTransform.localScale = new Vector3(100, 100, 100);
+            pieceIcon.CachedGO.SetLayerRecursively(gamePieceImage.gameObject.layer);
+            pieceIcon.View.StartBlinking();
         }
 
         void UserManager_OnUpdateUserInfo()
@@ -190,7 +206,7 @@ namespace Fourzy
 
         void UserManager_OnUpdateUserGamePieceID(int gamePieceId)
         {
-            gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceId);
+            UpdateGamePieceIcon(gamePieceId);
             gamePieceNameLabel.text = GameContentManager.Instance.GetGamePieceName(gamePieceId);
         }
 

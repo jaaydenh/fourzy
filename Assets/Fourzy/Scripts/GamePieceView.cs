@@ -309,6 +309,11 @@ namespace Fourzy
             pieceAnimator.Play(h_Idle, indexBaseLayer);
         }
 
+        public void StartBlinking()
+        {
+            this.StartCoroutine(BlinkingRoutine());
+        }
+
         private IEnumerator BlinkingRoutine()
         {
             float t = 0;
