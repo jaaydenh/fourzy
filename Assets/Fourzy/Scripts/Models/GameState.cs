@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace Fourzy
@@ -26,8 +28,108 @@ namespace Fourzy
         public List<Move> MoveList { get; private set; }
         public int Player1MoveCount { get; private set; }
         public int Player2MoveCount { get; private set; }
+        const char ColDelimiter = ',';
+        const char RowDelimiter = '|';
+        const char DataDelimiter = ':';
+        public int RandomSeed = -1;
 
-        public GameState (int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] gameBoardData, bool isGameOver, List<Move> moveList) {
+        public string UniqueId { get {
+
+                //What do we need to have?
+                //where are the pieces for player 1
+                //where are the pieces for player 2
+                //where are the tokens?
+
+                StringBuilder StringId = new StringBuilder();
+
+                for (int r = 0; r < Constants.numRows; r++)
+                {
+                    for (int c = 0; c < Constants.numColumns; c++)
+                    {
+                        StringId.Append(GameBoard.GetCell(c, r));
+                    }
+                }
+
+                StringId.Append(DataDelimiter);
+
+                for (int r = 0; r < Constants.numRows; r++)
+                {
+                    for (int c = 0; c < Constants.numColumns; c++)
+                    {
+                        StringId.Append((int)TokenBoard.tokens[r,c].tokenType + ColDelimiter);
+                    }
+                    StringId.Append(RowDelimiter);
+                }
+
+                StringId.Append(DataDelimiter);
+                StringId.Append(IsPlayerOneTurn.ToString());
+
+                string rval = StringId.ToString();
+                //StringCompression isn't working yet.
+                //string rval = StringCompression.Zip(StringId.ToString());
+                //string rval_back = StringCompression.UnZip(rval);
+                return rval; 
+
+            } }
+
+        public GameState(string UniqueIdString)
+            {
+          
+            string[] splitme= UniqueId.Split(':');
+            string pieces = splitme[0];
+            string tokens = splitme[1];
+            string curplayer = splitme[2];
+         
+            GameBoard = new GameBoard(this, Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
+            for (int r = 0; r < Constants.numRows; r++)
+            {
+                for (int c = 0; c < Constants.numColumns; c++)
+                {
+                    GameBoard.SetCell(c,r,(PlayerEnum) Convert.ToInt32(pieces.Substring(r * Constants.numColumns + c, 1)));
+                }
+            }
+
+            int[,] read_tokens = new int[Constants.numRows, Constants.numColumns];
+            int read_column = 0;
+            int read_row = 0;
+            string[] parse_rows = tokens.Split(RowDelimiter);
+            foreach (string rowstring in parse_rows)
+            {
+                string[] parse_cols = tokens.Split(ColDelimiter);
+                foreach (string tokenstring in parse_rows)
+                {
+                    read_tokens[read_row, read_column] = int.Parse(tokenstring); 
+                    read_column++;
+                }
+                read_row++;
+            }
+
+            TokenBoard = new TokenBoard(read_tokens,"id","name",new List<MoveInfo>(), null, true);
+
+
+            // Debug.Log("GameState 1");
+            this.numRows = Constants.numRows;
+            this.numColumns = Constants.numColumns;
+            this.IsPlayerOneTurn = bool.Parse(curplayer);
+
+            //this.GameType = gameType;
+            //this.isCurrentPlayerTurn = isCurrentPlayerTurn;
+            this.IsGameOver = false;
+            this.Winner = PlayerEnum.EMPTY;
+
+            Player1MoveCount = 0;
+            Player2MoveCount = 0;
+
+            isMoveableUp = new int[numColumns * numRows];
+            isMoveableDown = new int[numColumns * numRows];
+            isMoveableLeft = new int[numColumns * numRows];
+            isMoveableRight = new int[numColumns * numRows];
+
+            //InitGameState(gameBoardData);
+        }
+
+
+        public GameState (int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] gameBoardData, bool isGameOver, List<Move> moveList, int RandomSeed = -1) {
             // Debug.Log("GameState 1");
             this.numRows = numRows;
             this.numColumns = numColumns;
@@ -39,6 +141,7 @@ namespace Fourzy
             this.IsGameOver = isGameOver;
             this.MoveList = moveList;
             this.Winner = PlayerEnum.EMPTY;
+            this.RandomSeed = RandomSeed;
 
             Player1MoveCount = 0;
             Player2MoveCount = 0;
@@ -51,7 +154,7 @@ namespace Fourzy
             InitGameState(gameBoardData);
         }
 
-        public GameState(int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, bool isGameOver, TokenBoard tokenBoard, PlayerEnum winner, List<Move> moveList, int[] previousGameboardData) {
+        public GameState(int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, bool isGameOver, TokenBoard tokenBoard, PlayerEnum winner, List<Move> moveList, int[] previousGameboardData, int RandomSeed = -1) {
             // Debug.Log("GameState 2");
             this.numRows = numRows;
             this.numColumns = numColumns;
@@ -68,13 +171,15 @@ namespace Fourzy
             isMoveableDown = new int[numColumns * numRows];
             isMoveableLeft = new int[numColumns * numRows];
             isMoveableRight = new int[numColumns * numRows];
+            this.RandomSeed = RandomSeed;
 
             InitGameState(previousGameboardData);
         }
 
         public GameState Clone()
         {
-            return new GameState(numRows, numColumns, GameType, IsPlayerOneTurn, isCurrentPlayerTurn, TokenBoard, GameBoard.ToArray(), IsGameOver, MoveList);
+            GameState GS = new GameState(numRows, numColumns, GameType, IsPlayerOneTurn, isCurrentPlayerTurn, TokenBoard, GameBoard.ToArray(), IsGameOver, MoveList, RandomSeed);
+            return GS;
         }
 
         private void InitGameState(int[] gameBoardData) {
@@ -112,6 +217,16 @@ namespace Fourzy
             int number = 0;
             int number_space = max - min;
             int window_length = 5;
+            
+            if (RandomSeed > 0)
+            {
+                return UnityEngine.Random.Range(min, max);
+            }
+
+            if (move == 0 && MoveList != null) move = MoveList.Count;
+
+            if (randomGuid.Length == 0) randomGuid = System.Guid.NewGuid().ToString();
+
             int window_start = move % (randomGuid.Length - window_length);
 
             string window = randomGuid.Substring(window_start, window_length);
@@ -181,6 +296,12 @@ namespace Fourzy
             } else {
                 previousGameBoard = GameBoard.Clone();
                 PreviousTokenBoard = TokenBoard.Clone();
+            }
+            if (RandomSeed > 0)
+            {
+                int m = 0;
+                if (MoveList != null) m = MoveList.Count;
+                UnityEngine.Random.InitState(RandomSeed + m );
             }
 
             GameBoard.completedMovingPieces.Clear();

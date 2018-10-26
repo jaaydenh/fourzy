@@ -116,7 +116,7 @@ namespace Fourzy
             }
         }
 
-        public TokenBoard GetTokenBoard(string tokenBoardId = null) 
+        public TokenBoard GetTokenBoard(GameType gameType, string tokenBoardId = null) 
         {
             // Debug.Log("ChallengeManager: GetTokenBoard: " + tokenBoardId);
             if (tokenBoardId != null) 
@@ -130,7 +130,7 @@ namespace Fourzy
             }
 
             Debug.Log("GetRandomTokenBoard");
-            return tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard();
+            return tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard(gameType);
         }
 
         public void SubmitPuzzleCompleted() {
@@ -470,11 +470,13 @@ namespace Fourzy
             Opponent opponent = new Opponent(opponentId, opponentName, null);
 
             // tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoardByIndex(tokenBoardIndex);
-            tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard(seed);
+            tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard(GameType.REALTIME, seed);
 
-            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.REALTIME, true, isFirstPlayer, tokenBoard, tokenBoard.initialGameBoard, false, null);
+            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.REALTIME, true, isFirstPlayer, tokenBoard, tokenBoard.initialGameBoard, false, null, seed);
+ 
             Game game = new Game(null, gameState, isFirstPlayer, false, false, opponent, ChallengeState.NONE, ChallengeType.STANDARD, UserManager.Instance.gamePieceId.ToString(), "0", null, null, null, null, true);
             GameManager.Instance.activeGame = game;
+
 
             Dictionary<String, object> customAttributes = new Dictionary<String, object>();
             customAttributes.Add("PlayerName", UserManager.Instance.userName);
@@ -506,7 +508,7 @@ namespace Fourzy
             Debug.Log("Open New Multiplayer Game");
 
             if (tokenBoard == null) {
-                TokenBoard randomTokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard();
+                TokenBoard randomTokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard(GameType.RANDOM);
                 tokenBoard = randomTokenBoard;
             }
 
@@ -613,6 +615,7 @@ namespace Fourzy
 
                     foreach (var gsChallenge in response.ChallengeInstances)
                     {
+
                         bool didViewResult = false;
                         List<string> playersViewedResult = gsChallenge.ScriptData.GetStringList("playersViewedResult");
                         if (playersViewedResult != null)

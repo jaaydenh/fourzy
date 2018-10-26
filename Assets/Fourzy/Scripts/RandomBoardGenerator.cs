@@ -21,7 +21,7 @@ namespace Fourzy
             AddFeatures(ref newBoard.tokenBoard, 1, 3);
             AddNoise(ref newBoard.tokenBoard, 0, 4);
             SetCorners(ref newBoard.tokenBoard);
-            CheckArrows(ref newBoard.tokenBoard);
+            // CheckArrows(ref newBoard.tokenBoard);
             CheckPits(ref newBoard.tokenBoard);
             CheckMaxBlockers(ref newBoard.tokenBoard, 6);
             CheckEdges(ref newBoard.tokenBoard);
@@ -1721,7 +1721,7 @@ namespace Fourzy
              { "doublecross", 50},
              { "fullcheckers", 50},
              { "diaglines", 50},
-             { "blockalledges", 100},
+             { "blockalledges", 20},
              { "blocktwo", 0},
              { "blockcorner", 0 },
              { "centerplus", 50},

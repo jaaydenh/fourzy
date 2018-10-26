@@ -177,7 +177,7 @@ namespace Fourzy
 
         private void StartRealtimeGame(int firstPlayerPeerId, int seed) 
         {
-            GameManager.Instance.ShowInfoBanner("Start Realtime Game");
+            // GameManager.Instance.ShowInfoBanner("Start Realtime Game");
             var props = new Value();
             props["Status"] = "Found";
             Mixpanel.Track("Find Realtime Match", props);

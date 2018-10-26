@@ -16,9 +16,9 @@ public class IcePalaceRandomGenerator : BoardGenerator
             return new Dictionary<string, int>()
             {
                 { "circle_bomb", 0},
-                { "clear", 20 },
+                { "clear", 5 },
                 { "sticky", 1 },
-                { "ice", 40 },
+                { "ice", 0 },
                 { "ghost", 1},
                 { "pit", 0 },
                 { "left_arrow", 1},
@@ -66,19 +66,21 @@ public class IcePalaceRandomGenerator : BoardGenerator
              { "diagcross", 0},
              { "mostlyfull", 20 },
              { "centersquare", 20 },
-             { "blockedge", 20},
+             { "blockedge", 100},
+             { "halfalledges", 0},
+             { "blockalledges", 5},
+             { "clearalledges", 0},
              { "vdoubleline", 0},
              { "hdoubleline", 0},
              { "doublecross", 0},
              { "fullcheckers", 20},
              { "diaglines", 0},
-             { "blockalledges", 10},
              { "blocktwo", 5},
              { "blockcorner", 10 },
              { "centerplus", 30},
              { "fatdiagonal", 20},
              { "largering", 20},
-             { "fullbigcheckers", 20},
+             { "fullbigcheckers", 50},
              { "crosshair", 0},
              { "diagonalwaves", 20},
              { "donuts", 20},
@@ -128,7 +130,7 @@ public class IcePalaceRandomGenerator : BoardGenerator
              { "riverofarrows", 0},
              { "cycle", 0},
              { "faceoff", 0},
-             { "clearalledges", 20 }
+             { "clearalledges", 0 }
           };
         }
     }
