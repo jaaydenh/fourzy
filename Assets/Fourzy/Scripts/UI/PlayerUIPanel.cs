@@ -65,6 +65,11 @@ namespace Fourzy
         {
             playerIcon.View.StopTurnAnimation();
         }
+
+        public void StartWinJumps()
+        {
+            playerIcon.View.Jump(5);
+        }
     }
 }
 

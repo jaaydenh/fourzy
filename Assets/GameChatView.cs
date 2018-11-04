@@ -20,7 +20,8 @@ namespace Fourzy
 
         private void Awake()
         {
-            if (GameManager.Instance.activeGame.gameState.GameType != GameType.REALTIME)
+            if (GameManager.Instance.activeGame == null || 
+                GameManager.Instance.activeGame.gameState.GameType != GameType.REALTIME)
             {
                 this.gameObject.SetActive(false);
                 return;

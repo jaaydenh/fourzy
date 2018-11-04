@@ -51,6 +51,27 @@ namespace Fourzy
         public delegate void SetGamePiece(string gamePieceId);
         public static event SetGamePiece OnSetGamePiece;
 
+        public void InitWithRewardData(GamePieceData gamePieceData)
+        {
+            this.gamePieceData = gamePieceData;
+
+            gamePieceData.NumberOfStars = 3;
+            gamePieceData.NumberOfChampions = 0;
+            gamePieceData.NumberOfPieces = 20;
+            gamePieceData.TotalNumberOfChampions = 100;
+            gamePieceData.TotalNumberOfPieces = 60;
+            gamePieceData.state = GamePieceState.FoundAndUnlocked;
+
+            gamePieceImage.sprite = GameContentManager.Instance.GetGamePieceSprite(gamePieceData.ID);
+
+            pieceName.text = gamePieceData.Name;
+            totalNumberOfPieces.text = gamePieceData.NumberOfPieces + "/" + gamePieceData.TotalNumberOfPieces;
+            totalNumberOfChampions.text = this.FormatedNumberOfChampions(gamePieceData.NumberOfChampions, gamePieceData.TotalNumberOfChampions);
+
+            this.UpdateProgressBar();
+            this.UpdateStars();
+        }
+
         public void InitWithGamePieceData(GamePieceData gamePieceData)
         {
             this.gamePieceData = gamePieceData;

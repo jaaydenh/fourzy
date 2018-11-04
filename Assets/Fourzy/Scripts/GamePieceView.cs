@@ -296,6 +296,12 @@ namespace Fourzy
             yield return this.StartCoroutine(BlinkingRoutine());
         }
 
+        public void Jump(int count)
+        {
+            this.StopAllCoroutines();
+            this.StartCoroutine(JumpRoutine(count));
+        }
+
         private IEnumerator JumpRoutine(int count)
         {
             pieceAnimator.Play(h_Jumping);

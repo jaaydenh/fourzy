@@ -35,7 +35,6 @@ namespace Fourzy
         [Header("Game UI")]
         public Image backgroundImage;
         public CanvasGroup fadeUICanvasGroup;
-        public Rewards rewardScreen;
         public GameBoardView gameBoardView;
         public PlayerUIPanel playerUIPanel;
         public PlayerUIPanel opponentUIPanel;
@@ -43,13 +42,13 @@ namespace Fourzy
 
         public Text ratingDeltaText;
         public GameInfo gameInfo;
+        [SerializeField] RewardScreen rewardScreen;
         public AlertUI alertUI;
         public Button rematchButton;
         public Button nextGameButton;
         public Button createGameButton;
         public Button retryPuzzleChallengeButton;
         public Button nextPuzzleChallengeButton;
-        public Button rewardsButton;
         public Button backButton;
         public GameObject backButtonObject;
         public Button resignButton;
@@ -94,14 +93,14 @@ namespace Fourzy
             InitPlayerUI();
             InitIntroUI();
 
-            if (game.isCurrentPlayer_PlayerOne)
-            {
-                ratingDeltaText.text = game.challengerRatingDelta.ToString();
-            }
-            else
-            {
-                ratingDeltaText.text = game.challengedRatingDelta.ToString();
-            }
+            //if (game.isCurrentPlayer_PlayerOne)
+            //{
+            //    ratingDeltaText.text = game.challengerRatingDelta.ToString();
+            //}
+            //else
+            //{
+            //    ratingDeltaText.text = game.challengedRatingDelta.ToString();
+            //}
 
             challengeIdDebugText.text = "ChallengeId: " + game.challengeId;
 
@@ -236,9 +235,6 @@ namespace Fourzy
 
             Button retryPuzzleChallengeBtn = retryPuzzleChallengeButton.GetComponent<Button>();
             retryPuzzleChallengeBtn.onClick.AddListener(RetryPuzzleChallengeButtonOnClick);
-
-            Button rewardsBtn = rewardsButton.GetComponent<Button>();
-            rewardsButton.onClick.AddListener(RewardsButtonOnClick);
         }
 
         private void ResetUI()
@@ -578,47 +574,7 @@ namespace Fourzy
             ChallengeManager.Instance.Resign(game.challengeId);
         }
 
-        public void RewardsButtonOnClick()
-        {
-            GameManager.Instance.VisitedGameResults(game);
-            UserInputHandler.inputEnabled = false;
 
-            bool isCurrentPlayerWinner = this.IsPlayerWinner();
-            PlayerEnum currentPlayer = PlayerEnum.NONE;
-
-            if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
-            {
-                isCurrentPlayerWinner = true;
-            }
-            else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
-            {
-                isCurrentPlayerWinner = true;
-            }
-            else if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
-            {
-                isCurrentPlayerWinner = false;
-            }
-            else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
-            {
-                isCurrentPlayerWinner = false;
-            }
-            else if (game.gameState.Winner == PlayerEnum.ALL || game.gameState.Winner == PlayerEnum.NONE)
-            {
-                isCurrentPlayerWinner = false;
-            }
-
-            if (game.isCurrentPlayer_PlayerOne)
-            {
-                currentPlayer = PlayerEnum.ONE;
-            }
-            else
-            {
-                currentPlayer = PlayerEnum.TWO;
-            }
-
-            rewardScreen.Open(isCurrentPlayerWinner, game.gameState.PlayerPieceCount(currentPlayer));
-            gameInfo.Close();
-        }
 
         public void NextGameButtonOnClick() 
         {
@@ -635,12 +591,7 @@ namespace Fourzy
             SceneManager.UnloadSceneAsync("gamePlay");
 
             ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
-        }
-
-        public void RewardsScreenOkButtonOnClick()
-        {
-            rewardScreen.gameObject.SetActive(false);
-        }
+        } 
 
         public void RematchPassAndPlayGameButtonOnClick()
         {
@@ -1065,14 +1016,28 @@ namespace Fourzy
 
             Debug.Log("DisplayGameOverView gameState.winner: " +  game.gameState.Winner);
 
+            backButtonObject.SetActive(false);
+
+            this.LogGameWinner();
             this.PlayWinnerSound();
             this.ShowWinnerAnimation();
 
             yield return new WaitForSeconds(1.5f);
 
             this.ShowWinnerParticles();
-            this.ShowWinnerText();
-            this.LogGameWinner();
+            this.ShowRewardsScreen();
+
+            yield return new WaitWhile(() => rewardScreen.IsOpen);
+
+            //portal.Show();
+
+            //yield return new WaitForSeconds(3.0f);
+
+            //yield return new WaitUntil(() => portal.CanShowRewardScreen);
+
+            //this.RewardsButtonOnClick();
+
+            //this.ShowWinnerText();
 
             backButtonObject.SetActive(true);
 
@@ -1157,6 +1122,36 @@ namespace Fourzy
                 gamePiece.View.PlayWinAnimation(delay);
                 delay += 0.12f;
             }
+
+            if (IsPlayerWinner())
+            {
+                playerUIPanel.StartWinJumps();
+            }
+            else
+            {
+                opponentUIPanel.StartWinJumps();
+            }
+        }
+
+        public void ShowRewardsScreen()
+        {
+            GameManager.Instance.VisitedGameResults(game);
+            UserInputHandler.inputEnabled = false;
+
+            bool isCurrentPlayerWinner = this.IsPlayerWinner();
+            PlayerEnum currentPlayer = PlayerEnum.NONE;
+
+            if (game.isCurrentPlayer_PlayerOne)
+            {
+                currentPlayer = PlayerEnum.ONE;
+            }
+            else
+            {
+                currentPlayer = PlayerEnum.TWO;
+            }
+
+            rewardScreen.Open(null);
+            gameInfo.Close();
         }
 
         private void ShowWinnerText()
@@ -1210,7 +1205,8 @@ namespace Fourzy
                 {
                     //AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
                     string winnerText = game.gameState.Winner == PlayerEnum.ONE ? playerOneWonText : playerTwoWonText;
-                    gameInfo.Open(winnerText, winnerTextColor, true, false);
+                    //gameInfo.Open(winnerText, winnerTextColor, true, false);
+                    gameInfo.Open(winnerText, winnerTextColor, true, true);
                 }
             }
         }
