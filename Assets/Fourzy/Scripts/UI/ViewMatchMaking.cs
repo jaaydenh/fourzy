@@ -136,6 +136,11 @@ namespace Fourzy
 
         private void FindChallengeSuccess(FindChallengeResponse response)
         {
+            if (!isVisible)
+            {
+                return;
+            }
+
             // Debug.Log("ViewMatchMaking : FindChallengeSuccess");
             challengeIdToJoin = "";
 
@@ -198,11 +203,21 @@ namespace Fourzy
 
         private void OpenNewMultiplayerGame() 
         {
+            if (!isVisible)
+            {
+                return;
+            }
+
             ChallengeManager.Instance.OpenNewMultiplayerGame();
         }
 
         private void FindChallengeError(FindChallengeResponse response)
         {
+            if (!isVisible)
+            {
+                return;
+            }
+
             findChallengerErrorCount++;
             Debug.Log("***** Error Finding Random Challenge: " + response.Errors.JSON);
             AnalyticsManager.LogError("find_challenge_request_error", response.Errors.JSON);
@@ -217,7 +232,12 @@ namespace Fourzy
             }
         }
 
-        private void JoinChallengeSuccess(JoinChallengeResponse response) {
+        private void JoinChallengeSuccess(JoinChallengeResponse response) 
+        {
+            if (!isVisible)
+            {
+                return;
+            }
             // Debug.Log("ViewMatchMaking : JoinChallengeSuccess");
             // GameManager.Instance.challengeInstanceId = challengeIdToJoin;
             //Send Player to Game Screen to make a move
@@ -226,6 +246,11 @@ namespace Fourzy
 
         private void JoinChallengeError(JoinChallengeResponse response)
         {
+            if (!isVisible)
+            {
+                return;
+            }
+
             joinChallengeErrorCount++;
             Debug.Log("***** Error Joining Challenge: " + response.Errors.JSON);
             AnalyticsManager.LogError("join_challenge_request_error", response.Errors.JSON);
@@ -240,7 +265,13 @@ namespace Fourzy
             }
         }
 
-        private void GetChallengeSuccess(GetChallengeResponse response) {
+        private void GetChallengeSuccess(GetChallengeResponse response) 
+        {
+            if (!isVisible)
+            {
+                return;
+            }
+
             // Debug.Log("ViewMatchMaking : GetChallengeSuccess");
             var challenge = response.Challenge;
             GSData scriptData = response.ScriptData;
@@ -259,11 +290,21 @@ namespace Fourzy
 
         private void OpenJoinedMultiplayerGame() 
         {
+            if (!isVisible)
+            {
+                return;
+            }
+
             ChallengeManager.Instance.OpenJoinedMultiplayerGame();
         }
 
         private void GetChallengeError(GetChallengeResponse response) 
         {
+            if (!isVisible)
+            {
+                return;
+            }
+
             getChallengeError++;
             Debug.Log("***** Error Getting Challenge: " + response.Errors);
             AnalyticsManager.LogError("get_challenge_request_error", response.Errors.JSON);
