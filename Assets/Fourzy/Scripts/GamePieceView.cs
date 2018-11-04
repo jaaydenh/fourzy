@@ -296,10 +296,16 @@ namespace Fourzy
             yield return this.StartCoroutine(BlinkingRoutine());
         }
 
-        public void Jump(int count)
+        public void ShowUIWinAnimation()
         {
             this.StopAllCoroutines();
-            this.StartCoroutine(JumpRoutine(count));
+            this.StartCoroutine(ShowUIWinAnimationRoutine());
+        }
+
+        private IEnumerator ShowUIWinAnimationRoutine()
+        {
+            yield return this.StartCoroutine(JumpRoutine(5));
+            //this.PlayWinAnimation(0.0f);
         }
 
         private IEnumerator JumpRoutine(int count)

@@ -134,9 +134,9 @@ namespace Fourzy
 
         private IEnumerator RotateSpinnerRoutine()
         {
-            Transform spinnerTransform = spinner.transform;
-            float speed = 50.0f;
+            const float speed = 50.0f;
 
+            Transform spinnerTransform = spinner.transform;
             while (true)
             {
                 spinnerTransform.Rotate(Vector3.back, speed * Time.deltaTime);
@@ -160,11 +160,10 @@ namespace Fourzy
             }
 
             Transform rewardTransform = rewardGO.transform;
-            CanvasGroup canvasGroup = rewardGO.GetComponent<CanvasGroup>();
-            canvasGroup.alpha = 0.0f;
+            rewardTransform.localScale = Vector3.zero;
             rewardTransform.localPosition = portal.transform.localPosition;
 
-            float portalAnimationTime = 1.5f;
+            const float portalAnimationTime = 1.5f;
             Transform spinnerTransform = spinner.transform;
             float speed = 150.0f;
             float acceleration = 500.0f;
@@ -178,7 +177,7 @@ namespace Fourzy
 
             const float appearTime = 0.5f;
 
-            canvasGroup.DOFade(1.0f, appearTime);
+            rewardTransform.DOScale(1.0f, appearTime).SetEase(rewardAppearCurve);
             yield return rewardTransform.DOLocalMove(Vector3.zero, appearTime).SetEase(rewardAppearCurve).WaitForCompletion();
         }
 

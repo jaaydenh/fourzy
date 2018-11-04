@@ -68,7 +68,7 @@ namespace Fourzy
 
         public void StartWinJumps()
         {
-            playerIcon.View.Jump(5);
+            playerIcon.View.ShowUIWinAnimation();
         }
     }
 }
