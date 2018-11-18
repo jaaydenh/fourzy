@@ -13,8 +13,6 @@ namespace Fourzy
         [SerializeField] Image portal;
         [SerializeField] Image spinner;
 
-        [SerializeField] List<Sprite> portalSpinners = new List<Sprite>();
-
         [SerializeField] GameObject rewardGO;
         [SerializeField] Text coinsReward;
         [SerializeField] GamePieceUI gamePieceReward;

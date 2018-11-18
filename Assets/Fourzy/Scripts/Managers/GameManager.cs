@@ -343,7 +343,7 @@ namespace Fourzy
         public void OpenGame(Game game)
         {
             activeGame = game;
-            SceneManager.LoadScene("gamePlay", LoadSceneMode.Additive);
+            SceneManager.LoadScene("gamePlayNew", LoadSceneMode.Additive);
         }
 
         public Game GetRandomGame()

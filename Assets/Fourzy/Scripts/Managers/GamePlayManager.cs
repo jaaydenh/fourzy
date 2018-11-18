@@ -10,6 +10,7 @@ using GameSparks.Api.Requests;
 using UnityEngine.SceneManagement;
 using TMPro;
 using mixpanel;
+using Fourzy._Updates.UI.Menu;
 
 namespace Fourzy
 {
@@ -18,19 +19,9 @@ namespace Fourzy
     {
         public Game game;
 
-        private bool isLoading = false;
-        public bool isLoadingUI = false;
-        private bool isDropping = false;
         public bool disableInput = false;
-        private bool replayedLastMove = false;
-        private float gameScreenFadeInTime = 0.7f;
-        private DateTime serverClock;
-        private DateTime playerMoveCountdown;
-        private bool clockStarted = false;
-        private int playerMoveTimer_InitialTime;
-
-        private GamePiece playerGamePiecePrefab;
-        private GamePiece opponentGamePiecePrefab;
+        public bool isLoadingUI = false;
+        public MenuController menuController;
 
         [Header("Game UI")]
         public Image backgroundImage;
@@ -67,8 +58,21 @@ namespace Fourzy
         public AudioClip clipWin;
         public Color bluePlayerColor = new Color(0f / 255f, 176.0f / 255f, 255.0f / 255.0f);
         public Color redPlayerColor = new Color(254.0f / 255.0f, 40.0f / 255.0f, 81.0f / 255.0f);
+
         private string playerOneWonText = "Player 1 Wins!";
         private string playerTwoWonText = "Player 2 Wins!";
+
+        private bool isLoading = false;
+        private bool isDropping = false;
+        private bool replayedLastMove = false;
+        private float gameScreenFadeInTime = 0.7f;
+        private DateTime serverClock;
+        private DateTime playerMoveCountdown;
+        private bool clockStarted = false;
+        private int playerMoveTimer_InitialTime;
+
+        private GamePiece playerGamePiecePrefab;
+        private GamePiece opponentGamePiecePrefab;
 
         IEnumerator Start () 
         {
@@ -135,14 +139,14 @@ namespace Fourzy
 
         private void OnEnable()
         {
-            UserInputHandler.OnTap += ProcessPlayerInput;
+            //UserInputHandler.OnTap += ProcessPlayerInput;
             RealtimeManager.OnReceiveTimeStamp += RealtimeManager_OnReceiveTimeStamp;
             RealtimeManager.OnReceiveMove += RealtimeManager_OnReceiveMove;
         }
 
         private void OnDisable()
         {
-            UserInputHandler.OnTap -= ProcessPlayerInput;
+            //UserInputHandler.OnTap -= ProcessPlayerInput;
             RealtimeManager.OnReceiveTimeStamp -= RealtimeManager_OnReceiveTimeStamp;
             RealtimeManager.OnReceiveMove -= RealtimeManager_OnReceiveMove;
         }
@@ -1027,7 +1031,7 @@ namespace Fourzy
             this.ShowWinnerParticles();
             this.ShowRewardsScreen();
 
-            yield return new WaitWhile(() => rewardScreen.IsOpen);
+            //yield return new WaitWhile(() => rewardScreen.IsOpen);
 
             //portal.Show();
 
@@ -1150,7 +1154,10 @@ namespace Fourzy
                 currentPlayer = PlayerEnum.TWO;
             }
 
-            rewardScreen.Open(null);
+            //rewardScreen.Open(null);
+            _Updates.UI.Menu.Screens.RewardScreen rewardScreen = menuController.GetScreen<_Updates.UI.Menu.Screens.RewardScreen>();
+            rewardScreen.OpenScreen(new List<Reward>());
+
             gameInfo.Close();
         }
 
