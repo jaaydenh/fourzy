@@ -2,7 +2,7 @@
 
 using TMPro;
 
-namespace Fourzy._Updates.UI.Menu.Widgets
+namespace Fourzy._Updates.UI.Widgets
 {
     public class CoinsWidgetSmall : WidgetBase
     {

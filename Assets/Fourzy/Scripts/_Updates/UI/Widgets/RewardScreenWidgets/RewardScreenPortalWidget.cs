@@ -4,7 +4,7 @@ using Fourzy._Updates.Tween;
 using System;
 using UnityEngine;
 
-namespace Fourzy._Updates.UI.Menu.Widgets
+namespace Fourzy._Updates.UI.Widgets
 {
     /// <summary>
     /// Not sure if any other visuals will be needed for portal, so lets pack its functionality into separate class

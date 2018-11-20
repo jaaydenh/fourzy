@@ -1,7 +1,8 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Prefabs;
-using Fourzy._Updates.UI.Menu.Widgets;
+using Fourzy._Updates.Mechanics.Vfx;
+using Fourzy._Updates.Tools;
+using Fourzy._Updates.UI.Widgets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,23 +12,28 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public class RewardScreen : MenuScreen
     {
         public RewardScreenPortalWidget portal;
-        public RectTransform rewardsParent;
-
         public Vector3 moveRewardsTo = new Vector3(0f, -400f, 0f);
+        public RewardHolderWidget rewardHolderPrefab;
+        public RectTransform rewardsParent;
 
         private List<Reward> rewardsToDisplay;
 
-        private WidgetBase currentReward;
+        private RewardHolderWidget currentRewardHolder;
+        private Vfx starsVfx;
         private int currentRewardIndex;
 
         protected override void Awake()
         {
-            base.Awake(); rewardsToDisplay = new List<Reward>();
+            base.Awake();
+
+            rewardsToDisplay = new List<Reward>();
         }
 
+        //for testing
         protected void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.S))
+            {
                 OpenScreen(new Reward[] {
                     new Reward()
                     {
@@ -40,6 +46,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         CollectedGamePiece = new GamePieceData()
                     }
                 });
+            }
         }
 
         public void OpenScreen(ICollection<Reward> rewards)
@@ -57,18 +64,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             StopRoutine("screenOpen", false);
-            StartRoutine("screenOpen", ScreenOpenRoutine(), () =>
+            StartRoutine("screenOpen", 1.5f, () =>
             {
                 ShowNextReward();
             }, () =>
             {
-                portal.StopOpenAnimation();
-
-                StartRoutine("startRewardsListing", StartRewardsListing(), null, () =>
-                {
-                    ShowNextReward();
-                });
+                SkipToNext();
             });
+        }
+
+        public override void Close()
+        {
+            base.Close();
+
+            StopAllRoutines(false);
         }
 
         public void SkipCurrent()
@@ -77,105 +86,85 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (CancelRoutine("screenOpen"))
                 return;
 
-            if (CancelRoutine("startRewardsListing"))
-                return;
-
             if (CancelRoutine("closeRoutine"))
                 return;
+
+            if (CancelRoutine("showReward"))
+                return;
+
+            if (CancelRoutine("hideReward"))
+            {
+                SkipToNext();
+                return;
+            }
 
             ShowNextReward();
         }
 
         private void ShowNextReward()
         {
-            //skip current one
-            CancelRoutine("rewardDisplay");
-
             if (rewardsToDisplay.Count > currentRewardIndex)
             {
-                StartRoutine("rewardDisplay", ShowRewardRoutine(rewardsToDisplay[currentRewardIndex]), () =>
+                StartRoutine("showReward", ShowRewardRoutine(rewardsToDisplay[currentRewardIndex]), () =>
                 {
-                    ShowNextReward();
+                    StartRoutine("hideReward", 1.5f, () =>
+                    {
+                        HideCurrentReward();
+                        ShowNextReward();
+                    });
+
+                    //animate reward
+                    //currentRewardHolder.squishTween.PlayForward(true);
                 }, () =>
                 {
-                    HideCurrentReward();
+                    //if "show reward" was cacelled, just place it at the end of path with no animation
+                    currentRewardHolder.CancelAnimation();
+
+                    StartRoutine("hideReward", 1.5f, () =>
+                    {
+                        HideCurrentReward();
+                        ShowNextReward();
+                    });
                 });
 
                 currentRewardIndex++;
             }
             else
-                StartRoutine("closeRoutine", CloseRoutine(), null, () =>
+                StartRoutine("closeRoutine", 2f, () =>
                 {
+                    menuController.CloseCurrentScreen(false);
+                }, () =>
+                {
+                    HideCurrentReward();
                     menuController.CloseCurrentScreen(false);
                 });
         }
 
+        private void SkipToNext()
+        {
+            ShowNextReward();
+            CancelRoutine("showReward");
+        }
+
         private void HideCurrentReward()
         {
-            if (currentReward)
+            if (currentRewardHolder)
             {
-                currentReward.ScaleTo(Vector3.zero, .4f);
-                currentReward.Hide(.3f);
+                currentRewardHolder.ScaleTo(Vector3.zero, .4f);
+                currentRewardHolder.Hide(.3f);
             }
-        }
-
-        private IEnumerator ScreenOpenRoutine()
-        {
-            portal.ResetAnimation();
-
-            yield return new WaitForSeconds(1.2f);
-
-            //move portal up
-            portal.OpenAnimation();
-
-            yield return new WaitForSeconds(portal.positionTween.playbackTime + 1f);
-        }
-
-        private IEnumerator StartRewardsListing()
-        {
-            yield return new WaitForSeconds(.5f);
-
-            ShowNextReward();
         }
 
         private IEnumerator ShowRewardRoutine(Reward reward)
         {
-            //show&animate reward widget
-            switch (reward.Type)
-            {
-                case Reward.RewardType.Coins:
-                    currentReward = PrefabsManager.GetPrefab<WidgetBase>(PrefabType.COINS_WIDGET_SMALL, rewardsParent);
-                    ((CoinsWidgetSmall)currentReward).SetValue(reward.NumberOfCoins);
-                    break;
-                case Reward.RewardType.CollectedGamePiece:
-                    currentReward = PrefabsManager.GetPrefab<WidgetBase>(PrefabType.GAME_PIECE_SMALL, rewardsParent);
-                    ((GamePieceWidgetSmall)currentReward).SetData(reward.CollectedGamePiece);
-                    break;
-            }
+            currentRewardHolder = Instantiate(rewardHolderPrefab, portal.transform);
+            currentRewardHolder.transform.localPosition = Vector2.zero;
+            currentRewardHolder.transform.localScale = Vector2.one;
 
-            if (currentReward)
-            {
-                currentReward.transform.localPosition = Vector3.zero;
-                currentReward.ScaleTo(Vector3.zero, Vector3.one, .4f);
+            currentRewardHolder.SetRewardWidget(reward);
+            currentRewardHolder.BezierMoveTo(moveRewardsTo, Random.Range(45f, 135f).VectorFromAngle() * 600f, .8f);
 
-                yield return new WaitForSeconds(.2f);
-
-                currentReward.MoveTo(moveRewardsTo, 1f);
-            }
-
-            yield return new WaitForSeconds(1.5f);
-
-            HideCurrentReward();
-
-            yield return new WaitForSeconds(.5f);
-        }
-
-        private IEnumerator CloseRoutine()
-        {
-            yield return new WaitForSeconds(3f);
-
-            //close screen
-            menuController.CloseCurrentScreen(false);
+            yield return new WaitForSeconds(.8f);
         }
     }
 }

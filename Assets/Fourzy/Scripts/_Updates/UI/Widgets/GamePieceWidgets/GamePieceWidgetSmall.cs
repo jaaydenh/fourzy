@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Fourzy._Updates.UI.Menu.Widgets
+namespace Fourzy._Updates.UI.Widgets
 {
     public class GamePieceWidgetSmall : WidgetBase
     {
@@ -27,7 +27,5 @@ namespace Fourzy._Updates.UI.Menu.Widgets
             //set pieces count
             piecesCount.text = string.Format("{0}/{1}", data.NumberOfPieces, data.TotalNumberOfPieces);
         }
-
-        //public void 
     }
 }

@@ -23,11 +23,20 @@ namespace Fourzy._Updates.Serialized
     {
         NONE = 0,
 
-        //menu sfxs
+        #region Menu Sfxs
         NEGATIVE = 1,
         BUTTON_CLICK = 2,
         MENU_BACK = 3,
         SCROLL = 4,
+        #endregion
+
+        #region Game piece sounds
+        GAME_PIECE_MOVE = 20,
+        #endregion
+
+        #region Common gameplay sounds
+        GAME_WON = 40,
+        #endregion
 
         SIZE,
     }

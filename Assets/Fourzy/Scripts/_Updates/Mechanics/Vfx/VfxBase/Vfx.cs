@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using ByteSheep.Events;
 using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Vfx
@@ -8,6 +9,7 @@ namespace Fourzy._Updates.Mechanics.Vfx
     {
         public VfxType type;
         public float duration = 1f;
+        public AdvancedEvent onStart;
 
         [HideInInspector]
         public VfxHolder holder;
@@ -20,8 +22,8 @@ namespace Fourzy._Updates.Mechanics.Vfx
         {
             if (isActive && durationLeft != 0f)
             {
-                if (durationLeft - Time.fixedDeltaTime > 0f)
-                    durationLeft -= Time.fixedDeltaTime;
+                if (durationLeft - Time.deltaTime > 0f)
+                    durationLeft -= Time.deltaTime;
                 else
                     Disable();
             }
@@ -38,6 +40,7 @@ namespace Fourzy._Updates.Mechanics.Vfx
         {
             isActive = true;
             gameObject.SetActive(true);
+            onStart.Invoke();
 
             durationLeft = duration;
         }
@@ -46,6 +49,7 @@ namespace Fourzy._Updates.Mechanics.Vfx
         {
             transform.SetParent(target);
 
+            transform.localScale = Vector3.one;
             transform.position = target.position + offset;
             transform.localEulerAngles = new Vector3(0f, 0f, rotation);
 
@@ -80,11 +84,7 @@ namespace Fourzy._Updates.Mechanics.Vfx
 
     public enum VfxType
     {
-        VFX_CAR_SPARK = 0,
-        VFX_WHEEL_SKID = 1,
-        VFX_OIL_SKID = 2,
-
-        VFX_COIN_EXPLOSION = 10,
+        VFX_STARS_TRAIL = 0,
 
         LENGTH,
     }

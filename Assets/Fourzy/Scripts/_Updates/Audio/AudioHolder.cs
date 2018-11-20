@@ -71,6 +71,15 @@ namespace Fourzy._Updates.Audio
         }
 
         /// <summary>
+        /// Set masters' volume using mixer group
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetMasterVolume(float value)
+        {
+            mixer.SetFloat("MasterVolume", Mathf.Clamp01(1f - value) * -80f);
+        }
+
+        /// <summary>
         /// Set sfxs' volume using mixer group
         /// </summary>
         /// <param name="value">Volume value</param>

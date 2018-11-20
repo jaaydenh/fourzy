@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Fourzy._Updates.Tools
 {
-    public class RoutinesBase : MonoBehaviour
+    public abstract class RoutinesBase : MonoBehaviour
     {
         protected Dictionary<string, RoutineClass> routines;
 
@@ -53,6 +53,31 @@ namespace Fourzy._Updates.Tools
                 routines.Add(name, new RoutineClass(this, name, routine, onEnd, onCanceled));
         }
 
+        public void StartRoutine(string name, IEnumerator routine, Action both)
+        {
+            if (!routines.ContainsKey(name))
+                routines.Add(name, new RoutineClass(this, name, routine, both, both));
+        }
+
+        /// <summary>
+        /// Start a routine with time value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="time"></param>
+        /// <param name="onEnd"></param>
+        /// <param name="onCanceled"></param>
+        public void StartRoutine(string name, float time, Action onEnd, Action onCanceled)
+        {
+            if (!routines.ContainsKey(name))
+                routines.Add(name, new RoutineClass(this, name, time, onEnd, onCanceled));
+        }
+
+        public void StartRoutine(string name, float time, Action both)
+        {
+            if (!routines.ContainsKey(name))
+                routines.Add(name, new RoutineClass(this, name, time, both, both));
+        }
+
         /// <summary>
         /// Stops specified routine with optional call of onEnded
         /// </summary>
@@ -69,6 +94,18 @@ namespace Fourzy._Updates.Tools
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Stops all routines
+        /// </summary>
+        /// <param name="callEnded"></param>
+        public void StopAllRoutines(bool callEnded)
+        {
+            List<string> keys = new List<string>(routines.Keys);
+
+            foreach (string key in keys)
+                StopRoutine(key, callEnded);
         }
 
         /// <summary>
@@ -137,6 +174,17 @@ namespace Fourzy._Updates.Tools
             this.onCanceled = onCanceled;
         }
 
+        public RoutineClass(RoutinesBase owner, string name, float time, Action onEnded, Action onCanceled)
+        {
+            this.name = name;
+            this.owner = owner;
+
+            coroutineContainer = owner.StartCoroutine(RoutineContainer(time));
+
+            this.onEnded = onEnded;
+            this.onCanceled = onCanceled;
+        }
+
         public void Stop(bool callOnEnded)
         {
             if (coroutine != null)
@@ -163,6 +211,13 @@ namespace Fourzy._Updates.Tools
         {
             coroutine = owner.StartCoroutine(_routine);
             yield return coroutine;
+
+            Stop(true);
+        }
+
+        private IEnumerator RoutineContainer(float time)
+        {
+            yield return new WaitForSeconds(time);
 
             Stop(true);
         }

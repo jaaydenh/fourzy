@@ -13,7 +13,7 @@ namespace Fourzy._Updates.Tween
         public float from;
         public float to;
 
-        private List<GraphicsColorGroup> spriteAlphaGroups = new List<GraphicsColorGroup>();
+        private List<GraphicsColorGroup> alphaGroup = new List<GraphicsColorGroup>();
 
         protected void Awake()
         {
@@ -33,7 +33,7 @@ namespace Fourzy._Updates.Tween
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
                     {
-                        foreach (GraphicsColorGroup group in spriteAlphaGroups)
+                        foreach (GraphicsColorGroup group in alphaGroup)
                         {
                             if (group.canvasGroup)
                                 group.canvasGroup.alpha = Mathf.Lerp(from, to, curve.Evaluate(value));
@@ -47,7 +47,7 @@ namespace Fourzy._Updates.Tween
                     {
                         isPlaying = false;
 
-                        foreach (GraphicsColorGroup group in spriteAlphaGroups)
+                        foreach (GraphicsColorGroup group in alphaGroup)
                         {
                             if (group.canvasGroup)
                                 group.canvasGroup.alpha = Mathf.Lerp(from, to, curve.Evaluate(1f));
@@ -61,7 +61,7 @@ namespace Fourzy._Updates.Tween
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
                     {
-                        foreach (GraphicsColorGroup group in spriteAlphaGroups)
+                        foreach (GraphicsColorGroup group in alphaGroup)
                         {
                             if (group.canvasGroup)
                                 group.canvasGroup.alpha = Mathf.Lerp(to, from, curve.Evaluate(value));
@@ -75,7 +75,7 @@ namespace Fourzy._Updates.Tween
                     {
                         isPlaying = false;
 
-                        foreach (GraphicsColorGroup group in spriteAlphaGroups)
+                        foreach (GraphicsColorGroup group in alphaGroup)
                         {
                             if (group.canvasGroup)
                                 group.canvasGroup.alpha = Mathf.Lerp(to, from, curve.Evaluate(1f));
@@ -91,7 +91,7 @@ namespace Fourzy._Updates.Tween
 
         public override void OnReset()
         {
-            foreach (GraphicsColorGroup group in spriteAlphaGroups)
+            foreach (GraphicsColorGroup group in alphaGroup)
             {
                 if (group.canvasGroup)
                     group.canvasGroup.alpha = from;
@@ -108,7 +108,7 @@ namespace Fourzy._Updates.Tween
             MaskableGraphic uiGraphics = obj.GetComponent<MaskableGraphic>();
             CanvasGroup canvasGroup = obj.GetComponent<CanvasGroup>();
 
-            spriteAlphaGroups.Add(new GraphicsColorGroup() { spriteRenderer = spriteRenderer, uiGraphics = uiGraphics, canvasGroup = canvasGroup });
+            alphaGroup.Add(new GraphicsColorGroup() { spriteRenderer = spriteRenderer, uiGraphics = uiGraphics, canvasGroup = canvasGroup });
 
             if (propagate)
                 for (int i = 0; i < obj.childCount; i++)

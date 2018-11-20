@@ -1,53 +1,66 @@
 ﻿//vadym udod
 
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using UnityEngine;
 
-namespace Fourzy._Updates.UI.Menu.Widgets
+namespace Fourzy._Updates.UI.Widgets
 {
     [RequireComponent(typeof(AlphaTween))]
     [RequireComponent(typeof(PositionTween))]
     [RequireComponent(typeof(ScaleTween))]
     [RequireComponent(typeof(CanvasGroup))]
-    public abstract class WidgetBase : MonoBehaviour
+    public abstract class WidgetBase : RoutinesBase
     {
-        protected AlphaTween alphaTween;
-        protected PositionTween positionTween;
-        protected ScaleTween scaleTween;
-        protected CanvasGroup canvasGroup;
+        [HideInInspector]
+        public AlphaTween alphaTween;
+        [HideInInspector]
+        public PositionTween positionTween;
+        [HideInInspector]
+        public ScaleTween scaleTween;
+        [HideInInspector]
+        public CanvasGroup canvasGroup;
+        [HideInInspector]
+        public RectTransform rectTransform;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             alphaTween = GetComponent<AlphaTween>();
             positionTween = GetComponent<PositionTween>();
             scaleTween = GetComponent<ScaleTween>();
+            rectTransform = GetComponent<RectTransform>();
 
             canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void SetVisibility(float value)
+        public virtual void SetVisibility(float value)
         {
             canvasGroup.alpha = value;
         }
 
-        public void Hide(float time)
+        public virtual void Hide(float time)
         {
             alphaTween.playbackTime = time;
             alphaTween.PlayBackward(true);
         }
 
-        public void Show(float time)
+        public virtual void Show(float time)
         {
             alphaTween.playbackTime = time;
             alphaTween.PlayForward(true);
         }
 
-        public void MoveTo(Vector3 to, float time)
+        public virtual void MoveTo(Vector3 to, float time)
         {
-            MoveTo(transform.localPosition, to, time);
+            if (rectTransform)
+                MoveTo(rectTransform.anchoredPosition, to, time);
+            else
+                MoveTo(transform.localPosition, to, time);
         }
 
-        public void MoveTo(Vector3 from, Vector3 to, float time)
+        public virtual void MoveTo(Vector3 from, Vector3 to, float time)
         {
             positionTween.from = from;
             positionTween.to = to;
@@ -56,12 +69,20 @@ namespace Fourzy._Updates.UI.Menu.Widgets
             positionTween.PlayForward(true);
         }
 
-        public void ScaleTo(Vector3 to, float time)
+        public virtual void MoveRelative(Vector3 to, float time)
+        {
+            if(rectTransform)
+                MoveTo(rectTransform.anchoredPosition, positionTween.to + to, time);
+            else
+                MoveTo(transform.localPosition, positionTween.to + to, time);
+        }
+
+        public virtual void ScaleTo(Vector3 to, float time)
         {
             ScaleTo(transform.localScale, to, time);
         }
 
-        public void ScaleTo(Vector3 from, Vector3 to, float time)
+        public virtual void ScaleTo(Vector3 from, Vector3 to, float time)
         {
             scaleTween.from = from;
             scaleTween.to = to;

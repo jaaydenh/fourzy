@@ -57,9 +57,9 @@ namespace Fourzy._Updates.Mechanics.Vfx
             }
         }
 
-        public Vfx ShowVfx(VfxType type, Transform target, Vector3 offset, int decayIndex = -1, float rotation = 0f, float customDuration = 0f)
+        public Vfx ShowVfx(VfxType type, Transform target, Vector3 offset, int poolIndex = -1, float rotation = 0f, float customDuration = 0f)
         {
-            Vfx vfxToActivate = GetVfx<Vfx>(type, decayIndex);
+            Vfx vfxToActivate = GetVfx<Vfx>(type, poolIndex);
 
             if (!vfxToActivate)
                 return null;
@@ -82,24 +82,20 @@ namespace Fourzy._Updates.Mechanics.Vfx
             return ShowVfx(type, transform, position);
         }
 
-        public T GetVfx<T>(VfxType type, int decayIndex) where T : Vfx
+        public T GetVfx<T>(VfxType type, int poolIndex) where T : Vfx
         {
             if (pools.Length == 0)
                 return default(T);
 
             VfxPool upperPool = pools[decaysDictionary[type]];
 
-            //if (upperPool == null)
-            //    return default(T);
-
             Vfx result = null;
-
             List<Vfx> pool;
 
-            if (decayIndex == -1)
-                pool = upperPool.pool[UnityEngine.Random.Range(0, upperPool.pool.Length)];
+            if (poolIndex == -1)
+                pool = upperPool.pool[Random.Range(0, upperPool.pool.Length)];
             else
-                pool = upperPool.pool[decayIndex];
+                pool = upperPool.pool[poolIndex];
 
             foreach (Vfx vfx in pool)
             {

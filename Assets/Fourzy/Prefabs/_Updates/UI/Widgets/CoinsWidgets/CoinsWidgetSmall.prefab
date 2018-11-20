@@ -146,8 +146,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2264921ea0a174a8e8bc126df9e201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  alphaTween: {fileID: 0}
+  positionTween: {fileID: 0}
+  scaleTween: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  rectTransform: {fileID: 0}
   label: {fileID: 114959838461609216}
-  format: '{0}'
+  format: +{0} Coins
 --- !u!114 &114693845930165618
 MonoBehaviour:
   m_ObjectHideFlags: 1

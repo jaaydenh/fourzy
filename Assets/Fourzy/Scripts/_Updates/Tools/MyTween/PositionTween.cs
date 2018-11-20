@@ -10,7 +10,6 @@ namespace Fourzy._Updates.Tween
         public Vector3 to;
 
         private RectTransform rectTransform;
-        private Vector3 _temp;
 
         protected void Awake()
         {
