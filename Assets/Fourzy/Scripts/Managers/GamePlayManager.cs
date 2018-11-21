@@ -3,7 +3,9 @@
 using DG.Tweening;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.UI.Menu;
+using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Toasts;
+using Fourzy._Updates.UI.Widgets;
 using GameSparks.Api.Requests;
 using mixpanel;
 using System;
@@ -20,6 +22,12 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene, true)]
     public class GamePlayManager : UnitySingleton<GamePlayManager>
     {
+        public static event Action OnStartMove;
+        public static event Action OnEndMove;
+        public static event Action OnGameOver;
+        public static event Action<string> OnGamePlayMessage;
+
+        [HideInInspector]
         public Game game;
 
         public bool disableInput = false;
@@ -30,12 +38,11 @@ namespace Fourzy
         public Image backgroundImage;
         public CanvasGroup fadeUICanvasGroup;
         public GameBoardView gameBoardView;
-        public PlayerUIPanel playerUIPanel;
-        public PlayerUIPanel opponentUIPanel;
+        public PlayerUIWidget playerUIPanel;
+        public PlayerUIWidget opponentUIPanel;
         public WinningParticleGenerator winningParticleGenerator;
 
         public Text ratingDeltaText;
-        public GameInfo gameInfo;
         public Button rematchButton;
         public Button nextGameButton;
         public Button createGameButton;
@@ -46,15 +53,9 @@ namespace Fourzy
         public Button resignButton;
         public GameObject resignButtonObject;
         public GameObject moveHintAreaObject;
-        public GameIntroUI gameIntroUI;
         public Text challengeIdDebugText;
         public TextMeshProUGUI timerText;
         public GameObject playerTimer;
-
-        public static event Action OnStartMove;
-        public static event Action OnEndMove;
-        public static event Action OnGameOver;
-        public static event Action<string> OnGamePlayMessage;
         public Color bluePlayerColor = new Color(0f / 255f, 176.0f / 255f, 255.0f / 255.0f);
         public Color redPlayerColor = new Color(254.0f / 255.0f, 40.0f / 255.0f, 81.0f / 255.0f);
 
@@ -74,22 +75,30 @@ namespace Fourzy
         private GamePiece opponentGamePiecePrefab;
 
         //updates
-        //private RewardScreen
+        private GameFinishedScreen gameFinishedScreen;
+        private GameIntroScreen gameIntroScreen;
 
-        IEnumerator Start()
+        protected IEnumerator Start()
         {
             game = GameManager.Instance.activeGame;
 
             if (game == null)
             {
                 game = GameManager.Instance.GetRandomGame();
+
+                //game.displayIntroUI = true;
+                //game.title = "Title";
+                //game.subtitle = "Subtitle";
             }
+
+            //get screens
+            gameFinishedScreen = menuController.GetScreen<GameFinishedScreen>();
+            gameIntroScreen = menuController.GetScreen<GameIntroScreen>();
 
             UserInputHandler.inputEnabled = false;
             replayedLastMove = false;
 
             InitButtonListeners();
-            SetActionButton();
             InitPlayerPrefabs();
             ResetUI();
             backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackground;
@@ -97,16 +106,7 @@ namespace Fourzy
             gameBoardView.CreateGamePieceViews(game.gameState.GetPreviousGameBoard(), 0.0f);
             gameBoardView.CreateTokenViews(game.gameState.PreviousTokenBoard.tokens, 0.0f);
             InitPlayerUI();
-            InitIntroUI();
-
-            //if (game.isCurrentPlayer_PlayerOne)
-            //{
-            //    ratingDeltaText.text = game.challengerRatingDelta.ToString();
-            //}
-            //else
-            //{
-            //    ratingDeltaText.text = game.challengedRatingDelta.ToString();
-            //}
+            gameIntroScreen.Init(game);
 
             challengeIdDebugText.text = "ChallengeId: " + game.challengeId;
 
@@ -129,9 +129,6 @@ namespace Fourzy
             }
 
             playerMoveTimer_InitialTime = Constants.playerMoveTimer_InitialTime;
-
-            playerUIPanel.StopPlayerTurnAnimation();
-            opponentUIPanel.StopPlayerTurnAnimation();
 
             yield return StartCoroutine(FadeGameScreen(0.0f, 1.0f, gameScreenFadeInTime));
             yield return StartCoroutine(ReplayLastMove());
@@ -249,7 +246,7 @@ namespace Fourzy
 
         private void ResetUI()
         {
-            gameInfo.Close();
+            //gameInfo.Close();
             rematchButton.gameObject.SetActive(false);
             nextGameButton.gameObject.SetActive(false);
             createGameButton.gameObject.SetActive(false);
@@ -257,58 +254,7 @@ namespace Fourzy
             retryPuzzleChallengeButton.gameObject.SetActive(false);
             backButton.gameObject.SetActive(true);
             moveHintAreaObject.SetActive(false);
-            gameIntroUI.Close();
-        }
-
-        private void InitIntroUI()
-        {
-            if (!game.displayIntroUI)
-            {
-                return;
-            }
-
-            string title = game.title;
-            string subtitle = game.subtitle;
-            if (subtitle == "")
-            {
-                switch (game.gameState.GameType)
-                {
-                    case GameType.PASSANDPLAY:
-                        subtitle = LocalizationManager.Instance.GetLocalizedValue("pnp_button");
-                        break;
-                    case GameType.FRIEND:
-                        subtitle = LocalizationManager.Instance.GetLocalizedValue("friend_challenge_text");
-                        break;
-                    case GameType.LEADERBOARD:
-                        subtitle = LocalizationManager.Instance.GetLocalizedValue("leaderboard_challenge_text");
-                        break;
-                    case GameType.RANDOM:
-                        subtitle = LocalizationManager.Instance.GetLocalizedValue("random_opponent_button");
-                        break;
-                    case GameType.AI:
-                        subtitle = LocalizationManager.Instance.GetLocalizedValue("ai_challenge_text");
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (title == "")
-            {
-                title = game.gameState.TokenBoard.name;
-            }
-
-            DisplayIntroUI(title, subtitle, true);
-        }
-
-        private void DisplayIntroUI(string title, string subtitle, bool fade)
-        {
-            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(subtitle))
-            {
-                return;
-            }
-
-            gameIntroUI.Open(title, subtitle, fade);
+            //gameIntroUI.Close();
         }
 
         private IEnumerator ShowTokenInstructionPopupRoutine()
@@ -462,6 +408,9 @@ namespace Fourzy
 
             playerUIPanel.InitPlayerIcon(playerGamePiecePrefab);
             opponentUIPanel.InitPlayerIcon(opponentGamePiecePrefab);
+
+            playerUIPanel.StopPlayerTurnAnimation();
+            opponentUIPanel.StopPlayerTurnAnimation();
         }
 
         private IEnumerator FadeGameScreen(float startAlpha, float alpha, float fadeTime)
@@ -923,13 +872,13 @@ namespace Fourzy
                 {
                     string title = LocalizationManager.Instance.GetLocalizedValue("challenge_completed_title");
                     string subtitle = LocalizationManager.Instance.GetLocalizedValue("challenge_completed_subtitle");
-                    DisplayIntroUI(title, subtitle, false);
+                    //DisplayIntroUI(title, subtitle, false);
                 }
                 else
                 {
                     string title = LocalizationManager.Instance.GetLocalizedValue("challenge_failed_title");
                     string subtitle = LocalizationManager.Instance.GetLocalizedValue("challenge_failed_subtitle");
-                    DisplayIntroUI(title, subtitle, false);
+                    //DisplayIntroUI(title, subtitle, false);
                 }
 
                 if (game.gameState.IsPuzzleChallengePassed)
@@ -1029,7 +978,8 @@ namespace Fourzy
             if (game.isExpired)
             {
                 GameManager.Instance.VisitedGameResults(game);
-                gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("expired_text"), Color.white, false, !game.didViewResult);
+                //gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("expired_text"), Color.white, false, !game.didViewResult);
+                gameFinishedScreen.Open(LocalizationManager.Instance.GetLocalizedValue("expired_text"), !game.didViewResult);
                 yield break;
             }
 
@@ -1169,8 +1119,10 @@ namespace Fourzy
                 currentPlayer = PlayerEnum.TWO;
             }
 
-            //rewardScreen.Open(null);
-            _Updates.UI.Menu.Screens.RewardScreen rewardScreen = menuController.GetScreen<_Updates.UI.Menu.Screens.RewardScreen>();
+            if (gameFinishedScreen.isOpened)
+                menuController.CloseCurrentScreen(false);
+            
+            RewardScreen rewardScreen = menuController.GetScreen<RewardScreen>();
             rewardScreen.OpenScreen(new Reward[] {
                     new Reward()
                     {
@@ -1183,8 +1135,6 @@ namespace Fourzy
                         CollectedGamePiece = new GamePieceData()
                     }
                 });
-
-            gameInfo.Close();
         }
 
         private void ShowWinnerText()
@@ -1198,13 +1148,13 @@ namespace Fourzy
             {
                 if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
                 {
-                    gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), Color.white, false, showRewardButton);
+                    gameFinishedScreen.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), showRewardButton);
                 }
                 else
                 {
                     if (game.gameState.GameType != GameType.PUZZLE)
                     {
-                        gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), Color.white, false, false);
+                        gameFinishedScreen.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), false);
                     }
                 }
             }
@@ -1212,21 +1162,21 @@ namespace Fourzy
             {
                 if (!string.IsNullOrEmpty(game.winnerName))
                 {
-                    gameInfo.Open(game.winnerName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
+                    gameFinishedScreen.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), showRewardButton);
                 }
                 else
                 {
                     if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
                     {
-                        gameInfo.Open(UserManager.Instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
+                        gameFinishedScreen.Open(UserManager.Instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), showRewardButton);
                     }
                     else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
                     {
-                        gameInfo.Open(UserManager.Instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
+                        gameFinishedScreen.Open(UserManager.Instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), showRewardButton);
                     }
                     else
                     {
-                        gameInfo.Open(opponentUIPanel.GetPlayerName() + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), winnerTextColor, true, showRewardButton);
+                        gameFinishedScreen.Open(opponentUIPanel.GetPlayerName() + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), showRewardButton);
                     }
 
                     //AnalyticsManager.LogGameOver("multiplayer", gameState.winner, gameState.tokenBoard);
@@ -1238,8 +1188,8 @@ namespace Fourzy
                 {
                     //AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
                     string winnerText = game.gameState.Winner == PlayerEnum.ONE ? playerOneWonText : playerTwoWonText;
-                    //gameInfo.Open(winnerText, winnerTextColor, true, false);
-                    gameInfo.Open(winnerText, winnerTextColor, true, true);
+
+                    gameFinishedScreen.Open(winnerText, true);
                 }
             }
         }

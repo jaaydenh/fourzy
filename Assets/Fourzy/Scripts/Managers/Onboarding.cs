@@ -153,7 +153,7 @@ namespace Fourzy
                     GamePlayManager.Instance.disableInput = false;
                     break;
                 case 8:
-                    GamePlayManager.Instance.gameInfo.Close();
+                    //GamePlayManager.Instance.gameInfo.Close();
                     ShowWizardWithDialog("Congratulations!!! Now you know the basics of Fourzy.");
                     break;
                 case 9:
