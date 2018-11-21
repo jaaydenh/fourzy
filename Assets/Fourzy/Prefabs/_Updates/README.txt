@@ -1,0 +1,1 @@
+For now i will put my updates under "_Updates" folder for each assets type (e.g. Scripts, Prefabs, Materials, etc.)
