@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b0ffebc985b484ba3135919661f2e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundEffect: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
+  soundEffect: {fileID: 8300000, guid: dfccc4070327348459e712e5de06f501, type: 3}
 --- !u!114 &114662430344853364
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1671,7 +1671,7 @@ MonoBehaviour:
   timerText: {fileID: 1398324021}
   playerTimer: {fileID: 124707853}
   clipMove: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
-  clipWin: {fileID: 8300000, guid: ca964237fcd4d4536a70bd8683c27fa6, type: 3}
+  clipWin: {fileID: 8300000, guid: 822d54ee289134eb78545be8754e2b56, type: 3}
   bluePlayerColor: {r: 0, g: 0.6901961, b: 1, a: 1}
   redPlayerColor: {r: 0.99607843, g: 0.15686275, b: 0.31764707, a: 1}
 --- !u!4 &1899509753
