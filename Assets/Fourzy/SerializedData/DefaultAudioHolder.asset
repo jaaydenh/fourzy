@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32f3682dd64b6874682cea6a33fb80a4, type: 3}
-  m_Name: DefaultSFXHolder
+  m_Name: DefaultAudioHolder
   m_EditorClassIdentifier: 
   data:
   - type: 20
@@ -18,3 +18,12 @@ MonoBehaviour:
   - type: 40
     audios:
     - {fileID: 8300000, guid: ca964237fcd4d4536a70bd8683c27fa6, type: 3}
+  - type: 61
+    audios:
+    - {fileID: 8300000, guid: 713285c001b354d1c8b58a0d34ceabdd, type: 3}
+  - type: 100
+    audios:
+    - {fileID: 8300000, guid: 14ab3c192ae77489b9caa48bab054fc2, type: 3}
+  - type: 101
+    audios:
+    - {fileID: 8300000, guid: 5843de5fd87ab4c1192d8ac8767378b7, type: 3}

@@ -48,7 +48,7 @@ namespace Fourzy._Updates.Audio
         /// <param name="volume">Volume</param>
         /// <param name="fadeInTime">Fade in/out time</param>
         /// <returns></returns>
-        public BGAudio PlayAudio(AudioTypes type, bool repeat, float volume, float fadeInTime)
+        public BGAudio PlayBGAudio(AudioTypes type, bool repeat, float volume, float fadeInTime)
         {
             AudioClip audioClip = AudioHolder.instance.GetAudioClip(type);
 

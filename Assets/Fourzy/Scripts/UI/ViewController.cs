@@ -87,7 +87,7 @@ namespace Fourzy
 
         void SceneManager_SceneLoaded(Scene scene, LoadSceneMode arg1)
         {
-            if (scene.name == "gamePlay")
+            if (scene.name == Constants.GAMEPLAY_SCENE_NAME)
             {
                 headerUI.SetActive(false);
             }

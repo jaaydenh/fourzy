@@ -3,7 +3,7 @@
 using UnityEditor;
 using UnityEditor.UI;
 
-namespace Fourzy._Updates.UI.Menu.Helpers
+namespace Fourzy._Updates.UI.Helpers
 {
     [CustomEditor(typeof(ButtonExtended))]
     public class ButtonExtendedEditor : ButtonEditor

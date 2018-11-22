@@ -190,9 +190,9 @@ namespace Fourzy
             }
             GamePiece prefab = GameContentManager.Instance.GetGamePiecePrefab(gamePieceId);
             GamePiece pieceIcon = Instantiate(prefab, gamePieceImage.transform, false);
-            pieceIcon.CachedTransform.localPosition = Vector3.zero;
-            pieceIcon.CachedTransform.localScale = new Vector3(100, 100, 100);
-            pieceIcon.CachedGO.SetLayerRecursively(gamePieceImage.gameObject.layer);
+            pieceIcon.transform.localPosition = Vector3.zero;
+            pieceIcon.transform.localScale = new Vector3(100, 100, 100);
+            pieceIcon.gameObject.SetLayerRecursively(gamePieceImage.gameObject.layer);
             pieceIcon.View.StartBlinking();
         }
 

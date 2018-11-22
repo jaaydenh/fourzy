@@ -25,6 +25,7 @@ namespace Fourzy
         public string subtitle;
         public PuzzleChallengeLevel puzzleChallengeInfo;
         public Sprite opponentProfilePictureSprite;
+        public GameBoardView boardView;
 
         public Game(string challengeId, GameState gameState, bool isCurrentPlayer_PlayerOne, bool isExpired, bool didViewResult, Opponent opponent, ChallengeState challengeState, ChallengeType challengeType, string challengerGamePieceId, string challengedGamePieceId, PuzzleChallengeLevel puzzleChallengeInfo, string winnerName, string title, string subtitle, bool displayIntroUI)
         {

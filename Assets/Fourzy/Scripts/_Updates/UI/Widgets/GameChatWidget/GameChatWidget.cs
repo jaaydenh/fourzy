@@ -6,21 +6,21 @@ using TMPro;
 using DG.Tweening;
 using mixpanel;
 
-namespace Fourzy
+namespace Fourzy._Updates.UI.Widgets
 {
-    public class GameChatView : MonoBehaviour
+    public class GameChatWidget : MonoBehaviour
     {
-        [SerializeField] Button btnOpenChat;
-        [SerializeField] Button btnSendMessage;
-        [SerializeField] TMP_InputField chatInputField;
-        [SerializeField] TMP_Text opponentText;
+        public Button btnOpenChat;
+        public Button btnSendMessage;
+        public TMP_InputField chatInputField;
+        public TMP_Text opponentText;
 
         private Queue<string> messages = new Queue<string>();
         private bool isChatOpen;
 
         private void Awake()
         {
-            if (GameManager.Instance.activeGame == null || 
+            if (GameManager.Instance.activeGame == null ||
                 GameManager.Instance.activeGame.gameState.GameType != GameType.REALTIME)
             {
                 this.gameObject.SetActive(false);
@@ -37,7 +37,7 @@ namespace Fourzy
 
         private void OnEnable()
         {
-            RealtimeManager.OnChatMessageReceived += RealtimeManager_OnChatMessageReceived; 
+            RealtimeManager.OnChatMessageReceived += RealtimeManager_OnChatMessageReceived;
         }
 
         private void OnDisable()
@@ -54,7 +54,7 @@ namespace Fourzy
         {
             const float delayForNextMessage = 0.7f;
 
-            while(true)
+            while (true)
             {
                 if (messages.Count != 0)
                 {
@@ -113,7 +113,6 @@ namespace Fourzy
             chatInputField.gameObject.SetActive(isChatOpen);
             btnSendMessage.gameObject.SetActive(isChatOpen);
             chatInputField.text = string.Empty;
-
         }
     }
 }

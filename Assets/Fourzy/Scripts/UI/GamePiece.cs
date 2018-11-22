@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//modded @vadym udod
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -24,15 +26,10 @@ namespace Fourzy
 
         private CircleCollider2D gamePieceCollider;
 
-        public Transform CachedTransform { get; private set; }
-        public GameObject CachedGO { get; private set; }
-
 		private void Awake()
 		{
             gamePieceCollider = gameObject.GetComponent<CircleCollider2D>();
-            CachedTransform = this.transform;
-            View = this.GetComponent<GamePieceView>();
-            CachedGO = this.gameObject;
+            View = GetComponent<GamePieceView>();
 		}
 
         private void Start()
@@ -79,9 +76,9 @@ namespace Fourzy
                 for (float t = 0; t < 1; t += Time.deltaTime * Constants.moveSpeed / distance)
                 {
                     float interpolation = movementCurve.Evaluate(t);
-                    CachedTransform.position = Vector3.Lerp(start, end, interpolation);
+                    transform.position = Vector3.Lerp(start, end, interpolation);
 
-                    this.CheckActiveTokenCollision(activeTokens);
+                    CheckActiveTokenCollision(activeTokens);
 
                     if (nextPos == positions.Count - 1 && t + 2 * Time.deltaTime * Constants.moveSpeed / distance > 1)
                     {
@@ -91,7 +88,7 @@ namespace Fourzy
                     yield return null;
                 }
 
-                CachedTransform.position = end;
+                transform.position = end;
                 start = end;
                 i = nextPos - 1;
             }
@@ -198,7 +195,7 @@ namespace Fourzy
 
         public bool IsOverlapped(GamePiece gamePiece)
         {
-            return this.gamePieceCollider.Distance(gamePiece.gamePieceCollider).isOverlapped;
+            return gamePieceCollider.Distance(gamePiece.gamePieceCollider).isOverlapped;
         }
 
     }

@@ -57,7 +57,7 @@ namespace Fourzy
             loadingScreenObj.SetActive(true);
             this.StartCoroutine(LogoAnimationRoutine());
 
-            AsyncOperation async = SceneManager.LoadSceneAsync("tabbedUI");
+            AsyncOperation async = SceneManager.LoadSceneAsync(Constants.MAIN_MENU_SCENE_NAME);
             async.allowSceneActivation = false;
 
             float duration = 0;

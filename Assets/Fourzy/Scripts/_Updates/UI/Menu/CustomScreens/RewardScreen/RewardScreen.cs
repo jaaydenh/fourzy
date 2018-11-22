@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Audio;
 using Fourzy._Updates.Mechanics.Vfx;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Widgets;
@@ -128,6 +129,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 });
 
                 currentRewardIndex++;
+
+                //play spawn sound
+                AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.REWARD_SPAWN, .9f);
             }
             else
                 StartRoutine("closeRoutine", 2f, () =>
@@ -162,9 +166,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             currentRewardHolder.transform.localScale = Vector2.one;
 
             currentRewardHolder.SetRewardWidget(reward);
-            currentRewardHolder.BezierMoveTo(moveRewardsTo, Random.Range(45f, 135f).VectorFromAngle() * 600f, .8f);
+            currentRewardHolder.BezierMoveTo(moveRewardsTo, Random.Range(45f, 135f).VectorFromAngle() * 600f, .9f);
 
-            yield return new WaitForSeconds(.8f);
+            yield return new WaitForSeconds(.9f);
         }
     }
 }

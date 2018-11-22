@@ -25,8 +25,7 @@ namespace Fourzy
         void Start()
         {
             ChallengeManager.Instance.GetPlayerGamePiece();
-
-            TokenBoardLoader.Instance.LoadData();
+            
             GameContentManager.Instance.UpdateContentData();
         }
 

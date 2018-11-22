@@ -6,7 +6,7 @@ using Fourzy._Updates.Serialized;
 using TMPro;
 using UnityEngine.UI;
 
-namespace Fourzy._Updates.UI.Menu.Helpers
+namespace Fourzy._Updates.UI.Helpers
 {
     public class ButtonExtended : Button
     {
@@ -30,6 +30,11 @@ namespace Fourzy._Updates.UI.Menu.Helpers
         {
             if (label)
                 label.text = text;
+        }
+
+        public void SetActive(bool state)
+        {
+            gameObject.SetActive(state);
         }
 
         private void OnClick()

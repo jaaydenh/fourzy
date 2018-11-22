@@ -61,7 +61,7 @@ namespace Fourzy
             infoText = infoTextObject.GetComponent<TextMeshProUGUI>();
             hintText = hintTextObject.GetComponent<TextMeshProUGUI>();
 
-            GamePlayManager.Instance.backButtonObject.SetActive(false);
+            GamePlayManager.Instance.gameplayScreen.backButton.SetActive(false);
 
             onboarding = this.gameObject;
 
@@ -75,7 +75,7 @@ namespace Fourzy
         }
 
         public void CompleteOnboarding() {
-            GamePlayManager.Instance.backButton.gameObject.SetActive(true);
+            GamePlayManager.Instance.gameplayScreen.backButton.SetActive(true);
         }
 
         void NextStep() {
@@ -94,7 +94,7 @@ namespace Fourzy
                 case 1:
                     wizard.transform.localPosition = new Vector3(0, 221);
                     dialogBox.transform.localPosition = new Vector3(0, -118);
-                    GamePlayManager.Instance.disableInput = true;
+                    GameBoardView.disableInput = true;
                     bg_dim.SetActive(true);
                     fullscreenButton.SetActive(true);
                     wizard.SetActive(true);
@@ -124,11 +124,11 @@ namespace Fourzy
                     infoText.SetText("Now you try it. Tap this square on the perimeter of the board to make a move.");
                     hintText.SetText("");
                     TapHintPosition(-313, 136);
-                    GamePlayManager.Instance.disableInput = false;
-                    GamePlayManager.Instance.backButtonObject.SetActive(false);
+                    GameBoardView.disableInput = false;
+                    GamePlayManager.Instance.gameplayScreen.backButton.SetActive(false);
                     break;
                 case 6:
-                    GamePlayManager.Instance.disableInput = true;
+                    GameBoardView.disableInput = true;
                     hand.SetActive(false);
                     tapAreaAnim.SetActive(false);
                     bg_dim.SetActive(true);
@@ -149,15 +149,15 @@ namespace Fourzy
                     if (step7Attempts > 0) {
                         TapHintPosition(45, 313);
                     }
-                    GamePlayManager.Instance.backButtonObject.SetActive(false);
-                    GamePlayManager.Instance.disableInput = false;
+                    GamePlayManager.Instance.gameplayScreen.backButton.SetActive(false);
+                    GameBoardView.disableInput = false;
                     break;
                 case 8:
                     //GamePlayManager.Instance.gameInfo.Close();
                     ShowWizardWithDialog("Congratulations!!! Now you know the basics of Fourzy.");
                     break;
                 case 9:
-                    if (SceneManager.GetActiveScene().name == "gamePlay") {
+                    if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
                         GamePlayManager.Instance.BackButtonOnClick();
                     }
                     wizard.transform.localPosition = new Vector3(0, 360);
@@ -165,13 +165,13 @@ namespace Fourzy
                     ShowWizardWithDialog("Try challenging other players by pressing Turn Play/Realtime or press Puzzle Play for more practice.");
                     break;
                 case 10:
-                    if (SceneManager.GetActiveScene().name == "gamePlay") {
+                    if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
                         GamePlayManager.Instance.BackButtonOnClick();
                     }
                     ShowWizardWithDialog("Fourzy is an early access turn-based game. We recommended starting several games as it can take extra time to find an opponent.");
                     break;
                 case 11:
-                    if (SceneManager.GetActiveScene().name == "gamePlay") {
+                    if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
                         GamePlayManager.Instance.BackButtonOnClick();
                     }
                     HideWizardDialog();
@@ -275,8 +275,8 @@ namespace Fourzy
         }
         
         void ShowWizardWithDialog(string dialog) {
-            if (SceneManager.GetActiveScene().name == "gamePlay") {
-                GamePlayManager.Instance.disableInput = true;
+            if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
+                GameBoardView.disableInput = true;
             }
             bg_dim.SetActive(true);
             fullscreenButton.SetActive(true);
@@ -287,8 +287,8 @@ namespace Fourzy
         }
 
         void HideWizardDialog() {
-            if (SceneManager.GetActiveScene().name == "gamePlay") {
-                GamePlayManager.Instance.disableInput = false;
+            if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
+                GameBoardView.disableInput = false;
             }
             bg_dim.SetActive(false);
             fullscreenButton.SetActive(false);
@@ -298,7 +298,7 @@ namespace Fourzy
 
         void Complete()
         {
-            GamePlayManager.Instance.backButtonObject.SetActive(true);
+            GamePlayManager.Instance.gameplayScreen.backButton.SetActive(true);
         }
     }
 }

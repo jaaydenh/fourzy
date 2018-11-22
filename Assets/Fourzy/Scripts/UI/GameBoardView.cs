@@ -1,24 +1,34 @@
-﻿using UnityEngine;
+﻿//modded @vadym udod
+//GameBoardView is handling players' input for game field
+//it checks if current opened screen (menu) is GameplayScreen, if so, player can interract with field
+
 using DG.Tweening;
+using Fourzy._Updates.UI.Menu;
+using Fourzy._Updates.UI.Menu.Screens;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fourzy
 {
-    public class GameBoardView : MonoBehaviour 
+    public class GameBoardView : MonoBehaviour
     {
-        [SerializeField]
-        private Transform gamePiecesRootTransform;
+        public static Action<Vector3> onMouseDown;
+        public static Action<Vector3> onMouseUp;
+        public static Action<Vector3> onMouseDrag;
 
-        [SerializeField]
-        private Transform tokensRootTransform;
+        public static bool disableInput = false;
 
-        public int NumPiecesAnimating { get; set; }
-        public GamePiece PlayerPiece { get; set; }
-        public GamePiece OpponentPiece { get; set; }
+        [Tooltip("Need a direct reference since it look like ther will be more than 1 MenuController instance at a time")]
+        public MenuController menuController;
+        public SpriteRenderer backgroundImage;
 
-        public GamePiece[,] gamePieces; 
-        public GameObject[,] tokens; 
+        public Transform gamePiecesRootTransform;
+        public Transform tokensRootTransform;
+
+        public GamePiece[,] gamePieces;
+        public GameObject[,] tokens;
         [Range(3, 8)]
         public int numRows = Constants.numRows;
         [Range(3, 8)]
@@ -26,67 +36,104 @@ namespace Fourzy
 
         private SpriteRenderer spriteRenderer;
         private BoxCollider2D cellsArea;
-        private Transform cachedTransform;
 
         private Vector3 topLeft;
         private Vector3 step;
-
         private bool isInitialized;
+        /// <summary>
+        /// Touch will get canceled if current screen changes from GameplayScreen to anything else during touch lifetime
+        /// </summary>
+        private bool touchCanceled = false;
 
-        void Awake () 
+        public int NumPiecesAnimating { get; set; }
+        public GamePiece PlayerPiece { get; set; }
+        public GamePiece OpponentPiece { get; set; }
+        public MenuScreen assignedScreen { get; private set; }
+
+        protected void Awake()
         {
-            this.Init();
+            Init();
+        }
+
+        protected void Start()
+        {
+            backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackground;
         }
 
 #if UNITY_EDITOR
-        private void Update()
+        protected void Update()
         {
-            if (cachedTransform.hasChanged)
-            {
+            if (transform.hasChanged)
                 CalculatePositions();
-            }
         }
 #endif
-        public void Init()
+
+        protected void OnMouseDown()
         {
-            if (isInitialized)
+            //only continue if current opened screen is GameplayScreen
+            if (assignedScreen != menuController.currentScreen || disableInput)
+                return;
+
+            touchCanceled = false;
+
+            if (onMouseDown != null)
+                onMouseDown.Invoke(Input.mousePosition);
+
+            //highlight hint area
+        }
+
+        protected void OnMouseDrag()
+        {
+            //release controls if current screen isnt GameplayScreen
+            if (assignedScreen != menuController.currentScreen || disableInput)
             {
+                touchCanceled = true;
+
+                OnMouseRelease(Input.mousePosition);
                 return;
             }
 
+            if (onMouseDrag != null)
+                onMouseDrag.Invoke(Input.mousePosition);
+        }
+
+        protected void OnMouseUp()
+        {
+            if (touchCanceled)
+                return;
+
+            OnMouseRelease(Input.mousePosition);
+        }
+
+        public void OnMouseRelease(Vector3 position)
+        {
+            if (onMouseUp != null)
+                onMouseUp.Invoke(Input.mousePosition);
+        }
+
+        public void Init()
+        {
+            if (isInitialized)
+                return;
+
+            disableInput = false;
             tokens = new GameObject[numRows, numColumns];
             gamePieces = new GamePiece[numRows, numColumns];
+            
+            cellsArea = GetComponent<BoxCollider2D>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
 
-            cachedTransform = this.transform;
-            cellsArea = this.GetComponent<BoxCollider2D>();
-            spriteRenderer = this.GetComponent<SpriteRenderer>();
+            CalculatePositions();
 
-            this.CalculatePositions();
+            //assign control screen
+            assignedScreen = menuController.GetScreen<GameplayScreen>();
 
             isInitialized = true;
         }
 
-        private void CalculatePositions()
-        {
-            BoxCollider2D boxCollider = cellsArea;
-
-            float top = boxCollider.offset.y + (boxCollider.size.y / 2f);
-            float btm = boxCollider.offset.y - (boxCollider.size.y / 2f);
-            float left = boxCollider.offset.x - (boxCollider.size.x / 2f);
-            float right = boxCollider.offset.x + (boxCollider.size.x / 2f);
-
-            topLeft = cachedTransform.TransformPoint(new Vector3(left, top, 0f));
-            Vector3 btmRight = cachedTransform.TransformPoint(new Vector3(right, btm, 0f));
-
-            float stepX = (btmRight.x - topLeft.x) / Constants.numColumns;
-            float stepY = (topLeft.y - btmRight.y) / Constants.numRows;
-
-            step = new Vector3(stepX, stepY);
-        }
-
         public Vector3 PositionToVec3(Position position, float z = 0.0f)
         {
-            return this.PositionToVec3(position.row, position.column, z);
+            return PositionToVec3(position.row, position.column, z);
         }
 
         public Vector3 PositionToVec3(int row, int column, float z = 0.0f)
@@ -114,9 +161,7 @@ namespace Fourzy
                 {
                     int piece = board[row, col];
                     if (piece == (int)Piece.EMPTY)
-                    {
                         continue;
-                    }
 
                     PlayerEnum player = (piece == (int)Piece.BLUE) ? PlayerEnum.ONE : PlayerEnum.TWO;
 
@@ -145,8 +190,8 @@ namespace Fourzy
 
                     if (tokenPrefab)
                     {
-                        this.CreateToken(row, col, tokenPrefab);
-                        this.TokenAt(row, col).GetComponent<SpriteRenderer>().SetAlpha(initialAlpha);
+                        CreateToken(row, col, tokenPrefab);
+                        TokenAt(row, col).GetComponent<SpriteRenderer>().SetAlpha(initialAlpha);
                     }
                 }
             }
@@ -178,66 +223,45 @@ namespace Fourzy
                 copyGamePieces[end.row, end.column] = mgp.gamePiece;
             }
 
-            this.StartCoroutine(MovePiecesRoutine(movingPieces, activeTokens));
-        }
-
-        private IEnumerator MovePiecesRoutine(List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
-        {
-            for (int i = 0; i < movingPieces.Count; i++)
-            {
-                MovingGamePiece mgp = movingPieces[i];
-                bool firstPiece = (i == 0);
-                bool nextPieceExists = (i + 1 < movingPieces.Count);
-                mgp.playHitAnimation = ((nextPieceExists && mgp.positions.Count > 2) || firstPiece);
-
-                mgp.gamePiece.Move(mgp, activeTokens);
-
-                if (nextPieceExists)
-                {
-                    GamePiece nextPiece = movingPieces[i + 1].gamePiece;
-                    while (!mgp.gamePiece.IsOverlapped(nextPiece))
-                    {
-                        yield return null;
-                    }
-                }
-            }
+            StartCoroutine(MovePiecesRoutine(movingPieces, activeTokens));
         }
 
         public GamePiece SpawnPiece(int col, int row, PlayerEnum player)
         {
             GamePiece gamePiecePrefab;
-            if (player == PlayerPiece.player)
-            {
-                gamePiecePrefab = PlayerPiece;
-            }
-            else
-            {
-                gamePiecePrefab = OpponentPiece;
-            }
 
-            return this.SpawnPiece(row, col, gamePiecePrefab);
+            if (player == PlayerPiece.player)
+                gamePiecePrefab = PlayerPiece;
+            else
+                gamePiecePrefab = OpponentPiece;
+
+            return SpawnPiece(row, col, gamePiecePrefab);
         }
 
         public GamePiece SpawnPiece(int row, int col, GamePiece prefab)
         {
             GamePiece gamePiece = Instantiate(prefab);
+
             gamePiece.gameObject.SetActive(true);
-            gamePiece.CachedGO.SetLayerRecursively(this.gameObject.layer);
-            gamePiece.CachedTransform.parent = this.gamePiecesRootTransform;
-            gamePiece.CachedTransform.position = this.PositionToVec3(row, col, 10.0f);
-            gamePiece.CachedTransform.localScale = Vector3.one;
+            gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
+            gamePiece.transform.parent = gamePiecesRootTransform;
+            gamePiece.transform.position = PositionToVec3(row, col, 10.0f);
+            gamePiece.transform.localScale = Vector3.one;
             gamePiece.gameBoardView = this;
             gamePiece.View.SetSortingLayer(spriteRenderer.sortingLayerID);
+
             return gamePiece;
         }
 
         public GameObject SpawnMinigameboardPiece(int row, int col, GameObject prefab)
         {
             GameObject gamePiece = Instantiate(prefab);
-            gamePiece.SetLayerRecursively(this.gameObject.layer);
-            gamePiece.transform.parent = this.gamePiecesRootTransform;
-            gamePiece.transform.position = this.PositionToVec3(row, col, 10.0f);
+
+            gamePiece.SetLayerRecursively(gameObject.layer);
+            gamePiece.transform.parent = gamePiecesRootTransform;
+            gamePiece.transform.position = PositionToVec3(row, col, 10.0f);
             gamePiece.transform.localScale = Vector3.one;
+
             return gamePiece;
         }
 
@@ -249,23 +273,21 @@ namespace Fourzy
 
         public void CreateToken(int row, int col, GameObject tokenPrefab)
         {
-            if (tokens[row, col] != null) 
-            {
+            if (tokens[row, col] != null)
                 Destroy(tokens[row, col]);
-            }
 
-            Vector3 position = this.PositionToVec3(row, col);
-            GameObject go = Instantiate(tokenPrefab, position, Quaternion.identity, this.tokensRootTransform);
-            go.SetLayerRecursively(this.gameObject.layer);
+            Vector3 position = PositionToVec3(row, col);
+            GameObject go = Instantiate(tokenPrefab, position, Quaternion.identity, tokensRootTransform);
+            go.SetLayerRecursively(gameObject.layer);
             go.transform.rotation = tokenPrefab.transform.rotation;
             go.GetComponent<SpriteRenderer>().sortingLayerID = spriteRenderer.sortingLayerID;
             tokens[row, col] = go;
         }
 
-        public void SwapPiecePosition(Position oldPos, Position newPos) 
+        public void SwapPiecePosition(Position oldPos, Position newPos)
         {
             GamePiece gamePiece = gamePieces[oldPos.row, oldPos.column];
-            
+
             gamePiece.column = newPos.column;
             gamePiece.row = newPos.row;
             gamePieces[oldPos.row, oldPos.column] = null;
@@ -273,7 +295,7 @@ namespace Fourzy
         }
 
         public GamePiece GamePieceAt(Position position)
-        {            
+        {
             return gamePieces[position.row, position.column];
         }
 
@@ -292,15 +314,9 @@ namespace Fourzy
             List<GamePiece> list = new List<GamePiece>();
 
             for (int i = 0; i < Constants.numColumns; i++)
-            {
                 for (int j = 0; j < Constants.numRows; j++)
-                {
                     if (gamePieces[i, j] != null)
-                    {
                         list.Add(gamePieces[i, j]);
-                    }
-                }
-            }
 
             return list;
         }
@@ -310,15 +326,9 @@ namespace Fourzy
             List<GamePiece> list = new List<GamePiece>();
 
             for (int i = 0; i < Constants.numColumns; i++)
-            {
                 for (int j = 0; j < Constants.numRows; j++)
-                {
                     if (gamePieces[i, j] != null && !gamePieces[i, j].isMoving)
-                    {
                         list.Add(gamePieces[i, j]);
-                    }
-                }
-            }
 
             return list;
         }
@@ -328,34 +338,29 @@ namespace Fourzy
             NumPiecesAnimating = 0;
 
             foreach (Transform piece in gamePiecesRootTransform)
-            {
                 Destroy(piece.gameObject);
-            }
 
             foreach (Transform token in tokensRootTransform)
-            {
                 Destroy(token.gameObject);
-            }
 
             gamePieces = new GamePiece[numRows, numColumns];
         }
 
-        public void PrintGameBoard() 
+        public void PrintGameBoard()
         {
             string gameboard = "GameboardView: \n";
 
             for (int row = 0; row < numRows; row++)
             {
                 for (int col = 0; col < numColumns; col++)
-                {
-                    if (gamePieces[row, col]) {
+                    if (gamePieces[row, col])
                         gameboard += (int)gamePieces[row, col].player;
-                    } else {
+                    else
                         gameboard += "0";
-                    }
-                }
+
                 gameboard += "\n";
             }
+
             Debug.Log(gameboard);
         }
 
@@ -364,16 +369,59 @@ namespace Fourzy
             Color c = spriteRenderer.color;
             c.a = alpha;
             spriteRenderer.color = c;
+
+            backgroundImage.SetAlpha(alpha);
         }
 
         public void Fade(float alpha, float time)
         {
             spriteRenderer.DOFade(alpha, time);
+            backgroundImage.DOFade(alpha, time);
         }
 
         public void UpdateGameBoardSprite(Sprite sprite)
         {
             spriteRenderer.sprite = sprite;
+        }
+
+        private void CalculatePositions()
+        {
+            BoxCollider2D boxCollider = cellsArea;
+
+            float top = boxCollider.offset.y + (boxCollider.size.y / 2f);
+            float btm = boxCollider.offset.y - (boxCollider.size.y / 2f);
+            float left = boxCollider.offset.x - (boxCollider.size.x / 2f);
+            float right = boxCollider.offset.x + (boxCollider.size.x / 2f);
+
+            topLeft = transform.TransformPoint(new Vector3(left, top, 0f));
+            Vector3 btmRight = transform.TransformPoint(new Vector3(right, btm, 0f));
+
+            float stepX = (btmRight.x - topLeft.x) / Constants.numColumns;
+            float stepY = (topLeft.y - btmRight.y) / Constants.numRows;
+
+            step = new Vector3(stepX, stepY);
+        }
+
+        private IEnumerator MovePiecesRoutine(List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
+        {
+            for (int i = 0; i < movingPieces.Count; i++)
+            {
+                MovingGamePiece mgp = movingPieces[i];
+
+                bool firstPiece = (i == 0);
+                bool nextPieceExists = (i + 1 < movingPieces.Count);
+                mgp.playHitAnimation = ((nextPieceExists && mgp.positions.Count > 2) || firstPiece);
+
+                mgp.gamePiece.Move(mgp, activeTokens);
+
+                if (nextPieceExists)
+                {
+                    GamePiece nextPiece = movingPieces[i + 1].gamePiece;
+
+                    while (!mgp.gamePiece.IsOverlapped(nextPiece))
+                        yield return null;
+                }
+            }
         }
     }
 }

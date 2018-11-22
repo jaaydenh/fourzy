@@ -36,6 +36,14 @@ namespace Fourzy._Updates.Serialized
 
         #region Common gameplay sounds
         GAME_WON = 40,
+        GAME_LOST = 41,
+
+        REWARD_SPAWN = 61,
+        #endregion
+
+        #region Audio
+        GARDEN_REALTIME = 100,
+        GARDEN_TURN_BASED = 101,
         #endregion
 
         SIZE,

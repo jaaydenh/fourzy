@@ -1,16 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using GameSparks.Api.Messages;
-using GameSparks.Core;
-using GameSparks.Api.Responses;
+﻿using GameSparks.Api.Messages;
 using GameSparks.RT;
 using System;
+using System.Collections;
+using UnityEngine;
 
 namespace Fourzy
 {
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
-    public class RealtimeManager : UnitySingleton<RealtimeManager> {
+    public class RealtimeManager : UnitySingleton<RealtimeManager>
+    {
 
         public delegate void RealtimeReady(int firstPlayerPeerId, int seed);
         public static event RealtimeReady OnRealtimeReady;
@@ -26,28 +24,32 @@ namespace Fourzy
         private bool startedGame;
         private GameSparksRTUnity gameSparksRTUnity;
 
-        public GameSparksRTUnity GetRTSession(){
+        public GameSparksRTUnity GetRTSession()
+        {
             return gameSparksRTUnity;
         }
 
         private RTSessionInfo rtSessionInfo;
 
-        public RTSessionInfo GetSessionInfo(){
+        public RTSessionInfo GetSessionInfo()
+        {
             return rtSessionInfo;
         }
 
-        void Start () 
+        void Start()
         {
             MatchNotFoundMessage.Listener += OnMatchNotFound;
             MatchFoundMessage.Listener += OnMatchFound;
         }
 
-        void OnMatchNotFound (MatchNotFoundMessage _message) {
+        void OnMatchNotFound(MatchNotFoundMessage _message)
+        {
             GameManager.Instance.ShowInfoBanner("No Match Found");
             OnRealtimeMatchNotFound();
         }
 
-        void OnMatchFound (MatchFoundMessage _message) {
+        void OnMatchFound(MatchFoundMessage _message)
+        {
             GameManager.Instance.ShowInfoBanner("Match Found");
             rtSessionInfo = new RTSessionInfo(_message);
             StartNewRTSession(_message);
@@ -57,74 +59,87 @@ namespace Fourzy
         /// This will request a match between as many players you have set in the match.
         /// When the max number of players is found each player will receive the MatchFound message
         /// </summary>
-        public void FindPlayers() {
-            Debug.Log ("GSM| Attempting Matchmaking...");
-            new GameSparks.Api.Requests.MatchmakingRequest ()
-                .SetMatchShortCode ("matchRanked")
-                .SetSkill (0) // in this case we assume all players have skill level zero and we want anyone to be able to join so the skill level for the request is set to zero
-                .Send ((response) => {
-                    if(response.HasErrors){ // check for errors
+        public void FindPlayers()
+        {
+            Debug.Log("GSM| Attempting Matchmaking...");
+            new GameSparks.Api.Requests.MatchmakingRequest()
+                .SetMatchShortCode("matchRanked")
+                .SetSkill(0) // in this case we assume all players have skill level zero and we want anyone to be able to join so the skill level for the request is set to zero
+                .Send((response) =>
+                {
+                    if (response.HasErrors)
+                    { // check for errors
                         Debug.LogError("GSM| MatchMaking Error \n" + response.Errors.JSON);
                     }
                 });
         }
 
-        public void CancelMatchmakingRequest() {
-            Debug.Log ("GSM| Cancel Matchmaking...");
-            new GameSparks.Api.Requests.MatchmakingRequest ()
-                .SetMatchShortCode ("matchRanked")
+        public void CancelMatchmakingRequest()
+        {
+            Debug.Log("GSM| Cancel Matchmaking...");
+            new GameSparks.Api.Requests.MatchmakingRequest()
+                .SetMatchShortCode("matchRanked")
                 .SetAction("cancel")
-                .Send ((response) => {
-                    if(response.HasErrors){ // check for errors
+                .Send((response) =>
+                {
+                    if (response.HasErrors)
+                    { // check for errors
                         Debug.LogError("GSM| MatchMaking Cancel Error \n" + response.Errors.JSON);
                     }
                 });
         }
 
-        public void StartNewRTSession(MatchFoundMessage message){
-            Debug.Log ("GSM| Creating New RT Session Instance...");
+        public void StartNewRTSession(MatchFoundMessage message)
+        {
+            Debug.Log("GSM| Creating New RT Session Instance...");
 
             gameSparksRTUnity = this.gameObject.AddComponent<GameSparksRTUnity>(); // Adds the RT script to the game
 
-            gameSparksRTUnity.Configure(message, 
-                (peerId) =>  {    OnPlayerConnectedToGame(peerId);  },
-                (peerId) => {    OnPlayerDisconnected(peerId);    },
-                (ready) => {    OnRTReady(ready);    },
-                (packet) => {    OnPacketReceived(packet);    });
+            gameSparksRTUnity.Configure(message,
+                (peerId) => { OnPlayerConnectedToGame(peerId); },
+                (peerId) => { OnPlayerDisconnected(peerId); },
+                (ready) => { OnRTReady(ready); },
+                (packet) => { OnPacketReceived(packet); });
             gameSparksRTUnity.Connect(); // when the config is set, connect the game
         }
 
-        private void OnPlayerConnectedToGame(int _peerId){
-            Debug.Log ("GSM| Player Connected, " + _peerId);
+        private void OnPlayerConnectedToGame(int _peerId)
+        {
+            Debug.Log("GSM| Player Connected, " + _peerId);
             currentPlayerPeerId = _peerId;
         }
 
-        private void OnPlayerDisconnected(int _peerId){
-            Debug.Log ("GSM| Player Disconnected, " + _peerId);
+        private void OnPlayerDisconnected(int _peerId)
+        {
+            Debug.Log("GSM| Player Disconnected, " + _peerId);
             startedGame = false;
         }
 
-        private void OnRTReady(bool _isReady){
-            if (_isReady) {
-                Debug.Log ("GSM| RT Session Connected...");
+        private void OnRTReady(bool _isReady)
+        {
+            if (_isReady)
+            {
+                Debug.Log("GSM| RT Session Connected...");
 
                 StartCoroutine(CheckIfConnected());
             }
         }
 
-        private IEnumerator CheckIfConnected() {
+        private IEnumerator CheckIfConnected()
+        {
 
             yield return new WaitForSeconds(3.0f);
 
-            if (startedGame == false) {
+            if (startedGame == false)
+            {
                 GameManager.Instance.ShowInfoBanner("Realtime Connect Validation");
-                GetRTSession ().SendData(103, GameSparks.RT.GameSparksRT.DeliveryIntent.RELIABLE, null, new int[]{ 0 }); // send to peerId -> 0, which is the server
+                GetRTSession().SendData(103, GameSparks.RT.GameSparksRT.DeliveryIntent.RELIABLE, null, new int[] { 0 }); // send to peerId -> 0, which is the server
             }
         }
 
         private void OnPacketReceived(RTPacket _packet)
         {
-            switch (_packet.OpCode) 
+            switch (_packet.OpCode)
             {
                 case 1:
                     ProcessReceivedMessage(_packet);
@@ -153,8 +168,10 @@ namespace Fourzy
             }
         }
 
-        public void SendRealTimeMove(Move move) {
-            using (RTData data = RTData.Get ()) {  // we put a using statement here so that we can dispose of the RTData objects once the packet is sent
+        public void SendRealTimeMove(Move move)
+        {
+            using (RTData data = RTData.Get())
+            {  // we put a using statement here so that we can dispose of the RTData objects once the packet is sent
                 data.SetInt(1, Utility.GetMoveLocation(move));
                 data.SetInt(2, move.direction.GetHashCode());
                 data.SetInt(3, move.player.GetHashCode());
@@ -162,7 +179,7 @@ namespace Fourzy
             }
         }
 
-        public void ProcessOpponentMove(RTPacket _packet) 
+        public void ProcessOpponentMove(RTPacket _packet)
         {
             int location = _packet.Data.GetInt(1).Value;
             Direction direction = (Direction)_packet.Data.GetInt(2).Value;
@@ -174,27 +191,30 @@ namespace Fourzy
             }
         }
 
-        public void SendTimeStamp() {
+        public void SendTimeStamp()
+        {
             // send a packet with our current time first //
-            using (RTData data = RTData.Get ()) {
-                data.SetLong (1, (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds); // get the current time as unix timestamp
-                GetRTSession ().SendData (101, GameSparks.RT.GameSparksRT.DeliveryIntent.UNRELIABLE, data, new int[]{ 0 }); // send to peerId -> 0, which is the server
+            using (RTData data = RTData.Get())
+            {
+                data.SetLong(1, (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds); // get the current time as unix timestamp
+                GetRTSession().SendData(101, GameSparks.RT.GameSparksRT.DeliveryIntent.UNRELIABLE, data, new int[] { 0 }); // send to peerId -> 0, which is the server
             }
         }
 
         /// <summary>
         /// Calculates the time-difference between the client and server
         /// </summary>
-        public void CalculateTimeDelta(RTPacket _packet){
+        public void CalculateTimeDelta(RTPacket _packet)
+        {
             // calculate the time taken from the packet to be sent from the client and then for the server to return it //
-            roundTrip = (int)((long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds - _packet.Data.GetLong (1).Value);
+            roundTrip = (int)((long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds - _packet.Data.GetLong(1).Value);
             latency = roundTrip / 2; // the latency is half the round-trip time
             // calculate the server-delta from the server time minus the current time
-            int serverDelta = (int)(_packet.Data.GetLong (2).Value - (long)(DateTime.UtcNow - new DateTime (1970, 1, 1, 0, 0, 0)).TotalMilliseconds);
+            int serverDelta = (int)(_packet.Data.GetLong(2).Value - (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds);
             timeDelta = serverDelta + latency; // the time-delta is the server-delta plus the latency
         }
 
-        public void SendChatMessage(string message) 
+        public void SendChatMessage(string message)
         {
             if (string.IsNullOrEmpty(message))
             {
@@ -221,11 +241,11 @@ namespace Fourzy
         /// <param name="_data">Data.</param>
         public void ProcessReceivedMessage(RTPacket _packet)
         {
-            Debug.Log ("Message Received...\n"+_packet.Data.GetString(1)); // the RTData we sent the message with used an index '1' so we can parse the data back using the same index
+            Debug.Log("Message Received...\n" + _packet.Data.GetString(1)); // the RTData we sent the message with used an index '1' so we can parse the data back using the same index
             // we need the display name of the sender. We get this by using the packet sender id and comparing that to the peerId of the player //
-            foreach (RTSessionInfo.RTPlayer player in GetSessionInfo().GetPlayerList()) 
+            foreach (RTSessionInfo.RTPlayer player in GetSessionInfo().GetPlayerList())
             {
-                if (player.peerId == _packet.Sender) 
+                if (player.peerId == _packet.Sender)
                 {
                     if (OnChatMessageReceived != null)
                     {

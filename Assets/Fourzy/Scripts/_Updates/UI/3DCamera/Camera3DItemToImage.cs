@@ -16,6 +16,7 @@ namespace Fourzy._Updates.UI.Camera3D
         public bool autoSizeRenderTexture = false;
         [Tooltip("Will create a new instance of this prefab even if one already exists")]
         public bool forceNew = false;
+        public Color onStartColor = Color.white;
 
         private RawImage rawImage;
         private Vector2 oldSize;
@@ -32,6 +33,12 @@ namespace Fourzy._Updates.UI.Camera3D
                 return;
 
             Initialize();
+        }
+
+        protected void Start()
+        {
+            if (rawImage)
+                rawImage.color = onStartColor;
         }
 
         protected void Update()
