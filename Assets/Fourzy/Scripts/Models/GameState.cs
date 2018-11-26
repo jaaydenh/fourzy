@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Fourzy
 {
-    public class GameState {
+    public class GameState
+    {
 
         private int numRows;
         private int numColumns;
@@ -33,7 +34,10 @@ namespace Fourzy
         const char DataDelimiter = ':';
         public int RandomSeed = -1;
 
-        public string UniqueId { get {
+        public string UniqueId
+        {
+            get
+            {
 
                 //What do we need to have?
                 //where are the pieces for player 1
@@ -56,7 +60,7 @@ namespace Fourzy
                 {
                     for (int c = 0; c < Constants.numColumns; c++)
                     {
-                        StringId.Append((int)TokenBoard.tokens[r,c].tokenType + ColDelimiter);
+                        StringId.Append((int)TokenBoard.tokens[r, c].tokenType + ColDelimiter);
                     }
                     StringId.Append(RowDelimiter);
                 }
@@ -68,24 +72,25 @@ namespace Fourzy
                 //StringCompression isn't working yet.
                 //string rval = StringCompression.Zip(StringId.ToString());
                 //string rval_back = StringCompression.UnZip(rval);
-                return rval; 
+                return rval;
 
-            } }
+            }
+        }
 
         public GameState(string UniqueIdString)
-            {
-          
-            string[] splitme= UniqueId.Split(':');
+        {
+
+            string[] splitme = UniqueId.Split(':');
             string pieces = splitme[0];
             string tokens = splitme[1];
             string curplayer = splitme[2];
-         
+
             GameBoard = new GameBoard(this, Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
             for (int r = 0; r < Constants.numRows; r++)
             {
                 for (int c = 0; c < Constants.numColumns; c++)
                 {
-                    GameBoard.SetCell(c,r,(PlayerEnum) Convert.ToInt32(pieces.Substring(r * Constants.numColumns + c, 1)));
+                    GameBoard.SetCell(c, r, (PlayerEnum)Convert.ToInt32(pieces.Substring(r * Constants.numColumns + c, 1)));
                 }
             }
 
@@ -98,13 +103,13 @@ namespace Fourzy
                 string[] parse_cols = tokens.Split(ColDelimiter);
                 foreach (string tokenstring in parse_rows)
                 {
-                    read_tokens[read_row, read_column] = int.Parse(tokenstring); 
+                    read_tokens[read_row, read_column] = int.Parse(tokenstring);
                     read_column++;
                 }
                 read_row++;
             }
 
-            TokenBoard = new TokenBoard(read_tokens,"id","name",new List<MoveInfo>(), null, true);
+            TokenBoard = new TokenBoard(read_tokens, "id", "name", new List<MoveInfo>(), null, true);
 
 
             // Debug.Log("GameState 1");
@@ -129,7 +134,8 @@ namespace Fourzy
         }
 
 
-        public GameState (int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] gameBoardData, bool isGameOver, List<Move> moveList, int RandomSeed = -1) {
+        public GameState(int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, TokenBoard tokenBoard, int[] gameBoardData, bool isGameOver, List<Move> moveList, int RandomSeed = -1)
+        {
             // Debug.Log("GameState 1");
             this.numRows = numRows;
             this.numColumns = numColumns;
@@ -154,7 +160,8 @@ namespace Fourzy
             InitGameState(gameBoardData);
         }
 
-        public GameState(int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, bool isGameOver, TokenBoard tokenBoard, PlayerEnum winner, List<Move> moveList, int[] previousGameboardData, int RandomSeed = -1) {
+        public GameState(int numRows, int numColumns, GameType gameType, bool isPlayerOneTurn, bool isCurrentPlayerTurn, bool isGameOver, TokenBoard tokenBoard, PlayerEnum winner, List<Move> moveList, int[] previousGameboardData, int RandomSeed = -1)
+        {
             // Debug.Log("GameState 2");
             this.numRows = numRows;
             this.numColumns = numColumns;
@@ -182,15 +189,18 @@ namespace Fourzy
             return GS;
         }
 
-        private void InitGameState(int[] gameBoardData) {
+        private void InitGameState(int[] gameBoardData)
+        {
             GameBoard.OnUpdateTokenBoard += SetTokenBoardCell;
 
             GameBoard = new GameBoard(this, Constants.numRows, Constants.numColumns, Constants.numPiecesToWin);
 
             InitIsMovable();
 
-            if (gameBoardData != null) {
-                if (gameBoardData.Length > 0) {
+            if (gameBoardData != null)
+            {
+                if (gameBoardData.Length > 0)
+                {
                     GameBoard.SetGameBoard(gameBoardData);
                 }
 
@@ -202,22 +212,24 @@ namespace Fourzy
             randomGuid = System.Guid.NewGuid().ToString();
         }
 
-        private void InitMoveablePieces() {
+        private void InitMoveablePieces()
+        {
             GameBoard.GetCompletedPieces();
             UpdateMoveablePieces();
             GameBoard.completedMovingPieces.Clear();
         }
 
-        public void SetRandomGuid(string guid) {
+        public void SetRandomGuid(string guid)
+        {
             randomGuid = guid;
         }
 
-        public int GetRandomNumber(int min, int max, int move = 0, int random_id=0)
+        public int GetRandomNumber(int min, int max, int move = 0, int random_id = 0)
         {
             int number = 0;
             int number_space = max - min;
             int window_length = 5;
-            
+
             if (RandomSeed > 0)
             {
                 return UnityEngine.Random.Range(min, max);
@@ -239,11 +251,13 @@ namespace Fourzy
             return number;
         }
 
-        public void SetTokenBoardCell(int row, int col, IToken token) {
+        public void SetTokenBoardCell(int row, int col, IToken token)
+        {
             TokenBoard.SetTokenBoardCell(row, col, token);
         }
 
-        private void InitIsMovable() {
+        private void InitIsMovable()
+        {
             for (int i = 0; i < numColumns * numRows; i++)
             {
                 isMoveableUp[i] = 1;
@@ -287,13 +301,17 @@ namespace Fourzy
             return MovePiece(move, isReplay, out activeTokens);
         }
 
-        public List<MovingGamePiece> MovePiece(Move move, bool isReplay, out List<IToken> activeTokens) {
+        public List<MovingGamePiece> MovePiece(Move move, bool isReplay, out List<IToken> activeTokens)
+        {
             // Debug.Log("MovePiece");
-            if (isReplay) {
+            if (isReplay)
+            {
                 GameBoard = previousGameBoard.Clone();
                 TokenBoard = PreviousTokenBoard.Clone();
                 InitMoveablePieces();
-            } else {
+            }
+            else
+            {
                 previousGameBoard = GameBoard.Clone();
                 PreviousTokenBoard = TokenBoard.Clone();
             }
@@ -301,7 +319,7 @@ namespace Fourzy
             {
                 int m = 0;
                 if (MoveList != null) m = MoveList.Count;
-                UnityEngine.Random.InitState(RandomSeed + m );
+                UnityEngine.Random.InitState(RandomSeed + m);
             }
 
             GameBoard.completedMovingPieces.Clear();
@@ -398,43 +416,54 @@ namespace Fourzy
             }
             activeTokens = activeTokenList;
 
-            if (!isReplay) {
+            if (!isReplay)
+            {
                 // System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
                 // int currentTime = (int)(System.DateTime.UtcNow - epochStart).TotalMilliseconds;
                 move.timeStamp = System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond;
                 // move.timeStamp = currentTime;
                 // Debug.Log("timstamp: " + move.timeStamp.ToString());
-                if (MoveList ==  null) {
+                if (MoveList == null)
+                {
                     MoveList = new List<Move>();
                 }
                 MoveList.Add(move);
 
-                if (IsPlayerOneTurn) {
+                if (IsPlayerOneTurn)
+                {
                     Player1MoveCount++;
-                } else {
+                }
+                else
+                {
                     Player2MoveCount++;
                 }
             }
 
             UpdateMoveablePieces();
 
-            if (GameBoard.didPlayerWin(1)) {
+            if (GameBoard.didPlayerWin(1))
+            {
                 Winner = PlayerEnum.ONE;
                 IsGameOver = true;
                 isCurrentPlayerTurn = false;
             }
-            
-            if (GameBoard.didPlayerWin(2)) {
+
+            if (GameBoard.didPlayerWin(2))
+            {
                 IsGameOver = true;
                 isCurrentPlayerTurn = false;
-                if (Winner == PlayerEnum.ONE) {
+                if (Winner == PlayerEnum.ONE)
+                {
                     Winner = PlayerEnum.ALL;
-                } else {
+                }
+                else
+                {
                     Winner = PlayerEnum.TWO;
                 }
             }
 
-            if (IsGameOver == false && GetPossibleMoves().Count <= 0) {
+            if (IsGameOver == false && GetPossibleMoves().Count <= 0)
+            {
                 IsGameOver = true;
                 isCurrentPlayerTurn = false;
                 Winner = PlayerEnum.NONE;
@@ -468,22 +497,29 @@ namespace Fourzy
             return GameBoard.completedMovingPieces;
         }
 
-        public float GetGameResult(bool isCurrentPlayerPlayerOne) {
+        public float GetGameResult(bool isCurrentPlayerPlayerOne)
+        {
             float result = -1;
             switch (Winner)
             {
                 case PlayerEnum.ONE:
-                    if (isCurrentPlayerPlayerOne) {
+                    if (isCurrentPlayerPlayerOne)
+                    {
                         result = 1;
-                    } else {
+                    }
+                    else
+                    {
                         result = 0;
                     }
                     break;
                 case PlayerEnum.TWO:
-                    if (isCurrentPlayerPlayerOne) {
+                    if (isCurrentPlayerPlayerOne)
+                    {
                         result = 0;
-                    } else {
-                        result = 1;    
+                    }
+                    else
+                    {
+                        result = 1;
                     }
                     break;
                 case PlayerEnum.NONE:
@@ -502,57 +538,80 @@ namespace Fourzy
             return result;
         }
 
-        public int[,] GetPreviousGameBoard() {
-            return  previousGameBoard.GetGameBoard();
+        public int[,] GetPreviousGameBoard()
+        {
+            return previousGameBoard.GetGameBoard();
         }
 
-        public int[,] GetGameBoard() {
+        public int[,] GetGameBoard()
+        {
             return GameBoard.GetGameBoard();
         }
 
-        public int[] GetGameBoardArray() {
+        public int[] GetGameBoardArray()
+        {
             return GameBoard.ToArray();
         }
 
-        public List<long> GetGameBoardData() {
+        public List<long> GetGameBoardData()
+        {
             return GameBoard.GetGameBoardData();
         }
 
-        private void UpdateMoveablePieces() {
+        private void UpdateMoveablePieces()
+        {
             foreach (var piece in GameBoard.completedMovingPieces)
             {
-                if (!piece.isDestroyed) {
+                if (!piece.isDestroyed)
+                {
                     Position currentPosition = piece.GetCurrentPosition();
-                    if (currentPosition.row > 7 || currentPosition.column < 0 || currentPosition.column > 7 || currentPosition.column < 0) {
+                    if (currentPosition.row > 7 || currentPosition.column < 0 || currentPosition.column > 7 || currentPosition.column < 0)
+                    {
                         // Debug.Log("currentPosition.row: " + currentPosition.row);
                         // Debug.Log("currentPosition.column: " + currentPosition.column);
                     }
-                    if (TokenBoard.tokens == null) {
+                    if (TokenBoard.tokens == null)
+                    {
                         // Debug.Log("Tokenboard tokens is null");
                     }
-                    if (TokenBoard.tokens[currentPosition.row, currentPosition.column].isMoveable) {
+                    if (TokenBoard.tokens[currentPosition.row, currentPosition.column].isMoveable)
+                    {
 
-                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP, PlayerEnum.NONE), TokenBoard.tokens)) {
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.UP), Direction.UP, PlayerEnum.NONE), TokenBoard.tokens))
+                        {
                             MakePieceMoveable(currentPosition, true, Direction.UP);
-                        } else {
+                        }
+                        else
+                        {
                             MakePieceMoveable(currentPosition, false, Direction.UP);
-                        } 
-                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.DOWN), Direction.DOWN, PlayerEnum.NONE), TokenBoard.tokens)) {
+                        }
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.DOWN), Direction.DOWN, PlayerEnum.NONE), TokenBoard.tokens))
+                        {
                             MakePieceMoveable(currentPosition, true, Direction.DOWN);
-                        } else {
+                        }
+                        else
+                        {
                             MakePieceMoveable(currentPosition, false, Direction.DOWN);
                         }
-                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.LEFT), Direction.LEFT, PlayerEnum.NONE), TokenBoard.tokens)) {
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.LEFT), Direction.LEFT, PlayerEnum.NONE), TokenBoard.tokens))
+                        {
                             MakePieceMoveable(currentPosition, true, Direction.LEFT);
-                        } else {
+                        }
+                        else
+                        {
                             MakePieceMoveable(currentPosition, false, Direction.LEFT);
                         }
-                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.RIGHT), Direction.RIGHT, PlayerEnum.NONE), TokenBoard.tokens)) {
+                        if (CanMove(new Move(piece.GetNextPositionWithDirection(Direction.RIGHT), Direction.RIGHT, PlayerEnum.NONE), TokenBoard.tokens))
+                        {
                             MakePieceMoveable(currentPosition, true, Direction.RIGHT);
-                        } else {
+                        }
+                        else
+                        {
                             MakePieceMoveable(currentPosition, false, Direction.RIGHT);
                         }
-                    } else {
+                    }
+                    else
+                    {
                         MakePieceMoveable(currentPosition, false, Direction.UP);
                         MakePieceMoveable(currentPosition, false, Direction.DOWN);
                         MakePieceMoveable(currentPosition, false, Direction.LEFT);
@@ -562,7 +621,8 @@ namespace Fourzy
             }
         }
 
-        private void MakePieceMoveable(Position pos, bool moveable, Direction direction) {
+        private void MakePieceMoveable(Position pos, bool moveable, Direction direction)
+        {
             switch (direction)
             {
                 case Direction.UP:
@@ -584,45 +644,50 @@ namespace Fourzy
 
         public bool CanMove(Move move, IToken[,] tokens)
         {
-            Position endPosition = move.position;
             //Debug.Log("startPosition:col: " + startPosition.column + " row: " + startPosition.row);
             //Debug.Log("endPosition:col: " + endPosition.column + " row: " + endPosition.row);
             // if the next end position is outside of the board then return false;
-            if (endPosition.column >= Constants.numColumns || endPosition.column < 0 || endPosition.row >= Constants.numRows || endPosition.row < 0) {
+            if (move.position.column >= Constants.numColumns || move.position.column < 0 || move.position.row >= Constants.numRows || move.position.row < 0)
+            {
                 //Debug.Log("OUTSIDE OF BOARD Model");
                 return false;
             }
 
             // check for piece at end position, if there is a piece and the piece is not moveable then return false
-            if (GameBoard.GetCell(endPosition.column, endPosition.row) != 0) {
+            if (GameBoard.GetCell(move.position) != 0)
+            {
                 //Debug.Log("Check can move: row: " + endPosition.row + " col: " + endPosition.column + " direction: " + move.direction);                
                 switch (move.direction)
                 {
                     case Direction.UP:
-                        int isMoveableUp = this.isMoveableUp[endPosition.row * Constants.numRows + endPosition.column];
+                        int isMoveableUp = this.isMoveableUp[move.position.row * Constants.numRows + move.position.column];
                         //Debug.Log("isMoveableUp: " + isMoveableUp);
-                        if (isMoveableUp == 0) {
+                        if (isMoveableUp == 0)
+                        {
                             return false;
                         }
                         break;
                     case Direction.DOWN:
-                        int isMoveableDown = this.isMoveableDown[endPosition.row * Constants.numRows + endPosition.column];
+                        int isMoveableDown = this.isMoveableDown[move.position.row * Constants.numRows + move.position.column];
                         //Debug.Log("isMoveableDown: " + isMoveableDown);
-                        if (isMoveableDown == 0) {
+                        if (isMoveableDown == 0)
+                        {
                             return false;
                         }
                         break;
                     case Direction.LEFT:
-                        int isMoveableLeft = this.isMoveableLeft[endPosition.row * Constants.numRows + endPosition.column];
+                        int isMoveableLeft = this.isMoveableLeft[move.position.row * Constants.numRows + move.position.column];
                         //Debug.Log("isMoveableLeft: " + isMoveableLeft);
-                        if (isMoveableLeft == 0) {
+                        if (isMoveableLeft == 0)
+                        {
                             return false;
                         }
                         break;
                     case Direction.RIGHT:
-                        int isMoveableRight = this.isMoveableRight[endPosition.row * Constants.numRows + endPosition.column];
+                        int isMoveableRight = this.isMoveableRight[move.position.row * Constants.numRows + move.position.column];
                         //Debug.Log("isMoveableRight: " + isMoveableRight);
-                        if (isMoveableRight == 0) {
+                        if (isMoveableRight == 0)
+                        {
                             return false;
                         }
                         break;
@@ -633,22 +698,18 @@ namespace Fourzy
                 return CanMove(new Move(Utility.GetNextPosition(move), move.direction, move.player), tokens);
             }
 
-            if (tokens[endPosition.row, endPosition.column].canEvaluateWithoutEntering)
-            {
+            if (tokens[move.position.row, move.position.column].canEvaluateWithoutEntering)
                 return true;
-            }
 
             // if there is a token at the end position and canPassThrough is false then return false
             // MUST CHECK FOR canPassThrough before checking canStopOn
-            if (!tokens[endPosition.row, endPosition.column].pieceCanEnter) {
+            if (!tokens[move.position.row, move.position.column].pieceCanEnter)
                 return false;
-            }
 
             // if there is a token at the end position and canStopOn is false then check if the piece can move
             // to the next position, if not then return false
-            if (!tokens[endPosition.row, endPosition.column].pieceCanEndMoveOn) {
+            if (!tokens[move.position.row, move.position.column].pieceCanEndMoveOn)
                 return CanMove(new Move(Utility.GetNextPosition(move), move.direction, move.player), tokens);
-            }
 
             return true;
         }
@@ -658,7 +719,8 @@ namespace Fourzy
             return GameBoard.PlayerPieceCount(player);
         }
 
-        public void PrintMoveList() {
+        public void PrintMoveList()
+        {
             int i = 0;
 
             foreach (var move in MoveList)
@@ -791,7 +853,8 @@ namespace Fourzy
             return ((four_count_for * 5) - (four_count_against * 4));
         }
 
-        public void PrintGameState(string name) {
+        public void PrintGameState(string name)
+        {
             string log = name + "\n";
 
             log += GameBoard.PrintBoard("Gameboard");
@@ -799,8 +862,10 @@ namespace Fourzy
             log += TokenBoard.PrintBoard("TokenBoard");
 
             log += "IsMoveableUp\n";
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numColumns; col++) {
+            for (int row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < numColumns; col++)
+                {
                     log += isMoveableUp[row * numRows + col];
                 }
                 log += "\n";
@@ -808,8 +873,10 @@ namespace Fourzy
             log += "\n";
 
             log += "IsMoveableDown\n";
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numColumns; col++) {
+            for (int row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < numColumns; col++)
+                {
                     log += isMoveableDown[row * numRows + col];
                 }
                 log += "\n";
@@ -817,8 +884,10 @@ namespace Fourzy
             log += "\n";
 
             log += "IsMoveableLeft\n";
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numColumns; col++) {
+            for (int row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < numColumns; col++)
+                {
                     log += isMoveableLeft[row * numRows + col];
                 }
                 log += "\n";
@@ -826,13 +895,15 @@ namespace Fourzy
             log += "\n";
 
             log += "IsMoveableRight\n";
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numColumns; col++) {
+            for (int row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < numColumns; col++)
+                {
                     log += isMoveableRight[row * numRows + col];
                 }
                 log += "\n";
             }
-            
+
             Debug.Log(log);
         }
     }

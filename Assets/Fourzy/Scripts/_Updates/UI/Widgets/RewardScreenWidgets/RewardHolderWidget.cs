@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics.Vfx;
-using Fourzy._Updates.Prefabs;
 using Fourzy._Updates.Tween;
 using UnityEngine;
 
@@ -31,11 +30,11 @@ namespace Fourzy._Updates.UI.Widgets
             switch (reward.Type)
             {
                 case Reward.RewardType.Coins:
-                    rewardWidget = PrefabsManager.GetPrefab<WidgetBase>(PrefabType.COINS_WIDGET_SMALL, transform);
+                    rewardWidget = GameContentManager.GetPrefab<WidgetBase>(GameContentManager.PrefabType.COINS_WIDGET_SMALL, transform);
                     ((CoinsWidgetSmall)rewardWidget).SetValue(reward.NumberOfCoins);
                     break;
                 case Reward.RewardType.CollectedGamePiece:
-                    rewardWidget = PrefabsManager.GetPrefab<WidgetBase>(PrefabType.GAME_PIECE_SMALL, transform);
+                    rewardWidget = GameContentManager.GetPrefab<WidgetBase>(GameContentManager.PrefabType.GAME_PIECE_SMALL, transform);
                     ((GamePieceWidgetSmall)rewardWidget).SetData(reward.CollectedGamePiece);
                     break;
             }

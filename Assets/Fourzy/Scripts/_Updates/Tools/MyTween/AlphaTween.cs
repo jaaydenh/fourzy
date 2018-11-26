@@ -14,6 +14,7 @@ namespace Fourzy._Updates.Tween
         public float to;
 
         private List<GraphicsColorGroup> alphaGroup = new List<GraphicsColorGroup>();
+        private float temp;
 
         protected void Awake()
         {
@@ -32,60 +33,32 @@ namespace Fourzy._Updates.Tween
             {
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
-                    {
-                        foreach (GraphicsColorGroup group in alphaGroup)
-                        {
-                            if (group.canvasGroup)
-                                group.canvasGroup.alpha = Mathf.Lerp(from, to, curve.Evaluate(value));
-                            else if (group.uiGraphics)
-                                group.uiGraphics.color = new Color(group.uiGraphics.color.r, group.uiGraphics.color.g, group.uiGraphics.color.b, Mathf.Lerp(from, to, curve.Evaluate(value)));
-                            else if (group.spriteRenderer)
-                                group.spriteRenderer.color = new Color(group.spriteRenderer.color.r, group.spriteRenderer.color.g, group.spriteRenderer.color.b, Mathf.Lerp(from, to, curve.Evaluate(value)));
-                        }
-                    }
+                        temp = Mathf.Lerp(from, to, curve.Evaluate(value));
                     else
                     {
+                        temp = Mathf.Lerp(from, to, curve.Evaluate(1f));
                         isPlaying = false;
-
-                        foreach (GraphicsColorGroup group in alphaGroup)
-                        {
-                            if (group.canvasGroup)
-                                group.canvasGroup.alpha = Mathf.Lerp(from, to, curve.Evaluate(1f));
-                            else if (group.uiGraphics)
-                                group.uiGraphics.color = new Color(group.uiGraphics.color.r, group.uiGraphics.color.g, group.uiGraphics.color.b, Mathf.Lerp(from, to, curve.Evaluate(1f)));
-                            else if (group.spriteRenderer)
-                                group.spriteRenderer.color = new Color(group.spriteRenderer.color.r, group.spriteRenderer.color.g, group.spriteRenderer.color.b, Mathf.Lerp(from, to, curve.Evaluate(1f)));
-                        }
                     }
                     break;
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
-                    {
-                        foreach (GraphicsColorGroup group in alphaGroup)
-                        {
-                            if (group.canvasGroup)
-                                group.canvasGroup.alpha = Mathf.Lerp(to, from, curve.Evaluate(value));
-                            else if (group.uiGraphics)
-                                group.uiGraphics.color = new Color(group.uiGraphics.color.r, group.uiGraphics.color.g, group.uiGraphics.color.b, Mathf.Lerp(to, from, curve.Evaluate(value)));
-                            else if (group.spriteRenderer)
-                                group.spriteRenderer.color = new Color(group.spriteRenderer.color.r, group.spriteRenderer.color.g, group.spriteRenderer.color.b, Mathf.Lerp(to, from, curve.Evaluate(value)));
-                        }
-                    }
+                        temp = Mathf.Lerp(to, from, curve.Evaluate(value));
                     else
                     {
+                        temp = Mathf.Lerp(to, from, curve.Evaluate(1f));
                         isPlaying = false;
-
-                        foreach (GraphicsColorGroup group in alphaGroup)
-                        {
-                            if (group.canvasGroup)
-                                group.canvasGroup.alpha = Mathf.Lerp(to, from, curve.Evaluate(1f));
-                            else if (group.uiGraphics)
-                                group.uiGraphics.color = new Color(group.uiGraphics.color.r, group.uiGraphics.color.g, group.uiGraphics.color.b, Mathf.Lerp(to, from, curve.Evaluate(1f)));
-                            else if (group.spriteRenderer)
-                                group.spriteRenderer.color = new Color(group.spriteRenderer.color.r, group.spriteRenderer.color.g, group.spriteRenderer.color.b, Mathf.Lerp(to, from, curve.Evaluate(1f)));
-                        }
                     }
                     break;
+            }
+
+            foreach (GraphicsColorGroup group in alphaGroup)
+            {
+                if (group.canvasGroup)
+                    group.canvasGroup.alpha = temp;
+                else if (group.uiGraphics)
+                    group.uiGraphics.color = new Color(group.uiGraphics.color.r, group.uiGraphics.color.g, group.uiGraphics.color.b, temp);
+                else if (group.spriteRenderer)
+                    group.spriteRenderer.color = new Color(group.spriteRenderer.color.r, group.spriteRenderer.color.g, group.spriteRenderer.color.b, temp);
             }
         }
 

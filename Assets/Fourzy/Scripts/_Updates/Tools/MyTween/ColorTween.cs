@@ -10,10 +10,12 @@ namespace Fourzy._Updates.Tween
     {
         public Transform[] customObjects;
         public bool propagate = false;      //do the same for all child objects?
+        public bool changeAlpha = true;
         public Color from;
         public Color to;
 
         private List<GraphicsColorGroup> spriteColorGroups;
+        private Color temp;
 
         protected void Awake()
         {
@@ -42,60 +44,32 @@ namespace Fourzy._Updates.Tween
             {
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
-                    {
-                        foreach (GraphicsColorGroup group in spriteColorGroups)
-                        {
-                            if (group.uiGraphics)
-                                group.uiGraphics.color = Color.Lerp(from, to, curve.Evaluate(value));
-                            else if (group.spriteRenderer)
-                                group.spriteRenderer.color = Color.Lerp(from, to, curve.Evaluate(value));
-                            else if (group.lineRenderer)
-                                group.lineRenderer.startColor = Color.Lerp(from, to, curve.Evaluate(value));
-                        }
-                    }
+                        temp = Color.Lerp(from, to, curve.Evaluate(value));
                     else
                     {
+                        temp = Color.Lerp(from, to, curve.Evaluate(1f));
                         isPlaying = false;
-
-                        foreach (GraphicsColorGroup group in spriteColorGroups)
-                        {
-                            if (group.uiGraphics)
-                                group.uiGraphics.color = Color.Lerp(from, to, curve.Evaluate(1f));
-                            else if (group.spriteRenderer)
-                                group.spriteRenderer.color = Color.Lerp(from, to, curve.Evaluate(1f));
-                            else if (group.lineRenderer)
-                                group.lineRenderer.startColor = Color.Lerp(from, to, curve.Evaluate(1f));
-                        }
                     }
                     break;
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
-                    {
-                        foreach (GraphicsColorGroup group in spriteColorGroups)
-                        {
-                            if (group.uiGraphics)
-                                group.uiGraphics.color = Color.Lerp(to, from, curve.Evaluate(value));
-                            else if (group.spriteRenderer)
-                                group.spriteRenderer.color = Color.Lerp(to, from, curve.Evaluate(value));
-                            else if (group.lineRenderer)
-                                group.lineRenderer.startColor = Color.Lerp(to, from, curve.Evaluate(value));
-                        }
-                    }
+                        temp = Color.Lerp(to, from, curve.Evaluate(value));
                     else
                     {
+                        Color.Lerp(to, from, curve.Evaluate(1f));
                         isPlaying = false;
-
-                        foreach (GraphicsColorGroup group in spriteColorGroups)
-                        {
-                            if (group.uiGraphics)
-                                group.uiGraphics.color = Color.Lerp(to, from, curve.Evaluate(1f));
-                            else if (group.spriteRenderer)
-                                group.spriteRenderer.color = Color.Lerp(to, from, curve.Evaluate(1f));
-                            else if (group.lineRenderer)
-                                group.lineRenderer.startColor = Color.Lerp(to, from, curve.Evaluate(1f));
-                        }
                     }
                     break;
+            }
+
+            foreach (GraphicsColorGroup group in spriteColorGroups)
+            {
+                if (group.uiGraphics)
+                    group.uiGraphics.color = changeAlpha ? temp : new Color(temp.r, temp.g, temp.b, group.uiGraphics.color.a);
+                else if (group.spriteRenderer)
+                    group.spriteRenderer.color = changeAlpha ? temp : new Color(temp.r, temp.g, temp.b, group.spriteRenderer.color.a);
+                else if (group.lineRenderer)
+                    group.lineRenderer.startColor = changeAlpha ? temp : new Color(temp.r, temp.g, temp.b, group.lineRenderer.startColor.a);
             }
         }
 

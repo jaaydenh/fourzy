@@ -112,7 +112,6 @@ namespace Fourzy
 
         private void OnEnable()
         {
-            GameBoardView.onMouseUp += ProcessPlayerInput;
             RealtimeManager.OnReceiveTimeStamp += RealtimeManager_OnReceiveTimeStamp;
             RealtimeManager.OnReceiveMove += RealtimeManager_OnReceiveMove;
 
@@ -130,7 +129,6 @@ namespace Fourzy
 
         private void OnDisable()
         {
-            GameBoardView.onMouseUp -= ProcessPlayerInput;
             RealtimeManager.OnReceiveTimeStamp -= RealtimeManager_OnReceiveTimeStamp;
             RealtimeManager.OnReceiveMove -= RealtimeManager_OnReceiveMove;
 
@@ -154,9 +152,7 @@ namespace Fourzy
         private void SyncClock(long milliseconds)
         {
             if (isDropping)
-            {
                 return;
-            }
 
             DateTime dateNow = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc); // get the current time
             serverClock = dateNow.AddMilliseconds(milliseconds + RealtimeManager.Instance.timeDelta).ToLocalTime(); // adjust current time to match clock from server
@@ -198,9 +194,7 @@ namespace Fourzy
         private IEnumerator ShowTokenInstructionPopupRoutine()
         {
             if (!game.displayIntroUI)
-            {
                 yield break;
-            }
 
             yield return new WaitForSeconds(0.5f);
 
@@ -317,7 +311,6 @@ namespace Fourzy
         private IEnumerator FadeGameScreen(float startAlpha, float alpha, float fadeTime)
         {
             gameBoardView.SetAlpha(startAlpha);
-
             gameBoardView.Fade(alpha, fadeTime);
 
             yield return new WaitForSeconds(fadeTime);
@@ -330,9 +323,7 @@ namespace Fourzy
         {
             GameObject[] tokenArray = GameObject.FindGameObjectsWithTag("Token");
             for (int i = 0; i < tokenArray.Length; i++)
-            {
                 tokenArray[i].GetComponent<SpriteRenderer>().DOFade(alpha, fadeTime);
-            }
 
             yield return new WaitForSeconds(fadeTime);
         }
@@ -343,14 +334,10 @@ namespace Fourzy
 
             var pieces = gameBoardView.GetGamePiecesList();
             for (int i = 0; i < pieces.Count; i++)
-            {
                 pieces[i].View.Fade(alpha, fadeTime);
-            }
 
             if (pieces.Count > 0)
-            {
                 yield return new WaitForSeconds(fadeTime);
-            }
         }
 
         private IEnumerator ReplayLastMove()
@@ -380,9 +367,7 @@ namespace Fourzy
                 //StartCoroutine(PlayInitialMoves());
             }
             else
-            {
                 isLoading = false;
-            }
         }
 
         public IEnumerator ReplayIncomingOpponentMove(Move move)
@@ -496,7 +481,7 @@ namespace Fourzy
             isLoading = false;
         }
 
-        private void ProcessPlayerInput(Vector3 mousePosition)
+        public void ProcessPlayerInput(Vector3 mousePosition)
         {
             Debug.Log("Gamemanager: disableInput: " + GameBoardView.disableInput + ", isLoading: " + isLoading + ", isLoadingUI: " + ",isDropping: " + isDropping + ", numPiecesAnimating: " + gameBoardView.NumPiecesAnimating + ", isGameOver: " + game.gameState.IsGameOver);
 
@@ -506,8 +491,9 @@ namespace Fourzy
                 return;
             }
 
-            Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
-            Position position = gameBoardView.Vec3ToPosition(pos);
+            //Vector3 pos = Camera.main.ScreenToWorldPoint(mousePosition);
+            //Position position = gameBoardView.Vec3ToPosition(pos);
+            Position position = gameBoardView.Vec3ToPosition(mousePosition);
 
             if (game.gameState.isCurrentPlayerTurn)
             {
@@ -597,12 +583,10 @@ namespace Fourzy
                 replayedLastMove = false;
                 StartCoroutine(MovePiece(move, false, updatePlayer));
                 move.player = game.isCurrentPlayer_PlayerOne ? PlayerEnum.ONE : PlayerEnum.TWO;
-                // Debug.Log("Send Realtime move");
+
                 RealtimeManager.Instance.SendRealTimeMove(move);
                 while (isDropping)
-                {
                     yield return null;
-                }
 
                 playerMoveTimer_InitialTime = (int)(playerMoveCountdown - serverClock).TotalMilliseconds + Constants.playerMoveTimer_AdditionalTime;
 
@@ -630,12 +614,11 @@ namespace Fourzy
                 StartCoroutine(MovePiece(move, false, updatePlayer));
 
                 if (game.gameState.IsGameOver)
-                {
                     yield break;
-                }
 
                 while (isDropping)
                     yield return null;
+
                 isDropping = true;
 
                 AiPlayer aiPlayer = new AiPlayer(AIPlayerSkill.LEVEL1);
@@ -750,9 +733,7 @@ namespace Fourzy
         {
             // Debug.Log("UpdateGameStatus:isExpired: " + game.isExpired);
             if (game.gameState.IsGameOver || game.isExpired)
-            {
-                this.StartCoroutine(DisplayGameOverView());
-            }
+                StartCoroutine(DisplayGameOverView());
             else
             {
                 if (updatePlayer)
@@ -774,40 +755,30 @@ namespace Fourzy
         private bool IsPlayerWinner()
         {
             if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
-            {
                 return false;
-            }
 
             bool isPlayerWinner = false;
             GameType gameType = game.gameState.GameType;
+
             if (gameType == GameType.PASSANDPLAY)
-            {
                 isPlayerWinner = true;
-            }
             else if (gameType == GameType.PUZZLE)
-            {
                 isPlayerWinner = game.gameState.IsPuzzleChallengePassed;
-            }
             else
             {
                 if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
-                {
                     isPlayerWinner = true;
-                }
                 else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
-                {
                     isPlayerWinner = true;
-                }
             }
+
             return isPlayerWinner;
         }
 
         private void PlayWinnerSound()
         {
             if (!IsPlayerWinner())
-            {
                 return;
-            }
 
             AudioHolder.instance.PlaySelfSfxOneShotTracked(_Updates.Serialized.AudioTypes.GAME_WON);
         }
@@ -848,63 +819,6 @@ namespace Fourzy
                         CollectedGamePiece = new GamePieceData()
                     }
                 });
-        }
-
-        private void ShowWinnerText()
-        {
-            bool showRewardButton = !game.didViewResult;
-
-            // Color winnerTextColor = gameState.Winner == PlayerEnum.ONE ? bluePlayerColor : redPlayerColor;
-            Color winnerTextColor = Color.white;
-
-            if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
-            {
-                if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
-                {
-                    gameFinishedScreen.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), showRewardButton);
-                }
-                else
-                {
-                    if (game.gameState.GameType != GameType.PUZZLE)
-                    {
-                        gameFinishedScreen.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), false);
-                    }
-                }
-            }
-            else if (game.gameState.GameType == GameType.REALTIME || game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
-            {
-                if (!string.IsNullOrEmpty(game.winnerName))
-                {
-                    gameFinishedScreen.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), showRewardButton);
-                }
-                else
-                {
-                    if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
-                    {
-                        gameFinishedScreen.Open(UserManager.Instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), showRewardButton);
-                    }
-                    else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
-                    {
-                        gameFinishedScreen.Open(UserManager.Instance.userName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), showRewardButton);
-                    }
-                    else
-                    {
-                        gameFinishedScreen.Open(gameplayScreen.opponent.GetPlayerName() + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), showRewardButton);
-                    }
-
-                    //AnalyticsManager.LogGameOver("multiplayer", gameState.winner, gameState.tokenBoard);
-                }
-            }
-            else
-            {
-                if (game.gameState.GameType != GameType.PUZZLE)
-                {
-                    //AnalyticsManager.LogGameOver("pnp", gameState.winner, gameState.tokenBoard);
-                    string winnerText = game.gameState.Winner == PlayerEnum.ONE ? "Player 1 Wins!" : "Player 2 Wins!";
-
-                    gameFinishedScreen.Open(winnerText, true);
-                }
-            }
         }
 
         private void LogGameWinner()
@@ -978,14 +892,14 @@ namespace Fourzy
 
             Debug.Log("DisplayGameOverView gameState.winner: " + game.gameState.Winner);
 
-            this.LogGameWinner();
-            this.PlayWinnerSound();
+            LogGameWinner();
+            PlayWinnerSound();
             gameplayScreen.ShowWinnerAnimation(IsPlayerWinner());
 
             yield return new WaitForSeconds(1.5f);
 
-            this.ShowWinnerParticles();
-            this.ShowRewardsScreen();
+            ShowWinnerParticles();
+            ShowRewardsScreen();
 
 #if UNITY_IOS || UNITY_ANDROID
             if (game.gameState.Winner == PlayerEnum.ONE || game.gameState.Winner == PlayerEnum.TWO)

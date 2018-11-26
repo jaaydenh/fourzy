@@ -13,7 +13,7 @@ namespace Fourzy
         DOWN,
         IDLE
     }
-
+    
     public class GamePieceView : MonoBehaviour
     {
         public Color OutlineColor;

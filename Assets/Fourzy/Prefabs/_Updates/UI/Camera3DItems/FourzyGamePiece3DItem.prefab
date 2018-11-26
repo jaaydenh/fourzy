@@ -121,8 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1f2f5c56b6cb494bb6f54b045d520ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalTextureWidth: 512
-  originalTextureHeight: 512
+  originalTextureWidth: 768
+  originalTextureHeight: 768
   key: 0F34E47263FA7ACEA578C865CA8D4627
   renderTexture: {fileID: 0}
   pieceParent: {fileID: 4401567189932634}

@@ -3,6 +3,7 @@
 //it checks if current opened screen (menu) is GameplayScreen, if so, player can interract with field
 
 using DG.Tweening;
+using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using System;
@@ -44,11 +45,14 @@ namespace Fourzy
         /// Touch will get canceled if current screen changes from GameplayScreen to anything else during touch lifetime
         /// </summary>
         private bool touchCanceled = false;
+        private bool touched = false;
+        private HintBlock previousClosest;
 
         public int NumPiecesAnimating { get; set; }
         public GamePiece PlayerPiece { get; set; }
         public GamePiece OpponentPiece { get; set; }
         public MenuScreen assignedScreen { get; private set; }
+        public List<HintBlock> hintBlocks { get; private set; }
 
         protected void Awake()
         {
@@ -60,55 +64,74 @@ namespace Fourzy
             backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackground;
         }
 
+        protected void OnDestroy()
+        {
+            HintBlock.onHold -= OnHintBlockHold;
+        }
+
 #if UNITY_EDITOR
         protected void Update()
         {
             if (transform.hasChanged)
                 CalculatePositions();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                //only continue if current opened screen is GameplayScreen
+                if (assignedScreen != menuController.currentScreen || disableInput)
+                    return;
+
+                touchCanceled = false;
+                touched = true;
+
+                if (onMouseDown != null)
+                    onMouseDown.Invoke(Input.mousePosition);
+
+                //show hint area
+                ShowHintArea();
+
+                //select
+                SelectHintBlock(Input.mousePosition);
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                if (!touched)
+                    return;
+
+                //release controls if current screen isnt GameplayScreen
+                if (assignedScreen != menuController.currentScreen || disableInput)
+                {
+                    touchCanceled = true;
+
+                    OnMouseRelease(Input.mousePosition);
+                    return;
+                }
+
+                if (onMouseDrag != null)
+                    onMouseDrag.Invoke(Input.mousePosition);
+
+                //select
+                SelectHintBlock(Input.mousePosition);
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                OnMouseRelease(Input.mousePosition);
+            }
         }
 #endif
 
-        protected void OnMouseDown()
-        {
-            //only continue if current opened screen is GameplayScreen
-            if (assignedScreen != menuController.currentScreen || disableInput)
-                return;
-
-            touchCanceled = false;
-
-            if (onMouseDown != null)
-                onMouseDown.Invoke(Input.mousePosition);
-
-            //highlight hint area
-        }
-
-        protected void OnMouseDrag()
-        {
-            //release controls if current screen isnt GameplayScreen
-            if (assignedScreen != menuController.currentScreen || disableInput)
-            {
-                touchCanceled = true;
-
-                OnMouseRelease(Input.mousePosition);
-                return;
-            }
-
-            if (onMouseDrag != null)
-                onMouseDrag.Invoke(Input.mousePosition);
-        }
-
-        protected void OnMouseUp()
-        {
-            if (touchCanceled)
-                return;
-
-            OnMouseRelease(Input.mousePosition);
-        }
-
         public void OnMouseRelease(Vector3 position)
         {
+            if (!touched)
+                return;
+
+            touched = false;
+
             if (onMouseUp != null)
                 onMouseUp.Invoke(Input.mousePosition);
+
+            //hide hint area
+            HideHintArea();
         }
 
         public void Init()
@@ -119,7 +142,9 @@ namespace Fourzy
             disableInput = false;
             tokens = new GameObject[numRows, numColumns];
             gamePieces = new GamePiece[numRows, numColumns];
-            
+            hintBlocks = new List<HintBlock>();
+            HintBlock.onHold += OnHintBlockHold;
+
             cellsArea = GetComponent<BoxCollider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -129,6 +154,37 @@ namespace Fourzy
             assignedScreen = menuController.GetScreen<GameplayScreen>();
 
             isInitialized = true;
+
+            Move hintDirection = null;
+            //init hint blocks
+            for (int col = 0; col < numColumns; col++)
+            {
+                for (int row = 0; row < numRows; row++)
+                {
+                    if (row == col || (row == 0 && col == numColumns - 1) || (col == 0 && row == numRows - 1))
+                        continue;
+
+                    //top row
+                    if (row == 0)
+                        hintDirection = new Move(new Position(col, 0), Direction.DOWN);
+                    //bottom row
+                    else if (row == numRows - 1)
+                        hintDirection = new Move(new Position(col, numRows - 1), Direction.UP);
+                    //left side
+                    else if (col == 0)
+                        hintDirection = new Move(new Position(0, row), Direction.RIGHT);
+                    //right side
+                    else if (col == numColumns - 1)
+                        hintDirection = new Move(new Position(numColumns - 1, row), Direction.LEFT);
+                    else continue;
+
+                    HintBlock hintBlock = GameContentManager.GetPrefab<HintBlock>(GameContentManager.PrefabType.BOARD_HINT_BOX, transform);
+                    hintBlock.transform.position = PositionToVec3(row, col);
+                    hintBlock.blockDirection = hintDirection;
+
+                    hintBlocks.Add(hintBlock);
+                }
+            }
         }
 
         public Vector3 PositionToVec3(Position position, float z = 0.0f)
@@ -180,9 +236,7 @@ namespace Fourzy
                 for (int col = 0; col < Constants.numColumns; col++)
                 {
                     if (tokens[row, col] == null || tokens[row, col].tokenType == Token.EMPTY)
-                    {
                         continue;
-                    }
 
                     Token token = tokens[row, col].tokenType;
 
@@ -267,8 +321,7 @@ namespace Fourzy
 
         public void CreateToken(int row, int col, Token tokenType)
         {
-            GameObject tokenPrefab = GameContentManager.Instance.GetTokenPrefab(tokenType);
-            this.CreateToken(row, col, tokenPrefab);
+            CreateToken(row, col, GameContentManager.Instance.GetTokenPrefab(tokenType));
         }
 
         public void CreateToken(int row, int col, GameObject tokenPrefab)
@@ -422,6 +475,69 @@ namespace Fourzy
                         yield return null;
                 }
             }
+        }
+
+        private void ShowHintArea()
+        {
+            GameState gameState = GamePlayManager.Instance.game.gameState;
+
+            foreach (HintBlock hintBlock in hintBlocks)
+                if (gameState.CanMove(hintBlock.blockDirection.GetNextPosition(), gameState.TokenBoard.tokens))
+                    hintBlock.Show();
+
+            previousClosest = null;
+        }
+
+        private void HideHintArea()
+        {
+            foreach (HintBlock hintBlock in hintBlocks)
+                hintBlock.Hide();
+
+            previousClosest = null;
+        }
+
+        private HintBlock GetClosestHintBlock(Vector3 position)
+        {
+            HintBlock closest = hintBlocks[0];
+
+            foreach (HintBlock hintBlock in hintBlocks)
+                if (Vector3.Distance(position, hintBlock.transform.position) < Vector3.Distance(position, closest.transform.position))
+                    closest = hintBlock;
+
+            return closest;
+        }
+
+        private void SelectHintBlock(Vector3 mousePosition)
+        {
+            HintBlock closest = GetClosestHintBlock(Camera.main.ScreenToWorldPoint(mousePosition));
+
+            if (!closest.shown)
+                return;
+
+            if (closest != null)
+            {
+                if (previousClosest != null)
+                {
+                    if (previousClosest == closest)
+                        return;
+                    else
+                    {
+                        previousClosest.Deselect();
+                        closest.Select();
+                    }
+                }
+                else
+                    closest.Select();
+
+                previousClosest = closest;
+            }
+        }
+
+        private void OnHintBlockHold(HintBlock hintBlock)
+        {
+            GamePlayManager.Instance.ProcessPlayerInput(hintBlock.transform.position);
+
+            OnMouseRelease(Input.mousePosition);
         }
     }
 }

@@ -2,15 +2,40 @@
 
 namespace Fourzy
 {
-    public class Move : IEquatable<Move> {
-
+    public class Move : IEquatable<Move>
+    {
         public int location;
         public Position position;
         public Direction direction;
         public PlayerEnum player;
         public long timeStamp;
 
-        public Move(Position position, Direction direction, PlayerEnum player) {
+        public Move(Position position, Direction direction)
+        {
+            this.position = position;
+            this.direction = direction;
+
+            switch (direction)
+            {
+                case Direction.UP:
+                    location = position.column;
+                    break;
+                case Direction.DOWN:
+                    location = position.column;
+                    break;
+                case Direction.LEFT:
+                    location = position.row;
+                    break;
+                case Direction.RIGHT:
+                    location = position.row;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public Move(Position position, Direction direction, PlayerEnum player)
+        {
             this.position = position;
             this.direction = direction;
             this.player = player;
@@ -34,20 +59,23 @@ namespace Fourzy
             }
         }
 
-        public Move(int location, Direction direction, PlayerEnum player) {
+        public Move(int location, Direction direction, PlayerEnum player)
+        {
             this.player = player;
             InitMove(location, direction);
         }
 
-        public Move(int location, Direction direction) {
+        public Move(int location, Direction direction)
+        {
             InitMove(location, direction);
         }
 
-        public void InitMove(int location, Direction direction) {
+        public void InitMove(int location, Direction direction)
+        {
             this.location = location;
             this.direction = direction;
 
-            Position pos = new Position(0,0);
+            Position pos = new Position(0, 0);
             switch (direction)
             {
                 case Direction.UP:
@@ -88,8 +116,8 @@ namespace Fourzy
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            return this.position.column.Equals(other.position.column) && 
-                this.position.row.Equals(other.position.row) && 
+            return this.position.column.Equals(other.position.column) &&
+                this.position.row.Equals(other.position.row) &&
                 this.direction.Equals(other.direction);
         }
 
@@ -100,8 +128,9 @@ namespace Fourzy
             return 0;
         }
 
-        public Move GetNextPosition() {
-            Position nextPosition = new Position(0,0);
+        public Move GetNextPosition()
+        {
+            Position nextPosition = new Position(0, 0);
 
             switch (direction)
             {
