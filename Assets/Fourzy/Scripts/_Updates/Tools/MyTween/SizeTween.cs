@@ -14,8 +14,10 @@ namespace Fourzy._Updates.Tween
 
         private Vector2 temp;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             rectTransform = GetComponent<RectTransform>();
             spriteRenderer = GetComponent<SpriteRenderer>();
         }

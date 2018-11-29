@@ -12,8 +12,10 @@ namespace Fourzy._Updates.Tween
         public float from;
         public float to;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             audioSource = GetComponent<AudioSource>();
         }
 

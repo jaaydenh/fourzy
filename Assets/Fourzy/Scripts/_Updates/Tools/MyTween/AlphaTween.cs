@@ -16,8 +16,10 @@ namespace Fourzy._Updates.Tween
         private List<GraphicsColorGroup> alphaGroup = new List<GraphicsColorGroup>();
         private float temp;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             if (customObjects.Length != 0)
                 foreach (Transform obj in customObjects)
                     Parse(obj);

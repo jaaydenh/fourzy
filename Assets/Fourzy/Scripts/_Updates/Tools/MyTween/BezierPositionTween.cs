@@ -12,8 +12,10 @@ namespace Fourzy._Updates.Tween
 
         private RectTransform rectTransform;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             rectTransform = GetComponent<RectTransform>();
         }
 

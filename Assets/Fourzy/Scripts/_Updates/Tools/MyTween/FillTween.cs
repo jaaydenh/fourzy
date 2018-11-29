@@ -13,8 +13,10 @@ namespace Fourzy._Updates.Tween
 
         private Image image;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             image = GetComponent<Image>();
         }
 

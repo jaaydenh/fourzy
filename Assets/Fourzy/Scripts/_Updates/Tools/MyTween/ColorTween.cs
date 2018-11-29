@@ -17,8 +17,10 @@ namespace Fourzy._Updates.Tween
         private List<GraphicsColorGroup> spriteColorGroups;
         private Color temp;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             TryParse();
         }
 

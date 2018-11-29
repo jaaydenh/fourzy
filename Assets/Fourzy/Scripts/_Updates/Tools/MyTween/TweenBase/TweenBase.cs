@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Fourzy._Updates.Tween
 {
-    public abstract class TweenBase : MonoBehaviour
+    public class TweenBase : MonoBehaviour
     {
         public PlaybackDirection playbackDirection = PlaybackDirection.FORWARD;
         public AnimationCurve curve;
@@ -16,9 +16,16 @@ namespace Fourzy._Updates.Tween
         public QuickFloatEvent onProgress;
 
         [HideInInspector]
+        public float defaultPlaybackTime;
+        [HideInInspector]
         public float value = 0f;
         [HideInInspector]
         public bool isPlaying = false;
+
+        protected virtual void Awake()
+        {
+            defaultPlaybackTime = playbackTime;
+        }
 
         protected virtual void Update()
         {
@@ -88,7 +95,12 @@ namespace Fourzy._Updates.Tween
             AtProgress(value, playbackDirection);
         }
 
-        public abstract void OnReset();
+        public virtual void OnReset() { }
+
+        public virtual void ResetPlaybackTime()
+        {
+            playbackTime = defaultPlaybackTime;
+        }
 
         public virtual void AtProgress(Single value, PlaybackDirection direction)
         {

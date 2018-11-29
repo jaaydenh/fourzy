@@ -11,14 +11,19 @@ namespace Fourzy._Updates.Tween
 
         private RectTransform rectTransform;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             rectTransform = GetComponent<RectTransform>();
         }
 
         public void FromCurrentPosition()
         {
-            from = transform.localPosition;
+            if (rectTransform)
+                from = rectTransform.anchoredPosition;
+            else
+                from = transform.localPosition;
         }
 
         public override void AtProgress(float value, PlaybackDirection direction)

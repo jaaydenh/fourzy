@@ -61,6 +61,8 @@ namespace Fourzy._Updates.UI.Helpers
                     }
                     EditorGUILayout.EndHorizontal();
                     EditorGUILayout.PropertyField(labelsProperty.GetArrayElementAtIndex(index).FindPropertyRelative("label"));
+
+                    DrawLine(Color.grey, 1, 20);
                 }
 
                 //badges
@@ -89,6 +91,16 @@ namespace Fourzy._Updates.UI.Helpers
             }
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        public void DrawLine(Color color, int thickness = 2, int padding = 10)
+        {
+            Rect r = EditorGUILayout.GetControlRect(GUILayout.Height(padding + thickness));
+            r.height = thickness;
+            r.y += padding / 2;
+            r.x -= 2;
+            r.width += 6;
+            EditorGUI.DrawRect(r, color);
         }
     }
 }
