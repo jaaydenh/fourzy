@@ -330,8 +330,6 @@ namespace Fourzy
 
         private IEnumerator FadePieces(float alpha, float fadeTime)
         {
-            SoundManager.Instance.Mute(false);
-
             var pieces = gameBoardView.GetGamePiecesList();
             for (int i = 0; i < pieces.Count; i++)
                 pieces[i].View.Fade(alpha, fadeTime);

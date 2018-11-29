@@ -6,6 +6,7 @@ using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu
 {
@@ -30,6 +31,10 @@ namespace Fourzy._Updates.UI.Menu
         public bool defaultCalls = true;
         [HideInInspector]
         public MenuController menuController;
+        [HideInInspector]
+        public RectTransform rectTransform;
+        [HideInInspector]
+        public LayoutElement layoutElement;
 
         protected CanvasGroup canvasGroup;
         protected TweenBase tween;
@@ -52,6 +57,8 @@ namespace Fourzy._Updates.UI.Menu
             canvasGroup = GetComponent<CanvasGroup>();
             tween = GetComponent<TweenBase>();
             menuController = GetComponentInParent<MenuController>();
+            rectTransform = GetComponent<RectTransform>();
+            layoutElement = GetComponent<LayoutElement>();
         }
 
         protected virtual void Start()
@@ -104,7 +111,7 @@ namespace Fourzy._Updates.UI.Menu
         {
             onBack.Invoke();
 
-            if (onBackSfx != AudioTypes.NONE && onBackSfx != AudioTypes.SIZE)
+            if (onBackSfx != AudioTypes.NONE)
                 AudioHolder.instance.PlaySelfSfxOneShotTracked(onBackSfx);
         }
 

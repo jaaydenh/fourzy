@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using ByteSheep.Events;
 using Fourzy._Updates.Tween;
 using System;
 using UnityEngine;
@@ -12,6 +13,9 @@ namespace Fourzy._Updates.Mechanics.Board
     {
         public static float HOLD_TIME = 1f;
         public static Action<HintBlock> onHold;
+
+        public AdvancedEvent onSelected;
+        public AdvancedEvent onDeselected;
 
         private ColorTween colorTween;
         private AlphaTween alphaTween;
@@ -63,6 +67,9 @@ namespace Fourzy._Updates.Mechanics.Board
             if (!shown)
                 return;
 
+            if (selected)
+                Deselect();
+
             shown = false;
             alphaTween.PlayBackward(true);
         }
@@ -75,6 +82,8 @@ namespace Fourzy._Updates.Mechanics.Board
             selected = true;
             colorTween.PlayForward(true);
             selectedTimer = 0f;
+
+            onSelected.Invoke();
         }
 
         public void Deselect()
@@ -85,6 +94,8 @@ namespace Fourzy._Updates.Mechanics.Board
             selected = false;
             colorTween.PlayBackward(true);
             selectedTimer = 0f;
+
+            onDeselected.Invoke();
         }
     }
 }

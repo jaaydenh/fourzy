@@ -93,6 +93,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundEffect: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
+  clipType: 131
+  volume: 1
 --- !u!212 &212553889839197184
 SpriteRenderer:
   m_ObjectHideFlags: 1

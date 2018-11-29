@@ -46,6 +46,10 @@ namespace Fourzy._Updates.Serialized
         GARDEN_TURN_BASED = 101,
         #endregion
 
-        SIZE,
+        #region Tokens Sfxs
+        TOKEN_ARROW = 130,
+        TOKEN_STICKY = 131,
+
+        #endregion
     }
 }

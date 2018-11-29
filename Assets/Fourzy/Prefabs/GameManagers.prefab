@@ -1152,7 +1152,7 @@ MonoBehaviour:
     prefabType: 1
   - prefab: {fileID: 1576871843195750, guid: de95eca9ce249a54280efd878a486b52, type: 2}
     prefabType: 5
-  - prefab: {fileID: 1438916287650898, guid: a3c24ed961027314abdb0cbec1278049, type: 2}
+  - prefab: {fileID: 1489538643966412, guid: a3c24ed961027314abdb0cbec1278049, type: 2}
     prefabType: 40
 --- !u!114 &114651625545579072
 MonoBehaviour:

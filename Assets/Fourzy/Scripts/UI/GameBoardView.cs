@@ -57,6 +57,7 @@ namespace Fourzy
         protected void Awake()
         {
             Init();
+            Input.simulateMouseWithTouches = true;
         }
 
         protected void Start()

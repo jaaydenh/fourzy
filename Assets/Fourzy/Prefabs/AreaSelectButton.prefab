@@ -73,9 +73,8 @@ GameObject:
   - component: {fileID: 224922752045594204}
   - component: {fileID: 222520935839127110}
   - component: {fileID: 114706451661710430}
-  - component: {fileID: 114980203556256274}
-  - component: {fileID: 95895265216575438}
   - component: {fileID: 114198186699255100}
+  - component: {fileID: 114980203556256274}
   - component: {fileID: 114978817297543172}
   m_Layer: 5
   m_Name: AreaSelectButton
@@ -84,24 +83,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!95 &95895265216575438
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1718971965458052}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 33c131b538ca14075bc1d242a145aa33, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114198186699255100
 MonoBehaviour:
   m_ObjectHideFlags: 1

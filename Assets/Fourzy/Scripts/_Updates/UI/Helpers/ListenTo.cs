@@ -34,6 +34,10 @@ namespace Fourzy._Updates.UI.Helpers
                     case ListenValues.PLAYER_TIMER:
                         GamePlayManager.OnTimerUpdate += UpdatePlayerTimer;
                         break;
+
+                    case ListenValues.COINS:
+                        UserManager.OnUpdateUserInfo += UpdateCoins;
+                        break;
                 }
             }
         }
@@ -55,6 +59,10 @@ namespace Fourzy._Updates.UI.Helpers
                     case ListenValues.PLAYER_TIMER:
                         GamePlayManager.OnTimerUpdate -= UpdatePlayerTimer;
                         break;
+
+                    case ListenValues.COINS:
+                        UserManager.OnUpdateUserInfo -= UpdateCoins;
+                        break;
                 }
         }
 
@@ -72,6 +80,10 @@ namespace Fourzy._Updates.UI.Helpers
 
                         case ListenValues.PLAYER_TIMER:
                             UpdatePlayerTimer(new TimeSpan(0, 0, 0, 0, Constants.playerMoveTimer_InitialTime).Ticks);
+                            break;
+
+                        case ListenValues.COINS:
+                            UpdateCoins();
                             break;
                     }
                 }
@@ -91,6 +103,12 @@ namespace Fourzy._Updates.UI.Helpers
             foreach (ListenTarget target in sorted[ListenValues.PLAYER_TIMER])
                 target.events.Invoke(string.Format(target.targetText, time.Minute, time.Second));
         }
+
+        public void UpdateCoins()
+        {
+            foreach (ListenTarget target in sorted[ListenValues.COINS])
+                target.events.Invoke(string.Format(target.targetText, UserManager.Instance.coins));
+        }
     }
 
     [Serializable]
@@ -99,7 +117,7 @@ namespace Fourzy._Updates.UI.Helpers
         public ListenValues type;
 
         public string targetText;
-        [Header("Update value on awake?")]
+        [Header("Update value on start?")]
         public bool updateOnAwake;
         [Header("Will format target text with value")]
         public QuickStringEvent events;
@@ -111,6 +129,7 @@ namespace Fourzy._Updates.UI.Helpers
 
         CHELLENGE_ID = 1,
         PLAYER_TIMER = 2,
+        COINS = 3,
 
         LENGTH,
     }
