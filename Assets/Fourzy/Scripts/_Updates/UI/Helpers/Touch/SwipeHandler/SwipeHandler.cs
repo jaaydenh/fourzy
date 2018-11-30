@@ -11,7 +11,8 @@ namespace Fourzy._Updates.UI.Helpers
         public SwipeAxis swipeDirection = SwipeAxis.HORIZONTAL;
 
         [Tooltip("Distance that pointer need to trave\n to trigger swipe event")]
-        public float swipeDistance = 100f;
+        [Range(0f, 1f)]
+        public float swipeDistance = .1f;
         [Tooltip("Time during which swipe can occur")]
         public float swipeTime = .2f;
 
@@ -19,6 +20,12 @@ namespace Fourzy._Updates.UI.Helpers
 
         private float swipeTimer;
         private bool checking = false;
+        private float _swipeDistance;
+
+        protected void Awake()
+        {
+            _swipeDistance = Mathf.Min(Screen.width, Screen.height) * swipeDistance;
+        }
 
         protected void Update()
         {
@@ -26,7 +33,7 @@ namespace Fourzy._Updates.UI.Helpers
                 swipeTimer += Time.deltaTime;
         }
 
-        public void OnPointerDow(Vector2 position)
+        public void OnPointerDown(Vector2 position)
         {
             swipeTimer = 0f;
             checking = true;
@@ -37,45 +44,52 @@ namespace Fourzy._Updates.UI.Helpers
             if (!checking)
                 return;
 
-            if (position.magnitude > swipeDistance && swipeTimer <= swipeTime)
+            if (swipeTimer <= swipeTime)
             {
                 switch (swipeDirection)
                 {
                     case SwipeAxis.HORIZONTAL:
-                        if (position.x > 0f)
-                            onSwipe.Invoke(SwipeDirection.RIGHT);
-                        else
-                            onSwipe.Invoke(SwipeDirection.LEFT);
+                        if (position.x > _swipeDistance)
+                            InvokeSwipe(SwipeDirection.RIGHT);
+                        else if (position.x <= -_swipeDistance)
+                            InvokeSwipe(SwipeDirection.LEFT);
                         break;
 
                     case SwipeAxis.VERTICAL:
-                        if (position.y > 0f)
-                            onSwipe.Invoke(SwipeDirection.UP);
-                        else
-                            onSwipe.Invoke(SwipeDirection.DOWN);
+                        if (position.y >= _swipeDistance)
+                            InvokeSwipe(SwipeDirection.UP);
+                        else if (position.y <= -_swipeDistance)
+                            InvokeSwipe(SwipeDirection.DOWN);
                         break;
 
                     case SwipeAxis.BOTH:
                         if (Mathf.Abs(position.x) > Mathf.Abs(position.y))
                         {
-                            if (position.x > 0f)
-                                onSwipe.Invoke(SwipeDirection.RIGHT);
-                            else
-                                onSwipe.Invoke(SwipeDirection.LEFT);
+                            if (position.x > _swipeDistance)
+                                InvokeSwipe(SwipeDirection.RIGHT);
+                            else if (position.x <= -_swipeDistance)
+                                InvokeSwipe(SwipeDirection.LEFT);
                         }
                         else
                         {
-                            if (position.y > 0f)
-                                onSwipe.Invoke(SwipeDirection.UP);
-                            else
-                                onSwipe.Invoke(SwipeDirection.DOWN);
+                            if (position.y >= _swipeDistance)
+                                InvokeSwipe(SwipeDirection.UP);
+                            else if (position.y <= -_swipeDistance)
+                                InvokeSwipe(SwipeDirection.DOWN);
                         }
                         break;
                 }
-
-                swipeTimer = 0f;
-                checking = false;
             }
+            else
+                checking = false;
+        }
+
+        public void InvokeSwipe(SwipeDirection swipeDirection)
+        {
+            onSwipe.Invoke(swipeDirection);
+
+            swipeTimer = 0f;
+            checking = false;
         }
 
         public enum SwipeAxis

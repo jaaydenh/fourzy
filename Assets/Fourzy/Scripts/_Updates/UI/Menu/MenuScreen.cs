@@ -54,9 +54,10 @@ namespace Fourzy._Updates.UI.Menu
         {
             base.Awake();
 
+            menuController = GetComponentInParent<MenuController>();
+
             canvasGroup = GetComponent<CanvasGroup>();
             tween = GetComponent<TweenBase>();
-            menuController = GetComponentInParent<MenuController>();
             rectTransform = GetComponent<RectTransform>();
             layoutElement = GetComponent<LayoutElement>();
         }
@@ -82,7 +83,9 @@ namespace Fourzy._Updates.UI.Menu
 
             if (defaultCalls)
             {
-                tween.PlayForward(true);
+                if (tween)
+                    tween.PlayForward(true);
+
                 SetInteractable(true);
                 canvasGroup.blocksRaycasts = true;
             }
@@ -99,7 +102,9 @@ namespace Fourzy._Updates.UI.Menu
 
             if (defaultCalls)
             {
-                tween.PlayBackward(true);
+                if (tween)
+                    tween.PlayBackward(true);
+
                 SetInteractable(false);
                 canvasGroup.blocksRaycasts = false;
             }

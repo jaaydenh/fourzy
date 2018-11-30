@@ -14,6 +14,8 @@ namespace Fourzy._Updates.Mechanics.Board
         public static float HOLD_TIME = 1f;
         public static Action<HintBlock> onHold;
 
+        public AdvancedEvent onShow;
+        public AdvancedEvent onHide;
         public AdvancedEvent onSelected;
         public AdvancedEvent onDeselected;
 
@@ -60,6 +62,8 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             alphaTween.PlayForward(true);
             shown = true;
+
+            onShow.Invoke();
         }
 
         public void Hide()
@@ -72,6 +76,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
             shown = false;
             alphaTween.PlayBackward(true);
+
+            onHide.Invoke();
         }
 
         public void Select()

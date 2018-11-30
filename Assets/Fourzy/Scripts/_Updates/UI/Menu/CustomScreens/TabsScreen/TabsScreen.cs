@@ -5,6 +5,7 @@ using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
 using UnityEngine;
 using Fourzy._Updates.UI.Helpers;
+using ByteSheep.Events;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -15,10 +16,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RectTransform tabsParent;
         public List<TabButton> tabsButtons;
 
+        public AdvancedVector2Event onPointerDown;
+        public AdvancedVector2Event onPointerMove;
+
         private List<MenuScreen> tabs;
 
         private PositionTween tabsParentTween;
         private int currentTab = -1;
+        private Vector3 pointerOrigin;
 
         protected override void Awake()
         {
@@ -39,11 +44,31 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 tabsButtons[tabs.IndexOf(defaultTab)].Open(false);
         }
 
+        protected void Update()
+        {
+            //only continue if current opened screen is GameplayScreen
+            if (menuController.currentScreen != this)
+                return;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                pointerOrigin = Input.mousePosition;
+                onPointerDown.Invoke(pointerOrigin);
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                onPointerMove.Invoke(Input.mousePosition - pointerOrigin);
+            }
+        }
+
         public void OpenTab(int index, bool animate)
         {
             //close previous tab
             if (currentTab > -1)
+            {
                 tabsButtons[currentTab].Close();
+                tabs[currentTab].Close();
+            }
 
             currentTab = index;
 
@@ -52,6 +77,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             tabsParentTween.to = Vector3.left * index * 750f;  //750 = tab width
 
             tabsParentTween.PlayForward(true);
+
+            tabs[index].Open();
         }
 
         public void OpenTab(MenuScreen tab, bool animate)
@@ -63,17 +90,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void OpenNext(bool animate)
         {
             if (currentTab + 1 == tabs.Count)
-                tabsButtons[0].Open(false);
+                tabsButtons[0].Open(animate);
             else
-                tabsButtons[currentTab + 1].Open(false);
+                tabsButtons[currentTab + 1].Open(animate);
         }
 
         public void OpenPrevious(bool animate)
         {
             if (currentTab - 1 < 0)
-                tabsButtons[tabs.Count - 1].Open(false);
+                tabsButtons[tabs.Count - 1].Open(animate);
             else
-                tabsButtons[currentTab - 1].Open(false);
+                tabsButtons[currentTab - 1].Open(animate);
         }
 
         public void OnSwipe(SwipeHandler.SwipeDirection swipeDirection)
@@ -81,11 +108,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch(swipeDirection)
             {
                 case SwipeHandler.SwipeDirection.LEFT:
-                    OpenPrevious(true);
+                    OpenNext(true);
                     break;
 
                 case SwipeHandler.SwipeDirection.RIGHT:
-                    OpenNext(true);
+                    OpenPrevious(true);
                     break;
             }
         }

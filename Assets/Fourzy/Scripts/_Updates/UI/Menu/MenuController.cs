@@ -1,5 +1,7 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.UI.Menu.Screens;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,12 +24,15 @@ namespace Fourzy._Updates.UI.Menu
         public MenuScreen currentScreen { get; private set; }
         public Stack<MenuScreen> screensStack { get; private set; }
 
+        public Dictionary<Type, PromptScreen> availablePromptScreens;
+
         protected void Awake()
         {
             //looks like multiple menu controllers will exists at the same time, so cant rely on instance now
             //instance = this;
 
             screens = new List<MenuScreen>(transform.GetComponentsInChildren<MenuScreen>());
+            availablePromptScreens = new Dictionary<Type, PromptScreen>();
             screens.AddRange(extraScreens);
 
             screensStack = new Stack<MenuScreen>();
@@ -134,6 +139,45 @@ namespace Fourzy._Updates.UI.Menu
                     return screen as T;
 
             return null;
+        }
+
+        public MenuScreen AddScreen(MenuScreen screenPrefab)
+        {
+            if (!screenPrefab)
+                return null;
+
+            MenuScreen newScreen = Instantiate(screenPrefab, transform);
+
+            newScreen.transform.localScale = Vector3.one;
+            screens.Add(newScreen);
+
+            return newScreen;
+        }
+
+        public T AddScreen<T>(MenuScreen prefab) where T : MenuScreen
+        {
+            return (T)AddScreen(prefab);
+        }
+
+        public T GetPrompt<T>() where T : PromptScreen
+        {
+            Type promptType = typeof(T);
+
+            if (!availablePromptScreens.ContainsKey(promptType))
+            {
+                foreach (GameContentManager.PrefabTypePair pair in GameContentManager.Instance.typedPrefabs)
+                {
+                    PromptScreen promptScreen = pair.prefab.GetComponent<T>();
+
+                    if (promptScreen)
+                    {
+                        availablePromptScreens.Add(promptType, AddScreen<T>(promptScreen));
+                        break;
+                    }
+                }
+            }
+
+            return (T)availablePromptScreens[promptType];
         }
 
         //currently need screen handling only

@@ -56,8 +56,8 @@ namespace Fourzy
 
         protected void Awake()
         {
-            Init();
             Input.simulateMouseWithTouches = true;
+            Init();
         }
 
         protected void Start()
@@ -70,11 +70,12 @@ namespace Fourzy
             HintBlock.onHold -= OnHintBlockHold;
         }
 
-#if UNITY_EDITOR
         protected void Update()
         {
+#if UNITY_EDITOR
             if (transform.hasChanged)
                 CalculatePositions();
+#endif
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -119,7 +120,6 @@ namespace Fourzy
                 OnMouseRelease(Input.mousePosition);
             }
         }
-#endif
 
         public void OnMouseRelease(Vector3 position)
         {

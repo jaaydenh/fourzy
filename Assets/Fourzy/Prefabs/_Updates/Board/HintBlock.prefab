@@ -117,6 +117,7 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
+  defaultPlaybackTime: 0
   value: 0
   isPlaying: 0
   customObjects: []
@@ -166,6 +167,7 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
+  defaultPlaybackTime: 0
   value: 0
   isPlaying: 0
   from: {x: 0, y: 0.7912852}
@@ -212,10 +214,11 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
+  defaultPlaybackTime: 0
   value: 0
   isPlaying: 0
   customObjects: []
-  propagate: 0
+  propagate: 1
   from: 0
   to: 1
 --- !u!114 &114815130631895566
@@ -229,13 +232,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9477536e5cc86c45ad526dfe9746946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onShow:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 3
+          selectedMember: 15
+          isDynamic: 0
+        target: {fileID: 114243305223453960}
+        memberName: AtProgress
+        memberType: 8
+        arguments:
+        - typeName: System.Single, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          supportedType: 4
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0, y: 0, z: 0}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+  onHide:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls: []
   onSelected:
     inspectorListHeight: 83
     persistentCalls:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 23
+          selectedMember: 24
           isDynamic: 0
         target: {fileID: 114243305223453960}
         memberName: PlayForward
@@ -255,12 +287,33 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   onDeselected:
-    inspectorListHeight: 83
+    inspectorListHeight: 128
     persistentCalls:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 14
+          selectedMember: 32
+          isDynamic: 0
+        target: {fileID: 114243305223453960}
+        memberName: StopTween
+        memberType: 8
+        arguments:
+        - typeName: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          supportedType: 5
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0, y: 0, z: 0}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+      - genericMenuData:
+          selectedComponent: 3
+          selectedMember: 15
           isDynamic: 0
         target: {fileID: 114243305223453960}
         memberName: AtProgress

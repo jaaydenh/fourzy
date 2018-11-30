@@ -10,13 +10,11 @@ namespace Fourzy._Updates.UI.Widgets
 
         private bool isOpened = false;
         private TabsScreen tabsScreen;
-        private ValueTween sizeTween;
         private ColorTween colorTween;
 
         protected void Awake()
         {
             tabsScreen = GetComponentInParent<TabsScreen>();
-            sizeTween = GetComponent<ValueTween>();
             colorTween = GetComponent<ColorTween>();
         }
 
@@ -27,22 +25,16 @@ namespace Fourzy._Updates.UI.Widgets
 
             isOpened = true;
             tabsScreen.OpenTab(tabIndex, animate);
-
-            sizeTween.playbackTime = animate ? sizeTween.defaultPlaybackTime : 0f;
+            
             colorTween.playbackTime = animate ? colorTween.defaultPlaybackTime : 0f;
-
-            sizeTween.PlayForward(true);
             colorTween.PlayForward(true);
         }
 
         public void Close()
         {
             isOpened = false;
-
-            sizeTween.ResetPlaybackTime();
+            
             colorTween.ResetPlaybackTime();
-
-            sizeTween.PlayBackward(true);
             colorTween.PlayBackward(true);
         }
     }

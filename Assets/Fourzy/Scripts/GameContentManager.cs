@@ -190,11 +190,12 @@ namespace Fourzy
             COINS_WIDGET_SMALL = 1,
             //
             GAME_PIECE_SMALL = 5,
+
+            PROMPT_SCREEN_GENERIC = 35,
+            PROMPT_SCREEN_CAHNGE_NAME = 36,
             #endregion
 
             BOARD_HINT_BOX = 40,
-
-            LENGTH,
         }
     }
 }
