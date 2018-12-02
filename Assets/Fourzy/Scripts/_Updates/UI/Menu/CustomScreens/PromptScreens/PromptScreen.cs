@@ -44,8 +44,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             transform.SetAsLastSibling();
 
-            onAccept = accept;
+            promptTitle.text = title;
             promptText.text = text;
+            onAccept = accept;
+
             menuController.OpenScreen(this);
         }
 
@@ -63,6 +65,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public virtual void Prompt(string title, string text, string yes, string no, Action accept, Action decline)
         {
             onDecline = decline;
+
             Prompt(title, text, yes, no, accept);
         }
 

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Fourzy._Updates.Mechanics.Board;
 
 namespace Fourzy
 {
@@ -94,7 +95,7 @@ namespace Fourzy
                 case 1:
                     wizard.transform.localPosition = new Vector3(0, 221);
                     dialogBox.transform.localPosition = new Vector3(0, -118);
-                    GameBoardView.disableInput = true;
+                    //GameBoardView.interactable = true;
                     bg_dim.SetActive(true);
                     fullscreenButton.SetActive(true);
                     wizard.SetActive(true);
@@ -124,11 +125,11 @@ namespace Fourzy
                     infoText.SetText("Now you try it. Tap this square on the perimeter of the board to make a move.");
                     hintText.SetText("");
                     TapHintPosition(-313, 136);
-                    GameBoardView.disableInput = false;
+                    //GameBoardView.interactable = false;
                     GamePlayManager.Instance.gameplayScreen.backButton.SetActive(false);
                     break;
                 case 6:
-                    GameBoardView.disableInput = true;
+                    //GameBoardView.interactable = true;
                     hand.SetActive(false);
                     tapAreaAnim.SetActive(false);
                     bg_dim.SetActive(true);
@@ -150,7 +151,7 @@ namespace Fourzy
                         TapHintPosition(45, 313);
                     }
                     GamePlayManager.Instance.gameplayScreen.backButton.SetActive(false);
-                    GameBoardView.disableInput = false;
+                    //GameBoardView.interactable = false;
                     break;
                 case 8:
                     //GamePlayManager.Instance.gameInfo.Close();
@@ -275,9 +276,9 @@ namespace Fourzy
         }
         
         void ShowWizardWithDialog(string dialog) {
-            if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
-                GameBoardView.disableInput = true;
-            }
+            //if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
+            //    GameBoardView.interactable = true;
+            //}
             bg_dim.SetActive(true);
             fullscreenButton.SetActive(true);
             wizard.SetActive(true);
@@ -287,9 +288,9 @@ namespace Fourzy
         }
 
         void HideWizardDialog() {
-            if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
-                GameBoardView.disableInput = false;
-            }
+            //if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
+            //    GameBoardView.interactable = false;
+            //}
             bg_dim.SetActive(false);
             fullscreenButton.SetActive(false);
             wizard.SetActive(false);

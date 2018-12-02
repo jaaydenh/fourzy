@@ -1,5 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿//modded @vadym udod
+
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,36 +20,39 @@ public class CircleProgress : MonoBehaviour
     private int colorUniform = Shader.PropertyToID("_Color");
     private int rectMainTexUniform = Shader.PropertyToID("_RectMainTex");
 
-    private void Awake()
+    private bool initialized = false;
+
+    protected void Awake()
     {
-        this.Init();
-        this.SetupNewValue(currentValue);
+        Init();
+        SetupNewValue(currentValue);
     }
 
-    void OnValidate()
+    protected void OnValidate()
     {
-        if (progressMaterial != null)
-        {
-            this.SetupNewValue(currentValue);
-        }
+        if (initialized)
+            SetupNewValue(currentValue);
         else
-        {
-            this.Init();
-        }
+            Init();
     }
 
     private void Init()
     {
+        if (initialized)
+            return;
+
+        initialized = true;
         Sprite sprite = null;
 
-        Image image = this.GetComponent<Image>();
+        Image image = GetComponent<Image>();
+
         if (image)
         {
             progressMaterial = image.material;
             sprite = image.sprite;
         }
 
-        SpriteRenderer spriteRenderer = this.GetComponent<SpriteRenderer>();
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer)
         {
             progressMaterial = spriteRenderer.material; 
@@ -69,34 +73,26 @@ public class CircleProgress : MonoBehaviour
 
     public void SetupNewValue(float value, bool animated = true, float animationDuration = 1.5f)
     {
+        Init();
+
         if (progressCoroutine != null)
         {
-            this.StopCoroutine(progressCoroutine);
+            StopCoroutine(progressCoroutine);
             progressCoroutine = null;
         }
 
-        if (animated)
-        {
+        if (animated && gameObject.activeInHierarchy)
             progressCoroutine = StartCoroutine(SetupAnimatedProgress(value, animationDuration));
-        }
         else
-        {
-            this.SetupNewValue(value);
-        }
+            SetupNewValue(value);
     }
 
-    IEnumerator SetupAnimatedProgress(float value, float animationDuration)
+    public void SetupNewColor(Color color)
     {
-        float curValue = currentValue;
-        float newValue = value;
+        Init();
 
-        for (float time = 0; time < animationDuration; time += Time.deltaTime)
-        {
-            currentValue = Mathf.SmoothStep(curValue, newValue, time / animationDuration);
-            this.SetupNewValue(currentValue);
-
-            yield return null;
-        }
+        progressColor = color;
+        progressMaterial.SetColor(colorUniform, progressColor);
     }
 
     private void SetupNewValue(float value)
@@ -106,9 +102,17 @@ public class CircleProgress : MonoBehaviour
         progressMaterial.SetColor(colorUniform, progressColor);
     }
 
-    public void SetupNewColor(Color color)
+    private IEnumerator SetupAnimatedProgress(float value, float animationDuration)
     {
-        progressColor = color;
-        progressMaterial.SetColor(colorUniform, progressColor);
+        float curValue = currentValue;
+        float newValue = value;
+
+        for (float time = 0; time < animationDuration; time += Time.deltaTime)
+        {
+            currentValue = Mathf.SmoothStep(curValue, newValue, time / animationDuration);
+            SetupNewValue(currentValue);
+
+            yield return null;
+        }
     }
 }

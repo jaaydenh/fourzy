@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Fourzy._Updates.Mechanics.Board;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy
@@ -8,6 +9,7 @@ namespace Fourzy
         public delegate void SetTokenBoard(string tokenBoardId);
         public static event SetTokenBoard OnSetTokenBoard;
 
+        [HideInInspector]
         public TokenBoard tokenBoard;
 
         public GameBoardView gameboardView;
@@ -30,19 +32,19 @@ namespace Fourzy
                         continue;
                     }
 
-                    GameObject go = gameboardView.SpawnMinigameboardPiece(row, col, gamePiecePrefab);
-                    SpriteRenderer spriteRenderer = go.GetComponent<SpriteRenderer>();
-                    spriteRenderer.enabled = true;
-                    spriteRenderer.sortingOrder = 50;
+                    //GameObject go = gameboardView.SpawnMinigameboardPiece(row, col, gamePiecePrefab);
+                    //SpriteRenderer spriteRenderer = go.GetComponent<SpriteRenderer>();
+                    //spriteRenderer.enabled = true;
+                    //spriteRenderer.sortingOrder = 50;
 
-                    if (piece == Piece.BLUE)
-                    {
-                        spriteRenderer.sprite = Player1Piece;
-                    }
-                    else if (piece == Piece.RED)
-                    {
-                        spriteRenderer.sprite = Player2Piece;
-                    }
+                    //if (piece == Piece.BLUE)
+                    //{
+                    //    spriteRenderer.sprite = Player1Piece;
+                    //}
+                    //else if (piece == Piece.RED)
+                    //{
+                    //    spriteRenderer.sprite = Player2Piece;
+                    //}
                 }
             }
         }

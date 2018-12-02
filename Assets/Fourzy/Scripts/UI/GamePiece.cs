@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Fourzy._Updates.Mechanics.Board;
 
 namespace Fourzy
 {
@@ -76,7 +77,7 @@ namespace Fourzy
                 for (float t = 0; t < 1; t += Time.deltaTime * Constants.moveSpeed / distance)
                 {
                     float interpolation = movementCurve.Evaluate(t);
-                    transform.position = Vector3.Lerp(start, end, interpolation);
+                    transform.localPosition = Vector3.Lerp(start, end, interpolation);
 
                     CheckActiveTokenCollision(activeTokens);
 
@@ -88,7 +89,7 @@ namespace Fourzy
                     yield return null;
                 }
 
-                transform.position = end;
+                transform.localPosition = end;
                 start = end;
                 i = nextPos - 1;
             }

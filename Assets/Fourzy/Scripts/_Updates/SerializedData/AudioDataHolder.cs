@@ -28,6 +28,8 @@ namespace Fourzy._Updates.Serialized
         BUTTON_CLICK = 2,
         MENU_BACK = 3,
         SCROLL = 4,
+        TOGGLE_ON = 5,
+        TOGGLE_OFF = 6,
         #endregion
 
         #region Game piece sounds

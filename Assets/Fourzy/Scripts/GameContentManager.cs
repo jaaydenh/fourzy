@@ -1,5 +1,6 @@
 ﻿//modded @vadym udod
 
+using Fourzy._Updates.Mechanics.Board;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace Fourzy
         private TokenData[] tokenData = new TokenData[0];
         private Dictionary<int, TokenData> inGameTokensData = new Dictionary<int, TokenData>();
         private Dictionary<Token, TokenView> sortedTokenPrefabs = new Dictionary<Token, TokenView>();
-        private Dictionary<PrefabType, PrefabTypePair> typedPrefabsFastAccess;
+        public Dictionary<PrefabType, PrefabTypePair> typedPrefabsFastAccess { get; private set; }
 
         private int currentTheme;
 
@@ -124,19 +125,15 @@ namespace Fourzy
                 return gamePiecePrefabs[0];
         }
 
-        public GameObject GetTokenPrefab(Token tokenType, bool justForDisplaying = false)
+        public TokenView GetTokenPrefab(Token tokenType, bool justForDisplaying = false)
         {
-            TokenView tokenView;
-            GameObject token = null;
+            TokenView tokenView = null;
             sortedTokenPrefabs.TryGetValue(tokenType, out tokenView);
 
             if (tokenView != null)
-            {
                 tokenView.justDisplaying = justForDisplaying;
-                token = tokenView.gameObject;
-            }
 
-            return token;
+            return tokenView;
         }
 
         public GameTheme GetCurrentTheme()
@@ -144,7 +141,20 @@ namespace Fourzy
             return gameThemes[currentTheme];
         }
 
-        public static T GetPrefab<T>(PrefabType type, Transform parent) where T : Component
+        public static GameObject GetPrefab(PrefabType type)
+        {
+            if (!Instance.typedPrefabsFastAccess.ContainsKey(type))
+                return null;
+
+            return Instance.typedPrefabsFastAccess[type].prefab;
+        }
+
+        public static T GetPrefab<T>(PrefabType type)
+        {
+            return GetPrefab(type).GetComponent<T>();
+        }
+
+        public static T InstantiatePrefab<T>(PrefabType type, Transform parent) where T : Component
         {
             if (!Instance.typedPrefabsFastAccess.ContainsKey(type))
                 return null;
@@ -153,17 +163,15 @@ namespace Fourzy
             if (!Instance.typedPrefabsFastAccess[type].prefab.GetComponent<T>())
                 return null;
 
-            GameObject result = null;
-            
-            result = Instantiate(Instance.typedPrefabsFastAccess[type].prefab, parent);
+            GameObject result = Instantiate(Instance.typedPrefabsFastAccess[type].prefab, parent);
             result.transform.localScale = Vector3.one;
 
             return result.GetComponent<T>();
         }
 
-        public static T GetPrefab<T>(PrefabType type) where T : Component
+        public static T InstantiatePrefab<T>(PrefabType type) where T : Component
         {
-            return GetPrefab<T>(type, null);
+            return InstantiatePrefab<T>(type, null);
         }
 
         [Serializable]
@@ -190,9 +198,14 @@ namespace Fourzy
             COINS_WIDGET_SMALL = 1,
             //
             GAME_PIECE_SMALL = 5,
+            MINI_GAME_BOARD_PIECE = 6,
+            MINI_GAME_BOARD = 7,
+            GAME_PIECE_MEDIUM = 8,
+            TOKEN_SMALL = 9,
 
             PROMPT_SCREEN_GENERIC = 35,
             PROMPT_SCREEN_CAHNGE_NAME = 36,
+            PROMPT_SCREEN_TOKEN_INSTUCTION = 37,
             #endregion
 
             BOARD_HINT_BOX = 40,

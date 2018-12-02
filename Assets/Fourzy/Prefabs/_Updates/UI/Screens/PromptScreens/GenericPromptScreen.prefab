@@ -254,9 +254,9 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 21
+          selectedMember: 23
           isDynamic: 0
-        target: {fileID: 0}
+        target: {fileID: 114230311657223410}
         memberName: Decline
         memberType: 8
         arguments: []
@@ -528,7 +528,7 @@ MonoBehaviour:
   rectTransform: {fileID: 0}
   layoutElement: {fileID: 0}
   promptTitle: {fileID: 114580718722613278}
-  promptText: {fileID: 114768550409161212}
+  promptText: {fileID: 114094219889568600}
   acceptButton: {fileID: 114370493951583402}
   declineButton: {fileID: 114980933168852824}
 --- !u!114 &114255575571237798
@@ -646,7 +646,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 20
+          selectedMember: 23
           isDynamic: 0
         target: {fileID: 114230311657223410}
         memberName: Decline
@@ -1511,7 +1511,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1723845496643330}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0

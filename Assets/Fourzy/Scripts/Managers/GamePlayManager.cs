@@ -2,6 +2,7 @@
 
 using DG.Tweening;
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Toasts;
@@ -481,9 +482,9 @@ namespace Fourzy
 
         public void ProcessPlayerInput(Vector3 mousePosition)
         {
-            Debug.Log("Gamemanager: disableInput: " + GameBoardView.disableInput + ", isLoading: " + isLoading + ", isLoadingUI: " + ",isDropping: " + isDropping + ", numPiecesAnimating: " + gameBoardView.NumPiecesAnimating + ", isGameOver: " + game.gameState.IsGameOver);
+            Debug.Log(/*"Gamemanager: disableInput: " + GameBoardView.interactable + */", isLoading: " + isLoading + ", isLoadingUI: " + ",isDropping: " + isDropping + ", numPiecesAnimating: " + gameBoardView.NumPiecesAnimating + ", isGameOver: " + game.gameState.IsGameOver);
 
-            if (GameBoardView.disableInput || isLoading|| isDropping || game.gameState.IsGameOver || gameBoardView.NumPiecesAnimating > 0)
+            if (/*GameBoardView.interactable || */isLoading|| isDropping || game.gameState.IsGameOver || gameBoardView.NumPiecesAnimating > 0)
             {
                 Debug.Log("returned in process player input");
                 return;

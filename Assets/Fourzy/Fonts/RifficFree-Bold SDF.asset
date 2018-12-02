@@ -963,7 +963,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: RifficFree-Bold SDF Material
   m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
-  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA OUTLINE_ON UNDERLAY_ON _ALPHABLEND_ON
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA UNDERLAY_ON _ALPHABLEND_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -1045,7 +1045,7 @@ Material:
     - _Diffuse: 0.5
     - _DiffusePower: 1
     - _DstBlend: 10
-    - _FaceDilate: 0.06
+    - _FaceDilate: -0.1
     - _FaceShininess: 0
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
@@ -1070,13 +1070,13 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0.35
+    - _OutlineWidth: 0.2
     - _Parallax: 0.02
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.8333333
     - _ScaleRatioB: 0.71875
-    - _ScaleRatioC: 0.62708336
+    - _ScaleRatioC: 0.7604167
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0

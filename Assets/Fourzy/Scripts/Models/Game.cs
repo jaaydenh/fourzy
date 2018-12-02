@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using Fourzy._Updates.Mechanics.Board;
 
 namespace Fourzy
 {

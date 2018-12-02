@@ -30,11 +30,11 @@ namespace Fourzy._Updates.UI.Widgets
             switch (reward.Type)
             {
                 case Reward.RewardType.Coins:
-                    rewardWidget = GameContentManager.GetPrefab<WidgetBase>(GameContentManager.PrefabType.COINS_WIDGET_SMALL, transform);
+                    rewardWidget = GameContentManager.InstantiatePrefab<WidgetBase>(GameContentManager.PrefabType.COINS_WIDGET_SMALL, transform);
                     ((CoinsWidgetSmall)rewardWidget).SetValue(reward.NumberOfCoins);
                     break;
                 case Reward.RewardType.CollectedGamePiece:
-                    rewardWidget = GameContentManager.GetPrefab<WidgetBase>(GameContentManager.PrefabType.GAME_PIECE_SMALL, transform);
+                    rewardWidget = GameContentManager.InstantiatePrefab<WidgetBase>(GameContentManager.PrefabType.GAME_PIECE_SMALL, transform);
                     ((GamePieceWidgetSmall)rewardWidget).SetData(reward.CollectedGamePiece);
                     break;
             }

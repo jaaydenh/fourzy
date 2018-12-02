@@ -259,6 +259,8 @@ MonoBehaviour:
     persistentCalls:
       calls: []
   playOnClick: 0
+  labels: []
+  badges: []
 --- !u!114 &27351659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10052,6 +10054,7 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
+  defaultPlaybackTime: 0
   value: 0
   isPlaying: 0
   customObjects: []
@@ -10097,6 +10100,8 @@ MonoBehaviour:
   isOpened: 0
   defaultCalls: 1
   menuController: {fileID: 0}
+  rectTransform: {fileID: 0}
+  layoutElement: {fileID: 0}
   player: {fileID: 1605913797}
   opponent: {fileID: 1978039653}
   nextGameButton: {fileID: 1441813751}
@@ -15203,6 +15208,8 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   playOnClick: 2
+  labels: []
+  badges: []
 --- !u!1 &306298377
 GameObject:
   m_ObjectHideFlags: 0
@@ -20246,6 +20253,7 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
+  defaultPlaybackTime: 0
   value: 0
   isPlaying: 0
   customObjects: []
@@ -20301,6 +20309,8 @@ MonoBehaviour:
   isOpened: 0
   defaultCalls: 1
   menuController: {fileID: 0}
+  rectTransform: {fileID: 0}
+  layoutElement: {fileID: 0}
   titleLabel: {fileID: 1637588449}
   subtitleLabel: {fileID: 2016981944}
 --- !u!1 &439633685
@@ -25496,6 +25506,8 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   playOnClick: 2
+  labels: []
+  badges: []
 --- !u!114 &605472207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26161,6 +26173,8 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   playOnClick: 0
+  labels: []
+  badges: []
 --- !u!114 &698781912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36016,6 +36030,7 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
+  defaultPlaybackTime: 0
   value: 0
   isPlaying: 0
   from: {x: 0, y: 0, z: 0}
@@ -36443,6 +36458,8 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   playOnClick: 2
+  labels: []
+  badges: []
 --- !u!1 &997257132
 GameObject:
   m_ObjectHideFlags: 0
@@ -41627,6 +41644,7 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
+  defaultPlaybackTime: 0
   value: 0
   isPlaying: 0
   customObjects: []
@@ -41693,6 +41711,8 @@ MonoBehaviour:
   isOpened: 0
   defaultCalls: 1
   menuController: {fileID: 0}
+  rectTransform: {fileID: 0}
+  layoutElement: {fileID: 0}
   portal: {fileID: 920463428}
   moveRewardsTo: {x: 0, y: -400, z: 0}
   rewardHolderPrefab: {fileID: 114692087265858046, guid: 2e7d27999904d6f429cda7f53299acba,
@@ -42269,6 +42289,8 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   playOnClick: 2
+  labels: []
+  badges: []
 --- !u!1 &1451021652
 GameObject:
   m_ObjectHideFlags: 0
@@ -42600,6 +42622,8 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   playOnClick: 2
+  labels: []
+  badges: []
 --- !u!1 &1485041340
 GameObject:
   m_ObjectHideFlags: 0
@@ -42731,6 +42755,8 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   playOnClick: 2
+  labels: []
+  badges: []
 --- !u!1001 &1495060806
 Prefab:
   m_ObjectHideFlags: 0
@@ -43008,6 +43034,8 @@ MonoBehaviour:
   isOpened: 0
   defaultCalls: 1
   menuController: {fileID: 0}
+  rectTransform: {fileID: 0}
+  layoutElement: {fileID: 0}
   label: {fileID: 741239875}
   rewardButton: {fileID: 1547552682}
 --- !u!114 &1530844383
@@ -43052,6 +43080,7 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
+  defaultPlaybackTime: 0
   value: 0
   isPlaying: 0
   customObjects: []
@@ -43560,6 +43589,8 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   playOnClick: 2
+  labels: []
+  badges: []
 --- !u!224 &1633794825
 RectTransform:
   m_ObjectHideFlags: 0
@@ -48955,6 +48986,8 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   playOnClick: 2
+  labels: []
+  badges: []
 --- !u!1 &1899509751
 GameObject:
   m_ObjectHideFlags: 0
@@ -53788,12 +53821,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2f3b14855e094dbeaf1082064102ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuController: {fileID: 2049771981}
   backgroundImage: {fileID: 2068058697}
   gamePiecesRootTransform: {fileID: 1030748296}
   tokensRootTransform: {fileID: 241649662}
   numRows: 8
   numColumns: 8
+  interactable: 1
+  spawnHintArea: 1
+  menuController: {fileID: 2049771981}
 --- !u!1001 &2010475832
 Prefab:
   m_ObjectHideFlags: 0

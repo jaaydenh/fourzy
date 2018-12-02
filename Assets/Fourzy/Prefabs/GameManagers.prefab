@@ -1158,6 +1158,16 @@ MonoBehaviour:
     prefabType: 35
   - prefab: {fileID: 1941133241060118, guid: 9fc1a4ead8357f048ad0a8b0b4b65a19, type: 2}
     prefabType: 36
+  - prefab: {fileID: 1001685059054880, guid: 753eac7ea7c84784484fb0e32473bd24, type: 2}
+    prefabType: 7
+  - prefab: {fileID: 1984837645737912, guid: b338469e22db58449998dbef22ff6ade, type: 2}
+    prefabType: 6
+  - prefab: {fileID: 1719389088718380, guid: 93719fda88a629a41a705180ba1fb335, type: 2}
+    prefabType: 8
+  - prefab: {fileID: 1374114750642054, guid: e5c5c7b2f5b04014c8045bc68175a630, type: 2}
+    prefabType: 9
+  - prefab: {fileID: 1859522618651454, guid: eb9bf8ad461e1714f91e0430b340492a, type: 2}
+    prefabType: 37
 --- !u!114 &114651625545579072
 MonoBehaviour:
   m_ObjectHideFlags: 1

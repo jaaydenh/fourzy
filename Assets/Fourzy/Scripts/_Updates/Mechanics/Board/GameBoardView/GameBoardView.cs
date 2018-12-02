@@ -3,26 +3,24 @@
 //it checks if current opened screen (menu) is GameplayScreen, if so, player can interract with field
 
 using DG.Tweening;
-using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
+using Fourzy._Updates.UI.Widgets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Fourzy
+namespace Fourzy._Updates.Mechanics.Board
 {
     public class GameBoardView : MonoBehaviour
     {
+        //to remove if not needed
         public static Action<Vector3> onMouseDown;
+        //to remove if not needed
         public static Action<Vector3> onMouseUp;
+        //to remove if not needed
         public static Action<Vector3> onMouseDrag;
-
-        public static bool disableInput = false;
-
-        [Tooltip("Need a direct reference since it look like ther will be more than 1 MenuController instance at a time")]
-        public MenuController menuController;
         public SpriteRenderer backgroundImage;
 
         public Transform gamePiecesRootTransform;
@@ -35,11 +33,14 @@ namespace Fourzy
         [Range(3, 8)]
         public int numColumns = Constants.numRows;
 
-        private SpriteRenderer spriteRenderer;
-        private BoxCollider2D cellsArea;
+        [HideInInspector]
+        public bool interactable = false;
+        [HideInInspector]
+        public bool spawnHintArea = false;
+        [HideInInspector]
+        public MenuController menuController;
 
         private Vector3 topLeft;
-        private Vector3 step;
         private bool isInitialized;
         /// <summary>
         /// Touch will get canceled if current screen changes from GameplayScreen to anything else during touch lifetime
@@ -53,21 +54,26 @@ namespace Fourzy
         public GamePiece OpponentPiece { get; set; }
         public MenuScreen assignedScreen { get; private set; }
         public List<HintBlock> hintBlocks { get; private set; }
+        public SpriteRenderer spriteRenderer { get; private set; }
+        public BoxCollider2D cellsArea { get; private set; }
+        public RectTransform rectTransform { get; private set; }
+        public Vector3 step { get; private set; }
 
         protected void Awake()
         {
-            Input.simulateMouseWithTouches = true;
             Init();
         }
 
         protected void Start()
         {
-            backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackground;
+            if (backgroundImage)
+                backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackground;
         }
 
         protected void OnDestroy()
         {
-            HintBlock.onHold -= OnHintBlockHold;
+            if (spawnHintArea)
+                HintBlock.onHold -= OnHintBlockHold;
         }
 
         protected void Update()
@@ -76,11 +82,13 @@ namespace Fourzy
             if (transform.hasChanged)
                 CalculatePositions();
 #endif
+            if (!interactable)
+                return;
 
             if (Input.GetMouseButtonDown(0))
             {
                 //only continue if current opened screen is GameplayScreen
-                if (assignedScreen != menuController.currentScreen || disableInput)
+                if (assignedScreen != menuController.currentScreen)
                     return;
 
                 touchCanceled = false;
@@ -89,11 +97,14 @@ namespace Fourzy
                 if (onMouseDown != null)
                     onMouseDown.Invoke(Input.mousePosition);
 
-                //show hint area
-                ShowHintArea();
+                if (spawnHintArea)
+                {
+                    //show hint area
+                    ShowHintArea();
 
-                //select
-                SelectHintBlock(Input.mousePosition);
+                    //select
+                    SelectHintBlock(Input.mousePosition);
+                }
             }
             else if (Input.GetMouseButton(0))
             {
@@ -101,7 +112,7 @@ namespace Fourzy
                     return;
 
                 //release controls if current screen isnt GameplayScreen
-                if (assignedScreen != menuController.currentScreen || disableInput)
+                if (assignedScreen != menuController.currentScreen)
                 {
                     touchCanceled = true;
 
@@ -112,8 +123,11 @@ namespace Fourzy
                 if (onMouseDrag != null)
                     onMouseDrag.Invoke(Input.mousePosition);
 
-                //select
-                SelectHintBlock(Input.mousePosition);
+                if (spawnHintArea)
+                {
+                    //select
+                    SelectHintBlock(Input.mousePosition);
+                }
             }
             else if (Input.GetMouseButtonUp(0))
             {
@@ -131,8 +145,11 @@ namespace Fourzy
             if (onMouseUp != null)
                 onMouseUp.Invoke(Input.mousePosition);
 
-            //hide hint area
-            HideHintArea();
+            if (spawnHintArea)
+            {
+                //hide hint area
+                HideHintArea();
+            }
         }
 
         public void Init()
@@ -140,22 +157,26 @@ namespace Fourzy
             if (isInitialized)
                 return;
 
-            disableInput = false;
             tokens = new GameObject[numRows, numColumns];
             gamePieces = new GamePiece[numRows, numColumns];
             hintBlocks = new List<HintBlock>();
-            HintBlock.onHold += OnHintBlockHold;
 
             cellsArea = GetComponent<BoxCollider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
+            rectTransform = GetComponent<RectTransform>();
 
             CalculatePositions();
 
             //assign control screen
-            assignedScreen = menuController.GetScreen<GameplayScreen>();
+            if (interactable)
+                assignedScreen = menuController.GetScreen<GameplayScreen>();
 
             isInitialized = true;
 
+            if (!spawnHintArea)
+                return;
+
+            HintBlock.onHold += OnHintBlockHold;
             Move hintDirection = null;
             //init hint blocks
             for (int col = 0; col < numColumns; col++)
@@ -179,8 +200,8 @@ namespace Fourzy
                         hintDirection = new Move(new Position(numColumns - 1, row), Direction.LEFT);
                     else continue;
 
-                    HintBlock hintBlock = GameContentManager.GetPrefab<HintBlock>(GameContentManager.PrefabType.BOARD_HINT_BOX, transform);
-                    hintBlock.transform.position = PositionToVec3(row, col);
+                    HintBlock hintBlock = GameContentManager.InstantiatePrefab<HintBlock>(GameContentManager.PrefabType.BOARD_HINT_BOX, transform);
+                    hintBlock.transform.localPosition = PositionToVec3(row, col);
                     hintBlock.blockDirection = hintDirection;
 
                     hintBlocks.Add(hintBlock);
@@ -195,8 +216,8 @@ namespace Fourzy
 
         public Vector3 PositionToVec3(int row, int column, float z = 0.0f)
         {
-            float posX = topLeft.x + step.x * 0.5f + step.x * column;
-            float posY = topLeft.y - step.y * 0.5f - step.y * row;
+            float posX = topLeft.x + step.x * .5f + step.x * column;
+            float posY = topLeft.y - step.y * .5f - step.y * row;
             return new Vector3(posX, posY, transform.position.z + z);
         }
 
@@ -241,7 +262,7 @@ namespace Fourzy
 
                     Token token = tokens[row, col].tokenType;
 
-                    GameObject tokenPrefab = GameContentManager.Instance.GetTokenPrefab(token);
+                    TokenView tokenPrefab = GameContentManager.Instance.GetTokenPrefab(token);
 
                     if (tokenPrefab)
                     {
@@ -300,21 +321,22 @@ namespace Fourzy
             gamePiece.gameObject.SetActive(true);
             gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
             gamePiece.transform.parent = gamePiecesRootTransform;
-            gamePiece.transform.position = PositionToVec3(row, col, 10.0f);
+            gamePiece.transform.localPosition = PositionToVec3(row, col, 10.0f);
             gamePiece.transform.localScale = Vector3.one;
             gamePiece.gameBoardView = this;
-            gamePiece.View.SetSortingLayer(spriteRenderer.sortingLayerID);
+
+            if (spriteRenderer)
+                gamePiece.View.SetSortingLayer(spriteRenderer.sortingLayerID);
 
             return gamePiece;
         }
 
-        public GameObject SpawnMinigameboardPiece(int row, int col, GameObject prefab)
+        public MiniGameboardPiece SpawnMinigameboardPiece(int row, int col, MiniGameboardPiece prefab)
         {
-            GameObject gamePiece = Instantiate(prefab);
+            MiniGameboardPiece gamePiece = Instantiate(prefab, gamePiecesRootTransform);
 
-            gamePiece.SetLayerRecursively(gameObject.layer);
-            gamePiece.transform.parent = gamePiecesRootTransform;
-            gamePiece.transform.position = PositionToVec3(row, col, 10.0f);
+            gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
+            gamePiece.transform.localPosition = PositionToVec3(row, col);
             gamePiece.transform.localScale = Vector3.one;
 
             return gamePiece;
@@ -325,17 +347,19 @@ namespace Fourzy
             CreateToken(row, col, GameContentManager.Instance.GetTokenPrefab(tokenType));
         }
 
-        public void CreateToken(int row, int col, GameObject tokenPrefab)
+        public void CreateToken(int row, int col, TokenView tokenPrefab)
         {
             if (tokens[row, col] != null)
                 Destroy(tokens[row, col]);
 
-            Vector3 position = PositionToVec3(row, col);
-            GameObject go = Instantiate(tokenPrefab, position, Quaternion.identity, tokensRootTransform);
-            go.SetLayerRecursively(gameObject.layer);
-            go.transform.rotation = tokenPrefab.transform.rotation;
-            go.GetComponent<SpriteRenderer>().sortingLayerID = spriteRenderer.sortingLayerID;
-            tokens[row, col] = go;
+            TokenView tokenInstance = Instantiate(tokenPrefab, tokensRootTransform);
+            tokenInstance.gameObject.SetLayerRecursively(gameObject.layer);
+            tokenInstance.transform.localPosition = PositionToVec3(row, col);
+
+            if (spriteRenderer && tokenInstance.spriteRenderer)
+                tokenInstance.spriteRenderer.sortingLayerID = spriteRenderer.sortingLayerID;
+
+            tokens[row, col] = tokenInstance.gameObject;
         }
 
         public void SwapPiecePosition(Position oldPos, Position newPos)
@@ -420,40 +444,44 @@ namespace Fourzy
 
         public void SetAlpha(float alpha)
         {
-            Color c = spriteRenderer.color;
-            c.a = alpha;
-            spriteRenderer.color = c;
+            if (spriteRenderer)
+            {
+                Color c = spriteRenderer.color;
+                c.a = alpha;
+                spriteRenderer.color = c;
+            }
 
-            backgroundImage.SetAlpha(alpha);
+            if (backgroundImage)
+                backgroundImage.SetAlpha(alpha);
         }
 
         public void Fade(float alpha, float time)
         {
-            spriteRenderer.DOFade(alpha, time);
-            backgroundImage.DOFade(alpha, time);
+            if (spriteRenderer)
+                spriteRenderer.DOFade(alpha, time);
+
+            if (backgroundImage)
+                backgroundImage.DOFade(alpha, time);
         }
 
         public void UpdateGameBoardSprite(Sprite sprite)
         {
-            spriteRenderer.sprite = sprite;
+            if (spriteRenderer)
+                spriteRenderer.sprite = sprite;
         }
 
         private void CalculatePositions()
         {
-            BoxCollider2D boxCollider = cellsArea;
-
-            float top = boxCollider.offset.y + (boxCollider.size.y / 2f);
-            float btm = boxCollider.offset.y - (boxCollider.size.y / 2f);
-            float left = boxCollider.offset.x - (boxCollider.size.x / 2f);
-            float right = boxCollider.offset.x + (boxCollider.size.x / 2f);
-
-            topLeft = transform.TransformPoint(new Vector3(left, top, 0f));
-            Vector3 btmRight = transform.TransformPoint(new Vector3(right, btm, 0f));
-
-            float stepX = (btmRight.x - topLeft.x) / Constants.numColumns;
-            float stepY = (topLeft.y - btmRight.y) / Constants.numRows;
-
-            step = new Vector3(stepX, stepY);
+            if (cellsArea)
+            {
+                topLeft = cellsArea.offset + new Vector2(-cellsArea.bounds.extents.x / transform.localScale.x, cellsArea.bounds.extents.y / transform.localScale.y);
+                step = new Vector3(cellsArea.size.x / numColumns, cellsArea.size.y / numRows);
+            }
+            else if (rectTransform)
+            {
+                topLeft = new Vector3(-rectTransform.rect.size.x / 2f, rectTransform.rect.size.y / 2f);
+                step = new Vector3(rectTransform.rect.width / numColumns, rectTransform.rect.height / numRows);
+            }
         }
 
         private IEnumerator MovePiecesRoutine(List<MovingGamePiece> movingPieces, List<IToken> activeTokens)

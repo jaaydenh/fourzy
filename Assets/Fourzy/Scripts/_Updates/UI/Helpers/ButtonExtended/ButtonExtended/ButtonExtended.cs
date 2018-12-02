@@ -3,6 +3,7 @@
 using ByteSheep.Events;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tween;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -22,30 +23,21 @@ namespace Fourzy._Updates.UI.Helpers
         public Dictionary<string, LabelPair> labelsFastAccess { get; private set; }
         public Dictionary<string, BadgePair> badgesFastAccess { get; private set; }
 
+        public ScaleTween scaleTween { get; set; }
+
+        private bool initialized = false;
+
         protected override void Awake()
         {
             base.Awake();
 
-            if (!Application.isPlaying)
-                return;
-
-            //add our events to onClick events
-            onClick.AddListener(OnClick);
-
-            //get labels/badges
-            labelsFastAccess = new Dictionary<string, LabelPair>();
-            foreach (LabelPair pair in labels)
-                if (!labelsFastAccess.ContainsKey(pair.labelName))
-                    labelsFastAccess.Add(pair.labelName, pair);
-
-            badgesFastAccess = new Dictionary<string, BadgePair>();
-            foreach (BadgePair pair in badges)
-                if (!badgesFastAccess.ContainsKey(pair.badgeName))
-                    badgesFastAccess.Add(pair.badgeName, pair);
+            Initialize();
         }
 
         public void SetLabel(string value, string labelName = "name")
         {
+            Initialize();
+
             if (!labelsFastAccess.ContainsKey(labelName))
                 return;
 
@@ -54,6 +46,8 @@ namespace Fourzy._Updates.UI.Helpers
 
         public BadgePair GetBadge(string badgeName = "badge")
         {
+            Initialize();
+
             if (!badgesFastAccess.ContainsKey(badgeName))
                 return null;
 
@@ -71,6 +65,34 @@ namespace Fourzy._Updates.UI.Helpers
 
             if (playOnClick != AudioTypes.NONE)
                 AudioHolder.instance.PlaySelfSfxOneShotTracked(playOnClick);
+
+            if (scaleTween)
+                scaleTween.PlayForward(true);
+        }
+
+        private void Initialize()
+        {
+            if (!Application.isPlaying || initialized)
+                return;
+
+            //add our events to onClick events
+            onClick.AddListener(OnClick);
+
+            //get labels/badges
+            labelsFastAccess = new Dictionary<string, LabelPair>();
+            foreach (LabelPair pair in labels)
+                if (!labelsFastAccess.ContainsKey(pair.labelName))
+                    labelsFastAccess.Add(pair.labelName, pair);
+
+            badgesFastAccess = new Dictionary<string, BadgePair>();
+            foreach (BadgePair pair in badges)
+                if (!badgesFastAccess.ContainsKey(pair.badgeName))
+                    badgesFastAccess.Add(pair.badgeName, pair);
+
+            //get tweens
+            scaleTween = GetComponent<ScaleTween>();
+
+            initialized = true;
         }
 
         [Serializable]

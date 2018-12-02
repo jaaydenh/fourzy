@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿//modded @vadym udod
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Fourzy
+namespace Fourzy._Updates.Mechanics.Board
 {
     public class FruitTokenView : TokenView
     {

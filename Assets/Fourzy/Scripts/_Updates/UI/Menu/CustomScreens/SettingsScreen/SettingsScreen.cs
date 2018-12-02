@@ -16,8 +16,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             Mixpanel.Track("Reset Tutorial Button Press");
 
-            PlayerPrefs.DeleteKey("onboardingStage");
-            PlayerPrefs.DeleteKey("onboardingStep");
+            menuController.GetPrompt<PromptScreen>().Prompt("Clear Tutorial", "Clear tutorail data?", "Yes", "No", () =>
+            {
+                PlayerPrefs.DeleteKey("onboardingStage");
+                PlayerPrefs.DeleteKey("onboardingStep");
+
+                menuController.CloseCurrentScreen(false);
+            });
         }
     }
 }

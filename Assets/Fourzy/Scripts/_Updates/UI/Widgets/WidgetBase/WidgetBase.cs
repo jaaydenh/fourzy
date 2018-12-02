@@ -3,6 +3,7 @@
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -22,6 +23,8 @@ namespace Fourzy._Updates.UI.Widgets
         public CanvasGroup canvasGroup;
         [HideInInspector]
         public RectTransform rectTransform;
+        [HideInInspector]
+        public LayoutElement layoutElement;
 
         protected override void Awake()
         {
@@ -31,6 +34,7 @@ namespace Fourzy._Updates.UI.Widgets
             positionTween = GetComponent<PositionTween>();
             scaleTween = GetComponent<ScaleTween>();
             rectTransform = GetComponent<RectTransform>();
+            layoutElement = GetComponent<LayoutElement>();
 
             canvasGroup = GetComponent<CanvasGroup>();
         }
