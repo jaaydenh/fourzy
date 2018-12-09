@@ -1,23 +1,16 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.UI.Camera3D;
 using TMPro;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class PlayerUIWidget : WidgetBase
     {
         public TextMeshProUGUI playerName;
-        public Camera3DItemToImage pieceRenderer;
-
-        private FourzyGamePiece3DCameraItem camera3dItem;
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            camera3dItem = pieceRenderer.item as FourzyGamePiece3DCameraItem;
-        }
+        public RectTransform pieceParent;
+        
+        private GamePiece current;
 
         public void SetupPlayerName(string name)
         {
@@ -31,22 +24,26 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void InitPlayerIcon(GamePiece gamePiecePrefab)
         {
-            camera3dItem.SetGamePiece(gamePiecePrefab);
+            current = Instantiate(gamePiecePrefab, pieceParent);
+            current.transform.localPosition = Vector3.zero;
+            current.transform.localScale = Vector3.one * 94f;
+
+            current.gameObject.SetActive(true);
         }
 
         public void ShowPlayerTurnAnimation()
         {
-            camera3dItem.current.View.ShowTurnAnimation();
+            current.gamePieceView.ShowTurnAnimation();
         }
 
         public void StopPlayerTurnAnimation()
         {
-            camera3dItem.current.View.StopTurnAnimation();
+            current.gamePieceView.StopTurnAnimation();
         }
 
         public void StartWinJumps()
         {
-            camera3dItem.current.View.ShowUIWinAnimation();
+            current.gamePieceView.ShowUIWinAnimation();
         }
     }
 }

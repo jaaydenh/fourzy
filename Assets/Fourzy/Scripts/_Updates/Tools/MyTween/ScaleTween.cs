@@ -6,8 +6,8 @@ namespace Fourzy._Updates.Tween
 {
     public class ScaleTween : TweenBase
     {
-        public Vector3 from;
-        public Vector3 to;
+        public Vector3 from = Vector3.one;
+        public Vector3 to = Vector3.one;
 
         public override void AtProgress(float value, PlaybackDirection direction)
         {

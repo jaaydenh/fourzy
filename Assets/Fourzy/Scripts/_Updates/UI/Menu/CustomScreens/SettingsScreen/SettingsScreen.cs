@@ -9,7 +9,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public void ChangeName()
         {
-            menuController.GetPrompt<ChangeNamePromptScreen>().Prompt("Change Name", "Current name: " + UserManager.Instance.userName, () => { menuController.CloseCurrentScreen(false); });
+            menuController.GetPrompt<ChangeNamePromptScreen>().Prompt("Change Name", "Current name: " + UserManager.Instance.userName, () => { menuController.CloseCurrentScreen(); });
         }
 
         public void ResetTutorial()
@@ -21,7 +21,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 PlayerPrefs.DeleteKey("onboardingStage");
                 PlayerPrefs.DeleteKey("onboardingStep");
 
-                menuController.CloseCurrentScreen(false);
+                menuController.CloseCurrentScreen();
             });
         }
     }

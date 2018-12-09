@@ -390,21 +390,6 @@ namespace Fourzy
 
             PuzzleChallengeLevel puzzleChallengeLevel = ActivePuzzlePack.PuzzleChallengeLevels[ActivePuzzlePack.ActiveLevel - 1];
 
-            // if (puzzleChallengeLevel == null) {
-            //     if (ViewController.instance.GetCurrentView() != null) {
-            //         ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());
-            //         if (ViewController.instance.GetCurrentView() != ViewController.instance.viewTraining)
-            //         {
-            //             ViewController.instance.ShowTabView();
-            //         }
-            //     } else if (ViewController.instance.GetPreviousView() != null) {
-            //         ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
-            //     }
-            //     // no more puzzle challenges
-            //     PlayerPrefs.DeleteKey("puzzleChallengeLevel");
-            //     alertUI.Open(LocalizationManager.Instance.GetLocalizedValue("all_challenges_completed"));
-
-            // } else {
             string subtitle = "";
             if (puzzleChallengeLevel.MoveGoal > 1)
             {

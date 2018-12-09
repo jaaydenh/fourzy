@@ -45,7 +45,6 @@ namespace Fourzy
         {
             new AccountDetailsRequest().Send((response) =>
             {
-                Debug.Log("COINS: " + response.Currency1);
                 string facebookId = response.ExternalIds.GetString("FB");
                 int? rateElo = response.ScriptData.GetInt("ratingElo");
                 Mixpanel.Identify(response.UserId);

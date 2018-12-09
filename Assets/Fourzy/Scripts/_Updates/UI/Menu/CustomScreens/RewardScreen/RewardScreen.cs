@@ -136,11 +136,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else
                 StartRoutine("closeRoutine", 2f, () =>
                 {
-                    menuController.CloseCurrentScreen(false);
+                    menuController.CloseCurrentScreen();
                 }, () =>
                 {
                     HideCurrentReward();
-                    menuController.CloseCurrentScreen(false);
+                    menuController.CloseCurrentScreen();
                 });
         }
 

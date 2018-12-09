@@ -1,53 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿//modded @vadym udod
+
 using DG.Tweening;
+using Fourzy._Updates.Mechanics.Board;
+using Fourzy._Updates.Tools;
+using Fourzy._Updates.UI.Helpers;
+using System.Collections;
+using UnityEngine;
 
 namespace Fourzy
 {
-    enum MoveDirection
-    {
-        LEFT,
-        RIGHT,
-        TOP,
-        DOWN,
-        IDLE
-    }
-    
     public class GamePieceView : MonoBehaviour
     {
-        public Color OutlineColor;
-        public Vector4 SecondaryColor = Vector4.zero;
-
-        [SerializeField]
-        private SpriteRenderer body;
-
-        [SerializeField]
-        private Animator pieceAnimator;
-
-        [SerializeField]
-        private Shader outlineShader;
-
-        [SerializeField, HideInInspector]
-        private bool useSecondaryColor;
-
-        private Transform cachedTransform;
-
-        private SpriteRenderer[] sprites;
-
-        private Material bodyMaterial;
-        private Material bodyOutlineMaterial;
-
-        private int h_HSVAAdjust = Shader.PropertyToID("_HSVAAdjust");
-        private int h_OutlineColor = Shader.PropertyToID("_OutlineColor");
+        private const int indexBaseLayer = 0;
+        private const int indexEyeMouthLayer = 1;
+        private const int indexMaterialLayer = 2;
+        
+        public SpriteRenderer body;
+        public Animator pieceAnimator;
 
         private int h_win = Animator.StringToHash("win");
         private int h_blink = Animator.StringToHash("blink");
 
         private int h_Idle = Animator.StringToHash("Idle");
         private int h_ShowWinningOutline = Animator.StringToHash("ShowWinningOutline");
-        private int h_HideOutline = Animator.StringToHash("HideOutline");
-        private int h_ShowOutline = Animator.StringToHash("ShowOutline");
         private int h_Jumping = Animator.StringToHash("Jumping");
         private int h_Sleep = Animator.StringToHash("Sleep");
         private int h_WakeUp = Animator.StringToHash("WakeUp");
@@ -64,37 +39,39 @@ namespace Fourzy
         private int h_MoveTop = Animator.StringToHash("MoveTop");
         private int h_MoveBottom = Animator.StringToHash("MoveDown");
 
-        private const int indexBaseLayer = 0;
-        private const int indexEyeMouthLayer = 1;
-        private const int indexMaterialLayer = 2;
+        private MoveDirection moveDirection = MoveDirection.IDLE;
 
-        MoveDirection moveDirection = MoveDirection.IDLE;
+        public SpriteRenderer[] sprites { get; private set; }
+        public CustomOutline customOutline { get; private set; }
+        public RectTransform parentRectTransform { get; private set; }
+        public GameBoardView gameboard { get; private set; }
 
         private void Awake()
         {
             Debug.Assert(pieceAnimator != null, "Setup pieceAnimator for GamePieceView in editor");
             Debug.Assert(body != null, "Setup body for GamePieceView in editor");
-            Debug.Assert(outlineShader != null, "Setup OutlineShader for GamePieceView in editor");
 
             if (pieceAnimator == null)
-            {
-                pieceAnimator = this.GetComponent<Animator>();
-            }
+                pieceAnimator = GetComponent<Animator>();
+
             if (body == null)
-            {
-                body = this.transform.Find("Sprites").Find("Body").GetComponent<SpriteRenderer>();
-            }
+                body = transform.Find("Sprites").Find("Body").GetComponent<SpriteRenderer>();
 
-            cachedTransform = transform;
-            bodyMaterial = body.material;
-            bodyOutlineMaterial = new Material(outlineShader);
-            if (useSecondaryColor)
-            {
-                bodyOutlineMaterial.SetVector(h_HSVAAdjust, SecondaryColor);
-            }
-            bodyOutlineMaterial.SetColor(h_OutlineColor, OutlineColor);
+            sprites = GetComponentsInChildren<SpriteRenderer>(true);
+            parentRectTransform = GetComponentInParent<RectTransform>();
+            gameboard = GetComponentInParent<GameBoardView>();
 
-            sprites = this.GetComponentsInChildren<SpriteRenderer>(true);
+            if (parentRectTransform)
+            {
+                foreach (SpriteRenderer spriteRendederer in sprites)
+                    spriteRendederer.gameObject.AddComponent<SrpiteToImage>();
+
+                //size it
+                if (gameboard)
+                    transform.localScale = gameboard.step * .9f;
+            }
+            else
+                transform.localScale = Vector3.one;
         }
 
         public void SetSortingLayer(int layer)
@@ -107,31 +84,7 @@ namespace Fourzy
 
         public void UseSecondaryColor(bool value)
         {
-            useSecondaryColor = value;
-            if (value)
-            {
-                this.SetupHSVColor(SecondaryColor);
-            }
-            else
-            {
-                this.SetupHSVColor(Vector4.zero);
-            }
-        }
 
-        private void SetupHSVColor(Vector4 vec)
-        {
-            bodyMaterial.SetVector(h_HSVAAdjust, vec);
-            bodyOutlineMaterial.SetVector(h_HSVAAdjust, vec);
-
-            foreach (SpriteRenderer s in sprites)
-            {
-                s.material.SetVector(h_HSVAAdjust, vec);
-            }
-        }
-
-        public void SetupOutlineColor(Color color)
-        {
-            bodyOutlineMaterial.SetColor(h_OutlineColor, color);
         }
 
         public void PutMovementDirection(int x, int y)
@@ -139,7 +92,7 @@ namespace Fourzy
             moveDirection = this.ChooseDirection(x, y);
 
             const float transitionTime = 0.1f;
-            switch(moveDirection)
+            switch (moveDirection)
             {
                 case MoveDirection.RIGHT:
                     pieceAnimator.CrossFade(h_MovingHorizontal, transitionTime, indexBaseLayer);
@@ -223,7 +176,7 @@ namespace Fourzy
 
         public void FadeAfterPit()
         {
-            cachedTransform.DOScale(Vector3.zero, 1.0f);
+            transform.DOScale(Vector3.zero, 1.0f);
 
             //this.gameObject.SetActive(false);
             // GamePiece animation
@@ -249,7 +202,7 @@ namespace Fourzy
 
         public void SetupZOrder(int zorder)
         {
-            foreach(SpriteRenderer sr in sprites)
+            foreach (SpriteRenderer sr in sprites)
             {
                 sr.sortingOrder = zorder + 1;
             }
@@ -259,47 +212,59 @@ namespace Fourzy
 
         public void PlayWinAnimation(float delay)
         {
-            body.sharedMaterial = bodyOutlineMaterial;
-
             pieceAnimator.Play(h_ShowWinningOutline);
 
             Sequence sequence = DOTween.Sequence();
             sequence.AppendInterval(delay);
-            sequence.AppendCallback(() => {
+            sequence.AppendCallback(() =>
+            {
                 pieceAnimator.SetBool(h_win, true);
             });
         }
 
         public void ShowTurnAnimation()
         {
-            body.sharedMaterial = bodyOutlineMaterial;
+            StartCoroutine(ShowTurnAnimationRoutine());
 
-            this.StartCoroutine(ShowTurnAnimationRoutine());
+            //check if piece is part of canvas
+            if (parentRectTransform)
+            {
+                //add outline to body
+                if (!customOutline)
+                    customOutline = body.gameObject.AddComponent<CustomOutline>();
+
+                customOutline.outlineColor = Color.green;
+                customOutline.Animate(0f, 1f, 2f, true);
+            }
         }
 
         public void StopTurnAnimation()
         {
-            this.StopAllCoroutines();
+            if (parentRectTransform)
+            {
+                if (customOutline)
+                    customOutline.StopAnimation();
+            }
 
-            pieceAnimator.Play(h_HideOutline);
+            StopAllCoroutines();
+            
             pieceAnimator.Play(h_Sleep, indexEyeMouthLayer);
             pieceAnimator.CrossFade(h_Idle, 0.35f, indexBaseLayer);
         }
 
         private IEnumerator ShowTurnAnimationRoutine()
         {
-            pieceAnimator.Play(h_ShowOutline);
             pieceAnimator.Play(h_WakeUp, indexEyeMouthLayer);
 
             int countOfJumps = 3;
-            yield return this.StartCoroutine(JumpRoutine(countOfJumps));
-            yield return this.StartCoroutine(BlinkingRoutine());
+            yield return StartCoroutine(JumpRoutine(countOfJumps));
+            yield return StartCoroutine(BlinkingRoutine());
         }
 
         public void ShowUIWinAnimation()
         {
-            this.StopAllCoroutines();
-            this.StartCoroutine(ShowUIWinAnimationRoutine());
+            StopAllCoroutines();
+            StartCoroutine(ShowUIWinAnimationRoutine());
         }
 
         private IEnumerator ShowUIWinAnimationRoutine()
@@ -323,7 +288,7 @@ namespace Fourzy
 
         public void StartBlinking()
         {
-            this.StartCoroutine(BlinkingRoutine());
+            StartCoroutine(BlinkingRoutine());
         }
 
         private IEnumerator BlinkingRoutine()
@@ -335,7 +300,7 @@ namespace Fourzy
                 t += Time.deltaTime;
                 if (t > nextBlink)
                 {
-                    this.Blink();
+                    Blink();
                     nextBlink = Random.Range(5.0f, 15.0f);
                     t = 0;
                 }
@@ -349,5 +314,12 @@ namespace Fourzy
         }
     }
 
+    enum MoveDirection
+    {
+        LEFT,
+        RIGHT,
+        TOP,
+        DOWN,
+        IDLE
+    }
 }
-

@@ -20,12 +20,13 @@ namespace Fourzy
         readonly string[] lastNameSyllables = { "malo", "zak", "abo", "wonk", "zig", "wolf", "cat", "dog", "sheep", "goat" };
         private bool readyForDeviceLogin;
 
-        public List<Friend> Friends { get; private set; }
-
         public static event Action<string> OnLoginMessage;
         public static event Action<bool> OnFBLoginComplete;
         public static event Action<bool> OnDeviceLoginComplete;
         public static event Action OnGetFriends;
+
+        public List<Friend> Friends { get; private set; }
+        public bool IsFBLoggedIn { get { return FB.IsLoggedIn; } }
 
         private void Start()
         {
@@ -94,11 +95,6 @@ namespace Fourzy
                 });
         }
 
-        public bool IsFBLoggedIn()
-        {
-            return FB.IsLoggedIn;
-        }
-
         void DeviceLogin()
         {
             new DeviceAuthenticationRequest()
@@ -109,10 +105,9 @@ namespace Fourzy
                         Mixpanel.Identify(response.UserId);
                         UserManager.Instance.UpdateUserInfo(response.DisplayName, response.UserId, null, null, null);
                         UserManager.Instance.UpdateInformation();
-                    ChallengeManager.Instance.GetChallengesRequest();
-                        //LeaderboardManager.instance.GetLeaderboard();
-
+                        ChallengeManager.Instance.GetChallengesRequest();
                         AnalyticsManager.LogCustom("device_authentication_request");
+
                         if (OnLoginMessage != null)
                             OnLoginMessage("Device Authentication Success: " + response.DisplayName);
                     }

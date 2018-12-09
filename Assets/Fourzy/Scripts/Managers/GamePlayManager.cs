@@ -28,9 +28,9 @@ namespace Fourzy
 
         [HideInInspector]
         public Game game;
-        
+
         public MenuController menuController;
-        
+
         public GameBoardView gameBoardView;
         public WinningParticleGenerator winningParticleGenerator;
 
@@ -221,15 +221,13 @@ namespace Fourzy
                 }
             }
 
-            TokenPopupUI popupUI = PopupManager.Instance.GetPopup<TokenPopupUI>();
+            TokenPrompt popupUI = menuController.GetPrompt<TokenPrompt>();
 
             foreach (TokenData token in tokens)
             {
-                popupUI.tokenData = token;
+                popupUI.Prompt(token);
 
-                PopupManager.Instance.OpenPopup<TokenPopupUI>();
-
-                yield return new WaitWhile(() => popupUI.IsOpen());
+                yield return new WaitWhile(() => popupUI.isOpened);
 
                 PlayerPrefsWrapper.SetInstructionPopupDisplayed(token.ID, true);
 
@@ -296,14 +294,14 @@ namespace Fourzy
             gameBoardView.PlayerPiece = Instantiate(prefab);
             gameBoardView.PlayerPiece.player = player;
             gameBoardView.PlayerPiece.gameBoardView = gameBoardView;
-            gameBoardView.PlayerPiece.View.UseSecondaryColor(player == PlayerEnum.TWO && shouldUseSecondaryColor);
+            gameBoardView.PlayerPiece.gamePieceView.UseSecondaryColor(player == PlayerEnum.TWO && shouldUseSecondaryColor);
             gameBoardView.PlayerPiece.gameObject.SetActive(false);
 
             prefab = GameContentManager.Instance.GetGamePiecePrefab(opponentGamePieceId);
             gameBoardView.OpponentPiece = Instantiate(prefab);
             gameBoardView.OpponentPiece.player = opponent;
             gameBoardView.OpponentPiece.gameBoardView = gameBoardView;
-            gameBoardView.OpponentPiece.View.UseSecondaryColor(opponent == PlayerEnum.TWO && shouldUseSecondaryColor);
+            gameBoardView.OpponentPiece.gamePieceView.UseSecondaryColor(opponent == PlayerEnum.TWO && shouldUseSecondaryColor);
             gameBoardView.OpponentPiece.gameObject.SetActive(false);
 
             gameplayScreen.InitUI(game);
@@ -333,7 +331,7 @@ namespace Fourzy
         {
             var pieces = gameBoardView.GetGamePiecesList();
             for (int i = 0; i < pieces.Count; i++)
-                pieces[i].View.Fade(alpha, fadeTime);
+                pieces[i].gamePieceView.Fade(alpha, fadeTime);
 
             if (pieces.Count > 0)
                 yield return new WaitForSeconds(fadeTime);
@@ -385,21 +383,7 @@ namespace Fourzy
 
         public void BackButtonOnClick()
         {
-            if (ViewController.instance.GetCurrentView() != null)
-            {
-                ViewController.instance.ChangeView(ViewController.instance.GetCurrentView());
-                if (ViewController.instance.GetCurrentView() != ViewController.instance.viewTraining && ViewController.instance.GetCurrentView() != ViewController.instance.viewPuzzleSelection)
-                {
-                    ViewController.instance.ShowTabView();
-                }
-            }
-            else if (ViewController.instance.GetPreviousView() != null)
-            {
-                ViewController.instance.ChangeView(ViewController.instance.GetPreviousView());
-            }
-
-            //ChallengeManager.Instance.ReloadGames();
-
+            MenuController.SetState("MainMenuCanvas", true);
             SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
 
             if (game.gameState.GameType == GameType.REALTIME)
@@ -428,9 +412,9 @@ namespace Fourzy
         {
             Scene uiScene = SceneManager.GetSceneByName(Constants.MAIN_MENU_SCENE_NAME);
             SceneManager.SetActiveScene(uiScene);
-            SceneManager.UnloadSceneAsync("Constants.GAMEPLAY_SCENE_NAME");
+            SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
 
-            ViewController.instance.ChangeView(ViewController.instance.viewMatchMaking);
+            MenuController.GetMenu("MainMenuCanvas").OpenScreen<MatchmakingScreen>();
         }
 
         public void RematchPassAndPlayGameButtonOnClick()
@@ -438,8 +422,8 @@ namespace Fourzy
             Scene uiScene = SceneManager.GetSceneByName(Constants.MAIN_MENU_SCENE_NAME);
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
-            ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
-            ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(game.gameState.GameType);
+
+            MenuController.GetMenu("MainMenuCanvas").GetScreen<GameboardSelectionScreen>().SelectBoard(game.gameState.GameType);
             AnalyticsManager.LogCustom("rematch_pnp_game");
         }
 
@@ -484,7 +468,7 @@ namespace Fourzy
         {
             Debug.Log(/*"Gamemanager: disableInput: " + GameBoardView.interactable + */", isLoading: " + isLoading + ", isLoadingUI: " + ",isDropping: " + isDropping + ", numPiecesAnimating: " + gameBoardView.NumPiecesAnimating + ", isGameOver: " + game.gameState.IsGameOver);
 
-            if (/*GameBoardView.interactable || */isLoading|| isDropping || game.gameState.IsGameOver || gameBoardView.NumPiecesAnimating > 0)
+            if (/*GameBoardView.interactable || */isLoading || isDropping || game.gameState.IsGameOver || gameBoardView.NumPiecesAnimating > 0)
             {
                 Debug.Log("returned in process player input");
                 return;
@@ -803,7 +787,7 @@ namespace Fourzy
                 currentPlayer = PlayerEnum.TWO;
 
             if (gameFinishedScreen.isOpened)
-                menuController.CloseCurrentScreen(false);
+                menuController.CloseCurrentScreen();
 
             RewardScreen rewardScreen = menuController.GetScreen<RewardScreen>();
             rewardScreen.OpenScreen(new Reward[] {
@@ -871,7 +855,7 @@ namespace Fourzy
                     {
                         int randomIndex = UnityEngine.Random.Range(0, piecesForBlink.Count);
                         GamePiece gamePiece = piecesForBlink[randomIndex];
-                        gamePiece.View.Blink();
+                        gamePiece.gamePieceView.Blink();
                     }
                     t = 0;
                 }

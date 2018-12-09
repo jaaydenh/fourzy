@@ -83,7 +83,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (onDecline != null)
                 onDecline.Invoke();
             else
-                menuController.CloseCurrentScreen(true);
+                menuController.CloseCurrentScreen();
 
             onAccept = null;
             onDecline = null;

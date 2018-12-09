@@ -9,8 +9,8 @@ namespace Fourzy._Updates.Tween
         [HideInInspector]
         public AudioSource audioSource;
 
-        public float from;
-        public float to;
+        public float from = 0f;
+        public float to = 1f;
 
         protected override void Awake()
         {

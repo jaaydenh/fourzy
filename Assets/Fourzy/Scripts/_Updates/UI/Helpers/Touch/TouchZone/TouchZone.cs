@@ -10,6 +10,9 @@ public class TouchZone : EventTrigger
     public AdvancedVector2Event onPointerMove;
     public AdvancedVector2Event onPointerUp;
 
+    public bool dragPositionRelative = false;
+    public bool scalePosition = false;
+
     private Vector2 originPosition;
     private Canvas canvas;
 
@@ -22,7 +25,10 @@ public class TouchZone : EventTrigger
     {
         base.OnPointerDown(eventData);
 
-        originPosition = new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y);
+        if (scalePosition)
+            originPosition = new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y);
+        else
+            originPosition = new Vector2(eventData.position.x, eventData.position.y);
 
         onPointerDown.Invoke(originPosition);
     }
@@ -31,16 +37,30 @@ public class TouchZone : EventTrigger
     {
         base.OnDrag(eventData);
         
-        onPointerMove.Invoke(new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y) - originPosition);
+        if (dragPositionRelative)
+        {
+            if (scalePosition)
+                onPointerMove.Invoke(new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y) - originPosition);
+            else
+                onPointerMove.Invoke(new Vector2(eventData.position.x, eventData.position.y) - originPosition);
+        }
+        else
+        {
+            if (scalePosition)
+                onPointerMove.Invoke(new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y));
+            else
+                onPointerMove.Invoke(new Vector2(eventData.position.x, eventData.position.y));
+        }
     }
 
     public override void OnPointerUp(PointerEventData eventData)
     {
         base.OnPointerUp(eventData);
 
-        Vector2 pos = eventData.position;
-        pos.Scale(canvas.transform.lossyScale);
-        onPointerUp.Invoke(pos);
+        if (scalePosition)
+            onPointerUp.Invoke(new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y));
+        else
+            onPointerUp.Invoke(new Vector2(eventData.position.x, eventData.position.y));
     }
 
     private Canvas CheckObj(Transform @object)

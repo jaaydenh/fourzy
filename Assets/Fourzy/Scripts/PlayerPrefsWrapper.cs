@@ -1,11 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿//modded @vadym udod
+
+using System;
 using UnityEngine;
 
 namespace Fourzy
 {
     public static class PlayerPrefsWrapper
     {
+        public static Action<int> onThemeChanged;
+
         static string kInstructionPopupDisplayed = "kInstructionPopupDisplayed_";
         static string kPuzzleChallengeCompleted = "PuzzleChallengeID:";
         static string kCurrentTheme = "kCurrentTheme";
@@ -37,6 +40,9 @@ namespace Fourzy
         public static void SetCurrentGameTheme(int currentTheme)
         {
             PlayerPrefs.SetInt(kCurrentTheme, currentTheme);
+
+            if (onThemeChanged != null)
+                onThemeChanged.Invoke(currentTheme);
         }
 
         public static int GetCurrentTheme()

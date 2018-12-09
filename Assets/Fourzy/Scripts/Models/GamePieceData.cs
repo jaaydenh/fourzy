@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fourzy
 {
@@ -47,7 +46,6 @@ namespace Fourzy
             BorderColor = borderColor.ColorFromJson();
         }
     }
-
 
     public static class JsonConverterExternsion
     {

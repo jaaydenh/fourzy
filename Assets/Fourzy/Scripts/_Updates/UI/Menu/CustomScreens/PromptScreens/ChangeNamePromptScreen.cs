@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.UI.Toasts;
 using TMPro;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -22,14 +21,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public override void Accept()
         {
-            base.Accept();
-
             //change name
             if (string.IsNullOrEmpty(inputField.text))
             {
                 GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "New name can't be empty!");
                 return;
             }
+
+            base.Accept();
 
             UserManager.Instance.UpdatePlayerDisplayName(inputField.text);
         }

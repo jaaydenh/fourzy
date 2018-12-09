@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -19,17 +18,18 @@ namespace Fourzy._Updates.UI.Helpers
         [SerializeField]
         private TextMeshProUGUI targetText;
 
+        private bool shown = false;
+        private bool initialized = false;
+
         protected void Awake()
         {
-            if (thisTarget)
-                targetObject = gameObject;
-
-            if (!targetText)
-                targetText = targetObject.GetComponentInChildren<TextMeshProUGUI>();
+            Initialize();
         }
 
         public void SetValue(string value)
         {
+            Initialize();
+            
             if (!targetObject)
                 return;
 
@@ -37,7 +37,7 @@ namespace Fourzy._Updates.UI.Helpers
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    targetObject.SetActive(false);
+                    Hide();
                     return;
                 }
 
@@ -45,13 +45,15 @@ namespace Fourzy._Updates.UI.Helpers
 
                 if (int.TryParse(value, out intValue) && intValue == 0)
                 {
-                    targetObject.SetActive(false);
+                    Hide();
                     return;
                 }
             }
 
             if (!targetText)
                 return;
+
+            Show();
 
             targetText.text = string.Format(format, value);
         }
@@ -68,7 +70,7 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void Hide()
         {
-            if (!targetObject)
+            if (!targetObject || !shown)
                 return;
 
             targetObject.SetActive(false);
@@ -76,10 +78,24 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void Show()
         {
-            if (!targetObject)
+            if (!targetObject || shown)
                 return;
 
             targetObject.SetActive(true);
+        }
+
+        private void Initialize()
+        {
+            if (initialized)
+                return;
+
+            if (thisTarget)
+                targetObject = gameObject;
+
+            if (!targetText)
+                targetText = targetObject.GetComponentInChildren<TextMeshProUGUI>();
+
+            shown = gameObject.activeInHierarchy;
         }
     }
 }

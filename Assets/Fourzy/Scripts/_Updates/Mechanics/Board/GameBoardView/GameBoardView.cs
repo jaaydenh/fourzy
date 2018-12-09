@@ -27,7 +27,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public Transform tokensRootTransform;
 
         public GamePiece[,] gamePieces;
-        public GameObject[,] tokens;
+        public TokenView[,] tokens;
         [Range(3, 8)]
         public int numRows = Constants.numRows;
         [Range(3, 8)]
@@ -55,7 +55,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public MenuScreen assignedScreen { get; private set; }
         public List<HintBlock> hintBlocks { get; private set; }
         public SpriteRenderer spriteRenderer { get; private set; }
-        public BoxCollider2D cellsArea { get; private set; }
+        public BoxCollider2D boxCollider2D { get; private set; }
         public RectTransform rectTransform { get; private set; }
         public Vector3 step { get; private set; }
 
@@ -76,74 +76,70 @@ namespace Fourzy._Updates.Mechanics.Board
                 HintBlock.onHold -= OnHintBlockHold;
         }
 
-        protected void Update()
+        public void OnPointerDown(Vector2 position)
         {
-#if UNITY_EDITOR
-            if (transform.hasChanged)
-                CalculatePositions();
-#endif
             if (!interactable)
                 return;
 
-            if (Input.GetMouseButtonDown(0))
+            //only continue if current opened screen is GameplayScreen
+            if (assignedScreen != menuController.currentScreen)
+                return;
+
+            touchCanceled = false;
+            touched = true;
+
+            if (onMouseDown != null)
+                onMouseDown.Invoke(position);
+
+            if (spawnHintArea)
             {
-                //only continue if current opened screen is GameplayScreen
-                if (assignedScreen != menuController.currentScreen)
-                    return;
+                //show hint area
+                ShowHintArea();
 
-                touchCanceled = false;
-                touched = true;
-
-                if (onMouseDown != null)
-                    onMouseDown.Invoke(Input.mousePosition);
-
-                if (spawnHintArea)
-                {
-                    //show hint area
-                    ShowHintArea();
-
-                    //select
-                    SelectHintBlock(Input.mousePosition);
-                }
-            }
-            else if (Input.GetMouseButton(0))
-            {
-                if (!touched)
-                    return;
-
-                //release controls if current screen isnt GameplayScreen
-                if (assignedScreen != menuController.currentScreen)
-                {
-                    touchCanceled = true;
-
-                    OnMouseRelease(Input.mousePosition);
-                    return;
-                }
-
-                if (onMouseDrag != null)
-                    onMouseDrag.Invoke(Input.mousePosition);
-
-                if (spawnHintArea)
-                {
-                    //select
-                    SelectHintBlock(Input.mousePosition);
-                }
-            }
-            else if (Input.GetMouseButtonUp(0))
-            {
-                OnMouseRelease(Input.mousePosition);
+                //select
+                SelectHintBlock(position);
             }
         }
 
-        public void OnMouseRelease(Vector3 position)
+        public void OnPointerMove(Vector2 position)
         {
+            if (!interactable)
+                return;
+
+            if (!touched)
+                return;
+
+            //release controls if current screen isnt GameplayScreen
+            if (assignedScreen != menuController.currentScreen)
+            {
+                touchCanceled = true;
+
+                OnPointerRelease(position);
+                return;
+            }
+
+            if (onMouseDrag != null)
+                onMouseDrag.Invoke(position);
+
+            if (spawnHintArea)
+            {
+                //select
+                SelectHintBlock(position);
+            }
+        }
+
+        public void OnPointerRelease(Vector2 position)
+        {
+            if (!interactable)
+                return;
+
             if (!touched)
                 return;
 
             touched = false;
 
             if (onMouseUp != null)
-                onMouseUp.Invoke(Input.mousePosition);
+                onMouseUp.Invoke(position);
 
             if (spawnHintArea)
             {
@@ -157,11 +153,11 @@ namespace Fourzy._Updates.Mechanics.Board
             if (isInitialized)
                 return;
 
-            tokens = new GameObject[numRows, numColumns];
+            tokens = new TokenView[numRows, numColumns];
             gamePieces = new GamePiece[numRows, numColumns];
             hintBlocks = new List<HintBlock>();
 
-            cellsArea = GetComponent<BoxCollider2D>();
+            boxCollider2D = GetComponent<BoxCollider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             rectTransform = GetComponent<RectTransform>();
 
@@ -246,7 +242,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     GamePiece pieceObject = SpawnPiece(col, row, player);
                     pieceObject.player = player;
                     gamePieces[row, col] = pieceObject;
-                    pieceObject.View.SetAlpha(initialAlpha);
+                    pieceObject.gamePieceView.SetAlpha(initialAlpha);
                 }
             }
         }
@@ -266,8 +262,9 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     if (tokenPrefab)
                     {
-                        CreateToken(row, col, tokenPrefab);
-                        TokenAt(row, col).GetComponent<SpriteRenderer>().SetAlpha(initialAlpha);
+                        TokenView tokenInstance = CreateToken(row, col, tokenPrefab);
+
+                        tokenInstance.SetAlpha(initialAlpha);
                     }
                 }
             }
@@ -316,17 +313,14 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public GamePiece SpawnPiece(int row, int col, GamePiece prefab)
         {
-            GamePiece gamePiece = Instantiate(prefab);
+            GamePiece gamePiece = Instantiate(prefab, gamePiecesRootTransform);
 
             gamePiece.gameObject.SetActive(true);
             gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
-            gamePiece.transform.parent = gamePiecesRootTransform;
             gamePiece.transform.localPosition = PositionToVec3(row, col, 10.0f);
-            gamePiece.transform.localScale = Vector3.one;
-            gamePiece.gameBoardView = this;
 
             if (spriteRenderer)
-                gamePiece.View.SetSortingLayer(spriteRenderer.sortingLayerID);
+                gamePiece.gamePieceView.SetSortingLayer(spriteRenderer.sortingLayerID);
 
             return gamePiece;
         }
@@ -347,7 +341,7 @@ namespace Fourzy._Updates.Mechanics.Board
             CreateToken(row, col, GameContentManager.Instance.GetTokenPrefab(tokenType));
         }
 
-        public void CreateToken(int row, int col, TokenView tokenPrefab)
+        public TokenView CreateToken(int row, int col, TokenView tokenPrefab)
         {
             if (tokens[row, col] != null)
                 Destroy(tokens[row, col]);
@@ -356,10 +350,12 @@ namespace Fourzy._Updates.Mechanics.Board
             tokenInstance.gameObject.SetLayerRecursively(gameObject.layer);
             tokenInstance.transform.localPosition = PositionToVec3(row, col);
 
-            if (spriteRenderer && tokenInstance.spriteRenderer)
-                tokenInstance.spriteRenderer.sortingLayerID = spriteRenderer.sortingLayerID;
+            //if (spriteRenderer)
+            //    tokenInstance.TrySetsortingLayerID(spriteRenderer.sortingLayerID);
 
-            tokens[row, col] = tokenInstance.gameObject;
+            tokens[row, col] = tokenInstance;
+
+            return tokenInstance;
         }
 
         public void SwapPiecePosition(Position oldPos, Position newPos)
@@ -382,7 +378,7 @@ namespace Fourzy._Updates.Mechanics.Board
             return gamePieces[row, col];
         }
 
-        public GameObject TokenAt(int row, int col)
+        public TokenView TokenAt(int row, int col)
         {
             return tokens[row, col];
         }
@@ -472,10 +468,10 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private void CalculatePositions()
         {
-            if (cellsArea)
+            if (boxCollider2D)
             {
-                topLeft = cellsArea.offset + new Vector2(-cellsArea.bounds.extents.x / transform.localScale.x, cellsArea.bounds.extents.y / transform.localScale.y);
-                step = new Vector3(cellsArea.size.x / numColumns, cellsArea.size.y / numRows);
+                topLeft = boxCollider2D.offset + new Vector2(-boxCollider2D.bounds.size.x * .5f / transform.localScale.x, boxCollider2D.bounds.size.y * .5f / transform.localScale.y);
+                step = new Vector3(boxCollider2D.size.x / numColumns, boxCollider2D.size.y / numRows);
             }
             else if (rectTransform)
             {
@@ -566,7 +562,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             GamePlayManager.Instance.ProcessPlayerInput(hintBlock.transform.position);
 
-            OnMouseRelease(Input.mousePosition);
+            OnPointerRelease(Input.mousePosition);
         }
     }
 }

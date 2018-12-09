@@ -1,32 +1,39 @@
 ﻿//modded @vadym udod
 
+using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Helpers;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Rendering;
 
 namespace Fourzy._Updates.Mechanics.Board
 {
+    [RequireComponent(typeof(SortingGroup))]
+    [RequireComponent(typeof(AlphaTween))]
     public class TokenView : MonoBehaviour
     {
         public Token tokenType;
         public bool justDisplaying;
 
-        public SpriteRenderer spriteRenderer { get; private set; }
         public RectTransform parentRectTransform { get; private set; }
-        public RectTransform rectTransform { get; private set; }
         public GameBoardView gameboard { get; private set; }
-        public Image image { get; private set; }
+        public AlphaTween alphaTween { get; private set; }
+        public SortingGroup sortingGroup { get; private set; }
 
-        private Sprite previousSprite;
+        private SpriteRenderer[] spriteRenderers;
+        private SrpiteToImage[] spriteToImage;
 
         protected void Awake()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
             parentRectTransform = GetComponentInParent<RectTransform>();
             gameboard = GetComponentInParent<GameBoardView>();
+            alphaTween = GetComponent<AlphaTween>();
+            sortingGroup = GetComponent<SortingGroup>();
+
+            spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
 
             if (justDisplaying)
             {
-                var components = this.GetComponents<MonoBehaviour>();
+                var components = GetComponents<MonoBehaviour>();
                 foreach (MonoBehaviour component in components)
                 {
                     System.Type type = component.GetType();
@@ -36,31 +43,40 @@ namespace Fourzy._Updates.Mechanics.Board
                     }
                 }
             }
-        }
-
-        protected void Start()
-        {
-            //check if parent have rectTransform on it
-            if (parentRectTransform)
+            else
             {
-                image = gameObject.AddComponent<Image>();
-                rectTransform = GetComponent<RectTransform>();
+                //check if parent have rectTransform on it
+                if (parentRectTransform)
+                {
+                    spriteToImage = new SrpiteToImage[spriteRenderers.Length];
 
-                //size it
-                rectTransform.sizeDelta = gameboard.step;
+                    for (int rendererIndex = 0; rendererIndex < spriteRenderers.Length; rendererIndex++)
+                    {
+                        spriteToImage[rendererIndex] = spriteRenderers[rendererIndex].gameObject.AddComponent<SrpiteToImage>();
 
-                if (spriteRenderer)
-                    spriteRenderer.enabled = false;
+                        //size it
+                        transform.localScale = gameboard.step * .9f;
+                    }
+                }
+                else
+                {
+                    transform.localScale = Vector3.one;
+                }
+
+                //configure alpha tween
+                alphaTween.DoParse();
             }
         }
 
-        protected void Update()
+        public void SetAlpha(float value)
         {
-            if (parentRectTransform && spriteRenderer)
-            {
-                if (spriteRenderer.sprite != image.sprite)
-                    image.sprite = spriteRenderer.sprite;
-            }
+            alphaTween.SetAlpha(value);
+        }
+
+        public void TrySetsortingLayerID(int layerID)
+        {
+            if (!parentRectTransform)
+                sortingGroup.sortingLayerID = layerID;
         }
     }
 }

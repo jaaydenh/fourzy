@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: SF-UI-Display-Black SDF Outline
   m_EditorClassIdentifier: 
-  hashCode: 706226888
+  hashCode: 633654408
   material: {fileID: 21204670121071226}
   materialHashCode: 467486531
   fontAssetType: 1
@@ -1054,7 +1054,7 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0.25
+    - _OutlineWidth: 0.55
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.75

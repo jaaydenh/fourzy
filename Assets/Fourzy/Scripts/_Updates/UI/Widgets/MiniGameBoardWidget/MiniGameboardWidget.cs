@@ -13,7 +13,7 @@ namespace Fourzy._Updates.UI.Widgets
         public GameObject questionMark;
 
         [HideInInspector]
-        public TokenBoard tokenBoard;
+        public TokenBoard tokenBoardData;
 
         public GameBoardView gameboardView { get; private set; }
         public Toggle toggle { get; private set; }
@@ -24,27 +24,34 @@ namespace Fourzy._Updates.UI.Widgets
             toggle = GetComponent<Toggle>();
         }
 
+        public void SetData(TokenBoard data)
+        {
+            tokenBoardData = data;
+
+            CreateTokens();
+            CreateGamePieces();
+        }
+
         public void CreateGamePieces()
         {
             for (int row = 0; row < Constants.numRows; row++)
             {
                 for (int col = 0; col < Constants.numColumns; col++)
                 {
-                    Piece piece = (Piece)tokenBoard.initialGameBoard[row * Constants.numRows + col];
+                    Piece piece = (Piece)tokenBoardData.initialGameBoard[row * Constants.numRows + col];
                     if (piece == Piece.EMPTY)
                         continue;
 
-                    MiniGameboardPiece go = gameboardView.SpawnMinigameboardPiece(row, col, GameContentManager.GetPrefab<MiniGameboardPiece>(GameContentManager.PrefabType.MINI_GAME_BOARD_PIECE));
-                    go.SetGamePiece(piece);
+                    gameboardView.SpawnMinigameboardPiece(row, col, GameContentManager.GetPrefab<MiniGameboardPiece>(GameContentManager.PrefabType.MINI_GAME_BOARD_PIECE)).SetGamePiece(piece);
                 }
             }
         }
 
         public void CreateTokens()
         {
-            tokenBoard.SetTokenBoardFromData(tokenBoard.tokenBoard);
+            tokenBoardData.SetTokenBoardFromData(tokenBoardData.tokenBoard);
 
-            gameboardView.CreateTokenViews(tokenBoard.tokens);
+            gameboardView.CreateTokenViews(tokenBoardData.tokens);
         }
 
         public void SetAsRandom()
@@ -54,16 +61,10 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void BoardSelect()
         {
-            if (tokenBoard == null)
+            if (tokenBoardData == null)
                 return;
 
-            if (toggle.isOn)
-            {
-                Debug.Log("GAME BOARD SELECTED ON: tokenboard.id: " + tokenBoard.id);
-
-                //if (OnSetTokenBoard != null && tokenBoard != null)
-                //    OnSetTokenBoard(tokenBoard.id);
-            }
+            ChallengeManager.SetTokenBoard(tokenBoardData.id);
         }
     }
 }

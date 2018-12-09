@@ -47,7 +47,6 @@ namespace Fourzy
 
         void OnEnable()
         {
-            MiniGameBoard.OnSetTokenBoard += SetTokenBoard;
             GamePieceWidgetMedium.onSelected += SetGamePiece;
             ChallengeTurnTakenMessage.Listener += OnChallengeTurnTaken;
             ChallengeJoinedMessage.Listener += OnChallengeJoined;
@@ -59,7 +58,6 @@ namespace Fourzy
 
         void OnDisable()
         {
-            MiniGameBoard.OnSetTokenBoard -= SetTokenBoard;
             GamePieceWidgetMedium.onSelected -= SetGamePiece;
             ChallengeTurnTakenMessage.Listener -= OnChallengeTurnTaken;
             ChallengeJoinedMessage.Listener -= OnChallengeJoined;
@@ -97,25 +95,6 @@ namespace Fourzy
         private void OnChallengeIssued(ChallengeIssuedMessage message)
         {
             OnChallengeIssuedDelegate(message);
-        }
-
-        private void SetTokenBoard(string tokenBoardId)
-        {
-
-            if (tokenBoardId != null)
-            {
-                Debug.Log("SetTokenBoard tokenboardid: " + tokenBoardId);
-                // this.tokenBoard = new TokenBoard(tokenBoard);
-                this.tokenBoardId = tokenBoardId;
-                //   ObjectCopier.Clone(tokenboard);
-                // this.tokenBoard = new TokenBoard(tokenboard.tokenBoard, tokenboard.id, tokenboard.name, tokenboard.initialMoves, tokenboard.initialGameBoard, true);
-            }
-            else
-            {
-                Debug.Log("SetTokenBoard tokenboardid is null");
-                // this.tokenBoard = null;
-                this.tokenBoardId = null;
-            }
         }
 
         public TokenBoard GetTokenBoard(GameType gameType, string tokenBoardId = null)
@@ -170,7 +149,6 @@ namespace Fourzy
                         Dictionary<String, object> customAttributes = new Dictionary<String, object>();
                         customAttributes.Add("GamePieceId", gamePieceId);
                         AnalyticsManager.LogCustom("set_gamepiece");
-                        //if (OnSetGamePieceSuccess != null)
                     }
                 });
         }
@@ -818,6 +796,20 @@ namespace Fourzy
                     stopwatch.Reset();
 
                 }));
+        }
+
+        public static void SetTokenBoard(string tokenBoardId)
+        {
+            if (tokenBoardId != null)
+            {
+                Debug.Log("SetTokenBoard tokenboardid: " + tokenBoardId);
+                Instance.tokenBoardId = tokenBoardId;
+            }
+            else
+            {
+                Debug.Log("SetTokenBoard tokenboardid is null");
+                Instance.tokenBoardId = null;
+            }
         }
     }
 }

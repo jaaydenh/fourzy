@@ -64,11 +64,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void OnToggle()
         {
-            if (toggle.isOn)
-            {
-                if (onSelected != null)
-                    onSelected(data.ID.ToString());
-            }
+            if (onSelected != null)
+                onSelected(data.ID.ToString());
         }
     }
 }

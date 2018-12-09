@@ -7,13 +7,17 @@ using UnityEngine.UI;
 
 namespace Fourzy._Updates.Tween
 {
-    public class TweenBase : MonoBehaviour
+    public abstract class TweenBase : MonoBehaviour
     {
         public PlaybackDirection playbackDirection = PlaybackDirection.FORWARD;
         public AnimationCurve curve;
         public bool unscaledTime = false;
-        public float playbackTime;
+        public float playbackTime = .3f;
+        public RepeatType repeat = RepeatType.NONE;
         public QuickFloatEvent onProgress;
+
+        //for instances where event need to be assigned from code
+        public Action<float> _onProgress;
 
         [HideInInspector]
         public float defaultPlaybackTime;
@@ -95,8 +99,6 @@ namespace Fourzy._Updates.Tween
             AtProgress(value, playbackDirection);
         }
 
-        public virtual void OnReset() { }
-
         public virtual void ResetPlaybackTime()
         {
             playbackTime = defaultPlaybackTime;
@@ -106,7 +108,26 @@ namespace Fourzy._Updates.Tween
         {
             if (onProgress != null)
                 onProgress.Invoke(value);
+
+            if (_onProgress != null)
+                _onProgress.Invoke(value);
+
+            if (value >= 1f)
+                switch (repeat)
+                {
+                    case RepeatType.ZERO_TO_ONE:
+                        if (direction == PlaybackDirection.FORWARD)
+                            PlayForward(true);
+                        else
+                            PlayBackward(true);
+                        break;
+                    case RepeatType.PING_PONG:
+                        Toggle(true);
+                        break;
+                }
         }
+
+        public abstract void OnReset();
     }
 
     public class GraphicsColorGroup
@@ -121,5 +142,12 @@ namespace Fourzy._Updates.Tween
     {
         FORWARD,
         BACKWARD,
+    }
+
+    public enum RepeatType
+    {
+        NONE,
+        ZERO_TO_ONE,
+        PING_PONG,
     }
 }

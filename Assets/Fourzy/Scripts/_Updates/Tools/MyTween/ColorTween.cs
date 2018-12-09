@@ -11,8 +11,8 @@ namespace Fourzy._Updates.Tween
         public Transform[] customObjects;
         public bool propagate = false;      //do the same for all child objects?
         public bool changeAlpha = true;
-        public Color from;
-        public Color to;
+        public Color from = Color.white;
+        public Color to = Color.white;
 
         private List<GraphicsColorGroup> spriteColorGroups;
         private Color temp;
@@ -21,21 +21,7 @@ namespace Fourzy._Updates.Tween
         {
             base.Awake();
 
-            TryParse();
-        }
-
-        public override void PlayForward(bool resetValue)
-        {
-            TryParse();
-
-            base.PlayForward(resetValue);
-        }
-
-        public override void PlayBackward(bool resetValue)
-        {
-            TryParse();
-
-            base.PlayBackward(resetValue);
+            DoParse();
         }
 
         public override void AtProgress(float value, PlaybackDirection direction)
@@ -64,31 +50,28 @@ namespace Fourzy._Updates.Tween
                     break;
             }
 
+            SetColor(temp);
+        }
+
+        public void SetColor(Color color)
+        {
             foreach (GraphicsColorGroup group in spriteColorGroups)
             {
                 if (group.uiGraphics)
-                    group.uiGraphics.color = changeAlpha ? temp : new Color(temp.r, temp.g, temp.b, group.uiGraphics.color.a);
+                    group.uiGraphics.color = changeAlpha ? color : new Color(color.r, color.g, color.b, group.uiGraphics.color.a);
                 else if (group.spriteRenderer)
-                    group.spriteRenderer.color = changeAlpha ? temp : new Color(temp.r, temp.g, temp.b, group.spriteRenderer.color.a);
+                    group.spriteRenderer.color = changeAlpha ? color : new Color(color.r, color.g, color.b, group.spriteRenderer.color.a);
                 else if (group.lineRenderer)
-                    group.lineRenderer.startColor = changeAlpha ? temp : new Color(temp.r, temp.g, temp.b, group.lineRenderer.startColor.a);
+                    group.lineRenderer.startColor = changeAlpha ? color : new Color(color.r, color.g, color.b, group.lineRenderer.startColor.a);
             }
         }
 
         public override void OnReset()
         {
-            TryParse();
-
-            foreach (GraphicsColorGroup group in spriteColorGroups)
-            {
-                if (group.uiGraphics)
-                    group.uiGraphics.color = from;
-                else if (group.spriteRenderer)
-                    group.spriteRenderer.color = from;
-            }
+            SetColor(from);
         }
 
-        public void TryParse()
+        public void DoParse()
         {
             spriteColorGroups = new List<GraphicsColorGroup>();
 
@@ -112,5 +95,4 @@ namespace Fourzy._Updates.Tween
                     Parse(obj.GetChild(i));
         }
     }
-
 }

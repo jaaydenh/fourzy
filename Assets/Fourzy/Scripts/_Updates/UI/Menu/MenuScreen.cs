@@ -79,6 +79,9 @@ namespace Fourzy._Updates.UI.Menu
         /// </summary>
         public virtual void Open()
         {
+            if (isOpened)
+                return;
+
             isOpened = true;
 
             if (defaultCalls)

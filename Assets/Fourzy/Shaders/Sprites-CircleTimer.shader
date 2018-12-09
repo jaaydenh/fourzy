@@ -127,6 +127,7 @@ Shader "Sprites/CircleTimer"
                 } 
 
                 color.rgb *= color.a;
+
                 return color;
             }
 

@@ -11,16 +11,18 @@ namespace Fourzy
         private GamePieceData[] gamePieces = new GamePieceData[0];
         private TokenData[] tokens = new TokenData[0];
 
-        protected void OnEnable()
+        protected override void Awake()
         {
+            base.Awake();
+
             LoadData();
         }
 
         public void LoadData()
         {
-            this.LoadTokenBoardData();
-            this.LoadGamePieceData();
-            this.LoadTokenData();
+            LoadTokenBoardData();
+            LoadGamePieceData();
+            LoadTokenData();
         }
 
         private void LoadTokenBoardData()

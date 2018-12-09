@@ -588,6 +588,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.25
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -1220,10 +1221,10 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 17
+          selectedMember: 23
           isDynamic: 0
         target: {fileID: 114230311657223410}
-        memberName: Accept
+        memberName: Decline
         memberType: 8
         arguments: []
         isDynamic: 0

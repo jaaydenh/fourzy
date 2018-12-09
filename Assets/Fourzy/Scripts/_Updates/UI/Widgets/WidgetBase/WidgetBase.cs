@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Menu;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,8 @@ namespace Fourzy._Updates.UI.Widgets
         public RectTransform rectTransform;
         [HideInInspector]
         public LayoutElement layoutElement;
+        [HideInInspector]
+        public MenuScreen menuScreen;
 
         protected override void Awake()
         {
@@ -37,6 +40,8 @@ namespace Fourzy._Updates.UI.Widgets
             layoutElement = GetComponent<LayoutElement>();
 
             canvasGroup = GetComponent<CanvasGroup>();
+
+            menuScreen = GetComponentInParent<MenuScreen>();
         }
 
         public virtual void SetVisibility(float value)

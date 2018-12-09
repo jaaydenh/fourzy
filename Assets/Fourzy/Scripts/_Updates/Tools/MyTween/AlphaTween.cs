@@ -10,21 +10,17 @@ namespace Fourzy._Updates.Tween
     {
         public Transform[] customObjects;
         public bool propagate = false;      //do the same for all child objects?
-        public float from;
-        public float to;
+        public float from = 0f;
+        public float to = 1f;
 
-        private List<GraphicsColorGroup> alphaGroup = new List<GraphicsColorGroup>();
+        private List<GraphicsColorGroup> alphaGroup;
         private float temp;
 
         protected override void Awake()
         {
             base.Awake();
 
-            if (customObjects.Length != 0)
-                foreach (Transform obj in customObjects)
-                    Parse(obj);
-            else
-                Parse(transform);
+            DoParse();
         }
 
         public override void AtProgress(float value, PlaybackDirection direction)
@@ -53,14 +49,19 @@ namespace Fourzy._Updates.Tween
                     break;
             }
 
+            SetAlpha(temp);
+        }
+
+        public void SetAlpha(float value)
+        {
             foreach (GraphicsColorGroup group in alphaGroup)
             {
                 if (group.canvasGroup)
-                    group.canvasGroup.alpha = temp;
+                    group.canvasGroup.alpha = value;
                 else if (group.uiGraphics)
-                    group.uiGraphics.color = new Color(group.uiGraphics.color.r, group.uiGraphics.color.g, group.uiGraphics.color.b, temp);
+                    group.uiGraphics.color = new Color(group.uiGraphics.color.r, group.uiGraphics.color.g, group.uiGraphics.color.b, value);
                 else if (group.spriteRenderer)
-                    group.spriteRenderer.color = new Color(group.spriteRenderer.color.r, group.spriteRenderer.color.g, group.spriteRenderer.color.b, temp);
+                    group.spriteRenderer.color = new Color(group.spriteRenderer.color.r, group.spriteRenderer.color.g, group.spriteRenderer.color.b, value);
             }
         }
 
@@ -75,6 +76,17 @@ namespace Fourzy._Updates.Tween
                 else if (group.spriteRenderer)
                     group.spriteRenderer.color = new Color(1f, 1f, 1f, from);
             }
+        }
+
+        public void DoParse()
+        {
+            alphaGroup = new List<GraphicsColorGroup>();
+
+            if (customObjects.Length != 0)
+                foreach (Transform obj in customObjects)
+                    Parse(obj);
+            else
+                Parse(transform);
         }
 
         public void Parse(Transform obj)

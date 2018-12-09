@@ -50,6 +50,7 @@ namespace Fourzy._Updates.UI.Widgets
                 Mixpanel.Track("Open Puzzle Pack", props);
 
                 //disable main menu here?
+                menuScreen.menuController.SetState(false);
 
                 GameManager.Instance.SetActivePuzzlePack(puzzlePack);
                 GameManager.Instance.OpenPuzzleChallengeGame("open");

@@ -160,7 +160,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1636735846865358
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,8 +205,8 @@ GameObject:
   - component: {fileID: 224569656060655400}
   - component: {fileID: 222790523310241000}
   - component: {fileID: 114312443042991520}
+  - component: {fileID: 114048442049307386}
   - component: {fileID: 114674890455597108}
-  - component: {fileID: 114046946920653042}
   - component: {fileID: 225046676288696224}
   - component: {fileID: 114092304601310750}
   - component: {fileID: 114169671749890848}
@@ -278,7 +278,8 @@ GameObject:
   - component: {fileID: 224136539595708612}
   - component: {fileID: 222096375549670266}
   - component: {fileID: 114037980164210158}
-  - component: {fileID: 114896045123735618}
+  - component: {fileID: 114244611216992890}
+  - component: {fileID: 114738682540355404}
   m_Layer: 5
   m_Name: GlowProgress
   m_TagString: Untagged
@@ -428,8 +429,8 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 80e21dcc0dfb447359269cd63fce90ae, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Material: {fileID: 2100000, guid: 7c311327353b90d4f9d496ec6201b161, type: 2}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -471,7 +472,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114046946920653042
+--- !u!114 &114048442049307386
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -479,11 +480,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1719389088718380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 2109663825, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: a14a05cfe3d03f549b5799e622c0517f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -506,27 +507,40 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 114371106478723644}
+  m_TargetGraphic: {fileID: 0}
   toggleTransition: 1
   graphic: {fileID: 114092804737383050}
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114312443042991520}
-        m_MethodName: OnToggle
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
+  onState:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 3
+          selectedMember: 34
+          isDynamic: 0
+        target: {fileID: 114312443042991520}
+        memberName: OnToggle
+        memberType: 8
+        arguments: []
+        isDynamic: 0
+        isCallEnabled: 1
+  offState:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls: []
+  state:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls: []
+  onSfx: 5
+  offSfx: 6
 --- !u!114 &114092304601310750
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -565,6 +579,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.3
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -689,6 +704,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.3
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -698,6 +714,18 @@ MonoBehaviour:
   isPlaying: 0
   from: {x: 1, y: 1, z: 1}
   to: {x: 1.2, y: 1.2, z: 1.2}
+--- !u!114 &114244611216992890
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1935839560406960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5f80eff3772b3445b32c7580b4634fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progress: 0
 --- !u!114 &114267470340975522
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -769,6 +797,7 @@ MonoBehaviour:
   canvasGroup: {fileID: 0}
   rectTransform: {fileID: 0}
   layoutElement: {fileID: 0}
+  menuScreen: {fileID: 0}
   data:
     ID: 0
     Name: 
@@ -778,7 +807,7 @@ MonoBehaviour:
     secondaryColor: 0,0,0,0
     borderColor: 0,0,0,0
   gamePieceIcon: {fileID: 114371106478723644}
-  progressBar: {fileID: 114896045123735618}
+  progressBar: {fileID: 114244611216992890}
   piecesCount: {fileID: 114524336668811282}
   borderImage: {fileID: 114267470340975522}
   infoFrame: {fileID: 1636735846865358}
@@ -797,7 +826,7 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: c86eda31169da4939badc246ef72df6a, type: 2}
+  m_Material: {fileID: 2100000, guid: b6c21f90b858aa04ab6fc2eb7ee34944, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -1168,19 +1197,75 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114896045123735618
+--- !u!114 &114738682540355404
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1935839560406960}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9a20c1912b60408e925608e3a3b8957, type: 3}
+  m_Script: {fileID: 11500000, guid: f5e7a24e4a8b78f47802ff7326deaa78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  progressColor: {r: 1, g: 0.07060622, b: 0, a: 1}
-  currentValue: 0
+  playbackDirection: 0
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  unscaledTime: 0
+  playbackTime: 0.3
+  repeat: 0
+  onProgress:
+    inspectorListHeight: 63
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 4
+          selectedMember: 0
+          isDynamic: 1
+        target: {fileID: 114244611216992890}
+        memberName: progress
+        memberType: 4
+        argument:
+          supportedType: 3
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0, y: 0, z: 0}
+          objectArgument: {fileID: 0}
+          gameObjectArgument: {fileID: 0}
+          transformArgument: {fileID: 0}
+        isDynamic: 1
+        isCallEnabled: 1
+  defaultPlaybackTime: 0
+  value: 0
+  isPlaying: 0
+  from: 0
+  to: 1
 --- !u!114 &114976410908658362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1363,8 +1448,8 @@ RectTransform:
   m_Children:
   - {fileID: 224136539595708612}
   - {fileID: 224278983151313340}
-  - {fileID: 224416567772638018}
   - {fileID: 224295298447826754}
+  - {fileID: 224416567772638018}
   m_Father: {fileID: 224569656060655400}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1420,7 +1505,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224141068550799970}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1456,7 +1541,7 @@ RectTransform:
   m_LocalScale: {x: 1.0008007, y: 1.0008007, z: 1.0008007}
   m_Children: []
   m_Father: {fileID: 224141068550799970}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}

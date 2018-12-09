@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.UI.Helpers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +13,7 @@ namespace Fourzy._Updates.UI.Widgets
         public GamePieceData data;
 
         public Image gamePieceIcon;
-        public CircleProgress progressBar;
+        public CircleProgressUI progressBar;
         public TextMeshProUGUI piecesCount; 
 
         public virtual void SetData(GamePieceData data)
@@ -36,25 +37,25 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void UpdateProgressBar()
         {
-            float collectionProgress = ((float)data.NumberOfPieces) / data.TotalNumberOfPieces;
+            //float collectionProgress = ((float)data.NumberOfPieces) / data.TotalNumberOfPieces;
 
-            progressBar.SetupNewValue(collectionProgress);
+            progressBar.progress = Random.value;
 
-            if (collectionProgress < 1.0f)
+            if (progressBar.progress < 1.0f)
             {
                 switch (data.state)
                 {
                     case GamePieceState.FoundAndUnlocked:
-                        progressBar.SetupNewColor(Color.green);
+                        progressBar.SetColor(Color.green);
                         break;
                     default:
-                        progressBar.SetupNewColor(Color.yellow);
+                        progressBar.SetColor(Color.yellow);
                         break;
                 }
             }
             else
             {
-                progressBar.SetupNewColor(Color.red);
+                progressBar.SetColor(Color.red);
             }
         }
     }

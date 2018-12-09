@@ -12,12 +12,9 @@ namespace Fourzy._Updates.UI.Menu
     /// </summary>
     public class MenuController : MonoBehaviour
     {
-        /// <summary>
-        /// Reference to current instance
-        /// </summary>
-        //public static MenuController instance;
+        public static Dictionary<string, MenuController> menus = new Dictionary<string, MenuController>();
 
-        //public PromptScreen promptScreenPrefab;
+        public Camera _camera;
         public MenuScreen[] extraScreens;
 
         public List<MenuScreen> screens { get; private set; }
@@ -28,24 +25,18 @@ namespace Fourzy._Updates.UI.Menu
 
         protected void Awake()
         {
-            //looks like multiple menu controllers will exists at the same time, so cant rely on instance now
-            //instance = this;
-
             screens = new List<MenuScreen>(transform.GetComponentsInChildren<MenuScreen>());
             availablePromptScreens = new Dictionary<Type, PromptScreen>();
             screens.AddRange(extraScreens);
 
             screensStack = new Stack<MenuScreen>();
+
+            if (!menus.ContainsKey(gameObject.name))
+                menus.Add(gameObject.name, this);
         }
 
         protected void Start()
         {
-            ////if fade screen is opened, close it
-            //if (FadeScreen.instance)
-            //    FadeScreen.instance.StopLoading();
-
-            //Time.timeScale = 1f;
-
             foreach (MenuScreen screen in extraScreens)
                 if (!screen.menuController)
                     screen.menuController = this;
@@ -90,8 +81,7 @@ namespace Fourzy._Updates.UI.Menu
         /// <summary>
         /// Closes current screen
         /// </summary>
-        /// <param name="openPrevious">Open previous one?</param>
-        public void CloseCurrentScreen(bool openPrevious)
+        public void CloseCurrentScreen()
         {
             if (screensStack.Count > 0)
             {
@@ -102,9 +92,7 @@ namespace Fourzy._Updates.UI.Menu
                     MenuScreen menuScreen = screensStack.Peek();
 
                     SetCurrentScreen(menuScreen);
-
-                    if (!menuScreen.isOpened && openPrevious)
-                        menuScreen.Open();
+                    menuScreen.Open();
                 }
             }
         }
@@ -180,62 +168,24 @@ namespace Fourzy._Updates.UI.Menu
             return (T)availablePromptScreens[promptType];
         }
 
-        //currently need screen handling only
+        public void SetState(bool state)
+        {
+            gameObject.SetActive(state);
+            _camera.gameObject.SetActive(state);
+        }
 
-        ///// <summary>
-        ///// Show prompt screen
-        ///// </summary>
-        ///// <param name="text">Text</param>
-        ///// <param name="onAccept">On Accepted</param>
-        ///// <param name="onDecline">On Declined</param>
-        //public void Prompt(string text, Action onAccept, Action onDecline = null)
-        //{
-        //    if (!PromptScreen.instance)
-        //    {
-        //        PromptScreen promptScreen = Instantiate(promptScreenPrefab, transform);
-        //        promptScreen.transform.localPosition = Vector3.zero;
-        //        promptScreen.transform.localScale = Vector3.one;
+        public static void SetState(string key, bool state)
+        {
+            if (menus.ContainsKey(key))
+                menus[key].SetState(state);
+        }
 
-        //        screens.Add(promptScreen);
-        //    }
+        public static MenuController GetMenu(string key)
+        {
+            if (menus.ContainsKey(key))
+                return menus[key];
 
-        //    PromptScreen.instance.Prompt(text, onAccept, onDecline);
-        //}
-
-        ///// <summary>
-        ///// Load game scene
-        ///// </summary>
-        ///// <param name="time">Delay time</param>
-        //public void LoadGameScene(float time)
-        //{
-        //    if (currentScreen)
-        //        currentScreen.SetInteractable(false);
-
-        //    FadeScreen.instance.LoadGameScene(time);
-        //}
-
-        ///// <summary>
-        ///// Load multiplayer scene
-        ///// </summary>
-        ///// <param name="time">Delay time</param>
-        //public void LoadMultiplayerScene(float time)
-        //{
-        //    if (currentScreen)
-        //        currentScreen.SetInteractable(false);
-
-        //    FadeScreen.instance.LoadMultiplayerScene(time);
-        //}
-
-        ///// <summary>
-        ///// Load main menu scene
-        ///// </summary>
-        ///// <param name="time">Delay time</param>
-        //public void LoadMainMenu(float time)
-        //{
-        //    if (currentScreen)
-        //        currentScreen.SetInteractable(false);
-
-        //    FadeScreen.instance.LoadMainMenu(time);
-        //}
+            return null;
+        }
     }
 }

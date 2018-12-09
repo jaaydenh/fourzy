@@ -719,6 +719,8 @@ MonoBehaviour:
   scaleTween: {fileID: 0}
   canvasGroup: {fileID: 0}
   rectTransform: {fileID: 0}
+  layoutElement: {fileID: 0}
+  menuScreen: {fileID: 0}
 --- !u!114 &114587559702782684
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -850,7 +852,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 4
-          selectedMember: 22
+          selectedMember: 24
           isDynamic: 0
         target: {fileID: 114474962789438248}
         memberName: OpenPuzzlePack

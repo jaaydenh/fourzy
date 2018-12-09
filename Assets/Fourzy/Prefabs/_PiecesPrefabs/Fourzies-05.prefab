@@ -353,7 +353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c45a8ccec88446a2b606295173d3562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  View: {fileID: 114901244716620266}
   movementCurve:
     serializedVersion: 2
     m_Curve:
@@ -387,13 +386,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  gamePieceID: 4
   gamePieceIcon: {fileID: 21300000, guid: 8f60becb63a2d40848e040ec2dd2ef5c, type: 3}
-  player: 0
+  gamePieceID: 4
+  isMoving: 0
   column: 0
   row: 0
-  gameBoardView: {fileID: 0}
-  isMoving: 0
+  player: 0
 --- !u!114 &114901244716620266
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -405,12 +403,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b9a60c945494b21826418cd5ad6fbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutlineColor: {r: 0, g: 0, b: 1, a: 1}
-  SecondaryColor: {x: 0.3, y: 0, z: 0, w: 0}
   body: {fileID: 212797830540572170}
   pieceAnimator: {fileID: 95034505158233862}
-  outlineShader: {fileID: 4800000, guid: e824bef477aec4a3a97f9e1550a6010f, type: 3}
-  useSecondaryColor: 0
 --- !u!212 &212055079181231066
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -564,7 +558,7 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

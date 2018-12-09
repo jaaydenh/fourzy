@@ -97,7 +97,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 Position position = game.gameState.GameBoard.player1WinningPositions[i];
                 GamePiece gamePiece = game.boardView.GamePieceAt(position);
-                gamePiece.View.PlayWinAnimation(delay);
+                gamePiece.gamePieceView.PlayWinAnimation(delay);
                 delay += 0.12f;
             }
 
@@ -106,7 +106,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 Position position = game.gameState.GameBoard.player2WinningPositions[i];
                 GamePiece gamePiece = game.boardView.GamePieceAt(position);
-                gamePiece.View.PlayWinAnimation(delay);
+                gamePiece.gamePieceView.PlayWinAnimation(delay);
                 delay += 0.12f;
             }
 
