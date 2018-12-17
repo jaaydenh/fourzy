@@ -36528,7 +36528,7 @@ Transform:
   m_GameObject: {fileID: 1032379625}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.87810683, y: 0.87810683, z: 0}
+  m_LocalScale: {x: 0.8562517, y: 0.8759687, z: 0}
   m_Children:
   - {fileID: 241649662}
   - {fileID: 1030748296}
@@ -36548,18 +36548,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0039725304, y: 0.07298708}
+  m_Offset: {x: 0.0039725304, y: 0.31022286}
   m_SpriteTilingProperty:
-    border: {x: 2.95, y: 3.6899998, z: 2.95, w: 3.52}
+    border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 10.97, y: 12.29}
+    oldSize: {x: 11.25, y: 12.32}
     newSize: {x: 10.97, y: 12.29}
     adaptiveTilingThreshold: 0.5
-    drawMode: 2
+    drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 10.152011, y: 10.147634}
+  m_Size: {x: 10.584214, y: 10.560282}
   m_EdgeRadius: 0
 --- !u!212 &1032379628
 SpriteRenderer:
@@ -36597,11 +36597,11 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 1a881a67ed54c476493a115db846f636, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f06c7f0a6ed892a4ba22a40a56477dad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 2
+  m_DrawMode: 0
   m_Size: {x: 10.97, y: 12.29}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -41687,6 +41687,8 @@ MonoBehaviour:
           enumArgument: 
         isDynamic: 1
         isCallEnabled: 1
+  dragPositionRelative: 0
+  scalePosition: 0
 --- !u!1 &1343372426
 GameObject:
   m_ObjectHideFlags: 0
@@ -48320,7 +48322,7 @@ Camera:
   far clip plane: 10
   field of view: 60
   orthographic: 1
-  orthographic size: 9.6
+  orthographic size: 10.74
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -48360,8 +48362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b9a6c8b16ebe0f4e8397218b8dd8bf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 5.4
-  thresholdValue: 0.5625
 --- !u!1 &1750287342
 GameObject:
   m_ObjectHideFlags: 0
@@ -53760,7 +53760,7 @@ GameObject:
   - component: {fileID: 2068058696}
   - component: {fileID: 2068058697}
   m_Layer: 0
-  m_Name: TrainingGardenBackground
+  m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53774,7 +53774,7 @@ Transform:
   m_GameObject: {fileID: 2068058695}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.960216, y: 0.9600259, z: 1}
   m_Children: []
   m_Father: {fileID: 1366362825}
   m_RootOrder: 1
@@ -53814,12 +53814,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: 51d86dda53ccf4eb9831e84c249298fa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bf7cef5e3bb8fa34aa57e8fbecc9768c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.8, y: 19.2}
+  m_Size: {x: 10.80243, y: 23.386232}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

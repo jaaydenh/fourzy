@@ -141,6 +141,13 @@
             "Enabled": true,
             "outlineColor": "0, 0, 1, 1",
             "borderColor": "0, 1, 0, 1"
+        },
+        {
+            "ID": "19",
+            "Name": "Wisp",
+            "Enabled": true,
+            "outlineColor": "0, 0, 1, 1",
+            "borderColor": "0, 1, 0, 1"
         }
     ]
 }

@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿//
 
-namespace Fourzy {
-    public class MovingGamePiece {
+using Fourzy._Updates.Mechanics._GamePiece;
+using System.Collections.Generic;
+
+namespace Fourzy
+{
+    public class MovingGamePiece
+    {
 
         public Direction currentDirection;
         public List<Position> positions;
         public Position position;
-        public Position endPosition 
-        { 
+        public Position endPosition
+        {
             get
             {
                 return positions[positions.Count - 1];
@@ -22,7 +26,7 @@ namespace Fourzy {
         public float friction;
         public int momentum;
 
-        public MovingGamePiece(Move move, int momentum = 0) 
+        public MovingGamePiece(Move move, int momentum = 0)
         {
             positions = new List<Position>();
             this.position = move.position;
@@ -33,7 +37,7 @@ namespace Fourzy {
             this.animationState = PieceAnimState.NONE;
             this.friction = 0.0f;
 
-            if (momentum == 0) 
+            if (momentum == 0)
             {
                 // if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD) {
                 //int numMoves = GameManager.Instance.gameState.moveList.Count;
@@ -52,25 +56,28 @@ namespace Fourzy {
                 // } else {
                 // this.momentum = Random.Range(20, 40);
                 // }
-            } 
-            else 
+            }
+            else
             {
                 this.momentum = momentum;
             }
         }
 
-        public Position GetCurrentPosition() {
+        public Position GetCurrentPosition()
+        {
             return positions[positions.Count - 1];
         }
 
         // position is a row and column
-        public Position GetNextPosition() {
+        public Position GetNextPosition()
+        {
             return GetNextPositionWithDirection(currentDirection);
         }
 
         // position is a row and column
-        public Position GetNextPositionWithDirection(Direction direction) {
-            Position nextPosition = new Position(0,0);
+        public Position GetNextPositionWithDirection(Direction direction)
+        {
+            Position nextPosition = new Position(0, 0);
             Position currentPosition = positions[positions.Count - 1];
 
             switch (direction)

@@ -68,49 +68,24 @@ Shader "Custom/HSVRangeOutlineShader"
 
             half4 frag(Fragment IN) : COLOR
             {
-                /*float2 glintPosition = IN.uv_MainTex;
-                glintPosition.x += _SinTime.w;
-                half4 glintWave = tex2D (_ColorRampTex, glintPosition);
-                half wave = (glintWave.r + glintWave.g + glintWave.b) / 3.0;
-                wave *= 0.5;
-
-                _OutlineColor.r += wave;
-                _OutlineColor.g += wave;
-                _OutlineColor.b += wave;*/
-
-                //half4 color = tex2D (_MainTex, IN.uv_MainTex);
-
-                //return _OutlineColor * color.a * _Intencity;
-
-
                 float sum = 0;
-
-                float _Size = 2;
 
                 #define GRABPIXELY(weight,kernely) tex2D( _MainTex, float2(IN.uv_MainTex.x, IN.uv_MainTex.y + _MainTex_TexelSize.y * kernely *_BlurSize)).a * weight
                 #define GRABPIXELX(weight,kernelx) tex2D( _MainTex, float2(IN.uv_MainTex.x + kernelx * _BlurSize * _MainTex_TexelSize.x, IN.uv_MainTex.y)).a * weight
 
-//                    sum += GRABPIXELY(0.05, -4.0);
-//                    sum += GRABPIXELY(0.09, -3.0);
-                    sum += GRABPIXELY(0.12, -2.0);
-                    sum += GRABPIXELY(0.15, -1.0);
-                    sum += GRABPIXELY(0.18,  0.0);
-                    sum += GRABPIXELY(0.15, +1.0);
-                    sum += GRABPIXELY(0.12, +2.0);
-//                    sum += GRABPIXELY(0.09, +3.0);
-//                    sum += GRABPIXELY(0.05, +4.0);
+				sum += GRABPIXELY(0.12, -400.0);
+				sum += GRABPIXELY(0.15, -200.0);
+				sum += GRABPIXELY(0.18,  0.0);
+				sum += GRABPIXELY(0.15, +200.0);
+				sum += GRABPIXELY(0.12, +400.0);
 
-//                    sum += GRABPIXELX(0.05, -4.0);
-//                    sum += GRABPIXELX(0.09, -3.0);
-                    sum += GRABPIXELX(0.12, -2.0);
-                    sum += GRABPIXELX(0.15, -1.0);
-                    sum += GRABPIXELX(0.18,  0.0);
-                    sum += GRABPIXELX(0.15, +1.0);
-                    sum += GRABPIXELX(0.12, +2.0);
-//                    sum += GRABPIXELX(0.09, +3.0);
-//                    sum += GRABPIXELX(0.05, +4.0);
+				sum += GRABPIXELX(0.12, -400.0);
+				sum += GRABPIXELX(0.15, -200.0);
+				sum += GRABPIXELX(0.18,  0.0);
+				sum += GRABPIXELX(0.15, +200.0);
+				sum += GRABPIXELX(0.12, +400.0);
 
-                    _OutlineColor.a = _OutlineColor.a * sum * _Intensity;
+				_OutlineColor.a = _OutlineColor.a * sum * _Intensity;
 
                 return _OutlineColor;
             }

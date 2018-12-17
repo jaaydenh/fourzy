@@ -3,6 +3,7 @@
 //it checks if current opened screen (menu) is GameplayScreen, if so, player can interract with field
 
 using DG.Tweening;
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Widgets;
@@ -66,8 +67,26 @@ namespace Fourzy._Updates.Mechanics.Board
 
         protected void Start()
         {
+            //check aspect ratio
+            //if aspect is more than 9/16 fit width, else fit height
+            Camera _camera = Camera.main;
             if (backgroundImage)
-                backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackground;
+            {
+                //if (_camera.aspect > .5625f)
+                //{
+                //    backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackgroundWide;
+
+                //    float spriteAspect = backgroundImage.size / 
+
+                //    _camera.orthographicSize = backgroundImage.size.y * backgroundImage.transform.localScale.y / 2f * _camera.aspect;
+                //}
+                //else
+                {
+                    backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackground;
+
+                    _camera.orthographicSize = backgroundImage.size.x * backgroundImage.transform.localScale.x / _camera.aspect / 2f;
+                }
+            }
         }
 
         protected void OnDestroy()
@@ -318,9 +337,7 @@ namespace Fourzy._Updates.Mechanics.Board
             gamePiece.gameObject.SetActive(true);
             gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
             gamePiece.transform.localPosition = PositionToVec3(row, col, 10.0f);
-
-            if (spriteRenderer)
-                gamePiece.gamePieceView.SetSortingLayer(spriteRenderer.sortingLayerID);
+            //gamePiece.gamePieceView.SetSortingLayer(spriteRenderer.sortingLayerID);
 
             return gamePiece;
         }

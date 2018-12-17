@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Fourzy
+namespace Fourzy._Updates.Mechanics._GamePiece
 {
     public class GamePiece : MonoBehaviour
     {
@@ -60,11 +60,6 @@ namespace Fourzy
         private void Awake()
         {
             gamePieceCollider = gameObject.GetComponent<CircleCollider2D>();
-        }
-
-        private void Start()
-        {
-            gamePieceView.SetupZOrder(5);
         }
 
         public void Move(MovingGamePiece mgp, List<IToken> activeTokens)
@@ -133,7 +128,7 @@ namespace Fourzy
             CheckActiveTokenCollision(activeTokens);
             CheckTokensAfterMove(activeTokens, endPosition);
 
-            gamePieceView.SetupZOrder(5 + row * 2);
+            gamePieceView.SetSortingLayer(5 + row * 2);
 
             gameBoardView.NumPiecesAnimating--;
 

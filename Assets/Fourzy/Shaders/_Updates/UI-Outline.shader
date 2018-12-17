@@ -1,10 +1,6 @@
-// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
-// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
 //vadym udod
 
-Shader "Custom/Outline"
+Shader "Custom/UIOutline"
 {
     Properties
     {

@@ -14,6 +14,6 @@ namespace Fourzy
         public const int playerMoveTimer_AdditionalTime = 12000;
 
         public const string GAMEPLAY_SCENE_NAME = "gamePlayNew";
-        public const string MAIN_MENU_SCENE_NAME = "tabbedUI";
+        public const string MAIN_MENU_SCENE_NAME = "tabbedUINew";
     }
 }

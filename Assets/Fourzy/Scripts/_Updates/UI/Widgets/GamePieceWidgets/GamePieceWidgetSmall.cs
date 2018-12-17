@@ -1,9 +1,9 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -12,15 +12,21 @@ namespace Fourzy._Updates.UI.Widgets
         [HideInInspector]
         public GamePieceData data;
 
-        public Image gamePieceIcon;
+        public RectTransform gamePieceParent;
         public CircleProgressUI progressBar;
-        public TextMeshProUGUI piecesCount; 
+        public TextMeshProUGUI piecesCount;
+
+        protected GamePiece gamePiece;
 
         public virtual void SetData(GamePieceData data)
         {
             this.data = data;
 
-            gamePieceIcon.sprite = GameContentManager.Instance.GetGamePieceSprite(data.ID);
+            gamePiece = Instantiate(GameContentManager.Instance.GetGamePiecePrefab(data.ID), gamePieceParent.transform);
+            gamePiece.transform.localPosition = Vector3.zero;
+            gamePiece.transform.localScale = Vector3.one * 100f;
+            gamePiece.gameObject.SetLayerRecursively(gamePieceParent.gameObject.layer);
+            gamePiece.gamePieceView.StartBlinking();
 
             switch (data.state)
             {

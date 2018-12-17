@@ -44,7 +44,7 @@ namespace Fourzy._Updates.UI.Widgets
                     pieceName.text = data.Name;
                     numberOfChampions.text = string.Format("{0:000}/{1:000}", data.NumberOfChampions, data.TotalNumberOfChampions);
                     borderImage.color = data.BorderColor;
-                    gamePieceIcon.material = null;
+                    //gamePieceParent.material = null;
 
                     //stars slider
                     starsSlider.value = data.NumberOfStars;

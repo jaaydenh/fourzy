@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using TMPro;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public TMP_Text playerNameLabel;
         public TMP_Text pieceNameLabel;
-        public Helpers.Badge ratingLabel;
+        public Badge ratingLabel;
         public Slider starsSlider;
         public Image playerPieceIcon;
         public CircleProgressUI circleProgressUI;

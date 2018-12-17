@@ -1,5 +1,6 @@
 ﻿//modded @vadym udod
 
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Board;
 using System;
 using System.Collections.Generic;
@@ -181,6 +182,7 @@ namespace Fourzy
             public string Name;
             public Sprite Preview;
             public Sprite GameBackground;
+            public Sprite GameBackgroundWide;
             public Sprite GameBoard;
         }
 

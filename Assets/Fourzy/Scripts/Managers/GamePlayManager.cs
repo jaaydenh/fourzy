@@ -2,6 +2,7 @@
 
 using DG.Tweening;
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;

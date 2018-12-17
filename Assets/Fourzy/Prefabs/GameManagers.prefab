@@ -1240,6 +1240,7 @@ MonoBehaviour:
   - {fileID: 114104089286365860, guid: 6a0c38e6ff8de41799d86998d7c82222, type: 2}
   - {fileID: 114526700584965636, guid: 173c45a88363b4f2dbc1400eac396cf5, type: 2}
   - {fileID: 114609845889314808, guid: e3b17132e5fd542a39af92d8606c966a, type: 2}
+  - {fileID: 114282753117424710, guid: ee1fd5436576773458ed39488b83d250, type: 2}
   tokenPrefabs:
   - {fileID: 114662430344853364, guid: b50adf3cc91ed4ee590fd6bcc3fa79b9, type: 2}
   - {fileID: 114884426812413776, guid: d0d8f6d161f314d7ebd0abe80f0c81ea, type: 2}
@@ -1284,16 +1285,22 @@ MonoBehaviour:
   gameThemes:
   - Name: Training Garden
     Preview: {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
-    GameBackground: {fileID: 21300000, guid: 51d86dda53ccf4eb9831e84c249298fa, type: 3}
-    GameBoard: {fileID: 21300000, guid: 1a881a67ed54c476493a115db846f636, type: 3}
+    GameBackground: {fileID: 21300000, guid: bf7cef5e3bb8fa34aa57e8fbecc9768c, type: 3}
+    GameBackgroundWide: {fileID: 21300000, guid: ad107309a66d9b542ab245f66c91beb4,
+      type: 3}
+    GameBoard: {fileID: 21300000, guid: f06c7f0a6ed892a4ba22a40a56477dad, type: 3}
   - Name: Mystery Forest
     Preview: {fileID: 21300000, guid: c160e712160e34fe38fdb3a33069cd8b, type: 3}
-    GameBackground: {fileID: 21300000, guid: 67692cd97f41f4e4990551c6ce857e95, type: 3}
-    GameBoard: {fileID: 21300000, guid: 1f21b1de07fbd4da09e8d68b039983d3, type: 3}
+    GameBackground: {fileID: 21300000, guid: dbdc591b399709a428a23f9ee6241c57, type: 3}
+    GameBackgroundWide: {fileID: 21300000, guid: 97ecd5920dfc1654fbe8da46007f7c4e,
+      type: 3}
+    GameBoard: {fileID: 21300000, guid: dbdc591b399709a428a23f9ee6241c57, type: 3}
   - Name: Sandy Island
     Preview: {fileID: 21300000, guid: 884e828293a874cd69156202e84b89ac, type: 3}
-    GameBackground: {fileID: 21300000, guid: e28f5e8c6a8f44c68a87123189c6ecab, type: 3}
-    GameBoard: {fileID: 21300000, guid: e5c48d04ca1374c698544f2347a02129, type: 3}
+    GameBackground: {fileID: 21300000, guid: a72d0beedb5d30f46887fd043f2eb104, type: 3}
+    GameBackgroundWide: {fileID: 21300000, guid: 5bc2dd4836a9c9749b770f163312c92a,
+      type: 3}
+    GameBoard: {fileID: 21300000, guid: b3a3a3fa1283cc249af75de64b1c0abb, type: 3}
   typedPrefabs:
   - prefab: {fileID: 1892913936575318, guid: 389b9f7e0a5703944bdab65ceccc9823, type: 2}
     prefabType: 1

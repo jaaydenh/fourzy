@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Mechanics._GamePiece;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Camera3D

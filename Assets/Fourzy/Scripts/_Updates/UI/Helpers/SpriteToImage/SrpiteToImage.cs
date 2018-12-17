@@ -48,7 +48,10 @@ namespace Fourzy._Updates.UI.Helpers
                 image.color = Color.white;
 
             if (image.sprite != spriteRenderer.sprite)
+            {
                 image.sprite = spriteRenderer.sprite;
+                rectTransform.sizeDelta = new Vector2(image.sprite.rect.width / image.sprite.pixelsPerUnit, image.sprite.rect.height / image.sprite.pixelsPerUnit);
+            }
         }
     }
 }
