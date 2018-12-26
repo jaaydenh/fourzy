@@ -39,7 +39,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void OpenTokenPrompt()
         {
-            menuScree.menuController.GetPrompt<TokenPrompt>().Prompt(tokenData);
+            menuScree.menuController.GetScreen<TokenPrompt>().Prompt(tokenData);
         }
     }
 }

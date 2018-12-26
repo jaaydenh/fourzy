@@ -22,7 +22,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             this.data = data;
 
-            gamePiece = Instantiate(GameContentManager.Instance.GetGamePiecePrefab(data.ID), gamePieceParent.transform);
+            gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(data.ID).prefabs[0], gamePieceParent.transform);
             gamePiece.transform.localPosition = Vector3.zero;
             gamePiece.transform.localScale = Vector3.one * 100f;
             gamePiece.gameObject.SetLayerRecursively(gamePieceParent.gameObject.layer);

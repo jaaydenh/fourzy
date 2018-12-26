@@ -37,7 +37,7 @@ namespace Fourzy._Updates.UI.Widgets
             foreach (Transform t in playerPieceIcon.transform)
                 Destroy(t.gameObject);
             
-            GamePiece pieceIcon = Instantiate(GameContentManager.Instance.GetGamePiecePrefab(gamePieceID), playerPieceIcon.transform);
+            GamePiece pieceIcon = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(gamePieceID).prefabs[0], playerPieceIcon.transform);
             pieceIcon.transform.localPosition = Vector3.zero;
             pieceIcon.transform.localScale = Vector3.one * 100f;
             pieceIcon.gameObject.SetLayerRecursively(playerPieceIcon.gameObject.layer);
@@ -65,7 +65,7 @@ namespace Fourzy._Updates.UI.Widgets
         private void UserManager_OnUpdateUserGamePieceID(int gamePieceID)
         {
             UpdateGamePieceIcon(gamePieceID);
-            pieceNameLabel.text = GameContentManager.Instance.GetGamePieceName(gamePieceID);
+            pieceNameLabel.text = GameContentManager.Instance.piecesDataHolder.GetGamePieceName(gamePieceID);
         }
     }
 }

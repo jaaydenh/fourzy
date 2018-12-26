@@ -8,7 +8,6 @@ namespace Fourzy
     public class TokenBoardLoader : UnitySingleton<TokenBoardLoader>
     {
         private TokenBoardData[] tokenBoards = new TokenBoardData[0];
-        private GamePieceData[] gamePieces = new GamePieceData[0];
         private TokenData[] tokens = new TokenData[0];
 
         protected override void Awake()
@@ -21,7 +20,6 @@ namespace Fourzy
         public void LoadData()
         {
             LoadTokenBoardData();
-            LoadGamePieceData();
             LoadTokenData();
         }
 
@@ -35,19 +33,6 @@ namespace Fourzy
             else
             {
                 tokenBoards[0] = GetDefaultTokenBoard();
-            }
-        }
-
-        private void LoadGamePieceData()
-        {
-            TextAsset dataAsJson = Resources.Load<TextAsset>("GamePieces");
-            if (dataAsJson)
-            {
-                gamePieces = JsonHelper.getJsonArray<GamePieceData>(dataAsJson.text);
-            }
-            else
-            {
-                gamePieces[0] = GetDefaultGamePiece();
             }
         }
 
@@ -137,14 +122,6 @@ namespace Fourzy
             return selectedTokenBoards;
         }
 
-        public GamePieceData[] GetAllGamePieces()
-        {
-            IEnumerable<GamePieceData> enabledGamePieces = gamePieces
-                .Where(t => t.Enabled == true);
-
-            return enabledGamePieces.ToArray();
-        }
-
         public TokenData[] GetAllTokens()
         {
             IEnumerable<TokenData> enabledTokens = tokens
@@ -179,7 +156,6 @@ namespace Fourzy
             gamePieceData.Name = "Test Piece 1";
             gamePieceData.Enabled = true;
             gamePieceData.OutlineColor = Color.blue;
-            gamePieceData.SecondaryColor = new Vector4(0.3f, 0, 0, 0);
 
             return gamePieceData;
         }

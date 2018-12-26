@@ -70,7 +70,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             if (parentRectTransform)
             {
                 foreach (SpriteRenderer spriteRendederer in renderers)
-                    spriteRendederer.gameObject.AddComponent<SrpiteToImage>();
+                    spriteRendederer.gameObject.AddComponent<SpriteToImage>();
 
                 //size it
                 if (gameboard)
@@ -287,6 +287,9 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void StartBlinking()
         {
+            if (!gameObject.activeInHierarchy)
+                return;
+
             StartCoroutine(BlinkingRoutine());
         }
 

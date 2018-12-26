@@ -20,8 +20,8 @@ namespace Fourzy
         {
             this.tokenBoardID = tokenBoardID;
 
-            gameBoardView.PlayerPiece = GameContentManager.Instance.GetGamePiecePrefab(0);
-            gameBoardView.OpponentPiece = GameContentManager.Instance.GetGamePiecePrefab(1);
+            gameBoardView.playerPrefabData = GameContentManager.Instance.piecesDataHolder.gamePieces[0];
+            gameBoardView.opponentPrefabData = GameContentManager.Instance.piecesDataHolder.gamePieces[0];
 
             gameBoardView.PlayerPiece.player = PlayerEnum.ONE;
             gameBoardView.OpponentPiece.player = PlayerEnum.TWO;

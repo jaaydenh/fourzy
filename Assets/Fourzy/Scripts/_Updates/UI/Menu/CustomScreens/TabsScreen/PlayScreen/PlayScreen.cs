@@ -81,7 +81,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 else
                 {
                     Mixpanel.Track("Open Realtime Confirmation");
-                    menuController.GetPrompt<PromptScreen>().Prompt(
+                    menuController.GetScreen<PromptScreen>().Prompt(
                         "Fourzy is in Beta",
                         "During beta, realtime matchmaking is scheduled for Mon, Wed, and Fri from 9-9:30pm. There are limited players outside of these times. Do you want to continue?",
                         "Yes",
@@ -98,7 +98,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else
             {
                 Mixpanel.Track("Open Realtime Confirmation");
-                menuController.GetPrompt<PromptScreen>().Prompt(
+                menuController.GetScreen<PromptScreen>().Prompt(
                     "Fourzy is in Beta",
                     "During beta, realtime matchmaking is scheduled for Mon, Wed, and Fri from 9-9:30pm. There are limited players outside of these times. Do you want to continue?",
                     "Yes",

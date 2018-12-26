@@ -1,9 +1,8 @@
 ﻿using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using Fourzy._Updates.Mechanics.Board;
+using UnityEngine.UI;
 
 namespace Fourzy
 {
@@ -14,7 +13,6 @@ namespace Fourzy
         public GameObject infoTextObject;
         public GameObject hintTextObject;
         public GameObject hand;
-        // public GameObject gameScreenBackButton;
         public GameObject tapAreaAnim;
         public GameObject dialogBox;
         public GameObject wizard;
@@ -25,11 +23,6 @@ namespace Fourzy
         TextMeshProUGUI infoText;
         TextMeshProUGUI hintText;
         GameObject onboarding;
-
-        //void Awake()
-        //{
-        //    Debug.Log("Onboarding:Awake");
-        //}
 
         private void OnEnable()
         {
@@ -67,7 +60,8 @@ namespace Fourzy
             onboarding = this.gameObject;
 
             //onboardingStep = 0;
-            if (onboardingStep == 0) {
+            if (onboardingStep == 0)
+            {
                 onboardingStep = 1;
             }
             step7Attempts = 0;
@@ -75,11 +69,13 @@ namespace Fourzy
             DoNextStep();
         }
 
-        public void CompleteOnboarding() {
+        public void CompleteOnboarding()
+        {
             GamePlayManager.Instance.gameplayScreen.backButton.SetActive(true);
         }
 
-        void NextStep() {
+        void NextStep()
+        {
             onboardingStep++;
             DoNextStep();
         }
@@ -147,7 +143,8 @@ namespace Fourzy
                     fullscreenButton.SetActive(false);
                     wizard.SetActive(false);
                     dialogBox.SetActive(false);
-                    if (step7Attempts > 0) {
+                    if (step7Attempts > 0)
+                    {
                         TapHintPosition(45, 313);
                     }
                     GamePlayManager.Instance.gameplayScreen.backButton.SetActive(false);
@@ -158,7 +155,8 @@ namespace Fourzy
                     ShowWizardWithDialog("Congratulations!!! Now you know the basics of Fourzy.");
                     break;
                 case 9:
-                    if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
+                    if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME)
+                    {
                         GamePlayManager.Instance.BackButtonOnClick();
                     }
                     wizard.transform.localPosition = new Vector3(0, 360);
@@ -166,13 +164,15 @@ namespace Fourzy
                     ShowWizardWithDialog("Try challenging other players by pressing Turn Play/Realtime or press Puzzle Play for more practice.");
                     break;
                 case 10:
-                    if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
+                    if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME)
+                    {
                         GamePlayManager.Instance.BackButtonOnClick();
                     }
                     ShowWizardWithDialog("Fourzy is an early access turn-based game. We recommended starting several games as it can take extra time to find an opponent.");
                     break;
                 case 11:
-                    if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
+                    if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME)
+                    {
                         GamePlayManager.Instance.BackButtonOnClick();
                     }
                     HideWizardDialog();
@@ -184,10 +184,12 @@ namespace Fourzy
             }
         }
 
-        void MoveStarted() {
-            
+        void MoveStarted()
+        {
+
             Debug.Log("MoveStarted: onboardingStep: " + onboardingStep);
-            if (onboardingStep >= 4 && onboardingStep <= 6) {
+            if (onboardingStep >= 4 && onboardingStep <= 6)
+            {
                 moveCount++;
                 Debug.Log("MoveStarted movecount: " + moveCount);
                 switch (moveCount)
@@ -207,7 +209,9 @@ namespace Fourzy
                     default:
                         break;
                 }
-            } else if (onboardingStep == 7) {
+            }
+            else if (onboardingStep == 7)
+            {
                 hand.SetActive(false);
                 tapAreaAnim.SetActive(false);
             }
@@ -250,19 +254,25 @@ namespace Fourzy
             }
         }
 
-        void TapHintPosition(int x, int y) {
+        void TapHintPosition(int x, int y)
+        {
             hand.SetActive(true);
             tapAreaAnim.SetActive(true);
             tapAreaAnim.transform.localPosition = new Vector3(x, y, -5);
             hand.transform.localPosition = new Vector3(x + 102, y - 107);
         }
 
-        void OnGameOver() {
+        void OnGameOver()
+        {
             Debug.Log("Onboarding:OnGameOver: " + onboardingStep);
-            if (onboardingStep == 3) {
+            if (onboardingStep == 3)
+            {
                 StartCoroutine(NextStepWithWait(2));
-            } else if (onboardingStep == 7) {
-                if (GameManager.Instance.activeGame.gameState.Winner == PlayerEnum.ONE) {
+            }
+            else if (onboardingStep == 7)
+            {
+                if (GameManager.Instance.activeGame.gameState.Winner == PlayerEnum.ONE)
+                {
                     Debug.Log("GameManager.Instance.activeGame.gameState.winner: " + GameManager.Instance.activeGame.gameState.Winner);
                     AnalyticsManager.LogOnboardingComplete(true, onboardingStage, onboardingStep);
                     StartCoroutine(NextStepWithWait(2));
@@ -270,12 +280,14 @@ namespace Fourzy
             }
         }
 
-        IEnumerator NextStepWithWait(int seconds) {
+        IEnumerator NextStepWithWait(int seconds)
+        {
             yield return new WaitForSeconds(seconds);
             NextStep();
         }
-        
-        void ShowWizardWithDialog(string dialog) {
+
+        void ShowWizardWithDialog(string dialog)
+        {
             //if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
             //    GameBoardView.interactable = true;
             //}
@@ -287,7 +299,8 @@ namespace Fourzy
             hintText.SetText("tap to continue...");
         }
 
-        void HideWizardDialog() {
+        void HideWizardDialog()
+        {
             //if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME) {
             //    GameBoardView.interactable = false;
             //}

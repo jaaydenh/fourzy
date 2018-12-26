@@ -140,6 +140,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.3
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -233,6 +234,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.3
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -282,6 +284,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.3
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -443,9 +446,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Sandy Island
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c580bc38664200447b06f8cd12844e39, type: 2}
-  m_sharedMaterial: {fileID: 21894048186437448, guid: c580bc38664200447b06f8cd12844e39,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 32eefdc00061ddc4892251f981a33f8a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -518,13 +520,13 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
   m_isInputParsingRequired: 0
   m_inputSource: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_subTextObjects:
   - {fileID: 0}
   - {fileID: 0}

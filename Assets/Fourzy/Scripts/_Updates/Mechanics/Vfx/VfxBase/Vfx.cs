@@ -85,6 +85,7 @@ namespace Fourzy._Updates.Mechanics.Vfx
     public enum VfxType
     {
         VFX_STARS_TRAIL = 0,
+        VFX_TAP_ANIMATION = 1,
 
         LENGTH,
     }

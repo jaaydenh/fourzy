@@ -15,3 +15,6 @@ MonoBehaviour:
   - type: 0
     options:
     - {fileID: 114323684477669578, guid: e347680c7586f1e448e85c2a78301391, type: 2}
+  - type: 1
+    options:
+    - {fileID: 114125826259467030, guid: 5ac398c07505f034f9e8db66b2921b1b, type: 2}

@@ -11,6 +11,7 @@ namespace Fourzy._Updates.UI.Toasts
         public GamesToastsIcon toastIcon;
         public TextMeshProUGUI tostText;
         public float displayTime = 2f;
+        public int charactersLineLimit = 32;
 
         [Header("Movement values")]
         public Vector2 initialFromPosition;
@@ -56,7 +57,7 @@ namespace Fourzy._Updates.UI.Toasts
             this.owner = owner;
 
             toastIcon.SetIcon(sprite);
-            tostText.text = text;
+            SetToastText(text);
         }
 
         public void SetData(GamesToastsController owner, string text, ToastIconStyle style)
@@ -64,7 +65,7 @@ namespace Fourzy._Updates.UI.Toasts
             this.owner = owner;
 
             toastIcon.SetIcon(style);
-            tostText.text = text;
+            SetToastText(text);
         }
 
         public void SetData(GamesToastsController owner, string text)
@@ -72,7 +73,7 @@ namespace Fourzy._Updates.UI.Toasts
             this.owner = owner;
 
             toastIcon.SetIcon(ToastIconStyle.NONE);
-            tostText.text = text;
+            SetToastText(text);
         }
 
         public void ShowToast()
@@ -89,6 +90,22 @@ namespace Fourzy._Updates.UI.Toasts
             available = false;
 
             StartRoutine("displayCoroutine", displayTime, () => { Hide(.3f); }, null);
+        }
+
+        public void SetToastText(string text)
+        {
+            string[] words = text.Split(' ');
+            text = "";
+
+            foreach (string word in words)
+            {
+                if (text.Length + word.Length + 1 >= charactersLineLimit)
+                    text += "\n";
+
+                text += word + " ";
+            }
+
+            tostText.text = text;
         }
     }
 

@@ -46,5 +46,10 @@ namespace Fourzy._Updates.UI.Widgets
         {
             current.gamePieceView.ShowUIWinAnimation();
         }
+
+        public void SetActive(bool state)
+        {
+            gameObject.SetActive(state);
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public bool selected { get; private set; }
         public float selectedTimer { get; private set; }
 
-        public Move blockDirection { get; set; }
+        public Move move { get; set; }
 
         protected void Awake()
         {
@@ -84,7 +84,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (selected)
                 return;
-
+            
             selected = true;
             colorTween.PlayForward(true);
             selectedTimer = 0f;

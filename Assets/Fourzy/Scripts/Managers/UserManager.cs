@@ -82,7 +82,7 @@ namespace Fourzy
         private void SetPlayerGamePiece(string id)
         {
             gamePieceId = int.Parse(id);
-            if (gamePieceId > GameContentManager.Instance.GetGamePieceCount() - 1) 
+            if (gamePieceId > GameContentManager.Instance.piecesDataHolder.gamePieces.Length - 1) 
             {
                 gamePieceId = 0;
             }

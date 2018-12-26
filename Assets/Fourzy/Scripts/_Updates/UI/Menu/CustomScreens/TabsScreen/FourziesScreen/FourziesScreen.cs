@@ -1,5 +1,6 @@
 //@vadym udod
 
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,8 +35,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 Destroy(gamePiece.gameObject);
 
             //load game pieces
-            foreach (GamePieceData data in GameContentManager.Instance.GetAllGamePieces())
-                GameContentManager.InstantiatePrefab<GamePieceWidgetMedium>(GameContentManager.PrefabType.GAME_PIECE_MEDIUM, piecesGroup.transform).SetData(data);
+            foreach (GamePiecePrefabData prefabData in GameContentManager.Instance.piecesDataHolder.gamePieces)
+                GameContentManager.InstantiatePrefab<GamePieceWidgetMedium>(GameContentManager.PrefabType.GAME_PIECE_MEDIUM, piecesGroup.transform).SetData(prefabData.data);
         }
 
         private void CreateTokens()

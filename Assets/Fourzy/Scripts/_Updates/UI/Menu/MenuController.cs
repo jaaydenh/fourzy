@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.UI.Menu.Screens;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,40 +12,39 @@ namespace Fourzy._Updates.UI.Menu
     public class MenuController : MonoBehaviour
     {
         public static Dictionary<string, MenuController> menus = new Dictionary<string, MenuController>();
+        public static MenuController current;
 
         public Camera _camera;
         public MenuScreen[] extraScreens;
 
-        public List<MenuScreen> screens { get; private set; }
-        public MenuScreen currentScreen { get; private set; }
-        public Stack<MenuScreen> screensStack { get; private set; }
+        public List<MenuScreen> screens { get; protected set; }
+        public MenuScreen currentScreen { get; protected set; }
+        public Stack<MenuScreen> screensStack { get; protected set; }
 
-        public Dictionary<Type, PromptScreen> availablePromptScreens;
-
-        protected void Awake()
+        protected virtual void Awake()
         {
             screens = new List<MenuScreen>(transform.GetComponentsInChildren<MenuScreen>());
-            availablePromptScreens = new Dictionary<Type, PromptScreen>();
             screens.AddRange(extraScreens);
 
             screensStack = new Stack<MenuScreen>();
 
             if (!menus.ContainsKey(gameObject.name))
                 menus.Add(gameObject.name, this);
-        }
 
-        protected void Start()
-        {
             foreach (MenuScreen screen in extraScreens)
                 if (!screen.menuController)
                     screen.menuController = this;
         }
 
-        protected void Update()
+        protected virtual void Update()
         {
             //back button functionality
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                //first send ESC to static menu controller
+                if (PersistantMenuController.current.screensStack.Count > 0)
+                    return;
+
                 if (screensStack.Count > 0)
                 {
                     MenuScreen menuScreen = screensStack.Peek();
@@ -57,6 +55,11 @@ namespace Fourzy._Updates.UI.Menu
                     menuScreen.OnBack();
                 }
             }
+        }
+
+        protected virtual void OnEnable()
+        {
+            current = this;
         }
 
         public void SetCurrentScreen(int index)
@@ -97,14 +100,17 @@ namespace Fourzy._Updates.UI.Menu
             }
         }
 
-        public void OpenScreen<T>() where T : MenuScreen
+        public void OpenScreen<T>(bool addIfNotExists = false) where T : MenuScreen
         {
             foreach (MenuScreen screen in screens)
                 if (screen.GetType() == typeof(T))
                 {
                     OpenScreen(screen);
-                    break;
+                    return;
                 }
+
+            if (addIfNotExists)
+                OpenScreen(AddScreen<T>());
         }
 
         public void OpenScreen(int index)
@@ -120,58 +126,57 @@ namespace Fourzy._Updates.UI.Menu
             currentScreen.Open();
         }
 
-        public T GetScreen<T>() where T : MenuScreen
+        public T GetScreen<T>(bool newIfOpened = false) where T : MenuScreen
         {
             foreach (MenuScreen screen in screens)
-                if (screen.GetType() == typeof(T))
+                if (screen.GetType() == typeof(T) && ((screen.isOpened && !newIfOpened) || !screen.isOpened))
                     return screen as T;
 
-            return null;
-        }
-
-        public MenuScreen AddScreen(MenuScreen screenPrefab)
-        {
-            if (!screenPrefab)
-                return null;
-
-            MenuScreen newScreen = Instantiate(screenPrefab, transform);
-
-            newScreen.transform.localScale = Vector3.one;
-            screens.Add(newScreen);
-
-            return newScreen;
+            return AddScreen<T>();
         }
 
         public T AddScreen<T>(MenuScreen prefab) where T : MenuScreen
         {
-            return (T)AddScreen(prefab);
+            if (!prefab)
+                return null;
+
+            MenuScreen newScreen = Instantiate(prefab, transform);
+
+            newScreen.transform.localScale = Vector3.one;
+            screens.Add(newScreen);
+
+            return (T)newScreen;
         }
 
-        public T GetPrompt<T>() where T : PromptScreen
+        /// <summary>
+        /// Add screen from GameContentManager typed prefabs list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T AddScreen<T>() where T : MenuScreen
         {
-            Type promptType = typeof(T);
+            Type screenType = typeof(T);
 
-            if (!availablePromptScreens.ContainsKey(promptType))
+            foreach (GameContentManager.PrefabTypePair pair in GameContentManager.Instance.typedPrefabs)
             {
-                foreach (GameContentManager.PrefabTypePair pair in GameContentManager.Instance.typedPrefabs)
-                {
-                    PromptScreen promptScreen = pair.prefab.GetComponent<T>();
+                MenuScreen screenPrefab = pair.prefab.GetComponent<T>();
 
-                    if (promptScreen)
-                    {
-                        availablePromptScreens.Add(promptType, AddScreen<T>(promptScreen));
-                        break;
-                    }
-                }
+                if (screenPrefab)
+                    return AddScreen<T>(screenPrefab);
             }
 
-            return (T)availablePromptScreens[promptType];
+            return null;
         }
 
         public void SetState(bool state)
         {
+            if (gameObject.activeInHierarchy == state)
+                return;
+
             gameObject.SetActive(state);
-            _camera.gameObject.SetActive(state);
+
+            if (_camera)
+                _camera.gameObject.SetActive(state);
         }
 
         public static void SetState(string key, bool state)

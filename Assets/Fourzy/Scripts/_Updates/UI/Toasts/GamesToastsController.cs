@@ -149,6 +149,7 @@ namespace Fourzy._Updates.UI.Toasts
         public enum ToastStyle
         {
             ACTION_WARNING,
+            INFO_TOAST,
         }
     }
 }

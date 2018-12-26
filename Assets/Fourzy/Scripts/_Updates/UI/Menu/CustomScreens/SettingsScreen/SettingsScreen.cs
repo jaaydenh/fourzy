@@ -9,14 +9,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public void ChangeName()
         {
-            menuController.GetPrompt<ChangeNamePromptScreen>().Prompt("Change Name", "Current name: " + UserManager.Instance.userName, () => { menuController.CloseCurrentScreen(); });
+            menuController.GetScreen<ChangeNamePromptScreen>().Prompt("Change Name", "Current name: " + UserManager.Instance.userName, () => { menuController.CloseCurrentScreen(); });
         }
 
         public void ResetTutorial()
         {
             Mixpanel.Track("Reset Tutorial Button Press");
 
-            menuController.GetPrompt<PromptScreen>().Prompt("Clear Tutorial", "Clear tutorail data?", "Yes", "No", () =>
+            menuController.GetScreen<PromptScreen>().Prompt("Clear Tutorial", "Clear tutorail data?", "Yes", "No", () =>
             {
                 PlayerPrefs.DeleteKey("onboardingStage");
                 PlayerPrefs.DeleteKey("onboardingStep");

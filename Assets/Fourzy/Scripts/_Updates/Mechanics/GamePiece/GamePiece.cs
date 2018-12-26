@@ -15,12 +15,12 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         public int gamePieceID;
         public bool isMoving;
 
+        public PlayerEnum player { get; set; }
+
         [HideInInspector]
         public int column;
         [HideInInspector]
         public int row;
-        [HideInInspector]
-        public PlayerEnum player;
 
         private CircleCollider2D gamePieceCollider;
         private GameBoardView _boardView;
@@ -57,7 +57,9 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             }
         }
 
-        private void Awake()
+        public GamePieceData pieceData { get; set; }
+
+        protected void Awake()
         {
             gamePieceCollider = gameObject.GetComponent<CircleCollider2D>();
         }
@@ -222,6 +224,5 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         {
             return gamePieceCollider.Distance(gamePiece.gamePieceCollider).isOverlapped;
         }
-
     }
 }

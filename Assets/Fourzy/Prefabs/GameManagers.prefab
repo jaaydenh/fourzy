@@ -127,8 +127,9 @@ GameObject:
   - component: {fileID: 223911170149535750}
   - component: {fileID: 114719581345646034}
   - component: {fileID: 114379090258072772}
+  - component: {fileID: 114063190329484260}
   m_Layer: 5
-  m_Name: Onboarding Canvas
+  m_Name: PersistantMenuController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -779,6 +780,19 @@ MonoBehaviour:
   trackInEditor: 1
   minLogLevel: 0
   flushInterval: 30
+--- !u!114 &114063190329484260
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296663235296740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75393f6426f06e74e94a71200d1f48de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 0}
+  extraScreens: []
 --- !u!114 &114079966796045236
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1220,27 +1234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73862c3d4ded2491ba08cc142fc7583e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gamePiecePrefabs:
-  - {fileID: 114920343002454044, guid: 9c26418e7b2024aaaaf26cdf4775c6b4, type: 2}
-  - {fileID: 114728382540131844, guid: 729906e28f6094e7bbd571faf746e39f, type: 2}
-  - {fileID: 114513462052452064, guid: 10c424c4e1e3f467b824f0e020cf6808, type: 2}
-  - {fileID: 114274035791886202, guid: 5fbeb8ef6f23a4764936a450d8ec872a, type: 2}
-  - {fileID: 114788562888521412, guid: 5417f588216ac49f290832947371d3d5, type: 2}
-  - {fileID: 114027434767984306, guid: e78239847491a41a082c31d6ed5750cf, type: 2}
-  - {fileID: 114882993077219846, guid: a544f8d74ce464188ab7a3d1c6a19f63, type: 2}
-  - {fileID: 114420817535873184, guid: 1f54aa6b5eb6e40b5b452477071bab72, type: 2}
-  - {fileID: 114113780075857748, guid: 66e9b9c8caa6e474b8b4fcf84cdc55ed, type: 2}
-  - {fileID: 114803855136685020, guid: 9e88a8b7937b24e0f900fb62f34f8cc1, type: 2}
-  - {fileID: 114228576636892556, guid: 7b226b161d07849dbac9f21fb6d94048, type: 2}
-  - {fileID: 114993945673958186, guid: 2cb68902bf09b4622806d7825bbd318d, type: 2}
-  - {fileID: 114598352122061016, guid: 7237c2c2e0ab148c0afa1d0ef16e5e29, type: 2}
-  - {fileID: 114801269308765820, guid: 8b330d2509b184c9fa97d32de83baa1d, type: 2}
-  - {fileID: 114332142054554886, guid: 16f798287116448619c04adda27784f4, type: 2}
-  - {fileID: 114349184483951664, guid: 7258ddfb3e1ee47dab3191ff727a9b63, type: 2}
-  - {fileID: 114104089286365860, guid: 6a0c38e6ff8de41799d86998d7c82222, type: 2}
-  - {fileID: 114526700584965636, guid: 173c45a88363b4f2dbc1400eac396cf5, type: 2}
-  - {fileID: 114609845889314808, guid: e3b17132e5fd542a39af92d8606c966a, type: 2}
-  - {fileID: 114282753117424710, guid: ee1fd5436576773458ed39488b83d250, type: 2}
+  piecesDataHolder: {fileID: 11400000, guid: 15dde20219883e047b2bf43f7a126e41, type: 2}
   tokenPrefabs:
   - {fileID: 114662430344853364, guid: b50adf3cc91ed4ee590fd6bcc3fa79b9, type: 2}
   - {fileID: 114884426812413776, guid: d0d8f6d161f314d7ebd0abe80f0c81ea, type: 2}
@@ -1322,6 +1316,8 @@ MonoBehaviour:
     prefabType: 9
   - prefab: {fileID: 1859522618651454, guid: eb9bf8ad461e1714f91e0430b340492a, type: 2}
     prefabType: 37
+  - prefab: {fileID: 1289445032767014, guid: 4bfd1264994f0c64db9d8a1231bfbe94, type: 2}
+    prefabType: 30
 --- !u!114 &114651625545579072
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1525,11 +1521,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0eddd50cb28548f5918a9539a099c0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onboardingScreen: {fileID: 114706829214614028}
-  infoBannerPrefab: {fileID: 1375395073871002, guid: 2fa13cc6c3aa74203a81d3e13166ae1f,
-    type: 2}
   isOnboardingActive: 0
-  shouldLoadOnboarding: 0
+  shouldLoadOnboarding: 1
+  showinfoToasts: 1
 --- !u!114 &114799874575379872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1545,6 +1539,8 @@ MonoBehaviour:
   prefabs:
   - prefab: {fileID: 114830852162734606, guid: cd6a721b858d3294cbe624d5594152a6, type: 2}
     style: 0
+  - prefab: {fileID: 114722291174570644, guid: e8ee7b009c9216a48ba5d94f55f55bf8, type: 2}
+    style: 1
 --- !u!114 &114831268500817898
 MonoBehaviour:
   m_ObjectHideFlags: 1

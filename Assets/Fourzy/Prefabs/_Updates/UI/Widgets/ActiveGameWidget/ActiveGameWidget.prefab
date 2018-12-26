@@ -212,6 +212,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.3
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -259,6 +260,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.3
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -481,6 +483,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.3
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -727,6 +730,7 @@ MonoBehaviour:
   canvasGroup: {fileID: 0}
   rectTransform: {fileID: 0}
   layoutElement: {fileID: 0}
+  menuScreen: {fileID: 0}
   opponentNameLabel: {fileID: 114844105859848306}
   statusLabel: {fileID: 114358511690718086}
   moveTimeAgo: {fileID: 114068830252766226}
@@ -780,9 +784,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Delete
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a9e4e87d0ca41ee459e7f7654a77bc39, type: 2}
-  m_sharedMaterial: {fileID: 21204670121071226, guid: a9e4e87d0ca41ee459e7f7654a77bc39,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2e7a56fcdbd13904eaf96931accdb828, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 2b56a900830fc5d4690d2110e9ee5870, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -855,13 +858,13 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
   m_isInputParsingRequired: 0
   m_inputSource: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_subTextObjects:
   - {fileID: 0}
   - {fileID: 0}
@@ -920,7 +923,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 27
+          selectedMember: 28
           isDynamic: 0
         target: {fileID: 114376774353980172}
         memberName: OpenGame

@@ -14,13 +14,14 @@ namespace Fourzy._Updates.Mechanics.Board
         public Token tokenType;
         public bool justDisplaying;
 
-        public RectTransform parentRectTransform { get; private set; }
         public GameBoardView gameboard { get; private set; }
-        public AlphaTween alphaTween { get; private set; }
         public SortingGroup sortingGroup { get; private set; }
 
         private SpriteRenderer[] spriteRenderers;
-        private SrpiteToImage[] spriteToImage;
+        private SpriteToImage[] spriteToImage;
+        private RectTransform parentRectTransform;
+        private RectTransform rectTransform;
+        private AlphaTween alphaTween;
 
         protected void Awake()
         {
@@ -48,14 +49,17 @@ namespace Fourzy._Updates.Mechanics.Board
                 //check if parent have rectTransform on it
                 if (parentRectTransform)
                 {
-                    spriteToImage = new SrpiteToImage[spriteRenderers.Length];
+                    spriteToImage = new SpriteToImage[spriteRenderers.Length];
 
                     for (int rendererIndex = 0; rendererIndex < spriteRenderers.Length; rendererIndex++)
                     {
-                        spriteToImage[rendererIndex] = spriteRenderers[rendererIndex].gameObject.AddComponent<SrpiteToImage>();
+                        spriteToImage[rendererIndex] = spriteRenderers[rendererIndex].gameObject.AddComponent<SpriteToImage>();
 
                         //size it
-                        transform.localScale = gameboard.step * .9f;
+                        transform.localScale = gameboard.step;
+
+                        rectTransform = GetComponent<RectTransform>();
+                        rectTransform.sizeDelta = Vector2.one;
                     }
                 }
                 else

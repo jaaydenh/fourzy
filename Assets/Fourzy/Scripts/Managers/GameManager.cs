@@ -1,4 +1,7 @@
 ﻿using DG.Tweening;
+using Fourzy._Updates.UI.Menu;
+using Fourzy._Updates.UI.Menu.Screens;
+using Fourzy._Updates.UI.Toasts;
 using GameSparks.Api.Messages;
 using GameSparks.Api.Requests;
 using GameSparks.Core;
@@ -17,9 +20,6 @@ namespace Fourzy
         public static event Action<List<Game>> OnUpdateGames;
         public static event Action<Game> OnUpdateGame;
 
-        public Onboarding onboardingScreen;
-        public GameObject infoBannerPrefab;
-
         [HideInInspector]
         public Game activeGame;
 
@@ -28,6 +28,7 @@ namespace Fourzy
         public PuzzlePack ActivePuzzlePack { get; private set; }
         public bool isOnboardingActive = false;
         public bool shouldLoadOnboarding = false;
+        public bool showinfoToasts = true;
 
         public List<Game> Games
         {
@@ -52,7 +53,7 @@ namespace Fourzy
             DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
         }
 
-        private void OnEnable()
+        protected void OnEnable()
         {
             // GS.GameSparksAvailable += CheckConnectionStatus;
             ChallengeManager.OnReceivedOpponentGamePiece += SetOpponentGamePiece;
@@ -64,10 +65,12 @@ namespace Fourzy
             ChallengeManager.OnChallengeLostDelegate += ChallengeLostHandler;
             ChallengeManager.OnChallengeDrawnDelegate += ChallengeDrawnHandler;
             ChallengeManager.OnChallengeIssuedDelegate += ChallengeIssuedHandler;
+
             SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
-        private void OnDisable()
+        protected void OnDisable()
         {
             // GS.GameSparksAvailable -= CheckConnectionStatus;
             ChallengeManager.OnReceivedOpponentGamePiece -= SetOpponentGamePiece;
@@ -79,10 +82,12 @@ namespace Fourzy
             ChallengeManager.OnChallengeLostDelegate -= ChallengeLostHandler;
             ChallengeManager.OnChallengeDrawnDelegate -= ChallengeDrawnHandler;
             ChallengeManager.OnChallengeIssuedDelegate -= ChallengeIssuedHandler;
+
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
-        void Start()
+        protected void Start()
         {
             GS.GameSparksAvailable += CheckConnectionStatus;
 
@@ -114,6 +119,14 @@ namespace Fourzy
             UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
             UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
 #endif
+
+            if (shouldLoadOnboarding && PlayerPrefs.GetInt("onboardingStage") <= 1)
+            {
+                OpenNewGame(GameType.PASSANDPLAY, null, false, "100");
+
+                shouldLoadOnboarding = false;
+                PersistantMenuController.current.OpenScreen<OnboardingScreen>(true);
+            }
         }
 
         private void OpponentTurnHandler(ChallengeTurnTakenMessage message)
@@ -351,11 +364,6 @@ namespace Fourzy
             }
         }
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            SceneManager.SetActiveScene(scene);
-        }
-
         public void OpenGame(Game game)
         {
             activeGame = game;
@@ -386,8 +394,6 @@ namespace Fourzy
 
         public void OpenPuzzleChallengeGame(string type = "open")
         {
-            //PuzzleChallengeLevel puzzleChallengeLevel = PuzzleChallengeLoader.instance.GetChallenge();
-
             PuzzleChallengeLevel puzzleChallengeLevel = ActivePuzzlePack.PuzzleChallengeLevels[ActivePuzzlePack.ActiveLevel - 1];
 
             string subtitle = "";
@@ -401,14 +407,13 @@ namespace Fourzy
             }
             TokenBoard tokenBoard = new TokenBoard(puzzleChallengeLevel.InitialTokenBoard.ToArray(), "", "", null, null, true);
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.PUZZLE, true, true, tokenBoard, puzzleChallengeLevel.InitialGameBoard.ToArray(), false, null);
-            Game newGame = new Game(null, gameState, true, false, false, null, ChallengeState.NONE, ChallengeType.NONE, null, null, puzzleChallengeLevel, null, puzzleChallengeLevel.Name, subtitle.Replace("%1", puzzleChallengeLevel.MoveGoal.ToString()), true);
+            Game newGame = new Game(null, gameState, true, false, false, null, ChallengeState.NONE, ChallengeType.NONE, null, null, puzzleChallengeLevel, null, puzzleChallengeLevel.Name, subtitle.Replace("%1", "<color=#ffff00ff>" + puzzleChallengeLevel.MoveGoal.ToString() + "</color>"), true);
             OpenGame(newGame);
 
             Dictionary<string, object> customAttributes = new Dictionary<string, object>();
             customAttributes.Add("id", puzzleChallengeLevel.ID);
             customAttributes.Add("level", puzzleChallengeLevel.Level);
             AnalyticsManager.LogCustom(type + "_puzzle_challenge", customAttributes);
-            // }
         }
 
         public void SetActivePuzzlePack(PuzzlePack puzzlePack)
@@ -419,13 +424,9 @@ namespace Fourzy
         public void SetNextActivePuzzleLevel()
         {
             if (ActivePuzzlePack.ActiveLevel < ActivePuzzlePack.PuzzleChallengeLevels.Count)
-            {
                 ActivePuzzlePack.ActiveLevel++;
-            }
             else
-            {
                 ActivePuzzlePack.ActiveLevel = 1;
-            }
         }
 
         public void OpenNextGame()
@@ -457,6 +458,22 @@ namespace Fourzy
             }
         }
 
+        public void ShowInfoBanner(string message)
+        {
+            GamesToastsController.ShowToast(GamesToastsController.ToastStyle.INFO_TOAST, message);
+        }
+
+        public void AddGame(Game game)
+        {
+            game.gameState.SetRandomGuid(game.challengeId);
+            games.Add(game);
+        }
+
+        public void CallMovePiece(Move move, bool replayMove, bool updatePlayer)
+        {
+            StartCoroutine(GamePlayManager.Instance.MovePiece(move, replayMove, updatePlayer));
+        }
+
         private void SetOpponentGamePiece(string gamePieceId, string challengeId)
         {
             if (challengeId != "")
@@ -470,7 +487,7 @@ namespace Fourzy
                     game.challengedGamePieceId = int.Parse(gamePieceId);
                 }
 
-                if (game.challengedGamePieceId > GameContentManager.Instance.GetGamePieceCount() - 1)
+                if (game.challengedGamePieceId > GameContentManager.Instance.piecesDataHolder.gamePieces.Length - 1)
                 {
                     game.challengedGamePieceId = 0;
                 }
@@ -482,32 +499,31 @@ namespace Fourzy
             // TODO: inform the player they dont have a connection when connected is false
             //Debug.Log("CheckConnectionStatus: " + connected);
             if (connected)
-            {
                 ShowInfoBanner("Connected Successfully");
-            }
             else
-            {
                 ShowInfoBanner("Error connecting to server");
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            SceneManager.SetActiveScene(scene);
+
+            switch (scene.name)
+            {
+                case Constants.GAMEPLAY_SCENE_NAME:
+                    MenuController.SetState("MainMenuCanvas", false);
+                    break;
             }
         }
 
-        public void ShowInfoBanner(string message)
+        private void OnSceneUnloaded(Scene scene)
         {
-            Debug.Log("ShowInfoBanner");
-            GameObject infoBannerObject = Instantiate(infoBannerPrefab) as GameObject;
-            InfoBanner infoBanner = infoBannerObject.GetComponent<InfoBanner>();
-            StartCoroutine(infoBanner.ShowText(message));
-        }
-
-        public void AddGame(Game game)
-        {
-            game.gameState.SetRandomGuid(game.challengeId);
-            games.Add(game);
-        }
-
-        public void CallMovePiece(Move move, bool replayMove, bool updatePlayer)
-        {
-            StartCoroutine(GamePlayManager.Instance.MovePiece(move, replayMove, updatePlayer));
+            switch (scene.name)
+            {
+                case Constants.GAMEPLAY_SCENE_NAME:
+                    MenuController.SetState("MainMenuCanvas", true);
+                    break;
+            }
         }
     }
 }

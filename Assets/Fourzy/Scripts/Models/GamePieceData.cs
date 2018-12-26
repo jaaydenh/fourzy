@@ -10,15 +10,14 @@ namespace Fourzy
     }
 
     [System.Serializable]
-    public class GamePieceData : ISerializationCallbackReceiver
+    public class GamePieceData
     {
         public int ID;
         public string Name;
         public bool Enabled;
         public int Rarity;
-        public Color OutlineColor { get; set; }
-        public Vector4 SecondaryColor { get; set; }
-        public Color BorderColor { get; set; }
+        public Color OutlineColor;
+        public Color BorderColor;
 
         //Server data
         public int NumberOfPieces { get; set; }
@@ -27,24 +26,6 @@ namespace Fourzy
         public int TotalNumberOfChampions { get; set; }
         public int NumberOfStars { get; set; }
         public GamePieceState state { get; set; }
-
-        [SerializeField] string outlineColor = string.Empty;
-        [SerializeField] string secondaryColor = string.Empty;
-        [SerializeField] string borderColor = string.Empty;
-
-        public void OnBeforeSerialize()
-        {
-            outlineColor = OutlineColor.ToJson();
-            secondaryColor = SecondaryColor.ToJson();
-            borderColor = BorderColor.ToJson();
-        }
-
-        public void OnAfterDeserialize()
-        {
-            OutlineColor = outlineColor.ColorFromJson();
-            SecondaryColor = secondaryColor.Vector4FromJson();
-            BorderColor = borderColor.ColorFromJson();
-        }
     }
 
     public static class JsonConverterExternsion

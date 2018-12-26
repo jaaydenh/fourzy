@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: RifficFree-Bold SDF
   m_EditorClassIdentifier: 
-  hashCode: 227115292
+  hashCode: -1675649444
   material: {fileID: 21894048186437448}
   materialHashCode: 820121111
   fontAssetType: 1
@@ -963,7 +963,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: RifficFree-Bold SDF Material
   m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
-  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA UNDERLAY_ON _ALPHABLEND_ON
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA OUTLINE_ON UNDERLAY_ON _ALPHABLEND_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -1045,7 +1045,7 @@ Material:
     - _Diffuse: 0.5
     - _DiffusePower: 1
     - _DstBlend: 10
-    - _FaceDilate: -0.1
+    - _FaceDilate: 0.06
     - _FaceShininess: 0
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
@@ -1076,7 +1076,7 @@ Material:
     - _Reflectivity: 10
     - _ScaleRatioA: 0.8333333
     - _ScaleRatioB: 0.71875
-    - _ScaleRatioC: 0.7604167
+    - _ScaleRatioC: 0.62708336
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0

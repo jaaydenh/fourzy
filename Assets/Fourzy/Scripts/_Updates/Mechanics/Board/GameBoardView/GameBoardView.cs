@@ -4,10 +4,10 @@
 
 using DG.Tweening;
 using Fourzy._Updates.Mechanics._GamePiece;
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Widgets;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,12 +16,6 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class GameBoardView : MonoBehaviour
     {
-        //to remove if not needed
-        public static Action<Vector3> onMouseDown;
-        //to remove if not needed
-        public static Action<Vector3> onMouseUp;
-        //to remove if not needed
-        public static Action<Vector3> onMouseDrag;
         public SpriteRenderer backgroundImage;
 
         public Transform gamePiecesRootTransform;
@@ -40,25 +34,40 @@ namespace Fourzy._Updates.Mechanics.Board
         public bool spawnHintArea = false;
         [HideInInspector]
         public MenuController menuController;
+        [HideInInspector]
+        public GamePiecePrefabData playerPrefabData;
+        [HideInInspector]
+        public GamePiecePrefabData opponentPrefabData;
 
         private Vector3 topLeft;
         private bool isInitialized;
-        /// <summary>
-        /// Touch will get canceled if current screen changes from GameplayScreen to anything else during touch lifetime
-        /// </summary>
         private bool touchCanceled = false;
         private bool touched = false;
         private HintBlock previousClosest;
 
         public int NumPiecesAnimating { get; set; }
-        public GamePiece PlayerPiece { get; set; }
-        public GamePiece OpponentPiece { get; set; }
         public MenuScreen assignedScreen { get; private set; }
         public List<HintBlock> hintBlocks { get; private set; }
         public SpriteRenderer spriteRenderer { get; private set; }
         public BoxCollider2D boxCollider2D { get; private set; }
         public RectTransform rectTransform { get; private set; }
         public Vector3 step { get; private set; }
+
+        public GamePiece PlayerPiece
+        {
+            get
+            {
+                return playerPrefabData.prefabs[0];
+            }
+        }
+
+        public GamePiece OpponentPiece
+        {
+            get
+            {
+                return opponentPrefabData.prefabs[(playerPrefabData.data.ID == opponentPrefabData.data.ID) ? 1 : 0];
+            }
+        }
 
         protected void Awake()
         {
@@ -72,19 +81,19 @@ namespace Fourzy._Updates.Mechanics.Board
             Camera _camera = Camera.main;
             if (backgroundImage)
             {
-                //if (_camera.aspect > .5625f)
-                //{
-                //    backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackgroundWide;
+                if (_camera.aspect > .57f)
+                {
+                    backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackgroundWide;
+                    backgroundImage.size = backgroundImage.sprite.rect.size / backgroundImage.sprite.pixelsPerUnit;
 
-                //    float spriteAspect = backgroundImage.size / 
-
-                //    _camera.orthographicSize = backgroundImage.size.y * backgroundImage.transform.localScale.y / 2f * _camera.aspect;
-                //}
-                //else
+                    _camera.orthographicSize = backgroundImage.size.y * backgroundImage.transform.localScale.y / 2f;
+                }
+                else
                 {
                     backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackground;
+                    backgroundImage.size = backgroundImage.sprite.rect.size / backgroundImage.sprite.pixelsPerUnit;
 
-                    _camera.orthographicSize = backgroundImage.size.x * backgroundImage.transform.localScale.x / _camera.aspect / 2f;
+                    _camera.orthographicSize = backgroundImage.size.x * backgroundImage.transform.localScale.x / 2f / _camera.aspect;
                 }
             }
         }
@@ -97,7 +106,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void OnPointerDown(Vector2 position)
         {
-            if (!interactable)
+            if (!interactable || !GamePlayManager.AcceptMoveInput)
                 return;
 
             //only continue if current opened screen is GameplayScreen
@@ -106,9 +115,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
             touchCanceled = false;
             touched = true;
-
-            if (onMouseDown != null)
-                onMouseDown.Invoke(position);
 
             if (spawnHintArea)
             {
@@ -137,9 +143,6 @@ namespace Fourzy._Updates.Mechanics.Board
                 return;
             }
 
-            if (onMouseDrag != null)
-                onMouseDrag.Invoke(position);
-
             if (spawnHintArea)
             {
                 //select
@@ -156,9 +159,6 @@ namespace Fourzy._Updates.Mechanics.Board
                 return;
 
             touched = false;
-
-            if (onMouseUp != null)
-                onMouseUp.Invoke(position);
 
             if (spawnHintArea)
             {
@@ -203,21 +203,21 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     //top row
                     if (row == 0)
-                        hintDirection = new Move(new Position(col, 0), Direction.DOWN);
+                        hintDirection = new Move(new Position(col, -1), Direction.DOWN);
                     //bottom row
                     else if (row == numRows - 1)
-                        hintDirection = new Move(new Position(col, numRows - 1), Direction.UP);
+                        hintDirection = new Move(new Position(col, numRows), Direction.UP);
                     //left side
                     else if (col == 0)
-                        hintDirection = new Move(new Position(0, row), Direction.RIGHT);
+                        hintDirection = new Move(new Position(-1, row), Direction.RIGHT);
                     //right side
                     else if (col == numColumns - 1)
-                        hintDirection = new Move(new Position(numColumns - 1, row), Direction.LEFT);
+                        hintDirection = new Move(new Position(numColumns, row), Direction.LEFT);
                     else continue;
 
                     HintBlock hintBlock = GameContentManager.InstantiatePrefab<HintBlock>(GameContentManager.PrefabType.BOARD_HINT_BOX, transform);
                     hintBlock.transform.localPosition = PositionToVec3(row, col);
-                    hintBlock.blockDirection = hintDirection;
+                    hintBlock.move = hintDirection;
 
                     hintBlocks.Add(hintBlock);
                 }
@@ -291,7 +291,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void MoveGamePieceViews(Move move, List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
         {
-            GamePiece gamePiece = this.SpawnPiece(move.position.column, move.position.row, move.player);
+            GamePiece gamePiece = SpawnPiece(move.position.column, move.position.row, move.player);
             gamePiece.player = move.player;
             gamePiece.column = move.position.column;
             gamePiece.row = move.position.row;
@@ -336,8 +336,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             gamePiece.gameObject.SetActive(true);
             gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
-            gamePiece.transform.localPosition = PositionToVec3(row, col, 10.0f);
-            //gamePiece.gamePieceView.SetSortingLayer(spriteRenderer.sortingLayerID);
+            gamePiece.transform.localPosition = PositionToVec3(row, col);
 
             return gamePiece;
         }
@@ -524,7 +523,7 @@ namespace Fourzy._Updates.Mechanics.Board
             GameState gameState = GamePlayManager.Instance.game.gameState;
 
             foreach (HintBlock hintBlock in hintBlocks)
-                if (gameState.CanMove(hintBlock.blockDirection.GetNextPosition(), gameState.TokenBoard.tokens))
+                if (gameState.CanMove(hintBlock.move.GetNextPosition(), gameState.TokenBoard.tokens))
                     hintBlock.Show();
 
             previousClosest = null;
