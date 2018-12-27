@@ -40,7 +40,7 @@ namespace Fourzy
         public void StartOnboarding()
         {
             Debug.Log("Onboarding:StartOnboarding");
-            GameManager.Instance.isOnboardingActive = true;
+            //GameManager.Instance.isOnboardingActive = true;
 
             onboardingStep = PlayerPrefs.GetInt("onboardingStep");
             onboardingStage = PlayerPrefs.GetInt("onboardingStage");
@@ -177,7 +177,7 @@ namespace Fourzy
                     }
                     HideWizardDialog();
                     PlayerPrefs.SetInt("onboardingStage", 2);
-                    GameManager.Instance.isOnboardingActive = false;
+                    //GameManager.Instance.isOnboardingActive = false;
                     break;
                 default:
                     break;

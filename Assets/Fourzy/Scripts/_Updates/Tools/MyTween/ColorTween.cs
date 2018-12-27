@@ -15,7 +15,7 @@ namespace Fourzy._Updates.Tween
         public Color to = Color.white;
 
         private List<GraphicsColorGroup> spriteColorGroups;
-        private Color temp;
+        private Color _value;
 
         protected override void Awake()
         {
@@ -32,16 +32,16 @@ namespace Fourzy._Updates.Tween
             {
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
-                        temp = Color.Lerp(from, to, curve.Evaluate(value));
+                        _value = Color.Lerp(from, to, curve.Evaluate(value));
                     else
                     {
-                        temp = Color.Lerp(from, to, curve.Evaluate(1f));
+                        _value = Color.Lerp(from, to, curve.Evaluate(1f));
                         isPlaying = false;
                     }
                     break;
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
-                        temp = Color.Lerp(to, from, curve.Evaluate(value));
+                        _value = Color.Lerp(to, from, curve.Evaluate(value));
                     else
                     {
                         Color.Lerp(to, from, curve.Evaluate(1f));
@@ -50,7 +50,7 @@ namespace Fourzy._Updates.Tween
                     break;
             }
 
-            SetColor(temp);
+            SetColor(_value);
         }
 
         public void SetColor(Color color)

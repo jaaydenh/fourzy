@@ -30,6 +30,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             puzzleUI = GetComponentInChildren<PuzzleUIScreen>();
         }
 
+        public override void OnBack()
+        {
+            base.OnBack();
+
+            menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.Instance.BackButtonOnClick(); });
+        }
+
         public void InitUI(Game game)
         {
             this.game = game;
@@ -131,18 +138,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             float delay = 0.3f;
             for (int i = 0; i < game.gameState.GameBoard.player1WinningPositions.Count; i++)
             {
-                Position position = game.gameState.GameBoard.player1WinningPositions[i];
-                GamePiece gamePiece = game.boardView.GamePieceAt(position);
-                gamePiece.gamePieceView.PlayWinAnimation(delay);
+                game.boardView.GamePieceAt(game.gameState.GameBoard.player1WinningPositions[i]).gamePieceView.PlayWinAnimation(delay);
                 delay += 0.12f;
             }
 
             delay = 0.3f;
             for (int i = 0; i < game.gameState.GameBoard.player2WinningPositions.Count; i++)
             {
-                Position position = game.gameState.GameBoard.player2WinningPositions[i];
-                GamePiece gamePiece = game.boardView.GamePieceAt(position);
-                gamePiece.gamePieceView.PlayWinAnimation(delay);
+                game.boardView.GamePieceAt(game.gameState.GameBoard.player2WinningPositions[i]).gamePieceView.PlayWinAnimation(delay);
                 delay += 0.12f;
             }
 
@@ -167,6 +170,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void SetActionButton()
         {
+            switch (game.gameState.GameType)
+            {
+                case GameType.PUZZLE:
+                    if (game.gameState.IsGameOver && !game.gameState.IsPuzzleChallengePassed && !OnboardingScreen.isActive)
+                        retryPuzzleChallengeButton.gameObject.SetActive(true);
+                    break;
+                case GameType.PASSANDPLAY:
+                    if (game.gameState.IsGameOver && !OnboardingScreen.isActive)
+                        rematchButton.gameObject.SetActive(true);
+                    break;
+            }
             if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
             {
                 //bool hasNextGame = false;
@@ -197,16 +211,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 //    nextGameButton.gameObject.SetActive(false);
                 //}
             }
-            else
-            {
-                if (game.gameState.IsGameOver)
-                {
-                    if (!GameManager.Instance.isOnboardingActive && game.gameState.GameType == GameType.PASSANDPLAY)
-                    {
-                        rematchButton.gameObject.SetActive(true);
-                    }
-                }
-            }
         }
 
         public void ShowRewardsScreen()
@@ -225,11 +229,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         CollectedGamePiece = new GamePieceData()
                     }
                 });
-        }
-
-        public void OnBackButton()
-        {
-            GamePlayManager.Instance.BackButtonOnClick();
         }
 
         public void RealtimeResignButton()

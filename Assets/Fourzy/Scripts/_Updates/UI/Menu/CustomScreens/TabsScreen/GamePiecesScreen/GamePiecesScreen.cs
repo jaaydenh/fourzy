@@ -1,4 +1,4 @@
-//@vadym udod
+﻿//@vadym udod
 
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
@@ -8,17 +8,10 @@ using UnityEngine.UI.Extensions;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
-    public class FourziesScreen : MenuScreen
+    public class GamePiecesScreen : MenuScreen
     {
         public FlowLayoutGroup piecesGroup;
         public GridLayoutGroup tokensGroup;
-
-        protected override void Start()
-        {
-            base.Start();
-
-            //CreateGamePieces();
-        }
 
         public override void Open()
         {
@@ -50,4 +43,4 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 GameContentManager.InstantiatePrefab<TokenWidget>(GameContentManager.PrefabType.TOKEN_SMALL, tokensGroup.transform).SetData(data);
         }
     }
-}                                                                                                                                                                                                                                                         
+}

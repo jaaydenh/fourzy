@@ -189,7 +189,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void PlayWinAnimation(float delay)
         {
-            ShowOutline(true);
+            ShowOutline(false);
 
             Sequence sequence = DOTween.Sequence();
             sequence.AppendInterval(delay);
@@ -271,7 +271,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             }
 
             outline.outlineColor = Color.green;
-            outline.Animate(0f, 1f, 2f, true);
+            outline.Animate(0f, 1f, 1f, animate);
         }
 
         public void HideOutline(bool force)

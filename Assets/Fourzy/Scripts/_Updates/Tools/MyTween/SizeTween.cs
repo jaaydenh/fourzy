@@ -12,7 +12,7 @@ namespace Fourzy._Updates.Tween
         private RectTransform rectTransform;
         private SpriteRenderer spriteRenderer;
 
-        private Vector2 temp;
+        private Vector2 _value;
 
         protected override void Awake()
         {
@@ -30,28 +30,28 @@ namespace Fourzy._Updates.Tween
             {
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
-                        temp = Vector2.Lerp(from, to, curve.Evaluate(value));
+                        _value = Vector2.Lerp(from, to, curve.Evaluate(value));
                     else
                     {
                         isPlaying = false;
-                        temp = Vector2.Lerp(from, to, curve.Evaluate(1f));
+                        _value = Vector2.Lerp(from, to, curve.Evaluate(1f));
                     }
                     break;
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
-                        temp = Vector2.Lerp(to, from, curve.Evaluate(value));
+                        _value = Vector2.Lerp(to, from, curve.Evaluate(value));
                     else
                     {
                         isPlaying = false;
-                        temp = Vector2.Lerp(to, from, curve.Evaluate(1f));
+                        _value = Vector2.Lerp(to, from, curve.Evaluate(1f));
                     }
                     break;
             }
 
             if (rectTransform)
-                rectTransform.sizeDelta = temp;
+                rectTransform.sizeDelta = _value;
             else if (spriteRenderer)
-                spriteRenderer.size = temp;
+                spriteRenderer.size = _value;
         }
 
         public override void OnReset()

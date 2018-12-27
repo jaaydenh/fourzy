@@ -23,7 +23,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             LoadPuzzlePacks();
         }
 
-        private void LoadPuzzlePacks()
+        public void LoadPuzzlePacks()
         {
             //remove old one
             foreach (Transform child in gridLayoutGroup.transform)

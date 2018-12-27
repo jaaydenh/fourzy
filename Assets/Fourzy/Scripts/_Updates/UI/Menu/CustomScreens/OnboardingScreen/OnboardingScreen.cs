@@ -6,6 +6,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class OnboardingScreen : MenuScreen
     {
+        public static bool isActive = false;
+
         public OnboardingDataHolder scenario;
 
         public override void Open()
@@ -19,6 +21,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             base.Open();
 
+            isActive = true;
         }
 
         public override void Close()
@@ -27,6 +30,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             GamePlayManager.OnStartMove -= MoveStarted;
             GamePlayManager.OnEndMove -= MoveEnded;
+
+            isActive = false;
         }
 
         public override void OnBack()

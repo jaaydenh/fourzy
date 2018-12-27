@@ -28,7 +28,7 @@ namespace Fourzy._Updates.Tools
                 float tan45 = Mathf.Tan(Mathf.Deg2Rad * 45);
 
                 tween = gameObject.AddComponent<ValueTween>();
-                tween.curve = new AnimationCurve(new Keyframe(0f, 0f, tan45, tan45), new Keyframe(.5f, 1f), new Keyframe(1f, 0f, tan45, tan45));
+                tween.curve = new AnimationCurve(new Keyframe(0f, 0f, tan45, tan45), new Keyframe(1f, 1f, tan45, tan45));
 
                 tween._onProgress += (value) => { intensity = value; };
             }
@@ -36,7 +36,7 @@ namespace Fourzy._Updates.Tools
             tween.from = from;
             tween.to = to;
             tween.playbackTime = time;
-            tween.repeat = repeat ? RepeatType.ZERO_TO_ONE : RepeatType.NONE;
+            tween.repeat = repeat ? RepeatType.PING_PONG : RepeatType.NONE;
 
             tween.PlayForward(true);
         }

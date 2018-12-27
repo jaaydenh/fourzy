@@ -10,6 +10,7 @@ namespace Fourzy._Updates.Tween
         public Vector3 to;
 
         private RectTransform rectTransform;
+        private Vector3 _value;
 
         protected override void Awake()
         {
@@ -34,41 +35,30 @@ namespace Fourzy._Updates.Tween
             {
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
-                    {
-                        if (rectTransform)
-                            rectTransform.anchoredPosition = Vector3.Lerp(from, to, curve.Evaluate(value));
-                        else
-                            transform.localPosition = Vector3.Lerp(from, to, curve.Evaluate(value));
-                    }
+                        _value = Vector3.Lerp(from, to, curve.Evaluate(value));
                     else
                     {
                         isPlaying = false;
 
-                        if (rectTransform)
-                            rectTransform.anchoredPosition = Vector3.Lerp(from, to, curve.Evaluate(1f));
-                        else
-                            transform.localPosition = Vector3.Lerp(from, to, curve.Evaluate(1f));
+                        _value = Vector3.Lerp(from, to, curve.Evaluate(1f));
                     }
                     break;
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
-                    {
-                        if (rectTransform)
-                            rectTransform.anchoredPosition = Vector3.Lerp(to, from, curve.Evaluate(value));
-                        else
-                            transform.localPosition = Vector3.Lerp(to, from, curve.Evaluate(value));
-                    }
+                        _value = Vector3.Lerp(to, from, curve.Evaluate(value));
                     else
                     {
                         isPlaying = false;
 
-                        if (rectTransform)
-                            rectTransform.anchoredPosition = Vector3.Lerp(to, from, curve.Evaluate(1f));
-                        else
-                            transform.localPosition = Vector3.Lerp(to, from, curve.Evaluate(1f));
+                        _value = Vector3.Lerp(to, from, curve.Evaluate(1f));
                     }
                     break;
             }
+
+            if (rectTransform)
+                rectTransform.anchoredPosition = _value;
+            else
+                transform.localPosition = _value;
         }
 
         public override void OnReset()

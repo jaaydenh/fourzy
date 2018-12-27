@@ -14,7 +14,7 @@ namespace Fourzy._Updates.Tween
         public float to = 1f;
 
         private List<GraphicsColorGroup> alphaGroup;
-        private float temp;
+        private float _value;
 
         protected override void Awake()
         {
@@ -31,25 +31,25 @@ namespace Fourzy._Updates.Tween
             {
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
-                        temp = Mathf.Lerp(from, to, curve.Evaluate(value));
+                        _value = Mathf.Lerp(from, to, curve.Evaluate(value));
                     else
                     {
-                        temp = Mathf.Lerp(from, to, curve.Evaluate(1f));
+                        _value = Mathf.Lerp(from, to, curve.Evaluate(1f));
                         isPlaying = false;
                     }
                     break;
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
-                        temp = Mathf.Lerp(to, from, curve.Evaluate(value));
+                        _value = Mathf.Lerp(to, from, curve.Evaluate(value));
                     else
                     {
-                        temp = Mathf.Lerp(to, from, curve.Evaluate(1f));
+                        _value = Mathf.Lerp(to, from, curve.Evaluate(1f));
                         isPlaying = false;
                     }
                     break;
             }
 
-            SetAlpha(temp);
+            SetAlpha(_value);
         }
 
         public void SetAlpha(float value)

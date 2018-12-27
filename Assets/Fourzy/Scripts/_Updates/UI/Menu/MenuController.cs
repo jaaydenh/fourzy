@@ -175,6 +175,9 @@ namespace Fourzy._Updates.UI.Menu
 
             gameObject.SetActive(state);
 
+            if (state && currentScreen)
+                currentScreen.Open();
+
             if (_camera)
                 _camera.gameObject.SetActive(state);
         }

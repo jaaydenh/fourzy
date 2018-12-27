@@ -1521,8 +1521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0eddd50cb28548f5918a9539a099c0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOnboardingActive: 0
-  shouldLoadOnboarding: 1
+  shouldLoadOnboarding: 0
   showinfoToasts: 1
 --- !u!114 &114799874575379872
 MonoBehaviour:

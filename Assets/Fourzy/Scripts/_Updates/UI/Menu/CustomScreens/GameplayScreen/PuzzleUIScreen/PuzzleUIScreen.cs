@@ -38,7 +38,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             PuzzlePack activePack = GameManager.Instance.ActivePuzzlePack;
 
-            packName.text = activePack.Name;
+            packName.text = game.puzzleChallengeInfo.Name;
             rule.text = GameManager.Instance.ActivePuzzlePack.ActiveLevel + ": " + game.subtitle;
         }
 

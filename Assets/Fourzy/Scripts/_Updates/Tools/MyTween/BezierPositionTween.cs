@@ -11,6 +11,7 @@ namespace Fourzy._Updates.Tween
         public Vector2 control;
 
         private RectTransform rectTransform;
+        private Vector3 _value;
 
         protected override void Awake()
         {
@@ -27,42 +28,30 @@ namespace Fourzy._Updates.Tween
             {
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
-                    {
-                        if (rectTransform)
-                            rectTransform.anchoredPosition = GetBezierPoint(from, from + control, to, curve.Evaluate(value));
-                        else
-                            transform.localPosition = GetBezierPoint(from, from + control, to, curve.Evaluate(value));
-                    }
+                        _value = GetBezierPoint(from, from + control, to, curve.Evaluate(value));
                     else
                     {
                         isPlaying = false;
-                        
-                        if (rectTransform)
-                            rectTransform.anchoredPosition = GetBezierPoint(from, from + control, to, curve.Evaluate(1f));
-                        else
-                            transform.localPosition = GetBezierPoint(from, from + control, to, curve.Evaluate(1f));
+
+                        _value = GetBezierPoint(from, from + control, to, curve.Evaluate(1f));
                     }
                     break;
-
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
-                    {
-                        if (rectTransform)
-                            rectTransform.anchoredPosition = GetBezierPoint(from, from + control, to, curve.Evaluate(1f - value));
-                        else
-                            transform.localPosition = GetBezierPoint(from, from + control, to, curve.Evaluate(1f - value));
-                    }
+                        _value = GetBezierPoint(from, from + control, to, curve.Evaluate(1f - value));
                     else
                     {
                         isPlaying = false;
 
-                        if (rectTransform)
-                            rectTransform.anchoredPosition = GetBezierPoint(from, from + control, to, curve.Evaluate(0f));
-                        else
-                            transform.localPosition = GetBezierPoint(from, from + control, to, curve.Evaluate(0f));
+                        _value = GetBezierPoint(from, from + control, to, curve.Evaluate(1f));
                     }
                     break;
             }
+
+            if (rectTransform)
+                rectTransform.anchoredPosition = _value;
+            else
+                transform.localPosition = _value;
         }
 
         public static Vector2 GetBezierPoint(Vector2 start, Vector2 control, Vector2 end, float time)

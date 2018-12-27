@@ -26,7 +26,6 @@ namespace Fourzy
         private List<Game> games = new List<Game>();
 
         public PuzzlePack ActivePuzzlePack { get; private set; }
-        public bool isOnboardingActive = false;
         public bool shouldLoadOnboarding = false;
         public bool showinfoToasts = true;
 

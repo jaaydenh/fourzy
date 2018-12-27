@@ -30,6 +30,7 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 button.GetBadge().badge.SetValue("");
                 button.SetLabel(puzzlePack.completedCount + " / " + puzzlePack.PuzzleChallengeLevels.Count.ToString(), "completed");
+                button.interactable = true;
             }
             else
             {
@@ -42,16 +43,13 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void OpenPuzzlePack()
         {
-            if (!puzzlePack.locked)
-            {
-                var props = new Value();
-                props["ID"] = puzzlePack.ID;
-                props["Name"] = puzzlePack.Name;
-                Mixpanel.Track("Open Puzzle Pack", props);
+            var props = new Value();
+            props["ID"] = puzzlePack.ID;
+            props["Name"] = puzzlePack.Name;
+            Mixpanel.Track("Open Puzzle Pack", props);
 
-                GameManager.Instance.SetActivePuzzlePack(puzzlePack);
-                GameManager.Instance.OpenPuzzleChallengeGame("open");
-            }
+            GameManager.Instance.SetActivePuzzlePack(puzzlePack);
+            GameManager.Instance.OpenPuzzleChallengeGame("open");
         }
 
         private int GetNextLevel()

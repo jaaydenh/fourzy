@@ -639,24 +639,11 @@ namespace Fourzy
             {
                 if (game.gameState.IsPuzzleChallengePassed)
                 {
-                    string title = LocalizationManager.Instance.GetLocalizedValue("challenge_completed_title");
-                    string subtitle = LocalizationManager.Instance.GetLocalizedValue("challenge_completed_subtitle");
-                    //DisplayIntroUI(title, subtitle, false);
-                }
-                else
-                {
-                    string title = LocalizationManager.Instance.GetLocalizedValue("challenge_failed_title");
-                    string subtitle = LocalizationManager.Instance.GetLocalizedValue("challenge_failed_subtitle");
-                    //DisplayIntroUI(title, subtitle, false);
-                }
-
-                if (game.gameState.IsPuzzleChallengePassed)
-                {
                     if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID))
                         ChallengeManager.Instance.SubmitPuzzleCompleted();
 
                     PlayerPrefsWrapper.SetPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID, true);
-                    
+
                     AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, true, game.gameState.Player1MoveCount);
                 }
                 else

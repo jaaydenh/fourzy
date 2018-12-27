@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.UI.Widgets;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -95,17 +96,19 @@ namespace Fourzy._Updates.UI.Toasts
         public void SetToastText(string text)
         {
             string[] words = text.Split(' ');
-            text = "";
+
+            List<string> lines = new List<string>();
+            lines.Add("");
 
             foreach (string word in words)
             {
-                if (text.Length + word.Length + 1 >= charactersLineLimit)
-                    text += "\n";
+                if (lines[lines.Count - 1].Length + word.Length + 1 >= charactersLineLimit)
+                    lines.Add("");
 
-                text += word + " ";
+                lines[lines.Count - 1] += word + " ";
             }
 
-            tostText.text = text;
+            tostText.text = string.Join("\n", lines.ToArray());
         }
     }
 

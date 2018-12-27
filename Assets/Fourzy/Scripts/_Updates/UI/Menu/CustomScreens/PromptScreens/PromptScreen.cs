@@ -28,36 +28,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 Decline();
         }
 
-        /// <summary>
-        /// Sets data to this propt screen
-        /// </summary>
-        /// <param name="text">Text</param>
-        /// <param name="accept">On accept</param>
-        /// <param name="decline">on decline</param>
         public virtual void Prompt(string title, string text, Action accept, Action decline)
         {
             onDecline = decline;
-            Prompt(title, text, accept);
-        }
-
-        public virtual void Prompt(string title, string text, Action accept)
-        {
-            transform.SetAsLastSibling();
-
-            promptTitle.text = title;
-            promptText.text = text;
-            onAccept = accept;
-
-            menuController.OpenScreen(this);
-        }
-
-        public virtual void Prompt(string title, string text, string yes, string no, Action accept)
-        {
-            if (acceptButton)
-                acceptButton.SetLabel(yes);
-
-            if (declineButton)
-                declineButton.SetLabel(no);
 
             Prompt(title, text, accept);
         }
@@ -67,6 +40,48 @@ namespace Fourzy._Updates.UI.Menu.Screens
             onDecline = decline;
 
             Prompt(title, text, yes, no, accept);
+        }
+
+        public virtual void Prompt(string title, string text, Action accept)
+        {
+            Prompt(title, text, "Yes", "No", accept);
+        }
+
+        public virtual void Prompt(string title, string text, string yes, string no, Action accept)
+        {
+            if (acceptButton)
+            {
+                if (string.IsNullOrEmpty(yes))
+                    acceptButton.SetActive(false);
+                else
+                {
+                    acceptButton.SetActive(true);
+                    acceptButton.SetLabel(yes);
+                }
+            }
+
+            if (declineButton)
+            {
+                if (string.IsNullOrEmpty(no))
+                    declineButton.SetActive(false);
+                else
+                {
+                    declineButton.SetActive(true);
+                    declineButton.SetLabel(no);
+                }
+            }
+
+            promptTitle.text = title;
+            promptText.text = text;
+            onAccept = accept;
+
+            Prompt();
+        }
+
+        public virtual void Prompt()
+        {
+            transform.SetAsLastSibling();
+            menuController.OpenScreen(this);
         }
 
         public virtual void Accept()
