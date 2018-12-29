@@ -17,28 +17,25 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class GameBoardView : MonoBehaviour
     {
-        public SpriteRenderer backgroundImage;
-
         public Transform bitsParent;
         public bool sortByOrder = false;
+        public bool spawnHintArea = false;
+        public bool interactable = false;
+        public MenuController menuController;
+        public MenuScreen assignedScreen;
 
-        public BoardBit[,] gamePieces;
-        public BoardBit[,] tokens;
         [Range(3, 8)]
         public int numRows = Constants.numRows;
         [Range(3, 8)]
         public int numColumns = Constants.numRows;
 
         [HideInInspector]
-        public bool interactable = false;
-        [HideInInspector]
-        public bool spawnHintArea = false;
-        [HideInInspector]
-        public MenuController menuController;
-        [HideInInspector]
         public GamePiecePrefabData playerPrefabData;
         [HideInInspector]
         public GamePiecePrefabData opponentPrefabData;
+
+        public BoardBit[,] gamePieces;
+        public BoardBit[,] tokens;
 
         private Vector3 topLeft;
         private bool isInitialized;
@@ -46,9 +43,7 @@ namespace Fourzy._Updates.Mechanics.Board
         private HintBlock previousClosest;
 
         public int piecesAnimating { get; set; }
-        public MenuScreen assignedScreen { get; private set; }
         public List<HintBlock> hintBlocks { get; private set; }
-        public SpriteRenderer spriteRenderer { get; private set; }
         public BoxCollider2D boxCollider2D { get; private set; }
         public RectTransform rectTransform { get; private set; }
         public Vector3 step { get; private set; }
@@ -76,30 +71,6 @@ namespace Fourzy._Updates.Mechanics.Board
             Init();
         }
 
-        protected void Start()
-        {
-            //check aspect ratio
-            //if aspect is more than 9/16 fit width, else fit height
-            Camera _camera = Camera.main;
-            if (backgroundImage)
-            {
-                if (_camera.aspect > .57f)
-                {
-                    backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackgroundWide;
-                    backgroundImage.size = backgroundImage.sprite.rect.size / backgroundImage.sprite.pixelsPerUnit;
-
-                    _camera.orthographicSize = backgroundImage.size.y * backgroundImage.transform.localScale.y / 2f;
-                }
-                else
-                {
-                    backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().GameBackground;
-                    backgroundImage.size = backgroundImage.sprite.rect.size / backgroundImage.sprite.pixelsPerUnit;
-
-                    _camera.orthographicSize = backgroundImage.size.x * backgroundImage.transform.localScale.x / 2f / _camera.aspect;
-                }
-            }
-        }
-
         protected void OnDestroy()
         {
             if (spawnHintArea)
@@ -108,7 +79,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void OnPointerDown(Vector2 position)
         {
-            if (!interactable || !GamePlayManager.AcceptMoveInput)
+            if (!interactable)
                 return;
 
             //only continue if current opened screen is GameplayScreen
@@ -179,7 +150,6 @@ namespace Fourzy._Updates.Mechanics.Board
             hintBlocks = new List<HintBlock>();
 
             boxCollider2D = GetComponent<BoxCollider2D>();
-            spriteRenderer = GetComponent<SpriteRenderer>();
             rectTransform = GetComponent<RectTransform>();
             alphaTween = GetComponent<AlphaTween>();
 
@@ -478,12 +448,6 @@ namespace Fourzy._Updates.Mechanics.Board
             alphaTween.playbackTime = time;
 
             alphaTween.PlayForward(true);
-        }
-
-        public void UpdateGameBoardSprite(Sprite sprite)
-        {
-            if (spriteRenderer)
-                spriteRenderer.sprite = sprite;
         }
 
         private void CalculatePositions()

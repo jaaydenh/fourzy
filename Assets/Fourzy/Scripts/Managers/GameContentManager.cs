@@ -1,6 +1,5 @@
 ﻿//modded @vadym udod
 
-using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
 using System;
@@ -19,7 +18,7 @@ namespace Fourzy
 
         [Header("Typed Prefabs")]
         public PrefabTypePair[] typedPrefabs;
-        
+
         private TokenData[] tokenData = new TokenData[0];
         private Dictionary<int, TokenData> inGameTokensData = new Dictionary<int, TokenData>();
         private Dictionary<Token, TokenView> sortedTokenPrefabs = new Dictionary<Token, TokenView>();
@@ -54,10 +53,7 @@ namespace Fourzy
                     typedPrefabsFastAccess.Add(prefabTypePair.prefabType, prefabTypePair);
 
             currentTheme = PlayerPrefsWrapper.GetCurrentTheme();
-        }
 
-        public void UpdateContentData()
-        {
             tokenData = TokenBoardLoader.Instance.GetAllTokens();
             piecesDataHolder.Init();
 
@@ -135,11 +131,11 @@ namespace Fourzy
         [Serializable]
         public class GameTheme
         {
-            public string Name;
-            public Sprite Preview;
-            public Sprite GameBackground;
-            public Sprite GameBackgroundWide;
-            public Sprite GameBoard;
+            public string name;
+            public Sprite preview;
+            public Sprite gameBackground;
+            public Sprite gameBackgroundWide;
+            public GameBoardView gameBoard;
         }
 
         [Serializable]
@@ -163,7 +159,7 @@ namespace Fourzy
             TOKEN_SMALL = 9,
 
 
-            ONBOARDING_SCREEN = 30, 
+            ONBOARDING_SCREEN = 30,
 
             PROMPT_SCREEN_GENERIC = 35,
             PROMPT_SCREEN_CAHNGE_NAME = 36,

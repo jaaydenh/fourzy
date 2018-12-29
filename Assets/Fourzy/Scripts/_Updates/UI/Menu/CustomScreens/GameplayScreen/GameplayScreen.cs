@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using UnityEngine;

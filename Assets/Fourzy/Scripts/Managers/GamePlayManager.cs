@@ -2,7 +2,6 @@
 
 using DG.Tweening;
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
@@ -32,8 +31,8 @@ namespace Fourzy
 
         public MenuController menuController;
 
-        public GameBoardView gameBoardView;
         public WinningParticleGenerator winningParticleGenerator;
+        public SpriteRenderer backgroundImage;
 
         private bool isLoading = false;
         private bool clockStarted = false;
@@ -49,6 +48,8 @@ namespace Fourzy
         public GameIntroScreen gameIntroScreen;
         [HideInInspector]
         public GameplayScreen gameplayScreen;
+        [HideInInspector]
+        public GameBoardView gameboardView;
 
         private BGAudioManager.BGAudio bgAudio;
 
@@ -56,15 +57,47 @@ namespace Fourzy
 
         public static bool AcceptMoveInput
         {
-            get { return !Instance.isDropping && !Instance.game.gameState.IsGameOver && Instance.gameBoardView.piecesAnimating == 0; }
+            get { return !Instance.isDropping && !Instance.game.gameState.IsGameOver && Instance.gameboardView.piecesAnimating == 0; }
         }
 
         protected override void Awake()
         {
             base.Awake();
 
+            //get screens
+            gameFinishedScreen = menuController.GetScreen<GameFinishedScreen>();
+            gameIntroScreen = menuController.GetScreen<GameIntroScreen>();
+            gameplayScreen = menuController.GetScreen<GameplayScreen>();
+
+            gameboardView = Instantiate(GameContentManager.Instance.GetCurrentTheme().gameBoard, transform);
+            gameboardView.transform.localScale = Vector3.one;
+            gameboardView.menuController = MenuController.current;
+            gameboardView.assignedScreen = gameplayScreen;
+
+            //check aspect ratio
+            //if aspect is more than 9/16 fit width, else fit height
+            Camera _camera = Camera.main;
+            if (backgroundImage)
+            {
+                if (_camera.aspect > .57f)
+                {
+                    backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().gameBackgroundWide;
+                    backgroundImage.size = backgroundImage.sprite.rect.size / backgroundImage.sprite.pixelsPerUnit;
+
+                    _camera.orthographicSize = backgroundImage.size.y * backgroundImage.transform.localScale.y / 2f;
+                }
+                else
+                {
+                    backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().gameBackground;
+                    backgroundImage.size = backgroundImage.sprite.rect.size / backgroundImage.sprite.pixelsPerUnit;
+
+                    _camera.orthographicSize = backgroundImage.size.x * backgroundImage.transform.localScale.x / 2f / _camera.aspect;
+                }
+            }
+
             isDropping = false;
             game = GameManager.Instance.activeGame;
+            playerMoveTimer_InitialTime = Constants.playerMoveTimer_InitialTime;
 
             if (game == null)
             {
@@ -75,8 +108,12 @@ namespace Fourzy
                 //game.title = "Title";
                 //game.subtitle = "Subtitle";
             }
+            game.boardView = gameboardView;
 
-            game.boardView = gameBoardView;
+            InitGamePiecePrefabs();
+
+            gameboardView.CreateGamePieceViews(game.gameState.GetPreviousGameBoard(), 0.0f);
+            gameboardView.CreateTokenViews(game.gameState.PreviousTokenBoard.tokens, 0.0f);
 
             switch (game.gameState.GameType)
             {
@@ -88,19 +125,7 @@ namespace Fourzy
 
         protected IEnumerator Start()
         {
-            //get screens
-            gameFinishedScreen = menuController.GetScreen<GameFinishedScreen>();
-            gameIntroScreen = menuController.GetScreen<GameIntroScreen>();
-            gameplayScreen = menuController.GetScreen<GameplayScreen>();
-
             replayedLastMove = false;
-
-            InitGamePiecePrefabs();
-            gameBoardView.UpdateGameBoardSprite(GameContentManager.Instance.GetCurrentTheme().GameBoard);
-            gameBoardView.CreateGamePieceViews(game.gameState.GetPreviousGameBoard(), 0.0f);
-            gameBoardView.CreateTokenViews(game.gameState.PreviousTokenBoard.tokens, 0.0f);
-
-            playerMoveTimer_InitialTime = Constants.playerMoveTimer_InitialTime;
 
             yield return StartCoroutine(FadeGameScreen(.0f, 1f, gameScreenFadeInTime));
             yield return StartCoroutine(ReplayLastMove());
@@ -108,7 +133,7 @@ namespace Fourzy
             yield return StartCoroutine(ShowPlayTurnWithDelay(0.3f));
 
             StartCoroutine(RandomGamePiecesBlinkingRoutine());
-            gameBoardView.interactable = true;
+            gameboardView.interactable = true;
         }
 
         private void OnEnable()
@@ -135,6 +160,24 @@ namespace Fourzy
 
             //stop bg audio
             BGAudioManager.instance.StopBGAudio(bgAudio, 1f);
+        }
+
+        public void OnPointerDown(Vector2 position)
+        {
+            if (!AcceptMoveInput)
+                return;
+
+            gameboardView.OnPointerDown(position);
+        }
+
+        public void OnPointerMove(Vector2 position)
+        {
+            gameboardView.OnPointerMove(position);
+        }
+
+        public void OnPointerRelease(Vector2 position)
+        {
+            gameboardView.OnPointerRelease(position);
         }
 
         void RealtimeManager_OnReceiveTimeStamp(long milliseconds)
@@ -245,10 +288,10 @@ namespace Fourzy
         {
             game.opponent.gamePieceId = gamePieceID;
 
-            if (gameBoardView.OpponentPiece != null)
+            if (gameboardView.OpponentPiece != null)
             {
-                Destroy(gameBoardView.PlayerPiece);
-                Destroy(gameBoardView.OpponentPiece);
+                Destroy(gameboardView.PlayerPiece);
+                Destroy(gameboardView.OpponentPiece);
             }
 
             InitGamePiecePrefabs();
@@ -286,19 +329,19 @@ namespace Fourzy
                 player = PlayerEnum.TWO;
                 opponent = PlayerEnum.ONE;
             }
-            
-            gameBoardView.playerPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(playerGamePieceId);
-            gameBoardView.opponentPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(opponentGamePieceId);
 
-            gameBoardView.PlayerPiece.player = player;
-            gameBoardView.OpponentPiece.player = opponent;
+            gameboardView.playerPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(playerGamePieceId);
+            gameboardView.opponentPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(opponentGamePieceId);
+
+            gameboardView.PlayerPiece.player = player;
+            gameboardView.OpponentPiece.player = opponent;
 
             gameplayScreen.InitUI(game);
         }
 
         private IEnumerator FadeGameScreen(float startAlpha, float alpha, float fadeTime)
         {
-            gameBoardView.Fade(alpha, fadeTime);
+            gameboardView.Fade(alpha, fadeTime);
 
             yield return StartCoroutine(FadeTokens(alpha, .3f));
             yield return StartCoroutine(FadePieces(alpha, .3f));
@@ -315,7 +358,7 @@ namespace Fourzy
 
         private IEnumerator FadePieces(float alpha, float fadeTime)
         {
-            var pieces = gameBoardView.GetGamePiecesList();
+            var pieces = gameboardView.GetGamePiecesList();
             for (int i = 0; i < pieces.Count; i++)
                 pieces[i].Fade(alpha, fadeTime);
 
@@ -381,7 +424,6 @@ namespace Fourzy
 
         public void NextGameButtonOnClick()
         {
-            gameBoardView.backgroundImage.SetAlpha(0f);
             GameManager.Instance.OpenNextGame();
         }
 
@@ -399,7 +441,7 @@ namespace Fourzy
             Scene uiScene = SceneManager.GetSceneByName(Constants.MAIN_MENU_SCENE_NAME);
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
-            
+
             AnalyticsManager.LogCustom("rematch_pnp_game");
         }
 
@@ -448,7 +490,7 @@ namespace Fourzy
                 return;
             }
 
-            Position position = gameBoardView.Vec3ToPosition(mousePosition);
+            Position position = gameboardView.Vec3ToPosition(mousePosition);
 
             if (game.gameState.isCurrentPlayerTurn)
             {
@@ -586,7 +628,7 @@ namespace Fourzy
 
                 if (game.gameState.GameType == GameType.PUZZLE && !game.gameState.IsGameOver)
                 {
-                    while (isDropping && gameBoardView.piecesAnimating > 0)
+                    while (isDropping && gameboardView.piecesAnimating > 0)
                         yield return null;
 
                     isDropping = true;
@@ -615,10 +657,10 @@ namespace Fourzy
             List<MovingGamePiece> movingPieces = game.gameState.MovePiece(move, replayMove, out activeTokens);
             game.gameState.PrintGameState("AfterMove");
 
-            gameBoardView.MoveGamePieceViews(move, movingPieces, activeTokens);
-            gameBoardView.PrintGameBoard();
+            gameboardView.MoveGamePieceViews(move, movingPieces, activeTokens);
+            gameboardView.PrintGameBoard();
 
-            yield return new WaitWhile(() => gameBoardView.piecesAnimating > 0);
+            yield return new WaitWhile(() => gameboardView.piecesAnimating > 0);
 
             if (!replayMove || game.gameState.IsGameOver)
                 gameplayScreen.SetActionButton();
@@ -776,7 +818,7 @@ namespace Fourzy
                 t += Time.deltaTime;
                 if (t > blinkTime)
                 {
-                    var piecesForBlink = gameBoardView.GetWaitingGamePiecesList();
+                    var piecesForBlink = gameboardView.GetWaitingGamePiecesList();
 
                     if (piecesForBlink.Count > 0)
                         piecesForBlink[UnityEngine.Random.Range(0, piecesForBlink.Count)].Blink();

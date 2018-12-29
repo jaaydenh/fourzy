@@ -39,7 +39,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnThemeChanged(int theme)
         {
-            areaImage.sprite = GameContentManager.Instance.gameThemes[theme].Preview;
+            areaImage.sprite = GameContentManager.Instance.gameThemes[theme].preview;
         }
     }
 }

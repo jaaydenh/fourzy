@@ -22,20 +22,18 @@ namespace Fourzy
         public static event Action OnUpdateUserInfo;
         public static event Action<int> OnUpdateUserGamePieceID;
 
-        void Start()
+        protected void Start()
         {
             ChallengeManager.Instance.GetPlayerGamePiece();
-            
-            GameContentManager.Instance.UpdateContentData();
         }
 
-        void OnEnable()
+        protected void OnEnable()
         {
             ChallengeManager.OnReceivedPlayerGamePiece += SetPlayerGamePiece;
             ChallengeManager.OnSetGamePieceSuccess += SetPlayerGamePiece;
         }
 
-        void OnDisable()
+        protected void OnDisable()
         {
             ChallengeManager.OnReceivedPlayerGamePiece -= SetPlayerGamePiece;
             ChallengeManager.OnSetGamePieceSuccess -= SetPlayerGamePiece;
