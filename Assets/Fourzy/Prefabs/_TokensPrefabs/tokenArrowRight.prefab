@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 114906590540061570}
   - component: {fileID: 210529376142867198}
   - component: {fileID: 114363896810734790}
+  - component: {fileID: 114185976378285448}
   m_Layer: 8
   m_Name: tokenArrowRight
   m_TagString: Token
@@ -70,6 +71,54 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
+--- !u!114 &114185976378285448
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1923614959021622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a381918c4585afa4eb524c8b9426f808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playbackDirection: 0
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  unscaledTime: 0
+  playbackTime: 0.3
+  repeat: 0
+  onProgress:
+    inspectorListHeight: 63
+    persistentCalls:
+      calls: []
+  defaultPlaybackTime: 0
+  value: 0
+  isPlaying: 0
+  from: {x: 1, y: 1, z: 1}
+  to: {x: 1, y: 1, z: 1}
 --- !u!114 &114363896810734790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -108,6 +157,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.3
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -130,8 +180,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e25e70828c5a84aaca65935b760e06e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 0}
   tokenType: 4
-  justDisplaying: 0
 --- !u!114 &114980982449793596
 MonoBehaviour:
   m_ObjectHideFlags: 1

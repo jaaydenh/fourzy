@@ -15,7 +15,8 @@ namespace Fourzy._Updates.Tween
         public Color to = Color.white;
 
         private List<GraphicsColorGroup> spriteColorGroups;
-        private Color _value;
+
+        public Color _value { get; private set; }
 
         protected override void Awake()
         {

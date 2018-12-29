@@ -13,6 +13,8 @@ namespace Fourzy._Updates.Tween
 
         private Image image;
 
+        public float _value { get; private set; }
+
         protected override void Awake()
         {
             base.Awake();
@@ -28,25 +30,30 @@ namespace Fourzy._Updates.Tween
             {
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
-                        image.fillAmount = Mathf.Lerp(from, to, curve.Evaluate(value));
+                        _value = Mathf.Lerp(from, to, curve.Evaluate(value));
                     else
                     {
+                        _value = Mathf.Lerp(from, to, curve.Evaluate(1f));
                         isPlaying = false;
-
-                        image.fillAmount = Mathf.Lerp(from, to, curve.Evaluate(1f));
                     }
                     break;
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
-                        image.fillAmount = Mathf.Lerp(to, from, curve.Evaluate(value));
+                        _value = Mathf.Lerp(to, from, curve.Evaluate(value));
                     else
                     {
+                        _value = Mathf.Lerp(to, from, curve.Evaluate(1f));
                         isPlaying = false;
-
-                        image.fillAmount = Mathf.Lerp(to, from, curve.Evaluate(1f));
                     }
                     break;
             }
+
+            SetFillValue(_value);
+        }
+
+        public void SetFillValue(float value)
+        {
+            image.fillAmount = value;
         }
 
         public override void OnReset()

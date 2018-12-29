@@ -63,23 +63,14 @@ namespace GameAnalyticsSDK
         public void Awake()
         {
             if (!Application.isPlaying)
-            {
                 return;
-            }
 
-            if(_instance != null)
-            {
-                // only one system tracker allowed per scene
-                Debug.LogWarning("Destroying duplicate GameAnalytics object - only one is allowed per scene!");
-                Destroy(gameObject);
+            if (_instance != null)
                 return;
-            }
+
             _instance = this;
 
-            DontDestroyOnLoad(gameObject);
-
             Application.logMessageReceived += GA_Debug.HandleLog;
-
             InternalInitialize();
         }
 

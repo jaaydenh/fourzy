@@ -29,13 +29,9 @@ namespace Fourzy._Updates.UI.Toasts
         public void Awake()
         {
             if (instance != null)
-            {
-                Destroy(gameObject);
                 return;
-            }
 
             instance = this;
-            DontDestroyOnLoad(gameObject);
 
             toasts = new Dictionary<ToastStyle, List<GameToast>>();
             activeToasts = new Queue<GameToast>();

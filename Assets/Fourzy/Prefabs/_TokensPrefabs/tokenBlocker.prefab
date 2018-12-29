@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 114115778919009160}
   - component: {fileID: 210521510414044248}
   - component: {fileID: 114261096001255976}
+  - component: {fileID: 114312036782990136}
   m_Layer: 5
   m_Name: tokenBlocker
   m_TagString: Token
@@ -54,8 +55,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e25e70828c5a84aaca65935b760e06e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 0}
   tokenType: 6
-  justDisplaying: 0
 --- !u!114 &114261096001255976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -94,6 +95,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   unscaledTime: 0
   playbackTime: 0.3
+  repeat: 0
   onProgress:
     inspectorListHeight: 63
     persistentCalls:
@@ -105,6 +107,54 @@ MonoBehaviour:
   propagate: 0
   from: 0
   to: 1
+--- !u!114 &114312036782990136
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1187047679181528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a381918c4585afa4eb524c8b9426f808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playbackDirection: 0
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  unscaledTime: 0
+  playbackTime: 0.3
+  repeat: 0
+  onProgress:
+    inspectorListHeight: 63
+    persistentCalls:
+      calls: []
+  defaultPlaybackTime: 0
+  value: 0
+  isPlaying: 0
+  from: {x: 1, y: 1, z: 1}
+  to: {x: 1, y: 1, z: 1}
 --- !u!210 &210521510414044248
 SortingGroup:
   m_ObjectHideFlags: 1

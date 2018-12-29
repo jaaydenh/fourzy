@@ -129,11 +129,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4637471631919862}
-  - component: {fileID: 114027434767984306}
-  - component: {fileID: 95564673785005246}
   - component: {fileID: 114245824478245948}
+  - component: {fileID: 95564673785005246}
   - component: {fileID: 58673654433028720}
   - component: {fileID: 210842853623491740}
+  - component: {fileID: 114149441375978152}
+  - component: {fileID: 114137643352524388}
   m_Layer: 0
   m_Name: Fourzies-06
   m_TagString: GamePiece
@@ -175,8 +176,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1953748048196494}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.6193466, y: 1.0653032, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4715550924010380}
   m_Father: {fileID: 0}
@@ -285,7 +286,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114027434767984306
+--- !u!114 &114137643352524388
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -293,48 +294,96 @@ MonoBehaviour:
   m_GameObject: {fileID: 1953748048196494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c45a8ccec88446a2b606295173d3562, type: 3}
+  m_Script: {fileID: 11500000, guid: a381918c4585afa4eb524c8b9426f808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementCurve:
+  playbackDirection: 0
+  curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.74341565
-      outSlope: 0.74341565
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.09731265
-    - serializedVersion: 3
-      time: 0.59774673
-      value: 0.49997443
-      inSlope: 0.976477
-      outSlope: 0.976477
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.08484706
-      outWeight: 0.16313003
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1.7570684
-      outSlope: 1.7570684
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.089225166
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  gamePieceIcon: {fileID: 21300000, guid: 138a0e90f755544a4b3658f212c6aeb7, type: 3}
-  gamePieceID: 5
-  isMoving: 0
-  column: 0
-  row: 0
-  player: 0
+  unscaledTime: 0
+  playbackTime: 0.3
+  repeat: 0
+  onProgress:
+    inspectorListHeight: 63
+    persistentCalls:
+      calls: []
+  defaultPlaybackTime: 0
+  value: 0
+  isPlaying: 0
+  from: {x: 1, y: 1, z: 1}
+  to: {x: 1, y: 1, z: 1}
+--- !u!114 &114149441375978152
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1953748048196494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dfd67acc8bf0b14cb3b1ac3c343858d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playbackDirection: 0
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  unscaledTime: 0
+  playbackTime: 0.3
+  repeat: 0
+  onProgress:
+    inspectorListHeight: 63
+    persistentCalls:
+      calls: []
+  defaultPlaybackTime: 0
+  value: 0
+  isPlaying: 0
+  customObjects: []
+  propagate: 0
+  from: 0
+  to: 1
 --- !u!114 &114211681152167602
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -367,8 +416,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b9a60c945494b21826418cd5ad6fbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 212375791055424974}
+  _body: {fileID: 1695912378851496}
   pieceAnimator: {fileID: 95564673785005246}
+  movementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  isMoving: 0
 --- !u!114 &114309831359512448
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -478,7 +552,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: f2a3dbb10e6ee2844b3e13fff302a154, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 399a0c9fab9f968448f67c14f58703ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

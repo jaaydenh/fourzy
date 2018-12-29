@@ -11,7 +11,7 @@ namespace Fourzy._Updates.UI.Widgets
         public TextMeshProUGUI playerName;
         public RectTransform pieceParent;
         
-        private GamePiece current;
+        private GamePieceView current;
 
         public void SetupPlayerName(string name)
         {
@@ -23,7 +23,7 @@ namespace Fourzy._Updates.UI.Widgets
             return playerName.text;
         }
 
-        public void InitPlayerIcon(GamePiece gamePiecePrefab)
+        public void InitPlayerIcon(GamePieceView gamePiecePrefab)
         {
             current = Instantiate(gamePiecePrefab, pieceParent);
             current.transform.localPosition = Vector3.zero;
@@ -34,17 +34,17 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void ShowPlayerTurnAnimation()
         {
-            current.gamePieceView.ShowTurnAnimation();
+            current.ShowTurnAnimation();
         }
 
         public void StopPlayerTurnAnimation()
         {
-            current.gamePieceView.StopTurnAnimation();
+            current.StopTurnAnimation();
         }
 
         public void StartWinJumps()
         {
-            current.gamePieceView.ShowUIWinAnimation();
+            current.ShowUIWinAnimation();
         }
 
         public void SetActive(bool state)

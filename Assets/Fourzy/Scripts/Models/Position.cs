@@ -6,6 +6,14 @@ namespace Fourzy
 {
     public class Position
     {
+        public static Position zero
+        {
+            get
+            {
+                return new Position(0, 0);
+            }
+        }
+
         public Vector2Int value;
 
         public int row

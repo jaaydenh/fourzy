@@ -86,13 +86,10 @@ namespace Fourzy
             return inGameTokensData[(int)tokenType];
         }
 
-        public TokenView GetTokenPrefab(Token tokenType, bool justForDisplaying = false)
+        public TokenView GetTokenPrefab(Token tokenType)
         {
             TokenView tokenView = null;
             sortedTokenPrefabs.TryGetValue(tokenType, out tokenView);
-
-            if (tokenView != null)
-                tokenView.justDisplaying = justForDisplaying;
 
             return tokenView;
         }

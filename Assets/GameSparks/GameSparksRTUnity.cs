@@ -50,7 +50,7 @@ public class GameSparksRTUnity : MonoBehaviour, IRTSessionListener {
 	void Awake()
 	{
 		instance = this;
-		DontDestroyOnLoad(gameObject);
+		//DontDestroyOnLoad(gameObject);
 	}
 
 	//Configure the SDK with a MatchFoundMessage

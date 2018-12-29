@@ -12,8 +12,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public MiniGameboardWidget miniGameboardPrefab;
 
         public ToggleGroup toggleGroup { get; private set; }
-
-        private GameType gameType;
+        
         private Opponent opponent;
 
         protected override void Awake()
@@ -54,15 +53,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (opponentId != "")
                 ChallengeManager.Instance.GetOpponentGamePiece(opponentId);
 
-            this.gameType = gameType;
-
             opponent = new Opponent(opponentId, opponentName, "");
             opponent.opponentLeaderboardRank = opponentLeaderboardRank;
         }
 
-        public void PlayButton()
+        public void Play()
         {
-            GameManager.Instance.OpenNewGame(gameType, opponent, true, null);
+            GameManager.Instance.OpenNewGame(GameType.PASSANDPLAY, opponent, true, null);
         }
     }
 }

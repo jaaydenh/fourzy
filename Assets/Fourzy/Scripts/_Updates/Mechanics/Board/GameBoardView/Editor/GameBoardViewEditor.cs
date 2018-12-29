@@ -30,9 +30,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             EditorGUILayout.PropertyField(spawnHintAreaProperty);
             EditorGUILayout.PropertyField(interactableProperty);
-
-            if (trigger.interactable)
-                EditorGUILayout.PropertyField(menuControllerProperty);
+            EditorGUILayout.PropertyField(menuControllerProperty);
 
             serializedObject.ApplyModifiedProperties();
         }

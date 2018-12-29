@@ -43,6 +43,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             //set names
             player.SetupPlayerName(UserManager.Instance.userName);
+
             switch (game.gameState.GameType)
             {
                 case GameType.REALTIME:
@@ -62,7 +63,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
 
                     opponent.SetupPlayerName(opponentName);
-
+                    
                     //set icons
                     player.InitPlayerIcon(game.boardView.PlayerPiece);
                     opponent.InitPlayerIcon(game.boardView.OpponentPiece);
@@ -138,14 +139,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             float delay = 0.3f;
             for (int i = 0; i < game.gameState.GameBoard.player1WinningPositions.Count; i++)
             {
-                game.boardView.GamePieceAt(game.gameState.GameBoard.player1WinningPositions[i]).gamePieceView.PlayWinAnimation(delay);
+                game.boardView.GamePieceAt(game.gameState.GameBoard.player1WinningPositions[i]).PlayWinAnimation(delay);
                 delay += 0.12f;
             }
 
             delay = 0.3f;
             for (int i = 0; i < game.gameState.GameBoard.player2WinningPositions.Count; i++)
             {
-                game.boardView.GamePieceAt(game.gameState.GameBoard.player2WinningPositions[i]).gamePieceView.PlayWinAnimation(delay);
+                game.boardView.GamePieceAt(game.gameState.GameBoard.player2WinningPositions[i]).PlayWinAnimation(delay);
                 delay += 0.12f;
             }
 

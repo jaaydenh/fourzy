@@ -657,7 +657,7 @@ namespace mixpanel
 
         void Awake()
         {
-            DontDestroyOnLoad(this);
+            //DontDestroyOnLoad(this);
 
             #if UNITY_EDITOR
             tracking_enabled = trackInEditor;

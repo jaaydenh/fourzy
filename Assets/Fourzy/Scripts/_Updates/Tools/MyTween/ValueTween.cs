@@ -9,10 +9,10 @@ namespace Fourzy._Updates.Tween
         public float from = 0f;
         public float to = 1f;
 
+        public float _value { get; private set; }
+
         public override void AtProgress(float value, PlaybackDirection direction)
         {
-            float _value = 0f;
-
             switch (direction)
             {
                 case PlaybackDirection.FORWARD:
@@ -38,11 +38,7 @@ namespace Fourzy._Updates.Tween
                     break;
             }
 
-            if (onProgress != null)
-                onProgress.Invoke(_value);
-
-            if (_onProgress != null)
-                _onProgress.Invoke(_value);
+            InvokeValue(_value);
 
             if (value >= 1f)
                 switch (repeat)
@@ -57,6 +53,15 @@ namespace Fourzy._Updates.Tween
                         Toggle(true);
                         break;
                 }
+        }
+
+        public void InvokeValue(float value)
+        {
+            if (onProgress != null)
+                onProgress.Invoke(value);
+
+            if (_onProgress != null)
+                _onProgress.Invoke(value);
         }
 
         public override void OnReset()

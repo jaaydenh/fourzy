@@ -37,11 +37,11 @@ namespace Fourzy._Updates.UI.Widgets
             foreach (Transform t in playerPieceIcon.transform)
                 Destroy(t.gameObject);
             
-            GamePiece pieceIcon = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(gamePieceID).prefabs[0], playerPieceIcon.transform);
+            GamePieceView pieceIcon = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(gamePieceID).prefabs[0], playerPieceIcon.transform);
             pieceIcon.transform.localPosition = Vector3.zero;
             pieceIcon.transform.localScale = Vector3.one * 100f;
             pieceIcon.gameObject.SetLayerRecursively(playerPieceIcon.gameObject.layer);
-            pieceIcon.gamePieceView.StartBlinking();
+            pieceIcon.StartBlinking();
         }
 
         public void UpdateWidget()

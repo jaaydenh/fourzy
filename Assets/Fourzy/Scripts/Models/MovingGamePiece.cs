@@ -19,7 +19,7 @@ namespace Fourzy
             }
         }
         public PlayerEnum player = PlayerEnum.NONE;
-        public GamePiece gamePiece;
+        public GamePieceView gamePiece;
         public bool playHitAnimation;
         public bool isDestroyed;
         public PieceAnimState animationState;

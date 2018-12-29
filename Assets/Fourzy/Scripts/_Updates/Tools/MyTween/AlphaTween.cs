@@ -14,7 +14,8 @@ namespace Fourzy._Updates.Tween
         public float to = 1f;
 
         private List<GraphicsColorGroup> alphaGroup;
-        private float _value;
+
+        public float _value { get; private set; }
 
         protected override void Awake()
         {

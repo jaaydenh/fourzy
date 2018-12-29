@@ -16,7 +16,7 @@ namespace Fourzy._Updates.UI.Widgets
         public CircleProgressUI progressBar;
         public TextMeshProUGUI piecesCount;
 
-        protected GamePiece gamePiece;
+        protected GamePieceView gamePiece;
 
         public virtual void SetData(GamePieceData data)
         {
@@ -26,7 +26,7 @@ namespace Fourzy._Updates.UI.Widgets
             gamePiece.transform.localPosition = Vector3.zero;
             gamePiece.transform.localScale = Vector3.one * 100f;
             gamePiece.gameObject.SetLayerRecursively(gamePieceParent.gameObject.layer);
-            gamePiece.gamePieceView.StartBlinking();
+            gamePiece.StartBlinking();
 
             switch (data.state)
             {

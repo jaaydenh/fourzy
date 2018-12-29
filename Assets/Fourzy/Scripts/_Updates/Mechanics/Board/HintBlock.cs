@@ -48,13 +48,8 @@ namespace Fourzy._Updates.Mechanics.Board
             {
                 selectedTimer += Time.deltaTime;
 
-                if (selectedTimer > HOLD_TIME)
-                {
-                    Deselect();
-
-                    if (onHold != null)
-                        onHold.Invoke(this);
-                }
+                if (selectedTimer > HOLD_TIME && onHold != null)
+                    onHold.Invoke(this);
             }
         }
 
@@ -96,7 +91,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (!selected)
                 return;
-
+            
             selected = false;
             colorTween.PlayBackward(true);
             selectedTimer = 0f;

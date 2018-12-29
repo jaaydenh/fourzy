@@ -2,9 +2,9 @@
 //GameBoardView is handling players' input for game field
 //it checks if current opened screen (menu) is GameplayScreen, if so, player can interract with field
 
-using DG.Tweening;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Widgets;
@@ -18,10 +18,10 @@ namespace Fourzy._Updates.Mechanics.Board
     {
         public SpriteRenderer backgroundImage;
 
-        public Transform gamePiecesRootTransform;
-        public Transform tokensRootTransform;
+        public Transform bitsParent;
+        public bool sortByOrder = false;
 
-        public GamePiece[,] gamePieces;
+        public GamePieceView[,] gamePieces;
         public TokenView[,] tokens;
         [Range(3, 8)]
         public int numRows = Constants.numRows;
@@ -45,7 +45,7 @@ namespace Fourzy._Updates.Mechanics.Board
         private bool touched = false;
         private HintBlock previousClosest;
 
-        public int NumPiecesAnimating { get; set; }
+        public int piecesAnimating { get; set; }
         public MenuScreen assignedScreen { get; private set; }
         public List<HintBlock> hintBlocks { get; private set; }
         public SpriteRenderer spriteRenderer { get; private set; }
@@ -53,7 +53,9 @@ namespace Fourzy._Updates.Mechanics.Board
         public RectTransform rectTransform { get; private set; }
         public Vector3 step { get; private set; }
 
-        public GamePiece PlayerPiece
+        private AlphaTween alphaTween;
+
+        public GamePieceView PlayerPiece
         {
             get
             {
@@ -61,7 +63,7 @@ namespace Fourzy._Updates.Mechanics.Board
             }
         }
 
-        public GamePiece OpponentPiece
+        public GamePieceView OpponentPiece
         {
             get
             {
@@ -172,18 +174,22 @@ namespace Fourzy._Updates.Mechanics.Board
             if (isInitialized)
                 return;
 
+            if (!bitsParent)
+                bitsParent = transform;
+
             tokens = new TokenView[numRows, numColumns];
-            gamePieces = new GamePiece[numRows, numColumns];
+            gamePieces = new GamePieceView[numRows, numColumns];
             hintBlocks = new List<HintBlock>();
 
             boxCollider2D = GetComponent<BoxCollider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             rectTransform = GetComponent<RectTransform>();
+            alphaTween = GetComponent<AlphaTween>();
 
             CalculatePositions();
 
             //assign control screen
-            if (interactable)
+            if (menuController)
                 assignedScreen = menuController.GetScreen<GameplayScreen>();
 
             isInitialized = true;
@@ -246,7 +252,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void CreateGamePieceViews(int[,] board, float initialAlpha = 1.0f)
         {
-            gamePieces = new GamePiece[Constants.numRows, Constants.numColumns];
+            gamePieces = new GamePieceView[Constants.numRows, Constants.numColumns];
 
             for (int row = 0; row < Constants.numRows; row++)
             {
@@ -258,10 +264,10 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     PlayerEnum player = (piece == (int)Piece.BLUE) ? PlayerEnum.ONE : PlayerEnum.TWO;
 
-                    GamePiece pieceObject = SpawnPiece(col, row, player);
+                    GamePieceView pieceObject = SpawnPiece(col, row, player);
                     pieceObject.player = player;
                     gamePieces[row, col] = pieceObject;
-                    pieceObject.gamePieceView.SetAlpha(initialAlpha);
+                    pieceObject.SetAlpha(initialAlpha);
                 }
             }
         }
@@ -291,21 +297,16 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void MoveGamePieceViews(Move move, List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
         {
-            GamePiece gamePiece = SpawnPiece(move.position.column, move.position.row, move.player);
+            GamePieceView gamePiece = SpawnPiece(move.position.column, move.position.row, move.player);
             gamePiece.player = move.player;
-            gamePiece.column = move.position.column;
-            gamePiece.row = move.position.row;
 
-            var copyGamePieces = new GamePiece[numRows, numColumns];
+            var copyGamePieces = new GamePieceView[numRows, numColumns];
+
             for (int i = 0; i < numRows; i++)
-            {
                 for (int j = 0; j < numColumns; j++)
-                {
                     copyGamePieces[i, j] = gamePieces[i, j];
-                }
-            }
 
-            GamePiece movingPiece = gamePiece;
+            GamePieceView movingPiece = gamePiece;
             for (int i = 0; i < movingPieces.Count; i++)
             {
                 MovingGamePiece mgp = movingPieces[i];
@@ -318,9 +319,9 @@ namespace Fourzy._Updates.Mechanics.Board
             StartCoroutine(MovePiecesRoutine(movingPieces, activeTokens));
         }
 
-        public GamePiece SpawnPiece(int col, int row, PlayerEnum player)
+        public GamePieceView SpawnPiece(int col, int row, PlayerEnum player)
         {
-            GamePiece gamePiecePrefab;
+            GamePieceView gamePiecePrefab;
 
             if (player == PlayerPiece.player)
                 gamePiecePrefab = PlayerPiece;
@@ -330,9 +331,9 @@ namespace Fourzy._Updates.Mechanics.Board
             return SpawnPiece(row, col, gamePiecePrefab);
         }
 
-        public GamePiece SpawnPiece(int row, int col, GamePiece prefab)
+        public GamePieceView SpawnPiece(int row, int col, GamePieceView prefab)
         {
-            GamePiece gamePiece = Instantiate(prefab, gamePiecesRootTransform);
+            GamePieceView gamePiece = Instantiate(prefab, bitsParent);
 
             gamePiece.gameObject.SetActive(true);
             gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
@@ -343,7 +344,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public MiniGameboardPiece SpawnMinigameboardPiece(int row, int col, MiniGameboardPiece prefab)
         {
-            MiniGameboardPiece gamePiece = Instantiate(prefab, gamePiecesRootTransform);
+            MiniGameboardPiece gamePiece = Instantiate(prefab, bitsParent);
 
             gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
             gamePiece.transform.localPosition = PositionToVec3(row, col);
@@ -359,37 +360,27 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public TokenView CreateToken(int row, int col, TokenView tokenPrefab)
         {
-            if (tokens[row, col] != null)
-                Destroy(tokens[row, col]);
+            //this wont destroy go, only component on it
+            //if (tokens[row, col] != null)
+            //    Destroy(tokens[row, col]);
 
-            TokenView tokenInstance = Instantiate(tokenPrefab, tokensRootTransform);
+            TokenView tokenInstance = Instantiate(tokenPrefab, bitsParent);
             tokenInstance.gameObject.SetLayerRecursively(gameObject.layer);
             tokenInstance.transform.localPosition = PositionToVec3(row, col);
 
-            //if (spriteRenderer)
-            //    tokenInstance.TrySetsortingLayerID(spriteRenderer.sortingLayerID);
-
             tokens[row, col] = tokenInstance;
+
+
 
             return tokenInstance;
         }
 
-        public void SwapPiecePosition(Position oldPos, Position newPos)
-        {
-            GamePiece gamePiece = gamePieces[oldPos.row, oldPos.column];
-
-            gamePiece.column = newPos.column;
-            gamePiece.row = newPos.row;
-            gamePieces[oldPos.row, oldPos.column] = null;
-            gamePieces[newPos.row, newPos.column] = gamePiece;
-        }
-
-        public GamePiece GamePieceAt(Position position)
+        public GamePieceView GamePieceAt(Position position)
         {
             return gamePieces[position.row, position.column];
         }
 
-        public GamePiece GamePieceAt(int row, int col)
+        public GamePieceView GamePieceAt(int row, int col)
         {
             return gamePieces[row, col];
         }
@@ -399,9 +390,9 @@ namespace Fourzy._Updates.Mechanics.Board
             return tokens[row, col];
         }
 
-        public List<GamePiece> GetGamePiecesList()
+        public List<GamePieceView> GetGamePiecesList()
         {
-            List<GamePiece> list = new List<GamePiece>();
+            List<GamePieceView> list = new List<GamePieceView>();
 
             for (int i = 0; i < Constants.numColumns; i++)
                 for (int j = 0; j < Constants.numRows; j++)
@@ -411,9 +402,9 @@ namespace Fourzy._Updates.Mechanics.Board
             return list;
         }
 
-        public List<GamePiece> GetWaitingGamePiecesList()
+        public List<GamePieceView> GetWaitingGamePiecesList()
         {
-            List<GamePiece> list = new List<GamePiece>();
+            List<GamePieceView> list = new List<GamePieceView>();
 
             for (int i = 0; i < Constants.numColumns; i++)
                 for (int j = 0; j < Constants.numRows; j++)
@@ -425,15 +416,12 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void ResetGamePiecesAndTokens()
         {
-            NumPiecesAnimating = 0;
+            piecesAnimating = 0;
 
-            foreach (Transform piece in gamePiecesRootTransform)
+            foreach (Transform piece in bitsParent)
                 Destroy(piece.gameObject);
 
-            foreach (Transform token in tokensRootTransform)
-                Destroy(token.gameObject);
-
-            gamePieces = new GamePiece[numRows, numColumns];
+            gamePieces = new GamePieceView[numRows, numColumns];
         }
 
         public void PrintGameBoard()
@@ -456,24 +444,16 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void SetAlpha(float alpha)
         {
-            if (spriteRenderer)
-            {
-                Color c = spriteRenderer.color;
-                c.a = alpha;
-                spriteRenderer.color = c;
-            }
-
-            if (backgroundImage)
-                backgroundImage.SetAlpha(alpha);
+            alphaTween.SetAlpha(alpha);
         }
 
         public void Fade(float alpha, float time)
         {
-            if (spriteRenderer)
-                spriteRenderer.DOFade(alpha, time);
+            alphaTween.from = alphaTween._value;
+            alphaTween.to = alpha;
+            alphaTween.playbackTime = time;
 
-            if (backgroundImage)
-                backgroundImage.DOFade(alpha, time);
+            alphaTween.PlayForward(true);
         }
 
         public void UpdateGameBoardSprite(Sprite sprite)
@@ -510,7 +490,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 if (nextPieceExists)
                 {
-                    GamePiece nextPiece = movingPieces[i + 1].gamePiece;
+                    GamePieceView nextPiece = movingPieces[i + 1].gamePiece;
 
                     while (!mgp.gamePiece.IsOverlapped(nextPiece))
                         yield return null;
@@ -572,6 +552,11 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 previousClosest = closest;
             }
+        }
+
+        private void SortBits()
+        {
+            //get all 
         }
 
         private void OnHintBlockHold(HintBlock hintBlock)

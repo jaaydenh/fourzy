@@ -24,14 +24,9 @@ namespace Fourzy._Updates.UI.Camera3D
         protected void Awake()
         {
             if (instance != null)
-            {
-                Destroy(gameObject);
                 return;
-            }
 
             instance = this;
-            DontDestroyOnLoad(gameObject);
-
             currentPosition = transform.position;
         }
 

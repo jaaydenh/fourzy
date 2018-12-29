@@ -12,6 +12,8 @@ namespace Fourzy._Updates.Tween
         public float from = 0f;
         public float to = 1f;
 
+        public float _value { get; private set; }
+
         protected override void Awake()
         {
             base.Awake();
@@ -32,26 +34,32 @@ namespace Fourzy._Updates.Tween
             {
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
-                        audioSource.volume = Mathf.Lerp(from, to, curve.Evaluate(value));
+                        _value = Mathf.Lerp(from, to, curve.Evaluate(value));
                     else
                     {
                         isPlaying = false;
 
-                        audioSource.volume = Mathf.Lerp(from, to, curve.Evaluate(1f));
+                        _value = Mathf.Lerp(from, to, curve.Evaluate(1f));
                     }
                     break;
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
-                        audioSource.volume = Mathf.Lerp(to, from, curve.Evaluate(value));
+                        _value = Mathf.Lerp(to, from, curve.Evaluate(value));
                     else
                     {
                         isPlaying = false;
 
-                        audioSource.volume = Mathf.Lerp(to, from, curve.Evaluate(1f));
+                        _value = Mathf.Lerp(to, from, curve.Evaluate(1f));
                     }
                     break;
             }
+
+            SetVolume(_value);
+        }
+
+        public void SetVolume(float value)
+        {
+            audioSource.volume = value;
         }
     }
-
 }

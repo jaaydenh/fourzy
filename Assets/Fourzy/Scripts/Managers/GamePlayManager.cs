@@ -38,7 +38,7 @@ namespace Fourzy
         private bool isLoading = false;
         private bool clockStarted = false;
         private bool replayedLastMove = false;
-        private float gameScreenFadeInTime = 0.7f;
+        private float gameScreenFadeInTime = .5f;
         private DateTime serverClock;
         private DateTime playerMoveCountdown;
         private int playerMoveTimer_InitialTime;
@@ -56,7 +56,7 @@ namespace Fourzy
 
         public static bool AcceptMoveInput
         {
-            get { return !Instance.isDropping && !Instance.game.gameState.IsGameOver && Instance.gameBoardView.NumPiecesAnimating == 0; }
+            get { return !Instance.isDropping && !Instance.game.gameState.IsGameOver && Instance.gameBoardView.piecesAnimating == 0; }
         }
 
         protected override void Awake()
@@ -102,12 +102,13 @@ namespace Fourzy
 
             playerMoveTimer_InitialTime = Constants.playerMoveTimer_InitialTime;
 
-            yield return StartCoroutine(FadeGameScreen(0.0f, 1.0f, gameScreenFadeInTime));
+            yield return StartCoroutine(FadeGameScreen(.0f, 1f, gameScreenFadeInTime));
             yield return StartCoroutine(ReplayLastMove());
             yield return StartCoroutine(ShowTokenInstructionPopupRoutine());
             yield return StartCoroutine(ShowPlayTurnWithDelay(0.3f));
 
             StartCoroutine(RandomGamePiecesBlinkingRoutine());
+            gameBoardView.interactable = true;
         }
 
         private void OnEnable()
@@ -220,17 +221,16 @@ namespace Fourzy
                 }
             }
 
-            TokenPrompt popupUI = menuController.GetScreen<TokenPrompt>();
-
             foreach (TokenData token in tokens)
             {
+                TokenPrompt popupUI = menuController.GetScreen<TokenPrompt>(true);
                 popupUI.Prompt(token);
 
                 yield return new WaitWhile(() => popupUI.isOpened);
 
                 PlayerPrefsWrapper.SetInstructionPopupDisplayed(token.ID, true);
 
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(.5f);
             }
         }
 
@@ -298,13 +298,10 @@ namespace Fourzy
 
         private IEnumerator FadeGameScreen(float startAlpha, float alpha, float fadeTime)
         {
-            gameBoardView.SetAlpha(startAlpha);
             gameBoardView.Fade(alpha, fadeTime);
 
-            yield return new WaitForSeconds(fadeTime);
-
-            yield return StartCoroutine(FadeTokens(alpha, fadeTime));
-            yield return StartCoroutine(FadePieces(alpha, fadeTime));
+            yield return StartCoroutine(FadeTokens(alpha, .3f));
+            yield return StartCoroutine(FadePieces(alpha, .3f));
         }
 
         private IEnumerator FadeTokens(float alpha, float fadeTime)
@@ -320,7 +317,7 @@ namespace Fourzy
         {
             var pieces = gameBoardView.GetGamePiecesList();
             for (int i = 0; i < pieces.Count; i++)
-                pieces[i].gamePieceView.Fade(alpha, fadeTime);
+                pieces[i].Fade(alpha, fadeTime);
 
             if (pieces.Count > 0)
                 yield return new WaitForSeconds(fadeTime);
@@ -336,21 +333,13 @@ namespace Fourzy
 
                 PlayerEnum player = PlayerEnum.NONE;
                 if (!game.gameState.IsGameOver)
-                {
                     player = game.gameState.IsPlayerOneTurn ? PlayerEnum.TWO : PlayerEnum.ONE;
-                }
                 else
-                {
                     player = game.gameState.IsPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
-                }
 
                 lastMove.player = player;
 
                 yield return StartCoroutine(MovePiece(lastMove, true, false));
-            }
-            else if (game.gameState.TokenBoard.initialMoves.Count > 0)
-            {
-                //StartCoroutine(PlayInitialMoves());
             }
             else
                 isLoading = false;
@@ -410,8 +399,7 @@ namespace Fourzy
             Scene uiScene = SceneManager.GetSceneByName(Constants.MAIN_MENU_SCENE_NAME);
             SceneManager.SetActiveScene(uiScene);
             SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
-
-            MenuController.GetMenu("MainMenuCanvas").GetScreen<GameboardSelectionScreen>().SelectBoard(game.gameState.GameType);
+            
             AnalyticsManager.LogCustom("rematch_pnp_game");
         }
 
@@ -598,7 +586,7 @@ namespace Fourzy
 
                 if (game.gameState.GameType == GameType.PUZZLE && !game.gameState.IsGameOver)
                 {
-                    while (isDropping && gameBoardView.NumPiecesAnimating > 0)
+                    while (isDropping && gameBoardView.piecesAnimating > 0)
                         yield return null;
 
                     isDropping = true;
@@ -630,7 +618,7 @@ namespace Fourzy
             gameBoardView.MoveGamePieceViews(move, movingPieces, activeTokens);
             gameBoardView.PrintGameBoard();
 
-            yield return new WaitWhile(() => gameBoardView.NumPiecesAnimating > 0);
+            yield return new WaitWhile(() => gameBoardView.piecesAnimating > 0);
 
             if (!replayMove || game.gameState.IsGameOver)
                 gameplayScreen.SetActionButton();
@@ -789,12 +777,10 @@ namespace Fourzy
                 if (t > blinkTime)
                 {
                     var piecesForBlink = gameBoardView.GetWaitingGamePiecesList();
+
                     if (piecesForBlink.Count > 0)
-                    {
-                        int randomIndex = UnityEngine.Random.Range(0, piecesForBlink.Count);
-                        GamePiece gamePiece = piecesForBlink[randomIndex];
-                        gamePiece.gamePieceView.Blink();
-                    }
+                        piecesForBlink[UnityEngine.Random.Range(0, piecesForBlink.Count)].Blink();
+
                     t = 0;
                 }
                 yield return null;

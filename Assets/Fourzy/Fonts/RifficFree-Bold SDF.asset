@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: RifficFree-Bold SDF
   m_EditorClassIdentifier: 
-  hashCode: -1675649444
+  hashCode: 227115292
   material: {fileID: 21894048186437448}
   materialHashCode: 820121111
   fontAssetType: 1
@@ -1045,7 +1045,7 @@ Material:
     - _Diffuse: 0.5
     - _DiffusePower: 1
     - _DstBlend: 10
-    - _FaceDilate: 0.06
+    - _FaceDilate: 0.5
     - _FaceShininess: 0
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
@@ -1070,13 +1070,13 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0.2
+    - _OutlineWidth: 0.7
     - _Parallax: 0.02
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 0.8333333
+    - _ScaleRatioA: 0.6006006
     - _ScaleRatioB: 0.71875
-    - _ScaleRatioC: 0.62708336
+    - _ScaleRatioC: 0.26041666
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0

@@ -29,13 +29,9 @@ namespace Fourzy._Updates.Audio
         protected void Awake()
         {
             if (instance != null)
-            {
-                Destroy(gameObject);
                 return;
-            }
 
             instance = this;
-            DontDestroyOnLoad(gameObject);
 
             currentlyPlayingAudios = new List<BGAudio>();
         }

@@ -23,12 +23,7 @@ namespace Fourzy._Updates.Mechanics.Vfx
         protected void Awake()
         {
             if (instance != null)
-            {
-                Destroy(gameObject);
                 return;
-            }
-
-            DontDestroyOnLoad(gameObject);
 
             instance = this;
             decaysDictionary = new Dictionary<VfxType, int>();

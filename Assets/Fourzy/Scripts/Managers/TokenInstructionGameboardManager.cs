@@ -96,7 +96,7 @@ namespace Fourzy
             List<MovingGamePiece> movingPieces = gameState.MovePiece(move, false, out activeTokens);
             gameBoardView.MoveGamePieceViews(move, movingPieces, activeTokens);
 
-            yield return new WaitWhile(() => gameBoardView.NumPiecesAnimating > 0);
+            yield return new WaitWhile(() => gameBoardView.piecesAnimating > 0);
         }
     }
 }

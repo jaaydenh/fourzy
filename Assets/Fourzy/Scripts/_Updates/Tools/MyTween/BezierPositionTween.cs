@@ -11,7 +11,8 @@ namespace Fourzy._Updates.Tween
         public Vector2 control;
 
         private RectTransform rectTransform;
-        private Vector3 _value;
+
+        public Vector3 _value { get; private set; }
 
         protected override void Awake()
         {
@@ -48,10 +49,15 @@ namespace Fourzy._Updates.Tween
                     break;
             }
 
+            SetPosition(_value);
+        }
+
+        public void SetPosition(Vector3 position)
+        {
             if (rectTransform)
-                rectTransform.anchoredPosition = _value;
+                rectTransform.anchoredPosition = position;
             else
-                transform.localPosition = _value;
+                transform.localPosition = position;
         }
 
         public static Vector2 GetBezierPoint(Vector2 start, Vector2 control, Vector2 end, float time)

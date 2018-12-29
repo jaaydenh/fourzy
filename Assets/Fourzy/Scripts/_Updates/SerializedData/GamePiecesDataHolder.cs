@@ -26,7 +26,7 @@ namespace Fourzy._Updates.Serialized
                 if (gamePiece.data.Enabled)
                     enabledGamePiecesFastAccess.Add(gamePiece.data.ID, gamePiece);
 
-                foreach (GamePiece prefabVariant in gamePiece.prefabs)
+                foreach (GamePieceView prefabVariant in gamePiece.prefabs)
                     prefabVariant.pieceData = gamePiece.data;
             }
         }
@@ -52,6 +52,6 @@ namespace Fourzy._Updates.Serialized
     public class GamePiecePrefabData
     {
         public GamePieceData data;
-        public GamePiece[] prefabs;
+        public GamePieceView[] prefabs;
     }
 }

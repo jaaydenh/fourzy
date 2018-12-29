@@ -12,7 +12,7 @@ namespace Fourzy._Updates.Tween
         private RectTransform rectTransform;
         private SpriteRenderer spriteRenderer;
 
-        private Vector2 _value;
+        public Vector2 _value { get; private set; }
 
         protected override void Awake()
         {
@@ -48,10 +48,15 @@ namespace Fourzy._Updates.Tween
                     break;
             }
 
+            SetSize(_value);
+        }
+
+        public void SetSize(Vector2 size)
+        {
             if (rectTransform)
-                rectTransform.sizeDelta = _value;
+                rectTransform.sizeDelta = size;
             else if (spriteRenderer)
-                spriteRenderer.size = _value;
+                spriteRenderer.size = size;
         }
 
         public override void OnReset()
