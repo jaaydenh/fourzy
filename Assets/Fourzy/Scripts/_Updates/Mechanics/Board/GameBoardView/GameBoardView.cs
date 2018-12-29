@@ -41,7 +41,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private Vector3 topLeft;
         private bool isInitialized;
-        private bool touchCanceled = false;
         private bool touched = false;
         private HintBlock previousClosest;
 
@@ -114,8 +113,7 @@ namespace Fourzy._Updates.Mechanics.Board
             //only continue if current opened screen is GameplayScreen
             if (assignedScreen != menuController.currentScreen)
                 return;
-
-            touchCanceled = false;
+            
             touched = true;
 
             if (spawnHintArea)
@@ -139,8 +137,6 @@ namespace Fourzy._Updates.Mechanics.Board
             //release controls if current screen isnt GameplayScreen
             if (assignedScreen != menuController.currentScreen)
             {
-                touchCanceled = true;
-
                 OnPointerRelease(position);
                 return;
             }

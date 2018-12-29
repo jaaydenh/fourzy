@@ -155,8 +155,6 @@ namespace Fourzy._Updates.UI.Menu
         /// <returns></returns>
         public T AddScreen<T>() where T : MenuScreen
         {
-            Type screenType = typeof(T);
-
             foreach (GameContentManager.PrefabTypePair pair in GameContentManager.Instance.typedPrefabs)
             {
                 MenuScreen screenPrefab = pair.prefab.GetComponent<T>();

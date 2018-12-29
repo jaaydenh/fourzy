@@ -7,32 +7,32 @@ namespace Fourzy._Updates.Mechanics.Board
     [CustomEditor(typeof(GameBoardView))]
     public class GameBoardViewEditor : Editor
     {
-        private SerializedProperty interactableProperty;
-        private SerializedProperty spawnHintAreaProperty;
-        private SerializedProperty menuControllerProperty;
+        //private SerializedProperty interactableProperty;
+        //private SerializedProperty spawnHintAreaProperty;
+        //private SerializedProperty menuControllerProperty;
 
-        private GameBoardView trigger;
+        //private GameBoardView trigger;
 
-        protected void OnEnable()
-        {
-            interactableProperty = serializedObject.FindProperty("interactable");
-            spawnHintAreaProperty = serializedObject.FindProperty("spawnHintArea");
-            menuControllerProperty = serializedObject.FindProperty("menuController");
+        //protected void OnEnable()
+        //{
+        //    interactableProperty = serializedObject.FindProperty("interactable");
+        //    spawnHintAreaProperty = serializedObject.FindProperty("spawnHintArea");
+        //    menuControllerProperty = serializedObject.FindProperty("menuController");
 
-            trigger = target as GameBoardView;
-        }
+        //    trigger = target as GameBoardView;
+        //}
 
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
+        //public override void OnInspectorGUI()
+        //{
+        //    base.OnInspectorGUI();
 
-            serializedObject.Update();
+        //    serializedObject.Update();
 
-            EditorGUILayout.PropertyField(spawnHintAreaProperty);
-            EditorGUILayout.PropertyField(interactableProperty);
-            EditorGUILayout.PropertyField(menuControllerProperty);
+        //    EditorGUILayout.PropertyField(spawnHintAreaProperty);
+        //    EditorGUILayout.PropertyField(interactableProperty);
+        //    EditorGUILayout.PropertyField(menuControllerProperty);
 
-            serializedObject.ApplyModifiedProperties();
-        }
+        //    serializedObject.ApplyModifiedProperties();
+        //}
     }
 }

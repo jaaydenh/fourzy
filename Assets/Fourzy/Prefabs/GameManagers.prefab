@@ -1540,6 +1540,8 @@ MonoBehaviour:
     style: 0
   - prefab: {fileID: 114722291174570644, guid: e8ee7b009c9216a48ba5d94f55f55bf8, type: 2}
     style: 1
+  - prefab: {fileID: 114289499395651876, guid: f4b54656e79739a4aa98818ceae25777, type: 2}
+    style: 2
 --- !u!114 &114831268500817898
 MonoBehaviour:
   m_ObjectHideFlags: 1

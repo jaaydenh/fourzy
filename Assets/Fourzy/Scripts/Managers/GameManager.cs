@@ -459,7 +459,7 @@ namespace Fourzy
 
         public void ShowInfoBanner(string message)
         {
-            GamesToastsController.ShowToast(GamesToastsController.ToastStyle.INFO_TOAST, message);
+            GamesToastsController.ShowTopToast(message);
         }
 
         public void AddGame(Game game)

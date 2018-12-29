@@ -22,7 +22,7 @@ namespace Fourzy._Updates.UI.Toasts
         [HideInInspector]
         public bool available;
 
-        private GamesToastsController owner;
+        protected GamesToastsController owner;
 
         protected override void Awake()
         {
@@ -57,7 +57,9 @@ namespace Fourzy._Updates.UI.Toasts
         {
             this.owner = owner;
 
-            toastIcon.SetIcon(sprite);
+            if (toastIcon)
+                toastIcon.SetIcon(sprite);
+
             SetToastText(text);
         }
 
@@ -65,7 +67,9 @@ namespace Fourzy._Updates.UI.Toasts
         {
             this.owner = owner;
 
-            toastIcon.SetIcon(style);
+            if (toastIcon)
+                toastIcon.SetIcon(style);
+
             SetToastText(text);
         }
 
@@ -73,7 +77,9 @@ namespace Fourzy._Updates.UI.Toasts
         {
             this.owner = owner;
 
-            toastIcon.SetIcon(ToastIconStyle.NONE);
+            if (toastIcon)
+                toastIcon.SetIcon(ToastIconStyle.NONE);
+
             SetToastText(text);
         }
 

@@ -16,14 +16,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RectTransform friendsParent;
         public FriendWidget friendWidgetPrefab;
 
-        private List<GameObject> friendsList;
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            friendsList = new List<GameObject>();
-        }
+        private List<Friend> friends;
 
         public override void Open()
         {
@@ -68,7 +61,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             foreach (Transform gamePiece in friendsParent)
                 Destroy(gamePiece.gameObject);
 
-            List<Friend> friends = LoginManager.Instance.Friends;
+            friends = LoginManager.Instance.Friends;
 
             if (friends == null)
                 return;

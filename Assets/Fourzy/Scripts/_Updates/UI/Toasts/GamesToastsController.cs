@@ -26,6 +26,9 @@ namespace Fourzy._Updates.UI.Toasts
         public Queue<GameToast> activeToasts { get; private set; }
         public Queue<GameToast> movableToast { get; private set; }
 
+        public Queue<GameToast> topActiveToasts { get; private set; }
+        public Queue<GameToast> topMovableToast { get; private set; }
+
         public void Awake()
         {
             if (instance != null)
@@ -36,6 +39,9 @@ namespace Fourzy._Updates.UI.Toasts
             toasts = new Dictionary<ToastStyle, List<GameToast>>();
             activeToasts = new Queue<GameToast>();
             movableToast = new Queue<GameToast>();
+
+            topActiveToasts = new Queue<GameToast>();
+            topMovableToast = new Queue<GameToast>();
 
             toastPrefabFastAccess = new Dictionary<ToastStyle, ToastStylePair>();
             foreach (ToastStylePair pair in prefabs)
@@ -65,6 +71,23 @@ namespace Fourzy._Updates.UI.Toasts
 
             activeToasts.Enqueue(newToast);
             movableToast.Enqueue(newToast);
+        }
+
+        public void ShowTopToast(GameToast newToast)
+        {
+            newToast.transform.SetAsLastSibling();
+            newToast.ShowToast();
+
+            //fastfade if needed
+            if (topActiveToasts.Count == maxToastsVisible)
+                topActiveToasts.Dequeue().Hide(.3f);
+
+            //move other up
+            foreach (GameToast toast in topMovableToast)
+                toast.MoveRelative(newToast.toastStepDistance, .4f);
+
+            topActiveToasts.Enqueue(newToast);
+            topMovableToast.Enqueue(newToast);
         }
 
         public GameToast GetToast(ToastStyle style)
@@ -135,6 +158,17 @@ namespace Fourzy._Updates.UI.Toasts
             instance.ShowToast(toast);
         }
 
+        public static void ShowTopToast(string message)
+        {
+            if (!instance)
+                return;
+
+            GameToast toast = instance.GetToast(ToastStyle.TOP_TOAST);
+            toast.SetData(instance, message);
+
+            instance.ShowToast(toast);
+        }
+
         [Serializable]
         public class ToastStylePair
         {
@@ -146,6 +180,7 @@ namespace Fourzy._Updates.UI.Toasts
         {
             ACTION_WARNING,
             INFO_TOAST,
+            TOP_TOAST,
         }
     }
 }
