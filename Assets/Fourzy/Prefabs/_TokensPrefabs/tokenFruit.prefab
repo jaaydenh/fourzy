@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75d038a2efdcb4402b46b59a7fdc8784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 0}
+  _body: {fileID: 0}
   tokenType: 14
   animator: {fileID: 95167452109066022}
 --- !u!114 &114956997681196698
@@ -184,7 +184,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 1
 --- !u!212 &212342548853258528
 SpriteRenderer:
   m_ObjectHideFlags: 1

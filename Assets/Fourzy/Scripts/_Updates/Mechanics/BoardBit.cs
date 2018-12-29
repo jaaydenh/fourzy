@@ -19,7 +19,6 @@ namespace Fourzy._Updates.Mechanics
         protected SpriteRenderer[] spriteRenderers;
         protected SpriteToImage[] spriteToImage;
         protected RectTransform parentRectTransform;
-        protected RectTransform rectTransform;
         protected AlphaTween alphaTween;
         protected ScaleTween scaleTween;
         protected OutlineBase outline;
@@ -59,18 +58,27 @@ namespace Fourzy._Updates.Mechanics
                 spriteToImage = new SpriteToImage[spriteRenderers.Length];
 
                 for (int rendererIndex = 0; rendererIndex < spriteRenderers.Length; rendererIndex++)
-                {
                     spriteToImage[rendererIndex] = spriteRenderers[rendererIndex].gameObject.AddComponent<SpriteToImage>();
+            }
 
-                    //size it
-                    if (gameboard)
-                        transform.localScale = gameboard.step;
+            //size it
+            if (gameboard)
+            {
+                if (parentRectTransform)
+                {
+                    RectTransform rectTransform = _body.GetComponent<RectTransform>();
+
+                    transform.localScale = new Vector3(gameboard.step.x / rectTransform.rect.width, gameboard.step.y / rectTransform.rect.height, 1f);
+                }
+                else
+                {
+                    SpriteRenderer spriteRenderer = _body.GetComponent<SpriteRenderer>();
+
+                    transform.localScale = new Vector3(gameboard.step.x / spriteRenderer.bounds.size.x, gameboard.step.y / spriteRenderer.bounds.size.y, 1f);
                 }
             }
             else
-            {
                 transform.localScale = Vector3.one;
-            }
 
             //configure alpha tween
             alphaTween.propagate = true;

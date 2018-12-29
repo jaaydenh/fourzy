@@ -10,6 +10,7 @@ using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
@@ -21,8 +22,8 @@ namespace Fourzy._Updates.Mechanics.Board
         public Transform bitsParent;
         public bool sortByOrder = false;
 
-        public GamePieceView[,] gamePieces;
-        public TokenView[,] tokens;
+        public BoardBit[,] gamePieces;
+        public BoardBit[,] tokens;
         [Range(3, 8)]
         public int numRows = Constants.numRows;
         [Range(3, 8)]
@@ -113,7 +114,7 @@ namespace Fourzy._Updates.Mechanics.Board
             //only continue if current opened screen is GameplayScreen
             if (assignedScreen != menuController.currentScreen)
                 return;
-            
+
             touched = true;
 
             if (spawnHintArea)
@@ -260,12 +261,15 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     PlayerEnum player = (piece == (int)Piece.BLUE) ? PlayerEnum.ONE : PlayerEnum.TWO;
 
-                    GamePieceView pieceObject = SpawnPiece(col, row, player);
+                    GamePieceView pieceObject = SpawnPiece(col, row, player, false);
                     pieceObject.player = player;
                     gamePieces[row, col] = pieceObject;
                     pieceObject.SetAlpha(initialAlpha);
                 }
             }
+
+            if (sortByOrder)
+                SortBits();
         }
 
         public void CreateTokenViews(IToken[,] tokens, float initialAlpha = 1.0f)
@@ -283,12 +287,15 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     if (tokenPrefab)
                     {
-                        TokenView tokenInstance = CreateToken(row, col, tokenPrefab);
+                        TokenView tokenInstance = SpawnToken(row, col, tokenPrefab, false);
 
                         tokenInstance.SetAlpha(initialAlpha);
                     }
                 }
             }
+
+            if (sortByOrder)
+                SortBits();
         }
 
         public void MoveGamePieceViews(Move move, List<MovingGamePiece> movingPieces, List<IToken> activeTokens)
@@ -296,7 +303,7 @@ namespace Fourzy._Updates.Mechanics.Board
             GamePieceView gamePiece = SpawnPiece(move.position.column, move.position.row, move.player);
             gamePiece.player = move.player;
 
-            var copyGamePieces = new GamePieceView[numRows, numColumns];
+            var copyGamePieces = new BoardBit[numRows, numColumns];
 
             for (int i = 0; i < numRows; i++)
                 for (int j = 0; j < numColumns; j++)
@@ -308,14 +315,14 @@ namespace Fourzy._Updates.Mechanics.Board
                 MovingGamePiece mgp = movingPieces[i];
                 Position end = mgp.endPosition;
                 mgp.gamePiece = movingPiece;
-                movingPiece = copyGamePieces[end.row, end.column];
+                movingPiece = (GamePieceView)copyGamePieces[end.row, end.column];
                 copyGamePieces[end.row, end.column] = mgp.gamePiece;
             }
 
             StartCoroutine(MovePiecesRoutine(movingPieces, activeTokens));
         }
 
-        public GamePieceView SpawnPiece(int col, int row, PlayerEnum player)
+        public GamePieceView SpawnPiece(int col, int row, PlayerEnum player, bool sort = true)
         {
             GamePieceView gamePiecePrefab;
 
@@ -324,10 +331,10 @@ namespace Fourzy._Updates.Mechanics.Board
             else
                 gamePiecePrefab = OpponentPiece;
 
-            return SpawnPiece(row, col, gamePiecePrefab);
+            return SpawnPiece(row, col, gamePiecePrefab, sort);
         }
 
-        public GamePieceView SpawnPiece(int row, int col, GamePieceView prefab)
+        public GamePieceView SpawnPiece(int row, int col, GamePieceView prefab, bool sort = true)
         {
             GamePieceView gamePiece = Instantiate(prefab, bitsParent);
 
@@ -335,7 +342,33 @@ namespace Fourzy._Updates.Mechanics.Board
             gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
             gamePiece.transform.localPosition = PositionToVec3(row, col);
 
+            if (sort)
+                SortBits();
+
             return gamePiece;
+        }
+
+        public void SpawnToken(int row, int col, Token tokenType, bool sort = true)
+        {
+            SpawnToken(row, col, GameContentManager.Instance.GetTokenPrefab(tokenType), sort);
+        }
+
+        public TokenView SpawnToken(int row, int col, TokenView tokenPrefab, bool sort = true)
+        {
+            //this wont destroy gameObject, only component on it
+            //if (tokens[row, col] != null)
+            //    Destroy(tokens[row, col]);
+
+            TokenView tokenInstance = Instantiate(tokenPrefab, bitsParent);
+            tokenInstance.gameObject.SetLayerRecursively(gameObject.layer);
+            tokenInstance.transform.localPosition = PositionToVec3(row, col);
+
+            tokens[row, col] = tokenInstance;
+
+            if (sort)
+                SortBits();
+
+            return tokenInstance;
         }
 
         public MiniGameboardPiece SpawnMinigameboardPiece(int row, int col, MiniGameboardPiece prefab)
@@ -349,41 +382,19 @@ namespace Fourzy._Updates.Mechanics.Board
             return gamePiece;
         }
 
-        public void CreateToken(int row, int col, Token tokenType)
-        {
-            CreateToken(row, col, GameContentManager.Instance.GetTokenPrefab(tokenType));
-        }
-
-        public TokenView CreateToken(int row, int col, TokenView tokenPrefab)
-        {
-            //this wont destroy go, only component on it
-            //if (tokens[row, col] != null)
-            //    Destroy(tokens[row, col]);
-
-            TokenView tokenInstance = Instantiate(tokenPrefab, bitsParent);
-            tokenInstance.gameObject.SetLayerRecursively(gameObject.layer);
-            tokenInstance.transform.localPosition = PositionToVec3(row, col);
-
-            tokens[row, col] = tokenInstance;
-
-
-
-            return tokenInstance;
-        }
-
         public GamePieceView GamePieceAt(Position position)
         {
-            return gamePieces[position.row, position.column];
+            return (GamePieceView)gamePieces[position.row, position.column];
         }
 
         public GamePieceView GamePieceAt(int row, int col)
         {
-            return gamePieces[row, col];
+            return (GamePieceView)gamePieces[row, col];
         }
 
         public TokenView TokenAt(int row, int col)
         {
-            return tokens[row, col];
+            return (TokenView)tokens[row, col];
         }
 
         public List<GamePieceView> GetGamePiecesList()
@@ -393,7 +404,7 @@ namespace Fourzy._Updates.Mechanics.Board
             for (int i = 0; i < Constants.numColumns; i++)
                 for (int j = 0; j < Constants.numRows; j++)
                     if (gamePieces[i, j] != null)
-                        list.Add(gamePieces[i, j]);
+                        list.Add((GamePieceView)gamePieces[i, j]);
 
             return list;
         }
@@ -404,8 +415,25 @@ namespace Fourzy._Updates.Mechanics.Board
 
             for (int i = 0; i < Constants.numColumns; i++)
                 for (int j = 0; j < Constants.numRows; j++)
-                    if (gamePieces[i, j] != null && !gamePieces[i, j].isMoving)
+                    if (gamePieces[i, j] != null && !((GamePieceView)gamePieces[i, j]).isMoving)
+                        list.Add((GamePieceView)gamePieces[i, j]);
+
+            return list;
+        }
+
+        public List<BoardBit> GetBits()
+        {
+            List<BoardBit> list = new List<BoardBit>();
+
+            for (int i = 0; i < Constants.numColumns; i++)
+                for (int j = 0; j < Constants.numRows; j++)
+                {
+                    if (gamePieces[i, j] != null)
                         list.Add(gamePieces[i, j]);
+
+                    if (tokens[i, j] != null)
+                        list.Add(tokens[i, j]);
+                }
 
             return list;
         }
@@ -428,7 +456,7 @@ namespace Fourzy._Updates.Mechanics.Board
             {
                 for (int col = 0; col < numColumns; col++)
                     if (gamePieces[row, col])
-                        gameboard += (int)gamePieces[row, col].player;
+                        gameboard += (int)((GamePieceView)gamePieces[row, col]).player;
                     else
                         gameboard += "0";
 
@@ -552,7 +580,12 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private void SortBits()
         {
-            //get all 
+            List<BoardBit> bits = new List<BoardBit>(bitsParent.GetComponentsInChildren<BoardBit>());
+            bits = bits.OrderBy(bit => bit.sortingGroup.sortingOrder).ToList();
+
+            //sort in hirerarchy
+            foreach (BoardBit bit in bits)
+                bit.transform.SetAsLastSibling();
         }
 
         private void OnHintBlockHold(HintBlock hintBlock)

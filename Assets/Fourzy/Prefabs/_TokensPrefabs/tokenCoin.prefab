@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e25e70828c5a84aaca65935b760e06e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 0}
+  _body: {fileID: 0}
   tokenType: 13
 --- !u!114 &114472571470124734
 MonoBehaviour:
@@ -221,7 +221,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 1
 --- !u!212 &212385645222998306
 SpriteRenderer:
   m_ObjectHideFlags: 1
