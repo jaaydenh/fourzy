@@ -2080,7 +2080,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 29.997686, y: 29.995785}
+  m_AnchoredPosition: {x: 29.99768, y: 29.995728}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &154542060
@@ -3066,7 +3066,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000037281206}
+  m_AnchoredPosition: {x: 0, y: -0.00012347173}
   m_SizeDelta: {x: 0, y: 195}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!225 &204962648
@@ -4408,7 +4408,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: -13}
-  m_SizeDelta: {x: 342.00153, y: 191.1185}
+  m_SizeDelta: {x: 340, y: 190}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &402669947
 MonoBehaviour:
@@ -4733,14 +4733,14 @@ MonoBehaviour:
   m_text: Fourzies
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 32eefdc00061ddc4892251f981a33f8a, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 81f84413bb4463044be7896227b81b49, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278243071
-  m_fontColor: {r: 1, g: 0.80982494, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -4962,7 +4962,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.67, y: -25}
+  m_AnchoredPosition: {x: 165.72, y: -25}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &497996752
@@ -5053,7 +5053,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 50}
-  m_SizeDelta: {x: 381.20996, y: 190.61499}
+  m_SizeDelta: {x: 395, y: 190}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &500573405
 MonoBehaviour:
@@ -5194,7 +5194,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 30, y: 30.000061}
+  m_AnchoredPosition: {x: 30, y: 30}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &505338119
@@ -5326,8 +5326,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1125, y: -665.89716}
-  m_SizeDelta: {x: 750, y: 1331.7943}
+  m_AnchoredPosition: {x: 1125, y: -666.6667}
+  m_SizeDelta: {x: 750, y: 1333.3334}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &521655124
 MonoBehaviour:
@@ -6036,8 +6036,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 38
-  m_fontSizeBase: 38
+  m_fontSize: 44
+  m_fontSizeBase: 44
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6433,7 +6433,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -6467,16 +6467,17 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 5
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 1170420320}
-        memberName: color
+        memberName: fontMaterial
         memberType: 16
         arguments:
-        - typeName: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          supportedType: 6
-          objectArgument: {fileID: 0}
+        - typeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 1
+          objectArgument: {fileID: 2100000, guid: 81f84413bb4463044be7896227b81b49,
+            type: 2}
           stringArgument: 
           intArgument: 0
           floatArgument: 0
@@ -6536,16 +6537,17 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 5
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 1170420320}
-        memberName: color
+        memberName: fontMaterial
         memberType: 16
         arguments:
-        - typeName: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          supportedType: 6
-          objectArgument: {fileID: 0}
+        - typeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 1
+          objectArgument: {fileID: 2100000, guid: 32e857ccd1977dd418a6f6d936a082b3,
+            type: 2}
           stringArgument: 
           intArgument: 0
           floatArgument: 0
@@ -6733,7 +6735,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -6767,16 +6769,17 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 5
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 1190188353}
-        memberName: color
+        memberName: fontMaterial
         memberType: 16
         arguments:
-        - typeName: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          supportedType: 6
-          objectArgument: {fileID: 0}
+        - typeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 1
+          objectArgument: {fileID: 2100000, guid: 81f84413bb4463044be7896227b81b49,
+            type: 2}
           stringArgument: 
           intArgument: 0
           floatArgument: 0
@@ -6803,16 +6806,17 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 5
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 1190188353}
-        memberName: color
+        memberName: fontMaterial
         memberType: 16
         arguments:
-        - typeName: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          supportedType: 6
-          objectArgument: {fileID: 0}
+        - typeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 1
+          objectArgument: {fileID: 2100000, guid: 32e857ccd1977dd418a6f6d936a082b3,
+            type: 2}
           stringArgument: 
           intArgument: 0
           floatArgument: 0
@@ -9455,7 +9459,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 30, y: 30.000061}
+  m_AnchoredPosition: {x: 30, y: 30}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &952625092
@@ -9725,8 +9729,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -9913,7 +9917,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000106921034}
+  m_AnchoredPosition: {x: 0, y: -0.000037716673}
   m_SizeDelta: {x: 0, y: 426}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &976148532
@@ -9987,7 +9991,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -13}
-  m_SizeDelta: {x: 342.00153, y: 191.23709}
+  m_SizeDelta: {x: 340, y: 190}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1005979735
 MonoBehaviour:
@@ -10036,7 +10040,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 30
+          selectedMember: 31
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: StartTurnGame
@@ -10254,7 +10258,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -226}
-  m_SizeDelta: {x: 173.55, y: 51.710022}
+  m_SizeDelta: {x: 173.58, y: 51.73}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1050175554
 GameObject:
@@ -11033,7 +11037,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 185.67, y: 50}
+  m_SizeDelta: {x: 185.72, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1077918082
 MonoBehaviour:
@@ -12029,8 +12033,7 @@ MonoBehaviour:
   m_text: Tokens
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 21894048186437448, guid: 9d88010131ce14d0aa675e4166b1eefd,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 32e857ccd1977dd418a6f6d936a082b3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12408,14 +12411,14 @@ MonoBehaviour:
   m_text: Wins
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 32eefdc00061ddc4892251f981a33f8a, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 81f84413bb4463044be7896227b81b49, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278243071
-  m_fontColor: {r: 1, g: 0.80982494, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -12747,7 +12750,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -100}
-  m_SizeDelta: {x: 0, y: -941.7943}
+  m_SizeDelta: {x: 0, y: -943.3334}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1236367178
 MonoBehaviour:
@@ -13375,7 +13378,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -100}
-  m_SizeDelta: {x: 250, y: 106}
+  m_SizeDelta: {x: 310, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1262857460
 MonoBehaviour:
@@ -13951,8 +13954,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 2625, y: -665.89716}
-  m_SizeDelta: {x: 750, y: 1331.7943}
+  m_AnchoredPosition: {x: 2625, y: -666.6667}
+  m_SizeDelta: {x: 750, y: 1333.3334}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1323414207
 CanvasGroup:
@@ -14593,7 +14596,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00024414062, y: 0.00004130993}
+  m_AnchoredPosition: {x: -0.00024414062, y: -0.000024405444}
   m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1381583815
@@ -14948,7 +14951,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1419891956
@@ -15563,7 +15566,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -15597,16 +15600,17 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 5
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 433938519}
-        memberName: color
+        memberName: fontMaterial
         memberType: 16
         arguments:
-        - typeName: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          supportedType: 6
-          objectArgument: {fileID: 0}
+        - typeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 1
+          objectArgument: {fileID: 2100000, guid: 81f84413bb4463044be7896227b81b49,
+            type: 2}
           stringArgument: 
           intArgument: 0
           floatArgument: 0
@@ -15666,16 +15670,17 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 5
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 433938519}
-        memberName: color
+        memberName: fontMaterial
         memberType: 16
         arguments:
-        - typeName: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          supportedType: 6
-          objectArgument: {fileID: 0}
+        - typeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 1
+          objectArgument: {fileID: 2100000, guid: 32e857ccd1977dd418a6f6d936a082b3,
+            type: 2}
           stringArgument: 
           intArgument: 0
           floatArgument: 0
@@ -15967,8 +15972,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 375, y: -665.89716}
-  m_SizeDelta: {x: 750, y: 1331.7943}
+  m_AnchoredPosition: {x: 375, y: -666.6667}
+  m_SizeDelta: {x: 750, y: 1333.3334}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1514781803
 CanvasGroup:
@@ -16094,7 +16099,7 @@ MonoBehaviour:
   m_text: Puzzles Completed
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 32eefdc00061ddc4892251f981a33f8a, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 32e857ccd1977dd418a6f6d936a082b3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -17380,8 +17385,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1875, y: -665.89716}
-  m_SizeDelta: {x: 750, y: 1331.7943}
+  m_AnchoredPosition: {x: 1875, y: -666.6667}
+  m_SizeDelta: {x: 750, y: 1333.3334}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1739894148
 MonoBehaviour:
@@ -17807,7 +17812,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0.00004690076, y: 0.00012207031}
+  m_AnchoredPosition: {x: 0.00004614552, y: 0.00012207031}
   m_SizeDelta: {x: 95, y: 790}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1768845497
@@ -19651,8 +19656,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 70.835, y: -25}
-  m_SizeDelta: {x: 141.67, y: 50}
+  m_AnchoredPosition: {x: 70.86, y: -25}
+  m_SizeDelta: {x: 141.72, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1868708195
 MonoBehaviour:
@@ -19880,8 +19885,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 3375, y: -665.89716}
-  m_SizeDelta: {x: 750, y: 1331.7943}
+  m_AnchoredPosition: {x: 3375, y: -666.6667}
+  m_SizeDelta: {x: 750, y: 1333.3334}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1870856803
 CanvasGroup:
@@ -20014,7 +20019,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -20048,16 +20053,17 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 5
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 1527922276}
-        memberName: color
+        memberName: fontMaterial
         memberType: 16
         arguments:
-        - typeName: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          supportedType: 6
-          objectArgument: {fileID: 0}
+        - typeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 1
+          objectArgument: {fileID: 2100000, guid: 81f84413bb4463044be7896227b81b49,
+            type: 2}
           stringArgument: 
           intArgument: 0
           floatArgument: 0
@@ -20084,16 +20090,17 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 5
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 1527922276}
-        memberName: color
+        memberName: fontMaterial
         memberType: 16
         arguments:
-        - typeName: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-          supportedType: 6
-          objectArgument: {fileID: 0}
+        - typeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 1
+          objectArgument: {fileID: 2100000, guid: 32e857ccd1977dd418a6f6d936a082b3,
+            type: 2}
           stringArgument: 
           intArgument: 0
           floatArgument: 0
@@ -20563,7 +20570,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000043676268}
+  m_AnchoredPosition: {x: 0, y: -0.00012346964}
   m_SizeDelta: {x: 0, y: 90}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1971932259

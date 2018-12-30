@@ -21,7 +21,7 @@ namespace Fourzy._Updates.Audio
 
         public AudioMixerGroup outputGroup;
 
-        private List<BGAudio> currentlyPlayingAudios;
+        public List<BGAudio> currentlyPlaying { get; private set; }
 
         /// <summary>
         /// Store singleton reference or delete itself if one already exsists
@@ -33,8 +33,17 @@ namespace Fourzy._Updates.Audio
 
             instance = this;
 
-            currentlyPlayingAudios = new List<BGAudio>();
+            currentlyPlaying = new List<BGAudio>();
         }
+
+        public bool IsPlaying(AudioTypes type)
+        {
+            foreach (BGAudio audio in currentlyPlaying)
+                if (audio.type == type)
+                    return true;
+
+            return false;
+        } 
 
         /// <summary>
         /// Plays audio with given audio type
@@ -64,14 +73,14 @@ namespace Fourzy._Updates.Audio
 
             volumeTween.PlayForward(true);
 
-            BGAudio bgAudio = new BGAudio() { audioSource = audioSource, volumeTween = volumeTween, audioClip = audioClip, };
+            BGAudio bgAudio = new BGAudio() { type = type, audioSource = audioSource, volumeTween = volumeTween, audioClip = audioClip, };
 
             audioSource.Play();
 
             if (!repeat)
                 bgAudio.playbackRoutine = StartCoroutine(BGAudioRoutine(bgAudio));
 
-            currentlyPlayingAudios.Add(bgAudio);
+            currentlyPlaying.Add(bgAudio);
 
             return bgAudio;
         }
@@ -83,7 +92,7 @@ namespace Fourzy._Updates.Audio
         /// <param name="fadeOutTime">Fadeout time</param>
         public void StopBGAudio(BGAudio bgAudio, float fadeOutTime)
         {
-            if (!currentlyPlayingAudios.Contains(bgAudio) || !this)
+            if (!currentlyPlaying.Contains(bgAudio) || !this)
                 return;
 
             bgAudio.volumeTween.playbackTime = fadeOutTime;
@@ -122,17 +131,19 @@ namespace Fourzy._Updates.Audio
 
         private void RemoveBGAudio(BGAudio bgAudio)
         {
-            if (!currentlyPlayingAudios.Contains(bgAudio))
+            if (!currentlyPlaying.Contains(bgAudio))
                 return;
 
             Destroy(bgAudio.volumeTween);
             Destroy(bgAudio.audioSource);
 
-            currentlyPlayingAudios.Remove(bgAudio);
+            currentlyPlaying.Remove(bgAudio);
         }
 
         public class BGAudio
         {
+            public AudioTypes type;
+
             public AudioSource audioSource;
             public AudioClip audioClip;
 

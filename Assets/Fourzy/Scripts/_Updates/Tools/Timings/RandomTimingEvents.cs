@@ -3,48 +3,51 @@
 using ByteSheep.Events;
 using UnityEngine;
 
-public class RandomTimingEvents : MonoBehaviour
+namespace Fourzy._Updates.Tools.Timing
 {
-    public AdvancedEvent events;
-
-    [HideInInspector, SerializeField]
-    public float from = 1f;
-    [HideInInspector, SerializeField]
-    public float to = 2f;
-    [HideInInspector, SerializeField]
-    public float offsetFrom = 1f;
-    [HideInInspector, SerializeField]
-    public float offsetTo = 2f;
-
-    public bool onStart = false;
-    public bool repeat = false;
-
-    void Start()
+    public class RandomTimingEvents : MonoBehaviour
     {
-        if (onStart)
-            CallWithDefaultOffset();
-    }
+        public AdvancedEvent events;
 
-    public void CallWithDefaultOffset()
-    {
-        CallEvents(Random.Range(offsetFrom, offsetTo));
-    }
+        [HideInInspector, SerializeField]
+        public float from = 1f;
+        [HideInInspector, SerializeField]
+        public float to = 2f;
+        [HideInInspector, SerializeField]
+        public float offsetFrom = 1f;
+        [HideInInspector, SerializeField]
+        public float offsetTo = 2f;
 
-    public void CallEvents(float offset = 0f)
-    {
-        Invoke("ExecuteEvents", offset);
-    }
+        public bool onStart = false;
+        public bool repeat = false;
 
-    public void ExecuteEvents()
-    {
-        events.Invoke();
+        void Start()
+        {
+            if (onStart)
+                CallWithDefaultOffset();
+        }
 
-        if (repeat)
-            CallEvents(Random.Range(from, to));
-    }
+        public void CallWithDefaultOffset()
+        {
+            CallEvents(Random.Range(offsetFrom, offsetTo));
+        }
 
-    public void StopRepeating()
-    {
-        CancelInvoke("ExecuteEvents");
+        public void CallEvents(float offset = 0f)
+        {
+            Invoke("ExecuteEvents", offset);
+        }
+
+        public void ExecuteEvents()
+        {
+            events.Invoke();
+
+            if (repeat)
+                CallEvents(Random.Range(from, to));
+        }
+
+        public void StopRepeating()
+        {
+            CancelInvoke("ExecuteEvents");
+        }
     }
 }

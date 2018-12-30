@@ -26,7 +26,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         private int h_Jumping = Animator.StringToHash("Jumping");
 
         private int h_MovingHorizontal = Animator.StringToHash("MovingHorizontal");
-        private int h_MovingVertical = Animator.StringToHash("MovingHorizontal");
+        private int h_MovingVertical = Animator.StringToHash("MovingVertical");
         private int h_RightHit = Animator.StringToHash("RightHit");
         private int h_LeftHit = Animator.StringToHash("LeftHit");
         private int h_BottomHit = Animator.StringToHash("BottomHit");
@@ -142,6 +142,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             sequence.AppendCallback(() =>
             {
                 pieceAnimator.SetBool(h_win, true);
+                WakeUp();
             });
         }
 
@@ -272,8 +273,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
             CheckActiveTokenCollision(activeTokens);
             CheckTokensAfterMove(activeTokens, endPosition);
-
-            //SetSortingLayer(5 + position.row * 2);
+            
             gameboard.piecesAnimating--;
 
             yield return true;
@@ -282,16 +282,12 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         private void CheckTokensAfterMove(List<IToken> activeTokens, Position piecePos)
         {
             if (activeTokens == null)
-            {
                 return;
-            }
 
             for (int i = 0; i < activeTokens.Count; i++)
             {
                 if (piecePos.column != activeTokens[i].Column || piecePos.row != activeTokens[i].Row)
-                {
                     continue;
-                }
 
                 if (activeTokens[i].tokenType == Token.PIT)
                 {

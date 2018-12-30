@@ -21,8 +21,6 @@ namespace Fourzy._Updates.Mechanics.Board
         public bool sortByOrder = false;
         public bool spawnHintArea = false;
         public bool interactable = false;
-        public MenuController menuController;
-        public MenuScreen assignedScreen;
 
         [Range(3, 8)]
         public int numRows = Constants.numRows;
@@ -82,10 +80,6 @@ namespace Fourzy._Updates.Mechanics.Board
             if (!interactable)
                 return;
 
-            //only continue if current opened screen is GameplayScreen
-            if (assignedScreen != menuController.currentScreen)
-                return;
-
             touched = true;
 
             if (spawnHintArea)
@@ -100,18 +94,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void OnPointerMove(Vector2 position)
         {
-            if (!interactable)
+            if (!interactable || !touched)
                 return;
-
-            if (!touched)
-                return;
-
-            //release controls if current screen isnt GameplayScreen
-            if (assignedScreen != menuController.currentScreen)
-            {
-                OnPointerRelease(position);
-                return;
-            }
 
             if (spawnHintArea)
             {
@@ -122,10 +106,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void OnPointerRelease(Vector2 position)
         {
-            if (!interactable)
-                return;
-
-            if (!touched)
+            if (!interactable || !touched)
                 return;
 
             touched = false;
@@ -154,10 +135,6 @@ namespace Fourzy._Updates.Mechanics.Board
             alphaTween = GetComponent<AlphaTween>();
 
             CalculatePositions();
-
-            //assign control screen
-            if (menuController)
-                assignedScreen = menuController.GetScreen<GameplayScreen>();
 
             isInitialized = true;
 

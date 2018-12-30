@@ -4,26 +4,29 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class IndexEventSelection : MonoBehaviour
+namespace Fourzy._Updates.Tools.Timing
 {
-    public IndexedAdvancedTimingEvent[] events;
-
-    public void ExecureAtIndex(int index)
+    public class IndexEventSelection : MonoBehaviour
     {
-        foreach (IndexedAdvancedTimingEvent @event in events)
-            if (@event.index == index)
-                StartCoroutine(Execute(@event));
+        public IndexedAdvancedTimingEvent[] events;
+
+        public void ExecureAtIndex(int index)
+        {
+            foreach (IndexedAdvancedTimingEvent @event in events)
+                if (@event.index == index)
+                    StartCoroutine(Execute(@event));
+        }
+
+        public IEnumerator Execute(AdvancedTimingEvent @event)
+        {
+            yield return new WaitForSeconds(@event.time);
+            @event.onTimerEnd.Invoke();
+        }
     }
 
-    public IEnumerator Execute(AdvancedTimingEvent @event)
+    [Serializable]
+    public class IndexedAdvancedTimingEvent : AdvancedTimingEvent
     {
-        yield return new WaitForSeconds(@event.time);
-        @event.onTimerEnd.Invoke();
+        public int index;
     }
-}
-
-[Serializable]
-public class IndexedAdvancedTimingEvent : AdvancedTimingEvent
-{
-    public int index;
 }

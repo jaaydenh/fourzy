@@ -53,7 +53,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     string opponentName;
                     if (game.opponent != null && game.opponent.opponentName != null && game.opponent.opponentName != "")
                     {
-                        Debug.Log("game.opponent.opponentName: " + game.opponent.opponentName);
+                        Debug.Log(game.opponent.opponentName);
                         opponentName = game.opponent.opponentName;
                     }
                     else

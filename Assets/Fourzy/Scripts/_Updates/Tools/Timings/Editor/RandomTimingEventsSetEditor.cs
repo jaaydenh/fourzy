@@ -3,54 +3,57 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(RandomTimingEventsSet)), CanEditMultipleObjects]
-public class RandomTimingEventsSetEditor : Editor
+namespace Fourzy._Updates.Tools.Timing
 {
-    private SerializedProperty from;
-    private SerializedProperty to;
-    private SerializedProperty offsetFrom;
-    private SerializedProperty offsetTo;
-
-    private float fromFloat;
-    private float toFloat;
-    private float offsetFromFloat;
-    private float offsetToFloat;
-
-    void OnEnable()
+    [CustomEditor(typeof(RandomTimingEventsSet)), CanEditMultipleObjects]
+    public class RandomTimingEventsSetEditor : Editor
     {
-        from = serializedObject.FindProperty("from");
-        to = serializedObject.FindProperty("to");
-        offsetFrom = serializedObject.FindProperty("offsetFrom");
-        offsetTo = serializedObject.FindProperty("offsetTo");
-    }
+        private SerializedProperty from;
+        private SerializedProperty to;
+        private SerializedProperty offsetFrom;
+        private SerializedProperty offsetTo;
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
+        private float fromFloat;
+        private float toFloat;
+        private float offsetFromFloat;
+        private float offsetToFloat;
 
-        EditorGUILayout.PropertyField(from);
-        EditorGUILayout.PropertyField(to);
+        void OnEnable()
+        {
+            from = serializedObject.FindProperty("from");
+            to = serializedObject.FindProperty("to");
+            offsetFrom = serializedObject.FindProperty("offsetFrom");
+            offsetTo = serializedObject.FindProperty("offsetTo");
+        }
 
-        fromFloat = from.floatValue;
-        toFloat = to.floatValue;
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
 
-        EditorGUILayout.MinMaxSlider(new GUIContent("Set timing range"), ref fromFloat, ref toFloat, .001f, 50f);
+            EditorGUILayout.PropertyField(from);
+            EditorGUILayout.PropertyField(to);
 
-        EditorGUILayout.PropertyField(offsetFrom);
-        EditorGUILayout.PropertyField(offsetTo);
+            fromFloat = from.floatValue;
+            toFloat = to.floatValue;
 
-        offsetFromFloat = offsetFrom.floatValue;
-        offsetToFloat = offsetTo.floatValue;
+            EditorGUILayout.MinMaxSlider(new GUIContent("Set timing range"), ref fromFloat, ref toFloat, .001f, 50f);
 
-        EditorGUILayout.MinMaxSlider(new GUIContent("Set offset range"), ref offsetFromFloat, ref offsetToFloat, .001f, 50f);
+            EditorGUILayout.PropertyField(offsetFrom);
+            EditorGUILayout.PropertyField(offsetTo);
 
-        from.floatValue = fromFloat;
-        to.floatValue = toFloat;
-        offsetFrom.floatValue = offsetFromFloat;
-        offsetTo.floatValue = offsetToFloat;
+            offsetFromFloat = offsetFrom.floatValue;
+            offsetToFloat = offsetTo.floatValue;
 
-        serializedObject.ApplyModifiedProperties();
+            EditorGUILayout.MinMaxSlider(new GUIContent("Set offset range"), ref offsetFromFloat, ref offsetToFloat, .001f, 50f);
 
-        DrawDefaultInspector();
+            from.floatValue = fromFloat;
+            to.floatValue = toFloat;
+            offsetFrom.floatValue = offsetFromFloat;
+            offsetTo.floatValue = offsetToFloat;
+
+            serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
+        }
     }
 }

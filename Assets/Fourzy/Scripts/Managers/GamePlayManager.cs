@@ -3,6 +3,7 @@
 using DG.Tweening;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Mechanics.Board;
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Toasts;
@@ -36,16 +37,13 @@ namespace Fourzy
 
         private bool isLoading = false;
         private bool clockStarted = false;
-        private bool replayedLastMove = false;
         private float gameScreenFadeInTime = .5f;
         private DateTime serverClock;
         private DateTime playerMoveCountdown;
         private int playerMoveTimer_InitialTime;
 
         [HideInInspector]
-        public GameFinishedScreen gameFinishedScreen;
-        [HideInInspector]
-        public GameIntroScreen gameIntroScreen;
+        public GameInfoScreen gameInfoScreen;
         [HideInInspector]
         public GameplayScreen gameplayScreen;
         [HideInInspector]
@@ -65,14 +63,11 @@ namespace Fourzy
             base.Awake();
 
             //get screens
-            gameFinishedScreen = menuController.GetScreen<GameFinishedScreen>();
-            gameIntroScreen = menuController.GetScreen<GameIntroScreen>();
+            gameInfoScreen = menuController.GetScreen<GameInfoScreen>();
             gameplayScreen = menuController.GetScreen<GameplayScreen>();
 
             gameboardView = Instantiate(GameContentManager.Instance.GetCurrentTheme().gameBoard, transform);
             gameboardView.transform.localScale = Vector3.one;
-            gameboardView.menuController = MenuController.current;
-            gameboardView.assignedScreen = gameplayScreen;
 
             //check aspect ratio
             //if aspect is more than 9/16 fit width, else fit height
@@ -125,8 +120,6 @@ namespace Fourzy
 
         protected IEnumerator Start()
         {
-            replayedLastMove = false;
-
             yield return StartCoroutine(FadeGameScreen(.0f, 1f, gameScreenFadeInTime));
             yield return StartCoroutine(ReplayLastMove());
             yield return StartCoroutine(ShowTokenInstructionPopupRoutine());
@@ -145,10 +138,11 @@ namespace Fourzy
             switch (game.gameState.GameType)
             {
                 case GameType.REALTIME:
-                    bgAudio = BGAudioManager.instance.PlayBGAudio(_Updates.Serialized.AudioTypes.GARDEN_REALTIME, true, .9f, 3f);
+                    bgAudio = BGAudioManager.instance.PlayBGAudio(AudioTypes.GARDEN_REALTIME, true, .9f, 3f);
                     break;
                 default:
-                    bgAudio = BGAudioManager.instance.PlayBGAudio(_Updates.Serialized.AudioTypes.GARDEN_TURN_BASED, true, .9f, 3f);
+                    if (!BGAudioManager.instance.IsPlaying(AudioTypes.GARDEN_TURN_BASED))
+                        bgAudio = BGAudioManager.instance.PlayBGAudio(AudioTypes.GARDEN_TURN_BASED, true, .9f, 3f);
                     break;
             }
         }
@@ -158,8 +152,14 @@ namespace Fourzy
             RealtimeManager.OnReceiveTimeStamp -= RealtimeManager_OnReceiveTimeStamp;
             RealtimeManager.OnReceiveMove -= RealtimeManager_OnReceiveMove;
 
-            //stop bg audio
-            BGAudioManager.instance.StopBGAudio(bgAudio, 1f);
+            switch (game.gameState.GameType)
+            {
+                case GameType.PUZZLE:
+                    break;
+                default:
+                    BGAudioManager.instance.StopBGAudio(bgAudio, 1f);
+                    break;
+            }
         }
 
         public void OnPointerDown(Vector2 position)
@@ -167,11 +167,22 @@ namespace Fourzy
             if (!AcceptMoveInput)
                 return;
 
+            //only continue if current opened screen is GameplayScreen
+            if (gameplayScreen != menuController.currentScreen)
+                return;
+
             gameboardView.OnPointerDown(position);
         }
 
         public void OnPointerMove(Vector2 position)
         {
+            //release controls if current screen isnt GameplayScreen
+            if (gameplayScreen != menuController.currentScreen)
+            {
+                OnPointerRelease(position);
+                return;
+            }
+
             gameboardView.OnPointerMove(position);
         }
 
@@ -532,6 +543,29 @@ namespace Fourzy
             }
         }
 
+        public bool IsPlayerWinner()
+        {
+            if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
+                return false;
+
+            bool isPlayerWinner = false;
+            GameType gameType = game.gameState.GameType;
+
+            if (gameType == GameType.PASSANDPLAY)
+                isPlayerWinner = true;
+            else if (gameType == GameType.PUZZLE)
+                isPlayerWinner = game.gameState.IsPuzzleChallengePassed;
+            else
+            {
+                if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
+                    isPlayerWinner = true;
+                else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
+                    isPlayerWinner = true;
+            }
+
+            return isPlayerWinner;
+        }
+
         public IEnumerator ProcessMove(Move move)
         {
             if (!game.gameState.CanMove(move.GetNextPosition(), game.gameState.TokenBoard.tokens))
@@ -548,7 +582,6 @@ namespace Fourzy
                                              || game.gameState.GameType == GameType.FRIEND
                                              || game.gameState.GameType == GameType.LEADERBOARD))
             {
-                replayedLastMove = false;
                 StartCoroutine(MovePiece(move, false, updatePlayer));
                 Debug.Log("LogChallengeEventRequest: challengeInstanceId: " + game.challengeId);
                 new LogChallengeEventRequest().SetChallengeInstanceId(game.challengeId)
@@ -577,7 +610,6 @@ namespace Fourzy
             }
             else if (game.gameState.GameType == GameType.REALTIME)
             {
-                replayedLastMove = false;
                 StartCoroutine(MovePiece(move, false, updatePlayer));
                 move.player = game.isCurrentPlayer_PlayerOne ? PlayerEnum.ONE : PlayerEnum.TWO;
 
@@ -712,7 +744,6 @@ namespace Fourzy
 
         private void UpdateGameStatus(bool updatePlayer)
         {
-            // Debug.Log("UpdateGameStatus:isExpired: " + game.isExpired);
             if (game.gameState.IsGameOver || game.isExpired)
                 StartCoroutine(DisplayGameOverView());
             else
@@ -731,29 +762,6 @@ namespace Fourzy
 
                 gameplayScreen.UpdatePlayerTurn();
             }
-        }
-
-        private bool IsPlayerWinner()
-        {
-            if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
-                return false;
-
-            bool isPlayerWinner = false;
-            GameType gameType = game.gameState.GameType;
-
-            if (gameType == GameType.PASSANDPLAY)
-                isPlayerWinner = true;
-            else if (gameType == GameType.PUZZLE)
-                isPlayerWinner = game.gameState.IsPuzzleChallengePassed;
-            else
-            {
-                if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
-                    isPlayerWinner = true;
-                else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
-                    isPlayerWinner = true;
-            }
-
-            return isPlayerWinner;
         }
 
         private void PlayWinnerSound()
@@ -834,8 +842,6 @@ namespace Fourzy
             if (game.isExpired)
             {
                 GameManager.Instance.VisitedGameResults(game);
-                //gameInfo.Open(LocalizationManager.Instance.GetLocalizedValue("expired_text"), Color.white, false, !game.didViewResult);
-                gameFinishedScreen.Open(LocalizationManager.Instance.GetLocalizedValue("expired_text"), !game.didViewResult);
                 yield break;
             }
 
@@ -843,7 +849,10 @@ namespace Fourzy
 
             LogGameWinner();
             PlayWinnerSound();
-            gameplayScreen.ShowWinnerAnimation(IsPlayerWinner());
+
+            bool isWinner = IsPlayerWinner();
+            gameplayScreen.ShowWinnerAnimation(isWinner);
+            gameInfoScreen.SetData(game);
 
             yield return new WaitForSeconds(1.5f);
 

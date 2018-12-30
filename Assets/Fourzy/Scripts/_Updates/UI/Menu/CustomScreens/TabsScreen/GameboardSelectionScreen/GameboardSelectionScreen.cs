@@ -46,20 +46,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        public void SelectBoard(GameType gameType, string opponentId = "", string opponentName = "", Image opponentProfilePicture = null, string opponentLeaderboardRank = "")
-        {
-            menuController.OpenScreen(this);
-
-            if (opponentId != "")
-                ChallengeManager.Instance.GetOpponentGamePiece(opponentId);
-
-            opponent = new Opponent(opponentId, opponentName, "");
-            opponent.opponentLeaderboardRank = opponentLeaderboardRank;
-        }
-
         public void Play()
         {
-            GameManager.Instance.OpenNewGame(GameType.PASSANDPLAY, opponent, true, null);
+            GameManager.Instance.OpenNewGame(GameType.PASSANDPLAY, new Opponent("", "Player 2", ""), true, null);
         }
     }
 }

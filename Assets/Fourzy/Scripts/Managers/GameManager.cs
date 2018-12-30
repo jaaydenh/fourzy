@@ -373,7 +373,21 @@ namespace Fourzy
         {
             TokenBoard tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard(GameType.RANDOM);
             GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.PASSANDPLAY, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
-            Game newGame = new Game(null, newGameState, true, false, false, null, ChallengeState.NONE, ChallengeType.NONE, UserManager.Instance.gamePieceId.ToString(), null, null, null, null, null, false);
+            Game newGame = new Game(null, 
+                newGameState, 
+                true, 
+                false, 
+                false, 
+                null, 
+                ChallengeState.NONE,
+                ChallengeType.NONE,
+                UserManager.Instance.gamePieceId.ToString(), 
+                UserManager.Instance.gamePieceId.ToString(), 
+                null, 
+                null,
+                null, 
+                null,
+                false);
             return newGame;
         }
 
@@ -385,7 +399,21 @@ namespace Fourzy
             Debug.Log("OpenNewGame: tokenboard name: " + tokenBoard.name);
             //If we initiated the challenge, we get to be player 1
             GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, gameType, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
-            Game newGame = new Game(null, newGameState, true, false, false, opponent, ChallengeState.NONE, ChallengeType.NONE, UserManager.Instance.gamePieceId.ToString(), null, null, null, null, null, displayIntroUI);
+            Game newGame = new Game(null,
+                newGameState, 
+                true,
+                false,
+                false,
+                opponent,
+                ChallengeState.NONE, 
+                ChallengeType.NONE,
+                UserManager.Instance.gamePieceId.ToString(), 
+                UserManager.Instance.gamePieceId.ToString(), 
+                null,
+                null, 
+                null,
+                null, 
+                displayIntroUI);
             OpenGame(newGame);
 
             AnalyticsManager.LogOpenGame(newGame);
@@ -406,7 +434,21 @@ namespace Fourzy
             }
             TokenBoard tokenBoard = new TokenBoard(puzzleChallengeLevel.InitialTokenBoard.ToArray(), "", "", null, null, true);
             GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.PUZZLE, true, true, tokenBoard, puzzleChallengeLevel.InitialGameBoard.ToArray(), false, null);
-            Game newGame = new Game(null, gameState, true, false, false, null, ChallengeState.NONE, ChallengeType.NONE, null, null, puzzleChallengeLevel, null, puzzleChallengeLevel.Name, subtitle.Replace("%1", "<color=#ffff00ff>" + puzzleChallengeLevel.MoveGoal.ToString() + "</color>"), true);
+            Game newGame = new Game(null, 
+                gameState, 
+                true, 
+                false, 
+                false, 
+                null, 
+                ChallengeState.NONE,
+                ChallengeType.NONE,
+                UserManager.Instance.gamePieceId.ToString(),
+                UserManager.Instance.gamePieceId.ToString(),
+                puzzleChallengeLevel,
+                null, 
+                puzzleChallengeLevel.Name, 
+                subtitle.Replace("%1", "<color=#ffff00ff>" + puzzleChallengeLevel.MoveGoal.ToString() + "</color>"),
+                true);
             OpenGame(newGame);
 
             Dictionary<string, object> customAttributes = new Dictionary<string, object>();

@@ -15,6 +15,7 @@ namespace Fourzy._Updates.Mechanics
     public abstract class BoardBit : RoutinesBase
     {
         public GameObject _body;
+        public float onBoardScale = 1f;
 
         protected SpriteRenderer[] spriteRenderers;
         protected SpriteToImage[] spriteToImage;
@@ -74,7 +75,7 @@ namespace Fourzy._Updates.Mechanics
                 {
                     SpriteRenderer spriteRenderer = _body.GetComponent<SpriteRenderer>();
 
-                    transform.localScale = new Vector3(gameboard.step.x / spriteRenderer.bounds.size.x, gameboard.step.y / spriteRenderer.bounds.size.y, 1f);
+                    transform.localScale = new Vector3(gameboard.step.x / spriteRenderer.bounds.size.x, gameboard.step.y / spriteRenderer.bounds.size.y, 1f) * onBoardScale;
                 }
             }
             else
@@ -126,7 +127,7 @@ namespace Fourzy._Updates.Mechanics
             sortingGroup.sortingOrder = layer;
         }
 
-        public void ShowOutline(bool animate)
+        public void ShowOutline(bool repeat)
         {
             if (!outline)
             {
@@ -137,17 +138,17 @@ namespace Fourzy._Updates.Mechanics
             }
 
             outline.outlineColor = Color.green;
-            outline.Animate(0f, 1f, 1f, animate);
+            outline.Animate(0f, 1f, 1f, repeat);
         }
 
-        public void HideOutline(bool force)
+        public void HideOutline(bool hide)
         {
             if (outline)
             {
-                if (force)
+                if (hide)
                     outline.HideOutline();
                 else
-                    outline.StopAnimation();
+                    outline.Animate(outline.tween._value, 0f, .5f, false);
             }
         }
     }

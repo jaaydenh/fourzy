@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
 using TMPro;
@@ -101,20 +102,7 @@ namespace Fourzy._Updates.UI.Toasts
 
         public void SetToastText(string text)
         {
-            string[] words = text.Split(' ');
-
-            List<string> lines = new List<string>();
-            lines.Add("");
-
-            foreach (string word in words)
-            {
-                if (lines[lines.Count - 1].Length + word.Length + 1 >= charactersLineLimit)
-                    lines.Add("");
-
-                lines[lines.Count - 1] += word + " ";
-            }
-
-            tostText.text = string.Join("\n", lines.ToArray());
+            tostText.text = text.SplitText(charactersLineLimit);
         }
     }
 

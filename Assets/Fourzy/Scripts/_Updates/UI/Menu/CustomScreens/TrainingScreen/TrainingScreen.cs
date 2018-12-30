@@ -10,7 +10,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             Mixpanel.Track("Pass And Play Button Press");
 
-            MenuController.GetMenu("MainMenuCanvas").GetScreen<GameboardSelectionScreen>().SelectBoard(GameType.PASSANDPLAY);
+            //MenuController.GetMenu("MainMenuCanvas").GetScreen<GameboardSelectionScreen>().SelectBoard(GameType.PASSANDPLAY);
         }
 
         public void PuzzleChallengeGame()
@@ -20,7 +20,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void AIGame()
         {
-            MenuController.GetMenu("MainMenuCanvas").GetScreen<GameboardSelectionScreen>().SelectBoard(GameType.AI);
+            //MenuController.GetMenu("MainMenuCanvas").GetScreen<GameboardSelectionScreen>().SelectBoard(GameType.AI);
         }
     }
 }

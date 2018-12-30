@@ -159,6 +159,24 @@ namespace Fourzy._Updates.Tools
             return result;
         }
 
+        public static string SplitText(this string text, int charactersLimit)
+        {
+            string[] words = text.Split(' ');
+
+            List<string> lines = new List<string>();
+            lines.Add("");
+
+            foreach (string word in words)
+            {
+                if (lines[lines.Count - 1].Length + word.Length + 1 >= charactersLimit)
+                    lines.Add("");
+
+                lines[lines.Count - 1] += word + " ";
+            }
+
+            return string.Join("\n", lines.ToArray());
+        }
+
         public static AnimationCurve CreateStraightCurve()
         {
             AnimationCurve curve = new AnimationCurve();

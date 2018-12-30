@@ -437,6 +437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _body: {fileID: 1286927949278642}
+  onBoardScale: 1.3
   pieceAnimator: {fileID: 95088793693519316}
   movementCurve:
     serializedVersion: 2
