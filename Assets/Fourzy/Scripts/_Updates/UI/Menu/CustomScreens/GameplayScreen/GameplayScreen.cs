@@ -18,8 +18,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public ButtonExtended resignButton;
 
         private Game game;
-
-        //tabs
         private PuzzleUIScreen puzzleUI;
 
         protected override void Awake()
@@ -33,7 +31,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnBack();
 
-            menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.Instance.BackButtonOnClick(); });
+            switch (game.gameState.GameType)
+            {
+                case GameType.PASSANDPLAY:
+                    if (!game.gameState.IsGameOver)
+                        menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.Instance.BackButtonOnClick(); });
+                    break;
+
+                case GameType.PUZZLE:
+                    GamePlayManager.Instance.BackButtonOnClick();
+                    break;
+
+                default:
+                    menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.Instance.BackButtonOnClick(); });
+                    break;
+            }
         }
 
         public void InitUI(Game game)

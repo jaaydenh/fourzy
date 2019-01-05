@@ -1,6 +1,10 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Widgets;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -9,6 +13,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public static bool isActive = false;
 
         public OnboardingDataHolder scenario;
+
+        public AlphaTween bg;
+        public OnboardingScreenDialog dialog;
+        public OnboardingScreenPointer pointer;
+        public OnboardingScreenHighlight highlight;
+
+        private int onboardingStep;
+        private int onboardingStage;
+        private List<OnboardingDataHolder.OnboardingActions> previousSteps;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            previousSteps = new List<OnboardingDataHolder.OnboardingActions>();
+        }
 
         public override void Open()
         {
@@ -49,9 +69,61 @@ namespace Fourzy._Updates.UI.Menu.Screens
             });
         }
 
+        public void OpenOnboarding(int stage = -1)
+        {
+            if (stage == -1)
+                onboardingStep = PlayerPrefs.GetInt("onboardingStep");
+
+            onboardingStage = PlayerPrefs.GetInt("onboardingStage");
+
+            DisplayCurrentStep();
+        }
+
         public void Next()
         {
+            onboardingStep++;
+            DisplayCurrentStep();
+        }
 
+        public void DisplayCurrentStep()
+        {
+            AnalyticsManager.LogOnboardingStart(onboardingStage, onboardingStep);
+
+            if (scenario.tasks[onboardingStep].hideOther)
+                while (previousSteps.Count > 0)
+                {
+                    switch (previousSteps[0])
+                    {
+                        case OnboardingDataHolder.OnboardingActions.SHOW_MESSAGE:
+                            dialog.Hide(.2f);
+                            break;
+
+                        case OnboardingDataHolder.OnboardingActions.POINT_AT:
+                            pointer.Hide(.2f);
+                            break;
+
+                        case OnboardingDataHolder.OnboardingActions.HIGHLIGHT:
+                            highlight.Hide(.2f);
+                            break;
+                    }
+
+                    previousSteps.RemoveAt(0);
+                }
+
+            switch (scenario.tasks[onboardingStep].action)
+            {
+                case OnboardingDataHolder.OnboardingActions.SHOW_MESSAGE:
+                    dialog.DisplayText(scenario.tasks[onboardingStep].message);
+                    break;
+
+                case OnboardingDataHolder.OnboardingActions.POINT_AT:
+                    break;
+
+                case OnboardingDataHolder.OnboardingActions.HIGHLIGHT:
+                    break;
+            }
+
+            previousSteps.Add(scenario.tasks[onboardingStep].action);
         }
 
         private void MoveStarted()

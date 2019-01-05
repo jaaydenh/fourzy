@@ -10,17 +10,16 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public TextMeshProUGUI playerName;
         public RectTransform pieceParent;
+        public int playerNameMaxSize = 9;
         
         private GamePieceView current;
 
         public void SetupPlayerName(string name)
         {
-            playerName.text = name;
-        }
-
-        public string GetPlayerName()
-        {
-            return playerName.text;
+            if (name.Length > playerNameMaxSize)
+                playerName.text = name.Substring(0, playerNameMaxSize - 1) + "...";
+            else
+                playerName.text = name;
         }
 
         public void InitPlayerIcon(GamePieceView gamePiecePrefab)

@@ -56,30 +56,56 @@ SpriteAtlas:
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: 9b6500a0c5088ee4eb1e9d829b40dfeb, type: 3}
+  - {fileID: 21300000, guid: 5182f4f0fe84af243b4165aa58f1c06e, type: 3}
   - {fileID: 21300000, guid: c160e712160e34fe38fdb3a33069cd8b, type: 3}
   - {fileID: 21300000, guid: 884e828293a874cd69156202e84b89ac, type: 3}
+  - {fileID: 21300000, guid: 97ecd5920dfc1654fbe8da46007f7c4e, type: 3}
+  - {fileID: 21300000, guid: 6b54b7c2b4393bb4c98ee5a7fb116306, type: 3}
   - {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
   - {fileID: 21300000, guid: e5c48d04ca1374c698544f2347a02129, type: 3}
+  - {fileID: 21300000, guid: 046c8e76d5d4eb248b39284782f17b80, type: 3}
   - {fileID: 21300000, guid: 1a881a67ed54c476493a115db846f636, type: 3}
   - {fileID: 21300000, guid: 84fe40e7948c54c57995635a2d5f081a, type: 3}
+  - {fileID: 21300000, guid: 5bc2dd4836a9c9749b770f163312c92a, type: 3}
+  - {fileID: 21300000, guid: ad107309a66d9b542ab245f66c91beb4, type: 3}
   - {fileID: 21300000, guid: 67692cd97f41f4e4990551c6ce857e95, type: 3}
   - {fileID: 21300000, guid: 6bec12e9c39f244fbaf24bdc6baa2852, type: 3}
+  - {fileID: 21300000, guid: f06c7f0a6ed892a4ba22a40a56477dad, type: 3}
   - {fileID: 21300000, guid: 51d86dda53ccf4eb9831e84c249298fa, type: 3}
+  - {fileID: 21300000, guid: b3a3a3fa1283cc249af75de64b1c0abb, type: 3}
+  - {fileID: 21300000, guid: dbdc591b399709a428a23f9ee6241c57, type: 3}
   - {fileID: 21300000, guid: e28f5e8c6a8f44c68a87123189c6ecab, type: 3}
   - {fileID: 21300000, guid: a7808e2d1e66e4370b30a2ac0d36ad46, type: 3}
+  - {fileID: 21300000, guid: c18f272e5fb766944b3ad78762e78324, type: 3}
+  - {fileID: 21300000, guid: bf7cef5e3bb8fa34aa57e8fbecc9768c, type: 3}
   - {fileID: 21300000, guid: 1f21b1de07fbd4da09e8d68b039983d3, type: 3}
+  - {fileID: 21300000, guid: a72d0beedb5d30f46887fd043f2eb104, type: 3}
   m_PackedSpriteNamesToIndex:
+  - 03_Beach-Gameboard
+  - 01_Training-Gameboard
   - windowForest
   - windowIsland
+  - 02_Forest-Background
+  - 02_Forest-Gameboard
   - windowTrainingGarden
   - IslandBoard
+  - Pattern (iPhoneX)
   - boardTrainingGarden
   - PopupBackground
+  - 03_Beach-Background
+  - 01_Training-Background
   - ForestBackground
   - backgroundUI
+  - 01_Training-Gameboard
   - TrainingGardenBackground
+  - 03_Beach_Gameboard
+  - 02_Forest-Background
   - IslandBackground
   - backgroundPatternUI
+  - 02_Forest-Gameboard
+  - 01_Training-Background
   - ForestBoard
+  - 03_Beach_Background
   m_Tag: LargeSprites
   m_IsVariant: 0
