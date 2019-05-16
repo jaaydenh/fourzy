@@ -16,7 +16,7 @@ namespace Fourzy._Updates.UI.Helpers
         [Tooltip("Time during which swipe can occur")]
         public float swipeTime = .2f;
 
-        public AdvancedSwipEvent onSwipe;
+        public Action<SwipeDirection> onSwipe;
 
         private float swipeTimer;
         private bool checking = false;
@@ -86,27 +86,28 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void InvokeSwipe(SwipeDirection swipeDirection)
         {
-            onSwipe.Invoke(swipeDirection);
+            onSwipe?.Invoke(swipeDirection);
 
             swipeTimer = 0f;
             checking = false;
         }
-
-        public enum SwipeAxis
-        {
-            HORIZONTAL,
-            VERTICAL,
-            BOTH,
-        }
-
-        public enum SwipeDirection
-        {
-            LEFT,
-            RIGHT,
-            UP,
-            DOWN,
-        }
-
-        [Serializable] public class AdvancedSwipEvent : AdvancedEvent<SwipeDirection> { }
     }
+
+    public enum SwipeAxis
+    {
+        HORIZONTAL,
+        VERTICAL,
+        BOTH,
+    }
+
+    [Serializable]
+    public enum SwipeDirection
+    {
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN,
+    }
+
+    [Serializable] public class AdvancedSwipeEvent : AdvancedEvent<SwipeDirection> { }
 }

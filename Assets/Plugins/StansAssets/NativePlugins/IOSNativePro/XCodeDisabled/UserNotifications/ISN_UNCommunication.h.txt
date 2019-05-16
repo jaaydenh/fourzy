@@ -1,0 +1,115 @@
+#define CORE_LOCATION_API_ENABLED
+
+#if !TARGET_OS_TV
+
+#import "JSONModel.h"
+#import "ISN_Foundation.h"
+#import "ISN_NSCommunication.h"
+#import <UserNotifications/UserNotifications.h>
+
+#ifdef CORE_LOCATION_API_ENABLED
+#import "ISN_CLCommunication.h"
+#endif
+
+typedef NS_ENUM(NSInteger, ISN_UNNotificationTriggerType) {
+    ISN_UNNotificationTriggerTypeTimeInterval,
+    ISN_UNNotificationTriggerTypeCalendar,
+    
+#ifdef CORE_LOCATION_API_ENABLED
+    ISN_UNNotificationTriggerTypeLocation,
+#endif
+    ISN_UNNotificationTriggerTypePushNotification
+};
+
+
+@interface ISN_UNNotificationSettings : JSONModel
+@property (nonatomic) UNAuthorizationStatus m_authorizationStatus;
+@property (nonatomic) UNNotificationSetting m_notificationCenterSetting;
+@property (nonatomic) UNNotificationSetting m_lockScreenSetting;
+@property (nonatomic) UNNotificationSetting m_carPlaySetting;
+@property (nonatomic) UNNotificationSetting m_alertSetting;
+@property (nonatomic) UNAlertStyle m_alertStyle;
+@property (nonatomic) UNNotificationSetting m_badgeSetting;
+@property (nonatomic) UNNotificationSetting m_soundSetting;
+@property (nonatomic) UNShowPreviewsSetting m_showPreviewsSetting;
+
+
+
+
+-(id) initWithSettings:(UNNotificationSettings *) settings;
+@end
+
+
+@interface ISN_UNMutableNotificationContent: JSONModel
+
+@property (nonatomic) NSString *m_title;
+@property (nonatomic) NSString *m_subtitle;
+@property (nonatomic) NSString *m_body;
+@property (nonatomic) long m_badge;
+@property (nonatomic) NSString *m_sound;
+@property (nonatomic) NSString *m_userInfo;
+
+-(id) initWithContent:(UNNotificationContent *) content;
+-(UNNotificationContent* ) getNotificationContent;
+@end
+
+@interface ISN_ISN_UNNotificationTrigger: JSONModel
+@property (nonatomic) bool m_repeats;
+@property (nonatomic) long m_nextTriggerDate;
+@property (nonatomic) ISN_UNNotificationTriggerType m_type;
+@property (nonatomic) long m_timeInterval;
+@property (nonatomic) ISN_NSDateComponents* m_dateComponents;
+#ifdef CORE_LOCATION_API_ENABLED
+@property (nonatomic) ISN_CLCircularRegion *m_region;
+#endif
+
+-(id) initWithTrigger:(UNNotificationTrigger *) trigger;
+-(UNNotificationTrigger* ) getTrigger;
+@end
+
+@protocol ISN_UNNotificationRequest;
+@interface ISN_UNNotificationRequest: JSONModel
+@property(nonatomic) NSString *m_identifier;
+@property(nonatomic) ISN_UNMutableNotificationContent *m_content;
+@property(nonatomic) ISN_ISN_UNNotificationTrigger *m_trigger;
+
+-(id) initWithRequest:(UNNotificationRequest *) request;
+-(UNNotificationRequest*) getRequest;
+@end
+
+
+
+@protocol ISN_UNNotification;
+@interface ISN_UNNotification : JSONModel
+@property(nonatomic) long m_date;
+@property(nonatomic) ISN_UNNotificationRequest *m_request;
+
+-(id) initWithUNNotification:(UNNotification *) notification;
+@end
+
+
+@interface ISN_UNNotificationResponse : JSONModel
+@property (nonatomic) ISN_UNNotification *m_notification;
+@property (nonatomic) NSString *m_actionIdentifier;
+
+-(id) initWithUNNotificationResponse:(UNNotificationResponse *) response;
+@end
+
+
+
+@interface ISN_UNNotifcationRequestsIds : JSONModel
+@property (nonatomic) NSArray <NSString *> *m_notificationIds;
+@end
+
+@interface ISN_UNNotifcationRequests : JSONModel
+@property (nonatomic) NSArray <ISN_UNNotificationRequest> *m_requests;
+@end
+
+
+@interface ISN_UNNotifcations : JSONModel
+@property (nonatomic) NSArray <ISN_UNNotification> *m_notifications;
+@end
+
+
+
+#endif

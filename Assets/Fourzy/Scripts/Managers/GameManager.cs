@@ -1,47 +1,63 @@
-﻿using DG.Tweening;
+﻿//
+
+using Firebase;
+using Firebase.RemoteConfig;
+using Firebase.Storage;
+using Fourzy._Updates.Audio;
+using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Mechanics;
+using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Threading;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
-using Fourzy._Updates.UI.Toasts;
-using GameSparks.Api.Messages;
-using GameSparks.Api.Requests;
-using GameSparks.Core;
+using Fourzy._Updates.Tools;
 using mixpanel;
+using MoreMountains.NiceVibrations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using FourzyGameModel.Model;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace Fourzy
 {
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class GameManager : UnitySingleton<GameManager>
     {
-        public static event Action<List<Game>> OnUpdateGames;
-        public static event Action<Game> OnUpdateGame;
+        public static Action<string> onDailyChallengeFileName;
 
-        [HideInInspector]
-        public Game activeGame;
+        public static Dictionary<string, object> APP_REMOTE_SETTINGS_DEFAULTS;
 
-        private List<Game> games = new List<Game>();
+        [Header("Display tutorials?")]
+        public bool displayTutorials = true;
+        [Header("Display tutorial even if it was already displayed")]
+        public bool forceDisplayTutorials = true;
+        public bool showInfoToasts = true;
 
-        public PuzzlePack ActivePuzzlePack { get; private set; }
-        public bool shouldLoadOnboarding = false;
-        public bool showinfoToasts = true;
+        public PuzzleData dailyPuzzlePack { get; private set; }
+        public IClientFourzy activeGame { get; set; }
+        public DependencyStatus dependencyStatus;
 
-        public List<Game> Games
+        private bool configFetched = false;
+
+        public bool isMainMenuLoaded
         {
             get
             {
-                return games;
-            }
-            set
-            {
-                games = value;
-                if (OnUpdateGames != null)
-                {
-                    OnUpdateGames(games);
-                }
+                //load main menu if needed
+                bool mainMenuLoaded = false;
+                for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+                    if (SceneManager.GetSceneAt(sceneIndex).name == Constants.MAIN_MENU_SCENE_NAME)
+                    {
+                        mainMenuLoaded = true;
+                        break;
+                    }
+
+                return mainMenuLoaded;
             }
         }
 
@@ -49,510 +65,102 @@ namespace Fourzy
         {
             base.Awake();
 
-            DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
-        }
+            if (InstanceExists) return;
 
-        protected void OnEnable()
-        {
-            // GS.GameSparksAvailable += CheckConnectionStatus;
-            ChallengeManager.OnReceivedOpponentGamePiece += SetOpponentGamePiece;
-            LoginManager.OnLoginMessage += ShowInfoBanner;
-            GamePlayManager.OnGamePlayMessage += ShowInfoBanner;
-            ChallengeManager.OnOpponentTurnTakenDelegate += OpponentTurnHandler;
-            ChallengeManager.OnChallengeJoinedDelegate += ChallengeJoinedHandler;
-            ChallengeManager.OnChallengeWonDelegate += ChallengeWonHandler;
-            ChallengeManager.OnChallengeLostDelegate += ChallengeLostHandler;
-            ChallengeManager.OnChallengeDrawnDelegate += ChallengeDrawnHandler;
-            ChallengeManager.OnChallengeIssuedDelegate += ChallengeIssuedHandler;
+#if UNITY_IOS
+            MMVibrationManager.iOSInitializeHaptics();
+#endif
+
+            NetworkAccess.Initialize(DEBUG: true);
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
-        }
 
-        protected void OnDisable()
-        {
-            // GS.GameSparksAvailable -= CheckConnectionStatus;
-            ChallengeManager.OnReceivedOpponentGamePiece -= SetOpponentGamePiece;
-            LoginManager.OnLoginMessage -= ShowInfoBanner;
-            GamePlayManager.OnGamePlayMessage -= ShowInfoBanner;
-            ChallengeManager.OnOpponentTurnTakenDelegate -= OpponentTurnHandler;
-            ChallengeManager.OnChallengeJoinedDelegate -= ChallengeJoinedHandler;
-            ChallengeManager.OnChallengeWonDelegate -= ChallengeWonHandler;
-            ChallengeManager.OnChallengeLostDelegate -= ChallengeLostHandler;
-            ChallengeManager.OnChallengeDrawnDelegate -= ChallengeDrawnHandler;
-            ChallengeManager.OnChallengeIssuedDelegate -= ChallengeIssuedHandler;
+            //to modify manifest file
+            bool value = false;
+            if (value) Handheld.Vibrate();
 
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-            SceneManager.sceneUnloaded -= OnSceneUnloaded;
+            APP_REMOTE_SETTINGS_DEFAULTS = new Dictionary<string, object>()
+            {
+                [Constants.KEY_APP_VERSION] = Application.version,
+                [Constants.KEY_DAILY_PUZZLE] = "",
+            };
+
+            FirebaseRemoteConfig.SetDefaults(APP_REMOTE_SETTINGS_DEFAULTS);
         }
 
         protected void Start()
         {
-            GS.GameSparksAvailable += CheckConnectionStatus;
-
             Mixpanel.Track("Game Started");
-
-            ChallengeAcceptedMessage.Listener = (message) =>
-            {
-                var gsChallenge = message.Challenge;
-                Debug.Log("ChallengeAcceptedMessage");
-
-                if (UserManager.Instance.userId == gsChallenge.NextPlayer)
-                {
-                    Debug.Log("UserManager.Instance.userId == gsChallenge.NextPlayer");
-                }
-            };
-
-            ChallengeStartedMessage.Listener = (message) =>
-            {
-                var gsChallenge = message.Challenge;
-                Debug.Log("ChallengeStartedMessage");
-
-                if (UserManager.Instance.userId == gsChallenge.NextPlayer)
-                {
-                    Debug.Log("UserManager.Instance.userId == gsChallenge.NextPlayer");
-                }
-            };
-
 #if UNITY_IOS
             UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
             UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
 #endif
+            //init  threadqueuer
+            ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(null);
 
-            if (shouldLoadOnboarding && PlayerPrefs.GetInt("onboardingStage") <= 1)
-            {
-                OpenNewGame(GameType.PASSANDPLAY, null, false, "100");
-
-                shouldLoadOnboarding = false;
-                PersistantMenuController.current.OpenScreen<OnboardingScreen>(true);
-            }
+            NetworkAccess.onNetworkAccess += OnNetworkAccess;
         }
 
-        private void OpponentTurnHandler(ChallengeTurnTakenMessage message)
+        protected void OnDestory()
         {
-            //Debug.Log("OpponentTurnHandler: active scene: " + SceneManager.GetActiveScene().name);
-            var gsChallenge = message.Challenge;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
 
-            // Only do this for the opponent, not the player who just made the move
-            if (UserManager.Instance.userId == gsChallenge.NextPlayer)
+            NetworkAccess.onNetworkAccess -= OnNetworkAccess;
+
+#if UNITY_IOS
+            MMVibrationManager.iOSReleaseHaptics ();
+#endif
+        }
+
+        public void StartGame(IClientFourzy game)
+        {
+            switch (game._Type)
             {
-                // Only Replay the last move if the player is viewing the game screen for that game
-                // replayedLastMove is a workaround to avoid having the opponents move being replayed more than once
-                if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME)
-                {
-                    if (gsChallenge.ChallengeId == activeGame.challengeId)
-                    {
-                        List<GSData> moveList = gsChallenge.ScriptData.GetGSDataList("moveList");
-                        GSData lastMove = moveList.Last();
-                        int currentPlayerMove = gsChallenge.ScriptData.GetInt("currentPlayerMove").GetValueOrDefault();
-                        PlayerEnum opponent = currentPlayerMove == 1 ? PlayerEnum.TWO : PlayerEnum.ONE;
-                        int position = lastMove.GetInt("position").GetValueOrDefault();
-                        Direction direction = (Direction)lastMove.GetInt("direction").GetValueOrDefault();
-                        Move move = new Move(position, direction, opponent);
-                        StartCoroutine(GamePlayManager.Instance.ReplayIncomingOpponentMove(move));
-                    }
-                    else
-                    {
-                        GamePlayManager.Instance.gameplayScreen.SetActionButton();
-                    }
-                }
+                case GameType.TURN_BASED:
+                    Debug.Log($"Starting challenge, id: {game.GameID}");
+                    break;
+            }
+
+            //if gameplay scene is already opened, just load game
+            if (activeGame != null)
+            {
+                GamePlayManager.instance.LoadGame(game);
+            }
+            else
+            {
+                if (isMainMenuLoaded)
+                    SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME, LoadSceneMode.Additive);
                 else
-                {
-                    var currentGame = games
-                        .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                        .FirstOrDefault();
-                    if (currentGame != null)
-                    {
-                        GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-                        // TODO: update with correct gameType
-                        GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, PlayerEnum.EMPTY, ChallengeManager.Instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
-                        currentGame.gameState = newGameState;
-
-                        if (OnUpdateGame != null)
-                        {
-                            OnUpdateGame(currentGame);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void ChallengeJoinedHandler(ChallengeJoinedMessage message)
-        {
-            var gsChallenge = message.Challenge;
-            string opponentId = gsChallenge.Challenged.FirstOrDefault().Id;
-            string opponentName = gsChallenge.Challenged.FirstOrDefault().Name;
-            string opponentFBId = gsChallenge.Challenged.FirstOrDefault().ExternalIds.GetString("FB");
-            Opponent opponent = new Opponent(opponentId, opponentName, opponentFBId);
-
-            ChallengeManager.Instance.GetOpponentGamePiece(opponentId, gsChallenge.ChallengeId);
-
-            var currentGame = games
-                .Where(t => t.challengeId == gsChallenge.ChallengeId)
-                .FirstOrDefault();
-            if (currentGame != null)
-            {
-                currentGame.opponent = opponent;
-                currentGame.InitGame();
-
-                if (OnUpdateGame != null)
-                {
-                    OnUpdateGame(currentGame);
-                }
+                    SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME);
             }
 
-            if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME && gsChallenge.ChallengeId == activeGame.challengeId)
-            {
-                GamePlayManager.Instance.UpdateOpponentUI(opponent);
-            }
-        }
-
-        private void ChallengeDrawnHandler(ChallengeDrawnMessage message)
-        {
-            GameSparksChallenge challenge = new GameSparksChallenge(message.Challenge);
-            GameCompletedHandler(challenge);
-        }
-
-        private void ChallengeWonHandler(ChallengeWonMessage message)
-        {
-            GameSparksChallenge challenge = new GameSparksChallenge(message.Challenge);
-            GameCompletedHandler(challenge);
-        }
-
-        private void ChallengeLostHandler(ChallengeLostMessage message)
-        {
-            GameSparksChallenge challenge = new GameSparksChallenge(message.Challenge);
-            GameCompletedHandler(challenge);
-        }
-
-        private void GameCompletedHandler(GameSparksChallenge challenge)
-        {
-            PlayerEnum player = challenge.currentPlayerMove == 1 ? PlayerEnum.ONE : PlayerEnum.TWO;
-
-            if (challenge.challengeId == activeGame.challengeId)
-            {
-                //ChallengeManager.Instance.GetRatingDelta(activeGame.challengeId);
-            }
-
-            // Only for the player who didn't make the last move
-            if (UserManager.Instance.userId != challenge.nextPlayer)
-            {
-                var currentGame = games
-                .Where(t => t.challengeId == challenge.challengeId)
-                .FirstOrDefault();
-                if (currentGame != null)
-                {
-                    //TODO: update with correct game type
-                    GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, player, ChallengeManager.Instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
-                    currentGame.gameState = newGameState;
-                    currentGame.challengerRatingDelta = challenge.challengerRatingDelta;
-                    currentGame.challengedRatingDelta = challenge.challengedRatingDelta;
-
-                    if (OnUpdateGame != null)
-                    {
-                        OnUpdateGame(currentGame);
-                    }
-                }
-
-                // Only Replay the last move if the player is viewing the game screen for that game
-                if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME)
-                {
-                    if (challenge.challengeId == activeGame.challengeId)
-                    {
-                        GSData lastMove = challenge.moveList.Last();
-
-                        int position = lastMove.GetInt("position").GetValueOrDefault();
-                        Direction direction = (Direction)lastMove.GetInt("direction").GetValueOrDefault();
-                        Move move = new Move(position, direction, player);
-
-                        StartCoroutine(GamePlayManager.Instance.ReplayIncomingOpponentMove(move));
-                    }
-
-                    GamePlayManager.Instance.gameplayScreen.SetActionButton();
-                }
-            }
-
-            // Update players coins and rating when a game is completed
-            UserManager.Instance.UpdateInformation();
-        }
-
-        private void ChallengeIssuedHandler(ChallengeIssuedMessage message)
-        {
-            var gsChallenge = message.Challenge;
-            Debug.Log("ChallengeIssuedHandler");
-            GameSparksChallenge challenge = new GameSparksChallenge(gsChallenge);
-
-            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.RANDOM, challenge.isPlayerOneTurn, true, challenge.isGameOver, challenge.tokenBoard, PlayerEnum.EMPTY, ChallengeManager.Instance.ConvertMoveList(challenge.moveList), challenge.previousGameboardData);
-            string opponentFBId = gsChallenge.Challenger.ExternalIds.GetString("FB");
-            Opponent opponent = new Opponent(gsChallenge.Challenger.Id, gsChallenge.Challenger.Name, opponentFBId);
-
-            Game game = new Game(gsChallenge.ChallengeId, newGameState, false, false, false, opponent, ChallengeState.RUNNING, ChallengeType.STANDARD, challenge.challengerGamePieceId, challenge.challengedGamePieceId, null, null, null, null, true);
-            game.gameState.SetRandomGuid(gsChallenge.ChallengeId);
-            games.Add(game);
-
-            if (OnUpdateGames != null)
-            {
-                OnUpdateGames(games);
-            }
-
-            if (SceneManager.GetActiveScene().name == Constants.GAMEPLAY_SCENE_NAME)
-            {
-                GamePlayManager.Instance.gameplayScreen.SetActionButton();
-            }
-        }
-
-        void OnApplicationPause(bool paused)
-        {
-            if (!paused)
-            {
-                if (ChallengeManager.Instance)
-                {
-                    ChallengeManager.Instance.GetChallengesRequest();
-                }
-            }
-            else
-            {
-                new EndSessionRequest()
-                    .Send((response) =>
-                    {
-                        if (response.HasErrors)
-                        {
-                            Debug.Log("***** EndSessionRequest:Error: " + response.Errors.JSON);
-                        }
-                    });
-            }
-        }
-
-        public Game GetNextActiveGame()
-        {
-            Game game = null;
-            for (int i = 0; i < games.Count(); i++)
-            {
-                if (games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.IsGameOver == true))
-                {
-                    game = games[i];
-                    break;
-                }
-            }
-
-            return game;
-        }
-
-        public void UpdateGame(Game game)
-        {
-            var currentGame = games
-                .Where(t => t.challengeId == game.challengeId)
-                .FirstOrDefault();
-            if (currentGame != null)
-            {
-                currentGame.gameState = game.gameState;
-            }
-        }
-
-        public void VisitedGameResults(Game game)
-        {
-            var currentGame = games
-                .Where(t => t.challengeId == game.challengeId).FirstOrDefault();
-            if (currentGame != null)
-            {
-                if (!currentGame.didViewResult && game.gameState.IsGameOver)
-                {
-                    ChallengeManager.Instance.SetViewedCompletedGame(game.challengeId);
-                    currentGame.didViewResult = true;
-                }
-            }
-        }
-
-        public void OpenGame(Game game)
-        {
             activeGame = game;
-            SceneManager.LoadScene("gamePlayNew", LoadSceneMode.Additive);
         }
 
-        public Game GetRandomGame()
+        public void OpenMainMenu()
         {
-            TokenBoard tokenBoard = TokenBoardLoader.Instance.GetRandomTokenBoard(GameType.RANDOM);
-            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, GameType.PASSANDPLAY, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
-            Game newGame = new Game(null, 
-                newGameState, 
-                true, 
-                false, 
-                false, 
-                null, 
-                ChallengeState.NONE,
-                ChallengeType.NONE,
-                UserManager.Instance.gamePieceId.ToString(), 
-                UserManager.Instance.gamePieceId.ToString(), 
-                null, 
-                null,
-                null, 
-                null,
-                false);
-            return newGame;
+            //unload gameplay scene 
+            if (activeGame != null)
+                GamePlayManager.instance.UnloadGamePlayScreen();
+
+            if (!isMainMenuLoaded)
+                SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
         }
 
-        public void OpenNewGame(GameType gameType, Opponent opponent, bool displayIntroUI = true, string tokenBoardId = null)
-        {
-            Debug.Log("GameManager OpenNewGame tokenboardId: " + tokenBoardId);
+        public static void Vibrate(HapticTypes type) => MMVibrationManager.Haptic(type);
 
-            TokenBoard tokenBoard = ChallengeManager.Instance.GetTokenBoard(gameType, tokenBoardId);
-            Debug.Log("OpenNewGame: tokenboard name: " + tokenBoard.name);
-            //If we initiated the challenge, we get to be player 1
-            GameState newGameState = new GameState(Constants.numRows, Constants.numColumns, gameType, true, true, tokenBoard, tokenBoard.initialGameBoard, false, null);
-            Game newGame = new Game(null,
-                newGameState, 
-                true,
-                false,
-                false,
-                opponent,
-                ChallengeState.NONE, 
-                ChallengeType.NONE,
-                UserManager.Instance.gamePieceId.ToString(), 
-                UserManager.Instance.gamePieceId.ToString(), 
-                null,
-                null, 
-                null,
-                null, 
-                displayIntroUI);
-            OpenGame(newGame);
-
-            AnalyticsManager.LogOpenGame(newGame);
-        }
-
-        public void OpenPuzzleChallengeGame(string type = "open")
-        {
-            PuzzleChallengeLevel puzzleChallengeLevel = ActivePuzzlePack.PuzzleChallengeLevels[ActivePuzzlePack.ActiveLevel - 1];
-
-            string subtitle = "";
-            if (puzzleChallengeLevel.MoveGoal > 1)
-            {
-                subtitle = LocalizationManager.Instance.GetLocalizedValue("puzzle_challenge_win_instructions_plural");
-            }
-            else
-            {
-                subtitle = LocalizationManager.Instance.GetLocalizedValue("puzzle_challenge_win_instructions_singular");
-            }
-            TokenBoard tokenBoard = new TokenBoard(puzzleChallengeLevel.InitialTokenBoard.ToArray(), "", "", null, null, true);
-            GameState gameState = new GameState(Constants.numRows, Constants.numColumns, GameType.PUZZLE, true, true, tokenBoard, puzzleChallengeLevel.InitialGameBoard.ToArray(), false, null);
-            Game newGame = new Game(null, 
-                gameState, 
-                true, 
-                false, 
-                false, 
-                null, 
-                ChallengeState.NONE,
-                ChallengeType.NONE,
-                UserManager.Instance.gamePieceId.ToString(),
-                UserManager.Instance.gamePieceId.ToString(),
-                puzzleChallengeLevel,
-                null, 
-                puzzleChallengeLevel.Name, 
-                subtitle.Replace("%1", "<color=#ffff00ff>" + puzzleChallengeLevel.MoveGoal.ToString() + "</color>"),
-                true);
-            OpenGame(newGame);
-
-            Dictionary<string, object> customAttributes = new Dictionary<string, object>();
-            customAttributes.Add("id", puzzleChallengeLevel.ID);
-            customAttributes.Add("level", puzzleChallengeLevel.Level);
-            AnalyticsManager.LogCustom(type + "_puzzle_challenge", customAttributes);
-        }
-
-        public void SetActivePuzzlePack(PuzzlePack puzzlePack)
-        {
-            ActivePuzzlePack = puzzlePack;
-        }
-
-        public void SetNextActivePuzzleLevel()
-        {
-            if (ActivePuzzlePack.ActiveLevel < ActivePuzzlePack.PuzzleChallengeLevels.Count)
-                ActivePuzzlePack.ActiveLevel++;
-            else
-                ActivePuzzlePack.ActiveLevel = 1;
-        }
-
-        public void OpenNextGame()
-        {
-            SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
-
-            for (int i = 0; i < games.Count; i++)
-            {
-                if (games[i].challengeId == activeGame.challengeId)
-                {
-                    var game = games[i];
-                    games.RemoveAt(i);
-                    games.Add(game);
-                    break;
-                }
-            }
-
-            for (int i = 0; i < games.Count; i++)
-            {
-                if ((games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.IsGameOver == true)) && games[i].challengeId != activeGame.challengeId)
-                {
-                    if (games[i] != null)
-                    {
-                        OpenGame(games[i]);
-                        AnalyticsManager.LogCustom("next_game");
-                        break;
-                    }
-                }
-            }
-        }
-
-        public void ShowInfoBanner(string message)
-        {
-            GamesToastsController.ShowTopToast(message);
-        }
-
-        public void AddGame(Game game)
-        {
-            game.gameState.SetRandomGuid(game.challengeId);
-            games.Add(game);
-        }
-
-        public void CallMovePiece(Move move, bool replayMove, bool updatePlayer)
-        {
-            StartCoroutine(GamePlayManager.Instance.MovePiece(move, replayMove, updatePlayer));
-        }
-
-        private void SetOpponentGamePiece(string gamePieceId, string challengeId)
-        {
-            if (challengeId != "")
-            {
-                var game = games
-                    .Where(t => t.challengeId == challengeId)
-                    .FirstOrDefault();
-
-                if (game != null)
-                {
-                    game.challengedGamePieceId = int.Parse(gamePieceId);
-                }
-
-                if (game.challengedGamePieceId > GameContentManager.Instance.piecesDataHolder.gamePieces.Length - 1)
-                {
-                    game.challengedGamePieceId = 0;
-                }
-            }
-        }
-
-        private void CheckConnectionStatus(bool connected)
-        {
-            // TODO: inform the player they dont have a connection when connected is false
-            //Debug.Log("CheckConnectionStatus: " + connected);
-            if (connected)
-                ShowInfoBanner("Connected Successfully");
-            else
-                ShowInfoBanner("Error connecting to server");
-        }
+        public static void Vibrate() => Vibrate(HapticTypes.Success);
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            SceneManager.SetActiveScene(scene);
-
             switch (scene.name)
             {
                 case Constants.GAMEPLAY_SCENE_NAME:
                     MenuController.SetState("MainMenuCanvas", false);
+
+                    AudioHolder.instance.StopBGAudio(AudioTypes.BG_MAIN_MENU, .5f);
                     break;
             }
         }
@@ -563,8 +171,200 @@ namespace Fourzy
             {
                 case Constants.GAMEPLAY_SCENE_NAME:
                     MenuController.SetState("MainMenuCanvas", true);
+
+                    AudioHolder.instance.PlayBGAudio(AudioTypes.BG_MAIN_MENU, true, 1f, 3f);
                     break;
             }
+        }
+
+        private void GetRomoteSettings()
+        {
+            Task fetchTask = FirebaseRemoteConfig.FetchAsync(TimeSpan.Zero);
+            fetchTask.ContinueWith(FetchComplete);
+        }
+
+        private bool VersionCheck()
+        {
+            string value = FirebaseRemoteConfig.GetValue(Constants.KEY_APP_VERSION).StringValue;
+
+            Debug.Log($"Version checker: {Application.version} app version, {value} required app version");
+
+            //version checker
+            if (Application.version != value)
+            {
+                //show version popup
+                PersistantMenuController.instance.GetScreen<PromptScreen>().Prompt(
+                    "New Version Available",
+                    "New app version available,\nplease update your app pressing button below",
+                    "Update",
+                    null,
+                    () =>
+                {
+                    //open app page in related store
+                    PersistantMenuController.instance.CloseCurrentScreen(true);
+                },
+                //do nothing on decline
+                () => { }
+                );
+            }
+
+            return Application.version != value;
+        }
+
+        private void DailyPuzzleCheck()
+        {
+            string value = FirebaseRemoteConfig.GetValue(Constants.KEY_DAILY_PUZZLE).StringValue;
+
+            Debug.Log($"Old Daily Puzzle file '{PlayerPrefsWrapper.GetDailyPuzzleFileName()}', new '{value}'");
+
+            //filename check
+            if (PlayerPrefsWrapper.GetDailyPuzzleFileName() != value)
+            {
+                PlayerPrefsWrapper.SetDailyPuzzleFileName(value);
+
+                onDailyChallengeFileName?.Invoke(value);
+
+                //download file
+                FirebaseStorage storage = FirebaseStorage.GetInstance("gs://fourzytesting.appspot.com");
+                StorageReference reference = storage.GetReference("puzzles/daily/" + value);
+
+                reference.GetFileAsync(Application.persistentDataPath + "/" + value).ContinueWith(task =>
+                {
+                    Debug.Log(task.Status);
+                    if (!task.IsFaulted && !task.IsCanceled)
+                    {
+                        //downloaded
+                        ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() => DisplayDailyPuzzlePopup());
+                    }
+                });
+            }
+        }
+
+        private void DisplayDailyPuzzlePopup()
+        {
+            dailyPuzzlePack = JsonConvert.DeserializeObject<PuzzleData>(File.ReadAllText(Application.persistentDataPath + "/" + PlayerPrefsWrapper.GetDailyPuzzleFileName()));
+
+            if (dailyPuzzlePack != null)
+            {
+                //new daily puzzle available
+
+
+                //show daily puzzle popup
+                PersistantMenuController.instance.GetScreen<PromptScreen>().Prompt(
+                    "New Daily Puzzle",
+                    "New Daily Puzzle Available!",
+                    "Update",
+                    null,
+                    () =>
+                    {
+                        //open app page in related store
+                        PersistantMenuController.instance.CloseCurrentScreen(true);
+                    },
+                    null
+                );
+            }
+        }
+
+        private void FetchComplete(Task fetchTask)
+        {
+            if (fetchTask.IsCanceled)
+                Debug.Log("Remote config canceled.");
+            else if (fetchTask.IsFaulted)
+                Debug.Log("Remote config encountered an error.");
+            else if (fetchTask.IsCompleted)
+                Debug.Log("Remote config completed successfully!");
+
+            var info = FirebaseRemoteConfig.Info;
+
+            switch (info.LastFetchStatus)
+            {
+                case LastFetchStatus.Success:
+                    FirebaseRemoteConfig.ActivateFetched();
+
+                    Debug.Log($"Remote data loaded and ready (last fetch time {info.FetchTime}).");
+
+                    try
+                    {
+                        ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
+                        {
+                            configFetched = true;
+
+                            //do version check, if no new version available, check daily challenge
+                            if (!VersionCheck())
+                            {
+                                //daily puzzle check
+                                DailyPuzzleCheck();
+                            }
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log(e.ToString());
+                    }
+
+                    break;
+
+                case LastFetchStatus.Failure:
+                    switch (info.LastFetchFailureReason)
+                    {
+                        case FetchFailureReason.Error:
+                            Debug.Log("Remote config failed for unknown reason");
+
+                            break;
+
+                        case FetchFailureReason.Throttled:
+                            Debug.Log("Remote config throttled until " + info.ThrottledEndTime);
+
+                            break;
+                    }
+                    break;
+
+                case LastFetchStatus.Pending:
+                    Debug.Log("Latest Remote config call still pending.");
+                    break;
+            }
+        }
+
+        private void OnNetworkAccess(bool networkAccess)
+        {
+            if (networkAccess)
+            {
+                FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+                {
+                    dependencyStatus = task.Result;
+                    if (dependencyStatus == DependencyStatus.Available)
+                    {
+                        GetRomoteSettings();
+                    }
+                    else
+                    {
+                        Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
+                    }
+                });
+            }
+        }
+
+        [System.Serializable]
+        public class PuzzleData
+        {
+            //data goes in here
+            public int packID;
+            public string packName;
+            //...
+
+            //gameboards data
+            public List<GameBoardDefinitionData> puzzles = new List<GameBoardDefinitionData>();
+        }
+
+        [System.Serializable]
+        public class GameBoardDefinitionData
+        {
+            public string puzzleName;
+
+            public string assetGUID;
+            public GameBoardDefinition gameboard;
+            [JsonIgnore]
+            public TextAsset assetFile;
         }
     }
 }

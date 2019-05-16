@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Tools.Timing;
+using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Tween;
 using TMPro;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -9,54 +10,63 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public TextMeshProUGUI title;
         public TextMeshProUGUI subTitle;
-
-        private AdvancedTimingEventsSet events;
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            events = GetComponent<AdvancedTimingEventsSet>();
-        }
+        public ScaleTween scaleTween;
 
         public void Open(string titleText, string subtitleText)
         {
-            menuController.OpenScreen(this);
-
             title.text = titleText;
             subTitle.text = subtitleText;
+
+            Open();
         }
 
         public override void Open()
         {
+            if (isOpened)
+                return;
+
             base.Open();
-
-            if (tween)
-                tween.PlayForward(true);
-
-            events.StartTimer();
+            scaleTween.PlayForward(true);
         }
 
-        public void SetData(Game game)
+        public override void Close(bool animate = true)
         {
-            switch (game.gameState.GameType)
+            base.Close(animate);
+            scaleTween.AtProgress(0f, PlaybackDirection.FORWARD);
+        }
+
+        public void SetData(IClientFourzy game)
+        {
+            switch (game._Type)
             {
                 case GameType.PUZZLE:
-                    if (GamePlayManager.Instance.IsPlayerWinner())
-                        Open(game.puzzleChallengeInfo.Name + " Complete!", "continue to next level...");
+                    if (game.IsWinner())
+                        Open(/*game.puzzleChallengeInfo.Name + */LocalizationManager.Instance.GetLocalizedValue("challenge_completed_title"), 
+                            LocalizationManager.Instance.GetLocalizedValue("challenge_completed_subtitle"));
                     else
-                        Open("Level Failed.", "try again...");
+                        Open(LocalizationManager.Instance.GetLocalizedValue("challenge_failed_title"), LocalizationManager.Instance.GetLocalizedValue("challenge_failed_subtitle"));
                     break;
 
                 case GameType.PASSANDPLAY:
-                    if (game.gameState.Winner == PlayerEnum.ONE)
+                    if (game.IsWinner())
                         Open("Player 1 won!", "");
                     else
                         Open("Player 2 won!", "");
                     break;
 
+                case GameType.ONBOARDING:
+                    break;
+
+                case GameType.AI:
+                case GameType.TURN_BASED:
+                    if (game.IsWinner())
+                        Open(game.me.DisplayName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), "");
+                    else
+                        Open(game.opponent.DisplayName + LocalizationManager.Instance.GetLocalizedValue("won_suffix"), "");
+                    break;
+
                 default:
-                    Open("You won!", "");
+                    Open(LocalizationManager.Instance.GetLocalizedValue("you_won_text"), "");
                     break;
             }
         }

@@ -1,6 +1,11 @@
 ﻿//@vadym udod
 
 using ByteSheep.Events;
+using Fourzy._Updates.Audio;
+using Fourzy._Updates.Managers;
+using Fourzy._Updates.Mechanics;
+using Fourzy._Updates.Mechanics.GameplayScene;
+using StackableDecorator;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,15 +14,20 @@ namespace Fourzy._Updates.UI.Helpers
 {
     public class ListenTo : MonoBehaviour
     {
-        public ListenTarget[] targets;
+        [List]
+        public ListenTargetCollection targets;
 
         private Dictionary<ListenValues, List<ListenTarget>> sorted;
+
+        private bool listensToSfxState = false;
+        private bool listensToAudioState = false;
+        private bool listensToMoveOriginState = false;
 
         protected void Awake()
         {
             sorted = new Dictionary<ListenValues, List<ListenTarget>>();
 
-            foreach (ListenTarget target in targets)
+            foreach (ListenTarget target in targets.list)
             {
                 if (!sorted.ContainsKey(target.type))
                     sorted.Add(target.type, new List<ListenTarget>());
@@ -27,16 +37,43 @@ namespace Fourzy._Updates.UI.Helpers
                 //add to listeners
                 switch (target.type)
                 {
-                    case ListenValues.CHELLENGE_ID:
-                        GameManager.OnUpdateGame += UpdateChallengeID;
-                        break;
-
                     case ListenValues.PLAYER_TIMER:
                         GamePlayManager.OnTimerUpdate += UpdatePlayerTimer;
                         break;
 
-                    case ListenValues.COINS:
-                        UserManager.OnUpdateUserInfo += UpdateCoins;
+                    case ListenValues.NO_INTERNET_ACCESS:
+                        NetworkAccess.onNetworkAccess += UpdateNoInternet;
+                        break;
+
+                    case ListenValues.LOGGED_IN:
+                        LoginManager.OnDeviceLoginComplete += OnLogin;
+                        break;
+
+                    case ListenValues.SETTINGS_SFX_OFF:
+                    case ListenValues.SETTINGS_SFX_ON:
+                        if (!listensToSfxState)
+                        {
+                            listensToSfxState = true;
+                            SettingsManager.onSfx += OnSfx;
+                        }
+                        break;
+
+                    case ListenValues.SETTINGS_AUDIO_OFF:
+                    case ListenValues.SETTINGS_AUDIO_ON:
+                        if (!listensToAudioState)
+                        {
+                            listensToAudioState = true;
+                            SettingsManager.onAudio += OnAudio;
+                        }
+                        break;
+
+                    case ListenValues.SETTINGS_MOVE_ORIGIN_OFF:
+                    case ListenValues.SETTINGS_MOVE_ORIGIN_ON:
+                        if (!listensToMoveOriginState)
+                        {
+                            listensToMoveOriginState = true;
+                            SettingsManager.onMoveOrigin += OnMoveOrigin;
+                        }
                         break;
                 }
             }
@@ -49,51 +86,71 @@ namespace Fourzy._Updates.UI.Helpers
 
         protected void OnDestroy()
         {
-            foreach (ListenTarget target in targets)
+            foreach (ListenTarget target in targets.list)
                 switch (target.type)
                 {
-                    case ListenValues.CHELLENGE_ID:
-                        GameManager.OnUpdateGame -= UpdateChallengeID;
-                        break;
-
                     case ListenValues.PLAYER_TIMER:
                         GamePlayManager.OnTimerUpdate -= UpdatePlayerTimer;
                         break;
+                        break;
 
-                    case ListenValues.COINS:
-                        UserManager.OnUpdateUserInfo -= UpdateCoins;
+                    case ListenValues.NO_INTERNET_ACCESS:
+                        NetworkAccess.onNetworkAccess -= UpdateNoInternet;
+                        break;
+
+                    case ListenValues.LOGGED_IN:
+                        LoginManager.OnDeviceLoginComplete -= OnLogin;
+                        break;
+
+                    case ListenValues.SETTINGS_SFX_OFF:
+                    case ListenValues.SETTINGS_SFX_ON:
+                        if (listensToSfxState)
+                        {
+                            listensToSfxState = false;
+                            SettingsManager.onSfx -= OnSfx;
+                        }
+                        break;
+
+                    case ListenValues.SETTINGS_AUDIO_OFF:
+                    case ListenValues.SETTINGS_AUDIO_ON:
+                        if (listensToAudioState)
+                        {
+                            listensToAudioState = false;
+                            SettingsManager.onMoveOrigin -= OnMoveOrigin;
+                        }
                         break;
                 }
         }
 
         public void InvokeTargets(bool force)
         {
-            foreach (ListenTarget target in targets)
-            {
-                if (force || target.updateOnAwake)
-                {
+            foreach (ListenTarget target in targets.list)
+                if (force || target.updateOnStart)
                     switch (target.type)
                     {
-                        case ListenValues.CHELLENGE_ID:
-                            UpdateChallengeID(GameManager.Instance.activeGame);
-                            break;
-
                         case ListenValues.PLAYER_TIMER:
                             UpdatePlayerTimer(new TimeSpan(0, 0, 0, 0, Constants.playerMoveTimer_InitialTime).Ticks);
                             break;
 
-                        case ListenValues.COINS:
-                            UpdateCoins();
+                        case ListenValues.NO_INTERNET_ACCESS:
+                            UpdateNoInternet(NetworkAccess.ACCESS);
+                            break;
+
+                        case ListenValues.SETTINGS_SFX_OFF:
+                        case ListenValues.SETTINGS_SFX_ON:
+                            OnSfx(SettingsManager.Instance.Get(SettingsManager.KEY_SFX));
+                            break;
+
+                        case ListenValues.SETTINGS_AUDIO_OFF:
+                        case ListenValues.SETTINGS_AUDIO_ON:
+                            OnAudio(SettingsManager.Instance.Get(SettingsManager.KEY_AUDIO));
+                            break;
+
+                        case ListenValues.SETTINGS_MOVE_ORIGIN_OFF:
+                        case ListenValues.SETTINGS_MOVE_ORIGIN_ON:
+                            OnMoveOrigin(SettingsManager.Instance.Get(SettingsManager.KEY_MOVE_ORIGIN));
                             break;
                     }
-                }
-            }
-        }
-
-        public void UpdateChallengeID(Game game)
-        {
-            foreach (ListenTarget target in sorted[ListenValues.CHELLENGE_ID])
-                target.events.Invoke(string.Format(target.targetText, game.challengeId));
         }
 
         public void UpdatePlayerTimer(long ticks)
@@ -104,33 +161,99 @@ namespace Fourzy._Updates.UI.Helpers
                 target.events.Invoke(string.Format(target.targetText, time.Minute, time.Second));
         }
 
-        public void UpdateCoins()
+        public void UpdateNoInternet(bool state)
         {
-            foreach (ListenTarget target in sorted[ListenValues.COINS])
-                target.events.Invoke(string.Format(target.targetText, UserManager.Instance.coins));
+            if (!state)
+                foreach (ListenTarget target in sorted[ListenValues.NO_INTERNET_ACCESS])
+                    target.events.Invoke(string.Format(target.targetText, state));
         }
+
+        public void OnLogin(bool result)
+        {
+            if (result)
+                foreach (ListenTarget target in sorted[ListenValues.LOGGED_IN])
+                    target.events.Invoke(string.Format(target.targetText, result));
+        }
+
+        public void OnSfx(bool state)
+        {
+            if (state)
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_SFX_ON])
+                    target.events.Invoke(string.Format(target.targetText, state));
+            else
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_SFX_OFF])
+                    target.events.Invoke(string.Format(target.targetText, state));
+        }
+
+        public void OnAudio(bool state)
+        {
+            if (state)
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_AUDIO_ON])
+                    target.events.Invoke(string.Format(target.targetText, state));
+            else
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_AUDIO_OFF])
+                    target.events.Invoke(string.Format(target.targetText, state));
+        }
+
+        public void OnMoveOrigin(bool state)
+        {
+            if (state)
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_MOVE_ORIGIN_ON])
+                    target.events.Invoke(string.Format(target.targetText, state));
+            else
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_MOVE_ORIGIN_OFF])
+                    target.events.Invoke(string.Format(target.targetText, state));
+        }
+    }
+
+    [Serializable]
+    public class ListenTargetCollection
+    {
+        public List<ListenTarget> list;
     }
 
     [Serializable]
     public class ListenTarget
     {
-        public ListenValues type;
+        [HideInInspector]
+        public string _name;
 
-        public string targetText;
-        [Header("Update value on start?")]
-        public bool updateOnAwake;
+        [ShowIf("#Check")]
+        [StackableField]
+        public ListenValues type = ListenValues.CHELLENGE_ID;
+
+        [ShowIf("#TargetTextCheck")]
+        [StackableField]
+        public string targetText = "{0}";
+
+        public bool updateOnStart;
         [Header("Will format target text with value")]
         public QuickStringEvent events;
+
+        public bool TargetTextCheck() => ListenValues.USES_TEXT.HasFlag(type);
+
+        public bool Check()
+        {
+            _name = type.ToString();
+
+            return true;
+        }
     }
 
     public enum ListenValues
     {
-        NONE = 0,
+        CHELLENGE_ID = 0,
+        PLAYER_TIMER = 1,
+        NO_INTERNET_ACCESS = 4,
+        LOGGED_IN = 8,
 
-        CHELLENGE_ID = 1,
-        PLAYER_TIMER = 2,
-        COINS = 3,
+        SETTINGS_SFX_ON = 64,
+        SETTINGS_SFX_OFF = 128,
+        SETTINGS_AUDIO_ON = 256,
+        SETTINGS_AUDIO_OFF = 512,
+        SETTINGS_MOVE_ORIGIN_ON = 1024,
+        SETTINGS_MOVE_ORIGIN_OFF = 2048,
 
-        LENGTH,
+        USES_TEXT = CHELLENGE_ID | PLAYER_TIMER,
     }
 }

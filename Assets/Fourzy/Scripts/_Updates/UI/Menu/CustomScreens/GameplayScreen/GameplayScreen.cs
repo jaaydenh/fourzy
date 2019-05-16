@@ -1,277 +1,231 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class GameplayScreen : MenuScreen
     {
-        public PlayerUIWidget player;
-        public PlayerUIWidget opponent;
+        public PlayerUIWidget playerWidget;
+        public PlayerUIWidget opponentWidget;
 
         public ButtonExtended createGameButton;
-        public ButtonExtended retryPuzzleChallengeButton;
-        public ButtonExtended backButton;
         public ButtonExtended rematchButton;
         public ButtonExtended resignButton;
 
-        private Game game;
+        private IClientFourzy game;
         private PuzzleUIScreen puzzleUI;
+        private TurnBaseScreen turnbaseUI;
+        private SpellsListUIWidget spellsListWidget;
 
         protected override void Awake()
         {
             base.Awake();
 
             puzzleUI = GetComponentInChildren<PuzzleUIScreen>();
+            turnbaseUI = GetComponentInChildren<TurnBaseScreen>();
+            spellsListWidget = GetComponentInChildren<SpellsListUIWidget>();
         }
 
         public override void OnBack()
         {
             base.OnBack();
 
-            switch (game.gameState.GameType)
+            switch (game._Type)
             {
                 case GameType.PASSANDPLAY:
-                    if (!game.gameState.IsGameOver)
-                        menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.Instance.BackButtonOnClick(); });
+                    if (game._State.WinningLocations == null)
+                        menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.instance.BackButtonOnClick(); });
+                    else
+                        GamePlayManager.instance.BackButtonOnClick();
+
                     break;
 
                 case GameType.PUZZLE:
-                    GamePlayManager.Instance.BackButtonOnClick();
+                    GamePlayManager.instance.BackButtonOnClick();
+
+                    break;
+
+                case GameType.TURN_BASED:
+                    GamePlayManager.instance.BackButtonOnClick();
+
+                    break;
+
+                case GameType.FRIEND:
+                case GameType.LEADERBOARD:
+                    if (game.isOver)
+                        GamePlayManager.instance.BackButtonOnClick();
+                    else
+                        menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.instance.BackButtonOnClick(); });
+
                     break;
 
                 default:
-                    menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.Instance.BackButtonOnClick(); });
+                    menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.instance.BackButtonOnClick(); });
+
                     break;
             }
         }
 
-        public void InitUI(Game game)
+        public void InitUI(GamePlayManager gamePlayManager)
         {
-            this.game = game;
+            game = gamePlayManager.game;
 
-            //set names
-            player.SetupPlayerName(UserManager.Instance.userName);
+            playerWidget.SetGame(game);
+            opponentWidget.SetGame(game);
 
-            switch (game.gameState.GameType)
+            DisableButtons();
+
+            playerWidget.Initialize();
+            opponentWidget.Initialize();
+
+            playerWidget.SetPlayerName(game.me.DisplayName);
+            opponentWidget.SetPlayerName(game.opponent.DisplayName);
+
+            playerWidget.StopPlayerTurnAnimation();
+            opponentWidget.StopPlayerTurnAnimation();
+
+            playerWidget.SetPlayerIcon(game.me);
+            opponentWidget.SetPlayerIcon(game.opponent);
+
+            switch (game._Type)
             {
-                case GameType.REALTIME:
-                case GameType.RANDOM:
-                case GameType.FRIEND:
-                case GameType.LEADERBOARD:
-                case GameType.PASSANDPLAY:
-                    string opponentName;
-                    if (game.opponent != null && game.opponent.opponentName != null && game.opponent.opponentName != "")
-                    {
-                        Debug.Log(game.opponent.opponentName);
-                        opponentName = game.opponent.opponentName;
-                    }
-                    else
-                    {
-                        opponentName = LocalizationManager.Instance.GetLocalizedValue("waiting_opponent_text");
-                    }
-
-                    opponent.SetupPlayerName(opponentName);
-                    
-                    //set icons
-                    player.InitPlayerIcon(game.boardView.PlayerPiece);
-                    opponent.InitPlayerIcon(game.boardView.OpponentPiece);
-
-                    player.StopPlayerTurnAnimation();
-                    opponent.StopPlayerTurnAnimation();
-                    break;
-
                 case GameType.PUZZLE:
-                    opponent.SetActive(false);
+                    opponentWidget.alphaTween.SetAlpha(0f);
 
-                    player.InitPlayerIcon(game.boardView.PlayerPiece);
-                    player.StopPlayerTurnAnimation();
                     break;
-            }
 
-            //extra
-            switch (game.gameState.GameType)
-            {
-                case GameType.REALTIME:
-                    backButton.SetActive(false);
-                    resignButton.SetActive(true);
-                    break;
-                default:
-                    resignButton.SetActive(false);
+                case GameType.ONBOARDING:
+                    opponentWidget.alphaTween.SetAlpha(PersistantMenuController.instance.GetScreen<OnboardingScreen>().current.showPlayer2 ? 1f : 0f);
+
                     break;
             }
 
             puzzleUI.Open(game);
+            turnbaseUI.Open(game);
+            spellsListWidget.Open(game, gamePlayManager.board);
         }
 
         public void UpdatePlayerTurn()
         {
-            switch (game.gameState.GameType)
-            {
-                case GameType.REALTIME:
-                case GameType.RANDOM:
-                case GameType.FRIEND:
-                case GameType.LEADERBOARD:
-                case GameType.PASSANDPLAY:
-                    if (game.gameState.IsPlayerOneTurn == game.isCurrentPlayer_PlayerOne)
-                    {
-                        player.ShowPlayerTurnAnimation();
-                        opponent.StopPlayerTurnAnimation();
-                    }
-                    else if (game.gameState.IsPlayerOneTurn != game.isCurrentPlayer_PlayerOne)
-                    {
-                        opponent.ShowPlayerTurnAnimation();
-                        player.StopPlayerTurnAnimation();
-                    }
-                    break;
-                case GameType.PUZZLE:
-                    if (game.gameState.IsPlayerOneTurn == game.isCurrentPlayer_PlayerOne)
-                        player.ShowPlayerTurnAnimation();
-                    else if (game.gameState.IsPlayerOneTurn != game.isCurrentPlayer_PlayerOne)
-                        player.StopPlayerTurnAnimation();
-                    break;
-            }
-        }
-
-        public void UpdateTabs()
-        {
-            switch (game.gameState.GameType)
+            switch (game._Type)
             {
                 case GameType.PUZZLE:
                     puzzleUI.UpdateWidgets();
+
+                    break;
+            }
+
+            if (game.isOver)
+            {
+                playerWidget.StopPlayerTurnAnimation();
+                opponentWidget.StopPlayerTurnAnimation();
+
+                return;
+            }
+
+            spellsListWidget.UpdateSpells(game._State.ActivePlayerId);
+
+            switch (game._Type)
+            {
+                case GameType.REALTIME:
+                case GameType.TURN_BASED:
+                    if (game.isMyTurn)
+                    {
+                        playerWidget.ShowPlayerTurnAnimation();
+                        opponentWidget.StopPlayerTurnAnimation();
+                    }
+                    else
+                    {
+                        opponentWidget.ShowPlayerTurnAnimation();
+                        playerWidget.StopPlayerTurnAnimation();
+                    }
+
+                    break;
+
+                case GameType.FRIEND:
+                case GameType.LEADERBOARD:
+                case GameType.PASSANDPLAY:
+                case GameType.AI:
+                    if (game.isMyTurn)
+                    {
+                        playerWidget.ShowPlayerTurnAnimation();
+                        opponentWidget.StopPlayerTurnAnimation();
+                    }
+                    else
+                    {
+                        opponentWidget.ShowPlayerTurnAnimation();
+                        playerWidget.StopPlayerTurnAnimation();
+                    }
+
+                    break;
+
+                case GameType.ONBOARDING:
+                case GameType.PUZZLE:
+                    if (game.isMyTurn)
+                        playerWidget.ShowPlayerTurnAnimation();
+                    else
+                        playerWidget.StopPlayerTurnAnimation();
+
                     break;
             }
         }
 
-        public void ShowWinnerAnimation(bool isPlayerWinner)
+        public void OnGameFinished()
         {
-            float delay = 0.3f;
-            for (int i = 0; i < game.gameState.GameBoard.player1WinningPositions.Count; i++)
-            {
-                game.boardView.GamePieceAt(game.gameState.GameBoard.player1WinningPositions[i]).PlayWinAnimation(delay);
-                delay += 0.12f;
-            }
-
-            delay = 0.3f;
-            for (int i = 0; i < game.gameState.GameBoard.player2WinningPositions.Count; i++)
-            {
-                game.boardView.GamePieceAt(game.gameState.GameBoard.player2WinningPositions[i]).PlayWinAnimation(delay);
-                delay += 0.12f;
-            }
-
-            switch (game.gameState.GameType)
+            switch (game._Type)
             {
                 case GameType.PUZZLE:
-                    if (isPlayerWinner)
-                        player.StartWinJumps();
+                    if (game.IsWinner())
+                    {
+                        playerWidget.StartWinJumps();
+
+                        puzzleUI.Complete();
+                    }
+                    else
+                        CheckButtons();
                     break;
 
                 default:
-                    if (isPlayerWinner)
-                        player.StartWinJumps();
+                    if (game.IsWinner())
+                        playerWidget.StartWinJumps();
                     else
-                        opponent.StartWinJumps();
+                        opponentWidget.StartWinJumps();
+
+                    CheckButtons();
                     break;
             }
-
-            //show rewards screen
-            //ShowRewardsScreen();
         }
 
-        public void SetActionButton()
+        public void DisableButtons()
         {
-            switch (game.gameState.GameType)
+            createGameButton.SetActive(false);
+            rematchButton.SetActive(false);
+            resignButton.SetActive(false);
+        }
+
+        public void CheckButtons()
+        {
+            switch (game._Type)
             {
-                case GameType.PUZZLE:
-                    if (game.gameState.IsGameOver && !game.gameState.IsPuzzleChallengePassed && !OnboardingScreen.isActive)
-                        retryPuzzleChallengeButton.gameObject.SetActive(true);
+                //case GameType.REALTIME:
+                case GameType.TURN_BASED:
+                    rematchButton.GetComponentInChildren<LocalizedText>().UpdateLocale("rematch_button");
+                    rematchButton.SetActive(true);
+
                     break;
+
+                case GameType.AI:
                 case GameType.PASSANDPLAY:
-                    if (game.gameState.IsGameOver && !OnboardingScreen.isActive)
-                        rematchButton.gameObject.SetActive(true);
+                case GameType.PUZZLE:
+                    rematchButton.GetComponentInChildren<LocalizedText>().UpdateLocale("retry_challenge_button");
+                    rematchButton.SetActive(true);
+
                     break;
             }
-            if (game.gameState.GameType == GameType.RANDOM || game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
-            {
-                //bool hasNextGame = false;
-                //var games = GameManager.Instance.Games;
-                //for (int i = 0; i < games.Count; i++)
-                //{
-                //    if (games[i].gameState != null)
-                //    {
-                //        if ((games[i].gameState.isCurrentPlayerTurn == true || (games[i].didViewResult == false && games[i].gameState.IsGameOver == true && games[i].gameState.isCurrentPlayerTurn == false)) && games[i].challengeId != game.challengeId)
-                //        {
-                //            hasNextGame = true;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        AnalyticsManager.LogError("set_action_button_error", "GameState is null for challengeId: " + games[i].challengeId);
-                //    }
-                //}
-
-                //if (hasNextGame)
-                //{
-                //    nextGameButton.gameObject.SetActive(true);
-                //    createGameButton.gameObject.SetActive(false);
-                //}
-                //else
-                //{
-                //    createGameButton.gameObject.SetActive(true);
-                //    nextGameButton.gameObject.SetActive(false);
-                //}
-            }
-        }
-
-        public void ShowRewardsScreen()
-        {
-            //GameManager.Instance.VisitedGameResults(game);
-
-            menuController.GetScreen<RewardScreen>().OpenScreen(new Reward[] {
-                    new Reward()
-                    {
-                        Type = Reward.RewardType.Coins,
-                        NumberOfCoins = 10
-                    },
-                    new Reward()
-                    {
-                        Type = Reward.RewardType.CollectedGamePiece,
-                        CollectedGamePiece = new GamePieceData()
-                    }
-                });
-        }
-
-        public void RealtimeResignButton()
-        {
-            GamePlayManager.Instance.RealtimeResignButtonOnClick();
-        }
-
-        public void RematchPassAndPlay()
-        {
-            GamePlayManager.Instance.RematchPassAndPlayGameButtonOnClick();
-        }
-
-        public void NextGameButton()
-        {
-            GamePlayManager.Instance.NextGameButtonOnClick();
-        }
-
-        public void CreateGameButton()
-        {
-            GamePlayManager.Instance.CreateGameButtonOnClick();
-        }
-
-        public void NextChallengeButton()
-        {
-            GameManager.Instance.SetNextActivePuzzleLevel();
-            GamePlayManager.Instance.NextPuzzleChallengeButtonOnClick();
-        }
-
-        public void RetryPuzzleButton()
-        {
-            GamePlayManager.Instance.RetryPuzzleChallengeButtonOnClick();
         }
     }
 }

@@ -1,70 +1,90 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Board;
+using Fourzy._Updates.UI.Menu.Screens;
+using FourzyGameModel.Model;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using StackableDecorator;
+using TMPro;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class MiniGameboardWidget : WidgetBase
     {
-        public Sprite player1Piece;
-        public Sprite player2Piece;
+        [List]
+        public AreaGraphicsDataCollection sprites;
+        public Image gameboardGraphics;
+        public TMP_Text nameLabel;
         public GameObject questionMark;
 
-        [HideInInspector]
-        public TokenBoard tokenBoardData;
+        public ClientFourzyGame game;
 
-        public GameBoardView gameboardView { get; private set; }
+        private GameboardSelectionScreen _screen;
+
+        public GameboardView gameboardView { get; private set; }
         public Toggle toggle { get; private set; }
+
+        private GameBoardDefinition data;
 
         protected override void Awake()
         {
-            gameboardView = GetComponentInChildren<GameBoardView>();
+            base.Awake();
+
+            gameboardView = GetComponentInChildren<GameboardView>();
             toggle = GetComponent<Toggle>();
+
+            _screen = menuScreen as GameboardSelectionScreen;
         }
 
-        public void SetData(TokenBoard data)
+        public void SetData(GameBoardDefinition data)
         {
-            tokenBoardData = data;
+            this.data = data;
 
-            CreateTokens();
-            CreateGamePieces();
-        }
+            nameLabel.text = data.BoardName;
 
-        public void CreateGamePieces()
-        {
-            for (int row = 0; row < Constants.numRows; row++)
-            {
-                for (int col = 0; col < Constants.numColumns; col++)
-                {
-                    Piece piece = (Piece)tokenBoardData.initialGameBoard[row * Constants.numRows + col];
-                    if (piece == Piece.EMPTY)
-                        continue;
+            game = new ClientFourzyGame(data, UserManager.Instance.meAsPlayer, new Player(2, "Player 2"));
+            game._Type = GameType.PASSANDPLAY;
+            gameboardGraphics.sprite = sprites.GetGraphics(game._Area);
 
-                    gameboardView.SpawnMinigameboardPiece(row, col, GameContentManager.GetPrefab<MiniGameboardPiece>(GameContentManager.PrefabType.MINI_GAME_BOARD_PIECE)).SetGamePiece(piece);
-                }
-            }
-        }
+            gameboardView.Initialize(game);
 
-        public void CreateTokens()
-        {
-            tokenBoardData.SetTokenBoardFromData(tokenBoardData.tokenBoard);
-
-            gameboardView.CreateTokenViews(tokenBoardData.tokens);
-        }
-
-        public void SetAsRandom()
-        {
-            questionMark.SetActive(true);
+            questionMark.SetActive(false);
         }
 
         public void BoardSelect()
         {
-            if (tokenBoardData == null)
-                return;
+            _screen.SetGame(data);
+        }
 
-            ChallengeManager.SetTokenBoard(tokenBoardData.id);
+        [Serializable]
+        public class AreaGraphicsDataCollection
+        {
+            public List<AreaGraphicsData> list;
+
+            public Sprite GetGraphics(Area area) => list.Find(item => item.area == area).sprite;
+        }
+
+        [Serializable]
+        public class AreaGraphicsData
+        {
+            [HideInInspector]
+            public string _name;
+
+            [ShowIf("#Check")]
+            [StackableField]
+            public Area area;
+            public Sprite sprite;
+
+            public bool Check()
+            {
+                _name = area.ToString();
+
+                return true;
+            }
         }
     }
 }

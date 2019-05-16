@@ -17,8 +17,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public ButtonExtended acceptButton;
         public ButtonExtended declineButton;
 
-        private Action onAccept;
-        private Action onDecline;
+        protected Action onAccept;
+        protected Action onDecline;
 
         public override void OnBack()
         {
@@ -49,30 +49,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public virtual void Prompt(string title, string text, string yes, string no, Action accept)
         {
-            if (acceptButton)
-            {
-                if (string.IsNullOrEmpty(yes))
-                    acceptButton.SetActive(false);
-                else
-                {
-                    acceptButton.SetActive(true);
-                    acceptButton.SetLabel(yes);
-                }
-            }
+            UpdateAcceptButton(yes);
+            UpdateDeclineButton(no);
 
-            if (declineButton)
-            {
-                if (string.IsNullOrEmpty(no))
-                    declineButton.SetActive(false);
-                else
-                {
-                    declineButton.SetActive(true);
-                    declineButton.SetLabel(no);
-                }
-            }
+            if (promptTitle)
+                promptTitle.text = title;
 
-            promptTitle.text = title;
-            promptText.text = text;
+            if (promptText)
+                promptText.text = text;
+
             onAccept = accept;
 
             Prompt();
@@ -86,11 +71,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public virtual void Accept()
         {
-            if (onAccept != null)
-                onAccept.Invoke();
-
-            onAccept = null;
-            onDecline = null;
+            onAccept?.Invoke();
         }
 
         public virtual void Decline()
@@ -99,9 +80,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 onDecline.Invoke();
             else
                 menuController.CloseCurrentScreen();
+        }
 
-            onAccept = null;
-            onDecline = null;
+        public void UpdateAcceptButton(string yes)
+        {
+            if (acceptButton)
+            {
+                if (string.IsNullOrEmpty(yes))
+                    acceptButton.SetActive(false);
+                else
+                {
+                    acceptButton.SetActive(true);
+                    acceptButton.SetLabel(yes);
+                }
+            }
+        }
+
+        public void UpdateDeclineButton(string no)
+        {
+            if (declineButton)
+            {
+                if (string.IsNullOrEmpty(no))
+                    declineButton.SetActive(false);
+                else
+                {
+                    declineButton.SetActive(true);
+                    declineButton.SetLabel(no);
+                }
+            }
         }
 
         public enum PromptType

@@ -39,6 +39,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             inputField.text = "";
             inputField.ActivateInputField();
+
+            promptText.text = "Current name: " + UserManager.Instance.userName;
         }
 
         private void UserManagerOnUpdateName()

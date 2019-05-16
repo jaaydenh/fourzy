@@ -12,6 +12,8 @@ namespace Fourzy._Updates.UI.Camera3D
     {
         public static Camera3DManager instance;
 
+        public Material defaultItemToIMageMaterial;
+
         [HideInInspector]
         public Vector3 currentPosition;
         //dictionary for all items
@@ -30,6 +32,27 @@ namespace Fourzy._Updates.UI.Camera3D
             currentPosition = transform.position;
         }
 
+        public T InstantiateItem<T>() where T : Camera3DItem
+        {
+            GameObject itemObject = new GameObject("_item");
+            T item = itemObject.AddComponent<T>();
+
+            item.transform.SetParent(transform);
+            item.transform.position = currentPosition;
+            currentPosition.x += item.GetCameraSize().x;
+
+            item.GetKey();
+
+            items.Add(item.key, item);
+
+            return item;
+        }
+
+        public Camera3DItem InstantiateItem()
+        {
+            return InstantiateItem<Camera3DItem>();
+        }
+
         public Camera3DItem SpawnItem(Camera3DItem item, bool forceNewKey = false)
         {
             Camera3DItem copy = null;
@@ -43,6 +66,8 @@ namespace Fourzy._Updates.UI.Camera3D
             copy.transform.SetParent(transform);
             copy.transform.position = currentPosition;
             currentPosition.x += copy.GetCameraSize().x;
+
+            items.Add(copy.key, copy);
 
             return copy;
         }
@@ -97,11 +122,7 @@ namespace Fourzy._Updates.UI.Camera3D
             if (items.ContainsKey(item.key) && !forceNew)
                 result = items[item.key];
             else
-            {
                 result = SpawnItem(item, forceNew);
-
-                items.Add(result.key, result);
-            }
 
             return result;
         }

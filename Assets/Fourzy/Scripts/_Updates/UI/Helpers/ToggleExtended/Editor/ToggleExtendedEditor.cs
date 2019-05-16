@@ -11,9 +11,9 @@ namespace Fourzy._Updates.UI.Helpers
         private SerializedProperty onStateProperty;
         private SerializedProperty offStateProperty;
         private SerializedProperty stateProperty;
+        private SerializedProperty onClickProperty;
 
         private SerializedProperty onSfxProperty;
-        private SerializedProperty offSfxProperty;
 
         protected override void OnEnable()
         {
@@ -22,9 +22,9 @@ namespace Fourzy._Updates.UI.Helpers
             onStateProperty = serializedObject.FindProperty("onState");
             offStateProperty = serializedObject.FindProperty("offState");
             stateProperty = serializedObject.FindProperty("state");
+            onClickProperty = serializedObject.FindProperty("onClick");
 
             onSfxProperty = serializedObject.FindProperty("onSfx");
-            offSfxProperty = serializedObject.FindProperty("offSfx");
         }
 
         public override void OnInspectorGUI()
@@ -36,9 +36,9 @@ namespace Fourzy._Updates.UI.Helpers
             EditorGUILayout.PropertyField(onStateProperty);
             EditorGUILayout.PropertyField(offStateProperty);
             EditorGUILayout.PropertyField(stateProperty);
+            EditorGUILayout.PropertyField(onClickProperty);
 
             EditorGUILayout.PropertyField(onSfxProperty);
-            EditorGUILayout.PropertyField(offSfxProperty);
 
             serializedObject.ApplyModifiedProperties();
         }

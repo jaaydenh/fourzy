@@ -1,7 +1,7 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Managers;
 using mixpanel;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -16,13 +16,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             Mixpanel.Track("Reset Tutorial Button Press");
 
-            menuController.GetScreen<PromptScreen>().Prompt("Clear Tutorial", "Clear tutorail data?", "Yes", "No", () =>
+            menuController.GetScreen<PromptScreen>().Prompt("Reset Tutorial", "Replay tutorial next time the game is opened?", "Yes", "No", () =>
             {
-                PlayerPrefs.DeleteKey("onboardingStage");
-                PlayerPrefs.DeleteKey("onboardingStep");
+                GameContentManager.Instance.ResetOnboarding();
 
                 menuController.CloseCurrentScreen();
             });
         }
+
+        public void ToggleSfx() => SettingsManager.Instance.Toggle(SettingsManager.KEY_SFX);
+
+        public void ToggleAudio() => SettingsManager.Instance.Toggle(SettingsManager.KEY_AUDIO);
+
+        public void ToggleMoveOrigin() => SettingsManager.Instance.Toggle(SettingsManager.KEY_MOVE_ORIGIN);
     }
 }

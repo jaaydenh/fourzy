@@ -1,45 +1,30 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.UI.Menu.Screens;
-using Fourzy._Updates.UI.Toasts;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class ChangeThemeWidget : WidgetBase
     {
-        public Image areaImage;
+        public bool updateOnStart = true;
 
-        private AreaSelectScreen areaSelectScreen;
+        private Image image;
 
         protected void Start()
         {
-            areaSelectScreen = menuScreen.menuController.GetScreen<AreaSelectScreen>();
-
-            PlayerPrefsWrapper.onThemeChanged += OnThemeChanged;
-            OnThemeChanged(PlayerPrefsWrapper.GetCurrentTheme());
+            if (updateOnStart) _Update();
         }
 
-        protected void OnDestroy()
+        public override void _Update()
         {
-            PlayerPrefsWrapper.onThemeChanged -= OnThemeChanged;
+            image.sprite = GameContentManager.Instance.currentTheme.preview;
         }
 
-        public void ChangeTheme()
+        protected override void OnInitialized()
         {
-            //open AreaSelect screen
-            if (!areaSelectScreen)
-            {
-                GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Break devs arms!\nHe forgot to add area change\nscreen");
-                return;
-            }
+            base.OnInitialized();
 
-            menuScreen.menuController.OpenScreen(areaSelectScreen);
-        }
-
-        private void OnThemeChanged(int theme)
-        {
-            areaImage.sprite = GameContentManager.Instance.gameThemes[theme].preview;
+            image = GetComponent<Image>();
         }
     }
 }

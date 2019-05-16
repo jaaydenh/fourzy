@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿
+using mixpanel;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using DG.Tweening;
-using mixpanel;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -21,7 +21,7 @@ namespace Fourzy._Updates.UI.Widgets
         private void Awake()
         {
             if (GameManager.Instance.activeGame == null ||
-                GameManager.Instance.activeGame.gameState.GameType != GameType.REALTIME)
+                GameManager.Instance.activeGame._Type != GameType.REALTIME)
             {
                 this.gameObject.SetActive(false);
                 return;
@@ -75,7 +75,7 @@ namespace Fourzy._Updates.UI.Widgets
             opponentMessage.gameObject.SetActive(true);
             opponentMessage.text = chatMessage;
 
-            opponentMessage.rectTransform.DOMoveY(opponentText.rectTransform.position.y + 0.5f, 3.0f);
+            //opponentMessage.rectTransform.DOMoveY(opponentText.rectTransform.position.y + 0.5f, 3.0f);
 
             yield return new WaitForSeconds(3.0f);
 

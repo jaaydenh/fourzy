@@ -1,7 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.Mechanics.Vfx;
+using Fourzy._Updates.Mechanics._Vfx;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections;
@@ -17,7 +17,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RewardHolderWidget rewardHolderPrefab;
         public RectTransform rewardsParent;
 
-        private List<Reward> rewardsToDisplay;
+        //private List<Reward> rewardsToDisplay;
 
         private RewardHolderWidget currentRewardHolder;
         private Vfx starsVfx;
@@ -27,38 +27,38 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Awake();
 
-            rewardsToDisplay = new List<Reward>();
+            //rewardsToDisplay = new List<Reward>();
         }
 
         //for testing
         protected void Update()
         {
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                OpenScreen(new Reward[] {
-                    new Reward()
-                    {
-                        Type = Reward.RewardType.Coins,
-                        NumberOfCoins = 10
-                    },
-                    new Reward()
-                    {
-                        Type = Reward.RewardType.CollectedGamePiece,
-                        CollectedGamePiece = new GamePieceData()
-                    }
-                });
-            }
+            //if (Input.GetKeyDown(KeyCode.S))
+            //{
+            //    OpenScreen(new Reward[] {
+            //        new Reward()
+            //        {
+            //            Type = Reward.RewardType.Coins,
+            //            NumberOfCoins = 10
+            //        },
+            //        new Reward()
+            //        {
+            //            Type = Reward.RewardType.CollectedGamePiece,
+            //            CollectedGamePiece = new GamePieceData()
+            //        }
+            //    });
+            //}
         }
 
-        public void OpenScreen(ICollection<Reward> rewards)
-        {
-            rewardsToDisplay.Clear();
-            rewardsToDisplay.AddRange(rewards);
-            currentRewardIndex = 0;
+        //public void OpenScreen(ICollection<Reward> rewards)
+        //{
+        //    rewardsToDisplay.Clear();
+        //    rewardsToDisplay.AddRange(rewards);
+        //    currentRewardIndex = 0;
 
-            //open this screen using menu controller
-            menuController.OpenScreen(this);
-        }
+        //    //open this screen using menu controller
+        //    menuController.OpenScreen(this);
+        //}
 
         public override void Open()
         {
@@ -74,9 +74,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             });
         }
 
-        public override void Close()
+        public override void Close(bool animate)
         {
-            base.Close();
+            base.Close(animate);
 
             StopAllRoutines(false);
         }
@@ -104,44 +104,44 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void ShowNextReward()
         {
-            if (rewardsToDisplay.Count > currentRewardIndex)
-            {
-                StartRoutine("showReward", ShowRewardRoutine(rewardsToDisplay[currentRewardIndex]), () =>
-                {
-                    StartRoutine("hideReward", 1.5f, () =>
-                    {
-                        HideCurrentReward();
-                        ShowNextReward();
-                    });
+            //if (rewardsToDisplay.Count > currentRewardIndex)
+            //{
+            //    StartRoutine("showReward", ShowRewardRoutine(rewardsToDisplay[currentRewardIndex]), () =>
+            //    {
+            //        StartRoutine("hideReward", 1.5f, () =>
+            //        {
+            //            HideCurrentReward();
+            //            ShowNextReward();
+            //        });
 
-                    //animate reward
-                    //currentRewardHolder.squishTween.PlayForward(true);
-                }, () =>
-                {
-                    //if "show reward" was cacelled, just place it at the end of path with no animation
-                    currentRewardHolder.CancelAnimation();
+            //        //animate reward
+            //        //currentRewardHolder.squishTween.PlayForward(true);
+            //    }, () =>
+            //    {
+            //        //if "show reward" was cacelled, just place it at the end of path with no animation
+            //        currentRewardHolder.CancelAnimation();
 
-                    StartRoutine("hideReward", 1.5f, () =>
-                    {
-                        HideCurrentReward();
-                        ShowNextReward();
-                    });
-                });
+            //        StartRoutine("hideReward", 1.5f, () =>
+            //        {
+            //            HideCurrentReward();
+            //            ShowNextReward();
+            //        });
+            //    });
 
-                currentRewardIndex++;
+            //    currentRewardIndex++;
 
-                //play spawn sound
-                AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.REWARD_SPAWN, .9f);
-            }
-            else
-                StartRoutine("closeRoutine", 2f, () =>
-                {
-                    menuController.CloseCurrentScreen();
-                }, () =>
-                {
-                    HideCurrentReward();
-                    menuController.CloseCurrentScreen();
-                });
+            //    //play spawn sound
+            //    AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.REWARD_SPAWN, .9f);
+            //}
+            //else
+            //    StartRoutine("closeRoutine", 2f, () =>
+            //    {
+            //        menuController.CloseCurrentScreen();
+            //    }, () =>
+            //    {
+            //        HideCurrentReward();
+            //        menuController.CloseCurrentScreen();
+            //    });
         }
 
         private void SkipToNext()
@@ -159,16 +159,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        private IEnumerator ShowRewardRoutine(Reward reward)
-        {
-            currentRewardHolder = Instantiate(rewardHolderPrefab, portal.transform);
-            currentRewardHolder.transform.localPosition = Vector2.zero;
-            currentRewardHolder.transform.localScale = Vector2.one;
+        //private IEnumerator ShowRewardRoutine(Reward reward)
+        //{
+        //    currentRewardHolder = Instantiate(rewardHolderPrefab, portal.transform);
+        //    currentRewardHolder.transform.localPosition = Vector2.zero;
+        //    currentRewardHolder.transform.localScale = Vector2.one;
 
-            currentRewardHolder.SetRewardWidget(reward);
-            currentRewardHolder.BezierMoveTo(moveRewardsTo, Random.Range(45f, 135f).VectorFromAngle() * 600f, .9f);
+        //    currentRewardHolder.SetRewardWidget(reward);
+        //    currentRewardHolder.BezierMoveTo(moveRewardsTo, Random.Range(45f, 135f).VectorFromAngle() * 600f, .9f);
 
-            yield return new WaitForSeconds(.9f);
-        }
+        //    yield return new WaitForSeconds(.9f);
+        //}
     }
 }

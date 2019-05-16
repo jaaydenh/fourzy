@@ -1,0 +1,588 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13646e4ed6b72a648b9e5db94ac0fb80, type: 3}
+  m_Name: DefaultPuzzlePackDataHolder
+  m_EditorClassIdentifier: 
+  originalFontMaterial: {fileID: 21894048186437448, guid: 9d88010131ce14d0aa675e4166b1eefd,
+    type: 2}
+  puzzlePacks:
+    list:
+    - _name: 'Basics Pack1, Requirement: NONE, Boards: 6'
+      name: Basics Pack1
+      packID: 101
+      outlineColor: {r: 0.4784314, g: 0.16470589, b: 0, a: 1}
+      packBG: {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
+      unlockRequirement: 0
+      quantity: 10
+      puzzles:
+        list:
+        - _name: 'Name: Winning Vertically, ID: 10000'
+          file: {fileID: 4900000, guid: 9e7d5c66abf2141ec9585314dffa4cab, type: 3}
+          id: 1001
+          name: Winning Vertically
+          enabled: 1
+          goal: 0
+          moveLimit: 1
+          instructions: Win in 1 move
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: Winning Horizontally, ID: 10001'
+          file: {fileID: 4900000, guid: 5225c67d714c5468f95a8aed5730749b, type: 3}
+          id: 1002
+          name: Winning Horizontally
+          enabled: 1
+          goal: 0
+          moveLimit: 1
+          instructions: Win in 1 move
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: Winning Diagonally, ID: 10003'
+          file: {fileID: 4900000, guid: 88dd51637e7f742fbb701c65627ef0f7, type: 3}
+          id: 1003
+          name: Winning Diagonally 1
+          enabled: 1
+          goal: 0
+          moveLimit: 1
+          instructions: Win in 1 move
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: Winning Diagonally 2, ID: 10004'
+          file: {fileID: 4900000, guid: 2aa6eb6f292f549dd94d8bc328e6d074, type: 3}
+          id: 1004
+          name: Winning Diagonally 2
+          enabled: 1
+          goal: 0
+          moveLimit: 1
+          instructions: Win in 1 move
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: Up or Down, ID: 10005'
+          file: {fileID: 4900000, guid: b8e2afdeb6ae04c6aa3817272e62f948, type: 3}
+          id: 1005
+          name: Up or Down
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win in 2 moves
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: Left or Right, ID: 10006'
+          file: {fileID: 4900000, guid: 81a2ec55ac21f40138a3de2a5c881b48, type: 3}
+          id: 1006
+          name: Left or Right
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win in 2 moves
+          profileName: Puzzle AI
+          herdID: 1
+    - _name: 'Basics Pack 2, Requirement: NONE, Boards: 17'
+      name: Basics Pack 2
+      packID: 201
+      outlineColor: {r: 0.4784314, g: 0.16470589, b: 0, a: 1}
+      packBG: {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
+      unlockRequirement: 0
+      quantity: 6
+      puzzles:
+        list:
+        - _name: 'Name: Puzzles1_ThreeOnSide, ID: 2010'
+          file: {fileID: 4900000, guid: 028d06b367638bc43abc34e196e5cd03, type: 3}
+          id: 1005
+          name: On The Side
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win In Two Moves
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzle Board Sample, ID: 2001'
+          file: {fileID: 4900000, guid: 42d6065312205dc41950f82506b19273, type: 3}
+          id: 1001
+          name: Three Diagonal 1
+          enabled: 1
+          goal: 0
+          moveLimit: 3
+          instructions: Win In Three Moves.
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzles1_ThreeOnSide, ID: 2010'
+          file: {fileID: 4900000, guid: fc7b1b33ae7506f43b22571e085a1184, type: 3}
+          id: 1002
+          name: Double Threat
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win In Two Moves.
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzle1_TougherPuzzle, ID: 1020'
+          file: {fileID: 4900000, guid: 60a2c07e85b25eb4082eaa1d6cbf2659, type: 3}
+          id: 1003
+          name: Double Threat 2
+          enabled: 1
+          goal: 0
+          moveLimit: 3
+          instructions: Win In Two Moves.
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzle1_DoubleThreeTheat, ID: 2002'
+          file: {fileID: 4900000, guid: c327bc73a6ab14842996026d6799f551, type: 3}
+          id: 1007
+          name: Puzzle Board Sample
+          enabled: 1
+          goal: 0
+          moveLimit: 3
+          instructions: Win In Three Moves
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzles1_ThreeDiagLarger, ID: 2011'
+          file: {fileID: 4900000, guid: da5f08b80bf2ba04093d6525a07b225d, type: 3}
+          id: 1005
+          name: ThreeDiagWin
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win In Two Moves
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzles1_BlockAndWin, ID: 1031'
+          file: {fileID: 4900000, guid: cf512108bcb0cac40ae058b110f5b8d0, type: 3}
+          id: 1008
+          name: Puzzle Board Sample
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win In Two MOves
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzles_BlockAndWin2, ID: 1022'
+          file: {fileID: 4900000, guid: 87d46d46df38fc045a25c57a8342f40f, type: 3}
+          id: 1030
+          name: Block And Win 2
+          enabled: 1
+          goal: 0
+          moveLimit: 3
+          instructions: Win In Three Moves
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzle_TempoToThree, ID: 2003'
+          file: {fileID: 4900000, guid: ba777d14a32ccff4bba015dd54c41dc0, type: 3}
+          id: 1009
+          name: Puzzle Board Sample
+          enabled: 1
+          goal: 0
+          moveLimit: 4
+          instructions: Win In Four Moves
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzles1_FourceFours, ID: 2010'
+          file: {fileID: 4900000, guid: 5bda01df25862e44484144ff89ab7cb0, type: 3}
+          id: 1010
+          name: Puzzle Board Sample
+          enabled: 1
+          goal: 0
+          moveLimit: 4
+          instructions: Win In Four Moves
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzles1_LotsOfTempo, ID: 1022'
+          file: {fileID: 4900000, guid: 3646ca211524be24783cf48d8a4a2d17, type: 3}
+          id: 1032
+          name: Lots Of Tempo
+          enabled: 1
+          goal: 0
+          moveLimit: 6
+          instructions: Win in Six Moves.
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzle1_TougherPuzzle2, ID: 1021'
+          file: {fileID: 4900000, guid: 201e19adbec7044468d947be6d8820d5, type: 3}
+          id: 1011
+          name: Puzzle Board Sample
+          enabled: 1
+          goal: 0
+          moveLimit: 4
+          instructions: Win In Four Moves.
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzle1_TougherPuzzle, ID: 1020'
+          file: {fileID: 4900000, guid: 5282381987251d54789784883ea2b749, type: 3}
+          id: 1012
+          name: Puzzle Board Sample
+          enabled: 1
+          goal: 0
+          moveLimit: 5
+          instructions: Win In Five Moves.
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzles1_Tougher3, ID: 1031'
+          file: {fileID: 4900000, guid: 2679da2107aeeed45a14083e9128c30d, type: 3}
+          id: 1004
+          name: Tricky Win
+          enabled: 1
+          goal: 0
+          moveLimit: 5
+          instructions: Win in Five Moves.
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzle1_Experiment1, ID: 1030'
+          file: {fileID: 4900000, guid: 84446af3c61acbf49adfda24368de4d3, type: 3}
+          id: 1030
+          name: Puzzle Board Sample
+          enabled: 1
+          goal: 0
+          moveLimit: 3
+          instructions: Win In Three Moves
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzles1_Experiment2, ID: 1032'
+          file: {fileID: 4900000, guid: 9f1916600c4559c479d938460ee6ce13, type: 3}
+          id: 1032
+          name: Experiment 2
+          enabled: 1
+          goal: 0
+          moveLimit: 6
+          instructions: Win in Six Moves.
+          profileName: Puzzle AI
+          herdID: 2
+        - _name: 'Name: Puzzles1_Experiment3, ID: 1033'
+          file: {fileID: 4900000, guid: e469d5ced3dcb004f9431badef7ddd3f, type: 3}
+          id: 1033
+          name: Experiment 3
+          enabled: 1
+          goal: 0
+          moveLimit: 5
+          instructions: Win in Five Moves.
+          profileName: Puzzle AI
+          herdID: 2
+    - _name: 'Arrow Pack, Requirement: NONE, Boards: 8'
+      name: Arrow Pack
+      packID: 301
+      outlineColor: {r: 0.4784314, g: 0.16470589, b: 0, a: 1}
+      packBG: {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
+      unlockRequirement: 0
+      quantity: 15
+      puzzles:
+        list:
+        - _name: 'Name: Use the arrows, ID: 30001'
+          file: {fileID: 4900000, guid: 71cd32fd302b748c09f1aaf7c63c413d, type: 3}
+          id: 301
+          name: Use the Arrows
+          enabled: 1
+          goal: 0
+          moveLimit: 1
+          instructions: Win in 1 move
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Six with Arrows, ID: 302'
+          file: {fileID: 4900000, guid: e197b9a0e0dfb4b779bba91524db7157, type: 3}
+          id: 302
+          name: Six with Arrows
+          enabled: 1
+          goal: 0
+          moveLimit: 6
+          instructions: Win in 6 moves
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Pocket Arrow, ID: 303'
+          file: {fileID: 4900000, guid: 2a24621ce0c12422f9226daba55b612f, type: 3}
+          id: 303
+          name: Pocket Arrows
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win in 2 moves
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Arrows_A_ArrowBack, ID: 3005'
+          file: {fileID: 4900000, guid: 4ae5563f30389d64c8f8745fce9d5a35, type: 3}
+          id: 304
+          name: Back to the Start
+          enabled: 1
+          goal: 0
+          moveLimit: 1
+          instructions: Win in 1 Move
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Arrows_A_ArrowsStopMovement, ID: 3004'
+          file: {fileID: 4900000, guid: 613866cbf3b495f4abac26a8a4d581aa, type: 3}
+          id: 305
+          name: Stop
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win in 1 move
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Arrows_E_Chain, ID: 3007'
+          file: {fileID: 4900000, guid: 55870bebeca4f5e478eef6a80429cb9d, type: 3}
+          id: 306
+          name: The Chain Gang
+          enabled: 1
+          goal: 0
+          moveLimit: 3
+          instructions: Win in 3 moves
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Arrows_E_LongChain, ID: 3010'
+          file: {fileID: 4900000, guid: 86b255aaa9b8ea14ca87497806fd7627, type: 3}
+          id: 307
+          name: The Long Chain
+          enabled: 1
+          goal: 0
+          moveLimit: 5
+          instructions: Win in 5 moves
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Smile, ID: 05161901'
+          file: {fileID: 4900000, guid: 61c728717a1654183b165290b8ed69d9, type: 3}
+          id: 304
+          name: Smiley
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win in 2 moves
+          profileName: 
+          herdID: 1
+    - _name: 'Blocker Pack, Requirement: NONE, Boards: 10'
+      name: Blocker Pack
+      packID: 302
+      outlineColor: {r: 0.8235294, g: 0, b: 0.12791269, a: 1}
+      packBG: {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
+      unlockRequirement: 0
+      quantity: 30
+      puzzles:
+        list:
+        - _name: 'Name: BlockerPuzzle_A_BlockThreat, ID: 4003'
+          file: {fileID: 4900000, guid: f2c5581212d03334a935415aaeb42d8b, type: 3}
+          id: 5001
+          name: Block The Threat
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win In 2 Moves
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: BlockerPuzzle_A_Bracket, ID: 4001'
+          file: {fileID: 4900000, guid: e9f7393db616d5e44b47aeab9f8adfad, type: 3}
+          id: 5002
+          name: Bracket
+          enabled: 0
+          goal: 0
+          moveLimit: 3
+          instructions: Win In 3 Moves
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: BlockerPuzzle_A_Bracket, ID: 4002'
+          file: {fileID: 4900000, guid: 1f867d397f1578e4cb6a41dae49d34e0, type: 3}
+          id: 5003
+          name: Use The Edge
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win In 2 Moves
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: BlockerPuzzle_C_Bracket, ID: 4003'
+          file: {fileID: 4900000, guid: fdac37fe2c02b704d92b9d59e185fe38, type: 3}
+          id: 5004
+          name: Build the Threat
+          enabled: 1
+          goal: 0
+          moveLimit: 4
+          instructions: Win In 4 Moves
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: Blockers_C_CentralChain, ID: 4013'
+          file: {fileID: 4900000, guid: f9ca4e54f2aecaa4f9c1e9959aa4a2ac, type: 3}
+          id: 5005
+          name: Central Chain
+          enabled: 1
+          goal: 0
+          moveLimit: 5
+          instructions: Win In 5 Moves
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: BlockerPuzzle_C_ChainTheDiagonal, ID: 4004'
+          file: {fileID: 4900000, guid: 08c46b1697cf9a74eb6b6f54a4c4ff4d, type: 3}
+          id: 5006
+          name: Chain the Diagonal
+          enabled: 1
+          goal: 0
+          moveLimit: 4
+          instructions: Win In 4 Moves
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: BlockerPuzzle_C_OneSideBlocked, ID: 4004'
+          file: {fileID: 4900000, guid: 12eae81a86cb97b41bee55465426f232, type: 3}
+          id: 5007
+          name: One Side Blocked
+          enabled: 1
+          goal: 0
+          moveLimit: 4
+          instructions: Win In 4 Moves
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: BlockerPuzzle_C_OneSideBlocked, ID: 4004'
+          file: {fileID: 4900000, guid: 0928d6f5f0d9a1641a8cc12327152e8c, type: 3}
+          id: 5008
+          name: Partial Blockage
+          enabled: 1
+          goal: 0
+          moveLimit: 3
+          instructions: Win In 3 Moves
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: BlockerPuzzle_C_PartialBlockage2, ID: 4007'
+          file: {fileID: 4900000, guid: 8bb6bbe0790e5ba4e875e35a198312b3, type: 3}
+          id: 5009
+          name: Partial Blockage 2
+          enabled: 1
+          goal: 0
+          moveLimit: 4
+          instructions: Win In 4 Moves
+          profileName: Puzzle AI
+          herdID: 1
+        - _name: 'Name: BlockerPuzzle_C_PartialBlockage3, ID: 4008'
+          file: {fileID: 4900000, guid: 760d1c368fb4d6b40ae6bfaf6119c8d0, type: 3}
+          id: 5010
+          name: Partial Blockage 3
+          enabled: 1
+          goal: 0
+          moveLimit: 4
+          instructions: Win In 4 Moves
+          profileName: Puzzle AI
+          herdID: 1
+    - _name: 'Sticky Pack, Requirement: NONE, Boards: 7'
+      name: Sticky Pack
+      packID: 401
+      outlineColor: {r: 0.6745098, g: 0.23137257, b: 0.14117648, a: 1}
+      packBG: {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
+      unlockRequirement: 0
+      quantity: 100
+      puzzles:
+        list:
+        - _name: 'Name: Push It to Win It, ID: 05161902'
+          file: {fileID: 4900000, guid: 49bfc2a87fe864c32acfcd3d98075bc8, type: 3}
+          id: 401
+          name: Push It to Win It
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win in 2 Moves
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Center Sticky Cube, ID: 402'
+          file: {fileID: 4900000, guid: 46a638eb3e61d4709930c014b1bef553, type: 3}
+          id: 402
+          name: Center Sticky Cube
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win in 2 Moves
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Sticky Checkers, ID: 403'
+          file: {fileID: 4900000, guid: 94d84a67bc7a04b71a151137414b6f16, type: 3}
+          id: 403
+          name: Sticky Checkers
+          enabled: 1
+          goal: 0
+          moveLimit: 3
+          instructions: Win in 3 Moves
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Cant Stop Me, ID: 404'
+          file: {fileID: 4900000, guid: f081a07a8677c4288ba98e2fe6efa0d2, type: 3}
+          id: 404
+          name: Cant Stop Me
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win in 2 Moves
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Compression, ID: 405'
+          file: {fileID: 4900000, guid: f48af890557f94c158ed033443969a66, type: 3}
+          id: 405
+          name: Compression
+          enabled: 1
+          goal: 0
+          moveLimit: 1
+          instructions: Win in 1 Moves
+          profileName: 
+          herdID: 1
+        - _name: 'Name: Careful Placement, ID: 406'
+          file: {fileID: 4900000, guid: ed52ead610deb4f90ae4cd8f52a3d13c, type: 3}
+          id: 406
+          name: Careful Placement
+          enabled: 1
+          goal: 0
+          moveLimit: 2
+          instructions: Win in 2 Moves
+          profileName: 
+          herdID: 1
+        - _name: 'Name: A Trap is Set, ID: 407'
+          file: {fileID: 4900000, guid: b6c9cb8726ac24e078e5bbf5a7da1c04, type: 3}
+          id: 407
+          name: A Trap Is Set
+          enabled: 1
+          goal: 0
+          moveLimit: 4
+          instructions: Win in 4 Moves
+          profileName: 
+          herdID: 1
+    - _name: 'Island Pack 2, Requirement: COINS, Boards: 0'
+      name: Island Pack 2
+      packID: 5
+      outlineColor: {r: 0.6745098, g: 0.23137257, b: 0.14117648, a: 1}
+      packBG: {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
+      unlockRequirement: 2
+      quantity: 200
+      puzzles:
+        list: []
+    - _name: 'Island Pack 3, Requirement: COINS, Boards: 0'
+      name: Island Pack 3
+      packID: 6
+      outlineColor: {r: 0.6745098, g: 0.23137257, b: 0.14117648, a: 1}
+      packBG: {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
+      unlockRequirement: 2
+      quantity: 300
+      puzzles:
+        list: []
+    - _name: 'Ice Pack, Requirement: GEMS, Boards: 0'
+      name: Ice Pack
+      packID: 7
+      outlineColor: {r: 0, g: 0.23529413, b: 0.8235295, a: 1}
+      packBG: {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
+      unlockRequirement: 3
+      quantity: 10
+      puzzles:
+        list: []
+    - _name: 'Ice Pack 2, Requirement: GEMS, Boards: 0'
+      name: Ice Pack 2
+      packID: 8
+      outlineColor: {r: 0, g: 0.23529413, b: 0.8235295, a: 1}
+      packBG: {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
+      unlockRequirement: 3
+      quantity: 20
+      puzzles:
+        list: []
+    - _name: 'Ice Pack 2, Requirement: GEMS, Boards: 0'
+      name: Ice Pack 2
+      packID: 9
+      outlineColor: {r: 0, g: 0.23529413, b: 0.8235295, a: 1}
+      packBG: {fileID: 21300000, guid: d012ad699cbe8496a95f0812d0984093, type: 3}
+      unlockRequirement: 3
+      quantity: 30
+      puzzles:
+        list: []

@@ -1,0 +1,9 @@
+{"boardSpaceData":[
+{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]},
+{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},
+{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["+"]},{"P":null,"T":["X"]},{"P":null,"T":null},{"P":null,"T":["X"]},{"P":null,"T":["ALEFT"]},{"P":null,"T":null},
+{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},
+{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},
+{"P":null,"T":null},{"P":null,"T":["ARIGHT"]},{"P":null,"T":["X"]},{"P":null,"T":null},{"P":null,"T":["X"]},{"P":null,"T":["+"]},{"P":null,"T":null},{"P":null,"T":null},
+{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},
+{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]}],"initialMoves":[],"rows":8,"columns":8,"area":2,"id":"42751","boardName":"Four Way Pits","enabled":true,"enabledGallery":true,"enabledRealtime":false}

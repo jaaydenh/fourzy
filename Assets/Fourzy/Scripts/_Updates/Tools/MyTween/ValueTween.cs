@@ -1,5 +1,7 @@
 ﻿//@vadym udod
 
+using ByteSheep.Events;
+using System;
 using UnityEngine;
 
 namespace Fourzy._Updates.Tween
@@ -8,6 +10,9 @@ namespace Fourzy._Updates.Tween
     {
         public float from = 0f;
         public float to = 1f;
+
+        public AdvancedFloatEvent onValue;
+        public Action<float> _onValue;
 
         public float _value { get; private set; }
 
@@ -39,34 +44,19 @@ namespace Fourzy._Updates.Tween
             }
 
             InvokeValue(_value);
-
-            if (value >= 1f)
-                switch (repeat)
-                {
-                    case RepeatType.ZERO_TO_ONE:
-                        if (direction == PlaybackDirection.FORWARD)
-                            PlayForward(true);
-                        else
-                            PlayBackward(true);
-                        break;
-                    case RepeatType.PING_PONG:
-                        Toggle(true);
-                        break;
-                }
         }
 
         public void InvokeValue(float value)
         {
-            if (onProgress != null)
-                onProgress.Invoke(value);
-
-            if (_onProgress != null)
-                _onProgress.Invoke(value);
+            onValue?.Invoke(value);
+            _onValue?.Invoke(value);
         }
 
         public override void OnReset()
         {
             AtProgress(0f);
         }
+
+        public override void OnInitialized() { }
     }
 }

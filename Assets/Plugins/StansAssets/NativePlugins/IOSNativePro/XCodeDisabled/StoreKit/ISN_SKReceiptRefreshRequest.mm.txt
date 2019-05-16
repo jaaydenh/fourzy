@@ -1,0 +1,118 @@
+#import "ISN_SKCommunication.h"
+#import "ISN_Logger.h"
+#import <StoreKit/StoreKit.h>
+
+
+
+@interface ISN_SKReceiptDictionary : JSONModel
+@property (nonatomic)  NSArray<NSNumber*> *m_keys;
+@property (nonatomic)  NSArray<NSNumber*> *m_values;
+@end
+
+
+
+@implementation ISN_SKReceiptDictionary
+
+
+@end
+
+@interface ISN_SKRequestDelegate : NSObject<SKRequestDelegate>
+@property (nonatomic)  UnityAction callback;
+@end
+
+@implementation ISN_SKRequestDelegate
+
+
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+    NSLog(@"yiiiii bad bad abad");
+    SA_Result* result = [[SA_Result alloc] initWithNSError:error];
+    ISN_SendCallbackToUnity(self.callback, [result toJSONString]);
+}
+
+- (void)requestDidFinish:(SKRequest *)request  {
+    NSLog(@"requestDidFinish yioooo");
+    
+    SA_Result* result = [[SA_Result alloc] init];
+    ISN_SendCallbackToUnity(self.callback, [result toJSONString]);
+}
+
+@end
+
+
+static ISN_SKRequestDelegate* requestDelegate;
+
+
+extern "C" {
+    
+    
+    /*
+    void ISN_TestCB(char* key, UnityAction callback) {
+        NSString * helloWorld = @"hello world";
+        ISN_SendCallbackDataToUnity(callback, helloWorld);
+    }
+    
+    void ISN_TestCB2( UnityAction callback) {
+       
+        ISN_SKReceiptDictionary* result  = [[ISN_SKReceiptDictionary alloc] init];
+        NSMutableArray* ar = [[NSMutableArray alloc] init];
+        [ar addObject:[NSNumber numberWithInt:0]];
+        [ar addObject:[NSNumber numberWithInt:2]];
+        
+        [result setM_keys:ar];
+        
+        ISN_SendCallbackDataToUnity(callback, [result toJSONString]);
+    }*/
+    
+    void _ISN_SK_RefreshRequest(char * data, UnityAction callback) {
+        
+        [ISN_Logger LogNativeMethodInvoke:"ISN_SK_RefreshRequest" data:data];
+        NSError *jsonError;
+        ISN_SKReceiptDictionary *request = [[ISN_SKReceiptDictionary alloc] initWithChar:data error:&jsonError];
+        if (jsonError) {
+            [ISN_Logger LogError:@"_ISN_LoadStore JSON parsing error: %@", jsonError.description];
+        }
+        
+        SKReceiptRefreshRequest * refreshRequest;
+        
+        if(request.m_keys.count == 0) {
+            refreshRequest = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
+        } else {
+            
+            NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+            int valueIndex = 0;
+            for (NSNumber* key in request.m_keys) {
+                int index = [key intValue];
+                NSString* keyString = @"";
+                switch (index) {
+                    case 0:
+                        keyString = SKReceiptPropertyIsExpired;
+                        break;
+                    case 1:
+                        keyString = SKReceiptPropertyIsRevoked;
+                        break;
+                    case 2:
+                        keyString = SKReceiptPropertyIsVolumePurchase;
+                        break;
+                        
+                    default:
+                        break;
+                }
+                
+                [dic setValue:request.m_values[valueIndex] forKey:keyString];
+                valueIndex++;
+            }
+            refreshRequest = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:dic];
+        }
+        
+        requestDelegate = [[ISN_SKRequestDelegate alloc] init];
+        [requestDelegate setCallback:callback];
+        [refreshRequest setDelegate:requestDelegate];
+        [refreshRequest start];
+    }
+    
+   
+    
+    
+    
+}
+

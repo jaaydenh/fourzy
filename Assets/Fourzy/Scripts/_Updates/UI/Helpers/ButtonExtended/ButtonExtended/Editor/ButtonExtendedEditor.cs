@@ -10,7 +10,11 @@ namespace Fourzy._Updates.UI.Helpers
     public class ButtonExtendedEditor : ButtonEditor
     {
         private SerializedProperty eventProperty;
+        private SerializedProperty onStateProperty;
+        private SerializedProperty offStateProperty;
         private SerializedProperty sfxProperty;
+        private SerializedProperty buttonGraphicsProperty;
+        private SerializedProperty changeMaterialOnStateProperty;
         private SerializedProperty labelsProperty;
         private SerializedProperty badgesProperty;
 
@@ -22,7 +26,11 @@ namespace Fourzy._Updates.UI.Helpers
             base.OnEnable();
 
             eventProperty = serializedObject.FindProperty("events");
+            onStateProperty = serializedObject.FindProperty("onState");
+            offStateProperty = serializedObject.FindProperty("offState");
             sfxProperty = serializedObject.FindProperty("playOnClick");
+            buttonGraphicsProperty = serializedObject.FindProperty("buttonGraphics");
+            changeMaterialOnStateProperty = serializedObject.FindProperty("changeMaterialOnState");
             labelsProperty = serializedObject.FindProperty("labels");
             badgesProperty = serializedObject.FindProperty("badges");
 
@@ -35,7 +43,11 @@ namespace Fourzy._Updates.UI.Helpers
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(eventProperty);
+            EditorGUILayout.PropertyField(onStateProperty);
+            EditorGUILayout.PropertyField(offStateProperty);
             EditorGUILayout.PropertyField(sfxProperty);
+            EditorGUILayout.PropertyField(changeMaterialOnStateProperty);
+            EditorGUILayout.PropertyField(buttonGraphicsProperty);
 
             if (foldout = EditorGUILayout.Foldout(foldout, "Extra data"))
             {

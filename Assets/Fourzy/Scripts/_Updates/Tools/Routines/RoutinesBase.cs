@@ -187,6 +187,8 @@ namespace Fourzy._Updates.Tools
 
         public void Stop(bool callOnEnded)
         {
+            owner.RemoveRoutine(name);
+
             if (coroutine != null)
                 owner.StopCoroutine(coroutine);
 
@@ -195,8 +197,6 @@ namespace Fourzy._Updates.Tools
 
             if (callOnEnded && onEnded != null)
                 onEnded.Invoke();
-
-            owner.RemoveRoutine(name);
         }
 
         public void Cancel()
@@ -209,8 +209,7 @@ namespace Fourzy._Updates.Tools
 
         private IEnumerator RoutineContainer(IEnumerator _routine)
         {
-            coroutine = owner.StartCoroutine(_routine);
-            yield return coroutine;
+            yield return coroutine = owner.StartCoroutine(_routine);
 
             Stop(true);
         }

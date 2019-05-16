@@ -1,0 +1,266 @@
+#define CORE_LOCATION_API_ENABLED
+#if !TARGET_OS_TV
+
+
+#import "ISN_UNCommunication.h"
+
+@implementation ISN_UNNotificationSettings
+    -(id) init { return self = [super init]; }
+    -(id) initWithSettings:(UNNotificationSettings *) settings {
+        self = [super init];
+        if(self) {
+            self.m_authorizationStatus = settings.authorizationStatus;
+            self.m_notificationCenterSetting = settings.notificationCenterSetting;
+            self.m_lockScreenSetting = settings.lockScreenSetting;
+            self.m_carPlaySetting = settings.carPlaySetting;
+            self.m_alertSetting = settings.alertSetting;
+            self.m_alertStyle = settings.alertStyle;
+            self.m_badgeSetting = settings.badgeSetting;
+            self.m_soundSetting = settings.soundSetting;
+            self.m_showPreviewsSetting = settings.showPreviewsSetting;
+        }
+        return self;
+    }
+@end
+
+
+NSString* DEFAULT_SOUND = @"DefaultSound";
+NSString* USER_INFO_DATA_KEY = @"data";
+
+@implementation ISN_UNMutableNotificationContent
+-(id) init { return self = [super init]; }
+-(UNNotificationContent* ) getNotificationContent {
+    
+    //Creating a content:
+    UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
+    
+    if(self.m_body.length != 0) {
+        content.body = self.m_body;
+    }
+    
+    if(self.m_subtitle.length != 0) {
+        content.subtitle = self.m_subtitle;
+    }
+    
+    if(self.m_title.length != 0) {
+        content.title = self.m_title;
+    }
+    
+    if(self.m_badge != 0) {
+        content.badge = [[NSNumber alloc] initWithLong:self.m_badge];
+    }
+    
+    if(self.m_sound.length != 0) {
+        if([self.m_sound isEqualToString:DEFAULT_SOUND]) {
+            content.sound = [UNNotificationSound defaultSound];
+        } else {
+            content.sound = [UNNotificationSound soundNamed:self.m_sound];
+        }
+    }
+    
+    if(self.m_userInfo.length != 0) {
+        NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
+        [userInfo setObject:self.m_userInfo forKey:USER_INFO_DATA_KEY];
+        content.userInfo = userInfo;
+    }
+    
+    return content;
+}
+
+-(id) initWithContent:(UNNotificationContent *) content {
+    self = [super init];
+    if(self) {
+        self.m_body = content.body == NULL ? @"" : content.body;
+        self.m_subtitle = content.subtitle == NULL ? @"" : content.subtitle;
+        self.m_title = content.title == NULL ? @"" : content.title;
+        self.m_badge = (long) content.badge;
+        self.m_sound = @"";
+        
+        NSString *userInfo = [content.userInfo objectForKey:USER_INFO_DATA_KEY];
+        self.m_userInfo = userInfo == NULL ? @"" : userInfo;
+    }
+    
+    return self;
+}
+@end
+
+@implementation ISN_ISN_UNNotificationTrigger
+-(id) init { return self = [super init]; }
+-(id) initWithTrigger:(UNNotificationTrigger *) trigger {
+    
+    self = [super init];
+    if(self) {
+        if(trigger != NULL) {
+            if([trigger isKindOfClass:[UNTimeIntervalNotificationTrigger class]]) {
+                UNTimeIntervalNotificationTrigger *intervalTrigger = (UNTimeIntervalNotificationTrigger *)trigger;
+                self.m_type = ISN_UNNotificationTriggerTypeTimeInterval;
+                self.m_timeInterval = intervalTrigger.timeInterval;
+                
+                if(intervalTrigger.nextTriggerDate != NULL) {
+                    NSDate * mydate = [[NSDate alloc] init];
+                    NSTimeZone *zone = [NSTimeZone systemTimeZone];
+                    NSInteger interval = [zone secondsFromGMTForDate:intervalTrigger.nextTriggerDate];
+                    mydate = [mydate dateByAddingTimeInterval:interval];
+                    self.m_nextTriggerDate = [mydate timeIntervalSince1970];
+                } else {
+                    self.m_nextTriggerDate = 0;
+                }
+            }
+            
+            if([trigger isKindOfClass:[UNCalendarNotificationTrigger class]]) {
+                UNCalendarNotificationTrigger *calendarTrigger = (UNCalendarNotificationTrigger *)trigger;
+                self.m_type = ISN_UNNotificationTriggerTypeCalendar;
+                self.m_dateComponents = [[ISN_NSDateComponents alloc] initWithNSDateComponents:calendarTrigger.dateComponents];
+                
+                if(calendarTrigger.nextTriggerDate != NULL) {
+                    NSDate * mydate = [[NSDate alloc] init];
+                    NSTimeZone *zone = [NSTimeZone systemTimeZone];
+                    NSInteger interval = [zone secondsFromGMTForDate:calendarTrigger.nextTriggerDate];
+                    mydate = [mydate dateByAddingTimeInterval:interval];
+                    self.m_nextTriggerDate = [mydate timeIntervalSince1970];
+                } else {
+                    self.m_nextTriggerDate = 0;
+                }
+            }
+            
+            #ifdef CORE_LOCATION_API_ENABLED
+            if([trigger isKindOfClass:[UNLocationNotificationTrigger class]]) {
+                UNLocationNotificationTrigger *locationTrigger = (UNLocationNotificationTrigger *)trigger;
+                self.m_type = ISN_UNNotificationTriggerTypeLocation;
+                
+                
+                if([locationTrigger.region isKindOfClass:[CLCircularRegion class]]) {
+                    CLCircularRegion *region = (CLCircularRegion *)locationTrigger.region;
+                    self.m_region = [[ISN_CLCircularRegion alloc] initWithCLLocationCoordinate2D:region];
+                }
+                
+            }
+            #endif
+            
+            if([trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+                self.m_type = ISN_UNNotificationTriggerTypePushNotification;
+            }
+            
+            
+            
+            self.m_repeats = trigger.repeats;
+        }
+    }
+    return self;
+}
+
+-(UNNotificationTrigger* ) getTrigger {
+    UNNotificationTrigger* trigger = nil;
+    switch (self.m_type) {
+        case ISN_UNNotificationTriggerTypeTimeInterval:
+            
+            if(self.m_timeInterval != 0) {
+                trigger = [UNTimeIntervalNotificationTrigger
+                           triggerWithTimeInterval:self.m_timeInterval
+                           repeats:self.m_repeats];
+            }
+            break;
+            
+        case ISN_UNNotificationTriggerTypeCalendar:
+            trigger = [UNCalendarNotificationTrigger
+                       triggerWithDateMatchingComponents:[self.m_dateComponents getNSDateComponents]
+                       repeats:self.m_repeats];
+            break;
+            
+#ifdef CORE_LOCATION_API_ENABLED
+        case ISN_UNNotificationTriggerTypeLocation:
+            trigger = [UNLocationNotificationTrigger
+                       triggerWithRegion:[self.m_region getCLCircularRegion]
+                       repeats:self.m_repeats];
+            break;
+#endif
+        case ISN_UNNotificationTriggerTypePushNotification:
+            break;
+    }
+    
+    return  trigger;
+    
+}
+
+
+
+@end
+
+@implementation ISN_UNNotificationRequest
+-(id) init { return self = [super init]; }
+-(id) initWithRequest:(UNNotificationRequest *) request {
+    self = [super init];
+    if(self) {
+        self.m_identifier = request.identifier;
+        self.m_content = [[ISN_UNMutableNotificationContent alloc] initWithContent:request.content];
+        self.m_trigger = [[ISN_ISN_UNNotificationTrigger alloc] initWithTrigger:request.trigger];
+    }
+    return self;
+}
+
+-(UNNotificationRequest*) getRequest {
+    
+    UNNotificationContent* content = [self.m_content getNotificationContent];
+    UNNotificationTrigger* trigger = [self.m_trigger getTrigger];
+    UNNotificationRequest* request = [UNNotificationRequest
+                                      requestWithIdentifier:self.m_identifier
+                                      content:content
+                                      trigger:trigger];
+    
+    return request;
+}
+
+@end
+
+@implementation ISN_UNNotification
+-(id) init { return self = [super init]; }
+-(id) initWithUNNotification:(UNNotification *) notification {
+    self = [super init];
+    if(self) {
+        if(notification.date != NULL) {
+            NSDate * mydate = [[NSDate alloc] init];
+            NSTimeZone *zone = [NSTimeZone systemTimeZone];
+            NSInteger interval = [zone secondsFromGMTForDate:notification.date];
+            mydate = [mydate dateByAddingTimeInterval:interval];
+            self.m_date = [mydate timeIntervalSince1970];
+        } else {
+            self.m_date = 0;
+        }
+        
+        self.m_request =[[ISN_UNNotificationRequest alloc] initWithRequest:notification.request];
+    }
+    return self;
+    
+}
+@end
+
+
+@implementation ISN_UNNotificationResponse
+-(id) init { return self = [super init]; }
+-(id) initWithUNNotificationResponse:(UNNotificationResponse *) response {
+    self = [super init];
+    if(self) {
+        self.m_actionIdentifier = response.actionIdentifier;
+        self.m_notification = [[ISN_UNNotification alloc] initWithUNNotification:response.notification];
+    }
+    return self;
+}
+
+@end
+
+
+@implementation ISN_UNNotifcationRequestsIds
+-(id) init { return self = [super init]; }
+@end
+
+@implementation ISN_UNNotifcationRequests
+-(id) init { return self = [super init]; }
+@end
+
+@implementation ISN_UNNotifcations
+-(id) init { return self = [super init]; }
+@end
+
+
+
+#endif

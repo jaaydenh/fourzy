@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
@@ -11,7 +12,7 @@ namespace Fourzy._Updates.UI.Widgets
     public class TokenWidget : WidgetBase
     {
         [HideInInspector]
-        public TokenData tokenData;
+        public TokensDataHolder.TokenData tokenData;
 
         public Image tokenImage;
         public Image tileBGImage;
@@ -27,12 +28,12 @@ namespace Fourzy._Updates.UI.Widgets
             menuScree = GetComponentInParent<MenuScreen>();
         }
 
-        public void SetData(TokenData tokenData)
+        public void SetData(TokensDataHolder.TokenData tokenData)
         {
             this.tokenData = tokenData;
 
-            button.SetLabel(tokenData.Name);
-            tokenImage.sprite = GameContentManager.Instance.GetTokenSprite(tokenData.ID);
+            button.SetLabel(tokenData.name);
+            tokenImage.sprite = GameContentManager.Instance.tokensDataHolder.GetTokenSprite(tokenData);
 
             tileBGImage.enabled = tokenData.showBackgroundTile;
         }

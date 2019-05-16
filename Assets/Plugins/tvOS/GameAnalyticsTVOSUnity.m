@@ -107,6 +107,7 @@ void initialize(const char *gameKey, const char *gameSecret) {
     ga_cc_delegate = [[GACommandCenterUnityDelegate alloc] init];
     [GameAnalytics setCommandCenterDelegate:ga_cc_delegate];
 
+    [GameAnalytics setEnabledErrorReporting:NO];
     [GameAnalytics initializeWithGameKey:gameKeyString gameSecret:gameSecretString];
 }
 
@@ -215,7 +216,7 @@ void addDesignEvent(const char *eventId, const char *fields) {
         fields_dict = [NSJSONSerialization JSONObjectWithData:[fieldsString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
     }
 
-    [GameAnalytics addDesignEventWithEventId:eventIdString value:nil fields:fields_dict];
+    [GameAnalytics addDesignEventWithEventId:eventIdString value:nil /*fields:fields_dict*/];
 }
 
 void addDesignEventWithValue(const char *eventId, float value, const char *fields) {
@@ -251,6 +252,10 @@ void setEnabledVerboseLog(BOOL flag) {
 
 void setManualSessionHandling(BOOL flag) {
     [GameAnalytics setEnabledManualSessionHandling:flag];
+}
+
+void setEventSubmission(BOOL flag) {
+    [GameAnalytics setEnabledEventSubmission:flag];
 }
 
 void gameAnalyticsStartSession() {

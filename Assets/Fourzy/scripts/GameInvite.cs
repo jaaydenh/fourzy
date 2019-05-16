@@ -38,7 +38,7 @@ namespace Fourzy
                         else
                         {
                             //Since this challenge is no longer an invite, we need to update our running games
-                    ChallengeManager.Instance.GetChallengesRequest();
+                            ChallengeManager.Instance.GetChallengesRequest();
 
                             //Once we accept the challenge we can go ahead and remove the gameObject from the scene
                             canDestroy = true;

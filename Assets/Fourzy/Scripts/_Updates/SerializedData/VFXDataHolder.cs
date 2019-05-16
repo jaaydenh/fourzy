@@ -1,13 +1,13 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Mechanics.Vfx;
+using Fourzy._Updates.Mechanics._Vfx;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy._Updates.Serialized
 {
-    [CreateAssetMenu(fileName = "DefaultVFXHolder", menuName = "Create VFX data holder")]
+    [CreateAssetMenu(fileName = "DefaultVFXHolder", menuName = "Create VFX Data Holder")]
     public class VFXDataHolder : ScriptableObject
     {
         public VfxNamePair[] data;

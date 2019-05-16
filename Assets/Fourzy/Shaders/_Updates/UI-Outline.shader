@@ -89,7 +89,7 @@ Shader "Custom/UIOutline"
 			float _Intensity;
 			float _BlurSize;
 			float _OutlineBorder;
-			float4 _AnchoredPosition;
+			float2 _AnchoredPosition;
 
             v2f vert(appdata_t v)
             {

@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Menu.Screens;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -9,22 +10,24 @@ namespace Fourzy._Updates.UI.Widgets
     {
         private SliderExtended slider;
         private LayoutElement sliderLayout;
+        private PuzzleUIScreen puzzleScreen;
 
-        protected override void Awake()
+        public override void _Update()
         {
-            base.Awake();
+            if (puzzleScreen.game._Type != GameType.PUZZLE)
+                return;
+
+            sliderLayout.minWidth = 65f * puzzleScreen.game.asFourzyPuzzle.MoveLimit;
+            slider.SetMaxValue(puzzleScreen.game.asFourzyPuzzle.MoveLimit, puzzleScreen.game.asFourzyPuzzle.MoveLimit - puzzleScreen.game._playerTurnRecord.Count);
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
 
             slider = GetComponentInChildren<SliderExtended>();
             sliderLayout = slider.GetComponent<LayoutElement>();
-        }
-
-        public void SetData(Game data)
-        {
-            if (data.gameState.GameType != GameType.PUZZLE)
-                return;
-
-            sliderLayout.minWidth = 65f * data.puzzleChallengeInfo.MoveGoal;
-            slider.SetMaxValue(data.puzzleChallengeInfo.MoveGoal, data.puzzleChallengeInfo.MoveGoal - data.gameState.Player1MoveCount);
+            puzzleScreen = GetComponentInParent<PuzzleUIScreen>();
         }
     }
 }

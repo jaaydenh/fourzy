@@ -1,4 +1,5 @@
-﻿using GameSparks.Api.Messages;
+﻿using Fourzy._Updates.UI.Toasts;
+using GameSparks.Api.Messages;
 using GameSparks.RT;
 using System;
 using System.Collections;
@@ -16,7 +17,7 @@ namespace Fourzy
         public static Action<string> OnChatMessageReceived;
         public static Action OnRealtimeMatchNotFound;
         public static Action<long> OnReceiveTimeStamp;
-        public static Action<Move> OnReceiveMove;
+        //public static Action<Move> OnReceiveMove;
 
         private int currentPlayerPeerId;
         public int timeDelta;
@@ -29,12 +30,12 @@ namespace Fourzy
             return gameSparksRTUnity;
         }
 
-        private RTSessionInfo rtSessionInfo;
+        //private RTSessionInfo rtSessionInfo;
 
-        public RTSessionInfo GetSessionInfo()
-        {
-            return rtSessionInfo;
-        }
+        //public RTSessionInfo GetSessionInfo()
+        //{
+        //    return rtSessionInfo;
+        //}
 
         void Start()
         {
@@ -44,15 +45,15 @@ namespace Fourzy
 
         void OnMatchNotFound(MatchNotFoundMessage _message)
         {
-            GameManager.Instance.ShowInfoBanner("No Match Found");
+            GamesToastsController.ShowTopToast("No Match Found");
             OnRealtimeMatchNotFound();
         }
 
         void OnMatchFound(MatchFoundMessage _message)
         {
-            GameManager.Instance.ShowInfoBanner("Match Found");
-            rtSessionInfo = new RTSessionInfo(_message);
-            StartNewRTSession(_message);
+            //GameManager.Instance.ShowInfoBanner("Match Found");
+            //rtSessionInfo = new RTSessionInfo(_message);
+            //StartNewRTSession(_message);
         }
 
         /// <summary>
@@ -132,64 +133,64 @@ namespace Fourzy
 
             if (startedGame == false)
             {
-                GameManager.Instance.ShowInfoBanner("Realtime Connect Validation");
+                GamesToastsController.ShowTopToast("Realtime Connect Validation");
                 GetRTSession().SendData(103, GameSparks.RT.GameSparksRT.DeliveryIntent.RELIABLE, null, new int[] { 0 }); // send to peerId -> 0, which is the server
             }
         }
 
         private void OnPacketReceived(RTPacket _packet)
         {
-            switch (_packet.OpCode)
-            {
-                case 1:
-                    ProcessReceivedMessage(_packet);
-                    break;
-                case 2:
-                    ProcessOpponentMove(_packet);
-                    break;
-                case 100:
-                    startedGame = true;
-                    Debug.Log("All players joined realtime session");
-                    GameManager.Instance.ShowInfoBanner("Start Realtime Game");
-                    int firstPlayerPeerId = _packet.Data.GetInt(1).Value;
-                    // This is the seed from the server, probably should rename it
-                    int seed = _packet.Data.GetInt(2).Value;
-                    OnRealtimeReady(firstPlayerPeerId, seed);
-                    break;
-                case 101:
-                    CalculateTimeDelta(_packet);
-                    break;
-                case 102:
-                    if (OnReceiveTimeStamp != null)
-                    {
-                        OnReceiveTimeStamp(_packet.Data.GetLong(1).Value);
-                    }
-                    break;
-            }
+            //switch (_packet.OpCode)
+            //{
+            //    case 1:
+            //        ProcessReceivedMessage(_packet);
+            //        break;
+            //    case 2:
+            //        ProcessOpponentMove(_packet);
+            //        break;
+            //    case 100:
+            //        startedGame = true;
+            //        Debug.Log("All players joined realtime session");
+            //        GameManager.Instance.ShowInfoBanner("Start Realtime Game");
+            //        int firstPlayerPeerId = _packet.Data.GetInt(1).Value;
+            //        // This is the seed from the server, probably should rename it
+            //        int seed = _packet.Data.GetInt(2).Value;
+            //        OnRealtimeReady(firstPlayerPeerId, seed);
+            //        break;
+            //    case 101:
+            //        CalculateTimeDelta(_packet);
+            //        break;
+            //    case 102:
+            //        if (OnReceiveTimeStamp != null)
+            //        {
+            //            OnReceiveTimeStamp(_packet.Data.GetLong(1).Value);
+            //        }
+            //        break;
+            //}
         }
 
-        public void SendRealTimeMove(Move move)
-        {
-            using (RTData data = RTData.Get())
-            {  // we put a using statement here so that we can dispose of the RTData objects once the packet is sent
-                data.SetInt(1, Utility.GetMoveLocation(move));
-                data.SetInt(2, move.direction.GetHashCode());
-                data.SetInt(3, move.player.GetHashCode());
-                GetRTSession().SendData(2, GameSparks.RT.GameSparksRT.DeliveryIntent.RELIABLE, data);
-            }
-        }
+        //public void SendRealTimeMove(Move move)
+        //{
+        //    using (RTData data = RTData.Get())
+        //    {  // we put a using statement here so that we can dispose of the RTData objects once the packet is sent
+        //        data.SetInt(1, Utility.GetMoveLocation(move));
+        //        data.SetInt(2, move.direction.GetHashCode());
+        //        data.SetInt(3, move.player.GetHashCode());
+        //        GetRTSession().SendData(2, GameSparks.RT.GameSparksRT.DeliveryIntent.RELIABLE, data);
+        //    }
+        //}
 
-        public void ProcessOpponentMove(RTPacket _packet)
-        {
-            int location = _packet.Data.GetInt(1).Value;
-            Direction direction = (Direction)_packet.Data.GetInt(2).Value;
-            PlayerEnum player = (PlayerEnum)_packet.Data.GetInt(3).Value;
-            Move move = new Move(location, direction, player);
-            if (OnReceiveMove != null)
-            {
-                OnReceiveMove(move);
-            }
-        }
+        //public void ProcessOpponentMove(RTPacket _packet)
+        //{
+        //    int location = _packet.Data.GetInt(1).Value;
+        //    Direction direction = (Direction)_packet.Data.GetInt(2).Value;
+        //    PlayerEnum player = (PlayerEnum)_packet.Data.GetInt(3).Value;
+        //    Move move = new Move(location, direction, player);
+        //    if (OnReceiveMove != null)
+        //    {
+        //        OnReceiveMove(move);
+        //    }
+        //}
 
         public void SendTimeStamp()
         {
@@ -241,21 +242,21 @@ namespace Fourzy
         /// <param name="_data">Data.</param>
         public void ProcessReceivedMessage(RTPacket _packet)
         {
-            Debug.Log("Message Received...\n" + _packet.Data.GetString(1)); // the RTData we sent the message with used an index '1' so we can parse the data back using the same index
-            // we need the display name of the sender. We get this by using the packet sender id and comparing that to the peerId of the player //
-            foreach (RTSessionInfo.RTPlayer player in GetSessionInfo().GetPlayerList())
-            {
-                if (player.peerId == _packet.Sender)
-                {
-                    if (OnChatMessageReceived != null)
-                    {
-                        //string chatMessage = player.displayName + ": " + _packet.Data.GetString(1) + "(" + _packet.Data.GetString(2) + ")";
-                        // string chatMessage = player.displayName + "[" + _packet.Data.GetString(2) + "]: " + _packet.Data.GetString(1);
-                        string chatMessage = _packet.Data.GetString(1);
-                        OnChatMessageReceived(chatMessage);
-                    }
-                }
-            }
+            //Debug.Log("Message Received...\n" + _packet.Data.GetString(1)); // the RTData we sent the message with used an index '1' so we can parse the data back using the same index
+            //// we need the display name of the sender. We get this by using the packet sender id and comparing that to the peerId of the player //
+            //foreach (RTSessionInfo.RTPlayer player in GetSessionInfo().GetPlayerList())
+            //{
+            //    if (player.peerId == _packet.Sender)
+            //    {
+            //        if (OnChatMessageReceived != null)
+            //        {
+            //            //string chatMessage = player.displayName + ": " + _packet.Data.GetString(1) + "(" + _packet.Data.GetString(2) + ")";
+            //            // string chatMessage = player.displayName + "[" + _packet.Data.GetString(2) + "]: " + _packet.Data.GetString(1);
+            //            string chatMessage = _packet.Data.GetString(1);
+            //            OnChatMessageReceived(chatMessage);
+            //        }
+            //    }
+            //}
         }
     }
 }

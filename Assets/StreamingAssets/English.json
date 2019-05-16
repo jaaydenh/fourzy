@@ -37,7 +37,7 @@
     {"key":"ok_button","value":"OK"},
     {"key":"expired_text","value":"Game Expired"},
     {"key":"leaderboard_challenge_text","value":"Leaderboard Challenge"},
-    {"key":"play_game_button","value":"Play Game"},
+    {"key":"play_game_button","value":"Play"},
     {"key":"ai_button","value":"Training Bot"},
     {"key":"ai_challenge_text","value":"Bot Challenge"},
     {"key":"pieces_tab","value":"Fourzies"},

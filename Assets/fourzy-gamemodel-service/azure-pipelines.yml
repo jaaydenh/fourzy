@@ -1,0 +1,36 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-16.04' 
+  # other options: 'macOS-10.13', 'vs2017-win2016', 'ubuntu-16.04' 
+
+variables:
+  buildConfiguration: 'Release'
+
+# dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
+
+steps:
+- script: |
+    dotnet build --configuration $(buildConfiguration)
+    dotnet test GameModelService.UnitTests --configuration $(buildConfiguration) --logger trx --collect "Code coverage"
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: '**/*.trx'
+    
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    publishWebProjects: false
+    modifyOutputPath: true
+    zipAfterPublish: true
+    
+- task: PublishBuildArtifacts@1

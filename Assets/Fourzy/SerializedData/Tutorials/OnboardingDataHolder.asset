@@ -1,0 +1,741 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679e63b5120d68e469259cd1451a4b7d, type: 3}
+  m_Name: OnboardingDataHolder
+  m_EditorClassIdentifier: 
+  tutorialName: Onboarding
+  showPlayer2: 0
+  onFinished: 0
+  batches:
+  - tasks:
+    - action: 7
+      unfolded: 0
+      message: message 1
+      intValue: 200
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 0
+      unfolded: 1
+      message: Welcome to Fourzy!
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 0
+      unfolded: 1
+      message: Let's watch a quick game to learn how to play
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 10
+      unfolded: 1
+      message: message 5
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 1
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 12
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 6
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas: []
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 0
+      unfolded: 1
+      message: Press and hold to make a move
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 4
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 2}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 1
+        width: 1
+        height: 6
+      - serializedVersion: 2
+        x: 7
+        y: 1
+        width: 1
+        height: 6
+      - serializedVersion: 2
+        x: 1
+        y: 0
+        width: 6
+        height: 1
+      - serializedVersion: 2
+        x: 1
+        y: 7
+        width: 6
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 7
+      unfolded: 1
+      message: 
+      intValue: 201
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 11
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 2
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 0
+      unfolded: 1
+      message: Try it yourself!
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 5
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 10
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 2
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 2}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 2
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 1
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 18
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 16
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 3
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas: []
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 14
+      unfolded: 0
+      message: 
+      intValue: 3
+      pointAt: {x: 0, y: 3}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 3
+    - action: 17
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 18
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 2
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 2}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 2
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 16
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 3
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas: []
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 14
+      unfolded: 0
+      message: 
+      intValue: 3
+      pointAt: {x: 0, y: 3}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 3
+    - action: 17
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 18
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 2
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 2}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 2
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 16
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 3
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 2}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas: []
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 14
+      unfolded: 0
+      message: 
+      intValue: 3
+      pointAt: {x: 0, y: 3}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 3
+    - action: 17
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 18
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 2
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 2}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 2
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 16
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 3
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 2}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas: []
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 0
+      unfolded: 1
+      message: Good job!
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 11
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 13
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 0
+      unfolded: 1
+      message: Now lets change your username!
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 20
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0

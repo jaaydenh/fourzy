@@ -1,22 +1,29 @@
-﻿namespace Fourzy
-{
-    using System.Collections.Generic;
-    using UnityEngine;
-    using System.IO;
-    using System.Globalization;
-    using System.Linq;
+﻿//modded
 
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+using System.Globalization;
+using System.Linq;
+
+namespace Fourzy
+{
     [UnitySingleton(UnitySingletonAttribute.Type.CreateOnNewGameObject, false)]
     public class LocalizationManager : UnitySingleton<LocalizationManager>
     {
         const string STR_LOCALIZATION_KEY = "locale";
+
         public CultureInfo cultureInfo;
+
         private static Dictionary<string, string> localizedText;
-        private bool isReady = false;
         private string missingTextString = "Localized text not found";
 
-        private void Awake()
+        public bool isReady { get; private set; }
+
+        protected override void Awake()
         {
+            base.Awake();
+
             cultureInfo = GetCultureInfo(PlayerLanguage);
             LoadLocalizedText(PlayerLanguage);
         }
@@ -40,16 +47,12 @@
                 dataAsJson = reader.text;
             }
             else
-            {
-                 dataAsJson = File.ReadAllText(filePath);
-            }
+                dataAsJson = File.ReadAllText(filePath);
 
             LocalizationData loadedData = JsonUtility.FromJson<LocalizationData>(dataAsJson);
 
             for (int i = 0; i < loadedData.items.Length; i++)
-            {
                 localizedText.Add(loadedData.items[i].key, loadedData.items[i].value);
-            }
 
             isReady = true;
         }
@@ -63,11 +66,6 @@
             }
 
             return result;
-        }
-
-        public bool GetIsReady()
-        {
-            return isReady;
         }
 
         public static SystemLanguage PlayerLanguage

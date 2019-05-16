@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aba7f9bd57e3904ea630e98c74cbe26, type: 3}
+  m_Name: DefaultMiscBoardsDataHolder
+  m_EditorClassIdentifier: 
+  path: Fourzy/Resources/MiscBoards
+  boards:
+    list:
+    - elementName: BlockerTokenInstruction
+      boardFile: {fileID: 4900000, guid: baf3131ffb84a4048ad3910fc8bc0529, type: 3}
+    - elementName: ArrowTokenInstruction
+      boardFile: {fileID: 4900000, guid: 3f1f6d58d03917040929e2c7325af101, type: 3}
+    - elementName: BounceTokenInstruction
+      boardFile: {fileID: 4900000, guid: e8fdcc16fa9cc774fa36c1f4e5b1a75e, type: 3}
+    - elementName: CircleBombTokenInstruction
+      boardFile: {fileID: 4900000, guid: c4a897bb51f843343806880cf2562b0f, type: 3}
+    - elementName: FireTokenInstruction
+      boardFile: {fileID: 4900000, guid: cde3591a11ffb75449286bba01a0afd5, type: 3}
+    - elementName: FruitTokenInstruction
+      boardFile: {fileID: 4900000, guid: a5744664d8bbb79448bf5964d086165b, type: 3}
+    - elementName: GhostTokenInstruction
+      boardFile: {fileID: 4900000, guid: 23097243b406daf46b2ca079f0599773, type: 3}
+    - elementName: IceTokenInstruction
+      boardFile: {fileID: 4900000, guid: 91d449266c66a0e4a90da73561626fe5, type: 3}
+    - elementName: PitTokenInstruction
+      boardFile: {fileID: 4900000, guid: 5d7ccf77d24d2d7408bcb295eeb4004c, type: 3}
+    - elementName: PuddleTokenInstruction
+      boardFile: {fileID: 4900000, guid: 3a1cfc4a9733d6242bc518ccd5f417d4, type: 3}
+    - elementName: RandomLeftRightTokenInstruction
+      boardFile: {fileID: 4900000, guid: 278fede49c97a8145994afaf6a2a6f08, type: 3}
+    - elementName: SandTokenInstruction
+      boardFile: {fileID: 4900000, guid: 0d5ddb94fd93c4a4999c65730e6eefc1, type: 3}
+    - elementName: SpiderTokenInstruction
+      boardFile: {fileID: 4900000, guid: 73086c17863addb4697cd20e2fec5249, type: 3}
+    - elementName: StickyTokenInstruction
+      boardFile: {fileID: 4900000, guid: 285c8dff8d0802442a91bbd397397c12, type: 3}
+    - elementName: WallTokenInstruction
+      boardFile: {fileID: 4900000, guid: 8bb2f018db1d6154789df8468202c6bb, type: 3}
+    - elementName: WaterTokenInstruction
+      boardFile: {fileID: 4900000, guid: 2af50eb1d42aab2449a3f7c5a427f2aa, type: 3}
+    - elementName: WebTokenInstruction
+      boardFile: {fileID: 4900000, guid: 3585f326e096c7b4882eaea478403c46, type: 3}
+    - elementName: FruitTreeInstructionBoard
+      boardFile: {fileID: 4900000, guid: 021aa65a639fde940bd00399be78c6d3, type: 3}
+    - elementName: OnboardingLevelSampleBoard
+      boardFile: {fileID: 4900000, guid: ebd261e9c2fd34c47ad5e28c00108a2e, type: 3}
+    - elementName: EmptyBoard
+      boardFile: {fileID: 4900000, guid: da87db7d83d23df4e8457e6b564c1ae2, type: 3}
+    - elementName: Testing board
+      boardFile: {fileID: 4900000, guid: f73e00b7952d09440b9537e3bc3310c9, type: 3}
+    - elementName: IceBlockTokenInstruction
+      boardFile: {fileID: 4900000, guid: f02545c0f85854aceb039af6f9b62848, type: 3}
+    - elementName: SnowTokenInstruction
+      boardFile: {fileID: 4900000, guid: 43da1437a015f2642ab143c7c94b2353, type: 3}
+    - elementName: HexSpellTokenInstruction
+      boardFile: {fileID: 4900000, guid: a753be221bdb3e047a14c5b655c352b9, type: 3}
+    - elementName: FourWayArrowTokenInstruction
+      boardFile: {fileID: 4900000, guid: b6a0a61516dbf485381b102ae8a45d3e, type: 3}

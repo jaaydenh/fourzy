@@ -1,0 +1,836 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace FourzyGameModel.Model
+{
+    public class TurnEvaluator
+    {
+        public Stack<MovingPiece> ActivePieces;
+        public List<GameAction> ResultActions;
+        public GameState OriginalState;
+        public GameState EvalState;
+
+        public TurnEvaluator(GameState GameState)
+        {
+            this.OriginalState = new GameState(GameState);
+            this.EvalState = new GameState(OriginalState);
+            this.EvalState.SetActionRecorder(RecordAction);
+        }
+        
+        #region "Available Moves"
+        public List<SimpleMove> GetAvailableSimpleMoves(int PlayerId=0)
+        {
+            if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;
+
+            List<SimpleMove> PossibleMoves = new List<SimpleMove>();
+            foreach (Direction d in Enum.GetValues(typeof(Direction)))
+            {
+                switch (d) {
+                    case Direction.UP:
+                    case Direction.DOWN:
+                        for (int c=1; c<EvalState.Board.Columns -1; c++)
+                        {
+                            SimpleMove m = new SimpleMove(new Piece(PlayerId), d, c);
+                            if (EvalState.Board.ContentsAt(FirstLocation(m, EvalState.Board)).CanMoveInto(new MovingPiece(m, EvalState.Board), d)){
+                                PossibleMoves.Add(m);
+                            }
+                        }
+                        break;
+                    case Direction.LEFT:
+                    case Direction.RIGHT:
+                        for (int r = 1; r < EvalState.Board.Rows - 1; r++)
+                        {
+                            SimpleMove m = new SimpleMove(new Piece(PlayerId), d, r);
+                            if (EvalState.Board.ContentsAt(FirstLocation(m, EvalState.Board)).CanMoveInto(new MovingPiece(m, EvalState.Board), d))
+                            {
+                                PossibleMoves.Add(m);
+                            }
+                        }
+                        break;
+                }
+
+            }
+            return PossibleMoves;
+        }
+
+        public List<SimpleMove> GetWinningMoves(int PlayerId=0)
+        {
+            if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;
+
+            List<SimpleMove> WinningMoves = new List<SimpleMove>();
+            foreach (SimpleMove m in GetAvailableSimpleMoves(PlayerId))
+            {
+                if (EvaluateTurn(new PlayerTurn(m)).WinnerId == PlayerId) WinningMoves.Add(m);
+            }
+
+            return WinningMoves;                
+        }
+
+        public SimpleMove GetFirstWinningMove(int PlayerId = 0)
+        {
+            if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;
+
+            foreach (SimpleMove m in GetAvailableSimpleMoves(PlayerId))
+            {
+                if (EvaluateTurn(new PlayerTurn(m),true).WinnerId == PlayerId) return m;
+            }
+
+            return null;
+        }
+
+
+        public bool CanIMakeMove(SimpleMove Move)
+        {
+            //Check to see if piece can move into the first location.
+            if (EvalState.Board.ContentsAt(FirstLocation(Move, EvalState.Board)).CanMoveInto(new MovingPiece(Move, EvalState.Board), Move.Direction))
+            {
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
+        public GameState EvaluateStartOfTurn()
+        {
+            this.ResultActions = new List<GameAction>();
+            this.EvalState = new GameState(OriginalState);
+            this.EvalState.SetActionRecorder(RecordAction);
+            this.EvalState.Random.Reset();
+
+            this.EvalState.StartOfTurn(EvalState.ActivePlayerId);
+            return EvalState;
+        }
+
+        public void Reset()
+        {
+            this.ResultActions = new List<GameAction>();
+            this.EvalState = new GameState(OriginalState);
+            this.EvalState.SetActionRecorder(RecordAction);
+            this.EvalState.Random.Reset();
+        }
+
+        public GameState EvaluateTurn(PlayerTurn Turn, bool IgnoreActivePlayer = false, bool TriggerStartOfTurn = true, bool TriggerEndOfTurn = true)
+        {
+            this.ResultActions = new List<GameAction>();
+            this.EvalState = new GameState(OriginalState);
+            this.EvalState.SetActionRecorder(RecordAction);
+            this.EvalState.Random.Reset();
+
+            if (Turn.PlayerId == 0)
+            {
+                ResultActions.Add(new GameActionInvalidMove(null, "PlayerId Not Set (0)", InvalidTurnType.BADPLAYERID));
+                return OriginalState;
+            }
+
+            if (Turn.PlayerId != EvalState.ActivePlayerId && !IgnoreActivePlayer)
+            {
+                ResultActions.Add(new GameActionInvalidMove(null, "PlayerId Does Not Match Active PlayerId", InvalidTurnType.WRONGPLAYER));
+                return OriginalState;
+            }
+
+            if (TriggerStartOfTurn)
+                this.EvalState.StartOfTurn(Turn.PlayerId);
+
+            foreach (IMove m in Turn.Moves)
+            {
+                switch(m.MoveType)
+                {
+                    case MoveType.SIMPLE:
+                        if (!ProcessSimpleMove((SimpleMove)m)) return OriginalState;
+
+                        break; ;
+                    case MoveType.SPELL:
+                        if (!ProcessSpell((ISpell)m)) return OriginalState;
+
+                        break; ;
+                    case MoveType.TOKEN:
+                        break; ;
+
+                    case MoveType.BOSSPOWER:
+                        if (!ProcessPower((IBossPower)m)) return OriginalState;
+                        break; ;
+
+                }
+            }
+            if (TriggerEndOfTurn)
+                this.EvalState.EndOfTurn(Turn.PlayerId);
+
+            if (EvaluateWinner())
+            {
+                if (EvalState.WinnerId > 0)
+                {
+                    RecordAction(new GameActionGameEnd(GameEndType.WIN, this.EvalState.WinnerId, EvalState.WinningLocations));
+                    EvalState.ActivePlayerId = 0;
+                }
+                else
+                {
+                    RecordAction(new GameActionGameEnd(GameEndType.DRAW, this.EvalState.WinnerId, EvalState.WinningLocations));
+                    EvalState.ActivePlayerId = 0;
+                }
+            }
+            else
+            {
+                if (EvaluateDraw())
+                {
+                    RecordAction(new GameActionGameEnd(GameEndType.DRAW, this.EvalState.WinnerId, null));
+                    EvalState.ActivePlayerId = 0;
+                }
+                
+            }
+
+            return EvalState;
+        }
+
+        #region "Simple Piece Movement"
+
+        public List<BoardLocation> TraceMove(SimpleMove Move)
+        {
+            List<BoardLocation> Locations = new List<BoardLocation>();
+            GameBoard Board = EvalState.Board;
+
+            //Check to see if piece can move into the first location.
+            if (!Board.ContentsAt(FirstLocation(Move, Board)).CanMoveInto(new MovingPiece(Move, Board), Move.Direction))
+            {
+                return Locations;
+            }
+
+            //Trace all possible spaces a piece can move to.
+            MovingPiece CurrentPiece = new MovingPiece(Move, Board);
+            Locations.Add(CurrentPiece.Location);
+
+            //ignore momentum.
+            //some cheating on friction.
+            int count = 100;
+            while (true && count-->0)
+            {
+                if (!Board.ContentsAt(CurrentPiece.Location).TokensAllowPushing
+                    && Board.ContentsAt(CurrentPiece.Location).TokenForceStop) break;
+                if (!Board.ContentsAt(CurrentPiece.Location).TokensAllowPushing
+                    && Board.ContentsAt(CurrentPiece.Location).TokenAdjustFrictionAmount == 100) break;
+
+                CurrentPiece.Direction = Board.ContentsAt(CurrentPiece.Location).ProcessDirection(CurrentPiece);
+                BoardLocation NextLocation = GetNextMovingLocation(CurrentPiece);
+                if (!NextLocation.OnBoard(Board)) break;
+                if (Board.ContentsAt(NextLocation).NoMorePieces) break;
+
+                //This isn't perfect because of chain reaction.  A pileup might prevent a piece from getting deeper in a push chain.
+                if (!Board.ContentsAt(NextLocation).CanMoveInto(CurrentPiece, CurrentPiece.Direction)) break;
+
+                if (!Locations.Contains(NextLocation))
+                    Locations.Add(NextLocation);
+                CurrentPiece.Location = NextLocation;
+            }
+
+            return Locations;
+        }
+
+        public List<BoardLocation> FindPossibleLocations()
+        {
+            List<BoardLocation> Possible = new List<BoardLocation>();
+            foreach (SimpleMove m in GetAvailableSimpleMoves())
+            {
+                foreach(BoardLocation l in TraceMove(m))
+                {
+                    if (!Possible.Contains(l)) Possible.Add(l);
+                }
+            }
+
+            return Possible;
+        }
+
+        public List<BoardLocation> FindDeadLocations()
+        {
+            List<BoardLocation> Possible = FindPossibleLocations();
+            List<BoardLocation> Dead = new List<BoardLocation>();
+            foreach (BoardSpace s in EvalState.Board.Contents )
+            {
+                if (!Possible.Contains(s.Location))
+                    if (!s.ContainsPiece)
+                        Dead.Add(s.Location);
+            }
+
+            return Dead;
+        }
+
+        public bool ProcessSimpleMove(SimpleMove Move)
+        {
+            if (!CanIMakeMove(Move))
+            {
+                RecordAction(new GameActionInvalidMove(Move, "Cannot Make Move", InvalidTurnType.BLOCKED));
+                return false;
+            }
+
+            ActivePieces = new Stack<MovingPiece>();
+            //ActivePieces.Add(new MovingPiece(Move, EvalState.Board.Rows, EvalState.Board.Columns));
+
+            //any move may translate into a several moving pieces.
+            foreach (MovingPiece p in SendPieceOnBoard(Move))
+            {
+                ActivePieces.Push(p);
+            }
+
+            while (ActivePieces.Count > 0)
+            {
+                //Get an active piece
+                MovingPiece CurrentPiece = ActivePieces.Pop();
+   
+                if (CurrentPiece.Momentum <= 0)
+                {
+
+                    if (!EvalState.Board.ContentsAt(CurrentPiece.Location).TokensAllowEndHere)
+                    {
+                        CurrentPiece.Momentum = 1;
+                    }
+                    else
+                    {
+
+                        if (!EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece)
+                        {
+                            RecordAction(new GameActionStop(CurrentPiece, CurrentPiece.Location, StopType.MOMENTUM));
+                            EvalState.Board.AddPiece(CurrentPiece.Piece, CurrentPiece.Location);
+                            EvalState.PieceStopsOnSpace(CurrentPiece);
+                            continue;
+                        }
+                        if (EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece
+                          && EvalState.Board.ContentsAt(CurrentPiece.Location).ActivePiece.UniqueId == CurrentPiece.UniqueId)
+                        {
+                            RecordAction(new GameActionStop(CurrentPiece, CurrentPiece.Location, StopType.MOMENTUM));
+                            EvalState.PieceStopsOnSpace(CurrentPiece);
+                            continue;
+                        }
+                        else if (CurrentPiece.Momentum == 0) CurrentPiece.Momentum = 1;
+
+                    }
+
+                }
+
+                else if (CurrentPiece.Friction >= 100)
+                {
+                    if (!EvalState.Board.ContentsAt(CurrentPiece.Location).TokensAllowEndHere)
+                    {
+                        CurrentPiece.Momentum = 1;
+                    }
+                    else
+                    {
+                        RecordAction(new GameActionStop(CurrentPiece, CurrentPiece.Location, StopType.FRICTION));
+                        if (!EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece)
+                        {
+                            EvalState.Board.AddPiece(CurrentPiece.Piece, CurrentPiece.Location);
+                            EvalState.PieceStopsOnSpace(CurrentPiece);
+                            continue;
+                        }
+                        if (EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece
+                   && EvalState.Board.ContentsAt(CurrentPiece.Location).ActivePiece.UniqueId == CurrentPiece.UniqueId)
+                        {
+                            EvalState.PieceStopsOnSpace(CurrentPiece);
+                            continue;
+                        }
+                        else if (CurrentPiece.Momentum == 0) CurrentPiece.Momentum = 1;
+
+                    }
+                }
+ 
+
+                else if (CurrentPiece.Piece.ConditionCount(PieceConditionType.INERTIA) > 0)
+                {
+                    CurrentPiece.RemoveOneCondition(PieceConditionType.INERTIA);
+
+                    if (CurrentPiece.Piece.ConditionCount(PieceConditionType.INERTIA) == 0)
+                    {
+                        if (!EvalState.Board.ContentsAt(CurrentPiece.Location).TokensAllowEndHere)
+                        {
+                            CurrentPiece.Momentum = 1;
+                        }
+                        else
+                        {
+                            if (!EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece)
+                            {
+                                EvalState.Board.AddPiece(CurrentPiece.Piece, CurrentPiece.Location);
+                                EvalState.PieceStopsOnSpace(CurrentPiece);
+                                RecordAction(new GameActionStop(CurrentPiece, CurrentPiece.Location, StopType.INERTIA));
+                                continue;
+                            }
+                            if (EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece
+                       && EvalState.Board.ContentsAt(CurrentPiece.Location).ActivePiece.UniqueId == CurrentPiece.UniqueId)
+                            {
+                                EvalState.PieceStopsOnSpace(CurrentPiece);
+                                RecordAction(new GameActionStop(CurrentPiece, CurrentPiece.Location, StopType.INERTIA));
+                                continue;
+                            }
+                            else
+                            {
+                                if (CurrentPiece.Momentum == 0) CurrentPiece.Momentum = 1;
+                            }
+
+                        }
+
+                    }
+                }
+
+                else if (EvalState.Board.ContentsAt(CurrentPiece.Location).TokenForceStop)
+                {
+                    //if (!EvalState.Board.ContentsAt(CurrentPiece.Location).TokensAllowEndHere)
+                    //{
+                    //    CurrentPiece.Momentum = 1;
+                    //}
+                    //else
+                    //{
+                    //    RecordAction(new GameActionStop(CurrentPiece, CurrentPiece.Location, StopType.TOKEN));
+                    //    if (!EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece)
+                    //    {
+                    //        EvalState.PieceStopsOnSpace(CurrentPiece);
+
+                    //        EvalState.Board.AddPiece(CurrentPiece.Piece, CurrentPiece.Location);
+                    //        continue;
+                    //    }
+                    //    if (EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece
+                    //        && EvalState.Board.ContentsAt(CurrentPiece.Location).ActivePiece.UniqueId == CurrentPiece.UniqueId)
+                    //    {
+                    //        EvalState.PieceStopsOnSpace(CurrentPiece);
+                    //        continue;
+                    //    }
+                    //}
+
+
+                }
+
+                //Find its desired direction. Where do you want to go little Fourzy?
+                if (CurrentPiece.Location.OnBoard(EvalState.Board))
+                {
+                    CurrentPiece.Direction = EvalState.Board.ContentsAt(CurrentPiece.Location).ProcessDirection(CurrentPiece);
+                } 
+                
+                //if (EvalState.Board.ContentsAt(CurrentPiece.Location).TokenAffectsMovement)
+                //{
+                //    CurrentPiece.Direction = EvalState.Board.ContentsAt(CurrentPiece.Location).ProcessDirection(CurrentPiece);
+                //}
+
+                //Find out where it wants to move based on direction.
+                BoardLocation NextLocation = GetNextMovingLocation(CurrentPiece);
+
+                //If next move is off board. Stop.
+                //We discussed possibility of having some edges a piece can fall off.
+                //Such as a mountain cliff.
+                //It might be useful to define wall properties, or tokens
+                //instead of having an 'edge of board' calculation.
+                if (!NextLocation.OnBoard(EvalState.Board))
+                {
+                    EvalState.PieceBumpsIntoLocation(CurrentPiece, CurrentPiece.Location);
+                    EvalState.PieceStopsOnSpace(CurrentPiece);
+
+                    RecordAction(new GameActionStop(CurrentPiece, CurrentPiece.Location, StopType.WALL));
+                    
+
+                    if (!EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPieceId(CurrentPiece.UniqueId))
+                    {
+                        if (EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece) throw new Exception("Already a piece on this space.");
+                        EvalState.Board.AddPiece(CurrentPiece.Piece, CurrentPiece.Location);
+                    }
+                    continue;
+                }
+
+                //Look at the space it wants to go. 
+                //If the new space is empty, let's try moving there.
+                //Empty = no token, no pieces.
+                if (EvalState.Board.ContentsAt(NextLocation).Empty)
+                {
+                    foreach (MovingPiece p in MovePieceToLocation(CurrentPiece, NextLocation, CurrentPiece.Direction))
+                    {
+                        ActivePieces.Push(p);
+                    }
+                    continue;
+                }
+
+                //If the piece is not allowed to move into this space, maybe unmovable object or token filling space
+                //No More Pieces might mean: 
+                //   1. a token is set to prevent entry
+                //   2. a piece is on the space and isMovable = false
+                //Trigger a bump
+                if (EvalState.Board.ContentsAt(NextLocation).NoMorePieces)
+                {
+                    EvalState.PieceBumpsIntoLocation(CurrentPiece, NextLocation);
+                    EvalState.PieceStopsOnSpace(CurrentPiece);
+                    if (!EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPieceId(CurrentPiece.UniqueId))
+                    {
+                        if (EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece) throw new Exception("Already a piece on this space.");
+                        EvalState.Board.AddPiece(CurrentPiece.Piece, CurrentPiece.Location);
+                    }
+                    continue;
+                }
+
+                //If there is the piece is allowed to enter the space, but it might be depend on other conditions
+                //  we need to recurse and move the next piece.
+                //  if we're allowed to do this, let's initiate a move into the space.
+                if (EvalState.Board.ContentsAt(NextLocation).CanMoveInto(CurrentPiece, CurrentPiece.Direction))
+                {
+                        foreach (MovingPiece p in MovePieceToLocation(CurrentPiece, NextLocation, CurrentPiece.Direction))
+                        {
+                            ActivePieces.Push(p);
+                        }
+                }
+                //else if (EvalState.Board.ContentsAt(NextLocation).TokensAllowPushing && EvalState.Board.ContentsAt(NextLocation).CanMoveInto(CurrentPiece, CurrentPiece.Direction, -1, true))
+                //{
+                //       CurrentPiece.AddCondition(PieceConditionType.STRAIGHT);
+                //    foreach (MovingPiece p in MovePieceToLocation(CurrentPiece, NextLocation, CurrentPiece.Direction, true))
+                //    {
+                //        ActivePieces.Push(p);
+                //    }
+                //}
+                else
+                {
+                    EvalState.PieceBumpsIntoLocation(CurrentPiece, NextLocation);
+                    EvalState.PieceStopsOnSpace(CurrentPiece);
+                    if (!EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPieceId(CurrentPiece.UniqueId))
+                    {
+                        if (EvalState.Board.ContentsAt(CurrentPiece.Location).ContainsPiece) throw new Exception("Already a piece on this space.");
+                        EvalState.Board.AddPiece(CurrentPiece.Piece, CurrentPiece.Location);
+                    }
+                }
+            }
+
+            //WE CAN USE THIS CODE IF WE IMPLEMENT A SPRINGY BLOCKER
+            if (ActivePieces.Count == 0)
+            {
+
+                foreach (KeyValuePair<BoardLocation, Piece> p in EvalState.Board.Pieces)
+                {
+                    if (p.Value.HasCondition(PieceConditionType.PUSHED_UP))
+                    { p.Value.ClearCondition(PieceConditionType.PUSHED_UP); ActivePieces.Push(new MovingPiece(p.Value, p.Key, Direction.UP, 10)); }
+                    else if (p.Value.HasCondition(PieceConditionType.PUSHED_DOWN))
+                    { p.Value.ClearCondition(PieceConditionType.PUSHED_DOWN); ActivePieces.Push(new MovingPiece(p.Value, p.Key, Direction.DOWN, 10)); }
+                    else if (p.Value.HasCondition(PieceConditionType.PUSHED_LEFT))
+                    { p.Value.ClearCondition(PieceConditionType.PUSHED_LEFT); ActivePieces.Push(new MovingPiece(p.Value, p.Key, Direction.LEFT, 10)); }
+                    else if (p.Value.HasCondition(PieceConditionType.PUSHED_RIGHT))
+                    { p.Value.ClearCondition(PieceConditionType.PUSHED_RIGHT); ActivePieces.Push(new MovingPiece(p.Value, p.Key, Direction.RIGHT, 10)); }
+                }
+            }
+
+            return true;
+        }
+
+        public static BoardLocation GetNextMovingLocation(MovingPiece Piece)
+        {
+            BoardLocation NextLocation = new BoardLocation(Piece.Location);
+
+            //Should this be here.  It might need to be somewhere else.
+            //// does piece have momentum?
+            //// does piece have friction?
+            //// does piece have a direction?
+            //if (Piece.Direction == Direction.NONE ||
+            //    Piece.Momentum == 0 ||
+            //    Piece.Friction > 1) return NextLocation;
+
+            NextLocation = Piece.Location.Neighbor(Piece.Direction);
+
+            return NextLocation;
+        }
+                
+        public static BoardLocation FirstLocation(SimpleMove Move, GameBoard Board)
+        {
+            return new MovingPiece(Move, Board).Location;
+        }
+
+        public List<MovingPiece> SendPieceOnBoard(SimpleMove Move)
+        {
+            MovingPiece NewPiece = new MovingPiece(Move, EvalState.Board);
+            //Message Game State to indicate new piece in play.
+            //PieceEntersBoard(NewPiece);
+            NewPiece.Pushed = true;
+            return MovePieceToLocation(NewPiece, NewPiece.Location, Move.Direction);
+          
+        }
+        
+        //Added Direction to compensate for wind.  A moving piece may have momentum in a direction, but get pushed into a space but keep it's original direction.
+        public List<MovingPiece> MovePieceToLocation(MovingPiece Piece, BoardLocation NextLocation, Direction Direction, bool IgnoreDirectionChange = false)
+        {
+            //Return the updated piece after a move or the pushed piece if a piece pushes a piece.
+            MovingPiece EndPiece = null;
+            BoardLocation StartLocation = Piece.Location;
+
+            if (StartLocation.OnBoard(EvalState.Board)) EvalState.Board.PieceLeavesSpace(Piece);
+
+            if (!Piece.Pushed)
+            {
+                EvalState.Board.ContentsAt(Piece.Location).RemovePieceFrom();
+            }
+            Piece.Pushed = false;
+
+            GameAction MoveAction = new GameActionMove(Piece, StartLocation, NextLocation);
+            RecordAction(MoveAction);
+
+            //PieceLeavesSpace(Piece);
+            EndPiece = EvalState.Board.ContentsAt(NextLocation).MovePieceOn(Piece, IgnoreDirectionChange);
+            //PieceEntersSpace(Piece);
+            
+            if (EndPiece.Pushed)
+            {
+                GameAction PushAction = new GameActionPush(Piece, EndPiece, Piece.Location);
+                RecordAction(PushAction);
+
+                //reset push flag for continuing the move.
+            }
+
+            return new List<MovingPiece>() { EndPiece };
+        }
+
+        //Moves a piece one space
+        public List<MovingPiece> ContinueMovement(MovingPiece Piece)
+        {
+               
+            //Return the updated piece after a move or the pushed piece if a piece pushes a piece.
+                //MovingPiece EndPiece = null;
+                if (EvalState.Board.ContentsAt(Piece.Location).ContainsPieceId(Piece.Piece.UniqueId))
+                {
+                    EvalState.Board.ContentsAt(Piece.Location).RemovePieceFrom();
+                }
+
+                BoardLocation NextLocation = TurnEvaluator.GetNextMovingLocation(Piece);
+                return MovePieceToLocation(Piece, NextLocation, Piece.Direction);
+        }
+        #endregion
+
+        #region "Spells"
+        public bool ProcessSpell(ISpell Spell)
+        {
+            if (EvalState.Players[Spell.PlayerId].Magic >= Spell.Cost)
+            {
+                EvalState.Players[Spell.PlayerId].Magic -= Spell.Cost;
+                if (Spell.Cast(EvalState))
+                {
+                    RecordAction(new GameActionSpell(Spell));
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool ProcessPower(IBossPower Power)
+        {
+            if (Power.Activate(EvalState))
+            {
+                RecordAction(new GameActionBossPower(Power));
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region "Win Evaluation"
+
+        public bool EvaluateWinner()
+        {
+            int count = 0;
+            foreach(int p in EvalState.Players.Keys)
+            {
+                if (DidPlayerWin(p)) count++;
+            }
+
+            //draw because both sides have a winning condition.
+            if (count > 1)
+            {
+                EvalState.WinningLocations.Clear();
+                foreach (int p in EvalState.Players.Keys)
+                {
+                    EvalState.WinningLocations.AddRange(GetWinningLocations(p));
+                }
+                EvalState.WinnerId = 0;
+            }
+            return (count > 0);
+        }
+
+        public List<BoardLocation> GetWinningLocations(int PlayerId)
+        {
+            List<BoardLocation> WinSpots = new List<BoardLocation>();
+            for (var row = 0; row < EvalState.Board.Rows; row++)
+            {
+                for (var col = 0; col < EvalState.Board.Columns; col++)
+                {
+                    foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
+                    {
+                        switch (Direction)
+                        {
+                            case WinDirection.HORIZONTAL:
+                                if (EvalState.Board.Columns - col < 4) continue; break;
+                            case WinDirection.VERTICAL:
+                                if (EvalState.Board.Rows - row < 4) continue; break;
+                            case WinDirection.DIAGONAL_NE_SW:
+                                if (EvalState.Board.Columns - col < 4) continue;
+                                if (row < EvalState.Board.Rows - 4 - 1) continue; break;
+                            case WinDirection.DIAGONAL_NW_SE:
+                                if (EvalState.Board.Columns - col < 4) continue;
+                                if (EvalState.Board.Rows - row < 4) continue; break;
+                        }
+                        List<BoardLocation> WinTest = CheckForWin(new BoardLocation(row, col), Direction, PlayerId);
+                        if (WinTest != null)
+                        {
+                            return WinTest;
+                        }
+                    }
+                }
+            }
+            return WinSpots;
+        }
+
+        public bool DidPlayerWin(int PlayerId)
+        {
+            for (var row = 0; row < EvalState.Board.Rows; row++)
+            {
+                for (var col = 0; col < EvalState.Board.Columns; col++)
+                {
+                    foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection))){
+                        switch (Direction)
+                        {
+                            case WinDirection.HORIZONTAL:
+                                if (EvalState.Board.Columns - col < 4) continue; break;
+                            case WinDirection.VERTICAL:
+                                if (EvalState.Board.Rows - row < 4) continue; break;
+                            case WinDirection.DIAGONAL_NE_SW:
+                                if (EvalState.Board.Columns - col < 4) continue;
+                                if (row < EvalState.Board.Rows - 4 - 1) continue; break;
+                            case WinDirection.DIAGONAL_NW_SE:
+                                if (EvalState.Board.Columns - col < 4) continue;
+                                if (EvalState.Board.Rows - row < 4) continue; break;
+
+                        }
+                        List<BoardLocation> WinningLocations = CheckForWin(new BoardLocation(row, col), Direction, PlayerId);
+                        if (WinningLocations != null)
+                        {
+                            EvalState.WinningLocations = new List<BoardLocation>();
+                            foreach(BoardLocation l in WinningLocations)
+                            {
+                                EvalState.WinningLocations.Add(l);
+                            }
+                            EvalState.WinnerId = PlayerId;
+                            
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool EvaluateDraw()
+        {
+            int count = 0;
+            foreach (int p in EvalState.Players.Keys)
+            {
+                if (EvaluateDraw(p)) count++;
+            }
+
+            //draw because both sides have a winning condition.
+            if (count > 1)
+            {
+                EvalState.WinnerId = 0;
+            }
+            return (count > 0);
+        }
+
+        public bool EvaluateDraw(int PlayerId)
+        {
+            if (GetAvailableSimpleMoves(PlayerId).Count == 0) return true;
+            return false;
+        }
+
+        public List<BoardLocation> CheckForWin(BoardLocation Location, WinDirection Direction, int PlayerId)
+        {
+            int count = 0;
+            int i = 0;
+            BoardLocation loc; 
+            List<BoardLocation> WinningLocations = new List<BoardLocation>();
+            switch (Direction)
+                {
+                    case WinDirection.HORIZONTAL:
+                    loc = new BoardLocation(Location.Row, Location.Column);
+                    while ( loc.OnBoard(EvalState.Board)){
+
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId){
+                            count++;
+                            i++;
+                            WinningLocations.Add(loc);
+                            loc = new BoardLocation(Location.Row, Location.Column + i);
+                        } else
+                        {
+                            if (count < 4) return null; 
+                            if (count >= 4) return WinningLocations;
+                        }
+                    }
+                    break;
+
+                    case WinDirection.VERTICAL:
+                    loc = new BoardLocation(Location.Row, Location.Column);
+                    while (loc.OnBoard(EvalState.Board))
+                    {
+
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId){
+                            count++;
+                            i++;
+                            WinningLocations.Add(loc);
+                            loc = new BoardLocation(Location.Row + i, Location.Column);
+                        }
+                        else
+                        {
+                            if (count < 4) return null;
+                            if (count >= 4) return WinningLocations;
+                        }
+                    }
+
+                    break;
+                    case WinDirection.DIAGONAL_NE_SW:
+                    loc = new BoardLocation(Location.Row, Location.Column);
+                    while (loc.OnBoard(EvalState.Board))
+                    {
+
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
+                        {
+                            count++;
+                            i++;
+                            WinningLocations.Add(loc);
+                            loc = new BoardLocation(Location.Row - i, Location.Column +i );
+                        }
+                        else
+                        {
+                            if (count < 4) return null;
+                            if (count >= 4) return WinningLocations;
+                        }
+                    }
+                    break;
+
+
+                case WinDirection.DIAGONAL_NW_SE:
+                    loc = new BoardLocation(Location.Row, Location.Column);
+                    while (loc.OnBoard(EvalState.Board))
+                    {
+
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
+                        {
+                            count++;
+                            i++;
+                            WinningLocations.Add(loc);
+                            loc = new BoardLocation(Location.Row + i, Location.Column + i);
+                        }
+                        else
+                        {
+                            if (count < 4) return null;
+                            if (count >= 4) return WinningLocations;
+                        }
+                    }
+                    break;
+
+            }
+
+            if (count >= 4) return WinningLocations;
+            return null;
+        }
+            
+        
+        #endregion
+
+        public void RecordAction(GameAction Action)
+        {
+            ResultActions.Add(Action);
+        }
+    }
+}

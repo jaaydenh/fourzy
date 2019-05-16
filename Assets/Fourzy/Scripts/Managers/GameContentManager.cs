@@ -2,8 +2,12 @@
 
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.UI.Menu;
+using FourzyGameModel.Model;
+using StackableDecorator;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy
@@ -11,88 +15,78 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class GameContentManager : UnitySingleton<GameContentManager>
     {
+        public PuzzlePacksDataHolder puzzlePacksDataHolder;
         public GamePiecesDataHolder piecesDataHolder;
-        public List<TokenView> tokenPrefabs = new List<TokenView>();
-        public List<Sprite> tokenSprites = new List<Sprite>();
-        public List<GameTheme> gameThemes = new List<GameTheme>();
-
-        [Header("Typed Prefabs")]
-        public PrefabTypePair[] typedPrefabs;
-
-        private TokenData[] tokenData = new TokenData[0];
-        private Dictionary<int, TokenData> inGameTokensData = new Dictionary<int, TokenData>();
-        private Dictionary<Token, TokenView> sortedTokenPrefabs = new Dictionary<Token, TokenView>();
+        public AIPlayersDataHolder aiPlayersDataHolder;
+        public TokensDataHolder tokensDataHolder;
+        public SpellsDataHolder spellsDataHolder;
+        public ThemesDataHolder themesDataHolder;
+        public PassAndPlayDataHolder passAndPlayDataHolder;
+        public MiscBoardsDataHolder miscBoardsDataHolder;
+        [List]
+        public PrefabsCollection typedPrefabs;
+        [List]
+        public TutorialsCollection tutorials;
+        [List]
+        public ScreensCollection screens;
 
         public Dictionary<PrefabType, PrefabTypePair> typedPrefabsFastAccess { get; private set; }
 
-        private int currentTheme;
-
-        public int CurrentTheme
+        public ThemesDataHolder.GameTheme currentTheme
         {
-            get
-            {
-                return currentTheme;
-            }
-            set
-            {
-                currentTheme = value;
-                PlayerPrefsWrapper.SetCurrentGameTheme(currentTheme);
-            }
+            get => themesDataHolder.currentTheme;
+
+            set => themesDataHolder.currentTheme = value;
         }
+
+        public List<PuzzlePacksDataHolder.PuzzlePack> puzzlePacks => puzzlePacksDataHolder.puzzlePacks.list;
+
+        public List<ThemesDataHolder.GameTheme> themes => themesDataHolder.themes.list;
+
+        public List<ThemesDataHolder.GameTheme> enabledThemes => themesDataHolder.themes.list.Where(theme => theme.enabled).ToList();
+
+        public List<TokensDataHolder.TokenData> tokens => tokensDataHolder.tokens.list;
+
+        public List<TokensDataHolder.TokenData> enabledTokens => tokensDataHolder.tokens.list.Where(token => token.enabled).ToList();
+
+        public List<GameBoardDefinition> passAndPlayGameboards => passAndPlayDataHolder.gameboards;
 
         protected override void Awake()
         {
             base.Awake();
 
-            foreach (TokenView token in tokenPrefabs)
-                sortedTokenPrefabs[token.tokenType] = token;
+            if (InstanceExists) return;
 
             typedPrefabsFastAccess = new Dictionary<PrefabType, PrefabTypePair>();
-            foreach (PrefabTypePair prefabTypePair in typedPrefabs)
+            foreach (PrefabTypePair prefabTypePair in typedPrefabs.list)
                 if (!typedPrefabsFastAccess.ContainsKey(prefabTypePair.prefabType))
                     typedPrefabsFastAccess.Add(prefabTypePair.prefabType, prefabTypePair);
 
-            currentTheme = PlayerPrefsWrapper.GetCurrentTheme();
-
-            tokenData = TokenBoardLoader.Instance.GetAllTokens();
-            piecesDataHolder.Init();
-
-            foreach (TokenData token in tokenData)
-                foreach (int tokenType in token.InGameTokenTypes)
-                    inGameTokensData[tokenType] = token;
+            piecesDataHolder.Initialize();
+            passAndPlayDataHolder.Initialize();
+            miscBoardsDataHolder.Initialize();
         }
 
-        public TokenData[] GetAllTokens()
-        {
-            return tokenData;
-        }
+        public GameBoardDefinition GetMiscBoard(string boardID) => miscBoardsDataHolder.gameboards.Find(board => board.ID == boardID);
 
-        public Sprite GetTokenSprite(int tokenID)
-        {
-            return tokenSprites[tokenID];
-        }
+        public GameBoardDefinition GetPassAndPlayBoard(string boardID) => passAndPlayDataHolder.gameboards.Find(board => board.ID == boardID);
 
-        public TokenData GetTokenData(int tokenId)
-        {
-            return tokenData[tokenId];
-        }
+        public TokenView GetTokenPrefab(TokenType tokenType, Area theme) => tokensDataHolder.GetToken(tokenType, theme);
 
-        public TokenData GetTokenDataWithType(Token tokenType)
-        {
-            return inGameTokensData[(int)tokenType];
-        }
+        public TokenView GetTokenPrefab(TokenType tokenType) => GetTokenPrefab(tokenType, themes[0].themeID);
 
-        public TokenView GetTokenPrefab(Token tokenType)
-        {
-            TokenView tokenView = null;
-            sortedTokenPrefabs.TryGetValue(tokenType, out tokenView);
+        public TokensDataHolder.TokenData GetTokenData(TokenType tokenType) => tokensDataHolder.GetTokenData(tokenType);
 
-            return tokenView;
-        }
+        public string[] GetTokenThemes(TokenType tokenType) => GetTokenData(tokenType)?.GetTokenThemes(themesDataHolder) ?? null;
 
-        public GameTheme GetCurrentTheme()
+        [ContextMenu("ResetOnboarding")]
+        public void ResetOnboarding()
         {
-            return gameThemes[currentTheme];
+            for (int tutorialIndex = 0; tutorialIndex < tutorials.list.Count; tutorialIndex++)
+            {
+                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorial + tutorials.list[tutorialIndex].data.name);
+                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorialOpened + tutorials.list[tutorialIndex].data.name);
+            }
         }
 
         public static GameObject GetPrefab(PrefabType type)
@@ -103,10 +97,7 @@ namespace Fourzy
             return Instance.typedPrefabsFastAccess[type].prefab;
         }
 
-        public static T GetPrefab<T>(PrefabType type)
-        {
-            return GetPrefab(type).GetComponent<T>();
-        }
+        public static T GetPrefab<T>(PrefabType type) => GetPrefab(type).GetComponent<T>();
 
         public static T InstantiatePrefab<T>(PrefabType type, Transform parent) where T : Component
         {
@@ -123,26 +114,77 @@ namespace Fourzy
             return result.GetComponent<T>();
         }
 
-        public static T InstantiatePrefab<T>(PrefabType type) where T : Component
+        [Serializable]
+        public class TutorialsCollection
         {
-            return InstantiatePrefab<T>(type, null);
+            public List<Tutorial> list;
         }
 
         [Serializable]
-        public class GameTheme
+        public class Tutorial
         {
-            public string name;
-            public Sprite preview;
-            public Sprite gameBackground;
-            public Sprite gameBackgroundWide;
-            public GameBoardView gameBoard;
+            [HideInInspector]
+            public string _name;
+
+            [StackableField]
+            [ShowIf("#Check")]
+            public OnboardingDataHolder data;
+
+            public bool Check()
+            {
+                _name = data ? data.tutorialName : "No data specified.";
+
+                return true;
+            }
+        }
+
+        [Serializable]
+        public class ScreensCollection
+        {
+            public List<Screen> list;
+        }
+
+        [Serializable]
+        public class Screen
+        {
+            [HideInInspector]
+            public string _name;
+
+            [StackableField]
+            [ShowIf("#Check")]
+            public MenuScreen prefab;
+
+            public bool Check()
+            {
+                _name = prefab ? prefab.name : "No Prefab";
+
+                return true;
+            }
+        }
+
+        [Serializable]
+        public class PrefabsCollection
+        {
+            public List<PrefabTypePair> list;
         }
 
         [Serializable]
         public class PrefabTypePair
         {
-            public GameObject prefab;
+            [HideInInspector]
+            public string _name;
+
+            [StackableField]
+            [ShowIf("#Check")]
             public PrefabType prefabType;
+            public GameObject prefab;
+
+            public bool Check()
+            {
+                _name = prefabType.ToString();
+
+                return true;
+            }
         }
 
         public enum PrefabType
@@ -153,17 +195,12 @@ namespace Fourzy
             COINS_WIDGET_SMALL = 1,
             //
             GAME_PIECE_SMALL = 5,
-            MINI_GAME_BOARD_PIECE = 6,
             MINI_GAME_BOARD = 7,
             GAME_PIECE_MEDIUM = 8,
             TOKEN_SMALL = 9,
 
-
-            ONBOARDING_SCREEN = 30,
-
-            PROMPT_SCREEN_GENERIC = 35,
-            PROMPT_SCREEN_CAHNGE_NAME = 36,
-            PROMPT_SCREEN_TOKEN_INSTUCTION = 37,
+            REWARDS_COLLECTABLE_COIN = 10,
+            REWARDS_COLLECTABLE_TICKET = 11,
             #endregion
 
             BOARD_HINT_BOX = 40,

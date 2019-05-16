@@ -16,53 +16,90 @@ namespace Fourzy._Updates.UI.Widgets
         public CircleProgressUI progressBar;
         public TextMeshProUGUI piecesCount;
 
-        protected GamePieceView gamePiece;
+        public GamePieceView gamePiece { get; private set; }
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            GamePieceData.onUpgrade += UpdateData;
+        }
+
+        protected void OnDestroy()
+        {
+            GamePieceData.onUpgrade -= UpdateData;
+        }
 
         public virtual void SetData(GamePieceData data)
         {
             this.data = data;
 
-            gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(data.ID).prefabs[0], gamePieceParent.transform);
+            if (gamePiece) Destroy(gamePiece.gameObject);
+
+            gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(data.ID).player1Prefab, gamePieceParent.transform);
+
             gamePiece.transform.localPosition = Vector3.zero;
-            gamePiece.transform.localScale = Vector3.one * 100f;
+            gamePiece.transform.localScale = Vector3.one * 90f;
             gamePiece.gameObject.SetLayerRecursively(gamePieceParent.gameObject.layer);
             gamePiece.StartBlinking();
 
-            switch (data.state)
+            switch (data.State)
             {
                 case GamePieceState.FoundAndLocked:
                 case GamePieceState.FoundAndUnlocked:
-                    UpdateProgressBar();
-                    piecesCount.text = string.Format("{0}/{1}", data.NumberOfPieces, data.TotalNumberOfPieces);
+                    piecesCount.text = string.Format("{0}/{1}", data.pieces, data.GetCurrentTierProgression);
                     break;
 
                 case GamePieceState.NotFound:
+                    piecesCount.text = "";
                     break;
             }
+
+            UpdateProgressBar();
         }
 
         public virtual void UpdateProgressBar()
         {
-            //float collectionProgress = ((float)data.NumberOfPieces) / data.TotalNumberOfPieces;
+            float progressValue = (float)data.pieces / data.GetCurrentTierProgression;
 
-            progressBar.progress = Random.value;
+            progressBar.value = Mathf.Clamp01(progressValue);
 
-            if (progressBar.progress < 1.0f)
+            //set progress bar
+            switch (data.State)
             {
-                switch (data.state)
-                {
-                    case GamePieceState.FoundAndUnlocked:
-                        progressBar.SetColor(Color.green);
-                        break;
-                    default:
-                        progressBar.SetColor(Color.yellow);
-                        break;
-                }
+                case GamePieceState.NotFound:
+                    break;
+
+                case GamePieceState.FoundAndLocked:
+                    if (progressValue < 1f)
+                        progressBar.SetColor(new Color(1f, 0f, .3f, 1f));
+                    else
+                        progressBar.SetColor(new Color(0f, 1f, .45f, 1f));
+                    break;
+
+                case GamePieceState.FoundAndUnlocked:
+                    if (progressValue < 1f)
+                        progressBar.SetColor(new Color(0f, .95f, 1f, 1f));
+                    else
+                        progressBar.SetColor(new Color(0f, 1f, .45f, 1f));
+                    break;
             }
-            else
-            {
-                progressBar.SetColor(Color.red);
-            }
+        }
+
+        public void UpdateData(GamePieceData _data)
+        {
+            if (_data == null)
+                return;
+
+            if (data != null && data != _data)
+                return;
+
+            SetData(_data);
+        }
+
+        public override void _Update()
+        {
+            UpdateData(data);
         }
     }
 }

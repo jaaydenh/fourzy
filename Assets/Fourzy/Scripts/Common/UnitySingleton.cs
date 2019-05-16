@@ -146,7 +146,6 @@ namespace Fourzy
 			}
 			else if (type == UnitySingletonAttribute.Type.CreateOnNewGameObject)
 			{
-				Debug.Log("CreateOnNewGameObject");
 				GameObject go = new GameObject(typeof(T).Name + " Singleton");
 				if (go == null)
 				{

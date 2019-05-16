@@ -70,6 +70,12 @@ namespace Fourzy._Updates.UI.Camera3D
             return new Vector2(size * 2f, size * 2f);
         }
 
+        public void PlaceObject(GameObject go, Vector3 offset)
+        {
+            go.transform.SetParent(transform);
+            go.transform.localPosition = offset;
+        }
+
         public void SizeTexture(Vector2 newSize)
         {
             renderTexture.Release();

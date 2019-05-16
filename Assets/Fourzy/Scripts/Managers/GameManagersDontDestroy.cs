@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿//@vadym udod
+
 using UnityEngine;
 
 namespace Fourzy

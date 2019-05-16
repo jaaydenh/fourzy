@@ -254,6 +254,10 @@ void setManualSessionHandling(BOOL flag) {
     [GameAnalytics setEnabledManualSessionHandling:flag];
 }
 
+void setEventSubmission(BOOL flag) {
+    [GameAnalytics setEnabledEventSubmission:flag];
+}
+
 void gameAnalyticsStartSession() {
     [GameAnalytics startSession];
 }

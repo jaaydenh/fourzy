@@ -1,6 +1,6 @@
 ﻿//@vadym udod
 
-using System;
+using Fourzy._Updates.UI.Menu.Screens;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,14 +9,13 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class GamePieceWidgetMedium : GamePieceWidgetSmall
     {
-        public static Action<string> onSelected;
-
         public Image borderImage;
         public GameObject infoFrame;
         public GameObject notFound;
         public TMP_Text pieceName;
         public TMP_Text numberOfChampions;
         public Slider starsSlider;
+        public Material greyscaleMaterial;
 
         public Toggle toggle { get; private set; }
         public ToggleGroup toggleGroup { get; private set; }
@@ -26,7 +25,6 @@ namespace Fourzy._Updates.UI.Widgets
             base.Awake();
 
             toggle = GetComponent<Toggle>();
-
             toggleGroup = GetComponentInParent<ToggleGroup>();
             
             if (toggleGroup && toggle)
@@ -37,35 +35,51 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base.SetData(data);
 
-            switch (data.state)
+            switch (data.State)
             {
                 case GamePieceState.FoundAndLocked:
-                case GamePieceState.FoundAndUnlocked:
-                    pieceName.text = data.Name;
-                    numberOfChampions.text = string.Format("{0:000}/{1:000}", data.NumberOfChampions, data.TotalNumberOfChampions);
-                    borderImage.color = data.BorderColor;
-                    //gamePieceParent.material = null;
-
-                    //stars slider
-                    starsSlider.value = data.NumberOfStars;
-                    break;
-
                 case GamePieceState.NotFound:
                     infoFrame.SetActive(false);
                     notFound.SetActive(true);
-                    layoutElement.preferredHeight = 200f;
+                    layoutElement.preferredHeight = 180;
+
+                    gamePiece.SetMaterial(greyscaleMaterial);
+                    gamePiece.colorTween.SetColor(Color.grey);
+                    gamePiece.Sleep();
+                    break;
+
+                case GamePieceState.FoundAndUnlocked:
+                    infoFrame.SetActive(true);
+                    notFound.SetActive(false);
+                    layoutElement.preferredHeight = 330;
+                    
+                    gamePiece.SetMaterial(null);
+                    gamePiece.colorTween.SetColor(Color.white);
+                    gamePiece.WakeUp();
+
+                    //set data
+                    pieceName.text = data.name;
+                    borderImage.color = data.borderColor;
+
+                    //stars slider
+                    starsSlider.value = data.champions;
                     break;
             }
 
             //switch toggle
             if (toggle)
-                toggle.isOn = data.ID == UserManager.Instance.gamePieceId;
+                toggle.isOn = data.ID == UserManager.Instance.gamePieceID;
         }
 
         public void OnToggle()
         {
-            if (onSelected != null)
-                onSelected(data.ID.ToString());
+            if (!menuScreen.isCurrent)
+                return;
+
+            UserManager.Instance.UpdateSelectedGamePiece(data.ID);
+
+            //open upgrade prompt
+            menuScreen.menuController.GetScreen<UpgradeGamePiecePromptScreen>().Prompt(data);
         }
     }
 }

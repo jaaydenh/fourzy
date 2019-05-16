@@ -1,0 +1,46 @@
+#import "JSONModel.h"
+#import "ISN_Foundation.h"
+
+#import <CoreLocation/CoreLocation.h>
+
+
+@protocol ISN_CLLocationCoordinate2D;
+@interface ISN_CLLocationCoordinate2D : JSONModel
+@property (nonatomic) float m_latitude;
+@property (nonatomic) float m_longitude;
+
+-(id) initWithCLLocationCoordinate2D:(CLLocationCoordinate2D ) location;
+-(CLLocationCoordinate2D ) getCLLocationCoordinate2D;
+
+@end
+
+@interface ISN_CLCircularRegion : JSONModel
+@property (nonatomic) NSString* m_identifier;
+@property (nonatomic) bool m_notifyOnEntry;
+@property (nonatomic) bool m_notifyOnExit;
+@property (nonatomic) float m_radius;
+@property (nonatomic) ISN_CLLocationCoordinate2D* m_center;
+
+-(id) initWithCLLocationCoordinate2D:(CLCircularRegion *) region;
+-(CLCircularRegion *) getCLCircularRegion;
+
+@end
+
+
+@protocol ISN_CLLocation;
+@interface ISN_CLLocation : JSONModel
+@property (nonatomic) ISN_CLLocationCoordinate2D* m_coordinate;
+@property (nonatomic) double m_altitude;
+@property (nonatomic) int m_floor;
+@property (nonatomic) double m_speed;
+@property (nonatomic) double m_course;
+@property (nonatomic) long m_timestamp;
+
+-(id) initWithCLLocation:(CLLocation *) location;
+@end
+
+@protocol ISN_CLLocationArray;
+@interface ISN_CLLocationArray : JSONModel
+@property (nonatomic) NSArray <ISN_CLLocation>* m_locations;
+@end
+

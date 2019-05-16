@@ -1,0 +1,116 @@
+#import "JSONModel.h"
+#import "ISN_Foundation.h"
+#import "ISN_NSCommunication.h"
+#import <StoreKit/StoreKit.h>
+
+@interface SKProduct (LocalizedPrice)
+@property (nonatomic, readonly) NSString *localizedPrice;
+@end
+
+
+@interface SKProductDiscount (LocalizedPrice)
+@property (nonatomic, readonly) NSString *localizedPrice;
+@end
+
+
+
+
+@interface ISN_SKProductSubscriptionPeriod : JSONModel
+
+//Getting Subscription Period Details
+@property (nonatomic) NSUInteger m_numberOfUnits;
+@property (nonatomic) SKProductPeriodUnit m_unit;
+
+@end
+
+
+
+@interface ISN_SKProductDiscount : JSONModel
+
+//Getting Price and Payment Mode
+@property (nonatomic) NSDecimalNumber *m_price;
+@property (nonatomic) ISN_NSLocale *m_priceLocale;
+@property (nonatomic) SKProductDiscountPaymentMode m_paymentMode;
+//Getting the Discount Duration
+@property (nonatomic) NSUInteger m_numberOfUnits;
+@property (nonatomic) ISN_SKProductSubscriptionPeriod *m_subscriptionPeriod;
+
+//Additional fields
+@property (nonatomic) NSString *m_localizedPrice;
+
+@end
+
+
+
+@protocol ISN_SKProduct;
+@interface ISN_SKProduct : JSONModel
+
+-(id) initWithSKProduct:(SKProduct *) product;
+
+//Getting the Product Identifier
+@property (nonatomic) NSString *m_productIdentifier;
+//Getting Product Attributes
+@property (nonatomic) NSString *m_localizedDescription;
+@property (nonatomic) NSString *m_localizedTitle;
+//Getting Pricing Information
+@property (nonatomic) NSDecimalNumber *m_price;
+@property (nonatomic) ISN_NSLocale *m_priceLocale;;
+@property (nonatomic) ISN_SKProductDiscount *m_introductoryPrice;
+//Getting the Subscription Period and Duration
+@property (nonatomic) ISN_SKProductSubscriptionPeriod *m_subscriptionPeriod;
+//Additional fields
+@property (nonatomic) NSString *m_localizedPrice;
+@end
+
+
+@interface ISN_SKPaymentTransaction : SA_Result
+-(id) initWithSKPaymentTransaction:(SKPaymentTransaction *) transaction;
+
+//from SKPayment
+@property (nonatomic) NSString *m_productIdentifier;
+@property (nonatomic) ISN_SKPaymentTransaction *m_originalTransaction;
+
+@property (nonatomic) NSString *m_transactionIdentifier;
+@property (nonatomic) SKPaymentTransactionState m_state;
+@property (nonatomic) long m_unitxDate;
+@end
+
+
+
+/*
+
+ // Only valid if state is SKPaymentTransactionStateRestored.
+ @property(nonatomic, readonly, nullable) SKPaymentTransaction *originalTransaction NS_AVAILABLE_IOS(3_0);
+
+*/
+
+
+
+
+@interface SA_PluginSettingsWindowStylesitResult : SA_Result
+@property (nonatomic)  NSArray <ISN_SKProduct> *m_products;
+@property (nonatomic)  NSArray <NSString *> *m_invalidProductIdentifiers;
+
+-(id) initWithSKProductsRespons:(SKProductsResponse*) response;
+@end
+
+
+
+@interface SA_PluginSettingsWindowStylesitRequest : JSONModel
+@property (nonatomic) NSArray <NSString *> *ProductIdentifiers;
+@end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

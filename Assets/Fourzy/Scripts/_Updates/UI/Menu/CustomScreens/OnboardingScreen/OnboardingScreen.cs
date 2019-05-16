@@ -1,10 +1,12 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Managers;
+using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
-using Fourzy._Updates.Tween;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Widgets;
-using System.Collections.Generic;
-using UnityEngine;
+using FourzyGameModel.Model;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -12,205 +14,331 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public static bool isActive = false;
 
-        public OnboardingDataHolder scenario;
-
-        public AlphaTween bg;
+        public OnboardingScreenBG bg;
         public OnboardingScreenDialog dialog;
         public OnboardingScreenPointer pointer;
         public OnboardingScreenHighlight highlight;
+        public OnboardingScreenGraphics graphics;
 
-        private int onboardingStep;
-        private int onboardingStage;
-        private List<OnboardingDataHolder.OnboardingActions> previousSteps;
+        private int tutorialID;
+        private int step;
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            previousSteps = new List<OnboardingDataHolder.OnboardingActions>();
-        }
+        public OnboardingDataHolder current => GameContentManager.Instance.tutorials.list[tutorialID].data;
 
         public override void Open()
         {
+            //name prompt was closed, so we do next
+            if (IsCurrentBacthContains(OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT))
+                StartRoutine("username changed", .2f, () => { Next(); });
+
             if (isOpened)
                 return;
-
-            GamePlayManager.OnStartMove += MoveStarted;
-            GamePlayManager.OnEndMove += MoveEnded;
-            GamePlayManager.OnGameOver += OnGameOver;
 
             base.Open();
 
             isActive = true;
+
+            UserManager.OnUpdateUserInfo += UserManagerOnUpdateName;
+
+            GamePlayManager.onMoveStarted += MoveStarted;
+            GamePlayManager.onMoveEnded += MoveEnded;
+            GamePlayManager.onGameFinished += OnGameFinished;
         }
 
-        public override void Close()
+        public override void Close(bool animate)
         {
-            base.Close();
-
-            GamePlayManager.OnStartMove -= MoveStarted;
-            GamePlayManager.OnEndMove -= MoveEnded;
+            base.Close(animate);
 
             isActive = false;
+
+            UserManager.OnUpdateUserInfo -= UserManagerOnUpdateName;
+
+            GamePlayManager.onMoveStarted -= MoveStarted;
+            GamePlayManager.onMoveEnded -= MoveEnded;
+            GamePlayManager.onGameFinished -= OnGameFinished;
+
+            //scenario finished
+            switch (current.onFinished)
+            {
+                case OnboardingDataHolder.OnFinished.LOAD_MAIN_MENU:
+                    if (GameManager.Instance.activeGame != null)
+                        GamePlayManager.instance.BackButtonOnClick();
+                    else
+                        GameManager.Instance.OpenMainMenu();
+                    return;
+            }
         }
 
         public override void OnBack()
         {
             base.OnBack();
-            
-            menuController.GetScreen<PromptScreen>().Prompt("Quit tutorial?", "Leave tutorial level?\nYou can reset tutorial in Screen.", () =>
+
+            menuController.GetScreen<PromptScreen>().Prompt("Quit tutorial?", "Leave tutorial level?\nYou can reset tutorial in Options Screen.", () =>
             {
                 //close prompt
                 menuController.CloseCurrentScreen();
                 //close onboarding
                 menuController.CloseCurrentScreen();
-
-                GamePlayManager.Instance.BackButtonOnClick();
             });
         }
 
-        public void OpenOnboarding(int stage = -1)
+        public void OpenOnboarding(int tutorialID)
         {
-            if (stage == -1)
-                onboardingStep = PlayerPrefs.GetInt("onboardingStep");
+            if (!WillDisplayTutorial(tutorialID))
+                return;
 
-            onboardingStage = PlayerPrefs.GetInt("onboardingStage");
+            this.tutorialID = tutorialID;
+            menuController.OpenScreen(this);
 
+            PlayerPrefsWrapper.SetTutorialOpened(current, true);
             DisplayCurrentStep();
+        }
+
+        public bool WillDisplayTutorial(int tutorialID)
+        {
+            if (!GameManager.Instance.displayTutorials)
+                return false;
+
+            if (tutorialID >= GameContentManager.Instance.tutorials.list.Count
+                || ((PlayerPrefsWrapper.GetTutorialOpened(GameContentManager.Instance.tutorials.list[tutorialID].data) || PlayerPrefsWrapper.GetTutorialFinished(GameContentManager.Instance.tutorials.list[tutorialID].data)) && !GameManager.Instance.forceDisplayTutorials))
+                return false;
+
+            return true;
         }
 
         public void Next()
         {
-            onboardingStep++;
+            step++;
             DisplayCurrentStep();
         }
 
         public void DisplayCurrentStep()
         {
-            AnalyticsManager.LogOnboardingStart(onboardingStage, onboardingStep);
-
-            if (scenario.tasks[onboardingStep].hideOther)
-                while (previousSteps.Count > 0)
-                {
-                    switch (previousSteps[0])
-                    {
-                        case OnboardingDataHolder.OnboardingActions.SHOW_MESSAGE:
-                            dialog.Hide(.2f);
-                            break;
-
-                        case OnboardingDataHolder.OnboardingActions.POINT_AT:
-                            pointer.Hide(.2f);
-                            break;
-
-                        case OnboardingDataHolder.OnboardingActions.HIGHLIGHT:
-                            highlight.Hide(.2f);
-                            break;
-                    }
-
-                    previousSteps.RemoveAt(0);
-                }
-
-            switch (scenario.tasks[onboardingStep].action)
+            if (step >= current.batches.Length)
             {
-                case OnboardingDataHolder.OnboardingActions.SHOW_MESSAGE:
-                    dialog.DisplayText(scenario.tasks[onboardingStep].message);
-                    break;
+                //close onboarding
+                menuController.CloseCurrentScreen();
+                PlayerPrefsWrapper.SetTutorialState(current, true);
 
-                case OnboardingDataHolder.OnboardingActions.POINT_AT:
-                    break;
-
-                case OnboardingDataHolder.OnboardingActions.HIGHLIGHT:
-                    break;
+                return;
             }
 
-            previousSteps.Add(scenario.tasks[onboardingStep].action);
+            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
+
+            AnalyticsManager.LogOnboardingStart(tutorialID, step);
+            IClientFourzy activeGame = GameManager.Instance.activeGame;
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+            {
+                switch (task.action)
+                {
+                    //dialog
+                    case OnboardingDataHolder.OnboardingActions.SHOW_MESSAGE:
+                        if (!dialog.visible)
+                            dialog.Show(.2f);
+
+                        dialog.DisplayText(task.message);
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.HIDE_MESSAGE_BOX:
+                        dialog.Hide(.2f);
+                        break;
+
+                    //pointer
+                    case OnboardingDataHolder.OnboardingActions.POINT_AT:
+                        if (!pointer.visible)
+                            pointer.Show(.2f);
+
+                        BoardLocation pointLocation = new BoardLocation((int)task.pointAt.y, (int)task.pointAt.x);
+
+                        pointer.PointAt(pointLocation);
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.HIDE_POINTER:
+                        pointer.Hide(.2f);
+                        break;
+
+                    //highlight
+                    case OnboardingDataHolder.OnboardingActions.HIGHLIGHT:
+                        if (!highlight.visible)
+                            highlight.Show(.2f);
+
+                        highlight.ShowHighlight(task.areas);
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.HIDE_HIGHLIGHT:
+                        highlight.Hide(.2f);
+                        break;
+
+                    //board input
+                    case OnboardingDataHolder.OnboardingActions.LIMIT_BOARD_INPUT:
+                        GamePlayManager.instance.board.LimitInput(task.areas);
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.RESET_BOARD_INPUT:
+                        GamePlayManager.instance.board.ResetInputLimit(true);
+                        break;
+
+                    //bg
+                    case OnboardingDataHolder.OnboardingActions.HIDE_BG:
+                        bg.Hide(.2f);
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.SHOW_BG:
+                        bg.Show(.2f);
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.PLAY_INITIAL_MOVES:
+                        if (GamePlayManager.instance)
+                            GamePlayManager.instance.board.TryPlayInitialMoves();
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.OPEN_GAME:
+                        ClientFourzyGame game = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoard(task.intValue + ""), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                        game._Type = GameType.ONBOARDING;
+
+                        GameManager.Instance.StartGame(game);
+                        break;
+
+                    //wizard
+                    case OnboardingDataHolder.OnboardingActions.HIDE_WIZARD:
+                        graphics.SetWizardState(false);
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.WIZARD_CENTER:
+                        graphics.SetWizardState(true);
+                        break;
+
+                    //make player1 move
+                    case OnboardingDataHolder.OnboardingActions.PLAYER_1_PLACE_GAMEPIECE:
+                        GamePlayManager.instance.board.TakeTurn(task.direction, task.intValue, true);
+                        break;
+
+                    //make player2 move
+                    case OnboardingDataHolder.OnboardingActions.PLAYER_2_PLACE_GAMEPIECE:
+                        GamePlayManager.instance.board.TakeTurn(task.direction, task.intValue, true);
+                        break;
+
+                    //user change name
+                    case OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT:
+                        menuController.GetScreen<ChangeNamePromptScreen>().Prompt("Change Name", "Current name: " + UserManager.Instance.userName, () => { menuController.CloseCurrentScreen(); });
+                        break;
+                }
+            }
         }
 
-        private void MoveStarted()
+        public bool IsCurrentBacthContains(OnboardingDataHolder.OnboardingActions action)
         {
-            //Debug.Log("MoveStarted: onboardingStep: " + onboardingStep);
-            //if (onboardingStep >= 4 && onboardingStep <= 6)
-            //{
-            //    moveCount++;
-            //    Debug.Log("MoveStarted movecount: " + moveCount);
-            //    switch (moveCount)
-            //    {
-            //        case 1:
-            //            dialogBox.SetActive(false);
-            //            hand.SetActive(false);
-            //            tapAreaAnim.SetActive(false);
-            //            wizard.SetActive(false);
-            //            NextStep();
-            //            break;
-            //        case 3:
-            //            hand.SetActive(false);
-            //            tapAreaAnim.SetActive(false);
-            //            onboardingStep++;
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
-            //else if (onboardingStep == 7)
-            //{
-            //    hand.SetActive(false);
-            //    tapAreaAnim.SetActive(false);
-            //}
+            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+                if (task.action == action)
+                    return true;
+
+            return false;
         }
 
-        private void MoveEnded()
+        private void UserManagerOnUpdateName()
         {
-            //Debug.Log("MoveEnded: onboardingStep: " + onboardingStep);
-            //if (onboardingStep >= 4 && onboardingStep <= 6)
-            //{
-            //    Debug.Log("MoveEnded movecount: " + moveCount);
-            //    switch (moveCount)
-            //    {
-            //        case 1:
-            //            Move move1 = new Move(4, Direction.UP, PlayerEnum.TWO);
-            //            GameManager.Instance.CallMovePiece(move1, false, false);
-            //            break;
-            //        case 2:
-            //            TapHintPosition(44, -302);
-            //            break;
-            //        case 3:
-            //            Move move2 = new Move(2, Direction.DOWN, PlayerEnum.TWO);
-            //            GameManager.Instance.CallMovePiece(move2, false, false);
-            //            break;
-            //        case 4:
-            //            hand.SetActive(true);
-            //            tapAreaAnim.SetActive(true);
-            //            DoNextStep();
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
-            //else if (onboardingStep == 7 && GameManager.Instance.activeGame.gameState.Winner != PlayerEnum.ONE)
-            //{
-            //    AnalyticsManager.LogOnboardingComplete(false, onboardingStage, onboardingStep);
-            //    onboardingStep--;
-            //    ShowWizardWithDialog("Try Again, you must get 4 in a row to win");
-            //    step7Attempts++;
-            //}
+            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+            {
+                switch (task.action)
+                {
+                    case OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT:
+
+                        break;
+                }
+            }
         }
 
-        private void OnGameOver()
+        private void MoveEnded(int playerID)
         {
-            //Debug.Log("Onboarding:OnGameOver: " + onboardingStep);
-            //if (onboardingStep == 3)
-            //{
-            //    StartCoroutine(NextStepWithWait(2));
-            //}
-            //else if (onboardingStep == 7)
-            //{
-            //    if (GameManager.Instance.activeGame.gameState.Winner == PlayerEnum.ONE)
-            //    {
-            //        Debug.Log("GameManager.Instance.activeGame.gameState.winner: " + GameManager.Instance.activeGame.gameState.Winner);
-            //        AnalyticsManager.LogOnboardingComplete(true, onboardingStage, onboardingStep);
-            //        StartCoroutine(NextStepWithWait(2));
-            //    }
-            //}
+            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+            {
+                switch (task.action)
+                {
+                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER1_MOVE_ENDED:
+                        if (playerID != (int)PlayerEnum.ONE)
+                            return;
+
+                        switch (task.nextAction)
+                        {
+                            case OnboardingDataHolder.NextAction.NEXT:
+                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
+                                break;
+                        }
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER2_MOVE_ENDED:
+                        if (playerID != (int)PlayerEnum.TWO)
+                            return;
+
+                        switch (task.nextAction)
+                        {
+                            case OnboardingDataHolder.NextAction.NEXT:
+                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void MoveStarted(int playerID)
+        {
+            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+            {
+                switch (task.action)
+                {
+                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER1_MOVE_STARTED:
+                        if (playerID != (int)PlayerEnum.ONE)
+                            return;
+
+                        switch (task.nextAction)
+                        {
+                            case OnboardingDataHolder.NextAction.NEXT:
+                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
+                                break;
+                        }
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER2_MOVE_STARTED:
+                        if (playerID != (int)PlayerEnum.TWO)
+                            return;
+
+                        switch (task.nextAction)
+                        {
+                            case OnboardingDataHolder.NextAction.NEXT:
+                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void OnGameFinished(IClientFourzy game)
+        {
+            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+                switch (task.action)
+                {
+                    case OnboardingDataHolder.OnboardingActions.PLAY_INITIAL_MOVES:
+                        switch (task.onGameFinished)
+                        {
+                            case OnboardingDataHolder.OnGameFinished.CONTINUE:
+                                StartRoutine("gameFinishedNext", 2f, () => { Next(); });
+                                break;
+                        }
+                        break;
+                }
         }
     }
 }

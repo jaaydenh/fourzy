@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb7cca6c1dd772141bec7df0a77362c1, type: 3}
+  m_Name: DefaultPassAndPlayDataHolder
+  m_EditorClassIdentifier: 
+  boards:
+    list:
+    - elementName: SquareGarden
+      boardFile: {fileID: 4900000, guid: aac40c8ed6384424388e36010fac578b, type: 3}
+    - elementName: IceDungeon
+      boardFile: {fileID: 4900000, guid: 8b0447c22df68ea40aa644e1db092e08, type: 3}
+    - elementName: HauntedIcePalace
+      boardFile: {fileID: 4900000, guid: a5ae4069375685d45bf2a85e145f16c6, type: 3}
+    - elementName: IceFountain
+      boardFile: {fileID: 4900000, guid: 2d961d8d32f5db94392ef59fa5b12722, type: 3}
+    - elementName: IceMaze
+      boardFile: {fileID: 4900000, guid: 54630204eca593742a0fc2644884a45a, type: 3}
+    - elementName: IceWineCellar
+      boardFile: {fileID: 4900000, guid: 3f5269abbff0e12459d0ccdb2572476c, type: 3}
+    - elementName: IceDungeon
+      boardFile: {fileID: 4900000, guid: 6b48bad3118426941ac8f3ee792fb137, type: 3}
+    - elementName: CheckerGarden
+      boardFile: {fileID: 4900000, guid: 4b36ca108c8366942a2f4795649a289d, type: 3}
+    - elementName: WalkInThePark
+      boardFile: {fileID: 4900000, guid: 375cb7a02269ea746a874f19d149705c, type: 3}
+    - elementName: Orchard
+      boardFile: {fileID: 4900000, guid: bf82cde0d11b06742b053cc57e4dd398, type: 3}
+    - elementName: AtOdds
+      boardFile: {fileID: 4900000, guid: cdc1defb47850d942a283c68812a2580, type: 3}
+    - elementName: TrickyGarden
+      boardFile: {fileID: 4900000, guid: 2a3a4d129f1fd094f87818714fec83ba, type: 3}
+    - elementName: BombArea
+      boardFile: {fileID: 4900000, guid: 12c333541453a30478972b3cdeef9a47, type: 3}
+    - elementName: CrossTheDesert
+      boardFile: {fileID: 4900000, guid: d10966a7cbce55e4a8cc31bcd1848ba0, type: 3}
+    - elementName: Drainage
+      boardFile: {fileID: 4900000, guid: 279fe9897ee935647b5aef36a53b655c, type: 3}
+    - elementName: IrrigatedLand
+      boardFile: {fileID: 4900000, guid: 3a3a9884340c150488d9e95334c9c435, type: 3}
+    - elementName: Oasis
+      boardFile: {fileID: 4900000, guid: 3610c28842f10a34698e0d6f45b49297, type: 3}
+    - elementName: River
+      boardFile: {fileID: 4900000, guid: 5f4a9fa2f8b41ca40ad1d8399f956bfd, type: 3}
+    - elementName: SandMigration
+      boardFile: {fileID: 4900000, guid: 38e120bc698741d4ca9cc9a27a5c8d0c, type: 3}
+    - elementName: SandVortex
+      boardFile: {fileID: 4900000, guid: af1f9603ba108b94cb0c8cd6e7ffefee, type: 3}
+    - elementName: SpookyForest
+      boardFile: {fileID: 4900000, guid: ec99176ced1ee104d9c708c9a12f2816, type: 3}
+    - elementName: StickyRoads
+      boardFile: {fileID: 4900000, guid: 852c07b3e1ea82a45950c8063b8d3006, type: 3}
+    - elementName: HauntedLake
+      boardFile: {fileID: 4900000, guid: 09e6b83f41a3fe248bd2c1668e7ebc94, type: 3}
+    - elementName: SnowBoard1
+      boardFile: {fileID: 4900000, guid: 4ce11e978e9a44812bc7126467130178, type: 3}
+    - elementName: Four Way Pits
+      boardFile: {fileID: 4900000, guid: 845b3deb36c4a456aab8964a2e8014be, type: 3}

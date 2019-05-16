@@ -13,21 +13,12 @@ namespace Fourzy._Updates.Tween
         public float from = 0f;
         public float to = 1f;
 
-        private List<GraphicsColorGroup> alphaGroup;
+        public List<GraphicsColorGroup> alphaGroup { get; private set; }
 
         public float _value { get; private set; }
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            DoParse();
-        }
-
         public override void AtProgress(float value, PlaybackDirection direction)
         {
-            base.AtProgress(value, direction);
-
             switch (direction)
             {
                 case PlaybackDirection.FORWARD:
@@ -39,6 +30,7 @@ namespace Fourzy._Updates.Tween
                         isPlaying = false;
                     }
                     break;
+
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
                         _value = Mathf.Lerp(to, from, curve.Evaluate(value));
@@ -73,9 +65,9 @@ namespace Fourzy._Updates.Tween
                 if (group.canvasGroup)
                     group.canvasGroup.alpha = from;
                 else if (group.uiGraphics)
-                    group.uiGraphics.color = new Color(1f, 1f, 1f, from);
+                    group.uiGraphics.color = new Color(group.uiGraphics.color.r, group.uiGraphics.color.g, group.uiGraphics.color.b, from);
                 else if (group.spriteRenderer)
-                    group.spriteRenderer.color = new Color(1f, 1f, 1f, from);
+                    group.spriteRenderer.color = new Color(group.spriteRenderer.color.r, group.spriteRenderer.color.g, group.spriteRenderer.color.b, from);
             }
         }
 
@@ -83,7 +75,7 @@ namespace Fourzy._Updates.Tween
         {
             alphaGroup = new List<GraphicsColorGroup>();
 
-            if (customObjects.Length != 0)
+            if (customObjects != null && customObjects.Length != 0)
                 foreach (Transform obj in customObjects)
                     Parse(obj);
             else
@@ -101,6 +93,11 @@ namespace Fourzy._Updates.Tween
             if (propagate)
                 for (int i = 0; i < obj.childCount; i++)
                     Parse(obj.GetChild(i));
+        }
+
+        public override void OnInitialized()
+        {
+            DoParse();
         }
     }
 }

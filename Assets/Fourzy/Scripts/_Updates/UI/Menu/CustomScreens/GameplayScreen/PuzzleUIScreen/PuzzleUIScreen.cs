@@ -1,9 +1,12 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using TMPro;
+using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Mechanics.GameplayScene;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -16,13 +19,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public TMP_Text rule;
         public TweenBase completeIcon;
 
-        private Game game;
+        public IClientFourzy game { get; private set; }
 
-        public void Open(Game game)
+        public void Open(IClientFourzy game)
         {
             this.game = game;
 
-            switch (game.gameState.GameType)
+            switch (game._Type)
             {
                 case GameType.PUZZLE:
                     Open();
@@ -32,22 +35,33 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public override void Open()
         {
+            if (game == null || game._Type != GameType.PUZZLE) return;
+
             base.Open();
 
-            UpdateWidgets();
+            if (PlayerPrefsWrapper.IsPuzzleChallengeComplete(game.asFourzyPuzzle.GameID))
+                completeIcon.PlayForward(true);
+            else
+                completeIcon.AtProgress(0f);
 
-            PuzzlePack activePack = GameManager.Instance.ActivePuzzlePack;
+            PuzzlePacksDataHolder.PuzzlePack activePack = game.asFourzyPuzzle.puzzlePack;
 
-            packName.text = game.puzzleChallengeInfo.Name;
-            rule.text = GameManager.Instance.ActivePuzzlePack.ActiveLevel + ": " + game.subtitle;
+            packName.text = activePack.name;
+            rule.text = (game.asFourzyPuzzle._data.PackLevel + 1) + ": " + game.asFourzyPuzzle._data.Instructions;
         }
 
-        public void UpdateWidgets()
+        public void Complete()
         {
-            movesLeftWidget.SetData(game);
+            completeIcon.PlayForward(true);
 
-            if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID))
-                completeIcon.PlayForward(true);
+            PlayerPrefsWrapper.SetPuzzleChallengeComplete(game.GameID, true);
+        }
+
+        public void OpenNext()
+        {
+            if (game == null || game._Type != GameType.PUZZLE) return;
+
+            GamePlayManager.instance.LoadGame(game.asFourzyPuzzle.Next());
         }
     }
 }

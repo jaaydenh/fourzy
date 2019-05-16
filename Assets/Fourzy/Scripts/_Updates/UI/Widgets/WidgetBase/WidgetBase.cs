@@ -9,39 +9,23 @@ using UnityEngine.UI;
 namespace Fourzy._Updates.UI.Widgets
 {
     [RequireComponent(typeof(AlphaTween))]
-    [RequireComponent(typeof(PositionTween))]
-    [RequireComponent(typeof(ScaleTween))]
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class WidgetBase : RoutinesBase
     {
-        [HideInInspector]
-        public AlphaTween alphaTween;
-        [HideInInspector]
-        public PositionTween positionTween;
-        [HideInInspector]
-        public ScaleTween scaleTween;
-        [HideInInspector]
-        public CanvasGroup canvasGroup;
-        [HideInInspector]
-        public RectTransform rectTransform;
-        [HideInInspector]
-        public LayoutElement layoutElement;
-        [HideInInspector]
-        public MenuScreen menuScreen;
+        public bool initialized { get; private set; }
+        public MenuScreen menuScreen { get; protected set; }
+        public LayoutElement layoutElement { get; protected set; }
+        public RectTransform rectTransform { get; protected set; }
+        public CanvasGroup canvasGroup { get; protected set; }
+        public ScaleTween scaleTween { get; protected set; }
+        public PositionTween positionTween { get; protected set; }
+        public AlphaTween alphaTween { get; protected set; }
+
+        public bool visible => menuScreen.IsWidgetVisible(this);
 
         protected override void Awake()
         {
-            base.Awake();
-
-            alphaTween = GetComponent<AlphaTween>();
-            positionTween = GetComponent<PositionTween>();
-            scaleTween = GetComponent<ScaleTween>();
-            rectTransform = GetComponent<RectTransform>();
-            layoutElement = GetComponent<LayoutElement>();
-
-            canvasGroup = GetComponent<CanvasGroup>();
-
-            menuScreen = GetComponentInParent<MenuScreen>();
+            Initialize();
         }
 
         public virtual void SetVisibility(float value)
@@ -80,7 +64,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void MoveRelative(Vector3 to, float time)
         {
-            if(rectTransform)
+            if (rectTransform)
                 MoveTo(rectTransform.anchoredPosition, positionTween.to + to, time);
             else
                 MoveTo(transform.localPosition, positionTween.to + to, time);
@@ -98,6 +82,63 @@ namespace Fourzy._Updates.UI.Widgets
             scaleTween.playbackTime = time;
 
             scaleTween.PlayForward(true);
+        }
+
+        public virtual void SetInteractable(bool state)
+        {
+            if (!canvasGroup)
+                return;
+
+            canvasGroup.interactable = state;
+        }
+
+        public virtual void BlockRaycast(bool state)
+        {
+            if (!canvasGroup)
+                return;
+
+            canvasGroup.blocksRaycasts = state;
+        }
+
+        public void SetActive(bool state)
+        {
+            gameObject.SetActive(state);
+        }
+
+        public virtual void _Update() { }
+
+        public virtual void Initialize()
+        {
+            if (initialized)
+                return;
+
+            initialized = true;
+            base.Awake();
+
+            OnInitialized();
+        }
+
+        protected virtual void OnInitialized()
+        {
+            alphaTween = GetComponent<AlphaTween>();
+            positionTween = GetComponent<PositionTween>();
+            scaleTween = GetComponent<ScaleTween>();
+
+            if (alphaTween)
+                alphaTween.Initialize();
+
+            if (positionTween)
+                positionTween.Initialize();
+
+            if (scaleTween)
+                scaleTween.Initialize();
+
+            rectTransform = GetComponent<RectTransform>();
+            layoutElement = GetComponent<LayoutElement>();
+
+            canvasGroup = GetComponent<CanvasGroup>();
+            
+            menuScreen = GetComponentInParent<MenuScreen>();
         }
     }
 }

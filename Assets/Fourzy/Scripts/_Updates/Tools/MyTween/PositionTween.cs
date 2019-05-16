@@ -13,13 +13,6 @@ namespace Fourzy._Updates.Tween
 
         public Vector3 _value { get; private set; }
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            rectTransform = GetComponent<RectTransform>();
-        }
-
         public void FromCurrentPosition()
         {
             if (rectTransform)
@@ -30,8 +23,6 @@ namespace Fourzy._Updates.Tween
 
         public override void AtProgress(float value, PlaybackDirection direction)
         {
-            base.AtProgress(value, direction);
-
             switch (direction)
             {
                 case PlaybackDirection.FORWARD:
@@ -70,6 +61,11 @@ namespace Fourzy._Updates.Tween
         public override void OnReset()
         {
             transform.localPosition = from;
+        }
+
+        public override void OnInitialized()
+        {
+            rectTransform = GetComponent<RectTransform>();
         }
     }
 }

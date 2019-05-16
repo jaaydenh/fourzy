@@ -1,0 +1,76 @@
+#import "ISN_CLCommunication.h"
+
+
+@implementation ISN_CLLocationCoordinate2D
+
+-(id) initWithCLLocationCoordinate2D:(CLLocationCoordinate2D ) location {
+    self = [super init];
+    if(self) {
+        self.m_latitude = location.latitude;
+        self.m_longitude = location.longitude;
+    }
+    return self;
+}
+-(CLLocationCoordinate2D) getCLLocationCoordinate2D {
+   return  CLLocationCoordinate2DMake(self.m_latitude, self.m_longitude);
+}
+
+@end
+
+@implementation ISN_CLCircularRegion
+
+-(id) initWithCLLocationCoordinate2D:(CLCircularRegion *) region {
+    
+    self = [super init];
+    if(self) {
+        self.m_identifier = region.identifier;
+        self.m_notifyOnEntry = region.notifyOnEntry;
+        self.m_notifyOnExit = region.notifyOnExit;
+        self.m_radius = region.radius;
+        self.m_center = [[ISN_CLLocationCoordinate2D alloc] initWithCLLocationCoordinate2D:region.center];
+    }
+    return self;
+}
+-(CLCircularRegion *) getCLCircularRegion {
+    
+    CLCircularRegion* region = [[CLCircularRegion alloc]
+                                initWithCenter:[self.m_center getCLLocationCoordinate2D]
+                                radius:self.m_radius identifier:
+                                self.m_identifier];
+   
+    region.notifyOnExit = self.m_notifyOnExit;
+    region.notifyOnEntry = self.m_notifyOnEntry;
+    
+    return  region;
+}
+@end
+
+
+@implementation ISN_CLLocation
+
+-(id) initWithCLLocation:(CLLocation *) location {
+    self = [super init];
+    if(self) {
+
+        self.m_coordinate = [[ISN_CLLocationCoordinate2D alloc] initWithCLLocationCoordinate2D:location.coordinate];
+        self.m_altitude = location.altitude;
+        if(location.floor != NULL) {
+            self.m_floor = (int) location.floor.level;
+        } else {
+             self.m_floor  = -1;
+        }
+        
+        self.m_speed = location.speed;
+        self.m_course = location.course;
+        self.m_timestamp = [location.timestamp timeIntervalSince1970];
+    }
+    return self;
+}
+
+@end
+
+@implementation ISN_CLLocationArray
+    -(id) init {return [super init]; }
+@end
+
+

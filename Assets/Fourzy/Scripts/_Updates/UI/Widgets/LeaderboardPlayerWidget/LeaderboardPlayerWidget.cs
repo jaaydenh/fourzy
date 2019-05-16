@@ -1,6 +1,9 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Mechanics._GamePiece;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Menu.Screens;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,50 +15,28 @@ namespace Fourzy._Updates.UI.Widgets
         public TMP_Text playerNameLabel;
         public TMP_Text rankLabel;
         public TMP_Text typeLabel;
-        public Image profilePicture;
-        public Image onlineTexture;
-        public Texture2D defaultProfilePicture;
+        public RectTransform iconParent;
 
         public ButtonExtended playButton;
 
-        private Leaderboard leaderboard;
+        private RankingScreen.LeaderboardEntry leaderboard;
 
-        public void SetData(Leaderboard leaderboard)
+        public void SetData(RankingScreen.LeaderboardEntry leaderboard)
         {
             this.leaderboard = leaderboard;
-            
+
             playerNameLabel.text = leaderboard.userName;
             rankLabel.text = leaderboard.rank.ToString();
+            typeLabel.text = (leaderboard.isWinsLeaderboard ? "<color=#808080ff>Wins :</color> " : "<color=#808080ff>Puzzles :</color> ") + leaderboard.value;
 
-            if (leaderboard.isWinsLeaderboard)
-                typeLabel.text = "<color=#808080ff>Wins :</color> " + leaderboard.wins;
-            else
-                typeLabel.text = "<color=#808080ff>Puzzles :</color> " + leaderboard.coins;
-
-            playButton.SetActive(leaderboard.userId != UserManager.Instance.userId);
-
-            //if (leaderboard.facebookId != null)
-            //{
-            //    StartCoroutine(UserManager.Instance.GetFBPicture(leaderboard.facebookId, (sprite) =>
-            //        {
-            //            profilePicture.sprite = sprite;
-            //        }));
-            //}
-            //else
-            //{
-            //    profilePicture.sprite = Sprite.Create(defaultProfilePicture,
-            //        new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
-            //        new Vector2(0.5f, 0.5f));
-            //}
+            GamePieceView gamePieceView = Instantiate(GameContentManager.Instance.piecesDataHolder.gamePieces.list.Random().player1Prefab, iconParent);
+            gamePieceView.transform.localPosition = Vector3.zero;
+            gamePieceView.StartBlinking();
         }
 
         public void OpenNewLeaderboardChallengeGame()
         {
-            Debug.Log("OpenNewLeaderboardChallengeGame userName: ");
-
-            //ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
-            //ViewController.instance.HideTabView();
-            //ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.LEADERBOARD, id, userName, profilePicture);
+            Debug.Log($"Open user challenge {leaderboard.userName}, {leaderboard.userId}");
         }
     }
 }

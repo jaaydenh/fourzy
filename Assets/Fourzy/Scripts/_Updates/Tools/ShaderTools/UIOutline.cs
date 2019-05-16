@@ -21,10 +21,10 @@ namespace Fourzy._Updates.Tools
         {
             if (!initialized)
                 Initialize();
-
+            
             image.materialForRendering.SetVector("_AnchoredPosition",
-                new Vector4((transform.position.x - canvas.transform.position.x) / canvas.transform.localScale.x,
-                (transform.position.y - canvas.transform.position.y) / canvas.transform.localScale.y));
+                new Vector2((transform.position.x - canvas.transform.position.x) / canvas.transform.lossyScale.x,
+                (transform.position.y - canvas.transform.position.y) / canvas.transform.lossyScale.y));
             image.materialForRendering.SetFloat("_Intensity", intensity);
             image.materialForRendering.SetFloat("_OutlineBorder", size);
             image.materialForRendering.SetFloat("_BlurSize", blueSize);

@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
 using TMPro;
 using UnityEngine;
@@ -9,18 +10,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class PuzzleSelectionScreen : MenuScreen
     {
+        public AIPlayerUIWidget aiPlayerWidgetPrefab;
+        public RectTransform aiPlayersParent;
+
         public PuzzlePackWidget puzzlePackPrefab;
         public GridLayoutGroup gridLayoutGroup;
         public TMP_Text completeText;
-
-        public int totalCount { get; private set; }
-        public int completedCount { get; private set; }
 
         public override void Open()
         {
             base.Open();
 
             LoadPuzzlePacks();
+            LoadAIPlayerWidgets();
         }
 
         public void LoadPuzzlePacks()
@@ -29,19 +31,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
             foreach (Transform child in gridLayoutGroup.transform)
                 Destroy(child.gameObject);
 
-            totalCount = 0;
-            completedCount = 0;
-
-            foreach (PuzzlePack puzzlePack in PuzzleChallengeLoader.Instance.GetPuzzlePacks())
+            foreach (PuzzlePacksDataHolder.PuzzlePack puzzlePack in GameContentManager.Instance.puzzlePacks)
             {
-                completedCount += puzzlePack.completedCount;
-                totalCount += puzzlePack.PuzzleChallengeLevels.Count;
-
-                PuzzlePackWidget puzzlePackObject = Instantiate(puzzlePackPrefab, gridLayoutGroup.transform);
-                puzzlePackObject.InitPuzzlePack(puzzlePack, completedCount);
+                PuzzlePackWidget puzzlePackWidgetInstance = Instantiate(puzzlePackPrefab, gridLayoutGroup.transform);
+                puzzlePackWidgetInstance.SetData(puzzlePack);
             }
 
-            completeText.text = completedCount.ToString() + " / " + totalCount.ToString();
+            completeText.text = $"{GameContentManager.Instance.puzzlePacksDataHolder.totalPuzzlesCompleteCount} / {GameContentManager.Instance.puzzlePacksDataHolder.totalPuzzlesCount}";
+        }
+
+        public void LoadAIPlayerWidgets()
+        {
+            foreach (Transform child in aiPlayersParent)
+                Destroy(child.gameObject);
+
+            foreach (AIPlayersDataHolder.AIPlayerData aiPlayer in GameContentManager.Instance.aiPlayersDataHolder.enabledAIPlayers)
+            {
+                AIPlayerUIWidget widget = Instantiate(aiPlayerWidgetPrefab, aiPlayersParent);
+                widget.transform.localScale = Vector3.one;
+
+                widget.SetData(aiPlayer);
+            }
         }
     }
 }

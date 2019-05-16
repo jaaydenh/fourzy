@@ -1,6 +1,9 @@
 ﻿//@vadym udod
 
-using System.Linq;
+using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Mechanics._GamePiece;
+using Fourzy._Updates.UI.Menu.Screens;
+using FourzyGameModel.Model;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,72 +15,67 @@ namespace Fourzy._Updates.UI.Widgets
         public TMP_Text opponentNameLabel;
         public TMP_Text statusLabel;
         public TMP_Text moveTimeAgo;
-        public Image opponentProfilePicture;
+        public Transform gamepieceParent;
         public Image tournamentIcon;
 
-        [HideInInspector]
-        public Game game;
+        public ChallengeData data { get; private set; }
+        public ClientFourzyGame game { get; private set; }
+        public GamesScreen gamesScreen { get; private set; }
 
-        private PlayerEnum currentplayer = PlayerEnum.NONE;
-
-        public void SetData(Game data)
+        public void SetData(GamesScreen _parent, ChallengeData data, ClientFourzyGame game)
         {
-            tournamentIcon.enabled = game.challengeType == ChallengeType.TOURNAMENT;
+            gamesScreen = _parent;
 
-            if (game.opponent == null)
-            {
-                Debug.Log("game.opponent is null");
-                opponentNameLabel.text = LocalizationManager.Instance.GetLocalizedValue("waiting_opponent_text");
+            this.game = game;
+            this.data = data;
+
+            Player opponent = game.opponent;
+            opponentNameLabel.text = opponent.DisplayName;
+            int opponentHerdId = 0;
+            if (opponent.HerdId != null) {
+                opponentHerdId = (int)float.Parse(opponent.HerdId);
             }
-            else
-                opponentNameLabel.text = game.opponent.opponentName;
 
-            if (game.opponentProfilePictureSprite != null)
-                opponentProfilePicture.sprite = game.opponentProfilePictureSprite;
+            GamePieceView gamePieceView = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(opponentHerdId).player1Prefab, gamepieceParent);
+            gamePieceView.transform.localPosition = Vector3.zero;
+            gamePieceView.StartBlinking();
 
-            if (game.isCurrentPlayer_PlayerOne)
-                currentplayer = PlayerEnum.ONE;
-            else
-                currentplayer = PlayerEnum.TWO;
-
-            if (game.gameState.Winner != PlayerEnum.EMPTY)
+            if (game.isOver)
             {
-                if (game.gameState.Winner == currentplayer)
+                //if player won
+                if (game.IsWinner())
                     statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("you_won_text");
-                else if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
-                    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("draw_text");
-                else
+                //if they won
+                else if (game.IsWinner(opponent))
                     statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("they_won_text");
+                //its a draw
+                else
+                    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("draw_text");
             }
-            else if (game.isExpired == true)
-                statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("expired_text");
+            //else if (game.isExpired == true)
+            //    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("expired_text");
             else
             {
-                if (game.gameState.isCurrentPlayerTurn)
+                if (game.isMyTurn)
                     statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("your_move_text");
                 else
                     statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("their_move_text");
             }
 
-            if (game.gameState.MoveList.LastOrDefault() == null)
-                Debug.Log("game.gameState.moveList == null");
+            PlayerTurn lastMove = data.lastTurn;
 
-            Move lastPlayerMove = game.gameState.MoveList.LastOrDefault();
-
-            long timestamp = 0;
-            if (lastPlayerMove != null)
-                timestamp = lastPlayerMove.timeStamp;
-
-            if (timestamp != 0)
+            if (lastMove != null)
             {
-                System.DateTime timestampDateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc).AddMilliseconds(timestamp).ToLocalTime();
+                System.DateTime timestampDateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc).AddMilliseconds(lastMove.Timestamp).ToLocalTime();
                 moveTimeAgo.text = TimeAgo.DateTimeExtensions.TimeAgo(timestampDateTime, LocalizationManager.Instance.cultureInfo);
             }
+            else
+                moveTimeAgo.text = "No moves were made...";
         }
 
         public void OpenGame()
         {
-            GameManager.Instance.OpenGame(game);
+            GameManager.Instance.StartGame(data.GetGameForPreviousMove());
         }
     }
 }

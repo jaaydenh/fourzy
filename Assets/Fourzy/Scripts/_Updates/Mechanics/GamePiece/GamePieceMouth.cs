@@ -2,12 +2,14 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using StackableDecorator;
 
 namespace Fourzy._Updates.Mechanics._GamePiece
 {
     public class GamePieceMouth : MonoBehaviour
     {
-        public MouthStateSpritePair[] states;
+        [List]
+        public MouthStateSpritePairCollection states;
 
         public SpriteRenderer spriteRenderer { get; private set; }
         public Dictionary<MouthState, MouthStateSpritePair> statesFastAccess { get; private set; }
@@ -18,15 +20,15 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
             statesFastAccess = new Dictionary<MouthState, MouthStateSpritePair>();
 
-            foreach (MouthStateSpritePair pair in states)
+            foreach (MouthStateSpritePair pair in states.list)
                 if (!statesFastAccess.ContainsKey(pair.state))
                     statesFastAccess.Add(pair.state, pair);
         }
 
         public void SetState(MouthState state)
         {
-            if (statesFastAccess.ContainsKey(state) && spriteRenderer)
-                spriteRenderer.sprite = statesFastAccess[state].sprites[0];
+            if (statesFastAccess.ContainsKey(state) && spriteRenderer && statesFastAccess[state].sprite)
+                spriteRenderer.sprite = statesFastAccess[state].sprite;
         }
 
         public enum MouthState
@@ -37,10 +39,28 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         }
 
         [System.Serializable]
+        public class MouthStateSpritePairCollection
+        {
+            public List<MouthStateSpritePair> list;
+        }
+
+        [System.Serializable]
         public class MouthStateSpritePair
         {
+            [HideInInspector]
+            public string _name;
+
+            [StackableField]
+            [ShowIf("#Check")]
             public MouthState state;
-            public Sprite[] sprites;
+            public Sprite sprite;
+
+            public bool Check()
+            {
+                _name = state.ToString();
+
+                return true;
+            }
         }
     }
 }

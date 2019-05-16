@@ -289,8 +289,7 @@ namespace ByteSheep.Events
         /// <summary>Invoke all registered callbacks (runtime and persistent).</summary>
         public void Invoke()
         {
-            if (DynamicMethodCalls != null)
-                DynamicMethodCalls();
+            DynamicMethodCalls?.Invoke();
 
             base.InvokePersistent();
         }
@@ -313,8 +312,7 @@ namespace ByteSheep.Events
         /// <summary>Invoke all registered callbacks (runtime and persistent).</summary>
         public void Invoke(T arg0)
         {
-            if (DynamicMethodCalls != null)
-                DynamicMethodCalls(arg0);
+            DynamicMethodCalls?.Invoke(arg0);
 
             base.InvokePersistent(arg0);
         }
@@ -338,8 +336,7 @@ namespace ByteSheep.Events
         /// <summary>Invoke all registered callbacks (runtime and persistent).</summary>
         public void Invoke(T arg0, U arg1)
         {
-            if (DynamicMethodCalls != null)
-                DynamicMethodCalls(arg0, arg1);
+            DynamicMethodCalls?.Invoke(arg0, arg1);
 
             base.InvokePersistent(arg0, arg1);
         }
@@ -363,8 +360,7 @@ namespace ByteSheep.Events
         /// <summary>Invoke all registered callbacks (runtime and persistent).</summary>
         public void Invoke(T arg0, U arg1, V arg2)
         {
-            if (DynamicMethodCalls != null)
-                DynamicMethodCalls(arg0, arg1, arg2);
+            DynamicMethodCalls?.Invoke(arg0, arg1, arg2);
 
             base.InvokePersistent(arg0, arg1, arg2);
         }
@@ -388,8 +384,7 @@ namespace ByteSheep.Events
         /// <summary>Invoke all registered callbacks (runtime and persistent).</summary>
         public void Invoke(T arg0, U arg1, V arg2, W arg3)
         {
-            if (DynamicMethodCalls != null)
-                DynamicMethodCalls(arg0, arg1, arg2, arg3);
+            DynamicMethodCalls?.Invoke(arg0, arg1, arg2, arg3);
 
             base.InvokePersistent(arg0, arg1, arg2, arg3);
         }

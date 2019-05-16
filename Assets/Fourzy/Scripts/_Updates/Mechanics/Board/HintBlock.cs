@@ -2,6 +2,7 @@
 
 using ByteSheep.Events;
 using Fourzy._Updates.Tween;
+using FourzyGameModel.Model;
 using System;
 using UnityEngine;
 
@@ -11,8 +12,7 @@ namespace Fourzy._Updates.Mechanics.Board
     [RequireComponent(typeof(AlphaTween))]
     public class HintBlock : MonoBehaviour
     {
-        public static float HOLD_TIME = 1f;
-        public static Action<HintBlock> onHold;
+        public bool active = true;
 
         public AdvancedEvent onShow;
         public AdvancedEvent onHide;
@@ -21,17 +21,22 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private ColorTween colorTween;
         private AlphaTween alphaTween;
+        private SpriteRenderer spriteRenderer;
 
         public bool shown { get; private set; }
         public bool selected { get; private set; }
-        public float selectedTimer { get; private set; }
+        public Direction direction { get; private set; }
+        public int location { get; private set; }
+        public BoardLocation boardLocation { get; private set; }
+        public GameboardView board { get; private set; }
 
-        public Move move { get; set; }
+        public float radius => Mathf.Max(spriteRenderer.bounds.size.x * transform.localScale.x, spriteRenderer.bounds.size.y * transform.localScale.y) * .5f;
 
         protected void Awake()
         {
             colorTween = GetComponent<ColorTween>();
             alphaTween = GetComponent<AlphaTween>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
 
             shown = false;
             selected = false;
@@ -42,15 +47,36 @@ namespace Fourzy._Updates.Mechanics.Board
             alphaTween.AtProgress(0f);
         }
 
-        protected void Update()
+        public void SetData(BoardLocation _boardLocation, GameboardView board)
         {
-            if (selected)
-            {
-                selectedTimer += Time.deltaTime;
+            this.board = board;
+            boardLocation = _boardLocation;
 
-                if (selectedTimer > HOLD_TIME && onHold != null)
-                    onHold.Invoke(this);
+            if (_boardLocation.Row == 0)
+            {
+                direction = Direction.DOWN;
+                location = _boardLocation.Column;
             }
+            else if (_boardLocation.Row == board.model.Rows - 1)
+            {
+                direction = Direction.UP;
+                location = _boardLocation.Column;
+            }
+            else if (_boardLocation.Column == 0)
+            {
+                direction = Direction.RIGHT;
+                location = _boardLocation.Row;
+            }
+            else if (_boardLocation.Column == board.model.Columns - 1)
+            {
+                direction = Direction.LEFT;
+                location = _boardLocation.Row;
+            }
+        }
+
+        public SimpleMove GetMove(Piece piece)
+        {
+            return new SimpleMove(piece, direction, location);
         }
 
         public void Show()
@@ -77,12 +103,11 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void Select()
         {
-            if (selected)
+            if (selected || !active)
                 return;
-            
+
             selected = true;
             colorTween.PlayForward(true);
-            selectedTimer = 0f;
 
             onSelected.Invoke();
         }
@@ -91,10 +116,9 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (!selected)
                 return;
-            
+
             selected = false;
             colorTween.PlayBackward(true);
-            selectedTimer = 0f;
 
             onDeselected.Invoke();
         }

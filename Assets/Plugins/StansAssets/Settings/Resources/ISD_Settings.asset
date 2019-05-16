@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31eababc099d4442fa4d077e54e58fe7, type: 3}
+  m_Name: ISD_Settings
+  m_EditorClassIdentifier: 
+  LastVersionCode: 
+  Frameworks: []
+  EmbededFrameworks: []
+  Libraries: []
+  Flags: []
+  PlistVariables:
+  - IsOpen: 1
+    IsListOpen: 1
+    Name: NSCameraUsageDescription
+    Type: 0
+    StringValue: Please change 'Camera Usage Description' with IOS Native UI Kit Editor
+      Settings
+    IntegerValue: 0
+    FloatValue: 0
+    BooleanValue: 1
+    ChildrensIds: []
+  - IsOpen: 1
+    IsListOpen: 1
+    Name: NSPhotoLibraryUsageDescription
+    Type: 0
+    StringValue: Please change 'Photo Library Usage Description' with IOS Native UI
+      Kit Editor Settings
+    IntegerValue: 0
+    FloatValue: 0
+    BooleanValue: 1
+    ChildrensIds: []
+  - IsOpen: 1
+    IsListOpen: 1
+    Name: NSPhotoLibraryAddUsageDescription
+    Type: 0
+    StringValue: Please change 'Photo Library Add Usage Description' with IOS Native
+      UI Kit Editor Settings
+    IntegerValue: 0
+    FloatValue: 0
+    BooleanValue: 1
+    ChildrensIds: []
+  - IsOpen: 1
+    IsListOpen: 1
+    Name: NSMicrophoneUsageDescription
+    Type: 0
+    StringValue: Please change 'Microphone Usage Description' with IOS Native UI Kit
+      Editor Settings
+    IntegerValue: 0
+    FloatValue: 0
+    BooleanValue: 1
+    ChildrensIds: []
+  VariableDictionary: []
+  Languages: []
+  ShellScripts: []
+  m_buildProperties:
+  - m_name: ENABLE_BITCODE
+    m_value: YES
+    m_options:
+    - YES
+    - NO
+  - m_name: ENABLE_TESTABILITY
+    m_value: YES
+    m_options:
+    - YES
+    - NO
+  - m_name: GENERATE_PROFILING_CODE
+    m_value: YES
+    m_options:
+    - YES
+    - NO
+  - m_name: GCC_ENABLE_OBJC_EXCEPTIONS
+    m_value: YES
+    m_options:
+    - YES
+    - NO
+  Capability:
+    iCloud:
+      Enabled: 0
+      keyValueStorage: 0
+      iCloudDocument: 0
+      customContainers: []
+    PushNotifications:
+      Enabled: 1
+      development: 1
+    GameCenter:
+      Enabled: 1
+    Wallet:
+      Enabled: 0
+      passSubset: []
+    Siri:
+      Enabled: 0
+    ApplePay:
+      Enabled: 0
+      merchants: []
+    InAppPurchase:
+      Enabled: 0
+    Maps:
+      Enabled: 0
+      options: 
+    PersonalVPN:
+      Enabled: 0
+    BackgroundModes:
+      Enabled: 0
+      options: 
+    InterAppAudio:
+      Enabled: 0
+    KeychainSharing:
+      Enabled: 0
+      accessGroups: []
+    AssociatedDomains:
+      Enabled: 0
+      domains: []
+    AppGroups:
+      Enabled: 0
+      groups: []
+    DataProtection:
+      Enabled: 0
+    HomeKit:
+      Enabled: 0
+    HealthKit:
+      Enabled: 0
+    WirelessAccessoryConfiguration:
+      Enabled: 0
+  Files: []
+  EntitlementsMode: 0
+  EntitlementsFile: {fileID: 0}

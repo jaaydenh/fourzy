@@ -29,6 +29,11 @@ namespace Fourzy._Updates.UI.Camera3D
         {
             rawImage = GetComponent<RawImage>();
 
+            if (!rawImage)
+                rawImage = gameObject.AddComponent<RawImage>();
+
+            rawImage.material = Camera3DManager.instance.defaultItemToIMageMaterial;
+
             if (initialized)
                 return;
 

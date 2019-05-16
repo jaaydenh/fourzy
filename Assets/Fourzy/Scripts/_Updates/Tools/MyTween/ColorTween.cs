@@ -18,17 +18,8 @@ namespace Fourzy._Updates.Tween
 
         public Color _value { get; private set; }
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            DoParse();
-        }
-
         public override void AtProgress(float value, PlaybackDirection direction)
         {
-            base.AtProgress(value, direction);
-
             switch (direction)
             {
                 case PlaybackDirection.FORWARD:
@@ -45,7 +36,7 @@ namespace Fourzy._Updates.Tween
                         _value = Color.Lerp(to, from, curve.Evaluate(value));
                     else
                     {
-                        Color.Lerp(to, from, curve.Evaluate(1f));
+                        _value = Color.Lerp(to, from, curve.Evaluate(1f));
                         isPlaying = false;
                     }
                     break;
@@ -94,6 +85,11 @@ namespace Fourzy._Updates.Tween
             if (propagate)
                 for (int i = 0; i < obj.childCount; i++)
                     Parse(obj.GetChild(i));
+        }
+
+        public override void OnInitialized()
+        {
+            DoParse();
         }
     }
 }

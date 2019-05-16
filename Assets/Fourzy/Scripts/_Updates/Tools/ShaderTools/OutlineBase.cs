@@ -30,7 +30,7 @@ namespace Fourzy._Updates.Tools
                 tween = gameObject.AddComponent<ValueTween>();
                 tween.curve = new AnimationCurve(new Keyframe(0f, 0f, tan45, tan45), new Keyframe(1f, 1f, tan45, tan45));
 
-                tween._onProgress += (value) => { intensity = value; };
+                tween._onValue += (value) => { intensity = value; };
             }
 
             tween.from = from;

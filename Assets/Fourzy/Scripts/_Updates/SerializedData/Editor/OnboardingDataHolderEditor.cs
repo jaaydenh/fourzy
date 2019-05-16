@@ -11,88 +11,155 @@ namespace Fourzy._Updates.Serialized
     {
         protected OnboardingDataHolder trigger;
 
+        private SerializedProperty batchesProperty;
+        private SerializedProperty showPlayer2Property;
+        private SerializedProperty onFinishedProperty;
+        private SerializedProperty nameProperty;
+
         private SerializedProperty tasksProperty;
         private SerializedProperty messageProperty;
         private SerializedProperty pointAtProperty;
+        private SerializedProperty intProperty;
+        private SerializedProperty onGameFinishedProperty;
+        private SerializedProperty onMoveFinishedProperty;
+        private SerializedProperty directionProperty;
         private SerializedProperty highlightProperty;
 
         protected void OnEnable()
         {
             trigger = target as OnboardingDataHolder;
 
-            if (trigger.tasks == null)
-                trigger.tasks = new OnboardingDataHolder.OnboardingTask[0];
+            if (trigger.batches == null)
+                trigger.batches = new OnboardingDataHolder.OnboardingTasksBatch[0];
 
-            tasksProperty = serializedObject.FindProperty("tasks");
+            batchesProperty = serializedObject.FindProperty("batches");
+            showPlayer2Property = serializedObject.FindProperty("showPlayer2");
+            onFinishedProperty = serializedObject.FindProperty("onFinished");
+            nameProperty = serializedObject.FindProperty("tutorialName");
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            for (int taskIndex = 0; taskIndex < tasksProperty.arraySize; taskIndex++)
+            EditorGUILayout.PropertyField(showPlayer2Property);
+            EditorGUILayout.PropertyField(nameProperty);
+
+            for (int batchIndex = 0; batchIndex < batchesProperty.arraySize; batchIndex++)
             {
-                EditorGUILayout.BeginHorizontal();
+                DrawLine(Color.red, 2, 15);
+                tasksProperty = batchesProperty.GetArrayElementAtIndex(batchIndex).FindPropertyRelative("tasks");
+
+                for (int taskIndex = 0; taskIndex < tasksProperty.arraySize; taskIndex++)
                 {
-                    trigger.tasks[taskIndex].unfolded = EditorGUILayout.Foldout(trigger.tasks[taskIndex].unfolded, trigger.tasks[taskIndex].action.ToString());
-
-                    if (GUILayout.Button("-", GUILayout.Width(50f)))
-                        tasksProperty.DeleteArrayElementAtIndex(taskIndex);
-
-                    if (taskIndex > 0)
-                        if (GUILayout.Button("UP", GUILayout.Width(50f)))
-                            tasksProperty.MoveArrayElement(taskIndex, taskIndex - 1);
-
-                    if (taskIndex < tasksProperty.arraySize - 1)
-                        if (GUILayout.Button("DOWN", GUILayout.Width(50f)))
-                            tasksProperty.MoveArrayElement(taskIndex, taskIndex + 1);
-                }
-                EditorGUILayout.EndHorizontal();
-
-                if (trigger.tasks[taskIndex].unfolded)
-                {
-                    SerializedProperty action = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("action");
-                    EditorGUILayout.PropertyField(action);
-
-                    SerializedProperty hideOther = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("hideOther");
-                    EditorGUILayout.PropertyField(hideOther);
-
-                    switch (trigger.tasks[taskIndex].action)
+                    EditorGUILayout.BeginHorizontal();
                     {
-                        case OnboardingDataHolder.OnboardingActions.SHOW_MESSAGE:
-                            messageProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("message");
-                            EditorGUILayout.PropertyField(messageProperty);
-                            break;
+                        trigger.batches[batchIndex].tasks[taskIndex].unfolded = EditorGUILayout.Foldout(
+                            trigger.batches[batchIndex].tasks[taskIndex].unfolded,
+                            trigger.batches[batchIndex].tasks[taskIndex].action.ToString());
 
-                        case OnboardingDataHolder.OnboardingActions.POINT_AT:
-                            pointAtProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("pointAt");
+                        if (GUILayout.Button("-", GUILayout.Width(50f)))
+                        {
+                            tasksProperty.DeleteArrayElementAtIndex(taskIndex);
+                            continue;
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
 
-                            EditorGUILayout.PropertyField(pointAtProperty);
-                            break;
+                    if (trigger.batches[batchIndex].tasks[taskIndex].unfolded)
+                    {
+                        SerializedProperty action = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("action");
+                        EditorGUILayout.PropertyField(action);
 
-                        case OnboardingDataHolder.OnboardingActions.HIGHLIGHT:
-                            highlightProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("areas");
+                        switch (trigger.batches[batchIndex].tasks[taskIndex].action)
+                        {
+                            case OnboardingDataHolder.OnboardingActions.SHOW_MESSAGE:
+                                messageProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("message");
+                                EditorGUILayout.PropertyField(messageProperty);
+                                break;
 
-                            for (int highlighAreaIndex = 0; highlighAreaIndex < highlightProperty.arraySize; highlighAreaIndex++)
-                            {
-                                SerializedProperty from = highlightProperty.GetArrayElementAtIndex(highlighAreaIndex).FindPropertyRelative("from");
-                                EditorGUILayout.PropertyField(from);
+                            case OnboardingDataHolder.OnboardingActions.POINT_AT:
+                                pointAtProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("pointAt");
 
-                                SerializedProperty to = highlightProperty.GetArrayElementAtIndex(highlighAreaIndex).FindPropertyRelative("to");
-                                EditorGUILayout.PropertyField(to);
+                                EditorGUILayout.PropertyField(pointAtProperty);
+                                break;
 
-                                DrawLine(Color.gray);
-                            }
+                            case OnboardingDataHolder.OnboardingActions.OPEN_GAME:
+                                intProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("intValue");
+                                onGameFinishedProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("onGameFinished");
 
-                            if (GUILayout.Button("Add Area", GUILayout.Width(100f)))
-                                trigger.tasks[taskIndex].areas = trigger.tasks[taskIndex].areas.AddElement(new OnboardingDataHolder.OnboardingTask.HighlightArea());
-                            break;
+                                EditorGUILayout.PropertyField(intProperty, new GUIContent("Game ID"));
+                                EditorGUILayout.PropertyField(onGameFinishedProperty, new GUIContent("On Game Finished"));
+                                break;
+
+                            case OnboardingDataHolder.OnboardingActions.HIGHLIGHT:
+                            case OnboardingDataHolder.OnboardingActions.LIMIT_BOARD_INPUT:
+                                highlightProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("areas");
+
+                                for (int highlighAreaIndex = 0; highlighAreaIndex < highlightProperty.arraySize; highlighAreaIndex++)
+                                {
+                                    EditorGUILayout.PropertyField(highlightProperty.GetArrayElementAtIndex(highlighAreaIndex), new GUIContent("Area - " + highlighAreaIndex));
+
+                                    if (GUILayout.Button("-", GUILayout.Width(50f)))
+                                    {
+                                        highlightProperty.DeleteArrayElementAtIndex(highlighAreaIndex);
+                                        continue;
+                                    }
+
+                                    DrawLine(Color.gray);
+                                }
+
+                                if (GUILayout.Button("Add Area", GUILayout.Width(100f)))
+                                    trigger.batches[batchIndex].tasks[taskIndex].areas = trigger.batches[batchIndex].tasks[taskIndex].areas.AddElementToEnd(new Rect(0, 0, 1, 1));
+                                break;
+
+                            case OnboardingDataHolder.OnboardingActions.ON_PLAYER2_MOVE_ENDED:
+                            case OnboardingDataHolder.OnboardingActions.ON_PLAYER1_MOVE_ENDED:
+                            case OnboardingDataHolder.OnboardingActions.ON_PLAYER1_MOVE_STARTED:
+                            case OnboardingDataHolder.OnboardingActions.ON_PLAYER2_MOVE_STARTED:
+                                onMoveFinishedProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("nextAction");
+
+                                EditorGUILayout.PropertyField(onMoveFinishedProperty);
+                                break;
+
+                            case OnboardingDataHolder.OnboardingActions.PLAYER_1_PLACE_GAMEPIECE:
+                            case OnboardingDataHolder.OnboardingActions.PLAYER_2_PLACE_GAMEPIECE:
+                                intProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("intValue");
+                                directionProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("direction");
+
+                                EditorGUILayout.PropertyField(directionProperty);
+                                EditorGUILayout.PropertyField(intProperty, new GUIContent("At"));
+                                break;
+                        }
                     }
                 }
+
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("Add Task", GUILayout.Width(100f)))
+                        trigger.batches[batchIndex].tasks = trigger.batches[batchIndex].tasks.AddElementToEnd(new OnboardingDataHolder.OnboardingTask() { unfolded = true, });
+
+                    if (GUILayout.Button("-", GUILayout.Width(30f)))
+                    {
+                        batchesProperty.DeleteArrayElementAtIndex(batchIndex);
+                        break;
+                    }
+
+                    if (batchIndex > 0)
+                        if (GUILayout.Button("▲", GUILayout.Width(30f)))
+                            batchesProperty.MoveArrayElement(batchIndex, batchIndex - 1);
+
+                    if (batchIndex < batchesProperty.arraySize - 1)
+                        if (GUILayout.Button("▼", GUILayout.Width(30f)))
+                            batchesProperty.MoveArrayElement(batchIndex, batchIndex + 1);
+                }
+                EditorGUILayout.EndHorizontal();
             }
 
-            if (GUILayout.Button("Add Task", GUILayout.Width(150f)))
-                trigger.tasks = trigger.tasks.AddElement(new OnboardingDataHolder.OnboardingTask());
+            DrawLine(Color.green);
+
+            if (GUILayout.Button("Add Batch", GUILayout.Width(150f)))
+                trigger.batches = trigger.batches.AddElementToEnd(new OnboardingDataHolder.OnboardingTasksBatch());
 
             serializedObject.ApplyModifiedProperties();
         }

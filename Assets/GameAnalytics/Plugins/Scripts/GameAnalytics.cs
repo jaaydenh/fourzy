@@ -79,8 +79,6 @@ namespace GameAnalyticsSDK
             DontDestroyOnLoad(gameObject);
 
             Application.logMessageReceived += GA_Debug.HandleLog;
-
-            InternalInitialize();
         }
 
         void OnDestroy()
@@ -91,21 +89,6 @@ namespace GameAnalyticsSDK
             if(_instance == this)
                 _instance = null;
         }
-
-//         void OnApplicationPause(bool pauseStatus)
-//         {
-// #if UNITY_ANDROID && !UNITY_EDITOR
-//             AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-//             AndroidJavaObject activity = jc.GetStatic<AndroidJavaObject>("currentActivity");
-//             AndroidJavaClass ga = new AndroidJavaClass("com.gameanalytics.sdk.GAPlatform");
-//             if (pauseStatus) {
-//                 ga.CallStatic("onActivityPaused", activity);
-//             }
-//             else {
-//                 ga.CallStatic("onActivityResumed", activity);
-//             }
-// #endif
-//         }
 
         void OnApplicationQuit()
         {
@@ -232,6 +215,7 @@ namespace GameAnalyticsSDK
 
         public static void Initialize ()
         {
+            InternalInitialize();
             int platformIndex = GetPlatformIndex();
 
             if(platformIndex >= 0)
@@ -529,6 +513,15 @@ namespace GameAnalyticsSDK
         public static void SetEnabledManualSessionHandling(bool enabled)
         {
             GA_Wrapper.SetEnabledManualSessionHandling(enabled);
+        }
+
+        /// <summary>
+        /// Sets the enabled event submission.
+        /// </summary>
+        /// <param name="enabled">If set to <c>true</c> enabled.</param>
+        public static void SetEnabledEventSubmission(bool enabled)
+        {
+            GA_Wrapper.SetEnabledEventSubmission(enabled);
         }
 
         /// <summary>

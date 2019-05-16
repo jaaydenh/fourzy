@@ -5,7 +5,7 @@ using Fourzy._Updates.Tools;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Fourzy._Updates.Mechanics.Vfx
+namespace Fourzy._Updates.Mechanics._Vfx
 {
     public class VfxHolder : MonoBehaviour
     {
@@ -18,7 +18,7 @@ namespace Fourzy._Updates.Mechanics.Vfx
         [HideInInspector]
         public VfxPool[] pools;
 
-        private Dictionary<VfxType, int> decaysDictionary;
+        private Dictionary<VfxType, int> vfxsDictionary;
 
         protected void Awake()
         {
@@ -26,16 +26,13 @@ namespace Fourzy._Updates.Mechanics.Vfx
                 return;
 
             instance = this;
-            decaysDictionary = new Dictionary<VfxType, int>();
-        }
+            vfxsDictionary = new Dictionary<VfxType, int>();
 
-        protected void Start()
-        {
             pools = new VfxPool[vfxDataHolder.data.Length];
 
             for (int poolIndex = 0; poolIndex < vfxDataHolder.data.Length; poolIndex++)
             {
-                decaysDictionary.Add(vfxDataHolder.data[poolIndex].type, poolIndex);
+                vfxsDictionary.Add(vfxDataHolder.data[poolIndex].type, poolIndex);
 
                 pools[poolIndex] = new VfxPool();
 
@@ -82,7 +79,7 @@ namespace Fourzy._Updates.Mechanics.Vfx
             if (pools.Length == 0)
                 return default(T);
 
-            VfxPool upperPool = pools[decaysDictionary[type]];
+            VfxPool upperPool = pools[vfxsDictionary[type]];
 
             Vfx result = null;
             List<Vfx> pool;
@@ -102,7 +99,7 @@ namespace Fourzy._Updates.Mechanics.Vfx
             }
 
             if (!result)
-                result = AddVfx(decaysDictionary[type], upperPool.pool.ElementIndex(pool));
+                result = AddVfx(vfxsDictionary[type], upperPool.pool.ElementIndex(pool));
 
             return result as T;
         }

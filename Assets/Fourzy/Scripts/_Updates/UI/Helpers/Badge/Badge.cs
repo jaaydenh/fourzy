@@ -2,6 +2,7 @@
 
 using TMPro;
 using UnityEngine;
+using StackableDecorator;
 
 namespace Fourzy._Updates.UI.Helpers
 {
@@ -10,15 +11,14 @@ namespace Fourzy._Updates.UI.Helpers
         public bool hideOnEmpty = true;
         public bool thisTarget = true;
         public string format = "{0}";
-
-        [HideInInspector]
-        [SerializeField]
-        private GameObject targetObject;
-        [HideInInspector]
-        [SerializeField]
-        private TextMeshProUGUI targetText;
-
-        private bool shown = false;
+        
+        [ShowIf("#ShowCheck")]
+        [StackableField]
+        public GameObject targetObject;
+        [ShowIf("#ShowCheck")]
+        [StackableField]
+        public TextMeshProUGUI targetText;
+        
         private bool initialized = false;
 
         protected void Awake()
@@ -70,7 +70,9 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void Hide()
         {
-            if (!targetObject || !shown)
+            Initialize();
+
+            if (!targetObject)
                 return;
 
             targetObject.SetActive(false);
@@ -78,10 +80,20 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void Show()
         {
-            if (!targetObject || shown)
+            Initialize();
+
+            if (!targetObject)
                 return;
 
             targetObject.SetActive(true);
+        }
+
+        public void SetState(bool state)
+        {
+            if (state)
+                Show();
+            else
+                Hide();
         }
 
         private void Initialize()
@@ -94,8 +106,12 @@ namespace Fourzy._Updates.UI.Helpers
 
             if (!targetText)
                 targetText = targetObject.GetComponentInChildren<TextMeshProUGUI>();
+        }
 
-            shown = gameObject.activeInHierarchy;
+        //editor stuff
+        public bool ShowCheck()
+        {
+            return !thisTarget;
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using Fourzy._Updates.Tween;
-using Fourzy._Updates.UI.Menu.Screens;
+﻿//@vadym udod
+
+using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Menu;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -9,13 +11,13 @@ namespace Fourzy._Updates.UI.Widgets
         public int tabIndex;
 
         private bool isOpened = false;
-        private TabsScreen tabsScreen;
-        private ColorTween colorTween;
+        private MenuTabbedScreen tabsScreen;
+        private TweenBase tween;
 
         protected void Awake()
         {
-            tabsScreen = GetComponentInParent<TabsScreen>();
-            colorTween = GetComponent<ColorTween>();
+            tabsScreen = GetComponentInParent<MenuTabbedScreen>();
+            tween = GetComponent<TweenBase>();
         }
 
         public void Open(bool animate)
@@ -24,18 +26,17 @@ namespace Fourzy._Updates.UI.Widgets
                 return;
 
             isOpened = true;
-            tabsScreen.OpenTab(tabIndex, animate);
             
-            colorTween.playbackTime = animate ? colorTween.defaultPlaybackTime : 0f;
-            colorTween.PlayForward(true);
+            tween.playbackTime = animate ? tween.defaultPlaybackTime : 0f;
+            tween.PlayForward(true);
         }
 
         public void Close()
         {
             isOpened = false;
             
-            colorTween.ResetPlaybackTime();
-            colorTween.PlayBackward(true);
+            tween.ResetPlaybackTime();
+            tween.PlayBackward(true);
         }
     }
 }

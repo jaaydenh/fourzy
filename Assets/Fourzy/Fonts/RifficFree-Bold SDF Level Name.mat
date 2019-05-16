@@ -5,7 +5,8 @@ Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: RifficFree-Bold SDF Level Name
   m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
   m_ShaderKeywords: OUTLINE_ON UNDERLAY_ON
@@ -34,7 +35,7 @@ Material:
     - _PerspectiveFilter: 0.875
     - _ScaleRatioA: 0.94736844
     - _ScaleRatioB: 1
-    - _ScaleRatioC: 0.82894737
+    - _ScaleRatioC: 0.7697368
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -51,7 +52,7 @@ Material:
     - _UnderlaySoftness: 0
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
-    - _WeightBold: 0.5
+    - _WeightBold: 0.75
     - _WeightNormal: 0
     m_Colors:
     - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}

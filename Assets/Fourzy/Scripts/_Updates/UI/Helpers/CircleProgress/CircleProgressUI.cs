@@ -11,7 +11,7 @@ namespace Fourzy._Updates.UI.Helpers
     public class CircleProgressUI : MonoBehaviour
     {
         [Range(0f, 1f)]
-        public float progress = 0f;
+        public float value = 0f;
 
         private bool initialized = false;
 
@@ -30,7 +30,7 @@ namespace Fourzy._Updates.UI.Helpers
             if (!initialized)
                 return;
 
-            image.materialForRendering.SetFloat("_Progress", progress * Mathf.PI * 2f);
+            image.materialForRendering.SetFloat("_Progress", value * Mathf.PI * 2f);
         }
 
         protected void OnDestroy()
@@ -84,6 +84,11 @@ namespace Fourzy._Updates.UI.Helpers
         public void SetColor(Color color)
         {
             image.color = color;
+        }
+
+        public void SetActive(bool state)
+        {
+            gameObject.SetActive(state);
         }
     }
 }

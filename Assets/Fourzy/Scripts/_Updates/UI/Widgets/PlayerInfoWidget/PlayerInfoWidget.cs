@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics._GamePiece;
-using Fourzy._Updates.UI.Helpers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,60 +11,48 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public TMP_Text playerNameLabel;
         public TMP_Text pieceNameLabel;
-        public Badge ratingLabel;
         public Slider starsSlider;
-        public Image playerPieceIcon;
-        public CircleProgressUI circleProgressUI;
+        public GamePieceWidgetSmall gamePieceWidget;
 
         protected override void Awake()
         {
             base.Awake();
 
-            UserManager.OnUpdateUserInfo += UserManager_OnUpdateUserInfo;
-            UserManager.OnUpdateUserGamePieceID += UserManager_OnUpdateUserGamePieceID;
+            UserManager.OnUpdateUserInfo += OnUpdateUserInfo;
+            UserManager.OnUpdateUserGamePieceID += OnUpdateUserGamePieceID;
         }
 
         protected void OnDestroy()
         {
-            UserManager.OnUpdateUserInfo -= UserManager_OnUpdateUserInfo;
-            UserManager.OnUpdateUserGamePieceID -= UserManager_OnUpdateUserGamePieceID;
+            UserManager.OnUpdateUserInfo -= OnUpdateUserInfo;
+            UserManager.OnUpdateUserGamePieceID -= OnUpdateUserGamePieceID;
         }
 
-        public void UpdateGamePieceIcon(int gamePieceID)
+        public GamePieceView SetData(int gamePieceID)
         {
-            playerPieceIcon.enabled = false;
-            foreach (Transform t in playerPieceIcon.transform)
-                Destroy(t.gameObject);
-            
-            GamePieceView pieceIcon = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(gamePieceID).prefabs[0], playerPieceIcon.transform);
-            pieceIcon.transform.localPosition = Vector3.zero;
-            pieceIcon.transform.localScale = Vector3.one * 100f;
-            pieceIcon.gameObject.SetLayerRecursively(playerPieceIcon.gameObject.layer);
-            pieceIcon.StartBlinking();
+            GamePieceData data = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(gamePieceID).player1Prefab.pieceData;
+            gamePieceWidget.SetData(data);
+            starsSlider.value = data.ChampionsFromPieces;
+
+            return gamePieceWidget.gamePiece;
         }
 
-        public void UpdateWidget()
+        public override void _Update()
         {
             UserManager user = UserManager.Instance;
 
-            UserManager_OnUpdateUserInfo();
-            UserManager_OnUpdateUserGamePieceID(user.gamePieceId);
+            OnUpdateUserInfo();
+            OnUpdateUserGamePieceID(user.gamePieceID);
         }
 
-        private void UserManager_OnUpdateUserInfo()
+        private void OnUpdateUserInfo()
         {
-            UserManager user = UserManager.Instance;
-
-            ratingLabel.SetValue(user.ratingElo.ToString());
-
-            if (!string.IsNullOrEmpty(user.userName))
-                playerNameLabel.text = user.userName;
+            playerNameLabel.text = UserManager.Instance.userName;
         }
 
-        private void UserManager_OnUpdateUserGamePieceID(int gamePieceID)
+        private void OnUpdateUserGamePieceID(int gamePieceID)
         {
-            UpdateGamePieceIcon(gamePieceID);
-            pieceNameLabel.text = GameContentManager.Instance.piecesDataHolder.GetGamePieceName(gamePieceID);
+            pieceNameLabel.text = SetData(gamePieceID).pieceData.name;
         }
     }
 }

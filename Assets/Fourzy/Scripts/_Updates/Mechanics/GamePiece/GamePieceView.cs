@@ -1,7 +1,9 @@
 ﻿//modded @vadym udod
 
-using DG.Tweening;
-using Fourzy._Updates.Mechanics.Board;
+using Fourzy._Updates.Audio;
+using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tools;
+using FourzyGameModel.Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,14 +14,14 @@ namespace Fourzy._Updates.Mechanics._GamePiece
     {
         private const int indexBaseLayer = 0;
         private const int indexEyeMouthLayer = 1;
-        
-        public Animator pieceAnimator;
-        public AnimationCurve movementCurve;
 
         [HideInInspector]
-        public PlayerEnum player { get; set; }
-        [HideInInspector]
-        public bool isMoving = false;
+        public string key;
+        public Animator pieceAnimator;
+        public AnimationCurve movementCurve;
+        public PlayerEnum player;
+
+        public AudioTypes onMoveSfx = AudioTypes.GAME_PIECE_MOVE;
 
         private int h_win = Animator.StringToHash("win");
         private int h_Idle = Animator.StringToHash("Idle");
@@ -37,13 +39,16 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         private int h_MoveTop = Animator.StringToHash("MoveTop");
         private int h_MoveBottom = Animator.StringToHash("MoveDown");
 
-        private MoveDirection moveDirection = MoveDirection.IDLE;
-
+        private Direction moveDirection = Direction.NONE;
         private CircleCollider2D gamePieceCollider;
+        
+        public GamePieceData pieceData => GamePiecesDataHolder._GetGamePieceData(this);
 
         public GamePieceMouth mouth { get; private set; }
         public GamePieceEyes eyes { get; private set; }
-        public GamePieceData pieceData { get; set; }
+        public bool isMoving { get; private set; }
+
+        public override Color outlineColor => pieceData.outlineColor;
 
         protected override void Awake()
         {
@@ -59,31 +64,67 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             gamePieceCollider = gameObject.GetComponent<CircleCollider2D>();
         }
 
-        public void PutMovementDirection(int x, int y)
+        public void PutMovementDirection(Direction direction)
         {
-            moveDirection = ChooseDirection(x, y);
+            moveDirection = direction;
 
             const float transitionTime = 0.1f;
-            switch (moveDirection)
+
+            switch (direction)
             {
-                case MoveDirection.RIGHT:
+                case Direction.RIGHT:
                     pieceAnimator.CrossFade(h_MovingHorizontal, transitionTime, indexBaseLayer);
                     pieceAnimator.CrossFade(h_MoveRight, transitionTime, indexEyeMouthLayer);
                     break;
-                case MoveDirection.LEFT:
+
+                case Direction.LEFT:
                     pieceAnimator.CrossFade(h_MovingHorizontal, transitionTime, indexBaseLayer);
                     pieceAnimator.CrossFade(h_MoveLeft, transitionTime, indexEyeMouthLayer);
                     break;
-                case MoveDirection.DOWN:
+
+                case Direction.DOWN:
                     pieceAnimator.CrossFade(h_MovingVertical, transitionTime, indexBaseLayer);
                     pieceAnimator.CrossFade(h_MoveBottom, transitionTime, indexEyeMouthLayer);
                     break;
-                case MoveDirection.TOP:
+
+                case Direction.UP:
                     pieceAnimator.CrossFade(h_MovingVertical, transitionTime, indexBaseLayer);
                     pieceAnimator.CrossFade(h_MoveTop, transitionTime, indexEyeMouthLayer);
                     break;
             }
         }
+
+        //public void _PlayFinishMovement(bool animateHit)
+        //{
+        //    const float transitionTime = 0.03f;
+
+        //    if (animateHit)
+        //        switch (moveDirection)
+        //        {
+        //            case Direction.RIGHT:
+        //                pieceAnimator.CrossFade(h_RightHit, transitionTime, indexBaseLayer);
+        //                break;
+
+        //            case Direction.LEFT:
+        //                pieceAnimator.CrossFade(h_LeftHit, transitionTime, indexBaseLayer);
+        //                break;
+
+        //            case Direction.DOWN:
+        //                pieceAnimator.CrossFade(h_BottomHit, transitionTime, indexBaseLayer);
+        //                break;
+
+        //            case Direction.UP:
+        //                pieceAnimator.CrossFade(h_TopHit, transitionTime, indexBaseLayer);
+        //                break;
+        //        }
+        //    else
+        //        pieceAnimator.CrossFade(h_Idle, transitionTime, indexBaseLayer);
+
+        //    if (pieceAnimator.GetCurrentAnimatorStateInfo(indexEyeMouthLayer).shortNameHash == h_Idle)
+        //        pieceAnimator.Play(h_Idle, indexEyeMouthLayer);
+        //    else
+        //        pieceAnimator.CrossFade(h_Idle, 0.1f, indexEyeMouthLayer);
+        //}
 
         public void PlayFinishMovement(bool animateHit)
         {
@@ -92,16 +133,16 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             {
                 switch (moveDirection)
                 {
-                    case MoveDirection.RIGHT:
+                    case Direction.RIGHT:
                         pieceAnimator.CrossFade(h_RightHit, transitionTime, indexBaseLayer);
                         break;
-                    case MoveDirection.LEFT:
+                    case Direction.LEFT:
                         pieceAnimator.CrossFade(h_LeftHit, transitionTime, indexBaseLayer);
                         break;
-                    case MoveDirection.DOWN:
+                    case Direction.DOWN:
                         pieceAnimator.CrossFade(h_BottomHit, transitionTime, indexBaseLayer);
                         break;
-                    case MoveDirection.TOP:
+                    case Direction.UP:
                         pieceAnimator.CrossFade(h_TopHit, transitionTime, indexBaseLayer);
                         break;
                 }
@@ -117,33 +158,23 @@ namespace Fourzy._Updates.Mechanics._GamePiece
                 pieceAnimator.CrossFade(h_Idle, 0.1f, indexEyeMouthLayer);
         }
 
-        private MoveDirection ChooseDirection(int x, int y)
-        {
-            MoveDirection direction = MoveDirection.IDLE;
-            if (x > 0)
-                direction = MoveDirection.RIGHT;
-            else if (x < 0)
-                direction = MoveDirection.LEFT;
-
-            if (y > 0)
-                direction = MoveDirection.DOWN;
-            else if (y < 0)
-                direction = MoveDirection.TOP;
-
-            return direction;
-        }
-
         public void PlayWinAnimation(float delay)
         {
             ShowOutline(false);
 
-            Sequence sequence = DOTween.Sequence();
-            sequence.AppendInterval(delay);
-            sequence.AppendCallback(() =>
+            StartRoutine("winAnimation", delay, () =>
             {
                 pieceAnimator.SetBool(h_win, true);
-                WakeUp();
+                Happy();
             });
+        }
+
+        public void ShowUIWinAnimation()
+        {
+            CancelRoutine("jumping");
+            StartRoutine("jumping", JumpRoutine(5));
+
+            Happy();
         }
 
         public void ShowTurnAnimation()
@@ -151,14 +182,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             WakeUp();
 
             CancelRoutine("jumping");
-            StartRoutine("jumping", JumpRoutine(3), () =>
-            {
-                StartRoutine("blinking", BlinkingRoutine(), null, () => { eyes.SetState(GamePieceEyes.EyesState.OPENED); });
-            },
-            () =>
-            {
-                CancelRoutine("blinking");
-            });
+            StartRoutine("jumping", JumpRoutine(3));
 
             ShowOutline(true);
         }
@@ -167,21 +191,8 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         {
             HideOutline(false);
 
-            StopAllCoroutines();
-
             Sleep();
             pieceAnimator.CrossFade(h_Idle, 0.35f, indexBaseLayer);
-        }
-
-        public void ShowUIWinAnimation()
-        {
-            StopAllCoroutines();
-            StartCoroutine(ShowUIWinAnimationRoutine());
-        }
-
-        public void Blink()
-        {
-            eyes.Blink(Random.Range(.25f, .45f));
         }
 
         public void WakeUp()
@@ -189,11 +200,23 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             if (!eyes.IsRoutineActive("blink"))
                 eyes.SetState(GamePieceEyes.EyesState.OPENED);
 
+            mouth.SetState(GamePieceMouth.MouthState.CLOSED);
+            StartBlinking();
+        }
+
+        public void Happy()
+        {
+            if (!eyes.IsRoutineActive("blink"))
+                eyes.SetState(GamePieceEyes.EyesState.OPENED);
+
             mouth.SetState(GamePieceMouth.MouthState.OPENED);
+            StartBlinking();
         }
 
         public void Sleep()
         {
+            CancelRoutine("blinking");
+
             eyes.CancelRoutine("blink");
             eyes.SetState(GamePieceEyes.EyesState.CLOSED);
 
@@ -208,161 +231,56 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             if (!gameObject.activeInHierarchy)
                 return;
 
-            StartCoroutine(BlinkingRoutine());
-        }
-
-        public void Move(MovingGamePiece mgp, List<IToken> activeTokens)
-        {
-            StartCoroutine(MoveRoutine(mgp, activeTokens));
-        }
-
-        private IEnumerator MoveRoutine(MovingGamePiece mgp, List<IToken> activeTokens)
-        {
-            gameboard.piecesAnimating++;
-
-            List<Position> positions = mgp.positions;
-            isMoving = true;
-
-            for (int i = 0; i < positions.Count - 1; i++)
+            StartRoutine("blinking", Random.Range(3f, 6f), () =>
             {
-                int nextPos = i + 1;
-                int columnDir = positions[nextPos].column - positions[i].column;
-                int rowDir = positions[nextPos].row - positions[i].row;
-                for (int j = i + 1; j < positions.Count; j++)
-                {
-                    int newColumnDir = positions[j].column - positions[j - 1].column;
-                    int newRowDir = positions[j].row - positions[j - 1].row;
-                    bool isDirectionChanged = (newColumnDir != columnDir || newRowDir != rowDir);
-                    if (isDirectionChanged)
-                    {
-                        break;
-                    }
-                    nextPos = j;
-                }
-                PutMovementDirection(columnDir, rowDir);
+                Blink();
+                StartBlinking();
+            });
+        }
 
-                Vector3 start = gameboard.PositionToVec3(positions[i]);
-                Vector3 end = gameboard.PositionToVec3(positions[nextPos]);
+        public void Blink()
+        {
+            eyes.Blink(Random.Range(.2f, .4f));
+        }
 
-                float distance = Position.Distance(positions[i], positions[nextPos]);
+        public override void OnBeforeMoveAction(params GameActionMove[] actionsMoves)
+        {
+            base.OnBeforeMoveAction();
 
-                for (float t = 0; t < 1; t += Time.deltaTime * Constants.moveSpeed / distance)
-                {
-                    float interpolation = movementCurve.Evaluate(t);
-                    transform.localPosition = Vector3.Lerp(start, end, interpolation);
-
-                    CheckActiveTokenCollision(activeTokens);
-
-                    if (nextPos == positions.Count - 1 && t + 2 * Time.deltaTime * Constants.moveSpeed / distance > 1)
-                    {
-                        PlayFinishMovement(mgp.playHitAnimation);
-                    }
-
-                    yield return null;
-                }
-
-                transform.localPosition = end;
-                start = end;
-                i = nextPos - 1;
-            }
-
-            isMoving = false;
-
-            Position endPosition = mgp.endPosition;
-            gameboard.gamePieces[endPosition.row, endPosition.column] = this;
-
-            CheckActiveTokenCollision(activeTokens);
-            CheckTokensAfterMove(activeTokens, endPosition);
+            AudioHolder.instance.PlaySelfSfxOneShotTracked(onMoveSfx);
             
-            gameboard.piecesAnimating--;
-
-            yield return true;
-        }
-
-        private void CheckTokensAfterMove(List<IToken> activeTokens, Position piecePos)
-        {
-            if (activeTokens == null)
+            if (actionsMoves.Length < 2)
                 return;
 
-            for (int i = 0; i < activeTokens.Count; i++)
+            PutMovementDirection(actionsMoves[0].Direction);
+        }
+
+        public override void OnAfterMove(params GameActionMove[] actionsMoves)
+        {
+            base.OnAfterMove(actionsMoves);
+
+            PlayFinishMovement(actionsMoves.MoveActionsDistance() > 2f);
+        }
+
+        public override float _Destroy(DestroyType reason)
+        {
+            switch (reason)
             {
-                if (piecePos.column != activeTokens[i].Column || piecePos.row != activeTokens[i].Row)
-                    continue;
-
-                if (activeTokens[i].tokenType == Token.PIT)
-                {
-                    gameboard.TokenAt(activeTokens[i].Row, activeTokens[i].Column).Fade(0f, 1.5f);
-
-                    GamePieceView gp = gameboard.GamePieceAt(activeTokens[i].Row, activeTokens[i].Column);
-                    if (gp)
-                    {
-                        gp.Fade(0f, 1f);
-                        gameboard.gamePieces[activeTokens[i].Row, activeTokens[i].Column] = null;
-                        Destroy(gp.gameObject, 1.0f);
-                    }
-
-                    Scale(Vector3.zero, 1f);
-                    activeTokens.RemoveAt(i--);
-                }
-                else if (activeTokens[i].tokenType == Token.CIRCLE_BOMB)
-                {
-                    gameboard.TokenAt(activeTokens[i].Row, activeTokens[i].Column).Fade(0f, 1.5f);
-
-                    const int bombRadius = 1;
-                    int minX = Mathf.Max(activeTokens[i].Row - bombRadius, 0);
-                    int minY = Mathf.Max(activeTokens[i].Column - bombRadius, 0);
-                    int maxX = Mathf.Min(activeTokens[i].Row + bombRadius, Constants.numRows - 1);
-                    int maxY = Mathf.Min(activeTokens[i].Column + bombRadius, Constants.numColumns - 1);
-
-                    for (int x = minX; x <= maxX; x++)
-                    {
-                        for (int y = minY; y <= maxY; y++)
-                        {
-                            GamePieceView gp = gameboard.GamePieceAt(x, y);
-                            if (gp)
-                            {
-                                gp.Fade(0f, 1f);
-                                gameboard.gamePieces[activeTokens[i].Row, activeTokens[i].Column] = null;
-                                Destroy(gp.gameObject, 1.0f);
-                            }
-                        }
-                    }
-                    activeTokens.RemoveAt(i--);
-                }
+                case DestroyType.FALLING:
+                    Happy();
+                    break;
             }
+
+            return base._Destroy(reason);
         }
 
-        public bool IsOverlapped(GamePieceView gamePiece)
+        public void AddToModel()
         {
-            return gamePieceCollider.Distance(gamePiece.gamePieceCollider).isOverlapped;
-        }
-
-        private void CheckActiveTokenCollision(List<IToken> activeTokens)
-        {
-            if (activeTokens == null)
-            {
+            if (!gameboard)
                 return;
-            }
 
-            for (int i = 0; i < activeTokens.Count; i++)
-            {
-                Position piecePos = gameboard.Vec3ToPosition(transform.position);
-
-                if (piecePos.column != activeTokens[i].Column || piecePos.row != activeTokens[i].Row)
-                    continue;
-
-                if (activeTokens[i].tokenType == Token.FRUIT)
-                {
-                    gameboard.TokenAt(activeTokens[i].Row, activeTokens[i].Column).GetComponent<FruitTokenView>().PlayFruitIntoStickyAnimation();
-                    activeTokens.RemoveAt(i--);
-                }
-            }
-        }
-
-        private IEnumerator ShowUIWinAnimationRoutine()
-        {
-            yield return StartCoroutine(JumpRoutine(5));
-            //this.PlayWinAnimation(0.0f);
+            //add to board model
+            gameboard.model._State.Board.AddPiece(new Piece((int)player), location);
         }
 
         private IEnumerator JumpRoutine(int count)
@@ -377,25 +295,5 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
             pieceAnimator.Play(h_Idle, indexBaseLayer);
         }
-
-        private IEnumerator BlinkingRoutine()
-        {
-            yield return new WaitForSeconds(Random.Range(1f, 5f));
-
-            while (true)
-            {
-                Blink();
-                yield return new WaitForSeconds(Random.Range(5f, 15f));
-            }
-        }
-    }
-
-    enum MoveDirection
-    {
-        LEFT,
-        RIGHT,
-        TOP,
-        DOWN,
-        IDLE
     }
 }

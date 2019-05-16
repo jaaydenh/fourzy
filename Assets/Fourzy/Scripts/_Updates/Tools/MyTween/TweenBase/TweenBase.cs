@@ -13,22 +13,21 @@ namespace Fourzy._Updates.Tween
         public AnimationCurve curve;
         public bool unscaledTime = false;
         public float playbackTime = .3f;
+        public bool playOnAwake = false;
         public RepeatType repeat = RepeatType.NONE;
         public QuickFloatEvent onProgress;
 
         //for instances where event need to be assigned from code
         public Action<float> _onProgress;
 
-        [HideInInspector]
-        public float defaultPlaybackTime;
-        [HideInInspector]
-        public float value = 0f;
-        [HideInInspector]
-        public bool isPlaying = false;
+        public float value { get; protected set; }
+        public float defaultPlaybackTime { get; protected set; }
+        public bool isPlaying { get; protected set; }
+        public bool initialized { get; protected set; }
 
         protected virtual void Awake()
         {
-            defaultPlaybackTime = playbackTime;
+            Initialize();
         }
 
         protected virtual void Update()
@@ -38,7 +37,7 @@ namespace Fourzy._Updates.Tween
 
             value = Mathf.Clamp01(value + ((unscaledTime) ? Time.unscaledDeltaTime : Time.deltaTime) / playbackTime);
 
-            AtProgress(value, playbackDirection);
+            Progress(value, playbackDirection);
         }
 
         public virtual void PlayForward(bool resetValue)
@@ -54,7 +53,7 @@ namespace Fourzy._Updates.Tween
             isPlaying = true;
             playbackDirection = PlaybackDirection.FORWARD;
 
-            AtProgress(value, playbackDirection);
+            Progress(value, playbackDirection);
         }
 
         public virtual void PlayBackward(bool resetValue)
@@ -63,14 +62,14 @@ namespace Fourzy._Updates.Tween
                 value = 0f;
             else
             {
-                if (value != 0)
+                if (value != 0f)
                     value = 1f - value;
             }
 
             isPlaying = true;
             playbackDirection = PlaybackDirection.BACKWARD;
 
-            AtProgress(value, playbackDirection);
+            Progress(value, playbackDirection);
         }
 
         public virtual void Toggle(bool reset)
@@ -80,6 +79,7 @@ namespace Fourzy._Updates.Tween
                 case PlaybackDirection.BACKWARD:
                     PlayForward(reset);
                     break;
+
                 case PlaybackDirection.FORWARD:
                     PlayBackward(reset);
                     break;
@@ -94,23 +94,24 @@ namespace Fourzy._Updates.Tween
                 OnReset();
         }
 
-        public virtual void AtProgress(Single value)
-        {
-            AtProgress(value, playbackDirection);
-        }
-
         public virtual void ResetPlaybackTime()
         {
             playbackTime = defaultPlaybackTime;
         }
 
-        public virtual void AtProgress(Single value, PlaybackDirection direction)
+        public virtual void AtProgress(Single value)
         {
-            if (onProgress != null)
-                onProgress.Invoke(value);
+            AtProgress(value, playbackDirection);
+        }
 
-            if (_onProgress != null)
-                _onProgress.Invoke(value);
+        public virtual void Progress(Single value, PlaybackDirection direction)
+        {
+            Initialize();
+
+            onProgress?.Invoke((direction == PlaybackDirection.FORWARD) ? value : 1f - value);
+            _onProgress?.Invoke((direction == PlaybackDirection.FORWARD) ? value : 1f - value);
+
+            AtProgress(value, direction);
 
             if (value >= 1f)
                 switch (repeat)
@@ -121,13 +122,39 @@ namespace Fourzy._Updates.Tween
                         else
                             PlayBackward(true);
                         break;
+
                     case RepeatType.PING_PONG:
                         Toggle(true);
                         break;
                 }
         }
 
+        public void Initialize()
+        {
+            if (initialized)
+                return;
+
+            initialized = true;
+            defaultPlaybackTime = playbackTime;
+
+            OnInitialized();
+
+            if (playOnAwake)
+                switch (playbackDirection)
+                {
+                    case PlaybackDirection.BACKWARD:
+                        PlayBackward(true);
+                        break;
+
+                    case PlaybackDirection.FORWARD:
+                        PlayForward(true);
+                        break;
+                }
+        }
+        
         public abstract void OnReset();
+        public abstract void OnInitialized();
+        public abstract void AtProgress(Single value, PlaybackDirection direction);
     }
 
     public class GraphicsColorGroup

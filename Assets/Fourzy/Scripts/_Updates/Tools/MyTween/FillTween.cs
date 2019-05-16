@@ -15,17 +15,8 @@ namespace Fourzy._Updates.Tween
 
         public float _value { get; private set; }
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            image = GetComponent<Image>();
-        }
-
         public override void AtProgress(float value, PlaybackDirection direction)
         {
-            base.AtProgress(value, direction);
-
             switch (direction)
             {
                 case PlaybackDirection.FORWARD:
@@ -59,6 +50,11 @@ namespace Fourzy._Updates.Tween
         public override void OnReset()
         {
             image.fillAmount = 0f;
+        }
+
+        public override void OnInitialized()
+        {
+            image = GetComponent<Image>();
         }
     }
 }

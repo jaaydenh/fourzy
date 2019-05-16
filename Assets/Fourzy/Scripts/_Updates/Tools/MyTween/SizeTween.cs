@@ -14,18 +14,8 @@ namespace Fourzy._Updates.Tween
 
         public Vector2 _value { get; private set; }
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            rectTransform = GetComponent<RectTransform>();
-            spriteRenderer = GetComponent<SpriteRenderer>();
-        }
-
         public override void AtProgress(float value, PlaybackDirection direction)
         {
-            base.AtProgress(value, direction);
-
             switch (direction)
             {
                 case PlaybackDirection.FORWARD:
@@ -61,7 +51,16 @@ namespace Fourzy._Updates.Tween
 
         public override void OnReset()
         {
-            rectTransform.sizeDelta = from;
+            if (rectTransform)
+                rectTransform.sizeDelta = from;
+            else if (spriteRenderer)
+                spriteRenderer.size = from;
+        }
+
+        public override void OnInitialized()
+        {
+            rectTransform = GetComponent<RectTransform>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
         }
     }
 }

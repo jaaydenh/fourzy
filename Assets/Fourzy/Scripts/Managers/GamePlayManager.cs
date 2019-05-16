@@ -1,177 +1,208 @@
 ﻿//modded @vadym udod
 
-using DG.Tweening;
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tools;
+using Fourzy._Updates.Tools.Timing;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
-using Fourzy._Updates.UI.Toasts;
-using GameSparks.Api.Requests;
+using FourzyGameModel.Model;
+using GameSparks.Api.Responses;
 using mixpanel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Fourzy._Updates.Serialized.ThemesDataHolder;
 
-namespace Fourzy
+namespace Fourzy._Updates.Mechanics.GameplayScene
 {
-    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene, true)]
-    public class GamePlayManager : UnitySingleton<GamePlayManager>
+    public class GamePlayManager : RoutinesBase
     {
-        public static event Action OnStartMove;
-        public static event Action OnEndMove;
-        public static event Action OnGameOver;
-        public static event Action<string> OnGamePlayMessage;
-        public static event Action<long> OnTimerUpdate;
+        public static GamePlayManager instance;
 
-        [HideInInspector]
-        public Game game;
+        public static Action<int> onMoveStarted;
+        public static Action<int> onMoveEnded;
+        public static Action<IClientFourzy> onGameFinished;
+
+        public static Action<string> OnGamePlayMessage;
+        public static Action<long> OnTimerUpdate;
 
         public MenuController menuController;
-
         public WinningParticleGenerator winningParticleGenerator;
-        public SpriteRenderer backgroundImage;
+        public Transform bgParent;
+        public AdvancedTimingEventsSet notYourTurnLabel;
+        public GameObject noNetworkOverlay;
+        
+        private AudioHolder.BGAudio gameplayBGAudio;
 
-        private bool isLoading = false;
-        private bool clockStarted = false;
-        private float gameScreenFadeInTime = .5f;
-        private DateTime serverClock;
-        private DateTime playerMoveCountdown;
-        private int playerMoveTimer_InitialTime;
+        //id of rematch challenge
+        private string awaitingChallengeID = "";
 
-        [HideInInspector]
-        public GameInfoScreen gameInfoScreen;
-        [HideInInspector]
-        public GameplayScreen gameplayScreen;
-        [HideInInspector]
-        public GameBoardView gameboardView;
+        public BackgroundConfigurationData currentConfiguration { get; private set; }
+        public GameboardView board { get; private set; }
+        public GameplayBG bg { get; private set; }
+        public GameplayScreen gameplayScreen { get; private set; }
+        public GameInfoScreen gameInfoScreen { get; private set; }
+        public RandomPlayerPickScreen playerPickScreen { get; private set; }
+        public LoadingPromptScreen loadingPrompt { get; private set; }
 
-        private BGAudioManager.BGAudio bgAudio;
+        public IClientFourzy game { get; private set; }
 
-        public bool isDropping { get; private set; }
-
-        public static bool AcceptMoveInput
-        {
-            get { return !Instance.isDropping && !Instance.game.gameState.IsGameOver && Instance.gameboardView.piecesAnimating == 0; }
-        }
+        public bool isBoardReady { get; private set; }
+        public bool replayingLastTurn { get; private set; }
+        public bool gameStarted { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
 
-            //get screens
+            instance = this;
+            isBoardReady = false;
+        }
+
+        protected void Start()
+        {
             gameInfoScreen = menuController.GetScreen<GameInfoScreen>();
             gameplayScreen = menuController.GetScreen<GameplayScreen>();
+            playerPickScreen = menuController.GetScreen<RandomPlayerPickScreen>();
 
-            gameboardView = Instantiate(GameContentManager.Instance.GetCurrentTheme().gameBoard, transform);
-            gameboardView.transform.localScale = Vector3.one;
+            NetworkAccess.onNetworkAccess += OnNetwork;
+            LoginManager.OnDeviceLoginComplete += OnLogin;
+            ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
+            ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
 
-            //check aspect ratio
-            //if aspect is more than 9/16 fit width, else fit height
-            Camera _camera = Camera.main;
-            if (backgroundImage)
+            LoadGame(GameManager.Instance.activeGame);
+        }
+
+        protected void OnDestroy()
+        {
+            board.onGameFinished -= OnGameFinished;
+            board.onDraw -= OnDraw;
+            board.onMoveStarted -= OnMoveStarted;
+            board.onMoveEnded -= OnMoveEnded;
+
+            NetworkAccess.onNetworkAccess -= OnNetwork;
+            LoginManager.OnDeviceLoginComplete -= OnLogin;
+            ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
+            ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
+
+            if (GameManager.InstanceExists)
+                GameManager.Instance.activeGame = null;
+        }
+
+        public void LoadGame(IClientFourzy _game)
+        {
+            CancelRoutine("gameInit");
+            CancelRoutine("turnBaseTurn");
+
+            awaitingChallengeID = "";
+            gameStarted = false;
+
+            //if active game is empty, load random pass&play board
+            if (_game == null)
             {
-                if (_camera.aspect > .57f)
-                {
-                    backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().gameBackgroundWide;
-                    backgroundImage.size = backgroundImage.sprite.rect.size / backgroundImage.sprite.pixelsPerUnit;
+                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.passAndPlayDataHolder.random, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                newGame._Type = GameType.PASSANDPLAY;
 
-                    _camera.orthographicSize = backgroundImage.size.y * backgroundImage.transform.localScale.y / 2f;
-                }
-                else
-                {
-                    backgroundImage.sprite = GameContentManager.Instance.GetCurrentTheme().gameBackground;
-                    backgroundImage.size = backgroundImage.sprite.rect.size / backgroundImage.sprite.pixelsPerUnit;
-
-                    _camera.orthographicSize = backgroundImage.size.x * backgroundImage.transform.localScale.x / 2f / _camera.aspect;
-                }
+                GameManager.Instance.activeGame = newGame;
             }
+            else if (_game != GameManager.Instance.activeGame)
+                GameManager.Instance.activeGame = _game;
 
-            isDropping = false;
             game = GameManager.Instance.activeGame;
-            playerMoveTimer_InitialTime = Constants.playerMoveTimer_InitialTime;
 
-            if (game == null)
-            {
-                GameManager.Instance.activeGame = game = GameManager.Instance.GetRandomGame();
-
-                game.challengeId = "123999428123456";
-                //game.displayIntroUI = true;
-                //game.title = "Title";
-                //game.subtitle = "Subtitle";
-            }
-            game.boardView = gameboardView;
-
-            InitGamePiecePrefabs();
-
-            gameboardView.CreateGamePieceViews(game.gameState.GetPreviousGameBoard(), 0.0f);
-            gameboardView.CreateTokenViews(game.gameState.PreviousTokenBoard.tokens, 0.0f);
-
-            switch (game.gameState.GameType)
+            //manage bg audio
+            switch (game._Type)
             {
                 case GameType.REALTIME:
-                    StartCoroutine(SendTimeStamp());
+                    gameplayBGAudio = AudioHolder.instance.PlayBGAudio(AudioTypes.BG_GARDEN_REALTIME, true, .9f, 3f);
                     break;
-            }
-        }
 
-        protected IEnumerator Start()
-        {
-            yield return StartCoroutine(FadeGameScreen(.0f, 1f, gameScreenFadeInTime));
-            yield return StartCoroutine(ReplayLastMove());
-            yield return StartCoroutine(ShowTokenInstructionPopupRoutine());
-            yield return StartCoroutine(ShowPlayTurnWithDelay(0.3f));
-
-            StartCoroutine(RandomGamePiecesBlinkingRoutine());
-            gameboardView.interactable = true;
-        }
-
-        private void OnEnable()
-        {
-            RealtimeManager.OnReceiveTimeStamp += RealtimeManager_OnReceiveTimeStamp;
-            RealtimeManager.OnReceiveMove += RealtimeManager_OnReceiveMove;
-
-            //play BG audio
-            switch (game.gameState.GameType)
-            {
-                case GameType.REALTIME:
-                    bgAudio = BGAudioManager.instance.PlayBGAudio(AudioTypes.GARDEN_REALTIME, true, .9f, 3f);
-                    break;
                 default:
-                    if (!BGAudioManager.instance.IsPlaying(AudioTypes.GARDEN_TURN_BASED))
-                        bgAudio = BGAudioManager.instance.PlayBGAudio(AudioTypes.GARDEN_TURN_BASED, true, .9f, 3f);
+                    AudioTypes gameBGAudio = GameContentManager.Instance.themesDataHolder.GetTheme(game._Area).bgAudio;
+
+                    if (gameplayBGAudio != null)
+                    {
+                        if (gameplayBGAudio.type != gameBGAudio)
+                        {
+                            AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
+                            gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, .9f, 3f);
+                        }
+                    }
+                    else
+                        gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, .9f, 3f);
                     break;
             }
-        }
 
-        private void OnDisable()
-        {
-            RealtimeManager.OnReceiveTimeStamp -= RealtimeManager_OnReceiveTimeStamp;
-            RealtimeManager.OnReceiveMove -= RealtimeManager_OnReceiveMove;
-
-            switch (game.gameState.GameType)
+            switch (game._Type)
             {
+                case GameType.TURN_BASED:
+                    //if game was over and havent viewed yet, set it to viewed
+                    if (game.asFourzyGame.challengeData.lastTurnGame.isOver && !PlayerPrefsWrapper.GetGameViewed(game.GameID))
+                    {
+                        PlayerPrefsWrapper.SetGameViewed(game.GameID);
+
+                        ChallengeManager.OnChallengeUpdateLocal.Invoke(game.asFourzyGame.challengeData);
+                    }
+                    break;
+
                 case GameType.PUZZLE:
-                    break;
-                default:
-                    BGAudioManager.instance.StopBGAudio(bgAudio, 1f);
+                    //set this puzzlepack as opened
+                    PlayerPrefsWrapper.SetPuzzlePackOpened(game.asFourzyPuzzle.puzzlePack.packID);
+
                     break;
             }
+
+            //close loading prompt if opened
+            if (loadingPrompt && loadingPrompt.isOpened) menuController.CloseCurrentScreen();
+
+            //close info screen if opened
+            if (gameInfoScreen.isOpened) gameInfoScreen.Close();
+            winningParticleGenerator.HideParticles();
+
+            //unload old bg
+            if (bg) Destroy(bg.gameObject);
+
+            playerPickScreen.SetData(game);
+
+            currentConfiguration = GameContentManager.Instance.themesDataHolder.GetThemeBGConfiguration(game._Area, Camera.main);
+            bg = Instantiate(currentConfiguration.backgroundPrefab, bgParent);
+            bg.transform.localPosition = Vector3.zero;
+
+            if (board) Destroy(board.gameObject);
+
+            board = Instantiate(currentConfiguration.gameboardPrefab, transform);
+            board.Initialize(game);
+            board.transform.localPosition = currentConfiguration.gameboardPrefab.transform.position;
+            board.interactable = false;
+
+            board.onGameFinished += OnGameFinished;
+            board.onDraw += OnDraw;
+            board.onMoveStarted += OnMoveStarted;
+            board.onMoveEnded += OnMoveEnded;
+            board.onWrongTurn += () => notYourTurnLabel.StartTimer();
+
+            //hide tokens/gamepieces
+            board.FadeTokens(0f, 0f);
+            board.FadeGamepieces(0f, 0f);
+
+            gameplayScreen.InitUI(this);
+            OnNetwork(NetworkAccess.ACCESS);
+
+            StartRoutine("gameInit", GameInitRoutine());
         }
 
         public void OnPointerDown(Vector2 position)
         {
-            if (!AcceptMoveInput)
-                return;
-
             //only continue if current opened screen is GameplayScreen
             if (gameplayScreen != menuController.currentScreen)
                 return;
 
-            gameboardView.OnPointerDown(position);
+            board.OnPointerDown(position);
         }
 
         public void OnPointerMove(Vector2 position)
@@ -183,244 +214,120 @@ namespace Fourzy
                 return;
             }
 
-            gameboardView.OnPointerMove(position);
+            board.OnPointerMove(position);
         }
 
         public void OnPointerRelease(Vector2 position)
         {
-            gameboardView.OnPointerRelease(position);
-        }
-
-        void RealtimeManager_OnReceiveTimeStamp(long milliseconds)
-        {
-            SyncClock(milliseconds);
-        }
-
-        void RealtimeManager_OnReceiveMove(Move move)
-        {
-            StartCoroutine(ReplayIncomingOpponentMove(move));
+            board.OnPointerRelease(position);
         }
 
         /// <summary>
-        /// Syncs the local clock to server-time
+        /// Triggered after board/tokens fade id + optional delays
         /// </summary>
-        private void SyncClock(long milliseconds)
+        public void OnGameStarted()
         {
-            if (isDropping)
-                return;
+            board.interactable = true;
+            game.SetInitialTime(Time.time);
+        }
 
-            DateTime dateNow = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc); // get the current time
-            serverClock = dateNow.AddMilliseconds(milliseconds + RealtimeManager.Instance.timeDelta).ToLocalTime(); // adjust current time to match clock from server
+        public void UpdatePlayerTurn()
+        {
+            if (game == null) return;
 
-            if (game.gameState.isCurrentPlayerTurn)
+            if (!gameStarted)
             {
-                // make sure that we only calculate the endtime once
-                if (!clockStarted)
-                {
-                    playerMoveCountdown = serverClock.AddMilliseconds(playerMoveTimer_InitialTime + RealtimeManager.Instance.timeDelta); // endtime is 60seconds plus the time-offset
-                    clockStarted = true;
-                }
-
-                // set the timer each time a new update from the server comes in
-                // Debug.Log("Total miliseconds: " + (playerMoveCountdown - serverClock).TotalMilliseconds);
-                TimeSpan timeDifference = playerMoveCountdown - serverClock;
-                if (timeDifference.TotalMilliseconds <= 0)
-                {
-                    if (OnTimerUpdate != null)
-                        OnTimerUpdate.Invoke(0);
-
-                    List<Move> moves = game.gameState.GetPossibleMoves();
-                    Move move = moves[UnityEngine.Random.Range(0, moves.Count)];
-                    StartCoroutine(ProcessMove(move));
-                    clockStarted = false;
-                }
-                else
-                {
-                    if (OnTimerUpdate != null)
-                        OnTimerUpdate.Invoke(timeDifference.Ticks);
-                }
+                gameStarted = true;
+                OnGameStarted();
             }
-            else
+
+            //extra
+            switch (game._Type)
             {
-                // playerMoveCountdown = serverClock;
+                case GameType.AI:
+                    //AI turn
+                    if (!game.isOver && !game.isMyTurn) board.TakeAITurn();
+
+                    break;
+
+                case GameType.PUZZLE:
+                    if (!game.isOver)
+                    {
+                        //AI turn
+                        if (!game.isMyTurn) board.TakeAITurn();
+                    }
+                    else
+                    {
+                        //player lost
+                        if (game._State.WinningLocations == null)
+                            OnGameFinished(game);
+                    }
+
+                    break;
             }
+
+            gameplayScreen.UpdatePlayerTurn();
         }
 
         private IEnumerator ShowTokenInstructionPopupRoutine()
         {
-            if (!game.displayIntroUI)
+            if (game == null || game._Type == GameType.ONBOARDING)
                 yield break;
 
-            yield return new WaitForSeconds(0.5f);
+            HashSet<TokensDataHolder.TokenData> tokens = new HashSet<TokensDataHolder.TokenData>();
 
-            TokenBoard previousTokenBoard = game.gameState.PreviousTokenBoard;
-            IToken[,] previousTokenBoardTokens = previousTokenBoard.tokens;
+            foreach (BoardSpace boardSpace in game.boardContent)
+                foreach (IToken token in boardSpace.Tokens.Values)
+                    if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type))
+                        tokens.Add(GameContentManager.Instance.GetTokenData(token.Type));
 
-            HashSet<TokenData> tokens = new HashSet<TokenData>();
+            if (tokens.Count > 0)
+                yield return new WaitForSeconds(.5f);
 
-            for (int i = 0; i < Constants.numRows; i++)
-            {
-                for (int j = 0; j < Constants.numColumns; j++)
-                {
-                    if (previousTokenBoardTokens[i, j] == null || previousTokenBoardTokens[i, j].tokenType == Token.EMPTY)
-                    {
-                        continue;
-                    }
-
-                    TokenData token = GameContentManager.Instance.GetTokenDataWithType(previousTokenBoardTokens[i, j].tokenType);
-                    if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed(token.ID))
-                    {
-                        tokens.Add(token);
-                    }
-                }
-            }
-
-            foreach (TokenData token in tokens)
+            foreach (TokensDataHolder.TokenData token in tokens)
             {
                 TokenPrompt popupUI = menuController.GetScreen<TokenPrompt>(true);
                 popupUI.Prompt(token);
 
                 yield return new WaitWhile(() => popupUI.isOpened);
 
-                PlayerPrefsWrapper.SetInstructionPopupDisplayed(token.ID, true);
+                PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, true);
 
                 yield return new WaitForSeconds(.5f);
             }
         }
 
-        public void UpdateOpponentUI(Opponent opponent)
+        private IEnumerator FadeGameScreen(float alpha, float fadeTime)
         {
-            game.opponent = opponent;
+            board.Fade(alpha, fadeTime);
+            yield return new WaitForSeconds(fadeTime - .2f);
 
-            UpdateOpponentUI(opponent.gamePieceId);
+            FadeTokens(alpha, fadeTime);
+            yield return new WaitForSeconds(fadeTime - .2f);
+
+            FadePieces(alpha, fadeTime);
+            yield return new WaitForSeconds(fadeTime - .2f);
         }
 
-        public void UpdateOpponentUI(int gamePieceID)
+        private void FadeTokens(float alpha, float fadeTime)
         {
-            game.opponent.gamePieceId = gamePieceID;
-
-            if (gameboardView.OpponentPiece != null)
-            {
-                Destroy(gameboardView.PlayerPiece);
-                Destroy(gameboardView.OpponentPiece);
-            }
-
-            InitGamePiecePrefabs();
+            if (board.tokens.Count > 0) board.FadeTokens(alpha, fadeTime);
         }
 
-        private void InitGamePiecePrefabs()
+        private void FadePieces(float alpha, float fadeTime)
         {
-            int playerGamePieceId = 0;
-            int opponentGamePieceId = 0;
-
-            PlayerEnum player = PlayerEnum.ONE;
-            PlayerEnum opponent = PlayerEnum.TWO;
-
-            if (game.gameState.GameType == GameType.REALTIME)
-            {
-                playerGamePieceId = UserManager.Instance.gamePieceId;
-                opponentGamePieceId = game.opponent.gamePieceId;
-
-                if (!game.isCurrentPlayer_PlayerOne)
-                {
-                    player = PlayerEnum.TWO;
-                    opponent = PlayerEnum.ONE;
-                }
-            }
-            else if (game.isCurrentPlayer_PlayerOne)
-            {
-                playerGamePieceId = game.challengerGamePieceId;
-                opponentGamePieceId = game.challengedGamePieceId;
-            }
-            else
-            {
-                playerGamePieceId = game.challengedGamePieceId;
-                opponentGamePieceId = game.challengerGamePieceId;
-
-                player = PlayerEnum.TWO;
-                opponent = PlayerEnum.ONE;
-            }
-
-            gameboardView.playerPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(playerGamePieceId);
-            gameboardView.opponentPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(opponentGamePieceId);
-
-            gameboardView.PlayerPiece.player = player;
-            gameboardView.OpponentPiece.player = opponent;
-
-            gameplayScreen.InitUI(game);
-        }
-
-        private IEnumerator FadeGameScreen(float startAlpha, float alpha, float fadeTime)
-        {
-            gameboardView.Fade(alpha, fadeTime);
-
-            yield return StartCoroutine(FadeTokens(alpha, .3f));
-            yield return StartCoroutine(FadePieces(alpha, .3f));
-        }
-
-        private IEnumerator FadeTokens(float alpha, float fadeTime)
-        {
-            GameObject[] tokenArray = GameObject.FindGameObjectsWithTag("Token");
-            for (int i = 0; i < tokenArray.Length; i++)
-                tokenArray[i].GetComponent<SpriteRenderer>().DOFade(alpha, fadeTime);
-
-            yield return new WaitForSeconds(fadeTime);
-        }
-
-        private IEnumerator FadePieces(float alpha, float fadeTime)
-        {
-            var pieces = gameboardView.GetGamePiecesList();
-            for (int i = 0; i < pieces.Count; i++)
-                pieces[i].Fade(alpha, fadeTime);
-
-            if (pieces.Count > 0)
-                yield return new WaitForSeconds(fadeTime);
-        }
-
-        private IEnumerator ReplayLastMove()
-        {
-            Debug.Log("ReplayLastMove");
-            if (game.gameState.MoveList != null)
-            {
-                Debug.Log("ReplayLastMove: has move");
-                Move lastMove = game.gameState.MoveList.Last();
-
-                PlayerEnum player = PlayerEnum.NONE;
-                if (!game.gameState.IsGameOver)
-                    player = game.gameState.IsPlayerOneTurn ? PlayerEnum.TWO : PlayerEnum.ONE;
-                else
-                    player = game.gameState.IsPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
-
-                lastMove.player = player;
-
-                yield return StartCoroutine(MovePiece(lastMove, true, false));
-            }
-            else
-                isLoading = false;
-        }
-
-        public IEnumerator ReplayIncomingOpponentMove(Move move)
-        {
-            while (isDropping || isLoading)
-                yield return null;
-
-            StartCoroutine(MovePiece(move, false, true));
-        }
-
-        public void RealtimeResignButtonOnClick()
-        {
-            Mixpanel.Track("Resign Button Press");
-            BackButtonOnClick();
+            if (board.gamePieces.Count > 0) board.FadeGamepieces(alpha, fadeTime);
         }
 
         public void BackButtonOnClick()
         {
-            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+            AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
 
-            if (game.gameState.GameType == GameType.REALTIME)
-            {
+            GameManager.Instance.OpenMainMenu();
+
+            //disconnect
+            if (game._Type == GameType.REALTIME)
                 RealtimeManager.Instance.GetRTSession().Disconnect();
-            }
         }
 
         public void UnloadGamePlayScreen()
@@ -428,445 +335,260 @@ namespace Fourzy
             SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
         }
 
-        public void ResignButtonOnClick()
+        public void Rematch()
         {
-            ChallengeManager.Instance.Resign(game.challengeId);
-        }
-
-        public void NextGameButtonOnClick()
-        {
-            GameManager.Instance.OpenNextGame();
-        }
-
-        public void CreateGameButtonOnClick()
-        {
-            Scene uiScene = SceneManager.GetSceneByName(Constants.MAIN_MENU_SCENE_NAME);
-            SceneManager.SetActiveScene(uiScene);
-            SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
-
-            MenuController.GetMenu("MainMenuCanvas").OpenScreen<MatchmakingScreen>();
-        }
-
-        public void RematchPassAndPlayGameButtonOnClick()
-        {
-            Scene uiScene = SceneManager.GetSceneByName(Constants.MAIN_MENU_SCENE_NAME);
-            SceneManager.SetActiveScene(uiScene);
-            SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
-
-            AnalyticsManager.LogCustom("rematch_pnp_game");
-        }
-
-        public void RetryPuzzleChallengeButtonOnClick()
-        {
-            Scene uiScene = SceneManager.GetSceneByName(Constants.MAIN_MENU_SCENE_NAME);
-            SceneManager.SetActiveScene(uiScene);
-            SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
-            GameManager.Instance.OpenPuzzleChallengeGame("retry");
-        }
-
-        public void NextPuzzleChallengeButtonOnClick()
-        {
-            Scene uiScene = SceneManager.GetSceneByName(Constants.MAIN_MENU_SCENE_NAME);
-            SceneManager.SetActiveScene(uiScene);
-            SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
-            GameManager.Instance.OpenPuzzleChallengeGame("next");
-        }
-
-        private IEnumerator ShowPlayTurnWithDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-
-            gameplayScreen.UpdatePlayerTurn();
-        }
-
-        public IEnumerator PlayInitialMoves()
-        {
-            List<MoveInfo> initialMoves = game.gameState.TokenBoard.initialMoves;
-
-            for (int i = 0; i < initialMoves.Count; i++)
+            switch (game._Type)
             {
-                Move move = new Move(initialMoves[i].Location, (Direction)initialMoves[i].Direction, i % 2 == 0 ? PlayerEnum.ONE : PlayerEnum.TWO);
-                StartCoroutine(MovePiece(move, false, false));
-                yield return new WaitWhile(() => isDropping == true);
-            }
+                case GameType.TURN_BASED:
+                    if (game == null) return;
 
-            isLoading = false;
-        }
+                    loadingPrompt = menuController.GetScreen<LoadingPromptScreen>();
 
-        public void ProcessPlayerInput(Vector3 mousePosition)
-        {
-            if (!AcceptMoveInput)
-            {
-                Debug.Log("returned in process player input");
-                return;
-            }
+                    loadingPrompt.Prompt("", "Loading new game...", null, null, null, null);
 
-            Position position = gameboardView.Vec3ToPosition(mousePosition);
-
-            if (game.gameState.isCurrentPlayerTurn)
-            {
-                PlayerEnum player = game.gameState.IsPlayerOneTurn ? PlayerEnum.ONE : PlayerEnum.TWO;
-                Debug.Log("ProcessPlayerInput: column: " + position.column + "   row = " + position.row);
-                if (position.IsTopRow())
-                {
-                    position.row -= 1;
-                    Move move = new Move(position, Direction.DOWN, player);
-                    StartCoroutine(ProcessMove(move));
-                }
-                else if (position.IsBottomRow())
-                {
-                    position.row += 1;
-                    Move move = new Move(position, Direction.UP, player);
-                    StartCoroutine(ProcessMove(move));
-                }
-                else if (position.IsRightColumn())
-                {
-                    position.column += 1;
-                    Move move = new Move(position, Direction.LEFT, player);
-                    StartCoroutine(ProcessMove(move));
-                }
-                else if (position.IsLeftColumn())
-                {
-                    position.column -= 1;
-                    Move move = new Move(position, Direction.RIGHT, player);
-                    StartCoroutine(ProcessMove(move));
-                }
-            }
-            else
-            {
-                Debug.Log("Not isCurrentPlayerTurn: challengeInstanceId: " + game.challengeId);
-                if (game.challengeId != null)
-                {
-                    if (position.IsTopRow() || position.IsBottomRow() || position.IsLeftColumn() || position.IsRightColumn())
-                        GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, LocalizationManager.Instance.GetLocalizedValue("not_your_turn"));
-                }
-            }
-        }
-
-        public bool IsPlayerWinner()
-        {
-            if (game.gameState.Winner == PlayerEnum.NONE || game.gameState.Winner == PlayerEnum.ALL)
-                return false;
-
-            bool isPlayerWinner = false;
-            GameType gameType = game.gameState.GameType;
-
-            if (gameType == GameType.PASSANDPLAY)
-                isPlayerWinner = true;
-            else if (gameType == GameType.PUZZLE)
-                isPlayerWinner = game.gameState.IsPuzzleChallengePassed;
-            else
-            {
-                if (game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.ONE)
-                    isPlayerWinner = true;
-                else if (!game.isCurrentPlayer_PlayerOne && game.gameState.Winner == PlayerEnum.TWO)
-                    isPlayerWinner = true;
-            }
-
-            return isPlayerWinner;
-        }
-
-        public IEnumerator ProcessMove(Move move)
-        {
-            if (!game.gameState.CanMove(move.GetNextPosition(), game.gameState.TokenBoard.tokens))
-            {
-                GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Nope, not possible");
-                yield break;
-            }
-
-            isDropping = true;
-            bool updatePlayer = true;
-
-            //Debug.Log("game.challengeId: " + game.challengeId);
-            if (game.challengeId != null && (game.gameState.GameType == GameType.RANDOM
-                                             || game.gameState.GameType == GameType.FRIEND
-                                             || game.gameState.GameType == GameType.LEADERBOARD))
-            {
-                StartCoroutine(MovePiece(move, false, updatePlayer));
-                Debug.Log("LogChallengeEventRequest: challengeInstanceId: " + game.challengeId);
-                new LogChallengeEventRequest().SetChallengeInstanceId(game.challengeId)
-                    .SetEventKey("takeTurn") //The event we are calling is "takeTurn", we set this up on the GameSparks Portal
-                    .SetEventAttribute("pos", Utility.GetMoveLocation(move)) // pos is the row or column the piece was placed at depending on the direction
-                    .SetEventAttribute("direction", move.direction.GetHashCode()) // direction can be up, down, left, right
-                    .SetEventAttribute("player", game.gameState.IsPlayerOneTurn ? (int)Piece.BLUE : (int)Piece.RED)
-                    .SetDurable(true)
-                    .Send((response) =>
-                    {
-                        if (response.HasErrors)
-                        {
-                            Debug.Log("***** ChallengeEventRequest failed: " + response.Errors.JSON);
-                            // alertUI.Open("Server Error: " + response.Errors.JSON);
-                            OnGamePlayMessage("Error: " + response.Errors.JSON);
-                        }
-                        else
-                        {
-                            Debug.Log("ChallengeEventRequest was successful");
-                            OnGamePlayMessage("Move was successful");
-                        }
-                    });
-
-                while (isDropping)
-                    yield return null;
-            }
-            else if (game.gameState.GameType == GameType.REALTIME)
-            {
-                StartCoroutine(MovePiece(move, false, updatePlayer));
-                move.player = game.isCurrentPlayer_PlayerOne ? PlayerEnum.ONE : PlayerEnum.TWO;
-
-                RealtimeManager.Instance.SendRealTimeMove(move);
-                while (isDropping)
-                    yield return null;
-
-                playerMoveTimer_InitialTime = (int)(playerMoveCountdown - serverClock).TotalMilliseconds + Constants.playerMoveTimer_AdditionalTime;
-
-                TimeSpan ts = playerMoveCountdown - serverClock;
-                TimeSpan ts2 = ts.Add(TimeSpan.FromMilliseconds(Constants.playerMoveTimer_AdditionalTime));
-
-                if (OnTimerUpdate != null)
-                    OnTimerUpdate(ts2.Ticks);
-
-                // timerText.text = (playerMoveCountDown_LastTime/1000).ToString();
-                clockStarted = false;
-            }
-            else if (game.gameState.GameType == GameType.FRIEND || game.gameState.GameType == GameType.LEADERBOARD)
-            {
-                StartCoroutine(MovePiece(move, false, updatePlayer));
-                ChallengeManager.Instance.ChallengeUser(game, Utility.GetMoveLocation(move), move.direction);
-            }
-            else if (game.gameState.GameType == GameType.RANDOM)
-            {
-                StartCoroutine(MovePiece(move, false, updatePlayer));
-                ChallengeManager.Instance.ChallengeRandomUser(game, Utility.GetMoveLocation(move), move.direction);
-            }
-            else if (game.gameState.GameType == GameType.AI)
-            {
-                StartCoroutine(MovePiece(move, false, updatePlayer));
-
-                if (game.gameState.IsGameOver)
-                    yield break;
-
-                while (isDropping)
-                    yield return null;
-
-                isDropping = true;
-
-                AiPlayer aiPlayer = new AiPlayer(AIPlayerSkill.LEVEL1);
-
-                StartCoroutine(aiPlayer.MakeMove(move));
-            }
-            else
-            {
-                StartCoroutine(MovePiece(move, false, updatePlayer));
-
-                if (game.gameState.GameType == GameType.PUZZLE && !game.gameState.IsGameOver)
-                {
-                    while (isDropping && gameboardView.piecesAnimating > 0)
-                        yield return null;
-
-                    isDropping = true;
-
-                    yield return new WaitForSeconds(.5f);
-                    PuzzlePlayer puzzlePlayer = new PuzzlePlayer();
-                    StartCoroutine(puzzlePlayer.MakeMove(game));
-                }
-            }
-
-            yield return null;
-        }
-
-        public IEnumerator MovePiece(Move move, bool replayMove, bool updatePlayer)
-        {
-            isDropping = true;
-
-            if (OnStartMove != null)
-                OnStartMove();
-
-            AudioHolder.instance.PlaySelfSfxOneShotTracked(_Updates.Serialized.AudioTypes.GAME_PIECE_MOVE);
-
-            List<IToken> activeTokens;
-
-            game.gameState.PrintGameState("BeforeMove");
-            List<MovingGamePiece> movingPieces = game.gameState.MovePiece(move, replayMove, out activeTokens);
-            game.gameState.PrintGameState("AfterMove");
-
-            gameboardView.MoveGamePieceViews(move, movingPieces, activeTokens);
-            gameboardView.PrintGameBoard();
-
-            yield return new WaitWhile(() => gameboardView.piecesAnimating > 0);
-
-            if (!replayMove || game.gameState.IsGameOver)
-                gameplayScreen.SetActionButton();
-
-            if (game.gameState.GameType == GameType.PUZZLE && game.gameState.IsGameOver)
-            {
-                if (game.gameState.IsPuzzleChallengePassed)
-                {
-                    if (PlayerPrefsWrapper.IsPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID))
-                        ChallengeManager.Instance.SubmitPuzzleCompleted();
-
-                    PlayerPrefsWrapper.SetPuzzleChallengeCompleted(game.puzzleChallengeInfo.ID, true);
-
-                    AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, true, game.gameState.Player1MoveCount);
-                }
-                else
-                {
-                    AnalyticsManager.LogPuzzleChallenge(game.puzzleChallengeInfo, false, game.gameState.Player1MoveCount);
-                }
-            }
-
-            gameplayScreen.UpdateTabs();
-            UpdateGameStatus(updatePlayer);
-
-            isDropping = false;
-
-            if (replayMove)
-                isLoading = false;
-
-            // Retrieve the current game from the list of games and update its state with the changes from the current move
-            if (game.gameState.GameType == GameType.RANDOM
-                || game.gameState.GameType == GameType.FRIEND
-                || game.gameState.GameType == GameType.LEADERBOARD)
-            {
-                GameManager.Instance.UpdateGame(game);
-            }
-
-            if (game.gameState.IsGameOver)
-            {
-                if (OnGameOver != null)
-                    OnGameOver();
-            }
-
-            if (OnEndMove != null)
-                OnEndMove();
-
-            yield return true;
-        }
-
-        private void UpdateGameStatus(bool updatePlayer)
-        {
-            if (game.gameState.IsGameOver || game.isExpired)
-                StartCoroutine(DisplayGameOverView());
-            else
-            {
-                if (updatePlayer)
-                {
-                    if (game.gameState.GameType == GameType.REALTIME
-                        || game.gameState.GameType == GameType.RANDOM
-                        || game.gameState.GameType == GameType.FRIEND
-                        || game.gameState.GameType == GameType.LEADERBOARD
-                        || game.gameState.GameType == GameType.AI)
-                    {
-                        game.gameState.isCurrentPlayerTurn = !game.gameState.isCurrentPlayerTurn;
-                    }
-                }
-
-                gameplayScreen.UpdatePlayerTurn();
-            }
-        }
-
-        private void PlayWinnerSound()
-        {
-            if (!IsPlayerWinner())
-                return;
-
-            AudioHolder.instance.PlaySelfSfxOneShotTracked(_Updates.Serialized.AudioTypes.GAME_WON);
-        }
-
-        private void ShowWinnerParticles()
-        {
-            if (!IsPlayerWinner())
-                return;
-
-            winningParticleGenerator.ShowParticles();
-        }
-
-        private void LogGameWinner()
-        {
-            switch (game.gameState.GameType)
-            {
-                case GameType.FRIEND:
-                    AnalyticsManager.LogGameOver("friend", game.gameState.Winner, game.gameState.TokenBoard);
+                    ChallengeManager.Instance.CreateTurnBasedGame(game.opponent.PlayerString, game._Area, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
+                    
                     break;
-                case GameType.LEADERBOARD:
-                    AnalyticsManager.LogGameOver("leaderboard", game.gameState.Winner, game.gameState.TokenBoard);
-                    break;
+
                 case GameType.AI:
-                    AnalyticsManager.LogGameOver("AI", game.gameState.Winner, game.gameState.TokenBoard);
-                    break;
                 case GameType.PASSANDPLAY:
-                    AnalyticsManager.LogGameOver("pnp", game.gameState.Winner, game.gameState.TokenBoard);
-                    break;
                 case GameType.PUZZLE:
-                    //AnalyticsManager.LogGameOver("puzzle", gameState.winner, gameState.tokenBoard);
+                    if (game == null) return;
+
+                    game.Reset();
+                    LoadGame(game);
+
                     break;
-                default:
-                    AnalyticsManager.LogGameOver("random", game.gameState.Winner, game.gameState.TokenBoard);
-                    break;
             }
         }
 
-        /// <summary>
-        /// Sends a Unix timestamp in milliseconds to the server
-        /// </summary>
-        private IEnumerator SendTimeStamp()
+        #region Turn Base Calls
+
+        private void OnChallengeUpdate(ChallengeData gameData)
         {
-            while (true)
+            StartRoutine("turnBaseTurn", PlayTurnBaseTurn(gameData));
+        }
+
+        private void OnChallengesUpdate(List<ChallengeData> challenges)
+        {
+            //if game waits for rematch challenge
+            if (!string.IsNullOrEmpty(awaitingChallengeID))
             {
-                RealtimeManager.Instance.SendTimeStamp();
-                yield return new WaitForSeconds(5f);
+                //find the event we ve been waiting for
+                ChallengeData challenge = challenges.Find(_challenge => _challenge.challengeInstanceId == awaitingChallengeID);
+
+                if (challenge == null) return;
+
+                GameManager.Instance.StartGame(challenge.lastTurnGame);
             }
         }
 
-        private IEnumerator RandomGamePiecesBlinkingRoutine()
+        private void CreateTurnBasedGameSuccess(LogEventResponse response)
         {
-            float blinkTime = 2.5f;
-            float t = 0.0f;
-            while (true)
+            awaitingChallengeID = response.ScriptData.GetString("challengeInstanceId");
+            Debug.Log($"Game created {awaitingChallengeID}");
+        }
+
+        private void CreateTurnBasedGameError(LogEventResponse response)
+        {
+            Debug.Log("***** Error Creating Turn based game: " + response.Errors.JSON);
+            AnalyticsManager.LogError("create_turn_based_error", response.Errors.JSON);
+
+            if (loadingPrompt && loadingPrompt.isOpened)
             {
-                t += Time.deltaTime;
-                if (t > blinkTime)
-                {
-                    var piecesForBlink = gameboardView.GetWaitingGamePiecesList();
-
-                    if (piecesForBlink.Count > 0)
-                        piecesForBlink[UnityEngine.Random.Range(0, piecesForBlink.Count)].Blink();
-
-                    t = 0;
-                }
-                yield return null;
+                loadingPrompt.promptText.text = "Failed to create new game...\n" + response.Errors.JSON;
+                StartRoutine("closingLoadingPrompt", 5f, () => menuController.CloseCurrentScreen());
             }
         }
 
-        private IEnumerator DisplayGameOverView()
+        #endregion
+
+        private void OnGameFinished(IClientFourzy game)
         {
-            if (game.isExpired)
-            {
-                GameManager.Instance.VisitedGameResults(game);
-                yield break;
-            }
+            onGameFinished?.Invoke(game);
 
-            Debug.Log("DisplayGameOverView gameState.winner: " + game.gameState.Winner);
+            AnalyticsManager.LogGameOver(game);
 
-            LogGameWinner();
-            PlayWinnerSound();
-
-            bool isWinner = IsPlayerWinner();
-            gameplayScreen.ShowWinnerAnimation(isWinner);
+            gameplayScreen.OnGameFinished();
             gameInfoScreen.SetData(game);
 
-            yield return new WaitForSeconds(1.5f);
+            StartCoroutine(PostGameFinished(game));
+        }
 
-            ShowWinnerParticles();
+        private void OnDraw(IClientFourzy game)
+        {
+            gameInfoScreen.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), "");
+        }
 
-#if UNITY_IOS || UNITY_ANDROID
-            if (game.gameState.Winner == PlayerEnum.ONE || game.gameState.Winner == PlayerEnum.TWO)
+        private void OnMoveStarted(int playerID)
+        {
+            onMoveStarted?.Invoke(playerID);
+        }
+
+        private void OnMoveEnded(int playerID)
+        {
+            if (replayingLastTurn) replayingLastTurn = false;
+
+            onMoveEnded?.Invoke(playerID);
+
+            UpdatePlayerTurn();
+        }
+
+        private void OnNetwork(bool state)
+        {
+            if (game == null) return;
+
+            if (!state)
             {
-                if (game.gameState.isCurrentPlayerTurn)
+                switch (game._Type)
                 {
-                    Handheld.Vibrate();
+                    case GameType.FRIEND:
+                    case GameType.LEADERBOARD:
+                    case GameType.REALTIME:
+                    case GameType.TURN_BASED:
+                        noNetworkOverlay.SetActive(true);
+                        break;
                 }
             }
-#endif
+        }
+
+        private void OnLogin(bool state)
+        {
+            if (state)
+                noNetworkOverlay.SetActive(false);
+        }
+
+        private IEnumerator GameInitRoutine()
+        {
+            if (game == null) yield break;
+
+            yield return StartCoroutine(FadeGameScreen(1f, .5f));
+            yield return StartCoroutine(ShowTokenInstructionPopupRoutine());
+
+            switch (game._Type)
+            {
+                case GameType.TURN_BASED:
+                    if (!game.asFourzyGame.challengeData.haveMoves)
+                        playerPickScreen._Open();
+                    else
+                    {
+                        PlayerTurn lastTurn = game.asFourzyGame.challengeData.lastTurn;
+
+                        replayingLastTurn = true;
+
+                        UpdatePlayerTurn();
+
+                        board.TakeTurn(lastTurn);
+                    }
+                    break;
+
+                default:
+                    UpdatePlayerTurn();
+                    break;
+            }
+
+            isBoardReady = true;
+        }
+
+        private IEnumerator PlayTurnBaseTurn(ChallengeData gameData)
+        {
+            if (gameData.lastTurnGame._Type != GameType.TURN_BASED) yield break;
+
+            yield return new WaitUntil(() => !board.isAnimating && isBoardReady);
+
+            PlayerTurn lastTurn = gameData.lastTurn;
+
+            if (game.asFourzyGame.playerTurnRecord.Count > 0 && game.asFourzyGame.playerTurnRecord[game.asFourzyGame.playerTurnRecord.Count - 1].PlayerId == lastTurn.PlayerId) yield break;
+
+            //compare challenges
+            if (gameData.challengeInstanceId != game.asFourzyGame.challengeData.challengeInstanceId) yield break;
+
+            board.TakeTurn(lastTurn.GetMove(), true);
+            UpdatePlayerTurn();
+        }
+
+        private IEnumerator PostGameFinished(IClientFourzy game)
+        {
+            //rewards screen
+            switch (game._Type)
+            {
+                case GameType.PASSANDPLAY:
+                    break;
+
+                //show rewards screen
+                case GameType.PUZZLE:
+                case GameType.TURN_BASED:
+                    //if (!PlayerPrefsWrapper.GetGameRewarded(game.GameID))
+                    //    PersistantMenuController.instance.GetScreen<RewardsScreen>().SetData(game.asSubject);
+                    break;
+            }
+
+            yield return new WaitForSeconds(0.5f);
+
+            //visuals + haptic
+            switch (game._Type)
+            {
+                case GameType.ONBOARDING:
+                    break;
+
+                case GameType.FRIEND:
+                case GameType.LEADERBOARD:
+                case GameType.PUZZLE:
+                case GameType.TURN_BASED:
+                    if (game.IsWinner())
+                    {
+                        winningParticleGenerator.ShowParticles();
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_WON);
+
+                        GameManager.Vibrate();
+                    }
+                    else
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_LOST);
+                    break;
+
+                case GameType.REALTIME:
+                    if (game.IsWinner())
+                    {
+                        winningParticleGenerator.ShowParticles();
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
+
+                        GameManager.Vibrate();
+                    }
+                    break;
+
+                default:
+                    winningParticleGenerator.ShowParticles();
+                    AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
+
+                    GameManager.Vibrate();
+                    break;
+            }
+
+            //sound
+            switch (game._Type)
+            {
+                case GameType.ONBOARDING:
+                case GameType.PUZZLE:
+                case GameType.PASSANDPLAY:
+                    AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
+                    break;
+
+                case GameType.FRIEND:
+                case GameType.LEADERBOARD:
+                case GameType.TURN_BASED:
+                    if (game.IsWinner())
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_WON);
+                    else
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_LOST);
+                    break;
+
+                case GameType.REALTIME:
+                    if (game.IsWinner())
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
+                    else
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_LOST);
+                    break;
+            }
         }
     }
 }

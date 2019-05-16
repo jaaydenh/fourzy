@@ -292,7 +292,7 @@ namespace GameSparks.Platforms
 							if (ExceptionReporter != null) {
 								ExceptionReporter (e);
 							} else {
-								Debug.Log (e);
+								Debug.LogError (e);
 							}
 						}
 					}
@@ -302,25 +302,25 @@ namespace GameSparks.Platforms
 			}
 		}
 
-		virtual protected void OnApplicationPause(bool paused)
-		{
-			if(paused)
-			{
-#if UNITY_EDITOR
-				GS.Disconnect();
-#endif
-			}
-			else
-			{
-				try{
-					GS.Reconnect();
-				}catch(Exception e) {
-					if(ExceptionReporter != null) {
-						ExceptionReporter(e);
-					}
-				}
-			}
-		}
+//		virtual protected void OnApplicationPause(bool paused)
+//		{
+//			if(paused)
+//			{
+//#if UNITY_EDITOR
+//				GS.Disconnect();
+//#endif
+//			}
+//			else
+//			{
+//				try{
+//					GS.Reconnect();
+//				}catch(Exception e) {
+//					if(ExceptionReporter != null) {
+//						ExceptionReporter(e);
+//					}
+//				}
+//			}
+//		}
 
 #if UNITY_EDITOR
 	#if UNITY_2017_2_OR_NEWER
