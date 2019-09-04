@@ -93,3 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   background: {fileID: 3984022356669730713}
+  configureAtStart: 1
+  ipadMatch: 1
+  iphoneMatch: 0
+  iphoneXMatch: 0

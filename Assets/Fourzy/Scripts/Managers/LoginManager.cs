@@ -6,7 +6,6 @@ using GameAnalyticsSDK;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
 using GameSparks.Core;
-using mixpanel;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +15,8 @@ using UnityEngine.SocialPlatforms.GameCenter;
 using SA.iOS.GameKit;
 using SA.Foundation.Templates;
 using Fourzy._Updates.UI.Menu.Screens;
+using PlayFab;
+using PlayFab.ClientModels;
 
 namespace Fourzy
 {
@@ -26,8 +27,7 @@ namespace Fourzy
 
         public static event Action<string> OnLoginMessage;
         public static event Action<bool> OnDeviceLoginComplete;
-
-        public bool showDebugToasts;
+        
         private bool isConnecting;
 
         protected override void Awake()
@@ -87,15 +87,15 @@ namespace Fourzy
                     {
                         Debug.Log("***** PushRegistration Request Error: " + response.Errors.JSON);
 
-                        AnalyticsManager.LogError("push_registration_request_error: ", response.Errors.JSON);
+                        //AnalyticsManager.LogError("push_registration_request_error: ", response.Errors.JSON);
                     }
                     else
                     {
                         Debug.Log("***** PushRegistration Successful: Device OS: " + deviceOS);
 
-                        Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                        customAttributes.Add("deviceOS", deviceOS);
-                        AnalyticsManager.LogCustom("push_registration_request", customAttributes);
+                        //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+                        //customAttributes.Add("deviceOS", deviceOS);
+                        //AnalyticsManager.LogCustom("push_registration_request", customAttributes);
                     }
                 });
         }
@@ -122,7 +122,7 @@ namespace Fourzy
             ISN_GKLocalPlayer player = ISN_GKLocalPlayer.LocalPlayer;
             Debug.Log("ISN_GKLocalPlayer.LocalPlayer:Authenticated: " + player.Authenticated);
             Debug.Log("ISN_GKLocalPlayer.LocalPlayer:PlayerID: " + player.PlayerID);
-
+            
             if (player.Authenticated) {
                 player.GenerateIdentityVerificationSignatureWithCompletionHandler((signatureResult) => {
                     if(signatureResult.IsSucceeded) {
@@ -141,14 +141,15 @@ namespace Fourzy
                             .Send((response) =>{
                                 if (!response.HasErrors)
                                 {
-                                    Mixpanel.Identify(response.UserId);
+                                    AnalyticsManager.Instance.Identify(response.UserId);
+                                    //Mixpanel.Identify(response.UserId);
+                                    //AnalyticsManager.LogCustom("gamecenter_authentication_request");
                                     UserManager.Instance.UpdateInformation();
                                     ChallengeManager.Instance.GetChallengesRequest();
-                                    AnalyticsManager.LogCustom("gamecenter_authentication_request");
 
                                     OnLoginMessage?.Invoke("GameCenter Authentication Success: " + response.DisplayName);
 
-                                    if (showDebugToasts)
+                                    if (GameManager.Instance.showInfoToasts)
                                         GamesToastsController.ShowTopToast("GameCenter Authentication Success: " + response.DisplayName);
                                 }
                                 else
@@ -156,10 +157,10 @@ namespace Fourzy
                                     Debug.Log("***** Error Authenticating GameCenter: " + response.Errors.JSON);
                                     OnLoginMessage?.Invoke("Error Authenticating GameCenter: " + response.Errors.JSON);
 
-                                    if (showDebugToasts)
+                                    if (GameManager.Instance.showInfoToasts)
                                         GamesToastsController.ShowTopToast("Error Authenticating GameCenter: " + response.Errors.JSON);
 
-                                    AnalyticsManager.LogError("gamecenter_authentication_request_error", response.Errors.JSON);
+                                    //AnalyticsManager.LogError("gamecenter_authentication_request_error", response.Errors.JSON);
                                 }
 
                                 isConnecting = false;
@@ -184,14 +185,15 @@ namespace Fourzy
             .Send((response) =>{
                 if (!response.HasErrors)
                 {
-                    Mixpanel.Identify(response.UserId);
+                    AnalyticsManager.Instance.Identify(response.UserId);
+                    //Mixpanel.Identify(response.UserId);
+                    //AnalyticsManager.LogCustom("googleplay_authentication_request");
                     UserManager.Instance.UpdateInformation();
                     ChallengeManager.Instance.GetChallengesRequest();
-                    AnalyticsManager.LogCustom("googleplay_authentication_request");
 
                     OnLoginMessage?.Invoke("GooglePlay Authentication Success: " + response.DisplayName);
 
-                    if (showDebugToasts)
+                    if (GameManager.Instance.showInfoToasts)
                         GamesToastsController.ShowTopToast("GooglePlay Authentication Success: " + response.DisplayName);
                 }
                 else
@@ -199,10 +201,10 @@ namespace Fourzy
                     Debug.Log("***** Error Authenticating GooglePlay: " + response.Errors.JSON);
                     OnLoginMessage?.Invoke("Error Authenticating GooglePlay: " + response.Errors.JSON);
 
-                    if (showDebugToasts)
+                    if (GameManager.Instance.showInfoToasts)
                         GamesToastsController.ShowTopToast("Error Authenticating GooglePlay: " + response.Errors.JSON);
 
-                    AnalyticsManager.LogError("googleplay_authentication_request_error", response.Errors.JSON);
+                    //AnalyticsManager.LogError("googleplay_authentication_request_error", response.Errors.JSON);
                 }
 
                 isConnecting = false;
@@ -221,14 +223,15 @@ namespace Fourzy
                 {
                     if (!response.HasErrors)
                     {
-                        Mixpanel.Identify(response.UserId);
+                        AnalyticsManager.Instance.Identify(response.UserId);
+                        //Mixpanel.Identify(response.UserId);
+                        //AnalyticsManager.LogCustom("device_authentication_request");
                         UserManager.Instance.UpdateInformation();
                         ChallengeManager.Instance.GetChallengesRequest();
-                        AnalyticsManager.LogCustom("device_authentication_request");
 
                         OnLoginMessage?.Invoke("Device Authentication Success: " + response.DisplayName);
 
-                        if (showDebugToasts)
+                        if (GameManager.Instance.showInfoToasts)
                             GamesToastsController.ShowTopToast("Device Authentication Success: " + response.DisplayName);
                     }
                     else
@@ -236,10 +239,10 @@ namespace Fourzy
                         Debug.Log("***** Error Authenticating Device: " + response.Errors.JSON);
                         OnLoginMessage?.Invoke("Error Authenticating Device: " + response.Errors.JSON);
 
-                        if (showDebugToasts)
+                        if (GameManager.Instance.showInfoToasts)
                             GamesToastsController.ShowTopToast("Error Authenticating Device: " + response.Errors.JSON);
 
-                        AnalyticsManager.LogError("device_authentication_request_error", response.Errors.JSON);
+                        //AnalyticsManager.LogError("device_authentication_request_error", response.Errors.JSON);
                     }
 
                     isConnecting = false;
@@ -251,16 +254,31 @@ namespace Fourzy
         private void OnNetworkAccess(bool networkAccess)
         {
             Debug.Log("OnNetworkAccess: networkAccess: " + networkAccess + " GS.Authenticated: " + GS.Authenticated + " isConnecting: " + isConnecting);
+            //string identifierForVendor = SA.iOS.UIKit.ISN_UIDevice.CurrentDevice.IdentifierForVendor;
+            //Debug.Log("IdentifierForVendor:" + SystemInfo.deviceUniqueIdentifier);
+
             if (networkAccess) {
+
+                if (!PlayFabClientAPI.IsClientLoggedIn())
+                {
+#if UNITY_ANDROID
+                    PlayFabAndroidDeviceLogin();
+#elif UNITY_IOS
+                    PlayFabIOSDeviceLogin();
+#else
+                    PlayFabCustomIDLogin();
+#endif
+                }
+
                 if (!GS.Authenticated) {
                     if (!isConnecting) {
-                        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
                             Debug.Log("GameCenterLogin");
                             GameCenterLogin();    
-                        #else
-                            Debug.Log("DeviceLogin");
+#else
+                            Debug.Log("GameSparks DeviceLogin");
                             DeviceLogin();
-                        #endif
+#endif
                     }
                 } else {
                     Debug.Log("CONNECTED");
@@ -269,6 +287,51 @@ namespace Fourzy
                     OnDeviceLoginComplete?.Invoke(true);
                 }
             }
+        }
+
+        private void PlayFabIOSDeviceLogin()
+        {
+            LoginWithIOSDeviceIDRequest request = new LoginWithIOSDeviceIDRequest();
+            request.DeviceId = SystemInfo.deviceUniqueIdentifier;
+            request.TitleId = "9EB47";
+            request.CreateAccount = true;
+            request.DeviceModel = SystemInfo.deviceModel;
+            request.OS = SystemInfo.operatingSystem;
+
+            PlayFabClientAPI.LoginWithIOSDeviceID(request, PlayFabLoginSuccess, PlayFabLoginError);
+        }
+
+        private void PlayFabAndroidDeviceLogin()
+        {
+            LoginWithAndroidDeviceIDRequest request = new LoginWithAndroidDeviceIDRequest();
+            request.AndroidDeviceId = SystemInfo.deviceUniqueIdentifier;
+            request.TitleId = "9EB47";
+            request.CreateAccount = true;
+            request.AndroidDevice = SystemInfo.deviceModel;
+            request.OS = SystemInfo.operatingSystem;
+
+            PlayFabClientAPI.LoginWithAndroidDeviceID(request, PlayFabLoginSuccess, PlayFabLoginError);
+        }
+
+        private void PlayFabCustomIDLogin()
+        {
+            LoginWithCustomIDRequest request = new LoginWithCustomIDRequest();
+            request.CustomId = SystemInfo.deviceUniqueIdentifier;
+            request.TitleId = "9EB47";
+            request.CreateAccount = true;
+
+            PlayFabClientAPI.LoginWithCustomID(request, PlayFabLoginSuccess, PlayFabLoginError);
+        }
+
+        private void PlayFabLoginSuccess(LoginResult result)
+        {
+            AnalyticsManager.Instance.Identify(result.PlayFabId);
+            Debug.Log("***** PlayFab Login Success: " + result.PlayFabId);
+        }
+
+        private void PlayFabLoginError(PlayFabError error)
+        {
+            Debug.Log("***** PlayFab Login Error: " + error.ErrorMessage);
         }
 
         private void GetLeaderboard(string leaderboardShortCode, Action<List<RankingScreen.LeaderboardEntry>, string> callback, bool isWinsLeaderboard)

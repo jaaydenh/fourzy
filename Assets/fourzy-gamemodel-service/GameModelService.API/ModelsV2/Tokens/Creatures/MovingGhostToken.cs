@@ -22,6 +22,8 @@ namespace FourzyGameModel.Model
         public MoveMethod MoveType { get; set; }
         public int Frequency { get; set; }
         public int Countdown { get; set; }
+        public bool Tired { get; set; }
+        public TokenColor Color { get; set; }
 
         public char TokenCharacter
         {
@@ -39,7 +41,8 @@ namespace FourzyGameModel.Model
                                             + TokenConstants.DirectionString(Orientation)
                                             + TokenConstants.MoveString(MoveType)
                                             + Countdown.ToString()
-                                            + Frequency.ToString();
+                                            + Frequency.ToString()
+                                            + (Tired ? 1 : 0).ToString();
             }
         }
 
@@ -51,7 +54,8 @@ namespace FourzyGameModel.Model
                                             TokenConstants.DirectionString(Orientation),
                                             TokenConstants.MoveString(MoveType),
                                             Countdown.ToString(),
-                                            Frequency.ToString() };
+                                            Frequency.ToString(),
+                                            (Tired ? 1 : 0).ToString()};
             }
         }
 
@@ -63,7 +67,55 @@ namespace FourzyGameModel.Model
             }
         }
 
-        public MovingGhostToken(Direction Orientation = Direction.NONE, MoveMethod MoveType = MoveMethod.CLOCKWISE, int Frequency = 1)
+        public MovingGhostToken(TokenColor Color, Direction Orientation)
+        {
+            StandardTokenInit();
+
+            this.Type = TokenType.MOVING_GHOST;
+            this.Orientation = Orientation;
+            this.Countdown = 0;
+
+            switch (Color)
+            {
+                case TokenColor.RED:
+                    switch (Orientation)
+                    {
+                        case Direction.LEFT:
+                        case Direction.RIGHT:
+                            this.MoveType = MoveMethod.HORIZONTAL_PACE;
+                            break;
+                        case Direction.UP:
+                        case Direction.DOWN:
+                            this.MoveType = MoveMethod.VERTICAL_PACE;
+                            break;
+                    }
+                    this.Frequency = 1;
+                    break;
+
+                case TokenColor.BLUE:
+                    this.MoveType = MoveMethod.WRAPAROUND;
+                    this.Frequency = 1;
+                    break;
+
+                case TokenColor.YELLOW:
+                    this.MoveType = MoveMethod.CLOCKWISE;
+                    this.Frequency = 1;
+                    break;
+
+                case TokenColor.GREEN:
+                    this.MoveType = MoveMethod.COUNTERCLOCKWISE;
+                    this.Frequency = 1;
+                    break;
+            }
+
+            this.Tired = true;
+            this.pieceCanEnter = true;
+            this.pieceMustStopOn = false;
+            this.pieceCanEndMoveOn = false;
+            this.adjustMomentum = 0;
+        }
+
+        public MovingGhostToken(Direction Orientation = Direction.NONE, MoveMethod MoveType = MoveMethod.CLOCKWISE, int Frequency = 1, bool Tired=true)
         {
             StandardTokenInit();
 
@@ -72,11 +124,31 @@ namespace FourzyGameModel.Model
             this.Orientation = Orientation;
             this.Countdown = 0;
             this.Frequency = Frequency;
+            this.Tired = Tired;
 
             this.pieceCanEnter = true;
             this.pieceMustStopOn = false;
             this.pieceCanEndMoveOn = false;
             this.adjustMomentum = 0;
+
+            switch (MoveType)
+            {
+                case MoveMethod.COUNTERCLOCKWISE:
+                    Color = TokenColor.GREEN;
+                    break;
+                case MoveMethod.CLOCKWISE:
+                    Color = TokenColor.YELLOW;
+                    break;
+                case MoveMethod.HORIZONTAL_PACE:
+                case MoveMethod.VERTICAL_PACE:
+                    Color = TokenColor.RED;
+                    break;
+                case MoveMethod.WRAPAROUND:
+                    Color = TokenColor.BLUE;
+                    break;
+            }
+
+
         }
 
         public MovingGhostToken(string Notation)
@@ -119,6 +191,30 @@ namespace FourzyGameModel.Model
                 Frequency= int.Parse(Notation[4].ToString());
             }
 
+            if (Notation.Length > 5)
+            {
+                Tired = (Notation[5].ToString() == "1" ? true : false); 
+            } else
+            {
+                Tired = true;
+            }
+
+            switch (MoveType)
+            {
+                case MoveMethod.COUNTERCLOCKWISE:
+                    Color = TokenColor.GREEN;
+                    break;
+                case MoveMethod.CLOCKWISE:
+                    Color = TokenColor.YELLOW;
+                    break;
+                case MoveMethod.HORIZONTAL_PACE:
+                case MoveMethod.VERTICAL_PACE:
+                    Color = TokenColor.RED;
+                    break;
+                case MoveMethod.WRAPAROUND:
+                    Color = TokenColor.BLUE;
+                    break;
+            }
         }
 
         public void StandardTokenInit()
@@ -140,10 +236,13 @@ namespace FourzyGameModel.Model
 
         public void Haunt()
         {
+            if (Tired) return;
+            Tired = true;
             if (Orientation == Direction.NONE) Orientation = Space.Random.RandomDirection();
             int MaxLooks = 4;
             if (MoveType == MoveMethod.HORIZONTAL_PACE || MoveType == MoveMethod.VERTICAL_PACE)
                 MaxLooks = 2;
+            if (MoveType == MoveMethod.WRAPAROUND) MaxLooks = 1;
 
             for (int i=0; i<MaxLooks; i++)
             {
@@ -172,10 +271,47 @@ namespace FourzyGameModel.Model
 
             if (Found)
             {
-                Space.Parent.ContentsAt(Space.Location.Neighbor(Orientation)).AddToken(new MovingGhostToken(Orientation, MoveType, Frequency));
-                Space.Parent.RecordGameAction(new GameActionTokenMovement(this, TransitionType.GHOST_MOVE, Space.Location, Target.Location));
+                MovingGhostToken t = new MovingGhostToken(Orientation, MoveType, Frequency, true);
+                Target.AddToken(t);
+                Space.Parent.RecordGameAction(new GameActionTokenMovement(t, TransitionType.GHOST_MOVE, Space.Location, Target.Location));
                 Space.RemoveTokens(TokenType.MOVING_GHOST);
                 return true;
+            }
+            //Try for wrapping.
+            else if (MoveType == MoveMethod.WRAPAROUND)
+            {
+                switch (Orientation)
+                {
+                    case Direction.LEFT:
+                      PossibleTargets = (new BoardLocation(Space.Location.Row, Space.Parent.Rows - 1)).Look(Space.Parent, Direction.LEFT);
+                        break;
+                    case Direction.RIGHT:
+                        PossibleTargets = (new BoardLocation(Space.Location.Row, 0)).Look(Space.Parent, Direction.RIGHT);
+                        break;
+                    case Direction.UP:
+                        PossibleTargets = (new BoardLocation(Space.Parent.Columns -1, Space.Location.Column)).Look(Space.Parent, Direction.UP);
+                        break;
+                    case Direction.DOWN:
+                        PossibleTargets = (new BoardLocation(0, Space.Location.Column)).Look(Space.Parent, Direction.DOWN);
+                        break;
+                }
+                foreach (BoardLocation l in PossibleTargets)
+                {
+                    Target = Space.Parent.ContentsAt(l);
+                    if (Target.ContainsPiece) continue;
+                    if (!Target.TokensAllowEndHere) continue;
+                    if (Target.ContainsHex) continue;
+                    Found = true;
+                    break;
+                }
+                if (Found)
+                {
+                    MovingGhostToken t = new MovingGhostToken(Orientation, MoveType, Frequency, true);
+                    Target.AddToken(t);
+                    Space.Parent.RecordGameAction(new GameActionTokenMovement(t, TransitionType.GHOST_WRAPAROUND, Space.Location, Target.Location));
+                    Space.RemoveTokens(TokenType.MOVING_GHOST);
+                    return true;
+                }
             }
 
             return false;
@@ -201,10 +337,10 @@ namespace FourzyGameModel.Model
                     break;
             }
 
-            if (MoveType == MoveMethod.COUNTERCLOCKWISE) 
-                Space.Parent.RecordGameAction(new GameActionTokenRotation(this,TransitionType.GHOST_TURN, Rotation.COUNTER_CLOCKWISE,startOrientation,Orientation));
-            else
-                Space.Parent.RecordGameAction(new GameActionTokenRotation(this, TransitionType.GHOST_TURN, Rotation.CLOCKWISE, startOrientation,Orientation));
+            //if (MoveType == MoveMethod.COUNTERCLOCKWISE) 
+            //    Space.Parent.RecordGameAction(new GameActionTokenRotation(this,TransitionType.GHOST_TURN, Rotation.COUNTER_CLOCKWISE,startOrientation,Orientation));
+            //else
+                //Space.Parent.RecordGameAction(new GameActionTokenRotation(this, TransitionType.GHOST_TURN, Rotation.CLOCKWISE, startOrientation,Orientation));
         }
 
         public Direction GetDirection(MovingPiece Piece)
@@ -219,6 +355,7 @@ namespace FourzyGameModel.Model
 
         public void EndOfTurn(int PlayerId)
         {
+            Tired = false;
         }
 
         public void PieceEntersBoard(MovingPiece Piece)
@@ -250,7 +387,7 @@ namespace FourzyGameModel.Model
 
         public void StartOfTurn(int PlayerId)
         {
-            if (Countdown++ % Frequency == 0)
+            if (Countdown++ % Frequency == 0 && !Tired)
             {
                 Countdown = 0;
                 Haunt();

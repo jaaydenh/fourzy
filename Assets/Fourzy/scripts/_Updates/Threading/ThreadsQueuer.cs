@@ -1,13 +1,16 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Tools;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using UnityEngine;
 
 namespace Fourzy._Updates.Threading
 {
-    public class ThreadsQueuer : MonoBehaviour
+    public class ThreadsQueuer : RoutinesBase
     {
         public static ThreadsQueuer Instance
         {
@@ -21,8 +24,12 @@ namespace Fourzy._Updates.Threading
         }
 
         private static ThreadsQueuer instance;
-
+        
         private List<Action> queuedFunctions;
+        private List<Action> instantiatingFunctions;
+
+        private float lastTime;
+        private Stopwatch stopwatch;
 
         public static void Initialize()
         {
@@ -35,12 +42,16 @@ namespace Fourzy._Updates.Threading
             DontDestroyOnLoad(go);
         }
 
-        public void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             queuedFunctions = new List<Action>();
+            instantiatingFunctions = new List<Action>();
+            stopwatch = new Stopwatch();
         }
 
-        public void Update()
+        protected void Update()
         {
             while (queuedFunctions.Count > 0)
             {
@@ -48,6 +59,14 @@ namespace Fourzy._Updates.Threading
 
                 queuedFunctions.RemoveAt(0);
             }
+
+            lastTime = Time.time;
+            stopwatch.Restart();
+        }
+
+        protected void LateUpdate()
+        {
+            //print(stopwatch.ElapsedMilliseconds);
         }
 
         public Thread StartThreadForFunc(Action action)

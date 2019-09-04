@@ -3,11 +3,10 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
-using Fourzy._Updates.Tools;
+using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
-using mixpanel;
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,9 +15,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class TokenPrompt : PromptScreen
     {
+        public Badge locationBadge;
+        public Badge priceBadge;
         public TMP_Text extra;
         public Image tokenImage;
-        public TextMeshProUGUI areaText;
+        public Image tileBGImage;
         public TokensDataHolder.TokenData data { get; private set; }
 
         private GameboardView gameboard;
@@ -35,50 +36,42 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.data = data;
 
-            var props = new Value();
-            props["Token Type"] = data.name;
-            Mixpanel.Track("Open Token Detail", props);
-
             tokenImage.sprite = GameContentManager.Instance.tokensDataHolder.GetTokenSprite(data);
+
+            tileBGImage.enabled = data.showBackgroundTile;
+            tileBGImage.color = data.backgroundTileColor;
+
             gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
 
-            string text = "";
-            string areaString = "";
-            string extraText = "";
-            int charsCount = 70;
-            
-            string[] areas = GameContentManager.Instance.GetTokenThemes(data.tokenType).AddElementToEnd("\n");
-            string[] _description = data.description.Split(' ');
+            List<ThemesDataHolder.GameTheme> themes = GameContentManager.Instance.GetTokenThemes(data.tokenType);
 
-            // foreach (string area in areas)
-            //     if (text.Length + area.Length < charsCount)
-            //         text += area + " ";
-            //     else
-            //         extraText += area + " ";
+            //badges
+            if (data.isSpell)
+            {
+                locationBadge.SetState(false);
+                priceBadge.SetValue(data.price);
 
-            if (areas.Length > 0) {
-                for (int i = 0; i < 1; i++)
-                {
-                    if (i < areas.Length - 2) {
-                        areaString += areas[i];
-                    } else {
-                        areaString += areas[i];
-                    }
-                }
+                if (themes.Count > 0)
+                    priceBadge.targetText.color = themes[0].themeColor;
+            }
+            else
+            {
+                List<string> locations = GameContentManager.Instance.GetTokenThemeNames(data.tokenType);
+
+                if (locations.Count == 6)
+                    locationBadge.SetValue("All");
+                else
+                    locationBadge.SetValue(string.Join(", ", locations));
+
+                if (themes.Count > 0)
+                    locationBadge.targetText.color = themes[0].themeColor;
+
+                priceBadge.SetState(false);
             }
 
-            areaText.text = areaString;
+            extra.text = data.description;
 
-            // text += data.description;
-
-            foreach (string word in _description)
-                if (text.Length + word.Length < charsCount && extraText.Length == 0)
-                    text += word + " ";
-                else
-                    extraText += word + " ";
-
-            extra.text = extraText;
-            Prompt(data.name, text, accept: null);
+            Prompt(data.name, "");
 
             //play instructions
             CancelRoutine("tokenInstructions");
@@ -92,17 +85,69 @@ namespace Fourzy._Updates.UI.Menu.Screens
             CancelRoutine("tokenInstructions");
         }
 
+        public override void Prompt()
+        {
+            base.Prompt();
+
+            //StartCoroutine(AdjustOverflow());
+        }
+
+        //private IEnumerator AdjustOverflow()
+        //{
+        //    yield return new WaitForEndOfFrame();
+
+        //    string extraText = "";
+        //    int charIndex = 0;
+        //    float height = 0f;
+        //    bool overflow = false;
+
+        //    foreach (TMP_LineInfo line in promptText.textInfo.lineInfo)
+        //    {
+        //        height += line.lineHeight;
+
+        //        if (height > promptText.rectTransform.sizeDelta.y)
+        //        {
+        //            overflow = true;
+        //            extraText += promptText.text.Substring(charIndex, line.characterCount);
+        //        }
+
+        //        charIndex += line.characterCount;
+        //    }
+
+        //    if (overflow)
+        //    {
+        //        promptText.text = promptText.text.Substring(0, promptText.text.Length - extraText.Length);
+        //        promptText.alignment = TextAlignmentOptions.TopFlush;
+
+        //        extra.text = extraText;
+        //    }
+        //    else
+        //    {
+        //        promptText.alignment = TextAlignmentOptions.TopJustified;
+
+        //        extra.text = "";
+        //    }
+        //}
+
         private IEnumerator InstructionRoutine()
         {
             //loop initial moves
             while (isOpened)
             {
-                ClientFourzyGame game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                ClientFourzyGame game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Player Two") { HerdId = "1"});
                 gameboard.Initialize(game);
-                gameboard.PlayMoves(game.InitialTurns);
 
-                yield return new WaitWhile(() => gameboard.IsRoutineActive("playMoves"));
-                yield return new WaitForSeconds(2f);
+                //wait a bit for screen to fade in
+                yield return new WaitForSeconds(.8f);
+
+                //play before actions
+                yield return gameboard.OnPlayManagerReady();
+
+                //wait a bit again
+                yield return new WaitForSeconds(.3f);
+
+                //play initial moves
+                yield return gameboard.PlayInitialMoves();
             }
         }
     }

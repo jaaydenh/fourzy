@@ -1,46 +1,62 @@
-﻿//
+﻿//@vadym udod
 
 using Firebase;
+using Firebase.Analytics;
 using Firebase.RemoteConfig;
 using Firebase.Storage;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Threading;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
-using Fourzy._Updates.Tools;
-using mixpanel;
+using FourzyGameModel.Model;
 using MoreMountains.NiceVibrations;
+using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using FourzyGameModel.Model;
-using Newtonsoft.Json;
-using System.IO;
 
 namespace Fourzy
 {
-    [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
-    public class GameManager : UnitySingleton<GameManager>
+    public class GameManager : RoutinesBase
     {
         public static Action<string> onDailyChallengeFileName;
-
         public static Dictionary<string, object> APP_REMOTE_SETTINGS_DEFAULTS;
+
+        public static GameManager Instance;
 
         [Header("Display tutorials?")]
         public bool displayTutorials = true;
         [Header("Display tutorial even if it was already displayed")]
         public bool forceDisplayTutorials = true;
         public bool showInfoToasts = true;
+        public bool debugMessages = true;
+        [Tooltip("Options effected:\n   - Reset Puzzles\n   - Pass&Play rewards screen"), SerializeField]
+        private bool extraFeatures = true;
 
+        [Header("Pass And Play games only")]
+        public bool passAndPlayTimer = true;
+        [Header("Pass And Play games only")]
+        public bool tapToStartGame = true;
+        public PassPlayCharactersType characterType = PassPlayCharactersType.SELECTED_RANDOM;
+        public List<TokenType> excludeInstructionsFor;
+
+        public bool ExtraFeatures => extraFeatures || Application.isEditor;
+        public bool isRealtime => PhotonNetwork.room != null;
         public PuzzleData dailyPuzzlePack { get; private set; }
         public IClientFourzy activeGame { get; set; }
-        public DependencyStatus dependencyStatus;
+        public PuzzlePacksDataHolder.BasicPuzzlePack currentPuzzlePack { get; set; }
+        public DependencyStatus dependencyStatus { get; set; }
 
         private bool configFetched = false;
 
@@ -65,44 +81,89 @@ namespace Fourzy
         {
             base.Awake();
 
-            if (InstanceExists) return;
+            if (Instance) return;
+
+            Instance = this;
 
 #if UNITY_IOS
             MMVibrationManager.iOSInitializeHaptics();
 #endif
 
             NetworkAccess.Initialize(DEBUG: true);
+            ThreadsQueuer.Initialize();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
 
             //to modify manifest file
             bool value = false;
-            if (value) Handheld.Vibrate();
+
+
+#if UNITY_IOS || UNITY_ANDROID
+                if (value) Handheld.Vibrate();
+#endif
 
             APP_REMOTE_SETTINGS_DEFAULTS = new Dictionary<string, object>()
             {
                 [Constants.KEY_APP_VERSION] = Application.version,
                 [Constants.KEY_DAILY_PUZZLE] = "",
+                [Constants.KEY_STORE_STATE] = "1",
+
+                //rewards
+                [Constants.KEY_REWARDS_TURNBASED] = "0",
+                [Constants.KEY_REWARDS_PASSPLAY] = "0",
+                [Constants.KEY_REWARDS_PUZZLEPLAY] = "0",
+                [Constants.KEY_REWARDS_REALTIME] = "0",
             };
 
             FirebaseRemoteConfig.SetDefaults(APP_REMOTE_SETTINGS_DEFAULTS);
+
+            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+            {
+                dependencyStatus = task.Result;
+
+                if (dependencyStatus != DependencyStatus.Available)
+                {
+                    if (debugMessages)
+                        Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
+                }
+                else
+                {
+                    if (NetworkAccess.ACCESS) FirebaseUpdate();
+                }
+            });
+
+            //initialize photon
+            FourzyPhotonManager.Initialize(DEBUG: true);
         }
 
         protected void Start()
         {
-            Mixpanel.Track("Game Started");
 #if UNITY_IOS
             UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
             UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
 #endif
-            //init  threadqueuer
+            //init threadqueuer
             ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(null);
 
             NetworkAccess.onNetworkAccess += OnNetworkAccess;
+
+            if (SceneManager.GetActiveScene().name == Constants.MAIN_MENU_SCENE_NAME) StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
+
+            StandaloneInputModuleExtended.instance.AddNoInputFilter("startDemoGame", Constants.DEMO_IDLE_TIME);
+            StandaloneInputModuleExtended.instance.AddNoInputFilter("highlightMoves", Constants.DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME);
+
+            PointerInputModuleExtended.noInput += OnNoInput;
         }
 
-        protected void OnDestory()
+        protected void Update()
+        {
+            //force demo game
+            if (StandaloneInputModuleExtended.OnHotkey1Press())
+                StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
+        }
+
+        protected void OnDestroy()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
@@ -114,12 +175,25 @@ namespace Fourzy
 #endif
         }
 
+        protected void OnApplicationPause(bool pause)
+        {
+            if (!pause)
+            {
+                if (NetworkAccess.ACCESS)
+                {
+                    if (dependencyStatus == DependencyStatus.Available)
+                        FirebaseUpdate();
+                }
+            }
+        }
+
         public void StartGame(IClientFourzy game)
         {
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
-                    Debug.Log($"Starting challenge, id: {game.GameID}");
+                    if (debugMessages)
+                        Debug.Log($"Starting challenge, id: {game.GameID}");
                     break;
             }
 
@@ -139,6 +213,32 @@ namespace Fourzy
             activeGame = game;
         }
 
+        /// <summary>
+        /// StarGame version for Photon
+        /// </summary>
+        public void StartGame()
+        {
+            if (isRealtime)
+            {
+                PhotonNetwork.LoadLevel(Constants.GAMEPLAY_SCENE_NAME);
+
+                //lock this room if master client
+                if (PhotonNetwork.isMasterClient) PhotonNetwork.room.IsOpen = false;
+            }
+            else
+            {
+                if (isMainMenuLoaded)
+                    SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME, LoadSceneMode.Additive);
+                else
+                    SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME);
+            }
+        }
+
+        public void StartGauntletPuzzlePack(Area area)
+        {
+
+        }
+
         public void OpenMainMenu()
         {
             //unload gameplay scene 
@@ -147,6 +247,12 @@ namespace Fourzy
 
             if (!isMainMenuLoaded)
                 SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
+        }
+
+        public static void UpdateGameTypeUserProperty(GameType gameType)
+        {
+            Debug.Log("Updating user property");
+            FirebaseAnalytics.SetUserProperty("game_type", gameType.ToString());
         }
 
         public static void Vibrate(HapticTypes type) => MMVibrationManager.Haptic(type);
@@ -161,6 +267,7 @@ namespace Fourzy
                     MenuController.SetState("MainMenuCanvas", false);
 
                     AudioHolder.instance.StopBGAudio(AudioTypes.BG_MAIN_MENU, .5f);
+
                     break;
             }
         }
@@ -173,11 +280,25 @@ namespace Fourzy
                     MenuController.SetState("MainMenuCanvas", true);
 
                     AudioHolder.instance.PlayBGAudio(AudioTypes.BG_MAIN_MENU, true, 1f, 3f);
+
+                    //change gamepad mode
+                    StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
+
+                    activeGame = null;
+                    currentPuzzlePack = null;
+
                     break;
             }
         }
 
-        private void GetRomoteSettings()
+        private void FirebaseUpdate()
+        {
+            FirebaseAnalytics.SetUserProperty(Constants.KEY_EXTRA_FEATURES, ExtraFeatures ? "1" : "0");
+
+            StartCoroutine(GetRemoteSettingsRoutine());
+        }
+
+        private void GetRemoteSettings()
         {
             Task fetchTask = FirebaseRemoteConfig.FetchAsync(TimeSpan.Zero);
             fetchTask.ContinueWith(FetchComplete);
@@ -187,7 +308,8 @@ namespace Fourzy
         {
             string value = FirebaseRemoteConfig.GetValue(Constants.KEY_APP_VERSION).StringValue;
 
-            Debug.Log($"Version checker: {Application.version} app version, {value} required app version");
+            if (debugMessages)
+                Debug.Log($"Version check: {Application.version} app version, {value} required app version");
 
             //version checker
             if (Application.version != value)
@@ -211,38 +333,65 @@ namespace Fourzy
             return Application.version != value;
         }
 
+        private void RewardsStateCheck()
+        {
+            //check rewards for turnbased/passplay/puzzleplay/realtime
+            new List<string>() {
+                Constants.KEY_REWARDS_TURNBASED,
+                Constants.KEY_REWARDS_PASSPLAY,
+                Constants.KEY_REWARDS_PUZZLEPLAY,
+                Constants.KEY_REWARDS_REALTIME,
+            }.ForEach(key =>
+                {
+                    string value = FirebaseRemoteConfig.GetValue(key).StringValue;
+                    Debug.Log($"Rewards {key}: '{PlayerPrefsWrapper.GetRemoteSetting(key)}' old state, '{(value == "1" ? true : false)}' new state");
+                    PlayerPrefsWrapper.SetRemoteSetting(key, value);
+                });
+        }
+
         private void DailyPuzzleCheck()
         {
             string value = FirebaseRemoteConfig.GetValue(Constants.KEY_DAILY_PUZZLE).StringValue;
 
-            Debug.Log($"Old Daily Puzzle file '{PlayerPrefsWrapper.GetDailyPuzzleFileName()}', new '{value}'");
+            if (debugMessages)
+                Debug.Log($"Old Daily Puzzle file '{PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_DAILY_PUZZLE)}', new '{value}'");
 
-            //filename check
-            if (PlayerPrefsWrapper.GetDailyPuzzleFileName() != value)
+            if (!string.IsNullOrEmpty(value))
             {
-                PlayerPrefsWrapper.SetDailyPuzzleFileName(value);
-
-                onDailyChallengeFileName?.Invoke(value);
-
-                //download file
-                FirebaseStorage storage = FirebaseStorage.GetInstance("gs://fourzytesting.appspot.com");
-                StorageReference reference = storage.GetReference("puzzles/daily/" + value);
-
-                reference.GetFileAsync(Application.persistentDataPath + "/" + value).ContinueWith(task =>
+                //filename check
+                if (PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_DAILY_PUZZLE) != value)
                 {
-                    Debug.Log(task.Status);
-                    if (!task.IsFaulted && !task.IsCanceled)
+                    PlayerPrefsWrapper.SetRemoteSetting(Constants.KEY_DAILY_PUZZLE, value);
+
+                    onDailyChallengeFileName?.Invoke(value);
+
+                    //download file
+                    FirebaseStorage storage = FirebaseStorage.GetInstance("gs://fourzytesting.appspot.com");
+                    StorageReference reference = storage.GetReference("puzzles/daily/" + value);
+
+                    reference.GetFileAsync(Application.persistentDataPath + "/" + value).ContinueWith(task =>
                     {
-                        //downloaded
-                        ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() => DisplayDailyPuzzlePopup());
-                    }
-                });
+                        Debug.Log(task.Status);
+                        if (!task.IsFaulted && !task.IsCanceled)
+                        {
+                            //downloaded
+                            ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() => DisplayDailyPuzzlePopup());
+                        }
+                    });
+                }
             }
+        }
+
+        private void StoreCheck()
+        {
+            string value = FirebaseRemoteConfig.GetValue(Constants.KEY_STORE_STATE).StringValue;
+            if (debugMessages) Debug.Log($"Old Store State '{PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_STORE_STATE)}', new '{(value == "1" ? true : false)}'");
+            PlayerPrefsWrapper.SetRemoteSetting(Constants.KEY_STORE_STATE, value);
         }
 
         private void DisplayDailyPuzzlePopup()
         {
-            dailyPuzzlePack = JsonConvert.DeserializeObject<PuzzleData>(File.ReadAllText(Application.persistentDataPath + "/" + PlayerPrefsWrapper.GetDailyPuzzleFileName()));
+            dailyPuzzlePack = JsonConvert.DeserializeObject<PuzzleData>(File.ReadAllText(Application.persistentDataPath + "/" + PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_DAILY_PUZZLE)));
 
             if (dailyPuzzlePack != null)
             {
@@ -281,26 +430,39 @@ namespace Fourzy
                 case LastFetchStatus.Success:
                     FirebaseRemoteConfig.ActivateFetched();
 
-                    Debug.Log($"Remote data loaded and ready (last fetch time {info.FetchTime}).");
+                    if (debugMessages) Debug.Log($"Remote data loaded and ready (last fetch time {info.FetchTime}).");
 
-                    try
+                    //initial settings fetch only once
+                    if (!configFetched)
                     {
-                        ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
+                        try
                         {
-                            configFetched = true;
-
-                            //do version check, if no new version available, check daily challenge
-                            if (!VersionCheck())
+                            ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
                             {
-                                //daily puzzle check
-                                DailyPuzzleCheck();
-                            }
-                        });
+                                configFetched = true;
+
+                                //do version check, if no new version available, check daily challenge
+                                if (!VersionCheck())
+                                {
+                                    //daily puzzle check
+                                    DailyPuzzleCheck();
+                                }
+
+                                StoreCheck();
+                            });
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Log(e.ToString());
+                        }
                     }
-                    catch (Exception e)
+
+                    //fetch other values
+                    ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
                     {
-                        Debug.Log(e.ToString());
-                    }
+                        RewardsStateCheck();
+                        //...
+                    });
 
                     break;
 
@@ -329,19 +491,35 @@ namespace Fourzy
         {
             if (networkAccess)
             {
-                FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-                {
-                    dependencyStatus = task.Result;
-                    if (dependencyStatus == DependencyStatus.Available)
-                    {
-                        GetRomoteSettings();
-                    }
-                    else
-                    {
-                        Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
-                    }
-                });
+                if (dependencyStatus == DependencyStatus.Available)
+                    FirebaseUpdate();
             }
+        }
+
+        private void OnNoInput(KeyValuePair<string, float> noInputFilter)
+        {
+            if (!SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE) || noInputFilter.Key != "startDemoGame") return;
+
+            //also reset puzzlesPacks
+            GameContentManager.Instance.ResetPuzzlePacks();
+            GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
+
+            //check
+            if (activeGame == null || (activeGame._Type != GameType.ONBOARDING && activeGame._Type != GameType.PRESENTATION))
+            {
+                //start demo mode
+                StartGame(new ClientFourzyGame(GameContentManager.Instance.themesDataHolder.GetRandomTheme(Area.NONE),
+                    new Player(1, "AI Player 1") { PlayerString = "1" },
+                    new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
+                { _Type = GameType.PRESENTATION, });
+            }
+        }
+
+        private IEnumerator GetRemoteSettingsRoutine()
+        {
+            yield return new WaitForSeconds(.1f);
+
+            GetRemoteSettings();
         }
 
         [System.Serializable]
@@ -365,6 +543,13 @@ namespace Fourzy
             public GameBoardDefinition gameboard;
             [JsonIgnore]
             public TextAsset assetFile;
+        }
+
+        public enum PassPlayCharactersType
+        {
+            SELECTED_VARIATION,
+            SELECTED_RANDOM,
+            RANDOM,
         }
     }
 }

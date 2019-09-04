@@ -28,9 +28,9 @@ namespace Fourzy._Updates.UI.Widgets
             UserManager.OnUpdateUserGamePieceID -= OnUpdateUserGamePieceID;
         }
 
-        public GamePieceView SetData(int gamePieceID)
+        public GamePieceView SetData(string gamePieceID)
         {
-            GamePieceData data = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(gamePieceID).player1Prefab.pieceData;
+            GamePieceData data = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(gamePieceID);
             gamePieceWidget.SetData(data);
             starsSlider.value = data.ChampionsFromPieces;
 
@@ -50,7 +50,7 @@ namespace Fourzy._Updates.UI.Widgets
             playerNameLabel.text = UserManager.Instance.userName;
         }
 
-        private void OnUpdateUserGamePieceID(int gamePieceID)
+        private void OnUpdateUserGamePieceID(string gamePieceID)
         {
             pieceNameLabel.text = SetData(gamePieceID).pieceData.name;
         }

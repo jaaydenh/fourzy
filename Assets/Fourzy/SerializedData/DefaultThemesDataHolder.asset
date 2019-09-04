@@ -16,10 +16,11 @@ MonoBehaviour:
     list:
     - _name: 'Training Garden: Enabled'
       name: Training Garden
+      enabled: 1
+      themeColor: {r: 0.48584908, g: 1, b: 0.55352443, a: 1}
       description: 'Sample description Sample description Sample description Sample
         description '
       levelToUnlock: 0
-      enabled: 1
       themeID: 2
       bgAudio: 101
       preview: {fileID: 21300000, guid: 8a279f21fe54f344cabd91371b364627, type: 3}
@@ -51,19 +52,7 @@ MonoBehaviour:
           prefab: {fileID: 5841790964071463582, guid: 83eee2766bc691e4f9fa053207f90c68,
             type: 3}
       tokens:
-        list:
-        - _name: Arrow
-          prefab: {fileID: 114714016604888040, guid: b50adf3cc91ed4ee590fd6bcc3fa79b9,
-            type: 3}
-        - _name: Sticky
-          prefab: {fileID: 114136037640816306, guid: 6b7f67346b9e845aca14c64f8e4ca2a3,
-            type: 3}
-        - _name: Fruit
-          prefab: {fileID: 114437155169781676, guid: 22feb1168e98f4a4ca43fe3e586e82a2,
-            type: 3}
-        - _name: Fruit Tree
-          prefab: {fileID: 114673092515962608, guid: 399ed13c770784d6f9dc78a54823d6ae,
-            type: 3}
+        list: 010000000200000005000000
       unclockRequirements:
         list: []
       configurations:
@@ -86,12 +75,19 @@ MonoBehaviour:
             type: 3}
           gameboardPrefab: {fileID: 114596246813145948, guid: b70b53f171f60c046a0eab8dccd82185,
             type: 3}
+        - _name: WIDESCREEN
+          value: 4
+          backgroundPrefab: {fileID: 100717712478524717, guid: 959a85ccab0b6ee419008ef010e66a97,
+            type: 3}
+          gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
+            type: 3}
     - _name: 'Spooky Forest: Enabled'
       name: Spooky Forest
+      enabled: 1
+      themeColor: {r: 0.48584908, g: 1, b: 0.55352443, a: 1}
       description: 'Sample description Sample description Sample description Sample
         description '
       levelToUnlock: 0
-      enabled: 1
       themeID: 4
       bgAudio: 104
       preview: {fileID: 21300000, guid: 69d82d91d5c73814a802f6604eedd55c, type: 3}
@@ -118,16 +114,7 @@ MonoBehaviour:
           prefab: {fileID: 1004307609327887750, guid: 3a5a634b98d23134f8a17bc5f7ab4f40,
             type: 3}
       tokens:
-        list:
-        - _name: Ghost
-          prefab: {fileID: 114544858063307236, guid: 6e4f94269d5d54d82b69d83f7028a2e5,
-            type: 3}
-        - _name: Pit
-          prefab: {fileID: 5009243331750805650, guid: a8e6195c9f07043dba35b16ee6e88c8d,
-            type: 3}
-        - _name: Water
-          prefab: {fileID: 114947796886653976, guid: ed2219bcab6984100806f0122971febe,
-            type: 3}
+        list: 010000000400000005000000
       unclockRequirements:
         list: []
       configurations:
@@ -150,11 +137,18 @@ MonoBehaviour:
             type: 3}
           gameboardPrefab: {fileID: 114604034529016452, guid: e58d315bf1f40e947a0716665037fa0c,
             type: 3}
+        - _name: WIDESCREEN
+          value: 4
+          backgroundPrefab: {fileID: 100717712478524717, guid: 6d515f5186767b24fbbfdbebeceb48e7,
+            type: 3}
+          gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
+            type: 3}
     - _name: 'Island: Enabled'
       name: Island
+      enabled: 1
+      themeColor: {r: 1, g: 0.9930853, b: 0.3915094, a: 1}
       description: 
       levelToUnlock: 0
-      enabled: 1
       themeID: 8
       bgAudio: 103
       preview: {fileID: 21300000, guid: 490c8d7a991189c46b3b817f5a46067f, type: 3}
@@ -186,13 +180,7 @@ MonoBehaviour:
           prefab: {fileID: 5199269407045597157, guid: 9765dad3184127d4a8bbc3e2e65336f9,
             type: 3}
       tokens:
-        list:
-        - _name: Circle Bomb
-          prefab: {fileID: 114814103086142892, guid: 8b58c87404dc148f09df994cec7657eb,
-            type: 3}
-        - _name: Sand
-          prefab: {fileID: 114716639052643734, guid: 40d8e7ce660604805853c4e89a856058,
-            type: 3}
+        list: 030000000a000000
       unclockRequirements:
         list: []
       configurations:
@@ -215,11 +203,18 @@ MonoBehaviour:
             type: 3}
           gameboardPrefab: {fileID: 114393224895534332, guid: d06b9036fa716df46a5eefb51aa7336d,
             type: 3}
+        - _name: WIDESCREEN
+          value: 4
+          backgroundPrefab: {fileID: 100717712478524717, guid: 731e10ebb6b373f4da4738d24d6d9841,
+            type: 3}
+          gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
+            type: 3}
     - _name: 'Frozen Palace: Enabled'
       name: Frozen Palace
+      enabled: 1
+      themeColor: {r: 0.4669811, g: 0.9826793, b: 1, a: 1}
       description: 
       levelToUnlock: 0
-      enabled: 1
       themeID: 16
       bgAudio: 105
       preview: {fileID: 21300000, guid: 11aad45ccf44a4641b1c1e8d44ad0bb9, type: 3}
@@ -246,16 +241,7 @@ MonoBehaviour:
           prefab: {fileID: 4183014607794544357, guid: 83d1f34afe8480545aeda1ed7cc41246,
             type: 3}
       tokens:
-        list:
-        - _name: Ice
-          prefab: {fileID: 114147369826523774, guid: 3499a5e46e3be49a6a1cc9f3657fbff2,
-            type: 3}
-        - _name: Ice Block
-          prefab: {fileID: 5190625460180967082, guid: 108a5b1737461436b8c7f5c00db0fe0c,
-            type: 3}
-        - _name: Snow
-          prefab: {fileID: 6093681135839665814, guid: 969040b848220814e832a220ff8fd5a7,
-            type: 3}
+        list: 090000000800000001000000
       unclockRequirements:
         list: []
       configurations:
@@ -278,34 +264,42 @@ MonoBehaviour:
             type: 3}
           gameboardPrefab: {fileID: 6685559819090786594, guid: fb9c68edc35f1da4a85f4d8679894314,
             type: 3}
+        - _name: WIDESCREEN
+          value: 4
+          backgroundPrefab: {fileID: 100717712478524717, guid: 00abcb6a36e64de4fa5261fc70ad495f,
+            type: 3}
+          gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
+            type: 3}
     - _name: 'Castle: Disabled'
       name: Castle
+      enabled: 0
+      themeColor: {r: 0, g: 0, b: 0, a: 0}
       description: 
       levelToUnlock: 0
-      enabled: 0
       themeID: 32
       bgAudio: 101
       preview: {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
       gamepieces:
         list: []
       tokens:
-        list: []
+        list: 
       unclockRequirements:
         list: []
       configurations:
         list: []
     - _name: 'Arena: Disabled'
       name: Arena
+      enabled: 0
+      themeColor: {r: 0, g: 0, b: 0, a: 0}
       description: 
       levelToUnlock: 0
-      enabled: 0
       themeID: 64
       bgAudio: 101
       preview: {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
       gamepieces:
         list: []
       tokens:
-        list: []
+        list: 
       unclockRequirements:
         list: []
       configurations:

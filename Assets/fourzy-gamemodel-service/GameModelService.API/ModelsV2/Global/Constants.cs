@@ -1,4 +1,7 @@
-﻿namespace FourzyGameModel.Model
+﻿using System;
+using System.Collections.Generic;
+
+namespace FourzyGameModel.Model
 {
     public static class Constants
     {
@@ -14,5 +17,20 @@
         public const int DefaultFlowerMagic = 10;
         public const int MinimumMomentum = 30;
         public const int MaximumMomentum = 40;
+
+        public static List<Direction> Directions
+        {
+            get
+            {
+                List<Direction> dlist = new List<Direction>();
+
+                foreach (Direction d in Enum.GetValues(typeof(Direction)))
+                {
+                    if (d != Direction.NONE && d != Direction.RANDOM && d != Direction.TELEPORT)
+                        dlist.Add(d);
+                }
+                return dlist;
+            }
+        }
     }
 }

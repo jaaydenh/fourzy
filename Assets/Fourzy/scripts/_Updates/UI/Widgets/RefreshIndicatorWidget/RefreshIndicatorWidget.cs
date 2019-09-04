@@ -21,9 +21,9 @@ namespace Fourzy._Updates.UI.Widgets
                 rotationTween.Initialize();
         }
 
-        public override void SetVisibility(float value)
+        public override void SetAlpha(float value)
         {
-            base.SetVisibility(value);
+            base.SetAlpha(value);
 
             if (affectScaleWithVisibility)
                 transform.localScale = new Vector3(value, value, transform.localScale.z);

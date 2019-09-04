@@ -65,7 +65,7 @@ namespace FourzyGameModel.Model
         public BoardLocation RandomLocation(List<BoardLocation> Locations)
         {
             if (Locations.Count == 0) throw new Exception("No Locations passed to function");
-            return Locations[Range(0, Locations.Count - 1)];
+            return Locations[Range(0, Locations.Count)];
         }
 
         public BoardLocation RandomLocation(BoardLocation Reference, int Height, int Width)
@@ -74,6 +74,11 @@ namespace FourzyGameModel.Model
         }
 
         public string RandomItem(List<string> Items)
+        {
+            return Items[RandomInteger(0, Items.Count - 1)];
+        }
+
+        public int RandomNumericItem(List<int> Items)
         {
             return Items[RandomInteger(0, Items.Count - 1)];
         }
@@ -115,12 +120,12 @@ namespace FourzyGameModel.Model
 
         public int Range(int Min, int Max)
         {
-            return R.Next(Min, Max);
+            return R.Next(Min, Max+1);
         }
 
         public int RandomInteger(int Min, int Max)
         {
-            return R.Next(Min, Max);
+            return R.Next(Min, Max+1);
         }
 
         private int CreateSeed(string SeedString="RandomPlaceHolder")

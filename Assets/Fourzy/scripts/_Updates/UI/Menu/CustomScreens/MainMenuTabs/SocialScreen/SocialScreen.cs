@@ -2,8 +2,6 @@
 
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
-using mixpanel;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -34,9 +32,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ConnectFB()
         {
-            Mixpanel.Track("Facebook Connect Button Press");
             fbLoginButton.interactable = false;
-            
         }
 
         private void LoginManager_OnFBLoginComplete(bool success)

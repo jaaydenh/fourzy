@@ -54,7 +54,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (pulledToRefresh) return;
 
             if (contentsParent.anchoredPosition.y < 0f)
-                refreshIndicator.SetVisibility(Mathf.Clamp01(contentsParent.anchoredPosition.y / maxPullDistance));
+                refreshIndicator.SetAlpha(Mathf.Clamp01(contentsParent.anchoredPosition.y / maxPullDistance));
 
             if (contentsParent.anchoredPosition.y < maxPullDistance)
             {
@@ -81,7 +81,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (pulledToRefresh)
             {
-                refreshIndicator.SetVisibility(0f);
+                refreshIndicator.SetAlpha(0f);
                 refreshIndicator.SetAnimationState(false);
                 pulledToRefresh = false;
                 scrollRect.normalizedPosition = Vector2.up;
@@ -112,6 +112,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private ActiveGameWidget AddChallengeWidget(ChallengeData data)
         {
             ActiveGameWidget challengeWidget = Instantiate(activeGameWidgetPrefab);
+            challengeWidget.menuScreen = this;
 
             UpdateChallengeView(challengeWidget, data);
 

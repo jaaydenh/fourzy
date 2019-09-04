@@ -43,39 +43,10 @@ MonoBehaviour:
   SelectedPlatformGameID: 5d84000070840000
   SelectedStudio: 0100000001000000
   SelectedGame: 0200000001000000
-  NewVersion: 4.0.4
-  Changes: '4.0.4
+  NewVersion: 5.1.7
+  Changes: '5.1.7
 
-    - fixes to android session handling
-
-    - added custom dimensions to design and error events
-
-    - fixes to sqlite db path for windows and linux platforms
-
-
-    4.0.3
-
-    - small uwp bug fix (uwp)
-
-
-    4.0.2
-
-    - small editor bug fixes for stop showing log warnings after calling initialize
-    function
-
-
-    4.0.1
-
-    - small update for wehn signing up in editor
-
-
-    4.0.0
-
-    - dumped major version to emphasize the need to use manual initialization of the
-    SDK now
-
-    - added log warnings to warn if the SDK has not been manually initialized before
-    sending events'
+    - bug fix for special events script'
   SignUpOpen: 0
   StudioName: SuperMove Games
   GameName: Fourzy

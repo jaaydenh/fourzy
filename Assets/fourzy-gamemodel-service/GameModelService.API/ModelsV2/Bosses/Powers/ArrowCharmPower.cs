@@ -41,12 +41,12 @@ namespace FourzyGameModel.Model
             return true;
         }
         
-        public bool IsAvailable(GameState State)
+        public bool IsAvailable(GameState State, bool IsDesparate = false)
         {
             return true;
         }
 
-        public List<IMove> GetPossibleActivations(GameState State)
+        public List<IMove> GetPossibleActivations(GameState State, bool IsDesparate = false)
         {
             List<IMove> Powers = new List<IMove>();
             List<IToken> Arrows = State.Board.FindTokens(TokenType.ARROW);

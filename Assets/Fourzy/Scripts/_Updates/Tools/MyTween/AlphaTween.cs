@@ -47,28 +47,12 @@ namespace Fourzy._Updates.Tween
 
         public void SetAlpha(float value)
         {
-            foreach (GraphicsColorGroup group in alphaGroup)
-            {
-                if (group.canvasGroup)
-                    group.canvasGroup.alpha = value;
-                else if (group.uiGraphics)
-                    group.uiGraphics.color = new Color(group.uiGraphics.color.r, group.uiGraphics.color.g, group.uiGraphics.color.b, value);
-                else if (group.spriteRenderer)
-                    group.spriteRenderer.color = new Color(group.spriteRenderer.color.r, group.spriteRenderer.color.g, group.spriteRenderer.color.b, value);
-            }
+            foreach (GraphicsColorGroup group in alphaGroup) group.alpha = value;
         }
 
         public override void OnReset()
         {
-            foreach (GraphicsColorGroup group in alphaGroup)
-            {
-                if (group.canvasGroup)
-                    group.canvasGroup.alpha = from;
-                else if (group.uiGraphics)
-                    group.uiGraphics.color = new Color(group.uiGraphics.color.r, group.uiGraphics.color.g, group.uiGraphics.color.b, from);
-                else if (group.spriteRenderer)
-                    group.spriteRenderer.color = new Color(group.spriteRenderer.color.r, group.spriteRenderer.color.g, group.spriteRenderer.color.b, from);
-            }
+            SetAlpha(from);
         }
 
         public void DoParse()
@@ -98,6 +82,8 @@ namespace Fourzy._Updates.Tween
         public override void OnInitialized()
         {
             DoParse();
+
+            if (alphaGroup.Count > 0) _value = alphaGroup[0].alpha;
         }
     }
 }

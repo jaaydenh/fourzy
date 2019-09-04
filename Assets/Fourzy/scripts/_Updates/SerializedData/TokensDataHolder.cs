@@ -5,6 +5,7 @@ using FourzyGameModel.Model;
 using StackableDecorator;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.Serialized
@@ -23,7 +24,7 @@ namespace Fourzy._Updates.Serialized
             if (data == null)
                 return tokens.list[0].themesTokens.list[0].tokenPrefab;
 
-            ThemeTokenPrefabPair prefabData = data.themesTokens.list.Find((_prefabData) => Tools.Utils.IsSet(_prefabData.theme, theme));
+            ThemeTokenPrefabPair prefabData = data.themesTokens.list.Find(_prefabData => Tools.Utils.IsSet(_prefabData.theme, theme));
 
             if (prefabData != null)
                 return prefabData.tokenPrefab;
@@ -31,10 +32,9 @@ namespace Fourzy._Updates.Serialized
                 return data.themesTokens.list[0].tokenPrefab;
         }
 
-        public TokenData GetTokenData(TokenType tokenType)
-        {
-            return tokens.list.Find((_data) => _data.tokenType == tokenType);
-        }
+        public TokenData GetTokenData(TokenType tokenType) => tokens.list.Find(_data => _data.tokenType == tokenType);
+
+        public TokenData GetTokenData(SpellId spellID) => tokens.list.Find(_data => _data.isSpell && _data.spellID == spellID);
 
         public Dictionary<TokenType, Sprite> GetTokensSprites()
         {
@@ -42,30 +42,25 @@ namespace Fourzy._Updates.Serialized
             tokensSprites.Add(TokenType.NONE, missingTokenGraphics);
 
             foreach (TokenData tokenData in tokens.list)
-            {
-                SpriteRenderer tokenSpriteRenderer = tokenData.themesTokens.list[0].tokenPrefab.body.GetComponent<SpriteRenderer>();
-
-                //get sprite attached to body
-                if (tokenSpriteRenderer)
-                    tokensSprites.Add(tokenData.tokenType, tokenSpriteRenderer.sprite);
-            }
+                tokensSprites.Add(tokenData.tokenType, tokenData.GetTokenSprite());
 
             return tokensSprites;
         }
 
-        public Sprite GetTokenSprite(TokenType tokenType)
-        {
-            return GetTokenSprite(GetTokenData(tokenType));
-        }
+        public Sprite GetTokenSprite(TokenType tokenType) => GetTokenSprite(GetTokenData(tokenType));
 
         public Sprite GetTokenSprite(TokenData tokenData)
         {
             Sprite sprite = tokenData.GetTokenSprite();
 
-            if (sprite)
-                return sprite;
+            if (sprite) return sprite;
 
             return missingTokenGraphics;
+        }
+
+        public void ResetTokenInstructions()
+        {
+            tokens.list.ForEach(token => PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, false));
         }
 
         [Serializable]
@@ -82,7 +77,18 @@ namespace Fourzy._Updates.Serialized
             public string elementName;
 
             public TokenType tokenType;
+            public Sprite tokenIcon;
             public bool enabled = true;
+            /// <summary>
+            /// Just for some UI features
+            /// </summary>
+            public bool isSpell = false;
+            [ShowIf("#ShowSpellData")]
+            [StackableField]
+            public SpellId spellID;
+            [ShowIf("#ShowSpellData")]
+            [StackableField]
+            public int basePrice;
 
             [ShowIf("#ShowOther")]
             [StackableField]
@@ -90,6 +96,9 @@ namespace Fourzy._Updates.Serialized
             [ShowIf("#ShowOther")]
             [StackableField]
             public bool showBackgroundTile;
+            [ShowIf("#ShowColor")]
+            [StackableField]
+            public Color backgroundTileColor;
             [ShowIf("#ShowOther")]
             [StackableField]
             public string gameboardInstructionID;
@@ -110,24 +119,40 @@ namespace Fourzy._Updates.Serialized
                 }
             }
 
-            public string[] GetTokenThemes(ThemesDataHolder themesData)
+            public int price
             {
-                List<string> result = new List<string>();
+                get
+                {
+                    //get price depending on spell
+                    return basePrice;
+                }
+            }
+
+            public List<ThemesDataHolder.GameTheme> GetTokenThemes(ThemesDataHolder themesData)
+            {
+                List<ThemesDataHolder.GameTheme> result = new List<ThemesDataHolder.GameTheme>();
 
                 foreach (Enum value in Enum.GetValues(typeof(Area)))
                     foreach (ThemeTokenPrefabPair prefabData in themesTokens.list)
                         if (prefabData.theme.HasFlag(value) && themesData.IsThemeEnabled((Area)value))
-                            result.Add(themesData.GetThemeName((Area)value));
+                            result.Add(themesData.GetTheme((Area)value));
 
-                return result.ToArray();
+                return result;
             }
+
+            public List<string> GetThemeNames(ThemesDataHolder themesDataHolder) => GetTokenThemes(themesDataHolder)?.Select(area => area.name).ToList() ?? null;
 
             public Sprite GetTokenSprite()
             {
-                SpriteRenderer tokenSpriteRenderer = themesTokens.list[0].tokenPrefab.body.GetComponent<SpriteRenderer>();
+                if (tokenIcon == null)
+                {
+                    SpriteRenderer tokenSpriteRenderer = themesTokens.list[0].tokenPrefab.body.GetComponent<SpriteRenderer>();
 
-                if (tokenSpriteRenderer)
-                    return tokenSpriteRenderer.sprite;
+                    if (tokenSpriteRenderer)
+                        return tokenSpriteRenderer.sprite;
+                }
+                else
+                    return tokenIcon;
 
                 return null;
             }
@@ -137,6 +162,16 @@ namespace Fourzy._Updates.Serialized
                 elementName = tokenType.ToString() + (!enabled ? ", disabled" : "");
 
                 return enabled;
+            }
+
+            private bool ShowColor()
+            {
+                return ShowOther() && showBackgroundTile;
+            }
+
+            public bool ShowSpellData()
+            {
+                return ShowOther() && isSpell;
             }
         }
 

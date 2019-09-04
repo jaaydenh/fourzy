@@ -11,6 +11,9 @@ namespace Fourzy._Updates.Serialized
         public string tutorialName = "tutorial";
         public bool showPlayer2;
         public OnFinished onFinished;
+        public OpenScreen openScreen;
+        public GameType gameType;
+        public string stringValue;
         public OnboardingTasksBatch[] batches;
 
         public enum OnboardingActions
@@ -45,11 +48,28 @@ namespace Fourzy._Updates.Serialized
             ON_PLAYER2_MOVE_STARTED,
 
             USER_CHANGE_NAME_PROMPT,
+
+            SHOW_BOARD_HINT_AREA,
+            HIDE_BOARD_HINT_AREA,
+
+            LOG_TUTORIAL,
+
+            SHOW_MASKED_AREA,
+            HIDE_MAKSED_AREA,
+
+            SKIP_TO_NEXT_IF_DEMO_MODE,
         }
 
         public enum OnFinished
         {
             LOAD_MAIN_MENU,
+            LOAD_GAME_SCENE,
+        }
+
+        public enum OpenScreen
+        {
+            MAIN,
+            PUZZLES_SCREEN,
         }
 
         public enum OnGameFinished

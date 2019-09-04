@@ -10,8 +10,7 @@ namespace FourzyGameModel.Model
         public BoardSpace Space { get; set; }
         public bool Visible { get; set; }
         public bool Delete { get; set; }
-
-
+        
         public bool pieceCanEnter { get; set; }
         public bool pieceMustStopOn { get; set; }
         public bool pieceCanEndMoveOn { get; set; }
@@ -151,20 +150,39 @@ namespace FourzyGameModel.Model
         {
             if (Piece.Location.Equals(Space.Location)) return;
 
-            foreach (BoardLocation l in  Piece.Location.GetColumn(Space.Parent))
+            foreach (Direction d in TokenConstants.GetDirections())
             {
-                if (l.Equals(Space.Location))
-                    if (l.Row < Space.Location.Row) Piece.Direction = Direction.DOWN;
-                    else Piece.Direction = Direction.UP;
+                foreach (BoardLocation l in Piece.Location.Look(Space.Parent, d))
+                {
+                    if (!Space.Parent.ContentsAt(l).TokensAllowEnter) break;
+                    if (l.Equals(Space.Location))
+                    {
+                        Piece.Direction = d;
+                        Piece.AddCondition(PieceConditionType.LURED);
+                    }
+                }
             }
 
-            foreach (BoardLocation l in Piece.Location.GetRow(Space.Parent))
-            {
-                if (l.Equals(Space.Location))
-                    if (l.Column < Space.Location.Column) Piece.Direction = Direction.LEFT;
-                    else Piece.Direction = Direction.RIGHT;
-            }
-            
+            //foreach (BoardLocation l in  Piece.Location.GetColumn(Space.Parent))
+            //{
+            //    if (l.Equals(Space.Location))
+            //    {
+            //        if (Piece.Location.Row < Space.Location.Row) Piece.Direction = Direction.DOWN;
+            //        else Piece.Direction = Direction.UP;
+            //        Piece.AddCondition(PieceConditionType.LURED);
+            //    }
+            //}
+
+            //foreach (BoardLocation l in Piece.Location.GetRow(Space.Parent))
+            //{
+            //    if (l.Equals(Space.Location))
+            //    {
+            //        if (Piece.Location.Column < Space.Location.Column) Piece.Direction = Direction.RIGHT;
+            //        else Piece.Direction = Direction.LEFT;
+            //        Piece.AddCondition(PieceConditionType.LURED);
+            //    }
+            //}
+
         }
 
         public void PieceLeavesSpace(MovingPiece Piece)

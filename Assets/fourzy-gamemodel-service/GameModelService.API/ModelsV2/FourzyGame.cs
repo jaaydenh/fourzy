@@ -54,17 +54,41 @@ namespace FourzyGameModel.Model
 
             GameBoard Board = BoardFactory.CreateRandomBoard(Options, Player1, Player2, Area);
 
-            this.State = new GameState(Board, Options, FirstPlayerId);
+            if (Player2.DisplayName == "Pod")
+            {
+                Player2.Profile = AIProfile.BeginnerAI;
+                this.State = new GameState(Board, Options, FirstPlayerId);
+            }
 
-            //if (Player1.DisplayName == "Pod")
-            //{
-            //    IBoss Boss = BossFactory.Create(BossType.EntryWay);
-            //    Boss.StartGame(this.State);
-            //}
+            else if (Player2.DisplayName == "TiVo")
+            {
+                Player2.Profile = AIProfile.EasyAI;
+                this.State = new GameState(Board, Options, FirstPlayerId);
+            }
 
-            this.playerTurnRecord = new List<PlayerTurn>();
+            else if (Player2.DisplayName == "UFO")
+            {
+                //BossType MyBoss = BossType.Necrodancer;
+                //Board = BossFactory.CreateBoard(MyBoss);
+                //this.State = new GameState(Board, Options, FirstPlayerId);
+                //IBoss Boss = BossFactory.Create(MyBoss);
+                //Boss.StartGame(this.State);
+                //Player2.BossType = MyBoss;
+                //Player2.Profile = AIProfile.BossAI;
+                //Player2.SpecialAbilityCount = 1;
+
+                Player2.Profile = AIProfile.SimpleAI;
+                this.State = new GameState(Board, Options, FirstPlayerId);
+            }
+            else
+            {
+                this.State = new GameState(Board, Options, FirstPlayerId);
+            }
+
             this.State.Players.Add(1, Player1);
             this.State.Players.Add(2, Player2);
+
+            this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.STANDARD;
         }
 
@@ -99,14 +123,33 @@ namespace FourzyGameModel.Model
             this.State.Players.Add(2, new Player(2, "Second"));
             this.GameType = GameType.STANDARD;
         }
-
-        public FourzyGame(Area Area, int BossId, Player Player)
+        
+        //Create a boss match with a random area board.
+        public FourzyGame(Area Area, BossType Boss, Player Player)
         {
-            this.State = BossGameFactory.CreateBossGame(Area, BossId, Player);
+            this.State = BossGameFactory.CreateBossGame(Area, Boss, Player);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
         }
 
+        //Create a boss match with a specific board.
+        public FourzyGame(GameBoardDefinition definition, BossType Boss, Player Player)
+        {
+            this.State = BossGameFactory.CreateBossGame(definition, Boss, Player);
+            this.playerTurnRecord = new List<PlayerTurn>();
+            this.GameType = GameType.AI;
+        }
+
+        public FourzyGame(GameBoardDefinition definition, AIProfile Profile, Player Player1, int FirstPlayerId = 1)
+        {
+            this.State = new GameState(definition);
+            this.State.ActivePlayerId = FirstPlayerId;
+            this.playerTurnRecord = new List<PlayerTurn>();
+            this.State.Players.Add(1, Player1);
+            Player AI = new Player(2, Profile.ToString(), Profile);
+            this.State.Players.Add(2, AI);
+            this.GameType = GameType.STANDARD;
+        }
 
         public virtual PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn =false )
         {
@@ -145,14 +188,25 @@ namespace FourzyGameModel.Model
             return new PlayerTurnResult(StartState, ME.ResultActions);
         }
 
-        public PlayerTurnResult TakeAITurn(bool ReturnStartOfNextTurn = false)
+        public virtual PlayerTurnResult TakeAITurn(bool ReturnStartOfNextTurn = false)
         {
             PlayerTurnResult AIResult = new PlayerTurnResult();
 
             LastState = State;
             TurnEvaluator ME = new TurnEvaluator(State);
 
-            AIPlayer AI = AI = new SimpleAI(State);
+            AIProfile Profile = State.Players[State.ActivePlayerId].Profile;
+            BossType Boss = State.Players[State.ActivePlayerId].BossType;
+
+            AIPlayer AI = null;
+            if (Boss != BossType.None)
+               AI = new BossAI(State, Boss);
+            else
+               AI = AIPlayerFactory.Create(State, Profile);
+
+            if (AI is null) AI = new SimpleAI(State);
+
+            //AIPlayer AI  = new SimpleAI(State);
             //switch (State.Players[State.ActivePlayerId].DisplayName)
             //{
             //    case "Pod":
@@ -181,6 +235,7 @@ namespace FourzyGameModel.Model
                 AIResult.GameState = StartState;
             }
             AIResult.Activity = GameActions;
+            playerTurnRecord.Add(AIResult.Turn);
 
             return AIResult;
         }

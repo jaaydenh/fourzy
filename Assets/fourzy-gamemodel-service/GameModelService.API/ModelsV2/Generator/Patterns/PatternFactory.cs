@@ -25,6 +25,12 @@ namespace FourzyGameModel.Model
                     return new SolidFullLinePattern(Board,new BoardLocation(1,1), LineType.DIAGONAL).Locations;
                 case PatternType.CrossTheBoard:
                     return new CrossTheBoardPattern(Board, Direction.LEFT, Direction.RIGHT).Locations;
+                case PatternType.CrossBoardOneTurn:
+                    return new CrossBoardOneTurnPattern(Board).Locations;
+                case PatternType.CrossBoardTwoTurnPattern:
+                    return new CrossBoardTwoTurnPattern(Board).Locations;
+                //case PatternType.CrossBoardFourTurnPattern:
+                //    return new CrossBoardFourTurnPattern(Board).Locations;
                 case PatternType.CrossQuads:
                     return new CrossQuadPattern(Board).Locations;
                 case PatternType.DoubleCross:

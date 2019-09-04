@@ -16,15 +16,14 @@ namespace Fourzy._Updates.Serialized
 
         public List<GameBoardDefinition> gameboards { get; private set; }
 
+        public GameBoardDefinition random => gameboards[Random.Range(0, gameboards.Count)];
+
         public void Initialize()
         {
             gameboards = new List<GameBoardDefinition>();
 
-            foreach (EditorGameboardView _board in boards.list)
-                gameboards.Add(_board.GetGameboardDefinition());
+            foreach (EditorGameboardView _board in boards.list) gameboards.Add(_board.GetGameboardDefinition());
         }
-
-        public GameBoardDefinition random => gameboards[Random.Range(0, gameboards.Count)];
     }
 
     [System.Serializable]
@@ -38,18 +37,18 @@ namespace Fourzy._Updates.Serialized
     {
         //to replace "Element {index} with board name
         [HideInInspector]
-        public string elementName;
+        public string _name;
 
-        [HelpBox("#Context", below = false, messageType = MessageType.None)]
+        [ShowIf("#FileCheck")]
         [StackableField]
         public TextAsset boardFile;
 
-        public string Context()
+        public bool FileCheck()
         {
             if (boardFile == null)
             {
-                elementName = "";
-                return "No file specified.";
+                _name = "No file specified.";
+                return true;
             }
 
             GameBoardDefinition board = null;
@@ -57,20 +56,16 @@ namespace Fourzy._Updates.Serialized
             try
             {
                 board = JsonConvert.DeserializeObject<GameBoardDefinition>(boardFile.text);
-                elementName = board.BoardName;
-
-                return "Name: " + board.BoardName + "\nID: " + board.ID;
+                _name = $"Name: {board.BoardName}, ID: {board.ID}";
             }
             catch (JsonReaderException)
             {
-                elementName = "";
-                return "Wrong file";
+                _name = "Wrong file";
             }
+
+            return true;
         }
 
-        public GameBoardDefinition GetGameboardDefinition()
-        {
-            return JsonConvert.DeserializeObject<GameBoardDefinition>(boardFile.text);
-        }
+        public GameBoardDefinition GetGameboardDefinition() => JsonConvert.DeserializeObject<GameBoardDefinition>(boardFile.text);
     }
 }

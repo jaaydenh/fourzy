@@ -7,16 +7,31 @@ namespace FourzyGameModel.Model
 {
     public enum BossType
     {
-        ArrowChanger, FruitFighter, Slurper, Treant, Mole, GhostWhisperer, MadBomber, SnowQueen,
+        ArrowChanger,
+        FruitFighter,
+        Slurper,
+        Treant,
+        Mole,
+        GhostWhisperer,
+        MadBomber,
+        SnowQueen,
         DirectionMaster,
-        EntryWay
+        EntryWay,
+        None,
+        EarthQuake,
+        Necrodancer
     }
 
     public enum BossPowerType
     {
-        ArrowCharm, GlobalArrowChange,
+        ArrowCharm,
+        GlobalArrowChange,
         TreeCharm,
         PlantTree,
-        GhostCharm
+        GhostCharm,
+        BustAMove,
+        EarthCharm,
+        BlockASide,
+        FillHole
     }
 }

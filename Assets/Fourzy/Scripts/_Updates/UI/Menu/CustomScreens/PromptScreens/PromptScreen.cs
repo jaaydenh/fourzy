@@ -24,41 +24,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnBack();
 
-            if (defaultCalls)
-                Decline();
+            if (defaultCalls) Decline();
         }
 
-        public virtual void Prompt(string title, string text, Action accept, Action decline)
+        public virtual void Prompt(string title, string text, Action accept = null, Action decline = null) => Prompt(title, text, "Yes", "No", accept, decline);
+
+        public virtual void Prompt(string title, string text, string yes, string no, Action accept = null, Action decline = null)
         {
             onDecline = decline;
+            onAccept = accept;
 
-            Prompt(title, text, accept);
-        }
-
-        public virtual void Prompt(string title, string text, string yes, string no, Action accept, Action decline)
-        {
-            onDecline = decline;
-
-            Prompt(title, text, yes, no, accept);
-        }
-
-        public virtual void Prompt(string title, string text, Action accept)
-        {
-            Prompt(title, text, "Yes", "No", accept);
-        }
-
-        public virtual void Prompt(string title, string text, string yes, string no, Action accept)
-        {
             UpdateAcceptButton(yes);
             UpdateDeclineButton(no);
 
-            if (promptTitle)
-                promptTitle.text = title;
+            if (promptTitle) promptTitle.text = title;
 
-            if (promptText)
-                promptText.text = text;
-
-            onAccept = accept;
+            if (promptText) promptText.text = text;
 
             Prompt();
         }
@@ -108,12 +89,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     declineButton.SetLabel(no);
                 }
             }
-        }
-
-        public enum PromptType
-        {
-            GENERIC,
-            CHANGE_NAME,
         }
     }
 }

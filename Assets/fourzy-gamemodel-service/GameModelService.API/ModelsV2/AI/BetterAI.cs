@@ -19,7 +19,7 @@ namespace FourzyGameModel.Model
             if (AI.WinningTurns.Count > 0) return AI.WinningTurns.First();
 
             SimpleMove Move = AI.GetRandomBetterMove(3,12,6);
-            if (Move == null) return AI.GetRandomTurn();
+            if (Move == null) Move = AI.GetBestLostCauseMove();
 
             return new PlayerTurn(Move);
         }

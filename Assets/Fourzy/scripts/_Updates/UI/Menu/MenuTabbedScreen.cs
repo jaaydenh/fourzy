@@ -7,11 +7,14 @@ using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu
 {
     public class MenuTabbedScreen : MenuScreen
     {
+        public static MenuTabbedScreen Instance;
+
         public MenuTab defaultTab;
         public bool warp = false;
 
@@ -28,9 +31,15 @@ namespace Fourzy._Updates.UI.Menu
         private int currentTab = -1;
         private Vector3 pointerOrigin;
 
+        public override bool containsSelected => tabs[currentTab].containsSelected;
+
+        public override Selectable DefaultSelectable => tabs[currentTab].DefaultSelectable;
+
         protected override void Awake()
         {
             base.Awake();
+
+            Instance = this;
 
             tabsParentTween = tabsParent.GetComponent<PositionTween>();
             swipeHandler = GetComponent<SwipeHandler>();
@@ -60,7 +69,7 @@ namespace Fourzy._Updates.UI.Menu
         protected void Update()
         {
             //only continue if current opened screen is GameplayScreen
-            if (menuController.currentScreen != this)
+            if (menuController.currentScreen != this || PersistantMenuController.instance.screensStack.Count > 0)
                 return;
 
             if (Input.GetMouseButtonDown(0))
@@ -76,9 +85,8 @@ namespace Fourzy._Updates.UI.Menu
         {
             base.Open();
 
-            if (currentTab == -1)
-                return;
-            
+            if (currentTab == -1) return;
+
             tabs[currentTab].Open();
             tabsButtons[currentTab].Open(false);
         }
@@ -159,6 +167,11 @@ namespace Fourzy._Updates.UI.Menu
                     OpenPrevious(true);
                     break;
             }
+        }
+
+        public override void HighlightSelectable()
+        {
+            tabs[currentTab].HighlightSelectable();
         }
     }
 }

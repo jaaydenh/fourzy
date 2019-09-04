@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.ClientModel;
 using FourzyGameModel.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -51,11 +52,27 @@ namespace Fourzy._Updates.Tools
 
         public static T Random<T>(this IEnumerable<T> enumerable)
         {
-            if (enumerable == null)
-                return default(T);
+            if (enumerable == null) return default(T);
 
             var list = enumerable as IList<T> ?? enumerable.ToList();
             return list.Count == 0 ? default(T) : list[UnityEngine.Random.Range(0, list.Count)];
+        }
+
+        public static T Next<T>(this IEnumerable<T> enumerable, T current)
+        {
+            if (enumerable == null) return default(T);
+
+            var list = enumerable as IList<T> ?? enumerable.ToList();
+
+            if (list.Count == 0)
+                return default(T);
+            else
+            {
+                if (list.IndexOf(current) == list.Count - 1)
+                    return list[0];
+                else
+                    return list[list.IndexOf(current) + 1];
+            }
         }
 
         public static IList<T> InsertList<T>(this IEnumerable<T> enumerable, int index, IEnumerable<T> toAdd)
@@ -110,6 +127,27 @@ namespace Fourzy._Updates.Tools
 
         public static GameActionMove AsMoveAction(this GameAction action) => action as GameActionMove;
 
+        public static GameActionTokenMovement AsActionTokenMovement(this GameAction action) => action as GameActionTokenMovement;
+
+        public static BoardLocation[] AsBoardLocations(this GameAction[] actions)
+        {
+            List<BoardLocation> result = new List<BoardLocation>();
+
+            for (int index = 0; index < actions.Length; index++)
+            {
+                if (actions[index].GetType() == typeof(GameActionMove) && LastBoardLocationCheck(result, actions[index].AsMoveAction().Start)) result.Add(actions[index].AsMoveAction().Start);
+                else if (actions[index].GetType() == typeof(GameActionTokenMovement) && LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().Start)) result.Add(actions[index].AsActionTokenMovement().Start);
+
+                if (index == actions.Length - 1)
+                {
+                    if (actions[index].GetType() == typeof(GameActionMove) && LastBoardLocationCheck(result, actions[index].AsMoveAction().End)) result.Add(actions[index].AsMoveAction().End);
+                    else if (actions[index].GetType() == typeof(GameActionTokenMovement) && LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().End)) result.Add(actions[index].AsActionTokenMovement().End);
+                }
+            }
+
+            return result.ToArray();
+        }
+
         public static GameBoardData ToGameBoardData(this GameBoardDefinition definition)
         {
             GameBoardData _data = new GameBoardData();
@@ -122,6 +160,62 @@ namespace Fourzy._Updates.Tools
             return _data;
         }
 
+        public static GameContentManager.PrefabType AsPrefabType(this RewardType currencyType)
+        {
+            switch (currencyType)
+            {
+                case RewardType.COINS:
+                    return GameContentManager.PrefabType.REWARDS_COIN;
+
+                case RewardType.TICKETS:
+                    return GameContentManager.PrefabType.REWARDS_TICKET;
+
+                case RewardType.GEMS:
+                    return GameContentManager.PrefabType.REWARDS_GEM;
+
+                case RewardType.GAME_PIECE:
+                    return GameContentManager.PrefabType.REWARDS_GAME_PIECE;
+
+                case RewardType.PORTAL_POINTS:
+                    return GameContentManager.PrefabType.REWARDS_PORTAL_POINTS;
+
+                case RewardType.RARE_PORTAL_POINTS:
+                    return GameContentManager.PrefabType.REWARDS_RARE_PORTAL_POINTS;
+
+                case RewardType.XP:
+                    return GameContentManager.PrefabType.REWARDS_XP;
+
+                case RewardType.PACK_COMPLETE:
+                    return GameContentManager.PrefabType.REWARDS_PACK_COMPLETE;
+
+                case RewardType.OPEN_PORTAL:
+                    return GameContentManager.PrefabType.REWARDS_OPEN_PORTAL;
+
+                case RewardType.OPEN_RARE_PORTAL:
+                    return GameContentManager.PrefabType.REWARDS_OPEN_RARE_PORTAL;
+
+                default:
+                    return GameContentManager.PrefabType.NONE;
+            }
+        }
+
+        public static Direction GetDirectionFromLocations(this BoardLocation[] locations)
+        {
+            if (locations.Length < 2) return Direction.NONE;
+            else
+            {
+                int y = locations[locations.Length - 1].Row - locations[locations.Length - 2].Row;
+                int x = locations[locations.Length - 1].Column - locations[locations.Length - 2].Column;
+
+                if (x > 0) return Direction.RIGHT;
+                else if (x < 0) return Direction.LEFT;
+                else if (y < 0) return Direction.UP;
+                else if (y > 0) return Direction.DOWN;
+            }
+
+            return Direction.NONE;
+        }
+
         public static int GetLocation(this BoardLocation boardLocation, IClientFourzy model)
         {
             if (boardLocation.Row == 0 || boardLocation.Row == model.Rows - 1)
@@ -132,35 +226,53 @@ namespace Fourzy._Updates.Tools
             return -1;
         }
 
-        public static Direction GetDirection(this BoardLocation boardLocation, IClientFourzy model)
+        public static Direction GetTurnDirection(this BoardLocation boardLocation, IClientFourzy model)
         {
             if (boardLocation.Row == 0)
-                return Direction.UP;
-            else if (boardLocation.Row == model.Rows - 1)
                 return Direction.DOWN;
+            else if (boardLocation.Row == model.Rows - 1)
+                return Direction.UP;
             else if (boardLocation.Column == 0)
-                return Direction.LEFT;
-            else if (boardLocation.Column == model.Columns - 1)
                 return Direction.RIGHT;
+            else if (boardLocation.Column == model.Columns - 1)
+                return Direction.LEFT;
 
             return Direction.NONE;
         }
 
-        public static BoardLocation Mirrored(this BoardLocation boardLocation, IClientFourzy model)
+        public static Vector2 GetVector(this Direction direction)
         {
-            switch (boardLocation.GetDirection(model))
+            switch (direction)
             {
+                case Direction.LEFT:
+                    return Vector2.left;
+
                 case Direction.UP:
-                    return new BoardLocation(model.Rows - 1, boardLocation.Column);
+                    return Vector2.up;
 
                 case Direction.DOWN:
+                    return Vector2.down;
+
+                default:
+                    return Vector2.right;
+            }
+        }
+
+        public static BoardLocation Mirrored(this BoardLocation boardLocation, IClientFourzy model)
+        {
+            switch (boardLocation.GetTurnDirection(model))
+            {
+                case Direction.UP:
                     return new BoardLocation(0, boardLocation.Column);
 
+                case Direction.DOWN:
+                    return new BoardLocation(model.Rows - 1, boardLocation.Column);
+
                 case Direction.LEFT:
-                    return new BoardLocation(boardLocation.Row, model.Columns - 1);
+                    return new BoardLocation(boardLocation.Row, 0);
 
                 case Direction.RIGHT:
-                    return new BoardLocation(boardLocation.Row, 0);
+                    return new BoardLocation(boardLocation.Row, model.Columns - 1);
 
                 default:
                     return boardLocation;
@@ -277,26 +389,32 @@ namespace Fourzy._Updates.Tools
             return string.Join("\n", lines.ToArray());
         }
 
-        public static float MoveActionsDistance(this GameActionMove[] actions)
-        {
-            float distance = 0f;
-
-            for (int actionIndex = 0; actionIndex < actions.Length; actionIndex++)
-                distance += actions[actionIndex].Distance;
-
-            return distance;
-        }
-
-        public static float GetEloRatingDelta(int myRating, int opponentRating, float gameResult)
-        {
-            float myChanceToWin = 1 / (1 + Mathf.Pow(10, (opponentRating - myRating) / 400));
-
-            return Mathf.Floor(60 * (gameResult - myChanceToWin));
-        }
-
         public static string ToJson(this Color c)
         {
             return string.Format("{0},{1},{2},{3}", c.r, c.g, c.b, c.a);
+        }
+
+        /// <summary>
+        /// Perform a deep Copy of the object, using Json as a serialisation method. NOTE: Private members are not cloned using this method.
+        /// </summary>
+        /// <typeparam name="T">The type of object being copied.</typeparam>
+        /// <param name="source">The object instance to copy.</param>
+        /// <returns>The copied object.</returns>
+        public static T CloneJson<T>(this T source)
+        {
+            // Don't serialize a null object, simply return the default for that object
+            if (System.Object.ReferenceEquals(source, null))
+            {
+                return default(T);
+            }
+
+            // initialize inner objects individually
+            // for example in default constructor some list property initialized with some values,
+            // but in 'source' these items are cleaned -
+            // without ObjectCreationHandling.Replace default constructor values will be added to result
+            var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
+
+            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(source), deserializeSettings);
         }
 
         public static Color ColorFromJson(this string value)
@@ -402,6 +520,9 @@ namespace Fourzy._Updates.Tools
 
                 case TokenType.MOVING_SUN:
                     return TokenConstants.MovingSun.ToString();
+
+                case TokenType.MOVE_BLOCKER:
+                    return TokenConstants.MoveBlocker.ToString();
 
                 case TokenType.MUD:
                     return TokenConstants.Mud.ToString();
@@ -607,6 +728,9 @@ namespace Fourzy._Updates.Tools
                 case TokenConstants.MovingSun:
                     return TokenType.MOVING_SUN;
 
+                case TokenConstants.MoveBlocker:
+                    return TokenType.MOVE_BLOCKER;
+
                 case TokenConstants.SpiderWeb:
                     return TokenType.WEB;
 
@@ -732,6 +856,10 @@ namespace Fourzy._Updates.Tools
             curve.AddKey(new Keyframe(1, 1, tan45, tan45));
             return curve;
         }
+
+        public static long EpochMilliseconds() => Convert.ToInt64((DateTime.Now).ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
+
+        private static bool LastBoardLocationCheck(List<BoardLocation> actions, BoardLocation checkTo) => actions.Count == 0 || !actions[actions.Count - 1].Equals(checkTo);
     }
 
     public class StackModified<T>

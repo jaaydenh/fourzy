@@ -1,12 +1,24 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Managers;
-using mixpanel;
+using Fourzy._Updates.UI.Helpers;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class SettingsScreen : MenuScreen
     {
+        public ButtonExtended puzzlesResetButton;
+
+        protected override void Start()
+        {
+            base.Start();
+
+            puzzlesResetButton.SetActive(GameManager.Instance.ExtraFeatures);
+        }
+
         public void ChangeName()
         {
             menuController.GetScreen<ChangeNamePromptScreen>().Prompt("Change Name", "Current name: " + UserManager.Instance.userName, () => { menuController.CloseCurrentScreen(); });
@@ -14,20 +26,25 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ResetTutorial()
         {
-            Mixpanel.Track("Reset Tutorial Button Press");
+            PersistantMenuController.instance.GetScreen<OnboardingScreen>().OpenOnboarding(GameContentManager.Instance.GetTutorial("Onboarding"));
+            MenuController.AddMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, new KeyValuePair<string, object>("openScreen", "puzzlesScreen"));
+        }
 
-            menuController.GetScreen<PromptScreen>().Prompt("Reset Tutorial", "Replay tutorial next time the game is opened?", "Yes", "No", () =>
-            {
-                GameContentManager.Instance.ResetOnboarding();
+        public void ResetPuzzles()
+        {
+            GameContentManager.Instance.ResetPuzzlePacks();
+            GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
+        }
 
-                menuController.CloseCurrentScreen();
-            });
+        public void ForceAIPresentation()
+        {
+            StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
         }
 
         public void ToggleSfx() => SettingsManager.Instance.Toggle(SettingsManager.KEY_SFX);
 
         public void ToggleAudio() => SettingsManager.Instance.Toggle(SettingsManager.KEY_AUDIO);
 
-        public void ToggleMoveOrigin() => SettingsManager.Instance.Toggle(SettingsManager.KEY_MOVE_ORIGIN);
+        public void ToggleDemoMode() => SettingsManager.Instance.Toggle(SettingsManager.KEY_DEMO_MODE);
     }
 }

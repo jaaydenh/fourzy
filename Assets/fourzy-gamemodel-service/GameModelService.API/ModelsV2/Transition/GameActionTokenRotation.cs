@@ -8,12 +8,12 @@ namespace FourzyGameModel.Model
 
         public GameActionTiming Timing { get { return GameActionTiming.BEFORE_MOVE; } }
 
-        Direction StartOrientation { get; set; }
-        Direction EndOrientation { get; set; }
-        Rotation RotationDirection { get; set; }
+        public Direction StartOrientation { get; set; }
+        public Direction EndOrientation { get; set; }
+        public Rotation RotationDirection { get; set; }
 
-        TransitionType Reason { get; set; }
-        IToken Token { get; set; }
+        public TransitionType Reason { get; set; }
+        public IToken Token { get; set; }
 
         public GameActionTokenRotation(IToken Token, TransitionType Reason, Rotation RotationDirection, Direction StartOrientation, Direction EndOrientation)
         {

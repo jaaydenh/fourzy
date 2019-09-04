@@ -8,11 +8,11 @@ namespace FourzyGameModel.Model
 
         public GameActionTiming Timing { get { return GameActionTiming.BEFORE_MOVE; } }
 
-        BoardLocation Start { get; set; }
-        BoardLocation End { get; set; }
+        public BoardLocation Start { get; set; }
+        public BoardLocation End { get; set; }
 
-        TransitionType Reason { get; set; }
-        IToken Token { get; set; }
+        public TransitionType Reason { get; set; }
+        public IToken Token { get; set; }
 
         public GameActionTokenMovement(IToken Token, TransitionType Reason, BoardLocation Start, BoardLocation End)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -503,6 +504,22 @@ namespace FourzyGameModel.Model
 
             return Found;
         }
+        
+        public List<Piece> FindPieces(int PlayerId )
+        {
+            List<Piece> FoundPiece = new List<Piece>() { };
+
+            for (int r = 0; r < Rows; r++)
+            {
+                for (int c = 0; c < Columns; c++)
+                {
+                    if (Contents[r,c].ContainsPiece)
+                        FoundPiece.Add(Contents[r,c].ActivePiece);
+                }
+            }
+
+            return FoundPiece;
+        }
 
         #region "Events"
 
@@ -548,6 +565,31 @@ namespace FourzyGameModel.Model
                     Contents[r, c].PieceEntersSpace(Piece);
                 }
             }
+
+            //Check for Multiple Lures.
+            if (Piece.ConditionCount(PieceConditionType.LURED) > 1)
+            {
+                Dictionary<Direction, int> Lures = new Dictionary<Direction, int>();
+                foreach (Direction d in TokenConstants.GetDirections())
+                {
+                    int distance = 1;
+                    foreach (BoardLocation l in Piece.Location.Look(this, d))
+                    {
+                        if (!ContentsAt(l).TokensAllowEnter) break;
+                        if (ContentsAt(l).ContainsTokenType(TokenType.LURE))
+                        {
+                            if (!Lures.ContainsKey(d))
+                                Lures.Add(d, distance);
+                            else if (Lures[d] < distance) Lures[d] = distance;
+                        }
+                        distance++;
+                    }
+                }
+                Lures = Lures.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+                Piece.Direction = Lures.First().Key;
+            }
+            Piece.RemoveCondition(PieceConditionType.LURED);
+
         }
         public void PieceBumpsIntoLocation(MovingPiece Piece, BoardLocation Location)
         {

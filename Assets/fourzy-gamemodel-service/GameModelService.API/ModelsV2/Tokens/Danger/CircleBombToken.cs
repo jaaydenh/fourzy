@@ -110,15 +110,22 @@ namespace FourzyGameModel.Model
 
         public void Explode()
         {
-            if (Space.ContainsPiece && Active)
+            if (Active)
             {
+                Active = false;
                 GameActionExplosion Boom = new GameActionExplosion(Space.Location, new List<BoardLocation>() { Space.Location});
-                Space.Parent.RecordGameAction(new GameActionDestroyed(Space.ActivePiece, Space.Location, DestroyType.BOMB));
-                Space.ActivePiece.Conditions.Add(PieceConditionType.DEAD);
+
+                if (Space.ContainsPiece)
+                {
+                    Space.Parent.RecordGameAction(new GameActionDestroyed(Space.ActivePiece, Space.Location, DestroyType.BOMB));
+                    Space.ActivePiece.Conditions.Add(PieceConditionType.DEAD);
+                }
 
                 foreach (BoardLocation loc in Space.Location.GetAdjacent(Space.Parent))
                 {
                     Boom.Explosion.Add(loc);
+                    Space.Parent.ContentsAt(loc).ApplyElement(ElementType.EXPLOSION);
+
                     if (Space.Parent.ContentsAt(loc).ContainsPiece)
                     {
                         Space.Parent.RecordGameAction(new GameActionDestroyed(Space.Parent.ContentsAt(loc).ActivePiece, loc, DestroyType.BOMB));
@@ -126,7 +133,7 @@ namespace FourzyGameModel.Model
                     }
                 }
                 Space.Parent.RecordGameAction(Boom);
-                Active = false;
+            
                 this.Delete = true;
             }
         }
@@ -135,7 +142,11 @@ namespace FourzyGameModel.Model
         {
             switch (Element)
             {
+                case ElementType.EXPLOSION:
+                    Explode();
+                    break;
                 case ElementType.FIRE:
+                    //Explode();
                     break;
                 case ElementType.COLD:
                     break;

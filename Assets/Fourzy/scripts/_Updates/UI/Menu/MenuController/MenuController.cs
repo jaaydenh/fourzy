@@ -1,8 +1,10 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Tools;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu
@@ -13,6 +15,7 @@ namespace Fourzy._Updates.UI.Menu
     public class MenuController : MonoBehaviour
     {
         public static Dictionary<string, MenuController> menus = new Dictionary<string, MenuController>();
+        public static Dictionary<string, MenuEvents> menuEvents = new Dictionary<string, MenuEvents>();
 
         public Camera _camera;
         public bool closeCurrentOnOpen = false;
@@ -33,62 +36,48 @@ namespace Fourzy._Updates.UI.Menu
         public float widthAdjusted => canvaseScaler.referenceResolution.x * widthRatioAdjusted;
         public float heightAdjusted => canvaseScaler.referenceResolution.y * heightRatioAdjusted;
 
+        private bool initialized = false;
+
         //editor version of widthAdjusted
         public float _widthAdjusted
         {
             get
             {
                 CanvasScaler _canvasScaler = GetComponent<CanvasScaler>();
-                return _canvasScaler.referenceResolution.x * 
+                return _canvasScaler.referenceResolution.x *
                     Mathf.Lerp(1f, Screen.width / (Screen.height / _canvasScaler.referenceResolution.y * _canvasScaler.referenceResolution.x), _canvasScaler.matchWidthOrHeight);
             }
         }
 
         protected virtual void Awake()
         {
+            StandaloneInputModuleExtended.onBackPressed += OnBack;
+
             screens = new List<MenuScreen>(transform.GetComponentsInChildren<MenuScreen>());
             screens.AddRange(extraScreens);
+            foreach (MenuScreen screen in extraScreens) if (!screen.menuController) screen.menuController = this;
 
             screensStack = new StackModified<MenuScreen>();
-
             canvaseScaler = GetComponent<CanvasScaler>();
 
             widthScaled = Screen.height / canvaseScaler.referenceResolution.y * canvaseScaler.referenceResolution.x;
             heightScaled = Screen.width / canvaseScaler.referenceResolution.x * canvaseScaler.referenceResolution.y;
 
-            if (!menus.ContainsKey(gameObject.name))
-                menus.Add(gameObject.name, this);
+            if (!menus.ContainsKey(gameObject.name)) menus.Add(gameObject.name, this);
+        }
 
-            foreach (MenuScreen screen in extraScreens)
-                if (!screen.menuController)
-                    screen.menuController = this;
+        protected virtual void Start()
+        {
+            initialized = true;
+
+            ExecuteMenuEvent();
         }
 
         protected virtual void OnDestroy()
         {
-            if (menus.ContainsKey(gameObject.name))
-                menus.Remove(gameObject.name);
-        }
+            StandaloneInputModuleExtended.onBackPressed -= OnBack;
 
-        protected virtual void Update()
-        {
-            //back button functionality
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                //first send ESC to static menu controller
-                if (PersistantMenuController.instance.screensStack.Count > 0)
-                    return;
-
-                if (screensStack.Count > 0)
-                {
-                    MenuScreen menuScreen = screensStack.Peek();
-
-                    if (!menuScreen.interactable)
-                        return;
-
-                    menuScreen.OnBack();
-                }
-            }
+            if (menus.ContainsKey(gameObject.name)) menus.Remove(gameObject.name);
         }
 
         public void SetCurrentScreen(int index)
@@ -113,7 +102,7 @@ namespace Fourzy._Updates.UI.Menu
         /// <summary>
         /// Closes current screen
         /// </summary>
-        public void CloseCurrentScreen(bool animate = true)
+        public virtual void CloseCurrentScreen(bool animate = true)
         {
             if (screensStack.Count > 0)
             {
@@ -153,8 +142,7 @@ namespace Fourzy._Updates.UI.Menu
                 else
                     screensStack.Pop().Close(false);
 
-            if (screensStack.Count > 1)
-                CloseCurrentScreen(false);
+            if (screensStack.Count > 1) CloseCurrentScreen(false);
         }
 
         public void OpenScreen<T>(bool addIfNotExists = false) where T : MenuScreen
@@ -170,15 +158,11 @@ namespace Fourzy._Updates.UI.Menu
                 OpenScreen(AddScreen<T>());
         }
 
-        public void OpenScreen(int index)
-        {
-            OpenScreen(screens[index]);
-        }
+        public void OpenScreen(int index) => OpenScreen(screens[index]);
 
         public void OpenScreen(MenuScreen screen)
         {
-            if (closeCurrentOnOpen && currentScreen)
-                currentScreen.Close();
+            if (currentScreen && screen.closePreviousWhenOpened) currentScreen.Close();
 
             SetCurrentScreen(screen);
             screensStack.Push(currentScreen);
@@ -239,32 +223,99 @@ namespace Fourzy._Updates.UI.Menu
             return new Vector2(WorldToCanvasPoint(new Vector3(size.x, 0f)).x - WorldToCanvasPoint(Vector3.zero).x, WorldToCanvasPoint(new Vector3(0f, size.y)).y - WorldToCanvasPoint(Vector3.zero).y);
         }
 
-        public void SetState(bool state)
+        public virtual void SetState(bool state)
         {
-            if (gameObject.activeInHierarchy == state)
-                return;
+            if (gameObject.activeInHierarchy == state) return;
 
             gameObject.SetActive(state);
 
-            if (state && currentScreen)
-                currentScreen.Open();
+            if (state)
+            {
+                if (currentScreen) currentScreen.Open();
 
-            if (_camera)
-                _camera.gameObject.SetActive(state);
+                ExecuteMenuEvent();
+            }
+
+            if (_camera) _camera.gameObject.SetActive(state);
+        }
+
+        public void ExecuteMenuEvent()
+        {
+            if (!menuEvents.ContainsKey(name)) menuEvents.Add(name, new MenuEvents());
+
+            if (menuEvents.Count == 0 || !gameObject.activeInHierarchy) return;
+
+            StartCoroutine(InvokeMenuEvents(menuEvents[name]));
+        }
+
+        protected virtual void OnBack()
+        {
+            if (PersistantMenuController.instance.screensStack.Count > 0 || !gameObject.activeInHierarchy) return;
+            
+            if (screensStack.Count > 0)
+            {
+                MenuScreen menuScreen = screensStack.Peek();
+
+                if (!menuScreen.interactable) return;
+
+                menuScreen.OnBack();
+            }
+        }
+
+        protected virtual void OnInvokeMenuEvents(MenuEvents events) { }
+
+        private IEnumerator InvokeMenuEvents(MenuEvents events)
+        {
+            while (!initialized) yield return null;
+
+            OnInvokeMenuEvents(events);
+
+            screens.ForEach(screen => screen.ExecuteMenuEvent(events));
+
+            //remove events
+            menuEvents[name].Clear();
+        }
+
+        public static void AddMenuEvent(string menuName, params KeyValuePair<string, object>[] events)
+        {
+            if (!menuEvents.ContainsKey(menuName)) menuEvents.Add(menuName, new MenuEvents());
+
+            foreach (var @event in events) menuEvents[menuName][@event.Key] = @event.Value;
         }
 
         public static void SetState(string key, bool state)
         {
-            if (menus.ContainsKey(key))
-                menus[key].SetState(state);
+            if (menus.ContainsKey(key)) menus[key].SetState(state);
         }
 
         public static MenuController GetMenu(string key)
         {
-            if (menus.ContainsKey(key))
-                return menus[key];
+            if (menus.ContainsKey(key)) return menus[key];
 
             return null;
         }
+    }
+
+    public class MenuEvents
+    {
+        public string @event;
+
+        public Dictionary<string, object> data = new Dictionary<string, object>();
+
+        public object this[string idx]
+        {
+            get => data[idx];
+            set => data.Add(idx, value);
+        }
+
+        public MenuEvents(params KeyValuePair<string, object>[] @params)
+        {
+            foreach (KeyValuePair<string, object> _param in @params)
+                this[_param.Key] = _param.Value;
+        }
+
+        public int Count => data.Count;
+
+        public void Clear() => data.Clear();
     }
 }

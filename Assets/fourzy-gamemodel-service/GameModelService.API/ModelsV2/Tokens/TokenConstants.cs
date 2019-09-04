@@ -12,6 +12,11 @@ namespace FourzyGameModel.Model
         public const char Left = 'L';
         public const char Right = 'R';
 
+        public static List<Direction> GetDirections()
+        {
+            return new List<Direction>() { Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT }; 
+        }
+
         //Arrow Token Characters
         public const char UpArrowTokenChararacter = '\u2191';
         public const char DownArrowTokenChararacter = '\u2193';
@@ -226,6 +231,6 @@ namespace FourzyGameModel.Model
 
     }
 
-    public enum MoveMethod { HORIZONTAL_PACE, VERTICAL_PACE, CLOCKWISE, COUNTERCLOCKWISE, NONE };
+    public enum MoveMethod { HORIZONTAL_PACE, VERTICAL_PACE, CLOCKWISE, COUNTERCLOCKWISE, NONE, WRAPAROUND };
 
 }

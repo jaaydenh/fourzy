@@ -110,11 +110,12 @@ namespace FourzyGameModel.Model
         {
             if (Location.Equals(Space.Location))
             {
-                BoardSpace Target = Space.Parent.ContentsAt(Space.Location.Neighbor(Piece.Direction));
-
+                BoardLocation TargetLocation = Space.Location.Neighbor(Piece.Direction);
                 //check to see if the target is on the board.
-                if (!Target.Location.OnBoard(Space.Parent)) return;
-                
+                if (!TargetLocation.OnBoard(Space.Parent)) return;
+
+                BoardSpace Target = Space.Parent.ContentsAt(TargetLocation);
+                                
                 if (Target.ContainsTokenType(TokenType.FRUIT_TREE))
                 {
                     Space.Parent.PieceBumpsIntoLocation(Piece, Target.Location);

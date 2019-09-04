@@ -103,7 +103,7 @@ namespace Fourzy._Updates.UI.Toasts
 
             GameToast newToast = Instantiate(toastPrefabFastAccess[style].prefab, transform);
 
-            newToast.SetVisibility(0f);
+            newToast.SetAlpha(0f);
             newToast.transform.localScale = Vector3.one;
 
             toasts[style].Add(newToast);
@@ -181,6 +181,7 @@ namespace Fourzy._Updates.UI.Toasts
             ACTION_WARNING,
             INFO_TOAST,
             TOP_TOAST,
+            ACTION_WARNING_SCREEN_CENTER,
         }
     }
 }

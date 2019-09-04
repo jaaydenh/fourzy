@@ -31,8 +31,9 @@ namespace FourzyGameModel.Model
                 foreach (SimpleMove m in Evaluator.GetAvailableSimpleMoves())
                 {
                     Evaluator.EvaluateTurn(new PlayerTurn(m));
-                    if (Evaluator.DidPlayerWin(Evaluator.OriginalState.ActivePlayerId))
+                    if (Evaluator.DidPlayerWinRevised(Evaluator.OriginalState.ActivePlayerId))
                     {
+                        Evaluator.DidPlayerWinAndFindWinningLocations(Evaluator.OriginalState.ActivePlayerId);
                         break;                            
                     }
                 }

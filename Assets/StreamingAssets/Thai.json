@@ -50,6 +50,7 @@
     {"key":"turn_play_button","value":"Turn Play"},
     {"key":"fast_play_button","value":"Realtime"},
     {"key":"puzzle_play_button","value":"Puzzle Play"},
-    {"key":"cancel_button","value":"Cancel"}
+    {"key":"cancel_button","value":"Cancel"},
+    {"key":"reset_button","value":"Reset"}
     ]
 }

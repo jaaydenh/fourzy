@@ -24,7 +24,7 @@ namespace FourzyGameModel.Model
             this.Recipes.Add(WideRiver(), 10);
             this.Recipes.Add(DontFall(), 10);
             this.Recipes.Add(DontFall2(), 20);
-            this.Recipes.Add(SurpriseFall(), 10);
+            //this.Recipes.Add(SurpriseFall(), 10);
             this.Recipes.Add(CenterFall(), 10);
             this.Recipes.Add(EdgeBumps(), 10);
             this.Recipes.Add(SurroundedByGhosts(), 10);
@@ -36,10 +36,55 @@ namespace FourzyGameModel.Model
             this.Recipes.Add(DiagonalOfDeathLeftRight(), 10);
             this.Recipes.Add(WaterBlob(), 10);
             this.Recipes.Add(InArrows(), 10);
-
+            this.Recipes.Add(SpookyRiver(), 20);
+            this.Recipes.Add(River1(), 20);
+            this.Recipes.Add(River2(), 20);
+            //this.Recipes.Add(River3(), 500000);
 
             //this.Recipes.Add(RiverLand(), 10);
         }
+
+        private BoardRecipe SpookyRiver()
+        {
+            BoardRecipe Forest = new BoardRecipe("SpookyRiver");
+            Forest.Ingredients.Add(new Ingredient(new WaterToken(), PatternType.CrossBoardTwoTurnPattern, AddTokenMethod.ALWAYS, true));
+            Forest.Ingredients.Add(new Ingredient(new GhostToken(), PatternType.ThreeRandom, AddTokenMethod.ALWAYS, true));
+
+            return Forest;
+        }
+
+
+        private BoardRecipe River1()
+        {
+            BoardRecipe Forest = new BoardRecipe("River1");
+            Forest.Ingredients.Add(new Ingredient(new WaterToken(), PatternType.CrossBoardOneTurn, AddTokenMethod.ALWAYS, true));
+            Forest.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            Forest.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.OneRandom, AddTokenMethod.ALWAYS, true));
+
+            return Forest;
+        }
+
+        private BoardRecipe River2()
+        {
+            BoardRecipe Forest = new BoardRecipe("River2");
+            Forest.Ingredients.Add(new Ingredient(new WaterToken(), PatternType.CrossBoardTwoTurnPattern, AddTokenMethod.ALWAYS, true));
+            Forest.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            Forest.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.OneRandom, AddTokenMethod.ALWAYS, true));
+
+            return Forest;
+        }
+
+        private BoardRecipe River3()
+        {
+            BoardRecipe Forest = new BoardRecipe("River2");
+            Forest.Ingredients.Add(new Ingredient(new WaterToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            Forest.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.OneRandom, AddTokenMethod.ALWAYS, true));
+            Forest.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.OneRandom, AddTokenMethod.ALWAYS, true));
+
+            return Forest;
+        }
+
+
 
         private BoardRecipe InArrows()
         {
@@ -71,7 +116,6 @@ namespace FourzyGameModel.Model
 
             return Forest;
         }
-
 
         private BoardRecipe DiagonalOfDeath()
         {

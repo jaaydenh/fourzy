@@ -4,8 +4,10 @@
 using Fourzy._Updates.Serialized;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,14 +23,20 @@ namespace Fourzy._Updates.Tools
         private static Vector2Int gridCellSize = new Vector2Int(42, 42);
         private static Vector2Int gridCellPadding = new Vector2Int(4, 4);
 
+        public static string[] rotatingArrowFrequencyDisplayOptions = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9 " };
+        public static int[] rotatingArrowFrequencyOptions = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        public static string[] rotatingArrowCountdownDisplayOptions = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        public static int[] rotatingArrowCountdownOptions = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
         private static Dictionary<TokenType, Sprite> tokensSprites;
         private static GameBoardDefinition currentBoard;
-        private static BoardSpaceData selectedBoardSpaceData;
-        private static Vector2Int selectedBoardSpaceLocation;
-        private static int selectedToken;
+        private static List<BoardSpaceWrapper> selectedBoardSpaceData;
+        private static List<BoardSpaceTokenWrapper> commonTokens;
+        private static int selectedTokenIndex;
         private static int selectedInitialMove;
         private static TokenType prevTokenType;
         private static string selectedPath;
+        private static string selectedFileName;
 
         private static TokensDataHolder tokensData;
         private static TokensDataHolder tempTokensData;
@@ -45,6 +53,8 @@ namespace Fourzy._Updates.Tools
         public static GUIStyle selectedButtonStyle;
         public static GUIStyle selectedInitialMoveBoxStyle;
 
+        private static bool pointerInsideTab;
+
         private Vector2 tokensScrollViewPosition;
         private Vector2 initialMovesScrollViewPosition;
 
@@ -56,7 +66,7 @@ namespace Fourzy._Updates.Tools
             initialMoveButtonSize = new Vector2(gridCellSize.x * .5f, gridCellSize.y * .5f);
             initialMoveButtonPadding = new Vector2((gridCellSize.x - initialMoveButtonSize.x) * .5f, (gridCellSize.y - initialMoveButtonSize.y) * .5f);
             gridSize = new Vector2(8 * (gridCellSize.x + gridCellPadding.x) - gridCellPadding.x, 8 * (gridCellSize.y + gridCellPadding.y) - gridCellPadding.y);
-            windowSize = new Vector2(gridOrigin.x + gridSize.x + gridBorder.x, gridOrigin.y + gridSize.y + gridBorder.y);
+            windowSize = new Vector2(gridOrigin.x + gridSize.x + gridBorder.x, gridOrigin.y + gridSize.y + gridBorder.y + 50);
             instance.minSize = instance.maxSize = windowSize;
 
             defaultButtonsStyle = new GUIStyle() { alignment = TextAnchor.MiddleLeft };
@@ -68,6 +78,9 @@ namespace Fourzy._Updates.Tools
 
             guids = AssetDatabase.FindAssets("Player2BoardEditorGamePieceTexture");
             player2GamePieceTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(AssetDatabase.GUIDToAssetPath(guids[0]));
+
+            selectedBoardSpaceData = new List<BoardSpaceWrapper>();
+            commonTokens = new List<BoardSpaceTokenWrapper>();
 
             //load arrows
             arrowGraphics = new Texture[4];
@@ -92,6 +105,16 @@ namespace Fourzy._Updates.Tools
             //get current event
             Event @event = Event.current;
 
+            //draw explorere tab
+            BeginWindows();
+
+            Rect editorWindowRect = GUILayout.Window(ushort.MaxValue, new Rect(0f, 0f, tabSize.x, tabSize.y), EditorTab, "Editor Tab");
+
+            if (@event.type == EventType.Repaint)
+                pointerInsideTab = @event.mousePosition.x >= editorWindowRect.x && @event.mousePosition.y >= editorWindowRect.y && @event.mousePosition.x <= editorWindowRect.size.x && @event.mousePosition.y <= editorWindowRect.size.y;
+
+            EndWindows();
+
             if (currentBoard != null)
             {
                 switch (@event.type)
@@ -106,7 +129,9 @@ namespace Fourzy._Updates.Tools
                             {
                                 Color prev = GUI.color;
 
-                                if (selectedBoardSpaceData != null && row == selectedBoardSpaceLocation.y && col == selectedBoardSpaceLocation.x)
+                                BoardSpaceWrapper spaceData = selectedBoardSpaceData.Find(i => i.location.y == row && i.location.x == col);
+
+                                if (spaceData != null)
                                     GUI.color = Color.yellow;
 
                                 GUI.Box(new Rect(
@@ -130,7 +155,8 @@ namespace Fourzy._Updates.Tools
                                             switch (tokenValue.StringToToken())
                                             {
                                                 case TokenType.ARROW:
-                                                    textureToSet = arrowGraphics[(int)TokenConstants.IdentifyDirection(tokenValue.Substring(1))];
+                                                case TokenType.ROTATING_ARROW:
+                                                    textureToSet = arrowGraphics[(int)TokenConstants.IdentifyDirection(tokenValue.Substring(1, 1))];
                                                     break;
 
                                                 default:
@@ -185,48 +211,119 @@ namespace Fourzy._Updates.Tools
 
                         BoardSpaceData _selectedBoardSpaceData = BoardSpaceDataFromPoint(@event.mousePosition - gridOrigin);
 
-                        if (_selectedBoardSpaceData != null)
+                        if (Event.current.control)
                         {
-                            if (_selectedBoardSpaceData == selectedBoardSpaceData)
-                                selectedBoardSpaceData = null;
-                            else
-                                selectedBoardSpaceData = _selectedBoardSpaceData;
-
-                            if (selectedBoardSpaceData != null)
+                            if (_selectedBoardSpaceData != null)
                             {
-                                selectedBoardSpaceLocation = BoardSpaceDataLocation(selectedBoardSpaceData);
+                                BoardSpaceWrapper spaceData = selectedBoardSpaceData.Find(i => i.data == _selectedBoardSpaceData);
 
-                                if (selectedBoardSpaceData.T != null)
-                                {
-                                    if (selectedBoardSpaceData.T.Count > 0)
-                                        selectedToken = 0;
-                                    else
-                                        selectedToken = -1;
-                                }
+                                if (spaceData != null)
+                                    selectedBoardSpaceData.Remove(spaceData);
                                 else
-                                    selectedToken = -1;
+                                    selectedBoardSpaceData.Add(new BoardSpaceWrapper() { data = _selectedBoardSpaceData, location = BoardSpaceDataLocation(_selectedBoardSpaceData), });
+
+                                if (_selectedBoardSpaceData != null)
+                                {
+                                    if (_selectedBoardSpaceData.T != null)
+                                    {
+                                        if (_selectedBoardSpaceData.T.Count > 0)
+                                            selectedTokenIndex = 0;
+                                        else
+                                            selectedTokenIndex = -1;
+                                    }
+                                    else
+                                        selectedTokenIndex = -1;
+                                }
+
+                                UpdateCommonTokens();
                             }
                         }
-                        //check if we selected initial move box
                         else
                         {
-                            int _selectedInitialMove = InitialMoveFromPoint(@event.mousePosition);
+                            if (_selectedBoardSpaceData != null)
+                            {
+                                bool selected = false;
+                                if (selectedBoardSpaceData.Count > 0)
+                                    selected = selectedBoardSpaceData[0].data == _selectedBoardSpaceData;
 
-                            if (selectedInitialMove > -1)
-                                selectedInitialMove = -1;
+                                selectedBoardSpaceData.Clear();
+
+                                if (!selected)
+                                    selectedBoardSpaceData.Add(new BoardSpaceWrapper() { data = _selectedBoardSpaceData, location = BoardSpaceDataLocation(_selectedBoardSpaceData), });
+
+                                //if (spaceData != null)
+                                //    selectedBoardSpaceData.Remove(spaceData);
+                                //else
+                                //    selectedBoardSpaceData.Add(new BoardSpaceWrapper() { data = _selectedBoardSpaceData, location = BoardSpaceDataLocation(_selectedBoardSpaceData), });
+
+                                if (_selectedBoardSpaceData != null)
+                                {
+                                    if (_selectedBoardSpaceData.T != null)
+                                    {
+                                        if (_selectedBoardSpaceData.T.Count > 0)
+                                            selectedTokenIndex = 0;
+                                        else
+                                            selectedTokenIndex = -1;
+                                    }
+                                    else
+                                        selectedTokenIndex = -1;
+                                }
+
+                                UpdateCommonTokens();
+                            }
+                            //check if we selected initial move box
                             else
-                                selectedInitialMove = _selectedInitialMove;
+                            {
+                                int _selectedInitialMove = InitialMoveFromPoint(@event.mousePosition);
+
+                                if (selectedInitialMove > -1)
+                                    selectedInitialMove = -1;
+                                else
+                                    selectedInitialMove = _selectedInitialMove;
+                            }
                         }
+                        break;
+
+                    case EventType.KeyDown:
+                        switch (@event.keyCode)
+                        {
+                            case KeyCode.Alpha1:
+                                if (!pointerInsideTab)
+                                {
+                                    foreach (BoardSpaceWrapper boardSpace in selectedBoardSpaceData)
+                                        boardSpace.data.P = "1";
+                                }
+
+                                break;
+
+                            case KeyCode.Alpha2:
+                                if (!pointerInsideTab)
+                                {
+                                    foreach (BoardSpaceWrapper boardSpace in selectedBoardSpaceData)
+                                        boardSpace.data.P = "2";
+                                }
+
+                                break;
+
+                            case KeyCode.Delete:
+                            case KeyCode.D:
+                                if (!pointerInsideTab && @event.control)
+                                {
+                                    foreach (BoardSpaceWrapper boardSpace in selectedBoardSpaceData)
+                                    {
+                                        boardSpace.data.P = null;
+                                        boardSpace.data.T = null;
+
+                                        selectedTokenIndex = -1;
+                                    }
+                                }
+
+                                return;
+                        }
+
                         break;
                 }
             }
-
-            //draw shapes explorer window
-            BeginWindows();
-
-            Rect editorWindowRect = GUILayout.Window(ushort.MaxValue, new Rect(0f, 0f, tabSize.x, tabSize.y), EditorTab, "Editor Tab");
-
-            EndWindows();
         }
 
         private static void LoadTokensData(TokensDataHolder newData)
@@ -239,9 +336,36 @@ namespace Fourzy._Updates.Tools
 
         private static void LoadGameboard(GameBoardDefinition gameboard)
         {
-            selectedBoardSpaceData = null;
-            selectedToken = -1;
+            selectedBoardSpaceData = new List<BoardSpaceWrapper>();
+            selectedTokenIndex = -1;
             selectedInitialMove = -1;
+
+            if (string.IsNullOrEmpty(gameboard.ID))
+                gameboard.ID = Guid.NewGuid().ToString();
+        }
+
+        private static void UpdateCommonTokens()
+        {
+            if (selectedBoardSpaceData.Count > 0 && selectedBoardSpaceData[0].data.T != null)
+            {
+                commonTokens.Clear();
+
+                foreach (string token in selectedBoardSpaceData[0].data.T)
+                {
+                    if (selectedBoardSpaceData.All(i => i.data.T != null && i.data.T.Contains(token)))
+                        commonTokens.Add(new BoardSpaceTokenWrapper() { token = token, indicies = selectedBoardSpaceData.Select(boardSpace => boardSpace.data.T.IndexOf(token)).ToList(), });
+                }
+            }
+            else
+                commonTokens.Clear();
+
+            if (selectedTokenIndex > -1)
+            {
+                if (commonTokens.Count == 0)
+                    selectedTokenIndex = -1;
+                else if (selectedTokenIndex >= commonTokens.Count)
+                    selectedTokenIndex = commonTokens.Count - 1;
+            }
         }
 
         private BoardSpaceData BoardSpaceDataFromPoint(Vector2 position)
@@ -368,6 +492,7 @@ namespace Fourzy._Updates.Tools
                         GameBoardDefinition gameboard = JsonConvert.DeserializeObject<GameBoardDefinition>(File.ReadAllText(path));
 
                         selectedPath = path;
+                        selectedFileName = Path.GetFileName(path);
                         currentBoard = gameboard;
 
                         if (gameboard != null)
@@ -396,7 +521,7 @@ namespace Fourzy._Updates.Tools
                         if (string.IsNullOrEmpty(selectedPath))
                             path = EditorUtility.SaveFilePanelInProject("Save board", currentBoard.BoardName, "json", "");
                         else
-                            path = EditorUtility.SaveFilePanelInProject("Save board", currentBoard.BoardName, "json", "", selectedPath);
+                            path = EditorUtility.SaveFilePanelInProject("Save board", selectedFileName, "json", "", selectedPath);
 
                         if (path.Length != 0)
                             File.WriteAllText(path, JsonConvert.SerializeObject(currentBoard));
@@ -411,6 +536,8 @@ namespace Fourzy._Updates.Tools
                 {
                     currentBoard.BoardName = EditorGUILayout.TextField("Board name", currentBoard.BoardName);
                     currentBoard.ID = EditorGUILayout.TextField("Board ID", currentBoard.ID);
+                    if (GUILayout.Button("Reset ID"))
+                        currentBoard.ID = Guid.NewGuid().ToString();
                     currentBoard.Enabled = EditorGUILayout.Toggle("Enabled", currentBoard.Enabled);
                     currentBoard.EnabledGallery = EditorGUILayout.Toggle("Enabled Gallery", currentBoard.EnabledGallery);
                     currentBoard.EnabledRealtime = EditorGUILayout.Toggle("Enabled Realtime", currentBoard.EnabledRealtime);
@@ -508,37 +635,56 @@ namespace Fourzy._Updates.Tools
                 GUILayout.EndVertical();
 
                 //tokens list
-                if (selectedBoardSpaceData != null)
+                if (selectedBoardSpaceData.Count > 0)
                 {
-                    GUILayout.Label("Tokens");
-
                     PlayerEnum playerValue;
 
-                    if (!string.IsNullOrEmpty(selectedBoardSpaceData.P) && (selectedBoardSpaceData.P.Substring(0, 1) == "1" || selectedBoardSpaceData.P.Substring(0, 1) == "2"))
-                        playerValue = selectedBoardSpaceData.P.Substring(0, 1) == "1" ? PlayerEnum.ONE : PlayerEnum.TWO;
+                    if (!string.IsNullOrEmpty(selectedBoardSpaceData[0].data.P))
+                    {
+                        if (selectedBoardSpaceData.All(boardSpace => !string.IsNullOrEmpty(boardSpace.data.P)))
+                        {
+                            if (selectedBoardSpaceData.All(boardSpace => boardSpace.data.P.Substring(0, 1) == "1"))
+                                playerValue = PlayerEnum.ONE;
+                            else if (selectedBoardSpaceData.All(boardSpace => boardSpace.data.P.Substring(0, 1) == "2"))
+                                playerValue = PlayerEnum.TWO;
+                            else
+                                playerValue = PlayerEnum.NONE;
+                        }
+                        else
+                            playerValue = PlayerEnum.NONE;
+                    }
                     else
                         playerValue = PlayerEnum.NONE;
-                    
+
                     PlayerEnum selectedValue = (PlayerEnum)EditorGUILayout.EnumPopup("Game piece", playerValue);
 
-                    if (selectedValue == PlayerEnum.ONE || selectedValue == PlayerEnum.TWO)
-                        selectedBoardSpaceData.P = selectedValue == PlayerEnum.ONE ? "1" : "2";
-                    else
-                        selectedBoardSpaceData.P = null;
+                    if (selectedValue == PlayerEnum.ONE || selectedValue == PlayerEnum.TWO || selectedValue == PlayerEnum.NONE)
+                    {
+                        foreach (BoardSpaceWrapper boardSpace in selectedBoardSpaceData)
+                        {
+                            if (selectedValue == PlayerEnum.ONE || selectedValue == PlayerEnum.TWO)
+                                boardSpace.data.P = selectedValue == PlayerEnum.ONE ? "1" : "2";
+                            else
+                                boardSpace.data.P = null;
+                        }
+                    }
+
+                    GUILayout.Label("Tokens");
 
                     GUILayout.BeginVertical("Box");
                     {
                         tokensScrollViewPosition = GUILayout.BeginScrollView(tokensScrollViewPosition, GUILayout.Height(40f));
                         {
-                            if (selectedBoardSpaceData.T != null)
-                                for (int i = 0; i < selectedBoardSpaceData.T.Count; i++)
-                                    if (GUILayout.Button(i + ": Token, : " + selectedBoardSpaceData.T[i], (selectedToken == i) ? selectedButtonStyle : defaultButtonsStyle))
+                            //only display common tokens
+                            if (commonTokens.Count > 0)
+                                for (int i = 0; i < commonTokens.Count; i++)
+                                    if (GUILayout.Button(i + ": Token, : " + commonTokens[i].token, (selectedTokenIndex == i) ? selectedButtonStyle : defaultButtonsStyle))
                                     {
-                                        if (selectedToken == i)
-                                            selectedToken = -1;
+                                        if (selectedTokenIndex == i)
+                                            selectedTokenIndex = -1;
                                         else
                                         {
-                                            selectedToken = i;
+                                            selectedTokenIndex = i;
                                             prevTokenType = TokenType.NONE;
                                         }
                                     }
@@ -547,29 +693,157 @@ namespace Fourzy._Updates.Tools
                     }
                     GUILayout.EndVertical();
 
-                    if (selectedToken > -1)
+                    if (selectedTokenIndex > -1)
                     {
-                        TokenType tokenType = (TokenType)EditorGUILayout.EnumPopup("Token type", (System.Enum)selectedBoardSpaceData.T[selectedToken].StringToToken());
+                        TokenType tokenType = (TokenType)EditorGUILayout.EnumPopup("Token type", (System.Enum)commonTokens[selectedTokenIndex].token.StringToToken());
+                        Direction directionEnum = Direction.NONE;
+                        Rotation rotationEnum = Rotation.NONE;
+                        MoveMethod moveMethodEnum = MoveMethod.NONE;
+                        int countdown = 0;
+                        int frequency = 0;
+                        bool check = false;
 
                         //if token have extra data to set
                         switch (tokenType)
                         {
                             case TokenType.ARROW:
-                                if (selectedBoardSpaceData.T[selectedToken].StringToToken() != TokenType.ARROW)
-                                    selectedBoardSpaceData.T[selectedToken] = tokenType.TokenTypeToString() + TokenConstants.DirectionString(Direction.UP);
+                                //if selected token isnt set to 'tokenType', but 'tokenType' was selected, set current token to 'tokenType' on all selected tiles
+                                if (commonTokens[selectedTokenIndex].token.StringToToken() != TokenType.ARROW)
+                                {
+                                    commonTokens[selectedTokenIndex].token = tokenType.TokenTypeToString() + TokenConstants.DirectionString(Direction.UP);
 
-                                Direction directionEnum =
-                                    (Direction)EditorGUILayout.EnumPopup("Arrow Direction", (System.Enum)TokenConstants.IdentifyDirection(selectedBoardSpaceData.T[selectedToken].Substring(1)));
+                                    for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                                        selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] =
+                                            tokenType.TokenTypeToString() + TokenConstants.DirectionString(Direction.UP);
+                                }
 
+                                //display direction popup
+                                directionEnum = (Direction)EditorGUILayout.EnumPopup("Arrow Direction", TokenConstants.IdentifyDirection(commonTokens[selectedTokenIndex].token.Substring(1)));
+
+                                //only accept left/down/up/right
                                 if ((int)directionEnum < 4)
-                                    selectedBoardSpaceData.T[selectedToken] = selectedBoardSpaceData.T[selectedToken][0] + directionEnum.ToString();
+                                {
+                                    for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                                    {
+                                        selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] =
+                                            tokenType.TokenTypeToString() 
+                                            + TokenConstants.DirectionString(directionEnum);
+                                    }
+                                }
+                                break;
+
+                            case TokenType.ROTATING_ARROW:
+                                //if selected token isnt set to 'tokenType', but 'tokenType' was selected, set current token to 'tokenType' on all selected tiles
+                                if (commonTokens[selectedTokenIndex].token.StringToToken() != TokenType.ROTATING_ARROW)
+                                {
+                                    string notation =
+                                        tokenType.TokenTypeToString()
+                                        + TokenConstants.DirectionString(Direction.UP)
+                                        + TokenConstants.NotateRotation(Rotation.CLOCKWISE)
+                                        + 1
+                                        + 0;
+
+                                    commonTokens[selectedTokenIndex].token = notation;
+
+                                    for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                                        selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] = notation;
+                                }
+
+                                //display direction popup
+                                directionEnum = (Direction)EditorGUILayout.EnumPopup("Arrow Direction", TokenConstants.IdentifyDirection(commonTokens[selectedTokenIndex].token.Substring(1, 1)));
+
+                                //display rotation enum
+                                rotationEnum = (Rotation)EditorGUILayout.EnumPopup("Arrow Rotation", TokenConstants.GetRotation(commonTokens[selectedTokenIndex].token.Substring(2, 1)[0]));
+                                
+                                frequency = EditorGUILayout.IntPopup(
+                                    "Frequency",
+                                    int.Parse(commonTokens[selectedTokenIndex].token.Substring(3, 1)), 
+                                    rotatingArrowFrequencyDisplayOptions, 
+                                    rotatingArrowFrequencyOptions);
+
+                                countdown = EditorGUILayout.IntPopup(
+                                    "Countdown", 
+                                    int.Parse(commonTokens[selectedTokenIndex].token.Substring(4, 1)), 
+                                    rotatingArrowCountdownDisplayOptions, 
+                                    rotatingArrowCountdownOptions);
+
+                                //only accept left/down/up/right and correcnt rotation
+                                if ((int)directionEnum < 4 && (int)rotationEnum < 2)
+                                {
+                                    for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                                    {
+                                        selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] =
+                                            tokenType.TokenTypeToString()
+                                            + TokenConstants.DirectionString(directionEnum)
+                                            + TokenConstants.NotateRotation(rotationEnum)
+                                            + frequency
+                                            + countdown;
+                                    }
+                                }
+                                break;
+
+                            case TokenType.MOVING_GHOST:
+                                //if selected token isnt set to 'tokenType', but 'tokenType' was selected, set current token to 'tokenType' on all selected tiles
+                                if (commonTokens[selectedTokenIndex].token.StringToToken() != TokenType.MOVING_GHOST)
+                                {
+                                    string notation =
+                                        tokenType.TokenTypeToString()
+                                        + TokenConstants.DirectionString(Direction.UP)
+                                        + TokenConstants.MoveString(MoveMethod.CLOCKWISE)
+                                        + 0
+                                        + 1
+                                        + 0;
+
+                                    commonTokens[selectedTokenIndex].token = notation;
+
+                                    for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                                        selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] = notation;
+                                }
+                                
+                                //display direction popup
+                                directionEnum = (Direction)EditorGUILayout.EnumPopup("Direction", TokenConstants.IdentifyDirection(commonTokens[selectedTokenIndex].token.Substring(1, 1)));
+
+                                //display move method popup
+                                moveMethodEnum = (MoveMethod)EditorGUILayout.EnumPopup("Move Method", TokenConstants.IdentifyMoveMethod(commonTokens[selectedTokenIndex].token.Substring(2, 1)));
+
+                                countdown = EditorGUILayout.IntPopup(
+                                    "Countdown",
+                                    int.Parse(commonTokens[selectedTokenIndex].token.Substring(3, 1)),
+                                    rotatingArrowCountdownDisplayOptions,
+                                    rotatingArrowCountdownOptions);
+
+                                frequency = EditorGUILayout.IntPopup(
+                                    "Frequency",
+                                    int.Parse(commonTokens[selectedTokenIndex].token.Substring(4, 1)),
+                                    rotatingArrowFrequencyDisplayOptions,
+                                    rotatingArrowFrequencyOptions);
+
+                                check = EditorGUILayout.Toggle("Tired", (commonTokens[selectedTokenIndex].token.Substring(5, 1) == "1" ? true : false));
+
+
+                                //only accept left/down/up/right and correcnt moveMethod
+                                if ((int)directionEnum < 4 && (int)moveMethodEnum < 4)
+                                {
+                                    for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                                    {
+                                        selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] =
+                                            tokenType.TokenTypeToString()
+                                            + TokenConstants.DirectionString(directionEnum)
+                                            + TokenConstants.MoveString(moveMethodEnum)
+                                            + countdown
+                                            + frequency
+                                            + (check ? "1" : "0");
+                                    }
+                                }
                                 break;
 
                             default:
-                                selectedBoardSpaceData.T[selectedToken] = tokenType.TokenTypeToString();
+                                for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                                    selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] = tokenType.TokenTypeToString();
                                 break;
                         }
 
+                        UpdateCommonTokens();
                         prevTokenType = tokenType;
                     }
 
@@ -577,42 +851,78 @@ namespace Fourzy._Updates.Tools
                     {
                         if (GUILayout.Button("+", GUILayout.Width(30f)))
                         {
-                            if (selectedBoardSpaceData.T == null)
-                                selectedBoardSpaceData.T = new List<string>();
+                            for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                            {
+                                if (selectedBoardSpaceData[boardSpaceIndex].data.T == null)
+                                    selectedBoardSpaceData[boardSpaceIndex].data.T = new List<string>();
 
-                            selectedBoardSpaceData.T.Add("B");
-                            selectedToken = selectedBoardSpaceData.T.Count - 1;
+                                selectedBoardSpaceData[boardSpaceIndex].data.T.Add("B");
+                                selectedTokenIndex = selectedBoardSpaceData[boardSpaceIndex].data.T.Count - 1;
+                            }
+
+                            UpdateCommonTokens();
                         }
 
-                        if (selectedToken > -1)
+                        if (selectedTokenIndex > -1)
                         {
                             if (GUILayout.Button("-", GUILayout.Width(30f)))
                             {
-                                selectedBoardSpaceData.T.RemoveAt(selectedToken);
+                                for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                                {
+                                    selectedBoardSpaceData[boardSpaceIndex].data.T.RemoveAt(commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]);
+                                }
 
-                                if (selectedBoardSpaceData.T.Count == 0)
-                                    selectedToken = -1;
-                                else if (selectedToken == selectedBoardSpaceData.T.Count)
-                                    selectedToken--;
+                                commonTokens.RemoveAt(selectedTokenIndex);
+
+                                if (commonTokens.Count == 0)
+                                    selectedTokenIndex = -1;
+                                else if (selectedTokenIndex == commonTokens.Count)
+                                    selectedTokenIndex--;
+
+                                UpdateCommonTokens();
                             }
 
-                            if (selectedToken > 0)
-                                if (GUILayout.Button("▲", GUILayout.Width(30f)))
-                                {
-                                    selectedBoardSpaceData.T.MoveItem(selectedToken, selectedToken - 1);
-                                    selectedToken--;
-                                }
+                            if (selectedBoardSpaceData.Count == 1)
+                            {
+                                if (selectedTokenIndex > 0)
+                                    if (GUILayout.Button("▲", GUILayout.Width(30f)))
+                                    {
+                                        selectedBoardSpaceData[0].data.T.MoveItem(selectedTokenIndex, selectedTokenIndex - 1);
+                                        selectedTokenIndex--;
 
-                            if (selectedToken < selectedBoardSpaceData.T.Count - 1)
-                                if (GUILayout.Button("▼", GUILayout.Width(30f)))
-                                {
-                                    selectedBoardSpaceData.T.MoveItem(selectedToken, selectedToken + 1);
-                                    selectedToken++;
-                                }
+                                        UpdateCommonTokens();
+                                    }
+
+                                if (selectedTokenIndex < selectedBoardSpaceData[0].data.T.Count - 1)
+                                    if (GUILayout.Button("▼", GUILayout.Width(30f)))
+                                    {
+                                        selectedBoardSpaceData[0].data.T.MoveItem(selectedTokenIndex, selectedTokenIndex + 1);
+                                        selectedTokenIndex++;
+
+                                        UpdateCommonTokens();
+                                    }
+                            }
                         }
                     }
                     GUILayout.EndHorizontal();
                 }
+            }
+        }
+
+        public class BoardSpaceWrapper
+        {
+            public BoardSpaceData data;
+            public Vector2Int location;
+        }
+
+        public class BoardSpaceTokenWrapper
+        {
+            public string token;
+            public List<int> indicies;
+
+            public BoardSpaceTokenWrapper()
+            {
+                indicies = new List<int>();
             }
         }
     }

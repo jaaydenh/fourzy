@@ -11,8 +11,6 @@ namespace Fourzy._Updates.UI.Widgets
     public class CurrencyWidget : WidgetBase
     {
         public const int MAX_VALUE = 99999;
-        public const int PORTAL_POINTS = 100;
-        public const int RARE_PORTAL_POINTS = 10;
 
         public bool updateOnStart = true;
         public CurrencyType type;
@@ -64,11 +62,11 @@ namespace Fourzy._Updates.UI.Widgets
                         break;
 
                     case CurrencyType.PORTAL_POINTS:
-                        StartRoutine("labelAnimation", UpdateRoutine(Mathf.Clamp(value - _value, 0, int.MaxValue) / (float)PORTAL_POINTS));
+                        StartRoutine("labelAnimation", UpdateRoutine(Mathf.Clamp(value - _value, 0, int.MaxValue) / (float)Constants.PORTAL_POINTS));
                         break;
 
                     case CurrencyType.RARE_PORTAL_POINTS:
-                        StartRoutine("labelAnimation", UpdateRoutine(Mathf.Clamp(value - _value, 0, int.MaxValue) / (float)RARE_PORTAL_POINTS));
+                        StartRoutine("labelAnimation", UpdateRoutine(Mathf.Clamp(value - _value, 0, int.MaxValue) / (float)Constants.RARE_PORTAL_POINTS));
                         break;
 
                     case CurrencyType.XP:
@@ -130,13 +128,13 @@ namespace Fourzy._Updates.UI.Widgets
                     break;
 
                 case CurrencyType.PORTAL_POINTS:
-                    valueLabel.text = $"{value % PORTAL_POINTS}/{PORTAL_POINTS}";
-                    slider.value = (value % PORTAL_POINTS) / (float)PORTAL_POINTS;
+                    valueLabel.text = $"{value % Constants.PORTAL_POINTS}/{Constants.PORTAL_POINTS}";
+                    slider.value = (value % Constants.PORTAL_POINTS) / (float)Constants.PORTAL_POINTS;
                     break;
 
                 case CurrencyType.RARE_PORTAL_POINTS:
-                    valueLabel.text = $"{value % RARE_PORTAL_POINTS}/{RARE_PORTAL_POINTS}";
-                    slider.value = (value % RARE_PORTAL_POINTS) / (float)RARE_PORTAL_POINTS;
+                    valueLabel.text = $"{value % Constants.RARE_PORTAL_POINTS}/{Constants.RARE_PORTAL_POINTS}";
+                    slider.value = (value % Constants.RARE_PORTAL_POINTS) / (float)Constants.RARE_PORTAL_POINTS;
                     break;
 
                 case CurrencyType.XP:
@@ -165,19 +163,6 @@ namespace Fourzy._Updates.UI.Widgets
             }
 
             UpdateLabels(toValue);
-        }
-
-        public enum CurrencyType
-        {
-            COINS = 0,
-            XP = 1,
-            TICKETS = 2,
-            MAGIC = 3,
-            GEMS = 4,
-            PORTALS = 5,
-            RARE_PORTALS = 6,
-            PORTAL_POINTS = 7,
-            RARE_PORTAL_POINTS = 8,
         }
     }
 }

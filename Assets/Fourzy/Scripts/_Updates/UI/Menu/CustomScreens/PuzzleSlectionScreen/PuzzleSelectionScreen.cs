@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,38 +13,49 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public AIPlayerUIWidget aiPlayerWidgetPrefab;
         public RectTransform aiPlayersParent;
-
-        public PuzzlePackWidget puzzlePackPrefab;
+        
         public GridLayoutGroup gridLayoutGroup;
         public TMP_Text completeText;
+
+        private List<PuzzlePackWidget> puzzlePacksWidgets = new List<PuzzlePackWidget>();
+        private PuzzlePackWidget puzzlePackPrefab;
+
+        protected override void Start()
+        {
+            base.Start();
+
+            puzzlePackPrefab = GameContentManager.GetPrefab<PuzzlePackWidget>(GameContentManager.PrefabType.PUZZLE_PACK_WIDGET);
+        }
 
         public override void Open()
         {
             base.Open();
 
-            LoadPuzzlePacks();
+            LoadPuzzlePacks(GameContentManager.Instance.puzzlePacksDataHolder);
             LoadAIPlayerWidgets();
         }
 
-        public void LoadPuzzlePacks()
+        public void LoadPuzzlePacks(PuzzlePacksDataHolder puzzlePacksHolder)
         {
-            //remove old one
-            foreach (Transform child in gridLayoutGroup.transform)
-                Destroy(child.gameObject);
+            puzzlePacksWidgets.Clear();
 
-            foreach (PuzzlePacksDataHolder.PuzzlePack puzzlePack in GameContentManager.Instance.puzzlePacks)
+            //remove old one
+            foreach (Transform child in gridLayoutGroup.transform) Destroy(child.gameObject);
+
+            foreach (PuzzlePacksDataHolder.PuzzlePack puzzlePack in puzzlePacksHolder.puzzlePacks.list)
             {
                 PuzzlePackWidget puzzlePackWidgetInstance = Instantiate(puzzlePackPrefab, gridLayoutGroup.transform);
                 puzzlePackWidgetInstance.SetData(puzzlePack);
+
+                puzzlePacksWidgets.Add(puzzlePackWidgetInstance);
             }
 
-            completeText.text = $"{GameContentManager.Instance.puzzlePacksDataHolder.totalPuzzlesCompleteCount} / {GameContentManager.Instance.puzzlePacksDataHolder.totalPuzzlesCount}";
+            completeText.text = $"{puzzlePacksHolder.totalPuzzlesCompleteCount} / {puzzlePacksHolder.totalPuzzlesCount}";
         }
 
         public void LoadAIPlayerWidgets()
         {
-            foreach (Transform child in aiPlayersParent)
-                Destroy(child.gameObject);
+            foreach (Transform child in aiPlayersParent) Destroy(child.gameObject);
 
             foreach (AIPlayersDataHolder.AIPlayerData aiPlayer in GameContentManager.Instance.aiPlayersDataHolder.enabledAIPlayers)
             {
@@ -51,6 +63,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 widget.transform.localScale = Vector3.one;
 
                 widget.SetData(aiPlayer);
+            }
+        }
+
+        public override void ExecuteMenuEvent(MenuEvents menuEvent)
+        {
+            //respond to puzzle pack menu event
+            if (menuEvent.data.ContainsKey("puzzlePack"))
+            {
+                if (menuController.currentScreen != this)
+                {
+                    //back to root
+                    menuController.BackToRoot();
+                    //open this screen
+                    menuController.OpenScreen(this);
+                }
+
+                puzzlePacksWidgets.Find(widget => widget.puzzlePack.packID == (menuEvent["puzzlePack"] as PuzzlePacksDataHolder.PuzzlePack).packID).PlayCompleteAnimation();
             }
         }
     }

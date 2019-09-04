@@ -38,13 +38,14 @@ namespace FourzyGameModel.Model
             return true;
         }
 
-        public bool IsAvailable(GameState State)
+        public bool IsAvailable(GameState State, bool IsDesparate = false)
         {
+            if (!IsDesparate) return false;
             if (State.Board.FindTokens(TokenType.CIRCLE_BOMB).Count > MaxBombs) return false;
             return true;
         }
 
-        public List<IMove> GetPossibleActivations(GameState State)
+        public List<IMove> GetPossibleActivations(GameState State, bool IsDesparate = false)
         {
             List<IMove> Powers = new List<IMove>();
             foreach (BoardSpace s in State.Board.Contents)

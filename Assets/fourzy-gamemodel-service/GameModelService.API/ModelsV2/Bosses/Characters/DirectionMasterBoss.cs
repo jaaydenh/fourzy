@@ -19,13 +19,13 @@ namespace FourzyGameModel.Model
             this.Powers.Add(new GlobalArrowChangePower());
         }
 
-        public List<IMove> GetPossibleActivations(GameState State)
+        public List<IMove> GetPossibleActivations(GameState State, bool IsDesparate = false)
         {
             List<IMove> Activations = new List<IMove>();
             foreach (IBossPower p in Powers)
             {
-                if (p.IsAvailable(State))
-                    Activations.AddRange(p.GetPossibleActivations(State));        
+                if (p.IsAvailable(State, IsDesparate))
+                    Activations.AddRange(p.GetPossibleActivations(State, IsDesparate));        
             }
             return Activations;
         }

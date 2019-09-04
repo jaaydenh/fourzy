@@ -22,14 +22,16 @@ namespace Fourzy
         public static string kCoins = "coins_";
         public static string kGems = "gems_";
         public static string kXP = "xp_";
-        public static string kPortals = "portals_";
-        public static string kRarePortals = "rarePortals_";
         public static string kPortalPoints = "portalPoints_";
         public static string kRarePortalPoints = "rarePortalPoints_";
         public static string kTickets = "tickets_";
         public static string kGameViewed = "gameViewed_";
         public static string kGameRewarded = "gameRewarded_";
-        public static string kDailyPuzzle = "dailyPuzzle";
+        public static string kRemoteSetting = "remoteSetting_";
+        public static string kInitialProperties = "initialProperties";
+        public static string kFastPuzzle = "fast_puzzle_";
+
+        public static string kEventRewarded = "eventRewarded_";
 
         public static bool InstructionPopupWasDisplayed(int tokenId)
         {
@@ -43,7 +45,7 @@ namespace Fourzy
             PlayerPrefs.SetInt(kInstructionPopupDisplayed + tokenId, value);
         }
 
-        public static bool IsPuzzleChallengeComplete(string ID)
+        public static bool GetPuzzleChallengeComplete(string ID)
         {
             int defaultValue = 0;
             return PlayerPrefs.GetInt(kPuzzleChallenge + ID) != defaultValue;
@@ -61,9 +63,9 @@ namespace Fourzy
             return PlayerPrefs.GetInt(kPuzzleChallenge + ID + "_opened", defaultValue) != defaultValue;
         }
 
-        public static void SetPuzzlePackOpened(string ID)
+        public static void SetPuzzlePackOpened(string ID, bool value)
         {
-            PlayerPrefs.SetInt(kPuzzleChallenge + ID + "_opened", 1);
+            PlayerPrefs.SetInt(kPuzzleChallenge + ID + "_opened", value ? 1 : 0);
         }
 
         public static bool PuzzlePackUnlocked(string ID)
@@ -72,9 +74,9 @@ namespace Fourzy
             return PlayerPrefs.GetInt(kPuzzleChallenge + ID + "_unlocked", defaultValue) != defaultValue;
         }
 
-        public static void SetPuzzlePackUnlocked(string ID)
+        public static void SetPuzzlePackUnlocked(string ID, bool value)
         {
-            PlayerPrefs.SetInt(kPuzzleChallenge + ID + "_unlocked", 1);
+            PlayerPrefs.SetInt(kPuzzleChallenge + ID + "_unlocked", value ? 1 : 0);
         }
 
         public static void SetCurrentGameTheme(int currentTheme)
@@ -121,8 +123,7 @@ namespace Fourzy
             int defaultValue = 0;
             return PlayerPrefs.GetInt(kTutorialOpened + tutorial.name, defaultValue) != defaultValue;
         }
-
-        //username data
+        
         public static void SetUsetName(string userName)
         {
             PlayerPrefs.SetString(kUserName, userName);
@@ -132,8 +133,7 @@ namespace Fourzy
         {
             return PlayerPrefs.GetString(kUserName);
         }
-
-        //gamepieces data
+        
         public static void GamePieceUpdatePiecesCount(GamePieceData gamePiece)
         {
             PlayerPrefs.SetInt(kGamePiecePieces + gamePiece.ID, gamePiece.pieces);
@@ -159,14 +159,14 @@ namespace Fourzy
             return PlayerPrefs.GetInt(kGamePieceChampions + gamePiece.ID, 0);
         }
 
-        public static int GetSelectedGamePiece()
+        public static string GetSelectedGamePiece()
         {
-            return PlayerPrefs.GetInt(kSelectedGamePiece, -1);
+            return PlayerPrefs.GetString(kSelectedGamePiece, "");
         }
 
-        public static void SetSelectedGamePiece(int pieceID)
+        public static void SetSelectedGamePiece(string pieceID)
         {
-            PlayerPrefs.SetInt(kSelectedGamePiece, pieceID);
+            PlayerPrefs.SetString(kSelectedGamePiece, pieceID);
         }
 
         public static bool GetGameViewed(string gameID)
@@ -176,9 +176,6 @@ namespace Fourzy
 
         public static void SetGameViewed(string gameID)
         {
-            if (GetGameViewed(gameID))
-                return;
-
             PlayerPrefs.SetInt(kGameViewed + gameID, 1);
         }
 
@@ -187,22 +184,49 @@ namespace Fourzy
             return PlayerPrefs.GetInt(kGameRewarded + gameID, 0) != 0;
         }
 
-        public static void SetGameRewarded(string gameID)
+        public static void SetGameRewarded(string gameID, bool value)
         {
-            if (GetGameRewarded(gameID))
-                return;
-
-            PlayerPrefs.SetInt(kGameRewarded + gameID, 1);
+            PlayerPrefs.SetInt(kGameRewarded + gameID, value ? 1 : 0);
         }
 
-        public static string GetDailyPuzzleFileName()
+        public static bool GetInitialPropertiesSet()
         {
-            return PlayerPrefs.GetString(kDailyPuzzle, "");
+            return PlayerPrefs.GetInt(kInitialProperties, 0) != 0;
         }
 
-        public static void SetDailyPuzzleFileName(string value)
+        public static void InitialPropertiesSet()
         {
-            PlayerPrefs.SetString(kDailyPuzzle, value);
+            PlayerPrefs.SetInt(kInitialProperties, 1);
+        }
+
+        public static string GetRemoteSetting(string key)
+        {
+            return PlayerPrefs.GetString(kRemoteSetting + key, "0");
+        }
+
+        public static void SetRemoteSetting(string key, string value)
+        {
+            PlayerPrefs.SetString(kRemoteSetting + key, value);
+        }
+
+        public static void SetEventRewarded(string id, bool state)
+        {
+            PlayerPrefs.SetInt(kEventRewarded + id, state ? 1 : 0);
+        }
+
+        public static bool GetEventRewarded(string id)
+        {
+            return PlayerPrefs.GetInt(kEventRewarded + id, 0) != 0;
+        }
+
+        public static void SetFastPuzzleComplete(string id, bool state)
+        {
+            PlayerPrefs.SetInt(kFastPuzzle + id, state ? 1 : 0);
+        }
+
+        public static bool GetFastPuzzleComplete(string id)
+        {
+            return PlayerPrefs.GetInt(kFastPuzzle + id, 0) != 0;
         }
 
         #region Currencies
@@ -225,26 +249,6 @@ namespace Fourzy
         public static void SetGems(int quantity)
         {
             PlayerPrefs.SetInt(kGems, quantity);
-        }
-
-        public static int GetPortals()
-        {
-            return PlayerPrefs.GetInt(kPortals, 0);
-        }
-
-        public static void SetPortals(int quantity)
-        {
-            PlayerPrefs.SetInt(kPortals, quantity);
-        }
-
-        public static int GetRarePortals()
-        {
-            return PlayerPrefs.GetInt(kRarePortals, 0);
-        }
-
-        public static void SetRarePortals(int quantity)
-        {
-            PlayerPrefs.SetInt(kRarePortals, quantity);
         }
 
         public static int GetPortalPoints()

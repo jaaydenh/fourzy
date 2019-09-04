@@ -47,24 +47,24 @@ namespace FourzyGameModel.Model
             return true;
         }
 
-        public bool IsAvailable(GameState State)
+        public bool IsAvailable(GameState State, bool IsDesparate)
         {
             return true;
         }
 
-        public List<IMove> GetPossibleActivations(GameState State)
+        public List<IMove> GetPossibleActivations(GameState State, bool IsDesparate = false)
         {
             List<IMove> Powers = new List<IMove>();
             List<IToken> Trees  = State.Board.FindTokens(TokenType.FRUIT_TREE);
             foreach (IToken t in Trees)
             {
                 FruitTreeToken Tree = (FruitTreeToken)t;
-                foreach (Direction d in Enum.GetValues(typeof(Direction)))
+                foreach (Direction d in TokenConstants.GetDirections())
                 {
-                    if (d == Direction.NONE) continue;
                     BoardLocation Target = Tree.Space.Location.Neighbor(d);
                     if (!Target.OnBoard(State.Board)) continue;
                     if (State.Board.ContentsAt(Target).ContainsPiece) continue;
+                    if (State.Board.ContentsAt(Target).ContainsTokenType(TokenType.FRUIT)) continue;
                     if (!State.Board.ContentsAt(Target).TokensAllowEndHere) continue;
 
                     Powers.Add(new TreeCharmPower(Tree.Space.Location, d));

@@ -18,13 +18,13 @@ namespace FourzyGameModel.Model
             this.Powers.Add(new GhostCharmPower());
         }
 
-        public List<IMove> GetPossibleActivations(GameState State)
+        public List<IMove> GetPossibleActivations(GameState State, bool IsDesparate = false)
         {
             List<IMove> Activations = new List<IMove>();
             foreach (IBossPower p in Powers)
             {
-                if (p.IsAvailable(State))
-                    Activations.AddRange(p.GetPossibleActivations(State));
+                if (p.IsAvailable(State, IsDesparate))
+                    Activations.AddRange(p.GetPossibleActivations(State, IsDesparate));
             }
             return Activations;
         }
@@ -47,7 +47,7 @@ namespace FourzyGameModel.Model
                 {
                     BoardLocation Target = State.Board.Random.RandomLocation(new BoardLocation(1, 1), State.Board.Rows - 2, State.Board.Columns - 2);
                     if (State.Board.ContentsAt(Target).ContainsOnlyTerrain)
-                        State.Board.AddToken(new ArrowToken(State.Board.Random.RandomDirection()), Target, AddTokenMethod.ALWAYS, true);
+                        State.Board.AddToken(new GhostToken(), Target, AddTokenMethod.ALWAYS, true);
                 }
             }
 

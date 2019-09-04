@@ -37,6 +37,8 @@ namespace Fourzy._Updates.UI.Widgets
         public void OpenNewLeaderboardChallengeGame()
         {
             Debug.Log($"Open user challenge {leaderboard.userName}, {leaderboard.userId}");
+
+            menuScreen.menuController.GetScreen<MatchmakingScreen>().StartVSPlayer(leaderboard.userId);
         }
     }
 }

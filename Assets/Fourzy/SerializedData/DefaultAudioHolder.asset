@@ -146,3 +146,7 @@ MonoBehaviour:
       - {fileID: 8300000, guid: 6c26ebb121a0b4a58ac702574e3a2ce3, type: 3}
       - {fileID: 8300000, guid: 08649ee4078fb4ceebb2aa20272081d6, type: 3}
       - {fileID: 8300000, guid: 4a388644145be453ebc3c57ebfd4bfc9, type: 3}
+    - _name: TIMER_BAR_LOST
+      type: 62
+      clips:
+      - {fileID: 8300000, guid: 495f87d2ba016499bb112e578570766f, type: 3}

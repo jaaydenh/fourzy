@@ -51,9 +51,7 @@ namespace FourzyGameModel.Model
                      + TokenConstants.DirectionString(Orientation) 
                      + TokenConstants.NotateRotation(RotationDirection)
                      + Frequency
-                    +CountDown; 
-
-
+                     + CountDown; 
             }
         }
 
@@ -77,13 +75,12 @@ namespace FourzyGameModel.Model
             }
         }
 
-
-        public RotatingArrowToken(Direction Orientation, Rotation Direction, int Frequency = 1)
+        public RotatingArrowToken(Direction Orientation, Rotation RotateDirection, int Frequency = 1)
         {
             StandardTokenInit();
-            
+
             this.Orientation = Orientation;
-            this.RotationDirection = Direction;
+            this.RotationDirection = RotateDirection;
             this.Frequency = Frequency;
 
             this.Type = TokenType.ROTATING_ARROW;
@@ -100,7 +97,6 @@ namespace FourzyGameModel.Model
                 this.Orientation = TokenConstants.GetOrientation(Notation[1]);
             }
 
-
             if (Notation.Length > 2)
             {
                 this.RotationDirection = TokenConstants.GetRotation(Notation[2]);
@@ -108,12 +104,7 @@ namespace FourzyGameModel.Model
 
             if (Notation.Length > 3)
             {
-                this.Orientation = TokenConstants.GetOrientation(Notation[3]);
-            }
-
-            if (Notation.Length > 4)
-            {
-                this.Frequency = int.Parse(Notation[4].ToString());
+                this.Frequency = int.Parse(Notation[3].ToString());
             }
             else
             {
@@ -122,7 +113,7 @@ namespace FourzyGameModel.Model
 
             if (Notation.Length > 5)
             {
-                this.CountDown = int.Parse(Notation[5].ToString());
+                this.CountDown = int.Parse(Notation[4].ToString());
             }
             else
             {
@@ -161,7 +152,6 @@ namespace FourzyGameModel.Model
 
                 CountDown = Frequency;
             }
-
         }
 
         public Direction GetDirection(MovingPiece Piece)
@@ -172,7 +162,6 @@ namespace FourzyGameModel.Model
         public void ApplyElement(ElementType Element)
         {
         }
-
 
         public void EndOfTurn(int PlayerId)
         {

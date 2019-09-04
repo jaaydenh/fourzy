@@ -4,20 +4,17 @@ using Fourzy._Updates.Mechanics;
 using FourzyGameModel.Model;
 using GameSparks.Api.Requests;
 using GameSparks.Core;
-using mixpanel;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using Fourzy._Updates.UI.Widgets;
 
 namespace Fourzy
 {
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class UserManager : UnitySingleton<UserManager>
     {
-        public const int DEFAULT_GAME_PIECE = 2;
+        public const string DEFAULT_GAME_PIECE = "2";
         public const int MAX_PLAYER_LEVEL = 32;
         public const int MIN_PLAYER_LEVEL = 1;
 
@@ -25,10 +22,8 @@ namespace Fourzy
         readonly string[] lastNameSyllables = { "malo", "zak", "abo", "wonk", "zig", "wolf", "cat", "dog", "sheep", "goat" };
 
         public static Action OnUpdateUserInfo;
-        public static Action<CurrencyWidget.CurrencyType> onCurrencyUpdate;
-        public static Action<int> OnUpdateUserGamePieceID;
-
-        public bool debug = false;
+        public static Action<CurrencyType> onCurrencyUpdate;
+        public static Action<string> OnUpdateUserGamePieceID;
 
         public string userId { get; private set; }
         public int ratingElo { get; private set; }
@@ -43,19 +38,34 @@ namespace Fourzy
                 return string.IsNullOrEmpty(playerPrefsValue) ? userName = CreateNewPlayerName() : playerPrefsValue;
             }
 
-            private set => PlayerPrefsWrapper.SetUsetName(value);
+            private set
+            {
+                PlayerPrefsWrapper.SetUsetName(value);
+
+                if (PhotonNetwork.connected) PhotonNetwork.player.NickName = name;
+            }
         }
 
-        public int gamePieceID
+        public string gamePieceID
         {
             get
             {
-                int selectedGamePiece = PlayerPrefsWrapper.GetSelectedGamePiece();
+                string selectedGamePiece = PlayerPrefsWrapper.GetSelectedGamePiece();
 
-                return (selectedGamePiece < 0) ? DEFAULT_GAME_PIECE : selectedGamePiece;
+                return (string.IsNullOrEmpty(selectedGamePiece)) ? DEFAULT_GAME_PIECE : selectedGamePiece;
             }
 
-            private set => PlayerPrefsWrapper.SetSelectedGamePiece(value);
+            private set
+            {
+                PlayerPrefsWrapper.SetSelectedGamePiece(value);
+
+                if (PhotonNetwork.connected)
+                    //update photon player property
+                    PhotonNetwork.player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable()
+                    {
+                        ["gp"] = value,
+                    });
+            }
         }
 
         public int coins
@@ -66,7 +76,7 @@ namespace Fourzy
             {
                 PlayerPrefsWrapper.SetCoins(value);
 
-                onCurrencyUpdate?.Invoke(CurrencyWidget.CurrencyType.COINS);
+                onCurrencyUpdate?.Invoke(CurrencyType.COINS);
             }
         }
 
@@ -78,7 +88,7 @@ namespace Fourzy
             {
                 PlayerPrefsWrapper.SetGems(value);
 
-                onCurrencyUpdate?.Invoke(CurrencyWidget.CurrencyType.GEMS);
+                onCurrencyUpdate?.Invoke(CurrencyType.GEMS);
             }
         }
 
@@ -90,31 +100,7 @@ namespace Fourzy
             {
                 PlayerPrefsWrapper.SetXP(value);
 
-                onCurrencyUpdate?.Invoke(CurrencyWidget.CurrencyType.XP);
-            }
-        }
-
-        public int portals
-        {
-            get => PlayerPrefsWrapper.GetPortals();
-
-            set
-            {
-                PlayerPrefsWrapper.SetPortals(value);
-
-                onCurrencyUpdate?.Invoke(CurrencyWidget.CurrencyType.PORTALS);
-            }
-        }
-
-        public int rarePortals
-        {
-            get => PlayerPrefsWrapper.GetRarePortals();
-
-            set
-            {
-                PlayerPrefsWrapper.SetRarePortals(value);
-
-                onCurrencyUpdate?.Invoke(CurrencyWidget.CurrencyType.RARE_PORTALS);
+                onCurrencyUpdate?.Invoke(CurrencyType.XP);
             }
         }
 
@@ -126,7 +112,7 @@ namespace Fourzy
             {
                 PlayerPrefsWrapper.SetPortalPoints(value);
 
-                onCurrencyUpdate?.Invoke(CurrencyWidget.CurrencyType.PORTAL_POINTS);
+                onCurrencyUpdate?.Invoke(CurrencyType.PORTAL_POINTS);
             }
         }
 
@@ -138,7 +124,7 @@ namespace Fourzy
             {
                 PlayerPrefsWrapper.SetRarePortalPoints(value);
 
-                onCurrencyUpdate?.Invoke(CurrencyWidget.CurrencyType.RARE_PORTAL_POINTS);
+                onCurrencyUpdate?.Invoke(CurrencyType.RARE_PORTAL_POINTS);
             }
         }
 
@@ -265,12 +251,11 @@ namespace Fourzy
             {
                 string facebookId = response.ExternalIds.GetString("FB");
                 int? rateElo = response.ScriptData.GetInt("ratingElo");
-                Mixpanel.Identify(response.UserId);
-                Mixpanel.people.Set("$name", userName);
+                //Mixpanel.Identify(response.UserId);
+                //Mixpanel.people.Set("$name", userName);
 
                 //if server username not matching local username, update server username
-                if (response.DisplayName != userName)
-                    UpdatePlayerDisplayName(userName);
+                if (response.DisplayName != userName) UpdatePlayerDisplayName(userName);
 
                 UpdateUserInfo(response.UserId, facebookId, response.Currency1, rateElo);
             });
@@ -289,12 +274,12 @@ namespace Fourzy
                 {
                     if (response.HasErrors)
                     {
-                        if (debug)
+                        if (GameManager.Instance.debugMessages)
                             Debug.Log("Error updating player display name: " + response.Errors.ToString());
                     }
                     else
                     {
-                        if (debug)
+                        if (GameManager.Instance.debugMessages)
                             Debug.Log("Successfully updated player display name");
                     }
                 });
@@ -307,15 +292,14 @@ namespace Fourzy
                 {
                     if (response.HasErrors)
                     {
-                        if (debug)
+                        if (GameManager.Instance.debugMessages)
                             Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
                     }
                     else
                     {
-                        int? serverGamePiece = response.ScriptData.GetInt("gamePieceId");
+                        string serverGamePiece = response.ScriptData.GetInt("gamePieceId") + "";
 
-                        if (serverGamePiece != gamePieceID)
-                            UpdateSelectedGamePiece(gamePieceID);
+                        if (serverGamePiece != gamePieceID) UpdateSelectedGamePiece(gamePieceID);
                     }
                 });
         }
@@ -339,35 +323,11 @@ namespace Fourzy
             OnUpdateUserInfo?.Invoke();
         }
 
-        public void UpdateSelectedGamePiece(int _gamePieceID)
+        public void UpdateSelectedGamePiece(string _gamePieceID)
         {
             gamePieceID = _gamePieceID;
 
             OnUpdateUserGamePieceID?.Invoke(gamePieceID);
-
-            if (NetworkAccess.ACCESS)
-            {
-                Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                customAttributes.Add("GamePieceId", _gamePieceID);
-                AnalyticsManager.LogCustom("set_gamepiece");
-
-                new LogEventRequest().SetEventKey("setGamePiece")
-                    .SetEventAttribute("gamePieceId", _gamePieceID)
-                    .Send((response) =>
-                    {
-                        if (response.HasErrors)
-                        {
-                            if (debug)
-                                Debug.Log("***** Error setting gamepiece: " + response.Errors.JSON);
-
-                        }
-                        else
-                        {
-                            if (debug)
-                                Debug.Log("***** Game piece set " + response.Errors.JSON);
-                        }
-                    });
-            }
         }
 
         public string CreateNewPlayerName()
@@ -413,10 +373,8 @@ namespace Fourzy
 
                 if (uwr.isNetworkError || uwr.isHttpError)
                 {
-                    if (debug)
+                    if (GameManager.Instance.debugMessages)
                         Debug.Log("get_fb_picture_error: " + uwr.error);
-
-                    AnalyticsManager.LogError("get_fb_picture_error", uwr.error);
                 }
                 else
                 {

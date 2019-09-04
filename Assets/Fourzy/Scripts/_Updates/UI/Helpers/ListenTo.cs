@@ -1,10 +1,8 @@
 ﻿//@vadym udod
 
 using ByteSheep.Events;
-using Fourzy._Updates.Audio;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics;
-using Fourzy._Updates.Mechanics.GameplayScene;
 using StackableDecorator;
 using System;
 using System.Collections.Generic;
@@ -21,7 +19,7 @@ namespace Fourzy._Updates.UI.Helpers
 
         private bool listensToSfxState = false;
         private bool listensToAudioState = false;
-        private bool listensToMoveOriginState = false;
+        private bool listensToDemoModeState = false;
 
         protected void Awake()
         {
@@ -37,10 +35,6 @@ namespace Fourzy._Updates.UI.Helpers
                 //add to listeners
                 switch (target.type)
                 {
-                    case ListenValues.PLAYER_TIMER:
-                        GamePlayManager.OnTimerUpdate += UpdatePlayerTimer;
-                        break;
-
                     case ListenValues.NO_INTERNET_ACCESS:
                         NetworkAccess.onNetworkAccess += UpdateNoInternet;
                         break;
@@ -67,12 +61,12 @@ namespace Fourzy._Updates.UI.Helpers
                         }
                         break;
 
-                    case ListenValues.SETTINGS_MOVE_ORIGIN_OFF:
-                    case ListenValues.SETTINGS_MOVE_ORIGIN_ON:
-                        if (!listensToMoveOriginState)
+                    case ListenValues.SETTINGS_DEMO_MODE_OFF:
+                    case ListenValues.SETTINGS_DEMO_MODE_ON:
+                        if (!listensToDemoModeState)
                         {
-                            listensToMoveOriginState = true;
-                            SettingsManager.onMoveOrigin += OnMoveOrigin;
+                            listensToDemoModeState = true;
+                            SettingsManager.onDemoMode += OnDemoMode;
                         }
                         break;
                 }
@@ -89,17 +83,14 @@ namespace Fourzy._Updates.UI.Helpers
             foreach (ListenTarget target in targets.list)
                 switch (target.type)
                 {
-                    case ListenValues.PLAYER_TIMER:
-                        GamePlayManager.OnTimerUpdate -= UpdatePlayerTimer;
-                        break;
-                        break;
-
                     case ListenValues.NO_INTERNET_ACCESS:
                         NetworkAccess.onNetworkAccess -= UpdateNoInternet;
+
                         break;
 
                     case ListenValues.LOGGED_IN:
                         LoginManager.OnDeviceLoginComplete -= OnLogin;
+
                         break;
 
                     case ListenValues.SETTINGS_SFX_OFF:
@@ -109,6 +100,7 @@ namespace Fourzy._Updates.UI.Helpers
                             listensToSfxState = false;
                             SettingsManager.onSfx -= OnSfx;
                         }
+
                         break;
 
                     case ListenValues.SETTINGS_AUDIO_OFF:
@@ -116,8 +108,9 @@ namespace Fourzy._Updates.UI.Helpers
                         if (listensToAudioState)
                         {
                             listensToAudioState = false;
-                            SettingsManager.onMoveOrigin -= OnMoveOrigin;
+                            SettingsManager.onDemoMode -= OnDemoMode;
                         }
+
                         break;
                 }
         }
@@ -128,37 +121,29 @@ namespace Fourzy._Updates.UI.Helpers
                 if (force || target.updateOnStart)
                     switch (target.type)
                     {
-                        case ListenValues.PLAYER_TIMER:
-                            UpdatePlayerTimer(new TimeSpan(0, 0, 0, 0, Constants.playerMoveTimer_InitialTime).Ticks);
-                            break;
-
                         case ListenValues.NO_INTERNET_ACCESS:
                             UpdateNoInternet(NetworkAccess.ACCESS);
+
                             break;
 
                         case ListenValues.SETTINGS_SFX_OFF:
                         case ListenValues.SETTINGS_SFX_ON:
                             OnSfx(SettingsManager.Instance.Get(SettingsManager.KEY_SFX));
+
                             break;
 
                         case ListenValues.SETTINGS_AUDIO_OFF:
                         case ListenValues.SETTINGS_AUDIO_ON:
                             OnAudio(SettingsManager.Instance.Get(SettingsManager.KEY_AUDIO));
+
                             break;
 
-                        case ListenValues.SETTINGS_MOVE_ORIGIN_OFF:
-                        case ListenValues.SETTINGS_MOVE_ORIGIN_ON:
-                            OnMoveOrigin(SettingsManager.Instance.Get(SettingsManager.KEY_MOVE_ORIGIN));
+                        case ListenValues.SETTINGS_DEMO_MODE_ON:
+                        case ListenValues.SETTINGS_DEMO_MODE_OFF:
+                            OnDemoMode(SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE));
+
                             break;
                     }
-        }
-
-        public void UpdatePlayerTimer(long ticks)
-        {
-            DateTime time = new DateTime(ticks);
-
-            foreach (ListenTarget target in sorted[ListenValues.PLAYER_TIMER])
-                target.events.Invoke(string.Format(target.targetText, time.Minute, time.Second));
         }
 
         public void UpdateNoInternet(bool state)
@@ -195,13 +180,13 @@ namespace Fourzy._Updates.UI.Helpers
                     target.events.Invoke(string.Format(target.targetText, state));
         }
 
-        public void OnMoveOrigin(bool state)
+        public void OnDemoMode(bool state)
         {
             if (state)
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_MOVE_ORIGIN_ON])
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_DEMO_MODE_ON])
                     target.events.Invoke(string.Format(target.targetText, state));
             else
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_MOVE_ORIGIN_OFF])
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_DEMO_MODE_OFF])
                     target.events.Invoke(string.Format(target.targetText, state));
         }
     }
@@ -243,7 +228,6 @@ namespace Fourzy._Updates.UI.Helpers
     public enum ListenValues
     {
         CHELLENGE_ID = 0,
-        PLAYER_TIMER = 1,
         NO_INTERNET_ACCESS = 4,
         LOGGED_IN = 8,
 
@@ -251,9 +235,9 @@ namespace Fourzy._Updates.UI.Helpers
         SETTINGS_SFX_OFF = 128,
         SETTINGS_AUDIO_ON = 256,
         SETTINGS_AUDIO_OFF = 512,
-        SETTINGS_MOVE_ORIGIN_ON = 1024,
-        SETTINGS_MOVE_ORIGIN_OFF = 2048,
+        SETTINGS_DEMO_MODE_ON = 1024,
+        SETTINGS_DEMO_MODE_OFF = 2048,
 
-        USES_TEXT = CHELLENGE_ID | PLAYER_TIMER,
+        USES_TEXT = CHELLENGE_ID,
     }
 }

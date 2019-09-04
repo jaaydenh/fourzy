@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace FourzyGameModel.Model
@@ -70,6 +71,9 @@ namespace FourzyGameModel.Model
         {
             if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;
 
+            //Need at least 4 pieces on the board to win.
+            if (EvalState.Board.FindPieces(PlayerId).Count < 3) return null;
+
             foreach (SimpleMove m in GetAvailableSimpleMoves(PlayerId))
             {
                 if (EvaluateTurn(new PlayerTurn(m),true).WinnerId == PlayerId) return m;
@@ -109,6 +113,11 @@ namespace FourzyGameModel.Model
             this.EvalState.Random.Reset();
         }
 
+        public GameState EvaluateTurn(SimpleMove Move, bool IgnoreActivePlayer = false, bool TriggerStartOfTurn = true, bool TriggerEndOfTurn = true)
+        {
+            return EvaluateTurn(new PlayerTurn(Move), IgnoreActivePlayer, TriggerStartOfTurn, TriggerEndOfTurn);
+        }
+        
         public GameState EvaluateTurn(PlayerTurn Turn, bool IgnoreActivePlayer = false, bool TriggerStartOfTurn = true, bool TriggerEndOfTurn = true)
         {
             this.ResultActions = new List<GameAction>();
@@ -624,7 +633,8 @@ namespace FourzyGameModel.Model
             int count = 0;
             foreach(int p in EvalState.Players.Keys)
             {
-                if (DidPlayerWin(p)) count++;
+                //if (DidPlayerWinAndFindWinningLocations(p)) { count++; };
+                if (DidPlayerWinRevised(p)) { DidPlayerWinAndFindWinningLocations(p);  count++; };
             }
 
             //draw because both sides have a winning condition.
@@ -673,8 +683,117 @@ namespace FourzyGameModel.Model
             return WinSpots;
         }
 
-        public bool DidPlayerWin(int PlayerId)
+        public bool PossibleToWin(int PlayerId)
         {
+            if (EvalState.Board.FindPieces(PlayerId).Count < 4) return false;
+
+            int[] columns_count = new int[EvalState.Board.Columns];
+            int[] row_count = new int[EvalState.Board.Rows];
+            int[] d1_count = new int[EvalState.Board.Rows + EvalState.Board.Columns];
+            int[] d2_count = new int[EvalState.Board.Rows + EvalState.Board.Columns];
+
+            for (int i = 0; i < EvalState.Board.Columns; i++) columns_count[i] = 0;
+            for (int i = 0; i < EvalState.Board.Rows; i++) columns_count[i] = 0;
+            for (int i = 0; i < EvalState.Board.Rows  + EvalState.Board.Columns; i++) d1_count[i] = 0;
+            for (int i = 0; i < EvalState.Board.Rows  + EvalState.Board.Columns; i++) d2_count[i] = 0;
+         
+            foreach (BoardLocation l in EvalState.Board.Pieces.Keys)
+            {
+                if (EvalState.Board.Pieces[l].PlayerId != PlayerId) continue;
+                columns_count[l.Column]++;
+                row_count[l.Row]++;
+                if (l.Row <= EvalState.Board.Rows-4 && l.Column <= EvalState.Board.Columns-4) d1_count[EvalState.Board.Rows + l.Row - l.Column]++;
+                if (l.Row >= EvalState.Board.Rows - 4 && l.Column >= EvalState.Board.Columns - 4) d2_count[l.Row + l.Column]++;
+            }
+
+            foreach (int c in columns_count) if (c > 0) return true;
+            foreach (int r in row_count) if (r > 0) return true;
+            foreach (int d in d1_count) if (d > 0) return true;
+            foreach (int d in d2_count) if (d > 0) return true;
+
+            return false;
+        }
+
+        public bool DidPlayerWinRevised(int PlayerId)
+        {
+            if (EvalState.Board.FindPieces(PlayerId).Count < 4) return false;
+
+            BitArray[] columns = new BitArray[EvalState.Board.Columns];
+            BitArray[] rows = new BitArray[EvalState.Board.Rows];
+            BitArray[] diag1 = new BitArray[EvalState.Board.Rows + EvalState.Board.Columns];
+            BitArray[] diag2 = new BitArray[EvalState.Board.Rows + EvalState.Board.Columns];
+
+            for (int i = 0; i < EvalState.Board.Columns; i++) columns[i] = new BitArray(EvalState.Board.Rows);
+            for (int i = 0; i < EvalState.Board.Rows; i++) rows[i] = new BitArray(EvalState.Board.Columns); 
+            for (int i = 0; i < EvalState.Board.Rows + EvalState.Board.Columns; i++) diag1[i] = new BitArray(Math.Max(EvalState.Board.Rows, EvalState.Board.Columns));
+            for (int i = 0; i < EvalState.Board.Rows + EvalState.Board.Columns; i++) diag2[i] = new BitArray(Math.Max(EvalState.Board.Rows, EvalState.Board.Columns));
+            
+            foreach (BoardLocation l in EvalState.Board.Pieces.Keys)
+            {
+                if (EvalState.Board.Pieces[l].PlayerId != PlayerId) continue;
+                columns[l.Column][l.Row] = true;
+                rows[l.Row][l.Column] = true;
+                //This is broken. Review these if statements.
+                //if (l.Row <= EvalState.Board.Rows - 4 && l.Column <= EvalState.Board.Columns - 4) diag1[EvalState.Board.Rows + l.Row - l.Column][l.Row]=true;
+                //if (l.Row >= EvalState.Board.Rows - 5 && l.Column >= EvalState.Board.Columns - 5) diag2[l.Row + l.Column][l.Row]=true;
+                diag1[EvalState.Board.Rows + l.Row - l.Column][l.Row] = true;
+                diag2[l.Row + l.Column][l.Row] = true;
+
+            }
+
+            //foreach (int c in columns_count) if (c > 0) return true;
+            foreach (BitArray c in columns)
+            {
+                if (c.Count < 4) continue;
+                int count = 0;
+                foreach (bool b in c)
+                {
+                    if (b) count++; else { count = 0; }
+                    if (count == 4) return true;
+                }
+            }
+            //foreach (int r in row_count) if (r > 0) return true;
+            foreach (BitArray r in rows)
+            {
+                if (r.Count < 4) continue;
+                int count = 0;
+                foreach (bool b in r)
+                {
+                    if (b) count++; else { count = 0; }
+                    if (count == 4) return true;
+                }
+            }
+
+            //foreach (int d in d1_count) if (d > 0) return true;
+            foreach (BitArray d in diag1)
+            {
+                if (d.Count < 4) continue;
+                int count = 0;
+                foreach (bool b in d)
+                {
+                    if (b) count++; else { count = 0; }
+                    if (count == 4) return true;
+                }
+            }
+            //foreach (int d in d2_count) if (d > 0) return true;
+            foreach (BitArray d in diag2)
+            {
+                if (d.Count < 4) continue;
+                int count = 0;
+                foreach (bool b in d)
+                {
+                    if (b) count++; else { count = 0; }
+                    if (count == 4) return true;
+                }
+            }
+            return false;
+        }
+
+        public bool DidPlayerWinAndFindWinningLocations(int PlayerId)
+        {
+            if (EvalState.Board.FindPieces(PlayerId).Count < 4) return false;
+            //if (!PossibleToWin(PlayerId)) return false;
+
             for (var row = 0; row < EvalState.Board.Rows; row++)
             {
                 for (var col = 0; col < EvalState.Board.Columns; col++)

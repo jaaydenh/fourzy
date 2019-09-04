@@ -33,24 +33,45 @@ namespace FourzyGameModel.Model
             State.Board.AddToken(new FruitTreeToken(), GrowLocation);
             State.Board.RecordGameAction(new GameActionBossPower(this));
 
+            BossAIHelper.GetBoss(State).UseSpecialAbility();
             return true;
         }
 
-        public bool IsAvailable(GameState State)
+        public bool IsAvailable(GameState State, bool IsDesparate =false)
         {
-            return true;
+            if (BossAIHelper.GetBoss(State).SpecialAbilityCount > 0 && IsDesparate) return true;
+            return false;
+
         }
 
-        public List<IMove> GetPossibleActivations(GameState State)
+        public List<IMove> GetPossibleActivations(GameState State, bool IsDesparate = false)
         {
             List<IMove> Powers = new List<IMove>();
-            foreach (BoardSpace s in State.Board.Contents)
-            {
-                if (s.ContainsPiece) continue;
-                if (!s.TokensAllowEndHere) continue;
 
-                Powers.Add(new PlantTreePower(s.Location));
+            //Instead of adding a tree anywhere, limit to the same row and column as an existing tree
+
+            foreach (FruitTreeToken Tree in State.Board.FindTokens(TokenType.FRUIT_TREE))
+            {
+                foreach (Direction d in TokenConstants.GetDirections())
+                {
+                    foreach (BoardLocation l in Tree.Space.Location.Look(State.Board,d))
+                    {
+                        if (State.Board.ContentsAt(l).ContainsTokenType(TokenType.FRUIT)) continue;
+                        if (State.Board.ContentsAt(l).ContainsPiece) continue;
+                        if (!State.Board.ContentsAt(l).TokensAllowEndHere) continue;
+
+                        Powers.Add(new PlantTreePower(l));
+                    }
+                }
             }
+            
+            //foreach (BoardSpace s in State.Board.Contents)
+            //{
+            //    if (s.ContainsPiece) continue;
+            //    if (!s.TokensAllowEndHere) continue;
+
+            //    Powers.Add(new PlantTreePower(s.Location));
+            //}
 
             return Powers;
         }

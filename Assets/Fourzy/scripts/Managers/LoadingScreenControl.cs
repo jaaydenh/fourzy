@@ -1,8 +1,11 @@
 ﻿//modded
 
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
+using Sirenix.Utilities;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,9 +15,10 @@ namespace Fourzy
 {
     public class LoadingScreenControl : MonoBehaviour
     {
-        public const float WAIT_DURATION = 1f;
+        public const float WAIT_DURATION = 1.7f;
 
         public Slider slider;
+        public GameObject bg;
 
         protected void Awake()
         {
@@ -24,6 +28,9 @@ namespace Fourzy
         protected void Start()
         {
             StartCoroutine(LoadingRoutine());
+
+            bg.GetComponents<OnRatio>().ForEach(o => o.CheckOrientation());
+            bg.GetComponent<GameplayBG>().Configure();
         }
 
         protected void OnDestroy()
@@ -43,7 +50,7 @@ namespace Fourzy
             OnboardingScreen onboardingScreen = PersistantMenuController.instance.GetScreen<OnboardingScreen>();
 
             AsyncOperation async = null;
-            bool displayTutorial = onboardingScreen.WillDisplayTutorial(0);
+            bool displayTutorial = onboardingScreen.WillDisplayTutorial(GameContentManager.Instance.GetTutorial("Onboarding"));
 
             if (!displayTutorial)
             {
@@ -72,8 +79,7 @@ namespace Fourzy
                 }
             }
 
-            if (displayTutorial)
-                onboardingScreen.OpenOnboarding(0);
+            if (displayTutorial) onboardingScreen.OpenOnboarding(GameContentManager.Instance.GetTutorial("Onboarding"));
         }
     }
 }

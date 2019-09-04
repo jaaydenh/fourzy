@@ -45,23 +45,15 @@ namespace Fourzy._Updates.Tween
             SetColor(_value);
         }
 
-        public void SetColor(Color color)
+        public void SetColor(Color color) => spriteColorGroups.ForEach(colorGroup => colorGroup.SetColor(color, changeAlpha));
+
+        public void SetTo(Color color)
         {
-            foreach (GraphicsColorGroup group in spriteColorGroups)
-            {
-                if (group.uiGraphics)
-                    group.uiGraphics.color = changeAlpha ? color : new Color(color.r, color.g, color.b, group.uiGraphics.color.a);
-                else if (group.spriteRenderer)
-                    group.spriteRenderer.color = changeAlpha ? color : new Color(color.r, color.g, color.b, group.spriteRenderer.color.a);
-                else if (group.lineRenderer)
-                    group.lineRenderer.startColor = changeAlpha ? color : new Color(color.r, color.g, color.b, group.lineRenderer.startColor.a);
-            }
+            from = _value;
+            to = color;
         }
 
-        public override void OnReset()
-        {
-            SetColor(from);
-        }
+        public override void OnReset() => SetColor(from);
 
         public void DoParse()
         {

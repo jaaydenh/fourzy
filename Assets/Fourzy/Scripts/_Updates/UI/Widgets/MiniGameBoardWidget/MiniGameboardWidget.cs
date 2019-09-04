@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using StackableDecorator;
 using TMPro;
+using Fourzy._Updates.Tween;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -18,29 +19,60 @@ namespace Fourzy._Updates.UI.Widgets
         [List]
         public AreaGraphicsDataCollection sprites;
         public Image gameboardGraphics;
+        public AlphaTween selectionGraphics;
         public TMP_Text nameLabel;
         public GameObject questionMark;
+        public AlphaTween boardAlphaTween;
+        public AlphaTween spinner;
+        public RotationTween spinnerRotationTween;
 
         public ClientFourzyGame game;
 
         private GameboardSelectionScreen _screen;
 
         public GameboardView gameboardView { get; private set; }
-        public Toggle toggle { get; private set; }
 
-        private GameBoardDefinition data;
+        [HideInInspector, NonSerialized]
+        public GameBoardDefinition data;
 
         protected override void Awake()
         {
             base.Awake();
 
-            gameboardView = GetComponentInChildren<GameboardView>();
-            toggle = GetComponent<Toggle>();
+            gameboardView = GetComponentInChildren<GameboardView>(); 
 
             _screen = menuScreen as GameboardSelectionScreen;
         }
 
-        public void SetData(GameBoardDefinition data)
+        public void ShowSpinner()
+        {
+            spinner.SetAlpha(1f);
+            spinnerRotationTween.PlayForward(true);
+        }
+
+        public void HideSpinner()
+        {
+            spinner.PlayBackward(true);
+            spinnerRotationTween.StopTween(false);
+        }
+
+        public void HideBoard()
+        {
+            boardAlphaTween.SetAlpha(0f);
+        }
+
+        public void Select() => selectionGraphics.PlayForward(true);
+
+        public void Deselect() => selectionGraphics.PlayBackward(true);
+
+        public void FinishedLoading()
+        {
+            boardAlphaTween.PlayForward(true);
+
+            HideSpinner();
+        }
+
+        public GameboardView SetData(GameBoardDefinition data)
         {
             this.data = data;
 
@@ -50,15 +82,14 @@ namespace Fourzy._Updates.UI.Widgets
             game._Type = GameType.PASSANDPLAY;
             gameboardGraphics.sprite = sprites.GetGraphics(game._Area);
 
-            gameboardView.Initialize(game);
+            gameboardView.Initialize(game, false, false);
 
             questionMark.SetActive(false);
+
+            return gameboardView;
         }
 
-        public void BoardSelect()
-        {
-            _screen.SetGame(data);
-        }
+        public void BoardSelect() => _screen.SetGame(this);
 
         [Serializable]
         public class AreaGraphicsDataCollection

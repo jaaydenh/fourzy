@@ -14,6 +14,9 @@ namespace Fourzy._Updates.Serialized
         private SerializedProperty batchesProperty;
         private SerializedProperty showPlayer2Property;
         private SerializedProperty onFinishedProperty;
+        private SerializedProperty gameTypeProperty;
+        private SerializedProperty stringProperty;
+        private SerializedProperty openScreenProperty;
         private SerializedProperty nameProperty;
 
         private SerializedProperty tasksProperty;
@@ -29,12 +32,14 @@ namespace Fourzy._Updates.Serialized
         {
             trigger = target as OnboardingDataHolder;
 
-            if (trigger.batches == null)
-                trigger.batches = new OnboardingDataHolder.OnboardingTasksBatch[0];
+            if (trigger.batches == null) trigger.batches = new OnboardingDataHolder.OnboardingTasksBatch[0];
 
             batchesProperty = serializedObject.FindProperty("batches");
             showPlayer2Property = serializedObject.FindProperty("showPlayer2");
             onFinishedProperty = serializedObject.FindProperty("onFinished");
+            gameTypeProperty = serializedObject.FindProperty("gameType");
+            stringProperty = serializedObject.FindProperty("stringValue");
+            openScreenProperty = serializedObject.FindProperty("openScreen");
             nameProperty = serializedObject.FindProperty("tutorialName");
         }
 
@@ -44,6 +49,34 @@ namespace Fourzy._Updates.Serialized
 
             EditorGUILayout.PropertyField(showPlayer2Property);
             EditorGUILayout.PropertyField(nameProperty);
+            EditorGUILayout.PropertyField(onFinishedProperty);
+
+            switch (trigger.onFinished)
+            {
+                case OnboardingDataHolder.OnFinished.LOAD_GAME_SCENE:
+                    EditorGUILayout.PropertyField(gameTypeProperty);
+
+                    switch (trigger.gameType)
+                    {
+
+                        case GameType.PUZZLE:
+                            EditorGUILayout.PropertyField(stringProperty, new GUIContent("Pack ID"));
+
+                            break;
+
+                        case GameType.PASSANDPLAY:
+                            EditorGUILayout.PropertyField(stringProperty, new GUIContent("Board ID"));
+
+                            break;
+                    }
+
+                    break;
+
+                case OnboardingDataHolder.OnFinished.LOAD_MAIN_MENU:
+                    EditorGUILayout.PropertyField(openScreenProperty);
+
+                    break;
+            }
 
             for (int batchIndex = 0; batchIndex < batchesProperty.arraySize; batchIndex++)
             {
@@ -63,6 +96,20 @@ namespace Fourzy._Updates.Serialized
                             tasksProperty.DeleteArrayElementAtIndex(taskIndex);
                             continue;
                         }
+
+                        if (taskIndex > 0)
+                            if (GUILayout.Button("▲", GUILayout.Width(30f)))
+                            {
+                                tasksProperty.MoveArrayElement(taskIndex, taskIndex - 1);
+                                continue;
+                            }
+
+                        if (taskIndex < tasksProperty.arraySize - 1)
+                            if (GUILayout.Button("▼", GUILayout.Width(30f)))
+                            {
+                                tasksProperty.MoveArrayElement(taskIndex, taskIndex + 1);
+                                continue;
+                            }
                     }
                     EditorGUILayout.EndHorizontal();
 
@@ -94,6 +141,7 @@ namespace Fourzy._Updates.Serialized
 
                             case OnboardingDataHolder.OnboardingActions.HIGHLIGHT:
                             case OnboardingDataHolder.OnboardingActions.LIMIT_BOARD_INPUT:
+                            case OnboardingDataHolder.OnboardingActions.SHOW_MASKED_AREA:
                                 highlightProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("areas");
 
                                 for (int highlighAreaIndex = 0; highlighAreaIndex < highlightProperty.arraySize; highlighAreaIndex++)
@@ -129,6 +177,12 @@ namespace Fourzy._Updates.Serialized
 
                                 EditorGUILayout.PropertyField(directionProperty);
                                 EditorGUILayout.PropertyField(intProperty, new GUIContent("At"));
+                                break;
+
+                            case OnboardingDataHolder.OnboardingActions.LOG_TUTORIAL:
+                                messageProperty = tasksProperty.GetArrayElementAtIndex(taskIndex).FindPropertyRelative("message");
+                                EditorGUILayout.PropertyField(messageProperty, new GUIContent("Stage"));
+
                                 break;
                         }
                     }

@@ -47,7 +47,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         //deduct coins
 
                         //unlock
-                        PlayerPrefsWrapper.SetPuzzlePackUnlocked(puzzlePack.name);
+                        PlayerPrefsWrapper.SetPuzzlePackUnlocked(puzzlePack.packID, true);
                         menuController.CloseCurrentScreen();
                     }
                     else
@@ -63,7 +63,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         //deduct gems
 
                         //unlock
-                        PlayerPrefsWrapper.SetPuzzlePackUnlocked(puzzlePack.name);
+                        PlayerPrefsWrapper.SetPuzzlePackUnlocked(puzzlePack.packID, true);
                         menuController.CloseCurrentScreen();
                     }
                     else

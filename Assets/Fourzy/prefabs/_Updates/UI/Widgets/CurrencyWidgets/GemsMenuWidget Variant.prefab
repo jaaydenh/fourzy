@@ -84,7 +84,7 @@ PrefabInstance:
     - target: {fileID: 224480733714333564, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 224480733714333564, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
@@ -141,29 +141,19 @@ PrefabInstance:
       propertyPath: m_textInfo.textComponent
       value: 
       objectReference: {fileID: 4861620768974950650}
-    - target: {fileID: 114555555209972530, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: targets.list.Array.data[0].events.persistentCalls.calls.Array.data[0].target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114555555209972530, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: targets.list.Array.data[0].type
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 114555555209972530, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: targets.list.Array.data[0]._name
-      value: GEMS
-      objectReference: {fileID: 0}
     - target: {fileID: 3502583273549955641, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
       propertyPath: m_TargetGraphic
       value: 
       objectReference: {fileID: 1175644132068659490}
-    - target: {fileID: 4529880192779671134, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+    - target: {fileID: 2618477404747887170, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
-      propertyPath: textField
+      propertyPath: type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618477404747887170, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: valueLabel
       value: 
       objectReference: {fileID: 4861620768974950650}
     - target: {fileID: 114388624232748730, guid: 911f3ecd384c3c84987386e5fbc4bd19,
@@ -187,14 +177,24 @@ PrefabInstance:
       propertyPath: m_textInfo.textComponent
       value: 
       objectReference: {fileID: 1393545125217094511}
-    - target: {fileID: 2618477404747887170, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+    - target: {fileID: 114555555209972530, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
-      propertyPath: type
-      value: 4
+      propertyPath: targets.list.Array.data[0].events.persistentCalls.calls.Array.data[0].target
+      value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 2618477404747887170, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+    - target: {fileID: 114555555209972530, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
-      propertyPath: valueLabel
+      propertyPath: targets.list.Array.data[0].type
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 114555555209972530, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: targets.list.Array.data[0]._name
+      value: GEMS
+      objectReference: {fileID: 0}
+    - target: {fileID: 4529880192779671134, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: textField
       value: 
       objectReference: {fileID: 4861620768974950650}
     m_RemovedComponents: []

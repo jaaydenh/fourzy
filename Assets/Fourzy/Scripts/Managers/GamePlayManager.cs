@@ -2,7 +2,9 @@
 
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.Board;
+using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tools.Timing;
@@ -10,11 +12,13 @@ using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using GameSparks.Api.Responses;
-using mixpanel;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using static Fourzy._Updates.Serialized.ThemesDataHolder;
 
@@ -24,29 +28,29 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
     {
         public static GamePlayManager instance;
 
-        public static Action<int> onMoveStarted;
-        public static Action<int> onMoveEnded;
+        public static Action<ClientPlayerTurn> onMoveStarted;
+        public static Action<ClientPlayerTurn> onMoveEnded;
         public static Action<IClientFourzy> onGameFinished;
 
         public static Action<string> OnGamePlayMessage;
         public static Action<long> OnTimerUpdate;
 
-        public MenuController menuController;
+        public FourzyGameMenuController menuController;
         public WinningParticleGenerator winningParticleGenerator;
         public Transform bgParent;
-        public AdvancedTimingEventsSet notYourTurnLabel;
         public GameObject noNetworkOverlay;
-        
+        public RectTransform hintBlocksParent;
+
         private AudioHolder.BGAudio gameplayBGAudio;
 
         //id of rematch challenge
         private string awaitingChallengeID = "";
+        private long epochDelta;
 
         public BackgroundConfigurationData currentConfiguration { get; private set; }
         public GameboardView board { get; private set; }
         public GameplayBG bg { get; private set; }
         public GameplayScreen gameplayScreen { get; private set; }
-        public GameInfoScreen gameInfoScreen { get; private set; }
         public RandomPlayerPickScreen playerPickScreen { get; private set; }
         public LoadingPromptScreen loadingPrompt { get; private set; }
 
@@ -55,6 +59,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public bool isBoardReady { get; private set; }
         public bool replayingLastTurn { get; private set; }
         public bool gameStarted { get; private set; }
+        public bool isGamePaused { get; private set; }
+
+        /// <summary>
+        /// Used to check if postGame should log the game or not
+        /// </summary>
+        private bool logGameFinished;
 
         protected override void Awake()
         {
@@ -66,7 +76,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         protected void Start()
         {
-            gameInfoScreen = menuController.GetScreen<GameInfoScreen>();
             gameplayScreen = menuController.GetScreen<GameplayScreen>();
             playerPickScreen = menuController.GetScreen<RandomPlayerPickScreen>();
 
@@ -75,120 +84,95 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
             ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
 
-            LoadGame(GameManager.Instance.activeGame);
+            //listen to roomPropertyChanged event
+            FourzyPhotonManager.onRoomCustomPropertiesChanged += OnRoomCustomPropertiesChanged;
+            FourzyPhotonManager.onPlayerDisconnected += OnPlayerDisconnected;
+            PhotonNetwork.OnEventCall += OnEventCall;
+
+            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE))
+                PointerInputModuleExtended.noInput += OnNoInput;
+
+            //auto load game if its not realtime mdoe
+            if (GameManager.Instance.isRealtime)
+            {
+                //notify that this client is ready
+                FourzyPhotonManager.SetClientReady();
+                gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer();
+
+                OnRoomCustomPropertiesChanged(PhotonNetwork.room.CustomProperties);
+            }
+            else LoadGame(GameManager.Instance.activeGame);
         }
 
         protected void OnDestroy()
         {
-            board.onGameFinished -= OnGameFinished;
-            board.onDraw -= OnDraw;
-            board.onMoveStarted -= OnMoveStarted;
-            board.onMoveEnded -= OnMoveEnded;
+            if (board)
+            {
+                board.onGameFinished -= OnGameFinished;
+                board.onDraw -= OnDraw;
+                board.onMoveStarted -= OnMoveStarted;
+                board.onMoveEnded -= OnMoveEnded;
+            }
 
             NetworkAccess.onNetworkAccess -= OnNetwork;
             LoginManager.OnDeviceLoginComplete -= OnLogin;
             ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
             ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
 
-            if (GameManager.InstanceExists)
-                GameManager.Instance.activeGame = null;
+            FourzyPhotonManager.onRoomCustomPropertiesChanged -= OnRoomCustomPropertiesChanged;
+            FourzyPhotonManager.onPlayerDisconnected -= OnPlayerDisconnected;
+            PhotonNetwork.OnEventCall -= OnEventCall;
+
+            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE))
+                PointerInputModuleExtended.noInput -= OnNoInput;
+        }
+
+        protected void SetGameIfNull(IClientFourzy _game)
+        {
+            //if active game is empty, load random pass&play board
+            if (_game == null)
+            {
+                //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.passAndPlayDataHolder.random, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoardByName("DrawBoardTester"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoard("23"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                newGame._Type = GameType.PASSANDPLAY;
+
+                GameManager.Instance.activeGame = newGame;
+            }
+            else
+            if (_game != GameManager.Instance.activeGame)
+                GameManager.Instance.activeGame = _game;
+
+            game = GameManager.Instance.activeGame;
         }
 
         public void LoadGame(IClientFourzy _game)
         {
             CancelRoutine("gameInit");
-            CancelRoutine("turnBaseTurn");
+            CancelRoutine("takeTurn");
+            CancelRoutine("realtimeCoutdownRoutine");
+            CancelRoutine("postGameRoutine");
 
             awaitingChallengeID = "";
             gameStarted = false;
+            isGamePaused = false;
 
-            //if active game is empty, load random pass&play board
-            if (_game == null)
-            {
-                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.passAndPlayDataHolder.random, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
-                newGame._Type = GameType.PASSANDPLAY;
+            SetGameIfNull(_game);
 
-                GameManager.Instance.activeGame = newGame;
-            }
-            else if (_game != GameManager.Instance.activeGame)
-                GameManager.Instance.activeGame = _game;
+            GamepadCheck();
+            LogGameCheck();
+            PlayBGAudio();
+            GameOpenedCheck();
 
-            game = GameManager.Instance.activeGame;
+            //close other screens
+            menuController.BackToRoot();
 
-            //manage bg audio
-            switch (game._Type)
-            {
-                case GameType.REALTIME:
-                    gameplayBGAudio = AudioHolder.instance.PlayBGAudio(AudioTypes.BG_GARDEN_REALTIME, true, .9f, 3f);
-                    break;
-
-                default:
-                    AudioTypes gameBGAudio = GameContentManager.Instance.themesDataHolder.GetTheme(game._Area).bgAudio;
-
-                    if (gameplayBGAudio != null)
-                    {
-                        if (gameplayBGAudio.type != gameBGAudio)
-                        {
-                            AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
-                            gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, .9f, 3f);
-                        }
-                    }
-                    else
-                        gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, .9f, 3f);
-                    break;
-            }
-
-            switch (game._Type)
-            {
-                case GameType.TURN_BASED:
-                    //if game was over and havent viewed yet, set it to viewed
-                    if (game.asFourzyGame.challengeData.lastTurnGame.isOver && !PlayerPrefsWrapper.GetGameViewed(game.GameID))
-                    {
-                        PlayerPrefsWrapper.SetGameViewed(game.GameID);
-
-                        ChallengeManager.OnChallengeUpdateLocal.Invoke(game.asFourzyGame.challengeData);
-                    }
-                    break;
-
-                case GameType.PUZZLE:
-                    //set this puzzlepack as opened
-                    PlayerPrefsWrapper.SetPuzzlePackOpened(game.asFourzyPuzzle.puzzlePack.packID);
-
-                    break;
-            }
-
-            //close loading prompt if opened
-            if (loadingPrompt && loadingPrompt.isOpened) menuController.CloseCurrentScreen();
-
-            //close info screen if opened
-            if (gameInfoScreen.isOpened) gameInfoScreen.Close();
             winningParticleGenerator.HideParticles();
-
-            //unload old bg
-            if (bg) Destroy(bg.gameObject);
 
             playerPickScreen.SetData(game);
 
-            currentConfiguration = GameContentManager.Instance.themesDataHolder.GetThemeBGConfiguration(game._Area, Camera.main);
-            bg = Instantiate(currentConfiguration.backgroundPrefab, bgParent);
-            bg.transform.localPosition = Vector3.zero;
-
-            if (board) Destroy(board.gameObject);
-
-            board = Instantiate(currentConfiguration.gameboardPrefab, transform);
-            board.Initialize(game);
-            board.transform.localPosition = currentConfiguration.gameboardPrefab.transform.position;
-            board.interactable = false;
-
-            board.onGameFinished += OnGameFinished;
-            board.onDraw += OnDraw;
-            board.onMoveStarted += OnMoveStarted;
-            board.onMoveEnded += OnMoveEnded;
-            board.onWrongTurn += () => notYourTurnLabel.StartTimer();
-
-            //hide tokens/gamepieces
-            board.FadeTokens(0f, 0f);
-            board.FadeGamepieces(0f, 0f);
+            LoadBG(game._Area);
+            LoadBoard();
 
             gameplayScreen.InitUI(this);
             OnNetwork(NetworkAccess.ACCESS);
@@ -196,11 +180,39 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             StartRoutine("gameInit", GameInitRoutine());
         }
 
+        public void CreateRealtimeGame()
+        {
+            //only continue if master
+            if (PhotonNetwork.isMasterClient)
+            {
+                //ready me
+                Player me = new Player(1, UserManager.Instance.userName);
+                me.PlayerString = "1";
+                me.HerdId = UserManager.Instance.gamePieceID + "";
+                //ready opponent
+                Player opponen = new Player(2, PhotonNetwork.otherPlayers[0].NickName);
+                opponen.HerdId = PhotonNetwork.otherPlayers[0].CustomProperties.ContainsKey("gp") ? PhotonNetwork.otherPlayers[0].CustomProperties["gp"].ToString() : "1";
+                opponen.PlayerString = "2";
+
+                //load realtime game
+                ClientFourzyGame _game = new ClientFourzyGame(GameContentManager.Instance.currentTheme.themeID, me, opponen, 1)
+                    { _Type = GameType.REALTIME, _Area = GameContentManager.Instance.currentTheme.themeID };
+
+                GameStateDataEpoch gameStateData = _game.toGameStateData;
+                //add realtime data
+                gameStateData.realtimeData = new RealtimeData() { createdEpoch = Utils.EpochMilliseconds(), };
+
+                //send this game data to other player
+                PhotonNetwork.RaiseEvent(Constants.GAME_DATA, JsonConvert.SerializeObject(gameStateData), true, new RaiseEventOptions() { Receivers = ReceiverGroup.Others, });
+
+                LoadGame(_game);
+            }
+        }
+
         public void OnPointerDown(Vector2 position)
         {
             //only continue if current opened screen is GameplayScreen
-            if (gameplayScreen != menuController.currentScreen)
-                return;
+            if (gameplayScreen != menuController.currentScreen || isGamePaused) return;
 
             board.OnPointerDown(position);
         }
@@ -208,9 +220,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public void OnPointerMove(Vector2 position)
         {
             //release controls if current screen isnt GameplayScreen
-            if (gameplayScreen != menuController.currentScreen)
+            if (gameplayScreen != menuController.currentScreen || isGamePaused)
             {
                 OnPointerRelease(position);
+
                 return;
             }
 
@@ -219,16 +232,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void OnPointerRelease(Vector2 position)
         {
-            board.OnPointerRelease(position);
-        }
+            if (isGamePaused) return;
 
-        /// <summary>
-        /// Triggered after board/tokens fade id + optional delays
-        /// </summary>
-        public void OnGameStarted()
-        {
-            board.interactable = true;
-            game.SetInitialTime(Time.time);
+            board.OnPointerRelease(position);
         }
 
         public void UpdatePlayerTurn()
@@ -240,33 +246,36 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 gameStarted = true;
                 OnGameStarted();
             }
-
-            //extra
+            
             switch (game._Type)
             {
                 case GameType.AI:
-                    //AI turn
                     if (!game.isOver && !game.isMyTurn) board.TakeAITurn();
 
                     break;
 
                 case GameType.PUZZLE:
-                    if (!game.isOver)
-                    {
-                        //AI turn
-                        if (!game.isMyTurn) board.TakeAITurn();
-                    }
-                    else
-                    {
-                        //player lost
-                        if (game._State.WinningLocations == null)
-                            OnGameFinished(game);
-                    }
+                    if (!game.isOver && !game.isMyTurn) board.TakeAITurn();
+
+                    break;
+
+                case GameType.PRESENTATION:
+                    if (!game.isOver) board.TakeAITurn();
 
                     break;
             }
+        }
 
-            gameplayScreen.UpdatePlayerTurn();
+        /// <summary>
+        /// Triggered after board/tokens fade id + optional delays
+        /// </summary>
+        private void OnGameStarted()
+        {
+            gameplayScreen.OnGameStarted();
+
+            board.interactable = true;
+            board.OnPlayManagerReady();
+            game.SetInitialTime(Time.time);
         }
 
         private IEnumerator ShowTokenInstructionPopupRoutine()
@@ -278,7 +287,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             foreach (BoardSpace boardSpace in game.boardContent)
                 foreach (IToken token in boardSpace.Tokens.Values)
-                    if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type))
+                    if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type) && !GameManager.Instance.excludeInstructionsFor.Contains(token.Type))
                         tokens.Add(GameContentManager.Instance.GetTokenData(token.Type));
 
             if (tokens.Count > 0)
@@ -325,9 +334,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             GameManager.Instance.OpenMainMenu();
 
-            //disconnect
-            if (game._Type == GameType.REALTIME)
-                RealtimeManager.Instance.GetRTSession().Disconnect();
+            //disconnect if realtime
+            switch (game._Type)
+            {
+                case GameType.REALTIME:
+                    PhotonNetwork.LeaveRoom();
+
+                    break;
+            }
         }
 
         public void UnloadGamePlayScreen()
@@ -337,26 +351,196 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void Rematch()
         {
+            if (game == null) return;
+
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
-                    if (game == null) return;
-
                     loadingPrompt = menuController.GetScreen<LoadingPromptScreen>();
 
                     loadingPrompt.Prompt("", "Loading new game...", null, null, null, null);
 
                     ChallengeManager.Instance.CreateTurnBasedGame(game.opponent.PlayerString, game._Area, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
-                    
+
+                    break;
+
+                case GameType.AI:
+                case GameType.PUZZLE:
+                    game.Reset();
+
+                    LoadGame(game);
+
+                    break;
+
+                case GameType.PASSANDPLAY:
+                    //create new game if random board
+                    if (game.asFourzyGame.isBoardRandom)
+                        game = new ClientFourzyGame(
+                            GameContentManager.Instance.currentTheme.themeID,
+                            UserManager.Instance.meAsPlayer, new Player(2, "Player Two"),
+                            UserManager.Instance.meAsPlayer.PlayerId)
+                        { _Type = GameType.PASSANDPLAY };
+                    else
+                        game.Reset();
+
+                    LoadGame(game);
+
+                    break;
+            }
+        }
+
+        public void PauseGame()
+        {
+            if (isGamePaused) return;
+
+            isGamePaused = true;
+            gameplayScreen.OnGamePaused();
+        }
+
+        public void UnpauseGame()
+        {
+            if (!isGamePaused) return;
+
+            isGamePaused = false;
+            gameplayScreen.OnGameUnpaused();
+        }
+
+        /// <summary>
+        /// Game must be assigned prior to this call
+        /// </summary>
+        private void LoadBoard()
+        {
+            if (board) Destroy(board.gameObject);
+
+            board = Instantiate(currentConfiguration.gameboardPrefab, transform);
+            board.Initialize(game);
+            board.transform.localPosition = currentConfiguration.gameboardPrefab.transform.position;
+            board.interactable = false;
+
+            board.onGameFinished += OnGameFinished;
+            board.onDraw += OnDraw;
+            board.onMoveStarted += OnMoveStarted;
+            board.onMoveEnded += OnMoveEnded;
+            board.onWrongTurn += () => gameplayScreen.OnWrongTurn();
+
+            //hide tokens/gamepieces
+            board.FadeTokens(0f, 0f);
+            board.FadeGamepieces(0f, 0f);
+        }
+
+        private void LoadBG(Area area)
+        {
+            //unload old bg
+            if (bg) Destroy(bg.gameObject);
+
+            currentConfiguration = GameContentManager.Instance.themesDataHolder.GetThemeBGConfiguration(area, Camera.main);
+            bg = Instantiate(currentConfiguration.backgroundPrefab, bgParent);
+            bg.transform.localPosition = Vector3.zero;
+        }
+
+        /// <summary>
+        /// Game must be assigned prior to this call
+        /// </summary>
+        private void GamepadCheck()
+        {
+            switch (game._Type)
+            {
+                case GameType.PASSANDPLAY:
+                case GameType.REALTIME:
+                    if (Input.GetJoystickNames().Length > 1)
+                    {
+                        StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.SPECIFIC_GAMEPAD;
+                        StandaloneInputModuleExtended.GamepadID = game._State.ActivePlayerId == 1 ? 0 : 1;
+                    }
+
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Game must be assigned prior to this call
+        /// </summary>
+        private void LogGameCheck()
+        {
+            logGameFinished = false;
+
+            //log game finished
+            switch (game._Type)
+            {
+                case GameType.TURN_BASED:
+                    logGameFinished = PlayerPrefsWrapper.GetGameViewed(game.GameID);
+
+                    break;
+
+                case GameType.PUZZLE:
+                    logGameFinished = PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.GameID);
+
                     break;
 
                 case GameType.AI:
                 case GameType.PASSANDPLAY:
-                case GameType.PUZZLE:
-                    if (game == null) return;
+                    logGameFinished = true;
 
-                    game.Reset();
-                    LoadGame(game);
+                    break;
+            }
+
+            //log game open
+            switch (game._Type)
+            {
+                case GameType.TURN_BASED:
+                case GameType.PUZZLE:
+                    AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.GAME_OPEN, game);
+
+                    break;
+            }
+        }
+
+        private void PlayBGAudio()
+        {
+            switch (game._Type)
+            {
+                //case GameType.REALTIME:
+                //    gameplayBGAudio = AudioHolder.instance.PlayBGAudio(AudioTypes.BG_GARDEN_REALTIME, true, .9f, 3f);
+                //    break;
+
+                default:
+                    AudioTypes gameBGAudio = GameContentManager.Instance.themesDataHolder.GetTheme(game._Area).bgAudio;
+
+                    if (gameplayBGAudio != null)
+                    {
+                        if (gameplayBGAudio.type != gameBGAudio)
+                        {
+                            AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
+                            gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, .9f, 3f);
+                        }
+                    }
+                    else
+                        gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, .9f, 3f);
+                    break;
+            }
+        }
+
+        private void GameOpenedCheck()
+        {
+            switch (game._Type)
+            {
+                case GameType.TURN_BASED:
+                    //if game was over and havent been viewed yet, set it to viewed
+                    if (game.asFourzyGame.challengeData.lastTurnGame.isOver && !PlayerPrefsWrapper.GetGameViewed(game.GameID))
+                    {
+                        PlayerPrefsWrapper.SetGameViewed(game.GameID);
+
+                        ChallengeManager.OnChallengeUpdateLocal.Invoke(game.asFourzyGame.challengeData);
+                    }
+                    break;
+
+                default:
+                    //if current game have puzzle data assigned, set puzzlepack as opened
+                    if (game.puzzleData)
+                    {
+                        if (game.puzzleData.pack)
+                            PlayerPrefsWrapper.SetPuzzlePackOpened(game.puzzleData.pack.packID, true);
+                    }
 
                     break;
             }
@@ -366,7 +550,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnChallengeUpdate(ChallengeData gameData)
         {
-            StartRoutine("turnBaseTurn", PlayTurnBaseTurn(gameData));
+            StartRoutine("takeTurn", PlayTurnBaseTurn(gameData));
         }
 
         private void OnChallengesUpdate(List<ChallengeData> challenges)
@@ -392,7 +576,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private void CreateTurnBasedGameError(LogEventResponse response)
         {
             Debug.Log("***** Error Creating Turn based game: " + response.Errors.JSON);
-            AnalyticsManager.LogError("create_turn_based_error", response.Errors.JSON);
+            AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.create_turn_base_game);
 
             if (loadingPrompt && loadingPrompt.isOpened)
             {
@@ -403,35 +587,124 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         #endregion
 
+        #region Photon Callbacks
+
+        private void OnRoomCustomPropertiesChanged(ExitGames.Client.Photon.Hashtable values)
+        {
+            if (values.ContainsKey(Constants.PLAYER_1_READY) || values.ContainsKey(Constants.PLAYER_2_READY))
+            {
+                if (PhotonNetwork.isMasterClient)
+                {
+                    if (FourzyPhotonManager.CheckPlayersReady()) CreateRealtimeGame();
+                }
+            }
+
+            if (values.ContainsKey(Constants.EPOCH_KEY))
+            {
+                //update epoch delta
+                if (!PhotonNetwork.isMasterClient) epochDelta = values.ContainsKey(Constants.EPOCH_KEY) ? FourzyPhotonManager.GetRoomProperty(Constants.EPOCH_KEY, 0L) - Utils.EpochMilliseconds() : 0L;
+            }
+        }
+
+        private void OnEventCall(byte eventCode, object content, int senderId)
+        {
+            //will be called on other client
+            switch (eventCode)
+            {
+                case Constants.GAME_DATA:
+                    LoadGame(new ClientFourzyGame(JsonConvert.DeserializeObject<GameStateDataEpoch>(content.ToString())));
+
+                    break;
+
+                case Constants.TAKE_TURN:
+                    StartRoutine("takeTurn", PlayRealtimeTurn(JsonConvert.DeserializeObject<PlayerTurn>(content.ToString())));
+
+                    break;
+            }
+        }
+
+        private void OnPlayerDisconnected(PhotonPlayer otherPlayer)
+        {
+            switch (game._Type)
+            {
+                case GameType.REALTIME:
+                    //only if game is not finished
+                    if (game.isOver) return;
+
+                    //pause game
+                    PauseGame();
+
+                    //display prompt
+                    menuController.GetScreen<PromptScreen>().Prompt($"{otherPlayer.NickName} disconnected...", "Other player disconnected.", null, "Back", null, () =>
+                    {
+                        BackButtonOnClick();
+                    });
+
+                    break;
+            }
+        }
+
+        #endregion
+
         private void OnGameFinished(IClientFourzy game)
         {
             onGameFinished?.Invoke(game);
 
-            AnalyticsManager.LogGameOver(game);
-
             gameplayScreen.OnGameFinished();
-            gameInfoScreen.SetData(game);
 
-            StartCoroutine(PostGameFinished(game));
+            if (!logGameFinished)
+            {
+                AnalyticsManager.Instance.LogGameEvent(game.IsWinner() ? AnalyticsManager.AnalyticsGameEvents.GAME_FINISHED : AnalyticsManager.AnalyticsGameEvents.GAME_FAILED, game);
+            }
+
+            switch (game._Type)
+            {
+                case GameType.TURN_BASED:
+                case GameType.REALTIME:
+                case GameType.PASSANDPLAY:
+                    PersistantMenuController.instance.GetScreen<RewardsScreen>().SetData(game);
+
+                    break;
+            }
+
+            //reset controller filter
+            switch (game._Type)
+            {
+                case GameType.PASSANDPLAY:
+                    //change gamepad mode
+                    StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
+
+                    break;
+            }
+
+            StartRoutine("postGameRoutine", PostGameFinished());
         }
 
         private void OnDraw(IClientFourzy game)
         {
-            gameInfoScreen.Open(LocalizationManager.Instance.GetLocalizedValue("draw_text"), "");
+            //channel into gamefinished pipeline
+            OnGameFinished(game);
         }
 
-        private void OnMoveStarted(int playerID)
+        private void OnMoveStarted(ClientPlayerTurn turn)
         {
-            onMoveStarted?.Invoke(playerID);
+            gameplayScreen.OnMoveStarted(turn);
+
+            onMoveStarted?.Invoke(turn);
         }
 
-        private void OnMoveEnded(int playerID)
+        private void OnMoveEnded(ClientPlayerTurn turn)
         {
             if (replayingLastTurn) replayingLastTurn = false;
 
-            onMoveEnded?.Invoke(playerID);
+            onMoveEnded?.Invoke(turn);
+
+            gameplayScreen.OnMoveEnded(turn);
 
             UpdatePlayerTurn();
+
+            //change active gamepad id
+            StandaloneInputModuleExtended.GamepadID = game._State.ActivePlayerId == 1 ? 0 : 1;
         }
 
         private void OnNetwork(bool state)
@@ -454,8 +727,21 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnLogin(bool state)
         {
-            if (state)
-                noNetworkOverlay.SetActive(false);
+            if (state) noNetworkOverlay.SetActive(false);
+        }
+
+        private void OnNoInput(KeyValuePair<string, float> noInputFilter)
+        {
+            if (noInputFilter.Key != "highlightMoves" || !gameplayScreen.isCurrent) return;
+
+            switch (board.actionState)
+            {
+                case GameboardView.BoardActionState.SIMPLE_MOVE:
+                    board.ShowHintArea(GameboardView.HintAreaStyle.ANIMATION_LOOP, GameboardView.HintAreaAnimationPattern.NONE);
+                    board.SetHintAreaSelectableState(false);
+
+                    break;
+            }
         }
 
         private IEnumerator GameInitRoutine()
@@ -463,7 +749,22 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (game == null) yield break;
 
             yield return StartCoroutine(FadeGameScreen(1f, .5f));
-            yield return StartCoroutine(ShowTokenInstructionPopupRoutine());
+
+            //instruction boards
+            switch (game._Type)
+            {
+                //no token instructions for these modes
+                case GameType.REALTIME:
+                case GameType.ONBOARDING:
+                case GameType.PRESENTATION:
+
+                    break;
+
+                default:
+                    yield return StartCoroutine(ShowTokenInstructionPopupRoutine());
+
+                    break;
+            }
 
             switch (game._Type)
             {
@@ -480,14 +781,30 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                         board.TakeTurn(lastTurn);
                     }
+
+                    break;
+
+                //start timer
+                case GameType.REALTIME:
+                    StartRoutine("realtimeCoutdownRoutine", StartRealtimeCountdown());
+
                     break;
 
                 default:
                     UpdatePlayerTurn();
+
                     break;
             }
 
             isBoardReady = true;
+        }
+
+        private IEnumerator StartRealtimeCountdown()
+        {
+            //start timer
+            yield return gameplayScreen.realtimeScreen.StartCountdown(Constants.REALTIME_COUNTDOWN_SECONDS);
+
+            UpdatePlayerTurn();
         }
 
         private IEnumerator PlayTurnBaseTurn(ChallengeData gameData)
@@ -503,27 +820,24 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //compare challenges
             if (gameData.challengeInstanceId != game.asFourzyGame.challengeData.challengeInstanceId) yield break;
 
-            board.TakeTurn(lastTurn.GetMove(), true);
+            board.TakeTurn(lastTurn);
+
             UpdatePlayerTurn();
         }
 
-        private IEnumerator PostGameFinished(IClientFourzy game)
+        private IEnumerator PlayRealtimeTurn(PlayerTurn turn)
         {
-            //rewards screen
-            switch (game._Type)
-            {
-                case GameType.PASSANDPLAY:
-                    break;
+            if (game._Type != GameType.REALTIME) yield break;
 
-                //show rewards screen
-                case GameType.PUZZLE:
-                case GameType.TURN_BASED:
-                    //if (!PlayerPrefsWrapper.GetGameRewarded(game.GameID))
-                    //    PersistantMenuController.instance.GetScreen<RewardsScreen>().SetData(game.asSubject);
-                    break;
-            }
+            yield return new WaitUntil(() => !board.isAnimating && isBoardReady);
 
-            yield return new WaitForSeconds(0.5f);
+            board.TakeTurn(turn);
+            UpdatePlayerTurn();
+        }
+
+        private IEnumerator PostGameFinished()
+        {
+            yield return new WaitForSeconds(.5f);
 
             //visuals + haptic
             switch (game._Type)
@@ -534,31 +848,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.FRIEND:
                 case GameType.LEADERBOARD:
                 case GameType.PUZZLE:
+                case GameType.AI:
                 case GameType.TURN_BASED:
-                    if (game.IsWinner())
-                    {
-                        winningParticleGenerator.ShowParticles();
-                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_WON);
-
-                        GameManager.Vibrate();
-                    }
-                    else
-                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_LOST);
-                    break;
-
                 case GameType.REALTIME:
                     if (game.IsWinner())
                     {
                         winningParticleGenerator.ShowParticles();
-                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
 
                         GameManager.Vibrate();
                     }
                     break;
 
                 default:
-                    winningParticleGenerator.ShowParticles();
-                    AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
+                    if (!game.draw) winningParticleGenerator.ShowParticles();
 
                     GameManager.Vibrate();
                     break;
@@ -568,25 +870,45 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 case GameType.ONBOARDING:
+                    break;
+
                 case GameType.PUZZLE:
-                case GameType.PASSANDPLAY:
-                    AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
-                    break;
-
-                case GameType.FRIEND:
-                case GameType.LEADERBOARD:
-                case GameType.TURN_BASED:
-                    if (game.IsWinner())
-                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_WON);
-                    else
-                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_LOST);
-                    break;
-
                 case GameType.REALTIME:
                     if (game.IsWinner())
                         AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
                     else
                         AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_LOST);
+
+                    break;
+
+                case GameType.FRIEND:
+                case GameType.LEADERBOARD:
+                case GameType.AI:
+                case GameType.TURN_BASED:
+                    if (game.IsWinner())
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_WON);
+                    else
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_LOST);
+
+                    break;
+
+                default:
+                    AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
+
+                    break;
+            }
+
+            //if demo, restart
+            switch (game._Type)
+            {
+                case GameType.PRESENTATION:
+                    yield return new WaitForSeconds(3f);
+
+                    LoadGame(new ClientFourzyGame(GameContentManager.Instance.themesDataHolder.GetRandomTheme(Area.NONE),
+                        new Player(1, "AI Player 1") { PlayerString = "1" },
+                        new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
+                    { _Type = GameType.PRESENTATION, });
+
                     break;
             }
         }

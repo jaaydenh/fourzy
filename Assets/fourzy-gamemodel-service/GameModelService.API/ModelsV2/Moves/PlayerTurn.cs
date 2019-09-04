@@ -35,10 +35,15 @@ namespace FourzyGameModel.Model
         [JsonProperty("uniqueId")]
         public string UniqueId { get; private set; }
 
+
+
         public PlayerTurn(SimpleMove Move)
         {
-            PlayerId = Move.Piece.PlayerId;
-            Moves = new List<IMove>() { Move };
+            if (Move != null)
+            {
+                PlayerId = Move.Piece.PlayerId;
+                Moves = new List<IMove>() { Move };
+            }
             this.UniqueId = Guid.NewGuid().ToString();
         }
 

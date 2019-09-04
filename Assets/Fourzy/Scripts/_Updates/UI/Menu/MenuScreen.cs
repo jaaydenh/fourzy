@@ -7,7 +7,9 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu
@@ -18,12 +20,16 @@ namespace Fourzy._Updates.UI.Menu
     [RequireComponent(typeof(CanvasGroup))]
     public class MenuScreen : RoutinesBase
     {
+        [SerializeField]
+        private Selectable defaultSelectable;
+
         public AdvancedEvent onClose;
         public AdvancedEvent onOpen;
         public AdvancedEvent onBack;
 
         [Tooltip("What audio to play when onBack invoked")]
         public AudioTypes onBackSfx = AudioTypes.MENU_BACK;
+        public bool closePreviousWhenOpened = true;
 
         [HideInInspector]
         public bool @default;
@@ -57,12 +63,23 @@ namespace Fourzy._Updates.UI.Menu
         {
             get
             {
-                if (!menuController)
-                    return false;
+                if (!menuController) return false;
 
                 return menuController.currentScreen == this;
             }
         }
+
+        public virtual bool containsSelected
+        {
+            get
+            {
+                if (!EventSystem.current.currentSelectedGameObject) return false;
+
+                return EventSystem.current.currentSelectedGameObject.transform.IsChildOf(transform);
+            }
+        }
+
+        public virtual Selectable DefaultSelectable => defaultSelectable;
 
         protected override void Awake()
         {
@@ -75,7 +92,7 @@ namespace Fourzy._Updates.UI.Menu
             rectTransform = GetComponent<RectTransform>();
             layoutElement = GetComponent<LayoutElement>();
 
-            widgets = new List<WidgetBase>(GetComponentsInChildren<WidgetBase>());
+            widgets = new List<WidgetBase>(GetComponentsInChildren<WidgetBase>()).Where(widget => widget.GetComponentInParent<MenuScreen>() == this).ToList();
         }
 
         protected virtual void Start()
@@ -144,10 +161,11 @@ namespace Fourzy._Updates.UI.Menu
             menuController.CloseScreen(this, animate);
         }
 
+        public virtual void ExecuteMenuEvent(MenuEvents menuEvent) { }
+
         public virtual bool IsWidgetVisible(WidgetBase widget)
         {
-            if (widget.gameObject.activeInHierarchy && widget.canvasGroup && widget.canvasGroup.alpha > 0f)
-                return true;
+            if (widget.gameObject.activeInHierarchy && widget.canvasGroup && widget.canvasGroup.alpha > 0f) return true;
 
             return false;
         }
@@ -166,10 +184,7 @@ namespace Fourzy._Updates.UI.Menu
                 AudioHolder.instance.PlaySelfSfxOneShotTracked(onBackSfx);
         }
 
-        public virtual void BackToRoot()
-        {
-            menuController.BackToRoot();
-        }
+        public virtual void BackToRoot() => menuController.BackToRoot();
 
         public void SetInteractable(bool state)
         {
@@ -177,9 +192,16 @@ namespace Fourzy._Updates.UI.Menu
                 canvasGroup.interactable = state;
         }
 
-        public void UpdateWidgets()
+        public void UpdateWidgets() => widgets.ForEach(widget => widget._Update());
+
+        public virtual void HighlightSelectable()
         {
-            widgets.ForEach(widget => widget._Update());
+            if (defaultSelectable)
+                defaultSelectable.Select();
+            else
+                EventSystem.current.SetSelectedGameObject(null, null);
         }
+
+        public virtual List<T> GetWidgets<T>() => widgets.Where(wgt => wgt.GetType() == typeof(T) || wgt.GetType().IsSubclassOf(typeof(T))).Cast<T>().ToList();
     }
 }

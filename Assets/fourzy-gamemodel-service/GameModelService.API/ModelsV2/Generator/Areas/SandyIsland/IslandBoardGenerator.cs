@@ -35,6 +35,24 @@ namespace FourzyGameModel.Model
             this.Recipes.Add(CenterSand3(), 10);
             this.Recipes.Add(CenterBlob(), 10);
             this.Recipes.Add(LandBridge2(), 10);
+            this.Recipes.Add(SandSpook1(), 10);
+            this.Recipes.Add(SandSpook2(), 10);
+        }
+
+        private BoardRecipe SandSpook2()
+        {
+            BoardRecipe Shore = new BoardRecipe("SandSpook2");
+            Shore.Ingredients.Add(new Ingredient(new SandToken(), PatternType.CenterBlob, AddTokenMethod.ALWAYS, true));
+            Shore.Ingredients.Add(new Ingredient(new GhostToken(), PatternType.ThreeRandom, AddTokenMethod.ONLY_TERRAIN, true));
+            return Shore;
+        }
+
+        private BoardRecipe SandSpook1()
+        {
+            BoardRecipe Shore = new BoardRecipe("SandSpook1");
+            Shore.Ingredients.Add(new Ingredient(new SandToken(), PatternType.CenterSixteen, AddTokenMethod.ALWAYS, true));
+            Shore.Ingredients.Add(new Ingredient(new GhostToken(), PatternType.ThreeRandom, AddTokenMethod.ONLY_TERRAIN, true));
+            return Shore;
         }
 
 

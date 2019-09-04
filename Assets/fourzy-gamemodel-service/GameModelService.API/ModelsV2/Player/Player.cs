@@ -13,11 +13,20 @@ namespace FourzyGameModel.Model
         [JsonProperty("displayName")]
         public string DisplayName { get; }
 
+        [JsonProperty("profile")]
+        public AIProfile Profile { get; set; }
+
+        [JsonProperty("bossType")]
+        public BossType BossType { get; set; }
+
         [JsonProperty("herdId")]
         public string HerdId { get; set; }
 
         [JsonProperty("magic")]
         public int Magic { get; set; }
+
+        [JsonProperty("special")]
+        public int SpecialAbilityCount { get; set; }
 
         [JsonProperty("selectedArea")]
         public Area SelectedArea { get; set; }
@@ -26,7 +35,7 @@ namespace FourzyGameModel.Model
         public PlayerExperience Experience { get; set; }
 
         [JsonConstructor]
-        public Player(int PlayerId, string DisplayName)
+        public Player(int PlayerId, string DisplayName, AIProfile Profile = AIProfile.Player)
         {
             this.PlayerId = PlayerId;
             this.DisplayName = DisplayName;
@@ -34,6 +43,9 @@ namespace FourzyGameModel.Model
             this.SelectedArea = Area.NONE;
             this.Experience = new PlayerExperience();
             this.Experience.UnlockedAreas.Add(Area.TRAINING_GARDEN);
+            this.Profile = Profile;
+            this.SpecialAbilityCount = 0;
+            this.BossType = BossType.None;
         }
 
         public Player(Player original)
@@ -47,11 +59,30 @@ namespace FourzyGameModel.Model
 
             //not sure if copy of experience instance is needed
             this.Experience = original.Experience;
+            this.Profile = original.Profile;
+            this.SpecialAbilityCount = original.SpecialAbilityCount;
+            this.BossType = original.BossType;
+        }
+
+        public void UseSpecialAbility()
+        {
+            this.SpecialAbilityCount--;
+        }
+
+        public void GainSpecialAbility()
+        {
+            this.SpecialAbilityCount++;
         }
 
         public void AddMagic(int Magic)
         {
             this.Magic += Magic;
         }
+
+        public void LoseMagic(int Magic)
+        {
+            this.Magic -= Magic;
+        }
+
     }
 }

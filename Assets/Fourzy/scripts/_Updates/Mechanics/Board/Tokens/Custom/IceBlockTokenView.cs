@@ -34,13 +34,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public override void OnActivate()
         {
-            base.OnActivate();
-            active = false;
-
-            animator.Play(h_IceBlockBreak);
-
-            float length = .5f;
-            StartRoutine("destroy", length, () => _Destroy());
+            StartCoroutine(OnActivated());
         }
 
         public override IEnumerator OnActivated()
@@ -55,6 +49,27 @@ namespace Fourzy._Updates.Mechanics.Board
             StartRoutine("destroy", length, () => _Destroy());
 
             yield return new WaitForSeconds(length);
+        }
+
+        public override float OnGameAction(params GameAction[] actions)
+        {
+            GameActionTokenTransition _transition = actions[0] as GameActionTokenTransition;
+
+            if (_transition == null || _transition.Reason != TransitionType.BLOCK_ICE) return 0f;
+
+            StartCoroutine(Transition(_transition));
+
+            return 0f;
+        }
+
+        private IEnumerator Transition(GameActionTokenTransition _transition)
+        {
+            TokenView newToken = gameboard.SpawnToken<TokenView>(_transition.Location.Row, _transition.Location.Column, _transition.After.Type, true);
+            newToken.SetAlpha(0f);
+
+            yield return StartCoroutine(OnActivated());
+
+            newToken.Show(.3f);
         }
     }
 }

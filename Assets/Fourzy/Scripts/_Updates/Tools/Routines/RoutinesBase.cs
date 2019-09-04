@@ -21,23 +21,19 @@ namespace Fourzy._Updates.Tools
         /// </summary>
         /// <param name="name"></param>
         /// <param name="routine"></param>
-        public void StartRoutine(string name, IEnumerator routine)
+        public Coroutine StartRoutine(string name, IEnumerator routine)
         {
             if (!routines.ContainsKey(name))
-                routines.Add(name, new RoutineClass(this, name, routine));
-        }
+            {
+                RoutineClass _routineContainer = new RoutineClass(this, name, routine);
+                routines.Add(name, _routineContainer);
 
-        /// <summary>
-        /// Is specified routine active?
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public bool IsRoutineActive(string name)
-        {
-            if (routines.ContainsKey(name))
-                return routines[name].isActive;
+                return _routineContainer.WaitFor();
+            }
+            else
+                if (CheckEmptyRoutine(name)) return null;
 
-            return false;
+            return null;
         }
 
         /// <summary>
@@ -47,16 +43,34 @@ namespace Fourzy._Updates.Tools
         /// <param name="routine"></param>
         /// <param name="onEnd"></param>
         /// <param name="onCanceled"></param>
-        public void StartRoutine(string name, IEnumerator routine, Action onEnd, Action onCanceled)
+        public Coroutine StartRoutine(string name, IEnumerator routine, Action onEnd, Action onCanceled)
         {
             if (!routines.ContainsKey(name))
-                routines.Add(name, new RoutineClass(this, name, routine, onEnd, onCanceled));
+            {
+                RoutineClass _routineContainer = new RoutineClass(this, name, routine, onEnd, onCanceled);
+                routines.Add(name, _routineContainer);
+
+                return _routineContainer.WaitFor();
+            }
+            else
+                if (CheckEmptyRoutine(name)) return null;
+
+            return null;
         }
 
-        public void StartRoutine(string name, IEnumerator routine, Action both)
+        public Coroutine StartRoutine(string name, IEnumerator routine, Action both)
         {
             if (!routines.ContainsKey(name))
-                routines.Add(name, new RoutineClass(this, name, routine, both, both));
+            {
+                RoutineClass _routineContainer = new RoutineClass(this, name, routine, both, both);
+                routines.Add(name, _routineContainer);
+
+                return _routineContainer.WaitFor();
+            }
+            else
+                if (CheckEmptyRoutine(name)) return null;
+
+            return null;
         }
 
         /// <summary>
@@ -66,17 +80,57 @@ namespace Fourzy._Updates.Tools
         /// <param name="time"></param>
         /// <param name="onEnd"></param>
         /// <param name="onCanceled"></param>
-        public void StartRoutine(string name, float time, Action onEnd, Action onCanceled)
+        public Coroutine StartRoutine(string name, float time, Action onEnd, Action onCanceled)
         {
             if (!routines.ContainsKey(name))
-                routines.Add(name, new RoutineClass(this, name, time, onEnd, onCanceled));
+            {
+                RoutineClass _routineContainer = new RoutineClass(this, name, time, onEnd, onCanceled);
+                routines.Add(name, _routineContainer);
+
+                return _routineContainer.WaitFor();
+            }
+            else
+                if (CheckEmptyRoutine(name)) return null;
+
+            return null;
         }
 
-        public void StartRoutine(string name, float time, Action both)
+        public Coroutine StartRoutine(string name, float time, Action both)
         {
             if (!routines.ContainsKey(name))
-                routines.Add(name, new RoutineClass(this, name, time, both, both));
+            {
+                RoutineClass _routineContainer = new RoutineClass(this, name, time, both, both);
+                routines.Add(name, _routineContainer);
+
+                return _routineContainer.WaitFor();
+            }
+            else
+                if (CheckEmptyRoutine(name)) return null;
+
+            return null;
         }
+
+        public Coroutine StartRoutine(string name, float time)
+        {
+            if (!routines.ContainsKey(name))
+            {
+                RoutineClass _routineContainer = new RoutineClass(this, name, time, null, null);
+                routines.Add(name, _routineContainer);
+
+                return _routineContainer.WaitFor();
+            }
+            else
+                if (CheckEmptyRoutine(name)) return null;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Is specified routine active?
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool IsRoutineActive(string name) => routines.ContainsKey(name);
 
         /// <summary>
         /// Stops specified routine with optional call of onEnded
@@ -88,6 +142,8 @@ namespace Fourzy._Updates.Tools
         {
             if (routines.ContainsKey(name))
             {
+                if (CheckEmptyRoutine(name)) return false;
+
                 routines[name].Stop(callEnded);
 
                 return true;
@@ -104,8 +160,7 @@ namespace Fourzy._Updates.Tools
         {
             List<string> keys = new List<string>(routines.Keys);
 
-            foreach (string key in keys)
-                StopRoutine(key, callEnded);
+            foreach (string key in keys) StopRoutine(key, callEnded);
         }
 
         /// <summary>
@@ -117,6 +172,8 @@ namespace Fourzy._Updates.Tools
         {
             if (routines.ContainsKey(name))
             {
+                if (CheckEmptyRoutine(name)) return false;
+
                 routines[name].Cancel();
 
                 return true;
@@ -134,6 +191,19 @@ namespace Fourzy._Updates.Tools
             if (routines.ContainsKey(name))
                 routines.Remove(name);
         }
+
+        private bool CheckEmptyRoutine(string name)
+        {
+            if (routines[name].nested == null)
+            {
+                //force remove
+                RemoveRoutine(name);
+
+                return true;
+            }
+
+            return false;
+        }
     }
 
     public class RoutineClass
@@ -141,35 +211,24 @@ namespace Fourzy._Updates.Tools
         public RoutinesBase owner;
 
         public string name;
-        public Coroutine coroutine;
         public Action onEnded;
         public Action onCanceled;
 
-        private Coroutine coroutineContainer;
-
-        public bool isActive
-        {
-            get
-            {
-                return coroutineContainer != null;
-            }
-        }
+        public bool terminated = false;
+        public Coroutine nested;
+        private IEnumerator payload;
 
         public RoutineClass(RoutinesBase owner, string name, IEnumerator routine)
         {
             this.name = name;
             this.owner = owner;
-
-            coroutineContainer = owner.StartCoroutine(RoutineContainer(routine));
+            
+            payload = routine;
+            nested = owner.StartCoroutine(Wrapper());
         }
 
-        public RoutineClass(RoutinesBase owner, string name, IEnumerator routine, Action onEnded, Action onCanceled)
+        public RoutineClass(RoutinesBase owner, string name, IEnumerator routine, Action onEnded, Action onCanceled) : this(owner, name, routine)
         {
-            this.name = name;
-            this.owner = owner;
-
-            coroutineContainer = owner.StartCoroutine(RoutineContainer(routine));
-
             this.onEnded = onEnded;
             this.onCanceled = onCanceled;
         }
@@ -178,47 +237,66 @@ namespace Fourzy._Updates.Tools
         {
             this.name = name;
             this.owner = owner;
-
-            coroutineContainer = owner.StartCoroutine(RoutineContainer(time));
+            
+            nested = owner.StartCoroutine(Wrapper(time));
 
             this.onEnded = onEnded;
             this.onCanceled = onCanceled;
         }
 
+        public Coroutine WaitFor()
+        {
+            return owner.StartCoroutine(Wait());
+        }
+
         public void Stop(bool callOnEnded)
         {
+            terminated = true;
+
+            if (callOnEnded && onEnded != null) onEnded.Invoke();
+            if (nested != null) owner.StopCoroutine(nested);
+
             owner.RemoveRoutine(name);
-
-            if (coroutine != null)
-                owner.StopCoroutine(coroutine);
-
-            if (coroutineContainer != null)
-                owner.StopCoroutine(coroutineContainer);
-
-            if (callOnEnded && onEnded != null)
-                onEnded.Invoke();
         }
 
         public void Cancel()
         {
-            if (onCanceled != null)
-                onCanceled.Invoke();
+            onCanceled?.Invoke();
 
             Stop(false);
         }
 
-        private IEnumerator RoutineContainer(IEnumerator _routine)
+        private IEnumerator Wrapper(float time = 0f)
         {
-            yield return coroutine = owner.StartCoroutine(_routine);
+            if (time == 0f)
+            {
+                if (payload != null) while (payload.MoveNext() && !terminated) yield return payload.Current;
+            }
+            else if (time < 0f) while (true) if (terminated) yield break; else yield return null;
+            else
+            {
+                float timer = 0f;
+
+                while (timer < time)
+                {
+                    if (terminated)
+                        yield break;
+                    else
+                    {
+                        yield return null;
+                        timer += Time.deltaTime;
+                    }
+                }
+            }
 
             Stop(true);
+
+            yield break;
         }
 
-        private IEnumerator RoutineContainer(float time)
+        private IEnumerator Wait()
         {
-            yield return new WaitForSeconds(time);
-
-            Stop(true);
+            while (!terminated) yield return null;
         }
     }
 }

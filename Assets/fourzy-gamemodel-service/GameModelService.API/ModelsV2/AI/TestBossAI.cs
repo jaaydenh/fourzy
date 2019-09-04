@@ -26,7 +26,7 @@ namespace FourzyGameModel.Model
 
             bool Desparate = false;
 
-            SimpleMove Move = AI.GetRandomOkMove();
+            SimpleMove Move = AI.GetOkMove();
             if (Move == null)
             {
                 Desparate = true;
@@ -35,7 +35,7 @@ namespace FourzyGameModel.Model
             
             PlayerTurn TopBossTurn = new PlayerTurn(Move);
             int TopScore = AITurnEvaluator.Score(EvalState, TopBossTurn);
-            List<IMove> Powers = Boss.GetPossibleActivations(EvalState);
+            List<IMove> Powers = Boss.GetPossibleActivations(EvalState, Desparate);
 
             if (Powers.Count > 0)
             {

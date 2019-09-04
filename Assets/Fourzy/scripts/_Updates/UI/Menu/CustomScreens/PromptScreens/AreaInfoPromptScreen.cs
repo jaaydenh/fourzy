@@ -101,13 +101,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
             tokens.Clear();
 
             tokensRoot.SetActive(themeData.tokens.list.Count > 0);
-            foreach (ThemesDataHolder.TokenView_ThemesDataHolder tokenPrefab in themeData.tokens.list)
+
+            foreach (TokenType tokenType in themeData.tokens.list)
             {
                 GameObject tokenHolderInstance = Instantiate(gamePieceHolder, tokensParent);
                 tokenHolderInstance.SetActive(true);
 
-                TokenView tokenInstance = Instantiate(tokenPrefab.prefab, tokenHolderInstance.transform);
-                tokenInstance.transform.localScale = Vector3.one * 70f;
+                TokensDataHolder.TokenData tokenData = GameContentManager.Instance.GetTokenData(tokenType);
+
+                Image bg = tokenHolderInstance.GetComponentInChildren<Image>(true);
+                bg.gameObject.SetActive(tokenData.showBackgroundTile);
+                bg.color = tokenData.backgroundTileColor;
+
+                TokenView tokenInstance = Instantiate(GameContentManager.Instance.GetTokenPrefab(tokenType, themeData.themeID), tokenHolderInstance.transform);
+                tokenInstance.transform.localScale = Vector3.one * (tokenData.showBackgroundTile ? 55f : 70f);
 
                 tokens.Add(tokenHolderInstance);
             }
@@ -123,14 +130,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             menuController.CloseCurrentScreen(true);
         }
 
-        public void Purchase(CurrencyWidget.CurrencyType currency)
+        public void Purchase(CurrencyType currency)
         {
             ThemesDataHolder.AreaUnlockRequirement unlockRequirement = currentOpenedTheme.unclockRequirements.GetRequirement(currency);
 
             //check currency
             switch (currency)
             {
-                case CurrencyWidget.CurrencyType.COINS:
+                case CurrencyType.COINS:
                     if (UserManager.Instance.coins < unlockRequirement.quantity)
                     {
                         GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Not enought coins");
@@ -141,7 +148,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     UserManager.Instance.coins -= unlockRequirement.quantity;
                     break;
 
-                case CurrencyWidget.CurrencyType.GEMS:
+                case CurrencyType.GEMS:
                     if (UserManager.Instance.gems < unlockRequirement.quantity)
                     {
                         GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Not enought gems");
@@ -153,7 +160,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
 
-                case CurrencyWidget.CurrencyType.TICKETS:
+                case CurrencyType.TICKETS:
                     if (UserManager.Instance.gems < unlockRequirement.quantity)
                     {
                         GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "Not enought tickets");

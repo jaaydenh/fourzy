@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
 namespace StackableDecorator
 {
@@ -329,7 +330,7 @@ namespace StackableDecorator
                     }
                 }
             }
-
+            
             m_Type = DynamicType.Fail;
         }
 

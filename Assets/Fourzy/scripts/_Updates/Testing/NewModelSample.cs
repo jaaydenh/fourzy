@@ -2,21 +2,51 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Board;
+using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
+using PlayFab;
+using System.Collections;
 using UnityEngine;
+using PlayFab.ClientModels;
 
 namespace Fourzy.Testing
 {
-    public class NewModelSample : MonoBehaviour
+    public class NewModelSample : RoutinesBase
     {
         public GameboardView gameboard;
 
         private ClientFourzyGame game;
 
-        protected void Awake()
+        protected override void Awake()
         {
-            if (!gameboard)
-                gameboard = GetComponentInChildren<GameboardView>();
+            base.Awake();
+
+            if (!gameboard) gameboard = GetComponentInChildren<GameboardView>();
+        }
+
+        protected void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.A)) CancelRoutine("r1");
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                //create turn based game
+                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+                {
+                    FunctionName = "createTurnBased",
+
+                }, OnResult, OnError);
+            }
+        }
+
+        private void OnResult(ExecuteCloudScriptResult result)
+        {
+            print("good: " + result.ToJson());
+        }
+
+        private void OnError(PlayFabError error)
+        {
+            print("bad: " + error.ToString());
         }
 
         protected void Start()
@@ -25,6 +55,9 @@ namespace Fourzy.Testing
 
             gameboard.Initialize(game);
             gameboard.onDraw += OnDraw;
+
+            ////routines tests
+            //StartRoutine("r1", R1(), () => StartRoutine("r2", R2(), () => { Debug.Log("r2 ended"); }));
         }
 
         protected void OnDestroy()
@@ -35,6 +68,21 @@ namespace Fourzy.Testing
         private void OnDraw(IClientFourzy model)
         {
             Debug.Log("On Draw");
+        }
+
+        private IEnumerator R1()
+        {
+            Debug.Log("r1 started");
+            yield return new WaitForSeconds(5f);
+            Debug.Log("r1 ended");
+        }
+
+        private IEnumerator R2()
+        {
+            Debug.Log("r2 started");
+
+            yield return null;
+            yield break;
         }
     }
 }

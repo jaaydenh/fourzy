@@ -36,6 +36,7 @@ namespace Fourzy._Updates.UI.Widgets
             tokenImage.sprite = GameContentManager.Instance.tokensDataHolder.GetTokenSprite(tokenData);
 
             tileBGImage.enabled = tokenData.showBackgroundTile;
+            tileBGImage.color = tokenData.backgroundTileColor;
         }
 
         public void OpenTokenPrompt()

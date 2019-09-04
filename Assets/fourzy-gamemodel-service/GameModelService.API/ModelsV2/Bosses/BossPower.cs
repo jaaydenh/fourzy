@@ -11,8 +11,8 @@ namespace FourzyGameModel.Model
         BossPowerType PowerType{get; }
 
         bool Activate(GameState State);
-        bool IsAvailable(GameState State);
+        bool IsAvailable(GameState State, bool IsDeparate);
 
-        List<IMove> GetPossibleActivations(GameState State);
+        List<IMove> GetPossibleActivations(GameState State, bool IsDesparate);
     }
 }

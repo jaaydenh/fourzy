@@ -5,6 +5,7 @@ using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.UI.Helpers;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -13,8 +14,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public ButtonExtended nextButton;
         public TMP_Text challengeIDLabel;
 
-        private ChallengeData nextChallenge;
         private IClientFourzy game;
+        [HideInInspector]
+        public ChallengeData nextChallenge;
 
         protected override void Awake()
         {
@@ -26,13 +28,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected void OnDestroy()
         {
-            switch (game._Type)
-            {
-                case GameType.TURN_BASED:
-                    ChallengeManager.OnChallengesUpdate -= OnUpdateChallenges;
-                    ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
-                    break;
-            }
+            if (game != null)
+                switch (game._Type)
+                {
+                    case GameType.TURN_BASED:
+                        ChallengeManager.OnChallengesUpdate -= OnUpdateChallenges;
+                        ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
+                        break;
+                }
         }
 
         public void Open(IClientFourzy game)
@@ -46,13 +49,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     OnUpdateChallenges(ChallengeManager.Instance.Challenges);
                     Open();
+
+                    break;
+
+                default:
+                    if (isOpened) Close();
+
                     break;
             }
+        }
+
+        public void GameComplete()
+        {
+            HideButton();
         }
 
         public void OpenNext()
         {
             if (nextChallenge != null) GamePlayManager.instance.LoadGame(nextChallenge.GetGameForPreviousMove());
+        }
+
+        public void HideButton()
+        {
+            nextButton.SetActive(false);
         }
 
         private void OnUpdateChallenges(List<ChallengeData> challenges)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,11 +67,12 @@ namespace FourzyGameModel.Model
         #endregion
 
         #region "OK Moves"
-        public List<SimpleMove> GetOkMoves(IMove BossMove)
-        {
-            EvalState.TakeTurn(new PlayerTurn(EvalState.ActivePlayerId,BossMove));
-            return GetOkMoves();
-        }
+        ////For a particular Boss Move, Get Ok Moves.
+        //public List<SimpleMove> GetOkMoves(IMove BossMove)
+        //{
+        //    EvalState.TakeTurn(new PlayerTurn(EvalState.ActivePlayerId,BossMove));
+        //    return GetOkMoves();
+        //}
 
         //Return Moves that:
         //Win
@@ -78,25 +80,55 @@ namespace FourzyGameModel.Model
         //
         public List<SimpleMove> GetOkMoves()
             {
-            List<SimpleMove> Moves = new List<SimpleMove>();
+            //If we keep track of the resulting state, maybe we can remove some identical moves for consideration.
+            //List<SimpleMove> Moves = new List<SimpleMove>();
+            Dictionary<SimpleMove, GameState> UniqueMoves = new Dictionary<SimpleMove, GameState>();
 
             foreach (SimpleMove m in AvailableSimpleMoves)
             {
+                //Shortcut some processing if piece count is small, which will happen at start of game.
+                //if (EvalState.Board.FindPieces(m.Piece.PlayerId).Count < 3 
+                //     && EvalState.Board.FindPieces(EvalState.Opponent(m.Piece.PlayerId)).Count < 3)
+                //{
+                //    Moves.Add(m); continue;
+                //}
+
                 TurnEvaluator OPP = new TurnEvaluator(Evaluator.EvaluateTurn(new PlayerTurn(m)));
                 if (OPP.EvalState.WinnerId == m.Piece.PlayerId)
                 {
-                    Moves.Clear();
-                    Moves.Add(m);
+                    //Moves.Clear();
+                    //Moves.Add(m);
+                    UniqueMoves.Clear();
+                    UniqueMoves.Add(m, OPP.EvalState);
                     break;
                 }
                 if (OPP.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
-                if (OPP.GetFirstWinningMove() == null) Moves.Add(m);
+                if (OPP.GetFirstWinningMove() == null)
+                {
+                    //Moves.Add(m);
+                    if (!UniqueMoves.ContainsValue(OPP.EvalState)) UniqueMoves.Add(m, OPP.EvalState);
+                }
             }
 
-            return Moves;
+            //return Moves;
+            return UniqueMoves.Keys.ToList();
         }
 
-        public Dictionary<SimpleMove, int> GetOkMovesWithOppScores()
+        //Convert a list of Moves into UniqueMoves.
+        public List<SimpleMove> UniqueMoves(List<SimpleMove> Moves)
+        {
+                Dictionary<SimpleMove, GameState> UniqueMoves = new Dictionary<SimpleMove, GameState>();
+
+                foreach (SimpleMove m in Moves)
+                {
+                    TurnEvaluator OPP = new TurnEvaluator(Evaluator.EvaluateTurn(new PlayerTurn(m)));
+                    if (!UniqueMoves.ContainsValue(OPP.EvalState)) UniqueMoves.Add(m, OPP.EvalState);
+                }
+
+            return UniqueMoves.Keys.ToList();
+        }
+
+        public Dictionary<SimpleMove, int> GetOkMovesWithOppScores(bool SortMoves = true)
         {
             Dictionary<SimpleMove, int> Moves = new Dictionary<SimpleMove, int>();
 
@@ -106,6 +138,7 @@ namespace FourzyGameModel.Model
                 if (OPP.EvalState.WinnerId == m.Piece.PlayerId)
                 {
                     Moves.Clear();
+                    //TODO: Create a constant for winning score.
                     Moves.Add(m,10000000);
                     break;
                 }
@@ -122,10 +155,16 @@ namespace FourzyGameModel.Model
                     Moves.Add(m, Score);
                 }
             }
+            if (SortMoves)
+                Moves = Moves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
             return Moves;
         }
 
+        //Get all OK Moves
+        //for each ok move, score each opp move
+        //  record best opp score for each move
+        //  return move with lowest opp score.
         public SimpleMove GetBestOkMovesWithLeastOppScore()
         {
             Dictionary<SimpleMove, int> Moves = new Dictionary<SimpleMove, int>();
@@ -140,8 +179,7 @@ namespace FourzyGameModel.Model
                     break;
                 }
                 if (OPP.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
-
-                
+                                
                 if (OPP.GetFirstWinningMove() == null)
                 {
                     OPP.Reset();
@@ -169,13 +207,13 @@ namespace FourzyGameModel.Model
 
                 TurnEvaluator TE2 = new TurnEvaluator(GS);
                 int WinMoves = TE2.GetWinningMoves(GS.Opponent(m.Piece.PlayerId)).Count;
-                WeightedMoves.Add(m, WinMoves);
+                WeightedMoves.Add(m,WinMoves );
             }
             WeightedMoves = WeightedMoves.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
             return WeightedMoves.Keys.First();
         }
-
+        
         public SimpleMove GetFirstOkMove()
         {
 
@@ -187,14 +225,20 @@ namespace FourzyGameModel.Model
 
             return null;
         }
-
+        
         public List<SimpleMove> GetTopOkMoves(int NumberMoves = 5)
+        {
+            AIHeuristicWeight AIWeight = new AIHeuristicWeight();
+            return GetTopOkMoves(AIWeight, NumberMoves);
+        }
+
+        public List<SimpleMove> GetTopOkMoves(AIHeuristicWeight AIWeight, int NumberMoves = 5)
         {
             List<SimpleMove> Moves = new List<SimpleMove>();
 
-            Dictionary<SimpleMove, int> WeightedOkMoves = ScoreMoves(EvalState, GetOkMoves());
+            Dictionary<SimpleMove, int> WeightedOkMoves = ScoreMoves(EvalState, GetOkMoves(), NumberMoves, AIWeight, true);
             if (WeightedOkMoves.Count == 0) return null;
-            WeightedOkMoves = WeightedOkMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            //WeightedOkMoves = WeightedOkMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
             foreach (KeyValuePair<SimpleMove, int> m in WeightedOkMoves.Take(NumberMoves))
             {
@@ -204,24 +248,39 @@ namespace FourzyGameModel.Model
             return Moves;
         }
 
+        public int TopScoreValue()
+        {
+            return TopScore().Item2;
+        }
+
         public Tuple<SimpleMove, int> TopScore()
         {
-            Dictionary<SimpleMove, int> WeightedOkMoves = ScoreMoves(EvalState);
-            if (WeightedOkMoves.Count == 0) return new Tuple<SimpleMove, int>(null, 0);
+            Dictionary<SimpleMove, int> WeightedMoves = ScoreMoves(EvalState);
+            if (WeightedMoves.Count == 0) return new Tuple<SimpleMove, int>(null, 0);
 
-            WeightedOkMoves = WeightedOkMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            WeightedMoves = WeightedMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
-            return new Tuple<SimpleMove, int>(WeightedOkMoves.First().Key, WeightedOkMoves.First().Value);
+            return new Tuple<SimpleMove, int>(WeightedMoves.First().Key, WeightedMoves.First().Value);
         }
 
 
-        public SimpleMove GetRandomOkMove()
+        public SimpleMove GetOkMove(int NumberMovesToConsider = 2)
         {
-            List<SimpleMove> Moves = GetTopOkMoves(2);
+            List<SimpleMove> Moves = GetTopOkMoves(NumberMovesToConsider);
 
             if (Moves == null || Moves.Count == 0) return null;
             return Moves[EvalState.Board.Random.RandomInteger(0, Moves.Count - 1)];
         }
+
+        public SimpleMove GetOkMoveWithHueristics(AIHeuristicWeight AIWeight, int NumberOfMoves = 2)
+        {
+            List<SimpleMove> Moves = GetTopOkMoves(AIWeight, NumberOfMoves);
+
+            if (Moves == null || Moves.Count == 0) return GetTopMoveNoRestriction();
+            return Moves[EvalState.Board.Random.RandomInteger(0, Moves.Count - 1)];
+        }
+
+
         #endregion
 
         #region "Better Move"
@@ -235,6 +294,50 @@ namespace FourzyGameModel.Model
         //      record the lowest of my scores
         //      if I cannot make an ok move, remove this move from consideration
         //  after I find x suitable moves, stop and return
+
+        public SimpleMove GetGoodMove(int MovesToTryDeeperAnalysis=5)
+        {
+            SimpleMove Move = null;
+            Dictionary<SimpleMove, int> ok = GetOkMovesWithOppScores();
+            int count = 0;
+            foreach (SimpleMove m in ok.Select(x => x.Key))
+            {
+                if (DeeperMoveOkCheck(m)) { Move = m; break; }
+                if (count++ > MovesToTryDeeperAnalysis) Move = ok.Keys.First();
+            }
+           
+            return Move;
+        }
+
+        public bool DeeperMoveOkCheck(SimpleMove Move, int Depth=2, int MovesToCheck=5)
+        {
+            AITurnEvaluator AI = new AITurnEvaluator(Evaluator.EvaluateTurn(new PlayerTurn(Move)));
+            List<SimpleMove> AIMoves = AI.GetOkMoves();
+            if (AIMoves.Count == 0) return true;
+
+            //These are the moves the opponent can make
+            Dictionary<SimpleMove, int> WeightedAIMoves = ScoreMoves(EvalState, AIMoves);
+            int ok_move_count = 0;
+            WeightedAIMoves = WeightedAIMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+
+            //Look at the first couple moves
+            foreach (SimpleMove a in WeightedAIMoves.Select(x => x.Key).Take(MovesToCheck))
+            {
+                //Back to my perspective.  What moves can I make?
+                AITurnEvaluator PE = new AITurnEvaluator(AI.Evaluator.EvaluateTurn(new PlayerTurn(a)));
+
+                // If I make this move, can I win?
+                if (PE.Evaluator.GetFirstWinningMove() != null) { ok_move_count++; continue; }
+
+                // Do I have any non losing moves?
+                if (PE.GetFirstOkMove() != null) ok_move_count++;
+            }
+
+            //If all the moves I looked at are ok, then this is an ok move.
+            if (ok_move_count == MovesToCheck) return true;
+
+            return false;
+        }
 
         public Dictionary<SimpleMove, int> DeeperReview(List<SimpleMove> OkMoves, int MovesToReturn = 3, int MovesToConsider = 12, int OppMovesToConsider = 12)
         {
@@ -353,13 +456,16 @@ namespace FourzyGameModel.Model
             return Moves;
         }
 
-        public SimpleMove GetTopMoveNoRestriction()
+        public SimpleMove GetTopMoveNoRestriction(int NumberMoves = 1)
         {
-            List<SimpleMove> MovesToConsider = Evaluator.GetAvailableSimpleMoves();
-            Dictionary<SimpleMove, int> WeightedMoves = ScoreMoves(EvalState, MovesToConsider);
-            WeightedMoves = WeightedMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            TurnEvaluator TE = new TurnEvaluator(EvalState);
+            List<SimpleMove> MovesToConsider = TE.GetAvailableSimpleMoves();
+            Dictionary<SimpleMove, int> WeightedMoves = ScoreMoves(EvalState, MovesToConsider, true);
+            if (NumberMoves < 2)
+                return WeightedMoves.Keys.First();
 
-            return WeightedMoves.Keys.First();
+            return WeightedMoves.ElementAt(Evaluator.EvalState.Random.RandomInteger(0, Math.Min(NumberMoves,WeightedMoves.Count))).Key;
+
         }
 
         public static Dictionary<SimpleMove, int> ScoreMoves(GameState State)
@@ -371,21 +477,28 @@ namespace FourzyGameModel.Model
 
         public static Dictionary<SimpleMove, int> ScoreMoves(GameState State, List<SimpleMove> Moves, bool Sort = true, int TopMoves = -1)
         {
+            AIHeuristicWeight AIWeight = new AIHeuristicWeight();
+            return ScoreMoves(State, Moves, TopMoves, AIWeight, Sort);
+        }
+        
+        public static Dictionary<SimpleMove, int> ScoreMoves(GameState State, List<SimpleMove> Moves, int TopMoves, AIHeuristicWeight AIWeight, bool Sort = true)
+        {
             Dictionary<SimpleMove, int> ScoredMoves = new Dictionary<SimpleMove, int>();
             TurnEvaluator ME = new TurnEvaluator(State);
             foreach (SimpleMove m in Moves)
             {
                 GameState GS = ME.EvaluateTurn(new PlayerTurn(m));
-                //                int Score = AITurnEvaluator.Score(GS, m.Piece.PlayerId) - AITurnEvaluator.Score(GS, GS.Opponent(m.Piece.PlayerId));
-                int Score = AITurnEvaluator.Score(GS, m.Piece.PlayerId);
+                int Score = AITurnEvaluator.Score(GS, m.Piece.PlayerId, AIWeight);
 
                 ScoredMoves.Add(m, Score);
             }
             if (Sort) ScoredMoves = ScoredMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            if (TopMoves > 0) ScoredMoves = ScoredMoves.Take(TopMoves).ToDictionary(x => x.Key, x => x.Value);
+            if (TopMoves > 0)
+                ScoredMoves = ScoredMoves.Take(TopMoves).ToDictionary(x => x.Key, x => x.Value);
 
             return ScoredMoves;
         }
+
 
         public static int Score(GameState State, PlayerTurn Turn)
         {
@@ -406,19 +519,43 @@ namespace FourzyGameModel.Model
             return Score;
         }
 
-        public static int Score(GameState State, int PlayerId)
+        public static int Score(GameState State, int PlayerId, AIHeuristicWeight AIWeight)
         {
             int Score = 0;
 
             TurnEvaluator TE = new TurnEvaluator(State);
             List<BoardLocation> Dead = TE.FindDeadLocations();
 
-            Score += ScoreFours(State, PlayerId, Dead) * 10;
-            Score -= ScoreFours(State, State.Opponent(PlayerId), Dead) * 10;
-            Score += ScoreFives(State, PlayerId, Dead) * 25;
-            Score -= ScoreFives(State, State.Opponent(PlayerId), Dead) * 25;
-            Score += ScorePositions(State, PlayerId);
-            Score -= ScorePositions(State, State.Opponent(PlayerId));
+            //My Pieces
+            Score += ScoreFours(State, PlayerId, Dead) * AIWeight.FourWeight;
+            Score += ScoreFives(State, PlayerId, Dead) * AIWeight.FiveWeight;
+            Score += ScorePositions(State, PlayerId) * AIWeight.PositionWeight;
+
+            //Opponent Pieces
+            if (AIWeight.ConsiderOpponentPieces)
+            {
+                Score -= ScoreFours(State, State.Opponent(PlayerId), Dead) * AIWeight.FourWeight;
+                Score -= ScoreFives(State, State.Opponent(PlayerId), Dead) * AIWeight.FiveWeight;
+                Score -= ScorePositions(State, State.Opponent(PlayerId)) * AIWeight.PositionWeight;
+            }
+
+            return Score;
+        }
+
+
+        public static int Score(GameState State, int PlayerId, int FourWeight = 10, int FiveWeight=25, int PositionWeight=2)
+        {
+            int Score = 0;
+
+            TurnEvaluator TE = new TurnEvaluator(State);
+            List<BoardLocation> Dead = TE.FindDeadLocations();
+
+            Score += ScoreFours(State, PlayerId, Dead) * FourWeight;
+            Score -= ScoreFours(State, State.Opponent(PlayerId), Dead) * FourWeight;
+            Score += ScoreFives(State, PlayerId, Dead) * FiveWeight;
+            Score -= ScoreFives(State, State.Opponent(PlayerId), Dead) * FiveWeight;
+            Score += ScorePositions(State, PlayerId) * PositionWeight;
+            Score -= ScorePositions(State, State.Opponent(PlayerId)) * PositionWeight;
 
             return Score;
         }
@@ -538,6 +675,79 @@ namespace FourzyGameModel.Model
             }
             return Score;
         }
+
+        //Need to think through this.
+        //public static int ScoreFoursRevised(GameState State, int PlayerId, List<BoardLocation> DeadLocations)
+        //{
+        //    int Score = 0;
+
+        //    BitArray[] columns = new BitArray[State.Board.Columns];
+        //    BitArray[] rows = new BitArray[State.Board.Rows];
+        //    BitArray[] diag1 = new BitArray[State.Board.Rows + State.Board.Columns];
+        //    BitArray[] diag2 = new BitArray[State.Board.Rows + State.Board.Columns];
+
+        //    for (int i = 0; i < State.Board.Columns; i++) columns[i] = new BitArray(State.Board.Rows);
+        //    for (int i = 0; i < State.Board.Rows; i++) rows[i] = new BitArray(State.Board.Columns);
+        //    for (int i = 0; i < State.Board.Rows + State.Board.Columns; i++) diag1[i] = new BitArray(Math.Max(State.Board.Rows, State.Board.Columns));
+        //    for (int i = 0; i < State.Board.Rows + State.Board.Columns; i++) diag2[i] = new BitArray(Math.Max(State.Board.Rows, State.Board.Columns));
+
+        //    foreach (BoardLocation l in State.Board.Pieces.Keys)
+        //    {
+        //        if (State.Board.Pieces[l].PlayerId != PlayerId) continue;
+        //        columns[l.Column][l.Row] = true;
+        //        rows[l.Row][l.Column] = true;
+        //        diag1[State.Board.Rows + l.Row - l.Column][l.Row] = true;
+        //        diag2[l.Row + l.Column][l.Row] = true;
+
+        //    }
+
+        //    foreach (BitArray c in columns)
+        //    {
+        //        if (c.Count < 4) continue;
+        //        int count = 0;
+        //        foreach (bool b in c)
+        //        {
+        //            if (b) count++; else { count = 0; }
+        //            if (count == 4) return true;
+        //        }
+        //    }
+
+        //    foreach (BitArray r in rows)
+        //    {
+        //        if (r.Count < 4) continue;
+        //        int count = 0;
+        //        foreach (bool b in r)
+        //        {
+        //            if (b) count++; else { count = 0; }
+        //            if (count == 4) return true;
+        //        }
+        //    }
+
+        //    foreach (BitArray d in diag1)
+        //    {
+        //        if (d.Count < 4) continue;
+        //        int count = 0;
+        //        foreach (bool b in d)
+        //        {
+        //            if (b) count++; else { count = 0; }
+        //            if (count == 4) return true;
+        //        }
+        //    }
+
+        //    foreach (BitArray d in diag2)
+        //    {
+        //        if (d.Count < 4) continue;
+        //        int count = 0;
+        //        foreach (bool b in d)
+        //        {
+        //            if (b) count++; else { count = 0; }
+        //            if (count == 4) return true;
+        //        }
+        //    }
+
+        //    return Score;
+        //}
+
 
         public static int ScoreFives(GameState State, int PlayerId, List<BoardLocation> DeadLocations)
         {

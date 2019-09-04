@@ -18,9 +18,14 @@ MonoBehaviour:
     list:
     - elementName: BLOCKER
       tokenType: 1
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: A blocker. Pieces cannot enter or move through this space.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 0
       themesTokens:
         list:
@@ -32,10 +37,15 @@ MonoBehaviour:
             type: 3}
     - elementName: ARROW
       tokenType: 5
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: When a piece enters a space with an Arrow, it continues in the
         direction of the Arrow.
       showBackgroundTile: 1
+      backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
       gameboardInstructionID: 1
       themesTokens:
         list:
@@ -44,10 +54,15 @@ MonoBehaviour:
             type: 3}
     - elementName: STICKY
       tokenType: 2
+      tokenIcon: {fileID: 21300000, guid: 9daaa4893d4e27b4bbc1dd74873d6d70, type: 3}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: A piece will stop when entering a Sticky. A piece already on a
         Sticky can be pushed off a sticky by another piece.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 2
       themesTokens:
         list:
@@ -56,46 +71,66 @@ MonoBehaviour:
             type: 3}
     - elementName: GHOST
       tokenType: 4
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: A piece can pass through a Ghost but cannot stop on a Ghost.
       showBackgroundTile: 1
+      backgroundTileColor: {r: 1, g: 0.81154126, b: 0.4292453, a: 1}
       gameboardInstructionID: 3
       themesTokens:
         list:
         - theme: 127
           tokenPrefab: {fileID: 114544858063307236, guid: 6e4f94269d5d54d82b69d83f7028a2e5,
             type: 3}
-    - elementName: ICE
-      tokenType: 8
-      enabled: 1
-      description: Pieces move normally over Ice. A piece stopped on an Ice Sheet
-        can be pushed and the new piece will take its place.
-      showBackgroundTile: 0
-      gameboardInstructionID: 4
-      themesTokens:
-        list:
-        - theme: 16
-          tokenPrefab: {fileID: 114147369826523774, guid: 3499a5e46e3be49a6a1cc9f3657fbff2,
-            type: 3}
     - elementName: PIT
       tokenType: 12
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: A piece stopping on a Pit is removed from the game and the pit
         then disappears.
       showBackgroundTile: 1
+      backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
       gameboardInstructionID: 5
       themesTokens:
         list:
         - theme: 127
           tokenPrefab: {fileID: 5009243331750805650, guid: a8e6195c9f07043dba35b16ee6e88c8d,
             type: 3}
+    - elementName: ICE
+      tokenType: 8
+      tokenIcon: {fileID: 0}
+      enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
+      description: Pieces move normally over Ice. A piece stopped on an Ice Sheet
+        can be pushed and the new piece will take its place.
+      showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
+      gameboardInstructionID: 4
+      themesTokens:
+        list:
+        - theme: 16
+          tokenPrefab: {fileID: 114147369826523774, guid: 3499a5e46e3be49a6a1cc9f3657fbff2,
+            type: 3}
     - elementName: SAND
       tokenType: 10
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: Sand creates friction. A piece can pass through the 1st Sand but
         will stop on the 2nd Sand it reaches. Another piece can push a piece out of
         Sand and take it's place.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 6
       themesTokens:
         list:
@@ -104,10 +139,15 @@ MonoBehaviour:
             type: 3}
     - elementName: RANDOM_LEFTRIGHT, disabled
       tokenType: 44
+      tokenIcon: {fileID: 0}
       enabled: 0
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: Can be either Left or Right. Will cause a piece to always turn
         either right or left when passing through this space.
       showBackgroundTile: 1
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 7
       themesTokens:
         list:
@@ -116,10 +156,15 @@ MonoBehaviour:
             type: 3}
     - elementName: FRUIT
       tokenType: 19
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: Fruit are dropped from Fruit Trees. When a piece passes over a
         Fruit, the Fruit is squished and turns into a Sticky.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 8
       themesTokens:
         list:
@@ -128,10 +173,15 @@ MonoBehaviour:
             type: 3}
     - elementName: WALL, disabled
       tokenType: 39
+      tokenIcon: {fileID: 0}
       enabled: 0
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: Blocker. Every time a piece is stopped by a Fruit Tree, a new Fruit
         drops from the Fruit Tree and appears randomly on the board.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 9
       themesTokens:
         list:
@@ -140,12 +190,17 @@ MonoBehaviour:
             type: 3}
     - elementName: SPIDER, disabled
       tokenType: 37
+      tokenIcon: {fileID: 0}
       enabled: 0
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: Spiders can be squished and removed if a piece passes over them.
         A Spider will travel 1 space each turn towards the nearest Web. When a spider
         reaches a Web, any pieces in the Web will be removed from the game and the
         Spider will disappear.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 10
       themesTokens:
         list:
@@ -154,11 +209,16 @@ MonoBehaviour:
             type: 3}
     - elementName: WEB, disabled
       tokenType: 36
+      tokenIcon: {fileID: 0}
       enabled: 0
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: A piece entering a Web will stop and a Spider will appear randomly
         on the board unless a Spider is already on the board. Another piece can push
         a piece out of a Web and takes it's place.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 11
       themesTokens:
         list:
@@ -167,10 +227,15 @@ MonoBehaviour:
             type: 3}
     - elementName: WATER
       tokenType: 3
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: A piece entering Water will stop. A piece can be pushed out of
         Water but will only move 1 space.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 12
       themesTokens:
         list:
@@ -179,10 +244,15 @@ MonoBehaviour:
             type: 3}
     - elementName: BOUNCE, disabled
       tokenType: 7
+      tokenIcon: {fileID: 0}
       enabled: 0
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: A piece moving into a Bumper will bounce and move in the opposite
         direction.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 13
       themesTokens:
         list:
@@ -191,10 +261,15 @@ MonoBehaviour:
             type: 3}
     - elementName: CIRCLE_BOMB
       tokenType: 13
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: When a piece enters a Bomb, the Bomb will explode and remove that
         piece and any pieces in the 8 surrounding spaces from the game.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 14
       themesTokens:
         list:
@@ -203,11 +278,16 @@ MonoBehaviour:
             type: 3}
     - elementName: FIRE, disabled
       tokenType: 31
+      tokenIcon: {fileID: 0}
       enabled: 0
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: A piece passing over a Lava space has a chance of burning. If a
         piece ends it move on Lava, there is a 100% chance it start burning. After
         3 moves, a piece on fire will burn completely and be removed from the game.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 15
       themesTokens:
         list:
@@ -216,10 +296,15 @@ MonoBehaviour:
             type: 3}
     - elementName: PUDDLE, disabled
       tokenType: 45
+      tokenIcon: {fileID: 0}
       enabled: 0
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: A piece will stop on a Puddle. The Puddle then disappears from
         the game.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 16
       themesTokens:
         list:
@@ -228,10 +313,15 @@ MonoBehaviour:
             type: 3}
     - elementName: FOURWAY_ARROW
       tokenType: 6
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: Can be either Left or Right. Will cause a piece to always turn
         either right or left when passing through this space.
       showBackgroundTile: 1
+      backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
       gameboardInstructionID: 22
       themesTokens:
         list:
@@ -240,10 +330,15 @@ MonoBehaviour:
             type: 3}
     - elementName: FRUIT_TREE
       tokenType: 55
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: Blocker. If a piece is stopped by a Fruit Tree, a Fruit will appear
         on the opposite side."
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 18
       themesTokens:
         list:
@@ -252,9 +347,14 @@ MonoBehaviour:
             type: 3}
     - elementName: ICE_BLOCK
       tokenType: 9
+      tokenIcon: {fileID: 21300000, guid: 71c6951ce3a2ccf46a54f1c12bff57da, type: 3}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: Blocker. Crumbles after blocking a piece.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 19
       themesTokens:
         list:
@@ -263,9 +363,14 @@ MonoBehaviour:
             type: 3}
     - elementName: SNOW
       tokenType: 18
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 0
       description: Pieces that travel through snow will be turned into ice.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 20
       themesTokens:
         list:
@@ -274,12 +379,85 @@ MonoBehaviour:
             type: 3}
     - elementName: HEX
       tokenType: 33
+      tokenIcon: {fileID: 0}
       enabled: 1
+      isSpell: 1
+      spellID: 0
+      basePrice: 50
       description: Hex.
       showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
       gameboardInstructionID: 21
       themesTokens:
         list:
         - theme: 127
           tokenPrefab: {fileID: 8868011646140414053, guid: 45b68f66ca61bd34283d32d6fbedc365,
+            type: 3}
+    - elementName: MOVING_GHOST
+      tokenType: 49
+      tokenIcon: {fileID: 0}
+      enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 50
+      description: Moving Ghost.
+      showBackgroundTile: 1
+      backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
+      gameboardInstructionID: 31
+      themesTokens:
+        list:
+        - theme: 4
+          tokenPrefab: {fileID: 114544858063307236, guid: 5144a063c30d69748b84427af4c01094,
+            type: 3}
+    - elementName: ROTATING_ARROW
+      tokenType: 27
+      tokenIcon: {fileID: 0}
+      enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 50
+      description: Rotating Arrow
+      showBackgroundTile: 1
+      backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
+      gameboardInstructionID: 3
+      themesTokens:
+        list:
+        - theme: 127
+          tokenPrefab: {fileID: 114714016604888040, guid: 76a3a3b33c0ba504c9b8c947c4eacff9,
+            type: 3}
+    - elementName: LURE
+      tokenType: 20
+      tokenIcon: {fileID: 0}
+      enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 50
+      description: 'The lure token should change the direction of a piece and pull
+        the game piece towards it whenever it enters the same row or column as a lure. '
+      showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
+      gameboardInstructionID: 23
+      themesTokens:
+        list:
+        - theme: 127
+          tokenPrefab: {fileID: 4019648888608874011, guid: b3748e402408cbc44b26e230a5a0aec4,
+            type: 3}
+    - elementName: MOVE_BLOCKER
+      tokenType: 61
+      tokenIcon: {fileID: 0}
+      enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 50
+      description: A blocker. Pieces cannot enter or move through this space.
+      showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
+      gameboardInstructionID: 24
+      themesTokens:
+        list:
+        - theme: 2
+          tokenPrefab: {fileID: 114115778919009160, guid: 10b23b5ed8762074c9185dc01a8e0f64,
+            type: 3}
+        - theme: 16
+          tokenPrefab: {fileID: 2606553681170442482, guid: 3472ca9908b81eb4a9dc3c8c9500fd26,
             type: 3}

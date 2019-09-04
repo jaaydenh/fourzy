@@ -5,13 +5,12 @@ using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UI.Extensions;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class GamePiecesScreen : MenuTab
     {
-        public FlowLayoutGroup piecesGroup;
+        public GridLayoutGroup piecesGroup;
         public GridLayoutGroup tokensGroup;
 
         private List<GamePieceWidgetMedium> gamePieceWidgets;
@@ -44,7 +43,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 //    widget.data.AddPieces(Random.Range(1, 5));
 
                 //give gems
-                UserManager.Instance.gems = 3;
+                //UserManager.Instance.gems = 3;
 
                 ////update gamepieces data
                 //foreach (GamePieceWidgetMedium gamePieceWidget in gamePieceWidgets)
@@ -58,8 +57,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gamePieceWidgets.Clear();
 
             //remove old ones
-            foreach (Transform gamePiece in piecesGroup.transform)
-                Destroy(gamePiece.gameObject);
+            foreach (Transform gamePiece in piecesGroup.transform) Destroy(gamePiece.gameObject);
 
             //load game pieces
             foreach (GamePiecePrefabData prefabData in GameContentManager.Instance.piecesDataHolder.gamePieces.list)
@@ -67,6 +65,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 GamePieceWidgetMedium widget = GameContentManager.InstantiatePrefab<GamePieceWidgetMedium>(GameContentManager.PrefabType.GAME_PIECE_MEDIUM, piecesGroup.transform);
                 widget.SetData(prefabData.data);
                 gamePieceWidgets.Add(widget);
+
+                widgets.Add(widget);
             }
         }
 

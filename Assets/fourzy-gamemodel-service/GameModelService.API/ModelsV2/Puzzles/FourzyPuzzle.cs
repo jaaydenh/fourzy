@@ -89,7 +89,7 @@ namespace FourzyGameModel.Model
             return new PlayerTurnResult(State, GameActions, Turn);
         }
 
-        public PlayerTurnResult TakeAITurn(bool ReturnStartOfNextTurn = false)
+        public virtual PlayerTurnResult TakeAITurn(bool ReturnStartOfNextTurn = false)
         {
             PlayerTurnResult AIResult = new PlayerTurnResult();
 
@@ -149,7 +149,7 @@ namespace FourzyGameModel.Model
             return new PlayerTurnResult(newState, actions);
         }
 
-        public GameState Reset()
+        public virtual GameState Reset()
         {
             State = FirstState;
             initialize();

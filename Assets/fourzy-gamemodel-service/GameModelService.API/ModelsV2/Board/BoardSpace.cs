@@ -113,6 +113,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public void ApplyElement(ElementType Element)
+        {
+            foreach (IToken t in Tokens.Values)
+            {
+                t.ApplyElement(Element);
+            }
+        }
+
         public int CountTokenClass(TokenClassification TokenClass)
         {
             int count = 0;
@@ -757,11 +765,15 @@ namespace FourzyGameModel.Model
 
             if (ContainsToken)
             {
+                //Delete objects before end of turn logic.
                 foreach (var key in Tokens.Keys.ToArray().Where(v => Tokens[v].Delete == true)) Tokens.Remove(key);
 
                 List<IToken> TList = new List<IToken>();
                 foreach (IToken t in Tokens.Values) TList.Add(t);
                 foreach (IToken t in TList) t.EndOfTurn(PlayerId);
+
+                //In case a end of turn logic deletes a piece, check for additional deletes.
+                foreach (var key in Tokens.Keys.ToArray().Where(v => Tokens[v].Delete == true)) Tokens.Remove(key);
             }
         }
 

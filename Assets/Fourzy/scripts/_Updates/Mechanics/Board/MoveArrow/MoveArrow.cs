@@ -44,10 +44,10 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             this.board = board;
 
-            arrowSizeTween.playbackTime = animationDuration - .15f;
-            arrowAlphaTween.playbackTime = animationDuration - .15f;
+            arrowSizeTween.playbackTime = animationDuration * .6f;
+            arrowAlphaTween.playbackTime = animationDuration * .6f;
             markerAlphaTween.playbackTime = animationDuration;
-            glowAlphaTween.playbackTime = animationDuration + .2f;
+            glowAlphaTween.playbackTime = animationDuration * 1.35f;
         }
 
         public void _Reset()
@@ -94,7 +94,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void Rotate(Direction direction)
         {
-            bool origin = SettingsManager.Instance.Get(SettingsManager.KEY_MOVE_ORIGIN);
+            //bool origin = SettingsManager.Instance.Get(SettingsManager.KEY_MOVE_ORIGIN);
+            bool origin = false;
 
             switch (direction)
             {
@@ -117,6 +118,7 @@ namespace Fourzy._Updates.Mechanics.Board
         }
 
         public void Position(BoardLocation boardLocation) => 
-            transform.localPosition = board.BoardLocationToVec2(SettingsManager.Instance.Get(SettingsManager.KEY_MOVE_ORIGIN) ? boardLocation.Mirrored(board.model) : boardLocation);
+            transform.localPosition = board.BoardLocationToVec2(boardLocation.Mirrored(board.model));
+            //transform.localPosition = board.BoardLocationToVec2(SettingsManager.Instance.Get(SettingsManager.KEY_MOVE_ORIGIN) ? boardLocation.Mirrored(board.model) : boardLocation);
     }
 }

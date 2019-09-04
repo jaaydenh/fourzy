@@ -36,11 +36,10 @@ namespace Fourzy._Updates.UI.Widgets
 
             if (gamePiece) Destroy(gamePiece.gameObject);
 
-            gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(data.ID).player1Prefab, gamePieceParent.transform);
+            gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(data.ID).player1Prefab, gamePieceParent);
 
             gamePiece.transform.localPosition = Vector3.zero;
             gamePiece.transform.localScale = Vector3.one * 90f;
-            gamePiece.gameObject.SetLayerRecursively(gamePieceParent.gameObject.layer);
             gamePiece.StartBlinking();
 
             switch (data.State)

@@ -1,33 +1,68 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
-using Fourzy._Updates.UI.Menu.Screens;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class MovesLeftWidget : WidgetBase
     {
-        private SliderExtended slider;
-        private LayoutElement sliderLayout;
-        private PuzzleUIScreen puzzleScreen;
+        public RectTransform container;
+        public GameObject gamePieceHolderPrefab;
+        public Material colorBlendMaterial;
 
-        public override void _Update()
+        private List<GameObject> gamePieceHolders = new List<GameObject>();
+        private ClientFourzyPuzzle puzzle;
+
+        public MovesLeftWidget SetData(ClientFourzyPuzzle puzzle)
         {
-            if (puzzleScreen.game._Type != GameType.PUZZLE)
-                return;
+            this.puzzle = puzzle;
 
-            sliderLayout.minWidth = 65f * puzzleScreen.game.asFourzyPuzzle.MoveLimit;
-            slider.SetMaxValue(puzzleScreen.game.asFourzyPuzzle.MoveLimit, puzzleScreen.game.asFourzyPuzzle.MoveLimit - puzzleScreen.game._playerTurnRecord.Count);
+            _UpdateVisible();
+
+            //clear
+            foreach (GameObject go in gamePieceHolders) Destroy(go);
+            gamePieceHolders.Clear();
+
+            //spawn
+            for (int moveIndex = 0; moveIndex < puzzle.MoveLimit; moveIndex++)
+            {
+                GameObject gmHolder = Instantiate(gamePieceHolderPrefab, container);
+                gmHolder.SetActive(true);
+
+                GamePieceView gamePiece = Instantiate(puzzle.playerGamePiece, gmHolder.transform);
+
+                gamePiece.transform.localPosition = Vector3.zero;
+                gamePiece.transform.localScale = Vector3.one * 70f;
+
+                gamePieceHolders.Add(gmHolder);
+            }
+
+            return this;
         }
 
-        protected override void OnInitialized()
+        public void UpdateMovesLeft()
         {
-            base.OnInitialized();
+            _UpdateVisible();
 
-            slider = GetComponentInChildren<SliderExtended>();
-            sliderLayout = slider.GetComponent<LayoutElement>();
-            puzzleScreen = GetComponentInParent<PuzzleUIScreen>();
+            for (int moveIndex = 0; moveIndex < puzzle.MoveLimit; moveIndex++)
+                if (moveIndex > puzzle.MoveLimit - puzzle._playerTurnRecord.Count - 1)
+                    gamePieceHolders[moveIndex].GetComponentInChildren<GamePieceView>().SetMaterial(colorBlendMaterial);
+        }
+
+        public void _UpdateVisible()
+        {
+            if (puzzle.MoveLimit < 1)
+            {
+                if (alphaTween._value > 0f) Hide(.3f);
+                return;
+            }
+
+            if (alphaTween._value < 1f) Show(.3f);
         }
     }
 }

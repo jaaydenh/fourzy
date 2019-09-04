@@ -17,7 +17,6 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base.Show(time);
 
-
             SetInteractable(true);
             BlockRaycast(true);
         }

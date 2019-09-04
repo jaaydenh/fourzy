@@ -67,7 +67,10 @@ namespace FourzyGameModel.Model
         EdgeSpikeQuartet,
         Half,
         Full,
-        AlmostFull
+        AlmostFull,
+        CrossBoardOneTurn,
+        CrossBoardTwoTurnPattern,
+        CrossBoardFourTurnPattern
     }
 
     public enum RelativeDirection { IN, OUT, NONE}

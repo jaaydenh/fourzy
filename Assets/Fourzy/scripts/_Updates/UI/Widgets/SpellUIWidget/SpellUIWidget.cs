@@ -16,7 +16,7 @@ namespace Fourzy._Updates.UI.Widgets
         public AlphaTween selectedBG;
         public AudioTypes unavailableSfx = AudioTypes.NEGATIVE;
 
-        private SpellsDataHolder.Spell data;
+        private TokensDataHolder.TokenData data;
         private ButtonExtended button;
         private SpellsListUIWidget spellsList;
 
@@ -30,8 +30,9 @@ namespace Fourzy._Updates.UI.Widgets
             this.spellId = spellId;
 
             //get spell contents
-            data = GameContentManager.Instance.spellsDataHolder.GetSpell(spellId);
-            icon.sprite = data.icon;
+            //data = GameContentManager.Instance.spellsDataHolder.GetSpell(spellId);
+            data = GameContentManager.Instance.tokensDataHolder.GetTokenData(spellId);
+            icon.sprite = data.GetTokenSprite();
 
             UpdateWidget(spellsList.game._State.ActivePlayerId);
         }
@@ -94,7 +95,8 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case GameType.TURN_BASED:
                 case GameType.PASSANDPLAY:
-                    SetButtonState(spellsList.game._State.Players[playerId].Magic >= data.price && _state);
+                    SetButtonState(spellsList.game.magic[playerId] >= data.price && _state);
+
                     break;
             }
         }

@@ -39,15 +39,17 @@ namespace FourzyGameModel.Model
                     Arrow.Space.Parent.RecordGameAction(new GameActionTokenRotation(Arrow, TransitionType.BOSS_POWER, Rotation.CLOCKWISE, OrigOrientation, Arrow.Orientation));
                 }
             }
+            BossAIHelper.GetBoss(State).UseSpecialAbility();
             return true;
         }
 
-        public bool IsAvailable(GameState State)
+        public bool IsAvailable(GameState State, bool IsDesparate = false)
         {
-            return true;
+            if (BossAIHelper.GetBoss(State).SpecialAbilityCount > 0) return true;
+            return false;
         }
 
-        public List<IMove> GetPossibleActivations(GameState State)
+        public List<IMove> GetPossibleActivations(GameState State, bool IsDesparate = false)
         {
             List<IMove> Powers = new List<IMove>();
 

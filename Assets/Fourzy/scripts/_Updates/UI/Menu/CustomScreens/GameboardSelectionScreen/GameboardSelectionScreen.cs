@@ -3,11 +3,18 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
+    /// <summary>
+    /// One of the 'heavy' screens, needs a routine to initialize all gameboards
+    /// Also since it don't listen to any updates of those boards it can have them 'disabled' when not opened
+    /// </summary>
     public class GameboardSelectionScreen : MenuScreen
     {
         public RectTransform gameboardsParent;
@@ -15,6 +22,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public ToggleGroup toggleGroup { get; private set; }
         public GameBoardDefinition data { get; private set; }
+
+        private List<GameBoardDefinition> gameboards;
+        private List<MiniGameboardWidget> gameboardWidgets;
+        private int lastInstantiatedIndex = 0;
+
+        private bool wasDisabled = false;
+        private MiniGameboardWidget selected;
 
         protected override void Awake()
         {
@@ -27,43 +41,91 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Start();
 
-            foreach (Transform board in gameboardsParent)
-                Destroy(board.gameObject);
+            gameboards = GameContentManager.Instance.passAndPlayGameboards;
+            gameboardWidgets = new List<MiniGameboardWidget>();
 
             //spawn random one
-            MiniGameboardWidget gameboard = Instantiate(miniGameboardPrefab, gameboardsParent);
-            gameboard.toggle.group = toggleGroup;
-            gameboard.toggle.isOn = true;
+            //select first one
+            SetGame(Instantiate(miniGameboardPrefab, gameboardsParent));
 
-            //and the rest
-            foreach (GameBoardDefinition gameboardDefinition in GameContentManager.Instance.passAndPlayGameboards)
+            StartRoutine("initializeBoards", InitializeRoutine());
+        }
+
+        protected void OnDisable()
+        {
+            wasDisabled = true;
+        }
+
+        protected void OnEnable()
+        {
+            if (wasDisabled)
             {
-                gameboard = Instantiate(miniGameboardPrefab, gameboardsParent);
-                gameboard.SetData(gameboardDefinition);
-                gameboard.toggle.group = toggleGroup;
+                wasDisabled = false;
+
+                if (lastInstantiatedIndex < gameboards.Count - 1)
+                {
+                    StartRoutine("continueInitialize", gameboardWidgets[lastInstantiatedIndex].gameboardView.CreateBitsRoutine(false, true), () =>
+                    {
+                        gameboardWidgets[lastInstantiatedIndex].FinishedLoading();
+
+                        lastInstantiatedIndex++;
+
+                        CancelRoutine("initializeBoards");
+                        StartRoutine("initializeBoards", InitializeRoutine());
+                    }, null);
+                }
             }
         }
 
-        public void SetGame(GameBoardDefinition data)
+        public void SetGame(MiniGameboardWidget widget)
         {
-            this.data = data;
+            if (selected && selected == widget) return;
+
+            data = widget.data;
+
+            if (selected) selected.Deselect();
+
+            selected = widget;
+            selected.Select();
         }
 
         public void Play()
         {
             ClientFourzyGame game;
-            Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentTheme.themeID);
+
+            UnityEngine.Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentTheme.themeID);
+
             if (data != null)
                 game = new ClientFourzyGame(data, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
             else
                 game = new ClientFourzyGame(
-                    GameContentManager.Instance.currentTheme.themeID, 
-                    UserManager.Instance.meAsPlayer, new Player(2, "Player Two"), 
+                    GameContentManager.Instance.currentTheme.themeID,
+                    UserManager.Instance.meAsPlayer, new Player(2, "Player Two"),
                     UserManager.Instance.meAsPlayer.PlayerId);
 
             game._Type = GameType.PASSANDPLAY;
 
             GameManager.Instance.StartGame(game);
+        }
+
+        private IEnumerator InitializeRoutine()
+        {
+            while (lastInstantiatedIndex < gameboards.Count)
+            {
+                MiniGameboardWidget gameboard = Instantiate(miniGameboardPrefab, gameboardsParent);
+
+                gameboard.HideBoard();
+                gameboard.ShowSpinner();
+
+                widgets.Add(gameboard);
+                gameboardWidgets.Add(gameboard);
+
+                yield return gameboard.SetData(gameboards[lastInstantiatedIndex]).CreateBitsRoutine(true, true);
+
+                gameboardWidgets[lastInstantiatedIndex].FinishedLoading();
+
+                lastInstantiatedIndex++;
+            }
         }
     }
 }

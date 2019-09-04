@@ -3,11 +3,13 @@
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using StackableDecorator;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.Serialized
@@ -44,17 +46,34 @@ namespace Fourzy._Updates.Serialized
         {
             BackgroundConfiguration value = BackgroundConfiguration.IPHONEX;
 
-            if (_camera.aspect < .51f)
-                value = BackgroundConfiguration.IPHONEX;
-            else if (_camera.aspect < .655f)
-                value = BackgroundConfiguration.IPHONE;
+            //check portrait/landscape
+            if (Screen.width > Screen.height)
+            {
+                //landscape
+                value = BackgroundConfiguration.WIDESCREEN;
+            }
             else
-                value = BackgroundConfiguration.IPAD;
+            {
+                //portrait
+                if (_camera.aspect > .7f)
+                    value = BackgroundConfiguration.IPAD;
+                else if (_camera.aspect >= .5f)
+                    value = BackgroundConfiguration.IPHONE;
+                else
+                    value = BackgroundConfiguration.IPHONEX;
+            }
 
             return GetTheme(area).configurations.list.Find(configuration => configuration.value == value);
         }
 
         public string GetThemeName(Area area) => GetTheme(area)?.name ?? "theme_not_found";
+
+        public Area GetRandomTheme(Area exclude, bool excludeDisabled = true)
+        {
+            List<Area> areas = new List<Area>();
+            foreach (Area area in Enum.GetValues(typeof(Area)).Cast<Area>()) if (!exclude.HasFlag(area) && IsThemeEnabled(area)) areas.Add(area);
+            return areas.Random();
+        }
 
         public bool IsThemeEnabled(Area area) => GetTheme(area)?.enabled ?? false;
 
@@ -69,23 +88,34 @@ namespace Fourzy._Updates.Serialized
         {
             [HideInInspector]
             public string _name;
-
-            [StackableField]
-            [ShowIf("#Check")]
+            
+            [ShowIf("#Check"), StackableField]
             public string name;
-            public string description;
-            public int levelToUnlock;
             public bool enabled = true;
+            [ShowIf("#ShowIf"), StackableField]
+            public Color themeColor;
+            [ShowIf("#ShowIf"), StackableField]
+            public string description;
+            [ShowIf("#ShowIf"), StackableField]
+            public int levelToUnlock;
+            [ShowIf("#ShowIf"), StackableField]
             public Area themeID;
+            [ShowIf("#ShowIf"), StackableField]
             public AudioTypes bgAudio;
+            [ShowIf("#ShowIf"), StackableField]
             public Sprite preview;
+
             [List]
+            [ShowIf("#ShowIf"), StackableField]
             public GamepieceViewsCollection gamepieces;
             [List]
+            [ShowIf("#ShowIf"), StackableField]
             public TokenViewsCollection tokens;
             [List]
+            [ShowIf("#ShowIf"), StackableField]
             public AreaUnlockRequirementsCollection unclockRequirements;
             [List]
+            [ShowIf("#ShowIf"), StackableField]
             public BackgroundConfigurations configurations;
 
             public bool Check()
@@ -93,6 +123,11 @@ namespace Fourzy._Updates.Serialized
                 _name = $"{name}: {(enabled ? "Enabled" : "Disabled")}";
 
                 return true;
+            }
+
+            public bool ShowIf()
+            {
+                return enabled;
             }
         }
 
@@ -152,30 +187,9 @@ namespace Fourzy._Updates.Serialized
         }
 
         [Serializable]
-        public class TokenView_ThemesDataHolder
-        {
-            [HideInInspector]
-            public string _name;
-
-            [StackableField]
-            [ShowIf("#Check")]
-            public TokenView prefab;
-
-            public bool Check()
-            {
-                if (!prefab)
-                    return true;
-
-                _name = prefab.name;
-
-                return true;
-            }
-        }
-
-        [Serializable]
         public class TokenViewsCollection
         {
-            public List<TokenView_ThemesDataHolder> list;
+            public List<TokenType> list;
         }
 
         [Serializable]
@@ -186,7 +200,7 @@ namespace Fourzy._Updates.Serialized
 
             [StackableField]
             [ShowIf("#Check")]
-            public CurrencyWidget.CurrencyType type;
+            public CurrencyType type;
             public int quantity;
 
             public bool Check()
@@ -202,7 +216,7 @@ namespace Fourzy._Updates.Serialized
         {
             public List<AreaUnlockRequirement> list;
 
-            public AreaUnlockRequirement GetRequirement(CurrencyWidget.CurrencyType type) => list.Find(unlockRequirement => unlockRequirement.type == type);
+            public AreaUnlockRequirement GetRequirement(CurrencyType type) => list.Find(unlockRequirement => unlockRequirement.type == type);
         }
 
         public enum BackgroundConfiguration
@@ -211,6 +225,7 @@ namespace Fourzy._Updates.Serialized
             IPHONEX,
             IPHONE,
             IPAD,
+            WIDESCREEN,
         }
     }
 }

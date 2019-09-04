@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2298214839594650324}
   - component: {fileID: 6093681135839665814}
-  - component: {fileID: 4199900040731307401}
   - component: {fileID: 7893851387470280360}
   - component: {fileID: 112103608242191486}
   - component: {fileID: 5338305523893637579}
@@ -58,25 +57,6 @@ MonoBehaviour:
   volume: 1
   onGamePieceEnter: 0
   onActivate: 143
---- !u!95 &4199900040731307401
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3844440046759932430}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3c8da12f6a65249fc8fdf809104fdee2, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!210 &7893851387470280360
 SortingGroup:
   m_ObjectHideFlags: 0

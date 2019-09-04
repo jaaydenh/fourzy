@@ -67,6 +67,7 @@ namespace Fourzy._Updates.Serialized
 
 
         REWARD_SPAWN = 61,
+        TIMER_BAR_LOST = 62,
         #endregion
 
         #region Audio

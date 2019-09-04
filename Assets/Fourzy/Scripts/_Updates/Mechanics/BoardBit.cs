@@ -5,6 +5,8 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
+using Sirenix.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +36,7 @@ namespace Fourzy._Updates.Mechanics
 
         public bool active { get; set; }
 
+        public RectTransform rectTransform { get; private set; }
         public SortingGroup sortingGroup { get; private set; }
         public AlphaTween alphaTween { get; private set; }
         public ScaleTween scaleTween { get; private set; }
@@ -92,37 +95,40 @@ namespace Fourzy._Updates.Mechanics
             if (outline) outline.outlineColor = new Color(outline.outlineColor.r, outline.outlineColor.g, outline.outlineColor.b, value);
         }
 
-        public virtual void Hide(float fadeTime)
+        public virtual void Hide(float time)
         {
-            alphaTween.playbackTime = fadeTime;
-
-            alphaTween.PlayBackward(true);
+            if (time == 0f)
+                alphaTween.SetAlpha(0f);
+            else
+            {
+                alphaTween.playbackTime = time;
+                alphaTween.PlayBackward(true);
+            }
         }
 
-        public virtual void Show(float fadeTime)
+        public virtual void Show(float time)
         {
-            alphaTween.playbackTime = fadeTime;
-
-            alphaTween.PlayForward(true);
+            if (time == 0f)
+                alphaTween.SetAlpha(0f);
+            else
+            {
+                alphaTween.playbackTime = time;
+                alphaTween.PlayForward(true);
+            }
         }
 
-        public virtual void ScaleToCurrent(Vector3 value, float time)
+        public void Scale(Vector3 from, Vector3 to, float time)
         {
-            scaleTween.from = value;
-            scaleTween.to = transform.localScale;
+            scaleTween.from = from;
+            scaleTween.to = to;
             scaleTween.playbackTime = time;
 
             scaleTween.PlayForward(true);
         }
 
-        public virtual void ScaleFromCurrent(Vector3 value, float time)
-        {
-            scaleTween.from = transform.localScale;
-            scaleTween.to = value;
-            scaleTween.playbackTime = time;
+        public virtual void ScaleToCurrent(Vector3 value, float time) => Scale(value, transform.localScale, time);
 
-            scaleTween.PlayForward(true);
-        }
+        public virtual void ScaleFromCurrent(Vector3 value, float time) => Scale(transform.localScale, value, time);
 
         public virtual void RotateTo(float value, RepeatType repeatType, float time)
         {
@@ -132,6 +138,111 @@ namespace Fourzy._Updates.Mechanics
             rotationTween.repeat = repeatType;
 
             rotationTween.PlayForward(true);
+        }
+
+        /// <summary>
+        /// Time == 0 means autocalculate
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="rotation"></param>
+        /// <param name="time"></param>
+        public virtual float RotateTo(Direction from, Direction to, Rotation rotation, float time = 0f)
+        {
+            float _from = 0f;
+            float _to = 0f;
+            float _time = time;
+            
+            if (rotation == Rotation.CLOCKWISE)
+            {
+                switch (from)
+                {
+                    case Direction.RIGHT:
+                        _from = -90f;
+
+                        break;
+
+                    case Direction.DOWN:
+                        _from = -180f;
+
+                        break;
+
+                    case Direction.LEFT:
+                        _from = -270f;
+
+                        break;
+                }
+
+                switch (to)
+                {
+                    case Direction.RIGHT:
+                        _to = -90f;
+
+                        break;
+
+                    case Direction.DOWN:
+                        _to = -180f;
+
+                        break;
+
+                    case Direction.LEFT:
+                        _to = -270f;
+
+                        break;
+                }
+
+                if (_to > _from) _to -= 360f;
+            }
+            else
+            {
+                switch (from)
+                {
+                    case Direction.LEFT:
+                        _from = 90f;
+
+                        break;
+
+                    case Direction.DOWN:
+                        _from = 180f;
+
+                        break;
+
+                    case Direction.RIGHT:
+                        _from = 270f;
+
+                        break;
+                }
+
+                switch (to)
+                {
+                    case Direction.LEFT:
+                        _to = 90f;
+
+                        break;
+
+                    case Direction.DOWN:
+                        _to = 180f;
+
+                        break;
+
+                    case Direction.RIGHT:
+                        _to = 270f;
+
+                        break;
+                }
+
+                if (_from > _to) _to += 360f;
+            }
+
+            if (_time == 0f) _time = Mathf.Abs(Mathf.Abs(_from) - Mathf.Abs(_to)) / 90f * .5f;
+
+            rotationTween.from = Vector3.forward * _from;
+            rotationTween.to = Vector3.forward * _to;
+            rotationTween.playbackTime = _time;
+
+            rotationTween.PlayForward(true);
+
+            return _time;
         }
 
         public virtual void ShowOutline(bool repeat)
@@ -169,35 +280,33 @@ namespace Fourzy._Updates.Mechanics
                     spriteRenderer.material = material;
         }
 
+        public virtual float StartMoveRoutine(params GameAction[] actions)
+        {
+            BoardLocation[] locations = actions.AsBoardLocations();
+            float distance = 0f;
+
+            if (locations.Length > 1)
+                for (int index = 1; index < locations.Length; index++)
+                    distance += Vector2.Distance(gameboard.BoardLocationToVec2(locations[index - 1]), gameboard.BoardLocationToVec2(locations[index]));
+
+            StartCoroutine(MoveRoutine(locations));
+
+            return distance / gameboard.bitSpeed;
+        }
+
         public virtual float ExecuteGameAction(params GameAction[] actions)
         {
-            if (actions == null || actions.Length == 0)
-                return 0f;
+            if (actions == null || actions.Length == 0) return 0f;
 
             switch (actions[0].Type)
             {
-                case GameActionType.MOVE_PIECE:
-                    float distance = 0f;
-                    List<GameActionMove> actionsMove = new List<GameActionMove>();
-
-                    foreach (GameAction action in actions)
-                    {
-                        GameActionMove _action = action as GameActionMove;
-
-                        Vector2 start = gameboard.BoardLocationToVec2(_action.Start);
-                        Vector2 end = gameboard.BoardLocationToVec2(_action.End);
-
-                        distance += Vector2.Distance(start, end);
-                        actionsMove.Add(_action);
-                    }
-
-                    StartCoroutine(MoveRoutine(actionsMove.ToArray()));
-
-                    return distance / gameboard.bitSpeed;
+                case GameActionType.MOVE_PIECE: return StartMoveRoutine(actions);
             }
 
-            return 0f;
+            return OnGameAction(actions);
         }
+
+        public virtual float OnGameAction(params GameAction[] actions) { return 0f; }
 
         public virtual void OnBeforeTurn()
         {
@@ -206,9 +315,9 @@ namespace Fourzy._Updates.Mechanics
 
         public virtual void OnAfterTurn() { }
 
-        public virtual void OnBeforeMoveAction(params GameActionMove[] actionsMoves) { }
+        public virtual void OnBeforeMoveAction(params BoardLocation[] actionsMoves) { }
 
-        public virtual void OnAfterMove(params GameActionMove[] actionsMoves) { }
+        public virtual void OnAfterMove(params BoardLocation[] actionsMoves) { }
 
         public virtual void OnBitEnter(BoardBit other) { }
 
@@ -221,12 +330,22 @@ namespace Fourzy._Updates.Mechanics
             OnInitialized();
         }
 
+        public void ApplyMaterial(Material material)
+        {
+            Array.ForEach(imageRenderers, (_image) => _image.ApplyMaterial(material));
+            //if (parentRectTransform)
+            //    Array.ForEach(imageRenderers, (_image) => _image.ApplyMaterial(material));
+            //else
+            //    Array.ForEach(spriteRenderers, (_spriteRenderer) => _spriteRenderer.ApplyMaterial(material));
+        }
+
         protected virtual void OnInitialized()
         {
             active = true;
             turnTokensInteractionList = new List<TokenView>();
 
             parentRectTransform = GetComponentInParent<RectTransform>();
+            rectTransform = GetComponent<RectTransform>();
             gameboard = GetComponentInParent<GameboardView>();
             alphaTween = GetComponent<AlphaTween>();
             scaleTween = GetComponent<ScaleTween>();
@@ -280,10 +399,17 @@ namespace Fourzy._Updates.Mechanics
             alphaTween.DoParse();
         }
 
-        public virtual void _Destroy()
+        public void _Destroy(float time = 0f)
         {
-            if (gameboard)
-                gameboard.RemoveBoardBit(this);
+            if (time == 0f)
+                _Destroy();
+            else
+                StartRoutine("destroy", time, () => _Destroy());
+        }
+
+        public void _Destroy()
+        {
+            if (gameboard) gameboard.RemoveBoardBit(this);
 
             Destroy(gameObject);
         }
@@ -297,7 +423,7 @@ namespace Fourzy._Updates.Mechanics
                     RotateTo(360f, RepeatType.ZERO_TO_ONE, 1.2f);
                     ScaleFromCurrent(Vector3.zero, 1f);
 
-                    StartRoutine("destroy", 1f, () => _Destroy());
+                    _Destroy(1f);
 
                     return .85f;
 
@@ -314,45 +440,40 @@ namespace Fourzy._Updates.Mechanics
                 case TransitionType.SPELL_FADE:
                     ScaleFromCurrent(Vector3.zero, .85f);
                     Hide(.75f);
-
-                    StartRoutine("destroy", 1f, () => _Destroy());
+                    _Destroy(.75f);
 
                     return .85f;
 
                 default:
-                    _Destroy();
-                    return 0f;
+                    Hide(.75f);
+                    _Destroy(.75f);
+
+                    return .75f;
             }
         }
 
-        protected virtual IEnumerator MoveRoutine(params GameActionMove[] actionsMoves)
+        protected virtual IEnumerator MoveRoutine(params BoardLocation[] actionsMoves)
         {
-            if (actionsMoves == null || actionsMoves.Length == 0)
-                yield break;
+            if (actionsMoves == null || actionsMoves.Length == 0) yield break;
 
             OnBeforeMoveAction(actionsMoves);
 
-            GameActionMove startMoveAction = actionsMoves[0] as GameActionMove;
-            GameActionMove endMoveAction = actionsMoves[actionsMoves.Length - 1] as GameActionMove;
-
-            Vector2 start = gameboard.BoardLocationToVec2(startMoveAction.Start);
-            Vector2 end = gameboard.BoardLocationToVec2(endMoveAction.End);
+            Vector2 start = gameboard.BoardLocationToVec2(actionsMoves[0]);
+            Vector2 end = gameboard.BoardLocationToVec2(actionsMoves[actionsMoves.Length - 1]);
             float distance = Vector2.Distance(start, end);
             int actionIndex = 0;
-            GameActionMove closest = null;
+            BoardLocation closest = new BoardLocation(-1, -1);
 
             for (float t = 0; t < 1; t += Time.deltaTime * gameboard.bitSpeed / distance)
             {
                 transform.localPosition = Vector3.Lerp(start, end, t);
 
-                if (actionIndex < actionsMoves.Length &&
-                    Vector2.Distance(gameboard.BoardLocationToVec2(actionsMoves[actionIndex].End), transform.localPosition) <= radius &&
-                    (closest == null || closest != actionsMoves[actionIndex]))
+                if (actionIndex < actionsMoves.Length && Vector2.Distance(gameboard.BoardLocationToVec2(actionsMoves[actionIndex]), transform.localPosition) <= radius && !closest.Equals(actionsMoves[actionIndex]))
                 {
                     closest = actionsMoves[actionIndex];
                     actionIndex++;
 
-                    gameboard.OnBoardLocationEnter(closest.End, this);
+                    gameboard.OnBoardLocationEnter(closest, this);
                 }
 
                 yield return null;

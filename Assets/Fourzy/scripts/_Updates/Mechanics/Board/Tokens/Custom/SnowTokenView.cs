@@ -1,7 +1,7 @@
 ﻿//@vadym udod
 
+using FourzyGameModel.Model;
 using System.Collections;
-using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
 {
@@ -10,10 +10,27 @@ namespace Fourzy._Updates.Mechanics.Board
         public override IEnumerator OnActivated()
         {
             base.OnActivate();
-            scaleTween.from = transform.localScale;
-            scaleTween.PlayForward(true);
 
-            yield return new WaitForSeconds(scaleTween.playbackTime - .2f);
+            //despawn this token
+            Hide(.3f);
+            _Destroy(.4f);
+
+            BoardLocation _location = location;
+            //spawn ice token
+            gameboard.SpawnToken<TokenView>(_location.Row, _location.Column, TokenType.ICE, false).Show(.3f);
+
+            yield break;
+        }
+
+        public override float OnGameAction(params GameAction[] actions)
+        {
+            GameActionTokenTransition _transition = actions[0] as GameActionTokenTransition;
+
+            if (_transition == null || _transition.Reason != TransitionType.SNOW_ICE) return 0f;
+
+            StartCoroutine(OnActivated());
+
+            return 0f;
         }
     }
 }

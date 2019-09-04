@@ -11,22 +11,21 @@ namespace Fourzy._Updates.Managers
     {
         public static Action<bool> onSfx;
         public static Action<bool> onAudio;
-        public static Action<bool> onMoveOrigin;
+        public static Action<bool> onDemoMode;
 
         public const string KEY_SFX = "SETTINGS_SFX";
         public const string KEY_AUDIO = "SETTINGS_AUDIO";
-        public const string KEY_MOVE_ORIGIN = "SETTINGS_MOVE_ORIGIN";
+        public const string KEY_DEMO_MODE = "SETTINGS_DEMO_MODE";
 
         public const bool DEFAULT_SFX = true; 
         public const bool DEFAULT_AUDIO = true;
-        public const bool DEFAULT_MOVE_ORIGIN = true;
+        public const bool DEFAULT_DEMO_MODE = false;
 
         public static SettingsManager Instance
         {
             get
             {
-                if (instance == null)
-                    Initialize();
+                if (instance == null) Initialize();
 
                 return instance;
             }
@@ -37,7 +36,7 @@ namespace Fourzy._Updates.Managers
         {
             [KEY_SFX] = new OptionValueWrapper() { state = false, @default = DEFAULT_SFX, },
             [KEY_AUDIO] = new OptionValueWrapper() { state = false, @default = DEFAULT_AUDIO, },
-            [KEY_MOVE_ORIGIN] = new OptionValueWrapper() { state = false, @default = DEFAULT_MOVE_ORIGIN, },
+            [KEY_DEMO_MODE] = new OptionValueWrapper() { state = false, @default = DEFAULT_DEMO_MODE, },
         };
 
         public void Set(string key, bool value)
@@ -47,16 +46,19 @@ namespace Fourzy._Updates.Managers
                 case KEY_SFX:
                     PlayerPrefs.SetInt(key, (values[key].state = value) ? 1 : 0);
                     onSfx?.Invoke(value);
+
                     break;
 
                 case KEY_AUDIO:
                     PlayerPrefs.SetInt(key, (values[key].state = value) ? 1 : 0);
                     onAudio?.Invoke(value);
+
                     break;
 
-                case KEY_MOVE_ORIGIN:
+                case KEY_DEMO_MODE:
                     PlayerPrefs.SetInt(key, (values[key].state = value) ? 1 : 0);
-                    onMoveOrigin?.Invoke(value);
+                    onDemoMode?.Invoke(value);
+
                     break;
             }
         }

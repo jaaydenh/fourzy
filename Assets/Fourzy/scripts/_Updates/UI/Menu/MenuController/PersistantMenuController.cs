@@ -1,12 +1,11 @@
 ﻿//@vadym udod
 
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu
 {
     public class PersistantMenuController : MenuController
     {
-        public static MenuController instance;
+        public static PersistantMenuController instance;
 
         protected override void Awake()
         {
@@ -21,19 +20,38 @@ namespace Fourzy._Updates.UI.Menu
             base.Awake();
         }
 
-        protected override void Update()
+        protected override void OnBack()
         {
-            //back button functionality
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (screensStack.Count == 0) return;
+
+            if (screensStack.Count > 0)
             {
+                MenuScreen menuScreen = screensStack.Peek();
+
+                if (!menuScreen.interactable) return;
+
+                menuScreen.OnBack();
+            }
+        }
+
+        public override void CloseCurrentScreen(bool animate = true)
+        {
+            if (screensStack.Count > 0)
+            {
+                screensStack.Pop().Close(animate);
+
                 if (screensStack.Count > 0)
                 {
                     MenuScreen menuScreen = screensStack.Peek();
 
-                    if (!menuScreen.interactable)
-                        return;
+                    SetCurrentScreen(menuScreen);
+                    menuScreen.Open();
+                }
+                else
+                {
+                    MenuController underlayingMenuController = GetMenu(Constants.GAMEPLAY_MENU_CANVAS_NAME) ?? GetMenu(Constants.MAIN_MENU_CANVAS_NAME);
 
-                    menuScreen.OnBack();
+                    if (underlayingMenuController.screensStack.Count > 0) underlayingMenuController.screensStack.Peek().Open();
                 }
             }
         }

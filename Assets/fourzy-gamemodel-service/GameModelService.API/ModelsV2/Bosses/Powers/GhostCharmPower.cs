@@ -50,15 +50,20 @@ namespace FourzyGameModel.Model
             return false;
         }
 
-        public bool IsAvailable(GameState State)
+        public bool IsAvailable(GameState State, bool IsDesparate = false)
         {
             return true;
         }
 
-        public List<IMove> GetPossibleActivations(GameState State)
+        public List<IMove> GetPossibleActivations(GameState State, bool IsDesparate = false)
         {
             List<IMove> Powers = new List<IMove>();
             List<IToken> Ghosts = State.Board.FindTokens(TokenType.GHOST);
+
+            if (IsDesparate)
+            {
+
+          
             foreach (IToken t in Ghosts)
             {
                 GhostToken Ghost = (GhostToken)t;
@@ -75,6 +80,25 @@ namespace FourzyGameModel.Model
                     }
                 }
 
+            }
+            }
+            else
+            {
+                int RandomGhost = State.Random.RandomInteger(1, Ghosts.Count);
+
+                GhostToken Ghost = (GhostToken)Ghosts[RandomGhost];
+                foreach (Direction d in Enum.GetValues(typeof(Direction)))
+                {
+                    foreach (BoardLocation Target in Ghost.Space.Location.Look(State.Board, d))
+                    {
+                        if (!Target.OnBoard(State.Board)) continue;
+                        if (State.Board.ContentsAt(Target).ContainsPiece) continue;
+                        if (!State.Board.ContentsAt(Target).TokensAllowEndHere) continue;
+
+                        Powers.Add(new GhostCharmPower(Ghost.Space.Location, d));
+                        break;
+                    }
+                }
             }
 
             return Powers;

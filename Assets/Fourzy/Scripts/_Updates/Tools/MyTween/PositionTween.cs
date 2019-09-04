@@ -9,6 +9,8 @@ namespace Fourzy._Updates.Tween
         public Vector3 from;
         public Vector3 to;
 
+        public bool local = true;
+
         private RectTransform rectTransform;
 
         public Vector3 _value { get; private set; }
@@ -52,10 +54,17 @@ namespace Fourzy._Updates.Tween
 
         public void SetPosition(Vector3 position)
         {
-            if (rectTransform)
-                rectTransform.anchoredPosition = position;
+            if (local)
+            {
+                if (rectTransform)
+                    rectTransform.anchoredPosition = position;
+                else
+                    transform.localPosition = position;
+            }
             else
-                transform.localPosition = position;
+            {
+                transform.position = position;
+            }
         }
 
         public override void OnReset()

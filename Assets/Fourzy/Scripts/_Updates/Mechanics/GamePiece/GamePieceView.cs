@@ -40,7 +40,6 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         private int h_MoveBottom = Animator.StringToHash("MoveDown");
 
         private Direction moveDirection = Direction.NONE;
-        private CircleCollider2D gamePieceCollider;
         
         public GamePieceData pieceData => GamePiecesDataHolder._GetGamePieceData(this);
 
@@ -54,14 +53,10 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         {
             base.Awake();
 
-            if (pieceAnimator == null)
-                pieceAnimator = GetComponent<Animator>();
-
-            spriteRenderers = GetComponentsInChildren<SpriteRenderer>(true);
-            parentRectTransform = GetComponentInParent<RectTransform>();
+            if (pieceAnimator == null) pieceAnimator = GetComponent<Animator>();
+            
             mouth = GetComponentInChildren<GamePieceMouth>();
             eyes = GetComponentInChildren<GamePieceEyes>();
-            gamePieceCollider = gameObject.GetComponent<CircleCollider2D>();
         }
 
         public void PutMovementDirection(Direction direction)
@@ -93,38 +88,6 @@ namespace Fourzy._Updates.Mechanics._GamePiece
                     break;
             }
         }
-
-        //public void _PlayFinishMovement(bool animateHit)
-        //{
-        //    const float transitionTime = 0.03f;
-
-        //    if (animateHit)
-        //        switch (moveDirection)
-        //        {
-        //            case Direction.RIGHT:
-        //                pieceAnimator.CrossFade(h_RightHit, transitionTime, indexBaseLayer);
-        //                break;
-
-        //            case Direction.LEFT:
-        //                pieceAnimator.CrossFade(h_LeftHit, transitionTime, indexBaseLayer);
-        //                break;
-
-        //            case Direction.DOWN:
-        //                pieceAnimator.CrossFade(h_BottomHit, transitionTime, indexBaseLayer);
-        //                break;
-
-        //            case Direction.UP:
-        //                pieceAnimator.CrossFade(h_TopHit, transitionTime, indexBaseLayer);
-        //                break;
-        //        }
-        //    else
-        //        pieceAnimator.CrossFade(h_Idle, transitionTime, indexBaseLayer);
-
-        //    if (pieceAnimator.GetCurrentAnimatorStateInfo(indexEyeMouthLayer).shortNameHash == h_Idle)
-        //        pieceAnimator.Play(h_Idle, indexEyeMouthLayer);
-        //    else
-        //        pieceAnimator.CrossFade(h_Idle, 0.1f, indexEyeMouthLayer);
-        //}
 
         public void PlayFinishMovement(bool animateHit)
         {
@@ -200,24 +163,24 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             if (!eyes.IsRoutineActive("blink"))
                 eyes.SetState(GamePieceEyes.EyesState.OPENED);
 
+            if (!IsRoutineActive("blinking")) StartBlinking();
+
             mouth.SetState(GamePieceMouth.MouthState.CLOSED);
-            StartBlinking();
         }
 
         public void Happy()
         {
-            if (!eyes.IsRoutineActive("blink"))
-                eyes.SetState(GamePieceEyes.EyesState.OPENED);
+            if (!eyes.IsRoutineActive("blink")) eyes.SetState(GamePieceEyes.EyesState.OPENED);
+
+            if (!IsRoutineActive("blinking")) StartBlinking();
 
             mouth.SetState(GamePieceMouth.MouthState.OPENED);
-            StartBlinking();
         }
 
         public void Sleep()
         {
             CancelRoutine("blinking");
-
-            eyes.CancelRoutine("blink");
+            
             eyes.SetState(GamePieceEyes.EyesState.CLOSED);
 
             if (mouth.statesFastAccess.ContainsKey(GamePieceMouth.MouthState.SLEEPY))
@@ -228,38 +191,29 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void StartBlinking()
         {
-            if (!gameObject.activeInHierarchy)
-                return;
+            if (!gameObject.activeInHierarchy) return;
 
-            StartRoutine("blinking", Random.Range(3f, 6f), () =>
-            {
-                Blink();
-                StartBlinking();
-            });
+            StartRoutine("blinking", BlinkingRoutine(), null, () => eyes.CancelRoutine("blink"));
         }
 
-        public void Blink()
-        {
-            eyes.Blink(Random.Range(.2f, .4f));
-        }
+        public void Blink() => eyes.Blink(Random.Range(.2f, .4f));
 
-        public override void OnBeforeMoveAction(params GameActionMove[] actionsMoves)
+        public override void OnBeforeMoveAction(params BoardLocation[] locations)
         {
             base.OnBeforeMoveAction();
 
             AudioHolder.instance.PlaySelfSfxOneShotTracked(onMoveSfx);
             
-            if (actionsMoves.Length < 2)
-                return;
+            if (locations.Length < 2) return;
 
-            PutMovementDirection(actionsMoves[0].Direction);
+            PutMovementDirection(locations.GetDirectionFromLocations());
         }
 
-        public override void OnAfterMove(params GameActionMove[] actionsMoves)
+        public override void OnAfterMove(params BoardLocation[] actionsMoves)
         {
             base.OnAfterMove(actionsMoves);
 
-            PlayFinishMovement(actionsMoves.MoveActionsDistance() > 2f);
+            PlayFinishMovement(actionsMoves.Length > 1);
         }
 
         public override float _Destroy(DestroyType reason)
@@ -281,6 +235,16 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
             //add to board model
             gameboard.model._State.Board.AddPiece(new Piece((int)player), location);
+        }
+
+        private IEnumerator BlinkingRoutine()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(Random.Range(3f, 6f));
+
+                Blink();
+            }
         }
 
         private IEnumerator JumpRoutine(int count)

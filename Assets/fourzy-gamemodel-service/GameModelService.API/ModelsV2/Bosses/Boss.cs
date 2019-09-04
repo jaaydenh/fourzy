@@ -19,6 +19,6 @@ namespace FourzyGameModel.Model
         bool TriggerBossWin(GameState State);
         bool TriggerBossLoss(GameState State);
         
-        List<IMove> GetPossibleActivations(GameState State);
+        List<IMove> GetPossibleActivations(GameState State, bool IsDesparate);
     }
 }

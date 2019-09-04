@@ -1,12 +1,12 @@
 ﻿//@vadym udod
 
-using UnityEngine;
-using UnityEngine.UI;
+using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
-using Fourzy._Updates.Mechanics._GamePiece;
-using Fourzy._Updates.ClientModel;
 using FourzyGameModel.Model;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -35,20 +35,13 @@ namespace Fourzy._Updates.UI.Widgets
         {
             AIPlayersDataHolder.SELECTED = aiPlayerData;
 
-            ClientFourzyGame newGame = new ClientFourzyGame(
-            GameContentManager.Instance.currentTheme.themeID,
-            UserManager.Instance.meAsPlayer,
-            new Player(2, aiPlayerData.name) { HerdId = aiPlayerData.gamePieceID + "", },
-            2);
-
-            //ClientFourzyGame newGame = new ClientFourzyGame(
-            //        GameContentManager.Instance.currentTheme.themeID,
-            //        UserManager.Instance.meAsPlayer, 
-            //        new Player(2, aiPlayerData.name) { HerdId = aiPlayerData.gamePieceID + "", },
-            //        UserManager.Instance.meAsPlayer.PlayerId);
-            newGame._Type = GameType.AI;
-
-            GameManager.Instance.StartGame(newGame);
+            GameManager.Instance.StartGame(new ClientFourzyGame(
+                GameContentManager.Instance.currentTheme.themeID,
+                UserManager.Instance.meAsPlayer,
+                new Player(2, aiPlayerData.name) { HerdId = aiPlayerData.gamePieceID + "", },
+                1
+            )
+            { _Type = GameType.AI });
         }
 
         protected override void OnInitialized()

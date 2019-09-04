@@ -1,11 +1,10 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
-using Fourzy._Updates.UI.Toasts;
-using mixpanel;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,29 +14,17 @@ namespace Fourzy._Updates.UI.Widgets
     public class PuzzlePackWidget : WidgetBase
     {
         public Image bgImage;
+        public RectTransform gamepieceParent;
 
         public PuzzlePacksDataHolder.PuzzlePack puzzlePack { get; private set; }
         public ButtonExtended button { get; private set; }
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            button = GetComponent<ButtonExtended>();
-        }
+        private int completeAnimation = Animator.StringToHash("PuzzlePackCompleteAnimation");
+        private Animator animator;
 
         public void SetData(PuzzlePacksDataHolder.PuzzlePack puzzlePack)
         {
-            this.puzzlePack = puzzlePack;
-
-            bgImage.sprite = puzzlePack.packBG;
-
-            button.GetLabel().label.fontSharedMaterial = GameContentManager.Instance.puzzlePacksDataHolder.GetPuzzlePackFontMaterial(puzzlePack.outlineColor);
-            button.SetLabel(puzzlePack.name);
-
-            button.GetBadge("starsLocked").badge.SetState(false);
-            button.GetBadge("coinsLocked").badge.SetState(false);
-            button.GetBadge("gemsLocked").badge.SetState(false);
+            SetDataMinimal(puzzlePack);
 
             switch (puzzlePack.unlockRequirement)
             {
@@ -46,10 +33,11 @@ namespace Fourzy._Updates.UI.Widgets
                     break;
 
                 case PuzzlePacksDataHolder.UnlockRequirementsEnum.STARS:
-                    if (GameContentManager.Instance.puzzlePacksDataHolder.totalPuzzlesCompleteCount >= puzzlePack.quantity)
+                    if (puzzlePack.puzzlePacksHolder.totalPuzzlesCompleteCount >= puzzlePack.quantity)
                         DisplayProgression(puzzlePack);
                     else
                         button.GetBadge("starsLocked").badge.SetValue(puzzlePack.quantity);
+
                     break;
 
                 case PuzzlePacksDataHolder.UnlockRequirementsEnum.COINS:
@@ -61,6 +49,7 @@ namespace Fourzy._Updates.UI.Widgets
                         button.interactable = true;
                         button.GetBadge("coinsLocked").badge.SetValue(puzzlePack.quantity);
                     }
+
                     break;
 
                 case PuzzlePacksDataHolder.UnlockRequirementsEnum.GEMS:
@@ -72,6 +61,39 @@ namespace Fourzy._Updates.UI.Widgets
                         button.interactable = true;
                         button.GetBadge("gemsLocked").badge.SetValue(puzzlePack.quantity);
                     }
+
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Similar to SetData, but shows less of it
+        /// </summary>
+        /// <param name="puzzlePack"></param>
+        public void SetDataMinimal(PuzzlePacksDataHolder.PuzzlePack puzzlePack)
+        {
+            this.puzzlePack = puzzlePack;
+
+            bgImage.sprite = puzzlePack.packBG;
+
+            button.GetLabel().label.fontSharedMaterial = puzzlePack.labelMaterial;
+            button.SetLabel(puzzlePack.name);
+
+            button.GetBadge("starsLocked").badge.SetState(false);
+            button.GetBadge("coinsLocked").badge.SetState(false);
+            button.GetBadge("gemsLocked").badge.SetState(false);
+
+            switch (puzzlePack.packType)
+            {
+                case PuzzlePacksDataHolder.PackType.AI_PACK:
+                case PuzzlePacksDataHolder.PackType.BOSS_AI_PACK:
+                    //add gamepiece
+                    GamePieceView gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(puzzlePack.enabledPuzzlesData[0].PuzzlePlayer.HerdId).player1Prefab, gamepieceParent);
+
+                    gamePiece.transform.localPosition = Vector3.zero;
+                    gamePiece.transform.localScale = Vector3.one * 90f;
+                    gamePiece.StartBlinking();
+
                     break;
             }
         }
@@ -92,28 +114,65 @@ namespace Fourzy._Updates.UI.Widgets
                     break;
             }
 
-            var props = new Value();
-            props["Name"] = puzzlePack.name;
-            Mixpanel.Track("Open Puzzle Pack", props);
+            switch (puzzlePack.packType)
+            {
+                case PuzzlePacksDataHolder.PackType.AI_PACK:
+                case PuzzlePacksDataHolder.PackType.BOSS_AI_PACK:
+                    menuScreen.menuController.GetScreen<VSGamePrompt>().Prompt(puzzlePack);
 
-            ClientFourzyPuzzle puzzle = puzzlePack.nextUnsolvedPuzzle;
+                    break;
 
-            if (puzzle != null)
-                GameManager.Instance.StartGame(puzzle);
-            else
-                GamesToastsController.ShowTopToast("Empty puzzle pack");
+                case PuzzlePacksDataHolder.PackType.PUZZLE_PACK:
+                    //only open prepack prompt if there are any rewards in puzzle pack
+                    if (puzzlePack.allRewards.Count > 0)
+                        menuScreen.menuController.GetScreen<PrePackPrompt>().Prompt(puzzlePack);
+                    else
+                        puzzlePack.StartNextUnsolvedPuzzle();
+
+                    break;
+            }
+        }
+
+        public void PlayCompleteAnimation()
+        {
+            Debug.Log($"Puzzle pack {puzzlePack.name}:ID-{puzzlePack.packID} complete.");
+
+            StartCoroutine(CompleteRoutine());
         }
 
         private void DisplayProgression(PuzzlePacksDataHolder.PuzzlePack puzzlePack)
         {
             button.interactable = true;
-            button.GetBadge("completeCounter").badge.SetValue($"{puzzlePack.puzzlesCompleteCount} / {puzzlePack.puzzlesEnabled.Count}");
+
+            switch (puzzlePack.packType)
+            {
+                //only puzzle pack have progress for now
+                case PuzzlePacksDataHolder.PackType.PUZZLE_PACK:
+                    button.GetBadge("completeCounter").badge.SetValue($"{puzzlePack.puzzlesComplete.Count} / {puzzlePack.enabledPuzzlesData.Count}");
+
+                    break;
+            }
 
             //finished
             button.GetBadge("finished").badge.SetState(puzzlePack.complete);
 
             //is opened
             button.GetBadge("new").badge.SetState(!PlayerPrefsWrapper.PuzzlePackOpened(puzzlePack.packID));
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            button = GetComponent<ButtonExtended>();
+            animator = GetComponent<Animator>();
+        }
+
+        private IEnumerator CompleteRoutine()
+        {
+            animator.Play(completeAnimation);
+
+            yield break;
         }
     }
 }

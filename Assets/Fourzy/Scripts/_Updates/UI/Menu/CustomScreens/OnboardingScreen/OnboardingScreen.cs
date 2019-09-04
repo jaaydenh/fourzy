@@ -4,9 +4,12 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
-using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -14,25 +17,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public static bool isActive = false;
 
+        public OnboardingScreenMask masks;
         public OnboardingScreenBG bg;
         public OnboardingScreenDialog dialog;
         public OnboardingScreenPointer pointer;
         public OnboardingScreenHighlight highlight;
         public OnboardingScreenGraphics graphics;
 
-        private int tutorialID;
+        [NonSerialized]
+        public GameContentManager.Tutorial tutorial;
         private int step;
-
-        public OnboardingDataHolder current => GameContentManager.Instance.tutorials.list[tutorialID].data;
 
         public override void Open()
         {
             //name prompt was closed, so we do next
-            if (IsCurrentBacthContains(OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT))
-                StartRoutine("username changed", .2f, () => { Next(); });
+            if (IsCurrentBatchContains(OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT)) StartRoutine("username changed", .2f, () => { Next(); });
 
-            if (isOpened)
-                return;
+            if (isOpened) return;
 
             base.Open();
 
@@ -58,15 +59,66 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GamePlayManager.onGameFinished -= OnGameFinished;
 
             //scenario finished
-            switch (current.onFinished)
+            switch (tutorial.data.onFinished)
             {
                 case OnboardingDataHolder.OnFinished.LOAD_MAIN_MENU:
+                    switch (tutorial.data.openScreen)
+                    {
+                        case OnboardingDataHolder.OpenScreen.PUZZLES_SCREEN:
+                            //add menu event
+                            MenuController.AddMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, new KeyValuePair<string, object>("openScreen", "puzzlesScreen"));
+
+                            break;
+                    }
+
                     if (GameManager.Instance.activeGame != null)
                         GamePlayManager.instance.BackButtonOnClick();
                     else
                         GameManager.Instance.OpenMainMenu();
+
                     return;
+
+                case OnboardingDataHolder.OnFinished.LOAD_GAME_SCENE:
+                    //create game
+                    IClientFourzy game = null;
+
+                    switch (tutorial.data.gameType)
+                    {
+                        case GameType.PUZZLE:
+                            PuzzlePacksDataHolder.PuzzlePack puzzlePack = 
+                                GameContentManager.Instance.puzzlePacksDataHolder.puzzlePacks.list
+                                    .Find(_puzzlePack => _puzzlePack.packID == tutorial.data.stringValue) ?? 
+                                    GameContentManager.Instance.puzzlePacksDataHolder.puzzlePacks.list[0];
+
+                            game = puzzlePack.NextUnsolved();
+
+                            if (game != null)
+                            {
+                                GameManager.Instance.currentPuzzlePack = puzzlePack;
+                                GameManager.Instance.StartGame(game);
+                            }
+                            else break;
+
+                            return;
+
+                        case GameType.PASSANDPLAY:
+                            GameBoardDefinition gameboardDefinition = GameContentManager.Instance.GetPassAndPlayBoard(tutorial.data.stringValue);
+
+                            if (gameboardDefinition != null)
+                            {
+                                game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Player Two")) { _Type = GameType.PASSANDPLAY, };
+
+                                return;
+                            }
+
+                            break;
+                    }
+
+                    break;
             }
+
+            //if got to this point, just open MM
+            GameManager.Instance.OpenMainMenu();
         }
 
         public override void OnBack()
@@ -82,25 +134,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
             });
         }
 
-        public void OpenOnboarding(int tutorialID)
+        public void OpenOnboarding(GameContentManager.Tutorial tutorial)
         {
-            if (!WillDisplayTutorial(tutorialID))
-                return;
+            this.tutorial = tutorial;
+            step = 0;
 
-            this.tutorialID = tutorialID;
             menuController.OpenScreen(this);
 
-            PlayerPrefsWrapper.SetTutorialOpened(current, true);
-            DisplayCurrentStep();
+            PlayerPrefsWrapper.SetTutorialOpened(tutorial.data, true);
+
+            StartCoroutine(DisplayCurrentStep());
         }
 
-        public bool WillDisplayTutorial(int tutorialID)
+        public bool WillDisplayTutorial(GameContentManager.Tutorial tutorial)
         {
-            if (!GameManager.Instance.displayTutorials)
-                return false;
+            if (!GameManager.Instance.displayTutorials) return false;
 
-            if (tutorialID >= GameContentManager.Instance.tutorials.list.Count
-                || ((PlayerPrefsWrapper.GetTutorialOpened(GameContentManager.Instance.tutorials.list[tutorialID].data) || PlayerPrefsWrapper.GetTutorialFinished(GameContentManager.Instance.tutorials.list[tutorialID].data)) && !GameManager.Instance.forceDisplayTutorials))
+            if (tutorial == null || ((PlayerPrefsWrapper.GetTutorialOpened(tutorial.data) || PlayerPrefsWrapper.GetTutorialFinished(tutorial.data)) && !GameManager.Instance.forceDisplayTutorials))
                 return false;
 
             return true;
@@ -109,23 +159,142 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void Next()
         {
             step++;
-            DisplayCurrentStep();
+
+            StartCoroutine(DisplayCurrentStep());
         }
 
-        public void DisplayCurrentStep()
+        public bool IsCurrentBatchContains(OnboardingDataHolder.OnboardingActions action)
         {
-            if (step >= current.batches.Length)
+            OnboardingDataHolder.OnboardingTasksBatch batch = tutorial.data.batches[step];
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+                if (task.action == action)
+                    return true;
+
+            return false;
+        }
+
+        private void UserManagerOnUpdateName()
+        {
+            OnboardingDataHolder.OnboardingTasksBatch batch = tutorial.data.batches[step];
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+            {
+                switch (task.action)
+                {
+                    case OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT:
+
+                        break;
+                }
+            }
+        }
+
+        private void MoveEnded(ClientPlayerTurn turn)
+        {
+            if (turn == null || turn.PlayerId < 1) return;
+
+            OnboardingDataHolder.OnboardingTasksBatch batch = tutorial.data.batches[step];
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+            {
+                switch (task.action)
+                {
+                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER1_MOVE_ENDED:
+                        if (turn.PlayerId != (int)PlayerEnum.ONE)
+                            return;
+
+                        switch (task.nextAction)
+                        {
+                            case OnboardingDataHolder.NextAction.NEXT:
+                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
+                                break;
+                        }
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER2_MOVE_ENDED:
+                        if (turn.PlayerId != (int)PlayerEnum.TWO)
+                            return;
+
+                        switch (task.nextAction)
+                        {
+                            case OnboardingDataHolder.NextAction.NEXT:
+                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void MoveStarted(ClientPlayerTurn turn)
+        {
+            OnboardingDataHolder.OnboardingTasksBatch batch = tutorial.data.batches[step];
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+            {
+                if (turn == null || turn.PlayerId < 1) return;
+
+                switch (task.action)
+                {
+                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER1_MOVE_STARTED:
+                        if (turn.PlayerId != (int)PlayerEnum.ONE)
+                            return;
+
+                        switch (task.nextAction)
+                        {
+                            case OnboardingDataHolder.NextAction.NEXT:
+                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
+                                break;
+                        }
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER2_MOVE_STARTED:
+                        if (turn.PlayerId != (int)PlayerEnum.TWO)
+                            return;
+
+                        switch (task.nextAction)
+                        {
+                            case OnboardingDataHolder.NextAction.NEXT:
+                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void OnGameFinished(IClientFourzy game)
+        {
+            OnboardingDataHolder.OnboardingTasksBatch batch = tutorial.data.batches[step];
+
+            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+                switch (task.action)
+                {
+                    case OnboardingDataHolder.OnboardingActions.PLAY_INITIAL_MOVES:
+                        switch (task.onGameFinished)
+                        {
+                            case OnboardingDataHolder.OnGameFinished.CONTINUE:
+                                StartRoutine("gameFinishedNext", 2f, () => { Next(); });
+                                break;
+                        }
+                        break;
+                }
+        }
+
+        public IEnumerator DisplayCurrentStep()
+        {
+            if (step >= tutorial.data.batches.Length)
             {
                 //close onboarding
                 menuController.CloseCurrentScreen();
-                PlayerPrefsWrapper.SetTutorialState(current, true);
+                PlayerPrefsWrapper.SetTutorialState(tutorial.data, true);
 
-                return;
+                yield return null;
+                yield break;
             }
 
-            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
+            OnboardingDataHolder.OnboardingTasksBatch batch = tutorial.data.batches[step];
 
-            AnalyticsManager.LogOnboardingStart(tutorialID, step);
             IClientFourzy activeGame = GameManager.Instance.activeGame;
 
             foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
@@ -170,13 +339,39 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         highlight.Hide(.2f);
                         break;
 
+                    case OnboardingDataHolder.OnboardingActions.SHOW_BOARD_HINT_AREA:
+                        GamePlayManager.instance.board.SetHintAreaSelectableState(false);
+                        GamePlayManager.instance.board.ShowHintArea(Mechanics.Board.GameboardView.HintAreaStyle.ANIMATION_LOOP, Mechanics.Board.GameboardView.HintAreaAnimationPattern.DIAGONAL);
+                        yield return null;
+
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.HIDE_BOARD_HINT_AREA:
+                        GamePlayManager.instance.board.SetHintAreaSelectableState(true);
+                        GamePlayManager.instance.board.HideHintArea(Mechanics.Board.GameboardView.HintAreaAnimationPattern.DIAGONAL);
+                        yield return null;
+
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.SHOW_MASKED_AREA:
+                        masks.ShowMasks(task.areas);
+
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.HIDE_MAKSED_AREA:
+                        masks.HideMasks();
+
+                        break;
+
                     //board input
                     case OnboardingDataHolder.OnboardingActions.LIMIT_BOARD_INPUT:
                         GamePlayManager.instance.board.LimitInput(task.areas);
+
                         break;
 
                     case OnboardingDataHolder.OnboardingActions.RESET_BOARD_INPUT:
-                        GamePlayManager.instance.board.ResetInputLimit(true);
+                        GamePlayManager.instance.board.SetInputMap(true);
+
                         break;
 
                     //bg
@@ -189,156 +384,66 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingDataHolder.OnboardingActions.PLAY_INITIAL_MOVES:
-                        if (GamePlayManager.instance)
-                            GamePlayManager.instance.board.TryPlayInitialMoves();
+                        if (GamePlayManager.instance) GamePlayManager.instance.board.PlayInitialMoves();
+
                         break;
 
                     case OnboardingDataHolder.OnboardingActions.OPEN_GAME:
-                        ClientFourzyGame game = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoard(task.intValue + ""), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
-                        game._Type = GameType.ONBOARDING;
+                        GameManager.Instance.StartGame(
+                            new ClientFourzyGame(
+                                GameContentManager.Instance.GetMiscBoard(task.intValue + ""), 
+                                UserManager.Instance.meAsPlayer, 
+                                new Player(2, "Player Two"))
+                            { _Type = GameType.ONBOARDING, hideOpponent = !tutorial.data.showPlayer2 });
 
-                        GameManager.Instance.StartGame(game);
+                        break;
+
+                    case OnboardingDataHolder.OnboardingActions.LOG_TUTORIAL:
+                        AnalyticsManager.Instance.LogTutorialEvent(tutorial.data.tutorialName, task.message);
+
                         break;
 
                     //wizard
                     case OnboardingDataHolder.OnboardingActions.HIDE_WIZARD:
                         graphics.SetWizardState(false);
+
                         break;
 
                     case OnboardingDataHolder.OnboardingActions.WIZARD_CENTER:
                         graphics.SetWizardState(true);
+
                         break;
 
                     //make player1 move
                     case OnboardingDataHolder.OnboardingActions.PLAYER_1_PLACE_GAMEPIECE:
                         GamePlayManager.instance.board.TakeTurn(task.direction, task.intValue, true);
+
                         break;
 
                     //make player2 move
                     case OnboardingDataHolder.OnboardingActions.PLAYER_2_PLACE_GAMEPIECE:
                         GamePlayManager.instance.board.TakeTurn(task.direction, task.intValue, true);
+
                         break;
 
                     //user change name
                     case OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT:
                         menuController.GetScreen<ChangeNamePromptScreen>().Prompt("Change Name", "Current name: " + UserManager.Instance.userName, () => { menuController.CloseCurrentScreen(); });
+
                         break;
-                }
-            }
-        }
 
-        public bool IsCurrentBacthContains(OnboardingDataHolder.OnboardingActions action)
-        {
-            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
-
-            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
-                if (task.action == action)
-                    return true;
-
-            return false;
-        }
-
-        private void UserManagerOnUpdateName()
-        {
-            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
-
-            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
-            {
-                switch (task.action)
-                {
-                    case OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT:
+                    case OnboardingDataHolder.OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE:
+                        if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE))
+                        {
+                            Next();
+                            yield break;
+                        }
 
                         break;
                 }
             }
-        }
 
-        private void MoveEnded(int playerID)
-        {
-            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
-
-            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
-            {
-                switch (task.action)
-                {
-                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER1_MOVE_ENDED:
-                        if (playerID != (int)PlayerEnum.ONE)
-                            return;
-
-                        switch (task.nextAction)
-                        {
-                            case OnboardingDataHolder.NextAction.NEXT:
-                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
-                                break;
-                        }
-                        break;
-
-                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER2_MOVE_ENDED:
-                        if (playerID != (int)PlayerEnum.TWO)
-                            return;
-
-                        switch (task.nextAction)
-                        {
-                            case OnboardingDataHolder.NextAction.NEXT:
-                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
-                                break;
-                        }
-                        break;
-                }
-            }
-        }
-
-        private void MoveStarted(int playerID)
-        {
-            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
-
-            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
-            {
-                switch (task.action)
-                {
-                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER1_MOVE_STARTED:
-                        if (playerID != (int)PlayerEnum.ONE)
-                            return;
-
-                        switch (task.nextAction)
-                        {
-                            case OnboardingDataHolder.NextAction.NEXT:
-                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
-                                break;
-                        }
-                        break;
-
-                    case OnboardingDataHolder.OnboardingActions.ON_PLAYER2_MOVE_STARTED:
-                        if (playerID != (int)PlayerEnum.TWO)
-                            return;
-
-                        switch (task.nextAction)
-                        {
-                            case OnboardingDataHolder.NextAction.NEXT:
-                                StartRoutine("moveFinishedNext", .5f, () => { Next(); });
-                                break;
-                        }
-                        break;
-                }
-            }
-        }
-
-        private void OnGameFinished(IClientFourzy game)
-        {
-            OnboardingDataHolder.OnboardingTasksBatch batch = current.batches[step];
-
-            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
-                switch (task.action)
-                {
-                    case OnboardingDataHolder.OnboardingActions.PLAY_INITIAL_MOVES:
-                        switch (task.onGameFinished)
-                        {
-                            case OnboardingDataHolder.OnGameFinished.CONTINUE:
-                                StartRoutine("gameFinishedNext", 2f, () => { Next(); });
-                                break;
-                        }
-                        break;
-                }
+            yield return null;
         }
     }
 }

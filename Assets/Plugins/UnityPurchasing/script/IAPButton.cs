@@ -3,7 +3,6 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using System.IO;
 using System.Collections.Generic;
-using TMPro;
 
 namespace UnityEngine.Purchasing
 {
@@ -44,13 +43,13 @@ namespace UnityEngine.Purchasing
         public OnPurchaseFailedEvent onPurchaseFailed;
 
         [Tooltip("[Optional] Displays the localized title from the app store")]
-        public TMP_Text titleText;
+        public Text titleText;
 
         [Tooltip("[Optional] Displays the localized description from the app store")]
-        public TMP_Text descriptionText;
+        public Text descriptionText;
 
         [Tooltip("[Optional] Displays the localized price from the app store")]
-        public TMP_Text priceText;
+        public Text priceText;
 
         void Start()
         {

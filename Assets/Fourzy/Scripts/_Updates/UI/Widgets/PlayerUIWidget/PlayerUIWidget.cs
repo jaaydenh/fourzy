@@ -11,7 +11,6 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class PlayerUIWidget : WidgetBase
     {
-        public SliderExtended bgSlider;
         public TextMeshProUGUI playerName;
         public RectTransform pieceParent;
         public Badge magicBadge;
@@ -24,7 +23,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         protected void OnDestroy()
         {
-            game.onMagic -= UpdateMagic;
+            if (game != null)
+                game.onMagic -= UpdateMagic;
         }
 
         public void SetPlayerName(string name)
@@ -67,8 +67,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void StopPlayerTurnAnimation()
         {
-            if (!current)
-                return;
+            if (!current) return;
 
             current.StopTurnAnimation();
         }
@@ -88,10 +87,14 @@ namespace Fourzy._Updates.UI.Widgets
             game.onMagic += UpdateMagic;
         }
 
-        private void UpdateSlider(float value)
+        public override void Show(float time)
         {
-            if (game != null && game.activePlayer.PlayerId == (int)current.player)
-                bgSlider.value = value;
+            if (alphaTween._value < 1f) base.Show(time);
+        }
+
+        public override void Hide(float time)
+        {
+            if (alphaTween._value > 0f) base.Hide(time);
         }
 
         private void UpdateMagic(int playerId, int value)

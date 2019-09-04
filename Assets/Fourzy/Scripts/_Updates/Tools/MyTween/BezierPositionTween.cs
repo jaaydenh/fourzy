@@ -61,10 +61,7 @@ namespace Fourzy._Updates.Tween
 
         public override void OnReset()
         {
-            if (rectTransform)
-                rectTransform.anchoredPosition = from;
-            else
-                transform.localPosition = from;
+            SetPosition(to);
         }
 
         public override void OnInitialized()

@@ -254,6 +254,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   background: {fileID: 1817477847}
+  configureAtStart: 1
+  ipadMatch: 1
+  iphoneMatch: 0
+  iphoneXMatch: 0
 --- !u!1 &1900680287
 GameObject:
   m_ObjectHideFlags: 0

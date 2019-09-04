@@ -16,32 +16,22 @@ namespace FourzyGameModel.Model
         {
             this.Powers = new List<IBossPower>();
             this.Powers.Add(new BlockMovePower());
-            this.Powers.Add(new PlantTreePower());
+            this.Powers.Add(new BlockASidePower());
         }
 
-        public List<IMove> GetPossibleActivations(GameState State)
+        public List<IMove> GetPossibleActivations(GameState State, bool IsDesparate = false)
         {
             List<IMove> Activations = new List<IMove>();
             foreach (IBossPower p in Powers)
             {
-                if (p.IsAvailable(State))
-                    Activations.AddRange(p.GetPossibleActivations(State));
+                if (p.IsAvailable(State, IsDesparate))
+                    Activations.AddRange(p.GetPossibleActivations(State, IsDesparate));
             }
             return Activations;
         }
 
         public bool StartGame(GameState State)
         {
-            //List<IToken> Blockers = State.Board.FindTokens(TokenType.BLOCKER);
-            //foreach (IToken b in Blockers)
-            //{
-            //    if (b.Space.Location.Row == 0
-            //        || b.Space.Location.Column == 0
-            //        || b.Space.Location.Row == State.Board.Rows - 1
-            //        || b.Space.Location.Column == State.Board.Columns - 1)
-            //        State.Board.ContentsAt(b.Space.Location).RemoveTokens(TokenType.BLOCKER);
-            //}
-
             return true;
         }
 

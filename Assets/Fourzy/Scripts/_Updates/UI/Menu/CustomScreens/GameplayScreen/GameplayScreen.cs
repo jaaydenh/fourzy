@@ -2,8 +2,12 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.GameplayScene;
-using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
+using FourzyGameModel.Model;
+using StackableDecorator;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -11,15 +15,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public PlayerUIWidget playerWidget;
         public PlayerUIWidget opponentWidget;
+        public GameInfoWidget gameInfoWidget;
 
-        public ButtonExtended createGameButton;
-        public ButtonExtended rematchButton;
-        public ButtonExtended resignButton;
+        public List<TimerSliderWidget> timerWidgets;
+
+        public PuzzleWinLoseScreen puzzleWinLoseScreen;
+        public GameWinLoseScreen gameWinLoseScreen;
+
+        [HelpBox("Pass And Play mode overlay", messageType = MessageType.None)]
+        public MenuScreen tapToStartOverlay;
 
         private IClientFourzy game;
-        private PuzzleUIScreen puzzleUI;
-        private TurnBaseScreen turnbaseUI;
+        private GamePlayManager gameplayManager;
+        private int onePlayerTurnCounter;
+
+        public PuzzleUIScreen puzzleUI { get; private set; }
+        public TurnBaseScreen turnbaseUI { get; private set; }
+        public PassAndPlayScreen passAndPlayUI { get; private set; }
+        public RealtimeScreen realtimeScreen { get; private set; }
+        public DemoGameScreen demoGameScreen { get; private set; }
+
         private SpellsListUIWidget spellsListWidget;
+
+        private bool timersEnabled => GameManager.Instance.passAndPlayTimer && (game._Type == GameType.PASSANDPLAY || game._Type == GameType.REALTIME);
 
         protected override void Awake()
         {
@@ -27,57 +45,52 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             puzzleUI = GetComponentInChildren<PuzzleUIScreen>();
             turnbaseUI = GetComponentInChildren<TurnBaseScreen>();
+            passAndPlayUI = GetComponentInChildren<PassAndPlayScreen>();
+            realtimeScreen = GetComponentInChildren<RealtimeScreen>();
+            demoGameScreen = GetComponentInChildren<DemoGameScreen>();
+
             spellsListWidget = GetComponentInChildren<SpellsListUIWidget>();
+
+            timerWidgets.ForEach(widget => widget.onValueEmpty += OnTimerEmpty);
         }
 
         public override void OnBack()
         {
             base.OnBack();
 
-            switch (game._Type)
+            if (game == null)
             {
-                case GameType.PASSANDPLAY:
-                    if (game._State.WinningLocations == null)
-                        menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.instance.BackButtonOnClick(); });
-                    else
+                GamePlayManager.instance.BackButtonOnClick();
+            }
+            else
+            {
+                switch (game._Type)
+                {
+                    case GameType.PUZZLE:
+                    case GameType.TURN_BASED:
+                    case GameType.PRESENTATION:
                         GamePlayManager.instance.BackButtonOnClick();
 
-                    break;
+                        break;
 
-                case GameType.PUZZLE:
-                    GamePlayManager.instance.BackButtonOnClick();
+                    default:
+                        if (game.isOver)
+                            GamePlayManager.instance.BackButtonOnClick();
+                        else
+                            menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => GamePlayManager.instance.BackButtonOnClick());
 
-                    break;
-
-                case GameType.TURN_BASED:
-                    GamePlayManager.instance.BackButtonOnClick();
-
-                    break;
-
-                case GameType.FRIEND:
-                case GameType.LEADERBOARD:
-                    if (game.isOver)
-                        GamePlayManager.instance.BackButtonOnClick();
-                    else
-                        menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.instance.BackButtonOnClick(); });
-
-                    break;
-
-                default:
-                    menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => { GamePlayManager.instance.BackButtonOnClick(); });
-
-                    break;
+                        break;
+                }
             }
         }
 
-        public void InitUI(GamePlayManager gamePlayManager)
+        public void InitUI(GamePlayManager gameplayManager)
         {
-            game = gamePlayManager.game;
+            this.gameplayManager = gameplayManager;
+            game = gameplayManager.game;
 
             playerWidget.SetGame(game);
             opponentWidget.SetGame(game);
-
-            DisableButtons();
 
             playerWidget.Initialize();
             opponentWidget.Initialize();
@@ -91,84 +104,185 @@ namespace Fourzy._Updates.UI.Menu.Screens
             playerWidget.SetPlayerIcon(game.me);
             opponentWidget.SetPlayerIcon(game.opponent);
 
-            switch (game._Type)
+            if (game.hideOpponent) opponentWidget.Hide(.1f);
+            else opponentWidget.Show(.1f);
+
+            //initialize timer
+            if (timersEnabled)
             {
-                case GameType.PUZZLE:
-                    opponentWidget.alphaTween.SetAlpha(0f);
-
-                    break;
-
-                case GameType.ONBOARDING:
-                    opponentWidget.alphaTween.SetAlpha(PersistantMenuController.instance.GetScreen<OnboardingScreen>().current.showPlayer2 ? 1f : 0f);
-
-                    break;
+                timerWidgets[0].AssignPlayer(game.me);
+                timerWidgets[1].AssignPlayer(game.opponent);
+            }
+            //disable timer widgets if not needed
+            else
+            {
+                //close tap overlay of opened
+                CancelRoutine("waitFotTap");
+                timerWidgets.ForEach(widget => widget.Hide(0f));
             }
 
             puzzleUI.Open(game);
             turnbaseUI.Open(game);
-            spellsListWidget.Open(game, gamePlayManager.board);
+            passAndPlayUI.Open(game);
+            realtimeScreen.Open(game);
+            demoGameScreen.Open(game);
+
+            //close game win/lose screen
+            if (gameWinLoseScreen.isCurrent) menuController.CloseCurrentScreen(true);
+            //close puzzle win/lose screen
+            if (puzzleWinLoseScreen.isCurrent) menuController.CloseCurrentScreen(true);
+
+            #region Check AI move
+
+            switch (game._Type)
+            {
+                case GameType.AI:
+                case GameType.PRESENTATION:
+                case GameType.PUZZLE:
+                    gameInfoWidget.Hide(.3f);
+
+                    break;
+            }
+
+            #endregion
+
+            spellsListWidget.Open(game, gameplayManager.board, game.me);
         }
 
-        public void UpdatePlayerTurn()
+        public void OnWrongTurn()
         {
+            gameInfoWidget.NotYourTurn();
+        }
+
+        public void OnMoveStarted(ClientPlayerTurn turn)
+        {
+            if (turn == null || turn.PlayerId < 1) return;
+
+            #region Checking AI turn
+
             switch (game._Type)
             {
+                case GameType.AI:
+                case GameType.PRESENTATION:
                 case GameType.PUZZLE:
-                    puzzleUI.UpdateWidgets();
+                    if (game.isMyTurn) gameInfoWidget.Hide(.3f);
 
                     break;
             }
 
-            if (game.isOver)
-            {
-                playerWidget.StopPlayerTurnAnimation();
-                opponentWidget.StopPlayerTurnAnimation();
+            #endregion
 
-                return;
+            #region Timers
+
+            if (timersEnabled)
+            {
+                if (game._FirstState.ActivePlayerId == turn.PlayerId) onePlayerTurnCounter++;
+
+                //deactivate timers, add timer value
+                timerWidgets.ForEach(widget =>
+                {
+                    if (widget.player.PlayerId == turn.PlayerId)
+                    {
+                        widget.Deactivate();
+
+                        if (!widget.isEmpty)
+                        {
+                            if (onePlayerTurnCounter % Constants.addTimerBarEveryXTurn == 0)
+                                widget.AddTimerValue(Constants.barsToAdd, true, true);
+                            else
+                                widget.AddSmallTimerValue(Constants.circularTimerValue);
+                        }
+                    }
+                });
             }
+
+            #endregion
+        }
+
+        public void OnMoveEnded(ClientPlayerTurn turn)
+        {
+            if (game == null) return;
+
+            puzzleUI.UpdatePlayerTurn();
+            passAndPlayUI.UpdatePlayerTurn();
+            
+            if (game.isOver) return;
+
+            UpdatePlayerTurnGraphics();
+
+            if (turn == null || turn.PlayerId < 1) return;
+
+            #region Checking AI turn
+
+            switch (game._Type)
+            {
+                case GameType.AI:
+                //case GameType.PRESENTATION:
+                case GameType.PUZZLE:
+                    //if waiting more than (time), show "thinking..."
+                    //if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").ShowDelayed(time: .6f);
+                    if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").Show(.3f);
+
+                    break;
+            }
+
+            #endregion
+
+            #region Timers
+
+            if (timersEnabled)
+            {
+                //activate timers
+                ActivatePlayerTimer(game._State.ActivePlayerId);
+
+                //reset timers
+                timerWidgets.ForEach(widget => { if (widget.isEmpty) widget.AddTimerValue(Constants.aiTurnTimerResetValue, true, true); });
+            }
+
+            #endregion
 
             spellsListWidget.UpdateSpells(game._State.ActivePlayerId);
+        }
+
+        public void UpdatePlayerTurnGraphics()
+        {
+            if (game.isMyTurn)
+            {
+                playerWidget.ShowPlayerTurnAnimation();
+
+                if (!game.hideOpponent) opponentWidget.StopPlayerTurnAnimation();
+            }
+            else
+            {
+                playerWidget.StopPlayerTurnAnimation();
+
+                if (!game.hideOpponent) opponentWidget.ShowPlayerTurnAnimation();
+            }
+        }
+
+        public void OnGameStarted()
+        {
+            UpdatePlayerTurnGraphics();
 
             switch (game._Type)
             {
-                case GameType.REALTIME:
-                case GameType.TURN_BASED:
-                    if (game.isMyTurn)
-                    {
-                        playerWidget.ShowPlayerTurnAnimation();
-                        opponentWidget.StopPlayerTurnAnimation();
-                    }
-                    else
-                    {
-                        opponentWidget.ShowPlayerTurnAnimation();
-                        playerWidget.StopPlayerTurnAnimation();
-                    }
-
-                    break;
-
-                case GameType.FRIEND:
-                case GameType.LEADERBOARD:
                 case GameType.PASSANDPLAY:
-                case GameType.AI:
-                    if (game.isMyTurn)
+                    if (GameManager.Instance.tapToStartGame)
                     {
-                        playerWidget.ShowPlayerTurnAnimation();
-                        opponentWidget.StopPlayerTurnAnimation();
+                        menuController.OpenScreen(tapToStartOverlay);
+
+                        //wait for tap screen to be closed
+                        StartRoutine("waitFotTap", WaitForTapRoutine(), () => { if (timersEnabled) ActivatePlayerTimer(game._State.ActivePlayerId); }, () => tapToStartOverlay.CloseSelf());
                     }
                     else
-                    {
-                        opponentWidget.ShowPlayerTurnAnimation();
-                        playerWidget.StopPlayerTurnAnimation();
-                    }
+                        if (timersEnabled) ActivatePlayerTimer(game._State.ActivePlayerId);
 
                     break;
 
-                case GameType.ONBOARDING:
-                case GameType.PUZZLE:
-                    if (game.isMyTurn)
-                        playerWidget.ShowPlayerTurnAnimation();
-                    else
-                        playerWidget.StopPlayerTurnAnimation();
+                case GameType.REALTIME:
+                    //start coutdown
+
+                    if (timersEnabled) ActivatePlayerTimer(game._State.ActivePlayerId);
 
                     break;
             }
@@ -176,56 +290,112 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OnGameFinished()
         {
-            switch (game._Type)
+            if (!game.draw)
             {
-                case GameType.PUZZLE:
-                    if (game.IsWinner())
-                    {
-                        playerWidget.StartWinJumps();
-
-                        puzzleUI.Complete();
-                    }
-                    else
-                        CheckButtons();
-                    break;
-
-                default:
-                    if (game.IsWinner())
-                        playerWidget.StartWinJumps();
-                    else
-                        opponentWidget.StartWinJumps();
-
-                    CheckButtons();
-                    break;
+                if (game.IsWinner())
+                    playerWidget.StartWinJumps();
+                else
+                    opponentWidget.StartWinJumps();
             }
-        }
 
-        public void DisableButtons()
-        {
-            createGameButton.SetActive(false);
-            rematchButton.SetActive(false);
-            resignButton.SetActive(false);
-        }
+            if (game.puzzleData != null)
+            {
+                puzzleUI.GameComplete();
 
-        public void CheckButtons()
-        {
+                //open puzzle win/lose screen
+                puzzleWinLoseScreen.Open(game);
+            }
+            else
+            {
+                switch (game._Type)
+                {
+                    case GameType.PASSANDPLAY:
+                        passAndPlayUI.GameComplete();
+
+                        break;
+
+                    case GameType.TURN_BASED:
+                        turnbaseUI.GameComplete();
+
+                        break;
+
+                    case GameType.REALTIME:
+                        realtimeScreen.GameComplete();
+
+                        break;
+
+                    case GameType.PRESENTATION:
+                        demoGameScreen.GameComplete();
+
+                        break;
+                }
+
+                //win/lose screen
+                switch (game._Type)
+                {
+                    case GameType.ONBOARDING:
+                        //open nothing
+
+                        break;
+
+                    default:
+                        //open game win/lose screen
+                        gameWinLoseScreen.Open(game);
+
+                        break;
+                }
+            }
+
+            #region Check AI move
+
             switch (game._Type)
             {
-                //case GameType.REALTIME:
-                case GameType.TURN_BASED:
-                    rematchButton.GetComponentInChildren<LocalizedText>().UpdateLocale("rematch_button");
-                    rematchButton.SetActive(true);
-
-                    break;
-
                 case GameType.AI:
-                case GameType.PASSANDPLAY:
+                case GameType.PRESENTATION:
                 case GameType.PUZZLE:
-                    rematchButton.GetComponentInChildren<LocalizedText>().UpdateLocale("retry_challenge_button");
-                    rematchButton.SetActive(true);
+                    gameInfoWidget.Hide(.3f);
 
                     break;
             }
+
+            #endregion
+        }
+
+        public void OnGamePaused()
+        {
+            //pause timers
+            timerWidgets.ForEach(widget => widget.Pause());
+        }
+
+        public void OnGameUnpaused()
+        {
+            //unpause timers
+            timerWidgets.ForEach(widget => widget.Unpause());
+        }
+
+        private void OnTimerEmpty(Player player)
+        {
+            switch (game._Type)
+            {
+                case GameType.PASSANDPLAY:
+                    gameplayManager.board.TakeAITurn();
+
+                    break;
+
+                case GameType.REALTIME:
+                    //only take turn if its my turn
+                    if (game.isMyTurn) gameplayManager.board.TakeAITurn();
+
+                    break;
+            }
+        }
+
+        private void ActivatePlayerTimer(int playerID) => timerWidgets.ForEach(widget => { if (widget.player.PlayerId == playerID) { widget.Activate(); } });
+
+        private IEnumerator WaitForTapRoutine()
+        {
+            while (!isCurrent) yield return null;
+            yield break;
         }
     }
 }

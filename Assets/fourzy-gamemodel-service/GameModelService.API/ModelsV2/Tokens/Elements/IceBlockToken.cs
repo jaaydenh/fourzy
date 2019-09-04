@@ -87,7 +87,7 @@ namespace FourzyGameModel.Model
             pieceCanEnter = true;
             pieceCanEndMoveOn = true;
             Space.Parent.RecordGameAction(new GameActionTokenTransition(Space.Location, TransitionType.BLOCK_ICE, this, new IceToken()));
-            this.Delete = true;
+            //this.Delete = true;
         }
 
         public Direction GetDirection(MovingPiece Piece)
@@ -104,8 +104,9 @@ namespace FourzyGameModel.Model
         {
             if (this.Broken)
             {
-               if (!Space.ContainsTokenType(TokenType.ICE))
-                { 
+                this.Delete = true;
+                if (!Space.ContainsTokenType(TokenType.ICE))
+                {
                     Space.AddToken(new IceToken());
                 }
             }
