@@ -19,7 +19,7 @@ MonoBehaviour:
       boardFile: {fileID: 4900000, guid: f73e00b7952d09440b9537e3bc3310c9, type: 3}
     - _name: 'Name: EmptyBoard, ID: 201'
       boardFile: {fileID: 4900000, guid: da87db7d83d23df4e8457e6b564c1ae2, type: 3}
-    - _name: 'Name: Moving Ghost , ID: f231dafb-8d9e-4fe2-8e6f-de964d0f0631'
+    - _name: 'Name: Moving Ghost, ID: 31'
       boardFile: {fileID: 4900000, guid: baa5cf0d087988b498e6095b5aa4250e, type: 3}
     - _name: 'Name: RotatingArrowSample, ID: 235e79d1-257b-4ddd-8032-2820f641cf4b'
       boardFile: {fileID: 4900000, guid: 8d43d9ae6f1d33f4d97a5fe49bca793b, type: 3}
@@ -71,6 +71,8 @@ MonoBehaviour:
       boardFile: {fileID: 4900000, guid: b6a0a61516dbf485381b102ae8a45d3e, type: 3}
     - _name: 'Name: LureTokenInstructionBoard, ID: 23'
       boardFile: {fileID: 4900000, guid: 78bce2df401586347ba00b685fa3b77e, type: 3}
+    - _name: 'Name: MoveBlockerTokenInstruction, ID: 24'
+      boardFile: {fileID: 4900000, guid: 330abe9e7c4bdfa4a80f66a45820e240, type: 3}
     - _name: 'Name: VictoryRewardTestingBoard, ID: 1e41fa3e-fc27-44fd-b7e8-64af1db7943c'
       boardFile: {fileID: 4900000, guid: dd0b34c32389c7345bd522f5a2637cec, type: 3}
     - _name: 'Name: DrawBoardTester, ID: 5f938652-e6e9-4e36-8c5d-a4d4fde7395c'
