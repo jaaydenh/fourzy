@@ -6,7 +6,6 @@ using GameAnalyticsSDK;
 using GameSparks.Api.Requests;
 using GameSparks.Api.Responses;
 using GameSparks.Core;
-using mixpanel;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

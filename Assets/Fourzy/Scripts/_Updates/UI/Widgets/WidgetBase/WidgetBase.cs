@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
-    [RequireComponent(typeof(AlphaTween))]
-    [RequireComponent(typeof(CanvasGroup))]
     public abstract class WidgetBase : RoutinesBase
     {
         public bool initialized { get; private set; }
@@ -31,24 +29,38 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void SetAlpha(float value)
         {
-            canvasGroup.alpha = value;
+            if (canvasGroup)
+                canvasGroup.alpha = value;
+            else if (alphaTween)
+                alphaTween.SetAlpha(value);
         }
 
         public virtual void Hide(float time)
         {
-            if (time == 0f)
-                alphaTween.SetAlpha(0f);
-            else
+            if (alphaTween)
             {
-                alphaTween.playbackTime = time;
-                alphaTween.PlayBackward(true);
+                if (time == 0f)
+                    alphaTween.SetAlpha(0f);
+                else
+                {
+                    alphaTween.playbackTime = time;
+                    alphaTween.PlayBackward(true);
+                }
             }
         }
 
         public virtual void Show(float time)
         {
-            alphaTween.playbackTime = time;
-            alphaTween.PlayForward(true);
+            if (alphaTween)
+            {
+                if (time == 0f)
+                    alphaTween.SetAlpha(1f);
+                else
+                {
+                    alphaTween.playbackTime = time;
+                    alphaTween.PlayForward(true);
+                }
+            }
         }
 
         public virtual void MoveTo(Vector3 to, float time)
@@ -61,11 +73,14 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void MoveTo(Vector3 from, Vector3 to, float time)
         {
-            positionTween.from = from;
-            positionTween.to = to;
-            positionTween.playbackTime = time;
+            if (positionTween)
+            {
+                positionTween.from = from;
+                positionTween.to = to;
+                positionTween.playbackTime = time;
 
-            positionTween.PlayForward(true);
+                positionTween.PlayForward(true);
+            }
         }
 
         public virtual void MoveRelative(Vector3 to, float time)
@@ -76,32 +91,41 @@ namespace Fourzy._Updates.UI.Widgets
                 MoveTo(transform.localPosition, positionTween.to + to, time);
         }
 
-        public virtual void ScaleTo(Vector3 to, float time)
-        {
-            ScaleTo(transform.localScale, to, time);
-        }
+        public virtual void ScaleTo(Vector3 to, float time) => ScaleTo(transform.localScale, to, time);
 
         public virtual void ScaleTo(Vector3 from, Vector3 to, float time)
         {
-            scaleTween.from = from;
-            scaleTween.to = to;
-            scaleTween.playbackTime = time;
+            if (scaleTween)
+            {
+                if (time == 0f)
+                    scaleTween.SetScale(to);
+                else
+                {
+                    scaleTween.from = from;
+                    scaleTween.to = to;
+                    scaleTween.playbackTime = time;
 
-            scaleTween.PlayForward(true);
+                    scaleTween.PlayForward(true);
+                }
+            }
+        }
+
+        public virtual void ResetAnchors()
+        {
+            rectTransform.anchorMin = rectTransform.anchorMax = Vector2.one * .5f;
+            rectTransform.anchoredPosition = Vector2.zero;
         }
 
         public virtual void SetInteractable(bool state)
         {
-            if (!canvasGroup)
-                return;
+            if (!canvasGroup) return;
 
             canvasGroup.interactable = state;
         }
 
         public virtual void BlockRaycast(bool state)
         {
-            if (!canvasGroup)
-                return;
+            if (!canvasGroup) return;
 
             canvasGroup.blocksRaycasts = state;
         }
@@ -130,16 +154,13 @@ namespace Fourzy._Updates.UI.Widgets
             scaleTween = GetComponent<ScaleTween>();
 
             if (alphaTween) alphaTween.Initialize();
-
             if (positionTween) positionTween.Initialize();
-
             if (scaleTween) scaleTween.Initialize();
 
             rectTransform = GetComponent<RectTransform>();
             layoutElement = GetComponent<LayoutElement>();
 
             canvasGroup = GetComponent<CanvasGroup>();
-            
             menuScreen = GetComponentInParent<MenuScreen>();
         }
     }

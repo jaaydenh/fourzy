@@ -44,20 +44,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //assign rewards
             rewards.AssignRewards();
 
-            //deduct portal points
-            switch (portalType)
-            {
-                case RewardsManager.PortalType.SIMPLE:
-                    UserManager.Instance.portalPoints -= Constants.PORTAL_POINTS;
-
-                    break;
-
-                case RewardsManager.PortalType.RARE:
-                    UserManager.Instance.portalPoints -= Constants.RARE_PORTAL_POINTS;
-
-                    break;
-            }
-
             DisplayRewards();
 
             //open screen
@@ -100,9 +86,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GameObject rewardholder = Instantiate(rewardHolderPrefab, rewardHolderPrefab.transform.parent);
             rewardholder.SetActive(true);
 
-            RewardsScreenWidget rewardWidget = Instantiate(GameContentManager.GetPrefab<RewardsScreenWidget>(reward.asPrefabType), rewardholder.transform);
-            rewardWidget.rectTransform.anchorMin = rewardWidget.rectTransform.anchorMax = Vector2.one * .5f;
+            RewardsScreenWidget rewardWidget = 
+                Instantiate(GameContentManager.GetPrefab<RewardsScreenWidget>(reward.rewardType.AsPrefabType()), rewardholder.transform);
             rewardWidget.SetData(reward);
+            rewardWidget.ResetAnchors();
 
             return rewardWidget;
         }

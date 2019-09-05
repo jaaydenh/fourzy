@@ -2,7 +2,9 @@
 
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.Board;
+using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tools.Timing;
@@ -14,6 +16,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -25,17 +28,16 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
     {
         public static GamePlayManager instance;
 
-        public static Action<int> onMoveStarted;
-        public static Action<int> onMoveEnded;
+        public static Action<ClientPlayerTurn> onMoveStarted;
+        public static Action<ClientPlayerTurn> onMoveEnded;
         public static Action<IClientFourzy> onGameFinished;
 
         public static Action<string> OnGamePlayMessage;
         public static Action<long> OnTimerUpdate;
 
-        public MenuController menuController;
+        public FourzyGameMenuController menuController;
         public WinningParticleGenerator winningParticleGenerator;
         public Transform bgParent;
-        public AdvancedTimingEventsSet notYourTurnLabel;
         public GameObject noNetworkOverlay;
         public RectTransform hintBlocksParent;
 
@@ -87,6 +89,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             FourzyPhotonManager.onPlayerDisconnected += OnPlayerDisconnected;
             PhotonNetwork.OnEventCall += OnEventCall;
 
+            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE))
+                PointerInputModuleExtended.noInput += OnNoInput;
+
             //auto load game if its not realtime mdoe
             if (GameManager.Instance.isRealtime)
             {
@@ -98,13 +103,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
             else LoadGame(GameManager.Instance.activeGame);
         }
-
-#if UNITY_EDITOR
-        protected void Update()
-        {
-
-        }
-#endif
 
         protected void OnDestroy()
         {
@@ -124,6 +122,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             FourzyPhotonManager.onRoomCustomPropertiesChanged -= OnRoomCustomPropertiesChanged;
             FourzyPhotonManager.onPlayerDisconnected -= OnPlayerDisconnected;
             PhotonNetwork.OnEventCall -= OnEventCall;
+
+            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE))
+                PointerInputModuleExtended.noInput -= OnNoInput;
         }
 
         protected void SetGameIfNull(IClientFourzy _game)
@@ -132,7 +133,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (_game == null)
             {
                 //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.passAndPlayDataHolder.random, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
-                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoardByName("RotatingArrowSample"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoardByName("DrawBoardTester"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
                 //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoard("23"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
                 newGame._Type = GameType.PASSANDPLAY;
 
@@ -163,8 +164,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             PlayBGAudio();
             GameOpenedCheck();
 
-            //close loading prompt if opened
-            if (loadingPrompt && loadingPrompt.isOpened) menuController.CloseCurrentScreen();
+            //close other screens
+            menuController.BackToRoot();
 
             winningParticleGenerator.HideParticles();
 
@@ -258,7 +259,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
-                case GameType.DEMO:
+                case GameType.PRESENTATION:
                     if (!game.isOver) board.TakeAITurn();
 
                     break;
@@ -286,7 +287,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             foreach (BoardSpace boardSpace in game.boardContent)
                 foreach (IToken token in boardSpace.Tokens.Values)
-                    if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type))
+                    if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type) && !GameManager.Instance.excludeInstructionsFor.Contains(token.Type))
                         tokens.Add(GameContentManager.Instance.GetTokenData(token.Type));
 
             if (tokens.Count > 0)
@@ -420,7 +421,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             board.onDraw += OnDraw;
             board.onMoveStarted += OnMoveStarted;
             board.onMoveEnded += OnMoveEnded;
-            board.onWrongTurn += () => notYourTurnLabel.StartTimer();
+            board.onWrongTurn += () => gameplayScreen.OnWrongTurn();
 
             //hide tokens/gamepieces
             board.FadeTokens(0f, 0f);
@@ -472,7 +473,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case GameType.PUZZLE:
-                    logGameFinished = PlayerPrefsWrapper.IsPuzzleChallengeComplete(game.GameID);
+                    logGameFinished = PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.GameID);
 
                     break;
 
@@ -535,7 +536,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 default:
                     //if current game have puzzle data assigned, set puzzlepack as opened
-                    if (game.puzzleData != null) PlayerPrefsWrapper.SetPuzzlePackOpened(GameManager.Instance.currentPuzzlePack.packID, true);
+                    if (game.puzzleData)
+                    {
+                        if (game.puzzleData.pack)
+                            PlayerPrefsWrapper.SetPuzzlePackOpened(game.puzzleData.pack.packID, true);
+                    }
 
                     break;
             }
@@ -652,30 +657,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 AnalyticsManager.Instance.LogGameEvent(game.IsWinner() ? AnalyticsManager.AnalyticsGameEvents.GAME_FINISHED : AnalyticsManager.AnalyticsGameEvents.GAME_FAILED, game);
             }
 
-            //rewards screen
-            if (game.puzzleData != null)
+            switch (game._Type)
             {
-                if (RewardsScreen.WillDisplayRewardsScreen(game))
-                {
-                    PersistantMenuController.instance.GetScreen<RewardsScreen>().SetData(game, false);
+                case GameType.TURN_BASED:
+                case GameType.REALTIME:
+                case GameType.PASSANDPLAY:
+                    PersistantMenuController.instance.GetScreen<RewardsScreen>().SetData(game);
 
-                    PlayerPrefsWrapper.SetPuzzlePackRewarded(GameManager.Instance.currentPuzzlePack.packID, true);
-                }
-                //also mark this puzzle pack as rewarded if puzzlepack rewards are disabled, but player wasnt rewarded for pack
-                else if (PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_REWARDS_PUZZLEPLAY) == "0")
-                    PlayerPrefsWrapper.SetPuzzlePackRewarded(GameManager.Instance.currentPuzzlePack.packID, true);
-            }
-            else
-            {
-                switch (game._Type)
-                {
-                    case GameType.TURN_BASED:
-                    case GameType.REALTIME:
-                    case GameType.PASSANDPLAY:
-                        PersistantMenuController.instance.GetScreen<RewardsScreen>().SetData(game);
-
-                        break;
-                }
+                    break;
             }
 
             //reset controller filter
@@ -697,20 +686,20 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             OnGameFinished(game);
         }
 
-        private void OnMoveStarted(int playerID)
+        private void OnMoveStarted(ClientPlayerTurn turn)
         {
-            gameplayScreen.OnMoveStarted(playerID);
+            gameplayScreen.OnMoveStarted(turn);
 
-            onMoveStarted?.Invoke(playerID);
+            onMoveStarted?.Invoke(turn);
         }
 
-        private void OnMoveEnded(int playerID)
+        private void OnMoveEnded(ClientPlayerTurn turn)
         {
             if (replayingLastTurn) replayingLastTurn = false;
 
-            onMoveEnded?.Invoke(playerID);
+            onMoveEnded?.Invoke(turn);
 
-            gameplayScreen.OnMoveEnded(playerID);
+            gameplayScreen.OnMoveEnded(turn);
 
             UpdatePlayerTurn();
 
@@ -741,18 +730,33 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (state) noNetworkOverlay.SetActive(false);
         }
 
+        private void OnNoInput(KeyValuePair<string, float> noInputFilter)
+        {
+            if (noInputFilter.Key != "highlightMoves" || !gameplayScreen.isCurrent) return;
+
+            switch (board.actionState)
+            {
+                case GameboardView.BoardActionState.SIMPLE_MOVE:
+                    board.ShowHintArea(GameboardView.HintAreaStyle.ANIMATION_LOOP, GameboardView.HintAreaAnimationPattern.NONE);
+                    board.SetHintAreaSelectableState(false);
+
+                    break;
+            }
+        }
+
         private IEnumerator GameInitRoutine()
         {
             if (game == null) yield break;
 
             yield return StartCoroutine(FadeGameScreen(1f, .5f));
 
+            //instruction boards
             switch (game._Type)
             {
                 //no token instructions for these modes
                 case GameType.REALTIME:
                 case GameType.ONBOARDING:
-                case GameType.DEMO:
+                case GameType.PRESENTATION:
 
                     break;
 
@@ -897,13 +901,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //if demo, restart
             switch (game._Type)
             {
-                case GameType.DEMO:
+                case GameType.PRESENTATION:
                     yield return new WaitForSeconds(3f);
 
                     LoadGame(new ClientFourzyGame(GameContentManager.Instance.themesDataHolder.GetRandomTheme(Area.NONE),
                         new Player(1, "AI Player 1") { PlayerString = "1" },
                         new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
-                    { _Type = GameType.DEMO, });
+                    { _Type = GameType.PRESENTATION, });
 
                     break;
             }

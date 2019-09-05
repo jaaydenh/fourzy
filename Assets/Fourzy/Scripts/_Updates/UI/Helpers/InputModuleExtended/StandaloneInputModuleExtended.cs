@@ -53,6 +53,8 @@ namespace UnityEngine.EventSystems
             }
         }
 
+        public static Vector2 lastMousePos => instance.m_LastMousePosition;
+
         private float m_PrevActionTime;
         private Vector2 m_LastMoveVector;
         private int m_ConsecutiveMoveCount = 0;
@@ -65,6 +67,11 @@ namespace UnityEngine.EventSystems
 
         private static int gamepadID = 0;
         private static GamepadControlFilter gamepadFilter;
+
+        private static float prevHK1Value;
+        private static float prevHK2Value;
+        private static float prevHK3Value;
+
         private float moveSpeed;
 
         private GameObject m_CurrentFocusedGameObject;
@@ -172,6 +179,16 @@ namespace UnityEngine.EventSystems
 
             lastJoystick1 = joystick1;
             lastJoystick2 = joystick2;
+        }
+
+        protected void LateUpdate()
+        {
+            if (instance != this) return;
+
+            //assign hotkeys values
+            prevHK1Value = Input.GetAxisRaw("Hotkey1");
+            prevHK2Value = Input.GetAxisRaw("Hotkey2");
+            prevHK3Value = Input.GetAxisRaw("Hotkey3");
         }
 
         public KeyCode GetKeyCode(int button, int jIndex)
@@ -552,6 +569,24 @@ namespace UnityEngine.EventSystems
                     SendSubmitEventToSelectedObject();
             }
         }
+
+        public static bool OnHotkey1Press() => prevHK1Value == 0f && Input.GetAxisRaw("Hotkey1") == 1f;
+
+        public static bool OnHotkey1Hold() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey1") == 1f;
+
+        public static bool OnHotkey1Release() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey1") == 0f;
+
+        public static bool OnHotkey2Press() => prevHK1Value == 0f && Input.GetAxisRaw("Hotkey2") == 1f;
+
+        public static bool OnHotkey2Hold() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey2") == 1f;
+
+        public static bool OnHotkey2Release() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey2") == 0f;
+
+        public static bool OnHotkey3Press() => prevHK1Value == 0f && Input.GetAxisRaw("Hotkey3") == 1f;
+
+        public static bool OnHotkey3Hold() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey3") == 1f;
+
+        public static bool OnHotkey3Release() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey3") == 0f;
 
         private bool ProcessTouchEvents()
         {

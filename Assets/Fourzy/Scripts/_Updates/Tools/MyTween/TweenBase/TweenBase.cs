@@ -151,7 +151,7 @@ namespace Fourzy._Updates.Tween
                         break;
                 }
         }
-        
+
         public abstract void OnReset();
         public abstract void OnInitialized();
         public abstract void AtProgress(Single value, PlaybackDirection direction);
@@ -160,9 +160,55 @@ namespace Fourzy._Updates.Tween
     public class GraphicsColorGroup
     {
         public CanvasGroup canvasGroup;
-        public SpriteRenderer spriteRenderer;
         public MaskableGraphic uiGraphics;
+        public SpriteRenderer spriteRenderer;
         public LineRenderer lineRenderer;
+
+        public float alpha
+        {
+            set
+            {
+                if (canvasGroup)
+                    canvasGroup.alpha = value;
+                else if (uiGraphics)
+                    uiGraphics.color = new Color(uiGraphics.color.r, uiGraphics.color.g, uiGraphics.color.b, value);
+                else if (spriteRenderer)
+                    spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, value);
+                else if (lineRenderer)
+                    lineRenderer.startColor = lineRenderer.endColor = new Color(lineRenderer.startColor.r, lineRenderer.startColor.g, lineRenderer.startColor.b, value);
+            }
+            get
+            {
+                if (canvasGroup) return canvasGroup.alpha;
+                else if (uiGraphics) return uiGraphics.color.a;
+                else if (spriteRenderer) return spriteRenderer.color.a;
+                else if (lineRenderer) return lineRenderer.startColor.a;
+
+                return 0f;
+            }
+        }
+
+        public Color color
+        {
+            get
+            {
+                if (uiGraphics) return uiGraphics.color;
+                else if (spriteRenderer) return spriteRenderer.color;
+                else if (lineRenderer) return lineRenderer.startColor;
+
+                return Color.clear;
+            }
+        }
+
+        public void SetColor(Color _color, bool changeAlpha)
+        {
+            if (uiGraphics)
+                uiGraphics.color = changeAlpha ? _color : new Color(_color.r, _color.g, _color.b, uiGraphics.color.a);
+            else if (spriteRenderer)
+                spriteRenderer.color = changeAlpha ? _color : new Color(_color.r, _color.g, _color.b, spriteRenderer.color.a);
+            else if (lineRenderer)
+                lineRenderer.startColor = lineRenderer.endColor = changeAlpha ? _color : new Color(_color.r, _color.g, _color.b, lineRenderer.startColor.a);
+        }
     }
 
     public enum PlaybackDirection

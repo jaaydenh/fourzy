@@ -10,8 +10,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             switch (game._Type)
             {
-                case GameType.DEMO:
+                case GameType.PRESENTATION:
                     base.Open();
+
+                    break;
+
+                default:
+                    if (isOpened) Close();
 
                     break;
             }

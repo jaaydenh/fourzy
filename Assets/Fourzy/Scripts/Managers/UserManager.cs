@@ -4,7 +4,6 @@ using Fourzy._Updates.Mechanics;
 using FourzyGameModel.Model;
 using GameSparks.Api.Requests;
 using GameSparks.Core;
-using mixpanel;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -15,7 +14,7 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class UserManager : UnitySingleton<UserManager>
     {
-        public const int DEFAULT_GAME_PIECE = 2;
+        public const string DEFAULT_GAME_PIECE = "2";
         public const int MAX_PLAYER_LEVEL = 32;
         public const int MIN_PLAYER_LEVEL = 1;
 
@@ -24,7 +23,7 @@ namespace Fourzy
 
         public static Action OnUpdateUserInfo;
         public static Action<CurrencyType> onCurrencyUpdate;
-        public static Action<int> OnUpdateUserGamePieceID;
+        public static Action<string> OnUpdateUserGamePieceID;
 
         public string userId { get; private set; }
         public int ratingElo { get; private set; }
@@ -47,13 +46,13 @@ namespace Fourzy
             }
         }
 
-        public int gamePieceID
+        public string gamePieceID
         {
             get
             {
-                int selectedGamePiece = PlayerPrefsWrapper.GetSelectedGamePiece();
+                string selectedGamePiece = PlayerPrefsWrapper.GetSelectedGamePiece();
 
-                return (selectedGamePiece < 0) ? DEFAULT_GAME_PIECE : selectedGamePiece;
+                return (string.IsNullOrEmpty(selectedGamePiece)) ? DEFAULT_GAME_PIECE : selectedGamePiece;
             }
 
             private set
@@ -298,7 +297,7 @@ namespace Fourzy
                     }
                     else
                     {
-                        int? serverGamePiece = response.ScriptData.GetInt("gamePieceId");
+                        string serverGamePiece = response.ScriptData.GetInt("gamePieceId") + "";
 
                         if (serverGamePiece != gamePieceID) UpdateSelectedGamePiece(gamePieceID);
                     }
@@ -324,7 +323,7 @@ namespace Fourzy
             OnUpdateUserInfo?.Invoke();
         }
 
-        public void UpdateSelectedGamePiece(int _gamePieceID)
+        public void UpdateSelectedGamePiece(string _gamePieceID)
         {
             gamePieceID = _gamePieceID;
 

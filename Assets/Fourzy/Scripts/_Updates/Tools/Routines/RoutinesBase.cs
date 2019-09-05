@@ -254,8 +254,8 @@ namespace Fourzy._Updates.Tools
             terminated = true;
 
             if (callOnEnded && onEnded != null) onEnded.Invoke();
-
             if (nested != null) owner.StopCoroutine(nested);
+
             owner.RemoveRoutine(name);
         }
 

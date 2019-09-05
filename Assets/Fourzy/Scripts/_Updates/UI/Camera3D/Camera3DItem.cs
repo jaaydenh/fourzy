@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -24,32 +25,31 @@ namespace Fourzy._Updates.UI.Camera3D
         [HideInInspector]
         public RenderTexture renderTexture;
 
-        private Camera cam;
-        private Dictionary<string, StringEventJoin> eventsFastAccess = new Dictionary<string, StringEventJoin>();
+        protected Camera cam;
+        protected Dictionary<string, StringEventJoin> eventsFastAccess = new Dictionary<string, StringEventJoin>();
 
         protected virtual void Awake()
         {
-            if (string.IsNullOrEmpty(key))
-                GetKey();
+            if (string.IsNullOrEmpty(key)) GetKey();
 
             cam = GetComponent<Camera>();
 
-            if (!cam)
-                cam = gameObject.AddComponent<Camera>();
+            if (!cam) cam = gameObject.AddComponent<Camera>();
+
+            ConfigureCamera();
+
+            if (!Application.isPlaying) return;
 
             //get events
             if (events != null)
                 foreach (StringEventJoin @event in events)
                     eventsFastAccess.Add(@event.command, @event);
-
-            ConfigureCamera();
         }
 
-        [ContextMenu("Reconfigure camera")]
-        public void ConfigureCamera()
+        [Button("Configure Camera")]
+        public virtual void ConfigureCamera()
         {
-            if (!cam)
-                return;
+            if (!cam) return;
 
             renderTexture = new RenderTexture(originalTextureWidth, originalTextureHeight, 16, RenderTextureFormat.ARGB32);
             renderTexture.Create();
@@ -61,8 +61,6 @@ namespace Fourzy._Updates.UI.Camera3D
 
             cam.targetTexture = renderTexture;
         }
-
-        public virtual void Init() { }
 
         public Vector2 GetCameraSize()
         {
@@ -101,8 +99,7 @@ namespace Fourzy._Updates.UI.Camera3D
 
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < hash.Length; i++)
-                sb.Append(hash[i].ToString("X2"));
+            for (int i = 0; i < hash.Length; i++) sb.Append(hash[i].ToString("X2"));
 
             key = sb.ToString();
         }
@@ -113,5 +110,4 @@ namespace Fourzy._Updates.UI.Camera3D
             public Action @event;
         }
     }
-
 }

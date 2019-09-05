@@ -28,6 +28,12 @@ namespace Fourzy._Updates.UI.Helpers
             onValueChangeString.Invoke(string.Format(format, value));
         }
 
+        public void SetFillColor(Color color)
+        {
+            if (fillRect && fillRect.GetComponent<Image>())
+                fillRect.GetComponent<Image>().color = color;
+        }
+
         public void SetMinMaxValue(float min, float max, float value)
         {
             minValue = min;

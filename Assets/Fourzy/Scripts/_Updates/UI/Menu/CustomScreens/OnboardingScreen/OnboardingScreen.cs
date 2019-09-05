@@ -77,7 +77,48 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         GameManager.Instance.OpenMainMenu();
 
                     return;
+
+                case OnboardingDataHolder.OnFinished.LOAD_GAME_SCENE:
+                    //create game
+                    IClientFourzy game = null;
+
+                    switch (tutorial.data.gameType)
+                    {
+                        case GameType.PUZZLE:
+                            PuzzlePacksDataHolder.PuzzlePack puzzlePack = 
+                                GameContentManager.Instance.puzzlePacksDataHolder.puzzlePacks.list
+                                    .Find(_puzzlePack => _puzzlePack.packID == tutorial.data.stringValue) ?? 
+                                    GameContentManager.Instance.puzzlePacksDataHolder.puzzlePacks.list[0];
+
+                            game = puzzlePack.NextUnsolved();
+
+                            if (game != null)
+                            {
+                                GameManager.Instance.currentPuzzlePack = puzzlePack;
+                                GameManager.Instance.StartGame(game);
+                            }
+                            else break;
+
+                            return;
+
+                        case GameType.PASSANDPLAY:
+                            GameBoardDefinition gameboardDefinition = GameContentManager.Instance.GetPassAndPlayBoard(tutorial.data.stringValue);
+
+                            if (gameboardDefinition != null)
+                            {
+                                game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Player Two")) { _Type = GameType.PASSANDPLAY, };
+
+                                return;
+                            }
+
+                            break;
+                    }
+
+                    break;
             }
+
+            //if got to this point, just open MM
+            GameManager.Instance.OpenMainMenu();
         }
 
         public override void OnBack()
@@ -95,10 +136,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenOnboarding(GameContentManager.Tutorial tutorial)
         {
-            if (!WillDisplayTutorial(tutorial))
-                return;
-
             this.tutorial = tutorial;
+            step = 0;
+
             menuController.OpenScreen(this);
 
             PlayerPrefsWrapper.SetTutorialOpened(tutorial.data, true);
@@ -149,8 +189,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        private void MoveEnded(int playerID)
+        private void MoveEnded(ClientPlayerTurn turn)
         {
+            if (turn == null || turn.PlayerId < 1) return;
+
             OnboardingDataHolder.OnboardingTasksBatch batch = tutorial.data.batches[step];
 
             foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
@@ -158,7 +200,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 switch (task.action)
                 {
                     case OnboardingDataHolder.OnboardingActions.ON_PLAYER1_MOVE_ENDED:
-                        if (playerID != (int)PlayerEnum.ONE)
+                        if (turn.PlayerId != (int)PlayerEnum.ONE)
                             return;
 
                         switch (task.nextAction)
@@ -170,7 +212,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingDataHolder.OnboardingActions.ON_PLAYER2_MOVE_ENDED:
-                        if (playerID != (int)PlayerEnum.TWO)
+                        if (turn.PlayerId != (int)PlayerEnum.TWO)
                             return;
 
                         switch (task.nextAction)
@@ -184,16 +226,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        private void MoveStarted(int playerID)
+        private void MoveStarted(ClientPlayerTurn turn)
         {
             OnboardingDataHolder.OnboardingTasksBatch batch = tutorial.data.batches[step];
 
             foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
             {
+                if (turn == null || turn.PlayerId < 1) return;
+
                 switch (task.action)
                 {
                     case OnboardingDataHolder.OnboardingActions.ON_PLAYER1_MOVE_STARTED:
-                        if (playerID != (int)PlayerEnum.ONE)
+                        if (turn.PlayerId != (int)PlayerEnum.ONE)
                             return;
 
                         switch (task.nextAction)
@@ -205,7 +249,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingDataHolder.OnboardingActions.ON_PLAYER2_MOVE_STARTED:
-                        if (playerID != (int)PlayerEnum.TWO)
+                        if (turn.PlayerId != (int)PlayerEnum.TWO)
                             return;
 
                         switch (task.nextAction)
@@ -340,7 +384,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingDataHolder.OnboardingActions.PLAY_INITIAL_MOVES:
-                        if (GamePlayManager.instance) GamePlayManager.instance.board.TryPlayInitialMoves();
+                        if (GamePlayManager.instance) GamePlayManager.instance.board.PlayInitialMoves();
 
                         break;
 

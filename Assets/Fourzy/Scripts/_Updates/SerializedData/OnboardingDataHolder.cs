@@ -12,6 +12,8 @@ namespace Fourzy._Updates.Serialized
         public bool showPlayer2;
         public OnFinished onFinished;
         public OpenScreen openScreen;
+        public GameType gameType;
+        public string stringValue;
         public OnboardingTasksBatch[] batches;
 
         public enum OnboardingActions
@@ -61,6 +63,7 @@ namespace Fourzy._Updates.Serialized
         public enum OnFinished
         {
             LOAD_MAIN_MENU,
+            LOAD_GAME_SCENE,
         }
 
         public enum OpenScreen

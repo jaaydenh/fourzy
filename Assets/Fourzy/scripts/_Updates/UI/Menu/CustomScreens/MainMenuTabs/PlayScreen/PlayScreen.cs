@@ -3,7 +3,6 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
-using mixpanel;
 using System.Collections.Generic;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -47,6 +46,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void StartTurnGame()
         {
             matchmakingScreen.OpenTurnbased();
+        }
+
+        public void StartFastPuzzleGame()
+        {
+            GameManager.Instance.StartGame(GameContentManager.Instance.GetFastPuzzle());
         }
 
         private void OnChallengesUpdate(List<ChallengeData> data) => turnPlayButton.GetBadge("games").badge.SetValue(ChallengeManager.Instance.NextChallenges.Count);

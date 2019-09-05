@@ -30,9 +30,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private List<GamePieceView> gamePieces = new List<GamePieceView>();
 
-        protected override void Awake()
+        protected override void Start()
         {
-            base.Awake();
+            base.Start();
 
             turnBasedTab = menuController.GetScreen<TurnBaseScreen>();
         }
@@ -46,7 +46,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (game._Type)
             {
                 case GameType.PASSANDPLAY:
-                case GameType.DEMO:
+                case GameType.PRESENTATION:
                     if (game.draw)
                     {
                         stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>Draw</color>";
@@ -168,7 +168,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     //no 'next' for realtime/ai games
                     case GameType.REALTIME:
                     case GameType.AI:
-                    case GameType.DEMO:
+                    case GameType.PRESENTATION:
                         nextGameButton.SetActive(false);
 
                         break;
@@ -188,7 +188,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 switch (game._Type)
                 {
                     case GameType.REALTIME:
-                    case GameType.DEMO:
+                    case GameType.PRESENTATION:
                         rematchButton.SetActive(false);
 
                         break;
@@ -205,8 +205,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 rematchButton.SetActive(false);
             }
 
-            //set back button state
-            backButton.SetActive(!nextGameButton.gameObject.activeInHierarchy && !rematchButton.gameObject.activeInHierarchy);
+            //back button
+            switch (game._Type)
+            {
+                case GameType.PRESENTATION:
+
+                    break;
+
+                default:
+                    //set back button state
+                    backButton.SetActive(!nextGameButton.gameObject.activeInHierarchy && !rematchButton.gameObject.activeInHierarchy);
+
+                    break;
+            }
         }
     }
 }

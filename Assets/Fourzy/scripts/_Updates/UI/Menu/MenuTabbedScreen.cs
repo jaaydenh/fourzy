@@ -49,16 +49,6 @@ namespace Fourzy._Updates.UI.Menu
             //get tabs
             tabs = new List<MenuTab>(GetComponentsInChildren<MenuTab>());
 
-            //filter widgets
-            int widgetIndex = 0;
-            do
-            {
-                if (widgets[widgetIndex].GetComponentInParent<MenuTab>())
-                    widgets.RemoveAt(widgetIndex);
-                else
-                    widgetIndex++;
-            } while (widgetIndex < widgets.Count);
-
             //play bg audio
             if (!AudioHolder.instance.IsBGAudioPlaying(Serialized.AudioTypes.BG_MAIN_MENU))
                 AudioHolder.instance.PlayBGAudio(Serialized.AudioTypes.BG_MAIN_MENU, true, 1f, 1f);
@@ -95,8 +85,7 @@ namespace Fourzy._Updates.UI.Menu
         {
             base.Open();
 
-            if (currentTab == -1)
-                return;
+            if (currentTab == -1) return;
 
             tabs[currentTab].Open();
             tabsButtons[currentTab].Open(false);

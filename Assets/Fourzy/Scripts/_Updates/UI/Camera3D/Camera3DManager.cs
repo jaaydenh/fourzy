@@ -58,10 +58,8 @@ namespace Fourzy._Updates.UI.Camera3D
             Camera3DItem copy = null;
 
             copy = Instantiate(item);
-            copy.Init();
 
-            if (forceNewKey)
-                copy.GetKey();
+            if (forceNewKey) copy.GetKey();
 
             copy.transform.SetParent(transform);
             copy.transform.position = currentPosition;

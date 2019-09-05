@@ -3,9 +3,12 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Tools;
+using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
+using Sirenix.OdinInspector;
 using StackableDecorator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -16,7 +19,15 @@ namespace Fourzy._Updates.Serialized
     [CreateAssetMenu(fileName = "DefaultPuzzlePackDataHolder", menuName = "Create PuzzlePack Data Holder")]
     public class PuzzlePacksDataHolder : ScriptableObject
     {
+        [InfoBox("$GetMessage", VisibleIf = "GetMessageLength")]
         public Material originalFontMaterial;
+        [BoxGroup("Puzzle Packs Icons")]
+        public Sprite puzzlePackProgressionIconEmpty, puzzlePackProgressionIconSet;
+        [BoxGroup("AI Packs Icons")]
+        public Sprite aiPackProgressionIconEmpty, aiPackProgressionIconSet;
+        [BoxGroup("Boss Packs Icons")]
+        public Sprite bossPackProgressionIconEmpty, bossPackProgressionIconSet;
+
         [List]
         public PuzzlePackCollection puzzlePacks;
 
@@ -24,29 +35,25 @@ namespace Fourzy._Updates.Serialized
 
         public int totalPuzzlesCompleteCount => puzzlePacks.list.Sum(puzzlePack => puzzlePack.puzzlesComplete.Count);
 
-        public int totalPuzzlesCount => puzzlePacks.list.Sum(puzzlePack => puzzlePack.puzzlesEnabled.Count);
-        private static GamePiecesDataHolder piecesData;
+        public int totalPuzzlesCount => puzzlePacks.list.Sum(puzzlePack => puzzlePack.enabledPuzzlesData.Count);
 
-        public PuzzleData random
+        public ClientPuzzleData random
         {
             get
             {
-                PuzzlePack puzzlePack = puzzlePacks.list.Where(_puzzlePack => _puzzlePack.puzzlesEnabled.Count > 0).Random();
+                PuzzlePack puzzlePack = puzzlePacks.list.Where(_puzzlePack => _puzzlePack.enabledPuzzlesData.Count > 0).Random();
 
                 if (puzzlePack == null) return null;
 
-                PuzzleBoard puzzle = puzzlePack.puzzlesEnabled.Random();
+                ClientPuzzleData _data = puzzlePack.enabledPuzzlesData.Random();
 
-                if (puzzle == null) return null;
+                if (_data == null) return null;
 
-                return puzzle.puzzleData;
+                return _data;
             }
         }
 
-        public void Initialize()
-        {
-            puzzlePacks.list.ForEach(puzzlePack => { puzzlePack.puzzles.list.ForEach(puzzle => { puzzle.Initialize(puzzlePack, puzzlePack.puzzles.list.IndexOf(puzzle)); }); });
-        }
+        public void Initialize() => puzzlePacks.list.ForEach(puzzlePack => puzzlePack.Initialize(this));
 
         public Material GetPuzzlePackFontMaterial(Color outlineColor)
         {
@@ -69,32 +76,20 @@ namespace Fourzy._Updates.Serialized
         /// <summary>
         /// Runtime only
         /// </summary>
-        public void ResetPuzzlesPlayerPrefs()
+        public void ResetPlayerPrefs()
         {
-            puzzlePacks.list.ForEach(puzzlePack =>
-            {
-                puzzlePack.puzzles.list.ForEach(puzzleBoard =>
-                {
-                    PlayerPrefsWrapper.SetPuzzleChallengeComplete(puzzleBoard.puzzleData.ID, false);
-                    PlayerPrefsWrapper.SetGameRewarded(puzzleBoard.puzzleData.ID, false);
-                });
-            });
+            puzzlePacks.list.ForEach(puzzlePack => puzzlePack.ResetPlayerPrefs());
         }
 
-        /// <summary>
-        /// Reset unlocked/opened states
-        /// </summary>
-        public void ResetPuzzlePacksPlayerPrefs()
+        public string GetMessage()
         {
-            puzzlePacks.list.ForEach(puzzlePack =>
-            {
-                puzzlePack.puzzles.list.ForEach(puzzleBoard =>
-                {
-                    PlayerPrefsWrapper.SetPuzzlePackUnlocked(puzzlePack.packID, false);
-                    PlayerPrefsWrapper.SetPuzzlePackOpened(puzzlePack.packID, false);
-                });
-            });
+            if (puzzlePacks.list.Count == 0) return "";
+
+            List<PuzzlePack> duplicateIDs = puzzlePacks.list.GroupBy(x => x.packID).Where(g => g.Count() > 1).Select(y => y.First()).ToList();
+            return duplicateIDs.Count == 0 ? "" : "Duplicate IDs: " + string.Join(",", duplicateIDs.Select(puzzlePack => (puzzlePack.name + " - " + puzzlePack.packID)));
         }
+
+        public bool GetMessageLength() => GetMessage().Length > 0;
 
         [System.Serializable]
         public class PuzzlePackCollection
@@ -103,43 +98,30 @@ namespace Fourzy._Updates.Serialized
         }
 
         [System.Serializable]
-        public class PuzzlePack
+        public class BasicPuzzlePack
         {
-            /// <summary>
-            /// This is editor only field
-            /// </summary>
-            [HideInInspector]
-            public string _name;
             public string name;
             public PackType packType = PackType.PUZZLE_PACK;
             public string packID;
-            public Color outlineColor;
-            public Sprite packBG;
-            public UnlockRequirementsEnum unlockRequirement;
-            /// <summary>
-            /// Requirement quantity
-            /// </summary>
-            [StackableField]
-            [ShowIf("#Check")]
-            public int quantity;
-            [List]
-            public BoardsCollection puzzles;
-            [List]
-            public RewardsCollection rewards;
 
-            /// <summary>
-            /// Runtime only
-            /// </summary>
-            public List<PuzzleBoard> puzzlesEnabled => puzzles.list.Where(puzzle => puzzle.puzzleData.Enabled && puzzle._enabled).ToList();
+            public List<ClientPuzzleData> puzzlesData { get; set; }
+            public List<ClientPuzzleData> enabledPuzzlesData { get; set; }
+            public List<ClientPuzzleData> rewardPuzzles { get; set; }
+            public List<RewardsManager.Reward> allRewards { get; set; }
 
-            /// <summary>
-            /// Runtime only
-            /// </summary>
-            public List<PuzzleBoard> puzzlesComplete => puzzlesEnabled.Where(puzzle => PlayerPrefsWrapper.IsPuzzleChallengeComplete(puzzle.puzzleData.ID)).ToList();
+            public List<ClientPuzzleData> puzzlesComplete => enabledPuzzlesData.Where(puzzle => PlayerPrefsWrapper.GetPuzzleChallengeComplete(puzzle.ID)).ToList();
 
-            public bool complete => puzzlesComplete.Count == puzzlesEnabled.Count;
+            public bool complete => puzzlesComplete.Count == enabledPuzzlesData.Count;
 
             public bool justFinished { get; set; }
+
+            public virtual void Initialize()
+            {
+                puzzlesData = new List<ClientPuzzleData>();
+                enabledPuzzlesData = new List<ClientPuzzleData>();
+                rewardPuzzles = new List<ClientPuzzleData>();
+                allRewards = new List<RewardsManager.Reward>();
+            }
 
             /// <summary>
             /// Runtime only
@@ -148,41 +130,38 @@ namespace Fourzy._Updates.Serialized
             {
                 get
                 {
-                    List<PuzzleBoard> _enabled = puzzlesEnabled;
+                    if (enabledPuzzlesData.Count == 0) return null;
 
-                    if (_enabled.Count == 0) return null;
-
-                    for (int puzzleIndex = 0; puzzleIndex < _enabled.Count; puzzleIndex++)
+                    for (int puzzleIndex = 0; puzzleIndex < enabledPuzzlesData.Count; puzzleIndex++)
                     {
-                        if (puzzleIndex == 0 && !PlayerPrefsWrapper.IsPuzzleChallengeComplete(_enabled[puzzleIndex].puzzleData.ID))
-                            return _enabled[puzzleIndex].puzzleData;
-                        else if (puzzleIndex > 0 && PlayerPrefsWrapper.IsPuzzleChallengeComplete(_enabled[puzzleIndex - 1].puzzleData.ID)
-                            && !PlayerPrefsWrapper.IsPuzzleChallengeComplete(_enabled[puzzleIndex].puzzleData.ID))
-                            return _enabled[puzzleIndex].puzzleData;
+                        if (puzzleIndex == 0 && !PlayerPrefsWrapper.GetPuzzleChallengeComplete(enabledPuzzlesData[puzzleIndex].ID))
+                            return enabledPuzzlesData[puzzleIndex];
+                        else if (puzzleIndex > 0 && PlayerPrefsWrapper.GetPuzzleChallengeComplete(enabledPuzzlesData[puzzleIndex - 1].ID)
+                            && !PlayerPrefsWrapper.GetPuzzleChallengeComplete(enabledPuzzlesData[puzzleIndex].ID))
+                            return enabledPuzzlesData[puzzleIndex];
                     }
 
-                    return _enabled[0].puzzleData;
+                    return enabledPuzzlesData[0];
                 }
             }
 
-            public IClientFourzy nextUnsolved
+            public IClientFourzy NextUnsolved()
             {
-                get
+                ClientPuzzleData data = nextUnsolvedData;
+
+                if (data)
                 {
-                    ClientPuzzleData data = nextUnsolvedData;
+                    nextUnsolvedData.Initialize();
 
-                    if (data != null)
+                    switch (data.pack.packType)
                     {
-                        switch (data.packType)
-                        {
-                            case PackType.PUZZLE_PACK: return new ClientFourzyPuzzle(data);
+                        case PackType.PUZZLE_PACK: return new ClientFourzyPuzzle(data);
 
-                            default: return ClientFourzyGame.FromPuzzleData(data);
-                        }
+                        default: return ClientFourzyGame.FromPuzzleData(data);
                     }
-
-                    return null;
                 }
+
+                return null;
             }
 
             /// <summary>
@@ -190,22 +169,11 @@ namespace Fourzy._Updates.Serialized
             /// </summary>
             public IClientFourzy Next(IClientFourzy current)
             {
-                ClientPuzzleData puzzleData = null;
-                List<PuzzleBoard> _enabled = puzzlesEnabled;
+                ClientPuzzleData puzzleData = enabledPuzzlesData.Next(current.puzzleData);
 
-                if (current.puzzleData.PackLevel == puzzles.list.Count - 1)
-                    puzzleData = _enabled[0].puzzleData;
-                else
-                {
-                    int _index = puzzles.list.FindIndex(current.puzzleData.PackLevel + 1, puzzle => puzzle.puzzleData.Enabled);
+                puzzleData.Initialize();
 
-                    if (_index > -1)
-                        puzzleData = puzzles.list[_index].puzzleData;
-                    else
-                        puzzleData = _enabled[0].puzzleData;
-                }
-
-                switch (puzzleData.packType)
+                switch (puzzleData.pack.packType)
                 {
                     case PackType.PUZZLE_PACK: return new ClientFourzyPuzzle(puzzleData);
 
@@ -213,12 +181,187 @@ namespace Fourzy._Updates.Serialized
                 }
             }
 
+            public void StartNextUnsolvedPuzzle()
+            {
+                IClientFourzy game = NextUnsolved();
+
+                if (game == null)
+                {
+                    GamesToastsController.ShowTopToast("Empty puzzle pack");
+                    return;
+                }
+
+                GameManager.Instance.currentPuzzlePack = this;
+                GameManager.Instance.StartGame(game);
+            }
+
+            public void ResetPlayerPrefs()
+            {
+                PlayerPrefsWrapper.SetPuzzlePackUnlocked(packID, false);
+                PlayerPrefsWrapper.SetPuzzlePackOpened(packID, false);
+
+                puzzlesData.ForEach(_data =>
+                {
+                    PlayerPrefsWrapper.SetPuzzleChallengeComplete(_data.ID, false);
+                    PlayerPrefsWrapper.SetGameRewarded(_data.ID, false);
+
+                    //clear rewards
+                    foreach (RewardsManager.Reward reward in _data.rewards)
+                    {
+                        PlayerPrefsWrapper.SetEventRewarded(_data.GetRewardID(reward), false);
+                    }
+                });
+            }
+
+            public static implicit operator bool(BasicPuzzlePack pack) => pack != null;
+        }
+
+        [System.Serializable]
+        public class PuzzlePack : BasicPuzzlePack
+        {
+            /// <summary>
+            /// This is editor only field
+            /// </summary>
+            [HideInInspector]
+            public string _name;
+            public Color outlineColor;
+            public Sprite packBG;
+            public UnlockRequirementsEnum unlockRequirement;
+            [StackableField, StackableDecorator.ShowIf("#OpponentTypeCheck")]
+            public Color aiColor;
+            [StackableField, StackableDecorator.ShowIf("#OpponentTypeCheck")]
+            public Color playerColor;
+            [StackableField, StackableDecorator.ShowIf("#OpponentTypeCheck")]
+            public string herdID;
+            [StackableField, StackableDecorator.ShowIf("#AITypeCheck")]
+            public string profileName;
+            public bool overrideProgressionIcons;
+            [StackableField, StackableDecorator.ShowIf("$overrideProgressionIcons")]
+            public Sprite progressionIconEmpty, progressionIconSet;
+            /// <summary>
+            /// Requirement quantity
+            /// </summary>
+            [StackableField]
+            [StackableDecorator.ShowIf("#Check")]
+            public int quantity;
+            [List]
+            public BoardsCollection puzzles;
+
+            public PuzzlePacksDataHolder puzzlePacksHolder { get; private set; }
+            public Material labelMaterial { get; private set; }
+
+            public Sprite _progressionIconEmpty
+            {
+                get
+                {
+                    if (overrideProgressionIcons)
+                        return progressionIconEmpty;
+                    else
+                    {
+                        switch (packType)
+                        {
+                            case PackType.PUZZLE_PACK:
+                                return puzzlePacksHolder.puzzlePackProgressionIconEmpty;
+
+                            case PackType.AI_PACK:
+                                return puzzlePacksHolder.aiPackProgressionIconEmpty;
+
+                            default:
+                                return puzzlePacksHolder.bossPackProgressionIconEmpty;
+                        }
+                    }
+                }
+            }
+
+            public Sprite _progressionIconSet
+            {
+                get
+                {
+                    if (overrideProgressionIcons)
+                        return progressionIconEmpty;
+                    else
+                    {
+                        switch (packType)
+                        {
+                            case PackType.PUZZLE_PACK:
+                                return puzzlePacksHolder.puzzlePackProgressionIconSet;
+
+                            case PackType.AI_PACK:
+                                return puzzlePacksHolder.aiPackProgressionIconSet;
+
+                            default:
+                                return puzzlePacksHolder.bossPackProgressionIconSet;
+                        }
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Runtime only
+            /// </summary>
+            public string getUnlockRewardID
+            {
+                get
+                {
+                    //find unlock reward
+                    RewardsManager.Reward reward = null;
+                    ClientPuzzleData _puzzleData = null;
+
+                    foreach (ClientPuzzleData puzzleData in enabledPuzzlesData)
+                    {
+                        reward = Array.Find(puzzleData.rewards, _reward => _reward.rewardType == RewardType.PACK_COMPLETE);
+                        _puzzleData = puzzleData;
+
+                        if (reward != null) break;
+                    }
+
+                    if (reward == null) return "";
+
+                    return _puzzleData.ID + "_" + reward.rewardType.ToString();
+                }
+            }
+
+            public void Initialize(PuzzlePacksDataHolder puzzlePacksHolder)
+            {
+                base.Initialize();
+
+                this.puzzlePacksHolder = puzzlePacksHolder;
+                labelMaterial = puzzlePacksHolder.GetPuzzlePackFontMaterial(outlineColor);
+
+                for (int puzzleIndex = 0; puzzleIndex < puzzles.list.Count; puzzleIndex++)
+                {
+                    ClientPuzzleData _data = puzzles.list[puzzleIndex].GetPuzzleData(this, puzzleIndex);
+
+                    if (_data != null)
+                    {
+                        puzzlesData.Add(_data);
+                        allRewards.AddRange(_data.rewards);
+
+                        if (_data.Enabled)
+                        {
+                            enabledPuzzlesData.Add(_data);
+
+                            if (_data.rewards.Length > 0)
+                                rewardPuzzles.Add(_data);
+                        }
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Editor stuff
+            /// </summary>
+            /// <returns></returns>
             public bool Check()
             {
-                _name = $"{name}, Requirement: {unlockRequirement.ToString()}, Boards: {puzzles.list.Count}";
+                _name = $"{name}, R: {unlockRequirement.ToString()}, B: {puzzles.list.Count}, ID: {packID}, Type: {packType}";
 
                 return unlockRequirement != UnlockRequirementsEnum.NONE;
             }
+
+            public bool OpponentTypeCheck() => packType != PackType.PUZZLE_PACK;
+
+            public bool AITypeCheck() => packType == PackType.AI_PACK;
         }
 
         [System.Serializable]
@@ -233,6 +376,12 @@ namespace Fourzy._Updates.Serialized
             public List<RewardsManager.Reward> list;
         }
 
+        [System.Serializable]
+        public class SpellsCollection
+        {
+            public List<SpellId> list;
+        }
+
         /// <summary>
         /// Editor helper
         /// </summary>
@@ -244,70 +393,104 @@ namespace Fourzy._Updates.Serialized
             /// </summary>
             [HideInInspector]
             public string _name;
-            [StackableField]
-            [ShowIf("#FileCheck")]
+            [StackableField, StackableDecorator.ShowIf("#FileCheck")]
             public TextAsset file;
             [Tooltip("Enabled must be checked in both BoardFile and here for board to be available in puzzlePack")]
             public bool _enabled = true;
             public PuzzleGoalType goal;
-            [StackableField]
-            [ShowIf("#AIPackTypeCheck")]
+            [List]
+            public RewardsCollection rewards;
+            [StackableField, StackableDecorator.ShowIf("#RewardsCheck")]
+            public bool overridePorgressionIcons;
+            [StackableField, StackableDecorator.ShowIf("#RewardsCheckExtra")]
+            public Sprite progressionIconEmpty, progressionIconSet;
+
+            [Space(10f), StackableField, StackableDecorator.ShowIf("#AIPackTypeCheck")]
             public AIProfile aiProfile;
-            [StackableField]
-            [ShowIf("#BossPackTypeCheck")]
+            [StackableField, StackableDecorator.ShowIf("#BossPackTypeCheck")]
             public BossType aiBoss;
-            [StackableField]
-            [ShowIf("#PuzzkePackTypeCheck")]
+            [StackableField, StackableDecorator.ShowIf("#PuzzlePackTypeCheck")]
             public int moveLimit;
-            [StackableField]
-            [ShowIf("#PuzzkePackTypeCheck")]
+            [StackableField, StackableDecorator.ShowIf("#PuzzlePackTypeCheck")]
+            public bool overrideInstructions;
+            [StackableField, StackableDecorator.ShowIf("#PuzzlePackTypeCheckCheckOverride")]
             public string instructions;
 
-            [StackableField]
-            [ShowIf("#OpponentProfileCheck")]
+            [StackableField, StackableDecorator.ShowIf("#OpponentProfileCheck")]
+            public bool overrideAIProfile;
+            [StackableField, StackableDecorator.ShowIf("#AIPackTypeCheckOverride")]
             public string profileName;
-            [StackableField]
-            [ShowIf("#OpponentProfileCheck")]
+            [StackableField, StackableDecorator.ShowIf("#OpponentProfileCheckOverride")]
             public int herdID = 1;
-
-            public GameBoardDefinition boardDefinition { get; private set; }
-            public ClientPuzzleData puzzleData { get; private set; }
+            [StackableField, StackableDecorator.ShowIf("#OpponentProfileCheck")]
+            public PlayerEnum firstTurn = PlayerEnum.ONE;
+            [List, StackableDecorator.ShowIf("#OpponentProfileCheck")]
+            public SpellsCollection availableSpells;
 
             private string _fileName;
             private PuzzlePacksDataHolder dataHolder;
             private bool _lastEnabled = false;
 
-            public void Initialize(PuzzlePack pack, int packLevel)
+            public ClientPuzzleData GetPuzzleData(PuzzlePack pack, int packLevel)
             {
-                if (!file) return;
+                if (!file) return null;
 
                 GameBoardDefinition gameboard = JsonConvert.DeserializeObject<GameBoardDefinition>(file.text);
 
-                puzzleData = new ClientPuzzleData();
+                ClientPuzzleData puzzleData = new ClientPuzzleData();
 
                 puzzleData.PackID = pack.packID;
                 puzzleData.PackLevel = packLevel;
 
-                puzzleData.packType = pack.packType;
+                puzzleData.pack = pack;
                 puzzleData.aiProfile = aiProfile;
                 puzzleData.aiBoss = aiBoss;
+                puzzleData.firstTurn = (int)firstTurn;
 
-                puzzleData.ID = gameboard.ID;
+                puzzleData.ID = pack.puzzlePacksHolder.name + "_" + pack.packID + "_" + gameboard.BoardName + "_" + gameboard.ID;
                 puzzleData.Name = gameboard.BoardName;
-                puzzleData.Enabled = gameboard.Enabled;
+                puzzleData.Enabled = gameboard.Enabled && _enabled;
                 puzzleData.GoalType = goal;
                 puzzleData.MoveLimit = moveLimit;
-                puzzleData.PuzzlePlayer = new Player(2, profileName);
-                puzzleData.PuzzlePlayer.HerdId = herdID + "";
-                puzzleData.Instructions = instructions;
+                puzzleData.PuzzlePlayer =
+                    new Player(2, overrideAIProfile ? profileName : pack.profileName) { HerdId = overrideAIProfile ? herdID + "" : pack.herdID };
+
+                switch (pack.packType)
+                {
+                    case PackType.BOSS_AI_PACK:
+                        puzzleData.PuzzlePlayer.BossType = aiBoss;
+                        puzzleData.PuzzlePlayer.Profile = AIProfile.BossAI;
+
+                        break;
+
+                    case PackType.AI_PACK:
+                        puzzleData.PuzzlePlayer.Profile = aiProfile;
+
+                        break;
+
+                    case PackType.PUZZLE_PACK:
+                        puzzleData.PuzzlePlayer.Profile = AIProfile.PuzzleAI;
+
+                        break;
+                }
+
+                puzzleData.GetInstructions();
+                puzzleData.availableSpells = availableSpells.list.ToArray();
+                puzzleData.rewards = rewards.list.ToArray();
+                puzzleData.progressionIconEmpty = overridePorgressionIcons ? progressionIconEmpty : pack._progressionIconEmpty;
+                puzzleData.progressionIconSet = overridePorgressionIcons ? progressionIconSet : pack._progressionIconSet;
 
                 puzzleData.gameBoardDefinition = gameboard;
                 puzzleData.InitialGameBoard = gameboard.ToGameBoardData();
 
-                //initial moves
+                return puzzleData;
             }
 
-            public bool FileCheck()
+            private bool RewardsCheck() => rewards.list.Count > 0;
+
+            private bool RewardsCheckExtra() => rewards.list.Count > 0 && overridePorgressionIcons;
+
+            private bool FileCheck()
             {
                 if (!file)
                 {
@@ -326,7 +509,7 @@ namespace Fourzy._Updates.Serialized
                     try
                     {
                         gameboard = JsonConvert.DeserializeObject<GameBoardDefinition>(file.text);
-                        _name = $"Name: {gameboard.BoardName}, Enabled: {gameboard.Enabled && _enabled}";
+                        _name = $"{gameboard.BoardName}, On: {gameboard.Enabled && _enabled}, R: {rewards.list.Count}";
                     }
                     catch (JsonReaderException)
                     {
@@ -337,29 +520,29 @@ namespace Fourzy._Updates.Serialized
                 return true;
             }
 
-            public bool OpponentProfileCheck()
+            private bool OpponentProfileCheck()
             {
                 if (Application.isPlaying)
                     return false;
                 else
                 {
 #if UNITY_EDITOR
-                    if (!dataHolder) dataHolder = AssetDatabase.LoadAssetAtPath<PuzzlePacksDataHolder>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("DefaultPuzzlePackDataHolder")[0]));
+                    GetDataHolder();
 #else
                     return false;
 #endif
-                    return dataHolder.puzzlePacks.list.Find(pack => pack.puzzles.list.Contains(this)).packType != PackType.PUZZLE_PACK || aiBoss != BossType.None || aiProfile != AIProfile.Player;
+                    return dataHolder.puzzlePacks.list.Find(pack => pack.puzzles.list.Contains(this)).packType != PackType.PUZZLE_PACK && (aiBoss != BossType.None || aiProfile != AIProfile.Player);
                 }
             }
 
-            public bool PuzzkePackTypeCheck()
+            private bool PuzzlePackTypeCheck()
             {
                 if (Application.isPlaying)
                     return false;
                 else
                 {
 #if UNITY_EDITOR
-                    if (!dataHolder) dataHolder = AssetDatabase.LoadAssetAtPath<PuzzlePacksDataHolder>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("DefaultPuzzlePackDataHolder")[0]));
+                    GetDataHolder();
 #else
                     return false;
 #endif
@@ -367,14 +550,14 @@ namespace Fourzy._Updates.Serialized
                 }
             }
 
-            public bool BossPackTypeCheck()
+            private bool BossPackTypeCheck()
             {
                 if (Application.isPlaying)
                     return false;
                 else
                 {
 #if UNITY_EDITOR
-                    if (!dataHolder) dataHolder = AssetDatabase.LoadAssetAtPath<PuzzlePacksDataHolder>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("DefaultPuzzlePackDataHolder")[0]));
+                    GetDataHolder();
 #else
                     return false;
 #endif
@@ -382,19 +565,40 @@ namespace Fourzy._Updates.Serialized
                 }
             }
 
-            public bool AIPackTypeCheck()
+            private bool AIPackTypeCheck()
             {
                 if (Application.isPlaying)
                     return false;
                 else
                 {
 #if UNITY_EDITOR
-                    if (!dataHolder) dataHolder = AssetDatabase.LoadAssetAtPath<PuzzlePacksDataHolder>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("DefaultPuzzlePackDataHolder")[0]));
+                    GetDataHolder();
 #else
                     return false;
 #endif
                     return dataHolder.puzzlePacks.list.Find(pack => pack.puzzles.list.Contains(this)).packType == PackType.AI_PACK;
                 }
+            }
+
+            private bool AIPackTypeCheckOverride() => AIPackTypeCheck() && overrideAIProfile;
+
+            private bool OpponentProfileCheckOverride() => OpponentProfileCheck() && overrideAIProfile;
+
+            public bool PuzzlePackTypeCheckCheckOverride() => PuzzlePackTypeCheck() && overrideInstructions;
+
+            private void GetDataHolder()
+            {
+#if UNITY_EDITOR
+                if (!dataHolder)
+                {
+                    foreach (UnityEngine.Object obj in Selection.objects)
+                    {
+                        Type objType = obj.GetType();
+
+                        if (objType == typeof(PuzzlePacksDataHolder) || objType.IsSubclassOf(typeof(PuzzlePacksDataHolder))) dataHolder = obj as PuzzlePacksDataHolder;
+                    }
+                }
+#endif
             }
         }
 

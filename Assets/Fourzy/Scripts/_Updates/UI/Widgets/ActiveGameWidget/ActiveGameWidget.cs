@@ -36,9 +36,8 @@ namespace Fourzy._Updates.UI.Widgets
             opponent = game.opponent;
             opponentNameLabel.text = (opponent.DisplayName.Length > 14) ? opponent.DisplayName.Substring(0, 15) + "..." : opponent.DisplayName;
 
-            int opponentHerdId = 0;
-            if (opponent.HerdId != null)
-                opponentHerdId = (int)float.Parse(opponent.HerdId);
+            string opponentHerdId = "0";
+            if (opponent.HerdId != null) opponentHerdId = opponent.HerdId;
 
             GamePieceView gamePieceView = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(opponentHerdId).player1Prefab, gamepieceParent);
             gamePieceView.transform.localPosition = Vector3.zero;
@@ -46,30 +45,13 @@ namespace Fourzy._Updates.UI.Widgets
 
             if (game.isOver)
             {
-                ////if player won
-                //if (game.IsWinner())
-                //    userTitle.text = LocalizationManager.Instance.GetLocalizedValue("you_won_text");
-                ////if they won
-                //else if (game.IsWinner(opponent))
-                //    userTitle.text = LocalizationManager.Instance.GetLocalizedValue("they_won_text");
-                ////its a draw
-                //else
-                //    userTitle.text = LocalizationManager.Instance.GetLocalizedValue("draw_text");
-
                 rematchButton.SetActive(true);
                 rematchButton.SetLabel("Rematch");
 
                 moveTimeAgo.gameObject.SetActive(false);
             }
-            //else if (game.isExpired == true)
-            //    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("expired_text");
             else
             {
-                //if (game.isMyTurn)
-                //    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("your_move_text");
-                //else
-                //    statusLabel.text = LocalizationManager.Instance.GetLocalizedValue("their_move_text");
-
                 rematchButton.SetActive(false);
 
                 PlayerTurn lastMove = data.lastTurn;

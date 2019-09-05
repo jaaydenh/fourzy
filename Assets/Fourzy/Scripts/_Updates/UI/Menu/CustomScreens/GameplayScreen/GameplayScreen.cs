@@ -15,6 +15,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public PlayerUIWidget playerWidget;
         public PlayerUIWidget opponentWidget;
+        public GameInfoWidget gameInfoWidget;
 
         public List<TimerSliderWidget> timerWidgets;
 
@@ -67,7 +68,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 {
                     case GameType.PUZZLE:
                     case GameType.TURN_BASED:
-                    case GameType.DEMO:
+                    case GameType.PRESENTATION:
                         GamePlayManager.instance.BackButtonOnClick();
 
                         break;
@@ -131,21 +132,56 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //close puzzle win/lose screen
             if (puzzleWinLoseScreen.isCurrent) menuController.CloseCurrentScreen(true);
 
+            #region Check AI move
+
+            switch (game._Type)
+            {
+                case GameType.AI:
+                case GameType.PRESENTATION:
+                case GameType.PUZZLE:
+                    gameInfoWidget.Hide(.3f);
+
+                    break;
+            }
+
+            #endregion
+
             spellsListWidget.Open(game, gameplayManager.board, game.me);
         }
 
-        public void OnMoveStarted(int playerID)
+        public void OnWrongTurn()
         {
+            gameInfoWidget.NotYourTurn();
+        }
+
+        public void OnMoveStarted(ClientPlayerTurn turn)
+        {
+            if (turn == null || turn.PlayerId < 1) return;
+
+            #region Checking AI turn
+
+            switch (game._Type)
+            {
+                case GameType.AI:
+                case GameType.PRESENTATION:
+                case GameType.PUZZLE:
+                    if (game.isMyTurn) gameInfoWidget.Hide(.3f);
+
+                    break;
+            }
+
+            #endregion
+
             #region Timers
 
             if (timersEnabled)
             {
-                if (game._FirstState.ActivePlayerId == playerID) onePlayerTurnCounter++;
+                if (game._FirstState.ActivePlayerId == turn.PlayerId) onePlayerTurnCounter++;
 
                 //deactivate timers, add timer value
                 timerWidgets.ForEach(widget =>
                 {
-                    if (widget.player.PlayerId == playerID)
+                    if (widget.player.PlayerId == turn.PlayerId)
                     {
                         widget.Deactivate();
 
@@ -163,16 +199,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
             #endregion
         }
 
-        public void OnMoveEnded(int playerID)
+        public void OnMoveEnded(ClientPlayerTurn turn)
         {
             if (game == null) return;
 
             puzzleUI.UpdatePlayerTurn();
             passAndPlayUI.UpdatePlayerTurn();
-
+            
             if (game.isOver) return;
 
-            spellsListWidget.UpdateSpells(playerID);
+            UpdatePlayerTurnGraphics();
+
+            if (turn == null || turn.PlayerId < 1) return;
+
+            #region Checking AI turn
+
+            switch (game._Type)
+            {
+                case GameType.AI:
+                //case GameType.PRESENTATION:
+                case GameType.PUZZLE:
+                    //if waiting more than (time), show "thinking..."
+                    //if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").ShowDelayed(time: .6f);
+                    if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").Show(.3f);
+
+                    break;
+            }
+
+            #endregion
 
             #region Timers
 
@@ -187,7 +241,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             #endregion
 
-            UpdatePlayerTurnGraphics();
+            spellsListWidget.UpdateSpells(game._State.ActivePlayerId);
         }
 
         public void UpdatePlayerTurnGraphics()
@@ -247,6 +301,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game.puzzleData != null)
             {
                 puzzleUI.GameComplete();
+
+                //open puzzle win/lose screen
+                puzzleWinLoseScreen.Open(game);
             }
             else
             {
@@ -267,21 +324,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                    case GameType.DEMO:
+                    case GameType.PRESENTATION:
                         demoGameScreen.GameComplete();
 
                         break;
                 }
-            }
 
-            //win/lose screens calls
-            if (game.puzzleData != null)
-            {
-                //open puzzle win/lose screen
-                puzzleWinLoseScreen.Open(game);
-            }
-            else
-            {
+                //win/lose screen
                 switch (game._Type)
                 {
                     case GameType.ONBOARDING:
@@ -296,6 +345,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
                 }
             }
+
+            #region Check AI move
+
+            switch (game._Type)
+            {
+                case GameType.AI:
+                case GameType.PRESENTATION:
+                case GameType.PUZZLE:
+                    gameInfoWidget.Hide(.3f);
+
+                    break;
+            }
+
+            #endregion
         }
 
         public void OnGamePaused()
@@ -327,11 +390,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        private void ActivatePlayerTimer(int playerID) => timerWidgets.ForEach(widget => { if (widget.player.PlayerId == playerID) { widget.Activate(); Debug.Log("why finished"); } });
+        private void ActivatePlayerTimer(int playerID) => timerWidgets.ForEach(widget => { if (widget.player.PlayerId == playerID) { widget.Activate(); } });
 
         private IEnumerator WaitForTapRoutine()
         {
-            while (tapToStartOverlay.isOpened) yield return null;
+            while (!isCurrent) yield return null;
             yield break;
         }
     }

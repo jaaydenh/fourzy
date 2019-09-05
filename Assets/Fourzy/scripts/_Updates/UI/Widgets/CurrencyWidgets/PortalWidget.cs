@@ -10,15 +10,9 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class PortalWidget : WidgetBase
     {
-        public bool updateOnStart = true;
         public CurrencyType type;
 
         private ButtonExtended button;
-
-        protected void Start()
-        {
-            if (updateOnStart) _Update();
-        }
 
         public override void _Update()
         {
@@ -49,11 +43,13 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case CurrencyType.PORTAL_POINTS:
                     PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.SIMPLE);
+                    UserManager.Instance.portalPoints -= Constants.PORTAL_POINTS;
 
                     break;
 
                 case CurrencyType.RARE_PORTAL_POINTS:
                     PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
+                    UserManager.Instance.portalPoints -= Constants.RARE_PORTAL_POINTS;
 
                     break;
             }

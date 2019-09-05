@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu.Screens;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -24,25 +23,31 @@ namespace Fourzy._Updates.UI.Menu
 
         protected void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            //try load fast puzzlePack
+            if (Input.GetKeyDown(KeyCode.A))
             {
-                //create turn based game
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "createTurnBased",
-
-                }, OnResult, OnError);
+                GetScreen<PrePackPrompt>().Prompt(GameContentManager.Instance.externalPuzzlePacks[0]);
             }
-            else if (Input.GetKeyDown(KeyCode.W))
-            {
-                //create turn based game
-                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-                {
-                    FunctionName = "helloWorld",
-                    FunctionParameter = "-input-",
 
-                }, OnResult, OnError);
-            }
+            //if (Input.GetKeyDown(KeyCode.Q))
+            //{
+            //    //create turn based game
+            //    PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            //    {
+            //        FunctionName = "createTurnBased",
+
+            //    }, OnResult, OnError);
+            //}
+            //else if (Input.GetKeyDown(KeyCode.W))
+            //{
+            //    //create turn based game
+            //    PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            //    {
+            //        FunctionName = "helloWorld",
+            //        FunctionParameter = "-input-",
+
+            //    }, OnResult, OnError);
+            //}
         }
 
         private void OnResult(ExecuteCloudScriptResult result)
