@@ -66,6 +66,7 @@ MonoBehaviour:
     persistentCalls:
       calls: []
   onBackSfx: 3
+  closePreviousWhenOpened: 0
   default: 0
   isOpened: 0
   defaultCalls: 1
