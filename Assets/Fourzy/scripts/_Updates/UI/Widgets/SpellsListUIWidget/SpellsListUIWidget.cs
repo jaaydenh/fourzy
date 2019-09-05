@@ -76,26 +76,17 @@ namespace Fourzy._Updates.UI.Widgets
             this.board = board;
             this.owner = owner;
 
-            if (game.puzzleData != null)
+            switch (game._Type)
             {
-                System.Array.ForEach(game.puzzleData.availableSpells, (spell) => AddSpell(spell));
-            }
-            else
-            {
-                switch (game._Type)
-                {
-                    case GameType.PASSANDPLAY:
-                        //hardoceded for now
-                        AddSpell(SpellId.HEX);
+                case GameType.PASSANDPLAY:
+                    //hardoceded for now
+                    AddSpell(SpellId.HEX);
+                    break;
 
-                        break;
-
-                    case GameType.TURN_BASED:
-                        //hardoceded for now
-                        AddSpell(SpellId.HEX);
-
-                        break;
-                }
+                case GameType.TURN_BASED:
+                    //hardoceded for now
+                    AddSpell(SpellId.HEX);
+                    break;
             }
 
             board.onCast += OnCast;
@@ -117,14 +108,7 @@ namespace Fourzy._Updates.UI.Widgets
             spellWidgets.Add(spellWidget);
         }
 
-        public void UpdateSpells(ClientPlayerTurn turn)
-        {
-            if (turn == null || turn.PlayerId < 1) return;
-
-            spellWidgets.ForEach(widget => widget.UpdateWidget(turn.PlayerId));
-        }
-
-        public void UpdateSpells(int playerID) => spellWidgets.ForEach(widget => widget.UpdateWidget(playerID));
+        public void UpdateSpells(int value) => spellWidgets.ForEach(widget => widget.UpdateWidget(value));
 
         protected override void OnInitialized()
         {

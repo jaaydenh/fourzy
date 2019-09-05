@@ -5,6 +5,7 @@ using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
+using mixpanel;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -35,6 +36,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public virtual void Prompt(TokensDataHolder.TokenData data)
         {
             this.data = data;
+
+            var props = new Value();
+            props["Token Type"] = data.name;
+            Mixpanel.Track("Open Token Detail", props);
 
             tokenImage.sprite = GameContentManager.Instance.tokensDataHolder.GetTokenSprite(data);
 
@@ -134,20 +139,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //loop initial moves
             while (isOpened)
             {
-                ClientFourzyGame game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Player Two") { HerdId = "1"});
+                ClientFourzyGame game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
                 gameboard.Initialize(game);
+                gameboard.TryPlayInitialMoves();
 
-                //wait a bit for screen to fade in
-                yield return new WaitForSeconds(.8f);
-
-                //play before actions
-                yield return gameboard.OnPlayManagerReady();
-
-                //wait a bit again
-                yield return new WaitForSeconds(.3f);
-
-                //play initial moves
-                yield return gameboard.PlayInitialMoves();
+                yield return new WaitWhile(() => gameboard.IsRoutineActive("playMoves"));
+                yield return new WaitForSeconds(2f);
             }
         }
     }

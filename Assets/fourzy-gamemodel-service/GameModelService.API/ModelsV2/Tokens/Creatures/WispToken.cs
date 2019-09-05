@@ -52,6 +52,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_HARD;
+            }
+        }
+
         public int Chance;
 
         public WispToken(int ChanceToMove = TokenConstants.WispMovePercentage)

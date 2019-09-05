@@ -19,8 +19,7 @@ namespace FourzyGameModel.Model
         {
             return CreateDefaultBoard(Options.Rows, Options.Columns);
         }
-
-
+        
         //Look at the areas and tokens allowed and build a random board based on experience of both players.
         public static GameBoard CreateRandomBoard(GameOptions Options, Player A, Player B, Area PreferredArea = Area.NONE, string Recipe="")
         {
@@ -62,6 +61,87 @@ namespace FourzyGameModel.Model
         public static GameBoard CreateGameBoard(BoardGenerator Generator, GameOptions Options)
         {
             return Generator.GenerateBoard(Options.Rows, Options.Columns);
+        }
+
+        public static GameBoard CreateGameBoard(Area BoardArea, int MinComplexity, int MaxComplexity, GameOptions Options = null)
+        {
+            if (Options == null) Options = new GameOptions();
+            GameBoard Board = null;
+            BoardGenerator Generator = null;
+
+            switch (BoardArea)
+            {
+                case Area.TRAINING_GARDEN:
+                    Generator = new BeginnerGardenRandomGenerator();
+                    break;
+                case Area.ICE_PALACE:
+                    Generator = new IcePalaceRandomGenerator();
+                    break;
+                case Area.ENCHANTED_FOREST:
+                    Generator = new ForestRandomGenerator();
+                    break;
+
+                case Area.SANDY_ISLAND:
+                    Generator = new IslandRandomGenerator();
+                    break;
+
+                case Area.ARENA:
+                    break;
+            }
+
+            Board = Generator.GenerateBoard(Options.Rows, Options.Columns);
+            int Score = BoardComplexityScore(Board);
+            int attempts = 0;
+            while ((Score < MinComplexity || Score > MaxComplexity) && attempts < BoardGeneratorConstants.MAX_GENERATOR_ATTEMPTS)
+            {
+                Board = Generator.GenerateBoard(Options.Rows, Options.Columns);
+                Score = BoardComplexityScore(Board);
+            }
+            return Board;
+        }
+
+        //COMPLEXITY FACTORS:
+        //Sum of all tokens
+        //Number of different tokens
+        //Has Dynamic Elements
+        //Terrain allows pushing
+
+        public static int BoardComplexityScore(GameBoard Board)
+        {
+            int score = 0;
+            int numberDynamic = 0;
+            int numberMoveable = 0;
+            List<TokenType> TokenTypes = new List<TokenType>();
+            int uniquetokenscore = 0;
+            
+            foreach (BoardSpace s in Board.Contents)
+            {
+                foreach (IToken t in s.Tokens.Values)
+                {
+
+                if (t.isMoveable) numberMoveable++;
+                if (t.HasDynamicFeature) numberDynamic++;
+                score += t.Complexity;
+                if (!TokenTypes.Contains(t.Type)) {
+                    TokenTypes.Add(t.Type);
+                    uniquetokenscore += t.Complexity;
+                    }
+                }
+            }
+
+            if (numberDynamic >0)
+            {
+                score += numberDynamic * 25;
+            }
+
+            if (numberMoveable > 0)
+            {
+                score += numberDynamic * 5;
+            }
+
+            score += uniquetokenscore * Board.Rows * Board.Columns;
+
+            return score;
         }
 
         public static List<TokenType> IntersectTokens(List<TokenType> A, List<TokenType> B)

@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy;
 using Fourzy._Updates.UI.Helpers;
 using System;
 using System.Collections;
@@ -18,7 +19,7 @@ namespace UnityEngine.EventSystems
         public static Action onPointerDown;
         public static Action onPointerUp;
         public static Action<Vector2> onPointerPositionChanged;
-        public static Action<KeyValuePair<string, float>> noInput;
+        public static Action noInputTimerDone;
 
         /// <summary>
         /// Id of the cached left mouse pointer event.
@@ -39,8 +40,6 @@ namespace UnityEngine.EventSystems
         /// Touch id for when simulating touches on a non touch device.
         /// </summary>
         public const int kFakeTouchesId = -4;
-
-        public static Dictionary<string, float> noInputFilters = new Dictionary<string, float>();
 
         /// <summary>
         /// Is virtual pointer used?
@@ -65,7 +64,7 @@ namespace UnityEngine.EventSystems
         protected SelectableUI lastGOPoinerEnter;
         protected Selectable3D last3DGOPoinerEnter;
         protected int layerMask;
-        protected float noInputTimer;
+        protected float demoTimer;
 
         protected Dictionary<int, PointerEventData> m_PointerData = new Dictionary<int, PointerEventData>();
         protected Coroutine timerCoroutine;
@@ -546,27 +545,6 @@ namespace UnityEngine.EventSystems
             }
         }
 
-        public void AddNoInputFilter(string key, float time)
-        {
-            if (noInputFilters.ContainsKey(key)) return;
-
-            noInputFilters.Add(key, time);
-
-            ResetNoInputTimer();
-        }
-
-        public void ResetNoInputTimer()
-        {
-            noInputTimer = 0f;
-        }
-
-        public void TriggerNoInputEvent(string key)
-        {
-            if (!noInputFilters.ContainsKey(key)) return;
-
-            noInput.Invoke(new KeyValuePair<string, float>(key, noInputFilters[key]));
-        }
-
         // walk up the tree till a common root between the last entered and the current entered is foung
         // send exit events up to (but not inluding) the common root. Then send enter events up to
         // (but not including the common root).
@@ -678,16 +656,20 @@ namespace UnityEngine.EventSystems
             eventSystem.SetSelectedGameObject(null, baseEventData);
         }
 
+        protected void ResetNoInputTimer() => demoTimer = Constants.DEMO_IDLE_TIME;
+
         protected IEnumerator TimerRoutine()
         {
             while (true)
             {
-                foreach (var noInputFilter in noInputFilters)
-                    if (noInputTimer <= noInputFilter.Value &&
-                        (noInputTimer + Time.unscaledDeltaTime) > noInputFilter.Value)
-                        noInput.Invoke(noInputFilter);
+                if (demoTimer > 0f)
+                {
+                    if (demoTimer - Time.unscaledDeltaTime <= 0f) noInputTimerDone?.Invoke();
 
-                noInputTimer += Time.unscaledDeltaTime;
+                    demoTimer -= Time.unscaledDeltaTime;
+                }
+                else
+                    ResetNoInputTimer();
 
                 yield return null;
             }

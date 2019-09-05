@@ -18,7 +18,7 @@ namespace FourzyGameModel.Model
 
         public RandomTools(string SeedString = "")
         {
-            this.State = State;
+            this.State = new GameState();
             if (SeedString == "") SeedString = Guid.NewGuid().ToString();
             this.R = new Random(CreateSeed(SeedString));
         }
@@ -34,6 +34,20 @@ namespace FourzyGameModel.Model
             return false;
         }
 
+        public Area RandomArea()
+        {
+            var v = Enum.GetValues(typeof(Area));
+            Area a = Area.NONE;
+            while (a == Area.NONE) { a = (Area)v.GetValue(R.Next(v.Length)); }
+            return a;
+        }
+
+        public T RandomEnumValue<T>()
+        {
+            var v = Enum.GetValues(typeof(T));
+            return (T)v.GetValue(new Random().Next(v.Length));
+        }
+        
         public Direction RandomDirection()
         {
             return (Direction)RandomInteger(0,4);
@@ -65,12 +79,21 @@ namespace FourzyGameModel.Model
         public BoardLocation RandomLocation(List<BoardLocation> Locations)
         {
             if (Locations.Count == 0) throw new Exception("No Locations passed to function");
-            return Locations[Range(0, Locations.Count)];
+            return Locations[Range(0, Locations.Count-1)];
         }
 
         public BoardLocation RandomLocation(BoardLocation Reference, int Height, int Width)
         {
             return new BoardLocation(Reference.Row + RandomInteger(0, Height), Reference.Column + RandomInteger(0, Width));
+        }
+
+        public BoardLocation RandomLocationNoCorner()
+        {
+            BoardLocation l = new BoardLocation(RandomInteger(0, State.Board.Rows - 1), RandomInteger(0, State.Board.Columns - 1));
+            while (State.Board.Corners.Contains(l))
+                l = new BoardLocation(RandomInteger(0, State.Board.Rows - 1), RandomInteger(0, State.Board.Columns - 1));
+
+            return l;
         }
 
         public string RandomItem(List<string> Items)

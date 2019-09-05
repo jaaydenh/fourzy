@@ -29,9 +29,7 @@ namespace Fourzy
         public static string kGameRewarded = "gameRewarded_";
         public static string kRemoteSetting = "remoteSetting_";
         public static string kInitialProperties = "initialProperties";
-        public static string kFastPuzzle = "fast_puzzle_";
-
-        public static string kEventRewarded = "eventRewarded_";
+        public static string kPuzzlePackRewarded = "pazzlePackRewarded_";
 
         public static bool InstructionPopupWasDisplayed(int tokenId)
         {
@@ -45,7 +43,7 @@ namespace Fourzy
             PlayerPrefs.SetInt(kInstructionPopupDisplayed + tokenId, value);
         }
 
-        public static bool GetPuzzleChallengeComplete(string ID)
+        public static bool IsPuzzleChallengeComplete(string ID)
         {
             int defaultValue = 0;
             return PlayerPrefs.GetInt(kPuzzleChallenge + ID) != defaultValue;
@@ -159,14 +157,14 @@ namespace Fourzy
             return PlayerPrefs.GetInt(kGamePieceChampions + gamePiece.ID, 0);
         }
 
-        public static string GetSelectedGamePiece()
+        public static int GetSelectedGamePiece()
         {
-            return PlayerPrefs.GetString(kSelectedGamePiece, "");
+            return PlayerPrefs.GetInt(kSelectedGamePiece, -1);
         }
 
-        public static void SetSelectedGamePiece(string pieceID)
+        public static void SetSelectedGamePiece(int pieceID)
         {
-            PlayerPrefs.SetString(kSelectedGamePiece, pieceID);
+            PlayerPrefs.SetInt(kSelectedGamePiece, pieceID);
         }
 
         public static bool GetGameViewed(string gameID)
@@ -209,24 +207,14 @@ namespace Fourzy
             PlayerPrefs.SetString(kRemoteSetting + key, value);
         }
 
-        public static void SetEventRewarded(string id, bool state)
+        public static void SetPuzzlePackRewarded(string packID, bool state)
         {
-            PlayerPrefs.SetInt(kEventRewarded + id, state ? 1 : 0);
+            PlayerPrefs.SetInt(kPuzzlePackRewarded + packID, state ? 1 : 0);
         }
 
-        public static bool GetEventRewarded(string id)
+        public static bool GetPuzzlePackRewarded(string packID)
         {
-            return PlayerPrefs.GetInt(kEventRewarded + id, 0) != 0;
-        }
-
-        public static void SetFastPuzzleComplete(string id, bool state)
-        {
-            PlayerPrefs.SetInt(kFastPuzzle + id, state ? 1 : 0);
-        }
-
-        public static bool GetFastPuzzleComplete(string id)
-        {
-            return PlayerPrefs.GetInt(kFastPuzzle + id, 0) != 0;
+            return PlayerPrefs.GetInt(kPuzzlePackRewarded + packID, 0) != 0;
         }
 
         #region Currencies

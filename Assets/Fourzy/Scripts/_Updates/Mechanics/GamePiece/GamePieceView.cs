@@ -170,7 +170,8 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void Happy()
         {
-            if (!eyes.IsRoutineActive("blink")) eyes.SetState(GamePieceEyes.EyesState.OPENED);
+            if (!eyes.IsRoutineActive("blink"))
+                eyes.SetState(GamePieceEyes.EyesState.OPENED);
 
             if (!IsRoutineActive("blinking")) StartBlinking();
 
@@ -180,7 +181,8 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         public void Sleep()
         {
             CancelRoutine("blinking");
-            
+
+            eyes.CancelRoutine("blink");
             eyes.SetState(GamePieceEyes.EyesState.CLOSED);
 
             if (mouth.statesFastAccess.ContainsKey(GamePieceMouth.MouthState.SLEEPY))
@@ -191,12 +193,20 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void StartBlinking()
         {
-            if (!gameObject.activeInHierarchy) return;
+            if (!gameObject.activeInHierarchy)
+                return;
 
-            StartRoutine("blinking", BlinkingRoutine(), null, () => eyes.CancelRoutine("blink"));
+            StartRoutine("blinking", Random.Range(3f, 6f), () =>
+            {
+                Blink();
+                StartBlinking();
+            });
         }
 
-        public void Blink() => eyes.Blink(Random.Range(.2f, .4f));
+        public void Blink()
+        {
+            eyes.Blink(Random.Range(.2f, .4f));
+        }
 
         public override void OnBeforeMoveAction(params BoardLocation[] locations)
         {
@@ -235,16 +245,6 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
             //add to board model
             gameboard.model._State.Board.AddPiece(new Piece((int)player), location);
-        }
-
-        private IEnumerator BlinkingRoutine()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(Random.Range(3f, 6f));
-
-                Blink();
-            }
         }
 
         private IEnumerator JumpRoutine(int count)

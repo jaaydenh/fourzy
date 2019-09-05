@@ -87,16 +87,6 @@ namespace Fourzy._Updates.UI.Widgets
             game.onMagic += UpdateMagic;
         }
 
-        public override void Show(float time)
-        {
-            if (alphaTween._value < 1f) base.Show(time);
-        }
-
-        public override void Hide(float time)
-        {
-            if (alphaTween._value > 0f) base.Hide(time);
-        }
-
         private void UpdateMagic(int playerId, int value)
         {
             if (assignedPlayer.PlayerId == playerId)

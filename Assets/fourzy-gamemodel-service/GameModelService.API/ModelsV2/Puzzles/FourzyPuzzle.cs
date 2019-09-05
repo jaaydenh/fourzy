@@ -96,7 +96,7 @@ namespace FourzyGameModel.Model
             LastState = State;
             TurnEvaluator turnEvaluator = new TurnEvaluator(State);
 
-            AIPlayer AI = AI = new SimpleAI(State);
+            AIPlayer AI = AI = new PuzzleAI(State);
             turnEvaluator = new TurnEvaluator(State);
 
             AIResult.Turn = AI.GetTurn();

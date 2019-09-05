@@ -58,6 +58,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_CHALLENGE;
+            }
+        }
+
         public ToggleArrowToken(Direction Orientation, Rotation Direction)
         {
             StandardTokenInit();

@@ -39,7 +39,8 @@ namespace Fourzy._Updates.ClientModel
         bool draw { get; set; }
         bool hideOpponent { get; set; }
         Piece activePlayerPiece { get; }
-        
+
+        //both can have puzzle data attached
         ClientPuzzleData puzzleData { get; set; }
 
         TurnEvaluator turnEvaluator { get; }

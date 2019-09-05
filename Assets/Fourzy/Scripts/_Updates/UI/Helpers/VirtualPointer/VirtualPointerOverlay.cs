@@ -18,8 +18,10 @@ namespace Fourzy._Updates.UI.Helpers
 
         private StandaloneInputModuleExtended.GamepadControlFilter currentFilterMode;
 
-        protected void Start()
+        protected void Awake()
         {
+            if (PersistantMenuController.instance) return;
+
             PointerInputModuleExtended.onVirtualPointerRelease += ReleasePointer;
             PointerInputModuleExtended.onPointerPositionChanged += OnPointerPositionChanged;
 

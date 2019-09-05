@@ -158,7 +158,6 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
-  scaleOnClick: 1
   buttonGraphics:
     list: []
   labels: []
@@ -187,7 +186,7 @@ MonoBehaviour:
   playOnAwake: 0
   repeat: 0
   onProgress:
-    inspectorListHeight: 63
+    inspectorListHeight: 40
     persistentCalls:
       calls: []
   customObjects: []

@@ -11,7 +11,9 @@ namespace FourzyGameModel.Model
                 return new List<TokenType>() {
                 TokenType.SNOW, TokenType.SAND, TokenType.GRASS, TokenType.ICE, TokenType.STICKY, TokenType.WATER };
             }
-        } 
+        }
+
+        public const int MAX_GENERATOR_ATTEMPTS = 10;
     }
 
     public enum LineType { VERTICAL, HORIZONTAL, DIAGONAL, NONE};
@@ -45,4 +47,5 @@ namespace FourzyGameModel.Model
         ENHANCEMENT,
         SYMMETRICARROWS
     }
+   
 }

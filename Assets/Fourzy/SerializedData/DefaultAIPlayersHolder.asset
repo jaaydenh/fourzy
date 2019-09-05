@@ -14,19 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiPlayers:
     list:
-    - name: Easy
-      gamePieceID: 13
+    - name: TiVo
+      gamePieceID: 17
       background: {fileID: 21300000, guid: fb1280741d3be9c43b09e33e1508d1fd, type: 3}
       enabled: 1
-    - name: Normal
-      gamePieceID: 11
+    - name: Pod
+      gamePieceID: 13
       background: {fileID: 21300000, guid: bf6c559ef9d3a494b9a6ca2596021ace, type: 3}
       enabled: 1
-    - name: Hard
-      gamePieceID: 10
-      background: {fileID: 21300000, guid: fca5cb0f6b668b346ae11f256503b230, type: 3}
-      enabled: 1
-    - name: Doctor
-      gamePieceID: 5
+    - name: UFO
+      gamePieceID: 11
       background: {fileID: 21300000, guid: fca5cb0f6b668b346ae11f256503b230, type: 3}
       enabled: 1

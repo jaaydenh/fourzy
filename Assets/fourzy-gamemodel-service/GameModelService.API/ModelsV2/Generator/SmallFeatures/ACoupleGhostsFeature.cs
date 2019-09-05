@@ -33,12 +33,18 @@ namespace FourzyGameModel.Model
                 //  1. Next to another ghost or blocker
 
                 BoardLocation loc = Board.Random.RandomLocation(new BoardLocation(0, 0), Board.Rows, Board.Columns);
+                if (!loc.OnBoard(Board)) continue;
                 BoardSpace target = Board.ContentsAt(loc);
                 if (!target.Empty && !target.ContainsOnlyTerrain) continue;
-                if (loc.Neighbor(Direction.UP).OnBoard(Board) && !Board.ContentsAt(loc.Neighbor(Direction.UP)).TokensAllowEndHere) continue;
-                if (loc.Neighbor(Direction.DOWN).OnBoard(Board) && !Board.ContentsAt(loc.Neighbor(Direction.DOWN)).TokensAllowEndHere) continue;
-                if (loc.Neighbor(Direction.LEFT).OnBoard(Board) && !Board.ContentsAt(loc.Neighbor(Direction.LEFT)).TokensAllowEndHere) continue;
-                if (loc.Neighbor(Direction.RIGHT).OnBoard(Board) && !Board.ContentsAt(loc.Neighbor(Direction.RIGHT)).TokensAllowEndHere) continue;
+                if (loc.Neighbor(Direction.UP).OnBoard(Board)) 
+                    if (!Board.ContentsAt(loc.Neighbor(Direction.UP)).TokensAllowEndHere) continue;
+                if (loc.Neighbor(Direction.DOWN).OnBoard(Board))
+                    if (!Board.ContentsAt(loc.Neighbor(Direction.DOWN)).TokensAllowEndHere) continue;
+                if (loc.Neighbor(Direction.LEFT).OnBoard(Board)) 
+                    if (!Board.ContentsAt(loc.Neighbor(Direction.LEFT)).TokensAllowEndHere) continue;
+                if (loc.Neighbor(Direction.RIGHT).OnBoard(Board)) 
+                    if (!Board.ContentsAt(loc.Neighbor(Direction.RIGHT)).TokensAllowEndHere) continue;
+
                 Board.AddToken(new GhostToken(), loc);
                 ghosts++;
             }

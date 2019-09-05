@@ -55,6 +55,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_NORMAL;
+            }
+        }
+
 
         public int Fuse { get; set; }
         public bool Active { get; set; }
@@ -128,8 +144,11 @@ namespace FourzyGameModel.Model
 
                     if (Space.Parent.ContentsAt(loc).ContainsPiece)
                     {
-                        Space.Parent.RecordGameAction(new GameActionDestroyed(Space.Parent.ContentsAt(loc).ActivePiece, loc, DestroyType.BOMB));
-                        Space.Parent.ContentsAt(loc).Pieces.Clear();
+                        if (!Space.Parent.ContentsAt(loc).ActivePiece.HasCondition(PieceConditionType.DEAD))
+                        {
+                            Space.Parent.RecordGameAction(new GameActionDestroyed(Space.Parent.ContentsAt(loc).ActivePiece, loc, DestroyType.BOMB));
+                            Space.Parent.ContentsAt(loc).Pieces.Clear();
+                        }
                     }
                 }
                 Space.Parent.RecordGameAction(Boom);

@@ -66,6 +66,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_HARD;
+            }
+        }
+
 
         public CurrentToken(Direction Orientation)
         {

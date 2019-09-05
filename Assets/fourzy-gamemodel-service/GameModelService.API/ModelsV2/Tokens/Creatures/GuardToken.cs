@@ -51,6 +51,22 @@ namespace FourzyGameModel.Model
                 return TokenClassification.CREATURE;
             }
         }
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_HARD;
+            }
+        }
+
 
         public GuardToken(Direction Orientation = Direction.DOWN)
         {

@@ -27,74 +27,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void Open(IClientFourzy game)
         {
-            if (game == null || game.puzzleData == null)
-            {
-                if (isOpened) Close();
-
-                return;
-            }
+            if (game == null || game.puzzleData == null) return;
 
             base.Open();
 
             this.game = game;
             
-            if (game.puzzleData.pack)
-            {
-                if (game.puzzleData.pack.enabledPuzzlesData.Count > 1)
-                {
-                    if (nextButton.alphaTween._value < 1f)
-                    {
-                        nextButton.Show(.3f);
-                        nextButton.SetState(true);
-                    }
-                }
-                else
-                {
-                    nextButton.Hide(0f);
-                    nextButton.SetState(false);
-                }
-
-                switch (game.puzzleData.pack.packType)
-                {
-                    case PuzzlePacksDataHolder.PackType.BOSS_AI_PACK:
-                    case PuzzlePacksDataHolder.PackType.AI_PACK:
-                        packInfoTween.SetAlpha(0f);
-
-                        break;
-
-                    case PuzzlePacksDataHolder.PackType.PUZZLE_PACK:
-                        packInfoTween.SetAlpha(1f);
-
-                        movesLeftWidget.SetData(game.asFourzyPuzzle);
-
-                        if (PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.GameID))
-                            completeIcon.PlayForward(true);
-                        else
-                            completeIcon.AtProgress(0f);
-
-                        rule.text = (game.puzzleData.pack.enabledPuzzlesData.IndexOf(game.puzzleData) + 1) + ": " + game.puzzleData.Instructions;
-
-                        break;
-                }
-            }
-            else
+            if (GameManager.Instance.currentPuzzlePack.puzzlesEnabled.Count > 1)
             {
                 if (nextButton.alphaTween._value < 1f)
                 {
                     nextButton.Show(.3f);
                     nextButton.SetState(true);
                 }
-
-                packInfoTween.SetAlpha(1f);
-
-                if (PlayerPrefsWrapper.GetFastPuzzleComplete(game.GameID))
-                    completeIcon.PlayForward(true);
-                else
-                    completeIcon.AtProgress(0f);
-
-                rule.text = game.puzzleData.Instructions;
-
-                movesLeftWidget.SetData(game.asFourzyPuzzle);
+            }
+            else
+            {
+                nextButton.Hide(0f);
+                nextButton.SetState(false);
             }
 
             if (rematchButtonState)
@@ -105,13 +55,37 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 rematchButton.interactable = false;
                 rematchButtonState = false;
             }
+
+            switch (this.game.puzzleData.packType)
+            {
+                case PuzzlePacksDataHolder.PackType.BOSS_AI_PACK:
+                case PuzzlePacksDataHolder.PackType.AI_PACK:
+                    packInfoTween.SetAlpha(0f);
+
+                    break;
+
+                case PuzzlePacksDataHolder.PackType.PUZZLE_PACK:
+                    packInfoTween.SetAlpha(1f);
+
+                    movesLeftWidget.UpdateMovesLeft(game.asFourzyPuzzle);
+
+                    if (PlayerPrefsWrapper.IsPuzzleChallengeComplete(this.game.GameID))
+                        completeIcon.PlayForward(true);
+                    else
+                        completeIcon.AtProgress(0f);
+
+                    packName.text = GameManager.Instance.currentPuzzlePack.name;
+                    rule.text = (this.game.puzzleData.PackLevel + 1) + ": " + this.game.puzzleData.Instructions;
+
+                    break;
+            }
         }
 
         public void UpdatePlayerTurn()
         {
             if (game == null || game.puzzleData == null) return;
 
-            if (game._Type == GameType.PUZZLE) movesLeftWidget.UpdateMovesLeft();
+            if (game._Type == GameType.PUZZLE) movesLeftWidget.UpdateMovesLeft(game.asFourzyPuzzle);
 
             if (game._allTurnRecord.Count == 1 && !game.isOver)
             {

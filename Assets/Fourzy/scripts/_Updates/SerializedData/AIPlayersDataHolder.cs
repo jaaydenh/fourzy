@@ -31,7 +31,7 @@ namespace Fourzy._Updates.Serialized
             public string name;
             [StackableField]
             [HelpBox(message: "#Message", messageType = StackableDecorator.MessageType.None, below = true)]
-            public string gamePieceID;
+            public int gamePieceID;
             public Sprite background;
             public bool enabled;
 
@@ -41,10 +41,8 @@ namespace Fourzy._Updates.Serialized
                 string[] guids = AssetDatabase.FindAssets("DefaultGamePiecesDataHolder");
                 GamePiecesDataHolder gamePiecesHolder = AssetDatabase.LoadAssetAtPath<GamePiecesDataHolder>(AssetDatabase.GUIDToAssetPath(guids[0]));
 
-                GamePieceData gamepieceData = gamePiecesHolder.GetGamePieceData(gamePieceID);
-
-                if (gamepieceData != null)
-                    return $"Piece name {gamepieceData.name}";
+                if (gamePieceID > 0 && gamePieceID < gamePiecesHolder.gamePieces.list.Count)
+                    return $"Piece name {gamePiecesHolder.GetGamePieceData(gamePieceID).name}";
                 else
                     return "Wrong ID";
 #else

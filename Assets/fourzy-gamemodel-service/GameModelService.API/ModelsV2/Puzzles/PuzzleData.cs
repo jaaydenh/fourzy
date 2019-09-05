@@ -30,6 +30,8 @@ namespace FourzyGameModel.Model
         public GameBoardData InitialGameBoard { get; set; }
 
         public List<PlayerTurn> InitialMoves = new List<PlayerTurn>();
+        public List<PlayerTurn> Solution = new List<PlayerTurn>();
+        public GameState SolutionState { get; set; }
 
         //Direction on how to move
         //A Library on a gamestatestring as a key

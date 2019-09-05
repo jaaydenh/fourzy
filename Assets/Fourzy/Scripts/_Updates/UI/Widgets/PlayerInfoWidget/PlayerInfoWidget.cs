@@ -28,7 +28,7 @@ namespace Fourzy._Updates.UI.Widgets
             UserManager.OnUpdateUserGamePieceID -= OnUpdateUserGamePieceID;
         }
 
-        public GamePieceView SetData(string gamePieceID)
+        public GamePieceView SetData(int gamePieceID)
         {
             GamePieceData data = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(gamePieceID);
             gamePieceWidget.SetData(data);
@@ -50,7 +50,7 @@ namespace Fourzy._Updates.UI.Widgets
             playerNameLabel.text = UserManager.Instance.userName;
         }
 
-        private void OnUpdateUserGamePieceID(string gamePieceID)
+        private void OnUpdateUserGamePieceID(int gamePieceID)
         {
             pieceNameLabel.text = SetData(gamePieceID).pieceData.name;
         }

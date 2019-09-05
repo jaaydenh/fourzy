@@ -27,6 +27,8 @@ namespace Fourzy._Updates.UI.Helpers
         private MenuScreen menuScreen;
         private RectTransform rectTransform;
 
+        private bool adjusted = false;
+
         public Vector2 size
         {
             get

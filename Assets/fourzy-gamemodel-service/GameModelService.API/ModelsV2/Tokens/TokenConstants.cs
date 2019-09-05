@@ -92,6 +92,14 @@ namespace FourzyGameModel.Model
         public const char Clockwise = '+';
         public const char CounterClockwise = '-';
 
+        public const int COMPLEXITY_SIMPLE = 1;
+        public const int COMPLEXITY_BASIC = 2;
+        public const int COMPLEXITY_NORMAL = 3;
+        public const int COMPLEXITY_MEDIUM = 4;
+        public const int COMPLEXITY_HARD = 5;
+        public const int COMPLEXITY_CHALLENGE = 10;
+
+
         public static Direction GetOrientation(char orientation)
         {
             switch (orientation)

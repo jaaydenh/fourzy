@@ -5,15 +5,17 @@ FirebaseAnalytics iOS and Android Dependencies.
 
 <dependencies>
   <iosPods>
-    <iosPod name="Firebase/Analytics" version="6.6.0" minTargetSdk="8.0">
+    <iosPod name="Firebase/Analytics" version="5.16.0" minTargetSdk="8.0">
     </iosPod>
   </iosPods>
   <androidPackages>
-    <androidPackage spec="com.google.firebase:firebase-analytics:17.1.0">
+    <androidPackage spec="com.google.firebase:firebase-analytics:16.3.0">
     </androidPackage>
-    <androidPackage spec="com.google.firebase:firebase-iid:[20.0.0]">
+    <androidPackage spec="com.google.firebase:firebase-core:16.0.7">
     </androidPackage>
-    <androidPackage spec="com.google.firebase:firebase-analytics-unity:6.4.0">
+    <androidPackage spec="com.google.firebase:firebase-iid:[17.0.4]">
+    </androidPackage>
+    <androidPackage spec="com.google.firebase:firebase-analytics-unity:5.5.0">
       <repositories>
         <repository>Assets/Firebase/m2repository</repository>
       </repositories>

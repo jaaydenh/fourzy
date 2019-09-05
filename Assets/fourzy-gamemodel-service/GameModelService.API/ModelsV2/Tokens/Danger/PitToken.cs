@@ -53,6 +53,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_BASIC;
+            }
+        }
+
         public bool Filled { get; set; }
 
         public PitToken(bool Filled = false)

@@ -58,6 +58,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_BASIC;
+            }
+        }
+
         public FlowersToken(int MagicBonus = Constants.DefaultFlowerMagic)
         {
             StandardTokenInit();

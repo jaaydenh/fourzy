@@ -15,6 +15,7 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
+using mixpanel;
 using MoreMountains.NiceVibrations;
 using Newtonsoft.Json;
 using System;
@@ -48,17 +49,16 @@ namespace Fourzy
         public bool passAndPlayTimer = true;
         [Header("Pass And Play games only")]
         public bool tapToStartGame = true;
-        public PassPlayCharactersType characterType = PassPlayCharactersType.SELECTED_RANDOM;
-        public List<TokenType> excludeInstructionsFor;
 
         public bool ExtraFeatures => extraFeatures || Application.isEditor;
         public bool isRealtime => PhotonNetwork.room != null;
         public PuzzleData dailyPuzzlePack { get; private set; }
         public IClientFourzy activeGame { get; set; }
-        public PuzzlePacksDataHolder.BasicPuzzlePack currentPuzzlePack { get; set; }
+        public PuzzlePacksDataHolder.PuzzlePack currentPuzzlePack { get; set; }
         public DependencyStatus dependencyStatus { get; set; }
 
         private bool configFetched = false;
+        private float demoTimer = 0f;
 
         public bool isMainMenuLoaded
         {
@@ -94,6 +94,8 @@ namespace Fourzy
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
+
+            PointerInputModuleExtended.noInputTimerDone += OnNoInput;
 
             //to modify manifest file
             bool value = false;
@@ -139,6 +141,7 @@ namespace Fourzy
 
         protected void Start()
         {
+            Mixpanel.Track("Game Started");
 #if UNITY_IOS
             UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
             UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
@@ -149,18 +152,6 @@ namespace Fourzy
             NetworkAccess.onNetworkAccess += OnNetworkAccess;
 
             if (SceneManager.GetActiveScene().name == Constants.MAIN_MENU_SCENE_NAME) StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
-
-            StandaloneInputModuleExtended.instance.AddNoInputFilter("startDemoGame", Constants.DEMO_IDLE_TIME);
-            StandaloneInputModuleExtended.instance.AddNoInputFilter("highlightMoves", Constants.DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME);
-
-            PointerInputModuleExtended.noInput += OnNoInput;
-        }
-
-        protected void Update()
-        {
-            //force demo game
-            if (StandaloneInputModuleExtended.OnHotkey1Press())
-                StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
         }
 
         protected void OnDestroy()
@@ -234,11 +225,6 @@ namespace Fourzy
             }
         }
 
-        public void StartGauntletPuzzlePack(Area area)
-        {
-
-        }
-
         public void OpenMainMenu()
         {
             //unload gameplay scene 
@@ -285,7 +271,6 @@ namespace Fourzy
                     StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
 
                     activeGame = null;
-                    currentPuzzlePack = null;
 
                     break;
             }
@@ -496,22 +481,17 @@ namespace Fourzy
             }
         }
 
-        private void OnNoInput(KeyValuePair<string, float> noInputFilter)
+        private void OnNoInput()
         {
-            if (!SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE) || noInputFilter.Key != "startDemoGame") return;
-
-            //also reset puzzlesPacks
-            GameContentManager.Instance.ResetPuzzlePacks();
-            GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
-
+            if (!SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) return;
             //check
-            if (activeGame == null || (activeGame._Type != GameType.ONBOARDING && activeGame._Type != GameType.PRESENTATION))
+            if (activeGame == null || (activeGame._Type != GameType.ONBOARDING && activeGame._Type != GameType.DEMO))
             {
                 //start demo mode
-                StartGame(new ClientFourzyGame(GameContentManager.Instance.themesDataHolder.GetRandomTheme(Area.NONE),
-                    new Player(1, "AI Player 1") { PlayerString = "1" },
+                StartGame(new ClientFourzyGame(GameContentManager.Instance.themesDataHolder.GetRandomTheme(Area.NONE), 
+                    new Player(1, "AI Player 1") { PlayerString = "1" }, 
                     new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
-                { _Type = GameType.PRESENTATION, });
+                { _Type = GameType.DEMO, });
             }
         }
 
@@ -543,13 +523,6 @@ namespace Fourzy
             public GameBoardDefinition gameboard;
             [JsonIgnore]
             public TextAsset assetFile;
-        }
-
-        public enum PassPlayCharactersType
-        {
-            SELECTED_VARIATION,
-            SELECTED_RANDOM,
-            RANDOM,
         }
     }
 }

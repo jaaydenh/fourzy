@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +8,7 @@ namespace Fourzy._Updates.Tools
     public class TileOffset : MonoBehaviour
     {
         public static Material material;
-        public static Dictionary<string, ScrollableBG> materials = new Dictionary<string, ScrollableBG>();
 
-        public string id = "mainbg";
         [Range(.01f, .2f)]
         public float xSpeed = .03f;
         [Range(.01f, .2f)]
@@ -20,55 +17,33 @@ namespace Fourzy._Updates.Tools
         private Image image;
         private Vector4 offset = Vector4.zero;
 
-        private ScrollableBG _material;
-
         protected void Awake()
         {
             image = GetComponent<Image>();
+            Material _material;
 
-            if (!materials.ContainsKey(id))
-                materials.Add(id, new ScrollableBG()
-                {
-                    material = new Material(Shader.Find("UI/Default Offset"))
-                    {
-                        hideFlags = HideFlags.HideAndDontSave,
-                    },
-                });
+            if (!material)
+            {
+                material = new Material(Shader.Find("UI/Default Offset"));
+                material.hideFlags = HideFlags.HideAndDontSave;
 
-            _material = materials[id];
+                _material = material;
+            }
+            else
+                _material = new Material(material);
 
-            image.material = _material.material;
+            image.material = _material;
         }
 
         protected void Update()
         {
-            if (_material.changeApplied) return;
+            if (!image)
+                return;
 
-            _material.offset += new Vector2(xSpeed * Time.deltaTime, ySpeed * Time.deltaTime);
-        }
+            offset.x += xSpeed * Time.deltaTime;
+            offset.y += ySpeed * Time.deltaTime;
 
-        protected void LateUpdate()
-        {
-            if (_material.changeApplied) _material.changeApplied = false;
-        }
-
-        public class ScrollableBG
-        {
-            public Material material;
-            public bool changeApplied;
-
-            private Vector2 _offset;
-
-            public Vector2 offset
-            {
-                get => _offset;
-                set
-                {
-                    _offset = value;
-                    material.SetVector("_Offset", _offset);
-                    changeApplied = true;
-                }
-            }
+            image.material.SetVector("_Offset", offset);
         }
     }
 }

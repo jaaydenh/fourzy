@@ -94,7 +94,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private IEnumerator Animation(float duration, bool loop)
         {
-            do
+            while (loop)
             {
                 Show();
 
@@ -103,9 +103,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 Hide();
 
                 yield return new WaitForSeconds(duration);
-            } while (loop);
-
-            yield break;
+            }
         }
 
         public enum HintBlockMode

@@ -6,7 +6,7 @@ using Fourzy._Updates.Mechanics;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using GameAnalyticsSDK;
-//using mixpanel;
+using mixpanel;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -187,7 +187,7 @@ namespace Fourzy
 
         public void Identify(string userID)
         {
-            //Mixpanel.Identify(userID);
+            Mixpanel.Identify(userID);
             FirebaseAnalytics.SetUserId(userID);
 
             if (DEBUG) Debug.Log("User identity: " + userID);
@@ -271,9 +271,9 @@ namespace Fourzy
                 params1.Add(OPPONENT_ID_KEY, gameModel.opponent.PlayerString);
             }
 
-            if (gameModel.puzzleData && gameModel.puzzleData.pack)
+            if (gameModel._Type == GameType.PUZZLE)
             {
-                params1.Add(PACK_ID_KEY, gameModel.puzzleData.pack.packID);
+                params1.Add(PACK_ID_KEY, GameManager.Instance.currentPuzzlePack.packID);
             }
 
             foreach (Enum value in Enum.GetValues(provider.GetType()))
@@ -301,9 +301,9 @@ namespace Fourzy
 
                             values += $":{gameModel._Area.ToString().ToLower()}";
 
-                            if (gameModel.puzzleData && gameModel.puzzleData.pack)
+                            if (gameModel._Type == GameType.PUZZLE)
                             {
-                                values += $":pack_id-{gameModel.puzzleData.pack.packID.Truncate(7)}";
+                                values += $":pack_id-{GameManager.Instance.currentPuzzlePack.packID.Truncate(7)}";
                             }
 
                             LogGameAnalyticsDesignEvent(values);
@@ -527,26 +527,26 @@ namespace Fourzy
 
         private void LogMixpanelEvent(string eventType, Dictionary<object, object> @params)
         {
-            //Value mixpanelParams = new Value();
+            Value mixpanelParams = new Value();
 
-            //if (@params != null)
-            //{
-            //    foreach (KeyValuePair<object, object> _param in @params)
-            //    {
-            //        if (_param.Key != null && _param.Value != null)
-            //        {
-            //            mixpanelParams[_param.Key.ToString()] = _param.Value.ToString();
-            //        }
+            if (@params != null)
+            {
+                foreach (KeyValuePair<object, object> _param in @params)
+                {
+                    if (_param.Key != null && _param.Value != null)
+                    {
+                        mixpanelParams[_param.Key.ToString()] = _param.Value.ToString();
+                    }
 
-            //    }
-            //}
+                }
+            }
 
-            //Mixpanel.Track(eventType, mixpanelParams);
+            Mixpanel.Track(eventType, mixpanelParams);
 
-            //if (DEBUG)
-            //{
-            //    Debug.Log("Mixpanel event sent");
-            //}
+            if (DEBUG)
+            {
+                Debug.Log("Mixpanel event sent");
+            }
         }
 
         private void LogGameAnalyticsDesignEvent(string value)

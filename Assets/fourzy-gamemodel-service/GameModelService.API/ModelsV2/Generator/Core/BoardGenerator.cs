@@ -35,7 +35,7 @@ namespace FourzyGameModel.Model
 
         }
 
-        public virtual GameBoard GenerateBoard(int Rows, int Columns, string SeedString = "")
+        public virtual GameBoard GenerateBoard(int Rows, int Columns, string SeedString = "", int DesiredMinComplexity = -1, int DesiredMaxComplexity = -1)
         {
             GameBoard NewBoard = null;
             int count = 0;

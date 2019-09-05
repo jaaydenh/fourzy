@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace FourzyGameModel.Model
 {
@@ -31,6 +32,27 @@ namespace FourzyGameModel.Model
                 }
                 return dlist;
             }
+        }
+
+        public static string GenerateName(int length = -1)
+        {
+            const string vowels = "aeiou";
+            const string consonants = "bcdfghjklmnpqrstvwxyz";
+
+            var rnd = new Random();
+            var name = new StringBuilder();
+            if (length < 0) length = rnd.Next(3, 8);
+
+                length = length % 2 == 0 ? length : length + 1;
+
+            for (var i = 0; i < length / 2; i++)
+            {
+                name
+                    .Append(vowels[rnd.Next(vowels.Length)])
+                    .Append(consonants[rnd.Next(consonants.Length)]);
+            }
+            name[0] = char.ToUpper(name[0]);
+            return name.ToString();
         }
     }
 }

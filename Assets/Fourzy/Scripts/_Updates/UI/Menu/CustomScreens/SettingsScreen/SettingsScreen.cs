@@ -2,9 +2,8 @@
 
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Helpers;
-using System.Collections.Generic;
+using mixpanel;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -26,25 +25,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ResetTutorial()
         {
-            PersistantMenuController.instance.GetScreen<OnboardingScreen>().OpenOnboarding(GameContentManager.Instance.GetTutorial("Onboarding"));
-            MenuController.AddMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, new KeyValuePair<string, object>("openScreen", "puzzlesScreen"));
+            Mixpanel.Track("Reset Tutorial Button Press");
+
+            menuController.GetScreen<PromptScreen>().Prompt("Reset Tutorial", "Replay tutorial next time the game is opened?", "Yes", "No", () =>
+            {
+                GameContentManager.Instance.ResetOnboarding();
+
+                menuController.CloseCurrentScreen();
+            });
         }
 
         public void ResetPuzzles()
         {
-            GameContentManager.Instance.ResetPuzzlePacks();
+            GameContentManager.Instance.puzzlePacksDataHolder.ResetPuzzlesPlayerPrefs();
+            GameContentManager.Instance.puzzlePacksDataHolder.ResetPuzzlePacksPlayerPrefs();
             GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
-        }
-
-        public void ForceAIPresentation()
-        {
-            StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
         }
 
         public void ToggleSfx() => SettingsManager.Instance.Toggle(SettingsManager.KEY_SFX);
 
         public void ToggleAudio() => SettingsManager.Instance.Toggle(SettingsManager.KEY_AUDIO);
 
-        public void ToggleDemoMode() => SettingsManager.Instance.Toggle(SettingsManager.KEY_DEMO_MODE);
+        public void ToggkeDemoMode() => SettingsManager.Instance.Toggle(SettingsManager.KEY_DEMO_MODE);
     }
 }

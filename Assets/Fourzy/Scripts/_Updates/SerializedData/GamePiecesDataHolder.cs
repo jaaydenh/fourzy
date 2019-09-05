@@ -6,7 +6,6 @@ using UnityEngine;
 using StackableDecorator;
 using UnityEditor;
 using System;
-using Fourzy._Updates.Tools;
 
 namespace Fourzy._Updates.Serialized
 {
@@ -17,16 +16,13 @@ namespace Fourzy._Updates.Serialized
         [HelpBox("#Message", messageType = StackableDecorator.MessageType.None, below = false)]
         public GamePiecePrefabDataCollection gamePieces;
 
-        public Dictionary<string, GamePiecePrefabData> gamePiecesFastAccess { get; set; }
-
-        public Dictionary<string, GamePiecePrefabData> enabledGamePiecesFastAccess { get; set; }
-
-        public GamePiecePrefabData random => enabledGamePiecesFastAccess.Values.Random();
+        public Dictionary<int, GamePiecePrefabData> gamePiecesFastAccess { get; set; }
+        public Dictionary<int, GamePiecePrefabData> enabledGamePiecesFastAccess { get; set; }
 
         public void Initialize()
         {
-            gamePiecesFastAccess = new Dictionary<string, GamePiecePrefabData>();
-            enabledGamePiecesFastAccess = new Dictionary<string, GamePiecePrefabData>();
+            gamePiecesFastAccess = new Dictionary<int, GamePiecePrefabData>();
+            enabledGamePiecesFastAccess = new Dictionary<int, GamePiecePrefabData>();
 
             foreach (GamePiecePrefabData gamePiece in gamePieces.list)
             {
@@ -45,7 +41,7 @@ namespace Fourzy._Updates.Serialized
             }
         }
 
-        public GamePiecePrefabData GetGamePiecePrefabData(string gamePieceID)
+        public GamePiecePrefabData GetGamePiecePrefabData(int gamePieceID)
         {
             if (gamePiecesFastAccess.ContainsKey(gamePieceID))
                 return gamePiecesFastAccess[gamePieceID];
@@ -53,23 +49,17 @@ namespace Fourzy._Updates.Serialized
                 return gamePieces.list[0];
         }
 
-        public GamePieceData GetGamePieceData(string gamePieceID)
+        public GamePieceData GetGamePieceData(int gamePieceID)
         {
             if (Application.isPlaying)
             {
-                if (!gamePiecesFastAccess.ContainsKey(gamePieceID)) return null;
+                if (!gamePiecesFastAccess.ContainsKey(gamePieceID))
+                    return null;
 
                 return gamePiecesFastAccess[gamePieceID].data;
             }
             else
-            {
-                GamePiecePrefabData gamePieceData = gamePieces.list.Find(gamePiece => gamePiece.data.ID == gamePieceID);
-
-                if (gamePieceData != null)
-                    return gamePieceData.data;
-                else
-                    return null;
-            }
+                return gamePieces.list.Find(gamePiece => gamePiece.data.ID == gamePieceID).data;
         }
 
         public GamePieceData GetGamePieceData(GamePieceView gamePiece)

@@ -1,4 +1,5 @@
 ﻿
+using mixpanel;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -17,9 +18,10 @@ namespace Fourzy._Updates.UI.Widgets
         private Queue<string> messages = new Queue<string>();
         private bool isChatOpen;
 
-        private void Start()
+        private void Awake()
         {
-            if (GameManager.Instance.activeGame == null || GameManager.Instance.activeGame._Type != GameType.REALTIME)
+            if (GameManager.Instance.activeGame == null ||
+                GameManager.Instance.activeGame._Type != GameType.REALTIME)
             {
                 this.gameObject.SetActive(false);
                 return;
@@ -86,6 +88,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void OpenChatOnClick()
         {
+            Mixpanel.Track("Open Chat Button Press");
+
             isChatOpen = !isChatOpen;
 
             chatInputField.gameObject.SetActive(isChatOpen);
@@ -101,7 +105,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (chatInputField.text != string.Empty)
             {
-                //Mixpanel.Track("Send Message Button Press");
+                Mixpanel.Track("Send Message Button Press");
                 //RealtimeManager.Instance.SendChatMessage(chatInputField.text);
             }
 

@@ -6,4 +6,6 @@ using System.Threading.Tasks;
 namespace FourzyGameModel.Model
 {
     public enum PuzzleStatus { ACTIVE, FAILED, SUCCESS}
+
+
 }

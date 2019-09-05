@@ -29,8 +29,8 @@ namespace FourzyGameModel.Model
                     return new CrossBoardOneTurnPattern(Board).Locations;
                 case PatternType.CrossBoardTwoTurnPattern:
                     return new CrossBoardTwoTurnPattern(Board).Locations;
-                //case PatternType.CrossBoardFourTurnPattern:
-                //    return new CrossBoardFourTurnPattern(Board).Locations;
+                case PatternType.CrossBoardFourTurnPattern:
+                    return new CrossBoardFourTurnPattern(Board).Locations;
                 case PatternType.CrossQuads:
                     return new CrossQuadPattern(Board).Locations;
                 case PatternType.DoubleCross:

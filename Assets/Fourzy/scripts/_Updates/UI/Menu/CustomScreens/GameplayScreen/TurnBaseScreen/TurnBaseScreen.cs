@@ -49,12 +49,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     OnUpdateChallenges(ChallengeManager.Instance.Challenges);
                     Open();
-
-                    break;
-
-                default:
-                    if (isOpened) Close();
-
                     break;
             }
         }

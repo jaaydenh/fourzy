@@ -55,6 +55,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_BASIC;
+            }
+        }
+
         public GoldToken(int Amount = 1)
         {
             StandardTokenInit();

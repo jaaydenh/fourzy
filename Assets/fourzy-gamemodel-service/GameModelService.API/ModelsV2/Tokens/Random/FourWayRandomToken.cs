@@ -48,7 +48,23 @@ namespace FourzyGameModel.Model
         {
             get
             {
-                return TokenClassification.TERRAIN;
+                return TokenClassification.INSTRUCTION;
+            }
+        }
+
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_BASIC;
             }
         }
 

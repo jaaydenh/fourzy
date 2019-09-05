@@ -53,6 +53,23 @@ namespace FourzyGameModel.Model
                 return TokenClassification.ITEM;
             }
         }
+
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_NORMAL;
+            }
+        }
+
         public bool Eaten { get; set; }
 
         public LureToken(bool Eaten = false)

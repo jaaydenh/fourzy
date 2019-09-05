@@ -13,8 +13,6 @@ namespace FourzyGameModel.Model
         public bool Visible { get; set; }
         public bool Delete { get; set; }
 
-
-
         public bool pieceCanEnter { get; set; }
         public bool pieceMustStopOn { get; set; }
         public bool pieceCanEndMoveOn { get; set; }
@@ -54,6 +52,22 @@ namespace FourzyGameModel.Model
             get
             {
                 return TokenClassification.TERRAIN;
+            }
+        }
+
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_NORMAL;
             }
         }
 

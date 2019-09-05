@@ -15,7 +15,7 @@ namespace Fourzy
 {
     public class LoadingScreenControl : MonoBehaviour
     {
-        public const float WAIT_DURATION = 1.7f;
+        public const float WAIT_DURATION = 1f;
 
         public Slider slider;
         public GameObject bg;
@@ -79,7 +79,8 @@ namespace Fourzy
                 }
             }
 
-            if (displayTutorial) onboardingScreen.OpenOnboarding(GameContentManager.Instance.GetTutorial("Onboarding"));
+            if (displayTutorial)
+                onboardingScreen.OpenOnboarding(GameContentManager.Instance.GetTutorial("Onboarding"));
         }
     }
 }

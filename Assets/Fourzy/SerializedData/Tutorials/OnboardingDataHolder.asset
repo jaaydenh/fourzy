@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialName: Onboarding
   showPlayer2: 0
-  onFinished: 1
+  onFinished: 0
   openScreen: 1
-  gameType: 5
-  stringValue: 1001
   batches:
   - tasks:
     - action: 7
@@ -63,7 +61,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 0
     - action: 11
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -79,7 +77,7 @@ MonoBehaviour:
   - tasks:
     - action: 0
       unfolded: 1
-      message: Tap on the perimeter squares to make a move
+      message: Press and hold to make a move
       intValue: 0
       pointAt: {x: 0, y: 0}
       areas:
@@ -208,7 +206,7 @@ MonoBehaviour:
       unfolded: 1
       message: 
       intValue: 0
-      pointAt: {x: 0, y: 6}
+      pointAt: {x: 0, y: 2}
       areas:
       - serializedVersion: 2
         x: 0
@@ -226,7 +224,7 @@ MonoBehaviour:
       areas:
       - serializedVersion: 2
         x: 0
-        y: 6
+        y: 2
         width: 1
         height: 1
       onGameFinished: 0
@@ -240,7 +238,7 @@ MonoBehaviour:
       areas:
       - serializedVersion: 2
         x: 0
-        y: 6
+        y: 2
         width: 1
         height: 1
       onGameFinished: 0
@@ -304,7 +302,7 @@ MonoBehaviour:
       direction: 0
   - tasks:
     - action: 16
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -318,7 +316,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 0
     - action: 3
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -332,7 +330,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 0
     - action: 8
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -341,7 +339,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 0
     - action: 22
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -355,7 +353,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 0
     - action: 25
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -370,7 +368,7 @@ MonoBehaviour:
       direction: 0
   - tasks:
     - action: 14
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 3
       pointAt: {x: 0, y: 3}
@@ -384,7 +382,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 3
     - action: 17
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -416,7 +414,7 @@ MonoBehaviour:
       unfolded: 1
       message: 
       intValue: 0
-      pointAt: {x: 7, y: 5}
+      pointAt: {x: 7, y: 4}
       areas:
       - serializedVersion: 2
         x: 0
@@ -434,7 +432,7 @@ MonoBehaviour:
       areas:
       - serializedVersion: 2
         x: 7
-        y: 5
+        y: 4
         width: 1
         height: 1
       onGameFinished: 0
@@ -476,7 +474,7 @@ MonoBehaviour:
       areas:
       - serializedVersion: 2
         x: 7
-        y: 5
+        y: 4
         width: 1
         height: 1
       onGameFinished: 0
@@ -484,7 +482,7 @@ MonoBehaviour:
       direction: 0
   - tasks:
     - action: 16
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -498,7 +496,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 0
     - action: 3
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -512,7 +510,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 0
     - action: 8
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -550,9 +548,9 @@ MonoBehaviour:
       direction: 0
   - tasks:
     - action: 14
-      unfolded: 1
+      unfolded: 0
       message: 
-      intValue: 4
+      intValue: 3
       pointAt: {x: 0, y: 3}
       areas:
       - serializedVersion: 2
@@ -562,9 +560,9 @@ MonoBehaviour:
         height: 1
       onGameFinished: 0
       nextAction: 0
-      direction: 1
+      direction: 3
     - action: 17
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -578,21 +576,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 0
   - tasks:
-    - action: 0
-      unfolded: 1
-      message: Get 4 in a row to Win!
-      intValue: 0
-      pointAt: {x: 0, y: 0}
-      areas:
-      - serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1
-        height: 1
-      onGameFinished: 0
-      nextAction: 0
-      direction: 0
-    - action: 11
+    - action: 18
       unfolded: 1
       message: 
       intValue: 0
@@ -606,7 +590,35 @@ MonoBehaviour:
       onGameFinished: 0
       nextAction: 0
       direction: 0
-    - action: 13
+    - action: 2
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 2, y: 7}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 2
+        y: 7
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 21
       unfolded: 1
       message: 
       intValue: 0
@@ -634,8 +646,59 @@ MonoBehaviour:
       onGameFinished: 0
       nextAction: 0
       direction: 0
+    - action: 24
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 2
+        y: 7
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
   - tasks:
-    - action: 1
+    - action: 16
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 3
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 2}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 8
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas: []
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+    - action: 22
       unfolded: 1
       message: 
       intValue: 0
@@ -649,7 +712,7 @@ MonoBehaviour:
       onGameFinished: 0
       nextAction: 0
       direction: 0
-    - action: 12
+    - action: 25
       unfolded: 1
       message: 
       intValue: 0
@@ -663,7 +726,37 @@ MonoBehaviour:
       onGameFinished: 0
       nextAction: 0
       direction: 0
-    - action: 10
+  - tasks:
+    - action: 14
+      unfolded: 0
+      message: 
+      intValue: 3
+      pointAt: {x: 0, y: 3}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 3
+    - action: 17
+      unfolded: 0
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
+  - tasks:
+    - action: 18
       unfolded: 1
       message: 
       intValue: 0
@@ -705,34 +798,6 @@ MonoBehaviour:
       onGameFinished: 0
       nextAction: 0
       direction: 0
-    - action: 24
-      unfolded: 1
-      message: 
-      intValue: 0
-      pointAt: {x: 0, y: 0}
-      areas:
-      - serializedVersion: 2
-        x: 3
-        y: 0
-        width: 1
-        height: 1
-      onGameFinished: 0
-      nextAction: 0
-      direction: 0
-    - action: 18
-      unfolded: 1
-      message: 
-      intValue: 0
-      pointAt: {x: 0, y: 0}
-      areas:
-      - serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1
-        height: 1
-      onGameFinished: 0
-      nextAction: 0
-      direction: 0
     - action: 21
       unfolded: 1
       message: 
@@ -749,7 +814,7 @@ MonoBehaviour:
       direction: 0
     - action: 23
       unfolded: 1
-      message: 5
+      message: 6
       intValue: 0
       pointAt: {x: 0, y: 0}
       areas:
@@ -761,9 +826,23 @@ MonoBehaviour:
       onGameFinished: 0
       nextAction: 0
       direction: 0
+    - action: 24
+      unfolded: 1
+      message: 
+      intValue: 0
+      pointAt: {x: 0, y: 0}
+      areas:
+      - serializedVersion: 2
+        x: 3
+        y: 0
+        width: 1
+        height: 1
+      onGameFinished: 0
+      nextAction: 0
+      direction: 0
   - tasks:
     - action: 16
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}
@@ -777,7 +856,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 0
     - action: 3
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 2}
@@ -791,7 +870,7 @@ MonoBehaviour:
       nextAction: 0
       direction: 0
     - action: 8
-      unfolded: 1
+      unfolded: 0
       message: 
       intValue: 0
       pointAt: {x: 0, y: 0}

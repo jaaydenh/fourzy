@@ -52,6 +52,23 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_HARD;
+            }
+        }
+       
+
         //Wind Strength will push a Fourzy this many spaces in the Orienation Direction.
         public int Strength { get; set; }
 

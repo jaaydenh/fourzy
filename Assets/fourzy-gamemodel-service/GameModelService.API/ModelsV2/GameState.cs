@@ -12,6 +12,7 @@ namespace FourzyGameModel.Model
         public Dictionary<int, Player> Players;
         public Dictionary<int, Herd> Herds;
         public Dictionary<int, ISpell> ActiveSpells;
+        public bool ProcessStartOfTurn = false;
 
         //INITAL DATA AND PREFERENCES
         //A unique identifier used for repeating a random generation
@@ -231,6 +232,7 @@ namespace FourzyGameModel.Model
         public void StartOfTurn(int PlayerId)
         {
             Board.StartOfTurn(PlayerId);
+            this.ProcessStartOfTurn = true;
         }
 
         public void PieceBumpsIntoLocation(MovingPiece Piece, BoardLocation Location)
@@ -249,6 +251,7 @@ namespace FourzyGameModel.Model
             Board.EndOfTurn(PlayerId);
             var newActivePlayerId = this.Opponent(this.ActivePlayerId);
             this.ActivePlayerId = newActivePlayerId;
+            this.ProcessStartOfTurn = false;
         }
 
         #endregion

@@ -49,7 +49,7 @@ namespace FourzyGameModel.Model
                 {
                     int Index = (r % Height) * Width + (c % Width);
                     if (Pattern[Index] == '1')
-                       Board.AddToken(Token, new BoardLocation(r,c));
+                       Board.AddToken(Token, new BoardLocation(r,c), AddTokenMethod.ALWAYS, true);
                 }
 
         }

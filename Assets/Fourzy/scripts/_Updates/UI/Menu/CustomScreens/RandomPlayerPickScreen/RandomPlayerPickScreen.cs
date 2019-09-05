@@ -37,7 +37,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void _Open()
         {
-            if (menuController.currentScreen != this) menuController.OpenScreen(this);
+            if (menuController.currentScreen != this)
+                menuController.OpenScreen(this);
 
             randomPickWidget.StartPick();
 

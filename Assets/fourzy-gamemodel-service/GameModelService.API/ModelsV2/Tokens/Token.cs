@@ -10,6 +10,7 @@ namespace FourzyGameModel.Model
         bool Visible { get; set; }
         bool Delete { get; set; }
         TokenClassification Classification { get; }
+        int Complexity { get;  }
 
         [JsonIgnore]
         BoardSpace Space { get; set; }
@@ -26,6 +27,7 @@ namespace FourzyGameModel.Model
         int adjustMomentum { get; set; }
         int setMomentum { get; set; }
         bool changePieceDirection { get; set; }
+        bool HasDynamicFeature { get; }
         TokenType Type { get; set; }
 
         Direction GetDirection(MovingPiece Piece);

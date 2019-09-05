@@ -19,7 +19,6 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             this.Recipes.Add(AllysGardenRecipe(), 10);
             this.Recipes.Add(PortiasGardenRecipe(), 10);
             this.Recipes.Add(Lucy(), 10);
-            //this.Recipes.Add(StickyRiverRecipe(), 10);
             this.Recipes.Add(SpinGardenRecipe(), 10);
             this.Recipes.Add(SimpleGarden(), 10);
             this.Recipes.Add(SwirlyGarden(), 10);
@@ -53,6 +52,11 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             this.Recipes.Add(StickyTiles(), 10);
             this.Recipes.Add(StickyTiles2(), 20);
             this.Recipes.Add(MiniCircles(), 10);
+
+            this.Recipes.Add(StickyRiverRecipe(), 30);
+            this.Recipes.Add(StickyRiver3(), 30);
+            this.Recipes.Add(StickyRiver2(), 30);
+            this.Recipes.Add(DoubleStickyRiver2(), 30);
         }
 
 
@@ -407,16 +411,41 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             return Garden;
     }
 
+        private BoardRecipe StickyRiver3()
+        {
+            BoardRecipe StickyRiver = new BoardRecipe("StickyRiver3");
+            StickyRiver.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.EMPTY, true));
+            StickyRiver.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.MediumSymmetricBlockEdgePattern));
+            return StickyRiver;
+        }
+
+        private BoardRecipe DoubleStickyRiver2()
+        {
+            BoardRecipe StickyRiver = new BoardRecipe("DoubleFruitRiver");
+            StickyRiver.Ingredients.Add(new ASmallGroveFeature());
+            StickyRiver.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.CrossBoardTwoTurnPattern, AddTokenMethod.EMPTY, true));
+            StickyRiver.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.CrossBoardTwoTurnPattern, AddTokenMethod.EMPTY, true));
+            return StickyRiver;
+        }
+
+        private BoardRecipe StickyRiver2()
+        {
+            BoardRecipe StickyRiver = new BoardRecipe("RiverOfFruit");
+            StickyRiver.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.SmallSymmetricBlockEdgePattern));
+            StickyRiver.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            return StickyRiver;
+        }
+
         private BoardRecipe StickyRiverRecipe()
         {
             BoardRecipe StickyRiver = new BoardRecipe("RiverOfFruit");
-            StickyRiver.Ingredients.Add(new ASmallGroveFeature());
-            StickyRiver.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CrossTheBoard, AddTokenMethod.EMPTY, true));
+            StickyRiver.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.FullDots, AddTokenMethod.EMPTY, true));
+            StickyRiver.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
             return StickyRiver;
         }
 
         private BoardRecipe Lucy()
-    {
+        {
             BoardRecipe Garden = new BoardRecipe("Lucy");
             Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.FullDots, AddTokenMethod.EMPTY, true));
 

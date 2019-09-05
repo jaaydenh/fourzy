@@ -158,11 +158,15 @@ namespace Fourzy._Updates.UI.Menu
                 OpenScreen(AddScreen<T>());
         }
 
-        public void OpenScreen(int index) => OpenScreen(screens[index]);
+        public void OpenScreen(int index)
+        {
+            OpenScreen(screens[index]);
+        }
 
         public void OpenScreen(MenuScreen screen)
         {
-            if (currentScreen && screen.closePreviousWhenOpened) currentScreen.Close();
+            if (closeCurrentOnOpen && currentScreen)
+                currentScreen.Close();
 
             SetCurrentScreen(screen);
             screensStack.Push(currentScreen);
@@ -239,13 +243,15 @@ namespace Fourzy._Updates.UI.Menu
             if (_camera) _camera.gameObject.SetActive(state);
         }
 
-        public void ExecuteMenuEvent()
+        public void ExecuteMenuEvent(bool clear = true)
         {
             if (!menuEvents.ContainsKey(name)) menuEvents.Add(name, new MenuEvents());
 
             if (menuEvents.Count == 0 || !gameObject.activeInHierarchy) return;
 
             StartCoroutine(InvokeMenuEvents(menuEvents[name]));
+
+            if (clear) menuEvents.Clear();
         }
 
         protected virtual void OnBack()
@@ -271,9 +277,6 @@ namespace Fourzy._Updates.UI.Menu
             OnInvokeMenuEvents(events);
 
             screens.ForEach(screen => screen.ExecuteMenuEvent(events));
-
-            //remove events
-            menuEvents[name].Clear();
         }
 
         public static void AddMenuEvent(string menuName, params KeyValuePair<string, object>[] events)
@@ -285,12 +288,14 @@ namespace Fourzy._Updates.UI.Menu
 
         public static void SetState(string key, bool state)
         {
-            if (menus.ContainsKey(key)) menus[key].SetState(state);
+            if (menus.ContainsKey(key))
+                menus[key].SetState(state);
         }
 
         public static MenuController GetMenu(string key)
         {
-            if (menus.ContainsKey(key)) return menus[key];
+            if (menus.ContainsKey(key))
+                return menus[key];
 
             return null;
         }

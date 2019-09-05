@@ -122,6 +122,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_BASIC;                
+            }
+        }
+               
         public Direction GetDirection(MovingPiece Piece)
         {
             if (Active) return Orientation;

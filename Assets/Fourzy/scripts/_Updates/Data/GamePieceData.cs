@@ -11,7 +11,7 @@ namespace Fourzy
     {
         public static System.Action<GamePieceData> onUpgrade;
 
-        public string ID;
+        public int ID;
         public string name;
         public bool enabled;
         public int rarity = 30;

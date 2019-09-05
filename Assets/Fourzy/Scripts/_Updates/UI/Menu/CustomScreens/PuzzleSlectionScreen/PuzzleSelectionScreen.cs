@@ -13,36 +13,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public AIPlayerUIWidget aiPlayerWidgetPrefab;
         public RectTransform aiPlayersParent;
-        
+
+        public PuzzlePackWidget puzzlePackPrefab;
         public GridLayoutGroup gridLayoutGroup;
         public TMP_Text completeText;
 
         private List<PuzzlePackWidget> puzzlePacksWidgets = new List<PuzzlePackWidget>();
-        private PuzzlePackWidget puzzlePackPrefab;
-
-        protected override void Start()
-        {
-            base.Start();
-
-            puzzlePackPrefab = GameContentManager.GetPrefab<PuzzlePackWidget>(GameContentManager.PrefabType.PUZZLE_PACK_WIDGET);
-        }
 
         public override void Open()
         {
             base.Open();
 
-            LoadPuzzlePacks(GameContentManager.Instance.puzzlePacksDataHolder);
+            LoadPuzzlePacks();
             LoadAIPlayerWidgets();
         }
 
-        public void LoadPuzzlePacks(PuzzlePacksDataHolder puzzlePacksHolder)
+        public void LoadPuzzlePacks()
         {
             puzzlePacksWidgets.Clear();
 
             //remove old one
             foreach (Transform child in gridLayoutGroup.transform) Destroy(child.gameObject);
 
-            foreach (PuzzlePacksDataHolder.PuzzlePack puzzlePack in puzzlePacksHolder.puzzlePacks.list)
+            foreach (PuzzlePacksDataHolder.PuzzlePack puzzlePack in GameContentManager.Instance.puzzlePacks)
             {
                 PuzzlePackWidget puzzlePackWidgetInstance = Instantiate(puzzlePackPrefab, gridLayoutGroup.transform);
                 puzzlePackWidgetInstance.SetData(puzzlePack);
@@ -50,7 +43,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 puzzlePacksWidgets.Add(puzzlePackWidgetInstance);
             }
 
-            completeText.text = $"{puzzlePacksHolder.totalPuzzlesCompleteCount} / {puzzlePacksHolder.totalPuzzlesCount}";
+            completeText.text = $"{GameContentManager.Instance.puzzlePacksDataHolder.totalPuzzlesCompleteCount} / {GameContentManager.Instance.puzzlePacksDataHolder.totalPuzzlesCount}";
         }
 
         public void LoadAIPlayerWidgets()

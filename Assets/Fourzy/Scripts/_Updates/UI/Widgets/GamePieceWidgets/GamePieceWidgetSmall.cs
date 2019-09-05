@@ -40,6 +40,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             gamePiece.transform.localPosition = Vector3.zero;
             gamePiece.transform.localScale = Vector3.one * 90f;
+            //gamePiece.gameObject.SetLayerRecursively(gamePieceParent.gameObject.layer);
             gamePiece.StartBlinking();
 
             switch (data.State)

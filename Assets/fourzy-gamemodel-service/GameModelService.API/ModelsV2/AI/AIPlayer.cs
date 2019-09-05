@@ -26,6 +26,8 @@ namespace FourzyGameModel.Model
                     return new PuzzleAI(State);
                 case AIProfile.SimpleAI:
                     return new SimpleAI(State);
+                case AIProfile.ScoreBot:
+                    return new ScoreBotAI(State);
             }
             return null;
         }

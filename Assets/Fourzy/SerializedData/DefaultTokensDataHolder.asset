@@ -403,10 +403,10 @@ MonoBehaviour:
       description: Moving Ghost.
       showBackgroundTile: 1
       backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
-      gameboardInstructionID: 31
+      gameboardInstructionID: 3
       themesTokens:
         list:
-        - theme: 4
+        - theme: 127
           tokenPrefab: {fileID: 114544858063307236, guid: 5144a063c30d69748b84427af4c01094,
             type: 3}
     - elementName: ROTATING_ARROW
@@ -441,23 +441,4 @@ MonoBehaviour:
         list:
         - theme: 127
           tokenPrefab: {fileID: 4019648888608874011, guid: b3748e402408cbc44b26e230a5a0aec4,
-            type: 3}
-    - elementName: MOVE_BLOCKER
-      tokenType: 61
-      tokenIcon: {fileID: 0}
-      enabled: 1
-      isSpell: 0
-      spellID: 0
-      basePrice: 50
-      description: A blocker. Pieces cannot enter or move through this space.
-      showBackgroundTile: 0
-      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
-      gameboardInstructionID: 24
-      themesTokens:
-        list:
-        - theme: 2
-          tokenPrefab: {fileID: 114115778919009160, guid: 10b23b5ed8762074c9185dc01a8e0f64,
-            type: 3}
-        - theme: 16
-          tokenPrefab: {fileID: 2606553681170442482, guid: 3472ca9908b81eb4a9dc3c8c9500fd26,
             type: 3}

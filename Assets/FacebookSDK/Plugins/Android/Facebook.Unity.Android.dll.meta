@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: fb286cd0f33ce4f5e81baf10dab8d865
-timeCreated: 1561663365
+guid: 31f452f376ff7452198deafc9b34e67e
+timeCreated: 1488390589
 licenseType: Pro
 PluginImporter:
   serializedVersion: 2
@@ -27,7 +27,6 @@ PluginImporter:
           Exclude Win: 1
           Exclude Win64: 1
           Exclude iOS: 1
-          Exclude tvOS: 1
     data:
       first:
         '': Editor
@@ -38,17 +37,17 @@ PluginImporter:
           OS: AnyOS
     data:
       first:
+        '': data
+      second:
+        enabled: 0
+        settings: {}
+    data:
+      first:
         Android: Android
       second:
         enabled: 1
         settings:
           CPU: ARMv7
-    data:
-      first:
-        Any: 
-      second:
-        enabled: 0
-        settings: {}
     data:
       first:
         Editor: Editor
@@ -62,28 +61,28 @@ PluginImporter:
       second:
         enabled: 0
         settings:
-          CPU: None
+          CPU: AnyCPU
     data:
       first:
         Facebook: Win64
       second:
         enabled: 0
         settings:
-          CPU: None
+          CPU: AnyCPU
     data:
       first:
         Standalone: Linux
       second:
         enabled: 0
         settings:
-          CPU: None
+          CPU: x86
     data:
       first:
         Standalone: Linux64
       second:
         enabled: 0
         settings:
-          CPU: None
+          CPU: x86_64
     data:
       first:
         Standalone: LinuxUniversal
@@ -97,14 +96,14 @@ PluginImporter:
       second:
         enabled: 0
         settings:
-          CPU: None
+          CPU: AnyCPU
     data:
       first:
         Standalone: OSXIntel64
       second:
         enabled: 0
         settings:
-          CPU: None
+          CPU: AnyCPU
     data:
       first:
         Standalone: OSXUniversal
@@ -118,14 +117,14 @@ PluginImporter:
       second:
         enabled: 0
         settings:
-          CPU: None
+          CPU: AnyCPU
     data:
       first:
         Standalone: Win64
       second:
         enabled: 0
         settings:
-          CPU: None
+          CPU: AnyCPU
     data:
       first:
         Windows Store Apps: WindowsStoreApps
@@ -136,14 +135,6 @@ PluginImporter:
     data:
       first:
         iPhone: iOS
-      second:
-        enabled: 0
-        settings:
-          CompileFlags: 
-          FrameworkDependencies: 
-    data:
-      first:
-        tvOS: tvOS
       second:
         enabled: 0
         settings:

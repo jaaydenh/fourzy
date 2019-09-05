@@ -84,5 +84,6 @@ namespace FourzyGameModel.Model
             this.Magic -= Magic;
         }
 
+
     }
 }

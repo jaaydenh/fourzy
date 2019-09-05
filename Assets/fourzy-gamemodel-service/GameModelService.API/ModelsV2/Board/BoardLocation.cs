@@ -255,7 +255,7 @@ namespace FourzyGameModel.Model
 
         public bool OnBoard(GameBoard Board)
         {
-                if (Row >= 0 && Row < Board.Rows && Column >= 0 & Column < Board.Columns) return true;
+                if (Row >= 0 && Row < Board.Rows && Column >= 0 && Column < Board.Columns) return true;
                 return false;
         }
 

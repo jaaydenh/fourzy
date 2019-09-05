@@ -181,7 +181,6 @@ namespace Fourzy._Updates.UI.Toasts
             ACTION_WARNING,
             INFO_TOAST,
             TOP_TOAST,
-            ACTION_WARNING_SCREEN_CENTER,
         }
     }
 }

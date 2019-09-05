@@ -3,7 +3,6 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
-using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections;
@@ -18,9 +17,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public class RewardsScreen : MenuScreen
     {
         public TMP_Text title;
-        public CurrencyWidget xpWidget;
         public RectTransform xpTab;
+        public RewardsScreenWidget xpWidgetPrefab;
+        public CurrencyWidget xpWidget;
+
         public RectTransform portalKeysTab;
+        public RewardsScreenWidget portalKeysWidgetPrefab;
+        public RewardsScreenWidget totalPortalKeysWidgetPrefab;
+
         public RectTransform collectedItemsTab;
 
         private AlphaTween xpTabAlphaTween;
@@ -57,7 +61,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public static bool WillDisplayRewardsScreen(IClientFourzy game)
         {
-            if (game.puzzleData)
+            if (game.puzzleData != null)
             {
                 if (PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_REWARDS_PUZZLEPLAY) == "0") return false;
             }
@@ -86,10 +90,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (game.draw || !game.isOver) return false;
 
-            if (game.puzzleData && game.puzzleData.pack)
-                return game.puzzleData.pack.complete && !PlayerPrefsWrapper.GetEventRewarded(game.puzzleData.pack.packID);
-            else
-                return !PlayerPrefsWrapper.GetGameRewarded(game.GameID);
+            if (game.puzzleData != null) return GameManager.Instance.currentPuzzlePack.complete && !PlayerPrefsWrapper.GetPuzzlePackRewarded(GameManager.Instance.currentPuzzlePack.packID);
+            else return !PlayerPrefsWrapper.GetGameRewarded(game.GameID);
         }
 
         public void SetData(IClientFourzy game, bool addTimerRoutine = true)
@@ -105,11 +107,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             collectedItems = new List<RewardsManager.Reward>(game.collectedItems);
             rewards.AddRange(collectedItems);
 
-            if (game.puzzleData != null) rewards.AddRange(game.puzzleData.rewards);
+            if (game.puzzleData != null) rewards.AddRange(GameManager.Instance.currentPuzzlePack.rewards.list);
             else rewards.AddRange(RewardsManager.DoCheck(game));
 
-            xpRewards = rewards.Where(reward => reward.rewardType == RewardType.XP).ToList();
-            portalPointsRewards = rewards.Where(reward => reward.rewardType == RewardType.PORTAL_POINTS).ToList();
+            xpRewards = rewards.Where(reward => reward.rewardType == CurrencyType.XP).ToList();
+            portalPointsRewards = rewards.Where(reward => reward.rewardType == CurrencyType.PORTAL_POINTS).ToList();
 
             //assign rewards
             rewards.AssignRewards();
@@ -145,7 +147,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 Destroy(widget.gameObject);
             collectedItemsWidgets.Clear();
 
-            StartRoutine("show", addTimerRoutine ? 3f : -1f, () => Open());
+             StartRoutine("show", addTimerRoutine ? 3f : -1f, () => Open());
         }
 
         public override void Open()
@@ -159,8 +161,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     xpTabAlphaTween.AtProgress(1f);
                     int xpWidgetsCount = xpWidgets.Count;
                     for (int index = xpWidgetsCount; index < xpRewards.Count; index++)
-                        xpWidgets.Add(AddWidget(xpRewards[index], 
-                            GameContentManager.GetPrefab<RewardsScreenWidget>(GameContentManager.PrefabType.REWARDS_XP), xpTab));
+                        xpWidgets.Add(AddWidget(xpRewards[index], xpWidgetPrefab, xpTab));
 
                     previousXP = UserManager.Instance.xp;
                     xpWidget.SetTo(UserManager.Instance.xp, false);
@@ -175,11 +176,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         portalKeysTabAlphaTween.AtProgress(1f);
                         int portalKeysCount = portalKeysWidgets.Count;
                         for (int index = portalKeysWidgets.Count; index < portalPointsRewards.Count; index++)
-                            portalKeysWidgets.Add(AddWidget(portalPointsRewards[index], GameContentManager.GetPrefab<RewardsScreenWidget>(GameContentManager.PrefabType.REWARDS_PORTAL_POINTS), portalKeysTab));
+                            portalKeysWidgets.Add(AddWidget(portalPointsRewards[index], portalKeysWidgetPrefab, portalKeysTab));
 
                         //add total if needed
                         if (portalKeysWidgets.Count == portalPointsRewards.Count)
-                            portalKeysWidgets.Add(AddWidget(new RewardsManager.Reward("Total", portalPointsRewards.Sum(reward => reward.quantity), RewardType.PORTAL_POINTS), GameContentManager.GetPrefab<RewardsScreenWidget>(GameContentManager.PrefabType.REWARDS_PORTAL_POINTS), portalKeysTab));
+                            portalKeysWidgets.Add(AddWidget(new RewardsManager.Reward("Total", portalPointsRewards.Sum(reward => reward.quantity), CurrencyType.PORTAL_POINTS), totalPortalKeysWidgetPrefab, portalKeysTab));
 
                         scrollRect.normalizedPosition = Vector2.zero;
                     }
@@ -192,7 +193,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             int collectedItemsCount = collectedItemsWidgets.Count;
                             for (int index = collectedItemsWidgets.Count; index < collectedItems.Count; index++)
                                 collectedItemsWidgets.Add(
-                                    AddWidget(collectedItems[index], GameContentManager.GetPrefab<RewardsScreenWidget>(collectedItems[index].rewardType.AsPrefabType()), collectedItemsTab));
+                                    AddWidget(collectedItems[index], GameContentManager.GetPrefab<RewardsScreenWidget>(collectedItems[index].asPrefabType), collectedItemsTab));
 
                             scrollRect.normalizedPosition = Vector2.zero;
                         }
@@ -273,7 +274,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             foreach (RewardsManager.Reward reward in xpRewards)
             {
-                xpWidgets.Add(AddWidget(reward, GameContentManager.GetPrefab<RewardsScreenWidget>(GameContentManager.PrefabType.REWARDS_XP), xpTab));
+                xpWidgets.Add(AddWidget(reward, xpWidgetPrefab, xpTab));
 
                 previousXP += reward.quantity;
                 xpWidget.SetTo(previousXP, true);
@@ -301,8 +302,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             foreach (RewardsManager.Reward reward in portalPointsRewards)
             {
-                portalKeysWidgets.Add(AddWidget(reward, 
-                    GameContentManager.GetPrefab<RewardsScreenWidget>(GameContentManager.PrefabType.REWARDS_PORTAL_POINTS), portalKeysTab));
+                portalKeysWidgets.Add(AddWidget(reward, portalKeysWidgetPrefab, portalKeysTab));
 
                 scrollRect.normalizedPosition = Vector2.zero;
 
@@ -312,7 +312,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (portalKeysWidgets.Count == 0) yield break;
 
             //add total
-            portalKeysWidgets.Add(AddWidget(new RewardsManager.Reward("Total", portalPointsRewards.Sum(reward => reward.quantity), RewardType.PORTAL_POINTS), GameContentManager.GetPrefab<RewardsScreenWidget>(GameContentManager.PrefabType.REWARDS_PORTAL_POINTS), portalKeysTab));
+            portalKeysWidgets.Add(AddWidget(new RewardsManager.Reward("Total", portalPointsRewards.Sum(reward => reward.quantity), CurrencyType.PORTAL_POINTS), totalPortalKeysWidgetPrefab, portalKeysTab));
 
             scrollRect.normalizedPosition = Vector2.zero;
         }
@@ -335,7 +335,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             foreach (RewardsManager.Reward reward in collectedItems)
             {
-                collectedItemsWidgets.Add(AddWidget(reward, GameContentManager.GetPrefab<RewardsScreenWidget>(reward.rewardType.AsPrefabType()), collectedItemsTab));
+                collectedItemsWidgets.Add(AddWidget(reward, GameContentManager.GetPrefab<RewardsScreenWidget>(reward.asPrefabType), collectedItemsTab));
 
                 scrollRect.normalizedPosition = Vector2.zero;
 

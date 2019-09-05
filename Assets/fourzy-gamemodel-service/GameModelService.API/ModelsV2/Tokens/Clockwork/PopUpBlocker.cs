@@ -52,6 +52,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_HARD;
+            }
+        }
+
         public int Frequency { get; set; }
         public int Countdown { get; set; }
         public bool Raised { get; set; }

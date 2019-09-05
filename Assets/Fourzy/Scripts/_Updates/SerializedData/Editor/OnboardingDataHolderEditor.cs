@@ -14,8 +14,6 @@ namespace Fourzy._Updates.Serialized
         private SerializedProperty batchesProperty;
         private SerializedProperty showPlayer2Property;
         private SerializedProperty onFinishedProperty;
-        private SerializedProperty gameTypeProperty;
-        private SerializedProperty stringProperty;
         private SerializedProperty openScreenProperty;
         private SerializedProperty nameProperty;
 
@@ -37,8 +35,6 @@ namespace Fourzy._Updates.Serialized
             batchesProperty = serializedObject.FindProperty("batches");
             showPlayer2Property = serializedObject.FindProperty("showPlayer2");
             onFinishedProperty = serializedObject.FindProperty("onFinished");
-            gameTypeProperty = serializedObject.FindProperty("gameType");
-            stringProperty = serializedObject.FindProperty("stringValue");
             openScreenProperty = serializedObject.FindProperty("openScreen");
             nameProperty = serializedObject.FindProperty("tutorialName");
         }
@@ -53,25 +49,6 @@ namespace Fourzy._Updates.Serialized
 
             switch (trigger.onFinished)
             {
-                case OnboardingDataHolder.OnFinished.LOAD_GAME_SCENE:
-                    EditorGUILayout.PropertyField(gameTypeProperty);
-
-                    switch (trigger.gameType)
-                    {
-
-                        case GameType.PUZZLE:
-                            EditorGUILayout.PropertyField(stringProperty, new GUIContent("Pack ID"));
-
-                            break;
-
-                        case GameType.PASSANDPLAY:
-                            EditorGUILayout.PropertyField(stringProperty, new GUIContent("Board ID"));
-
-                            break;
-                    }
-
-                    break;
-
                 case OnboardingDataHolder.OnFinished.LOAD_MAIN_MENU:
                     EditorGUILayout.PropertyField(openScreenProperty);
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
+
 namespace FourzyGameModel.Model
 {
     public class FourzyGame
@@ -11,6 +12,7 @@ namespace FourzyGameModel.Model
         public List<PlayerTurn> playerTurnRecord;
         public GameType GameType;
 
+        #region "Constructors"
         public FourzyGame()
         {
             this.State = new GameState(8, 8);
@@ -62,23 +64,20 @@ namespace FourzyGameModel.Model
 
             else if (Player2.DisplayName == "TiVo")
             {
-                Player2.Profile = AIProfile.EasyAI;
+                Player2.Profile = AIProfile.PositionBot;
                 this.State = new GameState(Board, Options, FirstPlayerId);
             }
 
             else if (Player2.DisplayName == "UFO")
             {
-                //BossType MyBoss = BossType.Necrodancer;
-                //Board = BossFactory.CreateBoard(MyBoss);
-                //this.State = new GameState(Board, Options, FirstPlayerId);
-                //IBoss Boss = BossFactory.Create(MyBoss);
-                //Boss.StartGame(this.State);
-                //Player2.BossType = MyBoss;
-                //Player2.Profile = AIProfile.BossAI;
-                //Player2.SpecialAbilityCount = 1;
-
-                Player2.Profile = AIProfile.SimpleAI;
+                BossType MyBoss = BossType.Necrodancer;
+                Board = BossFactory.CreateBoard(MyBoss);
                 this.State = new GameState(Board, Options, FirstPlayerId);
+                IBoss Boss = BossFactory.Create(MyBoss);
+                Boss.StartGame(this.State);
+                Player2.BossType = MyBoss;
+                Player2.Profile = AIProfile.BossAI;
+                Player2.SpecialAbilityCount = 1;
             }
             else
             {
@@ -151,6 +150,61 @@ namespace FourzyGameModel.Model
             this.GameType = GameType.STANDARD;
         }
 
+        public FourzyGame(Player Player1, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GameOptions Options = null)
+        {
+            if (CurrentArea == Area.NONE)
+            {
+                RandomTools RT = new RandomTools();
+                CurrentArea = RT.RandomArea();
+            }
+
+            if (Options == null) Options = new GameOptions();
+            int FirstPlayerId = 1;
+
+            Player Player2 = new Player(2, Constants.GenerateName());
+            GameBoard Board = BoardFactory.CreateRandomBoard(Options, Player1, Player2, CurrentArea);
+
+            switch (GauntletLevel) {
+
+                case 0:
+                    Player2.Profile = AIProfile.BeginnerAI;
+                
+                    break;
+                case 1:
+                    Player2.Profile = AIProfile.PositionBot;
+
+                    break;
+                case 2:
+                    Player2.Profile = AIProfile.SimpleAI;
+
+                    break;
+                case 3:
+                    Player2.Profile = AIProfile.ScoreBot;
+
+                    break;
+
+                default:
+                    Player2.Profile = AIProfile.SimpleAI;
+
+                    break;
+            }
+
+
+            this.State = new GameState(Board, Options, FirstPlayerId);
+                 
+            this.State.Players.Add(1, Player1);
+            this.State.Players.Add(2, Player2);
+
+            this.playerTurnRecord = new List<PlayerTurn>();
+            this.GameType = GameType.AI;
+
+        }
+
+
+        #endregion "Constructors"
+
+
+
         public virtual PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn =false )
         {
 
@@ -205,18 +259,6 @@ namespace FourzyGameModel.Model
                AI = AIPlayerFactory.Create(State, Profile);
 
             if (AI is null) AI = new SimpleAI(State);
-
-            //AIPlayer AI  = new SimpleAI(State);
-            //switch (State.Players[State.ActivePlayerId].DisplayName)
-            //{
-            //    case "Pod":
-            //        AI = new TestBossAI(State, BossType.EntryWay);
-            //        break;
-
-            //    case "UFO":
-            //        AI = new BetterAI(State);
-            //        break;
-            //}
 
             ME = new TurnEvaluator(State);
 

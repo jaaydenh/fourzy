@@ -16,6 +16,7 @@ namespace FourzyGameModel.Model
             this.OriginalState = new GameState(GameState);
             this.EvalState = new GameState(OriginalState);
             this.EvalState.SetActionRecorder(RecordAction);
+            if (!this.EvalState.ProcessStartOfTurn) this.EvalState.StartOfTurn(this.EvalState.ActivePlayerId);
         }
         
         #region "Available Moves"
@@ -111,6 +112,7 @@ namespace FourzyGameModel.Model
             this.EvalState = new GameState(OriginalState);
             this.EvalState.SetActionRecorder(RecordAction);
             this.EvalState.Random.Reset();
+            if (!this.EvalState.ProcessStartOfTurn) this.EvalState.StartOfTurn(this.EvalState.ActivePlayerId);
         }
 
         public GameState EvaluateTurn(SimpleMove Move, bool IgnoreActivePlayer = false, bool TriggerStartOfTurn = true, bool TriggerEndOfTurn = true)
@@ -949,6 +951,7 @@ namespace FourzyGameModel.Model
 
         public void RecordAction(GameAction Action)
         {
+            if (ResultActions == null) ResultActions = new List<GameAction>();
             ResultActions.Add(Action);
         }
     }

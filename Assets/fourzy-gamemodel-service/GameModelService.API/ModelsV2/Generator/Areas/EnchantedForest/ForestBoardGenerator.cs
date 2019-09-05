@@ -39,7 +39,12 @@ namespace FourzyGameModel.Model
             this.Recipes.Add(SpookyRiver(), 20);
             this.Recipes.Add(River1(), 20);
             this.Recipes.Add(River2(), 20);
-            //this.Recipes.Add(River3(), 500000);
+            this.Recipes.Add(River3(), 50);
+
+            foreach(BoardRecipe r in this.Recipes.Keys)
+            {
+                r.Ingredients.Add(new PossibilityOfGhostsFeature(25,4));
+            }
 
             //this.Recipes.Add(RiverLand(), 10);
         }
@@ -76,10 +81,12 @@ namespace FourzyGameModel.Model
 
         private BoardRecipe River3()
         {
-            BoardRecipe Forest = new BoardRecipe("River2");
-            Forest.Ingredients.Add(new Ingredient(new WaterToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            BoardRecipe Forest = new BoardRecipe("River3");
+            Forest.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.OneRandom, AddTokenMethod.ALWAYS, true));
             Forest.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.OneRandom, AddTokenMethod.ALWAYS, true));
             Forest.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.OneRandom, AddTokenMethod.ALWAYS, true));
+            Forest.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.OneRandom, AddTokenMethod.ALWAYS, true));
+            Forest.Ingredients.Add(new Ingredient(new WaterToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
 
             return Forest;
         }

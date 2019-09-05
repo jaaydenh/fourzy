@@ -36,6 +36,144 @@ namespace FourzyGameModel.Model
             this.Recipes.Add(ABitOfSnow(), 10);
             this.Recipes.Add(BrokenLake(), 10);
             this.Recipes.Add(ThinIce(), 10);
+
+            this.Recipes.Add(SnowStorm(), 20);
+            this.Recipes.Add(SnowStorm2(), 20);
+            this.Recipes.Add(SnowStorm3(), 20);
+            this.Recipes.Add(SnowStorm4(), 20);
+            this.Recipes.Add(GhostsGo(), 10);
+            this.Recipes.Add(CenterPillar(), 20);
+            this.Recipes.Add(CenterPillar2(), 20);
+            this.Recipes.Add(CenterPillar3(), 20);
+
+            this.Recipes.Add(IceRiver1(), 40);
+            this.Recipes.Add(IceRiver2(), 40);
+            this.Recipes.Add(IceRiver3(), 40);
+            this.Recipes.Add(IceRiver4(), 40);
+            this.Recipes.Add(IceRiver5(), 40);
+            
+            foreach (BoardRecipe r in this.Recipes.Keys)
+            {
+                r.Ingredients.Add(new PossibilityOfGhostsFeature(10, 2));
+            }
+        }
+
+        private BoardRecipe IceRiver5()
+        {
+            BoardRecipe Room = new BoardRecipe("IceRiver5");
+            Room.Ingredients.Add(new Ingredient(new SnowToken(), PatternType.OuterRing, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new SnowToken(), PatternType.CenterBlob, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new IceToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+
+        private BoardRecipe IceRiver4()
+        {
+            BoardRecipe Room = new BoardRecipe("IceRiver4");
+            Room.Ingredients.Add(new TileFeature(new SnowToken(), 3, 3, "", 7, 7));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new IceToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+
+        private BoardRecipe IceRiver3()
+        {
+            BoardRecipe Room = new BoardRecipe("IceRiver3");
+            Room.Ingredients.Add(new TerrainIngredient(new IceToken()));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.SmallSymmetricBlockEdgePattern, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+
+        private BoardRecipe IceRiver2()
+        {
+            BoardRecipe Room = new BoardRecipe("IceRiver2");
+            Room.Ingredients.Add(new TerrainIngredient(new IceToken()));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.CenterFour, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.SmallSymmetricBlockEdgePattern, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new WaterToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+
+        private BoardRecipe IceRiver1()
+        {
+            BoardRecipe Room = new BoardRecipe("IceRiver1");
+            Room.Ingredients.Add(new TerrainIngredient(new IceToken()));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.CenterFour, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.SmallSymmetricBlockEdgePattern, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new WaterToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+
+        private BoardRecipe CenterPillar3()
+        {
+            BoardRecipe Room = new BoardRecipe("CenterPillar3");
+            Room.Ingredients.Add(new TileFeature(new IceToken(), 3, 3, "", 4, 6));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.CenterFour, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new IceToken(), PatternType.OuterRing, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+
+        private BoardRecipe CenterPillar2()
+        {
+            BoardRecipe Room = new BoardRecipe("CenterPillar2");
+            Room.Ingredients.Add(new TerrainIngredient(new SnowToken()));
+            Room.Ingredients.Add(new TileFeature(new IceToken(), 3, 3, "", 4, 6));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.CenterFour, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.SmallSymmetricBlockEdgePattern, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+
+        private BoardRecipe CenterPillar()
+        {
+            BoardRecipe Room = new BoardRecipe("CenterPillar");
+            Room.Ingredients.Add(new TileFeature(new IceToken(), 4, 4, "", 10, 12));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.CenterFour, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+        
+        private BoardRecipe GhostsGo()
+        {
+            BoardRecipe Room = new BoardRecipe("GhostsGo");
+            Room.Ingredients.Add(new TileFeature(new IceToken(), 3, 3, "", 7, 7));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            Room.Ingredients.Add(new Ingredient(new MovingGhostToken(Direction.UP,MoveMethod.HORIZONTAL_PACE,1), PatternType.Four, AddTokenMethod.ONLY_TERRAIN,false));
+            return Room;
+        }
+        
+        private BoardRecipe SnowStorm4()
+        {
+            BoardRecipe Room = new BoardRecipe("SnowStorm4");
+            Room.Ingredients.Add(new TerrainIngredient(new IceToken()));
+            Room.Ingredients.Add(new TileFeature(new SnowToken(), 3, 3, "", 5, 6));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+
+        private BoardRecipe SnowStorm3()
+        {
+            BoardRecipe Room = new BoardRecipe("SnowStorm3");
+            Room.Ingredients.Add(new TileFeature(new IceToken(), 3, 3, "", 5, 6));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+
+        private BoardRecipe SnowStorm2()
+        {
+            BoardRecipe Room = new BoardRecipe("SnowStorm2");
+            Room.Ingredients.Add(new TileFeature(new IceToken(), 3, 3, "", 6, 7));
+            Room.Ingredients.Add(new TileFeature(new SnowToken(), 3, 3, "", 4, 5));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            return Room;
+        }
+
+        private BoardRecipe SnowStorm()
+        {
+            BoardRecipe Room = new BoardRecipe("SnowStorm");
+            Room.Ingredients.Add(new TerrainIngredient(new IceToken()));
+            Room.Ingredients.Add(new TileFeature(new SnowToken(), 3, 3, "", 5, 6));
+            Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            return Room;
         }
 
         private BoardRecipe ThinIce()
@@ -116,7 +254,7 @@ namespace FourzyGameModel.Model
             BoardRecipe Room = new BoardRecipe("DividedLand");
             Room.Ingredients.Add(new DivideFeature(new IceToken(), new SnowToken()));
             Room.Ingredients.Add(new Ingredient(new IceBlockToken(), PatternType.OneFullLine, AddTokenMethod.ALWAYS, true));
-            Room.Ingredients.Add(new HighwayFeature());
+            //Room.Ingredients.Add(new HighwayFeature());
             return Room;
         }
 

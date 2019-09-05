@@ -37,6 +37,103 @@ namespace FourzyGameModel.Model
             this.Recipes.Add(LandBridge2(), 10);
             this.Recipes.Add(SandSpook1(), 10);
             this.Recipes.Add(SandSpook2(), 10);
+
+            this.Recipes.Add(SandCircle(), 25);
+            this.Recipes.Add(SandCircle2(), 25);
+            this.Recipes.Add(SandArt(), 25);
+            this.Recipes.Add(SandPath(), 25);
+            this.Recipes.Add(SandCheckers(), 25);
+
+            this.Recipes.Add(SandFourWay(), 25);
+            this.Recipes.Add(SandPivot(), 25);
+            this.Recipes.Add(SandPivot2(), 25);
+            this.Recipes.Add(SandPivot3(), 25);
+       
+
+            foreach (BoardRecipe r in this.Recipes.Keys)
+            {
+                r.Ingredients.Add(new PossibilityOfGhostsFeature(10, 2));
+            }
+
+        }
+
+
+        private BoardRecipe SandFourWay()
+        {
+            BoardRecipe Island = new BoardRecipe("SandFourWay");
+            Island.Ingredients.Add(new TileFeature(new SandToken(), 3, 3, "", 5, 6));
+            Island.Ingredients.Add(new Ingredient(new FourWayArrowToken(), PatternType.Four, AddTokenMethod.ALWAYS, true));
+            return Island;
+        }
+
+        private BoardRecipe SandPivot3()
+        {
+            BoardRecipe Island = new BoardRecipe("SandPivot3");
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.OuterRing, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.CenterBlob, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new RotatingArrowToken(Direction.RIGHT, Rotation.CLOCKWISE, 3), PatternType.Four, AddTokenMethod.ALWAYS, true));
+            return Island;
+        }
+
+        private BoardRecipe SandPivot2()
+        {
+            BoardRecipe Island = new BoardRecipe("SandPivot2");
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.OuterRing, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.CenterBlob, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new RotatingArrowToken(Direction.LEFT, Rotation.CLOCKWISE, 3), PatternType.CenterDiagonal, AddTokenMethod.ALWAYS, true));
+            return Island;
+        }
+
+        private BoardRecipe SandPivot()
+        {
+            BoardRecipe Island = new BoardRecipe("SandPivot");
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.CenterBlob, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new RotatingArrowToken(Direction.UP, Rotation.CLOCKWISE,3), PatternType.CenterFour, AddTokenMethod.ALWAYS, true));
+            return Island;
+        }
+
+        private BoardRecipe SandArt()
+        {
+            BoardRecipe Island = new BoardRecipe("SandArt");
+            Island.Ingredients.Add(new TileFeature(new SandToken(), -1, -1, "", -1, -1));
+            Island.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            return Island;
+        }
+
+        private BoardRecipe SandPath()
+        {
+            BoardRecipe Island = new BoardRecipe("SandPath");
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.OuterRing, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            return Island;
+        }
+        
+        private BoardRecipe SandCheckers()
+        {
+            BoardRecipe Island = new BoardRecipe("SandCheckers");
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.LargeCheckers, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            return Island;
+        }
+
+        private BoardRecipe SandCircle2()
+        {
+            BoardRecipe Island = new BoardRecipe("SandCircle2");
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.OuterRing, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.WideCross, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            return Island;
+        }
+
+        private BoardRecipe SandCircle()
+        {
+            BoardRecipe Island = new BoardRecipe("SandCircle");
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.OuterRing, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new SandToken(), PatternType.CenterFour, AddTokenMethod.ALWAYS, true));
+            Island.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            return Island;
         }
 
         private BoardRecipe SandSpook2()

@@ -30,9 +30,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private List<GamePieceView> gamePieces = new List<GamePieceView>();
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
 
             turnBasedTab = menuController.GetScreen<TurnBaseScreen>();
         }
@@ -46,7 +46,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (game._Type)
             {
                 case GameType.PASSANDPLAY:
-                case GameType.PRESENTATION:
+                case GameType.DEMO:
                     if (game.draw)
                     {
                         stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>Draw</color>";
@@ -168,7 +168,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     //no 'next' for realtime/ai games
                     case GameType.REALTIME:
                     case GameType.AI:
-                    case GameType.PRESENTATION:
+                    case GameType.DEMO:
                         nextGameButton.SetActive(false);
 
                         break;
@@ -188,7 +188,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 switch (game._Type)
                 {
                     case GameType.REALTIME:
-                    case GameType.PRESENTATION:
+                    case GameType.DEMO:
                         rematchButton.SetActive(false);
 
                         break;
@@ -205,19 +205,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 rematchButton.SetActive(false);
             }
 
-            //back button
-            switch (game._Type)
-            {
-                case GameType.PRESENTATION:
-
-                    break;
-
-                default:
-                    //set back button state
-                    backButton.SetActive(!nextGameButton.gameObject.activeInHierarchy && !rematchButton.gameObject.activeInHierarchy);
-
-                    break;
-            }
+            //set back button state
+            backButton.SetActive(!nextGameButton.gameObject.activeInHierarchy && !rematchButton.gameObject.activeInHierarchy);
         }
     }
 }

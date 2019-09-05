@@ -75,6 +75,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool HasDynamicFeature
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public int Complexity
+        {
+            get
+            {
+                return TokenConstants.COMPLEXITY_HARD;
+            }
+        }
+
         public RotatingArrowToken(Direction Orientation, Rotation RotateDirection, int Frequency = 1)
         {
             StandardTokenInit();
@@ -111,7 +127,7 @@ namespace FourzyGameModel.Model
                 this.Frequency = 1;
             }
 
-            if (Notation.Length > 5)
+            if (Notation.Length > 4)
             {
                 this.CountDown = int.Parse(Notation[4].ToString());
             }

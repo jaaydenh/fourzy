@@ -25,8 +25,12 @@ namespace FourzyGameModel.Model
 
             return null; 
         }
-
-       
+              
+        public static List<IBossPower> GetPowers(BossType Type)
+        {
+            IBoss Boss = BossFactory.Create(Type);
+            return Boss.Powers;
+        }
 
         public static GameBoard CreateBoard(BossType Type, GameOptions Options = null, string SeedString="")
         {
