@@ -2099,8 +2099,24 @@ namespace GameAnalyticsSDK.Editor
                 }
                 else
                 {
-                    Debug.LogError("Failed to find app: " + www.error + " " + text);
-                    SetLoginStatus("Failed to find app.", ga);
+                    // expired tokens / not signed in
+#if UNITY_2018_3_OR_NEWER
+                    if (www.responseCode == 401)
+#else
+                    if (www.responseHeaders["status"] != null && www.responseHeaders["status"].Contains("401"))
+#endif
+                    {
+                        Selection.objects = new UnityEngine.Object[] { AssetDatabase.LoadAssetAtPath("Assets/Resources/GameAnalytics/Settings.asset", typeof(Settings)) };
+                        ga.CurrentInspectorState = Settings.InspectorStates.Account;
+                        string message = "Please sign-in and try again to search for your game in the stores.";
+                        SetLoginStatus(message, ga);
+                        Debug.LogError(message);
+                    }
+                    else
+                    {
+                        Debug.LogError("Failed to find app: " + www.error + " " + text);
+                        SetLoginStatus("Failed to find app.", ga);
+                    }
                 }
             }
             catch (Exception e)

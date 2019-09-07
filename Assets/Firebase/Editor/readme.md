@@ -13,7 +13,6 @@ features on *iOS* and *Android*:
 | Firebase Dynamic Links             | FirebaseDynamicLinks.unitypackage |
 | Firebase Functions                 | FirebaseFunctions.unitypackage    |
 | Firebase Instance ID               | FirebaseInstanceId.unitypackage   |
-| Firebase Invites                   | FirebaseInvites.unitypackage      |
 | Firebase Messaging                 | FirebaseMessaging.unitypackage    |
 | Firebase Realtime Database         | FirebaseDatabase.unitypackage     |
 | Firebase Remote Config             | FirebaseRemoteConfig.unitypackage |
@@ -163,6 +162,224 @@ Support
 
 Release Notes
 -------------
+### 6.4.0
+  - Overview
+    - Updated dependencies, improved error handling in the iOS build logic,
+      improved error handling with deleted objects, fixed an issue with Auth
+      persistence, and fixed a crash in Database.
+  - Changes
+    - General: Added more underlying null checks when accessing objects that can
+      potentially be deleted, throwing exceptions instead of crashing.
+    - General (iOS): Handle malformed Info.plist files when patching Xcode
+      projects.
+    - Auth (Desktop): Fixed an issue with updated user info not being persisted.
+    - Database (Desktop): Fixed a crash with saving a ServerTimestamp during
+      a transaction.
+
+### 6.3.0
+  - Overview
+    - Auth (iOS): Fixed an exception in Firebase.AuthVerifyPhoneNumber.
+  - Changes
+    - General (Editor): Fixed spurious errors about missing google-services.json
+      file.
+    - General (iOS/Android): Fixed a bug that allows custom FirebaseApp
+      instances to be created after the app has been restarted
+    - Auth (Desktop): Changed destruction behavior. Instead of waiting for all
+      async operations to finish, now Auth will cancel all async operations and
+      quit. For callbacks that are already running, this will protect against
+      cases where auth instances might not exist anymore.
+    - Auth (iOS): Fixed an exception in PhoneAuthProvider.verifyPhoneNumber.
+    - Auth (iOS): Stopped Auth from hanging on destruction if any local tasks
+      remain in scope.
+    - Database (Desktop): Fixed an issue that could cause a crash when updating
+      the descendant of a location with a listener attached.
+
+### 6.2.2
+  - Overview
+    - Bug fixes.
+  - Changes
+    - General (Editor): Worked around regression in Unity 2019.2 and 2019.3
+      which caused DllNotFoundException.
+    - General (Editor, macOS): Add support for macOS 10.11.x.
+    - Auth (Editor): After loading a persisted user data, ensure token is
+      not expired.
+    - Auth (desktop): Ensure Database, Storage and Functions do not use an
+      expired token after it's loaded from persistent storage.
+    - Database (Editor): Fixed a crash when calling UpdateChildrenAsync.
+    - Database (Editor): Deprecated service account authentication.
+    - Database (Editor): Fixed DatabaseReference.RunTransaction() sending
+      invalid data to the server which causes error message "Error on
+      incoming message" and freeze.
+  - Known Issues
+    - Database/Storage/Functions may fail to send authentication token to server
+      if FirebaseAuth is garbage-collected. If you are unable to access to
+      the server due to "Permission Denied", please try to keep FirebaseAuth
+      alive.
+
+### 6.2.1
+  - Overview
+    - Fixed Crashlytics on Android not working correctly.
+  - Changes
+    - Crashlytics (Android): Fixed an issue causing Crashlytics to believe it
+      was shut down, blocking all functionality.
+
+### 6.2.0
+  - Overview
+    - Moved Realtime Database to a C++ implementation on desktop, added support
+      for custom domains to Dynamic Links, and fixed issues in Database,
+      Instance ID, and Crashlytics.
+  - Changes
+    - General (Editor): Fixed an issue that could cause errors when trying to
+      read a google-services.json file with unicode characters in its path.
+    - General (Editor, iOS): Added support for patching Xcode projects in
+      Unity 2019.3+.
+    - General: Fixed a race that could lead to a crash when gabarge collecting
+      FirebaseApp objects.
+    - General: Updated Play Services Resolver from 1.2.116 to 1.2.121
+      For more information, see [this document](https://github.com/googlesamples/unity-jar-resolver/blob/master/CHANGELOG.md#version-12121---jun-27-2019).
+      Added support for the [Jetpack Jetifier](https://developer.android.com/studio/command-line/jetifier)
+      , this allows the use of legacy Android support libraries with the latest
+      release of Google Play Services that uses AndroidX.
+    - Crashlytics (Android): Fixed a crash when logging large call stacks.
+    - Crashlytics (Android): Fixed a crash in exception logging when the
+      application is shutting down.
+    - Instance ID (Android): Fixed a crash when destroying InstanceID objects.
+    - Instance ID: Fixed a crash if multiple Instance ID objects are created and
+      destroyed quickly.
+    - Dynamic Links: Added support for custom domains.
+    - Database (Editor): Moved Realtime Database to a C++ implementation on
+      desktop to improve reliability across different Unity versions.
+    - Database (Editor): Moved transaction callbacks to the main thread to
+      mirror Android and iOS.
+    - Database: Added a way to configure log verbosity of Realtime Database
+      instances.
+
+### 6.1.1
+  - Overview
+    - Fixed an issue when generating Firebase config files on Windows.
+  - Changes
+    - General (Editor): Fixed an issue when generating Firebase config files on
+      Windows.
+    - General (Editor): Upgraded Play Services Resolver to from 1.2.115 to
+      1.2.116. For more information see [this
+      document](https://github.com/googlesamples/unity-jar-resolver/blob/master/CHANGELOG.md#version-12115---jun-7-2019).
+
+### 6.1.0
+  - Overview
+    - Added Auth credential persistence on Desktop, fixed and cleaned up some
+      documentation, converted testapps to use ContinueOnMainThread(), fixed
+      issues in Auth and Database, and added additional information to
+      Messaging notifications.
+  - Changes
+    - General (Editor): Removed Firebase Invites documentation from the
+      in-editor documentation.
+    - General (Editor): Fixed an issue with resource generation when Firebase
+      plugin files have been moved from their default locations.
+    - General (iOS): Fixed an issue where connections via NSURLSession
+      (used internally by the iOS SDK) can be prematurely closed by the client
+      if NSAppTransportSecurity is set to YES in the Info.plist and
+      NSAllowsArbitraryLoadsInWebContent is not set. This can be fixed by
+      setting NSAllowsArbitraryLoadsInWebContent  to the same value as
+      NSAppTransportSecurity.
+    - General (Editor): Upgraded Play Services Resolver to from 1.2.109 to
+      1.2.115. For more information see [this
+      document](https://github.com/googlesamples/unity-jar-resolver/blob/master/CHANGELOG.md#version-12115---may-28-2019).
+    - Auth (Desktop): User's credentials will now persist between sessions.  See
+      the [documentation](http://firebase.google.com/docs/auth/unity/manage-users#persist_a_users_credential)
+      for more information.
+    - Auth (Desktop): As part of the above change, if you access CurrentUser
+      immediately after creating the FirebaseAuth instance, it will block until
+      the saved user's state is finished loading.
+    - Auth (Desktop): Fixed an issue where Database/Functions/Storage might not
+      use the latest auth token immediately after sign-in.
+    - Auth (Android): Fixed an issue where an error code could get reported
+      incorrectly on Android.
+    - Crashlytics, Functions: Fixed an issue that could cause a crash during
+      shutdown due to the destruction order of plugins being nondeterministic.
+    - Database (iOS): Fixed a race condition that could cause a crash
+      when cleaning up database listeners on iOS.
+    - Database (iOS): Fixed an issue where long (64-bit) values could get
+      written to the database incorrectly (truncated to 32-bits) on 32-bit
+      devices.
+    - Messaging (Android): Added channel_id to Messaging notifications.
+
+### 6.0.0
+  - Overview
+    - Released
+      [Crashlytics](https://firebase.google.com/docs/crashlytics/get-started?platform=unity)
+      as generally available (GA); added Task.ContinueWithOnMainThread(); fixed
+      issues in the Android Resolver, iOS Resolver, Auth, Database, Messaging,
+      and Remote Config; removed Firebase Invites, removed deprecated methods in
+      Firebase Remote Config, and deprecated a method in Firebase Analytics.
+  - Changes
+    - Updated [Firebase
+      iOS](https://firebase.google.com/support/release-notes/ios#6.0.0) and
+      [Firebase
+      Android](https://firebase.google.com/support/release-notes/ios#2019-05-07)
+      dependencies.
+    - Crashlytics (iOS/Android): [Crashlytics for
+      Unity](https://firebase.google.com/docs/crashlytics/get-started?platform=unity)
+      is now generally available (GA). Get the next evolution with BigQuery
+      exports, Jira integration, and more. To migrate from Fabric Crashlytics
+      for Unity to Firebase Crashlytics, follow the [migration
+      guide](https://firebase.google.com/docs/crashlytics/migrate-from-fabric).
+    - Added an extension method, `Task.ContinueWithOnMainThread()`, which
+      forces the continuation of asynchronous operations to occur in the Unity
+      main thread rather than in a background thread.
+    - General: Upgraded Play Services Resolver to from 1.2.104 to 1.2.109. For
+      more information see [this
+      document](https://github.com/googlesamples/unity-jar-resolver/blob/master/CHANGELOG.md#version-12109---may-6-2019).
+    - General (Android): Added support for Android SDK installed directly in
+      Unity 2019.
+    - General (iOS): Fixed issues generating projects without using Cocoapods.
+    - Database (iOS/Android): Fixed an issue where integrating the SDK greatly
+      increased the size of your app.
+    - Database: Fixed exception handling during listener events.
+    - Remote Config: Fixed an issue parsing boolean values.
+    - Auth (Desktop): Fixed a crash when attempting to call Game Center
+      authentication methods from the Unity editor.
+    - Messaging (iOS/Android): Fix an issue where Subscribe and Unsubscribe
+      never returned if the API was configured not to receive a registration
+      token.
+    - Invites: Removed Firebase Invites, as it is no longer supported.
+    - Remote Config: Removed functions using config namespaces.
+    - Analytics: Deprecated SetMinimumSessionDuration.
+
+### 5.7.0
+  - Overview
+    - Fixed an issue with escape characters in Auth, deprecated functions
+      in Remote Config, and fixed an issue in the Android Resolver.
+  - Changes
+    - Auth: Fixed UserProfile.PhotoUrl removing percent encoded characters when
+      being set.
+    - Remote Config: Config namespaces are now deprecated. You'll need to switch
+      to methods that use the default namespace.
+    - General (Android): Fixed an exception on resolution in some versions of
+      Unity 2017.4 by changing how Android ABI selection is handled.
+
+### 5.6.1
+  - Overview
+    - Fixed race condition on iOS SDK startup and fixed some issues in the
+      Android Resolver.
+  - Changes
+    - General (iOS): Updated to the latest iOS SDK to fix a crash on
+      firebase::App creation caused by a race condition.  The crash could occur
+      when accessing the [FIRApp firebaseUserAgent] property of the iOS FIRApp.
+    - General (Android): Fixed Java version check in Android resolver when using
+      Java SE 12 and above.
+    - General (Android): Whitelisted Unity 2017.4 and above for ARM64 builds.
+      Previously required ARM64 libraries would be stripped from all Unity 2017
+      builds resulting in a DllNotFoundException.
+
+### 5.6.0
+  - Overview
+    - Added Game Center sign-in to Auth and fixed intermittent crashes due to
+      garbage collection.
+  - Changes
+    - Auth (iOS): Added Game Center authentication.
+    - General: Fixed intermittent crashes caused when multiple native objects
+      were garbage-collected at the same time.
+
 ### 5.5.0
   - Overview
     - Added support for

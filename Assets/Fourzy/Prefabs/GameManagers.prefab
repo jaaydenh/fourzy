@@ -50,6 +50,8 @@ MonoBehaviour:
   extraFeatures: 1
   passAndPlayTimer: 1
   tapToStartGame: 1
+  characterType: 2
+  excludeInstructionsFor: 01000000
 --- !u!1 &1276844110124004
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,8 +370,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73862c3d4ded2491ba08cc142fc7583e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  puzzlePacksDataHolder: {fileID: 11400000, guid: 78e493e27651ce74aa59ce3c09c737ec,
-    type: 2}
+  fastPuzzlesFolder: /PuzzlePool/
+  puzzlePacksRootPath: /PuzzlePacks/
+  packsDataHolders:
+  - {fileID: 11400000, guid: b3100e9855fa2e1418dc35b4346ddcfe, type: 2}
+  progressionMaps: []
   piecesDataHolder: {fileID: 11400000, guid: 15dde20219883e047b2bf43f7a126e41, type: 2}
   aiPlayersDataHolder: {fileID: 11400000, guid: 193c04713a60cff4cbf91989ce9e78ef,
     type: 2}
@@ -379,8 +384,52 @@ MonoBehaviour:
     type: 2}
   miscBoardsDataHolder: {fileID: 11400000, guid: c42940ba8db90734ebc4b24eebffeb03,
     type: 2}
+  miscGameDataHolder: {fileID: 11400000, guid: 723c3267438074b4f980f63958882dfb, type: 2}
   typedPrefabs:
     list:
+    - _name: REWARDS_XP
+      prefabType: 16
+      prefab: {fileID: 2179086365048087834, guid: 5d3321b1899bff44f903a69b179c22e5,
+        type: 3}
+    - _name: REWARDS_COIN
+      prefabType: 10
+      prefab: {fileID: 3213377190150069673, guid: ddd299213fea9c64a96b21741feeeec9,
+        type: 3}
+    - _name: REWARDS_TICKET
+      prefabType: 11
+      prefab: {fileID: 2480191876416953368, guid: 338e3b32fc5fa864598347f494ad2be8,
+        type: 3}
+    - _name: REWARDS_GAME_PIECE
+      prefabType: 13
+      prefab: {fileID: 7925316355291592101, guid: d20933a840e9e2d41a4de9fe6a9021a1,
+        type: 3}
+    - _name: REWARDS_GEM
+      prefabType: 12
+      prefab: {fileID: 915194111197399450, guid: 7f3c94e309d467747b7dc80793b77d05,
+        type: 3}
+    - _name: REWARDS_PORTAL_POINTS
+      prefabType: 14
+      prefab: {fileID: 4619857436758114287, guid: 801c329227760ea478fe63eaa7e16bf5,
+        type: 3}
+    - _name: REWARDS_RARE_PORTAL_POINTS
+      prefabType: 15
+      prefab: {fileID: 7041523958711570062, guid: f1826d03060738344a301ca7170ba785,
+        type: 3}
+    - _name: REWARDS_PACK_COMPLETE
+      prefabType: 17
+      prefab: {fileID: 5842573211701814948, guid: 6d2fb3544e72ae64084606c59cf8638e,
+        type: 3}
+    - _name: REWARDS_OPEN_PORTAL
+      prefabType: 18
+      prefab: {fileID: 4495346398306899116, guid: 10bec428a9ced7b4c9105ddbbb165390,
+        type: 3}
+    - _name: REWARDS_OPEN_RARE_PORTAL
+      prefabType: 19
+      prefab: {fileID: 3360629134425220575, guid: 1572a260ce0579d4b98c8c418061babb,
+        type: 3}
+    - _name: PUZZLE_PACK_WIDGET
+      prefabType: 41
+      prefab: {fileID: 1778221445083718, guid: 8e30d6a9efe1b49459d98a094846c4bc, type: 3}
     - _name: GAME_PIECE_SMALL
       prefabType: 5
       prefab: {fileID: 1576871843195750, guid: de95eca9ce249a54280efd878a486b52, type: 3}
@@ -396,25 +445,6 @@ MonoBehaviour:
     - _name: MINI_GAME_BOARD
       prefabType: 7
       prefab: {fileID: 1001685059054880, guid: 753eac7ea7c84784484fb0e32473bd24, type: 3}
-    - _name: MINI_GAME_BOARD
-      prefabType: 7
-      prefab: {fileID: 1001685059054880, guid: 753eac7ea7c84784484fb0e32473bd24, type: 3}
-    - _name: REWARDS_COIN
-      prefabType: 10
-      prefab: {fileID: 8561740519162683348, guid: ad2959ef031756245891b3b889f7a901,
-        type: 3}
-    - _name: REWARDS_TICKET
-      prefabType: 11
-      prefab: {fileID: 476156557909856773, guid: c6f1f3c07b94c2b479dce27b1475a1f0,
-        type: 3}
-    - _name: REWARDS_GAME_PIECE
-      prefabType: 13
-      prefab: {fileID: 8561740519162683348, guid: 0e839f3445e021e4f91841ac73a34c7d,
-        type: 3}
-    - _name: REWARDS_GEM
-      prefabType: 12
-      prefab: {fileID: 8561740519162683348, guid: 25a8dcb8176b90e459086aa325d305ee,
-        type: 3}
   tutorials:
     list:
     - _name: Onboarding
@@ -445,6 +475,12 @@ MonoBehaviour:
         type: 3}
     - _name: AreaInfoPromptScreen
       prefab: {fileID: 4325327119177535745, guid: 57969661751fc8e4e81791c622614dbb,
+        type: 3}
+    - _name: PrePackPrompt
+      prefab: {fileID: 5883465114685039261, guid: 3f2f4ba8078749544bfae00c9627e9d7,
+        type: 3}
+    - _name: VSPrompt
+      prefab: {fileID: 8685335311165154359, guid: d7a22aa0b1bd4c64a893f1a82e6eeb67,
         type: 3}
 --- !u!1 &1527524902537866
 GameObject:
@@ -556,7 +592,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4608094952514530}
-  - component: {fileID: 114041583828495230}
   m_Layer: 0
   m_Name: Mixpanel
   m_TagString: Untagged
@@ -578,23 +613,6 @@ Transform:
   m_Father: {fileID: 4316256013084540}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114041583828495230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1747623187596014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 882752fe4382f41c593a64591e77ee24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  token: 054b853878eb7ddfae6664f2d0a2423a
-  debugToken: 0cf32446c595b3fc2c6118679c14645b
-  trackInEditor: 1
-  minLogLevel: 5
-  flushInterval: 30
 --- !u!1 &1768030957288146
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,7 +778,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1906050702789844}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
@@ -782,7 +800,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1906050702789844}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1

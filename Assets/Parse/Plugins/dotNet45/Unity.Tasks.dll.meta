@@ -3,7 +3,7 @@ guid: bd18eee30834e4f71bded96fd14033a9
 labels:
 - gvh
 - gvh_dotnet-4.5
-- gvh_version-5.5.0
+- gvh_version-6.4.0
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -13,7 +13,20 @@ PluginImporter:
   isPreloaded: 0
   isOverridable: 0
   isExplicitlyReferenced: 0
+  validateReferences: 1
   platformData:
+  - first:
+      '': Linux
+    second:
+      enabled: 1
+      settings:
+        CPU: x86
+  - first:
+      '': LinuxUniversal
+    second:
+      enabled: 1
+      settings:
+        CPU: AnyCPU
   - first:
       '': OSXIntel
     second:
@@ -66,19 +79,7 @@ PluginImporter:
       settings:
         CPU: AnyCPU
   - first:
-      Standalone: Linux
-    second:
-      enabled: 1
-      settings:
-        CPU: x86
-  - first:
       Standalone: Linux64
-    second:
-      enabled: 1
-      settings:
-        CPU: x86_64
-  - first:
-      Standalone: LinuxUniversal
     second:
       enabled: 1
       settings:
