@@ -507,7 +507,7 @@ namespace Fourzy._Updates.ClientModel
             ClientFourzyGame game = null;
             switch (puzzleData.pack.packType)
             {
-                case PuzzlePacksDataHolder.PackType.AI_PACK:
+                case PackType.AI_PACK:
                     game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, UserManager.Instance.meAsPlayer);
 
                     break;

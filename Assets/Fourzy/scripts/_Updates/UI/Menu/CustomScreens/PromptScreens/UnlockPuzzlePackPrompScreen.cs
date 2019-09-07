@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Toasts;
 using Fourzy._Updates.UI.Widgets;
@@ -22,11 +23,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             acceptButton.GetBadge("gems").badge.SetState(false);
             switch (puzzlePack.unlockRequirement)
             {
-                case PuzzlePacksDataHolder.UnlockRequirementsEnum.COINS:
+                case UnlockRequirementsEnum.COINS:
                     acceptButton.GetBadge("coins").badge.SetValue(puzzlePack.quantity);
                     break;
 
-                case PuzzlePacksDataHolder.UnlockRequirementsEnum.GEMS:
+                case UnlockRequirementsEnum.GEMS:
                     acceptButton.GetBadge("gems").badge.SetValue(puzzlePack.quantity);
                     break;
             }
@@ -41,7 +42,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             switch (puzzlePack.unlockRequirement)
             {
-                case PuzzlePacksDataHolder.UnlockRequirementsEnum.COINS:
+                case UnlockRequirementsEnum.COINS:
                     if (UserManager.Instance.coins >= puzzlePack.quantity)
                     {
                         //deduct coins
@@ -57,7 +58,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                     break;
 
-                case PuzzlePacksDataHolder.UnlockRequirementsEnum.GEMS:
+                case UnlockRequirementsEnum.GEMS:
                     if (UserManager.Instance.gems >= puzzlePack.quantity)
                     {
                         //deduct gems

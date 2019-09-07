@@ -265,7 +265,7 @@ namespace Fourzy._Updates.ClientModel
             _allTurnRecord = new List<PlayerTurn>();
 
             if (puzzleData.pack)
-                hideOpponent = puzzleData.pack.packType == PuzzlePacksDataHolder.PackType.PUZZLE_PACK;
+                hideOpponent = puzzleData.pack.packType == PackType.PUZZLE_PACK;
             else
                 hideOpponent = true;
 

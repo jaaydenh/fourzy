@@ -1,6 +1,6 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Serialized;
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Widgets;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -9,7 +9,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public PuzzlePackProgressWidget progressWidget;
 
-        private PuzzlePacksDataHolder.BasicPuzzlePack puzzlePack;
+        private BasicPuzzlePack puzzlePack;
 
         public override void OnBack()
         {
@@ -18,7 +18,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             menuController.CloseCurrentScreen(true);
         }
 
-        public void Prompt(PuzzlePacksDataHolder.BasicPuzzlePack puzzlePack)
+        public void Prompt(BasicPuzzlePack puzzlePack)
         {
             if (this.puzzlePack == null || this.puzzlePack != puzzlePack)
             {

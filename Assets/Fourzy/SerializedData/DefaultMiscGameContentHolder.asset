@@ -23,3 +23,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 15c367a545f1cc64ca0e20bac393822a, type: 3}
   - id: boss_power_Treant
     sprite: {fileID: 21300000, guid: 18fc2bab44079a14a9c9b09ea06f3622, type: 3}
+  - id: puzzleProgressionIconEmpty
+    sprite: {fileID: 21300000, guid: 7229a1b060353364898853be84f91ee8, type: 3}
+  - id: puzzleProgressionIconSet
+    sprite: {fileID: 21300000, guid: 7823a4a0bb10cce43b58144b7fa2b43e, type: 3}

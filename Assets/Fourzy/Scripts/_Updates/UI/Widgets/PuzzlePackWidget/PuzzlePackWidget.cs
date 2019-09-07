@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
@@ -28,11 +29,11 @@ namespace Fourzy._Updates.UI.Widgets
 
             switch (puzzlePack.unlockRequirement)
             {
-                case PuzzlePacksDataHolder.UnlockRequirementsEnum.NONE:
+                case UnlockRequirementsEnum.NONE:
                     DisplayProgression(puzzlePack);
                     break;
 
-                case PuzzlePacksDataHolder.UnlockRequirementsEnum.STARS:
+                case UnlockRequirementsEnum.STARS:
                     if (puzzlePack.puzzlePacksHolder.totalPuzzlesCompleteCount >= puzzlePack.quantity)
                         DisplayProgression(puzzlePack);
                     else
@@ -40,7 +41,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
 
-                case PuzzlePacksDataHolder.UnlockRequirementsEnum.COINS:
+                case UnlockRequirementsEnum.COINS:
                     if (PlayerPrefsWrapper.PuzzlePackUnlocked(puzzlePack.name))
                         DisplayProgression(puzzlePack);
                     else
@@ -52,7 +53,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
 
-                case PuzzlePacksDataHolder.UnlockRequirementsEnum.GEMS:
+                case UnlockRequirementsEnum.GEMS:
                     if (PlayerPrefsWrapper.PuzzlePackUnlocked(puzzlePack.name))
                         DisplayProgression(puzzlePack);
                     else
@@ -85,8 +86,8 @@ namespace Fourzy._Updates.UI.Widgets
 
             switch (puzzlePack.packType)
             {
-                case PuzzlePacksDataHolder.PackType.AI_PACK:
-                case PuzzlePacksDataHolder.PackType.BOSS_AI_PACK:
+                case PackType.AI_PACK:
+                case PackType.BOSS_AI_PACK:
                     //add gamepiece
                     GamePieceView gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(puzzlePack.enabledPuzzlesData[0].PuzzlePlayer.HerdId).player1Prefab, gamepieceParent);
 
@@ -103,8 +104,8 @@ namespace Fourzy._Updates.UI.Widgets
             //try to unlock
             switch (puzzlePack.unlockRequirement)
             {
-                case PuzzlePacksDataHolder.UnlockRequirementsEnum.COINS:
-                case PuzzlePacksDataHolder.UnlockRequirementsEnum.GEMS:
+                case UnlockRequirementsEnum.COINS:
+                case UnlockRequirementsEnum.GEMS:
                     if (!PlayerPrefsWrapper.PuzzlePackUnlocked(puzzlePack.name))
                     {
                         //show unlock popup
@@ -116,13 +117,13 @@ namespace Fourzy._Updates.UI.Widgets
 
             switch (puzzlePack.packType)
             {
-                case PuzzlePacksDataHolder.PackType.AI_PACK:
-                case PuzzlePacksDataHolder.PackType.BOSS_AI_PACK:
+                case PackType.AI_PACK:
+                case PackType.BOSS_AI_PACK:
                     menuScreen.menuController.GetScreen<VSGamePrompt>().Prompt(puzzlePack);
 
                     break;
 
-                case PuzzlePacksDataHolder.PackType.PUZZLE_PACK:
+                case PackType.PUZZLE_PACK:
                     //only open prepack prompt if there are any rewards in puzzle pack
                     if (puzzlePack.allRewards.Count > 0)
                         menuScreen.menuController.GetScreen<PrePackPrompt>().Prompt(puzzlePack);
@@ -147,7 +148,7 @@ namespace Fourzy._Updates.UI.Widgets
             switch (puzzlePack.packType)
             {
                 //only puzzle pack have progress for now
-                case PuzzlePacksDataHolder.PackType.PUZZLE_PACK:
+                case PackType.PUZZLE_PACK:
                     button.GetBadge("completeCounter").badge.SetValue($"{puzzlePack.puzzlesComplete.Count} / {puzzlePack.enabledPuzzlesData.Count}");
 
                     break;

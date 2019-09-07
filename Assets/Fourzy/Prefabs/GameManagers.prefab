@@ -370,8 +370,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73862c3d4ded2491ba08cc142fc7583e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fastPuzzlesFolder: /PuzzlePool/
-  puzzlePacksRootPath: /PuzzlePacks/
+  fastPuzzlesFolder: PuzzlePool
+  puzzlePacksRootPath: PuzzlePacks
   packsDataHolders:
   - {fileID: 11400000, guid: b3100e9855fa2e1418dc35b4346ddcfe, type: 2}
   progressionMaps: []

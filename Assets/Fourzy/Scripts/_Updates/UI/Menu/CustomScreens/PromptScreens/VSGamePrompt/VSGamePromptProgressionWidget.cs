@@ -15,7 +15,7 @@ namespace Fourzy._Updates.UI.Widgets
         public Image checkedImage;
         public RectTransform container;
 
-        private PuzzlePacksDataHolder.BasicPuzzlePack puzzlePack;
+        private BasicPuzzlePack puzzlePack;
         private ClientPuzzleData puzzleData;
 
         public override void _Update()
@@ -26,7 +26,7 @@ namespace Fourzy._Updates.UI.Widgets
                 SetChecked(puzzlePack.puzzlesComplete.Contains(puzzleData) ? puzzleData.progressionIconSet : puzzleData.progressionIconEmpty);
         }
 
-        public VSGamePromptProgressionWidget SetData(PuzzlePacksDataHolder.BasicPuzzlePack puzzlePack, ClientPuzzleData puzzleData)
+        public VSGamePromptProgressionWidget SetData(BasicPuzzlePack puzzlePack, ClientPuzzleData puzzleData)
         {
             this.puzzlePack = puzzlePack;
             this.puzzleData = puzzleData;
@@ -56,7 +56,7 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public VSGamePromptProgressionWidget SetReward(PuzzlePacksDataHolder.BasicPuzzlePack puzzlePack, ClientPuzzleData puzzleData, RewardsManager.Reward reward)
+        public VSGamePromptProgressionWidget SetReward(BasicPuzzlePack puzzlePack, ClientPuzzleData puzzleData, RewardsManager.Reward reward)
         {
             //spawn reward
             RewardsScreenWidget rewardWidget =

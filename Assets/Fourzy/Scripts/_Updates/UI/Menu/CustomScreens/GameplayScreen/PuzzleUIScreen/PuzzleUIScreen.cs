@@ -56,13 +56,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 switch (game.puzzleData.pack.packType)
                 {
-                    case PuzzlePacksDataHolder.PackType.BOSS_AI_PACK:
-                    case PuzzlePacksDataHolder.PackType.AI_PACK:
+                    case PackType.BOSS_AI_PACK:
+                    case PackType.AI_PACK:
                         packInfoTween.SetAlpha(0f);
 
                         break;
 
-                    case PuzzlePacksDataHolder.PackType.PUZZLE_PACK:
+                    case PackType.PUZZLE_PACK:
                         packInfoTween.SetAlpha(1f);
 
                         movesLeftWidget.SetData(game.asFourzyPuzzle);

@@ -28,7 +28,7 @@ namespace Fourzy._Updates.UI.Widgets
         private List<GameObject> containers = new List<GameObject>();
 
         public List<RewardsScreenWidget> widgets { get; private set; }
-        public PuzzlePacksDataHolder.BasicPuzzlePack puzzlePack { get; private set; }
+        public BasicPuzzlePack puzzlePack { get; private set; }
 
         private int lastIndex;
 
@@ -48,7 +48,7 @@ namespace Fourzy._Updates.UI.Widgets
                     puzzlePack.rewardPuzzles[rewardPuzzleIndex].progressionIconSet : puzzlePack.rewardPuzzles[rewardPuzzleIndex].progressionIconEmpty;
         }
 
-        public PuzzlePackProgressWidget SetData(PuzzlePacksDataHolder.BasicPuzzlePack puzzlePack)
+        public PuzzlePackProgressWidget SetData(BasicPuzzlePack puzzlePack)
         {
             this.puzzlePack = puzzlePack;
 

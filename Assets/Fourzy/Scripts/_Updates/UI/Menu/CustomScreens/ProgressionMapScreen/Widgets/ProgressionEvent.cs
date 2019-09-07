@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using ByteSheep.Events;
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
@@ -70,7 +71,7 @@ namespace Fourzy._Updates.UI.Widgets
             get
             {
                 if (!packsData || packIndex < 0) return false;
-                return packsData.puzzlePacks.list[packIndex].packType == PuzzlePacksDataHolder.PackType.PUZZLE_PACK;
+                return packsData.puzzlePacks.list[packIndex].packType == PackType.PUZZLE_PACK;
             }
         }
 
@@ -82,8 +83,8 @@ namespace Fourzy._Updates.UI.Widgets
             get
             {
                 if (!packsData || packIndex < 0) return false;
-                return packsData.puzzlePacks.list[packIndex].packType == PuzzlePacksDataHolder.PackType.AI_PACK ||
-                    packsData.puzzlePacks.list[packIndex].packType == PuzzlePacksDataHolder.PackType.BOSS_AI_PACK;
+                return packsData.puzzlePacks.list[packIndex].packType == PackType.AI_PACK ||
+                    packsData.puzzlePacks.list[packIndex].packType == PackType.BOSS_AI_PACK;
             }
         }
 
@@ -106,8 +107,8 @@ namespace Fourzy._Updates.UI.Widgets
                     case ProgressionEventType.PUZZLE_PACK:
                         switch (PuzzlePack.packType)
                         {
-                            case PuzzlePacksDataHolder.PackType.AI_PACK:
-                            case PuzzlePacksDataHolder.PackType.BOSS_AI_PACK:
+                            case PackType.AI_PACK:
+                            case PackType.BOSS_AI_PACK:
                                 return PuzzlePack.complete;
 
                             default:
@@ -185,14 +186,14 @@ namespace Fourzy._Updates.UI.Widgets
                 case ProgressionEventType.PUZZLE_PACK:
                     switch (PuzzlePack.packType)
                     {
-                        case PuzzlePacksDataHolder.PackType.PUZZLE_PACK:
+                        case PackType.PUZZLE_PACK:
                             //update slider
                             progressSlider.value = (float)PuzzlePack.puzzlesComplete.Count / PuzzlePack.enabledPuzzlesData.Count;
 
                             if (PuzzlePack.complete) progressSlider.SetFillColor(Color.green);
 
                             break;
-                        case PuzzlePacksDataHolder.PackType.AI_PACK:
+                        case PackType.AI_PACK:
                             //close eyes if complete
                             if (PuzzlePack.complete)
                                 gamePieceView.Sleep();
@@ -245,7 +246,7 @@ namespace Fourzy._Updates.UI.Widgets
                 case ProgressionEventType.PUZZLE_PACK:
                     switch (PuzzlePack.packType)
                     {
-                        case PuzzlePacksDataHolder.PackType.PUZZLE_PACK:
+                        case PackType.PUZZLE_PACK:
                             if (animate)
                             {
                                 starTween.PlayForward(true);
@@ -289,13 +290,13 @@ namespace Fourzy._Updates.UI.Widgets
                 case ProgressionEventType.PUZZLE_PACK:
                     switch (PuzzlePack.packType)
                     {
-                        case PuzzlePacksDataHolder.PackType.AI_PACK:
-                        case PuzzlePacksDataHolder.PackType.BOSS_AI_PACK:
+                        case PackType.AI_PACK:
+                        case PackType.BOSS_AI_PACK:
                             menuScreen.menuController.GetScreen<VSGamePrompt>().Prompt(PuzzlePack);
 
                             break;
 
-                        case PuzzlePacksDataHolder.PackType.PUZZLE_PACK:
+                        case PackType.PUZZLE_PACK:
                             //only open prepack prompt if there are any rewards in puzzle pack
                             if (PuzzlePack.allRewards.Count > 0)
                                 menuScreen.menuController.GetScreen<PrePackPrompt>().Prompt(PuzzlePack);

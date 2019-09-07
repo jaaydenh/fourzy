@@ -55,7 +55,7 @@ namespace Fourzy
         public bool isRealtime => PhotonNetwork.room != null;
         public PuzzleData dailyPuzzlePack { get; private set; }
         public IClientFourzy activeGame { get; set; }
-        public PuzzlePacksDataHolder.BasicPuzzlePack currentPuzzlePack { get; set; }
+        public BasicPuzzlePack currentPuzzlePack { get; set; }
         public DependencyStatus dependencyStatus { get; set; }
 
         private bool configFetched = false;

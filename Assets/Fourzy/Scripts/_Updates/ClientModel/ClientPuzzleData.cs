@@ -1,12 +1,10 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics.Rewards;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -15,7 +13,7 @@ namespace Fourzy._Updates.ClientModel
     [System.Serializable]
     public class ClientPuzzleData : PuzzleData
     {
-        public PuzzlePacksDataHolder.BasicPuzzlePack pack;
+        public BasicPuzzlePack pack;
 
         public GameBoardDefinition gameBoardDefinition;
         public AIProfile aiProfile;
@@ -23,13 +21,40 @@ namespace Fourzy._Updates.ClientModel
         public int firstTurn;
         public SpellId[] availableSpells;
         public RewardsManager.Reward[] rewards;
-        public Sprite progressionIconEmpty;
-        public Sprite progressionIconSet;
 
         public int Complexity = -1;
-        public string puzzleFilePath;
+        public ResourceItem resource;
 
         public bool initialized = false;
+
+        private Sprite _progressionIconEmpty;
+        private Sprite _progressionIconSet;
+
+        public Sprite progressionIconEmpty
+        {
+            get
+            {
+                if (!_progressionIconEmpty)
+                    _progressionIconEmpty = GameContentManager.Instance.miscGameDataHolder.GetIcon("puzzleProgressionIconEmpty").sprite;
+
+                return _progressionIconEmpty;
+            }
+
+            set => _progressionIconEmpty = value;
+        }
+
+        public Sprite progressionIconSet
+        {
+            get
+            {
+                if (!_progressionIconSet)
+                    _progressionIconSet = GameContentManager.Instance.miscGameDataHolder.GetIcon("puzzleProgressionIconSet").sprite;
+
+                return _progressionIconSet;
+            }
+
+            set => _progressionIconSet = value;
+        }
 
         public ClientPuzzleData()
         {
@@ -37,20 +62,12 @@ namespace Fourzy._Updates.ClientModel
             rewards = new RewardsManager.Reward[0];
         }
 
-        public ClientPuzzleData(string ID, string puzzleFilePath) : this()
+        public ClientPuzzleData(string ID, ResourceItem resource) : this()
         {
-            this.puzzleFilePath = puzzleFilePath;
+            this.resource = resource;
             this.ID = ID;
 
-            PuzzlePlayer = new Player(2, "AI", /*(AIProfile)Profile*/AIProfile.PuzzleAI);
-        }
-
-        public ClientPuzzleData(JObject jObject) : this()
-        {
-            ParseJObject(jObject);
-            Initialize();
-
-            PuzzlePlayer = new Player(2, "AI", /*(AIProfile)Profile*/AIProfile.PuzzleAI);
+            PuzzlePlayer = new Player(2, "AI", AIProfile.PuzzleAI);
         }
 
         public void ParseJObject(JObject jObject)
@@ -67,6 +84,8 @@ namespace Fourzy._Updates.ClientModel
             Solution = jObject["Solution"].ToObject<List<PlayerTurn>>();
             SolutionState = jObject["SolutionStateData"].ToObject<GameState>();
             GoalType = jObject["GoalType"].ToObject<PuzzleGoalType>();
+
+            if (aiProfile != AIProfile.Player) PuzzlePlayer = new Player(2, "AI", aiProfile);
 
             GetInstructions();
         }
@@ -97,14 +116,16 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
-        public virtual void Initialize()
+        public ClientPuzzleData Initialize()
         {
             if (!initialized)
             {
                 initialized = true;
 
-                if (!string.IsNullOrEmpty(puzzleFilePath)) ParseJObject(JObject.Parse(File.ReadAllText(puzzleFilePath)));
+                if (resource != null) ParseJObject(JObject.Parse(resource.Load<TextAsset>().text));
             }
+
+            return this;
         }
 
         public string GetRewardID(RewardsManager.Reward reward) => ID + "_" + reward.rewardType.ToString();
