@@ -8,8 +8,6 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using StackableDecorator;
 using System;
 using System.Collections.Generic;
@@ -21,11 +19,6 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class GameContentManager : UnitySingleton<GameContentManager>
     {
-        [Sirenix.OdinInspector.BoxGroup("Fast Puzzles")]
-        public string fastPuzzlesFolder = "/PuzzlePool/";
-        [Sirenix.OdinInspector.BoxGroup("Fast Puzzles")]
-        public string puzzlePacksRootPath = "/PuzzlePacks/";
-
         public List<PuzzlePacksDataHolder> packsDataHolders;
         public List<Camera3dItemProgressionMap> progressionMaps;
         public GamePiecesDataHolder piecesDataHolder;
@@ -44,7 +37,7 @@ namespace Fourzy
 
         private Dictionary<string, ResourceItem> fastPuzzles = new Dictionary<string, ResourceItem>();
 
-        public List<BasicPuzzlePack> externalPuzzlePacks { get; private set; }
+        public Dictionary<string, BasicPuzzlePack> externalPuzzlePacks { get; private set; }
 
         public Dictionary<PrefabType, PrefabTypePair> typedPrefabsFastAccess { get; private set; }
 
@@ -130,8 +123,8 @@ namespace Fourzy
                             _id = __id;
                             break;
                         }
-                else
-                    _id = ids[0];
+                        else
+                            _id = ids[0];
 
                 if (string.IsNullOrEmpty(_id))
                     return GetFastPuzzle(id, false);
@@ -159,13 +152,15 @@ namespace Fourzy
                 progressionMap.ResetPlayerPrefs();
 
             //reset external packs
-            foreach (BasicPuzzlePack pack in externalPuzzlePacks)
+            foreach (BasicPuzzlePack pack in externalPuzzlePacks.Values)
                 pack.ResetPlayerPrefs();
         }
 
+        public BasicPuzzlePack GetExternalPuzzlePack(string folderName) => externalPuzzlePacks[folderName];
+
         private void LoadAllFastPuzzles()
         {
-            foreach (ResourceItem item in ResourceDB.GetFolder(fastPuzzlesFolder).GetChilds("", ResourceItem.Type.Asset))
+            foreach (ResourceItem item in ResourceDB.GetFolder(Constants.PUZZLES_ROOT_FOLDER).GetChilds("", ResourceItem.Type.Asset))
             {
                 if (item.Ext != "json") continue;
                 fastPuzzles.Add(item.Name, item);
@@ -179,32 +174,32 @@ namespace Fourzy
         /// </summary>
         private void LoadPuzzlePacks()
         {
-            externalPuzzlePacks = new List<BasicPuzzlePack>();
+            externalPuzzlePacks = new Dictionary<string, BasicPuzzlePack>();
 
-            foreach (ResourceItem @event in ResourceDB.GetFolder(puzzlePacksRootPath).GetChilds("", ResourceItem.Type.Folder))
+            foreach (ResourceItem @event in ResourceDB.GetFolder(Constants.PUZZLE_PACKS_ROOT_FOLDER).GetChilds("", ResourceItem.Type.Folder))
             {
                 //get puzzlepack file
-                JsonPuzzlePack puzzlePack = new JsonPuzzlePack(@event.GetChild("puzzlePack", ResourceItem.Type.Asset));
+                BasicPuzzlePack puzzlePack = new BasicPuzzlePack(@event.GetChilds("", ResourceItem.Type.Asset).First());
 
                 int puzzleIndex = 0;
                 //get puzzle descriptions file
-                foreach (ResourceItem descriptionFile in @event.GetChild("descriptions").GetChilds("", ResourceItem.Type.Asset))
+                foreach (ResourceItem puzzleDataFile in @event.GetChild("puzzles").GetChilds("", ResourceItem.Type.Asset))
                 {
-                    JsonPuzzleDescription description = new JsonPuzzleDescription(descriptionFile);
-
-                    //get puzzle data
-                    ResourceItem puzzleDataFile = @event.GetChild("puzzles").GetChild(description.filename);
-
                     ClientPuzzleData puzzleData = new ClientPuzzleData(puzzleDataFile.Name, puzzleDataFile);
-                    puzzleData.rewards = puzzlePack.rewards.Where(_reward => _reward.levelIndex == puzzleIndex).Cast<RewardsManager.Reward>().ToArray();
+
+                    if (puzzlePack.allRewards.ContainsKey(puzzleIndex))
+                        puzzleData.rewards = puzzlePack.allRewards[puzzleIndex].ToArray();
+                    else
+                        puzzleData.rewards = new RewardsManager.Reward[0];
 
                     puzzleData.pack = puzzlePack;
 
                     puzzlePack.puzzlesData.Add(puzzleData);
-                    /*if (puzzleData.Enabled) */puzzlePack.enabledPuzzlesData.Add(puzzleData);
+                    /*if (puzzleData.Enabled) */
+                    puzzlePack.enabledPuzzlesData.Add(puzzleData);
                     if (puzzleData.rewards.Length > 0) puzzlePack.rewardPuzzles.Add(puzzleData);
 
-                    externalPuzzlePacks.Add(puzzlePack);
+                    externalPuzzlePacks.Add(@event.Name, puzzlePack);
 
                     puzzleIndex++;
                 }

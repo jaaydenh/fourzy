@@ -55,6 +55,14 @@ namespace Fourzy._Updates.UI.Camera3D
             }
         }
 
+        public void LoadOther(Camera3dItemProgressionMap other)
+        {
+            Camera3DManager.instance.RemoveFromItem(gameObject);
+            item = other;
+
+            Initialize();
+        }
+
         public void UpdateWidgets() => _item.UpdateWidgets();
 
         public override Camera3DItem Initialize()
@@ -68,7 +76,7 @@ namespace Fourzy._Updates.UI.Camera3D
             _item.Scroll(0f, true);
             _item.SetMenuScreen(menuScreen);
 
-            GameContentManager.Instance.progressionMaps.Add(_item);
+            //GameContentManager.Instance.progressionMaps.Add(_item);
 
             base.Initialize();
 

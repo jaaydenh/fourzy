@@ -3,6 +3,7 @@
 using Fourzy._Updates.UI.Menu.Screens;
 using PlayFab;
 using PlayFab.ClientModels;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu
@@ -26,7 +27,7 @@ namespace Fourzy._Updates.UI.Menu
             //try load fast puzzlePack
             if (Input.GetKeyDown(KeyCode.A))
             {
-                GetScreen<PrePackPrompt>().Prompt(GameContentManager.Instance.externalPuzzlePacks[0]);
+                GetScreen<PrePackPrompt>().Prompt(GameContentManager.Instance.externalPuzzlePacks.Values.First());
             }
 
             //if (Input.GetKeyDown(KeyCode.Q))

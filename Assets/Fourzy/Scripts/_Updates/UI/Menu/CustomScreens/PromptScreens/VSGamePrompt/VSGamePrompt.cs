@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
 using System.Linq;
@@ -22,20 +23,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public Sprite middle;
         public Sprite left;
 
-        public PuzzlePacksDataHolder.PuzzlePack puzzlePack { get; private set; }
+        public BasicPuzzlePack puzzlePack { get; private set; }
 
-        public void Prompt(PuzzlePacksDataHolder.PuzzlePack puzzlePack)
+        public void Prompt(BasicPuzzlePack puzzlePack)
         {
             this.puzzlePack = puzzlePack;
 
             //spawn UI elements
             playerProfileWidget
                 .SetProfile(UserManager.Instance.meAsPlayer)
-                .SetColor(puzzlePack.playerColor == Color.clear ? defaultLeftColor : puzzlePack.playerColor);
+                .SetColor(defaultLeftColor);
 
             aiProfileWidget
                 .SetProfile(puzzlePack.enabledPuzzlesData[0].PuzzlePlayer)
-                .SetColor(puzzlePack.aiColor == Color.clear ? defaultRightColor : puzzlePack.aiColor);
+                .SetColor(defaultRightColor);
 
             foreach (WidgetBase widget in GetWidgets<VSGamePromptProgressionWidget>()) Destroy(widget.gameObject);
             widgets.Clear();

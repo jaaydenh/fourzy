@@ -3,8 +3,10 @@
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Toasts;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Fourzy._Updates.ClientModel
 {
@@ -14,11 +16,14 @@ namespace Fourzy._Updates.ClientModel
         public string name;
         public PackType packType = PackType.PUZZLE_PACK;
         public string packID;
+        public string aiPlayerName;
+        public string herdID;
+        public UnlockRequirementsEnum unlockRequirement;
 
         public List<ClientPuzzleData> puzzlesData { get; set; }
         public List<ClientPuzzleData> enabledPuzzlesData { get; set; }
         public List<ClientPuzzleData> rewardPuzzles { get; set; }
-        public List<RewardsManager.Reward> allRewards { get; set; }
+        public Dictionary<int, List<RewardsManager.Reward>> allRewards { get; set; }
 
         public List<ClientPuzzleData> puzzlesComplete => enabledPuzzlesData.Where(puzzle => PlayerPrefsWrapper.GetPuzzleChallengeComplete(puzzle.ID)).ToList();
 
@@ -26,12 +31,37 @@ namespace Fourzy._Updates.ClientModel
 
         public bool justFinished { get; set; }
 
+        public BasicPuzzlePack() { }
+
+        public BasicPuzzlePack(ResourceItem resourceItem)
+        {
+            Initialize();
+
+            JObject jObject = JObject.Parse(resourceItem.Load<TextAsset>().text);
+
+            name = jObject["name"].ToObject<string>();
+            packType = (PackType)jObject["type"].ToObject<int>();
+            packID = jObject["id"].ToObject<string>();
+            unlockRequirement = (UnlockRequirementsEnum)jObject["unlockRequirement"].ToObject<int>();
+            herdID = jObject["herdID"].ToObject<string>();
+            aiPlayerName = jObject["playerName"].ToObject<string>();
+
+            RewardIndexed[] _rewards = jObject["rewards"].ToObject<RewardIndexed[]>();
+
+            foreach (RewardIndexed reward in _rewards)
+            {
+                if (!allRewards.ContainsKey(reward.levelIndex)) allRewards.Add(reward.levelIndex, new List<RewardsManager.Reward>());
+
+                allRewards[reward.levelIndex].Add(reward);
+            }
+        }
+
         public virtual void Initialize()
         {
             puzzlesData = new List<ClientPuzzleData>();
             enabledPuzzlesData = new List<ClientPuzzleData>();
             rewardPuzzles = new List<ClientPuzzleData>();
-            allRewards = new List<RewardsManager.Reward>();
+            allRewards = new Dictionary<int, List<RewardsManager.Reward>>();
         }
 
         public ClientPuzzleData nextUnsolvedData
@@ -50,6 +80,24 @@ namespace Fourzy._Updates.ClientModel
                 }
 
                 return enabledPuzzlesData[0];
+            }
+        }
+
+        public string getUnlockRewardID
+        {
+            get
+            {
+                //find unlock reward
+                RewardsManager.Reward reward = null;
+
+                foreach (var _set in allRewards)
+                {
+                    reward = _set.Value.Find(_reward => _reward.rewardType == RewardType.PACK_COMPLETE);
+
+                    if (reward != null) return puzzlesData[_set.Key].GetRewardID(reward);
+                }
+
+                return "";
             }
         }
 
@@ -119,6 +167,17 @@ namespace Fourzy._Updates.ClientModel
         }
 
         public static implicit operator bool(BasicPuzzlePack pack) => pack != null;
+    }
+
+    [System.Serializable]
+    public class RewardIndexed : RewardsManager.Reward
+    {
+        public int levelIndex;
+
+        public RewardIndexed(int levelIndex, string name, int quantity, RewardType rewardType) : base(name, quantity, rewardType)
+        {
+            this.levelIndex = levelIndex;
+        }
     }
 
     public enum UnlockRequirementsEnum

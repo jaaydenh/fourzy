@@ -106,15 +106,10 @@ namespace Fourzy._Updates.Serialized
             public string _name;
             public Color outlineColor;
             public Sprite packBG;
-            public UnlockRequirementsEnum unlockRequirement;
             [StackableField, StackableDecorator.ShowIf("#OpponentTypeCheck")]
             public Color aiColor;
             [StackableField, StackableDecorator.ShowIf("#OpponentTypeCheck")]
             public Color playerColor;
-            [StackableField, StackableDecorator.ShowIf("#OpponentTypeCheck")]
-            public string herdID;
-            [StackableField, StackableDecorator.ShowIf("#AITypeCheck")]
-            public string profileName;
             public bool overrideProgressionIcons;
             [StackableField, StackableDecorator.ShowIf("$overrideProgressionIcons")]
             public Sprite progressionIconEmpty, progressionIconSet;
@@ -176,31 +171,6 @@ namespace Fourzy._Updates.Serialized
                 }
             }
 
-            /// <summary>
-            /// Runtime only
-            /// </summary>
-            public string getUnlockRewardID
-            {
-                get
-                {
-                    //find unlock reward
-                    RewardsManager.Reward reward = null;
-                    ClientPuzzleData _puzzleData = null;
-
-                    foreach (ClientPuzzleData puzzleData in enabledPuzzlesData)
-                    {
-                        reward = Array.Find(puzzleData.rewards, _reward => _reward.rewardType == RewardType.PACK_COMPLETE);
-                        _puzzleData = puzzleData;
-
-                        if (reward != null) break;
-                    }
-
-                    if (reward == null) return "";
-
-                    return _puzzleData.ID + "_" + reward.rewardType.ToString();
-                }
-            }
-
             public void Initialize(PuzzlePacksDataHolder puzzlePacksHolder)
             {
                 base.Initialize();
@@ -215,7 +185,9 @@ namespace Fourzy._Updates.Serialized
                     if (_data != null)
                     {
                         puzzlesData.Add(_data);
-                        allRewards.AddRange(_data.rewards);
+
+                        if (!allRewards.ContainsKey(puzzleIndex)) allRewards.Add(puzzleIndex, new List<RewardsManager.Reward>());
+                        allRewards[puzzleIndex].AddRange(_data.rewards);
 
                         if (_data.Enabled)
                         {
@@ -333,7 +305,7 @@ namespace Fourzy._Updates.Serialized
                 puzzleData.GoalType = goal;
                 puzzleData.MoveLimit = moveLimit;
                 puzzleData.PuzzlePlayer =
-                    new Player(2, overrideAIProfile ? profileName : pack.profileName) { HerdId = overrideAIProfile ? herdID + "" : pack.herdID };
+                    new Player(2, overrideAIProfile ? profileName : pack.aiPlayerName) { HerdId = overrideAIProfile ? herdID + "" : pack.herdID };
 
                 switch (pack.packType)
                 {

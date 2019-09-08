@@ -14,5 +14,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             mapContent.UpdateWidgets();
         }
+
+        public void Open(Camera3dItemProgressionMap map)
+        {
+            mapContent.LoadOther(map);
+
+            menuController.OpenScreen(this);
+        }
     }
 }

@@ -32,6 +32,9 @@ namespace Fourzy
         public const string MAIN_MENU_CANVAS_NAME = "MainMenuCanvas";
         public const string GAMEPLAY_MENU_CANVAS_NAME = "GameSceneCanvas";
 
+        public const string PUZZLE_PACKS_ROOT_FOLDER = "PuzzlePacks";
+        public const string PUZZLES_ROOT_FOLDER = "PuzzlePool";
+
         #region Remote Settings
 
         public const string KEY_APP_VERSION = "app_version";
