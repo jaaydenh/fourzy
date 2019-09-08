@@ -4,8 +4,6 @@ using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -29,8 +27,6 @@ namespace Fourzy._Updates.UI.Widgets
             this.spellsList = spellsList;
             this.spellId = spellId;
 
-            //get spell contents
-            //data = GameContentManager.Instance.spellsDataHolder.GetSpell(spellId);
             data = GameContentManager.Instance.tokensDataHolder.GetTokenData(spellId);
             icon.sprite = data.GetTokenSprite();
 

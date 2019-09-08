@@ -109,7 +109,7 @@ namespace Fourzy
         public ClientFourzyPuzzle GetFastPuzzle(string id = "", bool unfinished = true)
         {
             List<string> ids = new List<string>(fastPuzzles.Keys);
-            UnityEngine.Debug.Log(id);
+
             if (string.IsNullOrEmpty(id))
             {
                 //get random one
