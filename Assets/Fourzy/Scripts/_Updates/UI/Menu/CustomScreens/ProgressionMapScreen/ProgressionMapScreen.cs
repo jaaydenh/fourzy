@@ -21,5 +21,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             menuController.OpenScreen(this);
         }
+
+        
     }
 }

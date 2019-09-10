@@ -131,8 +131,7 @@ namespace Fourzy._Updates.Tween
 
         public void Initialize()
         {
-            if (initialized)
-                return;
+            if (initialized) return;
 
             initialized = true;
             defaultPlaybackTime = playbackTime;

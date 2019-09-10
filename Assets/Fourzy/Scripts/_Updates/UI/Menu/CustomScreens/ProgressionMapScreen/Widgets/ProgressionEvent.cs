@@ -6,6 +6,7 @@ using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.ProgressionMap;
@@ -15,12 +16,16 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Fourzy._Updates.UI.Widgets
 {
+    [ExecuteInEditMode]
     public class ProgressionEvent : WidgetBase
     {
-        public TMP_Text placeholderLabel;
+        public Camera3dItemProgressionLine linePrefab;
         public RectTransform content;
         public ProgressionEventType EventType;
 
@@ -46,7 +51,6 @@ namespace Fourzy._Updates.UI.Widgets
         public string otherRewardID;
 
         public List<ProgressionEvent> unlockWhenComplete;
-        public List<Camera3dItemProgressionLine> enableLinesWhenComplete;
         public AdvancedEvent onUnlock;
         public AdvancedEvent onRewarded;
         public AdvancedEvent onReset;
@@ -55,8 +59,18 @@ namespace Fourzy._Updates.UI.Widgets
         private ButtonExtended buttonExtended;
         private GamePieceView gamePieceView;
 
+        //[HideInInspector]
+        public List<Camera3dItemProgressionLine> lines;
+
         private bool _rewarded;
         private bool _unlocked;
+
+        public Camera3dItemProgressionMap map;
+
+        /// <summary>
+        /// Editor stuff
+        /// </summary>
+        private bool eventUsed;
 
         [HideInInspector]
         public ResourceDB resouceDB;
@@ -112,45 +126,59 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        protected void Start()
+        protected override void Awake()
         {
-            switch (EventType)
+            if (!Application.isPlaying) return;
+
+            base.Awake();
+        }
+
+#if UNITY_EDITOR
+        protected void OnDrawGizmosSelected()
+        {
+            if (Event.current.control)
             {
-                case ProgressionEventType.PUZZLE_PACK:
-                    //if (IsPuzzlePack)
-                    //{
-                    nameLabel.text = PuzzlePack.name;
-                    //}
-
-                    if (PuzzlePack.packType == PackType.BOSS_AI_PACK || PuzzlePack.packType == PackType.AI_PACK)
+                if (Event.current.button == 1 && Camera.current != null)
+                {
+                    if (!eventUsed)
                     {
-                        //spawn gamepiece
-                        gamePieceView = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(PuzzlePack.enabledPuzzlesData[0].PuzzlePlayer.HerdId).player1Prefab, gamePieceParent);
+                        eventUsed = true;
 
-                        gamePieceView.transform.localPosition = Vector3.zero;
-                        gamePieceView.transform.localScale = Vector3.one * 140f;
-                        gamePieceView.StartBlinking();
+                        Vector3 position = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin;
+                        position.z = transform.position.z - 5f;
+
+                        RaycastHit2D hit2d = Physics2D.Raycast(position, Camera.current.transform.forward, 10f);
+
+                        if (hit2d)
+                        {
+                            if (hit2d.transform != transform)
+                            {
+                                ProgressionEvent other = hit2d.transform.GetComponent<ProgressionEvent>();
+
+                                if (!other) return;
+
+                                if (unlockWhenComplete.Contains(other))
+                                    unlockWhenComplete.Remove(other);
+                                else
+                                    unlockWhenComplete.Add(other);
+
+                                EditorUtility.SetDirty(this);
+                            }
+                        }
                     }
-
-                    break;
-
-                case ProgressionEventType.CURRENCY:
-                    RewardsScreenWidget rewardWidget =
-                        Instantiate(GameContentManager.GetPrefab<RewardsScreenWidget>(reward.rewardType.AsPrefabType()), content);
-
-                    rewardWidget.SetData(reward);
-                    rewardWidget.ResetAnchors();
-
-                    break;
+                }
+                else
+                    eventUsed = false;
             }
         }
+#endif
 
         public override void _Update()
         {
             base._Update();
 
             if (wasRewarded) Rewarded(false);
-            else enableLinesWhenComplete.ForEach(line => line.SetColorLocked());
+            else lines.ForEach(line => line.SetColorLocked());
 
             if (!_unlocked && !_rewarded) return;
 
@@ -180,7 +208,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void Unlock(bool animate)
         {
-            if (_unlocked) return;
+            if (_unlocked || _rewarded) return;
 
             onUnlock.Invoke();
             _unlocked = true;
@@ -212,7 +240,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             //unlock next events
             unlockWhenComplete.ForEach(@event => @event.Unlock(animate));
-            enableLinesWhenComplete.ForEach(line => line.SetColorUnlocked());
+            lines.ForEach(line => line.SetColorUnlocked());
 
             switch (EventType)
             {
@@ -230,11 +258,6 @@ namespace Fourzy._Updates.UI.Widgets
                             }
 
                             break;
-
-                            //case PuzzlePacksDataHolder.PackType.AI_PACK:
-                            //    print(PuzzlePack.name + " rewarded");
-
-                            //    break;
                     }
 
                     break;
@@ -288,11 +311,15 @@ namespace Fourzy._Updates.UI.Widgets
                     //give reward
                     new RewardsManager.Reward[] { reward }.AssignRewards();
 
+                    map.CheckMapComplete();
+
                     break;
 
                 case ProgressionEventType.REWARD:
                     Rewarded(true);
                     PlayerPrefsWrapper.SetEventRewarded(id, true);
+
+                    map.CheckMapComplete();
 
                     break;
             }
@@ -321,26 +348,41 @@ namespace Fourzy._Updates.UI.Widgets
 
         protected override void OnInitialized()
         {
+            if (!Application.isPlaying) return;
+
             base.OnInitialized();
 
             buttonExtended = GetComponentInChildren<ButtonExtended>();
-            placeholderLabel.gameObject.SetActive(false);
+            map = GetComponentInParent<Camera3dItemProgressionMap>();
 
-            //
+            switch (EventType)
+            {
+                case ProgressionEventType.PUZZLE_PACK:
+                    nameLabel.text = PuzzlePack.name;
+
+                    if (PuzzlePack.packType == PackType.BOSS_AI_PACK || PuzzlePack.packType == PackType.AI_PACK)
+                    {
+                        //spawn gamepiece
+                        gamePieceView = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(PuzzlePack.GetHerdID()).player1Prefab, gamePieceParent);
+
+                        gamePieceView.transform.localPosition = Vector3.zero;
+                        gamePieceView.transform.localScale = Vector3.one * 140f;
+                        gamePieceView.StartBlinking();
+                    }
+
+                    break;
+
+                case ProgressionEventType.CURRENCY:
+                    RewardsScreenWidget rewardWidget =
+                        Instantiate(GameContentManager.GetPrefab<RewardsScreenWidget>(reward.rewardType.AsPrefabType()), content);
+
+                    rewardWidget.SetData(reward);
+                    rewardWidget.ResetAnchors();
+
+                    break;
+            }
         }
 
-        //editor stuff
-        //private IEnumerable GetPacksData()
-        //{
-        //    ValueDropdownList<int> values = new ValueDropdownList<int>();
-
-        //    if (!packsData) return values;
-
-        //    for (int packIndex = 0; packIndex < packsData.puzzlePacks.list.Count; packIndex++)
-        //        values.Add(packsData.puzzlePacks.list[packIndex].name, packIndex);
-
-        //    return values;
-        //}
 #if UNITY_EDITOR
         private IEnumerable GetPacksData()
         {
@@ -365,17 +407,25 @@ namespace Fourzy._Updates.UI.Widgets
 #endif
         }
 
-        [Button("Reset Anchor")]
-        private void ResetAnchorsToCurrentPosition()
+        [Button("Add Line")]
+        private void AddLine()
         {
-            RectTransform rectTransform = GetComponent<RectTransform>();
+            if (lines == null) lines = new List<Camera3dItemProgressionLine>();
 
-            if (!rectTransform) return;
+            Camera3dItemProgressionMap map = GetComponentInParent<Camera3dItemProgressionMap>();
 
-            Rect parentRect = rectTransform.parent.GetComponent<RectTransform>().rect;
-            rectTransform.anchorMin = rectTransform.anchorMax =
-                new Vector2(rectTransform.localPosition.x / parentRect.width, (rectTransform.localPosition.y + parentRect.height) / parentRect.height);
-            rectTransform.anchoredPosition = Vector2.zero;
+            if (!map) return;
+
+            lines.Add(Instantiate(linePrefab, map.linesParent).Initialize(transform));
+        }
+
+        [Button("Remove Line")]
+        private void RemoveLine()
+        {
+            if (lines == null || lines.Count == 0) return;
+
+            DestroyImmediate(lines[lines.Count - 1].gameObject);
+            lines.RemoveAt(lines.Count - 1);
         }
 
         public enum ProgressionEventType

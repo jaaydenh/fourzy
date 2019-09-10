@@ -107,7 +107,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 4176082004032094246}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -116,7 +116,17 @@ MonoBehaviour:
   events:
     inspectorListHeight: 83
     persistentCalls:
-      calls: []
+      calls:
+      - genericMenuData:
+          selectedComponent: 2
+          selectedMember: 29
+          isDynamic: 0
+        target: {fileID: 4176082004032094266}
+        memberName: OnTap
+        memberType: 8
+        arguments: []
+        isDynamic: 0
+        isCallEnabled: 1
   onState:
     inspectorListHeight: 83
     persistentCalls:

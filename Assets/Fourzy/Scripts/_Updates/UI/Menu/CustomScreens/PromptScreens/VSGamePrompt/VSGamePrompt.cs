@@ -35,7 +35,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 .SetColor(defaultLeftColor);
 
             aiProfileWidget
-                .SetProfile(puzzlePack.enabledPuzzlesData[0].PuzzlePlayer)
+                .SetProfile(puzzlePack.puzzlePlayer)
                 .SetColor(defaultRightColor);
 
             foreach (WidgetBase widget in GetWidgets<VSGamePromptProgressionWidget>()) Destroy(widget.gameObject);

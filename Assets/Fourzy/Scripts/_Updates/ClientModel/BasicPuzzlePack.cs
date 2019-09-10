@@ -3,6 +3,7 @@
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Toasts;
+using FourzyGameModel.Model;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace Fourzy._Updates.ClientModel
         public List<ClientPuzzleData> puzzlesData { get; set; }
         public List<ClientPuzzleData> enabledPuzzlesData { get; set; }
         public List<ClientPuzzleData> rewardPuzzles { get; set; }
+        public Player puzzlePlayer { get; set; }
         public Dictionary<int, List<RewardsManager.Reward>> allRewards { get; set; }
 
         public List<ClientPuzzleData> puzzlesComplete => enabledPuzzlesData.Where(puzzle => PlayerPrefsWrapper.GetPuzzleChallengeComplete(puzzle.ID)).ToList();
@@ -45,6 +47,7 @@ namespace Fourzy._Updates.ClientModel
             unlockRequirement = (UnlockRequirementsEnum)jObject["unlockRequirement"].ToObject<int>();
             herdID = jObject["herdID"].ToObject<string>();
             aiPlayerName = jObject["playerName"].ToObject<string>();
+            puzzlePlayer = new Player(2, aiPlayerName) { HerdId = herdID };
 
             RewardIndexed[] _rewards = jObject["rewards"].ToObject<RewardIndexed[]>();
 
@@ -122,15 +125,15 @@ namespace Fourzy._Updates.ClientModel
 
         public IClientFourzy Next(IClientFourzy current)
         {
-            ClientPuzzleData puzzleData = enabledPuzzlesData.Next(current.puzzleData);
+            ClientPuzzleData data = enabledPuzzlesData.Next(current.puzzleData);
 
-            puzzleData.Initialize();
+            data.Initialize();
 
-            switch (puzzleData.pack.packType)
+            switch (data.pack.packType)
             {
-                case PackType.PUZZLE_PACK: return new ClientFourzyPuzzle(puzzleData);
+                case PackType.PUZZLE_PACK: return new ClientFourzyPuzzle(data);
 
-                default: return ClientFourzyGame.FromPuzzleData(puzzleData);
+                default: return ClientFourzyGame.FromPuzzleData(data);
             }
         }
 
@@ -164,6 +167,14 @@ namespace Fourzy._Updates.ClientModel
                     PlayerPrefsWrapper.SetEventRewarded(_data.GetRewardID(reward), false);
                 }
             });
+        }
+
+        public string GetHerdID(int levelIndex = -1)
+        {
+            if (levelIndex == -1)
+                return herdID;
+            else
+                return puzzlesData[levelIndex].herdID;
         }
 
         public static implicit operator bool(BasicPuzzlePack pack) => pack != null;

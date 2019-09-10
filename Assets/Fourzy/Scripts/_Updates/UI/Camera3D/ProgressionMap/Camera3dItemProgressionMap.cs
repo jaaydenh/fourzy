@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.UI.Menu;
+using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,24 +15,65 @@ namespace Fourzy._Updates.UI.Camera3D
         public Transform content;
         public Camera3dItemProgressionMapChunk chunk;
         public SpriteRenderer bg;
+        public Transform linesParent;
 
         public int currentMapChunkIndex { get; private set; }
         [HideInInspector]
         public float currentScrollValue;
 
         protected Vector2 cameraSize;
-        protected List<ProgressionEvent> widgets;
+        public List<ProgressionEvent> widgets { get; private set; } 
+        public MenuScreen menuScreen { get; private set; }
 
-        protected void Start()
+        private bool initialized = false;
+        private bool finished = false;
+
+        public bool isComplete => SetWidgetsIfNull().TrueForAll(widget => widget.wasRewarded);
+
+        protected override void Awake()
         {
+            base.Awake();
+
             if (!Application.isPlaying) return;
 
-            firstEvent.Unlock(false);
+            Initialize();
         }
 
-        public void UpdateWidgets() => SetWidgetsIfNull().ForEach(widget => widget._Update());
+        protected void OnDestroy()
+        {
+            GameContentManager.Instance.existingProgressionMaps.Remove(this);
+        }
 
-        public void SetMenuScreen(MenuScreen menuScreen) => SetWidgetsIfNull().ForEach(widget => widget.menuScreen = menuScreen);
+        public void CheckMapComplete()
+        {
+            if (finished) return;
+
+            if (isComplete)
+            {
+                finished = true;
+
+                //show map finished animation
+                PlayerPrefsWrapper.SetAdventureComplete(name, true);
+
+                menuScreen.menuController.GetScreen<PromptScreen>().Prompt("Adventure map complete", "none", null, "OK");
+            }
+        }
+
+        public void UpdateWidgets()
+        {
+            Initialize();
+
+            SetWidgetsIfNull().ForEach(widget => widget._Update());
+
+            CheckMapComplete();
+        }
+
+        public void SetMenuScreen(MenuScreen menuScreen)
+        {
+            this.menuScreen = menuScreen;
+
+            SetWidgetsIfNull().ForEach(widget => widget.menuScreen = menuScreen);
+        }
 
         public override void ConfigureCamera()
         {
@@ -87,6 +129,20 @@ namespace Fourzy._Updates.UI.Camera3D
             if (widgets == null) widgets = new List<ProgressionEvent>(GetComponentsInChildren<ProgressionEvent>());
 
             return widgets;
+        }
+
+        private void Initialize()
+        {
+            if (initialized) return;
+
+            SetWidgetsIfNull().ForEach(widget => widget.Initialize());
+
+            initialized = true;
+            firstEvent.Unlock(false);
+
+            GameContentManager.Instance.existingProgressionMaps.Add(this);
+
+            finished = isComplete;
         }
     }
 }

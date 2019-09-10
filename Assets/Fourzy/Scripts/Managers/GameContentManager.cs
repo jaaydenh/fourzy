@@ -41,7 +41,6 @@ namespace Fourzy
 
         public Dictionary<PrefabType, PrefabTypePair> typedPrefabsFastAccess { get; private set; }
 
-
         public ThemesDataHolder.GameTheme currentTheme
         {
             get => themesDataHolder.currentTheme;
@@ -60,6 +59,8 @@ namespace Fourzy
         public List<GameBoardDefinition> passAndPlayGameboards => passAndPlayDataHolder.gameboards;
 
         public PuzzlePacksDataHolder puzzlePacksDataHolder => packsDataHolders[0];
+
+        public List<Camera3dItemProgressionMap> existingProgressionMaps { get; private set; } = new List<Camera3dItemProgressionMap>();
 
         protected override void Awake()
         {
@@ -147,11 +148,9 @@ namespace Fourzy
             foreach (PuzzlePacksDataHolder pack in packsDataHolders)
                 pack.ResetPlayerPrefs();
 
-            //reset progression maps
-            foreach (Camera3dItemProgressionMap progressionMap in progressionMaps)
+            foreach (Camera3dItemProgressionMap progressionMap in existingProgressionMaps)
                 progressionMap.ResetPlayerPrefs();
 
-            //reset external packs
             foreach (BasicPuzzlePack pack in externalPuzzlePacks.Values)
                 pack.ResetPlayerPrefs();
         }
@@ -185,7 +184,7 @@ namespace Fourzy
                 //get puzzle descriptions file
                 foreach (ResourceItem puzzleDataFile in @event.GetChild("puzzles").GetChilds("", ResourceItem.Type.Asset))
                 {
-                    ClientPuzzleData puzzleData = new ClientPuzzleData(puzzleDataFile.Name, puzzleDataFile);
+                    ClientPuzzleData puzzleData = new ClientPuzzleData(puzzlePack.packID + "_" + puzzleDataFile.Name, puzzleDataFile);
 
                     if (puzzlePack.allRewards.ContainsKey(puzzleIndex))
                         puzzleData.rewards = puzzlePack.allRewards[puzzleIndex].ToArray();

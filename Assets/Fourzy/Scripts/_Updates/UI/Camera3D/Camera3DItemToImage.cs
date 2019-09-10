@@ -39,7 +39,7 @@ namespace Fourzy._Updates.UI.Camera3D
 
             rawImage.material = Camera3DManager.instance.defaultItemToIMageMaterial;
 
-            if (initialized)  return;
+            if (initialized || !prefabToDisplay)  return;
 
             Initialize();
         }

@@ -54,7 +54,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3276486240134347593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 1
@@ -99,7 +99,7 @@ RectTransform:
   - {fileID: 2523926690395296407}
   - {fileID: 5604420551758792106}
   m_Father: {fileID: 5403881772088283885}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4098018764249045106}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -143,6 +143,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &4143292286026571288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,7 +153,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4098018764249045106}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
@@ -166,7 +167,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4098018764249045106}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -405508275, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -350,7 +351,7 @@ PrefabInstance:
     - target: {fileID: 1935594895090930300, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
       propertyPath: m_Name
-      value: DefeatBotProgressionEvent
+      value: DefeatBotProgressionEvent Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
@@ -397,6 +398,12 @@ PrefabInstance:
       propertyPath: gamePieceParent
       value: 
       objectReference: {fileID: 2523926690395296407}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: resouceDB
+      value: 
+      objectReference: {fileID: 11400000, guid: 740862cf3b18ca442ab0a44c3dd27684,
+        type: 2}
     - target: {fileID: 2076739957008318301, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -425,7 +432,7 @@ PrefabInstance:
     - target: {fileID: 1788369364149222938, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
       propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
-      value: 38
+      value: 39
       objectReference: {fileID: 0}
     - target: {fileID: 1935594895090930301, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}

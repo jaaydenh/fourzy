@@ -19,6 +19,8 @@ namespace Fourzy._Updates.ClientModel
         public AIProfile aiProfile;
         public BossType aiBoss;
         public int firstTurn;
+        public string herdID = "1";
+        public string aiPlayerName = "";
         public SpellId[] availableSpells;
         public RewardsManager.Reward[] rewards;
 
@@ -85,7 +87,20 @@ namespace Fourzy._Updates.ClientModel
             SolutionState = jObject["SolutionStateData"].ToObject<GameState>();
             GoalType = jObject["GoalType"].ToObject<PuzzleGoalType>();
 
-            if (aiProfile != AIProfile.Player) PuzzlePlayer = new Player(2, "AI", aiProfile);
+            if (aiProfile != AIProfile.Player)
+            {
+                if (string.IsNullOrEmpty(aiPlayerName)) aiPlayerName = "AI";
+                if (string.IsNullOrEmpty(herdID)) herdID = "1";
+
+                if (pack)
+                {
+                    aiPlayerName = string.IsNullOrEmpty(pack.aiPlayerName) ? aiPlayerName : pack.aiPlayerName;
+                    herdID = string.IsNullOrEmpty(pack.herdID) ? herdID : pack.herdID;
+                }
+
+                PuzzlePlayer = new Player(2, aiPlayerName, aiProfile) { HerdId = herdID };
+
+            }
 
             GetInstructions();
         }

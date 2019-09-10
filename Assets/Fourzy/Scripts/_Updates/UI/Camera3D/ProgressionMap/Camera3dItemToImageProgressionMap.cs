@@ -13,7 +13,7 @@ namespace Fourzy._Updates.UI.Camera3D
         public static float TAP_DISTANCE = .05f;
 
         protected CanvasScaler canvasScaler;
-        protected Camera3dItemProgressionMap _item;
+        public Camera3dItemProgressionMap _item { get; private set; }
 
         private Vector2 originalTouchPosition;
         private Vector2 lastTouchPosition;
@@ -58,7 +58,7 @@ namespace Fourzy._Updates.UI.Camera3D
         public void LoadOther(Camera3dItemProgressionMap other)
         {
             Camera3DManager.instance.RemoveFromItem(gameObject);
-            item = other;
+            prefabToDisplay = other;
 
             Initialize();
         }
@@ -75,8 +75,6 @@ namespace Fourzy._Updates.UI.Camera3D
 
             _item.Scroll(0f, true);
             _item.SetMenuScreen(menuScreen);
-
-            //GameContentManager.Instance.progressionMaps.Add(_item);
 
             base.Initialize();
 
