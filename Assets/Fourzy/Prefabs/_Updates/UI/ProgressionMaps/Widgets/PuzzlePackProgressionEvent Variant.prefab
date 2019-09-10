@@ -877,57 +877,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PuzzlePackProgressionEvent Variant
       objectReference: {fileID: 0}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: EventType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: nameLabel
-      value: 
-      objectReference: {fileID: 2145759720895278337}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: starTween
-      value: 
-      objectReference: {fileID: 8849567022286253399}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: packsData
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: packIndex
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: progressSlider
-      value: 
-      objectReference: {fileID: 4388523933832388780}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: resouceDB
-      value: 
-      objectReference: {fileID: 11400000, guid: 740862cf3b18ca442ab0a44c3dd27684,
-        type: 2}
-    - target: {fileID: 1839103346566499647, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1788369364149222938, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 8343263766400582214}
-    - target: {fileID: 1788369364149222938, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
-      value: 38
-      objectReference: {fileID: 0}
     - target: {fileID: 1935594895090930301, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1032,6 +981,57 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: EventType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: nameLabel
+      value: 
+      objectReference: {fileID: 2145759720895278337}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: starTween
+      value: 
+      objectReference: {fileID: 8849567022286253399}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: packsData
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: packIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: progressSlider
+      value: 
+      objectReference: {fileID: 4388523933832388780}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: resouceDB
+      value: 
+      objectReference: {fileID: 11400000, guid: 740862cf3b18ca442ab0a44c3dd27684,
+        type: 2}
+    - target: {fileID: 1788369364149222938, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 8343263766400582214}
+    - target: {fileID: 1788369364149222938, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1839103346566499647, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1454589770680166005, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}

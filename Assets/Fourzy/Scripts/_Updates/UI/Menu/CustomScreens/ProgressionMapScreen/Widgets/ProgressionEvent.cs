@@ -30,15 +30,15 @@ namespace Fourzy._Updates.UI.Widgets
         public RectTransform content;
         public ProgressionEventType EventType;
 
-        [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.PUZZLE_PACK), BoxGroup("PuzzlePack"), ValueDropdown("GetPacksData")]
+        [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.GAME), BoxGroup("PuzzlePack"), ValueDropdown("GetPacksData")]
         public string packName = "";
-        [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.PUZZLE_PACK), BoxGroup("PuzzlePack")]
+        [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.GAME), BoxGroup("PuzzlePack")]
         public TMP_Text nameLabel;
-        [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.PUZZLE_PACK), BoxGroup("PuzzlePack")]
+        [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.GAME), BoxGroup("PuzzlePack")]
         public TweenBase starTween;
-        [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.PUZZLE_PACK), BoxGroup("PuzzlePack")]
+        [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.GAME), BoxGroup("PuzzlePack")]
         public SliderExtended progressSlider;
-        [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.PUZZLE_PACK), BoxGroup("PuzzlePack")]
+        [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.GAME), BoxGroup("PuzzlePack")]
         public RectTransform gamePieceParent;
 
         [ShowIfGroup("Currency/EventType", Value = ProgressionEventType.CURRENCY), BoxGroup("Currency"), InlineButton("ResetRewardID", "Reset ID")]
@@ -66,7 +66,7 @@ namespace Fourzy._Updates.UI.Widgets
         private bool _rewarded;
         private bool _unlocked;
 
-        public Camera3dItemProgressionMap map;
+        public Camera3dItemProgressionMap map { get; private set; }
 
         /// <summary>
         /// Editor stuff
@@ -92,7 +92,7 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 switch (EventType)
                 {
-                    case ProgressionEventType.PUZZLE_PACK:
+                    case ProgressionEventType.GAME:
                         switch (PuzzlePack.packType)
                         {
                             case PackType.AI_PACK:
@@ -115,7 +115,7 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 switch (EventType)
                 {
-                    case ProgressionEventType.PUZZLE_PACK:
+                    case ProgressionEventType.GAME:
                         return PuzzlePack.getUnlockRewardID;
 
                     case ProgressionEventType.CURRENCY:
@@ -185,7 +185,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             switch (EventType)
             {
-                case ProgressionEventType.PUZZLE_PACK:
+                case ProgressionEventType.GAME:
                     switch (PuzzlePack.packType)
                     {
                         case PackType.PUZZLE_PACK:
@@ -218,7 +218,7 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 switch (EventType)
                 {
-                    case ProgressionEventType.PUZZLE_PACK:
+                    case ProgressionEventType.GAME:
                         buttonExtended.interactable = true;
 
                         break;
@@ -245,7 +245,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             switch (EventType)
             {
-                case ProgressionEventType.PUZZLE_PACK:
+                case ProgressionEventType.GAME:
                     switch (PuzzlePack.packType)
                     {
                         case PackType.PUZZLE_PACK:
@@ -284,7 +284,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             switch (EventType)
             {
-                case ProgressionEventType.PUZZLE_PACK:
+                case ProgressionEventType.GAME:
                     switch (PuzzlePack.packType)
                     {
                         case PackType.AI_PACK:
@@ -362,7 +362,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             switch (EventType)
             {
-                case ProgressionEventType.PUZZLE_PACK:
+                case ProgressionEventType.GAME:
                     nameLabel.text = PuzzlePack.name;
 
                     if (PuzzlePack.packType == PackType.BOSS_AI_PACK || PuzzlePack.packType == PackType.AI_PACK)
@@ -436,7 +436,7 @@ namespace Fourzy._Updates.UI.Widgets
         public enum ProgressionEventType
         {
             NONE,
-            PUZZLE_PACK,
+            GAME,
             CURRENCY,
             REWARD,
         }

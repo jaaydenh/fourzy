@@ -1306,14 +1306,14 @@ LineRenderer:
   m_Positions:
   - {x: -16.349998, y: 6.201915, z: 0}
   - {x: -16.103603, y: 6.8666563, z: 0}
-  - {x: -15.722374, y: 7.4742427, z: 0}
-  - {x: -15.227921, y: 8.021655, z: 0}
-  - {x: -14.6418495, y: 8.505875, z: 0}
-  - {x: -13.98576, y: 8.9238825, z: 0}
-  - {x: -13.281261, y: 9.272659, z: 0}
+  - {x: -15.722376, y: 7.4742427, z: 0}
+  - {x: -15.227922, y: 8.021655, z: 0}
+  - {x: -14.641848, y: 8.505875, z: 0}
+  - {x: -13.985759, y: 8.9238825, z: 0}
+  - {x: -13.28126, y: 9.272659, z: 0}
   - {x: -12.549957, y: 9.549185, z: 0}
-  - {x: -11.813454, y: 9.750442, z: 0}
-  - {x: -11.093361, y: 9.873409, z: 0}
+  - {x: -11.813456, y: 9.750442, z: 0}
+  - {x: -11.09336, y: 9.873409, z: 0}
   - {x: -10.411278, y: 9.91507, z: 0}
   m_Parameters:
     serializedVersion: 3
@@ -2433,6 +2433,16 @@ PrefabInstance:
       propertyPath: lines.Array.data[0]
       value: 
       objectReference: {fileID: 1219831041140100126}
+    - target: {fileID: 1619248955694505334, guid: 720019b7bd3ac3746b2aa429f391e138,
+        type: 3}
+      propertyPath: unlockWhenComplete.Array.data[1]
+      value: 
+      objectReference: {fileID: 7714828377007789512}
+    - target: {fileID: 1619248955694505334, guid: 720019b7bd3ac3746b2aa429f391e138,
+        type: 3}
+      propertyPath: lines.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2072577344806510639, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -2442,6 +2452,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1856849267794439238, guid: 720019b7bd3ac3746b2aa429f391e138,
+        type: 3}
+      propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 1529806966184227881, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
@@ -2857,6 +2872,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3153102272372976761, guid: 2e5b2ce658ef82341b6a4c3689c52669,
+        type: 3}
+      propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 9185897331684156288, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
