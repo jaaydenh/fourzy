@@ -1,8 +1,11 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Widgets;
+using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,12 +13,18 @@ namespace Fourzy._Updates.UI.Camera3D
 {
     public class Camera3dItemProgressionMap : Camera3DItem
     {
+        [InlineButton("ResetRewardID", "Reset ID")]
+        public string mapID = Guid.NewGuid().ToString();
         public ProgressionEvent firstEvent;
         
         public Transform content;
         public Camera3dItemProgressionMapChunk chunk;
         public SpriteRenderer bg;
         public Transform linesParent;
+
+        public UnlockRequirementsEnum unlockRequirements;
+        [ShowIf("$showQuantity")]
+        public int quantity = 0;
 
         public int currentMapChunkIndex { get; private set; }
         [HideInInspector]
@@ -28,7 +37,7 @@ namespace Fourzy._Updates.UI.Camera3D
         private bool initialized = false;
         private bool finished = false;
 
-        public bool isComplete => SetWidgetsIfNull().TrueForAll(widget => widget.wasRewarded);
+        public bool showQuantity => unlockRequirements != UnlockRequirementsEnum.NONE;
 
         protected override void Awake()
         {
@@ -48,12 +57,12 @@ namespace Fourzy._Updates.UI.Camera3D
         {
             if (finished) return;
 
-            if (isComplete)
+            if (SetWidgetsIfNull().TrueForAll(widget => widget.wasRewarded))
             {
                 finished = true;
 
                 //show map finished animation
-                PlayerPrefsWrapper.SetAdventureComplete(name, true);
+                PlayerPrefsWrapper.SetAdventureComplete(mapID, true);
 
                 menuScreen.menuController.GetScreen<PromptScreen>().Prompt("Adventure map complete", "none", null, "OK");
             }
@@ -66,6 +75,9 @@ namespace Fourzy._Updates.UI.Camera3D
             SetWidgetsIfNull().ForEach(widget => widget._Update());
 
             CheckMapComplete();
+
+            //set as opened
+            PlayerPrefsWrapper.SetAdventureNew(mapID, false);
         }
 
         public void SetMenuScreen(MenuScreen menuScreen)
@@ -142,7 +154,16 @@ namespace Fourzy._Updates.UI.Camera3D
 
             GameContentManager.Instance.existingProgressionMaps.Add(this);
 
-            finished = isComplete;
+            finished = PlayerPrefsWrapper.GetAdventureComplete(mapID);
+        }
+
+        private void ResetRewardID()
+        {
+            mapID = Guid.NewGuid().ToString();
+
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
     }
 }

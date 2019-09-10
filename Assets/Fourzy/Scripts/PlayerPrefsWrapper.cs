@@ -118,7 +118,7 @@ namespace Fourzy
 
         public static void SetAdventureNew(string id, bool state) => PlayerPrefs.SetInt(kAdventureNew + id, state ? 1 : 0);
 
-        public static bool GetAdventureNew(string id) => PlayerPrefs.GetInt(kAdventureNew + id, 0) != 0;
+        public static bool GetAdventureNew(string id) => PlayerPrefs.GetInt(kAdventureNew + id, 1) != 0;
 
         #region Currencies
 

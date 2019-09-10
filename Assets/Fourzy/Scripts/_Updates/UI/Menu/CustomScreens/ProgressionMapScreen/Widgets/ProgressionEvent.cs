@@ -26,6 +26,7 @@ namespace Fourzy._Updates.UI.Widgets
     public class ProgressionEvent : WidgetBase
     {
         public Camera3dItemProgressionLine linePrefab;
+        public TMP_Text placeholder;
         public RectTransform content;
         public ProgressionEventType EventType;
 
@@ -351,6 +352,8 @@ namespace Fourzy._Updates.UI.Widgets
             if (!Application.isPlaying) return;
 
             base.OnInitialized();
+
+            placeholder.gameObject.SetActive(false);
 
             buttonExtended = GetComponentInChildren<ButtonExtended>();
             map = GetComponentInParent<Camera3dItemProgressionMap>();
