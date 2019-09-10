@@ -57,6 +57,13 @@ namespace Fourzy._Updates.UI.Camera3D
 
         public void LoadOther(Camera3dItemProgressionMap other)
         {
+            if (_item && _item.mapID == other.mapID)
+            {
+                if (!_item.gameObject.activeInHierarchy) _item.gameObject.SetActive(true);
+
+                return;
+            }
+
             Camera3DManager.instance.RemoveFromItem(gameObject);
             prefabToDisplay = other;
 

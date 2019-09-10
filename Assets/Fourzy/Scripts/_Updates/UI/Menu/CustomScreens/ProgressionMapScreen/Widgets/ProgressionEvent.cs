@@ -209,7 +209,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void Unlock(bool animate)
         {
-            if (_unlocked || _rewarded) return;
+            if (_unlocked) return;
 
             onUnlock.Invoke();
             _unlocked = true;
@@ -328,11 +328,6 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void ResetGraphics()
         {
-            onReset.Invoke();
-
-            _unlocked = false;
-            _rewarded = false;
-
             /// <summary>
             /// Only for currency reward type
             /// </summary>
@@ -345,6 +340,13 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
+
+            if (string.IsNullOrEmpty(gameObject.scene.name)) return;
+
+            onReset.Invoke();
+
+            _unlocked = false;
+            _rewarded = false;
         }
 
         protected override void OnInitialized()

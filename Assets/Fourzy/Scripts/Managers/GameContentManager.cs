@@ -148,8 +148,8 @@ namespace Fourzy
             foreach (PuzzlePacksDataHolder pack in packsDataHolders)
                 pack.ResetPlayerPrefs();
 
-            foreach (Camera3dItemProgressionMap progressionMap in existingProgressionMaps)
-                progressionMap.ResetPlayerPrefs();
+            foreach (Camera3dItemProgressionMap progressionMap in progressionMaps)
+                (existingProgressionMaps.Find(__map => __map.mapID == progressionMap.mapID) ?? progressionMap).ResetPlayerPrefs();
 
             foreach (BasicPuzzlePack pack in externalPuzzlePacks.Values)
                 pack.ResetPlayerPrefs();

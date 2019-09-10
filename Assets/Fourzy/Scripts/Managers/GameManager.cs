@@ -30,6 +30,7 @@ namespace Fourzy
 {
     public class GameManager : RoutinesBase
     {
+        public static Action onGameplaySceneLoaded;
         public static Action<string> onDailyChallengeFileName;
         public static Dictionary<string, object> APP_REMOTE_SETTINGS_DEFAULTS;
 
@@ -267,6 +268,8 @@ namespace Fourzy
                     MenuController.SetState("MainMenuCanvas", false);
 
                     AudioHolder.instance.StopBGAudio(AudioTypes.BG_MAIN_MENU, .5f);
+
+                    onGameplaySceneLoaded?.Invoke();
 
                     break;
             }

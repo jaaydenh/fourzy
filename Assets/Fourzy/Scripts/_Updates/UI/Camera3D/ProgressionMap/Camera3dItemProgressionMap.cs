@@ -51,13 +51,14 @@ namespace Fourzy._Updates.UI.Camera3D
         protected void OnDestroy()
         {
             GameContentManager.Instance.existingProgressionMaps.Remove(this);
+            GameManager.onGameplaySceneLoaded -= OnGameSceneLoaded;
         }
 
         public void CheckMapComplete()
         {
             if (finished) return;
 
-            if (SetWidgetsIfNull().TrueForAll(widget => widget.wasRewarded))
+            if (widgets.TrueForAll(widget => widget.wasRewarded))
             {
                 finished = true;
 
@@ -72,7 +73,9 @@ namespace Fourzy._Updates.UI.Camera3D
         {
             Initialize();
 
-            SetWidgetsIfNull().ForEach(widget => widget._Update());
+            gameObject.SetActive(true);
+
+            widgets.ForEach(widget => widget._Update());
 
             CheckMapComplete();
 
@@ -84,7 +87,7 @@ namespace Fourzy._Updates.UI.Camera3D
         {
             this.menuScreen = menuScreen;
 
-            SetWidgetsIfNull().ForEach(widget => widget.menuScreen = menuScreen);
+            widgets.ForEach(widget => widget.menuScreen = menuScreen);
         }
 
         public override void ConfigureCamera()
@@ -132,22 +135,25 @@ namespace Fourzy._Updates.UI.Camera3D
 
         public void ResetPlayerPrefs()
         {
-            SetWidgetsIfNull().ForEach(widget => widget.ResetGraphics());
-            firstEvent.Unlock(false);
-        }
+            PlayerPrefsWrapper.SetAdventureNew(mapID, true);
+            PlayerPrefsWrapper.SetAdventureUnlocked(mapID, false);
+            PlayerPrefsWrapper.SetAdventureComplete(mapID, false);
 
-        private List<ProgressionEvent> SetWidgetsIfNull()
-        {
-            if (widgets == null) widgets = new List<ProgressionEvent>(GetComponentsInChildren<ProgressionEvent>());
-
-            return widgets;
+            if (string.IsNullOrEmpty(gameObject.scene.name))
+                Array.ForEach(GetComponentsInChildren<ProgressionEvent>(), widget => widget.ResetGraphics());
+            else
+            {
+                widgets.ForEach(widget => widget.ResetGraphics());
+                firstEvent.Unlock(false);
+            }
         }
 
         private void Initialize()
         {
             if (initialized) return;
 
-            SetWidgetsIfNull().ForEach(widget => widget.Initialize());
+            widgets = new List<ProgressionEvent>(GetComponentsInChildren<ProgressionEvent>());
+            widgets.ForEach(widget => widget.Initialize());
 
             initialized = true;
             firstEvent.Unlock(false);
@@ -155,6 +161,13 @@ namespace Fourzy._Updates.UI.Camera3D
             GameContentManager.Instance.existingProgressionMaps.Add(this);
 
             finished = PlayerPrefsWrapper.GetAdventureComplete(mapID);
+
+            GameManager.onGameplaySceneLoaded += OnGameSceneLoaded;
+        }
+
+        private void OnGameSceneLoaded()
+        {
+            gameObject.SetActive(false);
         }
 
         private void ResetRewardID()
