@@ -165,7 +165,7 @@ public class ResourceDB : ScriptableObject, ISerializationCallbackReceiver
     }
 
 #if UNITY_EDITOR
-    [UnityEditor.MenuItem("Tools/Update ResourceDB" )]
+    [UnityEditor.MenuItem("Fourzy/Update ResourceDB" )]
     internal static void TriggerUpdate()
     {
         Instance.UpdateDB();
