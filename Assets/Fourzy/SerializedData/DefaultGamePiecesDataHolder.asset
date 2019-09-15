@@ -275,10 +275,10 @@ MonoBehaviour:
         rarity: 30
         outlineColor: {r: 1, g: 1, b: 0.30588236, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
-        piecesToUnlock: 30
+        piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 6622972341321018873, guid: 0e465806c37671a46ba74c563581a185,
         type: 3}
@@ -293,10 +293,10 @@ MonoBehaviour:
         rarity: 30
         outlineColor: {r: 1, g: 0.39607847, b: 0.5568628, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
-        piecesToUnlock: 30
+        piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 2487924146770352966, guid: 363c7322a9e5e054e8ea51f0719e4ad3,
         type: 3}
@@ -311,17 +311,17 @@ MonoBehaviour:
         rarity: 30
         outlineColor: {r: 1, g: 1, b: 0, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
-        piecesToUnlock: 30
+        piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 199449817183531395, guid: 233e3f7fcd2a27949ae2e7fc630fb680,
         type: 3}
       player2Prefab: {fileID: 1386132387167348578, guid: 1bb3795f602b4ff438aa2c19ec74bd43,
         type: 3}
     - _name: 'RainbowBite: Fourzy-19 Variant'
-      _key: 479c753f-1a49-4b5f-b672-e97e03c29f8c
+      _key: 783c4c0c-31c6-4e6a-82aa-bc1d000ae78c
       data:
         ID: 18
         name: RainbowBite
@@ -329,17 +329,17 @@ MonoBehaviour:
         rarity: 30
         outlineColor: {r: 1, g: 0.33333334, b: 1, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
-        piecesToUnlock: 30
+        piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 3827068522086520645, guid: e8a8bf608141cf846b5a4689c46a4035,
         type: 3}
       player2Prefab: {fileID: 8716823118059120996, guid: b2858d767c9ed974b940ad2d493f0703,
         type: 3}
     - _name: 'WizzleWisp: Fourzy-20 Variant'
-      _key: 357a97d9-5f60-45cf-96ad-8ee592051a9e
+      _key: f6f6243a-cf64-4238-9568-d9697b73020a
       data:
         ID: 19
         name: WizzleWisp
@@ -347,10 +347,10 @@ MonoBehaviour:
         rarity: 30
         outlineColor: {r: 0, g: 1, b: 0.53333336, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
-        piecesToUnlock: 30
+        piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 1004307609327887750, guid: 3a5a634b98d23134f8a17bc5f7ab4f40,
         type: 3}

@@ -81,7 +81,7 @@ namespace Fourzy._Updates.UI.Widgets
             get
             {
                 if (!_puzzlePack) _puzzlePack = GameContentManager.Instance.GetExternalPuzzlePack(packName);
-
+                Debug.Log("get basic puzzle pack");
                 return _puzzlePack;
             }
         }
