@@ -845,7 +845,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 game.Reset();
 
                 for (int turnIndex = 0; turnIndex < lastHintIndex; turnIndex++)
+                {
                     game.TakeTurn(game.puzzleData.Solution[turnIndex], true, false);
+                    game.TakeAITurn(false);
+                }
 
                 LoadGame(game);
             }
