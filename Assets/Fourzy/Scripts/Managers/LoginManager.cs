@@ -30,6 +30,8 @@ namespace Fourzy
         
         private bool isConnecting;
 
+        private PlayFabAuthService _AuthService = PlayFabAuthService.Instance;
+
         protected override void Awake()
         {
             base.Awake();
@@ -45,6 +47,9 @@ namespace Fourzy
         protected void Start()
         {
             GameAnalytics.Initialize();
+
+            PlayFabAuthService.OnLoginSuccess += PlayFabLoginSuccess;
+            PlayFabAuthService.OnPlayFabError += PlayFabLoginError;
         }
 
         protected void OnDestroy()
@@ -106,12 +111,12 @@ namespace Fourzy
 
             ISN_GKLocalPlayer.Authenticate((SA_Result result) => {
                 if (result.IsSucceeded) {
-                    Debug.Log("Authenticate is succeeded!");
+                    Debug.Log("Authenticate succeeded!");
                     
                     GameSparksGameCenterConnect();
                 }
                 else {
-                    Debug.Log("Authenticate is failed! Error with code: " + result.Error.Code + " and description: " + result.Error.Message);
+                    Debug.Log("Authenticate failed! Error with code: " + result.Error.Code + " and description: " + result.Error.Message);
                     DeviceLogin();
                 }
             });
@@ -261,13 +266,15 @@ namespace Fourzy
 
                 if (!PlayFabClientAPI.IsClientLoggedIn())
                 {
-#if UNITY_ANDROID
-                    PlayFabAndroidDeviceLogin();
-#elif UNITY_IOS
-                    PlayFabIOSDeviceLogin();
-#else
-                    PlayFabCustomIDLogin();
-#endif
+
+                    _AuthService.Authenticate(Authtypes.Silent);
+//#if UNITY_ANDROID
+//                    PlayFabAndroidDeviceLogin();
+//#elif UNITY_IOS
+//                    PlayFabIOSDeviceLogin();
+//#else
+//                    PlayFabCustomIDLogin();
+//#endif
                 }
 
                 if (!GS.Authenticated) {
@@ -289,39 +296,39 @@ namespace Fourzy
             }
         }
 
-        private void PlayFabIOSDeviceLogin()
-        {
-            LoginWithIOSDeviceIDRequest request = new LoginWithIOSDeviceIDRequest();
-            request.DeviceId = SystemInfo.deviceUniqueIdentifier;
-            request.TitleId = "9EB47";
-            request.CreateAccount = true;
-            request.DeviceModel = SystemInfo.deviceModel;
-            request.OS = SystemInfo.operatingSystem;
+        //private void PlayFabIOSDeviceLogin()
+        //{
+        //    LoginWithIOSDeviceIDRequest request = new LoginWithIOSDeviceIDRequest();
+        //    request.DeviceId = SystemInfo.deviceUniqueIdentifier;
+        //    request.TitleId = "9EB47";
+        //    request.CreateAccount = true;
+        //    request.DeviceModel = SystemInfo.deviceModel;
+        //    request.OS = SystemInfo.operatingSystem;
 
-            PlayFabClientAPI.LoginWithIOSDeviceID(request, PlayFabLoginSuccess, PlayFabLoginError);
-        }
+        //    PlayFabClientAPI.LoginWithIOSDeviceID(request, PlayFabLoginSuccess, PlayFabLoginError);
+        //}
 
-        private void PlayFabAndroidDeviceLogin()
-        {
-            LoginWithAndroidDeviceIDRequest request = new LoginWithAndroidDeviceIDRequest();
-            request.AndroidDeviceId = SystemInfo.deviceUniqueIdentifier;
-            request.TitleId = "9EB47";
-            request.CreateAccount = true;
-            request.AndroidDevice = SystemInfo.deviceModel;
-            request.OS = SystemInfo.operatingSystem;
+        //private void PlayFabAndroidDeviceLogin()
+        //{
+        //    LoginWithAndroidDeviceIDRequest request = new LoginWithAndroidDeviceIDRequest();
+        //    request.AndroidDeviceId = SystemInfo.deviceUniqueIdentifier;
+        //    request.TitleId = "9EB47";
+        //    request.CreateAccount = true;
+        //    request.AndroidDevice = SystemInfo.deviceModel;
+        //    request.OS = SystemInfo.operatingSystem;
 
-            PlayFabClientAPI.LoginWithAndroidDeviceID(request, PlayFabLoginSuccess, PlayFabLoginError);
-        }
+        //    PlayFabClientAPI.LoginWithAndroidDeviceID(request, PlayFabLoginSuccess, PlayFabLoginError);
+        //}
 
-        private void PlayFabCustomIDLogin()
-        {
-            LoginWithCustomIDRequest request = new LoginWithCustomIDRequest();
-            request.CustomId = SystemInfo.deviceUniqueIdentifier;
-            request.TitleId = "9EB47";
-            request.CreateAccount = true;
+        //private void PlayFabCustomIDLogin()
+        //{
+        //    LoginWithCustomIDRequest request = new LoginWithCustomIDRequest();
+        //    request.CustomId = SystemInfo.deviceUniqueIdentifier;
+        //    request.TitleId = "9EB47";
+        //    request.CreateAccount = true;
 
-            PlayFabClientAPI.LoginWithCustomID(request, PlayFabLoginSuccess, PlayFabLoginError);
-        }
+        //    PlayFabClientAPI.LoginWithCustomID(request, PlayFabLoginSuccess, PlayFabLoginError);
+        //}
 
         private void PlayFabLoginSuccess(LoginResult result)
         {
