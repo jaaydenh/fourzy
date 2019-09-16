@@ -12,8 +12,12 @@ namespace Fourzy._Updates.Serialized
     {
         [BoxGroup("Icons"), InfoBox("$iconsInfo", "iconsInfoToggle")]
         public List<IconData> icons;
+        [BoxGroup("Products"), InfoBox("$productsInfo", "productsInfoToggle")]
+        public List<StoreItemExtraData> products;
 
         public IconData GetIcon(string id) => icons.Find(icon => icon.id == id);
+
+        public StoreItemExtraData GetStoreItem(string id) => products.Find(icon => icon.id == id);
 
         private string iconsInfo
         {
@@ -24,13 +28,32 @@ namespace Fourzy._Updates.Serialized
             }
         }
 
+        private string productsInfo
+        {
+            get
+            {
+                List<string> duplicateIDs = products.GroupBy(x => x.id).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+                return duplicateIDs.Count == 0 ? "" : "Duplicate IDs: " + string.Join(",", duplicateIDs);
+            }
+        }
+
         private bool iconsInfoToggle => iconsInfo.Length > 0;
+
+        private bool productsInfoToggle => productsInfo.Length > 0;
 
         [System.Serializable]
         public class IconData
         {
             public string id;
             public Sprite sprite;
+        }
+
+        [System.Serializable]
+        public class StoreItemExtraData
+        {
+            //[ValueDropdown("GetProducts")]
+            public string id;
+            public Sprite icon;
         }
     }
 }

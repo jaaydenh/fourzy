@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Tools;
 using GameSparks.Core;
+using Hellmade.Net;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace Fourzy._Updates.Mechanics
         public static NetworkAccessEnum NETWORK_STATE = NetworkAccessEnum.NONE;
         //public static bool ACCESS => NETWORK_STATE == NetworkAccessEnum.ACCESSIBLE;
         //for now pass throught GS
-        public static bool ACCESS => GS.Available;
+        public static bool HAVE_ACCESS => GS.Available;
 
         public static NetworkAccess Instance
         {
@@ -48,7 +49,8 @@ namespace Fourzy._Updates.Mechanics
             //    StartRoutine("networkAccessLoop", NetworkAccessRoutine());
 
             //as for now tight it to GS.GameSparksAvailable
-            GS.GameSparksAvailable += (state) => onNetworkAccess?.Invoke(state);
+            //GS.GameSparksAvailable += (state) => onNetworkAccess?.Invoke(state);
+            EazyNetChecker.OnConnectionStatusChanged += OnNetStatusChanged;
         }
 
 //        protected void Update()
@@ -89,6 +91,28 @@ namespace Fourzy._Updates.Mechanics
         public static void _TryPing(Action<bool> onPingDone, float maxWaitTime = 2f, bool useFake = true) => Instance.TryPing(onPingDone, maxWaitTime, useFake);
 
         public void TryPing(Action<bool> onPingDone, float maxWaitTime = 2f, bool useFake = true) => StartCoroutine(PingRoutine(onPingDone, maxWaitTime, useFake));
+
+        private void OnNetStatusChanged()
+        {
+            print("connection " + EazyNetChecker.Status);
+            onNetworkAccess?.Invoke(EazyNetChecker.Status == NetStatus.Connected);
+            //// Change status text depending on the status
+            //switch (EazyNetChecker.Status)
+            //{
+            //    case NetStatus.Connected:
+
+            //        break;
+            //    case NetStatus.NoDNSConnection:
+
+            //        break;
+            //    case NetStatus.WalledGarden:
+
+            //        break;
+            //    case NetStatus.PendingCheck:
+
+            //        break;
+            //}
+        }
 
         private IEnumerator PingRoutine(Action<bool> onPingDone, float maxWaitTime, bool useFake)
         {

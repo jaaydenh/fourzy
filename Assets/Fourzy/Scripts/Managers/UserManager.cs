@@ -74,7 +74,7 @@ namespace Fourzy
 
             set
             {
-                PlayerPrefsWrapper.SetCoins(value);
+                PlayerPrefsWrapper.SetCoins(Mathf.Clamp(value, 0, int.MaxValue));
 
                 onCurrencyUpdate?.Invoke(CurrencyType.COINS);
             }
@@ -86,7 +86,7 @@ namespace Fourzy
 
             set
             {
-                PlayerPrefsWrapper.SetGems(value);
+                PlayerPrefsWrapper.SetGems(Mathf.Clamp(value, 0, int.MaxValue));
 
                 onCurrencyUpdate?.Invoke(CurrencyType.GEMS);
             }
@@ -98,7 +98,7 @@ namespace Fourzy
 
             set
             {
-                PlayerPrefsWrapper.SetXP(value);
+                PlayerPrefsWrapper.SetXP(Mathf.Clamp(value, 0, int.MaxValue));
 
                 onCurrencyUpdate?.Invoke(CurrencyType.XP);
             }
@@ -110,7 +110,7 @@ namespace Fourzy
 
             set
             {
-                PlayerPrefsWrapper.SetPortalPoints(value);
+                PlayerPrefsWrapper.SetPortalPoints(Mathf.Clamp(value, 0, int.MaxValue));
 
                 onCurrencyUpdate?.Invoke(CurrencyType.PORTAL_POINTS);
             }
@@ -122,7 +122,7 @@ namespace Fourzy
 
             set
             {
-                PlayerPrefsWrapper.SetRarePortalPoints(value);
+                PlayerPrefsWrapper.SetRarePortalPoints(Mathf.Clamp(value, 0, int.MaxValue));
 
                 onCurrencyUpdate?.Invoke(CurrencyType.RARE_PORTAL_POINTS);
             }
@@ -134,7 +134,7 @@ namespace Fourzy
 
             set
             {
-                PlayerPrefsWrapper.SetTickets(value);
+                PlayerPrefsWrapper.SetTickets(Mathf.Clamp(value, 0, int.MaxValue));
 
                 OnUpdateUserInfo?.Invoke();
             }

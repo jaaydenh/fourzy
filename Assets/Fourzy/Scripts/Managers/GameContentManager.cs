@@ -165,7 +165,7 @@ namespace Fourzy
                 fastPuzzles.Add(item.Name, item);
             }
 
-            //UnityEngine.Debug.Log($"Loaded {fastPuzzles.Count} fast puzzles from resources");
+            UnityEngine.Debug.Log($"Loaded {fastPuzzles.Count} fast puzzles from resources");
         }
 
         /// <summary>
@@ -181,7 +181,6 @@ namespace Fourzy
                 BasicPuzzlePack puzzlePack = new BasicPuzzlePack(@event.GetChilds("", ResourceItem.Type.Asset).First());
 
                 int puzzleIndex = 0;
-                
                 //get puzzle descriptions file
                 foreach (ResourceItem puzzleDataFile in @event.GetChild("puzzles").GetChilds("", ResourceItem.Type.Asset))
                 {
@@ -198,8 +197,6 @@ namespace Fourzy
                     /*if (puzzleData.Enabled) */
                     puzzlePack.enabledPuzzlesData.Add(puzzleData);
                     if (puzzleData.rewards.Length > 0) puzzlePack.rewardPuzzles.Add(puzzleData);
-
-                    
 
                     puzzleIndex++;
                 }

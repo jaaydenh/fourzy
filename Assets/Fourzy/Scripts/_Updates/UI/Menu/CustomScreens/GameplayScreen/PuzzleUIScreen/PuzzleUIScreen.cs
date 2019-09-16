@@ -1,8 +1,8 @@
 ﻿//@vadym udod
 
+using System;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.GameplayScene;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
@@ -15,8 +15,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public MovesLeftWidget movesLeftWidget;
         public ButtonExtended rematchButton;
         public ButtonExtended nextButton;
+        public ButtonExtended hintButton;
 
-        public TMP_Text packName;
         public TMP_Text rule;
         public TweenBase completeIcon;
         public AlphaTween packInfoTween;
@@ -25,9 +25,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public IClientFourzy game { get; private set; }
 
+        protected override void Start()
+        {
+            base.Start();
+
+            UserManager.onCurrencyUpdate += OnCurrencyUpdate;
+        }
+
+        protected void OnDestroy()
+        {
+            UserManager.onCurrencyUpdate -= OnCurrencyUpdate;
+        }
+
         public void Open(IClientFourzy game)
         {
-            if (game == null || game.puzzleData == null)
+            if (game == null || !game.puzzleData)
             {
                 if (isOpened) Close();
 
@@ -37,7 +49,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             this.game = game;
-            
+
+            OnCurrencyUpdate(CurrencyType.GEMS);
+
+            if (game.puzzleData.Solution.Count > 0)
+            {
+                hintButton.SetActive(true);
+
+                SetHintButtonState(true);
+            }
+            else
+                hintButton.SetActive(false);
+
+
             if (game.puzzleData.pack)
             {
                 if (game.puzzleData.pack.enabledPuzzlesData.Count > 1)
@@ -107,11 +131,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        public void OnMoveStarted()
+        {
+            if (game == null || !game.puzzleData) return;
+
+            SetHintButtonState(false);
+            //hintButton.SetState(false);
+        }
+
         public void UpdatePlayerTurn()
         {
             if (game == null || game.puzzleData == null) return;
 
             if (game._Type == GameType.PUZZLE) movesLeftWidget.UpdateMovesLeft();
+
+            //if (game.isMyTurn && !game.isOver) hintButton.SetState(true);
+            SetHintButtonState(true);
 
             if (game._allTurnRecord.Count == 1 && !game.isOver)
             {
@@ -132,10 +167,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 completeIcon.PlayForward(true);
             }
 
-            if (movesLeftWidget.alphaTween._value > 0f)  movesLeftWidget.Hide(.3f);
+            if (movesLeftWidget.alphaTween._value > 0f) movesLeftWidget.Hide(.3f);
 
             nextButton.SetState(false);
             nextButton.Hide(.3f);
+        }
+
+        public void TryUseHint() => GamePlayManager.instance.PlayHint();
+
+        private void SetHintButtonState(bool state) => hintButton.SetState(state && !game.isOver && game.isMyTurn);
+
+        private void OnCurrencyUpdate(CurrencyType type)
+        {
+            if (type != CurrencyType.GEMS) return;
+
+            if (game == null || game.puzzleData == null) return;
+
+            hintButton.GetBadge().badge.SetValue(UserManager.Instance.gems);
         }
     }
 }

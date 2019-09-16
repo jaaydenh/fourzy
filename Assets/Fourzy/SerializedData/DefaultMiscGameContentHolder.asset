@@ -27,3 +27,14 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 7229a1b060353364898853be84f91ee8, type: 3}
   - id: puzzleProgressionIconSet
     sprite: {fileID: 21300000, guid: 7823a4a0bb10cce43b58144b7fa2b43e, type: 3}
+  products:
+  - id: hints_4
+    icon: {fileID: 21300000, guid: 31b0d9617756ea649bd00d2b1197f07b, type: 3}
+  - id: hints_10
+    icon: {fileID: 21300000, guid: 31b0d9617756ea649bd00d2b1197f07b, type: 3}
+  - id: hints_25
+    icon: {fileID: 21300000, guid: 31b0d9617756ea649bd00d2b1197f07b, type: 3}
+  - id: hints_60
+    icon: {fileID: 21300000, guid: 31b0d9617756ea649bd00d2b1197f07b, type: 3}
+  - id: hints_150
+    icon: {fileID: 21300000, guid: 31b0d9617756ea649bd00d2b1197f07b, type: 3}

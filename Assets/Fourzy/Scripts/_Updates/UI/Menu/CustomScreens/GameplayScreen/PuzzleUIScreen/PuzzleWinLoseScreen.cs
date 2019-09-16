@@ -3,6 +3,7 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.UI.Widgets;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -36,38 +37,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.game = game;
 
-            if (game.IsWinner())
-            {
-                animator.SetTrigger("winTrigger");
-
-                puzzleStateText.text = "Completed!";
-                puzzleStateText.color = winColor;
-
-                if (game.puzzleData.pack)
-                {
-                    if (puzzlePackProgressWidget.puzzlePack == null)
-                        puzzlePackProgressWidget
-                            .SetData(game.puzzleData.pack)
-                            .CheckWidgets()
-                            .Show(.3f);
-                    else
-                        puzzlePackProgressWidget
-                            .CheckWidgets()
-                            .Show(.3f);
-
-                    //animate rewards
-                    puzzlePackProgressWidget.AnimateRewardsForIndex(game.puzzleData.pack.puzzlesComplete.IndexOf(game.puzzleData));
-                }
-            }
-            else
-            {
-                animator.SetTrigger("loseTrigger");
-
-                puzzleStateText.text = "Failed";
-                puzzleStateText.color = loseColor;
-
-                puzzlePackProgressWidget.Hide(0f);
-            }
+            CancelRoutine("open");
+            StartRoutine("open", OpenRoutine());
 
             menuController.OpenScreen(this);
         }
@@ -97,6 +68,43 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 GamePlayManager.instance.Rematch();
 
             if (isCurrent) menuController.CloseCurrentScreen(true);
+        }
+
+        private IEnumerator OpenRoutine()
+        {
+            puzzlePackProgressWidget.Hide(0f);
+
+            if (game.IsWinner())
+            {
+                animator.SetTrigger("winTrigger");
+
+                puzzleStateText.text = "Completed!";
+                puzzleStateText.color = winColor;
+
+                if (game.puzzleData.pack)
+                {
+                    if (!puzzlePackProgressWidget.puzzlePack) puzzlePackProgressWidget.SetData(game.puzzleData.pack);
+
+                    yield return new WaitForSeconds(.95f);
+
+                    puzzlePackProgressWidget
+                        .CheckWidgets()
+                        .Show(.5f);
+
+                    //animate rewards
+                    puzzlePackProgressWidget.AnimateRewardsForIndex(game.puzzleData.pack.puzzlesComplete.IndexOf(game.puzzleData));
+                }
+            }
+            else
+            {
+                animator.SetTrigger("loseTrigger");
+
+                puzzleStateText.text = "Failed";
+                puzzleStateText.color = loseColor;
+            }
+
+            yield return null;
+            yield break;
         }
     }
 }

@@ -130,7 +130,7 @@ namespace Fourzy
                 }
                 else
                 {
-                    if (NetworkAccess.ACCESS) FirebaseUpdate();
+                    if (NetworkAccess.HAVE_ACCESS) FirebaseUpdate();
                 }
             });
 
@@ -180,7 +180,7 @@ namespace Fourzy
         {
             if (!pause)
             {
-                if (NetworkAccess.ACCESS)
+                if (NetworkAccess.HAVE_ACCESS)
                 {
                     if (dependencyStatus == DependencyStatus.Available)
                         FirebaseUpdate();

@@ -122,7 +122,7 @@ namespace Fourzy._Updates.UI.Helpers
                     switch (target.type)
                     {
                         case ListenValues.NO_INTERNET_ACCESS:
-                            UpdateNoInternet(NetworkAccess.ACCESS);
+                            UpdateNoInternet(NetworkAccess.HAVE_ACCESS);
 
                             break;
 

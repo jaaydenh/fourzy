@@ -36,7 +36,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void GetWinsLeaderboard()
         {
-            if (loadingLeaderboard || !isCurrent || !NetworkAccess.ACCESS)
+            if (loadingLeaderboard || !isCurrent || !NetworkAccess.HAVE_ACCESS)
                 return;
 
             loadingLeaderboard = true;
@@ -46,7 +46,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void GetTrophiesLeaderboard()
         {
-            if (loadingLeaderboard || !isCurrent || !NetworkAccess.ACCESS)
+            if (loadingLeaderboard || !isCurrent || !NetworkAccess.HAVE_ACCESS)
                 return;
 
             loadingLeaderboard = true;

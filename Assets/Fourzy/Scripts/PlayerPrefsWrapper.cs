@@ -31,6 +31,7 @@ namespace Fourzy
         public static string kAdventureComplete = "adventure_complete_";
         public static string kAdventureUnlocked = "adventure_unlocked_";
         public static string kAdventureNew = "adventure_new_";
+        public static string kPuzzleHintProgress = "puzzle_hint_progress_";
 
         public static string kEventRewarded = "eventRewarded_";
 
@@ -119,6 +120,10 @@ namespace Fourzy
         public static void SetAdventureNew(string id, bool state) => PlayerPrefs.SetInt(kAdventureNew + id, state ? 1 : 0);
 
         public static bool GetAdventureNew(string id) => PlayerPrefs.GetInt(kAdventureNew + id, 1) != 0;
+
+        public static int GetPuzzleHintProgress(string id) => PlayerPrefs.GetInt(kPuzzleHintProgress + id, 0);
+
+        public static void SetPuzzleHintProgress(string id, int value) => PlayerPrefs.SetInt(kPuzzleHintProgress + id, value);
 
         #region Currencies
 

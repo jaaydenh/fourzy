@@ -156,6 +156,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OnMoveStarted(ClientPlayerTurn turn)
         {
+            puzzleUI.OnMoveStarted();
+
             if (turn == null || turn.PlayerId < 1) return;
 
             #region Checking AI turn
@@ -205,7 +207,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             puzzleUI.UpdatePlayerTurn();
             passAndPlayUI.UpdatePlayerTurn();
-            
+
             if (game.isOver) return;
 
             UpdatePlayerTurnGraphics();
