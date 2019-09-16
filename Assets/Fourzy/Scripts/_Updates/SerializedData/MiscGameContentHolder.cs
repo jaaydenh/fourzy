@@ -54,6 +54,9 @@ namespace Fourzy._Updates.Serialized
             //[ValueDropdown("GetProducts")]
             public string id;
             public Sprite icon;
+            public int quantity;
+
+            public static implicit operator bool (StoreItemExtraData data) => data != null;
         }
     }
 }

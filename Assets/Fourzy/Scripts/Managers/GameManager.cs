@@ -253,9 +253,14 @@ namespace Fourzy
 
         public void OnPurchaseComplete(Product product)
         {
+            //try get product data
+            MiscGameContentHolder.StoreItemExtraData _data = GameContentManager.Instance.miscGameDataHolder.GetStoreItem(product.definition.id);
+
+            if (!_data) return;
+
             if (product.definition.id.Contains("hints"))
             {
-                UserManager.Instance.hints += int.Parse(product.definition.id);
+                UserManager.Instance.hints += _data.quantity;
             }
         }
 

@@ -106,9 +106,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //add gems
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.O))
-                UserManager.Instance.gems += 3;
+                UserManager.Instance.hints += 3;
             else if (Input.GetKeyDown(KeyCode.I))
-                UserManager.Instance.gems -= 3;
+                UserManager.Instance.hints -= 3;
 #endif
         }
 
@@ -401,7 +401,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (!game.isMyTurn || game.isOver) return;
 
-            if (UserManager.Instance.gems <= 0)
+            if (UserManager.Instance.hints <= 0)
             {
                 menuController.GetScreen<StorePromptScreen>().Prompt(StorePromptScreen.StoreItemType.HINTS);
 
@@ -410,7 +410,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (game == null || !game.puzzleData || game.puzzleData.Solution.Count == 0) return;
 
-            UserManager.Instance.gems--;
+            UserManager.Instance.hints--;
             AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.USE_HINT, game);
 
             StartRoutine("hintRoutine", PlayHintRoutine());

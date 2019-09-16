@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2343831771715926433}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11, y: 0, z: 0}
-  m_LocalScale: {x: 1.9889002, y: 1, z: 0}
+  m_LocalPosition: {x: -9.95, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 7235609577972644390}
   m_RootOrder: 1
@@ -58,6 +58,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -75,11 +76,11 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 0.1, y: 4.5}
+  m_Size: {x: 0, y: 4.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 1
+  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &5340799366603566473
 MonoBehaviour:
@@ -126,8 +127,8 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
-  from: {x: 0.1, y: 4.5}
-  to: {x: 12.5, y: 4.5}
+  from: {x: 0, y: 4.5}
+  to: {x: 10.7, y: 4.5}
 --- !u!114 &8507353803094515709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,7 +257,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6343297147896742409}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11, y: 0, z: 0}
+  m_LocalPosition: {x: -9.95, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7235609577972644390}
@@ -287,6 +288,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -304,11 +306,11 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 0.1, y: 3.9}
+  m_Size: {x: 0, y: 3.9}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 1
+  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1710970443540378742
 MonoBehaviour:
@@ -355,8 +357,8 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
-  from: {x: 0.1, y: 3.9}
-  to: {x: 12.5, y: 3.9}
+  from: {x: 0, y: 3.9}
+  to: {x: 10.7, y: 3.9}
 --- !u!114 &4339384579865288056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -528,6 +530,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
