@@ -58,6 +58,7 @@ namespace Fourzy._Updates.UI.Widgets
                     case CurrencyType.GEMS:
                     case CurrencyType.MAGIC:
                     case CurrencyType.TICKETS:
+                    case CurrencyType.HINTS:
                         StartRoutine("labelAnimation", UpdateRoutine(1f));
                         break;
 
@@ -104,6 +105,9 @@ namespace Fourzy._Updates.UI.Widgets
                 case CurrencyType.TICKETS:
                     return UserManager.Instance.tickets;
 
+                case CurrencyType.HINTS:
+                    return UserManager.Instance.hints;
+
                 case CurrencyType.XP:
                     return UserManager.Instance.xp;
             }
@@ -121,6 +125,7 @@ namespace Fourzy._Updates.UI.Widgets
                 case CurrencyType.GEMS:
                 case CurrencyType.MAGIC:
                 case CurrencyType.TICKETS:
+                case CurrencyType.HINTS:
                     if (value > MAX_VALUE)
                         valueLabel.text = $"{MAX_VALUE / 1000},{MAX_VALUE % 1000}+";
                     else
