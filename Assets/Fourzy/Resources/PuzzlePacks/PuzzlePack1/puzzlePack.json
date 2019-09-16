@@ -1,1 +1,16 @@
-{"name":"Puzzle Pack 1","type":0,"id":"001","unlockRequirement":0,"herdID":"1","playerName":"Guardian","rewards":[{"levelIndex":0,"rewardType":0,"name":"Coins","quantity":10},{"levelIndex":0,"rewardType":5,"name":"","quantity":10}]}
+{
+    "name": "How To Play",
+    "type": 0,
+    "id": "001",
+    "unlockRequirement": 0,
+    "herdID": "1",
+    "playerName": "Guardian",
+    "rewards": [
+        {
+            "levelIndex": 4,
+            "rewardType": 5,
+            "name": "",
+            "quantity": 0
+        }
+    ]
+}

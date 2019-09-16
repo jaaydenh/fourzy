@@ -17,7 +17,7 @@ namespace Fourzy
         public int rarity = 30;
         public Color outlineColor = Color.blue;
         public Color borderColor = Color.green;
-        public int piecesToUnlock = 30;
+        public int piecesToUnlock = 40;
         [List]
         public ProgressionCollection piecesProgression;
 
