@@ -136,7 +136,19 @@ namespace Fourzy
             {
                 PlayerPrefsWrapper.SetTickets(Mathf.Clamp(value, 0, int.MaxValue));
 
-                OnUpdateUserInfo?.Invoke();
+                onCurrencyUpdate?.Invoke(CurrencyType.TICKETS);
+            }
+        }
+
+        public int hints
+        {
+            get => PlayerPrefsWrapper.GetHints();
+
+            set
+            {
+                PlayerPrefsWrapper.SetHints(Mathf.Clamp(value, 0, int.MaxValue));
+
+                onCurrencyUpdate?.Invoke(CurrencyType.HINTS);
             }
         }
 

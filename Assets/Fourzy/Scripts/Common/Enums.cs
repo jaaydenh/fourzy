@@ -15,6 +15,7 @@
         GEMS = 4,
         PORTAL_POINTS = 7,
         RARE_PORTAL_POINTS = 8,
+        HINTS = 9,
     }
 
     public enum RewardType

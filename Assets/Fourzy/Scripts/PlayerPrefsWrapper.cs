@@ -23,6 +23,7 @@ namespace Fourzy
         public static string kPortalPoints = "portalPoints_";
         public static string kRarePortalPoints = "rarePortalPoints_";
         public static string kTickets = "tickets_";
+        public static string kHints = "hints_";
         public static string kGameViewed = "gameViewed_";
         public static string kGameRewarded = "gameRewarded_";
         public static string kRemoteSetting = "remoteSetting_";
@@ -146,6 +147,10 @@ namespace Fourzy
         public static int GetTickets() => PlayerPrefs.GetInt(kTickets, 0);
 
         public static void SetTickets(int quantity) => PlayerPrefs.SetInt(kTickets, quantity);
+
+        public static int GetHints() => PlayerPrefs.GetInt(kHints, 0);
+
+        public static void SetHints(int quantity) => PlayerPrefs.SetInt(kHints, quantity);
 
         public static int GetXP() => PlayerPrefs.GetInt(kXP, 0);
 

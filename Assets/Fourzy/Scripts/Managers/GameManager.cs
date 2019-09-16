@@ -24,6 +24,7 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Purchasing;
 using UnityEngine.SceneManagement;
 
 namespace Fourzy
@@ -248,6 +249,19 @@ namespace Fourzy
 
             if (!isMainMenuLoaded)
                 SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
+        }
+
+        public void OnPurchaseComplete(Product product)
+        {
+            if (product.definition.id.Contains("hints"))
+            {
+                UserManager.Instance.hints += int.Parse(product.definition.id);
+            }
+        }
+
+        public void OnPurchaseFailed(Product product, PurchaseFailureReason reason)
+        {
+
         }
 
         public static void UpdateGameTypeUserProperty(GameType gameType)
