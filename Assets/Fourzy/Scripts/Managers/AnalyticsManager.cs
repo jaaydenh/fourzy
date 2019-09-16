@@ -25,6 +25,7 @@ namespace Fourzy
         public const string SETTINGS_VALUE_NAME_KEY = "value_name";
         public const string SETTINGS_NEW_VALUE_KEY = "new_value";
         public const string SETTINGS_OLD_VALUE_KEY = "old_value";
+        public const string HINT_USED_KEY = "hint_used";
         public const string TUTORIAL_NAME_KEY = "name";
         public const string TUTORIAL_STAGE_KEY = "key";
 
@@ -55,6 +56,8 @@ namespace Fourzy
             [AnalyticsGameEvents.GAME_FAILED] = true,
 
             [AnalyticsGameEvents.TAKE_TURN] = true,
+
+            [AnalyticsGameEvents.USE_HINT] = true,
         };
 
         public static Dictionary<AnalyticsEvents, bool> miscEventsSwitch = new Dictionary<AnalyticsEvents, bool>()
@@ -110,6 +113,8 @@ namespace Fourzy
             /// Params: game_id
             /// </summary>
             TAKE_TURN = 10,
+
+            USE_HINT = 11,
         }
 
         public enum AnalyticsEvents
@@ -571,7 +576,7 @@ namespace Fourzy
 
         private bool NetworkPass()
         {
-            return NetworkAccess.ACCESS;
+            return NetworkAccess.HAVE_ACCESS;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Fourzy
         public void ShowParticles()
         {
             _particleSystem.Play(true);
-            StartRoutine("particles", 5f, () => { _particleSystem.Stop(); });
+            StartRoutine("particles", 1.3f, () => { _particleSystem.Stop(); });
         }
 
         public void HideParticles()

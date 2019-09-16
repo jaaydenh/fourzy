@@ -482,6 +482,9 @@ MonoBehaviour:
     - _name: VSPrompt
       prefab: {fileID: 8685335311165154359, guid: d7a22aa0b1bd4c64a893f1a82e6eeb67,
         type: 3}
+    - _name: StorePrompt
+      prefab: {fileID: 554847239912345784, guid: b6a7208541070344dbf7ea25544b4d00,
+        type: 3}
 --- !u!1 &1527524902537866
 GameObject:
   m_ObjectHideFlags: 0

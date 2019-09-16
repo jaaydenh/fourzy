@@ -198,10 +198,10 @@ namespace Fourzy
                     puzzlePack.enabledPuzzlesData.Add(puzzleData);
                     if (puzzleData.rewards.Length > 0) puzzlePack.rewardPuzzles.Add(puzzleData);
 
-                    externalPuzzlePacks.Add(@event.Name, puzzlePack);
-
                     puzzleIndex++;
                 }
+
+                externalPuzzlePacks.Add(@event.Name, puzzlePack);
             }
         }
 

@@ -4,10 +4,8 @@ using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.Board;
-using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
-using Fourzy._Updates.Tools.Timing;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
@@ -16,7 +14,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -104,6 +101,17 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             else LoadGame(GameManager.Instance.activeGame);
         }
 
+        protected void Update()
+        {
+            //add gems
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.O))
+                UserManager.Instance.gems += 3;
+            else if (Input.GetKeyDown(KeyCode.I))
+                UserManager.Instance.gems -= 3;
+#endif
+        }
+
         protected void OnDestroy()
         {
             if (board)
@@ -175,7 +183,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             LoadBoard();
 
             gameplayScreen.InitUI(this);
-            OnNetwork(NetworkAccess.ACCESS);
+            OnNetwork(NetworkAccess.HAVE_ACCESS);
 
             StartRoutine("gameInit", GameInitRoutine());
         }
@@ -196,7 +204,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 //load realtime game
                 ClientFourzyGame _game = new ClientFourzyGame(GameContentManager.Instance.currentTheme.themeID, me, opponen, 1)
-                    { _Type = GameType.REALTIME, _Area = GameContentManager.Instance.currentTheme.themeID };
+                { _Type = GameType.REALTIME, _Area = GameContentManager.Instance.currentTheme.themeID };
 
                 GameStateDataEpoch gameStateData = _game.toGameStateData;
                 //add realtime data
@@ -246,7 +254,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 gameStarted = true;
                 OnGameStarted();
             }
-            
+
             switch (game._Type)
             {
                 case GameType.AI:
@@ -387,6 +395,25 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+        }
+
+        public void PlayHint()
+        {
+            if (!game.isMyTurn || game.isOver) return;
+
+            if (UserManager.Instance.gems <= 0)
+            {
+                menuController.GetScreen<StorePromptScreen>().Prompt(StorePromptScreen.StoreItemType.HINTS);
+
+                return;
+            }
+
+            if (game == null || !game.puzzleData || game.puzzleData.Solution.Count == 0) return;
+
+            UserManager.Instance.gems--;
+            AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.USE_HINT, game);
+
+            StartRoutine("hintRoutine", PlayHintRoutine());
         }
 
         public void PauseGame()
@@ -797,6 +824,39 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             isBoardReady = true;
+        }
+
+        private IEnumerator PlayHintRoutine()
+        {
+            int lastHintIndex = PlayerPrefsWrapper.GetPuzzleHintProgress(game.GameID);
+
+            bool resetBoard = game._playerTurnRecord.Count != lastHintIndex;
+
+            if (!resetBoard)
+                for (int turnIndex = 0; turnIndex < game._playerTurnRecord.Count; turnIndex++)
+                    if (game._playerTurnRecord[turnIndex].Notation != game.puzzleData.Solution[turnIndex].Notation)
+                    {
+                        resetBoard = true;
+                        break;
+                    }
+
+            if (resetBoard)
+            {
+                game.Reset();
+
+                for (int turnIndex = 0; turnIndex < lastHintIndex; turnIndex++)
+                    game.TakeTurn(game.puzzleData.Solution[turnIndex], true, false);
+
+                LoadGame(game);
+            }
+
+            while (IsRoutineActive("gameInit")) yield return null;
+
+            board.TakeTurn(game.puzzleData.Solution[lastHintIndex]);
+            PlayerPrefsWrapper.SetPuzzleHintProgress(game.GameID, lastHintIndex + 1 == game.puzzleData.Solution.Count ? 0 : lastHintIndex + 1);
+
+            yield return null;
+            yield break;
         }
 
         private IEnumerator StartRealtimeCountdown()

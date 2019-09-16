@@ -108,7 +108,7 @@ namespace Fourzy
 
         public void GetChallengesRequest()
         {
-            if (gettingChallenges || !NetworkAccess.ACCESS)
+            if (gettingChallenges || !NetworkAccess.HAVE_ACCESS)
                 return;
 
             gettingChallenges = true;
@@ -163,7 +163,7 @@ namespace Fourzy
 
         private void AddCompleteChallenges(List<ChallengeData> runningChallenges)
         {
-            if (gettingChallenges || !NetworkAccess.ACCESS)
+            if (gettingChallenges || !NetworkAccess.HAVE_ACCESS)
                 return;
 
             gettingChallenges = true;
