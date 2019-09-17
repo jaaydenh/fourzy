@@ -50,7 +50,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             this.game = game;
 
-            OnCurrencyUpdate(CurrencyType.GEMS);
+            OnCurrencyUpdate(CurrencyType.HINTS);
 
             if (game.puzzleData.Solution.Count > 0)
             {
@@ -179,11 +179,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnCurrencyUpdate(CurrencyType type)
         {
-            if (type != CurrencyType.GEMS) return;
+            if (type != CurrencyType.HINTS) return;
 
             if (game == null || game.puzzleData == null) return;
 
-            hintButton.GetBadge().badge.SetValue(UserManager.Instance.gems);
+            hintButton.GetBadge().badge.SetValue(UserManager.Instance.hints);
         }
     }
 }
