@@ -295,10 +295,10 @@
                         "pieceType": 0,
                         "Notation": "1"
                     },
-                    "direction": 2,
-                    "location": 4,
+                    "direction": 1,
+                    "location": 2,
                     "moveType": 0,
-                    "notation": "Move:LEFT4"
+                    "notation": "Move:DOWN4"
                 }
             ],
             "Notation": "Move:LEFT4",
@@ -318,10 +318,10 @@
                         "pieceType": 0,
                         "Notation": "1"
                     },
-                    "direction": 2,
-                    "location": 4,
+                    "direction": 1,
+                    "location": 2,
                     "moveType": 0,
-                    "notation": "Move:LEFT4"
+                    "notation": "Move:DOWN4"
                 }
             ],
             "Notation": "Move:LEFT4",
