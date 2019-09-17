@@ -7,6 +7,8 @@ using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using GameAnalyticsSDK;
 //using mixpanel;
+using PlayFab;
+using PlayFab.ClientModels;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

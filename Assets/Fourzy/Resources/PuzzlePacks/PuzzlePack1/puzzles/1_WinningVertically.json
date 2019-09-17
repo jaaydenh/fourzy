@@ -295,10 +295,10 @@
                         "pieceType": 0,
                         "Notation": "1"
                     },
-                    "direction": 2,
+                    "direction": 1,
                     "location": 4,
                     "moveType": 0,
-                    "notation": "Move:LEFT4"
+                    "notation": "Move:DOWN4"
                 }
             ],
             "Notation": "Move:LEFT4",

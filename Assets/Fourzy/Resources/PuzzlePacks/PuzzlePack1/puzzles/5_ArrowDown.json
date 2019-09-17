@@ -322,12 +322,12 @@
                         "Notation": "1"
                     },
                     "direction": 2,
-                    "location": 4,
+                    "location": 3,
                     "moveType": 0,
-                    "notation": "Move:LEFT4"
+                    "notation": "Move:LEFT3"
                 }
             ],
-            "Notation": "Move:LEFT4",
+            "Notation": "Move:LEFT3",
             "timestamp": 0,
             "uniqueId": "e1b0287d-b335-4bc6-8577-08e155a9ceca"
         }

@@ -51,6 +51,7 @@
     {"key":"fast_play_button","value":"Realtime"},
     {"key":"puzzle_play_button","value":"Puzzle Play"},
     {"key":"cancel_button","value":"Cancel"},
-    {"key":"reset_button","value":"Reset"}
+    {"key":"reset_button","value":"Reset"},
+    {"key":"practice_button","value":"Practice"}
     ]
 }
