@@ -25,6 +25,8 @@ namespace Fourzy._Updates.ClientModel
         public RewardsManager.Reward[] rewards;
 
         public int Complexity = -1;
+        public int startingMagic = 0;
+
         public ResourceItem resource;
 
         public bool initialized = false;
@@ -86,6 +88,13 @@ namespace Fourzy._Updates.ClientModel
             Solution = jObject["Solution"].ToObject<List<PlayerTurn>>();
             SolutionState = jObject["SolutionStateData"].ToObject<GameState>();
             GoalType = jObject["GoalType"].ToObject<PuzzleGoalType>();
+
+            JToken _startingMagic = jObject["StartingMagic"];
+
+            if (_startingMagic != null)
+                startingMagic = _startingMagic.ToObject<int>();
+            else
+                startingMagic = FourzyGameModel.Model.Constants.PlayerStartingMagic;
 
             if (aiProfile != AIProfile.Player)
             {

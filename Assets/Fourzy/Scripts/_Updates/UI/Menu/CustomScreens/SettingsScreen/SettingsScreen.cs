@@ -38,7 +38,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ForceAIPresentation()
         {
-            StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
+            //StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
+            GameManager.Instance.StartPresentataionGame();
         }
 
         public void ToggleSfx() => SettingsManager.Instance.Toggle(SettingsManager.KEY_SFX);

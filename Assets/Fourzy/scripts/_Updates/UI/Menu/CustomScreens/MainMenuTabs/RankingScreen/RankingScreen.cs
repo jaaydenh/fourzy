@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Mechanics;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            NetworkAccess.onNetworkAccess += OnNetwowkAccess;
+            GameManager.onNetworkAccess += OnNetwowkAccess;
 
             InvokeCurrent();
         }
@@ -31,12 +30,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Close(animate);
 
-            NetworkAccess.onNetworkAccess -= OnNetwowkAccess;
+            GameManager.onNetworkAccess -= OnNetwowkAccess;
         }
 
         public void GetWinsLeaderboard()
         {
-            if (loadingLeaderboard || !isCurrent || !NetworkAccess.HAVE_ACCESS)
+            if (loadingLeaderboard || !isCurrent || !GameManager.NetworkAccess)
                 return;
 
             loadingLeaderboard = true;
@@ -46,7 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void GetTrophiesLeaderboard()
         {
-            if (loadingLeaderboard || !isCurrent || !NetworkAccess.HAVE_ACCESS)
+            if (loadingLeaderboard || !isCurrent || !GameManager.NetworkAccess)
                 return;
 
             loadingLeaderboard = true;

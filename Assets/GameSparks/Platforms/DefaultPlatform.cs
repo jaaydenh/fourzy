@@ -28,7 +28,12 @@ namespace GameSparks.Platforms
 			socket.Initialize(url, messageReceived, closed, opened, error);
 			return socket;
 		}
-	}
+
+        public override IGameSparksWebSocket GetBinarySocket(string url, Action<byte[]> messageReceived, Action closed, Action opened, Action<string> error)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 
 // namespace documentation

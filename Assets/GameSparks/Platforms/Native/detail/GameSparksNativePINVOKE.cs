@@ -260,6 +260,13 @@ class GameSparksNativePINVOKE {
   public static extern void NativeWebSocket_GSExternalOpen(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, string jarg3, string jarg4);
 
   #if (UNITY_IPHONE || UNITY_SWITCH || UNITY_XBOX360) && !UNITY_EDITOR
+    [global::System.Runtime.InteropServices.DllImport("__Internal", EntryPoint="CSharp_GameSparksNativefdetail_NativeWebSocket_GSExternalOpen___")]
+  #else
+    [global::System.Runtime.InteropServices.DllImport("GameSparksNative", EntryPoint="CSharp_GameSparksNativefdetail_NativeWebSocket_GSExternalOpen___")]
+  #endif
+  public static extern void NativeWebSocket_GSExternalOpen(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, string jarg3, string jarg4, bool jarg5);
+
+  #if (UNITY_IPHONE || UNITY_SWITCH || UNITY_XBOX360) && !UNITY_EDITOR
     [global::System.Runtime.InteropServices.DllImport("__Internal", EntryPoint="CSharp_GameSparksNativefdetail_NativeWebSocket_GSExternalClose___")]
   #else
     [global::System.Runtime.InteropServices.DllImport("GameSparksNative", EntryPoint="CSharp_GameSparksNativefdetail_NativeWebSocket_GSExternalClose___")]
@@ -272,6 +279,13 @@ class GameSparksNativePINVOKE {
     [global::System.Runtime.InteropServices.DllImport("GameSparksNative", EntryPoint="CSharp_GameSparksNativefdetail_NativeWebSocket_GSExternalSend___")]
   #endif
   public static extern void NativeWebSocket_GSExternalSend(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, string jarg3);
+
+  #if (UNITY_IPHONE || UNITY_SWITCH || UNITY_XBOX360) && !UNITY_EDITOR
+    [global::System.Runtime.InteropServices.DllImport("__Internal", EntryPoint="CSharp_GameSparksNativefdetail_NativeWebSocket_GSExternalSendBinary___")]
+  #else
+    [global::System.Runtime.InteropServices.DllImport("GameSparksNative", EntryPoint="CSharp_GameSparksNativefdetail_NativeWebSocket_GSExternalSendBinary___")]
+  #endif
+  public static extern void NativeWebSocket_GSExternalSendBinary(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, byte[] jarg3, int jarg4, int jarg5);
 
   #if (UNITY_IPHONE || UNITY_SWITCH || UNITY_XBOX360) && !UNITY_EDITOR
     [global::System.Runtime.InteropServices.DllImport("__Internal", EntryPoint="CSharp_GameSparksNativefdetail_NativeWebSocket_Update___")]

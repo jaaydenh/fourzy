@@ -36,7 +36,7 @@ namespace Fourzy._Updates.UI.Helpers
                 switch (target.type)
                 {
                     case ListenValues.NO_INTERNET_ACCESS:
-                        NetworkAccess.onNetworkAccess += UpdateNoInternet;
+                        GameManager.onNetworkAccess += UpdateNoInternet;
                         break;
 
                     case ListenValues.LOGGED_IN:
@@ -84,7 +84,7 @@ namespace Fourzy._Updates.UI.Helpers
                 switch (target.type)
                 {
                     case ListenValues.NO_INTERNET_ACCESS:
-                        NetworkAccess.onNetworkAccess -= UpdateNoInternet;
+                        GameManager.onNetworkAccess -= UpdateNoInternet;
 
                         break;
 
@@ -122,7 +122,7 @@ namespace Fourzy._Updates.UI.Helpers
                     switch (target.type)
                     {
                         case ListenValues.NO_INTERNET_ACCESS:
-                            UpdateNoInternet(NetworkAccess.HAVE_ACCESS);
+                            UpdateNoInternet(GameManager.NetworkAccess);
 
                             break;
 

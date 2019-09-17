@@ -58,6 +58,14 @@ namespace GameSparks.Platforms.Native
             return socket;
         }
 
+        public override IGameSparksWebSocket GetBinarySocket(string url, Action<byte[]> binaryMessageReceived, Action closed, Action opened, Action<string> error)
+        {
+            var socket = new NativeWebSocket();
+            socket.Initialize(url, binaryMessageReceived, closed, opened, error);
+            socket.SetController(webSocketController);
+            return socket;
+        }
+
     #endregion
 
         protected override void Start()

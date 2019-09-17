@@ -11534,6 +11534,12 @@
             Also sets the target Url for the socket and the relevant callback actions. 
             </summary>
         </member>
+        <member name="M:GameSparks.Core.IGSPlatform.GetBinarySocket(System.String,System.Action{System.Byte[]},System.Action,System.Action,System.Action{System.String})">
+            <summary>
+            Returns a platform specific instance of <see cref="T:GameSparks.IGameSparksWebSocket"/>. 
+            Also sets the target Url for the socket and the relevant callback actions. 
+            </summary>
+        </member>
         <member name="P:GameSparks.Core.IGSPlatform.DeviceId">
             <summary>
             Gets a unique identifier for the device

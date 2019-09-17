@@ -685,7 +685,7 @@ namespace UnityEngine.EventSystems
                 foreach (var noInputFilter in noInputFilters)
                     if (noInputTimer <= noInputFilter.Value &&
                         (noInputTimer + Time.unscaledDeltaTime) > noInputFilter.Value)
-                        noInput.Invoke(noInputFilter);
+                        noInput?.Invoke(noInputFilter);
 
                 noInputTimer += Time.unscaledDeltaTime;
 

@@ -24,11 +24,14 @@ namespace GameSparks.Platforms.Native
         string url;
         System.Action onOpen;
         System.Action<string> onMessage;
+        System.Action<byte[]> onBinaryMessage;
         System.Action<string> onError;
         System.Action onClose;
 
         WebSocketController controller;
         string controllerName;
+
+        bool binary = false;
 
     #region IGameSparksWebSocket implementation
 
@@ -43,6 +46,17 @@ namespace GameSparks.Platforms.Native
 
         }
 
+        public void Initialize(string url, Action<byte[]> onBinaryMessage, Action onClose, Action onOpen, Action<string> onError)
+        {
+            this.SocketId = nextSocketId++;
+            this.onBinaryMessage = onBinaryMessage;
+            this.onClose = onClose;
+            this.onOpen = onOpen;
+            this.onError = onError;
+            this.url = url;
+            this.binary = true;
+        }
+
         public void SetController(WebSocketController controller)
         {
             this.controller = controller;
@@ -53,7 +67,7 @@ namespace GameSparks.Platforms.Native
         public void Open()
         {
             State = GameSparksWebSocketState.Connecting;
-            nativeWebSocket.GSExternalOpen(SocketId, url, controllerName);
+            nativeWebSocket.GSExternalOpen(SocketId, url, controllerName, binary);
         }
 
         public void Close()
@@ -74,6 +88,15 @@ namespace GameSparks.Platforms.Native
                 throw new Exception("Websocket is not open");
             }
             nativeWebSocket.GSExternalSend(SocketId, request);
+        }
+
+        public void SendBinary(byte[] request, int offset, int length)
+        {
+            if (State != GameSparksWebSocketState.Open)
+            {
+                throw new Exception("Websocket is not open");
+            }
+            nativeWebSocket.GSExternalSendBinary(SocketId, request, offset, length);
         }
 
         public GameSparksWebSocketState State
@@ -117,6 +140,12 @@ namespace GameSparks.Platforms.Native
                 onMessage(message);
         }
 
+        public void TriggerOnBinaryMessage(byte[] message)
+        {
+            if (onBinaryMessage != null)
+                onBinaryMessage(message);
+        }
+
         public bool Update()
         {
             if (nativeWebSocket != null)
@@ -135,6 +164,8 @@ namespace GameSparks.Platforms.Native
                             TriggerOnError(result.getMessage()); break;
                         case GameSparksNative.detail.NativeWebSocket.Result.Type.Message:
                             TriggerOnMessage(result.getMessage()); break;
+                        case GameSparksNative.detail.NativeWebSocket.Result.Type.BinaryMessage:
+                            TriggerOnBinaryMessage(Convert.FromBase64String(result.getMessage())); break;
                         case GameSparksNative.detail.NativeWebSocket.Result.Type.Open:
                             TriggerOnOpen(); break;
                     }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using GameSparks.Api.Responses;
 using GameSparks.Api.Messages;
 using GameSparks.RT;
+using GameSparks.Core;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
 using SimpleJson2;
@@ -50,7 +51,7 @@ public class GameSparksRTUnity : MonoBehaviour, IRTSessionListener {
 	void Awake()
 	{
 		instance = this;
-		//DontDestroyOnLoad(gameObject);
+		DontDestroyOnLoad(gameObject);
 	}
 
 	//Configure the SDK with a MatchFoundMessage
@@ -58,7 +59,8 @@ public class GameSparksRTUnity : MonoBehaviour, IRTSessionListener {
 	                      Action<int> OnPlayerConnect,
 	                      Action<int> OnPlayerDisconnect,
 	                      Action<bool> OnReady,
-	                      Action<RTPacket> OnPacket){
+	                      Action<RTPacket> OnPacket,
+                          GSInstance instance = null){
 		
 		if(!message.Port.HasValue){
 			Debug.Log("Response does not contain a port, exiting.");
@@ -71,7 +73,8 @@ public class GameSparksRTUnity : MonoBehaviour, IRTSessionListener {
 		          OnPlayerConnect,
 		          OnPlayerDisconnect,
 		          OnReady, 
-		          OnPacket);
+		          OnPacket,
+                  instance);
 	}
 
 	//Configure the SDK with a FindMatchResponse
@@ -79,7 +82,8 @@ public class GameSparksRTUnity : MonoBehaviour, IRTSessionListener {
 	                      Action<int> OnPlayerConnect,
 	                      Action<int> OnPlayerDisconnect,
 	                      Action<bool> OnReady,
-	                      Action<RTPacket> OnPacket){
+	                      Action<RTPacket> OnPacket,
+                          GSInstance instance = null){
 
 		if(!response.Port.HasValue){
 			Debug.Log("Response does not contain a port, exiting.");
@@ -92,7 +96,8 @@ public class GameSparksRTUnity : MonoBehaviour, IRTSessionListener {
 		          OnPlayerConnect,
 		          OnPlayerDisconnect,
 		          OnReady, 
-		          OnPacket);
+		          OnPacket,
+                  instance);
 	}
 
 	//Configure the SDK manually
@@ -102,7 +107,8 @@ public class GameSparksRTUnity : MonoBehaviour, IRTSessionListener {
                Action<int> OnPlayerConnect,
                Action<int> OnPlayerDisconnect,
                Action<bool> OnReady,
-               Action<RTPacket> OnPacket){
+               Action<RTPacket> OnPacket,
+               GSInstance instance = null){
 
 		m_OnPlayerConnect = OnPlayerConnect;
 		m_OnPlayerDisconnect = OnPlayerDisconnect;
@@ -126,6 +132,7 @@ public class GameSparksRTUnity : MonoBehaviour, IRTSessionListener {
 				.SetPort(port)
 				.SetConnectToken(accessToken)
 				.SetListener(this)
+                .SetGSInstance(instance)
 	#if UNITY_XBOXONE && !UNITY_EDITOR
 				.UseOnlyWebSockets(true)
 	#endif

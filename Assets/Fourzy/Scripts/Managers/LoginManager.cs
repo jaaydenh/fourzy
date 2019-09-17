@@ -36,7 +36,7 @@ namespace Fourzy
 
             if (InstanceExists) return;
 
-            NetworkAccess.onNetworkAccess += OnNetworkAccess;
+            GameManager.onNetworkAccess += OnNetworkAccess;
 
             Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
@@ -49,7 +49,7 @@ namespace Fourzy
 
         protected void OnDestroy()
         {
-            NetworkAccess.onNetworkAccess -= OnNetworkAccess;
+            GameManager.onNetworkAccess -= OnNetworkAccess;
 
             Firebase.Messaging.FirebaseMessaging.TokenReceived -= OnTokenReceived;
             Firebase.Messaging.FirebaseMessaging.MessageReceived -= OnMessageReceived;

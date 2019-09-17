@@ -15,6 +15,7 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
+using Hellmade.Net;
 using MoreMountains.NiceVibrations;
 using Newtonsoft.Json;
 using System;
@@ -31,6 +32,7 @@ namespace Fourzy
 {
     public class GameManager : RoutinesBase
     {
+        public static Action<bool> onNetworkAccess;
         public static Action onGameplaySceneLoaded;
         public static Action<string> onDailyChallengeFileName;
         public static Dictionary<string, object> APP_REMOTE_SETTINGS_DEFAULTS;
@@ -91,11 +93,13 @@ namespace Fourzy
             MMVibrationManager.iOSInitializeHaptics();
 #endif
 
-            NetworkAccess.Initialize(DEBUG: true);
+            //NetworkAccess.Initialize(DEBUG: true);
             ThreadsQueuer.Initialize();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
+
+            EazyNetChecker.OnConnectionStatusChanged += OnNetStatusChanged;
 
             //to modify manifest file
             bool value = false;
@@ -131,7 +135,8 @@ namespace Fourzy
                 }
                 else
                 {
-                    if (NetworkAccess.HAVE_ACCESS) FirebaseUpdate();
+                    //if (NetworkAccess.HAVE_ACCESS) FirebaseUpdate();
+                    //if (EazyNetChecker.Status == NetStatus.Connected) FirebaseUpdate();
                 }
             });
 
@@ -145,17 +150,17 @@ namespace Fourzy
             UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
             UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
 #endif
-            //init threadqueuer
-            ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(null);
 
-            NetworkAccess.onNetworkAccess += OnNetworkAccess;
+            //NetworkAccess.onNetworkAccess += OnNetworkAccess;
 
             if (SceneManager.GetActiveScene().name == Constants.MAIN_MENU_SCENE_NAME) StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
 
-            StandaloneInputModuleExtended.instance.AddNoInputFilter("startDemoGame", Constants.DEMO_IDLE_TIME);
+            //StandaloneInputModuleExtended.instance.AddNoInputFilter("startDemoGame", Constants.DEMO_IDLE_TIME);
             StandaloneInputModuleExtended.instance.AddNoInputFilter("highlightMoves", Constants.DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME);
 
-            PointerInputModuleExtended.noInput += OnNoInput;
+            //PointerInputModuleExtended.noInput += OnNoInput;
+
+            EazyNetChecker.CheckConnection();
         }
 
         protected void Update()
@@ -170,7 +175,7 @@ namespace Fourzy
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
 
-            NetworkAccess.onNetworkAccess -= OnNetworkAccess;
+            //NetworkAccess.onNetworkAccess -= OnNetworkAccess;
 
 #if UNITY_IOS
             MMVibrationManager.iOSReleaseHaptics ();
@@ -179,14 +184,14 @@ namespace Fourzy
 
         protected void OnApplicationPause(bool pause)
         {
-            if (!pause)
-            {
-                if (NetworkAccess.HAVE_ACCESS)
-                {
-                    if (dependencyStatus == DependencyStatus.Available)
-                        FirebaseUpdate();
-                }
-            }
+            //if (!pause)
+            //{
+            //    if (NetworkAccess.HAVE_ACCESS)
+            //    {
+            //        if (dependencyStatus == DependencyStatus.Available)
+            //            FirebaseUpdate();
+            //    }
+            //}
         }
 
         public void StartGame(IClientFourzy game)
@@ -269,6 +274,8 @@ namespace Fourzy
 
         }
 
+        public void StartPresentataionGame() => OnNoInput(new KeyValuePair<string, float>("startDemoGame", 0f));
+
         public static void UpdateGameTypeUserProperty(GameType gameType)
         {
             Debug.Log("Updating user property");
@@ -278,6 +285,8 @@ namespace Fourzy
         public static void Vibrate(HapticTypes type) => MMVibrationManager.Haptic(type);
 
         public static void Vibrate() => Vibrate(HapticTypes.Success);
+
+        public static bool NetworkAccess => EazyNetChecker.Status == NetStatus.Connected;
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -517,6 +526,7 @@ namespace Fourzy
                     FirebaseUpdate();
             }
         }
+        private void OnNetStatusChanged() => onNetworkAccess?.Invoke(EazyNetChecker.Status == NetStatus.Connected);
 
         private void OnNoInput(KeyValuePair<string, float> noInputFilter)
         {

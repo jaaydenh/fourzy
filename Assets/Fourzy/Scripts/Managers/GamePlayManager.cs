@@ -76,7 +76,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             gameplayScreen = menuController.GetScreen<GameplayScreen>();
             playerPickScreen = menuController.GetScreen<RandomPlayerPickScreen>();
 
-            NetworkAccess.onNetworkAccess += OnNetwork;
+            GameManager.onNetworkAccess += OnNetwork;
             LoginManager.OnDeviceLoginComplete += OnLogin;
             ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
             ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
@@ -122,7 +122,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 board.onMoveEnded -= OnMoveEnded;
             }
 
-            NetworkAccess.onNetworkAccess -= OnNetwork;
+            GameManager.onNetworkAccess -= OnNetwork;
             LoginManager.OnDeviceLoginComplete -= OnLogin;
             ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
             ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
@@ -183,7 +183,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             LoadBoard();
 
             gameplayScreen.InitUI(this);
-            OnNetwork(NetworkAccess.HAVE_ACCESS);
+            OnNetwork(GameManager.NetworkAccess);
 
             StartRoutine("gameInit", GameInitRoutine());
         }

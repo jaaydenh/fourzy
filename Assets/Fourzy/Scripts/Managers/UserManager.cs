@@ -158,7 +158,7 @@ namespace Fourzy
 
         public float levelProgress => GetProgression(xp);
 
-        public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceID + "", };
+        public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceID + ""};
 
         protected override void Awake()
         {
@@ -167,7 +167,7 @@ namespace Fourzy
             if (InstanceExists) return;
 
             userId = "none";
-            NetworkAccess.onNetworkAccess += OnNetworkAccess;
+            GameManager.onNetworkAccess += OnNetworkAccess;
         }
 
         /// <summary>

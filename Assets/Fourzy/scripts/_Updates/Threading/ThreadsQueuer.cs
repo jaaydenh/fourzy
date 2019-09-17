@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Tools;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -24,7 +23,7 @@ namespace Fourzy._Updates.Threading
         }
 
         private static ThreadsQueuer instance;
-        
+
         private List<Action> queuedFunctions;
         private List<Action> instantiatingFunctions;
 

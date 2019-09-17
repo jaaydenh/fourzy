@@ -5356,7 +5356,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 23
+          selectedMember: 24
           isDynamic: 0
         target: {fileID: 44892454}
         memberName: ForceAIPresentation
@@ -23117,7 +23117,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 27
+          selectedMember: 28
           isDynamic: 0
         target: {fileID: 44892454}
         memberName: OnBack
@@ -31049,7 +31049,7 @@ MonoBehaviour:
         isCallEnabled: 1
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 20
+          selectedMember: 21
           isDynamic: 0
         target: {fileID: 44892454}
         memberName: ChangeName
@@ -45613,6 +45613,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082572971}
   m_CullTransparentMesh: 0
+--- !u!1 &2087292018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2087292020}
+  - component: {fileID: 2087292019}
+  m_Layer: 0
+  m_Name: Eazy NetChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2087292019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087292018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 935dbff241d30a446b0170ebdbd398b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  methods:
+  - id: google204
+    link: https://clients3.google.com/generate_204
+    responseType: 0
+    expectedHttpStatusCode: 204
+    expectedContent: 
+  - id: msftconnecttest
+    link: http://www.msftconnecttest.com/connecttest.txt
+    responseType: 1
+    expectedHttpStatusCode: 200
+    expectedContent: Microsoft Connect Test
+  - id: applehotspot
+    link: https://captive.apple.com/hotspot-detect.html
+    responseType: 1
+    expectedHttpStatusCode: 200
+    expectedContent: <HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>
+  customMethods: []
+  initialized: 1
+  selectedMethod:
+    id: 
+    link: 
+    responseType: 0
+    expectedHttpStatusCode: 0
+    expectedContent: 
+  platformDefaultSelected: 1
+  timeout: 10
+  checkInterval: 5
+  showDebug: 1
+--- !u!4 &2087292020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087292018}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2128128891
 GameObject:
   m_ObjectHideFlags: 0
@@ -47062,6 +47133,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4190099211029991624, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6660da8cd1bb65346b4dc60ebc42d4e6, type: 3}

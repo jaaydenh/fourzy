@@ -86,7 +86,8 @@ public class NativeWebSocket : global::System.IDisposable {
       Close,
       Open,
       Error,
-      Message
+      Message,
+      BinaryMessage
     }
   
   }
@@ -94,8 +95,8 @@ public class NativeWebSocket : global::System.IDisposable {
   public NativeWebSocket() : this(GameSparksNativePINVOKE.new_NativeWebSocket(), true) {
   }
 
-  public void GSExternalOpen(int socketId, string url, string gameObjectName) {
-    GameSparksNativePINVOKE.NativeWebSocket_GSExternalOpen(swigCPtr, socketId, url, gameObjectName);
+  public void GSExternalOpen(int socketId, string url, string gameObjectName, bool binary = false) {
+    GameSparksNativePINVOKE.NativeWebSocket_GSExternalOpen(swigCPtr, socketId, url, gameObjectName, binary);
     if (GameSparksNativePINVOKE.SWIGPendingException.Pending) throw GameSparksNativePINVOKE.SWIGPendingException.Retrieve();
   }
 
@@ -105,6 +106,11 @@ public class NativeWebSocket : global::System.IDisposable {
 
   public void GSExternalSend(int socketId, string message) {
     GameSparksNativePINVOKE.NativeWebSocket_GSExternalSend(swigCPtr, socketId, message);
+    if (GameSparksNativePINVOKE.SWIGPendingException.Pending) throw GameSparksNativePINVOKE.SWIGPendingException.Retrieve();
+  }
+
+  public void GSExternalSendBinary(int socketId, byte[] message, int offset, int length) {
+    GameSparksNativePINVOKE.NativeWebSocket_GSExternalSendBinary(swigCPtr, socketId, message, offset, length);
     if (GameSparksNativePINVOKE.SWIGPendingException.Pending) throw GameSparksNativePINVOKE.SWIGPendingException.Retrieve();
   }
 

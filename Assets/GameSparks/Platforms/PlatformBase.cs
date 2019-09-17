@@ -249,7 +249,7 @@ namespace GameSparks.Platforms
          
 			GS.Initialise(this);
 
-			//DontDestroyOnLoad (this);
+			DontDestroyOnLoad (this);
 
 #if UNITY_EDITOR
 	#if UNITY_2017_2_OR_NEWER
@@ -292,7 +292,7 @@ namespace GameSparks.Platforms
 							if (ExceptionReporter != null) {
 								ExceptionReporter (e);
 							} else {
-								Debug.LogError (e);
+								Debug.Log (e);
 							}
 						}
 					}
@@ -302,25 +302,25 @@ namespace GameSparks.Platforms
 			}
 		}
 
-//		virtual protected void OnApplicationPause(bool paused)
-//		{
-//			if(paused)
-//			{
-//#if UNITY_EDITOR
-//				GS.Disconnect();
-//#endif
-//			}
-//			else
-//			{
-//				try{
-//					GS.Reconnect();
-//				}catch(Exception e) {
-//					if(ExceptionReporter != null) {
-//						ExceptionReporter(e);
-//					}
-//				}
-//			}
-//		}
+		virtual protected void OnApplicationPause(bool paused)
+		{
+			if(paused)
+			{
+#if UNITY_EDITOR
+				GS.Disconnect();
+#endif
+			}
+			else
+			{
+				try{
+					GS.Reconnect();
+				}catch(Exception e) {
+					if(ExceptionReporter != null) {
+						ExceptionReporter(e);
+					}
+				}
+			}
+		}
 
 #if UNITY_EDITOR
 	#if UNITY_2017_2_OR_NEWER
@@ -533,6 +533,10 @@ namespace GameSparks.Platforms
 		/// Creates a (platform specific) Websocket and returns the instance.
 		/// </summary>
 		public abstract IGameSparksWebSocket GetSocket(string url, Action<string> messageReceived, Action closed, Action opened, Action<string> error);
-	}
+        /// <summary>
+		/// Creates a (platform specific) Websocket and returns the instance.
+		/// </summary>
+		public abstract IGameSparksWebSocket GetBinarySocket(string url, Action<byte[]> messageReceived, Action closed, Action opened, Action<string> error);
+    }
 
 }

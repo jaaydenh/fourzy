@@ -574,9 +574,6 @@ namespace Fourzy
             }
         }
 
-        private bool NetworkPass()
-        {
-            return NetworkAccess.HAVE_ACCESS;
-        }
+        private bool NetworkPass() => GameManager.NetworkAccess;
     }
 }

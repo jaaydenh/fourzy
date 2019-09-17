@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4134482284468884}
   - component: {fileID: 114771313682951538}
   - component: {fileID: 6077144665870927472}
+  - component: {fileID: 1433641275703540861}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -99,6 +100,31 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Purchasing.IAPListener+OnPurchaseFailedEvent, Assembly-CSharp-firstpass,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!114 &1433641275703540861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142780361699698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 935dbff241d30a446b0170ebdbd398b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  methods: []
+  customMethods: []
+  initialized: 0
+  selectedMethod:
+    id: 
+    link: 
+    responseType: 0
+    expectedHttpStatusCode: 0
+    expectedContent: 
+  platformDefaultSelected: 1
+  timeout: 10
+  checkInterval: 10
+  showDebug: 1
 --- !u!1 &1276844110124004
 GameObject:
   m_ObjectHideFlags: 0

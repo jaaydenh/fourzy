@@ -505,15 +505,18 @@ namespace Fourzy._Updates.ClientModel
         public static ClientFourzyGame FromPuzzleData(ClientPuzzleData puzzleData)
         {
             ClientFourzyGame game = null;
+            Player me = UserManager.Instance.meAsPlayer;
+            me.Magic = puzzleData.startingMagic;
+
             switch (puzzleData.pack.packType)
             {
                 case PackType.AI_PACK:
-                    game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, UserManager.Instance.meAsPlayer);
+                    game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, me);
 
                     break;
 
                 default:
-                    game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiBoss, UserManager.Instance.meAsPlayer);
+                    game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiBoss, me);
 
                     break;
             }

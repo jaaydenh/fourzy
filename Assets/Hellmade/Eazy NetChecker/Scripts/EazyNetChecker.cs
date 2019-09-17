@@ -376,6 +376,8 @@ namespace Hellmade.Net
         /// <returns></returns>
         public static NetCheckMethod GetDefaultMethod()
         {
+            if (!Instance.initialized) Init();
+
             switch (Application.platform)
             {
                 case RuntimePlatform.Android:
