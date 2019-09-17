@@ -47,7 +47,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!game.draw && game.IsWinner())
             {
-                if (game.puzzleData.pack.justFinished && game.puzzleData.pack)
+                if (game.puzzleData.pack && game.puzzleData.pack.justFinished)
                 {
                     ////add menu event
                     //MenuController.AddMenuEvent(

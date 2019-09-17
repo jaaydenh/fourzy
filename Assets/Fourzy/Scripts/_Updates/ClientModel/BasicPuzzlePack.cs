@@ -90,6 +90,7 @@ namespace Fourzy._Updates.ClientModel
                 puzzleData.aiPlayerName = aiPlayerName;
                 puzzleData.gauntletLevelIndex = levelIndex;
                 puzzleData.PuzzlePlayer = puzzlePlayer;
+                puzzleData.startingMagic = FourzyGameModel.Model.Constants.PlayerStartingMagic;
 
                 puzzlesData.Add(puzzleData);
                 enabledPuzzlesData.Add(puzzleData);
