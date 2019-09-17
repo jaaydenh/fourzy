@@ -43,15 +43,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 StartTurnGame();
         }
 
-        public void StartTurnGame()
-        {
-            matchmakingScreen.OpenTurnbased();
-        }
+        public void StartGauntletAIPack() => menuController.GetScreen<VSGamePrompt>().Prompt(5);
 
-        public void StartFastPuzzleGame()
-        {
-            GameManager.Instance.StartGame(GameContentManager.Instance.GetFastPuzzle());
-        }
+        public void StartFastPuzzleGame() => GameManager.Instance.StartGame(GameContentManager.Instance.GetFastPuzzle());
+
+        public void StartTurnGame() => matchmakingScreen.OpenTurnbased();
 
         private void OnChallengesUpdate(List<ChallengeData> data) => turnPlayButton.GetBadge("games").badge.SetValue(ChallengeManager.Instance.NextChallenges.Count);
 

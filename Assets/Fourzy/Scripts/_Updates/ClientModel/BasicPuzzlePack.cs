@@ -21,6 +21,7 @@ namespace Fourzy._Updates.ClientModel
         public string herdID;
         public UnlockRequirementsEnum unlockRequirement;
 
+        public int gauntletLevels { get; private set; } = -1;
         public List<ClientPuzzleData> puzzlesData { get; set; }
         public List<ClientPuzzleData> enabledPuzzlesData { get; set; }
         public List<ClientPuzzleData> rewardPuzzles { get; set; }
@@ -65,6 +66,36 @@ namespace Fourzy._Updates.ClientModel
             enabledPuzzlesData = new List<ClientPuzzleData>();
             rewardPuzzles = new List<ClientPuzzleData>();
             allRewards = new Dictionary<int, List<RewardsManager.Reward>>();
+        }
+
+        public virtual void Initialize(int gauntletLevels)
+        {
+            Initialize();
+
+            this.gauntletLevels = gauntletLevels;
+
+            name = "Beat The Bot";
+            packType = PackType.AI_PACK;
+            packID = "gauntlet";
+            unlockRequirement = UnlockRequirementsEnum.NONE;
+            herdID = "1";
+            aiPlayerName = "The Bot";
+            puzzlePlayer = new Player(2, aiPlayerName) { HerdId = herdID };
+
+            for (int levelIndex = 0; levelIndex < gauntletLevels; levelIndex++)
+            {
+                ClientPuzzleData puzzleData = new ClientPuzzleData();
+                puzzleData.pack = this;
+                puzzleData.ID = packID + "_level_" + levelIndex;
+                puzzleData.aiPlayerName = aiPlayerName;
+                puzzleData.gauntletLevelIndex = levelIndex;
+                puzzleData.PuzzlePlayer = puzzlePlayer;
+
+                puzzlesData.Add(puzzleData);
+                enabledPuzzlesData.Add(puzzleData);
+
+                PlayerPrefsWrapper.SetPuzzleChallengeComplete(puzzleData.ID, false);
+            }
         }
 
         public ClientPuzzleData nextUnsolvedData

@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
 using System.Linq;
 using UnityEngine;
@@ -24,6 +23,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public Sprite left;
 
         public BasicPuzzlePack puzzlePack { get; private set; }
+
+        public void Prompt(int gauntletLevels)
+        {
+            BasicPuzzlePack _puzzlePack = new BasicPuzzlePack();
+            _puzzlePack.Initialize(gauntletLevels);
+
+            Prompt(_puzzlePack);
+        }
 
         public void Prompt(BasicPuzzlePack puzzlePack)
         {
@@ -63,7 +70,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             Prompt(
-                $"Defeat {puzzlePack.enabledPuzzlesData[0].PuzzlePlayer.DisplayName}",
+                $"Beat {puzzlePack.aiPlayerName}",
                 null,
                 () =>
                 {

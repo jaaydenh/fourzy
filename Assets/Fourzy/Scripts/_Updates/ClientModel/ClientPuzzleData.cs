@@ -25,6 +25,7 @@ namespace Fourzy._Updates.ClientModel
         public RewardsManager.Reward[] rewards;
 
         public int Complexity = -1;
+        public int gauntletLevelIndex = -1;
         public int startingMagic = 0;
 
         public ResourceItem resource;

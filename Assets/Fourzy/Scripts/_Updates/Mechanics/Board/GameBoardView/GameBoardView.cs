@@ -68,8 +68,6 @@ namespace Fourzy._Updates.Mechanics.Board
         public BoardLocation previousLocation { get; private set; }
         public int direction { get; private set; }
 
-        public float bitSpeed => Constants.moveSpeed * step.x;
-
         public List<BoardBit> tokens => boardBits.Where(bit => (bit.GetType() == typeof(TokenView) || bit.GetType().IsSubclassOf(typeof(TokenView)))).ToList();
 
         public List<BoardBit> gamePieces => boardBits.Where(bit => (bit.GetType() == typeof(GamePieceView) || bit.GetType().IsSubclassOf(typeof(GamePieceView)))).ToList();
@@ -468,8 +466,6 @@ namespace Fourzy._Updates.Mechanics.Board
             return token;
         }
 
-        public float WaitTimeForDistance(float distance) => (distance * step.x) / bitSpeed;
-
         public void PrepareForSpell(SpellId spellId)
         {
             actionState = BoardActionState.CAST_SPELL;
@@ -560,7 +556,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             other.ForEach(_bit => _bit.OnBitEnter(bit));
 
-            bit.turnTokensInteractionList.AddRange(other);
+            bit.AddInteraction(other);
 
             //sort bits
             SortBits();
@@ -1004,7 +1000,7 @@ namespace Fourzy._Updates.Mechanics.Board
                             switch (turnResults.Activity[actionIndex].Type)
                             {
                                 case GameActionType.PUSH:
-                                    waitTime = Mathf.Clamp01(waitTime - WaitTimeForDistance(.9f));
+                                    waitTime = Mathf.Clamp01(waitTime - bit.WaitTimeForDistance(.9f));
                                     break;
                             }
                         }

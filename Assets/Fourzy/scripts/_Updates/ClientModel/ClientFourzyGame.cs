@@ -328,6 +328,14 @@ namespace Fourzy._Updates.ClientModel
             _Type = Fourzy.GameType.AI;
         }
 
+        public ClientFourzyGame(Player Player1, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GameOptions Options = null)
+            : base(Player1, GauntletLevel, CurrentArea, DifficultModifier, Options)
+        {
+            Initialize();
+
+            _Type = Fourzy.GameType.AI;
+        }
+
         public bool IsWinner(Player player) => State.WinnerId == player.PlayerId;
 
         public bool IsWinner() => me.PlayerId == State.WinnerId;
@@ -437,19 +445,22 @@ namespace Fourzy._Updates.ClientModel
 
         public void OnVictory()
         {
-            if (puzzleData && IsWinner())
+            if (puzzleData)
             {
-                if (puzzleData.pack)
+                if (IsWinner())
                 {
-                    bool _complete = puzzleData.pack.complete;
+                    if (puzzleData.pack)
+                    {
+                        bool _complete = puzzleData.pack.complete;
 
-                    PlayerPrefsWrapper.SetPuzzleChallengeComplete(GameID, true);
+                        PlayerPrefsWrapper.SetPuzzleChallengeComplete(GameID, true);
 
-                    if (puzzleData.pack.complete && !_complete) puzzleData.pack.justFinished = true;
+                        if (puzzleData.pack.complete && !_complete) puzzleData.pack.justFinished = true;
+                    }
+
+                    //assign rewards if any
+                    puzzleData.AssignPuzzleRewards();
                 }
-
-                //assign rewards if any
-                puzzleData.AssignPuzzleRewards();
             }
         }
 
@@ -511,7 +522,10 @@ namespace Fourzy._Updates.ClientModel
             switch (puzzleData.pack.packType)
             {
                 case PackType.AI_PACK:
-                    game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, me);
+                    if (puzzleData.gauntletLevelIndex > -1)
+                        game = new ClientFourzyGame(me, puzzleData.gauntletLevelIndex);
+                    else
+                        game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, me);
 
                     break;
 
@@ -523,7 +537,7 @@ namespace Fourzy._Updates.ClientModel
 
             game.puzzleData = puzzleData;
             game.GameID = puzzleData.ID;
-            game._State.ActivePlayerId = puzzleData.firstTurn < 1 ? game.me.PlayerId : puzzleData.firstTurn; 
+            game._State.ActivePlayerId = puzzleData.firstTurn < 1 ? game.me.PlayerId : puzzleData.firstTurn;
 
             game.opponent.HerdId = puzzleData.PuzzlePlayer.HerdId;
 

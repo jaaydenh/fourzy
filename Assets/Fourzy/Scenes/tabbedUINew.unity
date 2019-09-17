@@ -35798,7 +35798,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   events:
-    inspectorListHeight: 83
+    inspectorListHeight: 128
     persistentCalls:
       calls:
       - genericMenuData:
@@ -35811,6 +35811,16 @@ MonoBehaviour:
         arguments: []
         isDynamic: 0
         isCallEnabled: 0
+      - genericMenuData:
+          selectedComponent: 2
+          selectedMember: 38
+          isDynamic: 0
+        target: {fileID: 1739894148}
+        memberName: StartGauntletAIPack
+        memberType: 8
+        arguments: []
+        isDynamic: 0
+        isCallEnabled: 1
   onState:
     inspectorListHeight: 83
     persistentCalls:

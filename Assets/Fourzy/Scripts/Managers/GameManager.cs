@@ -241,11 +241,6 @@ namespace Fourzy
             }
         }
 
-        public void StartGauntletPuzzlePack(Area area)
-        {
-
-        }
-
         public void OpenMainMenu()
         {
             //unload gameplay scene 

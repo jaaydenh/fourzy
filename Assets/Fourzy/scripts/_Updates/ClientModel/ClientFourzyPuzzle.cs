@@ -221,19 +221,22 @@ namespace Fourzy._Updates.ClientModel
 
         public void OnVictory()
         {
-            if (puzzleData && IsWinner())
+            if (puzzleData)
             {
-                if (puzzleData.pack)
+                if (IsWinner())
                 {
-                    bool _complete = puzzleData.pack.complete;
+                    if (puzzleData.pack)
+                    {
+                        bool _complete = puzzleData.pack.complete;
 
-                    PlayerPrefsWrapper.SetPuzzleChallengeComplete(GameID, true);
+                        PlayerPrefsWrapper.SetPuzzleChallengeComplete(GameID, true);
 
-                    if (puzzleData.pack.complete && !_complete) puzzleData.pack.justFinished = true;
+                        if (puzzleData.pack.complete && !_complete) puzzleData.pack.justFinished = true;
+                    }
+
+                    //assign rewards if any
+                    puzzleData.AssignPuzzleRewards();
                 }
-
-                //assign rewards if any
-                puzzleData.AssignPuzzleRewards();
             }
         }
 
