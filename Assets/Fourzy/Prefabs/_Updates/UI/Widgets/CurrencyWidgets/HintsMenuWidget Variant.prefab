@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1097017916966598, guid: 911f3ecd384c3c84987386e5fbc4bd19, type: 3}
       propertyPath: m_Name
-      value: HintsMenuWidget
+      value: HintsMenuWidget Variant
       objectReference: {fileID: 0}
     - target: {fileID: 114600144459603598, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
@@ -135,6 +135,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224690942906249098, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224690942906249098, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 2618477404747887170, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}

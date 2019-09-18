@@ -40,7 +40,7 @@ namespace Fourzy._Updates.UI.Widgets
                 case GamePieceState.FoundAndLocked:
                 case GamePieceState.NotFound:
                     infoFrame.SetActive(false);
-                    notFound.SetActive(true);
+                    //notFound.SetActive(true);
                     layoutElement.preferredHeight = 180;
 
                     gamePiece.SetMaterial(greyscaleMaterial);
@@ -50,7 +50,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                 case GamePieceState.FoundAndUnlocked:
                     infoFrame.SetActive(true);
-                    notFound.SetActive(false);
+                    //notFound.SetActive(false);
                     layoutElement.preferredHeight = 330;
                     
                     gamePiece.SetMaterial(null);
