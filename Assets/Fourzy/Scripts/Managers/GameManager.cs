@@ -7,7 +7,6 @@ using Firebase.Storage;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
-using Fourzy._Updates.Mechanics;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Threading;
@@ -18,10 +17,13 @@ using FourzyGameModel.Model;
 using Hellmade.Net;
 using MoreMountains.NiceVibrations;
 using Newtonsoft.Json;
+using PlayFab;
+using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -32,6 +34,7 @@ namespace Fourzy
 {
     public class GameManager : RoutinesBase
     {
+        public static Action onNewsFetched;
         public static Action<bool> onNetworkAccess;
         public static Action onGameplaySceneLoaded;
         public static Action<string> onDailyChallengeFileName;
@@ -61,6 +64,7 @@ namespace Fourzy
         public IClientFourzy activeGame { get; set; }
         public BasicPuzzlePack currentPuzzlePack { get; set; }
         public DependencyStatus dependencyStatus { get; set; }
+        public List<TitleNewsItem> latestNews { get; private set; }
 
         private bool configFetched = false;
 
@@ -80,6 +84,8 @@ namespace Fourzy
                 return mainMenuLoaded;
             }
         }
+
+        public List<TitleNewsItem> unreadNews => latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ?? new List<TitleNewsItem>();
 
         protected override void Awake()
         {
@@ -271,6 +277,15 @@ namespace Fourzy
 
         public void StartPresentataionGame() => OnNoInput(new KeyValuePair<string, float>("startDemoGame", 0f));
 
+        public void CheckNews()
+        {
+            Debug.Log("Fetching news..");
+
+            PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest(), 
+                result => { latestNews = result.News; onNewsFetched?.Invoke(); }, 
+                error => Debug.LogError(error.GenerateErrorReport()));
+        }
+
         public static void UpdateGameTypeUserProperty(GameType gameType)
         {
             Debug.Log("Updating user property");
@@ -309,6 +324,9 @@ namespace Fourzy
 
                     //change gamepad mode
                     StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
+
+                    //check if there are any news
+                    CheckNews();
 
                     activeGame = null;
                     currentPuzzlePack = null;

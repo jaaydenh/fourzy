@@ -1,0 +1,9 @@
+<dependencies>
+  <androidPackages>
+    <androidPackage spec="androidx.legacy:legacy-support-v4:1.0.0"/>
+  </androidPackages>
+  <iosPods>
+    <iosPod name="MoPub-SDK-Plugin" minTargetSdk="9.0" path="Assets/MoPub/Plugins/iOS"/>
+    <iosPod name="mopub-ios-sdk" subspecs="['Core']" minTargetSdk="9.0" version="5.9.0"/>
+  </iosPods>
+</dependencies>

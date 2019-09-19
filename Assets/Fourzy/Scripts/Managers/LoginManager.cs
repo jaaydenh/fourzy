@@ -334,6 +334,8 @@ namespace Fourzy
         {
             AnalyticsManager.Instance.Identify(result.PlayFabId);
             Debug.Log("***** PlayFab Login Success: " + result.PlayFabId);
+
+            GameManager.Instance.CheckNews();
         }
 
         private void PlayFabLoginError(PlayFabError error)

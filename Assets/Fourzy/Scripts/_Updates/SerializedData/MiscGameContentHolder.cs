@@ -51,7 +51,6 @@ namespace Fourzy._Updates.Serialized
         [System.Serializable]
         public class StoreItemExtraData
         {
-            //[ValueDropdown("GetProducts")]
             public string id;
             public Sprite icon;
             public int quantity;

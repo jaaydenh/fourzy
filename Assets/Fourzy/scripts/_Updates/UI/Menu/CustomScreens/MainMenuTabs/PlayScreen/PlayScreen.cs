@@ -11,6 +11,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public PlayerInfoWidget playerInfoIwdget;
         public ButtonExtended turnPlayButton;
+        public ButtonExtended newsButton;
 
         private MatchmakingScreen matchmakingScreen;
 
@@ -21,6 +22,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
             ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
             ChallengeManager.OnChallengeUpdateLocal += OnChallengeUpdate;
+
+            GameManager.onNewsFetched += OnNewsFetched;
         }
 
         protected override void Start()
@@ -49,8 +52,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void StartTurnGame() => matchmakingScreen.OpenTurnbased();
 
+        public void OpenNews() => menuController.GetScreen<NewsPromptScreen>()._Prompt();
+
         private void OnChallengesUpdate(List<ChallengeData> data) => turnPlayButton.GetBadge("games").badge.SetValue(ChallengeManager.Instance.NextChallenges.Count);
 
         private void OnChallengeUpdate(ChallengeData data) => turnPlayButton.GetBadge("games").badge.SetValue(ChallengeManager.Instance.NextChallenges.Count);
+
+        private void OnNewsFetched()
+        {
+            int newsCount = GameManager.Instance.latestNews.Count;
+
+            newsButton.GetBadge().badge.SetValue(newsCount);
+            newsButton.SetActive(newsCount > 0);
+        }
     }
 }
