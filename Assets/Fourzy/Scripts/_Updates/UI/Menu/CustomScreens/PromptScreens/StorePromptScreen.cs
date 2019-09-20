@@ -12,7 +12,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public WatchAdStoreWidget watchAdWidget;
         public RectTransform productsParent;
 
-        public ProductCatalog catalog { get; private set; }
         public StoreItemType filter { get; private set; }
 
         protected bool initialized = false;
@@ -31,8 +30,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (initialized) return;
 
             initialized = true;
-
-            catalog = ProductCatalog.LoadDefaultCatalog();
 
             switch (filter)
             {

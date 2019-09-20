@@ -16098,12 +16098,12 @@ MonoBehaviour:
     persistentCalls:
       calls:
       - genericMenuData:
-          selectedComponent: -1
-          selectedMember: 0
+          selectedComponent: 2
+          selectedMember: 32
           isDynamic: 0
-        target: {fileID: 1739894146}
-        memberName: hideFlags
-        memberType: 16
+        target: {fileID: 1739894148}
+        memberName: OpenNews
+        memberType: 8
         arguments: []
         isDynamic: 0
         isCallEnabled: 1

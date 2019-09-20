@@ -153,6 +153,9 @@ namespace UnityEngine.Purchasing
             this.controller = controller;
             this.extensions = extensions;
 
+            if (controller == null)
+                Debug.Log("no controller");
+
             foreach (var button in activeButtons)
             {
                 button.UpdateText();

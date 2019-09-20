@@ -172,8 +172,7 @@ namespace Fourzy
         protected void Update()
         {
             //force demo game
-            if (StandaloneInputModuleExtended.OnHotkey1Press())
-                StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
+            if (StandaloneInputModuleExtended.OnHotkey1Press()) StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
         }
 
         protected void OnDestroy()
