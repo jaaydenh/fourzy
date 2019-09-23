@@ -9,12 +9,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public class StorePromptScreen : PromptScreen
     {
         public StoreWidget storeItemWidget;
+        public WatchAdStoreWidget watchAdWidget;
         public RectTransform productsParent;
 
-        public ProductCatalog catalog { get; private set; }
+        public StoreItemType filter { get; private set; }
 
         protected bool initialized = false;
-        protected StoreItemType filter;
 
         public void Prompt(StoreItemType filter)
         {
@@ -31,7 +31,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             initialized = true;
 
-            catalog = ProductCatalog.LoadDefaultCatalog();
+            switch (filter)
+            {
+                case StoreItemType.HINTS:
+                    widgets.Add(Instantiate(watchAdWidget, productsParent));
+
+                    break;
+            }
 
             //add widgets
             foreach (Product product in CodelessIAPStoreListener.Instance.StoreController.products.all)

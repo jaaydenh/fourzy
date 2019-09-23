@@ -1,0 +1,265 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &9153710186792557866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686376659826168145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3944c92c3ea34408d2f7418922e793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &685541370842329745
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1679855677268928, guid: bfc50d997804141b08eef4d0b104318d, type: 3}
+      propertyPath: m_Name
+      value: MoPubManager Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4333135864710296, guid: bfc50d997804141b08eef4d0b104318d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4333135864710296, guid: bfc50d997804141b08eef4d0b104318d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4333135864710296, guid: bfc50d997804141b08eef4d0b104318d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4333135864710296, guid: bfc50d997804141b08eef4d0b104318d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4333135864710296, guid: bfc50d997804141b08eef4d0b104318d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4333135864710296, guid: bfc50d997804141b08eef4d0b104318d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4333135864710296, guid: bfc50d997804141b08eef4d0b104318d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4333135864710296, guid: bfc50d997804141b08eef4d0b104318d, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114869840714624124, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: Initialized.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114869840714624124, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: AdUnitId
+      value: b195f8dd8ded45fe847ad89ed1d016da
+      objectReference: {fileID: 0}
+    - target: {fileID: 114869840714624124, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: LocationAware
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114869840714624124, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: LogLevel
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114869840714624124, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: Initialized.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 9153710186792557866}
+    - target: {fileID: 114869840714624124, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: Initialized.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SDKInitialized
+      objectReference: {fileID: 0}
+    - target: {fileID: 114869840714624124, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: Initialized.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114869840714624124, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: Initialized.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114869840714624124, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: Initialized.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogShown.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogLoaded.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogFailed.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentStatusChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogDismissed.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentStatusChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 9153710186792557866}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentStatusChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ConsentStatusChanged
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentStatusChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentStatusChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_ConsentDialogLoaded
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogFailed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogFailed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: UpdateStatusLabel
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogFailed.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogFailed.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Foobar
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogFailed.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogShown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogShown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_ConsentDialogLoaded
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogShown.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogShown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogShown.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogDismissed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogDismissed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: UpdateStatusLabel
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogDismissed.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogDismissed.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogDismissed.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Consent dialog has been dismissed
+      objectReference: {fileID: 0}
+    - target: {fileID: 114781843351734468, guid: bfc50d997804141b08eef4d0b104318d,
+        type: 3}
+      propertyPath: ConsentDialogDismissed.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bfc50d997804141b08eef4d0b104318d, type: 3}
+--- !u!1 &686376659826168145 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1679855677268928, guid: bfc50d997804141b08eef4d0b104318d,
+    type: 3}
+  m_PrefabInstance: {fileID: 685541370842329745}
+  m_PrefabAsset: {fileID: 0}

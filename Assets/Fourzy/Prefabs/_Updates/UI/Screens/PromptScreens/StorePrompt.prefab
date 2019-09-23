@@ -226,7 +226,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 33
+          selectedMember: 35
           isDynamic: 0
         target: {fileID: 554847239912345784}
         memberName: OnBack
@@ -376,7 +376,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 3
-          selectedMember: 33
+          selectedMember: 35
           isDynamic: 0
         target: {fileID: 554847239912345784}
         memberName: OnBack
@@ -860,6 +860,8 @@ MonoBehaviour:
   acceptButton: {fileID: 0}
   declineButton: {fileID: 0}
   storeItemWidget: {fileID: 4243896343938107939, guid: fcd9d6611de7be240b5ab205c13f4db5,
+    type: 3}
+  watchAdWidget: {fileID: 8085059469293386442, guid: a0ceb672190272b41bf59cb7169de672,
     type: 3}
   productsParent: {fileID: 7887076529672782465}
 --- !u!114 &5736449652914403722
