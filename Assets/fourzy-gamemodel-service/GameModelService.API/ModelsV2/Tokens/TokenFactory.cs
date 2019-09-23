@@ -48,6 +48,8 @@ namespace FourzyGameModel.Model
                     return new GrassToken(TokenNotation);
                 case TokenConstants.Hex:
                     return new HexSpellToken(TokenNotation);
+                case TokenConstants.HiddenBomb:
+                    return new HiddenBombToken(TokenNotation);
                 case TokenConstants.Ice:
                     return new IceToken();
                 case TokenConstants.IceBlock:

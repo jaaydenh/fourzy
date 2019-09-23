@@ -80,8 +80,8 @@ namespace FourzyGameModel.Model
             int Dead = AITurnEvaluator.CountTheDead(Board);
             if (Dead > MaxDeadSpaces) { Errors.Add(Board.ContentString, "TooManyDead=" + Dead); return false; }
 
-            int Score = AITurnEvaluator.ScoreFours(new GameState(Board, new GameOptions()),1);
-            if (Score < MinNewBoardScore) { Errors.Add(Board.ContentString, "ScoreTooLow=" + Score); return false; }
+            //int Score = AITurnEvaluator.ScoreFours(new GameState(Board, new GameOptions()),1);
+            //if (Score < MinNewBoardScore) { Errors.Add(Board.ContentString, "ScoreTooLow=" + Score); return false; }
 
             foreach (BoardSpace s in Board.Contents)
             {

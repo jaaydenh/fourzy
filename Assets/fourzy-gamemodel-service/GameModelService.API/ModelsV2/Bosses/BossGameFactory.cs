@@ -19,6 +19,8 @@ namespace FourzyGameModel.Model
             GameState BossGS = new GameState(Board,Options,1);
             BossGS.Players.Add(1, Player);
             BossGS.Players.Add(2, BossPlayer);
+            IBoss TheBoss = BossFactory.Create(Boss);
+            TheBoss.StartGame(BossGS);
 
             return BossGS;
         }
@@ -32,8 +34,11 @@ namespace FourzyGameModel.Model
             BossPlayer.Profile = AIProfile.BossAI;
             GameBoard Board = new GameBoard(definition);
             GameState BossGS = new GameState(Board, Options, 1);
+            
             BossGS.Players.Add(1, Player);
             BossGS.Players.Add(2, BossPlayer);
+            IBoss TheBoss = BossFactory.Create(Boss);
+            TheBoss.StartGame(BossGS);
 
             return BossGS;
         }

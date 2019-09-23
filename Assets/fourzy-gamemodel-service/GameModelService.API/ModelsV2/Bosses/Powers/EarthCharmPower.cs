@@ -41,6 +41,7 @@ namespace FourzyGameModel.Model
 
                 State.Board.ContentsAt(Hole.Space.Location).RemoveTokens(TokenType.PIT);
                 State.Board.ContentsAt(Target).AddToken(new PitToken());
+                Hole.Space = State.Board.ContentsAt(Target);
 
                 State.RecordGameAction(new GameActionTokenMovement(Hole, TransitionType.BOSS_POWER, Hole.Space.Location, Target));
             }

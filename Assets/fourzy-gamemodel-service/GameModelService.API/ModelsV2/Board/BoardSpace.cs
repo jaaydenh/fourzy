@@ -418,6 +418,15 @@ namespace FourzyGameModel.Model
             return false;
         }
 
+        public void SwapPiece()
+        {
+            if (PieceCount >0)
+            {
+                ActivePiece.PlayerId = Parent.Parent.Opponent(ActivePiece.PlayerId);
+            }
+        }
+
+
         public bool ContainsTokenType(TokenType Token)
         {
             //default is false, if any tokens provide is movable, then entire square is movable.

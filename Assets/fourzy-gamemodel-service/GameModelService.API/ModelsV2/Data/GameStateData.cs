@@ -26,7 +26,7 @@ namespace FourzyGameModel.Model
         public List<BoardLocation> WinningLocations { get; set; }
 
         [JsonProperty("gameEffects")]
-        public List<GameEffect> GameEffects { get; set; }
+        public List<IGameEffect> GameEffects { get; set; }
 
         [JsonProperty("activePlayerId")]
         public int ActivePlayerId { get; set; }

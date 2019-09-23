@@ -22,6 +22,7 @@ namespace FourzyGameModel.Model
                     Turn.Moves.Add(p);
                     GameState GS = State.TakeTurn(Turn).GameState;
                     AITurnEvaluator AITE = new AITurnEvaluator(GS);
+                    if (AITE.WinningTurns.Count > 0) continue;
                     int Score = AITE.TopScoreValue();
                     if (Score < BestScore || BossTurn == null)
                     {
@@ -50,7 +51,7 @@ namespace FourzyGameModel.Model
                 }
             return OkTurns;
         }
-        
+                             
         public static Player GetBoss(GameState State)
         {
             foreach(Player p in State.Players.Values)

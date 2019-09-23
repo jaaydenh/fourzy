@@ -55,11 +55,11 @@ namespace Fourzy._Updates.ClientModel
                 result.ActivePlayerId = 1;
                 result.GameSeed = _Type.ToString();
 
-                result.GameEffects = new List<GameEffect>();
+                result.GameEffects = new List<IGameEffect>();
                 result.WinningLocations = new List<BoardLocation>();
                 result.Herds = new Dictionary<int, Herd>();
 
-                if (State.GameEffects != null) result.GameEffects = new List<GameEffect>(State.GameEffects);
+                if (State.GameEffects != null) result.GameEffects = new List<IGameEffect>(State.GameEffects);
                 if (State.WinningLocations != null) result.WinningLocations = new List<BoardLocation>(State.WinningLocations);
                 if (State.Herds != null) foreach (var herd in State.Herds) result.Herds.Add(herd.Key, herd.Value);
 

@@ -505,7 +505,7 @@ namespace FourzyGameModel.Model
             return Found;
         }
         
-        public List<Piece> FindPieces(int PlayerId )
+        public List<Piece> FindPieces(int PlayerId =-1 )
         {
             List<Piece> FoundPiece = new List<Piece>() { };
 
@@ -514,11 +514,38 @@ namespace FourzyGameModel.Model
                 for (int c = 0; c < Columns; c++)
                 {
                     if (Contents[r,c].ContainsPiece)
-                        FoundPiece.Add(Contents[r,c].ActivePiece);
+                        if (PlayerId < 0 || PlayerId == Contents[r, c].ActivePiece.PlayerId)
+                            FoundPiece.Add(Contents[r,c].ActivePiece);
                 }
             }
 
             return FoundPiece;
+        }
+
+        public List<BoardLocation> FindPieceLocations(int PlayerId = -1)
+        {
+            List<BoardLocation> FoundPieces = new List<BoardLocation>() { };
+
+            for (int r = 0; r < Rows; r++)
+            {
+                for (int c = 0; c < Columns; c++)
+                {
+                    if (Contents[r, c].ContainsPiece)
+                        if (PlayerId < 0 || PlayerId == Contents[r, c].ActivePiece.PlayerId)
+                            FoundPieces.Add(new BoardLocation(r,c));
+                }
+            }
+
+            return FoundPieces;
+        }
+
+
+        public void SwapPieces()
+        {
+            foreach (BoardLocation l in FindPieceLocations())
+            {
+                ContentsAt(l).SwapPiece();
+            }
         }
 
         #region "Events"
@@ -612,6 +639,7 @@ namespace FourzyGameModel.Model
                 }
             }
         }
+
         public void PieceLeavesSpace(MovingPiece Piece)
         {
             for (int r = 0; r < Rows; r++)

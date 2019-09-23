@@ -18,8 +18,18 @@ namespace FourzyGameModel.Model
             {
                 case AIProfile.EasyAI:
                     return new EasyAI(State);
+                case AIProfile.UpBot:
+                    return new UpBotAI(State);
+                case AIProfile.VerticalBot:
+                    return new VerticalBotAI(State);
+                case AIProfile.HorizontalBot:
+                    return new HorizontalBotAI(State);
+                case AIProfile.RotatorBot:
+                    return new RotatorBotAI(State);
                 case AIProfile.BeginnerAI:
                     return new BeginnerAI(State);
+                case AIProfile.PassBot:
+                    return new PassBotAI(State);
                 case AIProfile.PositionBot:
                     return new PositionBot(State);
                 case AIProfile.PuzzleAI:
@@ -28,6 +38,8 @@ namespace FourzyGameModel.Model
                     return new SimpleAI(State);
                 case AIProfile.ScoreBot:
                     return new ScoreBotAI(State);
+                case AIProfile.WaitBot:
+                    return new WaitBotAI(State);
             }
             return null;
         }

@@ -44,6 +44,7 @@ namespace FourzyGameModel.Model
         public const char Guard = '!';
         public const char Grass = ',';
         public const char Hex = 'H';
+        public const char HiddenBomb = 'h';
         public const char Ice = 'i';
         public const char IceBlock = 'I';
         public const char Lava = 'l';

@@ -34,7 +34,7 @@ namespace FourzyGameModel.Model
             SimpleMove Move = null;
             if (EvalState.Board.Random.Chance(InitialBlockChance))
             {
-                Move = AI.GetOkMove(NumberOfMovesToConsider);
+                Move = AI.GetRandomOkMove(NumberOfMovesToConsider);
             }
             else
             {

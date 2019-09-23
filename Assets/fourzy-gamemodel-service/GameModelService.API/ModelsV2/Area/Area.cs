@@ -10,6 +10,6 @@ namespace FourzyGameModel.Model
         public int AdditionalTimePerMove { get; set; }
 
         //Specific Rules or Conditions Specific to the Region
-        public List<GameEffect> Effects { get; set; }
+        public List<IGameEffect> Effects { get; set; }
     }
 }
