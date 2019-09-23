@@ -57,6 +57,7 @@ namespace Fourzy._Updates.Tools
 
         private Vector2 tokensScrollViewPosition;
         private Vector2 initialMovesScrollViewPosition;
+        public static int PuzzleSearchDepth = 3;
 
         [MenuItem("Window/Board Editor")]
         public static void ShowWindow()
@@ -513,7 +514,7 @@ namespace Fourzy._Updates.Tools
 
                 if (currentBoard != null)
                 {
-                    //save board
+                    ////save board
                     if (GUILayout.Button("Save board", GUILayout.Width(90f)))
                     {
                         string path = "";
@@ -526,6 +527,33 @@ namespace Fourzy._Updates.Tools
                         if (path.Length != 0)
                             File.WriteAllText(path, JsonConvert.SerializeObject(currentBoard));
                     }
+
+                    if (GUILayout.Button("Save puzzle", GUILayout.Width(90f)))
+                    {
+                        string path = "";
+
+                        if (string.IsNullOrEmpty(selectedPath))
+                            path = EditorUtility.SaveFilePanelInProject("Save puzzle", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
+                        else
+                            path = EditorUtility.SaveFilePanelInProject("Save puzzle", selectedFileName, "json", "", selectedPath);
+
+                        if (path.Length != 0)
+                        {
+                            GameState GS = new GameState(currentBoard,1);
+                            PuzzleTestResults R = PuzzleTestTools.EvaluateState(GS, PuzzleSearchDepth);
+                            if (R.NumberOfVictoryPaths > 0)
+                            {
+                                FourzyPuzzleData PData = new FourzyPuzzleData(GS, R);
+                                File.WriteAllText(path, JsonConvert.SerializeObject(PData));
+                            }
+                            else
+                            {
+                                bool b = EditorUtility.DisplayDialog("Problem With Puzzle. Puzzle Not Created.",
+                                    "Reset or continue?", "Reset", "Continue");
+                            }
+                        }
+                    }
+
                 }
             }
             GUILayout.EndHorizontal();
@@ -542,6 +570,8 @@ namespace Fourzy._Updates.Tools
                     currentBoard.EnabledGallery = EditorGUILayout.Toggle("Enabled Gallery", currentBoard.EnabledGallery);
                     currentBoard.EnabledRealtime = EditorGUILayout.Toggle("Enabled Realtime", currentBoard.EnabledRealtime);
                     currentBoard.Area = (Area)EditorGUILayout.EnumPopup("Area", currentBoard.Area);
+                    PuzzleSearchDepth = int.Parse(EditorGUILayout.TextField("PuzzleSearchDepth", PuzzleSearchDepth.ToString()));
+
                 }
                 GUILayout.EndVertical();
 
