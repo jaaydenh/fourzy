@@ -26,7 +26,7 @@ namespace FourzyGameModel.Model
 
             bool Desparate = false;
 
-            SimpleMove Move = AI.GetOkMove();
+            SimpleMove Move = AI.GetRandomOkMove();
             if (Move == null)
             {
                 Desparate = true;
@@ -34,7 +34,10 @@ namespace FourzyGameModel.Model
             }
             
             PlayerTurn TopBossTurn = new PlayerTurn(Move);
-            int TopScore = AITurnEvaluator.Score(EvalState, TopBossTurn);
+            //int TopScore = AITurnEvaluator.Score(EvalState, TopBossTurn);
+            AITurnEvaluator AIBoss = new AITurnEvaluator(EvalState, TopBossTurn);
+            int TopScore = AIBoss.Score(AIBoss.ActivePlayerId);
+
             List<IMove> Powers = Boss.GetPossibleActivations(EvalState, Desparate);
 
             if (Powers.Count > 0)
@@ -47,7 +50,8 @@ namespace FourzyGameModel.Model
                     AITurnEvaluator AITE = new AITurnEvaluator(EvalState, TestTurn);
                     if (AITE.Evaluator.GetFirstWinningMove() != null) continue;
 
-                    int Score = AITurnEvaluator.Score(EvalState, TestTurn);
+                    int Score = AITE.Score(AITE.ActivePlayerId);
+                    //int Score = AITurnEvaluator.Score(EvalState, TestTurn);
                     if (Score > TopScore)
                     {
                         TopBossTurn = TestTurn;

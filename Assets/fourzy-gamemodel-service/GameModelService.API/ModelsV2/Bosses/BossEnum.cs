@@ -7,6 +7,7 @@ namespace FourzyGameModel.Model
 {
     public enum BossType
     {
+        None,
         ArrowChanger,
         FruitFighter,
         Slurper,
@@ -17,7 +18,6 @@ namespace FourzyGameModel.Model
         SnowQueen,
         DirectionMaster,
         EntryWay,
-        None,
         EarthQuake,
         Necrodancer
     }
@@ -32,6 +32,8 @@ namespace FourzyGameModel.Model
         BustAMove,
         EarthCharm,
         BlockASide,
-        FillHole
+        FillHole,
+        ThrowBomb,
+        ActivateBomb
     }
 }

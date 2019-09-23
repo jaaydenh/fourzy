@@ -52,13 +52,13 @@ namespace FourzyGameModel.Model
                                         PTT = null;
                                 }
                                 PR.Solution.Add(new PlayerTurn(m));
-                                PR.Solution.Reverse();
+                          
 
                             }
                         }
                         else
                         {
-                            if (GSTest.WinnerId < 0 && PR.NumberOfVictoryPaths == 0)
+                            if (GSTest.WinnerId < 0 && PR.NumberOfVictoryPaths == 0 && PR.VictoryDepth <= SearchDepth)
                             {
                                 AIPlayer AI = new PuzzleAI(GSTest);
                                 PlayerTurn AITurn = AI.GetTurn();
@@ -77,7 +77,12 @@ namespace FourzyGameModel.Model
                     evaluated_states++;
                 }
 
-                if (PR.NumberOfVictoryPaths > 0) break;
+                if (PR.NumberOfVictoryPaths > 0)
+                {
+                    //PR.Solution.Reverse();
+                    break;
+                }
+
             }
 
             return PR;

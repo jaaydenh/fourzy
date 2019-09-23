@@ -67,7 +67,7 @@ namespace FourzyGameModel.Model
             foreach (IToken t in Ghosts)
             {
                 GhostToken Ghost = (GhostToken)t;
-                foreach (Direction d in Enum.GetValues(typeof(Direction)))
+                foreach (Direction d in TokenConstants.GetDirections())
                 {
                     foreach (BoardLocation Target in Ghost.Space.Location.Look(State.Board, d))
                     {
@@ -84,10 +84,10 @@ namespace FourzyGameModel.Model
             }
             else
             {
-                int RandomGhost = State.Random.RandomInteger(1, Ghosts.Count);
+                int RandomGhost = State.Random.RandomInteger(0, Ghosts.Count-1);
 
                 GhostToken Ghost = (GhostToken)Ghosts[RandomGhost];
-                foreach (Direction d in Enum.GetValues(typeof(Direction)))
+                foreach (Direction d in TokenConstants.GetDirections() )
                 {
                     foreach (BoardLocation Target in Ghost.Space.Location.Look(State.Board, d))
                     {

@@ -18,7 +18,8 @@ namespace FourzyGameModel.Model
             AITurnEvaluator AI = new AITurnEvaluator(EvalState);
             if (AI.WinningTurns.Count > 0) return AI.WinningTurns.First();
 
-            SimpleMove Move = AI.GetRandomBetterMove(3,12,6);
+            //SimpleMove Move = AI.GetRandomBetterMove(3,12,6);
+            SimpleMove Move = AI.GetRandomOkMove(4);
             if (Move == null) Move = AI.GetBestLostCauseMove();
 
             return new PlayerTurn(Move);

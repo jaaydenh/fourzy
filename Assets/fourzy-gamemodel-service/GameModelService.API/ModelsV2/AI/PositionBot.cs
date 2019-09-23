@@ -18,7 +18,7 @@ namespace FourzyGameModel.Model
 
             AIHeuristicWeight AIWeight = new AIHeuristicWeight(25, 0, 100);
 
-            SimpleMove Move = AI.GetOkMoveWithHueristics(AIWeight,5);
+            SimpleMove Move = AI.GetRandomOkMoveWithHueristics(AIWeight,5);
             if (Move == null) Move = AI.GetBestLostCauseMove();
 
             return new PlayerTurn(Move);

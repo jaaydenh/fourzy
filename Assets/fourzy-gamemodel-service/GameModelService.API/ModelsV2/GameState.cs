@@ -8,11 +8,14 @@ namespace FourzyGameModel.Model
     {
         //INTERNAL DATA
         public GameBoard Board;
-        public List<GameEffect> GameEffects;
+        public List<IGameEffect> GameEffects;
         public Dictionary<int, Player> Players;
         public Dictionary<int, Herd> Herds;
         public Dictionary<int, ISpell> ActiveSpells;
         public bool ProcessStartOfTurn = false;
+
+        [JsonIgnore]
+        public List<BoardLocation> ActiveSpaces;
 
         //INITAL DATA AND PREFERENCES
         //A unique identifier used for repeating a random generation
@@ -94,6 +97,7 @@ namespace FourzyGameModel.Model
             this.Time = new Dictionary<int, int>();
 
             this.Random = new RandomTools(this);
+            this.ActiveSpaces = new List<BoardLocation>();
         }
 
         public GameState(GameState OriginalState)
@@ -101,9 +105,10 @@ namespace FourzyGameModel.Model
             this.Board = new GameBoard(OriginalState.Board);
             //this.Board.RecordGameAction += RecordGameAction;
             
-            this.GameEffects = new List<GameEffect>();
-            foreach (GameEffect e in OriginalState.GameEffects)
+            this.GameEffects = new List<IGameEffect>();
+            foreach (IGameEffect e in OriginalState.GameEffects)
             {
+                e.Parent = this;
                 this.GameEffects.Add(e);
             }
             this.Players = new Dictionary<int, Player>();
@@ -128,6 +133,13 @@ namespace FourzyGameModel.Model
             this.UniqueId = Guid.NewGuid().ToString();
             this.ActivePlayerId = OriginalState.ActivePlayerId;
             this.WinnerId = OriginalState.WinnerId;
+            this.ActiveSpaces = new List<BoardLocation>();
+            foreach (BoardLocation l in OriginalState.ActiveSpaces)
+            {
+                ActiveSpaces.Add(l);
+            }
+                
+
         }
 
         public GameState()
@@ -137,6 +149,8 @@ namespace FourzyGameModel.Model
             this.ActivePlayerId = 1;
             this.RealTime = false;
             Initialize();
+            this.Players.Add(1, new Player(1, "One"));
+            this.Players.Add(2, new Player(2, "Two"));
         }
 
         public GameState(int Rows, int Columns, int FirstPlayerId = 1)
@@ -145,6 +159,8 @@ namespace FourzyGameModel.Model
             this.Board.Parent = this;
             this.RealTime = false;
             Initialize();
+            this.Players.Add(1, new Player(1, "One"));
+            this.Players.Add(2, new Player(2, "Two"));
 
             this.ActivePlayerId = FirstPlayerId;
         }
@@ -153,8 +169,10 @@ namespace FourzyGameModel.Model
         {
             this.Board = Board;
             this.Board.Parent = this;
+           
             this.RealTime = false;
             Initialize();
+            this.Board.Random = this.Random;
 
             this.ActivePlayerId = FirstPlayerId;
         }
@@ -165,6 +183,7 @@ namespace FourzyGameModel.Model
             this.Board.Parent = this;
             this.RealTime = false;
             Initialize();
+            this.Board.Random = this.Random;
 
             this.ActivePlayerId = FirstPlayerId;
         }
@@ -198,13 +217,14 @@ namespace FourzyGameModel.Model
         private void Initialize()
         {
             this.WinnerId = -1;
-            this.GameEffects = new List<GameEffect>();
+            this.GameEffects = new List<IGameEffect>();
             this.Players = new Dictionary<int, Player>();
             this.Herds = new Dictionary<int, Herd>();
             this.Time = new Dictionary<int, int>();
             this.GameSeed = Guid.NewGuid().ToString();
             this.UniqueId = Guid.NewGuid().ToString();
             this.Random = new RandomTools(this);
+            this.ActiveSpaces = new List<BoardLocation>();
         }
 
         #endregion "Constructors"
@@ -231,23 +251,30 @@ namespace FourzyGameModel.Model
 
         public void StartOfTurn(int PlayerId)
         {
+            foreach (IGameEffect e in GameEffects) e.StartOfTurn(PlayerId);
             Board.StartOfTurn(PlayerId);
             this.ProcessStartOfTurn = true;
+            this.ActiveSpaces.Clear();
         }
 
         public void PieceBumpsIntoLocation(MovingPiece Piece, BoardLocation Location)
         {
+            foreach (IGameEffect e in GameEffects) e.PieceBumpsIntoLocation(Piece, Location); 
+
             Board.PieceBumpsIntoLocation(Piece, Location);
         }
 
         public void PieceStopsOnSpace(MovingPiece Piece)
         {
+            foreach (IGameEffect e in GameEffects) e.PieceStopsOnSpace(Piece);
             Piece.RemoveCondition(PieceConditionType.INERTIA);
             Board.PieceStopsOnSpace(Piece);
+            if (Piece.PlayerId == ActivePlayerId) ActiveSpaces.Add(Piece.Location);
         }
 
         public void EndOfTurn(int PlayerId)
         {
+            foreach (IGameEffect e in GameEffects) e.EndOfTurn(PlayerId);
             Board.EndOfTurn(PlayerId);
             var newActivePlayerId = this.Opponent(this.ActivePlayerId);
             this.ActivePlayerId = newActivePlayerId;

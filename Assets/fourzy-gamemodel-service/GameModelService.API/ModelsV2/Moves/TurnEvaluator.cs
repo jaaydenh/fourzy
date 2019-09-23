@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FourzyGameModel.Model
 {
@@ -53,6 +54,91 @@ namespace FourzyGameModel.Model
 
             }
             return PossibleMoves;
+        }
+
+        public bool IsAvailableSimpleMove(int PlayerId = 0)
+        {
+            
+            if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;
+
+            List<SimpleMove> PossibleMoves = new List<SimpleMove>();
+            foreach (Direction d in Enum.GetValues(typeof(Direction)))
+            {
+                switch (d)
+                {
+                    case Direction.UP:
+                    case Direction.DOWN:
+                        for (int c = 1; c < EvalState.Board.Columns - 1; c++)
+                        {
+                            SimpleMove m = new SimpleMove(new Piece(PlayerId), d, c);
+                            if (EvalState.Board.ContentsAt(FirstLocation(m, EvalState.Board)).CanMoveInto(new MovingPiece(m, EvalState.Board), d))
+                            {
+                                return true;
+                            }
+                        }
+                        break;
+                    case Direction.LEFT:
+                    case Direction.RIGHT:
+                        for (int r = 1; r < EvalState.Board.Rows - 1; r++)
+                        {
+                            SimpleMove m = new SimpleMove(new Piece(PlayerId), d, r);
+                            if (EvalState.Board.ContentsAt(FirstLocation(m, EvalState.Board)).CanMoveInto(new MovingPiece(m, EvalState.Board), d))
+                            {
+                                return true;
+                            }
+                        }
+                        break;
+                }
+
+            }
+            return false;
+        }
+
+
+        public List<SimpleMove> GetAvailableSimpleMoves(Direction MoveDirection, int PlayerId = 0)
+        {
+            if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;
+
+            List<SimpleMove> PossibleMoves = new List<SimpleMove>();
+                switch (MoveDirection)
+                {
+                    case Direction.UP:
+                    case Direction.DOWN:
+                        for (int c = 1; c < EvalState.Board.Columns - 1; c++)
+                        {
+                            SimpleMove m = new SimpleMove(new Piece(PlayerId), MoveDirection, c);
+                            if (EvalState.Board.ContentsAt(FirstLocation(m, EvalState.Board)).CanMoveInto(new MovingPiece(m, EvalState.Board), MoveDirection))
+                            {
+                                PossibleMoves.Add(m);
+                            }
+                        }
+                        break;
+                    case Direction.LEFT:
+                    case Direction.RIGHT:
+                        for (int r = 1; r < EvalState.Board.Rows - 1; r++)
+                        {
+                            SimpleMove m = new SimpleMove(new Piece(PlayerId), MoveDirection, r);
+                            if (EvalState.Board.ContentsAt(FirstLocation(m, EvalState.Board)).CanMoveInto(new MovingPiece(m, EvalState.Board), MoveDirection))
+                            {
+                                PossibleMoves.Add(m);
+                            }
+                        }
+                        break;
+                }
+            return PossibleMoves;
+        }
+
+        public Dictionary<SimpleMove, GameState> GetAvailableMoveInfo(int PlayerId = 0)
+        {
+            if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;
+
+            Dictionary<SimpleMove, GameState> MoveInfo = new Dictionary<SimpleMove, GameState>();
+            foreach (SimpleMove m in GetAvailableSimpleMoves(PlayerId))
+            {
+                MoveInfo.Add(m, new GameState(EvaluateTurn(new PlayerTurn(m))));
+            }
+
+            return MoveInfo;
         }
 
         public List<SimpleMove> GetWinningMoves(int PlayerId=0)
@@ -149,17 +235,23 @@ namespace FourzyGameModel.Model
                     case MoveType.SIMPLE:
                         if (!ProcessSimpleMove((SimpleMove)m)) return OriginalState;
 
-                        break; ;
+                        break; 
                     case MoveType.SPELL:
                         if (!ProcessSpell((ISpell)m)) return OriginalState;
 
-                        break; ;
+                        break; 
                     case MoveType.TOKEN:
-                        break; ;
+                        break; 
+
+                    case MoveType.PASS:
+                        PassMove Pass = (PassMove)m;
+                        Player Passer = EvalState.Players[this.EvalState.ActivePlayerId];
+                        RecordAction(new GameActionPass(Passer));
+                        break; 
 
                     case MoveType.BOSSPOWER:
                         if (!ProcessPower((IBossPower)m)) return OriginalState;
-                        break; ;
+                        break; 
 
                 }
             }
@@ -249,11 +341,25 @@ namespace FourzyGameModel.Model
             return Possible;
         }
 
-        public List<BoardLocation> FindDeadLocations()
+        public HashSet<BoardLocation> FindDeadLocations()
+        {
+            List<BoardLocation> Possible = FindPossibleLocations();
+            HashSet<BoardLocation> Dead = new HashSet<BoardLocation>();
+            foreach (BoardSpace s in EvalState.Board.Contents )
+            {
+                if (!Possible.Contains(s.Location))
+                    if (!s.ContainsPiece)
+                        Dead.Add(s.Location);
+            }
+
+            return Dead;
+        }
+
+        public List<BoardLocation> FindDeadLocationsList()
         {
             List<BoardLocation> Possible = FindPossibleLocations();
             List<BoardLocation> Dead = new List<BoardLocation>();
-            foreach (BoardSpace s in EvalState.Board.Contents )
+            foreach (BoardSpace s in EvalState.Board.Contents)
             {
                 if (!Possible.Contains(s.Location))
                     if (!s.ContainsPiece)
@@ -718,7 +824,8 @@ namespace FourzyGameModel.Model
 
         public bool DidPlayerWinRevised(int PlayerId)
         {
-            if (EvalState.Board.FindPieces(PlayerId).Count < 4) return false;
+            Dictionary<BoardLocation, Piece> Pieces = EvalState.Board.Pieces;
+            if (Pieces.Count < 4) return false;
 
             BitArray[] columns = new BitArray[EvalState.Board.Columns];
             BitArray[] rows = new BitArray[EvalState.Board.Rows];
@@ -729,10 +836,12 @@ namespace FourzyGameModel.Model
             for (int i = 0; i < EvalState.Board.Rows; i++) rows[i] = new BitArray(EvalState.Board.Columns); 
             for (int i = 0; i < EvalState.Board.Rows + EvalState.Board.Columns; i++) diag1[i] = new BitArray(Math.Max(EvalState.Board.Rows, EvalState.Board.Columns));
             for (int i = 0; i < EvalState.Board.Rows + EvalState.Board.Columns; i++) diag2[i] = new BitArray(Math.Max(EvalState.Board.Rows, EvalState.Board.Columns));
-            
-            foreach (BoardLocation l in EvalState.Board.Pieces.Keys)
+
+            Pieces = Pieces.Where(kvp => kvp.Value.PlayerId == PlayerId).ToDictionary(i => i.Key, i => i.Value);
+            foreach (BoardLocation l in Pieces.Keys)
             {
-                if (EvalState.Board.Pieces[l].PlayerId != PlayerId) continue;
+                //if (EvalState.Board.Pieces[l].PlayerId != PlayerId) continue;
+                //if (EvalState.Board.ContentsAt(l).ActivePiece.PlayerId != PlayerId) continue;
                 columns[l.Column][l.Row] = true;
                 rows[l.Row][l.Column] = true;
                 //This is broken. Review these if statements.
@@ -851,7 +960,7 @@ namespace FourzyGameModel.Model
 
         public bool EvaluateDraw(int PlayerId)
         {
-            if (GetAvailableSimpleMoves(PlayerId).Count == 0) return true;
+            if (!IsAvailableSimpleMove(PlayerId)) return true;
             return false;
         }
 

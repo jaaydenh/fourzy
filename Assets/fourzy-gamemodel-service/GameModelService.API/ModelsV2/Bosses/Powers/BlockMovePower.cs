@@ -33,6 +33,10 @@ namespace FourzyGameModel.Model
 
         public bool Activate(GameState State)
         {
+            BoardSpace Target = State.Board.ContentsAt(BlockLocation);
+            if (Target.ContainsPiece) return false;
+            if (!Target.ContainsOnlyTerrain) return false;
+
             List<IToken> Blockers = State.Board.FindTokens(TokenType.MOVE_BLOCKER);
             foreach (BoardLocation l in State.Board.Edges)
             {
@@ -53,6 +57,7 @@ namespace FourzyGameModel.Model
             return true;
         }
 
+        //Should always be true. Otherwise, game would be a draw.
         public bool IsAvailable(GameState State, bool IsDesparate=false)
         {
             return true;
@@ -72,7 +77,8 @@ namespace FourzyGameModel.Model
                         {
                             BoardLocation l = new BoardLocation(0, c);
                         if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER)
-                            && State.Board.ContentsAt(l).ContainsOnlyTerrain)
+                                && !State.Board.ContentsAt(l).ContainsPiece
+                                && State.Board.ContentsAt(l).ContainsOnlyTerrain)
                             {
                             Powers.Add(new BlockMovePower(l));
                             Found = true;
@@ -85,7 +91,8 @@ namespace FourzyGameModel.Model
                     {
                         BoardLocation l = new BoardLocation(State.Board.Rows-1, c);
                         if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER)
-                            && State.Board.ContentsAt(l).ContainsOnlyTerrain)
+                                && !State.Board.ContentsAt(l).ContainsPiece
+                                && State.Board.ContentsAt(l).ContainsOnlyTerrain)
                         {
                             Powers.Add(new BlockMovePower(l));
                             Found = true;
@@ -98,6 +105,7 @@ namespace FourzyGameModel.Model
                     {
                         BoardLocation l = new BoardLocation(r, 0);
                         if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER)
+                            && !State.Board.ContentsAt(l).ContainsPiece
                             && State.Board.ContentsAt(l).ContainsOnlyTerrain)
                         {
                             Powers.Add(new BlockMovePower(l));
@@ -111,7 +119,8 @@ namespace FourzyGameModel.Model
                     {
                         BoardLocation l = new BoardLocation(r, State.Board.Columns-1);
                         if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER)
-                            && State.Board.ContentsAt(l).ContainsOnlyTerrain)
+                                && !State.Board.ContentsAt(l).ContainsPiece
+                                && State.Board.ContentsAt(l).ContainsOnlyTerrain)
                         {
                             Powers.Add(new BlockMovePower(l));
                             Found = true;
@@ -125,6 +134,7 @@ namespace FourzyGameModel.Model
                 foreach (BoardLocation l in State.Board.Edges)
                 {
                     if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER)
+                        && !State.Board.ContentsAt(l).ContainsPiece
                         && State.Board.ContentsAt(l).ContainsOnlyTerrain)
                         Powers.Add(new BlockMovePower(l));
                 }

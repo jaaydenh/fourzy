@@ -25,7 +25,7 @@ namespace FourzyGameModel.Model
             AITurnEvaluator AI = new AITurnEvaluator(EvalState);
             if (AI.WinningTurns.Count > 0) return AI.WinningTurns.First();
 
-            List<SimpleMove> OkMoves = AI.GetTopOkMoves(2);
+            List<SimpleMove> OkMoves = AI.GetTopOkMoves(6);
 
             //Flag if no non-winning moves.
             bool Desparate = false;
@@ -39,9 +39,9 @@ namespace FourzyGameModel.Model
             
             if (Desparate)
             {
-                List<PlayerTurn> OkBossTurns = BossAIHelper.FindOkMove(EvalState, AI.AvailableSimpleMoves, Powers, 3);
+                List<PlayerTurn> OkBossTurns = BossAIHelper.FindOkMove(EvalState, AI.AvailableSimpleMoves, Powers, 1);
                 if (OkBossTurns.Count == 0) return new PlayerTurn(OkMoves.First());
-                if (OkBossTurns.Count > 1) return OkBossTurns.First();
+                if (OkBossTurns.Count >= 1) return OkBossTurns.First();
             }
 
             PlayerTurn TopBossTurn = BossAIHelper.GetBestBossTurn(EvalState, OkMoves, Powers); 

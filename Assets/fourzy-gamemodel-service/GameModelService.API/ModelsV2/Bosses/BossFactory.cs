@@ -13,6 +13,8 @@ namespace FourzyGameModel.Model
             switch (Type) {
                 case BossType.EarthQuake:
                     return new EarthQuakeBoss();
+                case BossType.MadBomber:
+                    return new MadBomberBoss();
                 case BossType.DirectionMaster:
                    return new DirectionMasterBoss();
                 case BossType.EntryWay:
@@ -40,6 +42,9 @@ namespace FourzyGameModel.Model
             Board.Random = new RandomTools(SeedString);
             switch (Type)
             {
+                case BossType.MadBomber:
+                    break;
+
                 case BossType.DirectionMaster:
                     List<int> Columns = new List<int>();
                     for (int c = 0; c < Board.Columns; c++)
@@ -67,7 +72,7 @@ namespace FourzyGameModel.Model
                     Board = BoardFactory.CreateGameBoard(new BeginnerGardenRandomGenerator(""), Options);
 
                     break;
-
+                
                 case BossType.Treant:
                     //List<BoardLocation> TreeLocations = new List<BoardLocation>();
                     //for (int i=0; i<4; i++)

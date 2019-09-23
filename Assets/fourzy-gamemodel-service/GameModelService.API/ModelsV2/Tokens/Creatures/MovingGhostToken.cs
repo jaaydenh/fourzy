@@ -290,6 +290,7 @@ namespace FourzyGameModel.Model
             {
                 MovingGhostToken t = new MovingGhostToken(Orientation, MoveType, Frequency, true);
                 Target.AddToken(t);
+                t.Space = Target;
                 Space.Parent.RecordGameAction(new GameActionTokenMovement(t, TransitionType.GHOST_MOVE, Space.Location, Target.Location));
                 Space.RemoveTokens(TokenType.MOVING_GHOST);
                 return true;
@@ -325,6 +326,7 @@ namespace FourzyGameModel.Model
                 {
                     MovingGhostToken t = new MovingGhostToken(Orientation, MoveType, Frequency, true);
                     Target.AddToken(t);
+                    t.Space = Target;
                     Space.Parent.RecordGameAction(new GameActionTokenMovement(t, TransitionType.GHOST_WRAPAROUND, Space.Location, Target.Location));
                     Space.RemoveTokens(TokenType.MOVING_GHOST);
                     return true;

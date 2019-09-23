@@ -56,29 +56,50 @@ namespace FourzyGameModel.Model
 
             GameBoard Board = BoardFactory.CreateRandomBoard(Options, Player1, Player2, Area);
 
-            if (Player2.DisplayName == "Pod")
+            if (Player2.DisplayName == "Easy")
             {
                 Player2.Profile = AIProfile.BeginnerAI;
                 this.State = new GameState(Board, Options, FirstPlayerId);
             }
 
-            else if (Player2.DisplayName == "TiVo")
+            else if (Player2.DisplayName == "Normal")
             {
                 Player2.Profile = AIProfile.PositionBot;
                 this.State = new GameState(Board, Options, FirstPlayerId);
             }
 
-            else if (Player2.DisplayName == "UFO")
+            else if (Player2.DisplayName == "Hard")
             {
-                BossType MyBoss = BossType.Necrodancer;
-                Board = BossFactory.CreateBoard(MyBoss);
+                Player2.Profile = AIProfile.SimpleAI;
                 this.State = new GameState(Board, Options, FirstPlayerId);
-                IBoss Boss = BossFactory.Create(MyBoss);
-                Boss.StartGame(this.State);
-                Player2.BossType = MyBoss;
-                Player2.Profile = AIProfile.BossAI;
-                Player2.SpecialAbilityCount = 1;
             }
+
+            else if (Player2.DisplayName == "Doctor")
+            {
+                Player2.Profile = AIProfile.ScoreBot;
+                this.State = new GameState(Board, Options, FirstPlayerId);
+            }
+
+            else if (Player2.DisplayName == "Practice")
+            {
+                Player2.Profile = AIProfile.PassBot;
+                this.State = new GameState(Board, Options, FirstPlayerId);
+                //this.State.GameEffects.Add(new LifeGameEffect(TokenType.STICKY));
+                this.State.GameEffects.Add(new ShiftTokensGameEffect(TokenType.STICKY,Direction.RIGHT, this.State));
+            }
+
+            //else if (Player2.DisplayName == "UFO")
+            //{
+            //    BossType MyBoss = BossType.Necrodancer;
+            //    Board = BossFactory.CreateBoard(MyBoss);
+            //    this.State = new GameState(Board, Options, FirstPlayerId);
+            //    IBoss Boss = BossFactory.Create(MyBoss);
+            //    Boss.StartGame(this.State);
+            //    Player2.BossType = MyBoss;
+            //    Player2.Profile = AIProfile.BossAI;
+            //    Player2.SpecialAbilityCount = 1;
+            //}
+
             else
             {
                 this.State = new GameState(Board, Options, FirstPlayerId);
@@ -127,6 +148,21 @@ namespace FourzyGameModel.Model
         public FourzyGame(Area Area, BossType Boss, Player Player)
         {
             this.State = BossGameFactory.CreateBossGame(Area, Boss, Player);
+            this.playerTurnRecord = new List<PlayerTurn>();
+            this.GameType = GameType.AI;
+        }
+
+        //Create a boss match with a random area board.
+        public FourzyGame(Area Area, AIProfile Profile, Player Player, int FirstPlayerId=1, GameOptions Options = null)
+        {
+            if (Options == null) Options = new GameOptions();
+            Player AI = new Player(2, Profile.ToString(), Profile);
+
+            GameBoard Board = BoardFactory.CreateRandomBoard(Options, Player, AI, Area);
+            this.State = new GameState(Board, Options, FirstPlayerId);
+            this.State.Players.Add(1, Player);
+            this.State.Players.Add(2, AI);
+
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
         }

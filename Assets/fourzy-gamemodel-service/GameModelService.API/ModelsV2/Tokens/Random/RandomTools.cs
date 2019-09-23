@@ -20,6 +20,7 @@ namespace FourzyGameModel.Model
         {
             this.State = new GameState();
             if (SeedString == "") SeedString = Guid.NewGuid().ToString();
+            this.State.GameSeed = SeedString;
             this.R = new Random(CreateSeed(SeedString));
         }
         

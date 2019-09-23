@@ -129,18 +129,33 @@ namespace FourzyGameModel.Model
 
         public BoardLocation Neighbor(Direction Direction, int Distance = 1)
         {
+            BoardLocation l = new BoardLocation(Row, Column);
             switch (Direction)
             {
                 case Direction.UP:
-                    return new BoardLocation(Row - Distance, Column);
+                    l = new BoardLocation(Row - Distance, Column);
+                    break;
                 case Direction.DOWN:
-                    return new BoardLocation(Row + Distance, Column);
+                    l = new BoardLocation(Row + Distance, Column);
+                    break;
                 case Direction.LEFT:
-                    return new BoardLocation(Row, Column - Distance);
+                    l = new BoardLocation(Row, Column - Distance);
+                    break;
                 case Direction.RIGHT:
-                    return new BoardLocation(Row, Column + Distance);
+                    l = new BoardLocation(Row, Column + Distance);
+                    break;
             }
-            return new BoardLocation(Row, Column);
+            return l;
+        }
+
+        public BoardLocation Wrap(GameBoard Board)
+        {
+                if (Row < 0) Row = Board.Rows - 1;
+                if (Row >= Board.Rows) Row = 0;
+                if (Column < 0) Column = Board.Columns - 1;
+                if (Column >= Board.Columns) Column = 0;
+
+                return new BoardLocation(Row, Column);
         }
 
         public BoardLocation Neighbor(CompassDirection Direction, int Distance = 1)
@@ -194,6 +209,29 @@ namespace FourzyGameModel.Model
             }
             return Locations;
         }
+
+        public List<BoardLocation> GetAdjacentWithWrap(GameBoard Board)
+        {
+            List<BoardLocation> Locations = new List<BoardLocation>();
+            for (int r = -1; r <= 1; r++)
+            {
+                for (int c = -1; c <= 1; c++)
+                {
+                    if (r != 0 || c != 0)
+                    {
+                        BoardLocation l = new BoardLocation(Row + r, Column + c);
+                        if (l.Row < 0) l.Row = Board.Rows - 1;
+                        if (l.Row >= Board.Rows) l.Row = 0;
+                        if (l.Column < 0) l.Column = Board.Columns - 1;
+                        if (l.Column >= Board.Columns) l.Column = 0;
+                        Locations.Add(l);
+                        //if (l.OnBoard(Board)) Locations.Add(l);
+                    }
+                }
+            }
+            return Locations;
+        }
+
         public List<BoardLocation> GetRow(GameBoard Board)
         {
             List<BoardLocation> Locations = new List<BoardLocation>();
