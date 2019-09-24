@@ -1,1 +1,11 @@
-{"name":"Defeat Blobby","type":1,"id":"002","unlockRequirement":0,"herdID":"1","playerName":"Blobby","rewards":[{"levelIndex":0,"rewardType":0,"name":"","quantity":10}]}
+{
+    "name": "Defeat Blobby",
+    "type": 1,
+    "id": "002",
+    "unlockRequirement": 0,
+    "herdID": "1",
+    "playerName": "Blobby",
+    "rewards": [
+
+    ]
+}
