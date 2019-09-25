@@ -1,8 +1,10 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,19 +12,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class GamePiecesScreen : MenuTab
     {
-        public GridLayoutGroup piecesGroup;
-        public GridLayoutGroup tokensGroup;
-
-        private List<GamePieceWidgetMedium> gamePieceWidgets;
+        public ScrollRect scrollRect;
+        public RectTransform piecesTab;
+        public RectTransform tokensTab;
+        public RectTransform unlockedPiecesParent;
+        public RectTransform lockedPiecesParent;
+        public RectTransform unlockedCover;
+        public RectTransform lockedCover;
+        public SizeTween unlockedCoverTween;
+        public SizeTween lockedCoverTween;
+        public RotationTween arrowUnlocked;
+        public RotationTween arrowLocked;
+        public RectTransform tokensParent;
+        public TMP_Text unlockedLabel;
+        public TMP_Text lockedLabel;
 
         public override bool isCurrent => base.isCurrent;
 
-        protected override void Awake()
-        {
-            base.Awake();
+        protected List<GamePieceWidgetMedium> gamePieceWidgets = new List<GamePieceWidgetMedium>();
 
-            gamePieceWidgets = new List<GamePieceWidgetMedium>();
-        }
+        protected bool unlockedExpanded = true;
+        protected bool lockedExpanded = true;
 
         protected override void Start()
         {
@@ -30,55 +40,142 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             CreateGamePieces();
             CreateTokens();
+
+            SetPiecesActive();
         }
 
         protected void Update()
         {
             //remove
 #if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.S))
             {
-                ////give game pieces
-                //foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
-                //    widget.data.AddPieces(Random.Range(1, 5));
+                //give game pieces
+                foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
+                {
+                    widget.data.AddPieces(Random.Range(1, 5));
+                    widget._Update();
+                }
 
-                //give gems
-                //UserManager.Instance.gems = 3;
-
-                ////update gamepieces data
-                //foreach (GamePieceWidgetMedium gamePieceWidget in gamePieceWidgets)
-                //    gamePieceWidget.UpdateData();
+                PlaceGamepieceWidgets();
             }
 #endif
         }
 
+        public override void Open()
+        {
+            base.Open();
+
+            PlaceGamepieceWidgets();
+        }
+
+        public void SetPiecesActive()
+        {
+            piecesTab.gameObject.SetActive(true);
+            tokensTab.gameObject.SetActive(false);
+            scrollRect.content = piecesTab;
+        }
+
+        public void SetTokensActive()
+        {
+            piecesTab.gameObject.SetActive(false);
+            tokensTab.gameObject.SetActive(true);
+            scrollRect.content = tokensTab;
+        }
+
+        public void ToggleUnlockedPiecesExpand()
+        {
+            unlockedExpanded = !unlockedExpanded;
+
+            if (unlockedExpanded)
+            {
+                unlockedCoverTween.PlayForward(true);
+                arrowUnlocked.PlayForward(true);
+            }
+            else
+            {
+                unlockedCoverTween.PlayBackward(true);
+                arrowUnlocked.PlayBackward(true);
+            }
+        }
+
+        public void ToggleLockedPiecesExpand()
+        {
+            lockedExpanded = !lockedExpanded;
+
+            if (lockedExpanded)
+            {
+                lockedCoverTween.PlayForward(true);
+                arrowLocked.PlayForward(true);
+            }
+            else
+            {
+                lockedCoverTween.PlayBackward(true);
+                arrowLocked.PlayBackward(true);
+            }
+        }
+
         private void CreateGamePieces()
         {
-            gamePieceWidgets.Clear();
-
-            //remove old ones
-            foreach (Transform gamePiece in piecesGroup.transform) Destroy(gamePiece.gameObject);
-
-            //load game pieces
             foreach (GamePiecePrefabData prefabData in GameContentManager.Instance.piecesDataHolder.gamePieces.list)
             {
-                GamePieceWidgetMedium widget = GameContentManager.InstantiatePrefab<GamePieceWidgetMedium>(GameContentManager.PrefabType.GAME_PIECE_MEDIUM, piecesGroup.transform);
+                GamePieceWidgetMedium widget = GameContentManager.InstantiatePrefab<GamePieceWidgetMedium>(GameContentManager.PrefabType.GAME_PIECE_MEDIUM, transform);
                 widget.SetData(prefabData.data);
-                gamePieceWidgets.Add(widget);
 
                 widgets.Add(widget);
+                gamePieceWidgets.Add(widget);
             }
         }
 
         private void CreateTokens()
         {
-            //remove old ones
-            foreach (Transform token in tokensGroup.transform)
-                Destroy(token.gameObject);
-
             //load tokens
             foreach (TokensDataHolder.TokenData data in GameContentManager.Instance.enabledTokens)
-                GameContentManager.InstantiatePrefab<TokenWidget>(GameContentManager.PrefabType.TOKEN_SMALL, tokensGroup.transform).SetData(data);
+                widgets.Add(GameContentManager.InstantiatePrefab<TokenWidget>(GameContentManager.PrefabType.TOKEN_SMALL, tokensParent).SetData(data));
+        }
+
+        private void PlaceGamepieceWidgets()
+        {
+            List<GamePieceWidgetMedium> unlocked = new List<GamePieceWidgetMedium>();
+            List<GamePieceWidgetMedium> locked = new List<GamePieceWidgetMedium>();
+
+            foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
+            {
+                switch (widget.data.State)
+                {
+                    case GamePieceState.FoundAndLocked:
+                    case GamePieceState.NotFound:
+                        locked.Add(widget);
+
+                        break;
+
+                    case GamePieceState.FoundAndUnlocked:
+                        unlocked.Add(widget);
+
+                        break;
+                }
+            }
+
+            //sort if needed
+            //
+
+            unlocked.ForEach(widget => widget.transform.SetParent(unlockedPiecesParent));
+            locked.ForEach(widget => widget.transform.SetParent(lockedPiecesParent));
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(unlockedPiecesParent);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(lockedPiecesParent);
+
+            if (unlockedExpanded) unlockedCover.sizeDelta = new Vector2(unlockedCover.sizeDelta.x, unlockedPiecesParent.rect.height);
+            if (lockedExpanded) lockedCover.sizeDelta = new Vector2(lockedCover.sizeDelta.x, lockedPiecesParent.rect.height);
+
+            unlockedCoverTween.from = new Vector2(unlockedCover.rect.width, 0f);
+            unlockedCoverTween.to = new Vector2(unlockedCover.rect.width, unlockedPiecesParent.rect.height);
+
+            lockedCoverTween.from = new Vector2(lockedCover.rect.width, 0f);
+            lockedCoverTween.to = new Vector2(lockedCover.rect.width, lockedPiecesParent.rect.height);
+
+            unlockedLabel.text = $"Unlocked {unlocked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
+            lockedLabel.text = $"Locked {locked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
         }
     }
 }

@@ -129,9 +129,7 @@ namespace Fourzy._Updates.UI.Helpers
         {
             MaskableGraphic maskable = obj.GetComponent<MaskableGraphic>();
 
-            if (!maskable) return;
-
-            maskableGraphics.Add(maskable);
+            if(maskable) maskableGraphics.Add(maskable);
 
             if (propagate)
                 for (int i = 0; i < obj.childCount; i++)

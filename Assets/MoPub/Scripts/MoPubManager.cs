@@ -83,21 +83,6 @@ public class MoPubManager : MonoBehaviour
     // iOS only. Fired when a rewarded video event causes another application to open
     public static event Action<string> OnRewardedVideoLeavingApplicationEvent;
 
-#if mopub_native_beta
-
-    // Fired when a native ad is loaded
-    public static event Action<string, AbstractNativeAd.Data> OnNativeLoadEvent;
-
-    // Fired when a native ad is shown
-    public static event Action<string> OnNativeImpressionEvent;
-
-    // Fired when a native ad is clicked
-    public static event Action<string> OnNativeClickEvent;
-
-    // Fired when a native ad fails to load
-    public static event Action<string, string> OnNativeFailEvent;
-
-#endif
 
     // Fired when the SDK has been notified of a change in the user's consent status for data tracking.
     public static event Action<MoPub.Consent.Status, MoPub.Consent.Status, bool> OnConsentStatusChangedEvent;
@@ -563,52 +548,6 @@ public class MoPubManager : MonoBehaviour
     }
 
 
-#if mopub_native_beta
-    public void EmitNativeLoadEvent(string argsJson)
-    {
-        var args = MoPubUtils.DecodeArgs(argsJson, min: 2);
-        var adUnitId = args[0];
-        var data = AbstractNativeAd.Data.FromJson(args[1]);
-
-        MoPubLog.Log("EmitNativeLoadEvent", MoPubLog.AdLogEvent.LoadSuccess);
-        EmitNativeLoadEvent(adUnitId, data);
-    }
-
-
-    public void EmitNativeFailEvent(string argsJson)
-    {
-        var args = MoPubUtils.DecodeArgs(argsJson, min: 2);
-        var adUnitId = args[0];
-        var error = args[1];
-
-        MoPubLog.Log("EmitNativeFailEvent", MoPubLog.AdLogEvent.LoadFailed, adUnitId, error);
-        var evt = OnNativeFailEvent;
-        if (evt != null) evt(adUnitId, error);
-    }
-
-
-    public void EmitNativeLoadEvent(string adUnitId, AbstractNativeAd.Data nativeAdData)
-    {
-        var evt = OnNativeLoadEvent;
-        if (evt != null) evt(adUnitId, nativeAdData);
-    }
-
-
-    public void EmitNativeImpressionEvent(string adUnitId)
-    {
-        MoPubLog.Log("EmitNativeImpressionEvent", MoPubLog.AdLogEvent.ShowSuccess);
-        var evt = OnNativeImpressionEvent;
-        if (evt != null) evt(adUnitId);
-    }
-
-
-    public void EmitNativeClickEvent(string adUnitId)
-    {
-        MoPubLog.Log("EmitNativeClickEvent", MoPubLog.AdLogEvent.Tapped);
-        var evt = OnNativeClickEvent;
-        if (evt != null) evt(adUnitId);
-    }
-#endif
 
     public void EmitImpressionTrackedEvent(string argsJson)
     {

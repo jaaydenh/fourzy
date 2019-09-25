@@ -49,13 +49,7 @@ namespace Fourzy._Updates.Tween
                 spriteRenderer.size = size;
         }
 
-        public override void OnReset()
-        {
-            if (rectTransform)
-                rectTransform.sizeDelta = from;
-            else if (spriteRenderer)
-                spriteRenderer.size = from;
-        }
+        public override void OnReset() => SetSize(from);
 
         public override void OnInitialized()
         {

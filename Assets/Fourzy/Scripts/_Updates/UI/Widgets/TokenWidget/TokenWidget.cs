@@ -28,7 +28,7 @@ namespace Fourzy._Updates.UI.Widgets
             menuScree = GetComponentInParent<MenuScreen>();
         }
 
-        public void SetData(TokensDataHolder.TokenData tokenData)
+        public WidgetBase SetData(TokensDataHolder.TokenData tokenData)
         {
             this.tokenData = tokenData;
 
@@ -37,6 +37,8 @@ namespace Fourzy._Updates.UI.Widgets
 
             tileBGImage.enabled = tokenData.showBackgroundTile;
             tileBGImage.color = tokenData.backgroundTileColor;
+
+            return this;
         }
 
         public void OpenTokenPrompt()

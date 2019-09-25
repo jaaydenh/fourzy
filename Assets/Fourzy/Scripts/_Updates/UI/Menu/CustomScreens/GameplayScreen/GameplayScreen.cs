@@ -165,7 +165,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (game._Type)
             {
                 case GameType.AI:
-                case GameType.PRESENTATION:
+                //case GameType.PRESENTATION:
                 case GameType.PUZZLE:
                     if (game.isMyTurn) gameInfoWidget.Hide(.3f);
 

@@ -35,11 +35,6 @@ public class MoPubEventListener : MonoBehaviour
         MoPubManager.OnRewardedVideoFailedToPlayEvent += OnRewardedVideoFailedToPlayEvent;
         MoPubManager.OnRewardedVideoClosedEvent += OnRewardedVideoClosedEvent;
 
-#if mopub_native_beta
-        MoPubManager.OnNativeLoadEvent += OnNativeLoadEvent;
-        MoPubManager.OnNativeFailEvent += OnNativeFailEvent;
-#endif
-
         MoPubManager.OnImpressionTrackedEvent += OnImpressionTrackedEvent;
     }
 
@@ -58,11 +53,6 @@ public class MoPubEventListener : MonoBehaviour
         MoPubManager.OnRewardedVideoFailedEvent -= OnRewardedVideoFailedEvent;
         MoPubManager.OnRewardedVideoFailedToPlayEvent -= OnRewardedVideoFailedToPlayEvent;
         MoPubManager.OnRewardedVideoClosedEvent -= OnRewardedVideoClosedEvent;
-
-#if mopub_native_beta
-        MoPubManager.OnNativeLoadEvent -= OnNativeLoadEvent;
-        MoPubManager.OnNativeFailEvent -= OnNativeFailEvent;
-#endif
 
         MoPubManager.OnImpressionTrackedEvent -= OnImpressionTrackedEvent;
     }
@@ -118,6 +108,8 @@ public class MoPubEventListener : MonoBehaviour
 
     private void OnRewardedVideoLoadedEvent(string adUnitId)
     {
+        Debug.Log("loaded");
+
         var availableRewards = MoPub.GetAvailableRewards(adUnitId);
         _demoGUI.AdLoaded(adUnitId);
         _demoGUI.LoadAvailableRewards(adUnitId, availableRewards);
@@ -140,20 +132,6 @@ public class MoPubEventListener : MonoBehaviour
     {
         _demoGUI.AdDismissed(adUnitId);
     }
-
-
-#if mopub_native_beta
-    private void OnNativeLoadEvent(string adUnitId, AbstractNativeAd.Data nativeAdData)
-    {
-        _demoGUI.NativeAdLoaded(adUnitId, nativeAdData);
-    }
-
-
-    private void OnNativeFailEvent(string adUnitId, string error)
-    {
-        AdFailed(adUnitId, "load native ad", error);
-    }
-#endif
 
 
     private void OnImpressionTrackedEvent(string adUnitId, MoPub.ImpressionData impressionData)

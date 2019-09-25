@@ -64,7 +64,7 @@ namespace Fourzy
         public IClientFourzy activeGame { get; set; }
         public BasicPuzzlePack currentPuzzlePack { get; set; }
         public DependencyStatus dependencyStatus { get; set; }
-        public List<TitleNewsItem> latestNews { get; private set; }
+        public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
 
         private bool configFetched = false;
 

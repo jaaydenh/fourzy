@@ -558,6 +558,9 @@ MonoBehaviour:
     - _name: StorePrompt
       prefab: {fileID: 554847239912345784, guid: b6a7208541070344dbf7ea25544b4d00,
         type: 3}
+    - _name: NewsPromptScreen
+      prefab: {fileID: 6082271716224161652, guid: 168c5ee4c57bfe84fae5edd475e2f554,
+        type: 3}
 --- !u!1 &1527524902537866
 GameObject:
   m_ObjectHideFlags: 0

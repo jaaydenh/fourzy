@@ -6,6 +6,7 @@ using UnityEngine;
 using StackableDecorator;
 using System.Linq;
 using UnityEditor;
+using FourzyGameModel.Model;
 
 namespace Fourzy._Updates.Serialized
 {
@@ -32,24 +33,32 @@ namespace Fourzy._Updates.Serialized
             [StackableField]
             [HelpBox(message: "#Message", messageType = StackableDecorator.MessageType.None, below = true)]
             public string gamePieceID;
+            public AIProfile profile;
             public Sprite background;
             public bool enabled;
+
+            private GamePiecesDataHolder gamePiecesHolder;
+            private string _gamePieceID = "-1";
+            private string message;
 
             public string Message()
             {
 #if UNITY_EDITOR
-                string[] guids = AssetDatabase.FindAssets("DefaultGamePiecesDataHolder");
-                GamePiecesDataHolder gamePiecesHolder = AssetDatabase.LoadAssetAtPath<GamePiecesDataHolder>(AssetDatabase.GUIDToAssetPath(guids[0]));
+                if (!gamePiecesHolder) gamePiecesHolder = AssetDatabase.LoadAssetAtPath<GamePiecesDataHolder>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("DefaultGamePiecesDataHolder")[0]));
 
-                GamePieceData gamepieceData = gamePiecesHolder.GetGamePieceData(gamePieceID);
+                if (_gamePieceID != gamePieceID)
+                {
+                    _gamePieceID = gamePieceID;
 
-                if (gamepieceData != null)
-                    return $"Piece name {gamepieceData.name}";
-                else
-                    return "Wrong ID";
-#else
-                return "";
+                    GamePieceData gamepieceData = gamePiecesHolder.GetGamePieceData(gamePieceID);
+
+                    if (gamepieceData != null)
+                        message = $"Piece name {gamepieceData.name}";
+                    else
+                        message = "Wrong ID";
+                }
 #endif
+                return message;
             }
 
             //conditions list

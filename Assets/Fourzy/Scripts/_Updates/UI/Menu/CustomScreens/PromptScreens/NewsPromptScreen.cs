@@ -2,17 +2,22 @@
 
 using PlayFab.ClientModels;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class NewsPromptScreen : PromptScreen
     {
+        public TMP_Text date;
+
         private int currentNewsIndex = -1;
         private List<TitleNewsItem> news = new List<TitleNewsItem>();
 
         public void _Prompt()
         {
-            news = GameManager.Instance.latestNews;
+            //sort by unread
+            news = GameManager.Instance.latestNews.OrderBy(item => PlayerPrefsWrapper.GetNewsOpened(item.NewsId)).ToList();
 
             if (news.Count == 0)
                 Prompt("No News", "", "", "");
@@ -32,6 +37,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             promptTitle.text = news[page].Title;
             promptText.text = news[page].Body;
+            date.text = news[page].Timestamp.ToString();
 
             UpdateAcceptButton(page > 0 ? "Previous" : "");
             UpdateDeclineButton(page < news.Count - 1 ? "Next" : "");

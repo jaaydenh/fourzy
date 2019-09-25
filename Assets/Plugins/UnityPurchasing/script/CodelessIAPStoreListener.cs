@@ -153,8 +153,6 @@ namespace UnityEngine.Purchasing
             this.controller = controller;
             this.extensions = extensions;
 
-            Debug.Log("---------------------------------------------- loaded " + (this.controller == null));
-
             foreach (var button in activeButtons)
             {
                 button.UpdateText();

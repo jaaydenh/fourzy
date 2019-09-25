@@ -34,8 +34,6 @@ namespace Fourzy._Updates.UI.Widgets
         {
             _Reset();
 
-            if (alphaTween._value == 0f) return;
-
             ScaleTo(Vector3.zero, time);
 
             base.Hide(time);

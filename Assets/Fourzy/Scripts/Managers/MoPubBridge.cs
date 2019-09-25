@@ -41,10 +41,7 @@ namespace Fourzy._Updates.Mechanics
             MoPub.LoadInterstitialPluginsForAdUnits(_interstitialAdUnits);
             MoPub.LoadRewardedVideoPluginsForAdUnits(_rewardedVideoAdUnits);
             MoPub.LoadRewardedVideoPluginsForAdUnits(_rewardedRichMediaAdUnits);
-        }
 
-        protected void OnEnable()
-        {
             //mopub listeners
             MoPubManager.OnAdLoadedEvent += OnAdLoadedEvent;
             MoPubManager.OnAdFailedEvent += OnAdFailedEvent;
@@ -61,22 +58,22 @@ namespace Fourzy._Updates.Mechanics
             MoPubManager.OnImpressionTrackedEvent += OnImpressionTrackedEvent;
         }
 
-        //protected void OnDisable()
-        //{
-        //    MoPubManager.OnAdLoadedEvent -= OnAdLoadedEvent;
-        //    MoPubManager.OnAdFailedEvent -= OnAdFailedEvent;
+        protected void OnDestroy()
+        {
+            MoPubManager.OnAdLoadedEvent -= OnAdLoadedEvent;
+            MoPubManager.OnAdFailedEvent -= OnAdFailedEvent;
 
-        //    MoPubManager.OnInterstitialLoadedEvent -= OnInterstitialLoadedEvent;
-        //    MoPubManager.OnInterstitialFailedEvent -= OnInterstitialFailedEvent;
-        //    MoPubManager.OnInterstitialDismissedEvent -= OnInterstitialDismissedEvent;
+            MoPubManager.OnInterstitialLoadedEvent -= OnInterstitialLoadedEvent;
+            MoPubManager.OnInterstitialFailedEvent -= OnInterstitialFailedEvent;
+            MoPubManager.OnInterstitialDismissedEvent -= OnInterstitialDismissedEvent;
 
-        //    MoPubManager.OnRewardedVideoLoadedEvent -= OnRewardedVideoLoadedEvent;
-        //    MoPubManager.OnRewardedVideoFailedEvent -= OnRewardedVideoFailedEvent;
-        //    MoPubManager.OnRewardedVideoFailedToPlayEvent -= OnRewardedVideoFailedToPlayEvent;
-        //    MoPubManager.OnRewardedVideoClosedEvent -= OnRewardedVideoClosedEvent;
+            MoPubManager.OnRewardedVideoLoadedEvent -= OnRewardedVideoLoadedEvent;
+            MoPubManager.OnRewardedVideoFailedEvent -= OnRewardedVideoFailedEvent;
+            MoPubManager.OnRewardedVideoFailedToPlayEvent -= OnRewardedVideoFailedToPlayEvent;
+            MoPubManager.OnRewardedVideoClosedEvent -= OnRewardedVideoClosedEvent;
 
-        //    MoPubManager.OnImpressionTrackedEvent -= OnImpressionTrackedEvent;
-        //}
+            MoPubManager.OnImpressionTrackedEvent -= OnImpressionTrackedEvent;
+        }
 
         public void SDKInitialized()
         {
@@ -88,6 +85,13 @@ namespace Fourzy._Updates.Mechanics
             MoPub.RequestRewardedVideo(
                 adUnitId: _rewardedVideoAdUnits[0], keywords: "rewarded, video, mopub",
                 latitude: 37.7833, longitude: 122.4167, customerId: "customer101");
+        }
+
+        public void ShowVideo()
+        {
+            Debug.Log("shjw vid");
+
+            MoPub.ShowRewardedVideo(_rewardedVideoAdUnits[0]);
         }
 
         public void ConsentStatusChanged(MoPub.Consent.Status oldStatus, MoPub.Consent.Status newStatus, bool canCollectPersonalInfo)

@@ -5,7 +5,6 @@ using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
 using System;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -21,14 +20,18 @@ namespace Fourzy._Updates.UI.Widgets
 
         protected void OnEnable()
         {
-            MoPubManager.OnInterstitialLoadedEvent += OnInterstitialLoadedEvent;
-            MoPubManager.OnInterstitialFailedEvent += OnInterstitialFailedEvent;
+            MoPubManager.OnRewardedVideoLoadedEvent += OnRewardedVideoLoadedEvent;
+            MoPubManager.OnRewardedVideoFailedEvent += OnRewardedVideoFailedEvent;
+            MoPubManager.OnRewardedVideoFailedToPlayEvent += OnRewardedVideoFailedToPlayEvent;
+            MoPubManager.OnRewardedVideoClosedEvent += OnRewardedVideoClosedEvent;
         }
 
         protected void OnDisable()
         {
-            MoPubManager.OnInterstitialLoadedEvent -= OnInterstitialLoadedEvent;
-            MoPubManager.OnInterstitialFailedEvent -= OnInterstitialFailedEvent;
+            MoPubManager.OnRewardedVideoLoadedEvent -= OnRewardedVideoLoadedEvent;
+            MoPubManager.OnRewardedVideoFailedEvent -= OnRewardedVideoFailedEvent;
+            MoPubManager.OnRewardedVideoFailedToPlayEvent -= OnRewardedVideoFailedToPlayEvent;
+            MoPubManager.OnRewardedVideoClosedEvent -= OnRewardedVideoClosedEvent;
         }
 
         public override void _Update()
@@ -79,14 +82,24 @@ namespace Fourzy._Updates.UI.Widgets
             storeScreen = GetComponentInParent<StorePromptScreen>();
             button = GetComponent<ButtonExtended>();
         }
-        private void OnInterstitialLoadedEvent(string adUnitId)
+
+        private void OnRewardedVideoLoadedEvent(string adUnitId) { }
+
+        private void OnRewardedVideoFailedEvent(string adUnitId, string error)
         {
-            button.SetActive(true);
+            button.SetState(true);
         }
 
-        private void OnInterstitialFailedEvent(string adUnitId, string error)
+        private void OnRewardedVideoFailedToPlayEvent(string adUnitId, string error)
         {
-            button.SetActive(true);
+            button.SetState(true);
+        }
+
+        private void OnRewardedVideoClosedEvent(string adUnitId)
+        {
+            button.SetState(true);
+
+            UserManager.Instance.hints++;
         }
     }
 }

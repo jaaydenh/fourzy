@@ -30,7 +30,7 @@ namespace Fourzy._Updates.UI.Widgets
             GamePieceData.onUpgrade -= UpdateData;
         }
 
-        public virtual void SetData(GamePieceData data)
+        public virtual WidgetBase SetData(GamePieceData data)
         {
             this.data = data;
 
@@ -55,6 +55,8 @@ namespace Fourzy._Updates.UI.Widgets
             }
 
             UpdateProgressBar();
+
+            return this;
         }
 
         public virtual void UpdateProgressBar()
@@ -87,18 +89,11 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void UpdateData(GamePieceData _data)
         {
-            if (_data == null)
-                return;
-
-            if (data != null && data != _data)
-                return;
+            if (_data == null || data != _data) return;
 
             SetData(_data);
         }
 
-        public override void _Update()
-        {
-            UpdateData(data);
-        }
+        public override void _Update() => UpdateData(data);
     }
 }

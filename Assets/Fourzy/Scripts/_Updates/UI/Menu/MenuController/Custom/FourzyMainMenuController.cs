@@ -12,13 +12,22 @@ namespace Fourzy._Updates.UI.Menu
     {
         private bool onboardingFinishedEventSent = false;
 
-        protected void OnEnable()
+        protected override void Start()
         {
+            base.Start();
+
             //onboarding finished event
             if (GameContentManager.Instance.GetTutorial("Onboarding").wasFinishedThisSession && !onboardingFinishedEventSent)
             {
                 AnalyticsManager.Instance.LogTutorialEvent("Onboarding", "10");
                 onboardingFinishedEventSent = true;
+            }
+
+            //check for news
+            if (PlayerPrefsWrapper.GetTutorialFinished(GameContentManager.Instance.GetTutorial("Onboarding").data))
+            {
+                //only force news if onboarding was finished
+                if (GameManager.Instance.unreadNews.Count > 0) GetScreen<NewsPromptScreen>()._Prompt();
             }
         }
 
