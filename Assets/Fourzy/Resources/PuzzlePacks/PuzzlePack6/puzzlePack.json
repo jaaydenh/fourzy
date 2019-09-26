@@ -1,0 +1,16 @@
+{
+    "name": "Diagonals",
+    "type": 0,
+    "id": "006",
+    "unlockRequirement": 0,
+    "herdID": "1",
+    "playerName": "Guardian",
+    "rewards": [
+        {
+            "levelIndex": 4,
+            "rewardType": 5,
+            "name": "",
+            "quantity": 0
+        }
+    ]
+}

@@ -549,7 +549,7 @@ namespace Fourzy._Updates.Tools
                             else
                             {
                                 bool b = EditorUtility.DisplayDialog("Problem With Puzzle. Puzzle Not Created.",
-                                    "Reset or continue?", "Reset", "Continue");
+                                    "No Solutions Found.", "", "Ok");
                             }
                         }
                     }
