@@ -342,6 +342,7 @@ namespace FourzyGameModel.Model
 
         public SimpleMove GetBestLostCauseMove()
         {
+            int MaxWinMoves = 100;
             Dictionary<SimpleMove, int> WeightedMoves = new Dictionary<SimpleMove, int>();
             foreach (SimpleMove m in AvailableSimpleMoves)
             {
@@ -350,10 +351,20 @@ namespace FourzyGameModel.Model
 
                 TurnEvaluator TE2 = new TurnEvaluator(GS);
                 int WinMoves = TE2.GetWinningMoves(GS.Opponent(m.Piece.PlayerId)).Count;
-                WeightedMoves.Add(m, WinMoves);
+                if (WinMoves < MaxWinMoves)
+                {
+                    WeightedMoves.Clear();
+                    MaxWinMoves = WinMoves;
+                }
+                if (WinMoves == MaxWinMoves)
+                {
+                    AITurnEvaluator AITE = new AITurnEvaluator(GS);
+                    WeightedMoves.Add(m, AITE.Score(m.Piece.PlayerId));
+                }
             }
-            WeightedMoves = WeightedMoves.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-
+  
+            WeightedMoves = WeightedMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            
             return WeightedMoves.Keys.First();
         }
 

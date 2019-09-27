@@ -104,7 +104,7 @@ namespace FourzyGameModel.Model
             {
                 this.State = new GameState(Board, Options, FirstPlayerId);
             }
-
+            this.State.Players.Clear();
             this.State.Players.Add(1, Player1);
             this.State.Players.Add(2, Player2);
 
@@ -119,6 +119,7 @@ namespace FourzyGameModel.Model
 
             this.State = new GameState(Board, Options, FirstPlayerId);
             this.playerTurnRecord = new List<PlayerTurn>();
+            this.State.Players.Clear();
             this.State.Players.Add(1, Player1);
             this.State.Players.Add(2, Player2);
             this.GameType = GameType.STANDARD;
@@ -129,6 +130,7 @@ namespace FourzyGameModel.Model
             this.State = new GameState(definition);
             this.State.ActivePlayerId = FirstPlayerId;
             this.playerTurnRecord = new List<PlayerTurn>();
+            this.State.Players.Clear();
             this.State.Players.Add(1, Player1);
             this.State.Players.Add(2, Player2);
             this.GameType = GameType.STANDARD;
@@ -139,6 +141,7 @@ namespace FourzyGameModel.Model
             GameBoardDefinition gbd = JsonConvert.DeserializeObject<GameBoardDefinition>(boardJson);
             this.State = new GameState(gbd);
             this.playerTurnRecord = new List<PlayerTurn>();
+            this.State.Players.Clear();
             this.State.Players.Add(1, new Player(1, "First"));
             this.State.Players.Add(2, new Player(2, "Second"));
             this.GameType = GameType.STANDARD;
