@@ -2576,11 +2576,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8161614487253948778}
     m_Modifications:
-    - target: {fileID: 634805734064135747, guid: 5cb6421cd40ba354bb99da364267513d,
-        type: 3}
-      propertyPath: m_Name
-      value: LineSegment_1
-      objectReference: {fileID: 0}
     - target: {fileID: 2658341930389918756, guid: 5cb6421cd40ba354bb99da364267513d,
         type: 3}
       propertyPath: unlockedColor.r
@@ -2600,6 +2595,11 @@ PrefabInstance:
         type: 3}
       propertyPath: unlockedColor.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 634805734064135747, guid: 5cb6421cd40ba354bb99da364267513d,
+        type: 3}
+      propertyPath: m_Name
+      value: LineSegment_1
       objectReference: {fileID: 0}
     - target: {fileID: 451689951744116410, guid: 5cb6421cd40ba354bb99da364267513d,
         type: 3}
@@ -3053,12 +3053,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cb6421cd40ba354bb99da364267513d, type: 3}
---- !u!4 &710801543864202040 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 451689951744116410, guid: 5cb6421cd40ba354bb99da364267513d,
-    type: 3}
-  m_PrefabInstance: {fileID: 1124210656569030018}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8975871321421248287 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8289241027595502237, guid: 5cb6421cd40ba354bb99da364267513d,
@@ -3071,6 +3065,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e70f079e2a6bf364e8185b765fbe61c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &710801543864202040 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 451689951744116410, guid: 5cb6421cd40ba354bb99da364267513d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1124210656569030018}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3421419336090172547
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3078,11 +3078,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8499412806326794250}
     m_Modifications:
-    - target: {fileID: 2002368631600480288, guid: 720019b7bd3ac3746b2aa429f391e138,
-        type: 3}
-      propertyPath: m_Name
-      value: Event1_PuzzlePack
-      objectReference: {fileID: 0}
     - target: {fileID: 1619248955694505334, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: unlockWhenComplete.Array.size
@@ -3117,6 +3112,11 @@ PrefabInstance:
         type: 3}
       propertyPath: lines.Array.data[1]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2002368631600480288, guid: 720019b7bd3ac3746b2aa429f391e138,
+        type: 3}
+      propertyPath: m_Name
+      value: Event1_PuzzlePack
       objectReference: {fileID: 0}
     - target: {fileID: 3051202785104845867, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
@@ -3350,11 +3350,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8499412806326794250}
     m_Modifications:
-    - target: {fileID: 3012658514175639583, guid: 2e5b2ce658ef82341b6a4c3689c52669,
-        type: 3}
-      propertyPath: m_Name
-      value: Event5_AI_Game
-      objectReference: {fileID: 0}
     - target: {fileID: 2629663499559083337, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: unlockWhenComplete.Array.size
@@ -3419,6 +3414,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012658514175639583, guid: 2e5b2ce658ef82341b6a4c3689c52669,
+        type: 3}
+      propertyPath: m_Name
+      value: Event5_AI_Game
       objectReference: {fileID: 0}
     - target: {fileID: 5313089583263301250, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
@@ -3632,11 +3632,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8499412806326794250}
     m_Modifications:
-    - target: {fileID: 2002368631600480288, guid: 720019b7bd3ac3746b2aa429f391e138,
-        type: 3}
-      propertyPath: m_Name
-      value: Event4_PuzzlePack
-      objectReference: {fileID: 0}
     - target: {fileID: 1619248955694505334, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: unlockWhenComplete.Array.size
@@ -3691,6 +3686,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2002368631600480288, guid: 720019b7bd3ac3746b2aa429f391e138,
+        type: 3}
+      propertyPath: m_Name
+      value: Event4_PuzzlePack
       objectReference: {fileID: 0}
     - target: {fileID: 8065288570989842964, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
@@ -3934,6 +3934,47 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8499412806326794250}
     m_Modifications:
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: unlockWhenComplete.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: lines.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: EventType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: currencyRewardID
+      value: 9a2c44a4-8bb6-4626-89d4-bbbc63732107
+      objectReference: {fileID: 0}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: reward.quantity
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: unlockWhenComplete.Array.data[0]
+      value: 
+      objectReference: {fileID: 4108383036106170869}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: lines.Array.data[0]
+      value: 
+      objectReference: {fileID: 2550893424737516245}
+    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: resouceDB
+      value: 
+      objectReference: {fileID: 11400000, guid: 740862cf3b18ca442ab0a44c3dd27684,
+        type: 2}
     - target: {fileID: 1935594895090930300, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
       propertyPath: m_Name
@@ -4049,47 +4090,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: unlockWhenComplete.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: lines.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: EventType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: currencyRewardID
-      value: 9a2c44a4-8bb6-4626-89d4-bbbc63732107
-      objectReference: {fileID: 0}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: reward.quantity
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: unlockWhenComplete.Array.data[0]
-      value: 
-      objectReference: {fileID: 4108383036106170869}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: lines.Array.data[0]
-      value: 
-      objectReference: {fileID: 2550893424737516245}
-    - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: resouceDB
-      value: 
-      objectReference: {fileID: 11400000, guid: 740862cf3b18ca442ab0a44c3dd27684,
-        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c808e81a56ec23d49b7830ab6eacfba9, type: 3}
 --- !u!114 &5500249861534467876 stripped
@@ -4117,11 +4117,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8499412806326794250}
     m_Modifications:
-    - target: {fileID: 3012658514175639583, guid: 2e5b2ce658ef82341b6a4c3689c52669,
-        type: 3}
-      propertyPath: m_Name
-      value: Event2_AI_Game
-      objectReference: {fileID: 0}
     - target: {fileID: 2629663499559083337, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: unlockWhenComplete.Array.size
@@ -4147,6 +4142,11 @@ PrefabInstance:
       propertyPath: lines.Array.data[0]
       value: 
       objectReference: {fileID: 1219831041140100126}
+    - target: {fileID: 3012658514175639583, guid: 2e5b2ce658ef82341b6a4c3689c52669,
+        type: 3}
+      propertyPath: m_Name
+      value: Event2_AI_Game
+      objectReference: {fileID: 0}
     - target: {fileID: 5313089583263301250, guid: 2e5b2ce658ef82341b6a4c3689c52669,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -4319,12 +4319,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e5b2ce658ef82341b6a4c3689c52669, type: 3}
---- !u!224 &8639494591416880053 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3012658514175639582, guid: 2e5b2ce658ef82341b6a4c3689c52669,
-    type: 3}
-  m_PrefabInstance: {fileID: 6785440823458728875}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8814894118413440738 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2629663499559083337, guid: 2e5b2ce658ef82341b6a4c3689c52669,
@@ -4337,6 +4331,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ea3a753f5196642b66d040909f59f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &8639494591416880053 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3012658514175639582, guid: 2e5b2ce658ef82341b6a4c3689c52669,
+    type: 3}
+  m_PrefabInstance: {fileID: 6785440823458728875}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7788628537994877285
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4344,11 +4344,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8499412806326794250}
     m_Modifications:
-    - target: {fileID: 2002368631600480288, guid: 720019b7bd3ac3746b2aa429f391e138,
-        type: 3}
-      propertyPath: m_Name
-      value: Event6_PuzzlePack
-      objectReference: {fileID: 0}
     - target: {fileID: 1619248955694505334, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: unlockWhenComplete.Array.size
@@ -4403,6 +4398,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2002368631600480288, guid: 720019b7bd3ac3746b2aa429f391e138,
+        type: 3}
+      propertyPath: m_Name
+      value: Event6_PuzzlePack
       objectReference: {fileID: 0}
     - target: {fileID: 8065288570989842964, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
@@ -4646,11 +4646,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8499412806326794250}
     m_Modifications:
-    - target: {fileID: 2002368631600480288, guid: 720019b7bd3ac3746b2aa429f391e138,
-        type: 3}
-      propertyPath: m_Name
-      value: Event7_PuzzlePack
-      objectReference: {fileID: 0}
     - target: {fileID: 1619248955694505334, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: unlockWhenComplete.Array.size
@@ -4705,6 +4700,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2002368631600480288, guid: 720019b7bd3ac3746b2aa429f391e138,
+        type: 3}
+      propertyPath: m_Name
+      value: Event7_PuzzlePack
       objectReference: {fileID: 0}
     - target: {fileID: 8065288570989842964, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
@@ -4923,12 +4923,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 720019b7bd3ac3746b2aa429f391e138, type: 3}
---- !u!224 &7628862290779558290 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2002368631600480289, guid: 720019b7bd3ac3746b2aa429f391e138,
-    type: 3}
-  m_PrefabInstance: {fileID: 8221037981858222515}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7236796573826452677 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1619248955694505334, guid: 720019b7bd3ac3746b2aa429f391e138,
@@ -4941,6 +4935,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ea3a753f5196642b66d040909f59f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &7628862290779558290 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2002368631600480289, guid: 720019b7bd3ac3746b2aa429f391e138,
+    type: 3}
+  m_PrefabInstance: {fileID: 8221037981858222515}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8365416079887195487
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4948,11 +4948,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8499412806326794250}
     m_Modifications:
-    - target: {fileID: 2002368631600480288, guid: 720019b7bd3ac3746b2aa429f391e138,
-        type: 3}
-      propertyPath: m_Name
-      value: Event3_PuzzlePack
-      objectReference: {fileID: 0}
     - target: {fileID: 1619248955694505334, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}
       propertyPath: unlockWhenComplete.Array.size
@@ -5007,6 +5002,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2002368631600480288, guid: 720019b7bd3ac3746b2aa429f391e138,
+        type: 3}
+      propertyPath: m_Name
+      value: Event3_PuzzlePack
       objectReference: {fileID: 0}
     - target: {fileID: 8065288570989842964, guid: 720019b7bd3ac3746b2aa429f391e138,
         type: 3}

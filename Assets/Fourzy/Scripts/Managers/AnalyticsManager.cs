@@ -6,7 +6,6 @@ using Fourzy._Updates.Mechanics;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using GameAnalyticsSDK;
-//using mixpanel;
 using PlayFab;
 using PlayFab.ClientModels;
 using System;
@@ -30,13 +29,16 @@ namespace Fourzy
         public const string HINT_USED_KEY = "hint_used";
         public const string TUTORIAL_NAME_KEY = "name";
         public const string TUTORIAL_STAGE_KEY = "key";
+        public const string PUZZLE_SESSION_ID = "puzzle_session_id";
+        public const string BOARD_ID = "board_id";
+        public const string PUZZLE_ID = "puzzle_id";
 
         public static AnalyticsManager Instance
         {
             get
             {
                 if (instance == null)
-                    Initialize();
+                    Initialize(true);
 
                 return instance;
             }
@@ -82,10 +84,10 @@ namespace Fourzy
         public enum AnalyticsProvider
         {
             FIREBASE = 1,
-            MIX_PANEL = 2,
+            PLAYFAB = 2,
             GAME_ANALYTICS = 4,
 
-            ALL = FIREBASE | MIX_PANEL | GAME_ANALYTICS,
+            ALL = FIREBASE | PLAYFAB | GAME_ANALYTICS,
         }
 
         public enum AnalyticsGameEvents
@@ -110,13 +112,15 @@ namespace Fourzy
             /// </summary>
             GAME_FAILED = 3,
 
+            RANDOM_PUZZLE_START,
+
             /// <summary>
             /// Turn-base only game event
             /// Params: game_id
             /// </summary>
             TAKE_TURN = 10,
 
-            USE_HINT = 11,
+            USE_HINT = 11
         }
 
         public enum AnalyticsEvents
@@ -151,8 +155,7 @@ namespace Fourzy
 
         public enum AnalyticsSettingsKeys
         {
-            change_name,
-
+            CHANGE_NAME,
         }
 
         public enum AnalyticsErrorType
@@ -194,11 +197,50 @@ namespace Fourzy
 
         public void Identify(string userID)
         {
-            //Mixpanel.Identify(userID);
             FirebaseAnalytics.SetUserId(userID);
 
             if (DEBUG) Debug.Log("User identity: " + userID);
         }
+
+        public void LogRandomPuzzleStart(Area area, string puzzleSessionId, string puzzleId, string boardId)
+        {
+            Dictionary<string, object> @params = new Dictionary<string, object>();
+
+            @params.Add(AREA_KEY, area.ToString().ToLower());
+            @params.Add(PUZZLE_SESSION_ID, puzzleSessionId);
+            @params.Add(PUZZLE_ID, puzzleId);
+            @params.Add(BOARD_ID, boardId);
+
+            foreach (Enum value in Enum.GetValues(AnalyticsProvider.ALL.GetType()))
+            {
+                switch (value)
+                {
+                    case AnalyticsProvider.FIREBASE:
+                        LogFirebaseEvent(AnalyticsGameEvents.RANDOM_PUZZLE_START.ToString().ToLower(), @params);
+
+                        break;
+
+                    case AnalyticsProvider.PLAYFAB:
+                        LogPlayFabPlayerEvent(AnalyticsGameEvents.RANDOM_PUZZLE_START.ToString().ToLower(), @params);
+
+                        break;
+
+                    case AnalyticsProvider.GAME_ANALYTICS:
+                        string values = $"{AnalyticsGameEvents.RANDOM_PUZZLE_START.ToString().ToLower()}";
+
+                        foreach (KeyValuePair<string, object> param in @params)
+                        {
+                            values += $":{param.Value}";
+                        }
+
+                        LogGameAnalyticsDesignEvent(values);
+
+                        break;
+                }
+            }
+        }
+
+
 
         public void LogCreateGame(
             GameType gameType, Area area,
@@ -209,10 +251,10 @@ namespace Fourzy
             if (!NetworkPass()) return;
             if (!gameEventsSwitch[AnalyticsGameEvents.GAME_CREATE]) return;
 
-            Dictionary<object, object> @params = new Dictionary<object, object>();
+            Dictionary<string, object> @params = new Dictionary<string, object>();
 
             @params.Add(GAME_TYPE_KEY, gameType);
-            @params.Add(AREA_KEY, area.ToString());
+            @params.Add(AREA_KEY, area.ToString().ToLower());
 
             if (lastLoggedButtonConsumable != AnalyticsUIButtons.none) @params.Add(ENTRY_POINT_KEY, lastLoggedButtonConsumable);
 
@@ -226,19 +268,19 @@ namespace Fourzy
                     switch (value)
                     {
                         case AnalyticsProvider.FIREBASE:
-                            LogFirebaseEvent(AnalyticsGameEvents.GAME_CREATE.ToString(), @params);
+                            LogFirebaseEvent(AnalyticsGameEvents.GAME_CREATE.ToString().ToLower(), @params);
 
                             break;
 
-                        case AnalyticsProvider.MIX_PANEL:
-                            LogMixpanelEvent(AnalyticsGameEvents.GAME_CREATE.ToString(), @params);
+                        case AnalyticsProvider.PLAYFAB:
+                            LogPlayFabPlayerEvent(AnalyticsGameEvents.GAME_CREATE.ToString().ToLower(), @params);
 
                             break;
 
                         case AnalyticsProvider.GAME_ANALYTICS:
-                            string values = $"{AnalyticsGameEvents.GAME_CREATE.ToString()}:{area.ToString()}";
+                            string values = $"{AnalyticsGameEvents.GAME_CREATE.ToString().ToLower()}:{area.ToString().ToLower()}";
 
-                            if (lastLoggedButtonConsumable != AnalyticsUIButtons.none) values += $":{lastLoggedButtonConsumable.ToString()}";
+                            if (lastLoggedButtonConsumable != AnalyticsUIButtons.none) values += $":{lastLoggedButtonConsumable.ToString().ToLower()}";
                             if (!string.IsNullOrEmpty(userID)) values += $":{userID}";
                             if (!string.IsNullOrEmpty(opponentID)) values += $":{opponentID}";
 
@@ -260,7 +302,7 @@ namespace Fourzy
             if (!NetworkPass()) return;
             if (!gameEventsSwitch[gameEventType]) return;
 
-            Dictionary<object, object> params1 = new Dictionary<object, object>();
+            Dictionary<string, object> params1 = new Dictionary<string, object>();
 
             //basic values
             params1.Add(GAME_ID_KEY, gameModel.GameID);
@@ -270,7 +312,7 @@ namespace Fourzy
 
             if (lastLoggedButtonConsumable != AnalyticsUIButtons.none)
             {
-                params1.Add(ENTRY_POINT_KEY, lastLoggedButtonConsumable.ToString());
+                params1.Add(ENTRY_POINT_KEY, lastLoggedButtonConsumable.ToString().ToLower());
             }
 
             if (!string.IsNullOrEmpty(gameModel.opponent.PlayerString))
@@ -290,12 +332,12 @@ namespace Fourzy
                     switch (value)
                     {
                         case AnalyticsProvider.FIREBASE:
-                            LogFirebaseEvent(gameEventType.ToString(), params1);
+                            LogFirebaseEvent(gameEventType.ToString().ToLower(), params1);
 
                             break;
 
-                        case AnalyticsProvider.MIX_PANEL:
-                            LogMixpanelEvent(gameEventType.ToString(), params1);
+                        case AnalyticsProvider.PLAYFAB:
+                            LogPlayFabPlayerEvent(gameEventType.ToString().ToLower(), params1);
 
                             break;
 
@@ -328,7 +370,7 @@ namespace Fourzy
             if (!NetworkPass()) return;
             if (!miscEventsSwitch[AnalyticsEvents.SETTINGS_CHANGE]) return;
 
-            Dictionary<object, object> @params = new Dictionary<object, object>();
+            Dictionary<string, object> @params = new Dictionary<string, object>();
 
             @params.Add(SETTINGS_VALUE_NAME_KEY, settingsKey);
             @params.Add(SETTINGS_NEW_VALUE_KEY, newValue);
@@ -341,17 +383,17 @@ namespace Fourzy
                     switch (value)
                     {
                         case AnalyticsProvider.FIREBASE:
-                            LogFirebaseEvent(AnalyticsEvents.SETTINGS_CHANGE.ToString(), @params);
+                            LogFirebaseEvent(AnalyticsEvents.SETTINGS_CHANGE.ToString().ToLower(), @params);
 
                             break;
 
-                        case AnalyticsProvider.MIX_PANEL:
-                            LogMixpanelEvent(AnalyticsEvents.SETTINGS_CHANGE.ToString(), @params);
+                        case AnalyticsProvider.PLAYFAB:
+                            LogPlayFabPlayerEvent(AnalyticsEvents.SETTINGS_CHANGE.ToString().ToLower(), @params);
 
                             break;
 
                         case AnalyticsProvider.GAME_ANALYTICS:
-                            string values = $"{settingsKey.ToString()}:{oldValue}:{newValue}";
+                            string values = $"{settingsKey.ToString().ToLower()}:{oldValue}:{newValue}";
 
                             LogGameAnalyticsDesignEvent(values);
 
@@ -366,9 +408,9 @@ namespace Fourzy
             if (!NetworkPass()) return;
             if (!miscEventsSwitch[AnalyticsEvents.ERROR]) return;
 
-            Dictionary<object, object> @params = new Dictionary<object, object>();
+            Dictionary<string, object> @params = new Dictionary<string, object>();
 
-            @params.Add(analyticsError, errorString);
+            @params.Add(analyticsError.ToString().ToLower(), errorString);
 
             foreach (Enum value in Enum.GetValues(provider.GetType()))
             {
@@ -377,17 +419,17 @@ namespace Fourzy
                     switch (value)
                     {
                         case AnalyticsProvider.FIREBASE:
-                            LogFirebaseEvent(AnalyticsEvents.ERROR.ToString(), @params);
+                            LogFirebaseEvent(AnalyticsEvents.ERROR.ToString().ToLower(), @params);
 
                             break;
 
-                        case AnalyticsProvider.MIX_PANEL:
-                            LogMixpanelEvent(AnalyticsEvents.SETTINGS_CHANGE.ToString(), @params);
+                        case AnalyticsProvider.PLAYFAB:
+                            LogPlayFabPlayerEvent(AnalyticsEvents.SETTINGS_CHANGE.ToString().ToLower(), @params);
 
                             break;
 
                         case AnalyticsProvider.GAME_ANALYTICS:
-                            string values = $"{analyticsError.ToString()}:{errorString.Truncate(15)}";
+                            string values = $"{analyticsError.ToString().ToLower()}:{errorString.Truncate(15)}";
 
                             GAErrorSeverity severity = GAErrorSeverity.Undefined;
 
@@ -430,7 +472,7 @@ namespace Fourzy
             if (!NetworkPass()) return;
             if (!miscEventsSwitch[AnalyticsEvents.TUTORIALS]) return;
 
-            Dictionary<object, object> _params = new Dictionary<object, object>();
+            Dictionary<string, object> _params = new Dictionary<string, object>();
 
             _params.Add(TUTORIAL_NAME_KEY, name);
             _params.Add(TUTORIAL_STAGE_KEY, stage);
@@ -441,19 +483,19 @@ namespace Fourzy
                     switch (value)
                     {
                         case AnalyticsProvider.FIREBASE:
-                            LogFirebaseEvent(AnalyticsEvents.TUTORIALS.ToString(), _params);
+                            LogFirebaseEvent(AnalyticsEvents.TUTORIALS.ToString().ToLower(), _params);
 
                             break;
 
-                        case AnalyticsProvider.MIX_PANEL:
-                            LogMixpanelEvent(AnalyticsEvents.TUTORIALS.ToString(), _params);
+                        case AnalyticsProvider.PLAYFAB:
+                            LogPlayFabPlayerEvent(AnalyticsEvents.TUTORIALS.ToString().ToLower(), _params);
 
                             break;
 
                         case AnalyticsProvider.GAME_ANALYTICS:
-                            string values = $"{AnalyticsEvents.TUTORIALS.ToString()}";
+                            string values = $"{AnalyticsEvents.TUTORIALS.ToString().ToLower()}";
 
-                            foreach (KeyValuePair<object, object> param in _params)
+                            foreach (KeyValuePair<string, object> param in _params)
                             {
                                 values += $":{param.Value}";
                             }
@@ -465,16 +507,16 @@ namespace Fourzy
                 }
         }
 
-        public void LogUIButton(AnalyticsUIButtons buttonEvent, AnalyticsProvider provider = AnalyticsProvider.ALL, params KeyValuePair<object, object>[] @params)
+        public void LogUIButton(AnalyticsUIButtons buttonEvent, AnalyticsProvider provider = AnalyticsProvider.ALL, params KeyValuePair<string, object>[] @params)
         {
             if (!NetworkPass()) return;
             if (!miscEventsSwitch[AnalyticsEvents.UI]) return;
 
             lastLoggedButton = lastLoggedButtonConsumable = buttonEvent;
 
-            Dictionary<object, object> _params = new Dictionary<object, object>();
+            Dictionary<string, object> _params = new Dictionary<string, object>();
 
-            foreach (KeyValuePair<object, object> param in @params)
+            foreach (KeyValuePair<string, object> param in @params)
             {
                 _params.Add(param.Key, param.Value);
             }
@@ -485,19 +527,19 @@ namespace Fourzy
                     switch (value)
                     {
                         case AnalyticsProvider.FIREBASE:
-                            LogFirebaseEvent(AnalyticsEvents.UI.ToString() + ":" + buttonEvent.ToString(), _params);
+                            LogFirebaseEvent(AnalyticsEvents.UI.ToString().ToLower() + ":" + buttonEvent.ToString().ToLower(), _params);
 
                             break;
 
-                        case AnalyticsProvider.MIX_PANEL:
-                            LogMixpanelEvent(AnalyticsEvents.UI.ToString() + ":" + buttonEvent.ToString(), _params);
+                        case AnalyticsProvider.PLAYFAB:
+                            LogPlayFabPlayerEvent(AnalyticsEvents.UI.ToString().ToLower() + ":" + buttonEvent.ToString().ToLower(), _params);
 
                             break;
 
                         case AnalyticsProvider.GAME_ANALYTICS:
-                            string values = $"{AnalyticsEvents.UI.ToString()}:{buttonEvent.ToString()}";
+                            string values = $"{AnalyticsEvents.UI.ToString().ToLower()}:{buttonEvent.ToString().ToLower()}";
 
-                            foreach (KeyValuePair<object, object> param in @params)
+                            foreach (KeyValuePair<string, object> param in @params)
                             {
                                 values += $":{param.Value}";
                             }
@@ -509,17 +551,17 @@ namespace Fourzy
                 }
         }
 
-        private void LogFirebaseEvent(string eventType, Dictionary<object, object> @params)
+        private void LogFirebaseEvent(string eventType, Dictionary<string, object> @params)
         {
             List<Parameter> firebaseParams = new List<Parameter>();
 
             if (@params != null)
             {
-                foreach (KeyValuePair<object, object> _param in @params)
+                foreach (KeyValuePair<string, object> _param in @params)
                 {
                     if (_param.Key != null && _param.Value != null)
                     {
-                        firebaseParams.Add(new Parameter(_param.Key.ToString(), _param.Value.ToString()));
+                        firebaseParams.Add(new Parameter(_param.Key, _param.Value.ToString().ToLower()));
                     }
                 }
             }
@@ -528,32 +570,22 @@ namespace Fourzy
 
             if (DEBUG)
             {
-                Debug.Log("Firebase event sent");
+                Debug.Log("Firebase event sent: " + eventType);
             }
         }
 
-        private void LogMixpanelEvent(string eventType, Dictionary<object, object> @params)
+        private void LogPlayFabPlayerEvent(string eventName, Dictionary<string, object> @params)
         {
-            //Value mixpanelParams = new Value();
+            PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
+            {
+                EventName = eventName,
+                Body = @params
+            }, null, null);
 
-            //if (@params != null)
-            //{
-            //    foreach (KeyValuePair<object, object> _param in @params)
-            //    {
-            //        if (_param.Key != null && _param.Value != null)
-            //        {
-            //            mixpanelParams[_param.Key.ToString()] = _param.Value.ToString();
-            //        }
-
-            //    }
-            //}
-
-            //Mixpanel.Track(eventType, mixpanelParams);
-
-            //if (DEBUG)
-            //{
-            //    Debug.Log("Mixpanel event sent");
-            //}
+            if (DEBUG)
+            {
+                Debug.Log("Playfab event sent: " + eventName);
+            }
         }
 
         private void LogGameAnalyticsDesignEvent(string value)
