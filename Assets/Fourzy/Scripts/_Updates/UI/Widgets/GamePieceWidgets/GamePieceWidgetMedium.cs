@@ -12,49 +12,40 @@ namespace Fourzy._Updates.UI.Widgets
         public Image borderImage;
         public GameObject infoFrame;
         public GameObject notFound;
+        public RectTransform selectedFrame;
         public TMP_Text pieceName;
         public TMP_Text numberOfChampions;
         public Slider starsSlider;
         public Material greyscaleMaterial;
 
-        public Toggle toggle { get; private set; }
-        public ToggleGroup toggleGroup { get; private set; }
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            toggle = GetComponent<Toggle>();
-            toggleGroup = GetComponentInParent<ToggleGroup>();
-            
-            if (toggleGroup && toggle)
-                toggle.group = toggleGroup;
-        }
-
         public override WidgetBase SetData(GamePieceData data)
         {
             base.SetData(data);
+
+            notFound.SetActive(data.State == GamePieceState.NotFound);
+
+            if (data.State == GamePieceState.NotFound)
+                gamePiece.SetMaterial(greyscaleMaterial);
+            else
+                gamePiece.SetMaterial(null);
 
             switch (data.State)
             {
                 case GamePieceState.FoundAndLocked:
                 case GamePieceState.NotFound:
                     infoFrame.SetActive(false);
-                    notFound.SetActive(true);
                     layoutElement.preferredHeight = 180;
 
-                    gamePiece.SetMaterial(greyscaleMaterial);
-                    gamePiece.colorTween.SetColor(Color.grey);
+                    //gamePiece.colorTween.SetColor(Color.grey);
                     gamePiece.Sleep();
+
                     break;
 
                 case GamePieceState.FoundAndUnlocked:
                     infoFrame.SetActive(true);
-                    notFound.SetActive(false);
                     layoutElement.preferredHeight = 330;
                     
-                    gamePiece.SetMaterial(null);
-                    gamePiece.colorTween.SetColor(Color.white);
+                    //gamePiece.colorTween.SetColor(Color.white);
                     gamePiece.WakeUp();
 
                     //set data
@@ -63,24 +54,15 @@ namespace Fourzy._Updates.UI.Widgets
 
                     //stars slider
                     starsSlider.value = data.champions;
+
                     break;
             }
-
-            //switch toggle
-            if (toggle) toggle.isOn = data.ID == UserManager.Instance.gamePieceID;
 
             return this;
         }
 
-        public void OnToggle()
-        {
-            if (!menuScreen.isCurrent)
-                return;
+        public void SetSelectedState(bool state) => selectedFrame.gameObject.SetActive(state);
 
-            UserManager.Instance.UpdateSelectedGamePiece(data.ID);
-
-            //open upgrade prompt
-            menuScreen.menuController.GetScreen<UpgradeGamePiecePromptScreen>().Prompt(data);
-        }
+        public void OnTap() => menuScreen.menuController.GetScreen<UpgradeGamePiecePromptScreen>().Prompt(data);
     }
 }

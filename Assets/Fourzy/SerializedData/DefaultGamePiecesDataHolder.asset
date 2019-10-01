@@ -98,7 +98,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 1
       player1Prefab: {fileID: 1676609191546690612, guid: 2b54608c97da9e04c9c162c2f5328311,
         type: 3}
@@ -116,7 +116,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 5199269407045597157, guid: 9765dad3184127d4a8bbc3e2e65336f9,
         type: 3}
@@ -134,7 +134,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 6576606855969728960, guid: 74415bf42c0517b45bcfa0bd57d90437,
         type: 3}
@@ -152,7 +152,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 8620094149043960381, guid: ee8f4b6dc4ca53847962658b4882fad6,
         type: 3}
@@ -170,7 +170,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 5841790964071463582, guid: 83eee2766bc691e4f9fa053207f90c68,
         type: 3}
@@ -188,7 +188,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 1
       player1Prefab: {fileID: 3008632754777774422, guid: 541328802fe2ad54b8cfb885bbc2b643,
         type: 3}
@@ -206,7 +206,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 4979347029933200198, guid: 001a4dfc8302eeb4ea65fa0ae12a1160,
         type: 3}
@@ -224,7 +224,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 6128777428980690519, guid: c26c94a8d94885244b13560062697a5c,
         type: 3}
@@ -242,7 +242,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 8004934299830492596, guid: 0f60c6b56ed528b44b6d0d0a461919e8,
         type: 3}
@@ -260,7 +260,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 30
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 4183014607794544357, guid: 83d1f34afe8480545aeda1ed7cc41246,
         type: 3}
