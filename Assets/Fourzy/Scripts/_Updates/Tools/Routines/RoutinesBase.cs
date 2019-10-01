@@ -17,33 +17,13 @@ namespace Fourzy._Updates.Tools
         }
 
         /// <summary>
-        /// Start routine
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="routine"></param>
-        public Coroutine StartRoutine(string name, IEnumerator routine)
-        {
-            if (!routines.ContainsKey(name))
-            {
-                RoutineClass _routineContainer = new RoutineClass(this, name, routine);
-                routines.Add(name, _routineContainer);
-
-                return _routineContainer.WaitFor();
-            }
-            else
-                if (CheckEmptyRoutine(name)) return null;
-
-            return null;
-        }
-
-        /// <summary>
         /// Starts routine
         /// </summary>
         /// <param name="name"></param>
         /// <param name="routine"></param>
         /// <param name="onEnd"></param>
         /// <param name="onCanceled"></param>
-        public Coroutine StartRoutine(string name, IEnumerator routine, Action onEnd, Action onCanceled)
+        public Coroutine StartRoutine(string name, IEnumerator routine, Action onEnd = null, Action onCanceled = null)
         {
             if (!routines.ContainsKey(name))
             {
@@ -52,26 +32,11 @@ namespace Fourzy._Updates.Tools
 
                 return _routineContainer.WaitFor();
             }
-            else
-                if (CheckEmptyRoutine(name)) return null;
 
             return null;
         }
 
-        public Coroutine StartRoutine(string name, IEnumerator routine, Action both)
-        {
-            if (!routines.ContainsKey(name))
-            {
-                RoutineClass _routineContainer = new RoutineClass(this, name, routine, both, both);
-                routines.Add(name, _routineContainer);
-
-                return _routineContainer.WaitFor();
-            }
-            else
-                if (CheckEmptyRoutine(name)) return null;
-
-            return null;
-        }
+        public Coroutine StartRoutine(string name, IEnumerator routine, Action both) => StartRoutine(name, routine, both, both);
 
         /// <summary>
         /// Start a routine with time value
@@ -80,7 +45,7 @@ namespace Fourzy._Updates.Tools
         /// <param name="time"></param>
         /// <param name="onEnd"></param>
         /// <param name="onCanceled"></param>
-        public Coroutine StartRoutine(string name, float time, Action onEnd, Action onCanceled)
+        public Coroutine StartRoutine(string name, float time, Action onEnd = null, Action onCanceled = null)
         {
             if (!routines.ContainsKey(name))
             {
@@ -89,41 +54,11 @@ namespace Fourzy._Updates.Tools
 
                 return _routineContainer.WaitFor();
             }
-            else
-                if (CheckEmptyRoutine(name)) return null;
 
             return null;
         }
 
-        public Coroutine StartRoutine(string name, float time, Action both)
-        {
-            if (!routines.ContainsKey(name))
-            {
-                RoutineClass _routineContainer = new RoutineClass(this, name, time, both, both);
-                routines.Add(name, _routineContainer);
-
-                return _routineContainer.WaitFor();
-            }
-            else
-                if (CheckEmptyRoutine(name)) return null;
-
-            return null;
-        }
-
-        public Coroutine StartRoutine(string name, float time)
-        {
-            if (!routines.ContainsKey(name))
-            {
-                RoutineClass _routineContainer = new RoutineClass(this, name, time, null, null);
-                routines.Add(name, _routineContainer);
-
-                return _routineContainer.WaitFor();
-            }
-            else
-                if (CheckEmptyRoutine(name)) return null;
-
-            return null;
-        }
+        public Coroutine StartRoutine(string name, float time, Action both) => StartRoutine(name, time, both, both);
 
         /// <summary>
         /// Is specified routine active?
@@ -142,8 +77,6 @@ namespace Fourzy._Updates.Tools
         {
             if (routines.ContainsKey(name))
             {
-                if (CheckEmptyRoutine(name)) return false;
-
                 routines[name].Stop(callEnded);
 
                 return true;
@@ -172,8 +105,6 @@ namespace Fourzy._Updates.Tools
         {
             if (routines.ContainsKey(name))
             {
-                if (CheckEmptyRoutine(name)) return false;
-
                 routines[name].Cancel();
 
                 return true;
@@ -191,19 +122,6 @@ namespace Fourzy._Updates.Tools
             if (routines.ContainsKey(name))
                 routines.Remove(name);
         }
-
-        private bool CheckEmptyRoutine(string name)
-        {
-            if (routines[name].nested == null)
-            {
-                //force remove
-                RemoveRoutine(name);
-
-                return true;
-            }
-
-            return false;
-        }
     }
 
     public class RoutineClass
@@ -218,30 +136,27 @@ namespace Fourzy._Updates.Tools
         public Coroutine nested;
         private IEnumerator payload;
 
-        public RoutineClass(RoutinesBase owner, string name, IEnumerator routine)
+        public RoutineClass(RoutinesBase owner, string name, IEnumerator routine, Action onEnded, Action onCanceled)
         {
             this.name = name;
             this.owner = owner;
-            
-            payload = routine;
-            nested = owner.StartCoroutine(Wrapper());
-        }
 
-        public RoutineClass(RoutinesBase owner, string name, IEnumerator routine, Action onEnded, Action onCanceled) : this(owner, name, routine)
-        {
             this.onEnded = onEnded;
             this.onCanceled = onCanceled;
+
+            payload = routine;
+            nested = owner.StartCoroutine(Wrapper());
         }
 
         public RoutineClass(RoutinesBase owner, string name, float time, Action onEnded, Action onCanceled)
         {
             this.name = name;
             this.owner = owner;
-            
-            nested = owner.StartCoroutine(Wrapper(time));
 
             this.onEnded = onEnded;
             this.onCanceled = onCanceled;
+
+            nested = owner.StartCoroutine(Wrapper(time));
         }
 
         public Coroutine WaitFor()
@@ -290,8 +205,6 @@ namespace Fourzy._Updates.Tools
             }
 
             Stop(true);
-
-            yield break;
         }
 
         private IEnumerator Wait()

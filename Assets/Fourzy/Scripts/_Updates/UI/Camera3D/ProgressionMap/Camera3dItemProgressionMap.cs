@@ -7,6 +7,7 @@ using Fourzy._Updates.UI.Widgets;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Camera3D
@@ -16,7 +17,7 @@ namespace Fourzy._Updates.UI.Camera3D
         [InlineButton("ResetRewardID", "Reset ID")]
         public string mapID = Guid.NewGuid().ToString();
         public ProgressionEvent firstEvent;
-        
+
         public Transform content;
         public Camera3dItemProgressionMapChunk chunk;
         public SpriteRenderer bg;
@@ -31,13 +32,21 @@ namespace Fourzy._Updates.UI.Camera3D
         public float currentScrollValue;
 
         protected Vector2 cameraSize;
-        public List<ProgressionEvent> widgets { get; private set; } 
-        public MenuScreen menuScreen { get; private set; }
+        //protected float cameraRestrictedSize;
 
         private bool initialized = false;
         private bool finished = false;
+        private float minScrollValue;
+        private float maxScrollValue;
+        private float chunkLeft;
+        private float chunkRight;
+
+        public List<ProgressionEvent> widgets { get; private set; }
+        public MenuScreen menuScreen { get; private set; }
 
         public bool showQuantity => unlockRequirements != UnlockRequirementsEnum.NONE;
+        public float contentPosition => -content.localPosition.x + chunkLeft;
+        public bool scrollLocked { get; private set; }
 
         protected override void Awake()
         {
@@ -47,6 +56,12 @@ namespace Fourzy._Updates.UI.Camera3D
 
             Initialize();
         }
+
+        //protected void Update()
+        //{
+        //    if (Input.GetKeyDown(KeyCode.U))
+        //        print(GetCurrentEventCameraRelativePosition());
+        //}
 
         protected void OnDestroy()
         {
@@ -81,6 +96,12 @@ namespace Fourzy._Updates.UI.Camera3D
 
             //set as opened
             PlayerPrefsWrapper.SetAdventureNew(mapID, false);
+
+            //unlock scroll
+            SetScrollLockedState(false);
+
+            //focus current one
+            FocusOn(GetCurrentEvent());
         }
 
         public void SetMenuScreen(MenuScreen menuScreen)
@@ -102,24 +123,33 @@ namespace Fourzy._Updates.UI.Camera3D
 
             cameraSize = new Vector2(cam.aspect * cam.orthographicSize, cam.orthographicSize);
 
-            //temp
-            chunk.left = (chunk.size.x * .5f) - cameraSize.x;
-            chunk.right = -chunk.left;
+            minScrollValue = cameraSize.x / chunk.size.x;
+            maxScrollValue = 1f - minScrollValue;
+            chunkLeft = chunk.size.x * .5f;
+            chunkRight = -chunkLeft;
         }
 
         public void Scroll(float value, bool changeCurrentScrollValue = false)
         {
-            if (changeCurrentScrollValue) currentScrollValue = Mathf.Clamp(value, 0f, 1f);
+            if (scrollLocked) return;
 
-            content.localPosition = new Vector3(Mathf.Lerp(chunk.left, chunk.right, Mathf.Clamp01(value)), 0f, 0f);
+            float clampedValue = Mathf.Clamp(value, minScrollValue, maxScrollValue);
+
+            if (changeCurrentScrollValue) currentScrollValue = clampedValue;
+
+            content.localPosition = new Vector3(Mathf.Lerp(chunkLeft, chunkRight, clampedValue), 0f, 0f);
         }
 
         public float ScrollCameraRelativeValue(float value)
         {
-            Scroll(currentScrollValue = Mathf.Clamp01(currentScrollValue - (value * cameraSize.x / chunk.left)));
+            Scroll(Mathf.Clamp01(currentScrollValue - (value * cameraSize.x / chunkLeft)), true);
 
             return currentScrollValue;
         }
+
+        public void FocusOn(int widgetIndex) => Scroll(widgets[widgetIndex].rectTransform.anchoredPosition.x / chunk.size.x, true);
+
+        public void FocusOn(ProgressionEvent widget) => Scroll(widgets[widgets.IndexOf(widget)].rectTransform.anchoredPosition.x / chunk.size.x, true);
 
         public void OnClick(Vector2 position)
         {
@@ -129,9 +159,11 @@ namespace Fourzy._Updates.UI.Camera3D
             {
                 ProgressionEvent progressionEvent = hit2d.transform.GetComponent<ProgressionEvent>();
 
-                if (progressionEvent) progressionEvent.OnTap();
+                if (progressionEvent) progressionEvent.button.OnClick();
             }
         }
+
+        public void SetScrollLockedState(bool state) => scrollLocked = state;
 
         public void ResetPlayerPrefs()
         {
@@ -147,6 +179,24 @@ namespace Fourzy._Updates.UI.Camera3D
                 firstEvent.Unlock(false);
             }
         }
+
+        public ProgressionEvent GetCurrentEvent()
+        {
+            List<ProgressionEvent> options = widgets.Where(@event => @event._unlocked && !@event._rewarded).ToList();
+
+            return options.Find(@event => @event.EventType == ProgressionEvent.ProgressionEventType.GAME) ??
+                options.Find(@event => @event.EventType == ProgressionEvent.ProgressionEventType.CURRENCY);
+        }
+
+        public Vector2 GetCurrentEventCameraRelativePosition()
+        {
+            ProgressionEvent current = GetCurrentEvent();
+
+            return new Vector2((current.rectTransform.anchoredPosition.x - (contentPosition - cameraSize.x)) / (cameraSize.x * 2f),
+                current.rectTransform.anchoredPosition.y / (cameraSize.y * 2f));
+        }
+
+        public Vector2 GetCurrentEventSize() => GetCurrentEvent().size;
 
         private void Initialize()
         {

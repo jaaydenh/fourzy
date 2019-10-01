@@ -34,7 +34,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                             if (Input.GetKeyDown(StandaloneInputModuleExtended.instance.GetKeyCode(3, 0)) || Input.GetKeyDown(StandaloneInputModuleExtended.instance.GetKeyCode(3, 1)))
                             {
-                                spellWidgets[0].ToggleState();
+                                spellWidgets[0].OnTap();
                             }
 
                             break;
@@ -45,7 +45,7 @@ namespace Fourzy._Updates.UI.Widgets
                                 case 0:
                                     if (Input.GetKeyDown(StandaloneInputModuleExtended.instance.GetKeyCode(3, 0)))
                                     {
-                                        spellWidgets[0].ToggleState();
+                                        spellWidgets[0].OnTap();
                                     }
 
                                     break;
@@ -53,7 +53,7 @@ namespace Fourzy._Updates.UI.Widgets
                                 case 1:
                                     if (Input.GetKeyDown(StandaloneInputModuleExtended.instance.GetKeyCode(3, 1)))
                                     {
-                                        spellWidgets[0].ToggleState();
+                                        spellWidgets[0].OnTap();
                                     }
 
                                     break;

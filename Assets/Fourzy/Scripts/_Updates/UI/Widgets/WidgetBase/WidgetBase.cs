@@ -2,7 +2,9 @@
 
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +21,7 @@ namespace Fourzy._Updates.UI.Widgets
         public ScaleTween scaleTween { get; protected set; }
         public PositionTween positionTween { get; protected set; }
         public AlphaTween alphaTween { get; protected set; }
+        public ButtonExtended button { get; private set; }
 
         public bool visible => menuScreen.IsWidgetVisible(this);
 
@@ -29,10 +32,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void SetAlpha(float value)
         {
-            if (canvasGroup)
-                canvasGroup.alpha = value;
-            else if (alphaTween)
-                alphaTween.SetAlpha(value);
+            if (canvasGroup) canvasGroup.alpha = value;
+            else if (alphaTween) alphaTween.SetAlpha(value);
         }
 
         public virtual void Hide(float time)
@@ -110,11 +111,15 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        public virtual void ResetAnchors()
+        public virtual WidgetBase SetAnchors(Vector2 anchor)
         {
-            rectTransform.anchorMin = rectTransform.anchorMax = Vector2.one * .5f;
+            rectTransform.anchorMin = rectTransform.anchorMax = anchor;
             rectTransform.anchoredPosition = Vector2.zero;
+
+            return this;
         }
+
+        public virtual WidgetBase ResetAnchors() => SetAnchors(Vector2.one * .5f);
 
         public virtual void SetInteractable(bool state)
         {
@@ -130,10 +135,7 @@ namespace Fourzy._Updates.UI.Widgets
             canvasGroup.blocksRaycasts = state;
         }
 
-        public void SetActive(bool state)
-        {
-            gameObject.SetActive(state);
-        }
+        public void SetActive(bool state) => gameObject.SetActive(state);
 
         public virtual void _Update() { }
 
@@ -152,6 +154,7 @@ namespace Fourzy._Updates.UI.Widgets
             alphaTween = GetComponent<AlphaTween>();
             positionTween = GetComponent<PositionTween>();
             scaleTween = GetComponent<ScaleTween>();
+            button = GetComponentInChildren<ButtonExtended>();
 
             if (alphaTween) alphaTween.Initialize();
             if (positionTween) positionTween.Initialize();

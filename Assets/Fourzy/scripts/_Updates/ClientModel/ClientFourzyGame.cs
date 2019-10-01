@@ -72,6 +72,7 @@ namespace Fourzy._Updates.ClientModel
                 return result;
             }
         }
+
         public GameType _Type
         {
             get => _type;

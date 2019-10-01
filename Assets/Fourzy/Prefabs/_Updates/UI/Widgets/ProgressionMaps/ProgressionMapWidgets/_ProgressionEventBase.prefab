@@ -137,6 +137,8 @@ MonoBehaviour:
   placeholder: {fileID: 7996391677424353352}
   content: {fileID: 6605158471241131083}
   EventType: 0
+  sizeIgnore:
+  - {fileID: 346910205724571135}
   packName: 
   nameLabel: {fileID: 0}
   starTween: {fileID: 0}
@@ -289,7 +291,6 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   lines: []
-  map: {fileID: 0}
   resouceDB: {fileID: 0}
 --- !u!114 &1935594895090930288
 MonoBehaviour:
@@ -441,7 +442,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 40
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 1688270127760215850}
         memberName: OnTap

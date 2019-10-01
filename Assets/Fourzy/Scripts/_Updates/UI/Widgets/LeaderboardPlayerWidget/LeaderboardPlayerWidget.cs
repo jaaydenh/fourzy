@@ -17,8 +17,6 @@ namespace Fourzy._Updates.UI.Widgets
         public TMP_Text typeLabel;
         public RectTransform iconParent;
 
-        public ButtonExtended playButton;
-
         private RankingScreen.LeaderboardEntry leaderboard;
 
         public void SetData(RankingScreen.LeaderboardEntry leaderboard)

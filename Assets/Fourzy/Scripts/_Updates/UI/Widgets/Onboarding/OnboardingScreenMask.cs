@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
@@ -11,10 +12,10 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class OnboardingScreenMask : MonoBehaviour
     {
-        public GameObject maskPrefab;
+        public OnboardingScreenMaskObject maskPrefab;
 
         private AlphaTween alphaTween;
-        private List<GameObject> masks = new List<GameObject>();
+        private List<OnboardingScreenMaskObject> masks = new List<OnboardingScreenMaskObject>();
         private OnboardingScreen onboardingScreen;
 
         protected void Awake()
@@ -23,39 +24,60 @@ namespace Fourzy._Updates.UI.Widgets
             alphaTween = GetComponent<AlphaTween>();
         }
 
-        public void ShowMasks(Rect[] rects)
+        public void ShowMasks(OnboardingDataHolder.OnboardingTask_ShowMaskedArea task, bool clear = true)
         {
-            alphaTween.PlayForward(true);
+            if (task.customMask)
+                ShowMask(task.pointAt, task.size, clear);
+            else
+                ShowMasks(task.areas, clear);
+        }
 
-            foreach (GameObject mask in masks) Destroy(mask);
-            masks.Clear();
+        public void ShowMasks(Rect[] areas, bool clear = true)
+        {
+            if (alphaTween._value == 0f) alphaTween.PlayForward(true);
 
-            Camera c = Camera.main;
+            if (clear) Clear();
 
-            foreach (Rect area in rects)
-            {
+            foreach (Rect area in areas)
                 for (int column = (int)area.x; column < (int)(area.x + area.width); column++)
-                {
                     for (int row = (int)area.y; row < (int)(area.y + area.height); row++)
-                    {
-                        GameObject maskInstance = Instantiate(maskPrefab, transform);
-                        maskInstance.SetActive(true);
+                        AddMaskObject().rectTransform.anchoredPosition =
+                            onboardingScreen.menuController.WorldToCanvasPoint(
+                                (Vector3)GamePlayManager.instance.board.BoardLocationToVec2(
+                                    new BoardLocation(row, column)) + GamePlayManager.instance.board.transform.position);
+        }
 
-                        RectTransform rectTransform = maskInstance.GetComponent<RectTransform>();
-                        rectTransform.SetAsFirstSibling();
-                        rectTransform.anchoredPosition = 
-                            onboardingScreen.menuController.WorldToCanvasPoint((Vector3)GamePlayManager.instance.board.BoardLocationToVec2(new BoardLocation(row, column)) + 
-                            GamePlayManager.instance.board.transform.position);
+        public void ShowMask(Vector2 position, Vector2 size, bool clear = true)
+        {
+            if (alphaTween._value == 0f) alphaTween.PlayForward(true);
 
-                        masks.Add(maskInstance);
-                    }
-                }
-            }
+            if (clear) Clear();
+
+            AddMaskObject()
+                .Size(size)
+                .SetAnchors(position);
         }
 
         public void HideMasks()
         {
             alphaTween.PlayBackward(true);
+        }
+
+        private void Clear()
+        {
+            foreach (OnboardingScreenMaskObject mask in masks) Destroy(mask.gameObject);
+            masks.Clear();
+        }
+
+        private OnboardingScreenMaskObject AddMaskObject()
+        {
+            OnboardingScreenMaskObject maskInstance = Instantiate(maskPrefab, transform);
+            maskInstance.SetActive(true);
+            maskInstance.rectTransform.SetAsFirstSibling();
+
+            masks.Add(maskInstance);
+
+            return maskInstance;
         }
     }
 }

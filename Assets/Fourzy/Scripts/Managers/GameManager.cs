@@ -72,7 +72,6 @@ namespace Fourzy
         {
             get
             {
-                //load main menu if needed
                 bool mainMenuLoaded = false;
                 for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
                     if (SceneManager.GetSceneAt(sceneIndex).name == Constants.MAIN_MENU_SCENE_NAME)
@@ -99,7 +98,6 @@ namespace Fourzy
             MMVibrationManager.iOSInitializeHaptics();
 #endif
 
-            //NetworkAccess.Initialize(DEBUG: true);
             ThreadsQueuer.Initialize();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -199,7 +197,7 @@ namespace Fourzy
             //}
         }
 
-        public void StartGame(IClientFourzy game)
+        public Coroutine StartGame(IClientFourzy game)
         {
             switch (game._Type)
             {
@@ -223,6 +221,8 @@ namespace Fourzy
             }
 
             activeGame = game;
+
+            return StartRoutine("startingGame", StartingGameRoutine());
         }
 
         /// <summary>
@@ -249,11 +249,9 @@ namespace Fourzy
         public void OpenMainMenu()
         {
             //unload gameplay scene 
-            if (activeGame != null)
-                GamePlayManager.instance.UnloadGamePlayScreen();
+            if (activeGame != null) GamePlayManager.instance.UnloadGamePlayScreen();
 
-            if (!isMainMenuLoaded)
-                SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
+            if (!isMainMenuLoaded) SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
         }
 
         public void OnPurchaseComplete(Product product)
@@ -564,6 +562,11 @@ namespace Fourzy
             yield return new WaitForSeconds(.1f);
 
             GetRemoteSettings();
+        }
+
+        private IEnumerator StartingGameRoutine()
+        {
+            while (!GamePlayManager.instance || !GamePlayManager.instance.isBoardReady) yield return null;
         }
 
         [System.Serializable]

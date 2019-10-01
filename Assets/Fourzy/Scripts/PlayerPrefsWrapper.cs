@@ -61,13 +61,13 @@ namespace Fourzy
 
         public static void SetThemeUnlocked(int themeID, bool state) => PlayerPrefs.SetInt(kThemeUnlocked + themeID, state ? 1 : 0);
 
-        public static void SetTutorialState(OnboardingDataHolder tutorial, bool state) => PlayerPrefs.SetInt(kTutorial + tutorial.name, state ? 1 : 0);
+        public static void SetTutorialState(OnboardingDataHolder tutorial, bool state) => PlayerPrefs.SetInt(kTutorial + tutorial.tutorialName, state ? 1 : 0);
 
-        public static bool GetTutorialFinished(OnboardingDataHolder tutorial) => PlayerPrefs.GetInt(kTutorial + tutorial.name, 0) != 0;
+        public static bool GetTutorialFinished(OnboardingDataHolder tutorial) => PlayerPrefs.GetInt(kTutorial + tutorial.tutorialName, 0) != 0;
 
-        public static void SetTutorialOpened(OnboardingDataHolder tutorial, bool state) => PlayerPrefs.SetInt(kTutorialOpened + tutorial.name, state ? 1 : 0);
+        public static void SetTutorialOpened(OnboardingDataHolder tutorial, bool state) => PlayerPrefs.SetInt(kTutorialOpened + tutorial.tutorialName, state ? 1 : 0);
 
-        public static bool GetTutorialOpened(OnboardingDataHolder tutorial) => PlayerPrefs.GetInt(kTutorialOpened + tutorial.name, 0) != 0;
+        public static bool GetTutorialOpened(OnboardingDataHolder tutorial) => PlayerPrefs.GetInt(kTutorialOpened + tutorial.tutorialName, 0) != 0;
 
         public static void SetUsetName(string userName) => PlayerPrefs.SetString(kUserName, userName);
 

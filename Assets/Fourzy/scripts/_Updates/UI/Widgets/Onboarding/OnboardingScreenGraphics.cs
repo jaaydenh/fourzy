@@ -15,10 +15,5 @@ namespace Fourzy._Updates.UI.Widgets
             SetInteractable(false);
             BlockRaycast(false);
         }
-
-        public void SetWizardState(bool state)
-        {
-            wizard.SetActive(state);
-        }
     }
 }

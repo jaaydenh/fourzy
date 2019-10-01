@@ -28,8 +28,6 @@ namespace Fourzy._Updates.UI.Widgets
 
         public AdvancedEvent onChecked;
 
-        private ButtonExtended button;
-
         public RewardsManager.Reward reward { get; private set; }
         public ClientPuzzleData puzzleData { get; private set; }
 
@@ -167,13 +165,6 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            button = GetComponent<ButtonExtended>();
         }
 
         private void _Checked(bool state)

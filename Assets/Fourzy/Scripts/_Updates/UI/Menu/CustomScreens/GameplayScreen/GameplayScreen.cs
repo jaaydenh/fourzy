@@ -397,7 +397,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private IEnumerator WaitForTapRoutine()
         {
             while (!isCurrent) yield return null;
-            yield break;
         }
     }
 }

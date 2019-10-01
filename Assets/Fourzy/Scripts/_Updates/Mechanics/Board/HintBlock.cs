@@ -104,8 +104,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 yield return new WaitForSeconds(duration);
             } while (loop);
-
-            yield break;
         }
 
         public enum HintBlockMode

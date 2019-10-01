@@ -30,13 +30,12 @@ namespace Fourzy._Updates.UI.Menu
 
         public float widthScaled { get; private set; }
         public float heightScaled { get; private set; }
+        public bool initialized { get; private set; }
 
         public float widthRatioAdjusted => Mathf.Lerp(1f, Screen.width / widthScaled, canvaseScaler.matchWidthOrHeight);
         public float heightRatioAdjusted => Mathf.Lerp(1f, Screen.height / heightScaled, 1f - canvaseScaler.matchWidthOrHeight);
         public float widthAdjusted => canvaseScaler.referenceResolution.x * widthRatioAdjusted;
         public float heightAdjusted => canvaseScaler.referenceResolution.y * heightRatioAdjusted;
-
-        private bool initialized = false;
 
         //editor version of widthAdjusted
         public float _widthAdjusted
@@ -68,9 +67,7 @@ namespace Fourzy._Updates.UI.Menu
 
         protected virtual void Start()
         {
-            initialized = true;
-
-            ExecuteMenuEvent();
+            StartCoroutine(InitializedRoutine());
         }
 
         protected virtual void OnDestroy()
@@ -233,13 +230,13 @@ namespace Fourzy._Updates.UI.Menu
             {
                 if (currentScreen) currentScreen.Open();
 
-                ExecuteMenuEvent();
+                ExecuteMenuEvents();
             }
 
             if (_camera) _camera.gameObject.SetActive(state);
         }
 
-        public void ExecuteMenuEvent()
+        public void ExecuteMenuEvents()
         {
             if (!menuEvents.ContainsKey(name)) menuEvents.Add(name, new MenuEvents());
 
@@ -263,6 +260,17 @@ namespace Fourzy._Updates.UI.Menu
         }
 
         protected virtual void OnInvokeMenuEvents(MenuEvents events) { }
+
+        protected virtual void OnInitialized() { }
+
+        private IEnumerator InitializedRoutine()
+        {
+            while (!screens.TrueForAll(screen => screen.initialized)) yield return null;
+            initialized = true;
+            OnInitialized();
+
+            ExecuteMenuEvents();
+        }
 
         private IEnumerator InvokeMenuEvents(MenuEvents events)
         {

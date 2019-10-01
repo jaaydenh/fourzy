@@ -34,16 +34,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected bool unlockedExpanded = true;
         protected bool lockedExpanded = true;
 
-        protected override void Start()
-        {
-            base.Start();
-
-            CreateGamePieces();
-            CreateTokens();
-
-            SetPiecesActive();
-        }
-
         protected void Update()
         {
             //remove
@@ -176,6 +166,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             unlockedLabel.text = $"Unlocked {unlocked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
             lockedLabel.text = $"Locked {locked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            CreateGamePieces();
+            CreateTokens();
+
+            SetPiecesActive();
         }
     }
 }

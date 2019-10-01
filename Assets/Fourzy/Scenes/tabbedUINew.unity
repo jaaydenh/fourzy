@@ -18105,7 +18105,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   events:
-    inspectorListHeight: 83
+    inspectorListHeight: 128
     persistentCalls:
       calls:
       - genericMenuData:
@@ -18128,6 +18128,16 @@ MonoBehaviour:
           vector2Argument: {x: 0, y: 0}
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 0
+      - genericMenuData:
+          selectedComponent: 2
+          selectedMember: 41
+          isDynamic: 0
+        target: {fileID: 1739894148}
+        memberName: StartTutorialAdventure
+        memberType: 8
+        arguments: []
         isDynamic: 0
         isCallEnabled: 1
   onState:
@@ -41404,7 +41414,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 17
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: AdjustSize
@@ -41418,7 +41428,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 17
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: AdjustSize
@@ -41432,7 +41442,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 17
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: AdjustSize
@@ -49693,7 +49703,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 20
+          selectedMember: 21
           isDynamic: 0
         target: {fileID: 1722251080}
         memberName: Close
@@ -51739,6 +51749,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7376957356009909290, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7257164511050955883, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -51747,11 +51762,6 @@ PrefabInstance:
     - target: {fileID: 7257164511050955883, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7376957356009909290, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6750938061458220674, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,

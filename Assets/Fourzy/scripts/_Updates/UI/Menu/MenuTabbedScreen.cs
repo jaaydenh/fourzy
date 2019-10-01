@@ -59,13 +59,6 @@ namespace Fourzy._Updates.UI.Menu
             swipeHandler.onSwipe -= OnSwipe;
         }
 
-        protected override void Start()
-        {
-            base.Start();
-
-            if (defaultTab && tabs.Contains(defaultTab)) OpenTab(tabs.IndexOf(defaultTab), false);
-        }
-
         protected void Update()
         {
             //only continue if current opened screen is GameplayScreen
@@ -172,6 +165,13 @@ namespace Fourzy._Updates.UI.Menu
         public override void HighlightSelectable()
         {
             tabs[currentTab].HighlightSelectable();
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            if (defaultTab && tabs.Contains(defaultTab)) OpenTab(tabs.IndexOf(defaultTab), false);
         }
     }
 }

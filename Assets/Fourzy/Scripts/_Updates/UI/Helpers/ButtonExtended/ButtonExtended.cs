@@ -4,6 +4,7 @@ using ByteSheep.Events;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Widgets;
 using StackableDecorator;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace Fourzy._Updates.UI.Helpers
 {
     public class ButtonExtended : Button
     {
+        public Action onTap;
+
         public static Material GREYSCALE_MATERIAL;
 
         public AdvancedEvent events;
@@ -36,6 +39,7 @@ namespace Fourzy._Updates.UI.Helpers
         public ScaleTween scaleTween { get; set; }
         public AlphaTween alphaTween { get; set; }
         public List<MaskableGraphic> maskableGraphics { get; private set; }
+        //public WidgetBase widget { get; private set; }
 
         private bool initialized = false;
 
@@ -192,20 +196,20 @@ namespace Fourzy._Updates.UI.Helpers
             }
         }
 
-        private void OnClick()
+        public void OnClick()
         {
             events.Invoke();
 
-            if (playOnClick != AudioTypes.NONE)
-                AudioHolder.instance.PlaySelfSfxOneShotTracked(playOnClick);
+            if (playOnClick != AudioTypes.NONE) AudioHolder.instance.PlaySelfSfxOneShotTracked(playOnClick);
 
             if (scaleOnClick && scaleTween) scaleTween.PlayForward(true);
+
+            onTap?.Invoke();
         }
 
         private void Initialize()
         {
-            if (!Application.isPlaying || initialized)
-                return;
+            if (!Application.isPlaying || initialized) return;
 
             initialized = true;
 
@@ -226,6 +230,7 @@ namespace Fourzy._Updates.UI.Helpers
             //get tweens
             scaleTween = GetComponent<ScaleTween>();
             alphaTween = GetComponent<AlphaTween>();
+            //widget = GetComponentInParent<WidgetBase>();
 
             DoParse();
 

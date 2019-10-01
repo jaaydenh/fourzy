@@ -521,8 +521,6 @@ namespace Fourzy._Updates.Mechanics
             transform.localPosition = end;
 
             OnAfterMove(actionsMoves);
-
-            yield return true;
         }
 
         public class BitBuff

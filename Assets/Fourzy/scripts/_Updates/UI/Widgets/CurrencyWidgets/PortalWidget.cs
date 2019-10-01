@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics.Rewards;
-using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using UnityEngine;
@@ -11,8 +10,6 @@ namespace Fourzy._Updates.UI.Widgets
     public class PortalWidget : WidgetBase
     {
         public CurrencyType type;
-
-        private ButtonExtended button;
 
         public override void _Update()
         {
@@ -37,7 +34,7 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        public void OpenPortalScreen()
+        public void OnTap()
         {
             switch (type)
             {
@@ -53,13 +50,6 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            button = GetComponent<ButtonExtended>();
         }
     }
 }

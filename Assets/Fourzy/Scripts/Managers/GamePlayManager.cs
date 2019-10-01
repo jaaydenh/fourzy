@@ -68,7 +68,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             base.Awake();
 
             instance = this;
-            isBoardReady = false;
         }
 
         protected void Start()
@@ -86,8 +85,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             FourzyPhotonManager.onPlayerDisconnected += OnPlayerDisconnected;
             PhotonNetwork.OnEventCall += OnEventCall;
 
-            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE))
-                PointerInputModuleExtended.noInput += OnNoInput;
+            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput += OnNoInput;
 
             //auto load game if its not realtime mdoe
             if (GameManager.Instance.isRealtime)
@@ -131,8 +129,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             FourzyPhotonManager.onPlayerDisconnected -= OnPlayerDisconnected;
             PhotonNetwork.OnEventCall -= OnEventCall;
 
-            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE))
-                PointerInputModuleExtended.noInput -= OnNoInput;
+            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput -= OnNoInput;
         }
 
         protected void SetGameIfNull(IClientFourzy _game)
@@ -164,6 +161,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             awaitingChallengeID = "";
             gameStarted = false;
             isGamePaused = false;
+            isBoardReady = false;
 
             SetGameIfNull(_game);
 
@@ -288,8 +286,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private IEnumerator ShowTokenInstructionPopupRoutine()
         {
-            if (game == null || game._Type == GameType.ONBOARDING)
-                yield break;
+            if (game == null || game._Type == GameType.ONBOARDING) yield break;
 
             HashSet<TokensDataHolder.TokenData> tokens = new HashSet<TokensDataHolder.TokenData>();
 
@@ -857,9 +854,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             board.TakeTurn(game.puzzleData.Solution[lastHintIndex]);
             PlayerPrefsWrapper.SetPuzzleHintProgress(game.GameID, lastHintIndex + 1 == game.puzzleData.Solution.Count ? 0 : lastHintIndex + 1);
-
-            yield return null;
-            yield break;
         }
 
         private IEnumerator StartRealtimeCountdown()

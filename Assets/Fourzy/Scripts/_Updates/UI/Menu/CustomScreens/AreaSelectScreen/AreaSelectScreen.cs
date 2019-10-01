@@ -22,9 +22,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             group = GetComponent<ToggleGroup>();
         }
 
-        protected override void Start()
+        protected override void OnInitialized()
         {
-            base.Start();
+            base.OnInitialized();
 
             foreach (ThemesDataHolder.GameTheme theme in GameContentManager.Instance.enabledThemes)
             {

@@ -11,14 +11,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public AdventureWidget adventureWidgetPrefab;
         public RectTransform widgetsParent;
 
-        protected override void Start()
-        {
-            base.Start();
-
-            //load adventures
-            LoadAdventures();
-        }
-
         public void LoadAdventures()
         {
             //clear widgets
@@ -27,6 +19,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //load new ones
             foreach (Camera3dItemProgressionMap map in GameContentManager.Instance.progressionMaps)
                 widgets.Add(Instantiate(adventureWidgetPrefab, widgetsParent).SetData(map));
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            //load adventures
+            LoadAdventures();
         }
     }
 }

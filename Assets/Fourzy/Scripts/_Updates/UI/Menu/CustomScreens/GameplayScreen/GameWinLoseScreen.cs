@@ -30,13 +30,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private List<GamePieceView> gamePieces = new List<GamePieceView>();
 
-        protected override void Start()
-        {
-            base.Start();
-
-            turnBasedTab = menuController.GetScreen<TurnBaseScreen>();
-        }
-
         public void Open(IClientFourzy game)
         {
             menuController.OpenScreen(this);
@@ -218,6 +211,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            turnBasedTab = menuController.GetScreen<TurnBaseScreen>();
         }
     }
 }

@@ -15,7 +15,6 @@ namespace Fourzy._Updates.UI.Widgets
         public Image bg;
         public RectTransform iconParent;
 
-        public ButtonExtended button { get; private set; }
         public AIPlayersDataHolder.AIPlayerData aiPlayerData;
 
         public void SetData(AIPlayersDataHolder.AIPlayerData aiPlayerData)
@@ -31,7 +30,7 @@ namespace Fourzy._Updates.UI.Widgets
             button.SetLabel(aiPlayerData.name);
         }
 
-        public void Activate()
+        public void OnTap()
         {
             AIPlayersDataHolder.SELECTED = aiPlayerData;
 
@@ -42,13 +41,6 @@ namespace Fourzy._Updates.UI.Widgets
                 1
             )
             { _Type = GameType.AI });
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            button = GetComponent<ButtonExtended>();
         }
     }
 }

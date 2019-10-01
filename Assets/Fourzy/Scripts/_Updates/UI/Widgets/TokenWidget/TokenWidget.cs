@@ -1,8 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Serialized;
-using Fourzy._Updates.UI.Helpers;
-using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,17 +15,6 @@ namespace Fourzy._Updates.UI.Widgets
         public Image tokenImage;
         public Image tileBGImage;
 
-        public ButtonExtended button { get; private set; }
-        public MenuScreen menuScree { get; private set; }
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            button = GetComponent<ButtonExtended>();
-            menuScree = GetComponentInParent<MenuScreen>();
-        }
-
         public WidgetBase SetData(TokensDataHolder.TokenData tokenData)
         {
             this.tokenData = tokenData;
@@ -41,9 +28,6 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public void OpenTokenPrompt()
-        {
-            menuScree.menuController.GetScreen<TokenPrompt>().Prompt(tokenData);
-        }
+        public void OnTap() => menuScreen.menuController.GetScreen<TokenPrompt>().Prompt(tokenData);
     }
 }

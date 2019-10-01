@@ -149,12 +149,8 @@ namespace Fourzy._Updates.UI.Widgets
             if (puzzlePack.puzzlesComplete[index].rewards.Length > 0)
                 widgets.AddRange(this.widgets.Where(_widget => puzzlePack.puzzlesComplete[index].rewards.Contains(_widget.reward)));
 
-            if (widgets.Count == 0)
-            {
-                yield return null;
-                yield break;
-            }
-            
+            if (widgets.Count == 0) yield break;
+
             foreach (RewardsScreenWidget widget in widgets) widget.SetChecked(false);
 
             yield return new WaitForSeconds(delay);
@@ -169,9 +165,6 @@ namespace Fourzy._Updates.UI.Widgets
 
                 yield return new WaitForSeconds(.25f);
             }
-
-            yield return null;
-            yield break;
         }
     }
 }

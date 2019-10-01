@@ -1,23 +1,15 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Managers;
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class SettingsScreen : MenuScreen
     {
         public ButtonExtended puzzlesResetButton;
-
-        protected override void Start()
-        {
-            base.Start();
-
-            puzzlesResetButton.SetActive(GameManager.Instance.ExtraFeatures);
-        }
 
         public void ChangeName()
         {
@@ -26,7 +18,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ResetTutorial()
         {
-            PersistantMenuController.instance.GetScreen<OnboardingScreen>().OpenOnboarding(GameContentManager.Instance.GetTutorial("Onboarding"));
+            PersistantMenuController.instance.GetScreen<OnboardingScreen>().OpenTutorial(HardcodedTutorials.tutorials[0]);
             MenuController.AddMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, new KeyValuePair<string, object>("openScreen", "puzzlesScreen"));
         }
 
@@ -47,5 +39,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void ToggleAudio() => SettingsManager.Instance.Toggle(SettingsManager.KEY_AUDIO);
 
         public void ToggleDemoMode() => SettingsManager.Instance.Toggle(SettingsManager.KEY_DEMO_MODE);
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            puzzlesResetButton.SetActive(GameManager.Instance.ExtraFeatures);
+        }
     }
 }

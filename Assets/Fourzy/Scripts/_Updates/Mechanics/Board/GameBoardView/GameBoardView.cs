@@ -1338,8 +1338,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     break;
             }
-
-            yield break;
         }
 
         private IEnumerator HideHintBlocksAnimation(HintAreaAnimationPattern pattern)
@@ -1385,8 +1383,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     break;
             }
-
-            yield break;
         }
 
         public IEnumerator CreateBitsRoutine(bool clear = true, bool delay = false)

@@ -17,13 +17,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Awake();
         }
 
-        protected override void Start()
-        {
-            base.Start();
-
-            matchmakingScreen = menuController.GetScreen<MatchmakingScreen>();
-        }
-
         public void ContinueStartTurnBasedGame()
         {
             List<ChallengeData> next = ChallengeManager.Instance.NextChallenges;
@@ -41,6 +34,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void StartTurnGame() => matchmakingScreen.OpenTurnbased();
 
+        public void StartTutorialAdventure() => menuController.GetScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
+
         public void OpenNews() => menuController.GetScreen<NewsPromptScreen>()._Prompt();
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            matchmakingScreen = menuController.GetScreen<MatchmakingScreen>();
+        }
     }
 }

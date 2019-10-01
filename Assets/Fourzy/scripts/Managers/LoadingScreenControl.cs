@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
@@ -50,7 +51,7 @@ namespace Fourzy
             OnboardingScreen onboardingScreen = PersistantMenuController.instance.GetScreen<OnboardingScreen>();
 
             AsyncOperation async = null;
-            bool displayTutorial = onboardingScreen.WillDisplayTutorial(GameContentManager.Instance.GetTutorial("Onboarding"));
+            bool displayTutorial = onboardingScreen.WillDisplayTutorial(HardcodedTutorials.tutorials[0]);
 
             if (!displayTutorial)
             {
@@ -79,7 +80,7 @@ namespace Fourzy
                 }
             }
 
-            if (displayTutorial) onboardingScreen.OpenOnboarding(GameContentManager.Instance.GetTutorial("Onboarding"));
+            if (displayTutorial) onboardingScreen.OpenTutorial(HardcodedTutorials.tutorials[0]);
         }
     }
 }

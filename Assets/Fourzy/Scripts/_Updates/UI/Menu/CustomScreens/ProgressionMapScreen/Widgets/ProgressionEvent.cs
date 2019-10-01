@@ -29,6 +29,7 @@ namespace Fourzy._Updates.UI.Widgets
         public TMP_Text placeholder;
         public RectTransform content;
         public ProgressionEventType EventType;
+        public List<RectTransform> sizeIgnore;
 
         [ShowIfGroup("PuzzlePack/EventType", Value = ProgressionEventType.GAME), BoxGroup("PuzzlePack"), ValueDropdown("GetPacksData")]
         public string packName = "";
@@ -56,17 +57,26 @@ namespace Fourzy._Updates.UI.Widgets
         public AdvancedEvent onRewarded;
         public AdvancedEvent onReset;
 
-        private BasicPuzzlePack _puzzlePack;
-        private ButtonExtended buttonExtended;
-        private GamePieceView gamePieceView;
-
         //[HideInInspector]
         public List<Camera3dItemProgressionLine> lines;
 
-        private bool _rewarded;
-        private bool _unlocked;
+        private BasicPuzzlePack _puzzlePack;
+        private GamePieceView gamePieceView;
+        private Vector2 _size;
 
+        public bool _rewarded { get; private set; }
+        public bool _unlocked { get; private set; }
         public Camera3dItemProgressionMap map { get; private set; }
+
+        public Vector2 size
+        {
+            get
+            {
+                if (_size == Vector2.zero) FindSize(rectTransform);
+
+                return _size;
+            }
+        }
 
         /// <summary>
         /// Editor stuff
@@ -218,12 +228,12 @@ namespace Fourzy._Updates.UI.Widgets
                 switch (EventType)
                 {
                     case ProgressionEventType.GAME:
-                        buttonExtended.interactable = true;
+                        button.interactable = true;
 
                         break;
 
                     default:
-                        buttonExtended.interactable = false;
+                        button.interactable = false;
 
                         break;
                 }
@@ -231,7 +241,7 @@ namespace Fourzy._Updates.UI.Widgets
                 Rewarded(animate);
             }
             else
-                buttonExtended.interactable = true;
+                button.interactable = true;
         }
 
         public virtual void Rewarded(bool animate)
@@ -263,12 +273,12 @@ namespace Fourzy._Updates.UI.Widgets
                     break;
 
                 case ProgressionEventType.CURRENCY:
-                    buttonExtended.interactable = false;
+                    button.interactable = false;
 
                     break;
 
                 case ProgressionEventType.REWARD:
-                    buttonExtended.interactable = false;
+                    button.interactable = false;
 
                     break;
             }
@@ -277,9 +287,9 @@ namespace Fourzy._Updates.UI.Widgets
             onRewarded.Invoke();
         }
 
-        public virtual void OnTap()
+        public void OnTap()
         {
-            if (!buttonExtended.interactable) return;
+            if (!button.interactable) return;
 
             switch (EventType)
             {
@@ -356,7 +366,6 @@ namespace Fourzy._Updates.UI.Widgets
 
             placeholder.gameObject.SetActive(false);
 
-            buttonExtended = GetComponentInChildren<ButtonExtended>();
             map = GetComponentInParent<Camera3dItemProgressionMap>();
 
             switch (EventType)
@@ -385,6 +394,19 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
+
+            FindSize(rectTransform);
+        }
+
+        private void FindSize(RectTransform obj)
+        {
+            if (obj == null || sizeIgnore.Contains(obj)) return;
+
+            if (_size.x < obj.sizeDelta.x) _size.x = obj.sizeDelta.x;
+            if (_size.y < obj.sizeDelta.y) _size.y = obj.sizeDelta.y;
+
+            //find chunker
+            for (int i = 0; i < obj.childCount; i++) FindSize(obj.GetChild(i).GetComponent<RectTransform>());
         }
 
 #if UNITY_EDITOR
