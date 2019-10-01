@@ -4,7 +4,7 @@ namespace FourzyGameModel.Model
 {
     public class GameActionPass : GameAction
     {
-        public GameActionType Type { get { return GameActionType.STOP; } }
+        public GameActionType Type { get { return GameActionType.PASS; } }
 
         public GameActionTiming Timing { get { return GameActionTiming.MOVE; } }
 

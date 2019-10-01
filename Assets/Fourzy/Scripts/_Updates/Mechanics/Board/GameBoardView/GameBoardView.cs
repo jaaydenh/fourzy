@@ -4,6 +4,7 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics._Vfx;
+using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Threading;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
@@ -78,8 +79,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             base.Awake();
 
-            if (!bitsParent)
-                bitsParent = transform;
+            if (!bitsParent) bitsParent = transform;
 
             boxCollider2D = GetComponent<BoxCollider2D>();
             rectTransform = GetComponent<RectTransform>();
@@ -1160,6 +1160,19 @@ namespace Fourzy._Updates.Mechanics.Board
                         List<GamePieceView> winningGamepieces = GetWinningPieces();
                         for (int index = 0; index < winningGamepieces.Count; index++)
                             winningGamepieces[index].PlayWinAnimation(index * .15f + .15f);
+
+                        actionIndex++;
+
+                        break;
+
+                    case GameActionType.PASS:
+                        float turnPassDuration = 1.8f;
+
+                        //show message
+                        GamePlayManager.instance.gameplayScreen.ShowOpponentMessage("Turn pass..", turnPassDuration - .22f);
+
+                        //use some delay
+                        yield return new WaitForSeconds(turnPassDuration);
 
                         actionIndex++;
 

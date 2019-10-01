@@ -183,8 +183,6 @@ namespace FourzyGameModel.Model
             this.Board.Parent = this;
             this.RealTime = false;
             Initialize();
-            this.Players.Add(1, new Player(1, "One"));
-            this.Players.Add(2, new Player(2, "Two"));
             this.Board.Random = this.Random;
 
             this.ActivePlayerId = FirstPlayerId;

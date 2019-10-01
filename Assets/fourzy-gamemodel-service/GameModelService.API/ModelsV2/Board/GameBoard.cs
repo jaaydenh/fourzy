@@ -514,7 +514,7 @@ namespace FourzyGameModel.Model
                 for (int c = 0; c < Columns; c++)
                 {
                     if (Contents[r,c].ContainsPiece)
-                        if (PlayerId > 0 && PlayerId == Contents[r, c].ActivePiece.PlayerId)
+                        if (PlayerId < 0 || PlayerId == Contents[r, c].ActivePiece.PlayerId)
                             FoundPiece.Add(Contents[r,c].ActivePiece);
                 }
             }
