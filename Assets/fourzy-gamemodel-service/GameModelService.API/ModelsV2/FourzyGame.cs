@@ -163,6 +163,7 @@ namespace FourzyGameModel.Model
 
             GameBoard Board = BoardFactory.CreateRandomBoard(Options, Player, AI, Area);
             this.State = new GameState(Board, Options, FirstPlayerId);
+            this.State.Players.Clear();
             this.State.Players.Add(1, Player);
             this.State.Players.Add(2, AI);
 
@@ -183,6 +184,7 @@ namespace FourzyGameModel.Model
             this.State = new GameState(definition);
             this.State.ActivePlayerId = FirstPlayerId;
             this.playerTurnRecord = new List<PlayerTurn>();
+            this.State.Players.Clear();
             this.State.Players.Add(1, Player1);
             Player AI = new Player(2, Profile.ToString(), Profile);
             this.State.Players.Add(2, AI);
