@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.Tools
 {
@@ -820,6 +821,41 @@ namespace Fourzy._Updates.Tools
 
             return board;
         }
+
+        public static Vector2 GetGridLayoutSize(this GridLayoutGroup grid, int childCount)
+        {
+            Vector2 result = new Vector2(grid.padding.left + grid.padding.right, grid.padding.top + grid.padding.bottom);
+
+            //calculate rows
+            int rows = 0;
+            int columns = 0;
+            switch (grid.constraint)
+            {
+                case GridLayoutGroup.Constraint.FixedColumnCount:
+                    rows = Mathf.CeilToInt((float)childCount / grid.constraintCount);
+                    columns = grid.constraintCount;
+
+                    break;
+
+                case GridLayoutGroup.Constraint.FixedRowCount:
+                    rows = grid.constraintCount;
+                    columns = Mathf.CeilToInt((float)childCount / grid.constraintCount);
+
+                    break;
+            }
+
+            //add spacings + cell size
+            if (columns > 0) result.x += (columns - 1) * grid.spacing.x;
+            if (rows > 0) result.y += (rows - 1) * grid.spacing.y;
+
+            //add cell size
+            result.x += columns * grid.cellSize.x;
+            result.y += rows * grid.cellSize.y;
+
+            return result;
+        }
+
+        public static Vector2 GetGridLayoutSize(this GridLayoutGroup grid) => GetGridLayoutSize(grid, grid.transform.childCount);
 
         public static AnimationCurve CreateStraightCurve()
         {

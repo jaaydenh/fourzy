@@ -4274,7 +4274,6 @@ GameObject:
   m_Component:
   - component: {fileID: 204962647}
   - component: {fileID: 204962652}
-  - component: {fileID: 204962651}
   - component: {fileID: 204962650}
   - component: {fileID: 204962648}
   - component: {fileID: 204962649}
@@ -4361,19 +4360,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
---- !u!114 &204962651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204962646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AllowSwitchOff: 0
 --- !u!222 &204962652
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11007,9 +10993,9 @@ MonoBehaviour:
   unlockedButton: {fileID: 916533445}
   foundButton: {fileID: 707072627}
   lockedButton: {fileID: 1569757644}
-  unlockedPiecesParent: {fileID: 1918431419}
-  foundPiecesParent: {fileID: 1875699564}
-  lockedPiecesParent: {fileID: 2037510796}
+  unlockedPiecesParent: {fileID: 1918431424}
+  foundPiecesParent: {fileID: 1875699569}
+  lockedPiecesParent: {fileID: 2037510801}
   unlockedCover: {fileID: 755983301}
   foundCover: {fileID: 1275983496}
   lockedCover: {fileID: 209624567}

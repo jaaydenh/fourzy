@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
@@ -19,9 +20,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public ButtonExtended unlockedButton;
         public ButtonExtended foundButton;
         public ButtonExtended lockedButton;
-        public RectTransform unlockedPiecesParent;
-        public RectTransform foundPiecesParent;
-        public RectTransform lockedPiecesParent;
+        public GridLayoutGroup unlockedPiecesParent;
+        public GridLayoutGroup foundPiecesParent;
+        public GridLayoutGroup lockedPiecesParent;
         public RectTransform unlockedCover;
         public RectTransform foundCover;
         public RectTransform lockedCover;
@@ -49,12 +50,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             //remove
 #if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.U))
             {
                 //give game pieces
                 foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
                 {
                     widget.data.AddPieces(Random.Range(1, 5));
+                    widget._Update();
+                }
+
+                PlaceGamepieceWidgets();
+            }
+
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                //give game pieces
+                foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
+                {
+                    widget.data.AddPieces(-3);
                     widget._Update();
                 }
 
@@ -164,6 +177,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 switch (widget.data.State)
                 {
+                    case GamePieceState.FoundAndUnlocked:
+                        unlocked.Add(widget);
+
+                        break;
+
                     case GamePieceState.FoundAndLocked:
                         found.Add(widget);
 
@@ -173,37 +191,32 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         locked.Add(widget);
 
                         break;
-
-                    case GamePieceState.FoundAndUnlocked:
-                        unlocked.Add(widget);
-
-                        break;
                 }
             }
 
             //sort if needed
             //
 
-            unlocked.ForEach(widget => widget.transform.SetParent(unlockedPiecesParent));
-            found.ForEach(widget => widget.transform.SetParent(foundPiecesParent));
-            locked.ForEach(widget => widget.transform.SetParent(lockedPiecesParent));
+            unlocked.ForEach(widget => widget.transform.SetParent(unlockedPiecesParent.transform));
+            found.ForEach(widget => widget.transform.SetParent(foundPiecesParent.transform));
+            locked.ForEach(widget => widget.transform.SetParent(lockedPiecesParent.transform));
 
-            LayoutRebuilder.ForceRebuildLayoutImmediate(unlockedPiecesParent);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(foundPiecesParent);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(lockedPiecesParent);
+            Vector2 unlcokedSize = unlockedPiecesParent.GetGridLayoutSize(unlocked.Count);
+            Vector2 foundSize = foundPiecesParent.GetGridLayoutSize(found.Count);
+            Vector2 lockedSize = lockedPiecesParent.GetGridLayoutSize(locked.Count);
 
-            if (unlockedExpanded) unlockedCover.sizeDelta = new Vector2(unlockedCover.sizeDelta.x, unlockedPiecesParent.rect.height);
-            if (lockedExpanded) lockedCover.sizeDelta = new Vector2(lockedCover.sizeDelta.x, lockedPiecesParent.rect.height);
-            if (foundExpanded) foundCover.sizeDelta = new Vector2(foundCover.sizeDelta.x, foundPiecesParent.rect.height);
+            if (unlockedExpanded) unlockedCover.sizeDelta = new Vector2(unlockedCover.sizeDelta.x, unlcokedSize.y);
+            if (foundExpanded) foundCover.sizeDelta = new Vector2(foundCover.sizeDelta.x, foundSize.y);
+            if (lockedExpanded) lockedCover.sizeDelta = new Vector2(lockedCover.sizeDelta.x, lockedSize.y);
 
             unlockedCoverTween.from = new Vector2(unlockedCover.rect.width, 0f);
-            unlockedCoverTween.to = new Vector2(unlockedCover.rect.width, unlockedPiecesParent.rect.height);
+            unlockedCoverTween.to = new Vector2(unlockedCover.rect.width, unlcokedSize.y);
 
             foundCoverTween.from = new Vector2(foundCover.rect.width, 0f);
-            foundCoverTween.to = new Vector2(foundCover.rect.width, foundPiecesParent.rect.height);
+            foundCoverTween.to = new Vector2(foundCover.rect.width, foundSize.y);
 
             lockedCoverTween.from = new Vector2(lockedCover.rect.width, 0f);
-            lockedCoverTween.to = new Vector2(lockedCover.rect.width, lockedPiecesParent.rect.height);
+            lockedCoverTween.to = new Vector2(lockedCover.rect.width, lockedSize.y);
 
             //hide/show buttons
             unlockedButton.SetActive(unlocked.Count != 0);
