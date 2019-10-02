@@ -1761,7 +1761,7 @@ RectTransform:
   m_GameObject: {fileID: 305274624}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.9679257}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1613511139}
   m_Father: {fileID: 2077467804}
@@ -8849,7 +8849,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 32
+          selectedMember: 34
           isDynamic: 0
         target: {fileID: 873791303}
         memberName: Next
@@ -8866,10 +8866,13 @@ MonoBehaviour:
     persistentCalls:
       calls: []
   playOnClick: 2
-  changeMaterialOnState: 0
+  changeMaterialOnState: 1
   scaleOnClick: 0
   buttonGraphics:
-    list: []
+    list:
+    - _name: NextButton
+      target: {fileID: 625362184}
+      propagate: 0
   labels: []
   badges: []
 --- !u!114 &625362187
@@ -29306,7 +29309,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 46
+          selectedMember: 47
           isDynamic: 0
         target: {fileID: 873791303}
         memberName: TryUseHint

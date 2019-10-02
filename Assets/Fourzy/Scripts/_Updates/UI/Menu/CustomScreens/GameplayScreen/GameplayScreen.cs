@@ -7,6 +7,7 @@ using FourzyGameModel.Model;
 using StackableDecorator;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -207,7 +208,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             #endregion
         }
 
-        public void OnMoveEnded(ClientPlayerTurn turn)
+        public void OnMoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult)
         {
             if (game == null) return;
 
@@ -222,17 +223,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             #region Checking AI turn
 
-            switch (game._Type)
-            {
-                case GameType.AI:
-                //case GameType.PRESENTATION:
-                case GameType.PUZZLE:
-                    //if waiting more than (time), show "thinking..."
-                    //if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").ShowDelayed(time: .6f);
-                    if (!game.isMyTurn) ShowOpponentMessage("Thinking...", 1f);
+            //if (!turnResult.Activity.Any(action => action.Type == GameActionType.PASS))
+                switch (game._Type)
+                {
+                    case GameType.AI:
+                    //case GameType.PRESENTATION:
+                    //case GameType.PUZZLE:
+                        //if waiting more than (time), show "thinking..."
+                        //if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").ShowDelayed(time: .6f);
+                        if (!game.isMyTurn) ShowOpponentMessage("Thinking...", 1f);
 
-                    break;
-            }
+                        break;
+                }
 
             #endregion
 

@@ -126,6 +126,8 @@ namespace Fourzy._Updates.ClientModel
             set => gameID = value;
         }
 
+        public bool isFourzyPuzzle => false;
+
         public GamePiecePrefabData playerOnePrefabData { get; set; }
         public GamePiecePrefabData playerTwoPrefabData { get; set; }
 

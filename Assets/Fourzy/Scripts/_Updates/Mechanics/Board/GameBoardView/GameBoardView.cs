@@ -34,7 +34,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public Action<IClientFourzy> onGameFinished;
         public Action<IClientFourzy> onDraw;
         public Action<ClientPlayerTurn> onMoveStarted;
-        public Action<ClientPlayerTurn> onMoveEnded;
+        public Action<ClientPlayerTurn, PlayerTurnResult> onMoveEnded;
         public Action onCastCanceled;
         public Action<SpellId, int> onCast;
         public Action onWrongTurn;
@@ -1244,7 +1244,7 @@ namespace Fourzy._Updates.Mechanics.Board
             boardBits.ForEach(bit => { if (bit.active) bit.OnAfterTurn(); });
 
             //invoke onMoveEnded
-            onMoveEnded?.Invoke(turn);
+            onMoveEnded?.Invoke(turn, turnResults);
 
             //update hint blocks
             UpdateHintArea();

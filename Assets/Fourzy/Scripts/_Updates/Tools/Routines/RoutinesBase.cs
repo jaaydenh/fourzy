@@ -28,7 +28,8 @@ namespace Fourzy._Updates.Tools
             if (!routines.ContainsKey(name))
             {
                 RoutineClass _routineContainer = new RoutineClass(this, name, routine, onEnd, onCanceled);
-                routines.Add(name, _routineContainer);
+
+                if (!_routineContainer.terminated) routines.Add(name, _routineContainer);
 
                 return _routineContainer.WaitFor();
             }
@@ -50,7 +51,8 @@ namespace Fourzy._Updates.Tools
             if (!routines.ContainsKey(name))
             {
                 RoutineClass _routineContainer = new RoutineClass(this, name, time, onEnd, onCanceled);
-                routines.Add(name, _routineContainer);
+
+                if (!_routineContainer.terminated) routines.Add(name, _routineContainer);
 
                 return _routineContainer.WaitFor();
             }

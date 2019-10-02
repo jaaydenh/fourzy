@@ -717,13 +717,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             onMoveStarted?.Invoke(turn);
         }
 
-        private void OnMoveEnded(ClientPlayerTurn turn)
+        private void OnMoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult)
         {
             if (replayingLastTurn) replayingLastTurn = false;
 
             onMoveEnded?.Invoke(turn);
 
-            gameplayScreen.OnMoveEnded(turn);
+            gameplayScreen.OnMoveEnded(turn, turnResult);
 
             UpdatePlayerTurn();
 

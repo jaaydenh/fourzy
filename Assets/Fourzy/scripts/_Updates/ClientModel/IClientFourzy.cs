@@ -21,6 +21,7 @@ namespace Fourzy._Updates.ClientModel
         Area _Area { get; set; }
         GameStateDataEpoch toGameStateData { get; }
         string GameID { get; set; }
+        bool isFourzyPuzzle { get; }
 
         List<PlayerTurn> InitialTurns { get; }
 

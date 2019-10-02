@@ -7,6 +7,7 @@ using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using TMPro;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -21,7 +22,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public TweenBase completeIcon;
         public AlphaTween packInfoTween;
 
-        private bool rematchButtonState = false;
+        //private bool rematchButtonState = false;
 
         public IClientFourzy game { get; private set; }
 
@@ -61,22 +62,26 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else
                 hintButton.SetActive(false);
 
-
             if (game.puzzleData.pack)
             {
-                if (game.puzzleData.pack.enabledPuzzlesData.Count > 1)
+                if (game.isFourzyPuzzle)
                 {
-                    if (nextButton.alphaTween._value < 1f)
+                    if (game.puzzleData.pack.enabledPuzzlesData.Count > 1)
                     {
-                        nextButton.Show(.3f);
-                        nextButton.SetState(true);
+                        if (nextButton.alphaTween._value < 1f)
+                        {
+                            nextButton.Show(.3f);
+                            nextButton.SetState(true);
+                        }
+                    }
+                    else
+                    {
+                        nextButton.Hide(0f);
+                        nextButton.SetState(false);
                     }
                 }
                 else
-                {
-                    nextButton.Hide(0f);
                     nextButton.SetState(false);
-                }
 
                 switch (game.puzzleData.pack.packType)
                 {
@@ -101,6 +106,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
                 }
             }
+            //for quick puzzles
             else
             {
                 if (nextButton.alphaTween._value < 1f)
@@ -121,13 +127,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 movesLeftWidget.SetData(game.asFourzyPuzzle);
             }
 
-            if (rematchButtonState)
+            //if (rematchButtonState)
+            if (rematchButton.interactable)
             {
-                rematchButton.scaleTween.PlayBackward(true);
+                //rematchButton.scaleTween.PlayBackward(true);
                 rematchButton.alphaTween.PlayBackward(true);
+                rematchButton.SetState(false);
 
-                rematchButton.interactable = false;
-                rematchButtonState = false;
+                //rematchButton.interactable = false;
+                //rematchButtonState = false;
             }
         }
 
@@ -148,13 +156,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //if (game.isMyTurn && !game.isOver) hintButton.SetState(true);
             SetHintButtonState(true);
 
-            if (game._allTurnRecord.Count == 1 && !game.isOver)
+            if (game._allTurnRecord.Count == 1 && !game.isOver && game.isFourzyPuzzle)
             {
-                rematchButton.scaleTween.PlayForward(true);
+                rematchButton.SetState(true);
                 rematchButton.alphaTween.PlayForward(true);
 
-                rematchButton.interactable = true;
-                rematchButtonState = true;
+                //rematchButton.interactable = true;
+                //rematchButtonState = true;
             }
         }
 
@@ -169,8 +177,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (movesLeftWidget.alphaTween._value > 0f) movesLeftWidget.Hide(.3f);
 
-            nextButton.SetState(false);
-            nextButton.Hide(.3f);
+            if (nextButton.interactable)
+            {
+                nextButton.SetState(false);
+                nextButton.Hide(.3f);
+            }
         }
 
         public void TryUseHint() => GamePlayManager.instance.PlayHint();
