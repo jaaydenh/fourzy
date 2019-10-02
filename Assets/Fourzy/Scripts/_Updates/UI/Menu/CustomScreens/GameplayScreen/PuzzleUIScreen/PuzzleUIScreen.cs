@@ -170,10 +170,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void GameComplete()
         {
-            if (game.IsWinner())
-            {
-                completeIcon.PlayForward(true);
-            }
+            if (game.IsWinner()) completeIcon.PlayForward(true);
 
             if (movesLeftWidget.alphaTween._value > 0f) movesLeftWidget.Hide(.3f);
 

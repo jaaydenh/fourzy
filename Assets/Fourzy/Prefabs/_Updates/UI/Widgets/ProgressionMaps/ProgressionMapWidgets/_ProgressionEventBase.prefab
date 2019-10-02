@@ -176,7 +176,7 @@ MonoBehaviour:
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
-        isCallEnabled: 1
+        isCallEnabled: 0
       - genericMenuData:
           selectedComponent: 0
           selectedMember: 11
@@ -222,7 +222,7 @@ MonoBehaviour:
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
-        isCallEnabled: 1
+        isCallEnabled: 0
       - genericMenuData:
           selectedComponent: 0
           selectedMember: 11

@@ -11030,7 +11030,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 37
+          selectedMember: 39
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -11050,7 +11050,7 @@ MonoBehaviour:
   buttonsRow: {fileID: 1594210383}
   nextGameButton: {fileID: 1122577625}
   rematchButton: {fileID: 1944413860}
-  backButton: {fileID: 1026052065}
+  continueButton: {fileID: 1026052065}
   tapToContinue: {fileID: 335893791}
 --- !u!1 &807682333
 GameObject:
@@ -11365,7 +11365,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 37
+          selectedMember: 39
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -13139,7 +13139,7 @@ GameObject:
   - component: {fileID: 1026052066}
   - component: {fileID: 1026052065}
   m_Layer: 5
-  m_Name: BackButton
+  m_Name: ContinueButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13162,7 +13162,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 835, y: -50}
+  m_AnchoredPosition: {x: 500, y: -50}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1026052065
@@ -13201,10 +13201,10 @@ MonoBehaviour:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
-    m_SelectedTrigger: Highlighted
+    m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 1026052066}
+  m_TargetGraphic: {fileID: 1440150837}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -13216,10 +13216,10 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 35
+          selectedMember: 36
           isDynamic: 0
-        target: {fileID: 159788920}
-        memberName: OnBack
+        target: {fileID: 783680541}
+        memberName: OnBGTap
         memberType: 8
         arguments: []
         isDynamic: 0
@@ -13233,7 +13233,7 @@ MonoBehaviour:
     persistentCalls:
       calls: []
   playOnClick: 2
-  changeMaterialOnState: 1
+  changeMaterialOnState: 0
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -13253,7 +13253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -14072,7 +14072,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 32
+          selectedMember: 34
           isDynamic: 0
         target: {fileID: 783680541}
         memberName: NextGame
@@ -14497,7 +14497,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Back
+  m_text: Continue
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 2df78b07fbfbc4234b2067921d1b81e2, type: 2}
@@ -16888,7 +16888,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 35
+          selectedMember: 36
           isDynamic: 0
         target: {fileID: 783680541}
         memberName: OnBGTap
@@ -20242,7 +20242,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 37
+          selectedMember: 39
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack
@@ -20618,7 +20618,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 21
+          selectedMember: 22
           isDynamic: 0
         target: {fileID: 1743460222}
         memberName: CloseSelf
@@ -29520,7 +29520,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 36
+          selectedMember: 38
           isDynamic: 0
         target: {fileID: 783680541}
         memberName: Rematch

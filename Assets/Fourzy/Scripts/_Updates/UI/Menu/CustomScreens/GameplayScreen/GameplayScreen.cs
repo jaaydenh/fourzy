@@ -308,12 +308,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     opponentWidget.StartWinJumps();
             }
 
-            if (game.puzzleData != null)
+            if (game.puzzleData)
             {
                 puzzleUI.GameComplete();
 
                 //open puzzle win/lose screen
-                puzzleWinLoseScreen.Open(game);
+                if (game.isFourzyPuzzle)
+                    puzzleWinLoseScreen.Open(game);
+                else
+                    gameWinLoseScreen.Open(game);
             }
             else
             {

@@ -20,7 +20,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameObject buttonsRow;
         public ButtonExtended nextGameButton;
         public ButtonExtended rematchButton;
-        public ButtonExtended backButton;
+        public ButtonExtended continueButton;
 
         public AlphaTween tapToContinue;
 
@@ -132,8 +132,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
 
-                case GameType.PASSANDPLAY:
-                    //load next passplay game
+                default:
                     GamePlayManager.instance.LoadGame(game.Next());
 
                     break;
@@ -146,7 +145,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (rematchButton.gameObject.activeInHierarchy) Rematch();
             else if (nextGameButton.gameObject.activeInHierarchy) NextGame();
-            else GamePlayManager.instance.gameplayScreen.OnBack();
+            else
+            {
+                if (game.puzzleData)
+                    menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack);
+                else
+                    GamePlayManager.instance.gameplayScreen.OnBack();
+            }
         }
 
         private void SetButtonRowState(bool value)
@@ -155,61 +160,47 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (value)
             {
-                //next button
-                switch (game._Type)
+                if (game.puzzleData)
                 {
-                    //no 'next' for realtime/ai games
-                    case GameType.REALTIME:
-                    case GameType.AI:
-                    case GameType.PRESENTATION:
-                        nextGameButton.SetActive(false);
-
-                        break;
-
-                    case GameType.TURN_BASED:
-                        nextGameButton.SetActive(turnBasedTab.nextChallenge != null);
-
-                        break;
-
-                    case GameType.PASSANDPLAY:
-                        //nextGameButton.SetActive(true);
-
-                        break;
+                    continueButton.SetActive(true);
                 }
-
-                //rematch button
-                switch (game._Type)
+                else
                 {
-                    case GameType.REALTIME:
-                    case GameType.PRESENTATION:
-                        rematchButton.SetActive(false);
+                    //next button
+                    switch (game._Type)
+                    {
+                        case GameType.TURN_BASED:
+                            nextGameButton.SetActive(turnBasedTab.nextChallenge != null);
 
-                        break;
+                            break;
 
-                    default:
-                        rematchButton.SetActive(true);
+                        default:
+                            nextGameButton.SetActive(false);
 
-                        break;
+                            break;
+                    }
+
+                    //rematch button
+                    switch (game._Type)
+                    {
+                        case GameType.REALTIME:
+                        case GameType.PRESENTATION:
+                            rematchButton.SetActive(false);
+
+                            break;
+
+                        default:
+                            rematchButton.SetActive(true);
+
+                            break;
+                    }
                 }
             }
             else
             {
                 nextGameButton.SetActive(false);
                 rematchButton.SetActive(false);
-            }
-
-            //back button
-            switch (game._Type)
-            {
-                case GameType.PRESENTATION:
-
-                    break;
-
-                default:
-                    //set back button state
-                    backButton.SetActive(!nextGameButton.gameObject.activeInHierarchy && !rematchButton.gameObject.activeInHierarchy);
-
-                    break;
+                continueButton.SetActive(false);
             }
         }
 
