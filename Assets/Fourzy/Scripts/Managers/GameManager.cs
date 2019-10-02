@@ -209,9 +209,7 @@ namespace Fourzy
 
             //if gameplay scene is already opened, just load game
             if (activeGame != null)
-            {
                 GamePlayManager.instance.LoadGame(game);
-            }
             else
             {
                 if (isMainMenuLoaded)

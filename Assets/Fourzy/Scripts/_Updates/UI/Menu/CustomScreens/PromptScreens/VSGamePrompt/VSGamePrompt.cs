@@ -24,13 +24,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public BasicPuzzlePack puzzlePack { get; private set; }
 
-        public void Prompt(int gauntletLevels)
-        {
-            BasicPuzzlePack _puzzlePack = new BasicPuzzlePack();
-            _puzzlePack.Initialize(gauntletLevels);
-
-            Prompt(_puzzlePack);
-        }
+        public void Prompt(int gauntletLevels) => Prompt(new BasicPuzzlePack(gauntletLevels));
 
         public void Prompt(BasicPuzzlePack puzzlePack)
         {

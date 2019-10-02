@@ -60,15 +60,7 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
-        public virtual void Initialize()
-        {
-            puzzlesData = new List<ClientPuzzleData>();
-            enabledPuzzlesData = new List<ClientPuzzleData>();
-            rewardPuzzles = new List<ClientPuzzleData>();
-            allRewards = new Dictionary<int, List<RewardsManager.Reward>>();
-        }
-
-        public virtual void Initialize(int gauntletLevels)
+        public BasicPuzzlePack(int gauntletLevels)
         {
             Initialize();
 
@@ -97,6 +89,14 @@ namespace Fourzy._Updates.ClientModel
 
                 PlayerPrefsWrapper.SetPuzzleChallengeComplete(puzzleData.ID, false);
             }
+        }
+
+        public virtual void Initialize()
+        {
+            puzzlesData = new List<ClientPuzzleData>();
+            enabledPuzzlesData = new List<ClientPuzzleData>();
+            rewardPuzzles = new List<ClientPuzzleData>();
+            allRewards = new Dictionary<int, List<RewardsManager.Reward>>();
         }
 
         public ClientPuzzleData nextUnsolvedData
