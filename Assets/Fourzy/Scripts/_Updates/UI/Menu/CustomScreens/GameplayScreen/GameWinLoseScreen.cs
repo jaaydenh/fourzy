@@ -20,7 +20,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameObject buttonsRow;
         public ButtonExtended nextGameButton;
         public ButtonExtended rematchButton;
-        public ButtonExtended continueButton;
+        //public ButtonExtended continueButton;
 
         public AlphaTween tapToContinue;
 
@@ -71,7 +71,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             tapToContinue.AtProgress(0f);
-            if (RewardsScreen.WillDisplayRewardsScreen(game))
+            if (RewardsScreen.WillDisplayRewardsScreen(game) || game.puzzleData)
             {
                 //display 'tap to continue'
                 tapToContinue.PlayForward(true);
@@ -147,8 +147,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else if (nextGameButton.gameObject.activeInHierarchy) NextGame();
             else
             {
-                if (game.puzzleData)
-                    menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack);
+                if (game.puzzleData && !game.puzzleData.lastInPack)
+                    menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
                 else
                     GamePlayManager.instance.gameplayScreen.OnBack();
             }
@@ -160,12 +160,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (value)
             {
-                if (game.puzzleData)
-                {
-                    continueButton.SetActive(true);
-                }
-                else
-                {
+                //if (game.puzzleData)
+                //{
+                //    continueButton.SetActive(true);
+                //}
+                //else
+                //{
                     //next button
                     switch (game._Type)
                     {
@@ -194,13 +194,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                             break;
                     }
-                }
+                //}
             }
             else
             {
                 nextGameButton.SetActive(false);
                 rematchButton.SetActive(false);
-                continueButton.SetActive(false);
+                //continueButton.SetActive(false);
             }
         }
 

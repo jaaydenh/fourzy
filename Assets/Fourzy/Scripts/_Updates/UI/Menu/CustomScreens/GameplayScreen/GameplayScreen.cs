@@ -7,7 +7,6 @@ using FourzyGameModel.Model;
 using StackableDecorator;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {

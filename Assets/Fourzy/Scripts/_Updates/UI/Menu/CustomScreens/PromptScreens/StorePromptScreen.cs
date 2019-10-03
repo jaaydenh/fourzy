@@ -39,10 +39,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
             }
 
-            ////add widgets
-            //foreach (Product product in CodelessIAPStoreListener.Instance.StoreController.products.all)
-            //    if (product.definition.id.IndexOf(filter.ToString(), System.StringComparison.InvariantCultureIgnoreCase) >= 0)
-            //        widgets.Add(Instantiate(storeItemWidget, productsParent).SetData(product));
+            //add widgets
+            foreach (Product product in CodelessIAPStoreListener.Instance.StoreController.products.all)
+                if (product.definition.id.IndexOf(filter.ToString(), System.StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    widgets.Add(Instantiate(storeItemWidget, productsParent).SetData(product));
         }
 
         public static string StoreItemTypeToString(StoreItemType filter)

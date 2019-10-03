@@ -61,6 +61,15 @@ namespace Fourzy._Updates.ClientModel
             set => _progressionIconSet = value;
         }
 
+        public bool lastInPack
+        {
+            get
+            {
+                if (!pack) return true;
+                else return pack.enabledPuzzlesData.IndexOf(this) == pack.enabledPuzzlesData.Count - 1;
+            }
+        }
+
         public ClientPuzzleData()
         {
             availableSpells = new SpellId[0];
