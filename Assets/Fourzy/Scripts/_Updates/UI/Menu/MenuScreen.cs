@@ -50,8 +50,6 @@ namespace Fourzy._Updates.UI.Menu
         protected TweenBase tween;
         protected List<WidgetBase> widgets;
 
-        public virtual ButtonExtended mainButton => gameObject.GetComponentInChildren<ButtonExtended>();
-
         public bool interactable
         {
             get

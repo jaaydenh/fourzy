@@ -205,7 +205,9 @@ namespace Fourzy._Updates.Serialized
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_BG },
                                 //will continue after main menu loaded
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.LOAD_MAIN_MENU },
-                                new OnboardingDataHolder.OnboardingTask_ExecMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, "openScreen", "tutorialProgressionMap"),
+                                //new OnboardingDataHolder.OnboardingTask_ExecMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, "openScreen", "tutorialProgressionMap"),
+                                //point at adventure button button
+                                new OnboardingDataHolder.OnboardingTask_HighlightButton("AdventureButton", new Vector2(.5f, .715f)),
                                 //will continue after event tap
                                 new OnboardingDataHolder.OnboardingTask_HighlightProgressionEvent (-1),
                             },

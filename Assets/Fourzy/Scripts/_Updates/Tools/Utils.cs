@@ -865,6 +865,52 @@ namespace Fourzy._Updates.Tools
             return curve;
         }
 
+        /// <summary>
+        /// Not finished
+        /// </summary>
+        /// <param name="transform"></param>
+        /// <returns></returns>
+        public static Vector2 GetSize(this RectTransform transform) => GetBoundaries(transform, transform, new Rect()).size;
+
+        /// <summary>
+        /// Not finished
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="root"></param>
+        /// <param name="current"></param>
+        /// <returns></returns>
+        public static Rect GetBoundaries(RectTransform obj, RectTransform root, Rect current)
+        {
+            if (!obj) return current;
+
+            Vector2 position = root == obj ? Vector2.zero : GetAnchoredPosition(obj, root, Vector2.zero);
+
+            float left = position.x - obj.pivot.x * obj.rect.width;
+            float right = position.x + (1f - obj.pivot.x) * obj.rect.width;
+            float top = position.y + (1f - obj.pivot.y) * obj.rect.height;
+            float bottom = position.y - obj.pivot.y * obj.rect.height;
+
+            if (left < current.xMin) current.xMin = left;
+            if (right > current.xMax) current.xMax = right;
+            if (top > current.yMax) current.yMax = top;
+            if (bottom < current.yMin) current.yMin = bottom;
+
+            Debug.Log(obj.name + " " + position + " " + left + " " + right);
+
+            for (int childIndex = 0; childIndex < obj.childCount; childIndex++)
+                current = GetBoundaries(obj.GetChild(childIndex).GetComponent<RectTransform>(), root, current);
+
+            return current;
+        }
+
+        public static Vector2 GetAnchoredPosition(this RectTransform target, RectTransform root, Vector2 current)
+        {
+            if (target.parent != root)
+                current += target.anchoredPosition + GetAnchoredPosition(target.parent.GetComponent<RectTransform>(), root, current);
+
+            return current;
+        }
+
         public static AnimationCurve CreateLinearCurve()
         {
             float tan45 = Mathf.Tan(Mathf.Deg2Rad * 45);

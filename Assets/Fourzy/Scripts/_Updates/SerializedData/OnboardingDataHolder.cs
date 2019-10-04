@@ -237,5 +237,15 @@ namespace Fourzy._Updates.Serialized
                 intValue = index;
             }
         }
+
+        public class OnboardingTask_HighlightButton : OnboardingTask
+        {
+            public OnboardingTask_HighlightButton(string buttonName, Vector2 size)
+            {
+                action = OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON;
+                stringValue = buttonName;
+                pointAt = size;
+            }
+        }
     }
 }

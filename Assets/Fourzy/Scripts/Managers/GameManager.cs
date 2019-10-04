@@ -36,8 +36,10 @@ namespace Fourzy
     {
         public static Action onNewsFetched;
         public static Action<bool> onNetworkAccess;
-        public static Action onGameplaySceneLoaded;
+        public static Action<string> onSceneChanged;
         public static Action<string> onDailyChallengeFileName;
+        public static Action<PlacementStyle> onPlacementStyle;
+
         public static Dictionary<string, object> APP_REMOTE_SETTINGS_DEFAULTS;
 
         public static GameManager Instance;
@@ -58,6 +60,20 @@ namespace Fourzy
         public PassPlayCharactersType characterType = PassPlayCharactersType.SELECTED_RANDOM;
         public List<TokenType> excludeInstructionsFor;
 
+        /// <summary>
+        /// Pieces placement style
+        /// </summary>
+        public PlacementStyle placementStyle
+        {
+            get => _placementStyle;
+
+            set
+            {
+                _placementStyle = value;
+
+                onPlacementStyle?.Invoke(_placementStyle);
+            }
+        }
         public bool ExtraFeatures => extraFeatures || Application.isEditor;
         public bool isRealtime => PhotonNetwork.room != null;
         public PuzzleData dailyPuzzlePack { get; private set; }
@@ -67,6 +83,7 @@ namespace Fourzy
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
 
         private bool configFetched = false;
+        private PlacementStyle _placementStyle = PlacementStyle.DEFAULT;
 
         public bool isMainMenuLoaded
         {
@@ -302,10 +319,14 @@ namespace Fourzy
 
                     AudioHolder.instance.StopBGAudio(AudioTypes.BG_MAIN_MENU, .5f);
 
-                    onGameplaySceneLoaded?.Invoke();
+                    break;
+
+                case Constants.MAIN_MENU_SCENE_NAME:
 
                     break;
             }
+
+            onSceneChanged?.Invoke(scene.name);
         }
 
         private void OnSceneUnloaded(Scene scene)
@@ -328,6 +349,8 @@ namespace Fourzy
 
                     break;
             }
+
+            onSceneChanged?.Invoke(SceneManager.GetActiveScene().name);
         }
 
         private void FirebaseUpdate()
@@ -595,6 +618,12 @@ namespace Fourzy
             SELECTED_VARIATION,
             SELECTED_RANDOM,
             RANDOM,
+        }
+
+        public enum PlacementStyle
+        {
+            DEFAULT,
+            DEMO_STYLE,
         }
     }
 }

@@ -20,12 +20,28 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private List<PuzzlePackWidget> puzzlePacksWidgets = new List<PuzzlePackWidget>();
         private PuzzlePackWidget puzzlePackPrefab;
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            puzzlePackPrefab = GameContentManager.GetPrefab<PuzzlePackWidget>(GameContentManager.PrefabType.PUZZLE_PACK_WIDGET);
+        }
+
         public override void Open()
         {
             base.Open();
 
-            LoadPuzzlePacks(GameContentManager.Instance.puzzlePacksDataHolder);
+            OnInitialized();
+
             LoadAIPlayerWidgets();
+            //LoadPuzzlePacks(GameContentManager.Instance.puzzlePacksDataHolder);
+        }
+
+        public override void OnBack()
+        {
+            base.OnBack();
+
+            menuController.CloseCurrentScreen();
         }
 
         public void LoadPuzzlePacks(PuzzlePacksDataHolder puzzlePacksHolder)
@@ -74,13 +90,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 puzzlePacksWidgets.Find(widget => widget.puzzlePack.packID == (menuEvent["puzzlePack"] as PuzzlePacksDataHolder.PuzzlePack).packID).PlayCompleteAnimation();
             }
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            puzzlePackPrefab = GameContentManager.GetPrefab<PuzzlePackWidget>(GameContentManager.PrefabType.PUZZLE_PACK_WIDGET);
         }
     }
 }

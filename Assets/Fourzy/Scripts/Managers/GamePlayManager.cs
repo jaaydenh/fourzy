@@ -130,6 +130,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             PhotonNetwork.OnEventCall -= OnEventCall;
 
             if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput -= OnNoInput;
+
+            AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
         }
 
         protected void SetGameIfNull(IClientFourzy _game)
@@ -335,8 +337,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void BackButtonOnClick()
         {
-            AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
-
             GameManager.Instance.OpenMainMenu();
 
             //disconnect if realtime

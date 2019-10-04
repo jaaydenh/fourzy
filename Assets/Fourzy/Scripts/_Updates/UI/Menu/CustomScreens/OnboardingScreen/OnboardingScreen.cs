@@ -26,6 +26,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public bool isTutorialRunning { get; private set; }
         public ButtonExtended currentButton { get; private set; }
+        public OnboardingDataHolder.OnboardingTask currentTask { get; private set; }
+        public OnboardingDataHolder.OnboardingTasksBatch currentBatch { get; private set; }
 
         [NonSerialized]
         public GameContentManager.Tutorial tutorial;
@@ -211,8 +213,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnTap()
         {
+            if (currentBatch.tasks[currentBatch.tasks.Length - 1] == currentTask)
+            {
+                CancelRoutine("idle");
+                StartRoutine("idle", .1f, () => Next());
+            }
+
             RemoveCurrentButton();
-            Next();
         }
 
         private void UpdateCurrentButton(ButtonExtended button)
@@ -240,12 +247,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 yield break;
             }
 
-            OnboardingDataHolder.OnboardingTasksBatch batch = tutorial.data.batches[step];
+            currentBatch = tutorial.data.batches[step];
 
             IClientFourzy activeGame = GameManager.Instance.activeGame;
 
-            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+            foreach (OnboardingDataHolder.OnboardingTask task in currentBatch.tasks)
             {
+                currentTask = task;
+
                 switch (task.action)
                 {
                     //dialog
@@ -427,7 +436,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case OnboardingDataHolder.OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON:
                         if (!GameManager.Instance.isMainMenuLoaded) break;
 
-                        UpdateCurrentButton(FourzyMainMenuController.instance.currentScreen.mainButton);
+                        //MenuScreen screen = MenuController.GetMenu(Constants.MAIN_MENU_CANVAS_NAME).currentScreen;
+                        MenuScreen screen = FourzyMainMenuController.instance.currentScreen;
+                        GameObject target = null;
+
+                        //get button
+                        if (screen.GetType() == typeof(MenuTabbedScreen))
+                            target = (screen as MenuTabbedScreen).CurrentTab.gameObject;
+                        else
+                            target = screen.gameObject;
+
+                        foreach (ButtonExtended button in target.GetComponentsInChildren<ButtonExtended>())
+                        {
+                            if (button.name == task.stringValue)
+                            {
+                                UpdateCurrentButton(button);
+
+                                break;
+                            }
+                        }
+
+                        masks.ShowMask(task.pointAt, new Vector2(350f, 130f), true);
 
                         break;
                 }

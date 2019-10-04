@@ -20,8 +20,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected Action onAccept;
         protected Action onDecline;
 
-        public override ButtonExtended mainButton => acceptButton ?? declineButton ?? base.mainButton;
-
         public override void OnBack()
         {
             base.OnBack();

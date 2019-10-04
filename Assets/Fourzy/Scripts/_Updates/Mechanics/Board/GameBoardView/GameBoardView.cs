@@ -133,37 +133,52 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (!interactable) return;
 
-            if (selectedBoardLocation != null)
+            switch (GameManager.Instance.placementStyle)
             {
-                if (!CAN_CANCEL_TAP) return;
+                case GameManager.PlacementStyle.DEFAULT:
+                    if (selectedBoardLocation != null)
+                    {
+                        if (!CAN_CANCEL_TAP) return;
 
-                selectedBoardLocation = null;
-                moveArrow._Reset();
-                return;
-            }
+                        selectedBoardLocation = null;
+                        moveArrow._Reset();
+                        return;
+                    }
 
-            touched = true;
-            tapStartTime = Time.time;
+                    touched = true;
+                    tapStartTime = Time.time;
 
-            switch (actionState)
-            {
-                case BoardActionState.SIMPLE_MOVE:
-                    CheckMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true);
+                    switch (actionState)
+                    {
+                        case BoardActionState.SIMPLE_MOVE:
+                            CheckMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true);
+
+                            break;
+
+                        case BoardActionState.CAST_SPELL:
+                            List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(model._State.Board, new HexSpell(0, new BoardLocation()));
+
+                            BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+
+                            if (!locationsList.Contains(touchLocation))
+                                onCastCanceled?.Invoke();
+                            else
+                                CastSpell(touchLocation, activeSpell);
+
+                            actionState = BoardActionState.SIMPLE_MOVE;
+                            HideHintArea(HintAreaAnimationPattern.DIAGONAL);
+                            break;
+                    }
 
                     break;
 
-                case BoardActionState.CAST_SPELL:
-                    List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(model._State.Board, new HexSpell(0, new BoardLocation()));
+                case GameManager.PlacementStyle.DEMO_STYLE:
+                    BoardLocation location = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
-                    BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+                    //drop gamepiece at location
+                    model._State.Board.AddPiece(model.activePlayerPiece, location);
+                    SpawnPiece(location.Row, location.Column, (PlayerEnum)model._State.ActivePlayerId);
 
-                    if (!locationsList.Contains(touchLocation))
-                        onCastCanceled?.Invoke();
-                    else
-                        CastSpell(touchLocation, activeSpell);
-
-                    actionState = BoardActionState.SIMPLE_MOVE;
-                    HideHintArea(HintAreaAnimationPattern.DIAGONAL);
                     break;
             }
         }

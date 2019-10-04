@@ -2,8 +2,10 @@
 
 using ByteSheep.Events;
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Toasts;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,16 +26,18 @@ namespace Fourzy._Updates.UI.Menu
         public AdvancedVector2Event onPointerDown;
         public AdvancedVector2Event onPointerMove;
 
-        private List<MenuTab> tabs;
         private SwipeHandler swipeHandler;
 
         private PositionTween tabsParentTween;
         private int currentTab = -1;
         private Vector3 pointerOrigin;
 
-        public override bool containsSelected => tabs[currentTab].containsSelected;
+        private int demoCounter = 0;
 
-        public override Selectable DefaultSelectable => tabs[currentTab].DefaultSelectable;
+        public override bool containsSelected => CurrentTab.containsSelected;
+        public override Selectable DefaultSelectable => CurrentTab.DefaultSelectable;
+        public List<MenuTab> tabs { get; private set; }
+        public MenuTab CurrentTab => tabs[currentTab];
 
         protected override void Awake()
         {
@@ -86,7 +90,22 @@ namespace Fourzy._Updates.UI.Menu
 
         public void OpenTab(int index, bool animate)
         {
-            if (index == currentTab) return;
+            if (index == currentTab)
+            {
+                demoCounter++;
+                if (demoCounter == 5)
+                {
+                    demoCounter = 0;
+
+                    //toggle demo mode
+                    SettingsManager.Instance.Toggle(SettingsManager.KEY_DEMO_MODE);
+                    GamesToastsController.ShowTopToast("Demo mode: " + SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE));
+                }
+
+                return;
+            }
+            else
+                demoCounter = 0;
 
             //close previous tab
             if (currentTab > -1)
@@ -109,8 +128,7 @@ namespace Fourzy._Updates.UI.Menu
 
         public void OpenTab(MenuTab tab, bool animate)
         {
-            if (tab && tabs.Contains(tab))
-                OpenTab(tabs.IndexOf(tab), animate);
+            if (tab && tabs.Contains(tab)) OpenTab(tabs.IndexOf(tab), animate);
         }
 
         public void OpenNext(bool animate)

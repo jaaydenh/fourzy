@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Widgets;
@@ -59,14 +60,14 @@ namespace Fourzy._Updates.UI.Camera3D
 
         //protected void Update()
         //{
-        //    if (Input.GetKeyDown(KeyCode.U))
-        //        print(GetCurrentEventCameraRelativePosition());
+        //    if (Input.GetKeyDown(KeyCode.L))
+        //        print(GetCurrentEvent().rectTransform.GetSize());
         //}
 
         protected void OnDestroy()
         {
             GameContentManager.Instance.existingProgressionMaps.Remove(this);
-            GameManager.onGameplaySceneLoaded -= OnGameSceneLoaded;
+            GameManager.onSceneChanged -= OnSceneChanged;
         }
 
         public void CheckMapComplete()
@@ -212,12 +213,12 @@ namespace Fourzy._Updates.UI.Camera3D
 
             finished = PlayerPrefsWrapper.GetAdventureComplete(mapID);
 
-            GameManager.onGameplaySceneLoaded += OnGameSceneLoaded;
+            GameManager.onSceneChanged += OnSceneChanged;
         }
 
-        private void OnGameSceneLoaded()
+        private void OnSceneChanged(string sceneName)
         {
-            gameObject.SetActive(false);
+            if (sceneName == Constants.GAMEPLAY_SCENE_NAME) gameObject.SetActive(false);
         }
 
         private void ResetRewardID()

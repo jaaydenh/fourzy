@@ -19,6 +19,7 @@ namespace Fourzy._Updates.UI.Menu
 
         public Camera _camera;
         public bool closeCurrentOnOpen = false;
+        public RectTransform newScreensParent;
         public MenuScreen[] extraScreens;
 
         public List<MenuScreen> screens { get; protected set; }
@@ -151,8 +152,7 @@ namespace Fourzy._Updates.UI.Menu
                     return;
                 }
 
-            if (addIfNotExists)
-                OpenScreen(AddScreen<T>());
+            if (addIfNotExists) OpenScreen(AddScreen<T>());
         }
 
         public void OpenScreen(int index) => OpenScreen(screens[index]);
@@ -178,10 +178,9 @@ namespace Fourzy._Updates.UI.Menu
 
         public T AddScreen<T>(MenuScreen prefab) where T : MenuScreen
         {
-            if (!prefab)
-                return null;
+            if (!prefab) return null;
 
-            MenuScreen newScreen = Instantiate(prefab, transform);
+            MenuScreen newScreen = Instantiate(prefab, newScreensParent == null ? transform : newScreensParent);
 
             newScreen.transform.localScale = Vector3.one;
             screens.Add(newScreen);
@@ -200,8 +199,7 @@ namespace Fourzy._Updates.UI.Menu
             {
                 MenuScreen screenPrefab = pair.prefab.GetComponent<T>();
 
-                if (screenPrefab)
-                    return AddScreen<T>(screenPrefab);
+                if (screenPrefab) return AddScreen<T>(screenPrefab);
             }
 
             return null;
