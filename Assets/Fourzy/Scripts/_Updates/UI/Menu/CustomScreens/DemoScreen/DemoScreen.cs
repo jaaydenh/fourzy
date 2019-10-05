@@ -2,6 +2,7 @@
 
 using System;
 using Fourzy._Updates.Managers;
+using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using UnityEngine;
 
@@ -11,8 +12,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public CanvasGroup context;
         public ButtonExtended placementStyleButton;
+        public PositionTween buttonPositionTween;
 
         private bool isContextShown = false;
+
+        public override void Open()
+        {
+            base.Open();
+
+            buttonPositionTween.PlayForward(true);
+        }
+
+        public override void Close(bool animate = true)
+        {
+            base.Close(animate);
+
+            buttonPositionTween.PlayBackward(false);
+        }
 
         public void ResetPuzzles()
         {

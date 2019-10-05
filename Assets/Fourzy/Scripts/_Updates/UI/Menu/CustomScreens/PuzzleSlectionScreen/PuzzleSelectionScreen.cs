@@ -3,7 +3,6 @@
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
