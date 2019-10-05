@@ -116,14 +116,16 @@ namespace Coffee.UIExtensions
 		/// <returns>Modified material.</returns>
 		/// <param name="baseMaterial">Configured Material.</param>
 		public override Material GetModifiedMaterial (Material baseMaterial)
-		{
-			return base.GetModifiedMaterial (_renderer ? _renderer.sharedMaterial : baseMaterial);
-		}
+        {
+#pragma warning disable
+            return base.GetModifiedMaterial (_renderer ? _renderer.sharedMaterial : baseMaterial);
+#pragma warning restore
+        }
 
-		/// <summary>
-		/// This function is called when the object becomes enabled and active.
-		/// </summary>
-		protected override void OnEnable ()
+        /// <summary>
+        /// This function is called when the object becomes enabled and active.
+        /// </summary>
+        protected override void OnEnable ()
 		{
 			// Register.
 			if (s_ActiveParticles.Count == 0)

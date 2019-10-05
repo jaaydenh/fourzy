@@ -15,7 +15,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RectTransform aiPlayersParent;
         
         public GridLayoutGroup gridLayoutGroup;
-        public TMP_Text completeText;
 
         private List<PuzzlePackWidget> puzzlePacksWidgets = new List<PuzzlePackWidget>();
         private PuzzlePackWidget puzzlePackPrefab;
@@ -58,8 +57,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 puzzlePacksWidgets.Add(puzzlePackWidgetInstance);
             }
-
-            completeText.text = $"{puzzlePacksHolder.totalPuzzlesCompleteCount} / {puzzlePacksHolder.totalPuzzlesCount}";
         }
 
         public void LoadAIPlayerWidgets()

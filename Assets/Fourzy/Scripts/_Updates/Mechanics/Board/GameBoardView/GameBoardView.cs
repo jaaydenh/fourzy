@@ -97,18 +97,10 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (selectedBoardLocation != null && (holdTimer -= Time.deltaTime) <= 0f) OnMove();
 
-            if (interactable)
-            {
-                //cheats
-                if (Input.GetKeyDown(KeyCode.P))
-                {
-                    BoardLocation location = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.localPosition);
-
-                    //drop gamepiece at location
-                    model._State.Board.AddPiece(model.activePlayerPiece, location);
-                    SpawnPiece(location.Row, location.Column, (PlayerEnum)model._State.ActivePlayerId);
-                }
-            }
+#if UNITY_EDITOR
+            //cheats
+            if (interactable) if (Input.GetKeyDown(KeyCode.P)) DropPiece(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+#endif
         }
 
         protected void OnDestroy()
@@ -173,11 +165,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case GameManager.PlacementStyle.DEMO_STYLE:
-                    BoardLocation location = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
-
-                    //drop gamepiece at location
-                    model._State.Board.AddPiece(model.activePlayerPiece, location);
-                    SpawnPiece(location.Row, location.Column, (PlayerEnum)model._State.ActivePlayerId);
+                    DropPiece(Camera.main.ScreenToWorldPoint(position));
 
                     break;
             }
@@ -946,6 +934,17 @@ namespace Fourzy._Updates.Mechanics.Board
                     affected.Add(inputMapValue.location);
 
             foreach (BoardLocation key in hintBlocks.Keys) hintBlocks[key].SetColliderState(affected.Contains(key));
+        }
+
+        private void DropPiece(Vector2 worldPoint)
+        {
+            BoardLocation location = Vec2ToBoardLocation(worldPoint - (Vector2)transform.localPosition);
+
+            if (BoardBitAt<GamePieceView>(location)) return;
+
+            //drop gamepiece at location
+            model._State.Board.AddPiece(model.activePlayerPiece, location);
+            SpawnPiece(location.Row, location.Column, (PlayerEnum)model._State.ActivePlayerId);
         }
 
         private void AddIMoveToTurn(IMove move)

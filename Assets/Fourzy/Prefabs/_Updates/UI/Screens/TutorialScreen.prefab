@@ -359,7 +359,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fba2e91aab42004dbadac9cc8dc2bbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSelectable: {fileID: 0}
   onClose:
     inspectorListHeight: 83
     persistentCalls:
@@ -1115,7 +1114,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &224571872734887556
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1447,7 +1446,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 31
+          selectedMember: 33
           isDynamic: 0
         target: {fileID: 114675544619200078}
         memberName: Next
@@ -2041,6 +2040,7 @@ GameObject:
   - component: {fileID: 5283263760081056841}
   - component: {fileID: 8041458182813222610}
   - component: {fileID: 3534430736106669731}
+  - component: {fileID: 847708176438529519}
   m_Layer: 5
   m_Name: MaskPrefab
   m_TagString: Untagged
@@ -2229,6 +2229,19 @@ MonoBehaviour:
       calls: []
   from: {x: 0, y: 0}
   to: {x: 0, y: 0}
+--- !u!114 &847708176438529519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486251676838067667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bb9714b62a114d45b65f30fc946ea5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TargetUnmask: {fileID: 5283263760081056841}
 --- !u!1 &6981099786973116634
 GameObject:
   m_ObjectHideFlags: 0
@@ -2243,6 +2256,7 @@ GameObject:
   - component: {fileID: 2918387301629446013}
   - component: {fileID: 2864535629703620983}
   - component: {fileID: 2156667910908924743}
+  - component: {fileID: 3770236630109014827}
   m_Layer: 5
   m_Name: Mask
   m_TagString: Untagged
@@ -2380,11 +2394,22 @@ MonoBehaviour:
     inspectorListHeight: 63
     persistentCalls:
       calls: []
-  customObjects:
-  - {fileID: 2327500716087244013}
+  customObjects: []
   propagate: 0
   from: 0
-  to: 0.3
+  to: 1
+--- !u!225 &3770236630109014827
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6981099786973116634}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &8950542184131004035
 GameObject:
   m_ObjectHideFlags: 0
@@ -2396,6 +2421,7 @@ GameObject:
   - component: {fileID: 2327500716087244013}
   - component: {fileID: 2094829107430895046}
   - component: {fileID: 3032780295338885039}
+  - component: {fileID: 6967324785979442146}
   m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
@@ -2443,8 +2469,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
-  m_RaycastTarget: 0
+  m_Color: {r: 0, g: 0, b: 0, a: 0.29803923}
+  m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2460,3 +2486,67 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6967324785979442146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8950542184131004035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c30ba88a1888a2f47821f13b12f89389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 3032780295338885039}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  events:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls: []
+  onState:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls: []
+  offState:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls: []
+  playOnClick: 2
+  changeMaterialOnState: 1
+  scaleOnClick: 1
+  buttonGraphics:
+    list: []
+  labels: []
+  badges: []

@@ -36636,7 +36636,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a845438105ce05449b96fff51afeb77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSelectable: {fileID: 0}
   onClose:
     inspectorListHeight: 83
     persistentCalls:
@@ -37036,7 +37035,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f1620a77ca08f749b73394ede8f0feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSelectable: {fileID: 0}
   onClose:
     inspectorListHeight: 83
     persistentCalls:
@@ -44100,7 +44098,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 49
+          selectedMember: 48
           isDynamic: 0
         target: {fileID: 2108173250573518001}
         memberName: TogglePiecesPlacementStyle
@@ -55500,8 +55498,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: PLACEMENT_STYLE_1
-      type: 9
+    - _name: PLACEMENT_STYLE_2
+      type: 10
       targetText: 
       updateOnStart: 1
       events:
@@ -55592,8 +55590,8 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: 512
-      type: 10
+    - _name: PLACEMENT_STYLE_2
+      type: 9
       targetText: 
       updateOnStart: 0
       events:
@@ -55813,7 +55811,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 18
+          selectedMember: 19
           isDynamic: 0
         target: {fileID: 2108173250573518001}
         memberName: AddRarePortalPoints
@@ -56337,7 +56335,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 35
+          selectedMember: 36
           isDynamic: 0
         target: {fileID: 2108173250573518001}
         memberName: RemoveRarePortalPoints
@@ -58396,7 +58394,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b526a8dabbe7cc648abfa4b86080f04a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSelectable: {fileID: 0}
   onClose:
     inspectorListHeight: 83
     persistentCalls:

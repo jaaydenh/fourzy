@@ -33,7 +33,6 @@ namespace Fourzy._Updates.UI.Camera3D
         public float currentScrollValue;
 
         protected Vector2 cameraSize;
-        //protected float cameraRestrictedSize;
 
         private bool initialized = false;
         private bool finished = false;
@@ -44,6 +43,34 @@ namespace Fourzy._Updates.UI.Camera3D
 
         public List<ProgressionEvent> widgets { get; private set; }
         public MenuScreen menuScreen { get; private set; }
+
+        public int totalGames
+        {
+            get
+            {
+                int result = 0;
+
+                foreach (ProgressionEvent widget in widgets)
+                    if (widget.EventType == ProgressionEvent.ProgressionEventType.GAME)
+                        result += widget.PuzzlePack.enabledPuzzlesData.Count;
+
+                return result;
+            }
+        }
+
+        public int totalGamesComplete
+        {
+            get
+            {
+                int result = 0;
+
+                foreach (ProgressionEvent widget in widgets)
+                    if (widget.EventType == ProgressionEvent.ProgressionEventType.GAME)
+                        result += widget.PuzzlePack.puzzlesComplete.Count;
+
+                return result;
+            }
+        }
 
         public bool showQuantity => unlockRequirements != UnlockRequirementsEnum.NONE;
         public float contentPosition => -content.localPosition.x + chunkLeft;

@@ -12,6 +12,7 @@ using marijnz.EditorCoroutines;
 using MoPubInternal.ThirdParty.MiniJSON;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class MoPubSDKManager : EditorWindow
 {
@@ -203,10 +204,10 @@ public class MoPubSDKManager : EditorWindow
         yield return null;
 
         activity = "Downloading SDK version manifest...";
-        var www = new WWW(staging ? stagingURL : manifestURL);
-        yield return www;
+        var www = new UnityWebRequest(staging ? stagingURL : manifestURL);
+        yield return www.SendWebRequest();
 
-        var json = www.text;
+        var json = www.downloadHandler.text;
         if (string.IsNullOrEmpty(json)) {
             json = "{}";
             Debug.LogError("Unable to retrieve SDK version manifest");

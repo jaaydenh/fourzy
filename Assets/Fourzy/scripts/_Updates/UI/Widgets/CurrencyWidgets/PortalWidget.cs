@@ -19,19 +19,17 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case CurrencyType.PORTAL_POINTS:
                     quantity = Mathf.FloorToInt(CurrencyWidget.ValueFromCurrencyType(type) / Constants.PORTAL_POINTS);
-                    button.GetBadge("value").badge.SetValue(quantity);
 
-                    button.SetState(quantity > 0);
-                    //button.SetState(true);
                     break;
 
                 case CurrencyType.RARE_PORTAL_POINTS:
                     quantity = Mathf.FloorToInt(CurrencyWidget.ValueFromCurrencyType(type) / Constants.RARE_PORTAL_POINTS);
-                    button.GetBadge("value").badge.SetValue(quantity);
 
-                    button.SetState(quantity > 0);
                     break;
             }
+
+            button.GetBadge("value").badge.SetValue(quantity);
+            button.SetState(quantity > 0);
         }
 
         public void OnTap()
@@ -50,6 +48,20 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            UserManager.onCurrencyUpdate += OnCurrencyUpdate;
+        }
+
+        private void OnCurrencyUpdate(CurrencyType currency)
+        {
+            if (currency != type) return;
+
+            _Update();
         }
     }
 }

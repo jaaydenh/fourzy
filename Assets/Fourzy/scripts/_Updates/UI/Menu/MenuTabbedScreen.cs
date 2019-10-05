@@ -35,7 +35,7 @@ namespace Fourzy._Updates.UI.Menu
         private int demoCounter = 0;
 
         public override bool containsSelected => CurrentTab.containsSelected;
-        public override Selectable DefaultSelectable => CurrentTab.DefaultSelectable;
+        //public override Selectable DefaultSelectable => CurrentTab.DefaultSelectable;
         public List<MenuTab> tabs { get; private set; }
         public MenuTab CurrentTab => tabs[currentTab];
 
@@ -180,10 +180,10 @@ namespace Fourzy._Updates.UI.Menu
             }
         }
 
-        public override void HighlightSelectable()
-        {
-            tabs[currentTab].HighlightSelectable();
-        }
+        //public override void HighlightSelectable()
+        //{
+        //    tabs[currentTab].HighlightSelectable();
+        //}
 
         protected override void OnInitialized()
         {

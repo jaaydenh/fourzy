@@ -66,65 +66,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GamePlayManager.onMoveEnded -= MoveEnded;
             GamePlayManager.onGameFinished -= OnGameFinished;
 
-            ////finished
-            //switch (tutorial.data.onFinished)
-            //{
-            //    case OnboardingDataHolder.OnFinished.LOAD_MAIN_MENU:
-            //        switch (tutorial.data.openScreen)
-            //        {
-            //            case OnboardingDataHolder.OpenScreen.PUZZLES_SCREEN:
-            //                //add menu event
-            //                MenuController.AddMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, new KeyValuePair<string, object>("openScreen", "puzzlesScreen"));
-
-            //                break;
-            //        }
-
-            //        if (GameManager.Instance.activeGame != null)
-            //            GamePlayManager.instance.BackButtonOnClick();
-            //        else
-            //            GameManager.Instance.OpenMainMenu();
-
-            //        return;
-
-            //    case OnboardingDataHolder.OnFinished.LOAD_GAME_SCENE:
-            //        //create game
-            //        IClientFourzy game = null;
-
-            //        switch (tutorial.data.gameType)
-            //        {
-            //            case GameType.PUZZLE:
-            //                PuzzlePacksDataHolder.PuzzlePack puzzlePack =
-            //                    GameContentManager.Instance.puzzlePacksDataHolder.puzzlePacks.list
-            //                        .Find(_puzzlePack => _puzzlePack.packID == tutorial.data.stringValue) ??
-            //                        GameContentManager.Instance.puzzlePacksDataHolder.puzzlePacks.list[0];
-
-            //                game = puzzlePack.NextUnsolved();
-
-            //                if (game != null)
-            //                {
-            //                    GameManager.Instance.currentPuzzlePack = puzzlePack;
-            //                    GameManager.Instance.StartGame(game);
-            //                }
-            //                else break;
-
-            //                return;
-
-            //            case GameType.PASSANDPLAY:
-            //                GameBoardDefinition gameboardDefinition = GameContentManager.Instance.GetPassAndPlayBoard(tutorial.data.stringValue);
-
-            //                if (gameboardDefinition != null)
-            //                {
-            //                    game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Player Two")) { _Type = GameType.PASSANDPLAY, };
-
-            //                    return;
-            //                }
-
-            //                break;
-            //        }
-
-            //        break;
-            //}
-
             //load main menu if game is opened
             if (GameManager.Instance.activeGame != null) GameManager.Instance.OpenMainMenu();
         }
@@ -151,9 +92,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             step = 0;
 
             menuController.OpenScreen(this);
+            masks.Hide(0);
 
             PlayerPrefsWrapper.SetTutorialOpened(tutorial.data, true);
-
             StartCoroutine(DisplayCurrentStep());
         }
 
@@ -312,12 +253,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingDataHolder.OnboardingActions.SHOW_MASKED_AREA:
-                        masks.ShowMasks(task as OnboardingDataHolder.OnboardingTask_ShowMaskedArea);
+                        masks.ShowMasks(task.areas);
 
                         break;
 
                     case OnboardingDataHolder.OnboardingActions.HIDE_MAKSED_AREA:
-                        masks.HideMasks();
+                        masks.Hide();
 
                         break;
 
@@ -422,7 +363,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         Vector2 anchors = item.GetCurrentEventCameraRelativePosition();
 
-                        masks.ShowMask(anchors, new Vector2(250f, 150f), true);
+                        masks.ShowMasks(anchors, new Vector2(250f, 150f), true);
 
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(anchors);
@@ -456,7 +397,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             }
                         }
 
-                        masks.ShowMask(task.pointAt, new Vector2(350f, 130f), true);
+                        masks.ShowMasks(task.pointAt, new Vector2(350f, 130f), true);
 
                         break;
                 }

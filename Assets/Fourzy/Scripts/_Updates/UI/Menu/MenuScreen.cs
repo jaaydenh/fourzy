@@ -21,8 +21,8 @@ namespace Fourzy._Updates.UI.Menu
     [RequireComponent(typeof(CanvasGroup))]
     public class MenuScreen : RoutinesBase
     {
-        [SerializeField]
-        private Selectable defaultSelectable;
+        //[SerializeField]
+        //private Selectable defaultSelectable;
 
         public AdvancedEvent onClose;
         public AdvancedEvent onOpen;
@@ -81,7 +81,7 @@ namespace Fourzy._Updates.UI.Menu
             }
         }
 
-        public virtual Selectable DefaultSelectable => defaultSelectable;
+        //public virtual Selectable DefaultSelectable => defaultSelectable;
 
         protected override void Awake()
         {
@@ -200,13 +200,13 @@ namespace Fourzy._Updates.UI.Menu
 
         public void UpdateWidgets() => widgets.ForEach(widget => widget._Update());
 
-        public virtual void HighlightSelectable()
-        {
-            if (defaultSelectable)
-                defaultSelectable.Select();
-            else
-                EventSystem.current.SetSelectedGameObject(null, null);
-        }
+        //public virtual void HighlightSelectable()
+        //{
+        //    if (defaultSelectable)
+        //        defaultSelectable.Select();
+        //    else
+        //        EventSystem.current.SetSelectedGameObject(null, null);
+        //}
 
         public virtual List<T> GetWidgets<T>() => widgets.Where(wgt => wgt.GetType() == typeof(T) || wgt.GetType().IsSubclassOf(typeof(T))).Cast<T>().ToList();
 

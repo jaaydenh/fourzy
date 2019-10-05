@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 4894820131291420832, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
       propertyPath: m_Name
-      value: Fourzy-z21b
+      value: Fourzy-z21b Variant
       objectReference: {fileID: 0}
     - target: {fileID: 8983483778679456887, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
@@ -132,7 +132,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 902b251e80ed77b4494ec0b4b60d9987,
+      objectReference: {fileID: 21300000, guid: 32465c3776593d644a2a566e41cc4500,
         type: 3}
     - target: {fileID: 8392033554832181875, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
