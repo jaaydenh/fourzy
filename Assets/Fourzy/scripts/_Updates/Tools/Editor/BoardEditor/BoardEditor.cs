@@ -58,6 +58,7 @@ namespace Fourzy._Updates.Tools
         private Vector2 tokensScrollViewPosition;
         private Vector2 initialMovesScrollViewPosition;
         public static int PuzzleSearchDepth = 3;
+        public static string BoardInfo = "";
 
         [MenuItem("Window/Board Editor")]
         public static void ShowWindow()
@@ -520,15 +521,22 @@ namespace Fourzy._Updates.Tools
                         string path = "";
 
                         if (string.IsNullOrEmpty(selectedPath))
-                            path = EditorUtility.SaveFilePanelInProject("Save board", currentBoard.BoardName, "json", "");
+                            path = EditorUtility.SaveFilePanelInProject("Save board", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/BoardsPool");
                         else
                             path = EditorUtility.SaveFilePanelInProject("Save board", selectedFileName, "json", "", selectedPath);
 
                         if (path.Length != 0)
                             File.WriteAllText(path, JsonConvert.SerializeObject(currentBoard));
                     }
+                }
+            }
+            GUILayout.EndHorizontal();
 
-                    if (GUILayout.Button("Save puzzle", GUILayout.Width(90f)))
+            GUILayout.BeginHorizontal("Box");
+            {
+                if (currentBoard != null)
+                {
+                    if (GUILayout.Button(">puzzle", GUILayout.Width(90f)))
                     {
                         string path = "";
 
@@ -539,7 +547,7 @@ namespace Fourzy._Updates.Tools
 
                         if (path.Length != 0)
                         {
-                            GameState GS = new GameState(currentBoard,1);
+                            GameState GS = new GameState(currentBoard, 1);
                             PuzzleTestResults R = PuzzleTestTools.EvaluateState(GS, PuzzleSearchDepth);
                             if (R.NumberOfVictoryPaths > 0)
                             {
@@ -553,12 +561,27 @@ namespace Fourzy._Updates.Tools
                             }
                         }
                     }
+                    if (GUILayout.Button(">game", GUILayout.Width(90f)))
+                    {
+                        string path = "";
 
+                        if (string.IsNullOrEmpty(selectedPath))
+                            path = EditorUtility.SaveFilePanelInProject("Save game", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
+                        else
+                            path = EditorUtility.SaveFilePanelInProject("Save game", selectedFileName, "json", "", selectedPath);
+
+                        if (path.Length != 0)
+                        {
+                            GameLevelData GLD = new GameLevelData(currentBoard, new List<SpellId>());
+                            File.WriteAllText(path, JsonConvert.SerializeObject(GLD));
+                        }
+                    }
                 }
+
             }
             GUILayout.EndHorizontal();
 
-            if (currentBoard != null)
+                if (currentBoard != null)
             {
                 GUILayout.BeginVertical("Box");
                 {
@@ -574,6 +597,30 @@ namespace Fourzy._Updates.Tools
 
                 }
                 GUILayout.EndVertical();
+
+                GUILayout.BeginVertical("Info");
+                {
+                    BoardInfo = EditorGUILayout.TextArea(BoardInfo, GUILayout.Height(50));
+
+                    if (GUILayout.Button("Solve", GUILayout.Width(90f)))
+                    {
+                        BoardInfo = "Thinking...";
+                        GameState GS = new GameState(currentBoard, 1);
+                        PuzzleTestResults R = PuzzleTestTools.EvaluateState(GS, PuzzleSearchDepth);
+                        BoardInfo = string.Format(@"Solutions:{0} at Depth:{1};", R.NumberOfVictoryPaths, R.VictoryDepth);
+                        if (R.NumberOfVictoryPaths > 0)
+                        {
+                            BoardInfo += "S:";
+                            for (int i = 0; i < R.Solution.Count; i++)
+                            {
+                                BoardInfo += R.Solution[0].Notation + @",";
+                            }
+                        }
+                    }
+
+                }
+                GUILayout.EndVertical();
+
 
                 //intial moves list
                 GUILayout.Label("Initial moves");

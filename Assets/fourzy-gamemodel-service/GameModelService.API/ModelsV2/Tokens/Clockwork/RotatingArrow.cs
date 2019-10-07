@@ -129,7 +129,9 @@ namespace FourzyGameModel.Model
 
             if (Notation.Length > 4)
             {
-                this.CountDown = int.Parse(Notation[4].ToString());
+                int value = 0;
+                if (!int.TryParse(Notation[4].ToString(), out value)) value = Frequency;
+                this.CountDown = value;
             }
             else
             {
