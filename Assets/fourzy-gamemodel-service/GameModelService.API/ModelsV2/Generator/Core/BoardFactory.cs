@@ -19,7 +19,14 @@ namespace FourzyGameModel.Model
         {
             return CreateDefaultBoard(Options.Rows, Options.Columns);
         }
-        
+
+        public static GameBoard CreateRandomBoard(GameOptions Options, Area BoardArea, int MaxComplexity, List<TokenType> AllowedTokens, string Recipe="")
+        {
+ 
+            return CreateGameBoard(Options, BoardArea, AllowedTokens, Recipe);
+        }
+
+
         //Look at the areas and tokens allowed and build a random board based on experience of both players.
         public static GameBoard CreateRandomBoard(GameOptions Options, Player A, Player B, Area PreferredArea = Area.NONE, string Recipe="")
         {

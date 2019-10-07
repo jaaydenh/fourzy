@@ -19,5 +19,23 @@ namespace FourzyGameModel.Model
             return "Blobby";
         }
 
+        //Todo. Constant for default HerdCount.
+        public Herd(int HerdId, int HerdCount = 100)
+        {
+            //Need to create HerdInfo
+            this.Name = "PlaceHolder";
+            this.Description = "PlaceHolder";
+            this.HerdId = HerdId;
+            this.Members = new List<Creature>();
+            this.AvailableTricks = new List<HerdTrick>();
+           
+            if (HerdCount > 0)
+            {
+                for (int i=0; i<HerdCount; i++)
+                {
+                    Members.Add(new Creature(HerdId));
+                }
+            }
+        }
     }
 }

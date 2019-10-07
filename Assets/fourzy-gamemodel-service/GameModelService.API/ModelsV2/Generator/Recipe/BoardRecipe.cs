@@ -11,11 +11,15 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; set; }
         public List<IBoardIngredient> Ingredients { get; set; }
+        public List<TokenType> Tokens { get; set; }
+        public PatternComplexity Complexity { get; set; }
 
-        public BoardRecipe(string Name)
+        public BoardRecipe(string Name, PatternComplexity Complexity = PatternComplexity.None)
         {
             this.Name = Name;
             this.Ingredients = new List<IBoardIngredient>();
+            this.Complexity = Complexity;
+            this.Tokens = new List<TokenType>();
         }
 
         public void Build(GameBoard Board)

@@ -183,8 +183,6 @@ namespace FourzyGameModel.Model
             this.Board.Parent = this;
             this.RealTime = false;
             Initialize();
-            this.Players.Add(1, new Player(1, "One"));
-            this.Players.Add(2, new Player(2, "Two"));
             this.Board.Random = this.Random;
 
             this.ActivePlayerId = FirstPlayerId;
@@ -221,12 +219,17 @@ namespace FourzyGameModel.Model
             this.WinnerId = -1;
             this.GameEffects = new List<IGameEffect>();
             this.Players = new Dictionary<int, Player>();
-            this.Herds = new Dictionary<int, Herd>();
             this.Time = new Dictionary<int, int>();
             this.GameSeed = Guid.NewGuid().ToString();
             this.UniqueId = Guid.NewGuid().ToString();
             this.Random = new RandomTools(this);
             this.ActiveSpaces = new List<BoardLocation>();
+            this.Herds = new Dictionary<int, Herd>();
+        }
+
+        public void InitializeHerd(int PlayerId, int HerdId, int HerdCount)
+        {
+            Herds[PlayerId] = new Herd(HerdId, HerdCount);
         }
 
         #endregion "Constructors"

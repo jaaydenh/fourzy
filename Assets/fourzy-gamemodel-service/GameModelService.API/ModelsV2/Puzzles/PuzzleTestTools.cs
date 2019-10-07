@@ -64,7 +64,7 @@ namespace FourzyGameModel.Model
                                 PlayerTurn AITurn = AI.GetTurn();
                                 TurnEvaluator AITE = new TurnEvaluator(GSTest);
                                 GameState GSAI = AITE.EvaluateTurn(AITurn);
-                                if (GSAI.WinnerId < 0 && PR.VictoryDepth < SearchDepth)
+                                if (GSAI.WinnerId < 0)
                                 {
                                     StateBucket[PR.VictoryDepth].Add(GSAI);
                                     if (!TurnBucket.ContainsKey(GSAI.UniqueId))

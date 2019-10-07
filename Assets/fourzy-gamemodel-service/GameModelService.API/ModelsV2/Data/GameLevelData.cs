@@ -26,7 +26,7 @@ namespace FourzyGameModel.Model
 
         }
 
-        public GameLevelData(GameBoardDefinition Board, List<SpellId> Spells, int StartingMagic=100)
+        public GameLevelData(GameBoardDefinition Board, List<SpellId> Spells, int StartingPlayer = 1, int StartingMagic=100)
         {
             GameBoardDefinition definition = Board;
             this.SolutionStateData = null;
@@ -37,6 +37,7 @@ namespace FourzyGameModel.Model
             this.GameBoard = definition;
             this.MoveLimit = -1;
             this.Complexity = -1;
+            this.FirstTurn = StartingPlayer;
             this.AvailableSpells = new List<SpellId>();
             if (Spells.Count > 0)
             {

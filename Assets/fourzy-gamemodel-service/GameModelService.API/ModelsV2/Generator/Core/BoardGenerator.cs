@@ -43,7 +43,7 @@ namespace FourzyGameModel.Model
 
             while (!BoardGeneratorTester.TestGeneratedBoard(NewBoard) && count++ < 100)
                 NewBoard = BuildBoard(Rows, Columns, SeedString);
-            
+
             return NewBoard;
         }
 
@@ -75,8 +75,52 @@ namespace FourzyGameModel.Model
             return NewBoard;
         }
 
+        public virtual List<BoardRecipe> GetRecipes(PatternComplexity Complexity)
+        {
+            List<BoardRecipe> RecipeList = new List<BoardRecipe>();
+            foreach (BoardRecipe r in Recipes.Keys)
+            {
+                if (r.Complexity == Complexity) RecipeList.Add(r);
+            }
 
-            public virtual GameBoard ApplyIngredient(GameBoard Board, IBoardIngredient Ingredient)
+            return RecipeList;
+        }
+
+        public virtual List<BoardRecipe> GetRecipes(List<TokenType> AllowedTokens)
+        {
+            List<BoardRecipe> RecipeList = new List<BoardRecipe>();
+
+            foreach (BoardRecipe r in Recipes.Keys)
+            {
+                foreach (TokenType t in r.Tokens)
+                {
+                    if (!AllowedTokens.Contains(t)) continue;
+                }
+                RecipeList.Add(r);
+            }
+
+            return RecipeList;
+        }
+
+        public virtual List<BoardRecipe> GetRecipes(PatternComplexity Complexity, List<TokenType> AllowedTokens)
+        {
+            List<BoardRecipe> RecipeList = new List<BoardRecipe>();
+
+            foreach (BoardRecipe r in Recipes.Keys)
+            {
+                if (r.Complexity != Complexity) continue;
+                foreach (TokenType t in r.Tokens)
+                {
+                    if (!AllowedTokens.Contains(t)) continue;
+                }
+                RecipeList.Add(r);
+            }
+
+
+            return RecipeList;
+        }
+
+        public virtual GameBoard ApplyIngredient(GameBoard Board, IBoardIngredient Ingredient)
             {
                 Ingredient.Build(Board);
                 return Board;

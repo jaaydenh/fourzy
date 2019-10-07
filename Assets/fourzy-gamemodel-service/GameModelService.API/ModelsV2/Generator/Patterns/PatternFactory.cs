@@ -21,6 +21,8 @@ namespace FourzyGameModel.Model
                     return new ACouplePattern(Board, 3).Locations;
                 case PatternType.CenterBlob:
                     return new CenterBlobPattern(Board).Locations;
+                case PatternType.CenterOne:
+                    return new CenterOnePattern(Board).Locations;
                 case PatternType.CenterDiagonal:
                     return new SolidFullLinePattern(Board,new BoardLocation(1,1), LineType.DIAGONAL).Locations;
                 case PatternType.CrossTheBoard:

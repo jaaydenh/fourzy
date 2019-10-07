@@ -12,6 +12,9 @@ namespace FourzyGameModel.Model
         public int FourWeight { get; set; }
         public int FiveWeight { get; set; }
 
+        public bool PruneFiveSetup { get; set; }
+        public bool PruneCrossSetup { get; set; }
+
         public bool ConsiderDeadSpaces { get; set; }
         public bool ConsiderOpponentPieces { get; set; }
 
@@ -26,6 +29,7 @@ namespace FourzyGameModel.Model
             this.FourWeight = FourWeight;
             this.FiveWeight = FiveWeight;
             this.PositionWeight = PositionWeight;
+            
         }
 
         public void Initialize()
@@ -35,7 +39,7 @@ namespace FourzyGameModel.Model
             FiveWeight = AIConstants.DefaultFiveWeight;
             ConsiderDeadSpaces = true;
             ConsiderOpponentPieces = true;
-
+            PruneFiveSetup = false;
         }
 
     }

@@ -328,8 +328,8 @@ namespace Fourzy._Updates.ClientModel
             _Type = Fourzy.GameType.AI;
         }
 
-        public ClientFourzyGame(Player Player1, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GameOptions Options = null)
-            : base(Player1, GauntletLevel, CurrentArea, DifficultModifier, Options)
+        public ClientFourzyGame(Player Player1, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GauntletStatus Status = null, GameOptions Options = null)
+            : base(Player1, GauntletLevel, CurrentArea, DifficultModifier, Status, Options)
         {
             Initialize();
 

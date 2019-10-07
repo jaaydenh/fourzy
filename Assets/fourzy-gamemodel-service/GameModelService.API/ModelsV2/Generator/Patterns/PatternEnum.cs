@@ -70,7 +70,8 @@ namespace FourzyGameModel.Model
         AlmostFull,
         CrossBoardOneTurn,
         CrossBoardTwoTurnPattern,
-        CrossBoardFourTurnPattern
+        CrossBoardFourTurnPattern,
+        CenterOne
     }
 
     public enum RelativeDirection { IN, OUT, NONE}

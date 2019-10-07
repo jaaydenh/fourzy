@@ -15,11 +15,31 @@ namespace FourzyGameModel.Model
 
     }
 
-    public enum AIProfile { Player, PuzzleAI, SimpleAI, PassBot, PositionBot, BossAI, BeginnerAI, EasyAI, BetterAI, ScoreBot,
+    public enum AIProfile { Player,
+        PuzzleAI,
+        SimpleAI,
+        PassBot,
+        PositionBot,
+        BossAI,
+        BeginnerAI,
+        EasyAI,
+        BetterAI,
+        ScoreBot,
         UpBot,
         RotatorBot,
         HorizontalBot,
         VerticalBot,
-        WaitBot
+        WaitBot,
+        ExtenderBotAI,
+        DownAI,
+        PanicBot,
+        RightAI,
+        LeftAI,
+        DoctorBot,
+        BlindBot,
+        BadBot
     }
+
+    public enum AIDifficulty { Pushover, Easy, Medium, Hard, Doctor}
+
 }

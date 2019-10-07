@@ -141,6 +141,19 @@ namespace FourzyGameModel.Model
             return MoveInfo;
         }
 
+        public Dictionary<SimpleMove, GameState> GetAvailableMoveInfo(List<SimpleMove> Moves)
+        {
+
+            Dictionary<SimpleMove, GameState> MoveInfo = new Dictionary<SimpleMove, GameState>();
+            foreach (SimpleMove m in Moves)
+            {
+                MoveInfo.Add(m, new GameState(EvaluateTurn(new PlayerTurn(m))));
+            }
+
+            return MoveInfo;
+        }
+
+
         public List<SimpleMove> GetWinningMoves(int PlayerId=0)
         {
             if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;

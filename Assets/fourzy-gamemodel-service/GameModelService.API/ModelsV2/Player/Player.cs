@@ -11,7 +11,7 @@ namespace FourzyGameModel.Model
         public string PlayerString { get; set; }
 
         [JsonProperty("displayName")]
-        public string DisplayName { get; }
+        public string DisplayName { get; set; }
 
         [JsonProperty("profile")]
         public AIProfile Profile { get; set; }

@@ -8,18 +8,19 @@ namespace FourzyGameModel.Model
 {
     public class AITurnEvaluator
     {
-        const int WIN_SCORE_VALUE  =  10000000;
+        const int WIN_SCORE_VALUE = 10000000;
         const int LOSS_SCORE_VALUE = -10000000;
         #region "Properties and Initialization"
         public GameState EvalState { get; set; }
         public TurnEvaluator Evaluator { get; set; }
-        
+
         public List<PlayerTurn> WinningTurns { get; set; }
         public List<SimpleMove> AvailableSimpleMoves { get; set; }
         //Alive Spaces are places where a player can make a move in the next turn.
         public HashSet<BoardLocation> AliveSpaces { get; set; }
         public HashSet<BoardLocation> DeadSpaces { get; set; }
         public int ActivePlayerId { get { return EvalState.ActivePlayerId; } }
+        public AIHeuristicWeight AIHeuristics { get; set; }
 
         bool WinningMove
         {
@@ -56,6 +57,7 @@ namespace FourzyGameModel.Model
                 //this.AliveSpaces.AddRange(move.Value.ActiveSpaces);
             }
             this.DeadSpaces = Evaluator.FindDeadLocations();
+            this.AIHeuristics = new AIHeuristicWeight();
 
             //this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
             //this.WinningTurns = new List<PlayerTurn>();
@@ -71,12 +73,17 @@ namespace FourzyGameModel.Model
             this.EvalState = State;
             this.Evaluator = new TurnEvaluator(this.EvalState);
             this.EvalState = Evaluator.EvaluateStartOfTurn();
-
             this.AliveSpaces = new HashSet<BoardLocation>();
             this.WinningTurns = new List<PlayerTurn>();
             this.AvailableSimpleMoves = AvailableMoves;
-            Dictionary<SimpleMove, GameState> MoveInfo = Evaluator.GetAvailableMoveInfo();
+            Dictionary<SimpleMove, GameState> MoveInfo = null;
 
+            if (AvailableMoves != null)
+                if (AvailableMoves.Count > 0)
+                    MoveInfo = Evaluator.GetAvailableMoveInfo(AvailableMoves);
+            if (MoveInfo == null) MoveInfo = Evaluator.GetAvailableMoveInfo();
+
+            this.AvailableSimpleMoves = new List<SimpleMove>();
             //Weed out moves that are idential.
             List<string> UniqueMoves = new List<string>();
             foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
@@ -92,6 +99,7 @@ namespace FourzyGameModel.Model
 
             }
             this.DeadSpaces = Evaluator.FindDeadLocations();
+            this.AIHeuristics = new AIHeuristicWeight();
 
             //this.AvailableSimpleMoves = AvailableMoves;
             //this.WinningTurns = new List<PlayerTurn>();
@@ -168,7 +176,8 @@ namespace FourzyGameModel.Model
         {
             //If we keep track of the resulting state, maybe we can remove some identical moves for consideration.
             //List<SimpleMove> Moves = new List<SimpleMove>();
-            Dictionary<SimpleMove, GameState> UniqueMoves = new Dictionary<SimpleMove, GameState>();
+            //Dictionary<SimpleMove, GameState> UniqueMoves = new Dictionary<SimpleMove, GameState>();
+            Dictionary<SimpleMove, string> UniqueMoves = new Dictionary<SimpleMove, string>();
 
             foreach (SimpleMove m in AvailableSimpleMoves)
             {
@@ -185,14 +194,15 @@ namespace FourzyGameModel.Model
                     //Moves.Clear();
                     //Moves.Add(m);
                     UniqueMoves.Clear();
-                    UniqueMoves.Add(m, OPP.EvalState);
+                    UniqueMoves.Add(m, OPP.EvalState.CompressedString);
                     break;
                 }
                 if (OPP.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
                 if (OPP.GetFirstWinningMove() == null)
                 {
+                    bool Prune = false;
                     //Moves.Add(m);
-                    if (!UniqueMoves.ContainsValue(OPP.EvalState)) UniqueMoves.Add(m, OPP.EvalState);
+                    if (!Prune && !UniqueMoves.ContainsValue(OPP.EvalState.CompressedString)) UniqueMoves.Add(m, OPP.EvalState.CompressedString);
                 }
             }
 
@@ -213,8 +223,8 @@ namespace FourzyGameModel.Model
 
         //    return UniqueMoves.Keys.ToList();
         //}
-       
-       
+
+
         //public Dictionary<SimpleMove, int> GetOkMovesWithOppScores(bool SortMoves = true)
         //{
         //    Dictionary<SimpleMove, int> Moves = new Dictionary<SimpleMove, int>();
@@ -266,7 +276,7 @@ namespace FourzyGameModel.Model
         //            break;
         //        }
         //        if (OPP.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
-                
+
         //        if (OPP.GetFirstWinningMove() == null)
         //        {
         //            AITurnEvaluator AI = new AITurnEvaluator(OPP.EvalState);
@@ -324,16 +334,64 @@ namespace FourzyGameModel.Model
                 if (!AITE.WinningMove)
                 {
                     Tuple<SimpleMove, int> Top = AITE.TopMoveScore();
-                
-                //    AITurnEvaluator AINext = new AITurnEvaluator(OPP.EvalState, new PlayerTurn(Top.Item1));
-                      Moves.Add(m, Top.Item2);
 
-                //    TurnEvaluator TE = new TurnEvaluator(OPP.EvalState);
-                //    GameState GS = TE.EvaluateTurn(new PlayerTurn(Top.Item1));
-                //    int Score = AITurnEvaluator.Score(GS, m.Piece.PlayerId);
-                //    Moves.Add(m, Score);
+                    //    AITurnEvaluator AINext = new AITurnEvaluator(OPP.EvalState, new PlayerTurn(Top.Item1));
+                    Moves.Add(m, Top.Item2);
+
+                    //    TurnEvaluator TE = new TurnEvaluator(OPP.EvalState);
+                    //    GameState GS = TE.EvaluateTurn(new PlayerTurn(Top.Item1));
+                    //    int Score = AITurnEvaluator.Score(GS, m.Piece.PlayerId);
+                    //    Moves.Add(m, Score);
                 }
             }
+            //Order Ascending to minimize opp value.
+            Moves = Moves.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+
+            if (Moves.Count == 0) return null;
+            return Moves.First().Key;
+        }
+
+        public SimpleMove GetBadMove(int NumberOfMovesToConsider = 8)
+        {
+            Dictionary<SimpleMove, int> Moves = new Dictionary<SimpleMove, int>();
+
+            //Shuffle up the moves.  Doesn't have to be perfectly random.
+            AvailableSimpleMoves = AvailableSimpleMoves.OrderBy(a => Guid.NewGuid()).ToList();
+
+            int moves_evaluated = 0;
+            foreach (SimpleMove m in AvailableSimpleMoves)
+            {
+                //AITurnEvaluator AITE = new AITurnEvaluator(EvalState, new PlayerTurn(m));
+                TurnEvaluator TE = new TurnEvaluator(EvalState);
+                GameState GS = TE.EvaluateTurn(new PlayerTurn(m));
+                AITurnEvaluator AITE = new AITurnEvaluator(GS);
+                moves_evaluated++;
+
+                //Player can make a move to win. No further analysis.
+                //This is probably pruned elsewhere
+                if (AITE.EvalState.WinnerId == m.Piece.PlayerId)
+                {
+                    Moves.Clear();
+                    Moves.Add(m, WIN_SCORE_VALUE);
+                    break;
+                }
+
+                //If make move causes opponent to win, ignore it.
+                //  Don't want to give game to opponent.  Probably pruned.
+                if (AITE.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
+
+                //If opponent has winning moves, what is the best move the opponent can make
+                if (!AITE.WinningMove)
+                {
+                    Tuple<SimpleMove, int> Top = AITE.TopMoveScore();
+
+                    Moves.Add(m, Top.Item2);
+                }
+
+                //To save time, we'll look at the first couple of moves and take the worst one.
+                if (moves_evaluated >= NumberOfMovesToConsider) break;
+            }
+            //Order Ascending to minimize opp value.
             Moves = Moves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
             if (Moves.Count == 0) return null;
@@ -362,9 +420,9 @@ namespace FourzyGameModel.Model
                     WeightedMoves.Add(m, AITE.Score(m.Piece.PlayerId));
                 }
             }
-  
+
             WeightedMoves = WeightedMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            
+
             return WeightedMoves.Keys.First();
         }
 
@@ -382,7 +440,7 @@ namespace FourzyGameModel.Model
 
         public List<SimpleMove> GetTopOkMoves(int NumberMoves = 5)
         {
-            AIHeuristicWeight AIWeight = new AIHeuristicWeight();
+            AIHeuristicWeight AIWeight = AIHeuristics;
             return GetTopOkMoves(AIWeight, NumberMoves);
         }
 
@@ -417,6 +475,22 @@ namespace FourzyGameModel.Model
             return new Tuple<SimpleMove, int>(WeightedMoves.First().Key, WeightedMoves.First().Value);
         }
 
+        public SimpleMove GetBestMoveWithoutWinning()
+        {
+            List<SimpleMove> Moves = GetTopOkMoves();
+            if (Moves == null) return null;
+            foreach (SimpleMove m in Moves)
+            {
+                bool ok = true;
+                foreach (PlayerTurn t in WinningTurns)
+                {
+                    if (t.Moves[0].Equals(m)) { ok = false; break; }
+                }
+                if (ok) return m;
+            }
+            return null;
+        }
+
         //Returns a random ok move from the top x calculated moves.
         public SimpleMove GetRandomOkMove(int TopMovesToConsider = 2)
         {
@@ -434,6 +508,18 @@ namespace FourzyGameModel.Model
             if (Moves == null || Moves.Count == 0) return GetTopMoveNoRestriction();
             return Moves[EvalState.Board.Random.RandomInteger(0, Moves.Count - 1)];
         }
+
+        //Returns a random ok move from the top x calculated moves.
+        public SimpleMove GetLowerScoringMove(int TopMovesToConsider, int BestMove)
+        {
+            List<SimpleMove> Moves = GetTopOkMoves(TopMovesToConsider);
+
+            if (Moves == null || Moves.Count == 0) return null;
+            if (BestMove >= Moves.Count) return Moves[Moves.Count - 1];
+
+            return Moves[EvalState.Board.Random.RandomInteger(BestMove, Moves.Count - 1)];
+        }
+
 
 
         #endregion
@@ -590,8 +676,8 @@ namespace FourzyGameModel.Model
         //    }
         //    return null;
         //}
-       
-        
+
+
         #endregion
 
         #region "Score Positions"
@@ -639,7 +725,7 @@ namespace FourzyGameModel.Model
 
         public Dictionary<SimpleMove, int> ScoreMoves(List<SimpleMove> Moves, bool Sort = true, int TopMoves = -1)
         {
-            AIHeuristicWeight AIWeight = new AIHeuristicWeight();
+            AIHeuristicWeight AIWeight = AIHeuristics;
             return ScoreMoves(Moves, TopMoves, AIWeight, Sort);
         }
 
@@ -653,9 +739,16 @@ namespace FourzyGameModel.Model
                 AITurnEvaluator AITE = new AITurnEvaluator(GS);
                 //AITurnEvaluator AITE = new AITurnEvaluator(EvalState, new PlayerTurn(m));
 
+                //We can look for setup patterns where a player can win multiple ways.
+                //The most classic is the 'FIVE SETUP'
+                if (AIWeight.PruneFiveSetup)
+                {
+                    if (AITE.FindFiveSetup(GS.ActivePlayerId)) continue;
+                }
+
                 //int Score = AITurnEvaluator.Score(GS, m.Piece.PlayerId, AIWeight);
                 //ScoredMoves.Add(m, Score);
-                ScoredMoves.Add(m, AITE.Score(m.Piece.PlayerId,AIWeight));
+                ScoredMoves.Add(m, AITE.Score(m.Piece.PlayerId, AIWeight));
             }
             if (Sort) ScoredMoves = ScoredMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
             if (TopMoves > 0)
@@ -690,7 +783,7 @@ namespace FourzyGameModel.Model
 
         public int Score(int PlayerId)
         {
-            return Score(PlayerId, new AIHeuristicWeight());
+            return Score(PlayerId, AIHeuristics);
         }
 
         public int Score(int PlayerId, AIHeuristicWeight AIWeight)
@@ -715,7 +808,40 @@ namespace FourzyGameModel.Model
 
             return Score;
         }
-        
+
+        // A 'FiveSetup' occurs in a set of five spaces in a row/column/diag where: 
+        //    -- the three center spaces are unmovable
+        //    -- a player can play on either side to win two ways.
+        //
+        public bool FindFiveSetup(int PlayerId)
+        {
+            bool found = false;
+            for (var row = 0; row < EvalState.Board.Rows; row++)
+            {
+                for (var col = 0; col < EvalState.Board.Columns; col++)
+                {
+                    foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
+                    {
+                        switch (Direction)
+                        {
+                            case WinDirection.HORIZONTAL:
+                                if (EvalState.Board.Columns - col < 5) continue; break;
+                            case WinDirection.VERTICAL:
+                                if (EvalState.Board.Rows - row < 5) continue; break;
+
+                                //case WinDirection.DIAGONAL_NW_SE:
+                                //case WinDirection.DIAGONAL_NE_SW:
+                                //    //continue;
+                        }
+                        found = FindFiveSetup(new BoardLocation(row, col), Direction, PlayerId);
+                        if (found) return true;
+                    }
+                }
+            }
+            return found;
+        }
+
+
         //public int Score(int PlayerId, int FourWeight = 10, int FiveWeight = 25, int PositionWeight = 2)
         //{
         //    int Score = 0;
@@ -766,7 +892,7 @@ namespace FourzyGameModel.Model
 
             return output.ToString();
         }
-        
+
         //public int ScoreFours(int PlayerId)
         //{
         //    List<BoardLocation> Dead = new List<BoardLocation>();
@@ -875,7 +1001,7 @@ namespace FourzyGameModel.Model
 
         //    return Score;
         //}
-        
+
         public int ScoreFives(int PlayerId)
         {
             int Score = 0;
@@ -926,7 +1052,7 @@ namespace FourzyGameModel.Model
             }
             return output.ToString();
         }
-        
+
         public int ScoreFour(BoardLocation Location, WinDirection WinDirection, int PlayerId)
         {
             int count = 0;
@@ -1028,7 +1154,7 @@ namespace FourzyGameModel.Model
                             contiguous = false;
                             if (AliveSpaces.Contains(loc)) alive++;
                         }
-                                            
+
                         i++;
                         loc = new BoardLocation(Location.Row - i, Location.Column + i);
 
@@ -1293,6 +1419,174 @@ namespace FourzyGameModel.Model
             return score;
         }
 
+        public bool FindFiveSetup(BoardLocation Location, WinDirection WinDirection, int PlayerId)
+        {
+            int count = 0;
+            int i = 0;
+            int alive = 0;
+            BoardLocation loc;
+            switch (WinDirection)
+            {
+                case WinDirection.HORIZONTAL:
+                    loc = new BoardLocation(Location.Row, Location.Column);
+                    while (loc.OnBoard(EvalState.Board) && i < 5)
+                    {
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
+
+                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+                        {
+                            return false;
+                        }
+
+                        if (DeadSpaces.Contains(loc))
+                        {
+                            return false;
+                        }
+
+                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+                        {
+                            return false;
+                        }
+
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId
+                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
+                        {
+                            count++;
+                        }
+                        else
+                        {
+                            if (AliveSpaces.Contains(loc)) alive++;
+                            //contiguous = false;
+                        }
+
+                        i++;
+                        loc = new BoardLocation(Location.Row, Location.Column + i);
+                    }
+
+                    break;
+
+                case WinDirection.VERTICAL:
+                    loc = new BoardLocation(Location.Row, Location.Column);
+                    while (loc.OnBoard(EvalState.Board) && i < 5)
+                    {
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
+
+                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+                        {
+                            return false;
+                        }
+                        if (DeadSpaces.Contains(loc))
+                        {
+                            return false;
+                        }
+                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+                        {
+                            return false;
+                        }
+
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId
+                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
+                            count++;
+                        else
+                        {
+                            if (AliveSpaces.Contains(loc)) alive++;
+                            //contiguous = false;
+                        }
+
+                        i++;
+                        loc = new BoardLocation(Location.Row + i, Location.Column);
+
+                    }
+                    break;
+
+                case WinDirection.DIAGONAL_NE_SW:
+                    loc = new BoardLocation(Location.Row, Location.Column);
+                    while (loc.OnBoard(EvalState.Board) && i < 5)
+                    {
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
+
+                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+                        {
+                            return false;
+                        }
+                        if (DeadSpaces.Contains(loc))
+                        {
+                            return false;
+                        }
+                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+                        {
+                            return false;
+                        }
+
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId
+                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
+                            count++;
+                        else
+                        {
+                            if (AliveSpaces.Contains(loc)) alive++;
+                            //contiguous = false;
+                        }
+
+                        i++;
+                        loc = new BoardLocation(Location.Row + i, Location.Column - i);
+
+                    }
+                    break;
+
+
+                case WinDirection.DIAGONAL_NW_SE:
+                    loc = new BoardLocation(Location.Row, Location.Column);
+                    while (loc.OnBoard(EvalState.Board) && i < 5)
+                    {
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
+
+                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+                        {
+                            return false;
+                        }
+                        if (DeadSpaces.Contains(loc))
+                        {
+                            return false;
+                        }
+                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+                        {
+                            return false;
+                        }
+
+                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId
+                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
+                            count++;
+                        else
+                        {
+                            if (AliveSpaces.Contains(loc)) alive++;
+                            //contiguous = false;
+                        }
+
+                        i++;
+                        loc = new BoardLocation(Location.Row + i, Location.Column + i);
+
+                    }
+
+                    break;
+
+            }
+
+            if (count > 1
+                && (count + alive) > 4
+                && EvalState.ActivePlayerId == PlayerId)
+                return true;
+
+            return false;
+        }
+
         #endregion
 
         #region "Positions"
@@ -1316,7 +1610,7 @@ namespace FourzyGameModel.Model
 
             return Score;
         }
-#endregion
+        #endregion
 
         #region "Counting"
         public static int CountTheDead(GameState State)
@@ -1761,7 +2055,7 @@ namespace FourzyGameModel.Model
             HashBucket[0] = new List<string>();
             HashBucket[0].Add(EvalState.CompressedString);
 
-            TurnEvaluator TE = null; 
+            TurnEvaluator TE = null;
             for (int d = 1; d <= SearchDepth; d++)
             {
                 StateBucket[d] = new List<SimpleMoveSequence>();
@@ -1773,10 +2067,10 @@ namespace FourzyGameModel.Model
 
                     //don't evaluate completed states.
                     if (S.State.WinnerId >= 0) if (!HashBucket[d].Contains(S.State.CompressedString))
-                    {
-                         HashBucket[d].Add(S.State.CompressedString);
-                         StateBucket[d].Add(S);
-                    }
+                        {
+                            HashBucket[d].Add(S.State.CompressedString);
+                            StateBucket[d].Add(S);
+                        }
 
                     TE = new TurnEvaluator(S.State);
                     foreach (SimpleMove m in TE.GetAvailableSimpleMoves())
@@ -1784,7 +2078,8 @@ namespace FourzyGameModel.Model
                         GameState GSTest = TE.EvaluateTurn(m);
                         evaluated_states++;
                         string id = GSTest.CompressedString;
-                        if (!HashBucket[d].Contains(id)){
+                        if (!HashBucket[d].Contains(id))
+                        {
                             HashBucket[d].Add(id);
 
                             SimpleMoveSequence SMS = new SimpleMoveSequence(S);
@@ -1804,7 +2099,7 @@ namespace FourzyGameModel.Model
         {
             Dictionary<int, List<SimpleMoveSequence>> StateBucket = new Dictionary<int, List<SimpleMoveSequence>>();
             Dictionary<int, List<string>> HashBucket = new Dictionary<int, List<string>>();
-            
+
             StateBucket[0] = new List<SimpleMoveSequence>();
             StateBucket[0].Add(new SimpleMoveSequence(EvalState));
             HashBucket[0] = new List<string>();
@@ -1834,7 +2129,8 @@ namespace FourzyGameModel.Model
                         AITurnEvaluator AITE = new AITurnEvaluator(S.State);
                         Moves = AITE.GetTopOkMoves(1);
                         TE = AITE.Evaluator;
-                    } else
+                    }
+                    else
                     {
                         TE = new TurnEvaluator(S.State);
                         Moves = TE.GetAvailableSimpleMoves();

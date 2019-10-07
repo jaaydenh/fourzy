@@ -221,7 +221,7 @@ namespace FourzyGameModel.Model
         {
             BoardRecipe Forest = new BoardRecipe("SurpriseFall");
             Forest.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterSixteen));
-            Forest.Ingredients.Add(new Ingredient(new PitToken(), PatternType.ThreeRandom));
+            //Forest.Ingredients.Add(new Ingredient(new PitToken(), PatternType.ThreeRandom));
 
             return Forest;
         }

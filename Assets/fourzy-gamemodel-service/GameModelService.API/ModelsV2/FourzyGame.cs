@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 
@@ -104,7 +105,7 @@ namespace FourzyGameModel.Model
             {
                 this.State = new GameState(Board, Options, FirstPlayerId);
             }
-            this.State.Players.Clear();
+
             this.State.Players.Add(1, Player1);
             this.State.Players.Add(2, Player2);
 
@@ -119,7 +120,6 @@ namespace FourzyGameModel.Model
 
             this.State = new GameState(Board, Options, FirstPlayerId);
             this.playerTurnRecord = new List<PlayerTurn>();
-            this.State.Players.Clear();
             this.State.Players.Add(1, Player1);
             this.State.Players.Add(2, Player2);
             this.GameType = GameType.STANDARD;
@@ -130,7 +130,6 @@ namespace FourzyGameModel.Model
             this.State = new GameState(definition);
             this.State.ActivePlayerId = FirstPlayerId;
             this.playerTurnRecord = new List<PlayerTurn>();
-            this.State.Players.Clear();
             this.State.Players.Add(1, Player1);
             this.State.Players.Add(2, Player2);
             this.GameType = GameType.STANDARD;
@@ -141,7 +140,6 @@ namespace FourzyGameModel.Model
             GameBoardDefinition gbd = JsonConvert.DeserializeObject<GameBoardDefinition>(boardJson);
             this.State = new GameState(gbd);
             this.playerTurnRecord = new List<PlayerTurn>();
-            this.State.Players.Clear();
             this.State.Players.Add(1, new Player(1, "First"));
             this.State.Players.Add(2, new Player(2, "Second"));
             this.GameType = GameType.STANDARD;
@@ -189,60 +187,17 @@ namespace FourzyGameModel.Model
             this.GameType = GameType.STANDARD;
         }
 
-        public FourzyGame(Player Player1, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GameOptions Options = null)
+        public FourzyGame(Player Human, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GauntletStatus Status = null, GameOptions Options = null)
         {
-            if (CurrentArea == Area.NONE)
-            {
-                RandomTools RT = new RandomTools();
-                CurrentArea = RT.RandomArea();
-            }
-
-            if (Options == null) Options = new GameOptions();
-            int FirstPlayerId = 1;
-
-            Player Player2 = new Player(2, Constants.GenerateName());
-            GameBoard Board = BoardFactory.CreateRandomBoard(Options, Player1, Player2, CurrentArea);
-
-            switch (GauntletLevel) {
-
-                case 0:
-                    Player2.Profile = AIProfile.BeginnerAI;
-                
-                    break;
-                case 1:
-                    Player2.Profile = AIProfile.PositionBot;
-
-                    break;
-                case 2:
-                    Player2.Profile = AIProfile.SimpleAI;
-
-                    break;
-                case 3:
-                    Player2.Profile = AIProfile.ScoreBot;
-
-                    break;
-
-                default:
-                    Player2.Profile = AIProfile.SimpleAI;
-
-                    break;
-            }
-
-
-            this.State = new GameState(Board, Options, FirstPlayerId);
-                 
-            this.State.Players.Add(1, Player1);
-            this.State.Players.Add(2, Player2);
-
+            string SeedString = Guid.NewGuid().ToString();
+            CurrentArea = Area.TRAINING_GARDEN;
+            this.State = GauntletFactory.Create(Human, GauntletLevel, Status, CurrentArea, DifficultModifier, Options, SeedString);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
-
         }
 
 
         #endregion "Constructors"
-
-
 
         public virtual PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn =false )
         {
