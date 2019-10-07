@@ -82,7 +82,7 @@ namespace FourzyGameModel.Model
                 if (AvailableMoves.Count > 0)
                     MoveInfo = Evaluator.GetAvailableMoveInfo(AvailableMoves);
             if (MoveInfo == null) MoveInfo = Evaluator.GetAvailableMoveInfo();
-         
+
             //Weed out moves that are idential.
             List<string> UniqueMoves = new List<string>();
             foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)

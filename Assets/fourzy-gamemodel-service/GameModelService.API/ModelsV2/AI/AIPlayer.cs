@@ -165,23 +165,21 @@ namespace FourzyGameModel.Model
             switch (Difficulty)
             {
                 case AIDifficulty.Pushover:
-                    return AIProfile.BadBot;
                     Personality = Random.RandomInteger(0, 2);
                     switch (Personality)
                     {
                         case 0:
                             return AIProfile.ExtenderBotAI;
                         case 1:
-                            return AIProfile.PanicBot;
+                            return AIProfile.BadBot;
                         case 2:
                             return AIProfile.WaitBot;
                     }
                     break;
 
                 case AIDifficulty.Easy:
-                    return AIProfile.BlindBot;
 
-                    Personality = Random.RandomInteger(0, 6);
+                    Personality = Random.RandomInteger(0, 8);
                     switch (Personality)
                     {
                         case 0:
@@ -198,35 +196,34 @@ namespace FourzyGameModel.Model
                             return AIProfile.HorizontalBot;
                         case 6:
                             return AIProfile.RotatorBot;
+                        case 7:
+                            return AIProfile.BlindBot;
+                        case 8:
+                            return AIProfile.EasyAI;
+
                     }
                     break;
 
                 case AIDifficulty.Medium:
-                    return AIProfile.PositionBot;
-
-                    Personality = Random.RandomInteger(0, 2);
+                  
+                    Personality = Random.RandomInteger(0, 1);
                     switch (Personality)
                     {
                         case 0:
                             return AIProfile.BeginnerAI;
                         case 1:
-                            return AIProfile.EasyAI;
-                        case 2:
                             return AIProfile.PositionBot;
                     }
                     break;
 
                 case AIDifficulty.Hard:
                     Personality = Random.RandomInteger(0, 1);
-                    return AIProfile.SimpleAI;
                     switch (Personality)
                     {
                         case 0:
                             return AIProfile.SimpleAI;
                         case 1:
                             return AIProfile.ScoreBot;
-                        case 2:
-                            return AIProfile.DoctorBot;
                     }
                     break;
 
