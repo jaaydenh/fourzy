@@ -19,6 +19,12 @@ namespace FourzyGameModel.Model
                     return new ACouplePattern(Board,2).Locations;
                 case PatternType.ThreeRandom:
                     return new ACouplePattern(Board, 3).Locations;
+                case PatternType.CenterLineOfFour:
+                    return new CentralLineOfFourPattern(Board,1).Locations;
+                case PatternType.TwoCenterLinesOfFour:
+                    return new CentralLineOfFourPattern(Board, 2).Locations;
+                case PatternType.ThreeCenterLinesOfFour:
+                    return new CentralLineOfFourPattern(Board, 3).Locations;
                 case PatternType.CenterBlob:
                     return new CenterBlobPattern(Board).Locations;
                 case PatternType.CenterOne:

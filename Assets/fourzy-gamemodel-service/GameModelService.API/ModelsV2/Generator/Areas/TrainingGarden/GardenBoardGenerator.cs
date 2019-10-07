@@ -20,7 +20,6 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             this.Recipes.Add(Simple2(), 2);
             this.Recipes.Add(Simple3(), 2);
             this.Recipes.Add(SimpleGarden(), 10);
-
             this.Recipes.Add(Empty1(), 2);
             this.Recipes.Add(Empty2(), 2);
             this.Recipes.Add(Empty3(), 2);
@@ -29,6 +28,10 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             this.Recipes.Add(CenterFourWithBlocking(), 10);
             this.Recipes.Add(CenterGarden(), 10);
             this.Recipes.Add(CenterTree(), 10);
+            this.Recipes.Add(CenterFour1(), 10);
+            this.Recipes.Add(CenterFour2(), 10);
+            this.Recipes.Add(CenterFour3(), 10);
+
             this.Recipes.Add(OneLineOfFruit(), 10);
             this.Recipes.Add(OneLineOfGoop(), 10);
             this.Recipes.Add(FruitBlob(), 10);
@@ -159,6 +162,30 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.TwoRandom));
             return Garden;
         }
+
+        private BoardRecipe CenterFour1()
+        {
+            BoardRecipe Garden = new BoardRecipe("CenterLineOfFour1");
+            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterLineOfFour));
+            return Garden;
+        }
+
+        private BoardRecipe CenterFour2()
+        {
+            BoardRecipe Garden = new BoardRecipe("CenterLineOfFour2");
+            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.TwoCenterLinesOfFour));
+
+            return Garden;
+        }
+
+        private BoardRecipe CenterFour3()
+        {
+            BoardRecipe Garden = new BoardRecipe("CenterLineOfFour3");
+            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.ThreeCenterLinesOfFour));
+            return Garden;
+        }
+
+
 
         //MEDIUM
 

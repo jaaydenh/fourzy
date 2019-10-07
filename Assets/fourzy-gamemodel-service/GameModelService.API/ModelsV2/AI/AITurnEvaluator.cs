@@ -75,15 +75,14 @@ namespace FourzyGameModel.Model
             this.EvalState = Evaluator.EvaluateStartOfTurn();
             this.AliveSpaces = new HashSet<BoardLocation>();
             this.WinningTurns = new List<PlayerTurn>();
-            this.AvailableSimpleMoves = AvailableMoves;
+            this.AvailableSimpleMoves = new List<SimpleMove>();
             Dictionary<SimpleMove, GameState> MoveInfo = null;
 
             if (AvailableMoves != null)
                 if (AvailableMoves.Count > 0)
                     MoveInfo = Evaluator.GetAvailableMoveInfo(AvailableMoves);
             if (MoveInfo == null) MoveInfo = Evaluator.GetAvailableMoveInfo();
-
-            this.AvailableSimpleMoves = new List<SimpleMove>();
+         
             //Weed out moves that are idential.
             List<string> UniqueMoves = new List<string>();
             foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
@@ -400,6 +399,7 @@ namespace FourzyGameModel.Model
 
         public SimpleMove GetBestLostCauseMove()
         {
+            int MaxWinMoves = 100;
             Dictionary<SimpleMove, int> WeightedMoves = new Dictionary<SimpleMove, int>();
             foreach (SimpleMove m in AvailableSimpleMoves)
             {
@@ -408,8 +408,19 @@ namespace FourzyGameModel.Model
 
                 TurnEvaluator TE2 = new TurnEvaluator(GS);
                 int WinMoves = TE2.GetWinningMoves(GS.Opponent(m.Piece.PlayerId)).Count;
-                WeightedMoves.Add(m, WinMoves);
+                if (WinMoves < MaxWinMoves)
+                {
+                    WeightedMoves.Clear();
+                    MaxWinMoves = WinMoves;
+                }
+                if (WinMoves == MaxWinMoves)
+                {
+                    AITurnEvaluator AITE = new AITurnEvaluator(GS);
+                    WeightedMoves.Add(m, AITE.Score(m.Piece.PlayerId));
+                }
             }
+
+            WeightedMoves = WeightedMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
             return WeightedMoves.Keys.First();
         }

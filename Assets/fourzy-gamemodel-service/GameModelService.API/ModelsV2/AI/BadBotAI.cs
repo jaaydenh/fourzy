@@ -30,16 +30,12 @@ namespace FourzyGameModel.Model
                     return AI.WinningTurns.First();
             }
 
-            //Can the opponent win next turn?
-            List<SimpleMove> OkMoves = AI.GetOkMoves();
-            if (OkMoves == null) return new PlayerTurn(AI.GetBestLostCauseMove());
-            OkMoves = OkMoves.OrderBy(a => Guid.NewGuid()).Take(5).ToList();
-
-            AI = new AITurnEvaluator(EvalState, OkMoves);
-
             SimpleMove Move = null;
-            //Look at a couple moves and take the worst one.
-            Move = AI.GetBadMove(3);
+
+            List<SimpleMove> PotentialMoves = AI.GetOkMoves().OrderBy(a => Guid.NewGuid()).Take(8).ToList();
+            
+            AI = new AITurnEvaluator(EvalState, PotentialMoves);
+            Move = AI.GetBadMove(2);
 
             //If for any reason, no good moves, get best lost cause move.
             if (Move == null) return new PlayerTurn(AI.GetBestLostCauseMove());

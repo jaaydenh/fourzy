@@ -71,7 +71,10 @@ namespace FourzyGameModel.Model
         CrossBoardOneTurn,
         CrossBoardTwoTurnPattern,
         CrossBoardFourTurnPattern,
-        CenterOne
+        CenterOne,
+        CenterLineOfFour,
+        TwoCenterLinesOfFour,
+        ThreeCenterLinesOfFour
     }
 
     public enum RelativeDirection { IN, OUT, NONE}

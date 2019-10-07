@@ -60,7 +60,8 @@ namespace FourzyGameModel.Model
                     Opponent.Profile = AIPlayerFactory.RandomProfile(AIDifficulty.Pushover);
                     Recipe = Random.RandomItem(
                         new List<string>() { "Empty1", "Empty2", "Empty3", "Empty4",
-                            "Center", "Simple1", "Simple2", "Simple3", "StickyBlob",
+                            "Center", "Simple1", "Simple2", "Simple3", 
+                            "CenterLineOfFour1", "CenterLineOfFour2", "CenterLineOfFour3",
                             "OneFullLineOfGoop", "OneFullLineOfFruit"});
 
                     break;
@@ -68,8 +69,8 @@ namespace FourzyGameModel.Model
                     Opponent.Profile = AIPlayerFactory.RandomProfile(AIDifficulty.Easy);
 
                     Recipe = Random.RandomItem(
-                         new List<string>() { "Orchard", "FruitBlob", "RiverOfFruit", "StickyRiver3",
-                             "TheZero", "WideCross", "CenterFruit",
+                         new List<string>() { "FruitBlob", "RiverOfFruit", "StickyRiver3",
+                             "TheZero", "WideCross", "CenterFruit","StickyBlob",
                               "TwoLinesOfFruit"});
 
                     break;
@@ -110,7 +111,9 @@ namespace FourzyGameModel.Model
 
             if (Options == null) Options = new GameOptions();
 
-            GameBoard Board = BoardFactory.CreateRandomBoard(Options, Human, Opponent, Area.TRAINING_GARDEN, Recipe);
+        
+            GameBoard Board = BoardFactory.CreateRandomBoard(Options, Human, Opponent, 
+                Area.TRAINING_GARDEN, Recipe);
 
             GameState State = new GameState(Board, Options, FirstPlayerId);
 

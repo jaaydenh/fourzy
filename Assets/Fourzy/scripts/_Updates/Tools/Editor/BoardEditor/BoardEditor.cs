@@ -548,6 +548,9 @@ namespace Fourzy._Updates.Tools
                         if (path.Length != 0)
                         {
                             GameState GS = new GameState(currentBoard, 1);
+                            GS.Players.Add(1, new Player(1, "ONE"));
+                            GS.Players.Add(2, new Player(1, "TWO"));
+
                             PuzzleTestResults R = PuzzleTestTools.EvaluateState(GS, PuzzleSearchDepth);
                             if (R.NumberOfVictoryPaths > 0)
                             {
@@ -606,6 +609,9 @@ namespace Fourzy._Updates.Tools
                     {
                         BoardInfo = "Thinking...";
                         GameState GS = new GameState(currentBoard, 1);
+                        GS.Players.Add(1, new Player(1, "Player 1"));
+                        GS.Players.Add(2, new Player(2, "Player 2"));
+
                         PuzzleTestResults R = PuzzleTestTools.EvaluateState(GS, PuzzleSearchDepth);
                         BoardInfo = string.Format(@"Solutions:{0} at Depth:{1};", R.NumberOfVictoryPaths, R.VictoryDepth);
                         if (R.NumberOfVictoryPaths > 0)
