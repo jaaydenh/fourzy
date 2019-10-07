@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics.Rewards;
-using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using UnityEngine;
@@ -12,8 +11,6 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public CurrencyType type;
 
-        private ButtonExtended button;
-
         public override void _Update()
         {
             int quantity = 0;
@@ -22,22 +19,20 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case CurrencyType.PORTAL_POINTS:
                     quantity = Mathf.FloorToInt(CurrencyWidget.ValueFromCurrencyType(type) / Constants.PORTAL_POINTS);
-                    button.GetBadge("value").badge.SetValue(quantity);
 
-                    button.SetState(quantity > 0);
-                    //button.SetState(true);
                     break;
 
                 case CurrencyType.RARE_PORTAL_POINTS:
                     quantity = Mathf.FloorToInt(CurrencyWidget.ValueFromCurrencyType(type) / Constants.RARE_PORTAL_POINTS);
-                    button.GetBadge("value").badge.SetValue(quantity);
 
-                    button.SetState(quantity > 0);
                     break;
             }
+
+            button.GetBadge("value").badge.SetValue(quantity);
+            button.SetState(quantity > 0);
         }
 
-        public void OpenPortalScreen()
+        public void OnTap()
         {
             switch (type)
             {
@@ -59,7 +54,14 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base.OnInitialized();
 
-            button = GetComponent<ButtonExtended>();
+            UserManager.onCurrencyUpdate += OnCurrencyUpdate;
+        }
+
+        private void OnCurrencyUpdate(CurrencyType currency)
+        {
+            if (currency != type) return;
+
+            _Update();
         }
     }
 }

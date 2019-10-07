@@ -72,6 +72,7 @@ namespace Fourzy._Updates.ClientModel
                 return result;
             }
         }
+
         public GameType _Type
         {
             get => _type;
@@ -124,6 +125,8 @@ namespace Fourzy._Updates.ClientModel
 
             set => gameID = value;
         }
+
+        public bool isFourzyPuzzle => false;
 
         public GamePiecePrefabData playerOnePrefabData { get; set; }
         public GamePiecePrefabData playerTwoPrefabData { get; set; }

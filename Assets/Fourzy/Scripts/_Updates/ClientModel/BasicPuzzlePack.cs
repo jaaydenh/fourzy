@@ -60,15 +60,7 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
-        public virtual void Initialize()
-        {
-            puzzlesData = new List<ClientPuzzleData>();
-            enabledPuzzlesData = new List<ClientPuzzleData>();
-            rewardPuzzles = new List<ClientPuzzleData>();
-            allRewards = new Dictionary<int, List<RewardsManager.Reward>>();
-        }
-
-        public virtual void Initialize(int gauntletLevels)
+        public BasicPuzzlePack(int gauntletLevels)
         {
             Initialize();
 
@@ -97,6 +89,14 @@ namespace Fourzy._Updates.ClientModel
 
                 PlayerPrefsWrapper.SetPuzzleChallengeComplete(puzzleData.ID, false);
             }
+        }
+
+        public virtual void Initialize()
+        {
+            puzzlesData = new List<ClientPuzzleData>();
+            enabledPuzzlesData = new List<ClientPuzzleData>();
+            rewardPuzzles = new List<ClientPuzzleData>();
+            allRewards = new Dictionary<int, List<RewardsManager.Reward>>();
         }
 
         public ClientPuzzleData nextUnsolvedData
@@ -155,9 +155,9 @@ namespace Fourzy._Updates.ClientModel
             return null;
         }
 
-        public IClientFourzy Next(IClientFourzy current)
+        public IClientFourzy Next(ClientPuzzleData current)
         {
-            ClientPuzzleData data = enabledPuzzlesData.Next(current.puzzleData);
+            ClientPuzzleData data = enabledPuzzlesData.Next(current);
 
             data.Initialize();
 
@@ -169,9 +169,30 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
-        public void StartNextUnsolvedPuzzle()
+        public IClientFourzy Next(IClientFourzy current) => Next(current.puzzleData);
+
+        public void StartNextUnsolvedPuzzle(IClientFourzy current = null)
         {
-            IClientFourzy game = NextUnsolved();
+            IClientFourzy game = null;
+
+            if (current != null)
+                game = Next(current);
+            else
+            {
+                ClientPuzzleData data = nextUnsolvedData;
+
+                if (data)
+                {
+                    data.Initialize();
+
+                    switch (data.pack.packType)
+                    {
+                        case PackType.PUZZLE_PACK: game = new ClientFourzyPuzzle(data); break;
+
+                        default: game = ClientFourzyGame.FromPuzzleData(data); break;
+                    }
+                }
+            }
 
             if (game == null)
             {

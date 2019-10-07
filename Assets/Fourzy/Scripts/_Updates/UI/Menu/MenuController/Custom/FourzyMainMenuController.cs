@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu.Screens;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -10,25 +11,15 @@ namespace Fourzy._Updates.UI.Menu
 {
     public class FourzyMainMenuController : MenuController
     {
+        public static FourzyMainMenuController instance;
+
         private bool onboardingFinishedEventSent = false;
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
 
-            //onboarding finished event
-            if (GameContentManager.Instance.GetTutorial("Onboarding").wasFinishedThisSession && !onboardingFinishedEventSent)
-            {
-                AnalyticsManager.Instance.LogTutorialEvent("Onboarding", "10");
-                onboardingFinishedEventSent = true;
-            }
-
-            //check for news
-            if (PlayerPrefsWrapper.GetTutorialFinished(GameContentManager.Instance.GetTutorial("Onboarding").data))
-            {
-                //only force news if onboarding was finished
-                if (GameManager.Instance.unreadNews.Count > 0) GetScreen<NewsPromptScreen>()._Prompt();
-            }
+            instance = this;
         }
 
         protected void Update()
@@ -86,7 +77,33 @@ namespace Fourzy._Updates.UI.Menu
                         }
 
                         break;
+
+                    case "tutorialProgressionMap":
+                        ProgressionMapScreen progressionMapScreen = GetScreen<ProgressionMapScreen>();
+
+                        if (currentScreen != progressionMapScreen)
+                        {
+                            BackToRoot();
+                            progressionMapScreen.Open(GameContentManager.Instance.progressionMaps[0]);
+                        }
+
+                        break;
                 }
+            }
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            //skip if tutorial running
+            if (OnboardingScreen.instance && OnboardingScreen.instance.isTutorialRunning) return;
+
+            //check for news
+            if (PlayerPrefsWrapper.GetTutorialFinished(HardcodedTutorials.tutorials[0].data))
+            {
+                //only force news if onboarding was finished
+                if (GameManager.Instance.unreadNews.Count > 0) GetScreen<NewsPromptScreen>()._Prompt();
             }
         }
     }

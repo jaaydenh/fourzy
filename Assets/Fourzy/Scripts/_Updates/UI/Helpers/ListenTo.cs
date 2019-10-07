@@ -2,7 +2,6 @@
 
 using ByteSheep.Events;
 using Fourzy._Updates.Managers;
-using Fourzy._Updates.Mechanics;
 using StackableDecorator;
 using System;
 using System.Collections.Generic;
@@ -20,6 +19,7 @@ namespace Fourzy._Updates.UI.Helpers
         private bool listensToSfxState = false;
         private bool listensToAudioState = false;
         private bool listensToDemoModeState = false;
+        private bool listensToPlacementStyle = false;
 
         protected void Awake()
         {
@@ -69,6 +69,15 @@ namespace Fourzy._Updates.UI.Helpers
                             SettingsManager.onDemoMode += OnDemoMode;
                         }
                         break;
+
+                    case ListenValues.PLACEMENT_STYLE_1:
+                    case ListenValues.PLACEMENT_STYLE_2:
+                        if (!listensToPlacementStyle)
+                        {
+                            listensToPlacementStyle = true;
+                            GameManager.onPlacementStyle += OnPlacementSyle;
+                        }
+                        break;
                 }
             }
         }
@@ -112,6 +121,16 @@ namespace Fourzy._Updates.UI.Helpers
                         }
 
                         break;
+
+                    case ListenValues.PLACEMENT_STYLE_1:
+                    case ListenValues.PLACEMENT_STYLE_2:
+                        if (listensToPlacementStyle)
+                        {
+                            listensToPlacementStyle = false;
+                            SettingsManager.onDemoMode -= OnDemoMode;
+                        }
+
+                        break;
                 }
         }
 
@@ -141,6 +160,12 @@ namespace Fourzy._Updates.UI.Helpers
                         case ListenValues.SETTINGS_DEMO_MODE_ON:
                         case ListenValues.SETTINGS_DEMO_MODE_OFF:
                             OnDemoMode(SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE));
+
+                            break;
+
+                        case ListenValues.PLACEMENT_STYLE_1:
+                        case ListenValues.PLACEMENT_STYLE_2:
+                            OnPlacementSyle(GameManager.Instance.placementStyle);
 
                             break;
                     }
@@ -189,6 +214,16 @@ namespace Fourzy._Updates.UI.Helpers
                 foreach (ListenTarget target in sorted[ListenValues.SETTINGS_DEMO_MODE_OFF])
                     target.events.Invoke(string.Format(target.targetText, state));
         }
+
+        public void OnPlacementSyle(GameManager.PlacementStyle state)
+        {
+            if (state == GameManager.PlacementStyle.DEFAULT)
+                foreach (ListenTarget target in sorted[ListenValues.PLACEMENT_STYLE_1])
+                    target.events.Invoke(string.Format(target.targetText, state));
+            else
+                foreach (ListenTarget target in sorted[ListenValues.PLACEMENT_STYLE_2])
+                    target.events.Invoke(string.Format(target.targetText, state));
+        }
     }
 
     [Serializable]
@@ -227,16 +262,18 @@ namespace Fourzy._Updates.UI.Helpers
 
     public enum ListenValues
     {
-        CHELLENGE_ID = 0,
-        NO_INTERNET_ACCESS = 4,
-        LOGGED_IN = 8,
+        CHELLENGE_ID,
+        NO_INTERNET_ACCESS,
+        LOGGED_IN,
 
-        SETTINGS_SFX_ON = 64,
-        SETTINGS_SFX_OFF = 128,
-        SETTINGS_AUDIO_ON = 256,
-        SETTINGS_AUDIO_OFF = 512,
-        SETTINGS_DEMO_MODE_ON = 1024,
-        SETTINGS_DEMO_MODE_OFF = 2048,
+        SETTINGS_SFX_ON,
+        SETTINGS_SFX_OFF,
+        SETTINGS_AUDIO_ON,
+        SETTINGS_AUDIO_OFF,
+        SETTINGS_DEMO_MODE_ON,
+        SETTINGS_DEMO_MODE_OFF,
+        PLACEMENT_STYLE_1,
+        PLACEMENT_STYLE_2,
 
         USES_TEXT = CHELLENGE_ID,
     }

@@ -18,7 +18,6 @@ namespace Fourzy._Updates.UI.Widgets
         public RectTransform gamepieceParent;
 
         public PuzzlePacksDataHolder.PuzzlePack puzzlePack { get; private set; }
-        public ButtonExtended button { get; private set; }
 
         private int completeAnimation = Animator.StringToHash("PuzzlePackCompleteAnimation");
         private Animator animator;
@@ -99,7 +98,7 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        public void OpenPuzzlePack()
+        public void OnTap()
         {
             //try to unlock
             switch (puzzlePack.unlockRequirement)
@@ -165,7 +164,6 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base.OnInitialized();
 
-            button = GetComponent<ButtonExtended>();
             animator = GetComponent<Animator>();
         }
 

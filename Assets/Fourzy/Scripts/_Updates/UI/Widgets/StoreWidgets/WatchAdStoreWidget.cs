@@ -16,7 +16,6 @@ namespace Fourzy._Updates.UI.Widgets
 
         private Action onComplete;
         private StorePromptScreen storeScreen;
-        private ButtonExtended button;
 
         protected void OnEnable()
         {
@@ -80,7 +79,6 @@ namespace Fourzy._Updates.UI.Widgets
             base.OnInitialized();
 
             storeScreen = GetComponentInParent<StorePromptScreen>();
-            button = GetComponent<ButtonExtended>();
         }
 
         private void OnRewardedVideoLoadedEvent(string adUnitId) { }

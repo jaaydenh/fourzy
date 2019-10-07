@@ -78,6 +78,7 @@ namespace Fourzy._Updates.ClientModel
 
             set { }
         }
+        public bool isFourzyPuzzle => true;
 
         public float initializedTime { get; set; }
 

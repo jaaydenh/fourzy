@@ -1,18 +1,9 @@
 ﻿//@vadym udod
 
-using UnityEngine;
-
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class HeaderScreen : MenuScreen
     {
-        protected override void Start()
-        {
-            base.Start();
-
-            isOpened = canvasGroup.alpha > 0f;
-        }
-
         public override void Close(bool animate = true)
         {
             if (!isOpened) return;
@@ -26,6 +17,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             MenuTabbedScreen tabbedScreen = menuController.GetScreen<MenuTabbedScreen>();
 
             tabbedScreen.OpenTab(0, tabbedScreen.isOpened);
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            isOpened = canvasGroup.alpha > 0f;
         }
     }
 }

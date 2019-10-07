@@ -1,6 +1,8 @@
 ﻿//@vadym udod
 
 
+using UnityEngine;
+
 namespace Fourzy._Updates.UI.Menu
 {
     public class PersistantMenuController : MenuController

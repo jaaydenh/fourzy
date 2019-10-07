@@ -1,12 +1,16 @@
 ﻿//@vadym udod
 
 
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class UpgradeGamePiecePromptScreen : PromptScreen
     {
+        public ButtonExtended selectButton;
+        public ButtonExtended upgradeButton;
+
         private GamePieceData data;
         private GamePieceWidgetSmall gamePieceWidget;
 
@@ -17,6 +21,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gamePieceWidget = GetComponentInChildren<GamePieceWidgetSmall>();
         }
 
+        public override void Open()
+        {
+            base.Open();
+
+            CheckUpdate();
+            CheckSelected();
+        }
+
         public void Prompt(GamePieceData data)
         {
             this.data = data;
@@ -24,17 +36,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Prompt(data.name, "", () =>
             {
-                data.Upgrade();
-                gamePieceWidget._Update();
+                //data.Upgrade();
+                //gamePieceWidget._Update();
 
-                //can upgrade further?
-                CheckUpdate();
+                CheckSelected();
             });
-
-            CheckUpdate();
         }
 
-        public void CheckUpdate()
+        public void SelectGamepiece()
+        {
+            UserManager.Instance.UpdateSelectedGamePiece(data.ID);
+
+            //close screen
+            menuController.CloseCurrentScreen();
+        }
+
+        private void CheckUpdate()
         {
             if (data.CanUpgrade)
                 UpdateAcceptButton("Upgrade");
@@ -42,10 +59,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 UpdateAcceptButton("");
         }
 
-        public override void Accept()
+        private void CheckSelected()
         {
-            if (onAccept != null)
-                onAccept.Invoke();
+            selectButton.SetActive(UserManager.Instance.gamePieceID != data.ID && data.State == GamePieceState.FoundAndUnlocked);
         }
     }
 }

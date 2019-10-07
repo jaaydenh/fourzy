@@ -41,14 +41,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
         }
 
-        protected override void Start()
-        {
-            base.Start();
-
-            if (ChallengeManager.Instance.Challenges.Count > 0)
-                OnChallengesUpdate(ChallengeManager.Instance.Challenges);
-        }
-
         public void ViewContentScrollRectOnValueChanged(Vector2 pos)
         {
             if (pulledToRefresh) return;
@@ -151,6 +143,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 Destroy(gameWidget.gameObject);
 
             challengesViews.Clear();
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            if (ChallengeManager.Instance.Challenges.Count > 0) OnChallengesUpdate(ChallengeManager.Instance.Challenges);
         }
     }
 }

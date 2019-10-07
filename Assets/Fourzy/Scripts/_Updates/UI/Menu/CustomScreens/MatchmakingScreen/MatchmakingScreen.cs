@@ -24,8 +24,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameObject backButton;
 
         private int findChallengerErrorCount = 0;
-        private int joinChallengeErrorCount = 0;
-        private int getChallengeError = 0;
         private string challengeIdToJoin;
         private string challengedID = "";
         private float elapsedTime;

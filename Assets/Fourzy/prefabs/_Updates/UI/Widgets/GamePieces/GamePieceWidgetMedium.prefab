@@ -678,7 +678,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &224462632837207538
 RectTransform:
   m_ObjectHideFlags: 0
@@ -903,12 +903,13 @@ GameObject:
   - component: {fileID: 224569656060655400}
   - component: {fileID: 222790523310241000}
   - component: {fileID: 114312443042991520}
-  - component: {fileID: 114048442049307386}
   - component: {fileID: 269402489526194782}
   - component: {fileID: 114674890455597108}
   - component: {fileID: 225046676288696224}
   - component: {fileID: 114092304601310750}
   - component: {fileID: 114169671749890848}
+  - component: {fileID: 3330351265156787935}
+  - component: {fileID: 748581795246007842}
   m_Layer: 5
   m_Name: GamePieceWidgetMedium
   m_TagString: Untagged
@@ -977,86 +978,11 @@ MonoBehaviour:
   borderImage: {fileID: 114267470340975522}
   infoFrame: {fileID: 1636735846865358}
   notFound: {fileID: 1657440484360286}
+  selectedFrame: {fileID: 224462632837207538}
   pieceName: {fileID: 114021651462127156}
   numberOfChampions: {fileID: 114422315204782328}
   starsSlider: {fileID: 114133423386668336}
   greyscaleMaterial: {fileID: 2100000, guid: b6c21f90b858aa04ab6fc2eb7ee34944, type: 2}
---- !u!114 &114048442049307386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1719389088718380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a14a05cfe3d03f549b5799e622c0517f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 0
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Highlighted
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
-  toggleTransition: 1
-  graphic: {fileID: 114092804737383050}
-  m_Group: {fileID: 0}
-  onValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
-  onState:
-    inspectorListHeight: 83
-    persistentCalls:
-      calls: []
-  offState:
-    inspectorListHeight: 83
-    persistentCalls:
-      calls: []
-  onClick:
-    inspectorListHeight: 83
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 3
-          selectedMember: 38
-          isDynamic: 0
-        target: {fileID: 114312443042991520}
-        memberName: OnToggle
-        memberType: 8
-        arguments: []
-        isDynamic: 0
-        isCallEnabled: 1
-  state:
-    inspectorListHeight: 83
-    persistentCalls:
-      calls: []
-  onSfx: 5
 --- !u!114 &269402489526194782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1098,7 +1024,7 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
       - genericMenuData:
-          selectedComponent: 6
+          selectedComponent: 5
           selectedMember: 10
           isDynamic: 0
         target: {fileID: 114674890455597108}
@@ -1149,7 +1075,7 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
       - genericMenuData:
-          selectedComponent: 6
+          selectedComponent: 5
           selectedMember: 10
           isDynamic: 0
         target: {fileID: 114674890455597108}
@@ -1276,8 +1202,17 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
+      time: 0.20201479
+      value: 1.0065352
+      inSlope: -0.005917225
+      outSlope: -0.005917225
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.55216944
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 1
-      value: 1
+      value: 0.0010757446
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1288,7 +1223,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   unscaledTime: 0
-  playbackTime: 0.3
+  playbackTime: 0.14
   playOnAwake: 0
   repeat: 0
   onProgress:
@@ -1296,7 +1231,111 @@ MonoBehaviour:
     persistentCalls:
       calls: []
   from: {x: 1, y: 1, z: 1}
-  to: {x: 1.2, y: 1.2, z: 1.2}
+  to: {x: 1.1, y: 1.1, z: 1.1}
+--- !u!114 &3330351265156787935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719389088718380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c30ba88a1888a2f47821f13b12f89389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 748581795246007842}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  events:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 3
+          selectedMember: 37
+          isDynamic: 0
+        target: {fileID: 114312443042991520}
+        memberName: OnTap
+        memberType: 8
+        arguments: []
+        isDynamic: 0
+        isCallEnabled: 1
+  onState:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls: []
+  offState:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls: []
+  playOnClick: 2
+  changeMaterialOnState: 1
+  scaleOnClick: 1
+  buttonGraphics:
+    list: []
+  labels: []
+  badges: []
+--- !u!114 &748581795246007842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719389088718380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1748222931957738
 GameObject:
   m_ObjectHideFlags: 0

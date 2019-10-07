@@ -3,7 +3,6 @@
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,14 +14,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RectTransform aiPlayersParent;
         
         public GridLayoutGroup gridLayoutGroup;
-        public TMP_Text completeText;
 
         private List<PuzzlePackWidget> puzzlePacksWidgets = new List<PuzzlePackWidget>();
         private PuzzlePackWidget puzzlePackPrefab;
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
 
             puzzlePackPrefab = GameContentManager.GetPrefab<PuzzlePackWidget>(GameContentManager.PrefabType.PUZZLE_PACK_WIDGET);
         }
@@ -31,8 +29,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            LoadPuzzlePacks(GameContentManager.Instance.puzzlePacksDataHolder);
+            OnInitialized();
+
             LoadAIPlayerWidgets();
+            //LoadPuzzlePacks(GameContentManager.Instance.puzzlePacksDataHolder);
+        }
+
+        public override void OnBack()
+        {
+            base.OnBack();
+
+            menuController.CloseCurrentScreen();
         }
 
         public void LoadPuzzlePacks(PuzzlePacksDataHolder puzzlePacksHolder)
@@ -49,8 +56,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 puzzlePacksWidgets.Add(puzzlePackWidgetInstance);
             }
-
-            completeText.text = $"{puzzlePacksHolder.totalPuzzlesCompleteCount} / {puzzlePacksHolder.totalPuzzlesCount}";
         }
 
         public void LoadAIPlayerWidgets()

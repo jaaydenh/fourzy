@@ -33,7 +33,6 @@ namespace AppStoresSupport
 		private const string STEP_UPDATE_CLIENT_SECRET = "update_client_secret";
 
 		struct ReqStruct {
-			public string currentStep;
 			public string targetStep;
 			public UnityWebRequest request;
 			public GeneralResponse resp;

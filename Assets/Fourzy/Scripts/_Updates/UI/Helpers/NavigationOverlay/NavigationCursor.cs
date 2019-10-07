@@ -3,7 +3,6 @@
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Widgets;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Helpers
 {

@@ -31,8 +31,6 @@ namespace Fourzy
         [List]
         public PrefabsCollection typedPrefabs;
         [List]
-        public TutorialsCollection tutorials;
-        [List]
         public ScreensCollection screens;
 
         private Dictionary<string, ResourceItem> fastPuzzles = new Dictionary<string, ResourceItem>();
@@ -74,8 +72,7 @@ namespace Fourzy
                     typedPrefabsFastAccess.Add(prefabTypePair.prefabType, prefabTypePair);
 
             //init tutorials
-            foreach (Tutorial t in tutorials.list)
-                t.Initialize();
+            foreach (Tutorial tutorial in HardcodedTutorials.tutorials) tutorial.Initialize();
 
             piecesDataHolder.Initialize();
             passAndPlayDataHolder.Initialize();
@@ -104,8 +101,6 @@ namespace Fourzy
         public List<ThemesDataHolder.GameTheme> GetTokenThemes(TokenType tokenType) => GetTokenData(tokenType)?.GetTokenThemes(themesDataHolder) ?? null;
 
         public List<string> GetTokenThemeNames(TokenType tokenType) => GetTokenData(tokenType)?.GetThemeNames(themesDataHolder) ?? null;
-
-        public Tutorial GetTutorial(string name) => tutorials.list.Find(_tutorial => _tutorial.data.tutorialName == name);
 
         public ClientFourzyPuzzle GetFastPuzzle(string id = "", bool unfinished = true)
         {
@@ -208,10 +203,10 @@ namespace Fourzy
         [ContextMenu("ResetOnboarding")]
         public void ResetOnboarding()
         {
-            for (int tutorialIndex = 0; tutorialIndex < tutorials.list.Count; tutorialIndex++)
+            for (int tutorialIndex = 0; tutorialIndex < HardcodedTutorials.tutorials.Count; tutorialIndex++)
             {
-                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorial + tutorials.list[tutorialIndex].data.name);
-                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorialOpened + tutorials.list[tutorialIndex].data.name);
+                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorial + HardcodedTutorials.tutorials[tutorialIndex].data.tutorialName);
+                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorialOpened + HardcodedTutorials.tutorials[tutorialIndex].data.tutorialName);
             }
         }
 

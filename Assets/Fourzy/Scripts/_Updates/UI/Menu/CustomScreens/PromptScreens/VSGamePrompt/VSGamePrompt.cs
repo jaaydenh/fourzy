@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Widgets;
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -24,15 +25,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public BasicPuzzlePack puzzlePack { get; private set; }
 
-        public void Prompt(int gauntletLevels)
-        {
-            BasicPuzzlePack _puzzlePack = new BasicPuzzlePack();
-            _puzzlePack.Initialize(gauntletLevels);
+        public void Prompt(int gauntletLevels) => Prompt(new BasicPuzzlePack(gauntletLevels));
 
-            Prompt(_puzzlePack);
-        }
-
-        public void Prompt(BasicPuzzlePack puzzlePack)
+        public void Prompt(BasicPuzzlePack puzzlePack, Action onClose = null)
         {
             this.puzzlePack = puzzlePack;
 
@@ -75,9 +70,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 () =>
                 {
                     menuController.CloseCurrentScreen(false);
-                    puzzlePack.StartNextUnsolvedPuzzle();
+                    puzzlePack.StartNextUnsolvedPuzzle(puzzlePack.complete ? GameManager.Instance.activeGame : null);
                 },
-                () => menuController.CloseCurrentScreen());
+                onClose ?? (() => menuController.CloseCurrentScreen()));
         }
 
         private VSGamePromptProgressionWidget AddWidget()

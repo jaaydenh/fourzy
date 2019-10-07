@@ -106,7 +106,7 @@ namespace Fourzy
 
         public void AddPieces(int quantity)
         {
-            pieces += quantity;
+            pieces = Mathf.Clamp(pieces + quantity, 0, int.MaxValue);
 
             PlayerPrefsWrapper.GamePieceUpdatePiecesCount(this);
         }

@@ -1,7 +1,9 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
 using TMPro;
@@ -15,45 +17,57 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public ScrollRect scrollRect;
         public RectTransform piecesTab;
         public RectTransform tokensTab;
-        public RectTransform unlockedPiecesParent;
-        public RectTransform lockedPiecesParent;
+        public ButtonExtended unlockedButton;
+        public ButtonExtended foundButton;
+        public ButtonExtended lockedButton;
+        public GridLayoutGroup unlockedPiecesParent;
+        public GridLayoutGroup foundPiecesParent;
+        public GridLayoutGroup lockedPiecesParent;
         public RectTransform unlockedCover;
+        public RectTransform foundCover;
         public RectTransform lockedCover;
         public SizeTween unlockedCoverTween;
+        public SizeTween foundCoverTween;
         public SizeTween lockedCoverTween;
         public RotationTween arrowUnlocked;
+        public RotationTween arrowFound;
         public RotationTween arrowLocked;
-        public RectTransform tokensParent;
         public TMP_Text unlockedLabel;
+        public TMP_Text foundLabel;
         public TMP_Text lockedLabel;
+
+        public RectTransform tokensParent;
 
         public override bool isCurrent => base.isCurrent;
 
         protected List<GamePieceWidgetMedium> gamePieceWidgets = new List<GamePieceWidgetMedium>();
 
         protected bool unlockedExpanded = true;
+        protected bool foundExpanded = true;
         protected bool lockedExpanded = true;
-
-        protected override void Start()
-        {
-            base.Start();
-
-            CreateGamePieces();
-            CreateTokens();
-
-            SetPiecesActive();
-        }
 
         protected void Update()
         {
             //remove
 #if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.U))
             {
                 //give game pieces
                 foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
                 {
                     widget.data.AddPieces(Random.Range(1, 5));
+                    widget._Update();
+                }
+
+                PlaceGamepieceWidgets();
+            }
+
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                //give game pieces
+                foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
+                {
+                    widget.data.AddPieces(-3);
                     widget._Update();
                 }
 
@@ -67,6 +81,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             PlaceGamepieceWidgets();
+
+            //highlight selected one
+            gamePieceWidgets.ForEach(widget => widget.SetSelectedState(widget.data.ID == UserManager.Instance.gamePieceID));
         }
 
         public void SetPiecesActive()
@@ -96,6 +113,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 unlockedCoverTween.PlayBackward(true);
                 arrowUnlocked.PlayBackward(true);
+            }
+        }
+
+        public void ToggleFoundPiecesExpand()
+        {
+            foundExpanded = !foundExpanded;
+
+            if (foundExpanded)
+            {
+                foundCoverTween.PlayForward(true);
+                arrowFound.PlayForward(true);
+            }
+            else
+            {
+                foundCoverTween.PlayBackward(true);
+                arrowFound.PlayBackward(true);
             }
         }
 
@@ -137,20 +170,25 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void PlaceGamepieceWidgets()
         {
             List<GamePieceWidgetMedium> unlocked = new List<GamePieceWidgetMedium>();
+            List<GamePieceWidgetMedium> found = new List<GamePieceWidgetMedium>();
             List<GamePieceWidgetMedium> locked = new List<GamePieceWidgetMedium>();
 
             foreach (GamePieceWidgetMedium widget in gamePieceWidgets)
             {
                 switch (widget.data.State)
                 {
-                    case GamePieceState.FoundAndLocked:
-                    case GamePieceState.NotFound:
-                        locked.Add(widget);
+                    case GamePieceState.FoundAndUnlocked:
+                        unlocked.Add(widget);
 
                         break;
 
-                    case GamePieceState.FoundAndUnlocked:
-                        unlocked.Add(widget);
+                    case GamePieceState.FoundAndLocked:
+                        found.Add(widget);
+
+                        break;
+
+                    case GamePieceState.NotFound:
+                        locked.Add(widget);
 
                         break;
                 }
@@ -159,23 +197,48 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //sort if needed
             //
 
-            unlocked.ForEach(widget => widget.transform.SetParent(unlockedPiecesParent));
-            locked.ForEach(widget => widget.transform.SetParent(lockedPiecesParent));
+            unlocked.ForEach(widget => widget.transform.SetParent(unlockedPiecesParent.transform));
+            found.ForEach(widget => widget.transform.SetParent(foundPiecesParent.transform));
+            locked.ForEach(widget => widget.transform.SetParent(lockedPiecesParent.transform));
 
-            LayoutRebuilder.ForceRebuildLayoutImmediate(unlockedPiecesParent);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(lockedPiecesParent);
+            Vector2 unlcokedSize = unlockedPiecesParent.GetGridLayoutSize(unlocked.Count);
+            Vector2 foundSize = foundPiecesParent.GetGridLayoutSize(found.Count);
+            Vector2 lockedSize = lockedPiecesParent.GetGridLayoutSize(locked.Count);
 
-            if (unlockedExpanded) unlockedCover.sizeDelta = new Vector2(unlockedCover.sizeDelta.x, unlockedPiecesParent.rect.height);
-            if (lockedExpanded) lockedCover.sizeDelta = new Vector2(lockedCover.sizeDelta.x, lockedPiecesParent.rect.height);
+            if (unlockedExpanded) unlockedCover.sizeDelta = new Vector2(unlockedCover.sizeDelta.x, unlcokedSize.y);
+            if (foundExpanded) foundCover.sizeDelta = new Vector2(foundCover.sizeDelta.x, foundSize.y);
+            if (lockedExpanded) lockedCover.sizeDelta = new Vector2(lockedCover.sizeDelta.x, lockedSize.y);
 
             unlockedCoverTween.from = new Vector2(unlockedCover.rect.width, 0f);
-            unlockedCoverTween.to = new Vector2(unlockedCover.rect.width, unlockedPiecesParent.rect.height);
+            unlockedCoverTween.to = new Vector2(unlockedCover.rect.width, unlcokedSize.y);
+
+            foundCoverTween.from = new Vector2(foundCover.rect.width, 0f);
+            foundCoverTween.to = new Vector2(foundCover.rect.width, foundSize.y);
 
             lockedCoverTween.from = new Vector2(lockedCover.rect.width, 0f);
-            lockedCoverTween.to = new Vector2(lockedCover.rect.width, lockedPiecesParent.rect.height);
+            lockedCoverTween.to = new Vector2(lockedCover.rect.width, lockedSize.y);
+
+            //hide/show buttons
+            unlockedButton.SetActive(unlocked.Count != 0);
+            unlockedCover.gameObject.SetActive(unlockedButton.gameObject.activeInHierarchy);
+            foundButton.SetActive(found.Count != 0);
+            foundCover.gameObject.SetActive(foundButton.gameObject.activeInHierarchy);
+            lockedButton.SetActive(locked.Count != 0);
+            lockedCover.gameObject.SetActive(lockedButton.gameObject.activeInHierarchy);
 
             unlockedLabel.text = $"Unlocked {unlocked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
-            lockedLabel.text = $"Locked {locked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
+            foundLabel.text = $"Found {found.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
+            lockedLabel.text = $"Not Found {locked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            CreateGamePieces();
+            CreateTokens();
+
+            SetPiecesActive();
         }
     }
 }

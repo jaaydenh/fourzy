@@ -36,8 +36,10 @@ namespace Fourzy
     {
         public static Action onNewsFetched;
         public static Action<bool> onNetworkAccess;
-        public static Action onGameplaySceneLoaded;
+        public static Action<string> onSceneChanged;
         public static Action<string> onDailyChallengeFileName;
+        public static Action<PlacementStyle> onPlacementStyle;
+
         public static Dictionary<string, object> APP_REMOTE_SETTINGS_DEFAULTS;
 
         public static GameManager Instance;
@@ -58,6 +60,20 @@ namespace Fourzy
         public PassPlayCharactersType characterType = PassPlayCharactersType.SELECTED_RANDOM;
         public List<TokenType> excludeInstructionsFor;
 
+        /// <summary>
+        /// Pieces placement style
+        /// </summary>
+        public PlacementStyle placementStyle
+        {
+            get => _placementStyle;
+
+            set
+            {
+                _placementStyle = value;
+
+                onPlacementStyle?.Invoke(_placementStyle);
+            }
+        }
         public bool ExtraFeatures => extraFeatures || Application.isEditor;
         public bool isRealtime => PhotonNetwork.room != null;
         public PuzzleData dailyPuzzlePack { get; private set; }
@@ -67,12 +83,12 @@ namespace Fourzy
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
 
         private bool configFetched = false;
+        private PlacementStyle _placementStyle = PlacementStyle.DEFAULT;
 
         public bool isMainMenuLoaded
         {
             get
             {
-                //load main menu if needed
                 bool mainMenuLoaded = false;
                 for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
                     if (SceneManager.GetSceneAt(sceneIndex).name == Constants.MAIN_MENU_SCENE_NAME)
@@ -99,7 +115,6 @@ namespace Fourzy
             MMVibrationManager.iOSInitializeHaptics();
 #endif
 
-            //NetworkAccess.Initialize(DEBUG: true);
             ThreadsQueuer.Initialize();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -199,7 +214,7 @@ namespace Fourzy
             //}
         }
 
-        public void StartGame(IClientFourzy game)
+        public Coroutine StartGame(IClientFourzy game)
         {
             switch (game._Type)
             {
@@ -211,9 +226,7 @@ namespace Fourzy
 
             //if gameplay scene is already opened, just load game
             if (activeGame != null)
-            {
                 GamePlayManager.instance.LoadGame(game);
-            }
             else
             {
                 if (isMainMenuLoaded)
@@ -223,6 +236,8 @@ namespace Fourzy
             }
 
             activeGame = game;
+
+            return StartRoutine("startingGame", StartingGameRoutine());
         }
 
         /// <summary>
@@ -249,11 +264,9 @@ namespace Fourzy
         public void OpenMainMenu()
         {
             //unload gameplay scene 
-            if (activeGame != null)
-                GamePlayManager.instance.UnloadGamePlayScreen();
+            if (activeGame != null) GamePlayManager.instance.UnloadGamePlayScreen();
 
-            if (!isMainMenuLoaded)
-                SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
+            if (!isMainMenuLoaded) SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
         }
 
         public void OnPurchaseComplete(Product product)
@@ -306,10 +319,14 @@ namespace Fourzy
 
                     AudioHolder.instance.StopBGAudio(AudioTypes.BG_MAIN_MENU, .5f);
 
-                    onGameplaySceneLoaded?.Invoke();
+                    break;
+
+                case Constants.MAIN_MENU_SCENE_NAME:
 
                     break;
             }
+
+            onSceneChanged?.Invoke(scene.name);
         }
 
         private void OnSceneUnloaded(Scene scene)
@@ -332,6 +349,8 @@ namespace Fourzy
 
                     break;
             }
+
+            onSceneChanged?.Invoke(SceneManager.GetActiveScene().name);
         }
 
         private void FirebaseUpdate()
@@ -566,6 +585,11 @@ namespace Fourzy
             GetRemoteSettings();
         }
 
+        private IEnumerator StartingGameRoutine()
+        {
+            while (!GamePlayManager.instance || !GamePlayManager.instance.isBoardReady) yield return null;
+        }
+
         [System.Serializable]
         public class PuzzleData
         {
@@ -594,6 +618,12 @@ namespace Fourzy
             SELECTED_VARIATION,
             SELECTED_RANDOM,
             RANDOM,
+        }
+
+        public enum PlacementStyle
+        {
+            DEFAULT,
+            DEMO_STYLE,
         }
     }
 }

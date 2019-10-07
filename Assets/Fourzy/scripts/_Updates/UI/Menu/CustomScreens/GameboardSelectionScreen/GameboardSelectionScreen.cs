@@ -37,20 +37,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             toggleGroup = GetComponent<ToggleGroup>();
         }
 
-        protected override void Start()
-        {
-            base.Start();
-
-            gameboards = GameContentManager.Instance.passAndPlayGameboards;
-            gameboardWidgets = new List<MiniGameboardWidget>();
-
-            //spawn random one
-            //select first one
-            SetGame(Instantiate(miniGameboardPrefab, gameboardsParent));
-
-            StartRoutine("initializeBoards", InitializeRoutine());
-        }
-
         protected void OnDisable()
         {
             wasDisabled = true;
@@ -71,7 +57,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         lastInstantiatedIndex++;
 
                         CancelRoutine("initializeBoards");
-                        StartRoutine("initializeBoards", InitializeRoutine());
+                        StartRoutine("initializeBoards", InstantiateBoards());
                     }, null);
                 }
             }
@@ -108,7 +94,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GameManager.Instance.StartGame(game);
         }
 
-        private IEnumerator InitializeRoutine()
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            gameboards = GameContentManager.Instance.passAndPlayGameboards;
+            gameboardWidgets = new List<MiniGameboardWidget>();
+
+            //spawn random one
+            //select first one
+            SetGame(Instantiate(miniGameboardPrefab, gameboardsParent));
+
+            StartRoutine("initializeBoards", InstantiateBoards());
+        }
+
+        private IEnumerator InstantiateBoards()
         {
             while (lastInstantiatedIndex < gameboards.Count)
             {

@@ -9,9 +9,6 @@ namespace Fourzy._Updates.UI.Camera3D
     {
         public Vector2 size;
         public SpriteRenderer bg;
-
-        public float left { get; set; }
-        public float right { get; set; }
         
 
         //editor thingis

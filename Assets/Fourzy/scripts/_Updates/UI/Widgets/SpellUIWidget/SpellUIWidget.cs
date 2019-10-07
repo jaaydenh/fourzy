@@ -15,7 +15,6 @@ namespace Fourzy._Updates.UI.Widgets
         public AudioTypes unavailableSfx = AudioTypes.NEGATIVE;
 
         private TokensDataHolder.TokenData data;
-        private ButtonExtended button;
         private SpellsListUIWidget spellsList;
 
         public int timesUsed { get; private set; }
@@ -33,7 +32,7 @@ namespace Fourzy._Updates.UI.Widgets
             UpdateWidget(spellsList.game._State.ActivePlayerId);
         }
 
-        public void ToggleState()
+        public void OnTap()
         {
             if (state == SpellState.UNAVAILABLE) return;
 
@@ -129,13 +128,6 @@ namespace Fourzy._Updates.UI.Widgets
                     selectedBG.PlayForward(true);
                     break;
             }
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            button = GetComponent<ButtonExtended>();
         }
 
         public enum SpellState

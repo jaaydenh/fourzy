@@ -61,6 +61,15 @@ namespace Fourzy._Updates.ClientModel
             set => _progressionIconSet = value;
         }
 
+        public bool lastInPack
+        {
+            get
+            {
+                if (!pack) return true;
+                else return pack.enabledPuzzlesData.IndexOf(this) == pack.enabledPuzzlesData.Count - 1;
+            }
+        }
+
         public ClientPuzzleData()
         {
             availableSpells = new SpellId[0];
@@ -97,20 +106,16 @@ namespace Fourzy._Updates.ClientModel
             else
                 startingMagic = FourzyGameModel.Model.Constants.PlayerStartingMagic;
 
-            if (aiProfile != AIProfile.Player)
+            if (string.IsNullOrEmpty(aiPlayerName)) aiPlayerName = "AI";
+            if (string.IsNullOrEmpty(herdID)) herdID = "1";
+
+            if (pack)
             {
-                if (string.IsNullOrEmpty(aiPlayerName)) aiPlayerName = "AI";
-                if (string.IsNullOrEmpty(herdID)) herdID = "1";
-
-                if (pack)
-                {
-                    aiPlayerName = string.IsNullOrEmpty(pack.aiPlayerName) ? aiPlayerName : pack.aiPlayerName;
-                    herdID = string.IsNullOrEmpty(pack.herdID) ? herdID : pack.herdID;
-                }
-
-                PuzzlePlayer = new Player(2, aiPlayerName, aiProfile) { HerdId = herdID };
-
+                aiPlayerName = string.IsNullOrEmpty(pack.aiPlayerName) ? aiPlayerName : pack.aiPlayerName;
+                herdID = string.IsNullOrEmpty(pack.herdID) ? herdID : pack.herdID;
             }
+
+            PuzzlePlayer = new Player(2, aiPlayerName, aiProfile) { HerdId = herdID };
 
             GetInstructions();
         }

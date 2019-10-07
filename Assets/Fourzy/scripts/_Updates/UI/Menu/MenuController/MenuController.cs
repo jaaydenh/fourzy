@@ -19,6 +19,7 @@ namespace Fourzy._Updates.UI.Menu
 
         public Camera _camera;
         public bool closeCurrentOnOpen = false;
+        public RectTransform newScreensParent;
         public MenuScreen[] extraScreens;
 
         public List<MenuScreen> screens { get; protected set; }
@@ -30,13 +31,12 @@ namespace Fourzy._Updates.UI.Menu
 
         public float widthScaled { get; private set; }
         public float heightScaled { get; private set; }
+        public bool initialized { get; private set; }
 
         public float widthRatioAdjusted => Mathf.Lerp(1f, Screen.width / widthScaled, canvaseScaler.matchWidthOrHeight);
         public float heightRatioAdjusted => Mathf.Lerp(1f, Screen.height / heightScaled, 1f - canvaseScaler.matchWidthOrHeight);
         public float widthAdjusted => canvaseScaler.referenceResolution.x * widthRatioAdjusted;
         public float heightAdjusted => canvaseScaler.referenceResolution.y * heightRatioAdjusted;
-
-        private bool initialized = false;
 
         //editor version of widthAdjusted
         public float _widthAdjusted
@@ -68,9 +68,7 @@ namespace Fourzy._Updates.UI.Menu
 
         protected virtual void Start()
         {
-            initialized = true;
-
-            ExecuteMenuEvent();
+            StartCoroutine(InitializedRoutine());
         }
 
         protected virtual void OnDestroy()
@@ -154,8 +152,7 @@ namespace Fourzy._Updates.UI.Menu
                     return;
                 }
 
-            if (addIfNotExists)
-                OpenScreen(AddScreen<T>());
+            if (addIfNotExists) OpenScreen(AddScreen<T>());
         }
 
         public void OpenScreen(int index) => OpenScreen(screens[index]);
@@ -181,10 +178,9 @@ namespace Fourzy._Updates.UI.Menu
 
         public T AddScreen<T>(MenuScreen prefab) where T : MenuScreen
         {
-            if (!prefab)
-                return null;
+            if (!prefab) return null;
 
-            MenuScreen newScreen = Instantiate(prefab, transform);
+            MenuScreen newScreen = Instantiate(prefab, newScreensParent == null ? transform : newScreensParent);
 
             newScreen.transform.localScale = Vector3.one;
             screens.Add(newScreen);
@@ -203,8 +199,7 @@ namespace Fourzy._Updates.UI.Menu
             {
                 MenuScreen screenPrefab = pair.prefab.GetComponent<T>();
 
-                if (screenPrefab)
-                    return AddScreen<T>(screenPrefab);
+                if (screenPrefab) return AddScreen<T>(screenPrefab);
             }
 
             return null;
@@ -233,13 +228,13 @@ namespace Fourzy._Updates.UI.Menu
             {
                 if (currentScreen) currentScreen.Open();
 
-                ExecuteMenuEvent();
+                ExecuteMenuEvents();
             }
 
             if (_camera) _camera.gameObject.SetActive(state);
         }
 
-        public void ExecuteMenuEvent()
+        public void ExecuteMenuEvents()
         {
             if (!menuEvents.ContainsKey(name)) menuEvents.Add(name, new MenuEvents());
 
@@ -263,6 +258,17 @@ namespace Fourzy._Updates.UI.Menu
         }
 
         protected virtual void OnInvokeMenuEvents(MenuEvents events) { }
+
+        protected virtual void OnInitialized() { }
+
+        private IEnumerator InitializedRoutine()
+        {
+            while (!screens.TrueForAll(screen => screen.initialized)) yield return null;
+            initialized = true;
+            OnInitialized();
+
+            ExecuteMenuEvents();
+        }
 
         private IEnumerator InvokeMenuEvents(MenuEvents events)
         {

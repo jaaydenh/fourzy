@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayTutorials: 1
-  forceDisplayTutorials: 0
+  forceDisplayTutorials: 1
   showInfoToasts: 1
   debugMessages: 1
   extraFeatures: 1
@@ -518,11 +518,6 @@ MonoBehaviour:
     - _name: MINI_GAME_BOARD
       prefabType: 7
       prefab: {fileID: 1001685059054880, guid: 753eac7ea7c84784484fb0e32473bd24, type: 3}
-  tutorials:
-    list:
-    - _name: Onboarding
-      previousState: 0
-      data: {fileID: 11400000, guid: aa23826f58209b047afdcbdfbff648b4, type: 2}
   screens:
     list:
     - _name: OnboardingScreen
@@ -560,6 +555,9 @@ MonoBehaviour:
         type: 3}
     - _name: NewsPromptScreen
       prefab: {fileID: 6082271716224161652, guid: 168c5ee4c57bfe84fae5edd475e2f554,
+        type: 3}
+    - _name: PuzzleSelectionScreen
+      prefab: {fileID: 748917514867771918, guid: 6c3a261672c02cf42a05a18d13c5889b,
         type: 3}
 --- !u!1 &1527524902537866
 GameObject:

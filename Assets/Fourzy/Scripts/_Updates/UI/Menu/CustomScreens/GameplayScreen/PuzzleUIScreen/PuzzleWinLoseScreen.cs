@@ -102,9 +102,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 puzzleStateText.text = "Failed";
                 puzzleStateText.color = loseColor;
             }
-
-            yield return null;
-            yield break;
         }
     }
 }

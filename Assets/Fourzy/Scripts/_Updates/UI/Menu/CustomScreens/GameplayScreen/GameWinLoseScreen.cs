@@ -20,7 +20,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameObject buttonsRow;
         public ButtonExtended nextGameButton;
         public ButtonExtended rematchButton;
-        public ButtonExtended backButton;
+        //public ButtonExtended continueButton;
 
         public AlphaTween tapToContinue;
 
@@ -29,13 +29,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private bool showButtonRow = false;
 
         private List<GamePieceView> gamePieces = new List<GamePieceView>();
-
-        protected override void Start()
-        {
-            base.Start();
-
-            turnBasedTab = menuController.GetScreen<TurnBaseScreen>();
-        }
 
         public void Open(IClientFourzy game)
         {
@@ -78,7 +71,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             tapToContinue.AtProgress(0f);
-            if (RewardsScreen.WillDisplayRewardsScreen(game))
+            if (RewardsScreen.WillDisplayRewardsScreen(game) || game.puzzleData)
             {
                 //display 'tap to continue'
                 tapToContinue.PlayForward(true);
@@ -139,8 +132,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
 
-                case GameType.PASSANDPLAY:
-                    //load next passplay game
+                default:
                     GamePlayManager.instance.LoadGame(game.Next());
 
                     break;
@@ -153,7 +145,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (rematchButton.gameObject.activeInHierarchy) Rematch();
             else if (nextGameButton.gameObject.activeInHierarchy) NextGame();
-            else GamePlayManager.instance.gameplayScreen.OnBack();
+            else
+            {
+                if (game.puzzleData && !game.puzzleData.lastInPack)
+                    menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                else
+                    GamePlayManager.instance.gameplayScreen.OnBack();
+            }
         }
 
         private void SetButtonRowState(bool value)
@@ -162,62 +160,55 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (value)
             {
-                //next button
-                switch (game._Type)
-                {
-                    //no 'next' for realtime/ai games
-                    case GameType.REALTIME:
-                    case GameType.AI:
-                    case GameType.PRESENTATION:
-                        nextGameButton.SetActive(false);
+                //if (game.puzzleData)
+                //{
+                //    continueButton.SetActive(true);
+                //}
+                //else
+                //{
+                    //next button
+                    switch (game._Type)
+                    {
+                        case GameType.TURN_BASED:
+                            nextGameButton.SetActive(turnBasedTab.nextChallenge != null);
 
-                        break;
+                            break;
 
-                    case GameType.TURN_BASED:
-                        nextGameButton.SetActive(turnBasedTab.nextChallenge != null);
+                        default:
+                            nextGameButton.SetActive(false);
 
-                        break;
+                            break;
+                    }
 
-                    case GameType.PASSANDPLAY:
-                        //nextGameButton.SetActive(true);
+                    //rematch button
+                    switch (game._Type)
+                    {
+                        case GameType.REALTIME:
+                        case GameType.PRESENTATION:
+                            rematchButton.SetActive(false);
 
-                        break;
-                }
+                            break;
 
-                //rematch button
-                switch (game._Type)
-                {
-                    case GameType.REALTIME:
-                    case GameType.PRESENTATION:
-                        rematchButton.SetActive(false);
+                        default:
+                            rematchButton.SetActive(true);
 
-                        break;
-
-                    default:
-                        rematchButton.SetActive(true);
-
-                        break;
-                }
+                            break;
+                    }
+                //}
             }
             else
             {
                 nextGameButton.SetActive(false);
                 rematchButton.SetActive(false);
+                //continueButton.SetActive(false);
             }
+        }
 
-            //back button
-            switch (game._Type)
-            {
-                case GameType.PRESENTATION:
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
 
-                    break;
-
-                default:
-                    //set back button state
-                    backButton.SetActive(!nextGameButton.gameObject.activeInHierarchy && !rematchButton.gameObject.activeInHierarchy);
-
-                    break;
-            }
+            turnBasedTab = menuController.GetScreen<TurnBaseScreen>();
         }
     }
 }

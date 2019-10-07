@@ -4,6 +4,7 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics._Vfx;
+using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Threading;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
@@ -33,7 +34,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public Action<IClientFourzy> onGameFinished;
         public Action<IClientFourzy> onDraw;
         public Action<ClientPlayerTurn> onMoveStarted;
-        public Action<ClientPlayerTurn> onMoveEnded;
+        public Action<ClientPlayerTurn, PlayerTurnResult> onMoveEnded;
         public Action onCastCanceled;
         public Action<SpellId, int> onCast;
         public Action onWrongTurn;
@@ -78,8 +79,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             base.Awake();
 
-            if (!bitsParent)
-                bitsParent = transform;
+            if (!bitsParent) bitsParent = transform;
 
             boxCollider2D = GetComponent<BoxCollider2D>();
             rectTransform = GetComponent<RectTransform>();
@@ -97,18 +97,10 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (selectedBoardLocation != null && (holdTimer -= Time.deltaTime) <= 0f) OnMove();
 
-            if (interactable)
-            {
-                //cheats
-                if (Input.GetKeyDown(KeyCode.P))
-                {
-                    BoardLocation location = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.localPosition);
-
-                    //drop gamepiece at location
-                    model._State.Board.AddPiece(model.activePlayerPiece, location);
-                    SpawnPiece(location.Row, location.Column, (PlayerEnum)model._State.ActivePlayerId);
-                }
-            }
+#if UNITY_EDITOR
+            //cheats
+            if (interactable) if (Input.GetKeyDown(KeyCode.P)) DropPiece(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+#endif
         }
 
         protected void OnDestroy()
@@ -133,37 +125,48 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (!interactable) return;
 
-            if (selectedBoardLocation != null)
+            switch (GameManager.Instance.placementStyle)
             {
-                if (!CAN_CANCEL_TAP) return;
+                case GameManager.PlacementStyle.DEFAULT:
+                    if (selectedBoardLocation != null)
+                    {
+                        if (!CAN_CANCEL_TAP) return;
 
-                selectedBoardLocation = null;
-                moveArrow._Reset();
-                return;
-            }
+                        selectedBoardLocation = null;
+                        moveArrow._Reset();
+                        return;
+                    }
 
-            touched = true;
-            tapStartTime = Time.time;
+                    touched = true;
+                    tapStartTime = Time.time;
 
-            switch (actionState)
-            {
-                case BoardActionState.SIMPLE_MOVE:
-                    CheckMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true);
+                    switch (actionState)
+                    {
+                        case BoardActionState.SIMPLE_MOVE:
+                            CheckMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true);
+
+                            break;
+
+                        case BoardActionState.CAST_SPELL:
+                            List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(model._State.Board, new HexSpell(0, new BoardLocation()));
+
+                            BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+
+                            if (!locationsList.Contains(touchLocation))
+                                onCastCanceled?.Invoke();
+                            else
+                                CastSpell(touchLocation, activeSpell);
+
+                            actionState = BoardActionState.SIMPLE_MOVE;
+                            HideHintArea(HintAreaAnimationPattern.DIAGONAL);
+                            break;
+                    }
 
                     break;
 
-                case BoardActionState.CAST_SPELL:
-                    List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(model._State.Board, new HexSpell(0, new BoardLocation()));
+                case GameManager.PlacementStyle.DEMO_STYLE:
+                    DropPiece(Camera.main.ScreenToWorldPoint(position));
 
-                    BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
-
-                    if (!locationsList.Contains(touchLocation))
-                        onCastCanceled?.Invoke();
-                    else
-                        CastSpell(touchLocation, activeSpell);
-
-                    actionState = BoardActionState.SIMPLE_MOVE;
-                    HideHintArea(HintAreaAnimationPattern.DIAGONAL);
                     break;
             }
         }
@@ -933,6 +936,17 @@ namespace Fourzy._Updates.Mechanics.Board
             foreach (BoardLocation key in hintBlocks.Keys) hintBlocks[key].SetColliderState(affected.Contains(key));
         }
 
+        private void DropPiece(Vector2 worldPoint)
+        {
+            BoardLocation location = Vec2ToBoardLocation(worldPoint - (Vector2)transform.localPosition);
+
+            if (BoardBitAt<GamePieceView>(location)) return;
+
+            //drop gamepiece at location
+            model._State.Board.AddPiece(model.activePlayerPiece, location);
+            SpawnPiece(location.Row, location.Column, (PlayerEnum)model._State.ActivePlayerId);
+        }
+
         private void AddIMoveToTurn(IMove move)
         {
             if (turn == null)
@@ -1165,6 +1179,19 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         break;
 
+                    case GameActionType.PASS:
+                        float turnPassDuration = 1.8f;
+
+                        //show message
+                        GamePlayManager.instance.gameplayScreen.ShowOpponentMessage("Turn pass..", turnPassDuration - .22f);
+
+                        //use some delay
+                        yield return new WaitForSeconds(turnPassDuration);
+
+                        actionIndex++;
+
+                        break;
+
                     default:
                         actionIndex++;
 
@@ -1231,7 +1258,7 @@ namespace Fourzy._Updates.Mechanics.Board
             boardBits.ForEach(bit => { if (bit.active) bit.OnAfterTurn(); });
 
             //invoke onMoveEnded
-            onMoveEnded?.Invoke(turn);
+            onMoveEnded?.Invoke(turn, turnResults);
 
             //update hint blocks
             UpdateHintArea();
@@ -1338,8 +1365,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     break;
             }
-
-            yield break;
         }
 
         private IEnumerator HideHintBlocksAnimation(HintAreaAnimationPattern pattern)
@@ -1385,8 +1410,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     break;
             }
-
-            yield break;
         }
 
         public IEnumerator CreateBitsRoutine(bool clear = true, bool delay = false)

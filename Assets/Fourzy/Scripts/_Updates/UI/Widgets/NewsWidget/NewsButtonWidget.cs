@@ -6,8 +6,6 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class NewsButtonWidget : WidgetBase
     {
-        protected ButtonExtended button;
-
         protected override void Awake()
         {
             base.Awake();
@@ -20,13 +18,6 @@ namespace Fourzy._Updates.UI.Widgets
             base._Update();
 
             OnNewsFetched();
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            button = GetComponent<ButtonExtended>();
         }
 
         private void OnNewsFetched()

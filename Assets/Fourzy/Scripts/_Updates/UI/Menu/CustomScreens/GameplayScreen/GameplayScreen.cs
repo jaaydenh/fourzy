@@ -7,7 +7,6 @@ using FourzyGameModel.Model;
 using StackableDecorator;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -15,6 +14,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public PlayerUIWidget playerWidget;
         public PlayerUIWidget opponentWidget;
+        //public PlayerUIMessagesWidget playerMessagesWidget;
+        public PlayerUIMessagesWidget opponentMessagesWidget;
         public GameInfoWidget gameInfoWidget;
 
         public List<TimerSliderWidget> timerWidgets;
@@ -134,19 +135,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             #region Check AI move
 
-            switch (game._Type)
-            {
-                case GameType.AI:
-                case GameType.PRESENTATION:
-                case GameType.PUZZLE:
-                    gameInfoWidget.Hide(.3f);
+            //switch (game._Type)
+            //{
+            //    case GameType.AI:
+            //    case GameType.PRESENTATION:
+            //    case GameType.PUZZLE:
+            //        gameInfoWidget.Hide(.3f);
 
-                    break;
-            }
+            //        break;
+            //}
 
             #endregion
 
             spellsListWidget.Open(game, gameplayManager.board, game.me);
+        }
+
+        public void ShowOpponentMessage(string message, float duration)
+        {
+            opponentMessagesWidget.AddMessage(message, duration);
         }
 
         public void OnWrongTurn()
@@ -201,7 +207,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             #endregion
         }
 
-        public void OnMoveEnded(ClientPlayerTurn turn)
+        public void OnMoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult)
         {
             if (game == null) return;
 
@@ -216,17 +222,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             #region Checking AI turn
 
-            switch (game._Type)
-            {
-                case GameType.AI:
-                //case GameType.PRESENTATION:
-                case GameType.PUZZLE:
-                    //if waiting more than (time), show "thinking..."
-                    //if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").ShowDelayed(time: .6f);
-                    if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").Show(.3f);
+            //if (!turnResult.Activity.Any(action => action.Type == GameActionType.PASS))
+                switch (game._Type)
+                {
+                    case GameType.AI:
+                    //case GameType.PRESENTATION:
+                    //case GameType.PUZZLE:
+                        //if waiting more than (time), show "thinking..."
+                        //if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").ShowDelayed(time: .6f);
+                        if (!game.isMyTurn) ShowOpponentMessage("Thinking...", 1f);
 
-                    break;
-            }
+                        break;
+                }
 
             #endregion
 
@@ -300,12 +307,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     opponentWidget.StartWinJumps();
             }
 
-            if (game.puzzleData != null)
+            if (game.puzzleData)
             {
                 puzzleUI.GameComplete();
 
                 //open puzzle win/lose screen
-                puzzleWinLoseScreen.Open(game);
+                if (game.isFourzyPuzzle)
+                    puzzleWinLoseScreen.Open(game);
+                else
+                    gameWinLoseScreen.Open(game);
             }
             else
             {
@@ -350,15 +360,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             #region Check AI move
 
-            switch (game._Type)
-            {
-                case GameType.AI:
-                case GameType.PRESENTATION:
-                case GameType.PUZZLE:
-                    gameInfoWidget.Hide(.3f);
+            //switch (game._Type)
+            //{
+            //    case GameType.AI:
+            //    case GameType.PRESENTATION:
+            //    case GameType.PUZZLE:
+            //        gameInfoWidget.Hide(.3f);
 
-                    break;
-            }
+            //        break;
+            //}
 
             #endregion
         }
@@ -397,7 +407,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private IEnumerator WaitForTapRoutine()
         {
             while (!isCurrent) yield return null;
-            yield break;
         }
     }
 }

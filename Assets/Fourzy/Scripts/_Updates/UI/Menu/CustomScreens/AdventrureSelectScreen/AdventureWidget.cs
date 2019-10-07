@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.UI.Camera3D;
-using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
 using TMPro;
 
@@ -13,8 +12,6 @@ namespace Fourzy._Updates.UI.Widgets
         public TMP_Text completeField;
 
         public Camera3dItemProgressionMap map { get; private set; }
-
-        protected ButtonExtended button { get; private set; }
 
         public AdventureWidget SetData(Camera3dItemProgressionMap data)
         {
@@ -53,13 +50,6 @@ namespace Fourzy._Updates.UI.Widgets
         {
             //select
             menuScreen.menuController.GetScreen<ProgressionMapScreen>().Open(map);
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            button = GetComponent<ButtonExtended>();
         }
     }
 }
