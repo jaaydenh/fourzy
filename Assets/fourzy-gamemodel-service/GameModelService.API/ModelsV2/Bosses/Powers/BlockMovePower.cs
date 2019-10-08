@@ -27,27 +27,38 @@ namespace FourzyGameModel.Model
 
         public BlockMovePower(GameState State, SimpleMove MoveToBlock)
         {
-            this.BlockLocation = new BoardLocation(MoveToBlock, State.Board);
+            this.BlockLocation = TurnEvaluator.FirstLocation(MoveToBlock, State.Board);
         }
 
 
         public bool Activate(GameState State)
         {
+            //For now, do not allow blocker on a corner.
+            //  Maybe if we eventually allow a corner move.
+            if (State.Board.Corners.Contains(BlockLocation)) return false;
+
             BoardSpace Target = State.Board.ContentsAt(BlockLocation);
-            if (Target.ContainsPiece) return false;
-            if (!Target.ContainsOnlyTerrain) return false;
+
+            //if (Target.ContainsPiece) return false;
+            //if (!Target.ContainsOnlyTerrain) return false;
 
             List<IToken> Blockers = State.Board.FindTokens(TokenType.MOVE_BLOCKER);
-            foreach (BoardLocation l in State.Board.Edges)
+            foreach (IToken b in Blockers)
             {
-                if (State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER))
-                {
-                    MoveBlockerToken RemoveToken = (MoveBlockerToken)State.Board.ContentsAt(l).FindTokens(TokenType.MOVE_BLOCKER).First();
-
-                    State.Board.RecordGameAction(new GameActionTokenRemove(l, TransitionType.BOSS_POWER, RemoveToken));
-                    State.Board.ContentsAt(l).RemoveTokens(TokenType.MOVE_BLOCKER);
-                }
+                State.Board.RecordGameAction(new GameActionTokenRemove(b.Space.Location, TransitionType.BOSS_POWER, b));
+                State.Board.ContentsAt(b.Space.Location).RemoveTokens(TokenType.MOVE_BLOCKER);
             }
+
+            //foreach (BoardLocation l in State.Board.Edges)
+            //{
+            //    if (State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER))
+            //    {
+            //        MoveBlockerToken RemoveToken = (MoveBlockerToken)State.Board.ContentsAt(l).FindTokens(TokenType.MOVE_BLOCKER).First();
+
+            //        State.Board.RecordGameAction(new GameActionTokenRemove(l, TransitionType.BOSS_POWER, RemoveToken));
+            //        State.Board.ContentsAt(l).RemoveTokens(TokenType.MOVE_BLOCKER);
+            //    }
+            //}
             MoveBlockerToken t = new MoveBlockerToken();
             t.Space = State.Board.ContentsAt(BlockLocation);
             State.Board.AddToken(t, BlockLocation);

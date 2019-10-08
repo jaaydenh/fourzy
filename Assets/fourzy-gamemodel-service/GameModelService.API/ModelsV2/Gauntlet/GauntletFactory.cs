@@ -64,10 +64,9 @@ namespace FourzyGameModel.Model
             {
                 case 0:
                     Opponent.Profile = AIPlayerFactory.RandomProfile(AIDifficulty.Pushover);
-                    Opponent.Profile = AIProfile.AggressiveAI;
                     Recipe = Random.RandomItem(
                         new List<string>() { "Empty1", "Empty2", "Empty3", "Empty4",
-                            "Center", "Simple1", "Simple2", "Simple3", 
+                            "Center", "Simple1", "Simple2", "Simple3",
                             "CenterLineOfFour1", "CenterLineOfFour2", "CenterLineOfFour3",
                             "OneFullLineOfGoop", "OneFullLineOfFruit"});
 

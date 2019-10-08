@@ -26,21 +26,28 @@ namespace FourzyGameModel.Model
             if (AI.WinningTurns.Count > 0) return AI.WinningTurns.First();
 
             List<SimpleMove> OkMoves = AI.GetTopOkMoves(6);
-
             //Flag if no non-winning moves.
             bool Desparate = false;
+
             if (OkMoves == null)
             {
                 Desparate = true;
-                OkMoves = new List<SimpleMove>();
-                OkMoves.Add(AI.GetBestLostCauseMove());
             }
+
+            if (!Desparate && Boss.UseCustomAI)
+                return Boss.GetTurn(EvalState);
+
+            //if (Desparate)
+            //{
+            //    OkMoves = new List<SimpleMove>();
+            //    OkMoves.Add(AI.GetBestLostCauseMove());
+            //}
             List<IMove> Powers = Boss.GetPossibleActivations(EvalState, Desparate);
             
             if (Desparate)
             {
                 List<PlayerTurn> OkBossTurns = BossAIHelper.FindOkMove(EvalState, AI.AvailableSimpleMoves, Powers, 1);
-                if (OkBossTurns.Count == 0) return new PlayerTurn(OkMoves.First());
+                if (OkBossTurns.Count == 0) return new PlayerTurn(AI.GetBestLostCauseMove());
                 if (OkBossTurns.Count >= 1) return OkBossTurns.First();
             }
 

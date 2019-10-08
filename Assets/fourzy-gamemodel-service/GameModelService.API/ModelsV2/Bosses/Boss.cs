@@ -9,6 +9,7 @@ namespace FourzyGameModel.Model
     {
         string Name { get; }
         List <IBossPower> Powers { get; }
+        bool UseCustomAI { get;  }
 
         bool StartGame(GameState State);
 
@@ -20,5 +21,6 @@ namespace FourzyGameModel.Model
         bool TriggerBossLoss(GameState State);
         
         List<IMove> GetPossibleActivations(GameState State, bool IsDesparate);
+        PlayerTurn GetTurn(GameState State);
     }
 }
