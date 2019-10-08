@@ -29,7 +29,7 @@ namespace FourzyGameModel.Model
         TreeCharm,
         PlantTree,
         GhostCharm,
-        BustAMove,
+        DoubleBlock,
         EarthCharm,
         BlockASide,
         FillHole,

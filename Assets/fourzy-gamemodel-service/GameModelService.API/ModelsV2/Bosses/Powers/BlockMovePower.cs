@@ -8,7 +8,7 @@ namespace FourzyGameModel.Model
     public class BlockMovePower : IBossPower, IMove
     {
         public string Name { get { return "Block Move"; } }
-        public BossPowerType PowerType { get { return BossPowerType.BustAMove; } }
+        public BossPowerType PowerType { get { return BossPowerType.DoubleBlock; } }
         public MoveType MoveType { get { return MoveType.BOSSPOWER; } }
 
         public string Notation { get { return Name; } }
@@ -64,89 +64,80 @@ namespace FourzyGameModel.Model
             State.Board.AddToken(t, BlockLocation);
             State.Board.RecordGameAction(new GameActionBossPower(this));
             State.Board.RecordGameAction(new GameActionTokenDrop(t, TransitionType.BOSS_POWER, BlockLocation, BlockLocation));
-            
+
             return true;
         }
 
         //Should always be true. Otherwise, game would be a draw.
-        public bool IsAvailable(GameState State, bool IsDesparate=false)
+        public bool IsAvailable(GameState State, bool IsDesparate = false)
         {
             return true;
         }
 
+        //NEED TO DO THIS DIFFERENTLY...  I DON'T THINK THIS WORKS TOO WELL.
         public List<IMove> GetPossibleActivations(GameState State, bool IsDesparate = false)
         {
             List<IMove> Powers = new List<IMove>();
             Player Boss = BossAIHelper.GetBoss(State);
             int Count = State.Board.FindPieces(Boss.PlayerId).Count;
             bool Found = false;
-            if (Count<State.Board.Rows)
+            if (Count < State.Board.Rows)
                 switch (Count % 4)
                 {
                     case 0:
-                        for (int c=1;c<State.Board.Columns-2; c++)
+                        for (int c = 1; c < State.Board.Columns - 2; c++)
                         {
                             BoardLocation l = new BoardLocation(0, c);
-                        if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER)
-                                && !State.Board.ContentsAt(l).ContainsPiece
-                                && State.Board.ContentsAt(l).ContainsOnlyTerrain)
+                            if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER))
                             {
-                            Powers.Add(new BlockMovePower(l));
-                            Found = true;
+                                Powers.Add(new BlockMovePower(l));
+                                Found = true;
                             }
 
                         }
                         break;
-                case 1:
-                    for (int c = 1; c < State.Board.Columns - 2; c++)
-                    {
-                        BoardLocation l = new BoardLocation(State.Board.Rows-1, c);
-                        if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER)
-                                && !State.Board.ContentsAt(l).ContainsPiece
-                                && State.Board.ContentsAt(l).ContainsOnlyTerrain)
+                    case 1:
+                        for (int c = 1; c < State.Board.Columns - 2; c++)
                         {
-                            Powers.Add(new BlockMovePower(l));
-                            Found = true;
-                        }
+                            BoardLocation l = new BoardLocation(State.Board.Rows - 1, c);
+                            if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER))
+                            {
+                                Powers.Add(new BlockMovePower(l));
+                                Found = true;
+                            }
 
-                    }
-                    break;
-                case 2:
-                    for (int r = 1; r < State.Board.Rows - 2; r++)
-                    {
-                        BoardLocation l = new BoardLocation(r, 0);
-                        if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER)
-                            && !State.Board.ContentsAt(l).ContainsPiece
-                            && State.Board.ContentsAt(l).ContainsOnlyTerrain)
+                        }
+                        break;
+                    case 2:
+                        for (int r = 1; r < State.Board.Rows - 2; r++)
                         {
-                            Powers.Add(new BlockMovePower(l));
-                            Found = true;
-                        }
+                            BoardLocation l = new BoardLocation(r, 0);
+                            if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER))
+                            {
+                                Powers.Add(new BlockMovePower(l));
+                                Found = true;
+                            }
 
-                    }
-                    break;
-                case 3:
-                    for (int r = 1; r < State.Board.Rows - 2; r++)
-                    {
-                        BoardLocation l = new BoardLocation(r, State.Board.Columns-1);
-                        if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER)
-                                && !State.Board.ContentsAt(l).ContainsPiece
-                                && State.Board.ContentsAt(l).ContainsOnlyTerrain)
+                        }
+                        break;
+                    case 3:
+                        for (int r = 1; r < State.Board.Rows - 2; r++)
                         {
-                            Powers.Add(new BlockMovePower(l));
-                            Found = true;
-                        }
+                            BoardLocation l = new BoardLocation(r, State.Board.Columns - 1);
+                            if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER))
+                            {
+                                Powers.Add(new BlockMovePower(l));
+                                Found = true;
+                            }
 
-                    }
-                    break;
-            }
+                        }
+                        break;
+                }
             if (!Found)
             {
                 foreach (BoardLocation l in State.Board.Edges)
                 {
-                    if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER)
-                        && !State.Board.ContentsAt(l).ContainsPiece
-                        && State.Board.ContentsAt(l).ContainsOnlyTerrain)
+                    if (!State.Board.ContentsAt(l).ContainsTokenType(TokenType.MOVE_BLOCKER))
                         Powers.Add(new BlockMovePower(l));
                 }
             }

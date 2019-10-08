@@ -43,7 +43,7 @@ namespace FourzyGameModel.Model
             //    OkMoves.Add(AI.GetBestLostCauseMove());
             //}
             List<IMove> Powers = Boss.GetPossibleActivations(EvalState, Desparate);
-            
+
             if (Desparate)
             {
                 List<PlayerTurn> OkBossTurns = BossAIHelper.FindOkMove(EvalState, AI.AvailableSimpleMoves, Powers, 1);
@@ -51,7 +51,7 @@ namespace FourzyGameModel.Model
                 if (OkBossTurns.Count >= 1) return OkBossTurns.First();
             }
 
-            PlayerTurn TopBossTurn = BossAIHelper.GetBestBossTurn(EvalState, OkMoves, Powers); 
+            PlayerTurn TopBossTurn = BossAIHelper.GetBestBossTurn(EvalState, OkMoves, Powers);
             return TopBossTurn;
         }
 

@@ -45,24 +45,29 @@ namespace FourzyGameModel.Model
                 GS2.Board.ContentsAt(l).RemoveTokens(TokenType.MOVE_BLOCKER);
             }
 
+            //AI = new AggressiveAI(GS2);
+            //PlayerTurn StopThisTurn = AI.GetTurn();
+            //SimpleMove m = (SimpleMove)StopThisTurn.Moves[0];
+            //Turn.Moves.Add(new BlockMovePower(State, m));
+
+            AITurnEvaluator AITE = new AITurnEvaluator(GS2);
+            AITE.AIHeuristics.IsAggressive = true;
+            List<SimpleMove> MovesToBlock = AITE.GetTopOkMoves(2);
+            bool Blocked = false;
+            if (MovesToBlock != null)
+                if (MovesToBlock.Count > 0)
+                {
+                    Blocked = true;
+                    Turn.Moves.Add(new DoubleBlockPower(State, AITE.GetTopOkMoves(2)));
+                }
+
+            if (!Blocked)
+            {
                 AI = new AggressiveAI(GS2);
                 PlayerTurn StopThisTurn = AI.GetTurn();
                 SimpleMove m = (SimpleMove)StopThisTurn.Moves[0];
                 Turn.Moves.Add(new BlockMovePower(State, m));
-
-            //DOESN'T WORK.  POWER REMOVES PREVIOUS MOVE_TOKENS.
-            //if (Block == 2)
-            //{
-            //    AITurnEvaluator AITE = new AITurnEvaluator(GS2);
-            //    AITE.AIHeuristics.IsAggressive = true;
-            //    Dictionary<SimpleMove, int> MoveInfo = AITE.ScoreMoves();
-            //    MoveInfo = MoveInfo.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            //    for (int i=0; i<Block; i++)
-            //    {
-            //        Turn.Moves.Add(new BlockMovePower(State, MoveInfo.ElementAt(i).Key));
-            //    }
-            //}
-
+            }
 
             return Turn;
         }
@@ -77,7 +82,7 @@ namespace FourzyGameModel.Model
         {
             return true;
         }
-        
+
         public bool TriggerBossWin(GameState State)
         {
             return false;
