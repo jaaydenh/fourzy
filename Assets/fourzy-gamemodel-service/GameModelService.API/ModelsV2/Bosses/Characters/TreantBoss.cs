@@ -10,7 +10,9 @@ namespace FourzyGameModel.Model
         public string Name { get { return "Greenish Beard"; } }
         public List<IBossPower> Powers { get; }
         const int MinStartingTrees = 2;   
-        const int MaxStartingTrees = 6;  
+        const int MaxStartingTrees = 6;
+        public bool UseCustomAI { get { return false; } }
+
 
         public TreantBoss()
         {
@@ -54,6 +56,12 @@ namespace FourzyGameModel.Model
 
             return true;
         }
+
+        public PlayerTurn GetTurn(GameState State)
+        {
+            return null;
+        }
+
 
         public bool TriggerPower(GameState State)
         {

@@ -10,6 +10,8 @@ namespace FourzyGameModel.Model
         public string Name { get { return "Dr Madd"; } }
         public List<IBossPower> Powers { get; }
         public const int NumberOfBombsToHide = 8;
+        public bool UseCustomAI { get { return false; } }
+
 
         public MadBomberBoss()
         {
@@ -48,6 +50,12 @@ namespace FourzyGameModel.Model
 
             return true;
         }
+
+        public PlayerTurn GetTurn(GameState State)
+        {
+            return null;
+        }
+
 
         public bool TriggerPower(GameState State)
         {

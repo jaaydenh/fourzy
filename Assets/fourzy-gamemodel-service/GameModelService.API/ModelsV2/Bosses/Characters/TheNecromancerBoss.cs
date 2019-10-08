@@ -11,6 +11,8 @@ namespace FourzyGameModel.Model
         public List<IBossPower> Powers { get; }
         const int MinStartingGhosts = 4;
         const int MaxStartingGhosts = 12;
+        public bool UseCustomAI { get { return false; } }
+
 
         public NecromancerBoss()
         {
@@ -53,6 +55,12 @@ namespace FourzyGameModel.Model
 
             return true;
         }
+
+        public PlayerTurn GetTurn(GameState State)
+        {
+            return null;
+        }
+
 
         public bool TriggerPower(GameState State)
         {

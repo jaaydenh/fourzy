@@ -11,6 +11,8 @@ namespace FourzyGameModel.Model
         public List<IBossPower> Powers { get; }
         const int MinStartingPits = 2;
         const int MaxStartingPits = 4;
+        public bool UseCustomAI { get { return false; } }
+
 
         public EarthQuakeBoss()
         {
@@ -54,6 +56,12 @@ namespace FourzyGameModel.Model
             }
             return true;
         }
+
+        public PlayerTurn GetTurn(GameState State)
+        {
+            return null;
+        }
+
 
         public bool TriggerPower(GameState State)
         {

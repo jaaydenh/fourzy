@@ -11,6 +11,7 @@ namespace FourzyGameModel.Model
         public List<IBossPower> Powers { get; }
         const int MinStartingArrows = 6;   //too few arrows and boss is too easy
         const int MaxStartingArrows = 12;  //too many arrows and boss has too many combinations to think about.
+        public bool UseCustomAI { get { return false; } }
 
         public DirectionMasterBoss()
         {
@@ -52,6 +53,11 @@ namespace FourzyGameModel.Model
                 }
             }
             return true;
+        }
+
+        public PlayerTurn GetTurn(GameState State)
+        {
+            return null; 
         }
 
         public bool TriggerPower(GameState State)
