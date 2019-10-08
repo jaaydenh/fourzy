@@ -8,5 +8,10 @@ namespace FourzyGameModel.Model
     public class GauntletStatus
     {
         public int FourzyCount { get; set; }
+
+        public GauntletStatus()
+        {
+            FourzyCount = 24;
+        }
     }
 }

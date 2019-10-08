@@ -190,7 +190,7 @@ namespace FourzyGameModel.Model
         public FourzyGame(Player Human, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GauntletStatus Status = null, GameOptions Options = null)
         {
             string SeedString = Guid.NewGuid().ToString();
-            CurrentArea = Area.TRAINING_GARDEN;
+
             this.State = GauntletFactory.Create(Human, GauntletLevel, Status, CurrentArea, DifficultModifier, Options, SeedString);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
@@ -198,6 +198,8 @@ namespace FourzyGameModel.Model
 
 
         #endregion "Constructors"
+
+
 
         public virtual PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn =false )
         {

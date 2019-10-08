@@ -246,6 +246,17 @@ namespace FourzyGameModel.Model
                 switch(m.MoveType)
                 {
                     case MoveType.SIMPLE:
+                        if (EvalState.Options.MovesReduceHerd)
+                        {
+                            if (EvalState.Herds != null) 
+                                if (EvalState.Herds.Count > 0)
+                            if (EvalState.Herds[EvalState.ActivePlayerId].Members.Count < 1 )
+                            {
+                                RecordAction(new GameActionGameEnd(GameEndType.NOPIECES, this.EvalState.WinnerId, null));
+                                RecordAction(new GameActionGameEnd(GameEndType.WIN, this.EvalState.Opponent(this.EvalState.WinnerId), null));
+                            }
+                        }
+
                         if (!ProcessSimpleMove((SimpleMove)m)) return OriginalState;
 
                         break; 

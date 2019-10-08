@@ -2,11 +2,11 @@
 
 namespace FourzyGameModel.Model
 {
-    public class DoctorBotAI : AIPlayer
+    public class SmartBotAI : AIPlayer
     {
         private GameState EvalState { get; set; }
 
-        public DoctorBotAI(GameState State)
+        public SmartBotAI(GameState State)
         {
             this.EvalState = State;
         }
@@ -14,12 +14,10 @@ namespace FourzyGameModel.Model
         public PlayerTurn GetTurn()
         {
             AITurnEvaluator AI = new AITurnEvaluator(EvalState);
-            AI.AIHeuristics.PruneFiveSetup = true;
-            AI.AIHeuristics.LookForSetups = true;
             if (AI.WinningTurns.Count > 0) return AI.WinningTurns.First();
 
-            SimpleMove Move = AI.GetBestOkMovesWithLeastOppScore();
-
+            AI.AIHeuristics.LookForSetups = true;
+            SimpleMove Move = AI.GetRandomOkMove();
             if (Move == null) return new PlayerTurn(AI.GetBestLostCauseMove());
 
             return new PlayerTurn(Move);

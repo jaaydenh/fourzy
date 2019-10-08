@@ -13,6 +13,7 @@ namespace FourzyGameModel.Model
         public Dictionary<int, Herd> Herds;
         public Dictionary<int, ISpell> ActiveSpells;
         public bool ProcessStartOfTurn = false;
+        public GameOptions Options;
 
         [JsonIgnore]
         public List<BoardLocation> ActiveSpaces;
@@ -98,6 +99,8 @@ namespace FourzyGameModel.Model
 
             this.Random = new RandomTools(this);
             this.ActiveSpaces = new List<BoardLocation>();
+
+            this.Options = new GameOptions();
         }
 
         public GameState(GameState OriginalState)
@@ -138,8 +141,8 @@ namespace FourzyGameModel.Model
             {
                 ActiveSpaces.Add(l);
             }
-                
 
+            this.Options = OriginalState.Options;
         }
 
         public GameState()
@@ -149,8 +152,8 @@ namespace FourzyGameModel.Model
             this.ActivePlayerId = 1;
             this.RealTime = false;
             Initialize();
-            this.Players.Add(1, new Player(1, "One"));
-            this.Players.Add(2, new Player(2, "Two"));
+            //this.Players.Add(1, new Player(1, "One"));
+            //this.Players.Add(2, new Player(2, "Two"));
         }
 
         public GameState(int Rows, int Columns, int FirstPlayerId = 1)
@@ -159,8 +162,8 @@ namespace FourzyGameModel.Model
             this.Board.Parent = this;
             this.RealTime = false;
             Initialize();
-            this.Players.Add(1, new Player(1, "One"));
-            this.Players.Add(2, new Player(2, "Two"));
+            //this.Players.Add(1, new Player(1, "One"));
+            //this.Players.Add(2, new Player(2, "Two"));
 
             this.ActivePlayerId = FirstPlayerId;
         }
@@ -173,7 +176,7 @@ namespace FourzyGameModel.Model
             this.RealTime = false;
             Initialize();
             this.Board.Random = this.Random;
-
+            this.Options = Options;
             this.ActivePlayerId = FirstPlayerId;
         }
 
@@ -188,30 +191,31 @@ namespace FourzyGameModel.Model
             this.ActivePlayerId = FirstPlayerId;
         }
 
-        public GameState(string GameStateString, bool Compressed = false)
-        {
-            if (Compressed) GameStateString = Compression.DecompressString(GameStateString);
+        //TO DO: Build a method to take a string and build a game state.
+        //public GameState(string GameStateString, bool Compressed = false)
+        //{
+        //    if (Compressed) GameStateString = Compression.DecompressString(GameStateString);
 
-            //Need to write code to parse GameStateString
+        //    //Need to write code to parse GameStateString
 
-            //this.GameSeed = gameStateData.GameSeed;
-            //this.Herds = gameStateData.Herds;
-            //this.Players = gameStateData.Players;
-            //this.WinnerId = gameStateData.WinnerId;
-            //this.WinningLocations = gameStateData.WinningLocations;
+        //    //this.GameSeed = gameStateData.GameSeed;
+        //    //this.Herds = gameStateData.Herds;
+        //    //this.Players = gameStateData.Players;
+        //    //this.WinnerId = gameStateData.WinnerId;
+        //    //this.WinningLocations = gameStateData.WinningLocations;
 
-            //this.Board = new GameBoard(gameStateData.GameBoardData);
-            //this.GameEffects = gameStateData.GameEffects;
+        //    //this.Board = new GameBoard(gameStateData.GameBoardData);
+        //    //this.GameEffects = gameStateData.GameEffects;
 
-            //this.Board.Parent = this;
-            //// activePlayerId of -1 means the first player is not yet known
-            //this.ActivePlayerId = gameStateData.ActivePlayerId;
-            //this.RealTime = false;
-            //this.UniqueId = Guid.NewGuid().ToString();
-            //this.Time = new Dictionary<int, int>();
+        //    //this.Board.Parent = this;
+        //    //// activePlayerId of -1 means the first player is not yet known
+        //    //this.ActivePlayerId = gameStateData.ActivePlayerId;
+        //    //this.RealTime = false;
+        //    //this.UniqueId = Guid.NewGuid().ToString();
+        //    //this.Time = new Dictionary<int, int>();
 
-            //this.Random = new RandomTools(this);
-        }
+        //    //this.Random = new RandomTools(this);
+        //}
 
 
         private void Initialize()
@@ -225,10 +229,22 @@ namespace FourzyGameModel.Model
             this.Random = new RandomTools(this);
             this.ActiveSpaces = new List<BoardLocation>();
             this.Herds = new Dictionary<int, Herd>();
+            this.Options = new GameOptions();
         }
 
         public void InitializeHerd(int PlayerId, int HerdId, int HerdCount)
         {
+            Herds[PlayerId] = new Herd(HerdId, HerdCount);
+        }
+
+        public void InitializeHerd(int PlayerId, int HerdCount)
+        {
+            int HerdId = 1;
+            try
+            {
+                HerdId = int.Parse(Players[PlayerId].HerdId);
+            }
+            catch { }
             Herds[PlayerId] = new Herd(HerdId, HerdCount);
         }
 

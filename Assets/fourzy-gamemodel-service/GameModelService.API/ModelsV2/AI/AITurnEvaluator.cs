@@ -8,9 +8,12 @@ namespace FourzyGameModel.Model
 {
     public class AITurnEvaluator
     {
+
+
+        #region "Properties and Initialization"
         const int WIN_SCORE_VALUE = 10000000;
         const int LOSS_SCORE_VALUE = -10000000;
-        #region "Properties and Initialization"
+
         public GameState EvalState { get; set; }
         public TurnEvaluator Evaluator { get; set; }
 
@@ -178,6 +181,7 @@ namespace FourzyGameModel.Model
             //Dictionary<SimpleMove, GameState> UniqueMoves = new Dictionary<SimpleMove, GameState>();
             Dictionary<SimpleMove, string> UniqueMoves = new Dictionary<SimpleMove, string>();
 
+            bool Threat = false;
             foreach (SimpleMove m in AvailableSimpleMoves)
             {
                 //Shortcut some processing if piece count is small, which will happen at start of game.
@@ -186,6 +190,7 @@ namespace FourzyGameModel.Model
                 //{
                 //    Moves.Add(m); continue;
                 //}
+
 
                 TurnEvaluator OPP = new TurnEvaluator(Evaluator.EvaluateTurn(new PlayerTurn(m)));
                 if (OPP.EvalState.WinnerId == m.Piece.PlayerId)
@@ -196,9 +201,35 @@ namespace FourzyGameModel.Model
                     UniqueMoves.Add(m, OPP.EvalState.CompressedString);
                     break;
                 }
+
                 if (OPP.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
+
+                if (AIHeuristics.LookForSetups)
+                {
+                    if (IsASetup()) continue;
+                }
+
                 if (OPP.GetFirstWinningMove() == null)
                 {
+                    if (AIHeuristics.IsAggressive)
+                    {
+                        //Don't make a move into a setup.
+
+                        if (IsAThreat())
+                        {
+                            if (!Threat)
+                            {
+                                UniqueMoves.Clear();
+                                Threat = true;
+                            }
+                        }
+                        else
+                        {
+                            //If found a threat, ignore this move.
+                            if (Threat) continue;
+                        }
+                    }
+
                     bool Prune = false;
                     //Moves.Add(m);
                     if (!Prune && !UniqueMoves.ContainsValue(OPP.EvalState.CompressedString)) UniqueMoves.Add(m, OPP.EvalState.CompressedString);
@@ -311,6 +342,7 @@ namespace FourzyGameModel.Model
                 AITurnEvaluator AITE = new AITurnEvaluator(GS);
 
                 //Player can make a move to win. No further analysis.
+
                 if (AITE.EvalState.WinnerId == m.Piece.PlayerId)
                 {
                     Moves.Clear();
@@ -318,13 +350,11 @@ namespace FourzyGameModel.Model
                     break;
                 }
 
-                //TurnEvaluator OPP = new TurnEvaluator(Evaluator.EvaluateTurn(new PlayerTurn(m)));
-                //if (OPP.EvalState.WinnerId == m.Piece.PlayerId)
-                //{
-                //    Moves.Clear();
-                //    Moves.Add(m, WIN_SCORE_VALUE);
-                //    break;
-                //}
+                if (AIHeuristics.LookForSetups)
+                {
+                    //Don't make a move into a setup.
+                    if (IsASetup()) continue;
+                }
 
                 //If make move causes opponent to win, ignore it.
                 if (AITE.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
@@ -334,13 +364,7 @@ namespace FourzyGameModel.Model
                 {
                     Tuple<SimpleMove, int> Top = AITE.TopMoveScore();
 
-                    //    AITurnEvaluator AINext = new AITurnEvaluator(OPP.EvalState, new PlayerTurn(Top.Item1));
                     Moves.Add(m, Top.Item2);
-
-                    //    TurnEvaluator TE = new TurnEvaluator(OPP.EvalState);
-                    //    GameState GS = TE.EvaluateTurn(new PlayerTurn(Top.Item1));
-                    //    int Score = AITurnEvaluator.Score(GS, m.Piece.PlayerId);
-                    //    Moves.Add(m, Score);
                 }
             }
             //Order Ascending to minimize opp value.
@@ -2042,7 +2066,35 @@ namespace FourzyGameModel.Model
         }
         #endregion
 
+
+
         #region "Look Ahead"
+
+        //A 'Setup' occurs when there are 2 or more ways to win.
+        //   Active player does a pass action
+        //   Look for how many moves an opponent can take to win. 
+        //      if greater than 1, it means that there is likely a 'Setup'
+        //   == GOOD FOR ACTIVE PLAYER
+
+        public bool IsASetup()
+        {
+            GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove() ));
+            AITurnEvaluator AITE = new AITurnEvaluator(GSReview);
+            if (AITE.WinningTurns.Count > 1) return true;
+
+            return false;
+        }
+
+        public bool IsAThreat()
+        {
+            GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove()));
+            AITurnEvaluator AITE = new AITurnEvaluator(GSReview);
+            if (AITE.WinningTurns.Count > 0) return true;
+
+            return false;
+        }
+
+
         public List<SimpleMoveSequence> LookAhead(int SearchDepth)
         {
             Dictionary<int, List<SimpleMoveSequence>> StateBucket = new Dictionary<int, List<SimpleMoveSequence>>();

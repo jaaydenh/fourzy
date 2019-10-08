@@ -16,9 +16,11 @@ namespace FourzyGameModel.Model
             RandomTools Random = new RandomTools(SeedString);
 
             if (Options == null) Options = new GameOptions();
+            if (Status == null) Status = new GauntletStatus();
 
             GameState State = null;
 
+            CurrentArea = Area.TRAINING_GARDEN;
             if (CurrentArea == Area.NONE)
             {
                 while (CurrentArea == Area.NONE
@@ -41,6 +43,10 @@ namespace FourzyGameModel.Model
                     State = SandyIsland(Human, GauntletLevel, DifficultModfier, Options, SeedString);
                     break;
             }
+            State.Options.MovesReduceHerd = true;
+            State.InitializeHerd(1, Status.FourzyCount);
+            //Do this differently somehow.  Maybe set in Gauntlet?
+            State.InitializeHerd(2, 999);
 
             return State;
         }
@@ -58,6 +64,7 @@ namespace FourzyGameModel.Model
             {
                 case 0:
                     Opponent.Profile = AIPlayerFactory.RandomProfile(AIDifficulty.Pushover);
+                    Opponent.Profile = AIProfile.AggressiveAI;
                     Recipe = Random.RandomItem(
                         new List<string>() { "Empty1", "Empty2", "Empty3", "Empty4",
                             "Center", "Simple1", "Simple2", "Simple3", 
@@ -111,15 +118,13 @@ namespace FourzyGameModel.Model
 
             if (Options == null) Options = new GameOptions();
 
-        
-            GameBoard Board = BoardFactory.CreateRandomBoard(Options, Human, Opponent, 
-                Area.TRAINING_GARDEN, Recipe);
+            GameBoard Board = BoardFactory.CreateRandomBoard(Options, Human, Opponent, Area.TRAINING_GARDEN, Recipe);
 
             GameState State = new GameState(Board, Options, FirstPlayerId);
 
             //Remove this eventually but helpful for testing.
             Opponent.DisplayName = Opponent.Profile.ToString();
-
+            Opponent.HerdId = "1";
 
             State.Players.Add(1, Human);
             State.Players.Add(2, Opponent);

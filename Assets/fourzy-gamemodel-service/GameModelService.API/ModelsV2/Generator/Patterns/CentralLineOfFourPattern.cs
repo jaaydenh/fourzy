@@ -13,12 +13,12 @@ namespace FourzyGameModel.Model
 
         //create a patter
 
-        public CentralLineOfFourPattern(GameBoard Board, int Count=1)
+        public CentralLineOfFourPattern(GameBoard Board, int Count = 1)
         {
             this.Reference = Reference;
             Locations = new List<BoardLocation>();
 
-            BoardLocation Origin = new BoardLocation(Board.Rows/2-2, Board.Columns/2-2);
+            BoardLocation Origin = new BoardLocation(Board.Rows / 2 - 2, Board.Columns / 2 - 2);
             List<int> ChosenLines = new List<int>();
 
             while (ChosenLines.Count < Count)
@@ -38,7 +38,7 @@ namespace FourzyGameModel.Model
                     case 1:
                     case 2:
                     case 3:
-                        for (int i=0; i<4; i++)
+                        for (int i = 0; i < 4; i++)
                         {
                             BoardLocation l = new BoardLocation(Origin.Row + id, Origin.Column + i);
                             if (!Locations.Contains(l)) Locations.Add(l);
@@ -72,17 +72,17 @@ namespace FourzyGameModel.Model
                         for (int i = 0; i < 4; i++)
                         {
                             BoardLocation l = new BoardLocation(Origin.Row + i, Origin.Column + 3 - i);
-                               if (!Locations.Contains(l)) Locations.Add(l);
+                            if (!Locations.Contains(l)) Locations.Add(l);
 
                         }
                         break;
                 }
             }
 
-           
-                //case Direction.RIGHT:
-                //    for (int r = 1; r < Board.Rows - 1; r++) Locations.Add(new BoardLocation(r, Board.Columns - 1));
-                //    break;
+
+            //case Direction.RIGHT:
+            //    for (int r = 1; r < Board.Rows - 1; r++) Locations.Add(new BoardLocation(r, Board.Columns - 1));
+            //    break;
 
         }
     }
