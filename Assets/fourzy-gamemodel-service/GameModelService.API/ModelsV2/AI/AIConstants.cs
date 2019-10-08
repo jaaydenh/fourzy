@@ -37,7 +37,9 @@ namespace FourzyGameModel.Model
         LeftAI,
         DoctorBot,
         BlindBot,
-        BadBot
+        BadBot,
+        SmartBot,
+        AggressiveAI
     }
 
     public enum AIDifficulty { Pushover, Easy, Medium, Hard, Doctor}

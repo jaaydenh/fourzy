@@ -69,10 +69,15 @@ namespace FourzyGameModel.Model
                 //The Basic AI.  Fast and fairly good, but not perfect.
                 case AIProfile.SimpleAI:
                     return new SimpleAI(State);
+                case AIProfile.SmartBot:
+                    return new SmartBotAI(State);
 
                 //Basic AI but scores using opponents position for more accurate move.
                 case AIProfile.ScoreBot:
                     return new ScoreBotAI(State);
+
+                case AIProfile.AggressiveAI:
+                    return new AggressiveAI(State);
                 case AIProfile.DoctorBot:
                     return new DoctorBotAI(State);
 
@@ -90,8 +95,7 @@ namespace FourzyGameModel.Model
             switch (Difficulty)
             {
                 case AIDifficulty.Pushover:
-                    return new WaitBotAI(State);
-
+                   
                     Personality = State.Random.RandomInteger(0, 3);
                     switch (Personality)
                     {
@@ -107,8 +111,7 @@ namespace FourzyGameModel.Model
                     break;
 
                 case AIDifficulty.Easy:
-                    return new BlindBotAI(State);
-
+                  
                     Personality = State.Random.RandomInteger(0, 6);
                     switch (Personality)
                     {
@@ -133,8 +136,7 @@ namespace FourzyGameModel.Model
                     break;
 
                 case AIDifficulty.Medium:
-                    return new PositionBot(State);
-
+                    
                     Personality = State.Random.RandomInteger(0, 2);
                     switch (Personality)
                     {
@@ -149,10 +151,22 @@ namespace FourzyGameModel.Model
                     break;
 
                 case AIDifficulty.Hard:
-                    return new SimpleAI(State);
+                    Personality = State.Random.RandomInteger(0, 3);
+                    switch (Personality)
+                    {
+                        case 0:
+                            return new SimpleAI(State);
+                        case 1:
+                            return new ScoreBotAI(State);
+                        case 2:
+                            return new SmartBotAI(State);
+                        case 3:
+                            return new AggressiveAI(State);
+                    }
+                    break;
 
                 case AIDifficulty.Doctor:
-                    return new ScoreBotAI(State);
+                    return new DoctorBotAI(State);
             }
             return null;
         }
@@ -217,13 +231,17 @@ namespace FourzyGameModel.Model
                     break;
 
                 case AIDifficulty.Hard:
-                    Personality = Random.RandomInteger(0, 1);
+                    Personality = Random.RandomInteger(0, 3);
                     switch (Personality)
                     {
                         case 0:
                             return AIProfile.SimpleAI;
                         case 1:
                             return AIProfile.ScoreBot;
+                        case 2:
+                            return AIProfile.SmartBot;
+                        case 3:
+                            return AIProfile.AggressiveAI;
                     }
                     break;
 
