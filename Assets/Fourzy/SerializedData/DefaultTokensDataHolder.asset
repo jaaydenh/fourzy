@@ -35,6 +35,9 @@ MonoBehaviour:
         - theme: 16
           tokenPrefab: {fileID: 2606553681170442482, guid: fcb5b614ea27643fd8cb0fb91a591d57,
             type: 3}
+        - theme: 8
+          tokenPrefab: {fileID: 4219423124813351930, guid: 12291801300ee458c8861b1ad4e9066f,
+            type: 3}
     - elementName: ARROW
       tokenType: 5
       tokenIcon: {fileID: 0}
@@ -455,9 +458,6 @@ MonoBehaviour:
       gameboardInstructionID: 24
       themesTokens:
         list:
-        - theme: 2
+        - theme: 127
           tokenPrefab: {fileID: 114115778919009160, guid: 10b23b5ed8762074c9185dc01a8e0f64,
-            type: 3}
-        - theme: 16
-          tokenPrefab: {fileID: 2606553681170442482, guid: 3472ca9908b81eb4a9dc3c8c9500fd26,
             type: 3}

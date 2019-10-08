@@ -176,26 +176,26 @@ namespace Fourzy._Updates.Serialized
                                 new OnboardingDataHolder.OnboardingTask_Log("7"),
                             },
                         },
-                        //step 13: change name message
-                        new OnboardingDataHolder.OnboardingTasksBatch()
-                        {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
-                            {
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE },
-                                new OnboardingDataHolder.OnboardingTask_ShowMessage("Now lets change your name!"),
-                                new OnboardingDataHolder.OnboardingTask_Log("8"),
-                            },
-                        },
-                        //step 14: open changename prompt
-                        new OnboardingDataHolder.OnboardingTasksBatch()
-                        {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
-                            {
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT },
-                                new OnboardingDataHolder.OnboardingTask_Log("9"),
-                            },
-                        },
+                        // //step 13: change name message
+                        // new OnboardingDataHolder.OnboardingTasksBatch()
+                        // {
+                        //     tasks = new OnboardingDataHolder.OnboardingTask[]
+                        //     {
+                        //         new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE },
+                        //         new OnboardingDataHolder.OnboardingTask_ShowMessage("Now lets change your name!"),
+                        //         new OnboardingDataHolder.OnboardingTask_Log("8"),
+                        //     },
+                        // },
+                        // //step 14: open changename prompt
+                        // new OnboardingDataHolder.OnboardingTasksBatch()
+                        // {
+                        //     tasks = new OnboardingDataHolder.OnboardingTask[]
+                        //     {
+                        //         new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE },
+                        //         new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT },
+                        //         new OnboardingDataHolder.OnboardingTask_Log("9"),
+                        //     },
+                        // },
                         new OnboardingDataHolder.OnboardingTasksBatch()
                         {
                             tasks = new OnboardingDataHolder.OnboardingTask[]
