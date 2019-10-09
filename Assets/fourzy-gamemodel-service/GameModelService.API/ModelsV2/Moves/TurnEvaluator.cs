@@ -252,8 +252,9 @@ namespace FourzyGameModel.Model
                                 if (EvalState.Herds.Count > 0)
                             if (EvalState.Herds[EvalState.ActivePlayerId].Members.Count < 1 )
                             {
+                                EvalState.WinnerId = this.EvalState.Opponent(this.EvalState.WinnerId);
                                 RecordAction(new GameActionGameEnd(GameEndType.NOPIECES, this.EvalState.WinnerId, null));
-                                RecordAction(new GameActionGameEnd(GameEndType.WIN, this.EvalState.Opponent(this.EvalState.WinnerId), null));
+                                //RecordAction(new GameActionGameEnd(GameEndType.WIN, this.EvalState.Opponent(this.EvalState.WinnerId), null));
                             }
                         }
 

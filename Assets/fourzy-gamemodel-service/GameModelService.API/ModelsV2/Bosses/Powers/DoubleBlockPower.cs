@@ -57,7 +57,6 @@ namespace FourzyGameModel.Model
                 MoveBlockerToken t = new MoveBlockerToken();
                 t.Space = State.Board.ContentsAt(l);
                 State.Board.AddToken(t, l);
-                State.Board.RecordGameAction(new GameActionBossPower(this));
                 State.Board.RecordGameAction(new GameActionTokenDrop(t, TransitionType.BOSS_POWER, l, l));
             }
 

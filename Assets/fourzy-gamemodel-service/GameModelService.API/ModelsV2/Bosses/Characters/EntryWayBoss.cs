@@ -52,22 +52,7 @@ namespace FourzyGameModel.Model
 
             AITurnEvaluator AITE = new AITurnEvaluator(GS2);
             AITE.AIHeuristics.IsAggressive = true;
-            List<SimpleMove> MovesToBlock = AITE.GetTopOkMoves(2);
-            bool Blocked = false;
-            if (MovesToBlock != null)
-                if (MovesToBlock.Count > 0)
-                {
-                    Blocked = true;
-                    Turn.Moves.Add(new DoubleBlockPower(State, AITE.GetTopOkMoves(2)));
-                }
-
-            if (!Blocked)
-            {
-                AI = new AggressiveAI(GS2);
-                PlayerTurn StopThisTurn = AI.GetTurn();
-                SimpleMove m = (SimpleMove)StopThisTurn.Moves[0];
-                Turn.Moves.Add(new BlockMovePower(State, m));
-            }
+            Turn.Moves.Add(new DoubleBlockPower(State, AITE.GetTopOkMoves(2)));
 
             return Turn;
         }
