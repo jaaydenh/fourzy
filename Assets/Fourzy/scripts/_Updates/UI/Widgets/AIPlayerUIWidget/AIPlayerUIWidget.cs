@@ -37,7 +37,11 @@ namespace Fourzy._Updates.UI.Widgets
             GameManager.Instance.StartGame(new ClientFourzyGame(
                 GameContentManager.Instance.currentTheme.themeID,
                 UserManager.Instance.meAsPlayer,
-                new Player(2, aiPlayerData.name, aiPlayerData.profile) { HerdId = aiPlayerData.gamePieceID + "", },
+                new Player(2, aiPlayerData.name, aiPlayerData.profile)
+                {
+                    HerdId = aiPlayerData.gamePieceID + "",
+                    BossType = aiPlayerData.bossProfile,
+                },
                 1
             )
             { _Type = GameType.AI });

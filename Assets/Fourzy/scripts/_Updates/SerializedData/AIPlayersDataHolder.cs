@@ -34,6 +34,7 @@ namespace Fourzy._Updates.Serialized
             [HelpBox(message: "#Message", messageType = StackableDecorator.MessageType.None, below = true)]
             public string gamePieceID;
             public AIProfile profile;
+            public BossType bossProfile = BossType.None;
             public Sprite background;
             public bool enabled;
 

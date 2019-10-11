@@ -14,7 +14,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public PlayerUIWidget playerWidget;
         public PlayerUIWidget opponentWidget;
-        //public PlayerUIMessagesWidget playerMessagesWidget;
         public PlayerUIMessagesWidget opponentMessagesWidget;
         public GameInfoWidget gameInfoWidget;
 
@@ -228,9 +227,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case GameType.AI:
                     //case GameType.PRESENTATION:
                     //case GameType.PUZZLE:
-                        //if waiting more than (time), show "thinking..."
-                        //if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").ShowDelayed(time: .6f);
-                        if (!game.isMyTurn) ShowOpponentMessage("Thinking...", 1f);
+                    //if waiting more than (time), show "thinking..."
+                    if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").ShowDelayed(time: .6f);
+                    //if (!game.isMyTurn) ShowOpponentMessage("Thinking...", 1f);
 
                         break;
                 }

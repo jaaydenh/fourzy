@@ -399,6 +399,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         masks.ShowMasks(task.pointAt, new Vector2(350f, 130f), true);
 
+
+                        //pointer
+                        if (!pointer.visible) pointer.Show(.2f);
+                        pointer.SetAnchors(task.pointAt);
+
                         break;
                 }
 

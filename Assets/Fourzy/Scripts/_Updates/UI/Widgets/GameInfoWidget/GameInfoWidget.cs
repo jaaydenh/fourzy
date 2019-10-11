@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Tween;
+using FourzyGameModel.Model;
 using TMPro;
 using UnityEngine;
 
@@ -17,6 +18,23 @@ namespace Fourzy._Updates.UI.Widgets
             Show(.3f);
 
             StartRoutine("hide", 2.5f, () => Hide(.3f), null);
+        }
+
+        public void PassTurn(float duration)
+        {
+            SetText("Pass..");
+            Show(.3f);
+
+            StartRoutine("hide", duration - .3f, () => Hide(.3f), null);
+        }
+
+        public void DisplayPower(BossPowerType type)
+        {
+            //type to string
+            SetText(type.ToString());
+            Show(.3f);
+
+            StartRoutine("hide", 1f, () => Hide(.3f), null);
         }
 
         public override void Show(float time)

@@ -31,5 +31,12 @@ namespace Fourzy._Updates.UI.Widgets
 
             pointerGraphics.anchoredPosition = menuScreen.menuController.WorldToCanvasPoint((board.transform.position + (Vector3)board.BoardLocationToVec2(location)));
         }
+
+        public override WidgetBase SetAnchors(Vector2 anchor)
+        {
+            pointerGraphics.anchoredPosition = Vector2.zero;
+
+            return base.SetAnchors(anchor);
+        }
     }
 }

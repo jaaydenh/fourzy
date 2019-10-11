@@ -758,6 +758,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (noInputFilter.Key != "highlightMoves" || !gameplayScreen.isCurrent) return;
 
+            //if its NOT my turn, exit
+            switch (game._Type)
+            {
+                case GameType.PASSANDPLAY:
+
+                    break;
+
+                default:
+                    if (!game.isMyTurn) return;
+
+                    break;
+            }
+
             switch (board.actionState)
             {
                 case GameboardView.BoardActionState.SIMPLE_MOVE:

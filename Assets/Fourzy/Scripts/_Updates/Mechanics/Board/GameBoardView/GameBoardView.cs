@@ -1024,6 +1024,15 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         break;
 
+                    case GameActionType.BOSS_POWER:
+                        GameActionBossPower bossPowerAction = turnResults.Activity[actionIndex] as GameActionBossPower;
+
+                        GamePlayManager.instance.gameplayScreen.gameInfoWidget.DisplayPower(bossPowerAction.Power.PowerType);
+
+                        actionIndex++;
+
+                        break;
+
                     case GameActionType.ADD_TOKEN:
                         GameActionTokenDrop tokenDrop = turnResults.Activity[actionIndex] as GameActionTokenDrop;
 
@@ -1039,6 +1048,13 @@ namespace Fourzy._Updates.Mechanics.Board
                                 BoardTokenAt<TokenView>(tokenDrop.Source, TokenType.FRUIT_TREE).OnActivate();
                                 break;
                         }
+
+                        //switch (tokenDrop.Reason)
+                        //{
+                        //    case TransitionType.BOSS_POWER:
+
+                        //        break;
+                        //}
 
                         yield return new WaitForSeconds(.5f);
 
@@ -1063,6 +1079,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         {
                             case DestroyType.FALLING:
                                 token.OnActivate();
+
                                 break;
                         }
 
@@ -1077,6 +1094,7 @@ namespace Fourzy._Updates.Mechanics.Board
                                 yield return new WaitForSeconds(.45f);
 
                                 token._Destroy();
+
                                 break;
                         }
 
@@ -1182,8 +1200,9 @@ namespace Fourzy._Updates.Mechanics.Board
                     case GameActionType.PASS:
                         float turnPassDuration = 1.8f;
 
-                        //show message
-                        GamePlayManager.instance.gameplayScreen.ShowOpponentMessage("Turn pass..", turnPassDuration - .22f);
+                        ////show message
+                        //GamePlayManager.instance.gameplayScreen.ShowOpponentMessage("Turn pass..", turnPassDuration - .22f);
+                        GamePlayManager.instance.gameplayScreen.gameInfoWidget.PassTurn(turnPassDuration);
 
                         //use some delay
                         yield return new WaitForSeconds(turnPassDuration);
@@ -1257,7 +1276,6 @@ namespace Fourzy._Updates.Mechanics.Board
             isAnimating = false;
             boardBits.ForEach(bit => { if (bit.active) bit.OnAfterTurn(); });
 
-            //invoke onMoveEnded
             onMoveEnded?.Invoke(turn, turnResults);
 
             //update hint blocks
