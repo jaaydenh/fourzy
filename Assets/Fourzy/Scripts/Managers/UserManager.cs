@@ -4,6 +4,8 @@ using Fourzy._Updates.Mechanics;
 using FourzyGameModel.Model;
 using GameSparks.Api.Requests;
 using GameSparks.Core;
+using PlayFab;
+using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -18,16 +20,18 @@ namespace Fourzy
         public const int MAX_PLAYER_LEVEL = 32;
         public const int MIN_PLAYER_LEVEL = 1;
 
-        readonly string[] firstNameSyllables = { "kit", "mon", "fay", "shi", "zag", "blarg", "rash", "izen", "boop", "pop", "moop", "foop" };
-        readonly string[] lastNameSyllables = { "malo", "zak", "abo", "wonk", "zig", "wolf", "cat", "dog", "sheep", "goat" };
+        public static Action onDisplayNameChanged;
+        public static Action<string> onDisplayNameChangeFailed;
 
         public static Action OnUpdateUserInfo;
         public static Action<CurrencyType> onCurrencyUpdate;
         public static Action<string> OnUpdateUserGamePieceID;
 
-        public string userId { get; private set; }
-        public int ratingElo { get; private set; }
-        public Sprite profilePicture { get; private set; }
+        public bool settingRandomName = false;
+
+        public bool currentlyChangingName => settingRandomName;
+
+        public string userId { get; set; }
 
         public string userName
         {
@@ -35,14 +39,7 @@ namespace Fourzy
             {
                 string playerPrefsValue = PlayerPrefsWrapper.GetUserName();
 
-                return string.IsNullOrEmpty(playerPrefsValue) ? userName = CreateNewPlayerName() : playerPrefsValue;
-            }
-
-            private set
-            {
-                PlayerPrefsWrapper.SetUsetName(value);
-
-                if (PhotonNetwork.connected) PhotonNetwork.player.NickName = name;
+                return string.IsNullOrEmpty(playerPrefsValue) ? "Player" : playerPrefsValue;
             }
         }
 
@@ -257,45 +254,63 @@ namespace Fourzy
             }
         }
 
-        public void UpdateInformation()
+        public void SetDisplayName(string value, bool updatePlayFabDisplayName = true)
         {
-            new AccountDetailsRequest().Send((response) =>
+            if (PhotonNetwork.connected) PhotonNetwork.player.NickName = value;
+
+            PlayerPrefsWrapper.SetUsetName(value);
+
+            if (updatePlayFabDisplayName)
             {
-                string facebookId = response.ExternalIds.GetString("FB");
-                int? rateElo = response.ScriptData.GetInt("ratingElo");
-                //Mixpanel.Identify(response.UserId);
-                //Mixpanel.people.Set("$name", userName);
-
-                //if server username not matching local username, update server username
-                if (response.DisplayName != userName) UpdatePlayerDisplayName(userName);
-
-                UpdateUserInfo(response.UserId, facebookId, response.Currency1, rateElo);
-            });
+                PlayFabClientAPI.UpdateUserTitleDisplayName(
+                    new UpdateUserTitleDisplayNameRequest() { DisplayName = value, },
+                    ChangeDisplayNameResult,
+                    OnPlayFabError);
+            }
         }
 
-        public void UpdatePlayerDisplayName(string name)
-        {
-            userName = name;
+        //public void UpdateInformation()
+        //{
+        //    new AccountDetailsRequest().Send((response) =>
+        //    {
+        //        string facebookId = response.ExternalIds.GetString("FB");
+        //        int? rateElo = response.ScriptData.GetInt("ratingElo");
+        //        //Mixpanel.Identify(response.UserId);
+        //        //Mixpanel.people.Set("$name", userName);
 
-            OnUpdateUserInfo?.Invoke();
+        //        //if server username not matching local username, update server username
+        //        if (response.DisplayName != userName) UpdatePlayerDisplayName(userName);
 
-            //update username on server
-            new ChangeUserDetailsRequest()
-                .SetDisplayName(name)
-                .Send((response) =>
-                {
-                    if (response.HasErrors)
-                    {
-                        if (GameManager.Instance.debugMessages)
-                            Debug.Log("Error updating player display name: " + response.Errors.ToString());
-                    }
-                    else
-                    {
-                        if (GameManager.Instance.debugMessages)
-                            Debug.Log("Successfully updated player display name");
-                    }
-                });
-        }
+        //        UpdateUserInfo(response.UserId, facebookId, response.Currency1, rateElo);
+        //    });
+        //}
+
+        //public void UpdatePlayerDisplayName(string name)
+        //{
+        //    //first check new name
+
+        //    userName = name;
+
+        //    OnUpdateUserInfo?.Invoke();
+
+        //    ////update username on server
+        //    //new ChangeUserDetailsRequest()
+        //    //    .SetDisplayName(name)
+        //    //    .Send((response) =>
+        //    //    {
+        //    //        if (response.HasErrors)
+        //    //        {
+        //    //            if (GameManager.Instance.debugMessages)
+        //    //                Debug.Log("Error updating player display name: " + response.Errors.ToString());
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            if (GameManager.Instance.debugMessages)
+        //    //                Debug.Log("Successfully updated player display name");
+        //    //        }
+        //    //    });
+        //    PlayFabClientAPI.UpdateUserTitleDisplayName(new PlayFab.ClientModels.UpdateUserTitleDisplayNameRequest() { DisplayName = name, }, ChangeDisplayNameResult, OnPlayFabError);
+        //}
 
         public void GetUserGamePiece()
         {
@@ -316,24 +331,24 @@ namespace Fourzy
                 });
         }
 
-        public void UpdateUserInfo(string uid, string fbId, long? coins, int? rating)
-        {
-            userId = uid;
+        //public void UpdateUserInfo(string uid, string fbId, long? coins, int? rating)
+        //{
+        //    userId = uid;
 
-            ratingElo = rating.GetValueOrDefault(0);
-            //this.coins = coins.GetValueOrDefault(0);
+        //    ratingElo = rating.GetValueOrDefault(0);
+        //    //this.coins = coins.GetValueOrDefault(0);
 
-            if (fbId != null)
-                StartCoroutine(GetFBPicture(fbId, (sprite) =>
-                {
-                    if (sprite)
-                        profilePicture = sprite;
-                }));
+        //    if (fbId != null)
+        //        StartCoroutine(GetFBPicture(fbId, (sprite) =>
+        //        {
+        //            if (sprite)
+        //                profilePicture = sprite;
+        //        }));
 
-            GetUserGamePiece();
+        //    GetUserGamePiece();
 
-            OnUpdateUserInfo?.Invoke();
-        }
+        //    OnUpdateUserInfo?.Invoke();
+        //}
 
         public void UpdateSelectedGamePiece(string _gamePieceID)
         {
@@ -342,11 +357,14 @@ namespace Fourzy
             OnUpdateUserGamePieceID?.Invoke(gamePieceID);
         }
 
-        public string CreateNewPlayerName()
+        public static string CreateNewPlayerName()
         {
+            string[] firstNameSyllables = { "kit", "mon", "fay", "shi", "zag", "blarg", "rash", "izen", "boop", "pop", "moop", "foop" };
+            string[] lastNameSyllables = { "malo", "zak", "abo", "wonk", "zig", "wolf", "cat", "dog", "sheep", "goat" };
+
             //Creates a first name with 2-3 syllables
             string firstName = "";
-            int numberOfSyllablesInFirstName = UnityEngine.Random.Range(2, 4);
+            int numberOfSyllablesInFirstName = UnityEngine.Random.Range(1, 3);
             for (int i = 0; i < numberOfSyllablesInFirstName; i++)
             {
                 firstName += firstNameSyllables[UnityEngine.Random.Range(0, firstNameSyllables.Length)];
@@ -375,29 +393,29 @@ namespace Fourzy
             return firstName + " " + lastName + Mathf.CeilToInt(UnityEngine.Random.Range(0f, 9999f)).ToString();
         }
 
-        public IEnumerator GetFBPicture(string facebookId, Action<Sprite> callback)
-        {
-            // FB.API("/" + facebookId + "/picture?type=square&height=210&width=210", HttpMethod.GET, UpdateProfileImage);
+        //public IEnumerator GetFBPicture(string facebookId, Action<Sprite> callback)
+        //{
+        //    // FB.API("/" + facebookId + "/picture?type=square&height=210&width=210", HttpMethod.GET, UpdateProfileImage);
 
-            using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture("https://graph.facebook.com/" + facebookId + "/picture?width=210&height=210"))
-            {
-                yield return uwr.SendWebRequest();
+        //    using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture("https://graph.facebook.com/" + facebookId + "/picture?width=210&height=210"))
+        //    {
+        //        yield return uwr.SendWebRequest();
 
-                if (uwr.isNetworkError || uwr.isHttpError)
-                {
-                    if (GameManager.Instance.debugMessages)
-                        Debug.Log("get_fb_picture_error: " + uwr.error);
-                }
-                else
-                {
-                    Texture2D tempPic = new Texture2D(25, 25);
-                    tempPic = DownloadHandlerTexture.GetContent(uwr);
-                    Sprite profilePictureSprite = Sprite.Create(tempPic, new Rect(0, 0, tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
+        //        if (uwr.isNetworkError || uwr.isHttpError)
+        //        {
+        //            if (GameManager.Instance.debugMessages)
+        //                Debug.Log("get_fb_picture_error: " + uwr.error);
+        //        }
+        //        else
+        //        {
+        //            Texture2D tempPic = new Texture2D(25, 25);
+        //            tempPic = DownloadHandlerTexture.GetContent(uwr);
+        //            Sprite profilePictureSprite = Sprite.Create(tempPic, new Rect(0, 0, tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
 
-                    callback(profilePictureSprite);
-                }
-            }
-        }
+        //            callback(profilePictureSprite);
+        //        }
+        //    }
+        //}
 
         private void OnNetworkAccess(bool networkAccess)
         {
@@ -406,6 +424,20 @@ namespace Fourzy
                 if (GS.Authenticated)
                     GetUserGamePiece();
             }
+        }
+
+        private void OnPlayFabError(PlayFabError error)
+        {
+            if (settingRandomName) SetDisplayName(CreateNewPlayerName());
+
+            onDisplayNameChangeFailed?.Invoke(error.ErrorMessage);
+        }
+
+        private void ChangeDisplayNameResult(UpdateUserTitleDisplayNameResult result)
+        {
+            settingRandomName = false;
+
+            onDisplayNameChanged?.Invoke();
         }
     }
 }

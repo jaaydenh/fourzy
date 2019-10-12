@@ -310,7 +310,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 368, y: 120}
+  m_SizeDelta: {x: 430, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5465413
 MonoBehaviour:
@@ -421,7 +421,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 30
+          selectedMember: 32
           isDynamic: 0
         target: {fileID: 44892454}
         memberName: ResetTutorial
@@ -8190,7 +8190,7 @@ RectTransform:
   m_GameObject: {fileID: 434548664}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children:
   - {fileID: 1469963370}
   - {fileID: 1493083036}
@@ -10218,7 +10218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 616.37946
+  m_MinWidth: 751.0757
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -14150,7 +14150,7 @@ RectTransform:
   m_GameObject: {fileID: 688797084}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_Children:
   - {fileID: 684361015}
   - {fileID: 287590283}
@@ -16225,7 +16225,7 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 190, y: 190}
+  m_CellSize: {x: 230, y: 230}
   m_Spacing: {x: 7, y: 7}
   m_Constraint: 0
   m_ConstraintCount: 3
@@ -16603,6 +16603,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3945021675964879045, guid: 3cd0083bbf82d5d4998d9b0935cd1727,
+        type: 3}
+      propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
+      value: 42
+      objectReference: {fileID: 0}
     - target: {fileID: 3726751639893728428, guid: 3cd0083bbf82d5d4998d9b0935cd1727,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -16706,6 +16711,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 51.729996
+      objectReference: {fileID: 0}
+    - target: {fileID: 4814652769782511158, guid: 3cd0083bbf82d5d4998d9b0935cd1727,
+        type: 3}
+      propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
+      value: 42
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209665256978667643, guid: 3cd0083bbf82d5d4998d9b0935cd1727,
+        type: 3}
+      propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
+      value: 42
       objectReference: {fileID: 0}
     - target: {fileID: 8781160807350562329, guid: 3cd0083bbf82d5d4998d9b0935cd1727,
         type: 3}
@@ -17016,7 +17031,7 @@ MonoBehaviour:
         isCallEnabled: 0
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 41
+          selectedMember: 40
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: StartTutorialAdventure
@@ -21029,7 +21044,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 20
+          selectedMember: 21
           isDynamic: 0
         target: {fileID: 976148534}
         memberName: SetPaddingLeft
@@ -21050,7 +21065,7 @@ MonoBehaviour:
         isCallEnabled: 1
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 21
+          selectedMember: 22
           isDynamic: 0
         target: {fileID: 976148534}
         memberName: SetPaddingRight
@@ -21075,7 +21090,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 20
+          selectedMember: 21
           isDynamic: 0
         target: {fileID: 976148534}
         memberName: SetPaddingLeft
@@ -21096,7 +21111,7 @@ MonoBehaviour:
         isCallEnabled: 1
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 21
+          selectedMember: 22
           isDynamic: 0
         target: {fileID: 976148534}
         memberName: SetPaddingRight
@@ -21121,7 +21136,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 20
+          selectedMember: 21
           isDynamic: 0
         target: {fileID: 976148534}
         memberName: SetPaddingLeft
@@ -21142,7 +21157,7 @@ MonoBehaviour:
         isCallEnabled: 1
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 21
+          selectedMember: 22
           isDynamic: 0
         target: {fileID: 976148534}
         memberName: SetPaddingRight
@@ -22086,7 +22101,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 45
+  m_Spacing: 85
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -23952,6 +23967,11 @@ PrefabInstance:
       propertyPath: forceDisplayTutorials
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114079966796045236, guid: 3b153745504954e599a747ae789ac703,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 311
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b153745504954e599a747ae789ac703, type: 3}
 --- !u!1 &1117171734
@@ -25275,7 +25295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 616.37946
+  m_MinWidth: 751.0757
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -31741,7 +31761,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 368, y: 120}
+  m_SizeDelta: {x: 430, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1381202238
 MonoBehaviour:
@@ -35041,7 +35061,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 616.37946
+  m_MinWidth: 751.0757
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -35560,7 +35580,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Reset Puzzles
+  m_text: Reset All Progress
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 2df78b07fbfbc4234b2067921d1b81e2, type: 2}
@@ -38979,7 +38999,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 15
+  m_Spacing: 40
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -39234,7 +39254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 616.37946
+  m_MinWidth: 751.0757
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -42296,7 +42316,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 300, y: -435}
-  m_SizeDelta: {x: 368, y: 120}
+  m_SizeDelta: {x: 430, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1850814826
 MonoBehaviour:
@@ -43078,7 +43098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 616.37946
+  m_MinWidth: 751.0757
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -43695,7 +43715,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 190, y: 190}
-  m_Spacing: {x: 15, y: 15}
+  m_Spacing: {x: 35, y: 15}
   m_Constraint: 1
   m_ConstraintCount: 3
 --- !u!1001 &1880803246
@@ -44844,7 +44864,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 190, y: 270}
-  m_Spacing: {x: 15, y: 15}
+  m_Spacing: {x: 35, y: 15}
   m_Constraint: 1
   m_ConstraintCount: 3
 --- !u!1 &1934413989
@@ -46998,7 +47018,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 190, y: 190}
-  m_Spacing: {x: 15, y: 15}
+  m_Spacing: {x: 35, y: 15}
   m_Constraint: 1
   m_ConstraintCount: 3
 --- !u!1 &2037674736

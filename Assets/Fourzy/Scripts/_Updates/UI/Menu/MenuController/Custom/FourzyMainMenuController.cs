@@ -24,11 +24,11 @@ namespace Fourzy._Updates.UI.Menu
 
         protected void Update()
         {
-            //try load fast puzzlePack
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                GetScreen<PrePackPrompt>().Prompt(GameContentManager.Instance.externalPuzzlePacks.Values.First());
-            }
+            ////try load fast puzzlePack
+            //if (Input.GetKeyDown(KeyCode.A))
+            //{
+            //    GetScreen<PrePackPrompt>().Prompt(GameContentManager.Instance.externalPuzzlePacks.Values.First());
+            //}
 
             //if (Input.GetKeyDown(KeyCode.Q))
             //{

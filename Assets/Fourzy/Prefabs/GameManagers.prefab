@@ -443,8 +443,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73862c3d4ded2491ba08cc142fc7583e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  packsDataHolders:
-  - {fileID: 11400000, guid: b3100e9855fa2e1418dc35b4346ddcfe, type: 2}
   progressionMaps:
   - {fileID: 2196441795849348853, guid: 3cd0083bbf82d5d4998d9b0935cd1727, type: 3}
   - {fileID: 2196441795849348853, guid: 3c578faf40505024eb2192e7b476e50a, type: 3}

@@ -3,7 +3,6 @@
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
-using System.Collections.Generic;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -13,7 +12,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ChangeName()
         {
-            menuController.GetScreen<ChangeNamePromptScreen>().Prompt("Change Name", "Current name: " + UserManager.Instance.userName, () => { menuController.CloseCurrentScreen(); });
+            menuController.GetScreen<ChangeNamePromptScreen>()._Prompt();
         }
 
         public void ResetTutorial()

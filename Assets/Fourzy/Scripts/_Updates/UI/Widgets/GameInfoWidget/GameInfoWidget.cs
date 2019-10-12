@@ -31,7 +31,7 @@ namespace Fourzy._Updates.UI.Widgets
         public void DisplayPower(BossPowerType type)
         {
             //type to string
-            SetText(type.ToString());
+            SetText($"Boss Fourzy \nuses {type.ToString()}");
             Show(.3f);
 
             StartRoutine("hide", 1f, () => Hide(.3f), null);

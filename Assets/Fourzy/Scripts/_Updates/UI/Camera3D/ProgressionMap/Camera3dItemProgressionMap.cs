@@ -200,10 +200,10 @@ namespace Fourzy._Updates.UI.Camera3D
             PlayerPrefsWrapper.SetAdventureComplete(mapID, false);
 
             if (string.IsNullOrEmpty(gameObject.scene.name))
-                Array.ForEach(GetComponentsInChildren<ProgressionEvent>(), widget => widget.ResetGraphics());
+                Array.ForEach(GetComponentsInChildren<ProgressionEvent>(), widget => widget.ResetEvent());
             else
             {
-                widgets.ForEach(widget => widget.ResetGraphics());
+                widgets.ForEach(widget => widget.ResetEvent());
                 firstEvent.Unlock(false);
             }
         }

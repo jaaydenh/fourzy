@@ -190,7 +190,7 @@ namespace Fourzy._Updates.UI.Widgets
             if (wasRewarded) Rewarded(false);
             else lines.ForEach(line => line.SetColorLocked());
 
-            if (!_unlocked && !_rewarded) return;
+            //if (!_unlocked && !_rewarded) return;
 
             switch (EventType)
             {
@@ -201,13 +201,24 @@ namespace Fourzy._Updates.UI.Widgets
                             //update slider
                             progressSlider.value = (float)PuzzlePack.puzzlesComplete.Count / PuzzlePack.enabledPuzzlesData.Count;
 
-                            if (PuzzlePack.complete) progressSlider.SetFillColor(Color.green);
+                            if (PuzzlePack.complete)
+                            {
+                                progressSlider.SetFillColor(Color.green);
+                                starTween.AtProgress(1f);
+                            }
+                            else
+                            {
+                                progressSlider.SetFillColor(Color.red);
+                                starTween.AtProgress(0f);
+                            }
 
                             break;
+
                         case PackType.AI_PACK:
-                            //close eyes if complete
                             if (PuzzlePack.complete)
                                 gamePieceView.Sleep();
+                            else
+                                gamePieceView.WakeUp();
 
                             break;
                     }
@@ -254,24 +265,6 @@ namespace Fourzy._Updates.UI.Widgets
 
             switch (EventType)
             {
-                case ProgressionEventType.GAME:
-                    switch (PuzzlePack.packType)
-                    {
-                        case PackType.PUZZLE_PACK:
-                            if (animate)
-                            {
-                                starTween.PlayForward(true);
-                            }
-                            else
-                            {
-                                starTween.AtProgress(1f);
-                            }
-
-                            break;
-                    }
-
-                    break;
-
                 case ProgressionEventType.CURRENCY:
                     button.interactable = false;
 
@@ -335,23 +328,24 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        public void ResetGraphics()
+        public void ResetEvent()
         {
-            /// <summary>
-            /// Only for currency reward type
-            /// </summary>
             switch (EventType)
             {
                 case ProgressionEventType.CURRENCY:
-                    //if (PlayerPrefsWrapper.GetEventRewarded(id)) Debug.Log(id);
-
                     PlayerPrefsWrapper.SetEventRewarded(id, false);
+
+                    break;
+
+                case ProgressionEventType.GAME:
+                    PuzzlePack.ResetPlayerPrefs();
 
                     break;
             }
 
             if (string.IsNullOrEmpty(gameObject.scene.name)) return;
 
+            button.interactable = false;
             onReset.Invoke();
 
             _unlocked = false;

@@ -327,7 +327,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT:
-                        menuController.GetScreen<ChangeNamePromptScreen>().Prompt("Change Name", "Current name: " + UserManager.Instance.userName, () => { menuController.CloseCurrentScreen(); });
+                        menuController.GetScreen<ChangeNamePromptScreen>()._Prompt();
 
                         break;
 

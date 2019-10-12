@@ -44,7 +44,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                 case CurrencyType.RARE_PORTAL_POINTS:
                     PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
-                    UserManager.Instance.portalPoints -= Constants.RARE_PORTAL_POINTS;
+                    UserManager.Instance.rarePortalPoints -= Constants.RARE_PORTAL_POINTS;
 
                     break;
             }

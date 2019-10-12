@@ -268,7 +268,7 @@ MonoBehaviour:
           vector3Argument: {x: 0, y: 0, z: 0}
           enumArgument: 
         isDynamic: 0
-        isCallEnabled: 1
+        isCallEnabled: 0
       - genericMenuData:
           selectedComponent: 0
           selectedMember: 11
@@ -398,7 +398,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1935594895090930300}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c30ba88a1888a2f47821f13b12f89389, type: 3}
   m_Name: 

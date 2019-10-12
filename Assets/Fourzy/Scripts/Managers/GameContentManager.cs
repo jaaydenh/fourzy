@@ -19,7 +19,7 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class GameContentManager : UnitySingleton<GameContentManager>
     {
-        public List<PuzzlePacksDataHolder> packsDataHolders;
+        //public List<PuzzlePacksDataHolder> packsDataHolders;
         public List<Camera3dItemProgressionMap> progressionMaps;
         public GamePiecesDataHolder piecesDataHolder;
         public AIPlayersDataHolder aiPlayersDataHolder;
@@ -56,7 +56,7 @@ namespace Fourzy
 
         public List<GameBoardDefinition> passAndPlayGameboards => passAndPlayDataHolder.gameboards;
 
-        public PuzzlePacksDataHolder puzzlePacksDataHolder => packsDataHolders[0];
+        //public PuzzlePacksDataHolder puzzlePacksDataHolder => packsDataHolders[0];
 
         public List<Camera3dItemProgressionMap> existingProgressionMaps { get; private set; } = new List<Camera3dItemProgressionMap>();
 
@@ -78,7 +78,7 @@ namespace Fourzy
             passAndPlayDataHolder.Initialize();
             miscBoardsDataHolder.Initialize();
 
-            packsDataHolders.ForEach(packsData => packsData.Initialize());
+            //packsDataHolders.ForEach(packsData => packsData.Initialize());
 
             LoadAllFastPuzzles();
             LoadPuzzlePacks();
@@ -140,8 +140,8 @@ namespace Fourzy
 
         public void ResetPuzzlePacks()
         {
-            foreach (PuzzlePacksDataHolder pack in packsDataHolders)
-                pack.ResetPlayerPrefs();
+            //foreach (PuzzlePacksDataHolder pack in packsDataHolders)
+            //    pack.ResetPlayerPrefs();
 
             foreach (Camera3dItemProgressionMap progressionMap in progressionMaps)
                 (existingProgressionMaps.Find(__map => __map.mapID == progressionMap.mapID) ?? progressionMap).ResetPlayerPrefs();
