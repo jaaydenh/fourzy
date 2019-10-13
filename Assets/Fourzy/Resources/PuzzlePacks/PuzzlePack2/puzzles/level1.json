@@ -269,7 +269,7 @@
         "initialMoves": [],
         "rows": 8,
         "columns": 8,
-        "area": 8,
+        "area": 2,
         "id": "b0b67189-d33f-4bca-8d84-3daaaf95c7e1",
         "boardName": "Empty Board",
         "enabled": true,
