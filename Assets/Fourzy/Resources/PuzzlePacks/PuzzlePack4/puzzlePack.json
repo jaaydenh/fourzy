@@ -1,13 +1,13 @@
 {
-    "name": "Arrow Pack",
+    "name": "Diagonals",
     "type": 0,
     "id": "004",
     "unlockRequirement": 0,
     "herdID": "1",
-    "playerName": "Blobbly",
+    "playerName": "Guardian",
     "rewards": [
         {
-            "levelIndex": 1,
+            "levelIndex": 4,
             "rewardType": 5,
             "name": "",
             "quantity": 0

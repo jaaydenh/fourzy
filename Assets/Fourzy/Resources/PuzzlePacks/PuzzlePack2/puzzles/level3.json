@@ -19,9 +19,7 @@
             },
             {
                 "P": null,
-                "T": [
-                    "AD"
-                ]
+                "T": null
             },
             {
                 "P": null,
@@ -47,50 +45,6 @@
             },
             {
                 "P": null,
-                "T": [
-                    "AR"
-                ]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": [
-                    "AD"
-                ]
-            },
-            {
-                "P": null,
                 "T": null
             },
             {
@@ -163,6 +117,46 @@
             },
             {
                 "P": null,
+                "T": ["AR"]
+            },
+            {
+                "P": null,
+                "T": ["AD"]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": ["AU"]
+            },
+            {
+                "P": null,
+                "T": ["AL"]
+            },
+            {
+                "P": null,
                 "T": null
             },
             {
@@ -195,12 +189,6 @@
             },
             {
                 "P": null,
-                "T": [
-                    "AU"
-                ]
-            },
-            {
-                "P": null,
                 "T": null
             },
             {
@@ -233,9 +221,11 @@
             },
             {
                 "P": null,
-                "T": [
-                    "AL"
-                ]
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
             },
             {
                 "P": null,
@@ -261,9 +251,7 @@
             },
             {
                 "P": null,
-                "T": [
-                    "AU"
-                ]
+                "T": null
             },
             {
                 "P": null,
@@ -285,12 +273,12 @@
         "columns": 8,
         "area": 2,
         "id": "28f378c3-430f-4414-b535-53029f9fe934",
-        "boardName": "SimpleBoard_Arrows",
+        "boardName": "Arrow_Loop",
         "enabled": true,
         "enabledGallery": true,
         "enabledRealtime": true
     },
-    "Profile": 14,
+    "Profile": 7,
     "Boss": 0,
     "FirstTurn": 0,
     "Solution": [],

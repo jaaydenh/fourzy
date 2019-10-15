@@ -649,6 +649,6 @@
         "area": 8
     },
     "GoalType": 0,
-    "MoveLimit": 2,
+    "MoveLimit": 1,
     "Complexity": 0
 }
