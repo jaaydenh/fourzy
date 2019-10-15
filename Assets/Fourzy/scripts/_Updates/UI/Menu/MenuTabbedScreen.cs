@@ -18,7 +18,7 @@ namespace Fourzy._Updates.UI.Menu
         public static MenuTabbedScreen Instance;
 
         public MenuTab defaultTab;
-        public bool warp = false;
+        //public bool warp = false;
 
         public RectTransform tabsParent;
         public List<TabButton> tabsButtons;
@@ -116,11 +116,18 @@ namespace Fourzy._Updates.UI.Menu
 
             currentTab = index;
 
-            tabsParentTween.playbackTime = animate ? tabsParentTween.defaultPlaybackTime : 0f;
-            tabsParentTween.FromCurrentPosition();
-            tabsParentTween.to = Vector3.left * index * menuController.widthAdjusted;
+            if (animate)
+            {
+                tabsParentTween.playbackTime = tabsParentTween.defaultPlaybackTime;
+                tabsParentTween.FromCurrentPosition();
+                tabsParentTween.to = Vector3.left * index * menuController.widthAdjusted;
 
-            tabsParentTween.PlayForward(true);
+                tabsParentTween.PlayForward(true);
+            }
+            else
+            {
+                tabsParentTween.SetPosition(Vector3.left * index * menuController.widthAdjusted);
+            }
 
             tabs[index].Open();
             tabsButtons[index].Open(true);
@@ -133,31 +140,54 @@ namespace Fourzy._Updates.UI.Menu
 
         public void OpenNext(bool animate)
         {
-            if (warp)
+            //if (warp)
+            //{
+            //    if (currentTab + 1 == tabs.Count)
+            //        OpenTab(0, animate);
+            //    else
+            //        OpenTab(currentTab + 1, animate);
+            //}
+            //else
+            //{
+            //if (currentTab + 1 < tabs.Count)
+            //{
+            //    if (tabsButtons[currentTab + 1].button.interactable)
+            //        OpenTab(currentTab + 1, animate);
+            //    else
+            //    {
+            //        int nextIndex = tabsButtons.FindIndex(currentTab)
+            //        bool found = false;
+            //        for (int tabIndex = currentTab + 1; tabIndex < tabsButtons.Count; tabIndex++)
+            //        {
+
+            //        }
+            //    }
+            //}
+            //}
+            if (currentTab + 1 < tabs.Count)
             {
-                if (currentTab + 1 == tabs.Count)
-                    OpenTab(0, animate);
-                else
-                    OpenTab(currentTab + 1, animate);
-            }
-            else
-            {
-                if (currentTab + 1 < tabs.Count) OpenTab(currentTab + 1, animate);
+                int index = tabsButtons.FindIndex(currentTab + 1, tab => tab.button.interactable);
+                if (index > -1) OpenTab(index, animate);
             }
         }
 
         public void OpenPrevious(bool animate)
         {
-            if (warp)
+            //if (warp)
+            //{
+            //    if (currentTab - 1 < 0)
+            //        OpenTab(tabs.Count - 1, animate);
+            //    else
+            //        OpenTab(currentTab - 1, animate);
+            //}
+            //else
+            //{
+            //if (currentTab - 1 >= 0) OpenTab(currentTab - 1, animate);
+            //}
+            if (currentTab > 0)
             {
-                if (currentTab - 1 < 0)
-                    OpenTab(tabs.Count - 1, animate);
-                else
-                    OpenTab(currentTab - 1, animate);
-            }
-            else
-            {
-                if (currentTab - 1 >= 0) OpenTab(currentTab - 1, animate);
+                int index = tabsButtons.FindLastIndex(currentTab - 1, tab => tab.button.interactable);
+                if (index > -1) OpenTab(index, animate);
             }
         }
 

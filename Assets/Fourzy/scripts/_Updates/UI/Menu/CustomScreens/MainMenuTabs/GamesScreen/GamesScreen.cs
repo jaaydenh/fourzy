@@ -36,9 +36,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             instance = this;
             challengesViews = new List<ActiveGameWidget>();
 
-            ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
-            ChallengeManager.OnChallengeUpdateLocal += OnChallengeUpdate;
-            ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
+            //ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
+            //ChallengeManager.OnChallengeUpdateLocal += OnChallengeUpdate;
+            //ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
         }
 
         public void ViewContentScrollRectOnValueChanged(Vector2 pos)
@@ -139,8 +139,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void ClearPreviousGames()
         {
-            foreach (ActiveGameWidget gameWidget in challengesViews)
-                Destroy(gameWidget.gameObject);
+            foreach (ActiveGameWidget gameWidget in challengesViews) Destroy(gameWidget.gameObject);
 
             challengesViews.Clear();
         }
@@ -149,7 +148,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnInitialized();
 
-            if (ChallengeManager.Instance.Challenges.Count > 0) OnChallengesUpdate(ChallengeManager.Instance.Challenges);
+            //if (ChallengeManager.Instance.Challenges.Count > 0) OnChallengesUpdate(ChallengeManager.Instance.Challenges);
         }
     }
 }

@@ -83,22 +83,25 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void CheckOrientation()
         {
+            Camera _camera = Camera.main;
+            if (!_camera) return;
+
             //ratio check
             switch (orientation)
             {
                 case DeviceOrientation.LandscapeLeft:
                 case DeviceOrientation.LandscapeRight:
-                    if (Camera.main.aspect > 1.85f)
+                    if (_camera.aspect > 1.85f)
                     {
                         ratio = DisplayRatioOption.IPHONEX;
                         UpdatePrevious();
                     }
-                    else if (Camera.main.aspect > 1.5f)
+                    else if (_camera.aspect > 1.5f)
                     {
                         ratio = DisplayRatioOption.IPHONE;
                         UpdatePrevious();
                     }
-                    else if (Camera.main.aspect > 1f)
+                    else if (_camera.aspect > 1f)
                     {
                         ratio = DisplayRatioOption.IPAD;
                         UpdatePrevious();
@@ -108,14 +111,14 @@ namespace Fourzy._Updates.UI.Helpers
 
                 case DeviceOrientation.Portrait:
                 case DeviceOrientation.PortraitUpsideDown:
-                    if (Camera.main.aspect <= 1f)
+                    if (_camera.aspect <= 1f)
                     {
-                        if (Camera.main.aspect >= .7f)
+                        if (_camera.aspect >= .7f)
                         {
                             ratio = DisplayRatioOption.IPAD;
                             UpdatePrevious();
                         }
-                        else if (Camera.main.aspect >= .5f)
+                        else if (_camera.aspect >= .5f)
                         {
                             ratio = DisplayRatioOption.IPHONE;
                             UpdatePrevious();
@@ -130,7 +133,7 @@ namespace Fourzy._Updates.UI.Helpers
                     break;
             }
 
-            previousAspect = Camera.main.aspect;
+            previousAspect = _camera.aspect;
         }
 
         private void OnRatioChanged(DisplayRatioOption option)

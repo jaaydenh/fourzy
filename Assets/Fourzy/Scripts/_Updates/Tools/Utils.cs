@@ -883,7 +883,7 @@ namespace Fourzy._Updates.Tools
         {
             if (!obj) return current;
 
-            Vector2 position = root == obj ? Vector2.zero : GetAnchoredPosition(obj, root, Vector2.zero);
+            Vector3 position = root == obj ? Vector3.zero : GetAnchoredPosition(obj, root, Vector2.zero);
 
             float left = position.x - obj.pivot.x * obj.rect.width;
             float right = position.x + (1f - obj.pivot.x) * obj.rect.width;
@@ -903,12 +903,23 @@ namespace Fourzy._Updates.Tools
             return current;
         }
 
-        public static Vector2 GetAnchoredPosition(this RectTransform target, RectTransform root, Vector2 current)
+        public static Vector3 GetAnchoredPosition(this RectTransform target, RectTransform root, Vector3 current)
         {
-            if (target.parent != root)
-                current += target.anchoredPosition + GetAnchoredPosition(target.parent.GetComponent<RectTransform>(), root, current);
+            if (target != root)
+            {
+                //current += target.anchoredPosition + GetAnchoredPosition(target.parent.GetComponent<RectTransform>(), root, current);
+                current += target.localPosition + GetAnchoredPosition(target.parent.GetComponent<RectTransform>(), root, current);
+                //Debug.Log(target.name + " " + target.localPosition);
+
+            }
 
             return current;
+        }
+
+        public static Vector2 GetCenterOffset(this RectTransform target)
+        {
+            Vector2 _offset = Vector2.one * .5f - target.pivot;
+            return new Vector2(target.rect.size.x * _offset.x, target.rect.size.y * _offset.y);
         }
 
         public static AnimationCurve CreateLinearCurve()

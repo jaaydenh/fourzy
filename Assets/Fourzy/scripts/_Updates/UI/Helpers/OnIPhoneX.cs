@@ -21,16 +21,14 @@ namespace Fourzy._Updates.UI.Helpers
 
         protected void Start()
         {
-            if (!Application.isPlaying)
-                return;
+            if (!Application.isPlaying) return;
 
             CheckPlatform();
         }
 
         protected void Update()
         {
-            if (Application.isEditor)
-                CheckPlatform();
+            if (Application.isEditor) CheckPlatform();
         }
 
         public void CheckPlatform()

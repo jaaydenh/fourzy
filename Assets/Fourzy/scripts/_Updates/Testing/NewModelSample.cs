@@ -16,6 +16,8 @@ namespace Fourzy.Testing
         public GameboardView gameboard;
 
         private ClientFourzyGame game;
+        public RectTransform root;
+        public RectTransform target;
 
         protected override void Awake()
         {
@@ -36,6 +38,11 @@ namespace Fourzy.Testing
                     FunctionName = "createTurnBased",
 
                 }, OnResult, OnError);
+            }
+
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                print(target.GetAnchoredPosition(root, Vector3.zero));
             }
         }
 

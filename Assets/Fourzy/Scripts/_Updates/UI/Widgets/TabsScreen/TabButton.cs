@@ -1,7 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Tween;
-using Fourzy._Updates.UI.Menu;
+using Fourzy._Updates.UI.Helpers;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -11,19 +11,19 @@ namespace Fourzy._Updates.UI.Widgets
         public int tabIndex;
 
         private bool isOpened = false;
-        private MenuTabbedScreen tabsScreen;
         private TweenBase tween;
+
+        public ButtonExtended button { get; private set; }
 
         protected void Awake()
         {
-            tabsScreen = GetComponentInParent<MenuTabbedScreen>();
             tween = GetComponent<TweenBase>();
+            button = GetComponent<ButtonExtended>();
         }
 
         public void Open(bool animate)
         {
-            if (isOpened)
-                return;
+            if (isOpened) return;
 
             isOpened = true;
             

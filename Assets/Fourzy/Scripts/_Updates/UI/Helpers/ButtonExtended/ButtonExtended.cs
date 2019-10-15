@@ -4,7 +4,6 @@ using ByteSheep.Events;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
-using Fourzy._Updates.UI.Widgets;
 using StackableDecorator;
 using System;
 using System.Collections.Generic;
@@ -39,7 +38,7 @@ namespace Fourzy._Updates.UI.Helpers
         public ScaleTween scaleTween { get; set; }
         public AlphaTween alphaTween { get; set; }
         public List<MaskableGraphic> maskableGraphics { get; private set; }
-        //public WidgetBase widget { get; private set; }
+        public RectTransform rectTransform { get; private set; }
 
         private bool initialized = false;
 
@@ -133,7 +132,7 @@ namespace Fourzy._Updates.UI.Helpers
         {
             MaskableGraphic maskable = obj.GetComponent<MaskableGraphic>();
 
-            if(maskable) maskableGraphics.Add(maskable);
+            if (maskable) maskableGraphics.Add(maskable);
 
             if (propagate)
                 for (int i = 0; i < obj.childCount; i++)
@@ -230,7 +229,7 @@ namespace Fourzy._Updates.UI.Helpers
             //get tweens
             scaleTween = GetComponent<ScaleTween>();
             alphaTween = GetComponent<AlphaTween>();
-            //widget = GetComponentInParent<WidgetBase>();
+            rectTransform = GetComponent<RectTransform>();
 
             DoParse();
 

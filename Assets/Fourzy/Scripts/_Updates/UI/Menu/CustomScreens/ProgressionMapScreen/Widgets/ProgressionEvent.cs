@@ -328,7 +328,7 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        public void ResetEvent()
+        public ProgressionEvent ResetEvent()
         {
             switch (EventType)
             {
@@ -343,13 +343,15 @@ namespace Fourzy._Updates.UI.Widgets
                     break;
             }
 
-            if (string.IsNullOrEmpty(gameObject.scene.name)) return;
+            if (string.IsNullOrEmpty(gameObject.scene.name)) return null;
 
             button.interactable = false;
             onReset.Invoke();
 
             _unlocked = false;
             _rewarded = false;
+
+            return this;
         }
 
         protected override void OnInitialized()

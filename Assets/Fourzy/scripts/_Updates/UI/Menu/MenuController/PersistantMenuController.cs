@@ -13,7 +13,8 @@ namespace Fourzy._Updates.UI.Menu
         {
             if (instance)
             {
-                Destroy(gameObject);
+                DestroyImmediate(gameObject);
+
                 return;
             }
 

@@ -148,7 +148,17 @@ MonoBehaviour:
   events:
     inspectorListHeight: 83
     persistentCalls:
-      calls: []
+      calls:
+      - genericMenuData:
+          selectedComponent: 2
+          selectedMember: 31
+          isDynamic: 0
+        target: {fileID: 2618477404747887170}
+        memberName: OnTap
+        memberType: 8
+        arguments: []
+        isDynamic: 0
+        isCallEnabled: 1
   onState:
     inspectorListHeight: 83
     persistentCalls:

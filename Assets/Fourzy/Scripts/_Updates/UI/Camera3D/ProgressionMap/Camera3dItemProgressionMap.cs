@@ -1,7 +1,8 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
-using Fourzy._Updates.Tools;
+using Fourzy._Updates.Managers;
+using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Widgets;
@@ -85,12 +86,6 @@ namespace Fourzy._Updates.UI.Camera3D
             Initialize();
         }
 
-        //protected void Update()
-        //{
-        //    if (Input.GetKeyDown(KeyCode.L))
-        //        print(GetCurrentEvent().rectTransform.GetSize());
-        //}
-
         protected void OnDestroy()
         {
             GameContentManager.Instance.existingProgressionMaps.Remove(this);
@@ -105,7 +100,6 @@ namespace Fourzy._Updates.UI.Camera3D
             {
                 finished = true;
 
-                //show map finished animation
                 PlayerPrefsWrapper.SetAdventureComplete(mapID, true);
 
                 menuScreen.menuController.GetScreen<PromptScreen>().Prompt("Adventure map complete", "none", null, "OK");
@@ -175,8 +169,6 @@ namespace Fourzy._Updates.UI.Camera3D
             return currentScrollValue;
         }
 
-        public void FocusOn(int widgetIndex) => Scroll(widgets[widgetIndex].rectTransform.anchoredPosition.x / chunk.size.x, true);
-
         public void FocusOn(ProgressionEvent widget) => Scroll(widgets[widgets.IndexOf(widget)].rectTransform.anchoredPosition.x / chunk.size.x, true);
 
         public void OnClick(Vector2 position)
@@ -195,6 +187,8 @@ namespace Fourzy._Updates.UI.Camera3D
 
         public void ResetPlayerPrefs()
         {
+            finished = false;
+
             PlayerPrefsWrapper.SetAdventureNew(mapID, true);
             PlayerPrefsWrapper.SetAdventureUnlocked(mapID, false);
             PlayerPrefsWrapper.SetAdventureComplete(mapID, false);
@@ -208,9 +202,43 @@ namespace Fourzy._Updates.UI.Camera3D
             }
         }
 
+        public void CompleteAll()
+        {
+            if (!SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) return;
+
+            Array.ForEach(GetComponentsInChildren<ProgressionEvent>(), widget =>
+            {
+                switch (widget.EventType)
+                {
+                    case ProgressionEvent.ProgressionEventType.GAME:
+
+                        BasicPuzzlePack pack = GameContentManager.Instance.GetExternalPuzzlePack(widget.packName);
+
+                        PlayerPrefsWrapper.SetPuzzlePackUnlocked(pack.packID, true);
+                        PlayerPrefsWrapper.SetPuzzlePackOpened(pack.packID, true);
+
+                        pack.puzzlesData.ForEach(_data =>
+                        {
+                            PlayerPrefsWrapper.SetPuzzleChallengeComplete(_data.ID, true);
+                            PlayerPrefsWrapper.SetGameRewarded(_data.ID, true);
+
+                            foreach (RewardsManager.Reward reward in _data.rewards)
+                                PlayerPrefsWrapper.SetEventRewarded(_data.GetRewardID(reward), true);
+                        });
+
+                        break;
+                }
+            });
+
+            if (string.IsNullOrEmpty(gameObject.scene.name) && gameObject.activeInHierarchy) UpdateWidgets();
+        }
+
         public ProgressionEvent GetCurrentEvent()
         {
             List<ProgressionEvent> options = widgets.Where(@event => @event._unlocked && !@event._rewarded).ToList();
+
+            if (options.Count == 0)
+                return widgets[0];
 
             return options.Find(@event => @event.EventType == ProgressionEvent.ProgressionEventType.GAME) ??
                 options.Find(@event => @event.EventType == ProgressionEvent.ProgressionEventType.CURRENCY);

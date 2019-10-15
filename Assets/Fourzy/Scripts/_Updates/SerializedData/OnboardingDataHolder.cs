@@ -240,11 +240,10 @@ namespace Fourzy._Updates.Serialized
 
         public class OnboardingTask_HighlightButton : OnboardingTask
         {
-            public OnboardingTask_HighlightButton(string buttonName, Vector2 size)
+            public OnboardingTask_HighlightButton(string buttonName)
             {
                 action = OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON;
                 stringValue = buttonName;
-                pointAt = size;
             }
         }
     }

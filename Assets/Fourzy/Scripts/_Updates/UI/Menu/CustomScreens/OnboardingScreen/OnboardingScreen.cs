@@ -4,6 +4,7 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
@@ -92,7 +93,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             step = 0;
 
             menuController.OpenScreen(this);
-            masks.Hide(0);
+            masks.Hide(0f);
+            pointer.Hide(0f);
 
             PlayerPrefsWrapper.SetTutorialOpened(tutorial.data, true);
             StartCoroutine(DisplayCurrentStep());
@@ -377,17 +379,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case OnboardingDataHolder.OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON:
                         if (!GameManager.Instance.isMainMenuLoaded) break;
 
-                        //MenuScreen screen = MenuController.GetMenu(Constants.MAIN_MENU_CANVAS_NAME).currentScreen;
-                        MenuScreen screen = FourzyMainMenuController.instance.currentScreen;
-                        GameObject target = null;
+                        MenuController _menuController = FourzyMainMenuController.instance;
+                        MenuScreen screen = _menuController.currentScreen;
+
+                        if (screen.GetType() == typeof(MenuTabbedScreen)) screen = (screen as MenuTabbedScreen).CurrentTab;
 
                         //get button
-                        if (screen.GetType() == typeof(MenuTabbedScreen))
-                            target = (screen as MenuTabbedScreen).CurrentTab.gameObject;
-                        else
-                            target = screen.gameObject;
-
-                        foreach (ButtonExtended button in target.GetComponentsInChildren<ButtonExtended>())
+                        foreach (ButtonExtended button in screen.GetComponentsInChildren<ButtonExtended>())
                         {
                             if (button.name == task.stringValue)
                             {
@@ -397,12 +395,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             }
                         }
 
-                        masks.ShowMasks(task.pointAt, new Vector2(350f, 130f), true);
+                        Vector2 screenSize = 
+                            new Vector2(_menuController.canvaseScaler.referenceResolution.x * _menuController.transform.localScale.x,
+                            _menuController.canvaseScaler.referenceResolution.y * _menuController.transform.localScale.y);
 
+                        Vector3 position = currentButton.transform.position - screen.transform.position
+                            + (Vector3)(currentButton.rectTransform.GetCenterOffset() * _menuController.transform.localScale.x);
+
+                        Vector2 anchor = Vector2.one * .5f + new Vector2(position.x / screenSize.x, position.y / screenSize.y);
+
+                        masks.ShowMasks(anchor, new Vector2(350f, 130f), true);
 
                         //pointer
                         if (!pointer.visible) pointer.Show(.2f);
-                        pointer.SetAnchors(task.pointAt);
+                        pointer.SetAnchors(anchor);
 
                         break;
                 }

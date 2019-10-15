@@ -386,30 +386,33 @@ namespace UnityEngine.EventSystems
             if (!lastGOPoinerEnter)
             {
                 Camera c = Camera.main;
-                Vector3 screenToWorld = c.ScreenToWorldPoint(leftData.position);
-                Vector3 rayPositionAdjusted = new Vector3(screenToWorld.x, screenToWorld.y, c.transform.position.z);
-
-                RaycastHit2D raycastHit2D = Physics2D.Raycast(c.ScreenToWorldPoint(leftData.position), c.transform.TransformDirection(Vector3.forward), c.farClipPlane, layerMask);
-
-                if (raycastHit2D)
+                if (c)
                 {
-                    Selectable3D selectable = raycastHit2D.transform.GetComponent<Selectable3D>();
+                    Vector3 screenToWorld = c.ScreenToWorldPoint(leftData.position);
+                    Vector3 rayPositionAdjusted = new Vector3(screenToWorld.x, screenToWorld.y, c.transform.position.z);
 
-                    if (selectable)
+                    RaycastHit2D raycastHit2D = Physics2D.Raycast(c.ScreenToWorldPoint(leftData.position), c.transform.TransformDirection(Vector3.forward), c.farClipPlane, layerMask);
+
+                    if (raycastHit2D)
                     {
-                        if (!last3DGOPoinerEnter || selectable != last3DGOPoinerEnter)
-                        {
-                            if (last3DGOPoinerEnter && last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnExit();
+                        Selectable3D selectable = raycastHit2D.transform.GetComponent<Selectable3D>();
 
-                            last3DGOPoinerEnter = selectable;
-                            if (last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnEnter();
+                        if (selectable)
+                        {
+                            if (!last3DGOPoinerEnter || selectable != last3DGOPoinerEnter)
+                            {
+                                if (last3DGOPoinerEnter && last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnExit();
+
+                                last3DGOPoinerEnter = selectable;
+                                if (last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnEnter();
+                            }
                         }
                     }
-                }
-                else if (last3DGOPoinerEnter)
-                {
-                    if (last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnExit();
-                    last3DGOPoinerEnter = null;
+                    else if (last3DGOPoinerEnter)
+                    {
+                        if (last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnExit();
+                        last3DGOPoinerEnter = null;
+                    }
                 }
             }
             ///

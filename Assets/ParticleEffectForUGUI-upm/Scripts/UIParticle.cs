@@ -110,17 +110,17 @@ namespace Coffee.UIExtensions
 		/// </summary>
 		public ParticleSystem cachedParticleSystem { get { return m_ParticleSystem ? m_ParticleSystem : (m_ParticleSystem = GetComponent<ParticleSystem> ()); } }
 
-		/// <summary>
-		/// Perform material modification in this function.
-		/// </summary>
-		/// <returns>Modified material.</returns>
-		/// <param name="baseMaterial">Configured Material.</param>
-		public override Material GetModifiedMaterial (Material baseMaterial)
-        {
+        /// <summary>
+        /// Perform material modification in this function.
+        /// </summary>
+        /// <returns>Modified material.</returns>
+        /// <param name="baseMaterial">Configured Material.</param>
 #pragma warning disable
+        public override Material GetModifiedMaterial (Material baseMaterial)
+        {
             return base.GetModifiedMaterial (_renderer ? _renderer.sharedMaterial : baseMaterial);
-#pragma warning restore
         }
+#pragma warning restore
 
         /// <summary>
         /// This function is called when the object becomes enabled and active.

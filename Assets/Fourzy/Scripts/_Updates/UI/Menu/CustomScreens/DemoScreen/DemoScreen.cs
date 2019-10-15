@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using System;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
@@ -60,6 +59,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Toggle();
         }
 
+        public void CompleteProgress()
+        {
+            GameContentManager.Instance.progressionMaps[0].CompleteAll();
+        }
+
         public void TogglePiecesPlacementStyle()
         {
             if (GameManager.Instance.placementStyle == GameManager.PlacementStyle.DEFAULT)
@@ -107,9 +111,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             SettingsManager.onDemoMode += OnDemo;
 
+            GameManager.onSceneChanged += OnSceneChanged;
+
             if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) OnDemo(true);
 
-            GameManager.onSceneChanged += OnSceneChanged;
             SetPlacementButtonState(false);
         }
 

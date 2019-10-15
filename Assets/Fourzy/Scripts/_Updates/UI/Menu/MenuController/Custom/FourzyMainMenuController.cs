@@ -4,8 +4,6 @@ using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu.Screens;
 using PlayFab;
 using PlayFab.ClientModels;
-using System.Linq;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu
 {

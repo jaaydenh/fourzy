@@ -97,7 +97,7 @@ namespace Fourzy._Updates.UI.Menu
             widgets = new List<WidgetBase>(GetComponentsInChildren<WidgetBase>()).Where(widget => widget.GetComponentInParent<MenuScreen>() == this).ToList();
         }
 
-        protected void Start()
+        protected virtual void Start()
         {
             //if @default, set this screen as default one
             if (@default)

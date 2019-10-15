@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Menu.Screens;
 using StackableDecorator;
 using System.Collections;
 using TMPro;
@@ -82,6 +83,17 @@ namespace Fourzy._Updates.UI.Widgets
         public bool Check() => type == CurrencyType.XP;
 
         public bool SliderCheck() => type == CurrencyType.PORTAL_POINTS || type == CurrencyType.RARE_PORTAL_POINTS || type == CurrencyType.XP;
+
+        public void OnTap()
+        {
+            switch (type)
+            {
+                case CurrencyType.HINTS:
+                    menuScreen.menuController.GetScreen<StorePromptScreen>().Prompt(StorePromptScreen.StoreItemType.HINTS);
+
+                    break;
+            }
+        }
 
         public static int ValueFromCurrencyType(CurrencyType type)
         {

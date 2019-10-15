@@ -18,8 +18,8 @@ namespace Fourzy._Updates.UI.Menu
         public static Dictionary<string, MenuEvents> menuEvents = new Dictionary<string, MenuEvents>();
 
         public Camera _camera;
-        public bool closeCurrentOnOpen = false;
         public RectTransform newScreensParent;
+        public RectTransform canvasRoot;
         public MenuScreen[] extraScreens;
 
         public List<MenuScreen> screens { get; protected set; }
@@ -28,6 +28,7 @@ namespace Fourzy._Updates.UI.Menu
 
         public CanvasScaler canvaseScaler { get; private set; }
         public Vector2 canvasToScreenRatio { get; private set; }
+        public Canvas canvas { get; private set; }
 
         public float widthScaled { get; private set; }
         public float heightScaled { get; private set; }
@@ -59,6 +60,7 @@ namespace Fourzy._Updates.UI.Menu
 
             screensStack = new StackModified<MenuScreen>();
             canvaseScaler = GetComponent<CanvasScaler>();
+            canvas = GetComponent<Canvas>();
 
             widthScaled = Screen.height / canvaseScaler.referenceResolution.y * canvaseScaler.referenceResolution.x;
             heightScaled = Screen.width / canvaseScaler.referenceResolution.x * canvaseScaler.referenceResolution.y;
@@ -220,9 +222,18 @@ namespace Fourzy._Updates.UI.Menu
 
         public virtual void SetState(bool state)
         {
-            if (gameObject.activeInHierarchy == state) return;
+            if (canvasRoot != null)
+            {
+                if (canvasRoot.gameObject.activeInHierarchy == state) return;
 
-            gameObject.SetActive(state);
+                canvasRoot.gameObject.SetActive(state);
+            }
+            else
+            {
+                if (gameObject.activeInHierarchy == state) return;
+
+                gameObject.SetActive(state);
+            }
 
             if (state)
             {
@@ -246,7 +257,7 @@ namespace Fourzy._Updates.UI.Menu
         protected virtual void OnBack()
         {
             if (PersistantMenuController.instance.screensStack.Count > 0 || !gameObject.activeInHierarchy) return;
-            
+
             if (screensStack.Count > 0)
             {
                 MenuScreen menuScreen = screensStack.Peek();
@@ -264,8 +275,9 @@ namespace Fourzy._Updates.UI.Menu
         private IEnumerator InitializedRoutine()
         {
             while (!screens.TrueForAll(screen => screen.initialized)) yield return null;
-            initialized = true;
+
             OnInitialized();
+            initialized = true;
 
             ExecuteMenuEvents();
         }
