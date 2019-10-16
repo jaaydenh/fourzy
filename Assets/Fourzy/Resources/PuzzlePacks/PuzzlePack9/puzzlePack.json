@@ -1,0 +1,16 @@
+{
+    "name": "Arrows",
+    "type": 0,
+    "id": "009",
+    "unlockRequirement": 0,
+    "herdID": "1",
+    "playerName": "Guardian",
+    "rewards": [
+        {
+            "levelIndex": 10,
+            "rewardType": 5,
+            "name": "",
+            "quantity": 0
+        }
+    ]
+}

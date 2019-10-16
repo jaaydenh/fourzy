@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 114312036782990136}
   - component: {fileID: 114308421352685144}
   m_Layer: 0
-  m_Name: TokenBlocker
+  m_Name: tokenBlocker
   m_TagString: Token
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -269,6 +269,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -281,7 +282,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: 3ae56ad6425124e559530a1e83895111, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 60d65346101224d0f823f3ae5791a585, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

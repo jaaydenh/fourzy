@@ -1,0 +1,16 @@
+{
+    "name": "Fruit and Goop",
+    "type": 0,
+    "id": "010",
+    "unlockRequirement": 0,
+    "herdID": "1",
+    "playerName": "Guardian",
+    "rewards": [
+        {
+            "levelIndex": 14,
+            "rewardType": 5,
+            "name": "",
+            "quantity": 0
+        }
+    ]
+}
