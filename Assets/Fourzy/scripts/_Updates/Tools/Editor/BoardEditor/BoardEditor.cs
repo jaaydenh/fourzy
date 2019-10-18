@@ -17,29 +17,50 @@ namespace Fourzy._Updates.Tools
     {
         public static BoardEditor instance;
 
-        private static Vector2 tabSize = new Vector2(300f, 0f);
+        private static Vector2 tab1Size = new Vector2(300f, 0f);
+        private static Vector2 tab2Size = new Vector2(300f, 0f);
         private static Vector2Int gridBorder = new Vector2Int(80, 80);
-        private static Vector2Int gridOrigin = new Vector2Int(400, 80);
         private static Vector2Int gridCellSize = new Vector2Int(42, 42);
         private static Vector2Int gridCellPadding = new Vector2Int(4, 4);
 
-        public static string[] rotatingArrowFrequencyDisplayOptions = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9 " };
-        public static int[] rotatingArrowFrequencyOptions = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        public static string[] rotatingArrowCountdownDisplayOptions = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-        public static int[] rotatingArrowCountdownOptions = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        public static string[] rotatingArrowFrequencyDisplayOptions = { "1", "2", "3", "4", "5", "6", "7", "8", "9 " };
+        public static int[] rotatingArrowFrequencyOptions = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        public static string[] rotatingArrowCountdownDisplayOptions = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        public static int[] rotatingArrowCountdownOptions = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        public static string[] firstTurnDisplayOptions = { "One", "Two" };
+        public static int[] firstTurnOptions = { 1, 2 };
+
+        private static readonly string[] saveOptions =
+        {
+            "Save Board",
+            "Solve And Save Puzzle",
+            "Save As Game",
+            "Save As Puzzle",
+        };
+        private static readonly string[] castOptions =
+        {
+            "Puzzle",
+            "Board",
+        };
 
         private static Dictionary<TokenType, Sprite> tokensSprites;
+        private static FourzyPuzzleData currentPuzzleData;
         private static GameBoardDefinition currentBoard;
         private static List<BoardSpaceWrapper> selectedBoardSpaceData;
         private static List<BoardSpaceTokenWrapper> commonTokens;
+        //private static List<PlayerTurn> currentSolutions;
         private static int selectedTokenIndex;
         private static int selectedInitialMove;
+        private static int selectedSolutionIndex;
         private static TokenType prevTokenType;
         private static string selectedPath;
         private static string selectedFileName;
+        private static GenericMenu saveMenu;
+        private static GenericMenu castMenu;
 
         private static TokensDataHolder tokensData;
         private static TokensDataHolder tempTokensData;
+        private static Vector2Int gridOrigin;
         private static Vector2 gridSize;
         private static Vector2 windowSize;
         private static Vector2 initialMoveButtonSize;
@@ -55,10 +76,13 @@ namespace Fourzy._Updates.Tools
 
         private static bool pointerInsideTab;
 
+        private static FileType fileType = FileType.BOARD;
+
         private Vector2 tokensScrollViewPosition;
         private Vector2 initialMovesScrollViewPosition;
+        private Vector2 solutionScrollViewPosition;
+
         public static int PuzzleSearchDepth = 3;
-        public static string BoardInfo = "";
 
         [MenuItem("Window/Board Editor")]
         public static void ShowWindow()
@@ -67,9 +91,9 @@ namespace Fourzy._Updates.Tools
 
             initialMoveButtonSize = new Vector2(gridCellSize.x * .5f, gridCellSize.y * .5f);
             initialMoveButtonPadding = new Vector2((gridCellSize.x - initialMoveButtonSize.x) * .5f, (gridCellSize.y - initialMoveButtonSize.y) * .5f);
+            gridOrigin = new Vector2Int(400, 80);
             gridSize = new Vector2(8 * (gridCellSize.x + gridCellPadding.x) - gridCellPadding.x, 8 * (gridCellSize.y + gridCellPadding.y) - gridCellPadding.y);
-            windowSize = new Vector2(gridOrigin.x + gridSize.x + gridBorder.x, gridOrigin.y + gridSize.y + gridBorder.y + 50);
-            instance.minSize = instance.maxSize = windowSize;
+            UpdateWindowSize();
 
             defaultButtonsStyle = new GUIStyle() { alignment = TextAnchor.MiddleLeft };
             selectedButtonStyle = new GUIStyle() { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, contentOffset = Vector2.right * 20f };
@@ -83,6 +107,12 @@ namespace Fourzy._Updates.Tools
 
             selectedBoardSpaceData = new List<BoardSpaceWrapper>();
             commonTokens = new List<BoardSpaceTokenWrapper>();
+
+            //build save menu
+            saveMenu = new GenericMenu();
+            foreach (string saveOption in saveOptions) AddSaveMenuItem(saveOption);
+            castMenu = new GenericMenu();
+            foreach (string castOption in castOptions) AddCastMenuItem(castOption);
 
             //load arrows
             arrowGraphics = new Texture[4];
@@ -110,10 +140,17 @@ namespace Fourzy._Updates.Tools
             //draw explorere tab
             BeginWindows();
 
-            Rect editorWindowRect = GUILayout.Window(ushort.MaxValue, new Rect(0f, 0f, tabSize.x, tabSize.y), EditorTab, "Editor Tab");
+            Rect editorWindowRect = GUILayout.Window(0, new Rect(0f, 0f, tab1Size.x, tab1Size.y), EditorTab, "Editor Tab");
+
+            Rect puzzleWindowRect = new Rect();
+            if (fileType == FileType.PUZZLE) puzzleWindowRect = GUILayout.Window(1, new Rect(tab1Size.x + 10f, 0f, tab2Size.x, tab2Size.y), PuzzleTab, "Puzzle Tab");
 
             if (@event.type == EventType.Repaint)
-                pointerInsideTab = @event.mousePosition.x >= editorWindowRect.x && @event.mousePosition.y >= editorWindowRect.y && @event.mousePosition.x <= editorWindowRect.size.x && @event.mousePosition.y <= editorWindowRect.size.y;
+                pointerInsideTab =
+                    @event.mousePosition.x >= 0f &&
+                    @event.mousePosition.y >= 0f &&
+                    @event.mousePosition.x <= puzzleWindowRect.position.x + editorWindowRect.size.x &&
+                    @event.mousePosition.y <= puzzleWindowRect.position.y + editorWindowRect.size.y;
 
             EndWindows();
 
@@ -208,7 +245,7 @@ namespace Fourzy._Updates.Tools
                         break;
 
                     case EventType.MouseDown:
-                        if (@event.mousePosition.x < tabSize.x)
+                        if (@event.mousePosition.x < tab1Size.x)
                             break;
 
                         BoardSpaceData _selectedBoardSpaceData = BoardSpaceDataFromPoint(@event.mousePosition - gridOrigin);
@@ -342,8 +379,13 @@ namespace Fourzy._Updates.Tools
             selectedTokenIndex = -1;
             selectedInitialMove = -1;
 
-            if (string.IsNullOrEmpty(gameboard.ID))
-                gameboard.ID = Guid.NewGuid().ToString();
+            if (currentPuzzleData != null)
+            {
+                if (currentPuzzleData.Solution != null && currentPuzzleData.Solution.Count > 0)
+                    selectedSolutionIndex = 0;
+            }
+
+            if (string.IsNullOrEmpty(gameboard.ID)) gameboard.ID = Guid.NewGuid().ToString();
         }
 
         private static void UpdateCommonTokens()
@@ -466,13 +508,11 @@ namespace Fourzy._Updates.Tools
             return offset;
         }
 
-        //inner window
         private void EditorTab(int id)
         {
             tempTokensData = (TokensDataHolder)EditorGUILayout.ObjectField("Tokens Data", tokensData, typeof(TokensDataHolder), false);
 
-            if (tempTokensData != tokensData)
-                LoadTokensData(tempTokensData);
+            if (tempTokensData != tokensData) LoadTokensData(tempTokensData);
 
             tokensData = tempTokensData;
 
@@ -485,25 +525,10 @@ namespace Fourzy._Updates.Tools
             GUILayout.BeginHorizontal("Box");
             {
                 //board loader
-                if (GUILayout.Button("Load Board", GUILayout.Width(90f)))
-                {
-                    string path = EditorUtility.OpenFilePanel("Load board", "", "json");
-
-                    if (path.Length != 0)
-                    {
-                        GameBoardDefinition gameboard = JsonConvert.DeserializeObject<GameBoardDefinition>(File.ReadAllText(path));
-
-                        selectedPath = path;
-                        selectedFileName = Path.GetFileName(path);
-                        currentBoard = gameboard;
-
-                        if (gameboard != null)
-                            LoadGameboard(currentBoard);
-                    }
-                }
+                if (GUILayout.Button("Load...", GUILayout.Width(70f))) OnLoadPressed();
 
                 //new/clear board
-                if (GUILayout.Button("New board", GUILayout.Width(90f)))
+                if (GUILayout.Button("New", GUILayout.Width(70f)))
                 {
                     currentBoard = new GameBoardDefinition();
                     selectedPath = "";
@@ -515,76 +540,16 @@ namespace Fourzy._Updates.Tools
 
                 if (currentBoard != null)
                 {
-                    ////save board
-                    if (GUILayout.Button("Save board", GUILayout.Width(90f)))
-                    {
-                        string path = "";
+                    if (GUILayout.Button("Save...", GUILayout.Width(70f)))
+                        saveMenu.ShowAsContext();
 
-                        if (string.IsNullOrEmpty(selectedPath))
-                            path = EditorUtility.SaveFilePanelInProject("Save board", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/BoardsPool");
-                        else
-                            path = EditorUtility.SaveFilePanelInProject("Save board", selectedFileName, "json", "", selectedPath);
-
-                        if (path.Length != 0)
-                            File.WriteAllText(path, JsonConvert.SerializeObject(currentBoard));
-                    }
+                    if (GUILayout.Button("Cast To...", GUILayout.Width(70f)))
+                        castMenu.ShowAsContext();
                 }
             }
             GUILayout.EndHorizontal();
 
-            GUILayout.BeginHorizontal("Box");
-            {
-                if (currentBoard != null)
-                {
-                    if (GUILayout.Button(">puzzle", GUILayout.Width(90f)))
-                    {
-                        string path = "";
-
-                        if (string.IsNullOrEmpty(selectedPath))
-                            path = EditorUtility.SaveFilePanelInProject("Save puzzle", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
-                        else
-                            path = EditorUtility.SaveFilePanelInProject("Save puzzle", selectedFileName, "json", "", selectedPath);
-
-                        if (path.Length != 0)
-                        {
-                            GameState GS = new GameState(currentBoard, 1);
-                            GS.Players.Add(1, new Player(1, "ONE"));
-                            GS.Players.Add(2, new Player(1, "TWO"));
-
-                            PuzzleTestResults R = PuzzleTestTools.EvaluateState(GS, PuzzleSearchDepth);
-                            if (R.NumberOfVictoryPaths > 0)
-                            {
-                                FourzyPuzzleData PData = new FourzyPuzzleData(GS, R);
-                                File.WriteAllText(path, JsonConvert.SerializeObject(PData));
-                            }
-                            else
-                            {
-                                bool b = EditorUtility.DisplayDialog("Problem With Puzzle. Puzzle Not Created.",
-                                    "No Solutions Found.", "", "Ok");
-                            }
-                        }
-                    }
-                    if (GUILayout.Button(">game", GUILayout.Width(90f)))
-                    {
-                        string path = "";
-
-                        if (string.IsNullOrEmpty(selectedPath))
-                            path = EditorUtility.SaveFilePanelInProject("Save game", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
-                        else
-                            path = EditorUtility.SaveFilePanelInProject("Save game", selectedFileName, "json", "", selectedPath);
-
-                        if (path.Length != 0)
-                        {
-                            GameLevelData GLD = new GameLevelData(currentBoard, new List<SpellId>());
-                            File.WriteAllText(path, JsonConvert.SerializeObject(GLD));
-                        }
-                    }
-                }
-
-            }
-            GUILayout.EndHorizontal();
-
-                if (currentBoard != null)
+            if (currentBoard != null)
             {
                 GUILayout.BeginVertical("Box");
                 {
@@ -600,33 +565,6 @@ namespace Fourzy._Updates.Tools
 
                 }
                 GUILayout.EndVertical();
-
-                GUILayout.BeginVertical("Info");
-                {
-                    BoardInfo = EditorGUILayout.TextArea(BoardInfo, GUILayout.Height(50));
-
-                    if (GUILayout.Button("Solve", GUILayout.Width(90f)))
-                    {
-                        BoardInfo = "Thinking...";
-                        GameState GS = new GameState(currentBoard, 1);
-                        GS.Players.Add(1, new Player(1, "Player 1"));
-                        GS.Players.Add(2, new Player(2, "Player 2"));
-
-                        PuzzleTestResults R = PuzzleTestTools.EvaluateState(GS, PuzzleSearchDepth);
-                        BoardInfo = string.Format(@"Solutions:{0} at Depth:{1};", R.NumberOfVictoryPaths, R.VictoryDepth);
-                        if (R.NumberOfVictoryPaths > 0)
-                        {
-                            BoardInfo += "S:";
-                            for (int i = 0; i < R.Solution.Count; i++)
-                            {
-                                BoardInfo += R.Solution[0].Notation + @",";
-                            }
-                        }
-                    }
-
-                }
-                GUILayout.EndVertical();
-
 
                 //intial moves list
                 GUILayout.Label("Initial moves");
@@ -809,7 +747,7 @@ namespace Fourzy._Updates.Tools
                                     for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
                                     {
                                         selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] =
-                                            tokenType.TokenTypeToString() 
+                                            tokenType.TokenTypeToString()
                                             + TokenConstants.DirectionString(directionEnum);
                                     }
                                 }
@@ -837,17 +775,17 @@ namespace Fourzy._Updates.Tools
 
                                 //display rotation enum
                                 rotationEnum = (Rotation)EditorGUILayout.EnumPopup("Arrow Rotation", TokenConstants.GetRotation(commonTokens[selectedTokenIndex].token.Substring(2, 1)[0]));
-                                
+
                                 frequency = EditorGUILayout.IntPopup(
                                     "Frequency",
-                                    int.Parse(commonTokens[selectedTokenIndex].token.Substring(3, 1)), 
-                                    rotatingArrowFrequencyDisplayOptions, 
+                                    int.Parse(commonTokens[selectedTokenIndex].token.Substring(3, 1)),
+                                    rotatingArrowFrequencyDisplayOptions,
                                     rotatingArrowFrequencyOptions);
 
                                 countdown = EditorGUILayout.IntPopup(
-                                    "Countdown", 
-                                    int.Parse(commonTokens[selectedTokenIndex].token.Substring(4, 1)), 
-                                    rotatingArrowCountdownDisplayOptions, 
+                                    "Countdown",
+                                    int.Parse(commonTokens[selectedTokenIndex].token.Substring(4, 1)),
+                                    rotatingArrowCountdownDisplayOptions,
                                     rotatingArrowCountdownOptions);
 
                                 //only accept left/down/up/right and correcnt rotation
@@ -882,7 +820,7 @@ namespace Fourzy._Updates.Tools
                                     for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
                                         selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] = notation;
                                 }
-                                
+
                                 //display direction popup
                                 directionEnum = (Direction)EditorGUILayout.EnumPopup("Direction", TokenConstants.IdentifyDirection(commonTokens[selectedTokenIndex].token.Substring(1, 1)));
 
@@ -992,6 +930,224 @@ namespace Fourzy._Updates.Tools
             }
         }
 
+        private void PuzzleTab(int id)
+        {
+            if (currentPuzzleData == null) return;
+
+            GUILayout.Label("Data");
+            GUILayout.BeginVertical("Box");
+            {
+                currentPuzzleData.Boss = (BossType)EditorGUILayout.EnumPopup("Boss Type", currentPuzzleData.Boss);
+                currentPuzzleData.FirstTurn = EditorGUILayout.IntPopup("First Player", currentPuzzleData.FirstTurn, firstTurnDisplayOptions, firstTurnOptions);
+                currentPuzzleData.GoalType = (PuzzleGoalType)EditorGUILayout.EnumPopup("Goal Type", currentPuzzleData.GoalType);
+                currentPuzzleData.MoveLimit = EditorGUILayout.IntField("Move Limit", currentPuzzleData.MoveLimit);
+                currentPuzzleData.Profile = (AIProfile)EditorGUILayout.EnumPopup("Profile", currentPuzzleData.Profile);
+                currentPuzzleData.StartingMagic = EditorGUILayout.IntField("Starting Magic", currentPuzzleData.StartingMagic);
+            }
+            GUILayout.EndVertical();
+
+            GUILayout.Label("Solution");
+            GUILayout.BeginVertical("Box");
+            {
+                //solution
+                GUILayout.BeginVertical("Box");
+                {
+                    solutionScrollViewPosition = GUILayout.BeginScrollView(solutionScrollViewPosition, GUILayout.Height(80f));
+                    {
+                        for (int i = 0; i < currentPuzzleData.Solution.Count; i++)
+                            if (GUILayout.Button(i + ": Turn, : " + currentPuzzleData.Solution[i].Notation, (selectedSolutionIndex == i) ? selectedButtonStyle : defaultButtonsStyle))
+                            {
+                                if (selectedSolutionIndex == i)
+                                    selectedSolutionIndex = -1;
+                                else
+                                    selectedSolutionIndex = i;
+                            }
+                    }
+                    GUILayout.EndScrollView();
+                }
+                GUILayout.EndVertical();
+
+                if (GUILayout.Button("Solve", GUILayout.Width(90f)))
+                {
+                    GameState GS = new GameState(currentBoard, 1);
+                    GS.Players.Add(1, new Player(1, "Player 1"));
+                    GS.Players.Add(2, new Player(2, "Player 2"));
+
+                    PuzzleTestResults R = PuzzleTestTools.EvaluateState(GS, PuzzleSearchDepth);
+
+                    if (R.NumberOfVictoryPaths > 0) currentPuzzleData.Solution = new List<PlayerTurn>(R.Solution);
+                }
+
+            }
+            GUILayout.EndVertical();
+        }
+
+        private void OnLoadPressed()
+        {
+            string path = EditorUtility.OpenFilePanel("Load board", "", "json");
+
+            if (path.Length != 0)
+            {
+                //try load as gameboard
+                GameBoardDefinition gameboard = null;
+
+                bool failed = false;
+                gameboard = JsonConvert.DeserializeObject<GameBoardDefinition>(File.ReadAllText(path));
+
+                if (gameboard.BoardSpaceData.Count == 0) failed = true;
+                else SetToFileType(FileType.BOARD);
+
+                if (failed)
+                {
+                    failed = false;
+
+                    currentPuzzleData = JsonConvert.DeserializeObject<FourzyPuzzleData>(File.ReadAllText(path));
+
+                    if (currentPuzzleData.GameBoard.BoardSpaceData.Count == 0)
+                        failed = true;
+                    else
+                    {
+                        gameboard = currentPuzzleData.GameBoard;
+
+                        SetToFileType(FileType.PUZZLE);
+                    }
+                }
+
+                if (!failed)
+                {
+                    selectedPath = path;
+                    selectedFileName = Path.GetFileName(path);
+                    currentBoard = gameboard;
+
+                    LoadGameboard(currentBoard);
+                }
+            }
+        }
+
+        private static void SetToFileType(FileType type)
+        {
+            fileType = type;
+
+            switch (type)
+            {
+                case FileType.BOARD:
+                    gridOrigin = new Vector2Int(400, 80);
+
+                    break;
+
+                case FileType.PUZZLE:
+                    gridOrigin = new Vector2Int(700, 80);
+
+                    break;
+            }
+
+            UpdateWindowSize();
+        }
+
+        private static void UpdateWindowSize()
+        {
+            windowSize = new Vector2(gridOrigin.x + gridSize.x + gridBorder.x, gridOrigin.y + gridSize.y + gridBorder.y + 200);
+            instance.minSize = instance.maxSize = windowSize;
+        }
+
+        private static void AddSaveMenuItem(string option)
+        {
+            saveMenu.AddItem(new GUIContent(option), false, OnSaveMenuItemSelected, option);
+        }
+
+        private static void AddCastMenuItem(string option)
+        {
+            castMenu.AddItem(new GUIContent(option), false, OnCastMenuItemSelected, option);
+        }
+
+        private static void OnCastMenuItemSelected(object option)
+        {
+            if (option.ToString() == castOptions[0])
+            {
+                fileType = FileType.PUZZLE;
+
+                if (currentPuzzleData == null) currentPuzzleData = new FourzyPuzzleData();
+
+                SetToFileType(FileType.PUZZLE);
+            }
+            else if (option.ToString() == castOptions[1])
+            {
+                fileType = FileType.BOARD;
+
+                SetToFileType(FileType.BOARD);
+            }
+        }
+
+        private static void OnSaveMenuItemSelected(object option)
+        {
+            string path = "";
+
+            //save board
+            if (option.ToString() == saveOptions[0])
+            {
+                if (string.IsNullOrEmpty(selectedPath))
+                    path = EditorUtility.SaveFilePanelInProject("Save board", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/BoardsPool");
+                else
+                    path = EditorUtility.SaveFilePanelInProject("Save board", selectedFileName, "json", "", selectedPath);
+
+                if (path.Length != 0)
+                    File.WriteAllText(path, JsonConvert.SerializeObject(currentBoard));
+            }
+            //solve&save
+            else if (option.ToString() == saveOptions[1])
+            {
+                if (string.IsNullOrEmpty(selectedPath))
+                    path = EditorUtility.SaveFilePanelInProject("Save puzzle", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
+                else
+                    path = EditorUtility.SaveFilePanelInProject("Save puzzle", selectedFileName, "json", "", selectedPath);
+
+                if (path.Length != 0)
+                {
+                    GameState GS = new GameState(currentBoard, 1);
+                    GS.Players.Add(1, new Player(1, "ONE"));
+                    GS.Players.Add(2, new Player(1, "TWO"));
+
+                    PuzzleTestResults R = PuzzleTestTools.EvaluateState(GS, PuzzleSearchDepth);
+                    if (R.NumberOfVictoryPaths > 0)
+                    {
+                        FourzyPuzzleData PData = new FourzyPuzzleData(GS, R);
+                        File.WriteAllText(path, JsonConvert.SerializeObject(PData));
+                    }
+                    else
+                    {
+                        bool b = EditorUtility.DisplayDialog("Problem With Puzzle. Puzzle Not Created.",
+                            "No Solutions Found.", "", "Ok");
+                    }
+                }
+            }
+            //save as game
+            else if (option.ToString() == saveOptions[2])
+            {
+                if (string.IsNullOrEmpty(selectedPath))
+                    path = EditorUtility.SaveFilePanelInProject("Save game", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
+                else
+                    path = EditorUtility.SaveFilePanelInProject("Save game", selectedFileName, "json", "", selectedPath);
+
+                if (path.Length != 0)
+                {
+                    GameLevelData GLD = new GameLevelData(currentBoard, new List<SpellId>());
+                    File.WriteAllText(path, JsonConvert.SerializeObject(GLD));
+                }
+            }
+            //save as puzzle
+            else if (option.ToString() == saveOptions[3])
+            {
+                if (currentPuzzleData == null) return;
+
+                if (string.IsNullOrEmpty(selectedPath))
+                    path = EditorUtility.SaveFilePanelInProject("Save puzzle", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
+                else
+                    path = EditorUtility.SaveFilePanelInProject("Save puzzle", selectedFileName, "json", "", selectedPath);
+
+                if (path.Length != 0) File.WriteAllText(path, JsonConvert.SerializeObject(currentPuzzleData));
+            }
+        }
+
         public class BoardSpaceWrapper
         {
             public BoardSpaceData data;
@@ -1007,6 +1163,12 @@ namespace Fourzy._Updates.Tools
             {
                 indicies = new List<int>();
             }
+        }
+
+        public enum FileType
+        {
+            BOARD,
+            PUZZLE,
         }
     }
 }

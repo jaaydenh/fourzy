@@ -422,7 +422,7 @@ MonoBehaviour:
       description: Rotating Arrow
       showBackgroundTile: 1
       backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
-      gameboardInstructionID: 3
+      gameboardInstructionID: 3d15e1e1-4069-4d6d-ac97-ff4acb938f5c
       themesTokens:
         list:
         - theme: 127

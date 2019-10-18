@@ -391,7 +391,8 @@ namespace Fourzy._Updates.Mechanics
                     return .85f;
 
                 case DestroyType.BOMB:
-                    _Destroy(1.4f);
+                    StartRoutine("hideRoutine", .3f, () => Hide(.7f));
+                    _Destroy(.7f);
 
                     return 0f;
 

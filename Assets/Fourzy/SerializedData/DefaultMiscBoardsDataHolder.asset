@@ -77,3 +77,5 @@ MonoBehaviour:
       boardFile: {fileID: 4900000, guid: dd0b34c32389c7345bd522f5a2637cec, type: 3}
     - _name: 'Name: DrawBoardTester, ID: 5f938652-e6e9-4e36-8c5d-a4d4fde7395c'
       boardFile: {fileID: 4900000, guid: f272be493ad442e4fbb6469163a25a77, type: 3}
+    - _name: 'Name: RotatingArrowInstructionBoard, ID: 3d15e1e1-4069-4d6d-ac97-ff4acb938f5c'
+      boardFile: {fileID: 4900000, guid: cec11713aa4fc3d4eacd86133243faef, type: 3}
