@@ -18,6 +18,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         public GamePieceView gamePiece { get; private set; }
 
+        //private string currentGamepieceID = "";
+
         protected override void Awake()
         {
             base.Awake();
@@ -34,13 +36,16 @@ namespace Fourzy._Updates.UI.Widgets
         {
             this.data = data;
 
-            if (gamePiece) Destroy(gamePiece.gameObject);
+            //if (gamePiece && currentGamepieceID != data.ID) Destroy(gamePiece.gameObject);
 
-            gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(data.ID).player1Prefab, gamePieceParent);
+            if (!gamePiece)
+            {
+                gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(data.ID).player1Prefab, gamePieceParent);
 
-            gamePiece.transform.localPosition = Vector3.zero;
-            gamePiece.transform.localScale = Vector3.one * 90f;
-            gamePiece.StartBlinking();
+                gamePiece.transform.localPosition = Vector3.zero;
+                gamePiece.transform.localScale = Vector3.one * 90f;
+                gamePiece.StartBlinking();
+            }
 
             switch (data.State)
             {

@@ -222,6 +222,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             {
                 case DestroyType.FALLING:
                     Happy();
+
                     break;
             }
 

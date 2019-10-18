@@ -220,11 +220,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             //hide/show buttons
             unlockedButton.SetActive(unlocked.Count != 0);
-            unlockedCover.gameObject.SetActive(unlockedButton.gameObject.activeInHierarchy);
+            unlockedCover.gameObject.SetActive(unlocked.Count != 0);
             foundButton.SetActive(found.Count != 0);
-            foundCover.gameObject.SetActive(foundButton.gameObject.activeInHierarchy);
+            foundCover.gameObject.SetActive(found.Count != 0);
             lockedButton.SetActive(locked.Count != 0);
-            lockedCover.gameObject.SetActive(lockedButton.gameObject.activeInHierarchy);
+            lockedCover.gameObject.SetActive(locked.Count != 0);
 
             unlockedLabel.text = $"Unlocked {unlocked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
             foundLabel.text = $"Found {found.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";

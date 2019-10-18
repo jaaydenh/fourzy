@@ -1081,6 +1081,10 @@ namespace Fourzy._Updates.Mechanics.Board
                                 token.OnActivate();
 
                                 break;
+
+                            case DestroyType.BOMB:
+
+                                break;
                         }
 
                         yield return new WaitForSeconds(BoardBitAt<GamePieceView>(_destroy.End)._Destroy(_destroy.Reason));
@@ -1105,12 +1109,13 @@ namespace Fourzy._Updates.Mechanics.Board
                     case GameActionType.EFFECT:
                         GameActionExplosion _explosion = turnResults.Activity[actionIndex] as GameActionExplosion;
 
-                        //VfxHolder.instance.ShowVfx(VfxType.VFX_BOMB_EXPLOSION, transform, BoardLocationToVec2(_explosion.Center));
-                        VfxHolder.instance.GetVfx<Vfx>(VfxType.VFX_BOMB_EXPLOSION).StartVfx(transform, BoardLocationToVec2(_explosion.Center), 0f);
+                        Vfx bombVfx = VfxHolder.instance.GetVfx<Vfx>(VfxType.VFX_BOMB_EXPLOSION).StartVfx(transform, (Vector3)BoardLocationToVec2(_explosion.Center) + Vector3.back, 0f);
 
                         //destroy bomb
                         TokenView bomb = BoardTokenAt<TokenView>(_explosion.Center, TokenType.CIRCLE_BOMB) ?? BoardTokenAt<TokenView>(_explosion.Center, TokenType.CROSS_BOMB);
                         bomb?._Destroy();
+
+                        yield return new WaitForSeconds(bombVfx.duration);
 
                         actionIndex++;
 

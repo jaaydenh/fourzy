@@ -390,8 +390,14 @@ namespace Fourzy._Updates.Mechanics
 
                     return .85f;
 
+                case DestroyType.BOMB:
+                    _Destroy(1.4f);
+
+                    return 0f;
+
                 default:
                     _Destroy();
+
                     return 0f;
             }
         }
