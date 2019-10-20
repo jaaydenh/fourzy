@@ -189,10 +189,10 @@ namespace FourzyGameModel.Model
 
         public FourzyGame(Player Human, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GauntletStatus Status = null, GameOptions Options = null)
         {
-            this.State = BossGameFactory.CreateBossGame(Area.TRAINING_GARDEN, BossType.EntryWay, Human);
-            this.playerTurnRecord = new List<PlayerTurn>();
-            this.GameType = GameType.AI;
-            return;
+            //this.State = BossGameFactory.CreateBossGame(Area.TRAINING_GARDEN, BossType.EntryWay, Human);
+            //this.playerTurnRecord = new List<PlayerTurn>();
+            //this.GameType = GameType.AI;
+            //return;
 
             string SeedString = Guid.NewGuid().ToString();
 

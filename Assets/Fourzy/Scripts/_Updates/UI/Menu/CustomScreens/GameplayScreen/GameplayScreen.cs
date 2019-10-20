@@ -34,6 +34,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public PassAndPlayScreen passAndPlayUI { get; private set; }
         public RealtimeScreen realtimeScreen { get; private set; }
         public DemoGameScreen demoGameScreen { get; private set; }
+        public GauntletGameScreen gauntletGameScreen { get; private set; }
 
         private SpellsListUIWidget spellsListWidget;
 
@@ -48,6 +49,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             passAndPlayUI = GetComponentInChildren<PassAndPlayScreen>();
             realtimeScreen = GetComponentInChildren<RealtimeScreen>();
             demoGameScreen = GetComponentInChildren<DemoGameScreen>();
+            gauntletGameScreen = GetComponentInChildren<GauntletGameScreen>();
 
             spellsListWidget = GetComponentInChildren<SpellsListUIWidget>();
 
@@ -126,6 +128,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             passAndPlayUI.Open(game);
             realtimeScreen.Open(game);
             demoGameScreen.Open(game);
+            gauntletGameScreen.Open(game);
 
             //close game win/lose screen
             if (gameWinLoseScreen.isCurrent) menuController.CloseCurrentScreen(true);
@@ -162,6 +165,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void OnMoveStarted(ClientPlayerTurn turn)
         {
             puzzleUI.OnMoveStarted();
+            gauntletGameScreen.OnMoveStarted();
 
             if (turn == null || turn.PlayerId < 1) return;
 
@@ -212,6 +216,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             puzzleUI.UpdatePlayerTurn();
             passAndPlayUI.UpdatePlayerTurn();
+            gauntletGameScreen.UpdatePlayerTurn();
 
             if (game.isOver) return;
 

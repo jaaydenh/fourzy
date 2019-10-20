@@ -317,7 +317,7 @@ namespace Fourzy
                 FunctionName = "updateStatistic",
                 FunctionParameter = new { stat_name = stat, value = _value },
                 GeneratePlayStreamEvent = true,
-            }, (result) => { Debug.Log("stat updated"); }, (error) => { Debug.LogError(error.ErrorMessage); });
+            }, (result) => { Debug.Log($"{stat} updated {_value}"); }, (error) => { Debug.LogError(error.ErrorMessage); });
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

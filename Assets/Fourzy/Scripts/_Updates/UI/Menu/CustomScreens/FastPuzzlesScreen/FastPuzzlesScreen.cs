@@ -14,7 +14,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public LeaderboardPlayerWidget leaderboardWidgetPrefab;
         public RectTransform widgetsParent;
 
-        public void StartFastPuzzleGame() => GameManager.Instance.StartGame(GameContentManager.Instance.GetFastPuzzle());
+        public void StartFastPuzzleGame() => GameManager.Instance.StartGame(GameContentManager.Instance.GetNextFastPuzzle());
 
         public override void Open()
         {

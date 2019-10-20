@@ -258,7 +258,7 @@ namespace Fourzy._Updates.ClientModel
             if (puzzleData.pack)
                 return puzzleData.pack.Next(this);
             else
-                return GameContentManager.Instance.GetFastPuzzle(puzzleData.ID);
+                return GameContentManager.Instance.GetNextFastPuzzle(puzzleData.ID);
         }
 
         public PlayerTurnResult StartTurn() => StartTurn(_State);

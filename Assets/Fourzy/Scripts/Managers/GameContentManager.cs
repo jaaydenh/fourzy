@@ -102,7 +102,7 @@ namespace Fourzy
 
         public List<string> GetTokenThemeNames(TokenType tokenType) => GetTokenData(tokenType)?.GetThemeNames(themesDataHolder) ?? null;
 
-        public ClientFourzyPuzzle GetFastPuzzle(string id = "", bool unfinished = true)
+        public ClientFourzyPuzzle GetNextFastPuzzle(string id = "")
         {
             List<string> ids = new List<string>(fastPuzzles.Keys);
 
@@ -111,19 +111,16 @@ namespace Fourzy
                 //get random one
                 ids.Shuffle();
                 string _id = "";
-
-                if (unfinished)
-                    foreach (string __id in ids)
-                        if (!PlayerPrefsWrapper.GetFastPuzzleComplete(__id))
-                        {
-                            _id = __id;
-                            break;
-                        }
-                        else
-                            _id = ids[0];
+                
+                foreach (string __id in ids)
+                    if (!PlayerPrefsWrapper.GetFastPuzzleComplete(__id))
+                    {
+                        _id = __id;
+                        break;
+                    }
 
                 if (string.IsNullOrEmpty(_id))
-                    return GetFastPuzzle(id, false);
+                    return new ClientFourzyPuzzle(new ClientPuzzleData(ids[0], fastPuzzles[ids[0]]).Initialize());
                 else
                     return new ClientFourzyPuzzle(new ClientPuzzleData(_id, fastPuzzles[_id]).Initialize());
             }
@@ -134,9 +131,11 @@ namespace Fourzy
                 if (idIndex > -1 && idIndex < ids.Count - 1)
                     return new ClientFourzyPuzzle(new ClientPuzzleData(ids[idIndex + 1], fastPuzzles[ids[idIndex + 1]]).Initialize());
                 else
-                    return GetFastPuzzle();
+                    return GetNextFastPuzzle();
             }
         }
+
+        public ClientFourzyPuzzle GetFastPuzzle(string id) => new ClientFourzyPuzzle(new ClientPuzzleData(id, fastPuzzles[id]).Initialize());
 
         public void ResetFastPuzzles()
         {

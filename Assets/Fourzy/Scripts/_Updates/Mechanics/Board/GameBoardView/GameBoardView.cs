@@ -964,10 +964,24 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (turnResults.Activity.Count == 0) yield break;
 
+            bool isGauntlet = model.puzzleData && model.puzzleData.gauntletStatus != null;
+            SimpleMove move = turn != null ? turn.GetMove() : null;
+
             SetHintAreaColliderState(false);
             isAnimating = true;
             boardBits.ForEach(bit => { if (bit.active) bit.OnBeforeTurn(); });
-            
+
+            //if gauntlet game, remove member
+            if (isGauntlet && move != null && move.Piece.PlayerId == model.me.PlayerId)
+            {
+                List<Creature> members = model._State.Herds[move.Piece.PlayerId].Members;
+                if (members.Count > 0)
+                {
+                    members.RemoveAt(members.Count - 1);
+                    model.puzzleData.pack.RemoveHerdMember();
+                }
+            }
+
             //invoke onMoveStart
             onMoveStarted?.Invoke(turn);
 
@@ -1228,6 +1242,16 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     //consume delay
                     customDelay = 0f;
+                }
+            }
+
+            //check if gauntlet game finished
+            if (isGauntlet && move != null && move.Piece.PlayerId == model.me.PlayerId)
+            {
+                if (model._State.Herds[move.Piece.PlayerId].Members.Count == 0 && model._State.WinningLocations == null)
+                {
+                    SetHintAreaColliderState(false);
+                    onGameFinished?.Invoke(model);
                 }
             }
 

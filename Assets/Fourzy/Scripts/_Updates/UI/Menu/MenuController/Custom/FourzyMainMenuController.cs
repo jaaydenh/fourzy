@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu.Screens;
 using PlayFab;
@@ -49,6 +50,11 @@ namespace Fourzy._Updates.UI.Menu
 
             //    }, OnResult, OnError);
             //}
+
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                GameManager.Instance.StartGame(GameContentManager.Instance.GetFastPuzzle("ENCHANTED_FOREST_Puzzle_39_WinIn2"));
+            }
         }
 
         private void OnResult(ExecuteCloudScriptResult result)

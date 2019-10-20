@@ -22,6 +22,7 @@ namespace Fourzy._Updates.ClientModel
         public UnlockRequirementsEnum unlockRequirement;
 
         public int gauntletLevels { get; private set; } = -1;
+        public GauntletStatus gauntletStatus { get; private set; }
         public List<ClientPuzzleData> puzzlesData { get; set; }
         public List<ClientPuzzleData> enabledPuzzlesData { get; set; }
         public List<ClientPuzzleData> rewardPuzzles { get; set; }
@@ -65,6 +66,7 @@ namespace Fourzy._Updates.ClientModel
             Initialize();
 
             this.gauntletLevels = gauntletLevels;
+            gauntletStatus = new GauntletStatus() { FourzyCount = 5 };
 
             name = "Beat The Bot";
             packType = PackType.AI_PACK;
@@ -228,6 +230,11 @@ namespace Fourzy._Updates.ClientModel
                 return herdID;
             else
                 return puzzlesData[levelIndex].herdID;
+        }
+
+        public void RemoveHerdMember()
+        {
+            gauntletStatus.FourzyCount = Mathf.Clamp(gauntletStatus.FourzyCount - 1, 0, int.MaxValue);
         }
 
         public static implicit operator bool(BasicPuzzlePack pack) => pack != null;

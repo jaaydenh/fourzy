@@ -143,14 +143,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OnBGTap()
         {
-            if (rematchButton.gameObject.activeInHierarchy) Rematch();
-            else if (nextGameButton.gameObject.activeInHierarchy) NextGame();
+            //if gauntlet, exit
+            if (game.puzzleData && game.puzzleData.pack && game.puzzleData.pack.gauntletStatus != null && !game.IsWinner())
+            {
+                GamePlayManager.instance.gameplayScreen.OnBack();
+            }
             else
             {
-                if (game.puzzleData && !game.puzzleData.lastInPack)
-                    menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                if (rematchButton.gameObject.activeInHierarchy) Rematch();
+                else if (nextGameButton.gameObject.activeInHierarchy) NextGame();
                 else
-                    GamePlayManager.instance.gameplayScreen.OnBack();
+                {
+                    if (game.puzzleData && !game.puzzleData.lastInPack)
+                        menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                    else
+                        GamePlayManager.instance.gameplayScreen.OnBack();
+                }
             }
         }
 

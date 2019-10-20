@@ -70,6 +70,16 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
+        public GauntletStatus gauntletStatus
+        {
+            get
+            {
+                if (pack && pack.gauntletStatus != null) return pack.gauntletStatus;
+
+                return null;
+            }
+        }
+
         public ClientPuzzleData()
         {
             availableSpells = new SpellId[0];

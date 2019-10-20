@@ -180,7 +180,7 @@ namespace Fourzy._Updates.ClientModel
 
         public int Columns => State.Board.Columns;
 
-        public bool isOver => State.WinningLocations != null;
+        public bool isOver => State.WinningLocations != null || (puzzleData && puzzleData.pack && puzzleData.pack.gauntletStatus != null && puzzleData.pack.gauntletStatus.FourzyCount == 0);
 
         public bool draw { get; set; }
 
@@ -343,19 +343,19 @@ namespace Fourzy._Updates.ClientModel
 
         public bool IsWinner() => me.PlayerId == State.WinnerId;
 
-        public PlayerTurnResult TakeTurn(PlayerTurn playerTurn, bool local, bool returnStartOfNextTurn)
+        public PlayerTurnResult TakeTurn(PlayerTurn turn, bool local, bool returnStartOfNextTurn)
         {
             if (State.Players.ContainsKey(State.ActivePlayerId))
             {
-                playerTurn.PlayerString = State.Players[State.ActivePlayerId].PlayerString ?? "";
+                turn.PlayerString = State.Players[State.ActivePlayerId].PlayerString ?? "";
             }
             else
             {
-                playerTurn.PlayerString = "Null";
+                turn.PlayerString = "Null";
                 Debug.Log("Active PlayerId is not present in Player Dictionary: " + State.ActivePlayerId + " GameSeed: " + State.GameSeed);
             }
 
-            PlayerTurnResult turnResult = TakeTurn(playerTurn, returnStartOfNextTurn);
+            PlayerTurnResult turnResult = TakeTurn(turn, returnStartOfNextTurn);
 
             if (!local)
             {
@@ -363,17 +363,17 @@ namespace Fourzy._Updates.ClientModel
                 switch (_Type)
                 {
                     case Fourzy.GameType.TURN_BASED:
-                        Debug.Log(JsonConvert.SerializeObject(playerTurn));
+                        Debug.Log(JsonConvert.SerializeObject(turn));
                         new LogChallengeEventRequest().SetEventKey("takeTurnNew")
                             .SetChallengeInstanceId(challengeData.challengeInstanceId)
-                            .SetEventAttribute("playerTurn", new GSRequestData(JsonConvert.SerializeObject(playerTurn)))
+                            .SetEventAttribute("playerTurn", new GSRequestData(JsonConvert.SerializeObject(turn)))
                             .SetDurable(true)
                             .Send(response =>
                             {
                                 if (response.HasErrors)
                                 {
                                     Debug.Log("***** Error taking turn: " + response.Errors.JSON);
-                                    Debug.Log("Player Turn: " + JsonConvert.SerializeObject(playerTurn));
+                                    Debug.Log("Player Turn: " + JsonConvert.SerializeObject(turn));
                                     Debug.Log("GameStateData: " + JsonConvert.SerializeObject(State.SerializeData()));
 
                                     AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.turn_based);
@@ -390,7 +390,7 @@ namespace Fourzy._Updates.ClientModel
 
 
                         //if user just made a turn, manually update this game without waiting for server response
-                        challengeData.playerTurnRecord.Add(playerTurn);
+                        challengeData.playerTurnRecord.Add(turn);
                         challengeData.UpdateLastTurnGame();
 
                         ChallengeManager.OnChallengeUpdateLocal.Invoke(challengeData);
@@ -399,7 +399,7 @@ namespace Fourzy._Updates.ClientModel
 
                     case Fourzy.GameType.REALTIME:
                         //notify other about this turn
-                        PhotonNetwork.RaiseEvent(Constants.TAKE_TURN, JsonConvert.SerializeObject(playerTurn), true, new RaiseEventOptions() { Receivers = ReceiverGroup.Others });
+                        PhotonNetwork.RaiseEvent(Constants.TAKE_TURN, JsonConvert.SerializeObject(turn), true, new RaiseEventOptions() { Receivers = ReceiverGroup.Others });
 
                         break;
                 }
@@ -490,7 +490,7 @@ namespace Fourzy._Updates.ClientModel
                 if (puzzleData.pack)
                     return puzzleData.pack.Next(this);
                 else
-                    return GameContentManager.Instance.GetFastPuzzle(puzzleData.ID);
+                    return GameContentManager.Instance.GetNextFastPuzzle(puzzleData.ID);
             }
 
             switch (_Type)
@@ -533,7 +533,7 @@ namespace Fourzy._Updates.ClientModel
             {
                 case PackType.AI_PACK:
                     if (puzzleData.gauntletLevelIndex > -1)
-                        game = new ClientFourzyGame(me, puzzleData.gauntletLevelIndex);
+                        game = new ClientFourzyGame(me, puzzleData.gauntletLevelIndex, Status: puzzleData.pack.gauntletStatus);
                     else
                         game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, me);
 

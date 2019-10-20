@@ -6,11 +6,13 @@ namespace Fourzy._Updates.UI.Menu
 {
     public class PassAndPlayScreen : MenuScreen
     {
-        private ClientFourzyGame game;
+        public IClientFourzy game { get; private set; }
 
         public void Open(IClientFourzy game)
         {
-            this.game = game.asFourzyGame;
+            if (game == null) return;
+
+            this.game = game;
 
             base.Open();
         }

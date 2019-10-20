@@ -144,9 +144,10 @@ namespace FourzyGameModel.Model
 
         public PlayerTurnResult StartTurn(GameState GameState)
         {
-            GameState newState = new GameState();
-            List<GameAction> actions = new List<GameAction>();
-            return new PlayerTurnResult(newState, actions);
+            TurnEvaluator ME = new TurnEvaluator(GameState);
+            GameState StartState = ME.EvaluateStartOfTurn();
+
+            return new PlayerTurnResult(StartState, ME.ResultActions);
         }
 
         public virtual GameState Reset()
