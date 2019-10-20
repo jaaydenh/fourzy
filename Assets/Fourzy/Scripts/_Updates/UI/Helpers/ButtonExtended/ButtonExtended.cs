@@ -103,6 +103,8 @@ namespace Fourzy._Updates.UI.Helpers
                 maskable.material = material;
         }
 
+        public void SetGreyscaleMaterial() => SetMaterial(GREYSCALE_MATERIAL);
+
         public void SetState(bool state)
         {
             interactable = state;

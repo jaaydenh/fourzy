@@ -135,7 +135,7 @@ namespace Fourzy._Updates.ClientModel
             if (rewards.Length == 0) return;
 
             //filter rewards
-            rewards.Where(reward => !PlayerPrefsWrapper.GetEventRewarded(GetRewardID(reward))).AssignRewards();
+            rewards.Where(reward => !PlayerPrefsWrapper.GetRewardRewarded(GetRewardID(reward))).AssignRewards();
 
             //set events as rewarded
             foreach (RewardsManager.Reward reward in rewards)
@@ -149,7 +149,7 @@ namespace Fourzy._Updates.ClientModel
                         break;
 
                     default:
-                        PlayerPrefsWrapper.SetEventRewarded(GetRewardID(reward), true);
+                        PlayerPrefsWrapper.SetRewardRewarded(GetRewardID(reward), true);
 
                         break;
                 }
@@ -168,7 +168,7 @@ namespace Fourzy._Updates.ClientModel
             return this;
         }
 
-        public string GetRewardID(RewardsManager.Reward reward) => ID + "_" + reward.rewardType.ToString();
+        public string GetRewardID(RewardsManager.Reward reward) => reward.GetID(ID);
 
         /// <summary>
         /// Only after rest was assigned

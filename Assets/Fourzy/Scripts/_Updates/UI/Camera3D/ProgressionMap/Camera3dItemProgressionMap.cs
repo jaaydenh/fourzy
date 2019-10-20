@@ -223,7 +223,7 @@ namespace Fourzy._Updates.UI.Camera3D
                             PlayerPrefsWrapper.SetGameRewarded(_data.ID, true);
 
                             foreach (RewardsManager.Reward reward in _data.rewards)
-                                PlayerPrefsWrapper.SetEventRewarded(_data.GetRewardID(reward), true);
+                                PlayerPrefsWrapper.SetRewardRewarded(_data.GetRewardID(reward), true);
                         });
 
                         break;

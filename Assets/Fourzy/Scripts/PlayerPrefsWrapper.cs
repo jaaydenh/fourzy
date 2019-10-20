@@ -104,9 +104,9 @@ namespace Fourzy
 
         public static void SetRemoteSetting(string key, string value) => PlayerPrefs.SetString(kRemoteSetting + key, value);
 
-        public static void SetEventRewarded(string id, bool state) => PlayerPrefs.SetInt(kEventRewarded + id, state ? 1 : 0);
+        public static void SetRewardRewarded(string id, bool state) => PlayerPrefs.SetInt(kEventRewarded + id, state ? 1 : 0);
 
-        public static bool GetEventRewarded(string id) => PlayerPrefs.GetInt(kEventRewarded + id, 0) != 0;
+        public static bool GetRewardRewarded(string id) => PlayerPrefs.GetInt(kEventRewarded + id, 0) != 0;
 
         public static void SetFastPuzzleComplete(string id, bool state) => PlayerPrefs.SetInt(kFastPuzzle + id, state ? 1 : 0);
 

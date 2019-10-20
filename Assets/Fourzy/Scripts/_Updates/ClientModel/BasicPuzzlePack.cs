@@ -219,7 +219,7 @@ namespace Fourzy._Updates.ClientModel
                 //clear rewards
                 foreach (RewardsManager.Reward reward in _data.rewards)
                 {
-                    PlayerPrefsWrapper.SetEventRewarded(_data.GetRewardID(reward), false);
+                    PlayerPrefsWrapper.SetRewardRewarded(_data.GetRewardID(reward), false);
                 }
             });
         }

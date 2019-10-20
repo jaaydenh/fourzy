@@ -3043,18 +3043,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d655c64b518d4c4398988a5d6eaeec7, type: 3}
---- !u!114 &144027302 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114108322543479450, guid: 2d655c64b518d4c4398988a5d6eaeec7,
-    type: 3}
-  m_PrefabInstance: {fileID: 144027301}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1039891250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3caa7bfd43d514244a23980b0a62e89b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!84 &153934348
 RenderTexture:
   m_ObjectHideFlags: 0
@@ -16817,6 +16805,99 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 729194773}
   m_CullTransparentMesh: 0
+--- !u!1 &736364142
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 736364143}
+  - component: {fileID: 736364146}
+  - component: {fileID: 736364145}
+  - component: {fileID: 736364144}
+  m_Layer: 5
+  m_Name: LockedBadge
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &736364143
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736364142}
+  m_LocalRotation: {x: -0, y: -0, z: 0.25785184, w: 0.9661845}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1295063779}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 29.885002}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 12.300003, y: -14.5}
+  m_SizeDelta: {x: 66.85, y: 77.17999}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &736364144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736364142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a8240062fa69b24a89c4812d66c9f56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hideOnEmpty: 1
+  thisTarget: 1
+  format: '{0}'
+  targetObject: {fileID: 0}
+  targetText: {fileID: 0}
+--- !u!114 &736364145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736364142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: 443e63abe988b7b4da37e809d84a653d, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &736364146
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736364142}
+  m_CullTransparentMesh: 0
 --- !u!1 &739981314
 GameObject:
   m_ObjectHideFlags: 0
@@ -30432,6 +30513,7 @@ RectTransform:
   m_Children:
   - {fileID: 1704180025}
   - {fileID: 1623961814}
+  - {fileID: 736364143}
   m_Father: {fileID: 2006786869}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -30602,25 +30684,13 @@ MonoBehaviour:
     persistentCalls:
       calls:
       - genericMenuData:
-          selectedComponent: 5
-          selectedMember: 23
+          selectedComponent: 2
+          selectedMember: 31
           isDynamic: 0
-        target: {fileID: 169684871}
-        memberName: OpenScreen
+        target: {fileID: 1739894148}
+        memberName: OpenFastPuzzleScreen
         memberType: 8
-        arguments:
-        - typeName: Fourzy._Updates.UI.Menu.MenuScreen, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 1
-          objectArgument: {fileID: 1722314398}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
+        arguments: []
         isDynamic: 0
         isCallEnabled: 1
   onState:
@@ -30640,10 +30710,8 @@ MonoBehaviour:
   - labelName: name
     label: {fileID: 1704180028}
   badges:
-  - badgeName: games
-    badge: {fileID: 0}
-  - badgeName: network
-    badge: {fileID: 0}
+  - badgeName: locked
+    badge: {fileID: 736364144}
 --- !u!114 &1295063783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32033,6 +32101,99 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344609803}
+  m_CullTransparentMesh: 0
+--- !u!1 &1355562501
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1355562502}
+  - component: {fileID: 1355562505}
+  - component: {fileID: 1355562504}
+  - component: {fileID: 1355562503}
+  m_Layer: 5
+  m_Name: LockedBadge
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1355562502
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355562501}
+  m_LocalRotation: {x: -0, y: -0, z: 0.25785184, w: 0.9661845}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1574380343}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 29.885002}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 12.300293, y: -14.5}
+  m_SizeDelta: {x: 66.85, y: 77.17999}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1355562503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355562501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a8240062fa69b24a89c4812d66c9f56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hideOnEmpty: 1
+  thisTarget: 1
+  format: '{0}'
+  targetObject: {fileID: 0}
+  targetText: {fileID: 0}
+--- !u!114 &1355562504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355562501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: 443e63abe988b7b4da37e809d84a653d, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1355562505
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355562501}
   m_CullTransparentMesh: 0
 --- !u!1 &1356423571
 GameObject:
@@ -36827,6 +36988,7 @@ RectTransform:
   m_Children:
   - {fileID: 609614146}
   - {fileID: 1124456109}
+  - {fileID: 1355562502}
   m_Father: {fileID: 2006786869}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -36998,7 +37160,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 38
+          selectedMember: 37
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: StartGauntletAIPack
@@ -37023,10 +37185,8 @@ MonoBehaviour:
   - labelName: name
     label: {fileID: 609614149}
   badges:
-  - badgeName: games
-    badge: {fileID: 0}
-  - badgeName: network
-    badge: {fileID: 0}
+  - badgeName: locked
+    badge: {fileID: 1355562503}
 --- !u!114 &1574380347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40365,7 +40525,8 @@ MonoBehaviour:
   isOpened: 0
   defaultCalls: 1
   menuController: {fileID: 0}
-  playerInfoIwdget: {fileID: 144027302}
+  fastPuzzleButton: {fileID: 1295063782}
+  gauntletGameButton: {fileID: 1574380346}
 --- !u!225 &1739894149
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -40418,7 +40579,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 16
+          selectedMember: 17
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: AdjustSize
@@ -40432,7 +40593,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 16
+          selectedMember: 17
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: AdjustSize
@@ -40446,7 +40607,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 16
+          selectedMember: 17
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: AdjustSize

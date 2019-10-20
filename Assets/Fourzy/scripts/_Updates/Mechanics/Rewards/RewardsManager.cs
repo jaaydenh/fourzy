@@ -233,6 +233,18 @@ namespace Fourzy._Updates.Mechanics.Rewards
             public string name;
             public int quantity;
 
+            public string GetID(string prefix)
+            {
+                switch (rewardType)
+                {
+                    case RewardType.CUSTOM:
+                        return name;
+
+                    default:
+                        return prefix + "_" + rewardType.ToString();
+                }
+            }
+
             public Reward(string name, int quantity, RewardType rewardType)
             {
                 this.rewardType = rewardType;

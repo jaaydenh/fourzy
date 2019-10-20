@@ -87,7 +87,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game.draw || !game.isOver) return false;
 
             if (game.puzzleData && game.puzzleData.pack)
-                return game.puzzleData.pack.complete && !PlayerPrefsWrapper.GetEventRewarded(game.puzzleData.pack.packID);
+                return game.puzzleData.pack.complete && !PlayerPrefsWrapper.GetRewardRewarded(game.puzzleData.pack.packID);
             else
                 return !PlayerPrefsWrapper.GetGameRewarded(game.GameID);
         }

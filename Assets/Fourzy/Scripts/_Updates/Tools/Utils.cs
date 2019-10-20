@@ -195,6 +195,9 @@ namespace Fourzy._Updates.Tools
                 case RewardType.OPEN_RARE_PORTAL:
                     return GameContentManager.PrefabType.REWARDS_OPEN_RARE_PORTAL;
 
+                case RewardType.CUSTOM:
+                    return GameContentManager.PrefabType.REWARDS_CUSTOM;
+
                 default:
                     return GameContentManager.PrefabType.NONE;
             }

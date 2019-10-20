@@ -31,5 +31,7 @@
         GAME_PIECE = 8,
         OPEN_PORTAL = 9,
         OPEN_RARE_PORTAL = 10,
+
+        CUSTOM = 99,
     }
 }

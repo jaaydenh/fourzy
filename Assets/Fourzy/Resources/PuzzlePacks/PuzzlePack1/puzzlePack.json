@@ -5,12 +5,24 @@
     "unlockRequirement": 0,
     "herdID": "1",
     "playerName": "Guardian",
-    "rewards": [
-        {
-            "levelIndex": 4,
-            "rewardType": 5,
-            "name": "",
-            "quantity": 0
-        }
-    ]
+  "rewards": [
+    {
+      "levelIndex": 4,
+      "rewardType": 5,
+      "name": "",
+      "quantity": 0
+    },
+    {
+      "levelIndex": 3,
+      "rewardType": 99,
+      "name": "unlock_fast_puzzles_mode",
+      "quantity": 0
+    },
+    {
+      "levelIndex": 2,
+      "rewardType": 99,
+      "name": "unlock_gauntlet_mode",
+      "quantity": 0
+    }
+  ]
 }

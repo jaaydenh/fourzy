@@ -109,11 +109,11 @@ namespace Fourzy._Updates.UI.Widgets
                                 return PuzzlePack.complete;
 
                             default:
-                                return PlayerPrefsWrapper.GetEventRewarded(id);
+                                return PlayerPrefsWrapper.GetRewardRewarded(id);
                         }
 
                     default:
-                        return PlayerPrefsWrapper.GetEventRewarded(id);
+                        return PlayerPrefsWrapper.GetRewardRewarded(id);
                 }
             }
         }
@@ -309,7 +309,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                 case ProgressionEventType.CURRENCY:
                     Rewarded(true);
-                    PlayerPrefsWrapper.SetEventRewarded(id, true);
+                    PlayerPrefsWrapper.SetRewardRewarded(id, true);
 
                     //give reward
                     new RewardsManager.Reward[] { reward }.AssignRewards();
@@ -320,7 +320,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                 case ProgressionEventType.REWARD:
                     Rewarded(true);
-                    PlayerPrefsWrapper.SetEventRewarded(id, true);
+                    PlayerPrefsWrapper.SetRewardRewarded(id, true);
 
                     map.CheckMapComplete();
 
@@ -333,7 +333,7 @@ namespace Fourzy._Updates.UI.Widgets
             switch (EventType)
             {
                 case ProgressionEventType.CURRENCY:
-                    PlayerPrefsWrapper.SetEventRewarded(id, false);
+                    PlayerPrefsWrapper.SetRewardRewarded(id, false);
 
                     break;
 

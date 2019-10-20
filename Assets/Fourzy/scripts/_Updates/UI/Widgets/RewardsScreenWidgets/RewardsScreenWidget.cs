@@ -5,7 +5,6 @@ using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
-using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using TMPro;
@@ -50,12 +49,38 @@ namespace Fourzy._Updates.UI.Widgets
         {
             reward = data;
 
-            string nameText = swapLabels ? string.Format(format, data.ToString()) : data.name;
-            string valueText = swapLabels ? data.name : string.Format(format, data.ToString());
+            string nameText = "";
+            string valueText = "";
+
+            switch (reward.rewardType)
+            {
+                case RewardType.CUSTOM:
+                    switch (data.name)
+                    {
+                        case "unlock_fast_puzzles_mode":
+                            valueText = "Mode\nUnlock";
+
+                            break;
+
+                        case "unlock_gauntlet_mode":
+                            valueText = "Mode\nUnlock";
+
+                            break;
+                    }
+
+                    break;
+
+                default:
+                    nameText = swapLabels ? string.Format(format, data.ToString()) : data.name;
+                    valueText = swapLabels ? data.name : string.Format(format, data.ToString());
+
+                    break;
+            }
 
             if (!string.IsNullOrEmpty(nameText) && nameLabel) nameLabel.text = nameText;
             if (!string.IsNullOrEmpty(valueText) && valueLabel) valueLabel.text = valueText;
 
+            //assign icon
             switch (reward.rewardType)
             {
                 case RewardType.GAME_PIECE:
@@ -85,7 +110,7 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case RewardType.OPEN_PORTAL:
                 case RewardType.OPEN_RARE_PORTAL:
-                    if (!state || (state && PlayerPrefsWrapper.GetEventRewarded(puzzleData.GetRewardID(reward))))
+                    if (!state || (state && PlayerPrefsWrapper.GetRewardRewarded(puzzleData.GetRewardID(reward))))
                         _Checked(state);
 
                     break;
@@ -137,10 +162,10 @@ namespace Fourzy._Updates.UI.Widgets
                     else
                     {
                         //check if puzzle was complete and reward wasnt assigned yet
-                        if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && !PlayerPrefsWrapper.GetEventRewarded(puzzleData.GetRewardID(reward)))
+                        if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && !PlayerPrefsWrapper.GetRewardRewarded(puzzleData.GetRewardID(reward)))
                         {
                             PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.SIMPLE);
-                            PlayerPrefsWrapper.SetEventRewarded(puzzleData.GetRewardID(reward), true);
+                            PlayerPrefsWrapper.SetRewardRewarded(puzzleData.GetRewardID(reward), true);
 
                             SetChecked(true);
                         }
@@ -154,10 +179,10 @@ namespace Fourzy._Updates.UI.Widgets
                     else
                     {
                         //check if puzzle was complete and reward wasnt assigned yet
-                        if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && !PlayerPrefsWrapper.GetEventRewarded(puzzleData.GetRewardID(reward)))
+                        if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && !PlayerPrefsWrapper.GetRewardRewarded(puzzleData.GetRewardID(reward)))
                         {
                             PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
-                            PlayerPrefsWrapper.SetEventRewarded(puzzleData.GetRewardID(reward), true);
+                            PlayerPrefsWrapper.SetRewardRewarded(puzzleData.GetRewardID(reward), true);
 
                             SetChecked(true);
                         }

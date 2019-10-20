@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d060be3ffc70746b493bd8aaa1e238b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settingRandomName: 0
 --- !u!114 &114877576207642572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,6 +498,10 @@ MonoBehaviour:
     - _name: REWARDS_OPEN_RARE_PORTAL
       prefabType: 19
       prefab: {fileID: 3360629134425220575, guid: 1572a260ce0579d4b98c8c418061babb,
+        type: 3}
+    - _name: REWARDS_CUSTOM
+      prefabType: 39
+      prefab: {fileID: 6681481199898053062, guid: 4b61b51cc212c57409bb9cbbbf079c33,
         type: 3}
     - _name: PUZZLE_PACK_WIDGET
       prefabType: 41

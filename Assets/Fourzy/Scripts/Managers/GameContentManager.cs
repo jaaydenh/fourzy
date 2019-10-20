@@ -343,6 +343,8 @@ namespace Fourzy
             REWARDS_PACK_COMPLETE = 17,
             REWARDS_OPEN_PORTAL = 18,
             REWARDS_OPEN_RARE_PORTAL = 19,
+
+            REWARDS_CUSTOM = 39,
             #endregion
 
             BOARD_HINT_BOX = 40,
