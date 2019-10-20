@@ -310,6 +310,16 @@ namespace Fourzy
 
         public static bool NetworkAccess => EazyNetChecker.Status == NetStatus.Connected;
 
+        public static void UpdateStatistic(string stat, int _value)
+        {
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "updateStatistic",
+                FunctionParameter = new { stat_name = stat, value = _value },
+                GeneratePlayStreamEvent = true,
+            }, (result) => { Debug.Log("stat updated"); }, (error) => { Debug.LogError(error.ErrorMessage); });
+        }
+
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             switch (scene.name)
@@ -563,7 +573,7 @@ namespace Fourzy
         {
             if (!SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE) || noInputFilter.Key != "startDemoGame") return;
 
-            //also reset puzzlesPacks
+            GameContentManager.Instance.ResetFastPuzzles();
             GameContentManager.Instance.ResetPuzzlePacks();
             GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
 

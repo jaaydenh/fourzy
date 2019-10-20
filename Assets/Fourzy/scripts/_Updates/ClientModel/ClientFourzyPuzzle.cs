@@ -234,6 +234,13 @@ namespace Fourzy._Updates.ClientModel
 
                         if (puzzleData.pack.complete && !_complete) puzzleData.pack.justFinished = true;
                     }
+                    else
+                    {
+                        PlayerPrefsWrapper.SetFastPuzzleComplete(GameID, true);
+
+                        //send new statistics to playfab
+                        GameManager.UpdateStatistic("PuzzlesLB", GameContentManager.Instance.finishedFastPuzzlesCount);
+                    }
 
                     //assign rewards if any
                     puzzleData.AssignPuzzleRewards();

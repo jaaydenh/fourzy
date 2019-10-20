@@ -30,8 +30,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void StartGauntletAIPack() => menuController.GetScreen<VSGamePrompt>().Prompt(5);
 
-        public void StartFastPuzzleGame() => GameManager.Instance.StartGame(GameContentManager.Instance.GetFastPuzzle());
-
         public void StartTurnGame() => matchmakingScreen.OpenTurnbased();
 
         public void StartTutorialAdventure() => menuController.GetScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);

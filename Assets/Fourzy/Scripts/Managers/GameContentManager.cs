@@ -56,7 +56,7 @@ namespace Fourzy
 
         public List<GameBoardDefinition> passAndPlayGameboards => passAndPlayDataHolder.gameboards;
 
-        //public PuzzlePacksDataHolder puzzlePacksDataHolder => packsDataHolders[0];
+        public int finishedFastPuzzlesCount => fastPuzzles.Keys.Where(id => PlayerPrefsWrapper.GetFastPuzzleComplete(id)).Count();
 
         public List<Camera3dItemProgressionMap> existingProgressionMaps { get; private set; } = new List<Camera3dItemProgressionMap>();
 
@@ -136,6 +136,11 @@ namespace Fourzy
                 else
                     return GetFastPuzzle();
             }
+        }
+
+        public void ResetFastPuzzles()
+        {
+            foreach (string id in fastPuzzles.Keys) PlayerPrefsWrapper.SetFastPuzzleComplete(id, false);
         }
 
         public void ResetPuzzlePacks()

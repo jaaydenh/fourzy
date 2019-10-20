@@ -31,6 +31,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ResetPuzzles()
         {
+            GameContentManager.Instance.ResetFastPuzzles();
             GameContentManager.Instance.ResetPuzzlePacks();
             GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
         }

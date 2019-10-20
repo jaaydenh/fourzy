@@ -391,7 +391,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289445032767014}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -471,16 +471,16 @@ RectTransform:
   m_GameObject: {fileID: 1391187897284340}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224298912331242316}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
-  m_Pivot: {x: 0.10609217, y: 0.9637962}
+  m_AnchoredPosition: {x: -0.85498047, y: 4}
+  m_SizeDelta: {x: 142, y: 163}
+  m_Pivot: {x: 0.76, y: 0.9637962}
 --- !u!222 &222803602325704474
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -509,7 +509,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: bf16876b1febc43fab8fce7dd46c4127, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4d42966faae6de64f8649de3097f1feb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

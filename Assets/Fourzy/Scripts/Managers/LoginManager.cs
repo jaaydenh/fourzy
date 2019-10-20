@@ -27,6 +27,8 @@ namespace Fourzy
 
         public static event Action<string> OnLoginMessage;
         public static event Action<bool> OnDeviceLoginComplete;
+
+        public static string playfabID;
         
         private bool isConnecting;
 
@@ -345,6 +347,7 @@ namespace Fourzy
 
         private void PlayFabLoginSuccess(LoginResult result)
         {
+            playfabID = result.PlayFabId;
             AnalyticsManager.Instance.Identify(result.PlayFabId);
 
             GameManager.Instance.CheckNews();
