@@ -25,18 +25,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
             fastPuzzlesUnlocked = PlayerPrefsWrapper.GetRewardRewarded("unlock_fast_puzzles_mode");
             fastPuzzleButton.GetBadge("locked").badge.SetState(!fastPuzzlesUnlocked);
 
-            if (fastPuzzlesUnlocked)
-                fastPuzzleButton.SetMaterial(null);
-            else
-                fastPuzzleButton.SetGreyscaleMaterial();
+            //if (fastPuzzlesUnlocked)
+            //    fastPuzzleButton.SetMaterial(null);
+            //else
+            //    fastPuzzleButton.SetGreyscaleMaterial();
 
             gauntletGameUnlocked = PlayerPrefsWrapper.GetRewardRewarded("unlock_gauntlet_mode");
             gauntletGameButton.GetBadge("locked").badge.SetState(!gauntletGameUnlocked);
 
-            if (gauntletGameUnlocked)
-                gauntletGameButton.SetMaterial(null);
-            else
-                gauntletGameButton.SetGreyscaleMaterial();
+            //if (gauntletGameUnlocked)
+            //    gauntletGameButton.SetMaterial(null);
+            //else
+            //    gauntletGameButton.SetGreyscaleMaterial();
         }
 
         public void ContinueStartTurnBasedGame()

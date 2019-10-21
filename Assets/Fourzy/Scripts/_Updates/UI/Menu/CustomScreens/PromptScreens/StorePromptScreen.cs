@@ -22,11 +22,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Prompt($"Buy {StoreItemTypeToString(filter)}", "");
         }
 
-        protected override void OnInitialized()
+        protected override void Awake()
         {
-            if (initialized) return;
-
-            initialized = true;
+            base.Awake();
 
             switch (filter)
             {

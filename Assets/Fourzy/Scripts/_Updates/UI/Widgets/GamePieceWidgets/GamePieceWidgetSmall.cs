@@ -51,7 +51,7 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case GamePieceState.FoundAndLocked:
                 case GamePieceState.FoundAndUnlocked:
-                    piecesCount.text = string.Format("{0}/{1}", data.pieces, data.GetCurrentTierProgression);
+                    piecesCount.text = string.Format("{0}/{1}", data.Pieces, data.GetCurrentTierProgression);
                     break;
 
                 case GamePieceState.NotFound:
@@ -66,7 +66,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void UpdateProgressBar()
         {
-            float progressValue = (float)data.pieces / data.GetCurrentTierProgression;
+            float progressValue = (float)data.Pieces / data.GetCurrentTierProgression;
 
             progressBar.value = Mathf.Clamp01(progressValue);
 

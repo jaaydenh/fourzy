@@ -22,28 +22,37 @@ namespace Fourzy
         public ProgressionCollection piecesProgression;
 
         public int pieces = 0;
-        public int champions;
 
         [System.NonSerialized]
         public bool foldout = false;
 
-        //champions count from numberOfPieces
+        public int Pieces
+        {
+            get => PlayerPrefsWrapper.GetGamePiecePieces(ID);
+            set => PlayerPrefsWrapper.GamePieceUpdatePiecesCount(ID, value);
+        }
+
+        public int Champions
+        {
+            get => PlayerPrefsWrapper.GetGamePieceChampions(ID);
+            set => PlayerPrefsWrapper.GamePieceUpdateChampionsCount(ID, value);
+        }
+
         public int ChampionsFromPieces
         {
             get
             {
                 int starsCount = 0;
+                int piecesCount = Pieces;
 
-                if (pieces < piecesToUnlock)
-                    return starsCount;
+                if (piecesCount < piecesToUnlock) return 0;
 
                 for (int count = 0; count < 5; count++)
                     if (count < piecesProgression.list.Count)
                     {
-                        if (piecesProgression.list[count] > pieces)
+                        if (piecesProgression.list[count] > piecesCount)
                         {
-                            if (count > 0)
-                                starsCount = count;
+                            if (count > 0) starsCount = count;
 
                             break;
                         }
@@ -59,21 +68,10 @@ namespace Fourzy
         {
             get
             {
-                if (pieces < piecesToUnlock)
+                if (Pieces < piecesToUnlock)
                     return piecesToUnlock;
                 else
-                    return piecesProgression.list[champions];
-            }
-        }
-
-        public int GetTierProgression
-        {
-            get
-            {
-                if (pieces < piecesToUnlock)
-                    return piecesToUnlock;
-                else
-                    return piecesProgression.list[ChampionsFromPieces];
+                    return piecesProgression.list[Champions];
             }
         }
 
@@ -81,47 +79,36 @@ namespace Fourzy
         {
             get
             {
-                if (pieces == 0)
+                int piecesCount = Pieces;
+
+                if (piecesCount == 0)
                     return GamePieceState.NotFound;
-                else if (pieces < piecesToUnlock)
+                else if (piecesCount < piecesToUnlock)
                     return GamePieceState.FoundAndLocked;
                 else
                     return GamePieceState.FoundAndUnlocked;
             }
         }
 
-        public bool CanUpgrade
+        public bool CanUpgrade => Pieces >= GetCurrentTierProgression;
+
+        public void AddPieces(int quantity) => Pieces += quantity;
+
+        public void Upgrade()
         {
-            get
-            {
-                return pieces >= GetCurrentTierProgression;
-            }
+            if (!CanUpgrade) return;
+
+            Champions++;
+
+            onUpgrade?.Invoke(this);
         }
 
         public void Initialize()
         {
-            pieces = PlayerPrefsWrapper.GetGamePiecePieces(this);
-            champions = PlayerPrefsWrapper.GetGamePieceChampions(this);
-        }
-
-        public void AddPieces(int quantity)
-        {
-            pieces = Mathf.Clamp(pieces + quantity, 0, int.MaxValue);
-
-            PlayerPrefsWrapper.GamePieceUpdatePiecesCount(this);
-        }
-
-        public void Upgrade()
-        {
-            if (!CanUpgrade)
-                return;
-
-            champions++;
-
-            if (onUpgrade != null)
-                onUpgrade.Invoke(this);
-
-            PlayerPrefsWrapper.GamePieceUpdateChampionsCount(this);
+            if (!PlayerPrefsWrapper.HaveGamePieceRecord(ID))
+            {
+                Pieces = pieces;
+            }
         }
     }
 

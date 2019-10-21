@@ -53,7 +53,7 @@ namespace Fourzy._Updates.UI.Widgets
                     borderImage.color = data.borderColor;
 
                     //stars slider
-                    starsSlider.value = data.champions;
+                    starsSlider.value = data.Champions;
 
                     break;
             }

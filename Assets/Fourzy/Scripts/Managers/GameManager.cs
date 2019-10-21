@@ -115,6 +115,7 @@ namespace Fourzy
             MMVibrationManager.iOSInitializeHaptics();
 #endif
 
+            ExecutePerVersion.TryExecute();
             ThreadsQueuer.Initialize();
 
             SceneManager.sceneLoaded += OnSceneLoaded;

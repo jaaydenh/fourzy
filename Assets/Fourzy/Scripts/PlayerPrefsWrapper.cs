@@ -35,6 +35,7 @@ namespace Fourzy
         public static string kPuzzleHintProgress = "puzzle_hint_progress_";
         public static string kNewsOpened = "news_opened_";
         public static string kFastPuzzlesLeaderboardVersion = "fast_puzzles_leaderboard_version";
+        public static string kLastProjectVersion = "kProjectVersion";
 
         public static string kEventRewarded = "eventRewarded_";
 
@@ -74,15 +75,21 @@ namespace Fourzy
 
         public static string GetUserName() => PlayerPrefs.GetString(kUserName);
 
-        public static void GamePieceUpdatePiecesCount(GamePieceData gamePiece) => PlayerPrefs.SetInt(kGamePiecePieces + gamePiece.ID, gamePiece.pieces);
+        public static void GamePieceUpdatePiecesCount(string id, int value) => PlayerPrefs.SetInt(kGamePiecePieces + id, value);
 
-        public static int GetGamePiecePieces(GamePieceData gamePiece) => PlayerPrefs.GetInt(kGamePiecePieces + gamePiece.ID, 0);
+        public static void GamePieceDeleteData(string id)
+        {
+            PlayerPrefs.DeleteKey(kGamePiecePieces + id);
+            PlayerPrefs.DeleteKey(kGamePieceChampions + id);
+        }
 
-        public static bool HaveGamePieceRecord(GamePieceData gamePiece) => PlayerPrefs.HasKey(kGamePiecePieces + gamePiece.ID);
+        public static int GetGamePiecePieces(string id) => PlayerPrefs.GetInt(kGamePiecePieces + id, 0);
 
-        public static void GamePieceUpdateChampionsCount(GamePieceData gamePiece) => PlayerPrefs.SetInt(kGamePieceChampions + gamePiece.ID, gamePiece.champions);
+        public static bool HaveGamePieceRecord(string id) => PlayerPrefs.HasKey(kGamePiecePieces + id);
 
-        public static int GetGamePieceChampions(GamePieceData gamePiece) => PlayerPrefs.GetInt(kGamePieceChampions + gamePiece.ID, 0);
+        public static void GamePieceUpdateChampionsCount(string id, int value) => PlayerPrefs.SetInt(kGamePieceChampions + id, value);
+
+        public static int GetGamePieceChampions(string id) => PlayerPrefs.GetInt(kGamePieceChampions + id, 0);
 
         public static string GetSelectedGamePiece() => PlayerPrefs.GetString(kSelectedGamePiece, "");
 
@@ -135,6 +142,10 @@ namespace Fourzy
         public static int GetFastPuzzlesLeaderboardVersion() => PlayerPrefs.GetInt(kFastPuzzlesLeaderboardVersion, -1);
 
         public static void SetFastPuzzlesLeaderboardVersion(int value) => PlayerPrefs.SetInt(kFastPuzzlesLeaderboardVersion, value);
+
+        public static string GetLastProjectVersion() => PlayerPrefs.GetString(kLastProjectVersion);
+
+        public static void SetLastProjectVersion(string value) => PlayerPrefs.SetString(kLastProjectVersion, value);
 
         #region Currencies
 

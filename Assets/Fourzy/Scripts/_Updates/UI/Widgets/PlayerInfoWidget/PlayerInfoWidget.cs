@@ -32,7 +32,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             GamePieceData data = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(gamePieceID);
             gamePieceWidget.SetData(data);
-            starsSlider.value = data.ChampionsFromPieces;
+            starsSlider.value = data.Champions;
 
             return gamePieceWidget.gamePiece;
         }

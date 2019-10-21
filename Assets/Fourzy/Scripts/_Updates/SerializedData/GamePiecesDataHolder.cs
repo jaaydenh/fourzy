@@ -30,13 +30,7 @@ namespace Fourzy._Updates.Serialized
 
             foreach (GamePiecePrefabData gamePiece in gamePieces.list)
             {
-                if (!PlayerPrefsWrapper.HaveGamePieceRecord(gamePiece.data))
-                {
-                    PlayerPrefsWrapper.GamePieceUpdatePiecesCount(gamePiece.data);
-                    PlayerPrefsWrapper.GamePieceUpdateChampionsCount(gamePiece.data);
-                }
-                else
-                    gamePiece.data.Initialize();
+                gamePiece.data.Initialize();
 
                 gamePiecesFastAccess.Add(gamePiece.data.ID, gamePiece);
 
@@ -79,6 +73,12 @@ namespace Fourzy._Updates.Serialized
             if (prefabData == null) return null;
 
             return prefabData.data;
+        }
+
+        public static void ClearGamepiecesData()
+        {
+            for (int index = 0; index < 50; index++)
+                PlayerPrefsWrapper.GamePieceDeleteData(index + "");
         }
 
         public static GamePieceData _GetGamePieceData(GamePieceView gamePiece)
