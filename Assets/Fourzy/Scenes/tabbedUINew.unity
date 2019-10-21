@@ -1972,7 +1972,7 @@ MonoBehaviour:
         isCallEnabled: 1
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 33
+          selectedMember: 35
           isDynamic: 0
         target: {fileID: 1722314398}
         memberName: StartFastPuzzleGame

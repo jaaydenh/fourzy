@@ -527,12 +527,12 @@ namespace Fourzy
                     switch (value)
                     {
                         case AnalyticsProvider.FIREBASE:
-                            LogFirebaseEvent(AnalyticsEvents.UI.ToString().ToLower() + ":" + buttonEvent.ToString().ToLower(), _params);
+                            LogFirebaseEvent(AnalyticsEvents.UI.ToString().ToLower() + "_" + buttonEvent.ToString().ToLower(), _params);
 
                             break;
 
                         case AnalyticsProvider.PLAYFAB:
-                            LogPlayFabPlayerEvent(AnalyticsEvents.UI.ToString().ToLower() + ":" + buttonEvent.ToString().ToLower(), _params);
+                            LogPlayFabPlayerEvent(AnalyticsEvents.UI.ToString().ToLower() + "_" + buttonEvent.ToString().ToLower(), _params);
 
                             break;
 

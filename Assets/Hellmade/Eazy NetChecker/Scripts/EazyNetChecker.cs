@@ -181,7 +181,9 @@ namespace Hellmade.Net
             if (instance == null)
             {
                 instance = this as EazyNetChecker;
-                DontDestroyOnLoad(this.gameObject);
+
+                if (!GetComponentInParent<Fourzy.GameManagersDontDestroy>())
+                    DontDestroyOnLoad(this.gameObject);
             }
         }
 

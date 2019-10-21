@@ -42,9 +42,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private List<RewardsManager.Reward> collectedItems;
 
-        private IClientFourzy game;
-        private PuzzlePacksDataHolder.PuzzlePack puzzlePack;
-
         protected override void Awake()
         {
             base.Awake();
@@ -96,8 +93,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             //availability check
             if (!WillDisplayRewardsScreen(game)) return;
-
-            this.game = game;
 
             rewards = new List<RewardsManager.Reward>();
 
