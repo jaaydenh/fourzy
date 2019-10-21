@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,16 +14,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         
         public GridLayoutGroup gridLayoutGroup;
 
-        private List<PuzzlePackWidget> puzzlePacksWidgets = new List<PuzzlePackWidget>();
-        private PuzzlePackWidget puzzlePackPrefab;
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            puzzlePackPrefab = GameContentManager.GetPrefab<PuzzlePackWidget>(GameContentManager.PrefabType.PUZZLE_PACK_WIDGET);
-        }
-
         public override void Open()
         {
             base.Open();
@@ -32,7 +21,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             OnInitialized();
 
             LoadAIPlayerWidgets();
-            //LoadPuzzlePacks(GameContentManager.Instance.puzzlePacksDataHolder);
         }
 
         public override void OnBack()
@@ -40,22 +28,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnBack();
 
             menuController.CloseCurrentScreen();
-        }
-
-        public void LoadPuzzlePacks(PuzzlePacksDataHolder puzzlePacksHolder)
-        {
-            puzzlePacksWidgets.Clear();
-
-            //remove old one
-            foreach (Transform child in gridLayoutGroup.transform) Destroy(child.gameObject);
-
-            foreach (PuzzlePacksDataHolder.PuzzlePack puzzlePack in puzzlePacksHolder.puzzlePacks.list)
-            {
-                PuzzlePackWidget puzzlePackWidgetInstance = Instantiate(puzzlePackPrefab, gridLayoutGroup.transform);
-                puzzlePackWidgetInstance.SetData(puzzlePack);
-
-                puzzlePacksWidgets.Add(puzzlePackWidgetInstance);
-            }
         }
 
         public void LoadAIPlayerWidgets()
@@ -73,19 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public override void ExecuteMenuEvent(MenuEvents menuEvent)
         {
-            //respond to puzzle pack menu event
-            if (menuEvent.data.ContainsKey("puzzlePack"))
-            {
-                if (menuController.currentScreen != this)
-                {
-                    //back to root
-                    menuController.BackToRoot();
-                    //open this screen
-                    menuController.OpenScreen(this);
-                }
 
-                puzzlePacksWidgets.Find(widget => widget.puzzlePack.packID == (menuEvent["puzzlePack"] as PuzzlePacksDataHolder.PuzzlePack).packID).PlayCompleteAnimation();
-            }
         }
     }
 }

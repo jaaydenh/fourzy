@@ -51,7 +51,9 @@ public class GameSparksRTUnity : MonoBehaviour, IRTSessionListener {
 	void Awake()
 	{
 		instance = this;
-		DontDestroyOnLoad(gameObject);
+
+        if (!GetComponentInParent<Fourzy.GameManagersDontDestroy>())
+            DontDestroyOnLoad(gameObject);
 	}
 
 	//Configure the SDK with a MatchFoundMessage

@@ -249,7 +249,8 @@ namespace GameSparks.Platforms
          
 			GS.Initialise(this);
 
-			DontDestroyOnLoad (this);
+            if (!GetComponentInParent<Fourzy.GameManagersDontDestroy>())
+                DontDestroyOnLoad (this);
 
 #if UNITY_EDITOR
 	#if UNITY_2017_2_OR_NEWER

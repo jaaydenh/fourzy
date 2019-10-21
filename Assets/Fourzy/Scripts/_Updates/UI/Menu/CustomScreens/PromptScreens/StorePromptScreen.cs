@@ -15,18 +15,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public StoreItemType filter { get; private set; }
 
-        protected bool initialized = false;
-
         public void Prompt(StoreItemType filter)
         {
             this.filter = filter;
 
-            Initialize();
-
             Prompt($"Buy {StoreItemTypeToString(filter)}", "");
         }
 
-        protected void Initialize()
+        protected override void OnInitialized()
         {
             if (initialized) return;
 
@@ -46,7 +42,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 foreach (Product product in CodelessIAPStoreListener.Instance.StoreController.products.all)
                     if (product.definition.id.IndexOf(filter.ToString(), System.StringComparison.InvariantCultureIgnoreCase) >= 0)
                         widgets.Add(Instantiate(storeItemWidget, productsParent).SetData(product));
-            } catch (Exception) { }
+            }
+            catch (Exception) { }
         }
 
         public static string StoreItemTypeToString(StoreItemType filter)

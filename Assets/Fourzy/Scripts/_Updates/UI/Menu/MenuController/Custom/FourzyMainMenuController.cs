@@ -14,8 +14,6 @@ namespace Fourzy._Updates.UI.Menu
     {
         public static FourzyMainMenuController instance;
 
-        private bool onboardingFinishedEventSent = false;
-
         protected override void Awake()
         {
             base.Awake();

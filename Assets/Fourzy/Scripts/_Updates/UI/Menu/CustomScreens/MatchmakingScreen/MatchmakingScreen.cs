@@ -23,10 +23,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public TMP_Text timerLabel;
         public GameObject backButton;
 
-        private int findChallengerErrorCount = 0;
         private string challengeIdToJoin;
         private string challengedID = "";
-        private float elapsedTime;
         private List<string> matchMakingStrings;
 
         public bool isRealtime { get; set; }
@@ -129,7 +127,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 ChallengeManager.Instance.CreateTurnBasedGame(challengedID/*"5ca27b6b4cd5b739c01cbd21"*/, selectedArea, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
             }
 
-            StartCoroutine(UpdateElapsedTimeRoutine());
             StartRoutine("randomText", ShowRandomTextRoutine());
         }
 
@@ -251,16 +248,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         }
 
         #endregion
-
-        private IEnumerator UpdateElapsedTimeRoutine()
-        {
-            float startTime = Time.time;
-            while (true)
-            {
-                elapsedTime = Time.time - startTime;
-                yield return null;
-            }
-        }
 
         private IEnumerator ShowRandomTextRoutine()
         {

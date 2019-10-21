@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   consumePurchase: 1
-  dontDestroyOnLoad: 1
+  dontDestroyOnLoad: 0
   onPurchaseComplete:
     m_PersistentCalls:
       m_Calls:
@@ -523,7 +523,7 @@ MonoBehaviour:
       prefab: {fileID: 1001685059054880, guid: 753eac7ea7c84784484fb0e32473bd24, type: 3}
   screens:
     list:
-    - _name: OnboardingScreen
+    - _name: TutorialScreen
       prefab: {fileID: 114675544619200078, guid: 4bfd1264994f0c64db9d8a1231bfbe94,
         type: 3}
     - _name: GenericPromptScreen
@@ -540,9 +540,6 @@ MonoBehaviour:
         type: 3}
     - _name: LoadingPromptScreen
       prefab: {fileID: 523291431602527423, guid: 62f7c19afb5b1054b9337d58e5af10c3,
-        type: 3}
-    - _name: PuzzlePackUnlockPromptScreen
-      prefab: {fileID: 6900950922252252547, guid: 5072d3ce31b986a4389fd76fb4dd0ba7,
         type: 3}
     - _name: AreaInfoPromptScreen
       prefab: {fileID: 4325327119177535745, guid: 57969661751fc8e4e81791c622614dbb,

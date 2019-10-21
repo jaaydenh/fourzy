@@ -10,7 +10,6 @@ using UnityEngine;
 
 namespace Fourzy._Updates.ClientModel
 {
-    [System.Serializable]
     public class ClientPuzzleData : PuzzleData
     {
         public BasicPuzzlePack pack;

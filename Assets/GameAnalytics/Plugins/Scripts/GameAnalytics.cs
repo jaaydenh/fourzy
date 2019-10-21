@@ -76,7 +76,8 @@ namespace GameAnalyticsSDK
             }
             _instance = this;
 
-            DontDestroyOnLoad(gameObject);
+            if (!GetComponentInParent<Fourzy.GameManagersDontDestroy>())
+                DontDestroyOnLoad(gameObject);
 
             Application.logMessageReceived += GA_Debug.HandleLog;
         }

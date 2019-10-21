@@ -19,7 +19,6 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class GameContentManager : UnitySingleton<GameContentManager>
     {
-        //public List<PuzzlePacksDataHolder> packsDataHolders;
         public List<Camera3dItemProgressionMap> progressionMaps;
         public GamePiecesDataHolder piecesDataHolder;
         public AIPlayersDataHolder aiPlayersDataHolder;
