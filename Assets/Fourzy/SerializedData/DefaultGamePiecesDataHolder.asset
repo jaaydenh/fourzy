@@ -14,42 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gamePieces:
     list:
-    - _name: 'Blobby: Fourzy-04 Variant'
-      _key: 520aeb95-fd6c-49a2-8d09-3caed0ce39a2
-      data:
-        ID: 1
-        name: Blobby
-        enabled: 1
-        rarity: 30
-        outlineColor: {r: 1, g: 1, b: 0.29411766, a: 1}
-        borderColor: {r: 1, g: 1, b: 1, a: 0}
-        piecesToUnlock: 30
-        piecesProgression:
-          list: 5000000096000000f00000002c01000026020000
-        pieces: 28
-        champions: 1
-      player1Prefab: {fileID: 5850652874326644820, guid: c33502f68010829499f160b16d2ff88a,
-        type: 3}
-      player2Prefab: {fileID: 3037363664063910796, guid: b86d0e80064180345b1e74e1b4ae43a5,
-        type: 3}
-    - _name: 'Cyclops: Fourzy-01 Variant'
-      _key: 28e430cf-d34d-4891-930b-1bba22a71f18
-      data:
-        ID: 2
-        name: Cyclops
-        enabled: 1
-        rarity: 30
-        outlineColor: {r: 0, g: 1, b: 0.6627451, a: 1}
-        borderColor: {r: 1, g: 1, b: 1, a: 0}
-        piecesToUnlock: 30
-        piecesProgression:
-          list: 5000000096000000f00000002c01000026020000
-        pieces: 30
-        champions: 1
-      player1Prefab: {fileID: 129306896706497102, guid: 30d9e06aadf6a9446b994c68cd59d48e,
-        type: 3}
-      player2Prefab: {fileID: 1166267820841079138, guid: 49f97f15819037b4995443ef7d37ae84,
-        type: 3}
     - _name: 'Crossy: Fourzy-02 Variant'
       _key: acd8704d-e8c6-497a-8b08-2bd200905311
       data:
@@ -62,7 +26,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 25
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 2811853481136367920, guid: 501ae4bb220056444ba4732d645da809,
         type: 3}
@@ -80,7 +44,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 22
+        pieces: 0
         champions: 1
       player1Prefab: {fileID: 7039071045634544731, guid: b1dd14466f648fd478ea8078b8f8db5e,
         type: 3}
@@ -98,7 +62,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 13
+        pieces: 0
         champions: 1
       player1Prefab: {fileID: 1676609191546690612, guid: 2b54608c97da9e04c9c162c2f5328311,
         type: 3}
@@ -116,7 +80,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 3
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 5199269407045597157, guid: 9765dad3184127d4a8bbc3e2e65336f9,
         type: 3}
@@ -134,7 +98,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 12
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 6576606855969728960, guid: 74415bf42c0517b45bcfa0bd57d90437,
         type: 3}
@@ -152,7 +116,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 9
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 8620094149043960381, guid: ee8f4b6dc4ca53847962658b4882fad6,
         type: 3}
@@ -170,11 +134,29 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 6
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 5841790964071463582, guid: 83eee2766bc691e4f9fa053207f90c68,
         type: 3}
       player2Prefab: {fileID: 5265662473142153822, guid: 097e58db2ac0e074293d399c982219e9,
+        type: 3}
+    - _name: 'Blobby: Fourzy-04 Variant'
+      _key: 266df0f6-1ff4-43f0-a44a-1a0064ceb59c
+      data:
+        ID: 1
+        name: Blobby
+        enabled: 1
+        rarity: 30
+        outlineColor: {r: 1, g: 1, b: 0.29411766, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 0}
+        piecesToUnlock: 30
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+        champions: 1
+      player1Prefab: {fileID: 5850652874326644820, guid: c33502f68010829499f160b16d2ff88a,
+        type: 3}
+      player2Prefab: {fileID: 3037363664063910796, guid: b86d0e80064180345b1e74e1b4ae43a5,
         type: 3}
     - _name: 'Sentinal: Fourzy-11 Variant'
       _key: 5e9a9874-2418-46c6-a6be-99207afdabd1
@@ -188,7 +170,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 2
+        pieces: 0
         champions: 1
       player1Prefab: {fileID: 3008632754777774422, guid: 541328802fe2ad54b8cfb885bbc2b643,
         type: 3}
@@ -206,11 +188,29 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 4
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 4979347029933200198, guid: 001a4dfc8302eeb4ea65fa0ae12a1160,
         type: 3}
       player2Prefab: {fileID: 5164172713599178379, guid: e99be6bd0874d4540a3b69bee6feecd1,
+        type: 3}
+    - _name: 'Cyclops: Fourzy-01 Variant'
+      _key: 28e430cf-d34d-4891-930b-1bba22a71f18
+      data:
+        ID: 2
+        name: Cyclops
+        enabled: 1
+        rarity: 30
+        outlineColor: {r: 0, g: 1, b: 0.6627451, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 0}
+        piecesToUnlock: 30
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+        champions: 0
+      player1Prefab: {fileID: 129306896706497102, guid: 30d9e06aadf6a9446b994c68cd59d48e,
+        type: 3}
+      player2Prefab: {fileID: 1166267820841079138, guid: 49f97f15819037b4995443ef7d37ae84,
         type: 3}
     - _name: 'Masked: Fourzy-09 Variant'
       _key: 26e5ce3d-f0bd-47f3-a5ab-da1344434ff8
@@ -224,7 +224,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 11
+        pieces: 30
         champions: 0
       player1Prefab: {fileID: 6128777428980690519, guid: c26c94a8d94885244b13560062697a5c,
         type: 3}
@@ -242,7 +242,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 3
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 8004934299830492596, guid: 0f60c6b56ed528b44b6d0d0a461919e8,
         type: 3}
@@ -260,7 +260,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 5
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 4183014607794544357, guid: 83d1f34afe8480545aeda1ed7cc41246,
         type: 3}
@@ -278,7 +278,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 5
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 6622972341321018873, guid: 0e465806c37671a46ba74c563581a185,
         type: 3}
@@ -296,7 +296,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 8
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 2487924146770352966, guid: 363c7322a9e5e054e8ea51f0719e4ad3,
         type: 3}
@@ -311,10 +311,10 @@ MonoBehaviour:
         rarity: 30
         outlineColor: {r: 1, g: 1, b: 0, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
-        piecesToUnlock: 60
+        piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 14
+        pieces: 30
         champions: 0
       player1Prefab: {fileID: 199449817183531395, guid: 233e3f7fcd2a27949ae2e7fc630fb680,
         type: 3}
@@ -329,10 +329,10 @@ MonoBehaviour:
         rarity: 30
         outlineColor: {r: 1, g: 0.33333334, b: 1, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
-        piecesToUnlock: 60
+        piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 6
+        pieces: 30
         champions: 0
       player1Prefab: {fileID: 3827068522086520645, guid: e8a8bf608141cf846b5a4689c46a4035,
         type: 3}
@@ -350,17 +350,17 @@ MonoBehaviour:
         piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 13
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 1004307609327887750, guid: 3a5a634b98d23134f8a17bc5f7ab4f40,
         type: 3}
       player2Prefab: {fileID: 4688549563729829321, guid: 575c00809413a62488a55dec06d526a4,
         type: 3}
-    - _name: 'ID21: Fourzy-21 Variant'
+    - _name: 'Snow Person: Fourzy-21 Variant'
       _key: b26837a6-26a8-4ec5-9d00-15b0944016e2
       data:
         ID: 21
-        name: ID21
+        name: Snow Person
         enabled: 1
         rarity: 30
         outlineColor: {r: 1, g: 0.5137255, b: 0.52156866, a: 1}
@@ -368,17 +368,17 @@ MonoBehaviour:
         piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 27
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 3277097321123099967, guid: d3bfba0f81e54814cb2349d58837e85b,
         type: 3}
       player2Prefab: {fileID: 8625214451842383249, guid: a2d57f29f5cde4b468d92c78b10c4c55,
         type: 3}
-    - _name: 'ID36: Fourzy-36 Variant'
+    - _name: 'Mecha Bunny: Fourzy-36 Variant'
       _key: b26837a6-26a8-4ec5-9d00-15b0944016e2
       data:
         ID: 36
-        name: ID36
+        name: Mecha Bunny
         enabled: 1
         rarity: 30
         outlineColor: {r: 1, g: 0.45882356, b: 1, a: 1}
@@ -386,53 +386,53 @@ MonoBehaviour:
         piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 27
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 5089221997847664087, guid: c27128c8d6d336c478e7ed026a7d6857,
         type: 3}
       player2Prefab: {fileID: 5034072604579296946, guid: 38a77cd11c95a0a4cb7087832a17ee0a,
         type: 3}
-    - _name: 'ID44: Fourzy-44 Variant'
+    - _name: 'Lil Flame: Fourzy-44 Variant'
       _key: b26837a6-26a8-4ec5-9d00-15b0944016e2
       data:
         ID: 44
-        name: ID44
+        name: Lil Flame
         enabled: 1
         rarity: 30
         outlineColor: {r: 0, g: 0.4666667, b: 0.9960785, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
-        piecesToUnlock: 60
+        piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 27
+        pieces: 30
         champions: 0
       player1Prefab: {fileID: 1912799475505460758, guid: 6958e8d3563c88b4ba2cba447b8ee1ed,
         type: 3}
       player2Prefab: {fileID: 4199936739902266244, guid: 5991ee940d6515a4db27bfc18cbc1daf,
         type: 3}
-    - _name: 'ID23: Fourzy-23 Variant'
+    - _name: 'Sir Knighty: Fourzy-23 Variant'
       _key: b26837a6-26a8-4ec5-9d00-15b0944016e2
       data:
         ID: 23
-        name: ID23
+        name: Sir Knighty
         enabled: 1
         rarity: 30
         outlineColor: {r: 0.9960785, g: 1, b: 0.11764707, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
-        piecesToUnlock: 60
+        piecesToUnlock: 30
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 27
+        pieces: 30
         champions: 0
       player1Prefab: {fileID: 3974870754057325091, guid: 33851e064bde8ab4daf83f5e6c1b8625,
         type: 3}
       player2Prefab: {fileID: 6776202281948818908, guid: 7288ecd28bdcffb4589a870c4245ad2b,
         type: 3}
-    - _name: 'ID45: Fourzy-45 Variant'
+    - _name: 'Techno Bug: Fourzy-45 Variant'
       _key: b26837a6-26a8-4ec5-9d00-15b0944016e2
       data:
         ID: 45
-        name: ID45
+        name: Techno Bug
         enabled: 1
         rarity: 30
         outlineColor: {r: 0.003921569, g: 0.97647065, b: 0.49803925, a: 1}
@@ -440,17 +440,17 @@ MonoBehaviour:
         piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 27
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 868307597764827387, guid: 825fca623b83fff4a8b71683fcf1b031,
         type: 3}
       player2Prefab: {fileID: 3600020066660262105, guid: 0f0b53b410614ad449722edec3378799,
         type: 3}
-    - _name: 'ID38: Fourzy-38 Variant'
-      _key: b26837a6-26a8-4ec5-9d00-15b0944016e2
+    - _name: 'Mr. Hatty: Fourzy-38 Variant'
+      _key: daf8f206-141c-4c0d-b30e-3200db0ce8ed
       data:
         ID: 38
-        name: ID38
+        name: Mr. Hatty
         enabled: 1
         rarity: 30
         outlineColor: {r: 0.654902, g: 0.43137258, b: 1, a: 1}
@@ -458,7 +458,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
-        pieces: 27
+        pieces: 0
         champions: 0
       player1Prefab: {fileID: 5105064160253020775, guid: 093db82c1c3d7464a8abf61ae3840df9,
         type: 3}

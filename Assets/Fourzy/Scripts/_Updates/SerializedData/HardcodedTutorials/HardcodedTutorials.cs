@@ -41,7 +41,7 @@ namespace Fourzy._Updates.Serialized
 
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BG },
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.WIZARD_CENTER },
-                                new OnboardingDataHolder.OnboardingTask_ShowMessage("Tap on the perimeter squares to make a move"),
+                                new OnboardingDataHolder.OnboardingTask_ShowMessage("Tap on the edge of the board to make a move"),
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BOARD_HINT_AREA },
                                 new OnboardingDataHolder.OnboardingTask_Log("2"),
                             },
