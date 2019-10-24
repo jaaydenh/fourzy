@@ -17,18 +17,19 @@ namespace Fourzy
 {
     public class AnalyticsManager : RoutinesBase
     {
-        public const string GAME_ID_KEY = "game_id";
-        public const string ENTRY_POINT_KEY = "entry_point";
-        public const string GAME_TYPE_KEY = "game_type";
+        public const string BOARD_ID_KEY = "board_id";
+        public const string LEVEL_ID = "level_id";
+        public const string EVENT_ID_KEY = "event_id";
+        public const string GAUNTLET_ID_KEY = "gauntlet_id";
+        public const string SESSION_ID_KEY = "session_id";
+
+        public const string AREA_KEY = "area";
         public const string GAME_RESULT_KEY = "game_result";
         public const string ALL_TURNS_COUNT_KEY = "all_turns_count";
         public const string PLAYER_TURNS_COUNT_KEY = "player_turns_count";
         public const string PUZZLE_TURNS_LIMIT_KEY = "puzzle_turns_limit";
         public const string LEVEL_INDEX_KEY = "level_index";
-        public const string EVENT_ID_KEY = "event_id";
         public const string GAUNTLET_MEMBERS_LEFT_KEY = "members_left";
-        public const string GAUNTLET_ID_KEY = "gauntlet_id";
-        public const string SESSION_ID_KEY = "session_id";
         public const string MAGIC_LEFT_KEY = "magic_left";
         public const string GAME_AI_PROFILE_KEY = "ai_profile";
         public const string GAME_BOSS_TYPE_KEY = "boss_type";
@@ -38,10 +39,6 @@ namespace Fourzy
         public const string HINT_NUMBER_KEY = "hint_turn_number";
         public const string HINT_STORE_ITEMS_KEY = "hint_store_items";
         public const string STORE_ITEM_KEY = "store_item_id";
-        public const string AREA_KEY = "area";
-        public const string USER_ID_KEY = "user_id";
-        public const string OPPONENT_ID_KEY = "opponent_id";
-        public const string PACK_ID_KEY = "pack_id";
         public const string GAMEPIECE_SELECT_KEY = "gamepiece_select";
         public const string SETTINGS_VALUE_NAME_KEY = "value_name";
         public const string SETTINGS_NEW_VALUE_KEY = "new_value";
@@ -49,9 +46,6 @@ namespace Fourzy
         public const string HINT_USED_KEY = "hint_used";
         public const string TUTORIAL_NAME_KEY = "name";
         public const string TUTORIAL_STAGE_KEY = "key";
-        public const string PUZZLE_SESSION_ID = "puzzle_session_id";
-        public const string BOARD_ID = "board_id";
-        public const string PUZZLE_ID = "puzzle_id";
 
         public static AnalyticsManager Instance
         {
@@ -215,65 +209,6 @@ namespace Fourzy
             DontDestroyOnLoad(go);
         }
 
-        //public void Identify(string userID)
-        //{
-        //    FirebaseAnalytics.SetUserId(userID);
-
-        //    if (DEBUG) Debug.Log("User identity: " + userID);
-        //}
-
-        //public void LogCreateGame(
-        //    GameType gameType, Area area,
-        //    string userID = "",
-        //    string opponentID = "",
-        //    AnalyticsProvider provider = AnalyticsProvider.ALL)
-        //{
-        //    if (!NetworkPass()) return;
-        //    if (!gameEventsSwitch[AnalyticsGameEvents.GAME_CREATE]) return;
-
-        //    Dictionary<string, object> @params = new Dictionary<string, object>();
-
-        //    @params.Add(GAME_TYPE_KEY, gameType);
-        //    @params.Add(AREA_KEY, area.ToString().ToLower());
-
-        //    if (lastLoggedButtonConsumable != AnalyticsUIButtons.none) @params.Add(ENTRY_POINT_KEY, lastLoggedButtonConsumable);
-
-        //    if (!string.IsNullOrEmpty(userID)) @params.Add(USER_ID_KEY, userID);
-        //    if (!string.IsNullOrEmpty(opponentID)) @params.Add(OPPONENT_ID_KEY, opponentID);
-
-        //    foreach (Enum value in Enum.GetValues(provider.GetType()))
-        //    {
-        //        if (provider.HasFlag(value))
-        //        {
-        //            switch (value)
-        //            {
-        //                case AnalyticsProvider.FIREBASE:
-        //                    LogFirebaseEvent(AnalyticsGameEvents.GAME_CREATE.ToString().ToLower(), @params);
-
-        //                    break;
-
-        //                case AnalyticsProvider.PLAYFAB:
-        //                    LogPlayFabPlayerEvent(AnalyticsGameEvents.GAME_CREATE.ToString().ToLower(), @params);
-
-        //                    break;
-
-        //                case AnalyticsProvider.GAME_ANALYTICS:
-        //                    string values = $"{AnalyticsGameEvents.GAME_CREATE.ToString().ToLower()}:{area.ToString().ToLower()}";
-
-        //                    if (lastLoggedButtonConsumable != AnalyticsUIButtons.none) values += $":{lastLoggedButtonConsumable.ToString().ToLower()}";
-        //                    if (!string.IsNullOrEmpty(userID)) values += $":{userID}";
-        //                    if (!string.IsNullOrEmpty(opponentID)) values += $":{opponentID}";
-
-        //                    LogGameAnalyticsDesignEvent(values);
-
-        //                    break;
-        //            }
-        //        }
-        //    }
-
-        //    lastLoggedButton = AnalyticsUIButtons.none;
-        //}
-
         public void LogGame(
             AnalyticsGameEvents gameEventType,
             IClientFourzy game,
@@ -286,7 +221,7 @@ namespace Fourzy
 
             foreach (KeyValuePair<string, object> p in extraParams) @params.Add(p.Key, p.Value);
 
-            @params.Add(GAME_ID_KEY, game.GameID);
+            @params.Add(BOARD_ID_KEY, game.GameID);
             @params.Add(AREA_KEY, game._Area);
 
             switch (gameEventType)
@@ -298,11 +233,13 @@ namespace Fourzy
 
                 case AnalyticsGameEvents.RANDOM_PUZZLE_START:
                     @params.Add(SESSION_ID_KEY, GameManager.Instance.sessionID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
 
                     break;
 
                 case AnalyticsGameEvents.RANDOM_PUZZLE_END:
                     @params.Add(SESSION_ID_KEY, GameManager.Instance.sessionID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
                     @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
                     @params.Add(PUZZLE_TURNS_LIMIT_KEY, game.puzzleData.MoveLimit);
 
@@ -331,6 +268,7 @@ namespace Fourzy
 
                 case AnalyticsGameEvents.AI_LEVEL_START:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
                     @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
 
@@ -338,6 +276,7 @@ namespace Fourzy
 
                 case AnalyticsGameEvents.AI_LEVEL_END:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
                     @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
                     @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
@@ -346,6 +285,7 @@ namespace Fourzy
 
                 case AnalyticsGameEvents.BOSS_AI_LEVEL_START:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
                     @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
                     @params.Add(GAME_BOSS_TYPE_KEY, game.puzzleData.aiBoss);
@@ -354,6 +294,7 @@ namespace Fourzy
 
                 case AnalyticsGameEvents.BOSS_AI_LEVEL_END:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
                     @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
                     @params.Add(GAME_BOSS_TYPE_KEY, game.puzzleData.aiBoss);
@@ -364,12 +305,14 @@ namespace Fourzy
 
                 case AnalyticsGameEvents.PUZZLE_LEVEL_START:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
 
                     break;
 
                 case AnalyticsGameEvents.PUZZLE_LEVEL_END:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
                     @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
                     @params.Add(PUZZLE_TURNS_LIMIT_KEY, game.puzzleData.MoveLimit);
@@ -380,6 +323,7 @@ namespace Fourzy
                     //try add eventid
                     if (game.puzzleData.pack) @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
 
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
                     @params.Add(HINT_AVAILABLE_KEY, UserManager.Instance.hints > 0);
                     @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
@@ -391,6 +335,7 @@ namespace Fourzy
                     //try add eventid
                     if (game.puzzleData.pack) @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
 
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
                     @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
                     @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.GameID));
@@ -670,22 +615,14 @@ namespace Fourzy
             List<Parameter> firebaseParams = new List<Parameter>();
 
             if (@params != null)
-            {
                 foreach (KeyValuePair<string, object> _param in @params)
-                {
                     if (_param.Key != null && _param.Value != null)
-                    {
-                        firebaseParams.Add(new Parameter(_param.Key, _param.Value.ToString().ToLower()));
-                    }
-                }
-            }
+                        firebaseParams.Add(new Parameter(_param.Key, _param.Value.ToString()));
 
             FirebaseAnalytics.LogEvent(eventType, firebaseParams.ToArray());
 
             if (DEBUG)
-            {
                 Debug.Log("Firebase event sent: " + eventType);
-            }
         }
 
         private void LogPlayFabPlayerEvent(string eventName, Dictionary<string, object> @params)
@@ -697,9 +634,7 @@ namespace Fourzy
             }, null, null);
 
             if (DEBUG)
-            {
                 Debug.Log("Playfab event sent: " + eventName);
-            }
         }
 
         private void LogGameAnalyticsDesignEvent(string value)
@@ -707,9 +642,7 @@ namespace Fourzy
             GameAnalytics.NewDesignEvent(value);
 
             if (DEBUG)
-            {
                 Debug.Log("Game Analytics event sent: " + value);
-            }
         }
 
         private void LogGameAnalyticsErrorEvent(GAErrorSeverity severity, string value)

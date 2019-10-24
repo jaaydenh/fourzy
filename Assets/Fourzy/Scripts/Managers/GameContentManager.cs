@@ -160,7 +160,7 @@ namespace Fourzy
             foreach (ResourceItem item in ResourceDB.GetFolder(Constants.PUZZLES_ROOT_FOLDER).GetChilds("", ResourceItem.Type.Asset))
             {
                 if (item.Ext != "json") continue;
-                fastPuzzles.Add(item.Name, item);
+                fastPuzzles.Add(item.GetIDFromPuzzleDataFile(), item);
             }
 
             UnityEngine.Debug.Log($"Loaded {fastPuzzles.Count} fast puzzles from resources");
@@ -183,7 +183,6 @@ namespace Fourzy
                 foreach (ResourceItem puzzleDataFile in @event.GetChild("puzzles").GetChilds("", ResourceItem.Type.Asset))
                 {
                     ClientPuzzleData puzzleData = new ClientPuzzleData(puzzleDataFile);
-                    puzzleData.Initialize();
 
                     if (puzzlePack.allRewards.ContainsKey(puzzleIndex))
                         puzzleData.rewards = puzzlePack.allRewards[puzzleIndex].ToArray();

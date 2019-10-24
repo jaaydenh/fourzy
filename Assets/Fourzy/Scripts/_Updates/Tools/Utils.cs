@@ -398,6 +398,15 @@ namespace Fourzy._Updates.Tools
             return string.Format("{0},{1},{2},{3}", c.r, c.g, c.b, c.a);
         }
 
+        public static string GetIDFromPuzzleDataFile(this ResourceItem puzzleData)
+        {
+            string text = puzzleData.Load<TextAsset>().text;
+            int from = text.IndexOf('"', text.IndexOf("ID") + 4);
+            int to = text.IndexOf('"', from + 1);
+
+            return text.Substring(from + 1, to - from - 1);
+        }
+
         /// <summary>
         /// Perform a deep Copy of the object, using Json as a serialisation method. NOTE: Private members are not cloned using this method.
         /// </summary>

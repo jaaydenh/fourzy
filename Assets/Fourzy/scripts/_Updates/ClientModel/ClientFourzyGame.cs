@@ -500,7 +500,7 @@ namespace Fourzy._Updates.ClientModel
                     {
                         bool _complete = puzzleData.pack.complete;
 
-                        PlayerPrefsWrapper.SetPuzzleChallengeComplete(GameID, true);
+                        PlayerPrefsWrapper.SetPuzzleChallengeComplete(puzzleData.ID, true);
 
                         if (puzzleData.pack.complete && !_complete)
                         {
@@ -512,7 +512,7 @@ namespace Fourzy._Updates.ClientModel
                     }
                     else
                     {
-                        PlayerPrefsWrapper.SetFastPuzzleComplete(GameID, true);
+                        PlayerPrefsWrapper.SetFastPuzzleComplete(puzzleData.ID, true);
 
                         //send new statistics to playfab
                         GameManager.UpdateStatistic("PuzzlesLB", GameContentManager.Instance.finishedFastPuzzlesCount);
@@ -596,7 +596,7 @@ namespace Fourzy._Updates.ClientModel
             }
 
             game.puzzleData = puzzleData;
-            game.GameID = puzzleData.ID;
+            game.GameID = puzzleData.gameBoardDefinition.ID;
             game._State.ActivePlayerId = puzzleData.firstTurn < 1 ? game.me.PlayerId : puzzleData.firstTurn;
 
             game.opponent.HerdId = puzzleData.PuzzlePlayer.HerdId;

@@ -87,7 +87,7 @@ namespace Fourzy._Updates.ClientModel
 
         public string GameID
         {
-            get => puzzleData.ID;
+            get => puzzleData.gameBoardDefinition.ID;
 
             set { }
         }
@@ -245,7 +245,7 @@ namespace Fourzy._Updates.ClientModel
                     {
                         bool _complete = puzzleData.pack.complete;
 
-                        PlayerPrefsWrapper.SetPuzzleChallengeComplete(GameID, true);
+                        PlayerPrefsWrapper.SetPuzzleChallengeComplete(puzzleData.ID, true);
 
                         if (puzzleData.pack.complete && !_complete)
                         {
@@ -257,7 +257,7 @@ namespace Fourzy._Updates.ClientModel
                     }
                     else
                     {
-                        PlayerPrefsWrapper.SetFastPuzzleComplete(GameID, true);
+                        PlayerPrefsWrapper.SetFastPuzzleComplete(puzzleData.ID, true);
 
                         //send new statistics to playfab
                         GameManager.UpdateStatistic("PuzzlesLB", GameContentManager.Instance.finishedFastPuzzlesCount);

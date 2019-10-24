@@ -537,61 +537,19 @@ MonoBehaviour:
     path: PuzzlePacks/PuzzlePack11
     type: 1
     objectTypeName: 
-  - name: TRAINING_GARDEN_Puzzle_1_WinIn2
+  - name: level1_SquareGarden
     ext: json
     path: PuzzlePacks/PuzzlePack11/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_1_WinIn3
+  - name: level2_StickyDiagonal
     ext: json
     path: PuzzlePacks/PuzzlePack11/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_2_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack11/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_3_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack11/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_4_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack11/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_5_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack11/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_6_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack11/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_7_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack11/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_8_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack11/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_9_WinIn2
+  - name: level3_CheckerGarden
     ext: json
     path: PuzzlePacks/PuzzlePack11/puzzles
     type: 2
@@ -613,108 +571,6 @@ MonoBehaviour:
     path: PuzzlePacks/PuzzlePack12
     type: 1
     objectTypeName: 
-  - name: TRAINING_GARDEN_Puzzle_10_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_10_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_11_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_11_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_12_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_12_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_13_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_13_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_14_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_14_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_15_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_15_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_16_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_16_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_17_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_18_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_19_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_1_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack12/puzzles
@@ -727,85 +583,7 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_20_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_21_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_22_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_23_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_24_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_25_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_26_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_27_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_28_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_29_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_2_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_2_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_30_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_31_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack12/puzzles
     type: 2
@@ -817,19 +595,7 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_3_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_4_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_4_WinIn3
     ext: json
     path: PuzzlePacks/PuzzlePack12/puzzles
     type: 2
@@ -841,19 +607,7 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_5_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_6_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_6_WinIn3
     ext: json
     path: PuzzlePacks/PuzzlePack12/puzzles
     type: 2
@@ -865,31 +619,13 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_7_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_8_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack12/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_8_WinIn3
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_9_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack12/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_9_WinIn3
     ext: json
     path: PuzzlePacks/PuzzlePack12/puzzles
     type: 2
@@ -911,127 +647,7 @@ MonoBehaviour:
     path: PuzzlePacks/PuzzlePack13
     type: 1
     objectTypeName: 
-  - name: TRAINING_GARDEN_Board_10_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_11_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_12_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_13_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_14_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_15_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_16_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_1_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_2_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_3_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_4_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_5_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_6_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_7_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_8_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Board_9_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_10_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_11_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_12_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_13_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_14_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
     type: 2
@@ -1061,43 +677,13 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_19_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_1_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_20_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_21_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_22_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_23_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_24_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
     type: 2
@@ -1115,18 +701,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_27_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_28_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_29_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
@@ -1134,42 +708,6 @@ MonoBehaviour:
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_2_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_30_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_31_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_32_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_33_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_34_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_35_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
     type: 2
@@ -1187,25 +725,7 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_38_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_39_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_3_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_40_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
     type: 2
@@ -1223,43 +743,13 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_43_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_44_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_45_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_46_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_47_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_48_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_49_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
     type: 2
@@ -1283,31 +773,7 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_52_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_53_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_54_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_55_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_56_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
     type: 2
@@ -1319,49 +785,13 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_58_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_59_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_5_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_60_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_61_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_6_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: TRAINING_GARDEN_Puzzle_7_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack13/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TRAINING_GARDEN_Puzzle_8_WinIn2
     ext: json
     path: PuzzlePacks/PuzzlePack13/puzzles
     type: 2
@@ -1376,6 +806,170 @@ MonoBehaviour:
   - name: puzzlePack
     ext: json
     path: PuzzlePacks/PuzzlePack13
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: PuzzlePack14
+    ext: 
+    path: PuzzlePacks
+    type: 1
+    objectTypeName: 
+  - name: puzzles
+    ext: 
+    path: PuzzlePacks/PuzzlePack14
+    type: 1
+    objectTypeName: 
+  - name: TRAINING_GARDEN_Puzzle_10_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_10_WinIn3
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_17_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_18_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_1_WinIn3
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_21_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_22_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_24_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_29_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_2_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_30_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_3_WinIn3
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_4_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_4_WinIn3
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_5_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_5_WinIn3
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_6_WinIn3
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_7_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: TRAINING_GARDEN_Puzzle_7_WinIn3
+    ext: json
+    path: PuzzlePacks/PuzzlePack14/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: puzzlePack
+    ext: json
+    path: PuzzlePacks/PuzzlePack14
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: PuzzlePack15
+    ext: 
+    path: PuzzlePacks
+    type: 1
+    objectTypeName: 
+  - name: puzzles
+    ext: 
+    path: PuzzlePacks/PuzzlePack15
+    type: 1
+    objectTypeName: 
+  - name: level1_SquareGarden
+    ext: json
+    path: PuzzlePacks/PuzzlePack15/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: level2_StickyDiagonal
+    ext: json
+    path: PuzzlePacks/PuzzlePack15/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: level3_CheckerGarden
+    ext: json
+    path: PuzzlePacks/PuzzlePack15/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: puzzlePack
+    ext: json
+    path: PuzzlePacks/PuzzlePack15
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -1631,6 +1225,40 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - name: PuzzlePack7_1
+    ext: 
+    path: PuzzlePacks
+    type: 1
+    objectTypeName: 
+  - name: puzzles
+    ext: 
+    path: PuzzlePacks/PuzzlePack7_1
+    type: 1
+    objectTypeName: 
+  - name: level1_SquareGarden
+    ext: json
+    path: PuzzlePacks/PuzzlePack7_1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: level2_StickyDiagonal
+    ext: json
+    path: PuzzlePacks/PuzzlePack7_1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: level3_CheckerGarden
+    ext: json
+    path: PuzzlePacks/PuzzlePack7_1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: puzzlePack
+    ext: json
+    path: PuzzlePacks/PuzzlePack7_1
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: PuzzlePack8
     ext: 
     path: PuzzlePacks
@@ -1792,12 +1420,6 @@ MonoBehaviour:
   - name: puzzlePack
     ext: json
     path: PuzzlePacks/PuzzlePack9
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Arrow_Chain_WinIn4_Puzzle
-    ext: json
-    path: PuzzlePacks
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -3991,6 +3613,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 628
-  m_FolderCount: 42
+  m_FileCount: 560
+  m_FolderCount: 48
   UpdateAutomatically: 0

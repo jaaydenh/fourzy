@@ -97,6 +97,7 @@ namespace Fourzy._Updates.ClientModel
         public ClientPuzzleData(ResourceItem resource) : this()
         {
             this.resource = resource;
+            ID = resource.GetIDFromPuzzleDataFile();
 
             PuzzlePlayer = new Player(2, "AI", AIProfile.PuzzleAI);
         }

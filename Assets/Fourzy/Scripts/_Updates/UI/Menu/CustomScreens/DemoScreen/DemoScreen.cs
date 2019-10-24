@@ -60,6 +60,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Toggle();
         }
 
+        public void UnlockModes()
+        {
+            PlayerPrefsWrapper.SetRewardRewarded(Constants.GAME_MODE_FAST_PUZZLES, true);
+            PlayerPrefsWrapper.SetRewardRewarded(Constants.GAME_MODE_GAUNTLET_GAME, true);
+        }
+
         public void CompleteProgress()
         {
             GameContentManager.Instance.progressionMaps[0].CompleteAll();
