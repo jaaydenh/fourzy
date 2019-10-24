@@ -303,6 +303,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OnGameFinished()
         {
+            gameInfoWidget.Hide(.3f);
+
             if (!game.draw)
             {
                 if (game.IsWinner())

@@ -144,9 +144,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void OnBGTap()
         {
             //if gauntlet, exit
-            if (game.puzzleData && game.puzzleData.pack && game.puzzleData.pack.gauntletStatus != null && !game.IsWinner())
+            if (game.puzzleData && game.puzzleData.pack && game.puzzleData.pack.gauntletStatus != null)
             {
-                GamePlayManager.instance.gameplayScreen.OnBack();
+                if (game.puzzleData.pack.gauntletStatus.FourzyCount == 0)
+                    GamePlayManager.instance.gameplayScreen.OnBack();
+                else
+                    Rematch();
             }
             else
             {

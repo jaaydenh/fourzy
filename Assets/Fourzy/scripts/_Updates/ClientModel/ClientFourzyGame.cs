@@ -596,7 +596,7 @@ namespace Fourzy._Updates.ClientModel
             }
 
             game.puzzleData = puzzleData;
-            game.GameID = puzzleData.gameBoardDefinition.ID;
+            game.GameID = puzzleData.gameBoardDefinition != null ? puzzleData.gameBoardDefinition.ID : "random_level";
             game._State.ActivePlayerId = puzzleData.firstTurn < 1 ? game.me.PlayerId : puzzleData.firstTurn;
 
             game.opponent.HerdId = puzzleData.PuzzlePlayer.HerdId;
