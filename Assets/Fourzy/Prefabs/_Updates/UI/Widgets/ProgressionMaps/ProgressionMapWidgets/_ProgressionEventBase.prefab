@@ -149,7 +149,6 @@ MonoBehaviour:
     rewardType: 0
     name: 
     quantity: 0
-  otherReward: 
   otherRewardID: 
   unlockWhenComplete: []
   onUnlock:
@@ -442,7 +441,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 42
+          selectedMember: 41
           isDynamic: 0
         target: {fileID: 1688270127760215850}
         memberName: OnTap

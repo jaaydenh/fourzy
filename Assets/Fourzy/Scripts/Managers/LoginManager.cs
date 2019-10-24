@@ -348,7 +348,7 @@ namespace Fourzy
         private void PlayFabLoginSuccess(LoginResult result)
         {
             playfabID = result.PlayFabId;
-            AnalyticsManager.Instance.Identify(result.PlayFabId);
+            //AnalyticsManager.Instance.Identify(result.PlayFabId);
 
             GameManager.Instance.CheckNews();
 

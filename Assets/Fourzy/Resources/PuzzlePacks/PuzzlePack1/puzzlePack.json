@@ -12,17 +12,17 @@
       "name": "",
       "quantity": 0
     },
-    {
-      "levelIndex": 3,
-      "rewardType": 99,
-      "name": "unlock_fast_puzzles_mode",
-      "quantity": 0
-    },
-    {
-      "levelIndex": 2,
-      "rewardType": 99,
-      "name": "unlock_gauntlet_mode",
-      "quantity": 0
-    }
+    //{
+    //  "levelIndex": 3,
+    //  "rewardType": 99,
+    //  "name": "unlock_fast_puzzles_mode",
+    //  "quantity": 0
+    //},
+    //{
+    //  "levelIndex": 2,
+    //  "rewardType": 99,
+    //  "name": "unlock_gauntlet_mode",
+    //  "quantity": 0
+    //}
   ]
 }

@@ -81,8 +81,6 @@ namespace Fourzy
 
         public void CreateTurnBasedGame(string oppponentID, Area selectedArea, Action<LogEventResponse> successCallback, Action<LogEventResponse> errorCallback)
         {
-            AnalyticsManager.Instance.LogCreateGame(GameType.TURN_BASED, selectedArea, UserManager.Instance.userId, oppponentID);
-
             new LogEventRequest().SetEventKey("createTurnBased")
                 // .SetDurable(true)
                 .SetMaxResponseTimeInMillis(15000)

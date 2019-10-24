@@ -8,6 +8,7 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -355,6 +356,9 @@ namespace Fourzy
             gamePieceID = _gamePieceID;
 
             OnUpdateUserGamePieceID?.Invoke(gamePieceID);
+
+            AnalyticsManager.Instance.LogEvent(AnalyticsManager.AnalyticsGameEvents.SELECT_GAMEPIECE,
+                extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAMEPIECE_SELECT_KEY, _gamePieceID));
         }
 
         public static string CreateNewPlayerName()

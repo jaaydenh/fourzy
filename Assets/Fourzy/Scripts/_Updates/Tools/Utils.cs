@@ -443,6 +443,32 @@ namespace Fourzy._Updates.Tools
             collection.Insert(newIndex, removedItem);
         }
 
+        public static AnalyticsManager.AnalyticsGameEvents GameModeToAnalyticsEvent(this GameMode mode, bool start)
+        {
+            switch (mode)
+            {
+                case GameMode.LOCAL_VERSUS:
+                    return start ? AnalyticsManager.AnalyticsGameEvents.VERSUS_GAME_START : AnalyticsManager.AnalyticsGameEvents.VERSUS_GAME_END;
+
+                case GameMode.PUZZLE_FAST:
+                    return start ? AnalyticsManager.AnalyticsGameEvents.RANDOM_PUZZLE_START : AnalyticsManager.AnalyticsGameEvents.RANDOM_PUZZLE_END;
+
+                case GameMode.GAUNTLET:
+                    return start ? AnalyticsManager.AnalyticsGameEvents.GAUNTLET_LEVEL_START : AnalyticsManager.AnalyticsGameEvents.GAUNTLET_LEVEL_END;
+
+                case GameMode.AI_PACK:
+                    return start ? AnalyticsManager.AnalyticsGameEvents.AI_LEVEL_START : AnalyticsManager.AnalyticsGameEvents.AI_LEVEL_END;
+
+                case GameMode.BOSS_AI_PACK:
+                    return start ? AnalyticsManager.AnalyticsGameEvents.BOSS_AI_LEVEL_START : AnalyticsManager.AnalyticsGameEvents.BOSS_AI_LEVEL_END;
+
+                case GameMode.PUZZLE_PACK:
+                    return start ? AnalyticsManager.AnalyticsGameEvents.PUZZLE_LEVEL_START : AnalyticsManager.AnalyticsGameEvents.PUZZLE_LEVEL_END;
+            }
+
+            return AnalyticsManager.AnalyticsGameEvents.NONE;
+        }
+
         public static string TokenTypeToString(this TokenType type)
         {
             switch (type)

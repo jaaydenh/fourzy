@@ -1042,6 +1042,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         GameActionBossPower bossPowerAction = turnResults.Activity[actionIndex] as GameActionBossPower;
 
                         GamePlayManager.instance.gameplayScreen.gameInfoWidget.DisplayPower(bossPowerAction.Power.PowerType);
+                        model.BossMoves++;
 
                         actionIndex++;
 

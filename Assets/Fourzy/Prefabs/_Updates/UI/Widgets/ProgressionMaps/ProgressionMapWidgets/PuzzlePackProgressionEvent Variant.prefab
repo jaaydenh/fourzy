@@ -990,7 +990,7 @@ PrefabInstance:
     - target: {fileID: 1788369364149222938, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
       propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
-      value: 42
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
@@ -1033,16 +1033,6 @@ PrefabInstance:
       propertyPath: labelBG
       value: 
       objectReference: {fileID: 2072577344806510639}
-    - target: {fileID: 1839103346566499647, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1454589770680166005, guid: c808e81a56ec23d49b7830ab6eacfba9,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5969188304621360137, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -1082,6 +1072,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1839103346566499647, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1454589770680166005, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c808e81a56ec23d49b7830ab6eacfba9, type: 3}

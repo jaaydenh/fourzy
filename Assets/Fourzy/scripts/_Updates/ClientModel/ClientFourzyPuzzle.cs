@@ -72,6 +72,19 @@ namespace Fourzy._Updates.ClientModel
             set { }
         }
 
+        public GameMode _Mode
+        {
+            get
+            {
+                if (puzzleData.pack)
+                    return GameMode.PUZZLE_PACK;
+                else
+                    return GameMode.PUZZLE_FAST;
+            }
+
+            set { }
+        }
+
         public string GameID
         {
             get => puzzleData.ID;
@@ -112,6 +125,8 @@ namespace Fourzy._Updates.ClientModel
         public int Rows => State.Board.Rows;
 
         public int Columns => State.Board.Columns;
+
+        public int BossMoves { get; set; }
 
         public bool isOver => 
             Status == PuzzleStatus.SUCCESS || 
@@ -232,7 +247,13 @@ namespace Fourzy._Updates.ClientModel
 
                         PlayerPrefsWrapper.SetPuzzleChallengeComplete(GameID, true);
 
-                        if (puzzleData.pack.complete && !_complete) puzzleData.pack.justFinished = true;
+                        if (puzzleData.pack.complete && !_complete)
+                        {
+                            puzzleData.pack.justFinished = true;
+
+                            AnalyticsManager.Instance.LogEvent(AnalyticsManager.AnalyticsGameEvents.EVENT_COMPLETED,
+                                extraParams: new KeyValuePair<string, object>(AnalyticsManager.EVENT_ID_KEY, puzzleData.pack.packID));
+                        }
                     }
                     else
                     {

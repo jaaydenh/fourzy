@@ -18,8 +18,6 @@ namespace Fourzy._Updates.UI.Widgets
 
         public GamePieceView gamePiece { get; private set; }
 
-        //private string currentGamepieceID = "";
-
         protected override void Awake()
         {
             base.Awake();
@@ -34,18 +32,15 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual WidgetBase SetData(GamePieceData data)
         {
-            this.data = data;
-
-            //if (gamePiece && currentGamepieceID != data.ID) Destroy(gamePiece.gameObject);
-
-            if (!gamePiece)
+            if (gamePiece && gamePiece.pieceData.ID != data.ID)
             {
-                gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(data.ID).player1Prefab, gamePieceParent);
-
-                gamePiece.transform.localPosition = Vector3.zero;
-                gamePiece.transform.localScale = Vector3.one * 90f;
-                gamePiece.StartBlinking();
+                Destroy(gamePiece.gameObject);
+                gamePiece = AddPiece(data.ID);
             }
+            else if (!gamePiece)
+                gamePiece = AddPiece(data.ID);
+
+            this.data = data;
 
             switch (data.State)
             {
@@ -94,11 +89,22 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void UpdateData(GamePieceData _data)
         {
-            if (_data == null || data != _data) return;
+            if (_data == null || data.ID != _data.ID) return;
 
             SetData(_data);
         }
 
         public override void _Update() => UpdateData(data);
+
+        private GamePieceView AddPiece(string id)
+        {
+            GamePieceView _gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(id).player1Prefab, gamePieceParent);
+
+            _gamePiece.transform.localPosition = Vector3.zero;
+            _gamePiece.transform.localScale = Vector3.one * 90f;
+            _gamePiece.StartBlinking();
+
+            return _gamePiece;
+        }
     }
 }

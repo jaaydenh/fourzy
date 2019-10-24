@@ -22,8 +22,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public TweenBase completeIcon;
         public AlphaTween packInfoTween;
 
-        //private bool rematchButtonState = false;
-
         public IClientFourzy game { get; private set; }
 
         protected override void Awake()
@@ -53,10 +51,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             OnCurrencyUpdate(CurrencyType.HINTS);
 
+            //hint button
             if (game.puzzleData.Solution.Count > 0)
             {
                 hintButton.SetActive(true);
-
                 SetHintButtonState(true);
             }
             else
@@ -64,24 +62,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (game.puzzleData.pack)
             {
-                if (game.isFourzyPuzzle)
-                {
-                    if (game.puzzleData.pack.enabledPuzzlesData.Count > 1)
-                    {
-                        if (nextButton.alphaTween._value < 1f)
-                        {
-                            nextButton.Show(.3f);
-                            nextButton.SetState(true);
-                        }
-                    }
-                    else
-                    {
-                        nextButton.Hide(0f);
-                        nextButton.SetState(false);
-                    }
-                }
-                else
-                    nextButton.SetState(false);
+                nextButton.Hide(0f);
+                nextButton.SetState(false);
 
                 switch (game.puzzleData.pack.packType)
                 {
@@ -127,15 +109,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 movesLeftWidget.SetData(game.asFourzyPuzzle);
             }
 
-            //if (rematchButtonState)
             if (rematchButton.interactable)
             {
-                //rematchButton.scaleTween.PlayBackward(true);
                 rematchButton.alphaTween.PlayBackward(true);
                 rematchButton.SetState(false);
-
-                //rematchButton.interactable = false;
-                //rematchButtonState = false;
             }
         }
 
@@ -144,7 +121,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game == null || !game.puzzleData) return;
 
             SetHintButtonState(false);
-            //hintButton.SetState(false);
         }
 
         public void UpdatePlayerTurn()
@@ -153,16 +129,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (game._Type == GameType.PUZZLE) movesLeftWidget.UpdateMovesLeft();
 
-            //if (game.isMyTurn && !game.isOver) hintButton.SetState(true);
             SetHintButtonState(true);
 
             if (game._allTurnRecord.Count == 1 && !game.isOver && game.isFourzyPuzzle)
             {
                 rematchButton.SetState(true);
                 rematchButton.alphaTween.PlayForward(true);
-
-                //rematchButton.interactable = true;
-                //rematchButtonState = true;
             }
         }
 

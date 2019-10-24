@@ -619,7 +619,7 @@ PrefabInstance:
     - target: {fileID: 1788369364149222938, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
       propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
-      value: 42
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 1688270127760215850, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}

@@ -337,6 +337,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void BackButtonOnClick()
         {
+            //analytics
+            if (!game.isOver)
+                AnalyticsManager.Instance.LogGame(game._Mode.GameModeToAnalyticsEvent(false), game,
+                    extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAME_RESULT_KEY, AnalyticsManager.GameResultType.Abandoned));
+
             GameManager.Instance.OpenMainMenu();
 
             //disconnect if realtime
@@ -349,7 +354,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        public void UnloadGamePlayScreen()
+        public void UnloadGamePlaySceene()
         {
             SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
         }
@@ -396,7 +401,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void PlayHint()
         {
-            if (!game.isMyTurn || game.isOver) return;
+            if (game == null || !game.isMyTurn || game.isOver || !game.puzzleData || game.puzzleData.Solution.Count == 0) return;
+
+            AnalyticsManager.Instance.LogGame(AnalyticsManager.AnalyticsGameEvents.PUZZLE_LEVEL_HINT_BUTTON_PRESS, game,
+                extraParams: new KeyValuePair<string, object>(AnalyticsManager.HINT_STORE_ITEMS_KEY, StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)));
 
             if (UserManager.Instance.hints <= 0)
             {
@@ -405,10 +413,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 return;
             }
 
-            if (game == null || !game.puzzleData || game.puzzleData.Solution.Count == 0) return;
-
             UserManager.Instance.hints--;
-            AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.USE_HINT, game);
 
             StartRoutine("hintRoutine", PlayHintRoutine());
         }
@@ -508,15 +513,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-            //log game open
-            switch (game._Type)
-            {
-                case GameType.TURN_BASED:
-                case GameType.PUZZLE:
-                    AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.GAME_OPEN, game);
-
-                    break;
-            }
+            //analytics
+            AnalyticsManager.Instance.LogGame(game._Mode.GameModeToAnalyticsEvent(true), game);
         }
 
         private void PlayBGAudio()
@@ -678,8 +676,24 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (!logGameFinished)
             {
-                AnalyticsManager.Instance.LogGameEvent(game.IsWinner() ? AnalyticsManager.AnalyticsGameEvents.GAME_FINISHED : AnalyticsManager.AnalyticsGameEvents.GAME_FAILED, game);
+                //AnalyticsManager.Instance.LogGameEvent(game.IsWinner() ? AnalyticsManager.AnalyticsGameEvents.GAME_FINISHED : AnalyticsManager.AnalyticsGameEvents.GAME_FAILED, game);
             }
+
+            //analytics event
+            AnalyticsManager.GameResultType gameResult;
+
+            if (game._Mode == GameMode.LOCAL_VERSUS)
+                gameResult = game.draw ? AnalyticsManager.GameResultType.Draw : AnalyticsManager.GameResultType.Win;
+            else
+            {
+                if (game.draw)
+                    gameResult = AnalyticsManager.GameResultType.Draw;
+                else
+                    gameResult = game.IsWinner() ? AnalyticsManager.GameResultType.Win : AnalyticsManager.GameResultType.Lose;
+            }
+
+            AnalyticsManager.Instance.LogGame(game._Mode.GameModeToAnalyticsEvent(false), game,
+                extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAME_RESULT_KEY, gameResult));
 
             switch (game._Type)
             {

@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.UI.Widgets;
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -21,6 +22,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Prompt($"Buy {StoreItemTypeToString(filter)}", "");
         }
+
+        public static string ProductsToString(StoreItemType filter) => string.Join(",", CodelessIAPStoreListener.Instance.StoreController.products.all
+            .Where(product => product.definition.id.IndexOf(filter.ToString(), System.StringComparison.InvariantCultureIgnoreCase) >= 0)
+            .Select(product => product.definition.id));
 
         protected override void Awake()
         {

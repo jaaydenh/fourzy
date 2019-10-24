@@ -113,6 +113,48 @@ namespace Fourzy._Updates.ClientModel
                 }
             }
         }
+
+        public GameMode _Mode
+        {
+            get
+            {
+                if (puzzleData)
+                {
+                    if (puzzleData.pack)
+                    {
+                        if (puzzleData.gauntletStatus != null)
+                            return GameMode.GAUNTLET;
+                        else
+                        {
+                            switch (puzzleData.pack.packType)
+                            {
+                                case PackType.AI_PACK:
+                                    return GameMode.AI_PACK;
+
+                                case PackType.BOSS_AI_PACK:
+                                    return GameMode.BOSS_AI_PACK;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    switch (_Type)
+                    {
+                        case Fourzy.GameType.PASSANDPLAY:
+                            return GameMode.LOCAL_VERSUS;
+
+                        case Fourzy.GameType.AI:
+                            return GameMode.NONE;
+                    }
+                }
+
+                return GameMode.NONE;
+            }
+
+            set { }
+        }
+
         public float initializedTime { get; set; }
         public string GameID
         {
@@ -127,6 +169,8 @@ namespace Fourzy._Updates.ClientModel
         }
 
         public bool isFourzyPuzzle => false;
+
+        public int BossMoves { get; set; }
 
         public GamePiecePrefabData playerOnePrefabData { get; set; }
         public GamePiecePrefabData playerTwoPrefabData { get; set; }
@@ -384,7 +428,7 @@ namespace Fourzy._Updates.ClientModel
                                 {
                                     Debug.Log("Take Turn Success");
 
-                                    AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.TAKE_TURN, this);
+                                    //AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.TAKE_TURN, this);
                                 }
                             });
 
@@ -458,7 +502,13 @@ namespace Fourzy._Updates.ClientModel
 
                         PlayerPrefsWrapper.SetPuzzleChallengeComplete(GameID, true);
 
-                        if (puzzleData.pack.complete && !_complete) puzzleData.pack.justFinished = true;
+                        if (puzzleData.pack.complete && !_complete)
+                        {
+                            puzzleData.pack.justFinished = true;
+
+                            AnalyticsManager.Instance.LogEvent(AnalyticsManager.AnalyticsGameEvents.EVENT_COMPLETED,
+                                extraParams: new KeyValuePair<string, object>(AnalyticsManager.EVENT_ID_KEY, puzzleData.pack.packID));
+                        }
                     }
                     else
                     {
@@ -532,8 +582,8 @@ namespace Fourzy._Updates.ClientModel
             switch (puzzleData.pack.packType)
             {
                 case PackType.AI_PACK:
-                    if (puzzleData.gauntletLevelIndex > -1)
-                        game = new ClientFourzyGame(me, puzzleData.gauntletLevelIndex, Status: puzzleData.pack.gauntletStatus);
+                    if (puzzleData.puzzleIndex > -1)
+                        game = new ClientFourzyGame(me, puzzleData.puzzleIndex, Status: puzzleData.pack.gauntletStatus);
                     else
                         game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, me);
 

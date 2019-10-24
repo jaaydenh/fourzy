@@ -18,6 +18,7 @@ namespace Fourzy._Updates.ClientModel
         GameState _FirstState { get; set; }
         GameState _State { get; }
         GameType _Type { get; set; }
+        GameMode _Mode { get; set; }
         Area _Area { get; set; }
         GameStateDataEpoch toGameStateData { get; }
         string GameID { get; set; }
@@ -36,6 +37,7 @@ namespace Fourzy._Updates.ClientModel
 
         int Rows { get; }
         int Columns { get; }
+        int BossMoves { get; set; }
         bool isOver { get; }
         bool draw { get; set; }
         bool hideOpponent { get; set; }

@@ -48,8 +48,6 @@ namespace Fourzy._Updates.UI.Widgets
         public RewardsManager.Reward reward;
 
         [ShowIfGroup("Reward/EventType", Value = ProgressionEventType.REWARD), BoxGroup("Reward")]
-        public string otherReward;
-        [ShowIfGroup("Reward/EventType", Value = ProgressionEventType.REWARD), BoxGroup("Reward")]
         public string otherRewardID;
 
         public List<ProgressionEvent> unlockWhenComplete;
@@ -234,25 +232,24 @@ namespace Fourzy._Updates.UI.Widgets
             onUnlock.Invoke();
             _unlocked = true;
 
-            if (wasRewarded)
+            if (wasRewarded) Rewarded(animate);
+
+            button.interactable = true;
+
+            switch (EventType)
             {
-                switch (EventType)
-                {
-                    case ProgressionEventType.GAME:
-                        button.interactable = true;
+                case ProgressionEventType.CURRENCY:
+                case ProgressionEventType.REWARD:
+                    Rewarded(true);
+                    PlayerPrefsWrapper.SetRewardRewarded(id, true);
 
-                        break;
+                    if (EventType == ProgressionEventType.CURRENCY)
+                        new RewardsManager.Reward[] { reward }.AssignRewards();
 
-                    default:
-                        button.interactable = false;
+                    map.CheckMapComplete();
 
-                        break;
-                }
-
-                Rewarded(animate);
+                    break;
             }
-            else
-                button.interactable = true;
         }
 
         public virtual void Rewarded(bool animate)
@@ -266,11 +263,6 @@ namespace Fourzy._Updates.UI.Widgets
             switch (EventType)
             {
                 case ProgressionEventType.CURRENCY:
-                    button.interactable = false;
-
-                    break;
-
-                case ProgressionEventType.REWARD:
                     button.interactable = false;
 
                     break;
@@ -305,24 +297,38 @@ namespace Fourzy._Updates.UI.Widgets
                             break;
                     }
 
-                    break;
-
-                case ProgressionEventType.CURRENCY:
-                    Rewarded(true);
-                    PlayerPrefsWrapper.SetRewardRewarded(id, true);
-
-                    //give reward
-                    new RewardsManager.Reward[] { reward }.AssignRewards();
-
-                    map.CheckMapComplete();
+                    AnalyticsManager.Instance.LogEvent(AnalyticsManager.AnalyticsGameEvents.EVENT_OPENED,
+                        extraParams: new KeyValuePair<string, object>(AnalyticsManager.EVENT_ID_KEY, PuzzlePack.packID));
 
                     break;
 
                 case ProgressionEventType.REWARD:
-                    Rewarded(true);
-                    PlayerPrefsWrapper.SetRewardRewarded(id, true);
+                    switch (otherRewardID)
+                    {
+                        case Constants.GAME_MODE_FAST_PUZZLES:
+                            menuScreen.menuController.GetScreen<PromptScreen>().Prompt("Puzzles Ladder",
+                                "Compete with other to solve as many puzzle boards in week as possible!",
+                                "PLAY",
+                                null,
+                                () =>
+                                {
+                                    menuScreen.menuController.BackToRoot();
+                                    menuScreen.menuController.OpenScreen<FastPuzzlesScreen>();
+                                },
+                                null);
 
-                    map.CheckMapComplete();
+                            break;
+
+                        case Constants.GAME_MODE_GAUNTLET_GAME:
+                            menuScreen.menuController.GetScreen<PromptScreen>().Prompt("Gauntlet Mode",
+                                "In the gauntlet, you will play a series of gradually more difficult opponents. Default them all to win!",
+                                "PLAY",
+                                null,
+                                () => menuScreen.menuController.GetScreen<VSGamePrompt>().Prompt(5),
+                                null);
+
+                            break;
+                    }
 
                     break;
             }

@@ -24,7 +24,6 @@ namespace Fourzy._Updates.ClientModel
         public RewardsManager.Reward[] rewards;
 
         public int Complexity = -1;
-        public int gauntletLevelIndex = -1;
         public int startingMagic = 0;
 
         public ResourceItem resource;
@@ -76,6 +75,17 @@ namespace Fourzy._Updates.ClientModel
                 if (pack && pack.gauntletStatus != null) return pack.gauntletStatus;
 
                 return null;
+            }
+        }
+
+        public int puzzleIndex
+        {
+            get
+            {
+                if (pack)
+                    return pack.enabledPuzzlesData.IndexOf(this);
+
+                return -1;
             }
         }
 

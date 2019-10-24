@@ -27,6 +27,9 @@ namespace Fourzy
         public const int running_challenges_count = 100;
         public const int complete_challenges_count = 50;
 
+        public const string GAME_MODE_FAST_PUZZLES = "unlock_fast_puzzles_mode";
+        public const string GAME_MODE_GAUNTLET_GAME = "unlock_gauntlet_mode";
+
         public const string GAMEPLAY_SCENE_NAME = "gamePlayNew";
         public const string MAIN_MENU_SCENE_NAME = "tabbedUINew";
         public const string LOGO_SCENE_NAME = "logo";

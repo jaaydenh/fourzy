@@ -81,6 +81,7 @@ namespace Fourzy
         public BasicPuzzlePack currentPuzzlePack { get; set; }
         public DependencyStatus dependencyStatus { get; set; }
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
+        public string sessionID { get; private set; }
 
         private bool configFetched = false;
         private PlacementStyle _placementStyle = PlacementStyle.DEFAULT;
@@ -230,6 +231,8 @@ namespace Fourzy
                 GamePlayManager.instance.LoadGame(game);
             else
             {
+                sessionID = Guid.NewGuid().ToString();
+
                 if (isMainMenuLoaded)
                     SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME, LoadSceneMode.Additive);
                 else
@@ -265,7 +268,7 @@ namespace Fourzy
         public void OpenMainMenu()
         {
             //unload gameplay scene 
-            if (activeGame != null) GamePlayManager.instance.UnloadGamePlayScreen();
+            if (activeGame != null) GamePlayManager.instance.UnloadGamePlaySceene();
 
             if (!isMainMenuLoaded) SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
         }
@@ -280,6 +283,15 @@ namespace Fourzy
             if (product.definition.id.Contains("hints"))
             {
                 UserManager.Instance.hints += _data.quantity;
+
+                //analytics
+                if (activeGame != null)
+                    AnalyticsManager.Instance.LogGame(
+                        AnalyticsManager.AnalyticsGameEvents.PUZZLE_HINT_STORE_HINT_PURCHASE, 
+                        activeGame, 
+                        AnalyticsManager.AnalyticsProvider.ALL,
+                        new KeyValuePair<string, object>(AnalyticsManager.HINT_STORE_ITEMS_KEY, StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)),
+                        new KeyValuePair<string, object>(AnalyticsManager.STORE_ITEM_KEY, _data.id));
             }
         }
 

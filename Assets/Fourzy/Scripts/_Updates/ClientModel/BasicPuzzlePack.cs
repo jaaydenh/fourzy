@@ -5,6 +5,7 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -70,7 +71,7 @@ namespace Fourzy._Updates.ClientModel
 
             name = "Beat The Bot";
             packType = PackType.AI_PACK;
-            packID = "gauntlet";
+            packID = Guid.NewGuid().ToString();
             unlockRequirement = UnlockRequirementsEnum.NONE;
             herdID = "1";
             aiPlayerName = "The Bot";
@@ -82,7 +83,6 @@ namespace Fourzy._Updates.ClientModel
                 puzzleData.pack = this;
                 puzzleData.ID = packID + "_level_" + levelIndex;
                 puzzleData.aiPlayerName = aiPlayerName;
-                puzzleData.gauntletLevelIndex = levelIndex;
                 puzzleData.PuzzlePlayer = puzzlePlayer;
                 puzzleData.startingMagic = FourzyGameModel.Model.Constants.PlayerStartingMagic;
 

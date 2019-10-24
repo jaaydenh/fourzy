@@ -74,7 +74,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void OpenFastPuzzleScreen()
         {
             //check
-            if (!gauntletGameUnlocked)
+            if (!fastPuzzlesUnlocked)
             {
                 menuController.GetScreen<PromptScreen>().Prompt("Fast Puzzles mode locked",
                     "Compete with other to solve as many puzzle boards in week as possible!",
