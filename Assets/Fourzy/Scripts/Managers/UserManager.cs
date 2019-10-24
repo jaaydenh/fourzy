@@ -17,7 +17,7 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class UserManager : UnitySingleton<UserManager>
     {
-        public const string DEFAULT_GAME_PIECE = "2";
+        public const string DEFAULT_GAME_PIECE = "44";
         public const int MAX_PLAYER_LEVEL = 32;
         public const int MIN_PLAYER_LEVEL = 1;
 
