@@ -3,11 +3,11 @@
     "type": 0,
     "id": "012",
     "unlockRequirement": 0,
-    "herdID": "1",
-    "playerName": "Guardian",
+    "herdID": "10",
+    "playerName": "Sentinel",
     "rewards": [
         {
-            "levelIndex": 10,
+            "levelIndex": 7,
             "rewardType": 5,
             "name": "",
             "quantity": 0
