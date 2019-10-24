@@ -68,7 +68,9 @@ namespace Fourzy._Updates.Serialized
 
         public GamePieceData GetGamePieceData(GamePieceView gamePiece)
         {
-            GamePiecePrefabData prefabData = gamePieces.list.Find(_prefabData => _prefabData.player1Prefab.key == gamePiece.key || _prefabData.player2Prefab.key == gamePiece.key);
+            GamePiecePrefabData prefabData = gamePieces.list.Find(_prefabData => 
+                gamePiece.name.Contains(_prefabData.player1Prefab.name) ||
+                gamePiece.name.Contains(_prefabData.player2Prefab.name));
 
             if (prefabData == null) return null;
 
@@ -101,37 +103,10 @@ namespace Fourzy._Updates.Serialized
     {
         [HideInInspector]
         public string _name;
-        [HideInInspector]
-        public string _key;
 
-        [ShowIf("#Check")]
-        [StackableField]
         public GamePieceData data;
         public GamePieceView player1Prefab;
-        [StackableField]
-        [Buttons(titles = "Reset Keys", actions = "Reset", below = true)]
         public GamePieceView player2Prefab;
-
-        public bool Check()
-        {
-            if (string.IsNullOrEmpty(_key))
-                _key = Guid.NewGuid().ToString();
-
-            if (player1Prefab && player1Prefab.key != _key) player1Prefab.key = _key;
-            if (player2Prefab && player2Prefab.key != _key) player2Prefab.key = _key;
-
-            _name = data.name + ": " + (player1Prefab ? player1Prefab.name : "No Prefab");
-
-            return true;
-        }
-
-        public void Reset()
-        {
-            _key = Guid.NewGuid().ToString();
-
-            if (player1Prefab) player1Prefab.key = _key;
-            if (player2Prefab) player2Prefab.key = _key;
-        }
     }
 
     [System.Serializable]

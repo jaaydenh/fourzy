@@ -23,9 +23,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Prompt($"Buy {StoreItemTypeToString(filter)}", "");
         }
 
-        public static string ProductsToString(StoreItemType filter) => string.Join(",", CodelessIAPStoreListener.Instance.StoreController.products.all
-            .Where(product => product.definition.id.IndexOf(filter.ToString(), System.StringComparison.InvariantCultureIgnoreCase) >= 0)
-            .Select(product => product.definition.id));
+        public static string ProductsToString(StoreItemType filter)
+        {
+            try
+            {
+                return string.Join(",", CodelessIAPStoreListener.Instance.StoreController.products.all
+                    .Where(product => product.definition.id.IndexOf(filter.ToString(), System.StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    .Select(product => product.definition.id));
+            }
+            catch (Exception) { }
+
+            return $"failed_to_fetch_products: {Application.platform}";
+        }
 
         protected override void Awake()
         {

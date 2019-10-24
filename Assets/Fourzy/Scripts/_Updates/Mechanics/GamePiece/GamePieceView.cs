@@ -15,8 +15,6 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         private const int indexBaseLayer = 0;
         private const int indexEyeMouthLayer = 1;
 
-        [HideInInspector]
-        public string key;
         public Animator pieceAnimator;
         public AnimationCurve movementCurve;
         public PlayerEnum player;

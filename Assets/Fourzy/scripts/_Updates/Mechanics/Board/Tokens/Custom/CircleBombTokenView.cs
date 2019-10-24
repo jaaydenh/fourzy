@@ -20,5 +20,12 @@ namespace Fourzy._Updates.Mechanics.Board
 
             return base.SetData(tokenData);
         }
+
+        public override void _Destroy()
+        {
+            OnActivate();
+
+            base._Destroy();
+        }
     }
 }

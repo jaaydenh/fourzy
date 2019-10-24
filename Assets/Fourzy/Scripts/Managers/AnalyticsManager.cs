@@ -88,6 +88,7 @@ namespace Fourzy
             [AnalyticsGameEvents.EVENT_OPENED] = true,
             [AnalyticsGameEvents.EVENT_COMPLETED] = true,
             [AnalyticsGameEvents.SELECT_GAMEPIECE] = true,
+            [AnalyticsGameEvents.NONE] = false,
         };
 
         public static Dictionary<AnalyticsEvents, bool> miscEventsSwitch = new Dictionary<AnalyticsEvents, bool>()
@@ -279,8 +280,7 @@ namespace Fourzy
             AnalyticsProvider provider = AnalyticsProvider.ALL,
             params KeyValuePair<string, object>[] extraParams)
         {
-            if (!NetworkPass()) return;
-            if (!gameEventsSwitch[gameEventType] || gameEventType == AnalyticsGameEvents.NONE) return;
+            if (!NetworkPass() || !gameEventsSwitch[gameEventType]) return;
 
             Dictionary<string, object> @params = new Dictionary<string, object>();
 

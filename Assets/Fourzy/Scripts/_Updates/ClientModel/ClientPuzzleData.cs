@@ -82,8 +82,7 @@ namespace Fourzy._Updates.ClientModel
         {
             get
             {
-                if (pack)
-                    return pack.enabledPuzzlesData.IndexOf(this);
+                if (pack) return pack.enabledPuzzlesData.IndexOf(this);
 
                 return -1;
             }
@@ -95,10 +94,9 @@ namespace Fourzy._Updates.ClientModel
             rewards = new RewardsManager.Reward[0];
         }
 
-        public ClientPuzzleData(string ID, ResourceItem resource) : this()
+        public ClientPuzzleData(ResourceItem resource) : this()
         {
             this.resource = resource;
-            this.ID = ID;
 
             PuzzlePlayer = new Player(2, "AI", AIProfile.PuzzleAI);
         }

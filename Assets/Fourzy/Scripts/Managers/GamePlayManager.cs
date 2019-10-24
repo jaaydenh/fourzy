@@ -134,6 +134,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
         }
 
+        protected void OnApplicationQuit()
+        {
+            //analytics
+            if (game != null && !game.isOver)
+                AnalyticsManager.Instance.LogGame(game._Mode.GameModeToAnalyticsEvent(false), game,
+                    extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAME_RESULT_KEY, AnalyticsManager.GameResultType.Abandoned));
+        }
+
         protected void SetGameIfNull(IClientFourzy _game)
         {
             //if active game is empty, load random pass&play board

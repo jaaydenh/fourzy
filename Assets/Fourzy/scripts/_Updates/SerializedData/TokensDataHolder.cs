@@ -41,8 +41,7 @@ namespace Fourzy._Updates.Serialized
             Dictionary<TokenType, Sprite> tokensSprites = new Dictionary<TokenType, Sprite>();
             tokensSprites.Add(TokenType.NONE, missingTokenGraphics);
 
-            foreach (TokenData tokenData in tokens.list)
-                tokensSprites.Add(tokenData.tokenType, tokenData.GetTokenSprite());
+            foreach (TokenData tokenData in tokens.list) tokensSprites.Add(tokenData.tokenType, tokenData.GetTokenSprite());
 
             return tokensSprites;
         }

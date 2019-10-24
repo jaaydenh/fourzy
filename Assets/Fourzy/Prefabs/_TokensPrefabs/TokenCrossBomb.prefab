@@ -9,13 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4305424821544548}
-  - component: {fileID: 114814103086142892}
+  - component: {fileID: 8327551974067832565}
   - component: {fileID: 210521513613386502}
   - component: {fileID: 114723435646999666}
   - component: {fileID: 114980944731055944}
   - component: {fileID: 114570204143285448}
+  - component: {fileID: 767563879290157086}
   m_Layer: 0
-  m_Name: TokenCircleBomb
+  m_Name: TokenCrossBomb
   m_TagString: Token
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +37,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114814103086142892
+--- !u!114 &8327551974067832565
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,14 +46,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1317002439044838}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61105884763bd6e40bdf8ba41de043ea, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b24cf1dbb172ae439bcfd57144d2597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _body: {fileID: 8345101532789021895}
   onBoardScale: 1
   _radius: 0.65
-  name: Circle Bomb
-  tokenType: 13
+  name: Cross Bomb
+  tokenType: 14
   volume: 1
   onGamePieceEnter: 0
   onActivate: 141
@@ -213,6 +214,53 @@ MonoBehaviour:
   changeAlpha: 0
   from: {r: 1, g: 1, b: 1, a: 1}
   to: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &767563879290157086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317002439044838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f9ac5ca75a4fe040a5a702ca1c26378, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playbackDirection: 0
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  unscaledTime: 0
+  playbackTime: 0.3
+  playOnAwake: 0
+  repeat: 0
+  onProgress:
+    inspectorListHeight: 63
+    persistentCalls:
+      calls: []
+  from: {x: 0, y: 0, z: 0}
+  to: {x: 0, y: 0, z: 0}
 --- !u!1 &8345101532789021895
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +330,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b200f11cb0e5d6841b9d9a4d73c5944b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c18f30853a560ed4fa6efc8014baef26, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

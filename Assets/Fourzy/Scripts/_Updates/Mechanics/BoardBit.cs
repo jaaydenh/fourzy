@@ -343,7 +343,7 @@ namespace Fourzy._Updates.Mechanics
             //    Array.ForEach(spriteRenderers, (_spriteRenderer) => _spriteRenderer.ApplyMaterial(material));
         }
 
-        public void _Destroy(float time = 0f)
+        public virtual void _Destroy(float time = 0f)
         {
             if (time == 0f)
                 _Destroy();
@@ -351,7 +351,7 @@ namespace Fourzy._Updates.Mechanics
                 StartRoutine("destroy", time, () => _Destroy());
         }
 
-        public void _Destroy()
+        public virtual void _Destroy()
         {
             if (gameboard) gameboard.RemoveBoardBit(this);
 

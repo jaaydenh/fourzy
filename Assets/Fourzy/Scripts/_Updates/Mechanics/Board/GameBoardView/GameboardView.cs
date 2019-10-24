@@ -1080,6 +1080,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     case GameActionType.REMOVE_TOKEN:
                         GameActionTokenRemove tokenRemove = turnResults.Activity[actionIndex] as GameActionTokenRemove;
                         yield return new WaitForSeconds(BoardTokenAt<TokenView>(tokenRemove.Location, tokenRemove.Before.Type)._Destroy(tokenRemove.Reason));
+
                         actionIndex++;
 
                         break;
@@ -1122,15 +1123,22 @@ namespace Fourzy._Updates.Mechanics.Board
                         break;
 
                     case GameActionType.EFFECT:
-                        GameActionExplosion _explosion = turnResults.Activity[actionIndex] as GameActionExplosion;
+                        GameActionExplosion effect = turnResults.Activity[actionIndex] as GameActionExplosion;
+                        Vfx bombVfx = null;
 
-                        Vfx bombVfx = VfxHolder.instance.GetVfx<Vfx>(VfxType.VFX_BOMB_EXPLOSION).StartVfx(transform, (Vector3)BoardLocationToVec2(_explosion.Center) + Vector3.back, 0f);
+                        if (effect.Explosion.Count > 9)
+                        {
+                            foreach(BoardLocation location in effect.Explosion)
+                                VfxHolder.instance.GetVfx<Vfx>(VfxType.VFX_BOMB_EXPLOSION_LINE).StartVfx(transform, (Vector3)BoardLocationToVec2(location) + Vector3.back, 0f);
+                        }
+                        else
+                            bombVfx = VfxHolder.instance.GetVfx<Vfx>(VfxType.VFX_BOMB_EXPLOSION).StartVfx(transform, (Vector3)BoardLocationToVec2(effect.Center) + Vector3.back, 0f);
 
                         //destroy bomb
-                        TokenView bomb = BoardTokenAt<TokenView>(_explosion.Center, TokenType.CIRCLE_BOMB) ?? BoardTokenAt<TokenView>(_explosion.Center, TokenType.CROSS_BOMB);
+                        TokenView bomb = BoardTokenAt<TokenView>(effect.Center, TokenType.CIRCLE_BOMB) ?? BoardTokenAt<TokenView>(effect.Center, TokenType.CROSS_BOMB);
                         bomb?._Destroy();
 
-                        yield return new WaitForSeconds(bombVfx.duration);
+                        yield return new WaitForSeconds(bombVfx ? bombVfx.duration : 2f);
 
                         actionIndex++;
 

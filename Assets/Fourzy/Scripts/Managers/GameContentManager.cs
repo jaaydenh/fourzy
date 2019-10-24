@@ -119,22 +119,22 @@ namespace Fourzy
                     }
 
                 if (string.IsNullOrEmpty(_id))
-                    return new ClientFourzyPuzzle(new ClientPuzzleData(ids[0], fastPuzzles[ids[0]]).Initialize());
+                    return new ClientFourzyPuzzle(new ClientPuzzleData(fastPuzzles[ids[0]]).Initialize());
                 else
-                    return new ClientFourzyPuzzle(new ClientPuzzleData(_id, fastPuzzles[_id]).Initialize());
+                    return new ClientFourzyPuzzle(new ClientPuzzleData(fastPuzzles[_id]).Initialize());
             }
             else
             {
                 int idIndex = ids.FindIndex(ids.IndexOf(id), __id => !PlayerPrefsWrapper.GetFastPuzzleComplete(__id));
 
                 if (idIndex > -1 && idIndex < ids.Count - 1)
-                    return new ClientFourzyPuzzle(new ClientPuzzleData(ids[idIndex + 1], fastPuzzles[ids[idIndex + 1]]).Initialize());
+                    return new ClientFourzyPuzzle(new ClientPuzzleData(fastPuzzles[ids[idIndex + 1]]).Initialize());
                 else
                     return GetNextFastPuzzle();
             }
         }
 
-        public ClientFourzyPuzzle GetFastPuzzle(string id) => new ClientFourzyPuzzle(new ClientPuzzleData(id, fastPuzzles[id]).Initialize());
+        public ClientFourzyPuzzle GetFastPuzzle(string id) => new ClientFourzyPuzzle(new ClientPuzzleData(fastPuzzles[id]).Initialize());
 
         public void ResetFastPuzzles()
         {
@@ -182,7 +182,8 @@ namespace Fourzy
                 //get puzzle descriptions file
                 foreach (ResourceItem puzzleDataFile in @event.GetChild("puzzles").GetChilds("", ResourceItem.Type.Asset))
                 {
-                    ClientPuzzleData puzzleData = new ClientPuzzleData(puzzlePack.packID + "_" + puzzleDataFile.Name, puzzleDataFile);
+                    ClientPuzzleData puzzleData = new ClientPuzzleData(puzzleDataFile);
+                    puzzleData.Initialize();
 
                     if (puzzlePack.allRewards.ContainsKey(puzzleIndex))
                         puzzleData.rewards = puzzlePack.allRewards[puzzleIndex].ToArray();

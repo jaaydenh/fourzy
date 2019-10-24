@@ -156,6 +156,7 @@ namespace Fourzy._Updates.Mechanics._Vfx
         VFX_TAP_ANIMATION = 1,
         VFX_BOMB_EXPLOSION = 2,
         VFX_MOVE_NEGATIVE = 3,
+        VFX_BOMB_EXPLOSION_LINE = 4,
 
         UI_VFX_ADD_TIMER = 30,
         UI_TOUCH_VFX = 31,

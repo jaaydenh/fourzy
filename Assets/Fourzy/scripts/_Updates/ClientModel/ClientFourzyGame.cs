@@ -575,14 +575,14 @@ namespace Fourzy._Updates.ClientModel
 
         public static ClientFourzyGame FromPuzzleData(ClientPuzzleData puzzleData)
         {
-            ClientFourzyGame game = null;
+            ClientFourzyGame game;
             Player me = UserManager.Instance.meAsPlayer;
             me.Magic = puzzleData.startingMagic;
 
             switch (puzzleData.pack.packType)
             {
                 case PackType.AI_PACK:
-                    if (puzzleData.puzzleIndex > -1)
+                    if (puzzleData.gauntletStatus != null)
                         game = new ClientFourzyGame(me, puzzleData.puzzleIndex, Status: puzzleData.pack.gauntletStatus);
                     else
                         game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, me);

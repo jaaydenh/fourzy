@@ -159,7 +159,7 @@ MonoBehaviour:
             type: 3}
     - elementName: FRUIT
       tokenType: 19
-      tokenIcon: {fileID: 0}
+      tokenIcon: {fileID: 21300000, guid: a16244d70e469904a846d683a3093a9e, type: 3}
       enabled: 1
       isSpell: 0
       spellID: 0
@@ -460,4 +460,20 @@ MonoBehaviour:
         list:
         - theme: 127
           tokenPrefab: {fileID: 114115778919009160, guid: 10b23b5ed8762074c9185dc01a8e0f64,
+            type: 3}
+    - elementName: CROSS_BOMB
+      tokenType: 14
+      tokenIcon: {fileID: 0}
+      enabled: 1
+      isSpell: 0
+      spellID: 0
+      basePrice: 50
+      description: Cross Bomb.
+      showBackgroundTile: 0
+      backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
+      gameboardInstructionID: cefb7a62-c34c-4f20-9c62-96b560b1ba89
+      themesTokens:
+        list:
+        - theme: 127
+          tokenPrefab: {fileID: 8327551974067832565, guid: f086d73d9f5ebbc4c800b09f105fe2df,
             type: 3}

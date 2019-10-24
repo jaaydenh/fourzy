@@ -38,3 +38,7 @@ MonoBehaviour:
       type: 31
       options:
       - {fileID: 6801803617125816027, guid: d3839016411594045a61429e69c99169, type: 3}
+    - _name: VFX_BOMB_EXPLOSION_LINE
+      type: 4
+      options:
+      - {fileID: 1368547108588348377, guid: e0cc34537398dce40824d946c1f8ef22, type: 3}
