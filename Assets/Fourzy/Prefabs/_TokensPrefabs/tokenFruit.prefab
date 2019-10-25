@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 114364880149236398}
   - component: {fileID: 114882540043114098}
   m_Layer: 0
-  m_Name: TokenFruit
+  m_Name: tokenFruit
   m_TagString: Token
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -270,6 +270,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -282,7 +283,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
+  m_Sprite: {fileID: 7794195792750145734, guid: 848d138e1fb70445da396522f82e1757,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -303,7 +305,7 @@ Animator:
   m_GameObject: {fileID: 7617528227127001071}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3c8da12f6a65249fc8fdf809104fdee2, type: 2}
+  m_Controller: {fileID: 9100000, guid: fb767531405f44493bb6453242658c99, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
