@@ -54,8 +54,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //hint button
             if (game.puzzleData.Solution.Count > 0)
             {
-               hintButton.SetActive(true);
-               SetHintButtonState(true);
+                hintButton.SetActive(true);
+                SetHintButtonState(true);
             }
             else
                 hintButton.SetActive(false);
