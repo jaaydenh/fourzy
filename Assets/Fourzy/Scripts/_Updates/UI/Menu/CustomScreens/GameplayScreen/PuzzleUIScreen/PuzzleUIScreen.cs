@@ -52,12 +52,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             OnCurrencyUpdate(CurrencyType.HINTS);
 
             //hint button
-            //if (game.puzzleData.Solution.Count > 0)
-            //{
-            //    hintButton.SetActive(true);
-            //    SetHintButtonState(true);
-            //}
-            //else
+            if (game.puzzleData.Solution.Count > 0)
+            {
+               hintButton.SetActive(true);
+               SetHintButtonState(true);
+            }
+            else
                 hintButton.SetActive(false);
 
             if (game.puzzleData.pack)
