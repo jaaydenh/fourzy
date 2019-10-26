@@ -1,0 +1,283 @@
+{
+  "ID": "42976eb1-4c9a-4244-94ef-c47380132344",
+  "Enabled": true,
+  "GameBoard": {
+    "boardSpaceData": [
+      {
+        "P": null,
+        "T": [ "B" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "B" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "B" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "B" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "B" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "B" ]
+      }
+    ],
+    "initialMoves": [],
+    "rows": 8,
+    "columns": 8,
+    "area": 2,
+    "id": "ff6f4562-c6ba-43e9-a267-310e7cc2710e",
+    "boardName": "TwoTrees",
+    "enabled": true,
+    "enabledGallery": true,
+    "enabledRealtime": true
+  },
+  "Profile": 4,
+  "Boss": 0,
+  "FirstTurn": 0,
+  "Solution": [],
+  "SolutionStateData": null,
+  "GoalType": 0,
+  "MoveLimit": -1,
+  "Complexity": -1,
+  "StartingMagic": 0,
+  "AvailableSpells": []
+}
