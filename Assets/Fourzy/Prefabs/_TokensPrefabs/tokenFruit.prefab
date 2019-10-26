@@ -51,7 +51,7 @@ MonoBehaviour:
   _body: {fileID: 7617528227127001071}
   onBoardScale: 1
   _radius: 0.65
-  name: Fruit
+  name: token_fruit
   tokenType: 19
   volume: 1
   onGamePieceEnter: 131
@@ -270,6 +270,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

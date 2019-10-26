@@ -20,7 +20,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.filter = filter;
 
-            Prompt($"Buy {StoreItemTypeToString(filter)}", "");
+            Prompt($"{LocalizationManager.Value("buy")} {StoreItemTypeToString(filter)}", "");
         }
 
         public static string ProductsToString(StoreItemType filter)
@@ -63,7 +63,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (filter)
             {
                 default:
-                    return "Hints";
+                    return LocalizationManager.Value("hints");
             }
         }
 

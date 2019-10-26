@@ -59,7 +59,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public GameInfoWidget SetTextLocalized(string key)
         {
-            label.text = LocalizationManager.Instance.GetLocalizedValue(key);
+            label.text = LocalizationManager.Value(key);
 
             return this;
         }

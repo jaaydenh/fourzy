@@ -27,7 +27,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (defaultCalls) Decline();
         }
 
-        public virtual void Prompt(string title, string text, Action accept = null, Action decline = null) => Prompt(title, text, "Yes", "No", accept, decline);
+        public virtual void Prompt(string title, string text, Action accept = null, Action decline = null) => 
+            Prompt(title, text, LocalizationManager.Value("yes"), LocalizationManager.Value("no"), accept, decline);
 
         public virtual void Prompt(string title, string text, string yes, string no, Action accept = null, Action decline = null)
         {

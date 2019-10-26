@@ -1215,6 +1215,12 @@ namespace Fourzy._Updates.Mechanics.Board
                                 onDraw?.Invoke(model);
 
                                 break;
+
+                            //case GameEndType.NOPIECES:
+                            //    SetHintAreaColliderState(false);
+                            //    onGameFinished?.Invoke(model);
+
+                            //    break;
                         }
 
                         List<GamePieceView> winningGamepieces = GetWinningPieces();

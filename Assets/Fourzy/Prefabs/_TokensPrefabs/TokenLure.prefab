@@ -52,7 +52,7 @@ MonoBehaviour:
   _body: {fileID: 7044831152686493518}
   onBoardScale: 1
   _radius: 0.65
-  name: Lure
+  name: token_lure
   tokenType: 20
   volume: 1
   onGamePieceEnter: 131

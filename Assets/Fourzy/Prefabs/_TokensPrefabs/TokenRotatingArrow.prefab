@@ -52,7 +52,7 @@ MonoBehaviour:
   _body: {fileID: 802393107332962681}
   onBoardScale: 1
   _radius: 0.65
-  name: Rotating Arrow
+  name: token_rotating_arrow
   tokenType: 27
   volume: 1
   onGamePieceEnter: 130
@@ -328,6 +328,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

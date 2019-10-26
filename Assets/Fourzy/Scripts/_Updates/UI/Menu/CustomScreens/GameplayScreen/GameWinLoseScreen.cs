@@ -42,14 +42,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameType.PRESENTATION:
                     if (game.draw)
                     {
-                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>Draw</color>";
+                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
                     }
                     else
                     {
                         if (game.IsWinner())
-                            stateLabel.text = $"Player 1 <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Instance.GetLocalizedValue("won_suffix")}</color>";
+                            stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                         else
-                            stateLabel.text = $"Player 2 <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Instance.GetLocalizedValue("won_suffix")}</color>";
+                            stateLabel.text = $"{LocalizationManager.Value("player_two")} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                     }
 
                     break;
@@ -57,14 +57,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 default:
                     if (game.draw)
                     {
-                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>Draw</color>";
+                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
                     }
                     else
                     {
                         if (game.IsWinner())
-                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Instance.GetLocalizedValue("won_suffix")}</color>";
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                         else
-                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>Lost</color>";
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
                     }
 
                     break;
@@ -149,7 +149,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 if (game.puzzleData.pack.gauntletStatus.FourzyCount == 0)
                     GamePlayManager.instance.gameplayScreen.OnBack();
                 else
-                    Rematch();
+                {
+                    if (game.IsWinner())
+                    {
+                        if(game.puzzleData.pack.complete)
+                            GamePlayManager.instance.gameplayScreen.OnBack();
+                        else
+                            NextGame();
+                    }
+                    else
+                        Rematch();
+                }
             }
             else
             {

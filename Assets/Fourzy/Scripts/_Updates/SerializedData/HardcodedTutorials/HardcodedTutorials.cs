@@ -22,7 +22,7 @@ namespace Fourzy._Updates.Serialized
                             tasks = new OnboardingDataHolder.OnboardingTask[]
                             {
                                 new OnboardingDataHolder.OnboardingTask_OpenGame(GameType.ONBOARDING, "200"),
-                                new OnboardingDataHolder.OnboardingTask_ShowMessage("Welcome to Fourzy!"),
+                                new OnboardingDataHolder.OnboardingTask_ShowMessage(LocalizationManager.Value("welcome_to_fourzy")),
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.WIZARD_CENTER },
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BG },
                                 new OnboardingDataHolder.OnboardingTask_Log("1"),
@@ -41,7 +41,7 @@ namespace Fourzy._Updates.Serialized
 
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BG },
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.WIZARD_CENTER },
-                                new OnboardingDataHolder.OnboardingTask_ShowMessage("Tap on the edge of the board to make a move"),
+                                new OnboardingDataHolder.OnboardingTask_ShowMessage(LocalizationManager.Value("tap_edge_rule")),
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BOARD_HINT_AREA },
                                 new OnboardingDataHolder.OnboardingTask_Log("2"),
                             },
@@ -129,7 +129,7 @@ namespace Fourzy._Updates.Serialized
                         {
                             tasks = new OnboardingDataHolder.OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask_ShowMessage("Get 4 in a row to Win!"),
+                                new OnboardingDataHolder.OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win")),
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BG },
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.WIZARD_CENTER },
                                 new OnboardingDataHolder.OnboardingTask_Log("5"),

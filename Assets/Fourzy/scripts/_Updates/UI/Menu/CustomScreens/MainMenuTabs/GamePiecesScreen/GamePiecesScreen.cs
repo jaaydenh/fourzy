@@ -226,9 +226,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             lockedButton.SetActive(locked.Count != 0);
             lockedCover.gameObject.SetActive(locked.Count != 0);
 
-            unlockedLabel.text = $"Unlocked {unlocked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
-            foundLabel.text = $"Found {found.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
-            lockedLabel.text = $"Not Found {locked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
+            unlockedLabel.text = $"{LocalizationManager.Value("unlocked")} {unlocked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
+            foundLabel.text = $"{LocalizationManager.Value("found")} {found.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
+            lockedLabel.text = $"{LocalizationManager.Value("not_found")} {locked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
         }
 
         protected override void OnInitialized()

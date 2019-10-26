@@ -51,7 +51,7 @@ MonoBehaviour:
   _body: {fileID: 1356081108928052901}
   onBoardScale: 1
   _radius: 0.65
-  name: Sand
+  name: token_sand
   tokenType: 10
   volume: 1
   onGamePieceEnter: 132
@@ -269,6 +269,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

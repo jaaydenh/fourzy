@@ -30,7 +30,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void _Prompt()
         {
-            Prompt("Change Name", "", "Change Name", null);
+            Prompt(LocalizationManager.Value("change_name"), "", LocalizationManager.Value("change_name"), null);
         }
 
         public override void Accept()
@@ -38,8 +38,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //change name
             if (string.IsNullOrEmpty(inputField.text))
             {
-                SetError("Can't be empty");
-                GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "New name can't be empty!");
+                SetError(LocalizationManager.Value("cant_be_empty"));
+                //GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "New name can't be empty!");
 
                 return;
             }
@@ -48,11 +48,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 if (inputField.text.Length <= 3 || inputField.text.Length >= 25)
                 {
                     if (inputField.text.Length <= 3)
-                        SetError("Too short");
+                        SetError(LocalizationManager.Value("too_short"));
                     else
-                        SetError("Too long");
+                        SetError(LocalizationManager.Value("too_long"));
 
-                    GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "New name must be between 3 and 25 characters.");
+                    //GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "New name must be between 3 and 25 characters.");
                 }
                 else
                 {
@@ -74,7 +74,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             inputField.ActivateInputField();
 
             previousName = UserManager.Instance.userName;
-            promptText.text = "Current name: " + previousName;
+            promptText.text = $"{LocalizationManager.Value("current_name")}: " + previousName;
 
             if (UserManager.Instance.currentlyChangingName) SetChangingNameOverlayState(true);
         }
@@ -98,7 +98,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnDisplayNameChanged()
         {
-            promptText.text = "Current name: " + UserManager.Instance.userName;
+            promptText.text = $"{LocalizationManager.Value("current_name")}: " + UserManager.Instance.userName;
             SetChangingNameOverlayState(false);
 
             menuController.CloseCurrentScreen();

@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Fourzy._Updates.Tools;
 
 namespace Fourzy._Updates.ClientModel
 {
@@ -183,24 +184,25 @@ namespace Fourzy._Updates.ClientModel
         /// </summary>
         public void GetInstructions()
         {
-            Instructions = GoalType.ToString();
+            Instructions = LocalizationManager.Value(GoalType.GoalTypeToKey());
+
             switch (GoalType)
             {
                 case PuzzleGoalType.SURVIVE:
-                    Instructions += " for ";
+                    Instructions += $" {LocalizationManager.Value("for")} ";
 
                     break;
 
                 default:
-                    Instructions += " in ";
+                    Instructions += $" {LocalizationManager.Value("in")} ";
 
                     break;
             }
+
             Instructions += (MoveLimit + " ");
-            if (MoveLimit > 1)
-                Instructions += "moves!";
-            else
-                Instructions += "move!";
+
+            if (MoveLimit > 1) Instructions += $" {LocalizationManager.Value("moves")}!";
+            else Instructions += $" {LocalizationManager.Value("move")}!";
         }
 
         public static implicit operator bool(ClientPuzzleData data) => data != null;

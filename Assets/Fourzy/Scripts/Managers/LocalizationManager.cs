@@ -1,17 +1,18 @@
-﻿//modded
+﻿
 
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Globalization;
 using System.Linq;
+using UnityEngine.Networking;
 
 namespace Fourzy
 {
     [UnitySingleton(UnitySingletonAttribute.Type.CreateOnNewGameObject, false)]
     public class LocalizationManager : UnitySingleton<LocalizationManager>
     {
-        const string STR_LOCALIZATION_KEY = "locale";
+        private const string STR_LOCALIZATION_KEY = "locale";
 
         public CultureInfo cultureInfo;
 
@@ -25,26 +26,24 @@ namespace Fourzy
             base.Awake();
 
             cultureInfo = GetCultureInfo(PlayerLanguage);
+
             LoadLocalizedText(PlayerLanguage);
         }
 
         public void LoadLocalizedText(SystemLanguage language)
         {
-            string fileName = language.ToString() + ".json";
-            //string fileName = "English" + ".json";
             localizedText = new Dictionary<string, string>();
 
+            string fileName = language.ToString() + ".json";
             string filePath = Path.Combine(Application.streamingAssetsPath, fileName);
 
-            string dataAsJson = "";
+            string dataAsJson;
 
             if (Application.platform == RuntimePlatform.Android)
             {
-                // Android only use WWW to read file
-                WWW reader = new WWW(filePath);
-                while (!reader.isDone) { }
+                UnityWebRequest reader = new UnityWebRequest(filePath);
 
-                dataAsJson = reader.text;
+                dataAsJson = reader.downloadHandler.text;
             }
             else
                 dataAsJson = File.ReadAllText(filePath);
@@ -60,13 +59,19 @@ namespace Fourzy
         public string GetLocalizedValue(string key)
         {
             string result = missingTextString;
-            if (localizedText.ContainsKey(key))
-            {
-                result = localizedText[key];
-            }
+            if (localizedText.ContainsKey(key)) result = localizedText[key];
 
             return result;
         }
+
+        public void SetCurrentLanguage(SystemLanguage language)
+        {
+            PlayerLanguage = language;
+            LoadLocalizedText(PlayerLanguage);
+            foreach (LocalizedText text in FindObjectsOfType<LocalizedText>()) text.UpdateLocale();
+        }
+
+        public static string Value(string key) => Instance.GetLocalizedValue(key);
 
         public static SystemLanguage PlayerLanguage
         {
@@ -85,15 +90,6 @@ namespace Fourzy
             {
                 PlayerPrefs.SetInt(STR_LOCALIZATION_KEY, (int)value);
                 PlayerPrefs.Save();
-            }
-        }
-
-        public static void SetCurrentLanguage(SystemLanguage language)
-        {
-            PlayerLanguage = language;
-            LocalizedText[] allTexts = FindObjectsOfType<LocalizedText>();
-            for (int i = 0; i < allTexts.Length; i++) {
-                allTexts[i].UpdateLocale();
             }
         }
 

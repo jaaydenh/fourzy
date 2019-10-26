@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 114312036782990136}
   - component: {fileID: 114308421352685144}
   m_Layer: 0
-  m_Name: tokenBlocker
+  m_Name: TokenBlocker
   m_TagString: Token
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
   _body: {fileID: 7044831152686493518}
   onBoardScale: 1
   _radius: 0.65
-  name: Bush
+  name: token_blocker_forest
   tokenType: 1
   volume: 1
   onGamePieceEnter: 0

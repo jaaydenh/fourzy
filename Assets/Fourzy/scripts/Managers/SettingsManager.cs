@@ -21,11 +21,13 @@ namespace Fourzy._Updates.Managers
         public const bool DEFAULT_AUDIO = true;
         public const bool DEFAULT_DEMO_MODE = false;
 
+        private static bool initialized = false;
+
         public static SettingsManager Instance
         {
             get
             {
-                if (instance == null) Initialize();
+                if (!initialized) Initialize();
 
                 return instance;
             }
@@ -69,6 +71,7 @@ namespace Fourzy._Updates.Managers
 
         public static void Initialize()
         {
+            initialized = true;
             if (instance != null) return;
 
             GameObject go = new GameObject("SettingsManager");

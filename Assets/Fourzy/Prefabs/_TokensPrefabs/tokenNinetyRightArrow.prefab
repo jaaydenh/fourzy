@@ -51,7 +51,7 @@ MonoBehaviour:
   _body: {fileID: 8119875976682664188}
   onBoardScale: 1
   _radius: 0.65
-  name: 
+  name: token_ninghty_turn_right
   tokenType: 22
   volume: 1
   onGamePieceEnter: 140
@@ -269,6 +269,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

@@ -452,6 +452,23 @@ namespace Fourzy._Updates.Tools
             collection.Insert(newIndex, removedItem);
         }
 
+        public static string GoalTypeToKey(this PuzzleGoalType goalType)
+        {
+            switch (goalType)
+            {
+                case PuzzleGoalType.WIN:
+                    return "win_goal";
+
+                case PuzzleGoalType.SURVIVE:
+                    return "survive_goal";
+
+                case PuzzleGoalType.COVER:
+                    return "cover_goal";
+            }
+
+            return "";
+        }
+
         public static AnalyticsManager.AnalyticsGameEvents GameModeToAnalyticsEvent(this GameMode mode, bool start)
         {
             switch (mode)

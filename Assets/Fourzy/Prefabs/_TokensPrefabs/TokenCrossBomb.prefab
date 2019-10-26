@@ -52,7 +52,7 @@ MonoBehaviour:
   _body: {fileID: 8345101532789021895}
   onBoardScale: 1
   _radius: 0.65
-  name: Cross Bomb
+  name: token_cross_bomb
   tokenType: 14
   volume: 1
   onGamePieceEnter: 0

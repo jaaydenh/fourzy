@@ -54,6 +54,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void RemoveRarePortalPoints() => UserManager.Instance.rarePortalPoints -= 9;
 
+        public void SetLanguageEng() => LocalizationManager.Instance.SetCurrentLanguage(SystemLanguage.English);
+
+        public void SetLanguageSpanish() => LocalizationManager.Instance.SetCurrentLanguage(SystemLanguage.Spanish);
+
+        public void SetLanguageThai() => LocalizationManager.Instance.SetCurrentLanguage(SystemLanguage.Thai);
+
         public void OpenGrid()
         {
             menuController.OpenScreen<PuzzleSelectionScreen>(true);
@@ -66,10 +72,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             PlayerPrefsWrapper.SetRewardRewarded(Constants.GAME_MODE_GAUNTLET_GAME, true);
         }
 
-        public void CompleteProgress()
-        {
-            GameContentManager.Instance.progressionMaps[0].CompleteAll();
-        }
+        public void CompleteProgress() => GameContentManager.Instance.progressionMaps[0].CompleteAll();
 
         public void TogglePiecesPlacementStyle()
         {

@@ -78,7 +78,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 animator.SetTrigger("winTrigger");
 
-                puzzleStateText.text = "Completed!";
+                puzzleStateText.text = LocalizationManager.Value("complete");
                 puzzleStateText.color = winColor;
 
                 if (game.puzzleData.pack)
@@ -99,7 +99,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 animator.SetTrigger("loseTrigger");
 
-                puzzleStateText.text = "Failed";
+                puzzleStateText.text = LocalizationManager.Value("failed");
                 puzzleStateText.color = loseColor;
             }
         }

@@ -52,7 +52,7 @@ MonoBehaviour:
   _body: {fileID: 6731237075949044701}
   onBoardScale: 1.1
   _radius: 0.65
-  name: Ice Block
+  name: token_ice_block
   tokenType: 9
   volume: 1
   onGamePieceEnter: 0
@@ -318,6 +318,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

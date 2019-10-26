@@ -52,8 +52,8 @@ MonoBehaviour:
   _body: {fileID: 4223508710816958860}
   onBoardScale: 1
   _radius: 0.65
-  name: Pit
-  tokenType: 0
+  name: token_pit
+  tokenType: 12
   volume: 1
   onGamePieceEnter: 0
   onActivate: 134
@@ -299,6 +299,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

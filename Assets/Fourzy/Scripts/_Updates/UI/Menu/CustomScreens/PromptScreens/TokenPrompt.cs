@@ -69,9 +69,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 priceBadge.SetState(false);
             }
 
-            extra.text = data.description;
+            extra.text = LocalizationManager.Value(data.description);
 
-            Prompt(data.name, "");
+            Prompt(LocalizationManager.Value(data.name), "");
 
             //play instructions
             CancelRoutine("tokenInstructions");

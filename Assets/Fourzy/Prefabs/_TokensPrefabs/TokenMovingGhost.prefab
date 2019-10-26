@@ -51,7 +51,7 @@ MonoBehaviour:
   _body: {fileID: 8626116494812497896}
   onBoardScale: 1
   _radius: 0.65
-  name: Moving Ghost
+  name: token_moving_ghost
   tokenType: 49
   volume: 1
   onGamePieceEnter: 135
