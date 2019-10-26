@@ -59,3 +59,10 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+Assets/Plugins/UnityChannel/XiaomiSupport/Editor.meta
+Assets/Plugins/UnityChannel/Android.meta
+Assets/PlayFabEditorExtensions/Editor/Resources/PlayFabUnitySdk.unitypackage.meta
+Assets/ParticleEffectForUGUI-upm/UIParticle_Demo.unitypackage.meta
+Assets/MoPub/MoPub-UnityAds-Adapters.unitypackage.meta
+Assets/GameAnalytics/Plugins/Playmaker/Examples/GameAnalyticsPlayMakerDemo.unitypackage.meta
+Assets/fourzy-gamemodel-service/FourzyConsole/FourzyConsole.csproj.meta
