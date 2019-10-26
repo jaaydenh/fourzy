@@ -32,6 +32,7 @@
     {"key":"player_two","value":"Player 2"},
     {"key":"puzzle","value":"Puzzle"},
     {"key":"replay_tutorial","value":"Replay Tutorial"},
+    {"key":"reset","value":"Reset"},
     {"key":"sound_effects","value":"Sound Effects"},
     {"key":"settings","value":"Settings"},
     {"key":"tap_edge_rule","value":"Tap on the edge of the board to make a move"},

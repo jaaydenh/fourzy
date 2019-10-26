@@ -96,13 +96,13 @@ namespace Fourzy._Updates.UI.Camera3D
         {
             if (finished) return;
 
-            if (widgets.TrueForAll(widget => widget.wasRewarded))
+            if (widgets.TrueForAll(widget => widget.wasRewarded) && !PlayerPrefsWrapper.GetAdventureComplete(mapID))
             {
                 finished = true;
 
                 PlayerPrefsWrapper.SetAdventureComplete(mapID, true);
 
-                menuScreen.menuController.GetScreen<PromptScreen>().Prompt("Adventure map complete", "none", null, "OK");
+                MenuController.GetMenu(Constants.MAIN_MENU_CANVAS_NAME).GetScreen<PromptScreen>().Prompt("Adventure map complete", "none", null, "OK");
             }
         }
 

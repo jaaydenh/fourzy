@@ -32,6 +32,7 @@
     {"key":"player_two","value":"Jugador 2"},
     {"key":"puzzle","value":"Rompecabezas"},
     {"key":"replay_tutorial","value":"Tutorial de repetición"},
+    {"key":"reset","value":"Reiniciar"},
     {"key":"sound_effects","value":"Efectos de sonido"},
     {"key":"settings","value":"Configuraciones"},
     {"key":"tap_edge_rule","value":"Toca el borde del tablero para hacer un movimiento."},
