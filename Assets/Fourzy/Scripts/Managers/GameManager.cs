@@ -304,11 +304,16 @@ namespace Fourzy
 
         public void CheckNews()
         {
+            if (!NetworkAccess) return;
             Debug.Log("Fetching news..");
 
-            PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest(), 
-                result => { latestNews = result.News; onNewsFetched?.Invoke(); }, 
-                error => Debug.LogError(error.GenerateErrorReport()));
+            try
+            {
+                PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest(),
+                    result => { latestNews = result.News; onNewsFetched?.Invoke(); },
+                    error => Debug.LogError(error.GenerateErrorReport()));
+            }
+            catch (Exception) { }
         }
 
         public static void UpdateGameTypeUserProperty(GameType gameType)

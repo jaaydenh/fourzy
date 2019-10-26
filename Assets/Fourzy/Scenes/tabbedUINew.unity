@@ -303,7 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: play_game_button
+  key: play
 --- !u!222 &2508485
 CanvasRenderer:
   m_ObjectHideFlags: 0
