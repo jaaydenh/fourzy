@@ -116,7 +116,7 @@
                 "T": []
             },
             {
-                "P": "0",
+                "P": "1",
                 "T": []
             },
             {
@@ -152,7 +152,7 @@
                 "T": []
             },
             {
-                "P": "0",
+                "P": "1",
                 "T": []
             },
             {
@@ -276,7 +276,7 @@
         "enabledGallery": false,
         "enabledRealtime": false
     },
-    "Profile": 7,
+    "Profile": 22,
     "Boss": 0,
     "FirstTurn": 0,
     "Solution": [],
