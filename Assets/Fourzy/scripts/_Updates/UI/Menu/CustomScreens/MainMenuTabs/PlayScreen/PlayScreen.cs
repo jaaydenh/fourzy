@@ -55,8 +55,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //check
             if (!gauntletGameUnlocked)
             {
-                menuController.GetScreen<PromptScreen>().Prompt("Gauntlet mode locked",
-                    "In the gauntlet, you will play a series of gradually more difficult opponents. Default them all to win!",
+                menuController.GetScreen<PromptScreen>().Prompt("The Gauntlet Locked",
+                    "The gauntlet is where you will play a series of more difficult opponents. Defeat them all to win!",
                     "OK",
                     null,
                     () => menuController.CloseCurrentScreen(),
@@ -76,8 +76,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //check
             if (!fastPuzzlesUnlocked)
             {
-                menuController.GetScreen<PromptScreen>().Prompt("Fast Puzzles mode locked",
-                    "Compete with other to solve as many puzzle boards in week as possible!",
+                menuController.GetScreen<PromptScreen>().Prompt("Random Puzzles Locked",
+                    "Compete with other players to solve the most puzzles every week!",
                     "OK",
                     null,
                     () => menuController.CloseCurrentScreen(),

@@ -11,7 +11,7 @@ namespace Fourzy._Updates.Mechanics.Board
         private const int indexBaseLayer = 0;
 
         private Animator animator;
-        private int h_FruitIntoSticky = Animator.StringToHash("FruitIntoSticky");
+        private int h_FruitIntoSticky = Animator.StringToHash("FruitIntoGoop");
 
         protected override void OnInitialized()
         {
