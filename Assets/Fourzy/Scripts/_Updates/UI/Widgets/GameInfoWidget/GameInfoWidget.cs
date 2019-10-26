@@ -10,11 +10,10 @@ namespace Fourzy._Updates.UI.Widgets
     public class GameInfoWidget : WidgetBase
     {
         public TMP_Text label;
-        public string NYTKey = "not_your_turn";
 
         public void NotYourTurn()
         {
-            SetTextLocalized(NYTKey);
+            SetText($"{LocalizationManager.Value("not_your_turn")}..");
             Show(.3f);
 
             StartRoutine("hide", 2.5f, () => Hide(.3f), null);
@@ -22,7 +21,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void PassTurn(float duration)
         {
-            SetText("Pass..");
+            SetText($"{LocalizationManager.Value("pass")}..");
             Show(.3f);
 
             StartRoutine("hide", duration - .3f, () => Hide(.3f), null);
@@ -55,13 +54,6 @@ namespace Fourzy._Updates.UI.Widgets
             ScaleTo(Vector3.zero, time);
 
             base.Hide(time);
-        }
-
-        public GameInfoWidget SetTextLocalized(string key)
-        {
-            label.text = LocalizationManager.Value(key);
-
-            return this;
         }
 
         public GameInfoWidget SetText(string value)

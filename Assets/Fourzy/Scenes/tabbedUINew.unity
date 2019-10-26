@@ -18581,7 +18581,7 @@ MonoBehaviour:
         isCallEnabled: 0
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 40
+          selectedMember: 41
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: StartTutorialAdventure
@@ -21256,7 +21256,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 64
+          selectedMember: 63
           isDynamic: 0
         target: {fileID: 521655127}
         memberName: ToggleUnlockedPiecesExpand

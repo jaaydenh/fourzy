@@ -152,10 +152,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 {
                     if (game.IsWinner())
                     {
-                        if(game.puzzleData.pack.complete)
+                        if (game.puzzleData.pack.complete)
                             GamePlayManager.instance.gameplayScreen.OnBack();
                         else
-                            NextGame();
+                            menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
                     }
                     else
                         Rematch();
