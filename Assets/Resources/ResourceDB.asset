@@ -197,6 +197,137 @@ MonoBehaviour:
     path: 
     type: 1
     objectTypeName: 
+  - name: NewBoards
+    ext: 
+    path: LevelDrafts
+    type: 1
+    objectTypeName: 
+  - name: Board_ArrowAttackUpDown
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_ArrowCenterCycle
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_ArrowQuadrants
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_ArrowSemiBlocked
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_ArrowSimplePath
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_CenterGooper
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_CentralWithGoopCorners
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_ColumnOfArrows
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_DoubleGoopBlock
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_FourArrows
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_GoopMiniSpikes
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_GoopSnake
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_LargeArrowGoopCircle
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_LargeGoopSnake
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_LargerCorners
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_SimplePattern
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_Spiral2
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_StickyDiagLines
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_StickyOval
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Board_StickySnake
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_GoopSnake
+    ext: json
+    path: LevelDrafts/NewBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: Level_CenterStage
     ext: json
     path: LevelDrafts
@@ -537,19 +668,25 @@ MonoBehaviour:
     path: PuzzlePacks/PuzzlePack11
     type: 1
     objectTypeName: 
-  - name: level1_SquareGarden
+  - name: Level2_DoubleTriangle
     ext: json
     path: PuzzlePacks/PuzzlePack11/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: level2_StickyDiagonal
+  - name: Level3_CenterTriangle
     ext: json
     path: PuzzlePacks/PuzzlePack11/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: level3_CheckerGarden
+  - name: Level4_LargeFruitTriangle
+    ext: json
+    path: PuzzlePacks/PuzzlePack11/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level5_AngryFruit
     ext: json
     path: PuzzlePacks/PuzzlePack11/puzzles
     type: 2
@@ -949,19 +1086,19 @@ MonoBehaviour:
     path: PuzzlePacks/PuzzlePack15
     type: 1
     objectTypeName: 
-  - name: level1_SquareGarden
+  - name: Level1_CenterSpin
     ext: json
     path: PuzzlePacks/PuzzlePack15/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: level2_StickyDiagonal
+  - name: Level2_Fives
     ext: json
     path: PuzzlePacks/PuzzlePack15/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: level3_CheckerGarden
+  - name: Level3_CenterFruitWithRing
     ext: json
     path: PuzzlePacks/PuzzlePack15/puzzles
     type: 2
@@ -1235,19 +1372,43 @@ MonoBehaviour:
     path: PuzzlePacks/PuzzlePack7_1
     type: 1
     objectTypeName: 
-  - name: level1_SquareGarden
+  - name: Level_CenterStage
     ext: json
     path: PuzzlePacks/PuzzlePack7_1/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: level2_StickyDiagonal
+  - name: Level_ForTheBirds
     ext: json
     path: PuzzlePacks/PuzzlePack7_1/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: level3_CheckerGarden
+  - name: Level_GoopSnake
+    ext: json
+    path: PuzzlePacks/PuzzlePack7_1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_TheKnot
+    ext: json
+    path: PuzzlePacks/PuzzlePack7_1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_TwoDonuts
+    ext: json
+    path: PuzzlePacks/PuzzlePack7_1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_TwoTrees
+    ext: json
+    path: PuzzlePacks/PuzzlePack7_1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_ZigZag3
     ext: json
     path: PuzzlePacks/PuzzlePack7_1/puzzles
     type: 2
@@ -1275,31 +1436,7 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: ArrowPack1_PocketArrows
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: ArrowPack1_SixWithArrows
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: ArrowPack1_SixWithArrows_3
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: ArrowPack1_Smile
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: ArrowPack1_UseTheArrows
     ext: json
     path: PuzzlePacks/PuzzlePack8/puzzles
     type: 2
@@ -1311,73 +1448,13 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: CrossRight_WinIn1
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: DrawBoardTester
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: PushTogether_WinIn1
     ext: json
     path: PuzzlePacks/PuzzlePack8/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: Puzzle Board Sample
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: Puzzle Board Sample_2
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Puzzle Board Sample_3
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack0_LeftOrRight
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack0_UpOrDown
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack0_WinningDiagonally1
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack0_WinningDiagonally2
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack0_WinningHorizontally
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack0_WinningVertically
     ext: json
     path: PuzzlePacks/PuzzlePack8/puzzles
     type: 2
@@ -1395,31 +1472,7 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack1_A3_ThreeDiag
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: PuzzlePack1_A4_ThreeDiagLarger
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack1_A5_ThreeOnSide
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack1_A6_DoubleThreeTheat
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack1_A7_DiagThree1
     ext: json
     path: PuzzlePacks/PuzzlePack8/puzzles
     type: 2
@@ -1432,12 +1485,6 @@ MonoBehaviour:
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: PuzzlePackArrows_A_ArrowBack
-    ext: json
-    path: PuzzlePacks/PuzzlePack8/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePackArrows_A_ArrowsStopMovement
     ext: json
     path: PuzzlePacks/PuzzlePack8/puzzles
     type: 2
@@ -3739,6 +3786,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 581
-  m_FolderCount: 48
+  m_FileCount: 588
+  m_FolderCount: 49
   UpdateAutomatically: 0

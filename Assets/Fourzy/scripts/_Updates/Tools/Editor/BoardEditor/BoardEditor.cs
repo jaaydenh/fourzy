@@ -29,6 +29,8 @@ namespace Fourzy._Updates.Tools
         public static int[] rotatingArrowCountdownOptions = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         public static string[] firstTurnDisplayOptions = { "One", "Two" };
         public static int[] firstTurnOptions = { 1, 2 };
+        public static string[] locationOptions = { "0", "1", "2", "3", "4", "5", "6", "7", };
+        public static int[] locations = { 0, 1, 2, 3, 4, 5, 6, 7, };
 
         private static readonly string[] saveOptions =
         {
@@ -48,7 +50,6 @@ namespace Fourzy._Updates.Tools
         private static GameBoardDefinition currentBoard;
         private static List<BoardSpaceWrapper> selectedBoardSpaceData;
         private static List<BoardSpaceTokenWrapper> commonTokens;
-        //private static List<PlayerTurn> currentSolutions;
         private static int selectedTokenIndex;
         private static int selectedInitialMove;
         private static int selectedSolutionIndex;
@@ -68,6 +69,7 @@ namespace Fourzy._Updates.Tools
 
         public static Texture player1GamePieceTexture;
         public static Texture player2GamePieceTexture;
+        public static Texture solutionTexture;
         public static Texture[] arrowGraphics;
 
         public static GUIStyle defaultButtonsStyle;
@@ -93,6 +95,14 @@ namespace Fourzy._Updates.Tools
             initialMoveButtonPadding = new Vector2((gridCellSize.x - initialMoveButtonSize.x) * .5f, (gridCellSize.y - initialMoveButtonSize.y) * .5f);
             gridOrigin = new Vector2Int(400, 80);
             gridSize = new Vector2(8 * (gridCellSize.x + gridCellPadding.x) - gridCellPadding.x, 8 * (gridCellSize.y + gridCellPadding.y) - gridCellPadding.y);
+
+            if (currentPuzzleData != null)
+            {
+                currentBoard = currentPuzzleData.GameBoard;
+
+                SetToFileType(FileType.PUZZLE);
+            }
+
             UpdateWindowSize();
 
             defaultButtonsStyle = new GUIStyle() { alignment = TextAnchor.MiddleLeft };
@@ -104,6 +114,9 @@ namespace Fourzy._Updates.Tools
 
             guids = AssetDatabase.FindAssets("Player2BoardEditorGamePieceTexture");
             player2GamePieceTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(AssetDatabase.GUIDToAssetPath(guids[0]));
+
+            guids = AssetDatabase.FindAssets("SolutionBoardEditorTexture");
+            solutionTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(AssetDatabase.GUIDToAssetPath(guids[0]));
 
             selectedBoardSpaceData = new List<BoardSpaceWrapper>();
             commonTokens = new List<BoardSpaceTokenWrapper>();
@@ -161,17 +174,16 @@ namespace Fourzy._Updates.Tools
                     case EventType.Repaint:
                         instance.Repaint();
 
+                        Color prev = GUI.color;
                         //draw grid
                         for (int row = 0; row < 8; row++)
                         {
                             for (int col = 0; col < 8; col++)
                             {
-                                Color prev = GUI.color;
-
                                 BoardSpaceWrapper spaceData = selectedBoardSpaceData.Find(i => i.location.y == row && i.location.x == col);
 
-                                if (spaceData != null)
-                                    GUI.color = Color.yellow;
+                                if (spaceData != null) GUI.color = Color.yellow;
+                                else GUI.color = Color.white;
 
                                 GUI.Box(new Rect(
                                     gridOrigin.x + (col * (gridCellSize.x + gridCellPadding.x)),
@@ -212,22 +224,20 @@ namespace Fourzy._Updates.Tools
                                 {
                                     case "1":
                                         GUI.DrawTexture(position, player1GamePieceTexture, ScaleMode.ScaleToFit);
+
                                         break;
 
                                     case "2":
                                         GUI.DrawTexture(position, player2GamePieceTexture, ScaleMode.ScaleToFit);
+
                                         break;
                                 }
-
-                                GUI.color = prev;
                             }
                         }
 
                         //draw initial moves buttons
                         for (int initialMoveIndex = 0; initialMoveIndex < currentBoard.InitialMoves.Count; initialMoveIndex++)
                         {
-                            Color prev = GUI.color;
-
                             if (selectedInitialMove == initialMoveIndex)
                                 GUI.color = Color.green;
                             else
@@ -239,9 +249,30 @@ namespace Fourzy._Updates.Tools
                             }
 
                             GUI.Box(GetInitialMoveBoxRect(currentBoard.InitialMoves[initialMoveIndex]), initialMoveIndex + "");
-
-                            GUI.color = prev;
                         }
+
+                        //draw solutions
+                        if (currentPuzzleData != null)
+                        {
+                            prev = GUI.color;
+                            for (int solutionIndex = 0; solutionIndex < currentPuzzleData.Solution.Count; solutionIndex++)
+                            {
+
+                                if (selectedSolutionIndex == solutionIndex)
+                                    GUI.color = Color.green;
+                                else
+                                    GUI.color = Color.white;
+
+                                Rect position = GetInitialMoveBoxRect(currentPuzzleData.Solution[solutionIndex].Moves[0] as SimpleMove);
+                                Rect labelPos = new Rect(position);
+                                labelPos.position += new Vector2(4f, 2f);
+
+                                GUI.DrawTexture(position, solutionTexture);
+                                GUI.Label(labelPos, solutionIndex + "");
+                            }
+                        }
+
+                        GUI.color = prev;
                         break;
 
                     case EventType.MouseDown:
@@ -647,8 +678,8 @@ namespace Fourzy._Updates.Tools
                             currentBoard.InitialMoves[selectedInitialMove].Location = EditorGUILayout.IntPopup(
                                 "Location",
                                 currentBoard.InitialMoves[selectedInitialMove].Location,
-                                new string[] { "0", "1", "2", "3", "4", "5", "6", "7", },
-                                new int[] { 0, 1, 2, 3, 4, 5, 6, 7, });
+                                locationOptions,
+                                locations);
                         }
                         GUILayout.EndVertical();
                     }
@@ -964,6 +995,50 @@ namespace Fourzy._Updates.Tools
                             }
                     }
                     GUILayout.EndScrollView();
+
+                    GUILayout.BeginHorizontal();
+                    {
+                        //control buttons
+                        if (selectedSolutionIndex > 0)
+                            if (GUILayout.Button("▲", GUILayout.Width(30f)))
+                            {
+                                currentPuzzleData.Solution.MoveItem(selectedSolutionIndex, selectedSolutionIndex - 1);
+                                selectedSolutionIndex--;
+                            }
+
+                        if (selectedSolutionIndex < currentPuzzleData.Solution.Count - 1)
+                            if (GUILayout.Button("▼", GUILayout.Width(30f)))
+                            {
+                                currentPuzzleData.Solution.MoveItem(selectedSolutionIndex, selectedSolutionIndex + 1);
+                                selectedSolutionIndex++;
+                            }
+
+                        if (GUILayout.Button("+", GUILayout.Width(30f)))
+                        {
+                            currentPuzzleData.Solution.Add(new PlayerTurn(new SimpleMove(new Piece(1), Direction.DOWN, 0)));
+
+                            if (selectedSolutionIndex == -1) selectedSolutionIndex = 0;
+                        }
+
+                        if (currentPuzzleData.Solution.Count > 0)
+                            if (GUILayout.Button("-", GUILayout.Width(30f)))
+                            {
+                                currentPuzzleData.Solution.RemoveAt(selectedSolutionIndex);
+
+                                if (selectedSolutionIndex > currentPuzzleData.Solution.Count - 1)
+                                    selectedSolutionIndex--;
+                            }
+                    }
+                    GUILayout.EndHorizontal();
+
+                    //solution editor
+                    if (selectedSolutionIndex > -1)
+                    {
+                        SimpleMove move = currentPuzzleData.Solution[selectedSolutionIndex].Moves[0] as SimpleMove;
+
+                        move.Direction = (Direction)EditorGUILayout.EnumPopup("Direction", move.Direction);
+                        move.Location = EditorGUILayout.IntPopup("Location", move.Location, locationOptions, locations);
+                    }
                 }
                 GUILayout.EndVertical();
 
@@ -995,7 +1070,11 @@ namespace Fourzy._Updates.Tools
                 gameboard = JsonConvert.DeserializeObject<GameBoardDefinition>(File.ReadAllText(path));
 
                 if (gameboard.BoardSpaceData.Count == 0) failed = true;
-                else SetToFileType(FileType.BOARD);
+                else
+                {
+                    SetToFileType(FileType.BOARD);
+                    currentPuzzleData = null;
+                }
 
                 if (failed)
                 {
