@@ -39,6 +39,7 @@ namespace Fourzy
 
         public const string PUZZLE_PACKS_ROOT_FOLDER = "PuzzlePacks";
         public const string PUZZLES_ROOT_FOLDER = "PuzzlePool";
+        public const string LOCALIZATION_FOLDER = "Localization";
 
         #region Remote Settings
 

@@ -1154,31 +1154,37 @@ MonoBehaviour:
     path: PuzzlePacks/PuzzlePack3
     type: 1
     objectTypeName: 
-  - name: 1_Compression
+  - name: 1_Puzzle_HowToWin_Diag_WinIn1
     ext: json
     path: PuzzlePacks/PuzzlePack3/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 2_CenterStickyCube
+  - name: 2_Puzzle_HowToWin_Diag_WinIn1
     ext: json
     path: PuzzlePacks/PuzzlePack3/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 3_PushItToWiinIt
+  - name: 3_Puzzle_HowToWin_Diag_WinIn1
     ext: json
     path: PuzzlePacks/PuzzlePack3/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 4_CantStopMe
+  - name: 4_Puzzle_HowToWin_Diag_WinIn1
     ext: json
     path: PuzzlePacks/PuzzlePack3/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 5_CrossDiagonal
+  - name: 5_Puzzle_HowToWin_Diag_WinIn1
+    ext: json
+    path: PuzzlePacks/PuzzlePack3/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 6_Puzzle_HowToWin_Diag_WinIn1
     ext: json
     path: PuzzlePacks/PuzzlePack3/puzzles
     type: 2
@@ -1200,37 +1206,31 @@ MonoBehaviour:
     path: PuzzlePacks/PuzzlePack4
     type: 1
     objectTypeName: 
-  - name: 1_Puzzle_HowToWin_Diag_WinIn1
+  - name: 1_Compression
     ext: json
     path: PuzzlePacks/PuzzlePack4/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 2_Puzzle_HowToWin_Diag_WinIn1
+  - name: 2_CenterStickyCube
     ext: json
     path: PuzzlePacks/PuzzlePack4/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 3_Puzzle_HowToWin_Diag_WinIn1
+  - name: 3_PushItToWiinIt
     ext: json
     path: PuzzlePacks/PuzzlePack4/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 4_Puzzle_HowToWin_Diag_WinIn1
+  - name: 4_CantStopMe
     ext: json
     path: PuzzlePacks/PuzzlePack4/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 5_Puzzle_HowToWin_Diag_WinIn1
-    ext: json
-    path: PuzzlePacks/PuzzlePack4/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 6_Puzzle_HowToWin_Diag_WinIn1
+  - name: 5_CrossDiagonal
     ext: json
     path: PuzzlePacks/PuzzlePack4/puzzles
     type: 2
@@ -3622,6 +3622,47 @@ MonoBehaviour:
     type: 2
     objectTypeName: GameAnalyticsSDK.Setup.Settings, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - name: Localization
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: English
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Spanish
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Thai
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: _English
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: _Spanish
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: _Thai
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: IAPProductCatalog
     ext: json
     path: 
@@ -3786,6 +3827,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 588
-  m_FolderCount: 49
+  m_FileCount: 594
+  m_FolderCount: 50
   UpdateAutomatically: 0

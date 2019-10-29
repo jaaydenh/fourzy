@@ -162,9 +162,6 @@ namespace Fourzy
                     //if (EazyNetChecker.Status == NetStatus.Connected) FirebaseUpdate();
                 }
             });
-
-            //initialize photon
-            FourzyPhotonManager.Initialize(DEBUG: true);
         }
 
         protected void Start()
@@ -183,7 +180,8 @@ namespace Fourzy
 
             //PointerInputModuleExtended.noInput += OnNoInput;
 
-            EazyNetChecker.CheckConnection();
+            //EazyNetChecker.StartConnectionCheck(false, true);
+            NetworkManager.instance.StartChecking();
         }
 
         protected void Update()
@@ -585,6 +583,7 @@ namespace Fourzy
                     FirebaseUpdate();
             }
         }
+
         private void OnNetStatusChanged() => onNetworkAccess?.Invoke(EazyNetChecker.Status == NetStatus.Connected);
 
         private void OnNoInput(KeyValuePair<string, float> noInputFilter)

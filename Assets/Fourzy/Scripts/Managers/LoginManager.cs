@@ -1,6 +1,5 @@
 ﻿//modded
 
-using Fourzy._Updates.Mechanics;
 using Fourzy._Updates.UI.Toasts;
 using GameAnalyticsSDK;
 using GameSparks.Api.Requests;
@@ -29,7 +28,7 @@ namespace Fourzy
         public static event Action<bool> OnDeviceLoginComplete;
 
         public static string playfabID;
-        
+
         private bool isConnecting;
 
         private PlayFabAuthService _AuthService = PlayFabAuthService.Instance;
@@ -235,7 +234,7 @@ namespace Fourzy
         private void DeviceLogin()
         {
             isConnecting = true;
-            
+
             new DeviceAuthenticationRequest()
                 .SetDisplayName(UserManager.Instance.userName)
                 .Send((response) =>
@@ -266,43 +265,50 @@ namespace Fourzy
                     }
 
                     isConnecting = false;
-                    
+
                     OnDeviceLoginComplete?.Invoke(!response.HasErrors);
                 });
         }
 
         private void OnNetworkAccess(bool networkAccess)
         {
-            Debug.Log("OnNetworkAccess: networkAccess: " + networkAccess + " GS.Authenticated: " + GS.Authenticated + " isConnecting: " + isConnecting);
+            Debug.Log("OnNetworkAccess: networkAccess: " + networkAccess + " isConnecting: " + isConnecting);
             //string identifierForVendor = SA.iOS.UIKit.ISN_UIDevice.CurrentDevice.IdentifierForVendor;
             //Debug.Log("IdentifierForVendor:" + SystemInfo.deviceUniqueIdentifier);
 
-            if (networkAccess) {
+            if (networkAccess)
+            {
+                //initialize photon
+                FourzyPhotonManager.Initialize(DEBUG: true);
 
                 if (!PlayFabClientAPI.IsClientLoggedIn())
                 {
 
                     _AuthService.Authenticate(Authtypes.Silent);
-//#if UNITY_ANDROID
-//                    PlayFabAndroidDeviceLogin();
-//#elif UNITY_IOS
-//                    PlayFabIOSDeviceLogin();
-//#else
-//                    PlayFabCustomIDLogin();
-//#endif
+                    //#if UNITY_ANDROID
+                    //                    PlayFabAndroidDeviceLogin();
+                    //#elif UNITY_IOS
+                    //                    PlayFabIOSDeviceLogin();
+                    //#else
+                    //                    PlayFabCustomIDLogin();
+                    //#endif
                 }
 
-                if (!GS.Authenticated) {
-                    if (!isConnecting) {
+                if (!GS.Authenticated)
+                {
+                    if (!isConnecting)
+                    {
 #if UNITY_IOS && !UNITY_EDITOR
                             Debug.Log("GameCenterLogin");
                             GameCenterLogin();    
 #else
-                            Debug.Log("GameSparks DeviceLogin");
-                            DeviceLogin();
+                        Debug.Log("GameSparks DeviceLogin");
+                        DeviceLogin();
 #endif
                     }
-                } else {
+                }
+                else
+                {
                     Debug.Log("CONNECTED");
                     //UserManager.Instance.UpdateInformation();
                     ChallengeManager.Instance.GetChallengesRequest();
