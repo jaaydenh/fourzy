@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Tools;
-using Hellmade.Net;
 using System;
 using System.Collections;
 using System.Net;
@@ -166,5 +165,19 @@ namespace Fourzy._Updates.Managers
             }
             return result;
         }
+    }
+
+    public enum NetStatus
+    {
+        PendingCheck,
+        NoDNSConnection,
+        WalledGarden,
+        Connected
+    }
+    public enum NetCheckResponseType
+    {
+        HTTPStatusCode,
+        ResponseContent,
+        ResponseContainContent
     }
 }

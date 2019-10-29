@@ -14,7 +14,6 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
-using Hellmade.Net;
 using MoreMountains.NiceVibrations;
 using Newtonsoft.Json;
 using PlayFab;
@@ -122,7 +121,7 @@ namespace Fourzy
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
 
-            EazyNetChecker.OnConnectionStatusChanged += OnNetStatusChanged;
+            NetworkManager.onStatusChanged += OnNetStatusChanged;
 
             //to modify manifest file
             bool value = false;
@@ -324,7 +323,7 @@ namespace Fourzy
 
         public static void Vibrate() => Vibrate(HapticTypes.Success);
 
-        public static bool NetworkAccess => EazyNetChecker.Status == NetStatus.Connected;
+        public static bool NetworkAccess => NetworkManager.Status == NetStatus.Connected;
 
         public static void UpdateStatistic(string stat, int _value)
         {
@@ -584,7 +583,7 @@ namespace Fourzy
             }
         }
 
-        private void OnNetStatusChanged() => onNetworkAccess?.Invoke(EazyNetChecker.Status == NetStatus.Connected);
+        private void OnNetStatusChanged(NetStatus status) => onNetworkAccess?.Invoke(status == NetStatus.Connected);
 
         private void OnNoInput(KeyValuePair<string, float> noInputFilter)
         {

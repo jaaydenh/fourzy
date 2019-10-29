@@ -1146,6 +1146,7 @@ namespace Fourzy._Updates.Tools
                 fileType = FileType.PUZZLE;
 
                 if (currentPuzzleData == null) currentPuzzleData = new FourzyPuzzleData();
+                selectedSolutionIndex = -1;
 
                 SetToFileType(FileType.PUZZLE);
             }
