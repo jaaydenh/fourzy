@@ -16,6 +16,7 @@ namespace Fourzy._Updates.UI.Helpers
 
         private Dictionary<ListenValues, List<ListenTarget>> sorted;
 
+        private bool listensToNetworkState = false;
         private bool listensToSfxState = false;
         private bool listensToAudioState = false;
         private bool listensToDemoModeState = false;
@@ -36,12 +37,18 @@ namespace Fourzy._Updates.UI.Helpers
                 switch (target.type)
                 {
                     case ListenValues.NO_INTERNET_ACCESS:
-                        GameManager.onNetworkAccess += UpdateNoInternet;
+                    case ListenValues.INTERNET_ACCESS:
+                        if (!listensToNetworkState)
+                        {
+                            GameManager.onNetworkAccess += UpdateNoInternet;
+                            listensToNetworkState = true;
+                        }
+
                         break;
 
-                    case ListenValues.LOGGED_IN:
-                        LoginManager.OnDeviceLoginComplete += OnLogin;
-                        break;
+                    //case ListenValues.LOGGED_IN:
+                    //    LoginManager.OnDeviceLoginComplete += OnLogin;
+                    //    break;
 
                     case ListenValues.SETTINGS_SFX_OFF:
                     case ListenValues.SETTINGS_SFX_ON:
@@ -93,14 +100,19 @@ namespace Fourzy._Updates.UI.Helpers
                 switch (target.type)
                 {
                     case ListenValues.NO_INTERNET_ACCESS:
-                        GameManager.onNetworkAccess -= UpdateNoInternet;
+                    case ListenValues.INTERNET_ACCESS:
+                        if (listensToNetworkState)
+                        {
+                            GameManager.onNetworkAccess -= UpdateNoInternet;
+                            listensToNetworkState = false;
+                        }
 
                         break;
 
-                    case ListenValues.LOGGED_IN:
-                        LoginManager.OnDeviceLoginComplete -= OnLogin;
+                    //case ListenValues.LOGGED_IN:
+                    //    LoginManager.OnDeviceLoginComplete -= OnLogin;
 
-                        break;
+                    //    break;
 
                     case ListenValues.SETTINGS_SFX_OFF:
                     case ListenValues.SETTINGS_SFX_ON:
@@ -176,14 +188,17 @@ namespace Fourzy._Updates.UI.Helpers
             if (!state)
                 foreach (ListenTarget target in sorted[ListenValues.NO_INTERNET_ACCESS])
                     target.events.Invoke(string.Format(target.targetText, state));
+            else
+                foreach (ListenTarget target in sorted[ListenValues.INTERNET_ACCESS])
+                    target.events.Invoke(string.Format(target.targetText, state));
         }
 
-        public void OnLogin(bool result)
-        {
-            if (result)
-                foreach (ListenTarget target in sorted[ListenValues.LOGGED_IN])
-                    target.events.Invoke(string.Format(target.targetText, result));
-        }
+        //public void OnLogin(bool result)
+        //{
+        //    if (result)
+        //        foreach (ListenTarget target in sorted[ListenValues.LOGGED_IN])
+        //            target.events.Invoke(string.Format(target.targetText, result));
+        //}
 
         public void OnSfx(bool state)
         {
@@ -264,7 +279,7 @@ namespace Fourzy._Updates.UI.Helpers
     {
         CHELLENGE_ID,
         NO_INTERNET_ACCESS,
-        LOGGED_IN,
+        INTERNET_ACCESS,
 
         SETTINGS_SFX_ON,
         SETTINGS_SFX_OFF,

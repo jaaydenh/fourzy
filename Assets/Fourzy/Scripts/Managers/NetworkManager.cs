@@ -1,37 +1,99 @@
-﻿using System;
+﻿//@vadym udod
+
+using Fourzy._Updates.Tools;
+using Hellmade.Net;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Hellmade.Net
+namespace Fourzy._Updates.Managers
 {
-    /// <summary>
-    /// The method of checking and determining the status of the internet connection
-    /// </summary>
+    public class NetworkManager : RoutinesBase
+    {
+        #region Initializing
+        public static NetworkManager instance
+        {
+            get
+            {
+                if (!_instance) Initialize();
+
+                return _instance;
+            }
+        }
+
+        private static NetworkManager _instance;
+
+        private static void Initialize()
+        {
+            GameObject go = new GameObject("NetworkManager");
+            _instance = go.AddComponent<NetworkManager>();
+            _instance.SetMethod();
+
+            DontDestroyOnLoad(go);
+        }
+
+        #endregion
+
+        public static Action<NetStatus> onStatusChanged;
+
+        public bool checking => IsRoutineActive("checking");
+
+        private NetCheckMethod selected;
+
+        public static NetStatus Status { get; private set; }
+
+        public void StartChecking() => StartRoutine("checking", Check());
+
+        private void SetMethod()
+        {
+            switch (Application.platform)
+            {
+                case RuntimePlatform.WindowsEditor:
+                case RuntimePlatform.WindowsPlayer:
+                case RuntimePlatform.XboxOne:
+                    selected = new NetCheckMethod("msftconnecttest", "http://www.msftconnecttest.com/connecttest.txt", "Microsoft Connect Test");
+                    return;
+
+                case RuntimePlatform.IPhonePlayer:
+                case RuntimePlatform.OSXEditor:
+                case RuntimePlatform.OSXPlayer:
+                    selected = new NetCheckMethod("applehotspot", "https://captive.apple.com/hotspot-detect.html", "<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>");
+                    return;
+
+                default:
+                    selected = new NetCheckMethod("google204", "https://clients3.google.com/generate_204", HttpStatusCode.NoContent);
+                    return;
+            }
+        }
+
+        private IEnumerator Check()
+        {
+            do
+            {
+                yield return selected.Check();
+                NetStatus previousStatus = Status;
+                Status = selected.GetCheckStatus();
+
+                if (Status != previousStatus)
+                {
+                    onStatusChanged?.Invoke(Status);
+                    print(Status);
+                }
+
+                yield return checking ? new WaitForSeconds(5f) : null;
+            } while (checking);
+        }
+    }
+
     [System.Serializable]
     public class NetCheckMethod
     {
-        /// <summary>
-        /// The ID of the method
-        /// </summary>
         public string id;
-        /// <summary>
-        /// The link the method uses for internet check
-        /// </summary>
         public string link;
-        /// <summary>
-        /// The response type that is used for checking for validity of the connection
-        /// </summary>
         public NetCheckResponseType responseType;
-        /// <summary>
-        /// The expected response from the HTTP request when target destination can succesfully be reached.Only applicable if HTTP status code is the selected response type
-        /// </summary>
         public HttpStatusCode expectedHttpStatusCode;
-        /// <summary>
-        /// The response content is used as a response check. Whether the whole content needs to match, or just a part of it, depends on the selected response type. Check is done on trimmed content, therefore whitespaces, newlines and tabs are ignored.
-        /// </summary>
         public string expectedContent;
 
         private NetStatus status;
@@ -63,10 +125,6 @@ namespace Hellmade.Net
             this.expectedContent = expectedContent;
         }
 
-        /// <summary>
-        /// Determines the internet connection status using the method's settings. Use GetCheckStatus after the check is finished to get the determined internet connection status
-        /// </summary>
-        /// <returns></returns>
         public IEnumerator Check()
         {
             UnityWebRequest www = UnityWebRequest.Get(link);
@@ -87,10 +145,6 @@ namespace Hellmade.Net
                 status = www.downloadHandler.text.Trim().Contains(expectedContent.Trim()) ? NetStatus.Connected : NetStatus.WalledGarden;
         }
 
-        /// <summary>
-        /// Returns the determined internet connection status after the check.
-        /// </summary>
-        /// <returns></returns>
         public NetStatus GetCheckStatus() => status;
 
         public override string ToString() => id + ": " + link;
@@ -107,7 +161,7 @@ namespace Hellmade.Net
             else
             {
                 NetCheckMethod other = (NetCheckMethod)obj;
-                result = id.Equals(other.id) && link.Equals(other.link) && responseType.Equals(other.responseType) 
+                result = id.Equals(other.id) && link.Equals(other.link) && responseType.Equals(other.responseType)
                     && expectedHttpStatusCode.Equals(other.expectedHttpStatusCode) && expectedContent.Equals(other.expectedContent);
             }
             return result;

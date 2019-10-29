@@ -34,19 +34,14 @@ namespace Fourzy
         {
             localizedText = new Dictionary<string, string>();
 
-            string fileName = language.ToString() + ".json";
-            string filePath = Path.Combine(Application.streamingAssetsPath, fileName);
+            ResourceItem file = ResourceDB.GetFolder(Constants.LOCALIZATION_FOLDER).GetChild(language.ToString(), ResourceItem.Type.Asset);
 
             string dataAsJson;
 
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                UnityWebRequest reader = new UnityWebRequest(filePath);
-
-                dataAsJson = reader.downloadHandler.text;
-            }
+            if (file != null)
+                dataAsJson = file.Load<TextAsset>().text;
             else
-                dataAsJson = File.ReadAllText(filePath);
+                return;
 
             LocalizationData loadedData = JsonUtility.FromJson<LocalizationData>(dataAsJson);
 

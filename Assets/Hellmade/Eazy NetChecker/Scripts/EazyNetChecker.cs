@@ -172,7 +172,7 @@ namespace Hellmade.Net
         [SerializeField]
         private float timeout = 10f;
         [SerializeField]
-        private float checkInterval = 10;
+        private float checkInterval = 5;
         [SerializeField]
         private bool showDebug = true;
 
@@ -200,24 +200,24 @@ namespace Hellmade.Net
                 Downtime += Time.deltaTime;
             }
 
-            // check if netCheck has timed out
-            if (IsChecking && Time.time > checkStartedTime + timeout)
-            {
-                StopConnectionCheck();
+            //// check if netCheck has timed out
+            //if (IsChecking && Time.time > checkStartedTime + timeout)
+            //{
+            //    StopConnectionCheck();
 
-                // Raise OnCheckTimeout event
-                if (OnCheckTimeout != null)
-                {
-                    OnCheckTimeout();
-                }
+            //    // Raise OnCheckTimeout event
+            //    if (OnCheckTimeout != null)
+            //    {
+            //        OnCheckTimeout();
+            //    }
 
-                Status = NetStatus.NoDNSConnection;
+            //    Status = NetStatus.NoDNSConnection;
 
-                if (ShowDebug)
-                {
-                    Debug.Log("[Eazy NetChecker] Internet check timed out.");
-                }
-            }
+            //    if (ShowDebug)
+            //    {
+            //        Debug.Log("[Eazy NetChecker] Internet check timed out.");
+            //    }
+            //}
         }
 
         /// <summary>

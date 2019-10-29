@@ -170,7 +170,7 @@ namespace Fourzy._Updates.Serialized
                         {
                             tasks = new OnboardingDataHolder.OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask_ShowMessage("Excellent!"),
+                                new OnboardingDataHolder.OnboardingTask_ShowMessage(LocalizationManager.Value("excellent")),
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BG },
                                 new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.WIZARD_CENTER },
                                 new OnboardingDataHolder.OnboardingTask_Log("7"),

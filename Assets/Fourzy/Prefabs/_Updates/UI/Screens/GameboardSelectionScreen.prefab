@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: play_game_button
+  key: play
 --- !u!114 &102027882301965341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,6 +465,7 @@ GameObject:
   m_Component:
   - component: {fileID: 102027882557536391}
   - component: {fileID: 102027882557536393}
+  - component: {fileID: 8135827785890791588}
   - component: {fileID: 102027882557536390}
   m_Layer: 5
   m_Name: TextMeshPro Text
@@ -500,6 +501,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 102027882557536388}
   m_CullTransparentMesh: 0
+--- !u!114 &8135827785890791588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102027882557536388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: select_board
 --- !u!114 &102027882557536390
 MonoBehaviour:
   m_ObjectHideFlags: 0
