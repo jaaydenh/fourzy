@@ -96,6 +96,51 @@ namespace FourzyGameModel.Model
 
             return score;
         }
+
+        public static bool TestSolution(GameState State, List<PlayerTurn> Solution, int PlayerId = 1)
+        {
+            GameState GS = new GameState(State);
+            if (GS.Players.Count == 0)
+            {
+                GS.Players.Add(1, new Player(1, "ONE"));
+                GS.Players.Add(2, new Player(2, "TWO"));
+            }
+
+            GS.ActivePlayerId = PlayerId;
+            for (int i = 0; i < Solution.Count; i++)
+            {
+                PlayerTurn t = Solution[i];
+                //PlayerTurn t = Solution[Solution.Count -i -1];
+
+                TurnEvaluator TE = new TurnEvaluator(GS);
+                GS = TE.EvaluateTurn(t);
+
+                //if wrong player or draw.
+                if (GS.WinnerId > 0 && GS.WinnerId != PlayerId) return false;
+
+                //Don't make AI move on last player turn.
+                if (i == Solution.Count - 1) break;
+
+                if (GS.WinnerId < 0)
+                {
+                    AIPlayer AI = AIPlayerFactory.Create(GS, AIProfile.PuzzleAI);
+                    PlayerTurn Turn = AI.GetTurn();
+
+                    TE = new TurnEvaluator(GS);
+                    GS = TE.EvaluateTurn(Turn);
+
+                    //if wrong player or draw.
+                    if (GS.WinnerId > 0 && GS.WinnerId != PlayerId) return false;
+                }
+
+            }
+
+            //If not winner, or Wrong player/draw
+            if (GS.WinnerId < 0 || GS.WinnerId != PlayerId) return false;
+
+            return true;
+        }
+
     }
 
     public class PuzzleTestResults
@@ -129,5 +174,8 @@ namespace FourzyGameModel.Model
             this.FinalState = FinalState;
         }
     }
+
+
+
 
 }

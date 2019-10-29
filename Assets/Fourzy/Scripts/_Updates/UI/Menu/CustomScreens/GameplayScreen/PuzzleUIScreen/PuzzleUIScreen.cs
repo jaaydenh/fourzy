@@ -14,7 +14,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public class PuzzleUIScreen : MenuScreen
     {
         public MovesLeftWidget movesLeftWidget;
-        public ButtonExtended rematchButton;
         public ButtonExtended nextButton;
         public ButtonExtended hintButton;
 
@@ -108,12 +107,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 movesLeftWidget.SetData(game.asFourzyPuzzle);
             }
-
-            if (rematchButton.interactable)
-            {
-                rematchButton.alphaTween.PlayBackward(true);
-                rematchButton.SetState(false);
-            }
         }
 
         public void OnMoveStarted()
@@ -130,12 +123,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game._Type == GameType.PUZZLE) movesLeftWidget.UpdateMovesLeft();
 
             SetHintButtonState(true);
-
-            if (game._allTurnRecord.Count == 1 && !game.isOver && game.isFourzyPuzzle)
-            {
-                rematchButton.SetState(true);
-                rematchButton.alphaTween.PlayForward(true);
-            }
         }
 
         public void Next() => GamePlayManager.instance.LoadGame(game.Next());

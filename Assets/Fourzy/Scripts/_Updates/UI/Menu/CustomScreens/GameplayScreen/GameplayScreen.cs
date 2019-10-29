@@ -2,9 +2,11 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using StackableDecorator;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -16,6 +18,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public PlayerUIWidget opponentWidget;
         public PlayerUIMessagesWidget opponentMessagesWidget;
         public GameInfoWidget gameInfoWidget;
+        public ButtonExtended rematchButton;
 
         public List<TimerSliderWidget> timerWidgets;
 
@@ -98,16 +101,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
             opponentWidget.Initialize();
 
             playerWidget.SetPlayerName(game.me.DisplayName);
-            opponentWidget.SetPlayerName(game.opponent.DisplayName);
-
-            playerWidget.StopPlayerTurnAnimation();
-            opponentWidget.StopPlayerTurnAnimation();
-
             playerWidget.SetPlayerIcon(game.me);
-            opponentWidget.SetPlayerIcon(game.opponent);
+            playerWidget.StopPlayerTurnAnimation();
 
-            if (game.hideOpponent) opponentWidget.Hide(.1f);
-            else opponentWidget.Show(.1f);
+            if (game.opponent != null)
+            {
+                opponentWidget.SetPlayerName(game.opponent.DisplayName);
+                opponentWidget.SetPlayerIcon(game.opponent);
+                opponentWidget.StopPlayerTurnAnimation();
+
+                if (game.hideOpponent)
+                {
+                    opponentWidget.Hide(.1f);
+                }
+                else
+                {
+                    if (game.puzzleData)
+                    {
+                        if (game.puzzleData.hasAIOpponent)
+                            opponentWidget.Show(.1f);
+                        else
+                            opponentWidget.Hide(.1f);
+                    }
+                    else
+                        opponentWidget.Show(.1f);
+                }
+            }
+            else
+                opponentWidget.Hide(.1f);
 
             //initialize timer
             if (timersEnabled)
@@ -135,21 +156,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //close puzzle win/lose screen
             if (puzzleWinLoseScreen.isCurrent) menuController.CloseCurrentScreen(true);
 
-            #region Check AI move
-
-            //switch (game._Type)
-            //{
-            //    case GameType.AI:
-            //    case GameType.PRESENTATION:
-            //    case GameType.PUZZLE:
-            //        gameInfoWidget.Hide(.3f);
-
-            //        break;
-            //}
-
-            #endregion
-
             spellsListWidget.Open(game, gameplayManager.board, game.me);
+
+            SetResetButtonState(false);
+
+            HideGameInfoWidget(false);
         }
 
         public void ShowOpponentMessage(string message, float duration)
@@ -169,19 +180,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (turn == null || turn.PlayerId < 1) return;
 
-            #region Checking AI turn
-
-            switch (game._Type)
-            {
-                case GameType.AI:
-                //case GameType.PRESENTATION:
-                case GameType.PUZZLE:
-                    if (game.isMyTurn) gameInfoWidget.Hide(.3f);
-
-                    break;
-            }
-
-            #endregion
+            HideGameInfoWidget();
 
             #region Timers
 
@@ -208,6 +207,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             #endregion
+
+            SetResetButtonState(true);
         }
 
         public void OnMoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult)
@@ -224,22 +225,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (turn == null || turn.PlayerId < 1) return;
 
-            #region Checking AI turn
-
-            //if (!turnResult.Activity.Any(action => action.Type == GameActionType.PASS))
-                switch (game._Type)
-                {
-                    case GameType.AI:
-                    //case GameType.PRESENTATION:
-                    //case GameType.PUZZLE:
-                    //if waiting more than (time), show "thinking..."
+            switch (game._Type)
+            {
+                case GameType.AI:
                     if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").ShowDelayed(time: .6f);
-                    //if (!game.isMyTurn) ShowOpponentMessage("Thinking...", 1f);
 
-                        break;
-                }
-
-            #endregion
+                    break;
+            }
 
             #region Timers
 
@@ -305,6 +297,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             gameInfoWidget.Hide(.3f);
 
+            SetResetButtonState(false);
+
             if (!game.draw)
             {
                 if (game.IsWinner())
@@ -363,20 +357,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
                 }
             }
-
-            #region Check AI move
-
-            //switch (game._Type)
-            //{
-            //    case GameType.AI:
-            //    case GameType.PRESENTATION:
-            //    case GameType.PUZZLE:
-            //        gameInfoWidget.Hide(.3f);
-
-            //        break;
-            //}
-
-            #endregion
         }
 
         public void OnGamePaused()
@@ -408,7 +388,52 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        private void ActivatePlayerTimer(int playerID) => timerWidgets.ForEach(widget => { if (widget.player.PlayerId == playerID) { widget.Activate(); } });
+        private void ActivatePlayerTimer(int playerID) => timerWidgets.Find(widget => widget.player.PlayerId == playerID).Activate();
+
+        private void HideGameInfoWidget(bool checkType = true)
+        {
+            if (checkType)
+                switch (game._Type)
+                {
+                    case GameType.AI:
+                    case GameType.PUZZLE:
+                        if (game.isMyTurn) gameInfoWidget.Hide(.3f);
+
+                        break;
+                }
+            else
+                gameInfoWidget.Hide(.3f);
+        }
+
+        private void SetResetButtonState(bool state)
+        {
+            if (state)
+            {
+                switch (game._Mode)
+                {
+                    case GameMode.AI_PACK:
+                    case GameMode.BOSS_AI_PACK:
+                    case GameMode.GAUNTLET:
+                    case GameMode.PUZZLE_FAST:
+                    case GameMode.PUZZLE_PACK:
+                        if (game._allTurnRecord.Count == 1 && !game.isOver)
+                        {
+                            rematchButton.SetState(true);
+                            rematchButton.Show(.3f);
+                        }
+
+                        break;
+                }
+            }
+            else
+            {
+                if (rematchButton.interactable)
+                {
+                    rematchButton.Hide(.3f);
+                    rematchButton.SetState(false);
+                }
+            }
+        }
 
         private IEnumerator WaitForTapRoutine()
         {

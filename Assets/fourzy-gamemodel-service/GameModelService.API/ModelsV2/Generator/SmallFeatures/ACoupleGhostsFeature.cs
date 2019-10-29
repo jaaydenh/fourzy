@@ -9,6 +9,7 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
+        public TokenType Token { get;  }
 
         public SmallFeatureType Feature { get { return SmallFeatureType.A_COUPLE_OF_GHOSTS; } }
         public int GhostCount { get; set; }
@@ -16,6 +17,7 @@ namespace FourzyGameModel.Model
         public ACoupleGhostsFeature(int GhostCount = 8)
         {
             this.Name = "A Couple of Ghosts";
+            this.Token = TokenType.GHOST;
             this.Type = IngredientType.SMALLFEATURE;
             this.GhostCount = GhostCount;
         }

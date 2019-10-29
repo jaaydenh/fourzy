@@ -7,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Fourzy._Updates.Tools;
 
 namespace Fourzy._Updates.ClientModel
 {
@@ -26,6 +25,7 @@ namespace Fourzy._Updates.ClientModel
 
         public int Complexity = -1;
         public int startingMagic = 0;
+        public bool hasAIOpponent = true;
 
         public ResourceItem resource;
 
@@ -118,23 +118,30 @@ namespace Fourzy._Updates.ClientModel
             SolutionState = jObject["SolutionStateData"].ToObject<GameState>();
             GoalType = jObject["GoalType"].ToObject<PuzzleGoalType>();
 
+            //try get starting magic
             JToken _startingMagic = jObject["StartingMagic"];
-
             if (_startingMagic != null)
                 startingMagic = _startingMagic.ToObject<int>();
             else
                 startingMagic = FourzyGameModel.Model.Constants.PlayerStartingMagic;
 
-            if (string.IsNullOrEmpty(aiPlayerName)) aiPlayerName = "AI";
-            if (string.IsNullOrEmpty(herdID)) herdID = "1";
+            //try get hasAIOpponent
+            JToken _hasAIOpponent = jObject["hasAIOpponent "];
+            if (_hasAIOpponent != null) hasAIOpponent = _hasAIOpponent.ToObject<bool>();
 
-            if (pack)
+            if (hasAIOpponent)
             {
-                aiPlayerName = string.IsNullOrEmpty(pack.aiPlayerName) ? aiPlayerName : pack.aiPlayerName;
-                herdID = string.IsNullOrEmpty(pack.herdID) ? herdID : pack.herdID;
-            }
+                if (string.IsNullOrEmpty(aiPlayerName)) aiPlayerName = "AI";
+                if (string.IsNullOrEmpty(herdID)) herdID = "1";
 
-            PuzzlePlayer = new Player(2, aiPlayerName, aiProfile) { HerdId = herdID };
+                if (pack)
+                {
+                    aiPlayerName = string.IsNullOrEmpty(pack.aiPlayerName) ? aiPlayerName : pack.aiPlayerName;
+                    herdID = string.IsNullOrEmpty(pack.herdID) ? herdID : pack.herdID;
+                }
+
+                PuzzlePlayer = new Player(2, aiPlayerName, aiProfile) { HerdId = herdID };
+            }
 
             GetInstructions();
         }

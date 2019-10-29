@@ -52,7 +52,7 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_move_blocker
-  tokenType: 61
+  tokenType: 60
   volume: 1
   onGamePieceEnter: 0
   onActivate: 0

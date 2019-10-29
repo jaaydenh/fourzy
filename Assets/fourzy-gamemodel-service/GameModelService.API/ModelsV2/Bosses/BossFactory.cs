@@ -11,14 +11,16 @@ namespace FourzyGameModel.Model
         {
 
             switch (Type) {
+                case BossType.EntryWay:
+                    return new EntryWayBoss();
+                case BossType.LordOfGoop:
+                    return new LordOfGoopBoss();
                 case BossType.EarthQuake:
                     return new EarthQuakeBoss();
                 case BossType.MadBomber:
                     return new MadBomberBoss();
                 case BossType.DirectionMaster:
                    return new DirectionMasterBoss();
-                case BossType.EntryWay:
-                    return new EntryWayBoss();
                 case BossType.Treant:
                     return new TreantBoss();
                 case BossType.Necrodancer:

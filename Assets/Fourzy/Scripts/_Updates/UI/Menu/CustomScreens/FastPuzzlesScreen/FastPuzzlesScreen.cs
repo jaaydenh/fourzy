@@ -16,6 +16,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void StartFastPuzzleGame() => GameManager.Instance.StartGame(GameContentManager.Instance.GetNextFastPuzzle());
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            GameManager.onNetworkAccess += NetworkAccess;
+        }
+
         public override void Open()
         {
             base.Open();
@@ -38,11 +45,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 GameContentManager.Instance.ResetFastPuzzles();
             }
 
-            foreach (WidgetBase widget in widgets) Destroy(widget.gameObject);
-            widgets.Clear();
+            ClearEntries();
 
             foreach (PlayerLeaderboardEntry entry in leaderboardRequestResult.Leaderboard)
                 widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
+        }
+
+        private void NetworkAccess(bool state)
+        {
+            if (isOpened)
+            {
+                if (state)
+                    StartRoutine("showLB", ShowLeaderboard());
+                else
+                    ClearEntries();
+            }
+        }
+
+        private void ClearEntries()
+        {
+            foreach (WidgetBase widget in widgets) Destroy(widget.gameObject);
+            widgets.Clear();
         }
 
         private IEnumerator ShowLeaderboard()

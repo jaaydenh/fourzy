@@ -233,7 +233,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
                 return;
 
             //add to board model
-            gameboard.model._State.Board.AddPiece(new Piece((int)player), location);
+            gameboard.game._State.Board.AddPiece(new Piece((int)player), location);
         }
 
         private IEnumerator BlinkingRoutine()

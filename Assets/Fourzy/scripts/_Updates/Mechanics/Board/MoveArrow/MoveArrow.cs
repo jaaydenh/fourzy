@@ -118,7 +118,7 @@ namespace Fourzy._Updates.Mechanics.Board
         }
 
         public void Position(BoardLocation boardLocation) => 
-            transform.localPosition = board.BoardLocationToVec2(boardLocation.Mirrored(board.model));
+            transform.localPosition = board.BoardLocationToVec2(boardLocation.Mirrored(board.game));
             //transform.localPosition = board.BoardLocationToVec2(SettingsManager.Instance.Get(SettingsManager.KEY_MOVE_ORIGIN) ? boardLocation.Mirrored(board.model) : boardLocation);
     }
 }

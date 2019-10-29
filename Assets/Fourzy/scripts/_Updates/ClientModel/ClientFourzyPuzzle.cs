@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using GameType = Fourzy.GameType;
 
 namespace Fourzy._Updates.ClientModel
 {
@@ -128,9 +127,9 @@ namespace Fourzy._Updates.ClientModel
 
         public int BossMoves { get; set; }
 
-        public bool isOver => 
-            Status == PuzzleStatus.SUCCESS || 
-            Status == PuzzleStatus.FAILED || 
+        public bool isOver =>
+            Status == PuzzleStatus.SUCCESS ||
+            Status == PuzzleStatus.FAILED ||
             playerTurnRecord.Count == puzzleData.MoveLimit ||
             _State.WinnerId > 0;
 
@@ -162,7 +161,16 @@ namespace Fourzy._Updates.ClientModel
 
         public Player me => State.Players.Values.ToList().Find(_player => _player.PlayerString == UserManager.Instance.userId) ?? State.Players[1];
 
-        public Player opponent => State.Players[(PlayerEnum)me.PlayerId == PlayerEnum.ONE ? (int)PlayerEnum.TWO : (int)PlayerEnum.ONE];
+        public Player opponent
+        {
+            get
+            {
+                if (State.Players.Count > 1)
+                    return State.Players[(PlayerEnum)me.PlayerId == PlayerEnum.ONE ? (int)PlayerEnum.TWO : (int)PlayerEnum.ONE];
+                else
+                    return null;
+            }
+        }
 
         public Player activePlayer => isMyTurn ? me : opponent;
 

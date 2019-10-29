@@ -16,15 +16,16 @@ namespace Fourzy._Updates.UI.Widgets
         public Badge magicBadge;
         public int playerNameMaxSize = 9;
 
-        public IClientFourzy game { get; private set; }
-
         private GamePieceView current;
         private Player assignedPlayer;
 
+        public IClientFourzy game { get; private set; }
+
+        public bool shown { get; private set; } = false;
+
         protected void OnDestroy()
         {
-            if (game != null)
-                game.onMagic -= UpdateMagic;
+            if (game != null) game.onMagic -= UpdateMagic;
         }
 
         public void SetPlayerName(string name)
@@ -90,11 +91,13 @@ namespace Fourzy._Updates.UI.Widgets
         public override void Show(float time)
         {
             if (alphaTween._value < 1f) base.Show(time);
+            shown = true;
         }
 
         public override void Hide(float time)
         {
             if (alphaTween._value > 0f) base.Hide(time);
+            shown = false;
         }
 
         private void UpdateMagic(int playerId, int value)

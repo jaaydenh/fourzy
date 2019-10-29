@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 114364880149236398}
   - component: {fileID: 114882540043114098}
   m_Layer: 0
-  m_Name: tokenFruit
+  m_Name: TokenFruit
   m_TagString: Token
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_fruit
-  tokenType: 19
+  tokenType: 8
   volume: 1
   onGamePieceEnter: 131
   onActivate: 137

@@ -75,6 +75,17 @@ namespace FourzyGameModel.Model
             return NewBoard;
         }
 
+        public virtual List<BoardRecipe> GetRecipesWithTokenType(TokenType Type)
+        {
+            List<BoardRecipe> RecipeList = new List<BoardRecipe>();
+            foreach (BoardRecipe r in Recipes.Keys)
+            {
+                if (r.Tokens.Contains(Type)) RecipeList.Add(r);
+            }
+
+            return RecipeList;
+        }
+
         public virtual List<BoardRecipe> GetRecipes(PatternComplexity Complexity)
         {
             List<BoardRecipe> RecipeList = new List<BoardRecipe>();
@@ -92,11 +103,12 @@ namespace FourzyGameModel.Model
 
             foreach (BoardRecipe r in Recipes.Keys)
             {
+                bool allowed = true;
                 foreach (TokenType t in r.Tokens)
                 {
-                    if (!AllowedTokens.Contains(t)) continue;
+                    if (!AllowedTokens.Contains(t)) { allowed = false;  }
                 }
-                RecipeList.Add(r);
+                if (allowed) RecipeList.Add(r);
             }
 
             return RecipeList;
@@ -109,11 +121,13 @@ namespace FourzyGameModel.Model
             foreach (BoardRecipe r in Recipes.Keys)
             {
                 if (r.Complexity != Complexity) continue;
+                bool tokens_allowed = true;
                 foreach (TokenType t in r.Tokens)
                 {
-                    if (!AllowedTokens.Contains(t)) continue;
+                    if (!AllowedTokens.Contains(t))  tokens_allowed = false; 
                 }
-                RecipeList.Add(r);
+                if (tokens_allowed)
+                    RecipeList.Add(r);
             }
 
 

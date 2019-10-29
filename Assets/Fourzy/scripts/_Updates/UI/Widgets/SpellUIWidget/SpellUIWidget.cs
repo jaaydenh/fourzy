@@ -86,7 +86,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void TrySetButtonState(int playerId, bool _state)
         {
-            switch (spellsList.board.model._Type)
+            switch (spellsList.board.game._Type)
             {
                 case GameType.TURN_BASED:
                 case GameType.PASSANDPLAY:

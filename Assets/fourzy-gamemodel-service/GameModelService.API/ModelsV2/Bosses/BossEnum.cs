@@ -19,7 +19,8 @@ namespace FourzyGameModel.Model
         DirectionMaster,
         EntryWay,
         EarthQuake,
-        Necrodancer
+        Necrodancer,
+        LordOfGoop
     }
 
     public enum BossPowerType
@@ -34,6 +35,8 @@ namespace FourzyGameModel.Model
         BlockASide,
         FillHole,
         ThrowBomb,
-        ActivateBomb
+        ActivateBomb,
+        GoopAPiece,
+        WallOfGoop
     }
 }

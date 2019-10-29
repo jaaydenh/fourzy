@@ -11,7 +11,7 @@ namespace FourzyGameModel.Model
         public List<IBossPower> Powers { get; }
         const int MinStartingArrows = 6;   //too few arrows and boss is too easy
         const int MaxStartingArrows = 12;  //too many arrows and boss has too many combinations to think about.
-        public bool UseCustomAI { get { return false; } }
+        public bool UseCustomAI { get { return true; } }
 
         public DirectionMasterBoss()
         {
@@ -57,7 +57,49 @@ namespace FourzyGameModel.Model
 
         public PlayerTurn GetTurn(GameState State)
         {
-            return null; 
+            Dictionary<PlayerTurn, int> PossibleTurns = new Dictionary<PlayerTurn, int>();
+            List<IMove> Powers = GetPossibleActivations(State);
+            TurnEvaluator TE = new TurnEvaluator(State);
+            List<string> States = new List<string>();
+
+            foreach (SimpleMove m in TE.GetAvailableSimpleMoves())
+            {
+                List<BoardLocation> trace = TE.TraceMove(m);
+                GameState GSNew = null;
+                foreach (IMove p in Powers)
+                {
+                    PlayerTurn t = new PlayerTurn(m);
+
+                    IBossPower power = (IBossPower)p;
+                    if (power.PowerType == BossPowerType.ArrowCharm)
+                    {
+                        ArrowCharmPower charm = (ArrowCharmPower)power;
+                        if (trace.Contains(charm.ArrowLocation) )
+                        {
+                            t.Moves.Insert(0, charm);
+                            GSNew = TE.EvaluateTurn(t);
+
+                            if (GSNew.WinnerId == State.ActivePlayerId || State.WinnerId==0) return t;
+                            if (GSNew.WinnerId == State.Opponent(State.ActivePlayerId)) continue;
+                        }
+                    }
+                }
+
+                GSNew = TE.EvaluateTurn(m);
+                if (!States.Contains(GSNew.StateString))
+                    PossibleTurns.Add(new PlayerTurn(m), 0);
+            }
+
+            foreach (PlayerTurn t in PossibleTurns.Keys)
+            {
+                //GameState ResultState = TE.EvaluateTurn(t);
+                AITurnEvaluator AI = new AITurnEvaluator(State,t);
+                PossibleTurns[t] = AI.Score(State.ActivePlayerId);
+            }
+
+            PossibleTurns = PossibleTurns.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+                        
+            return PossibleTurns.Keys.First(); 
         }
 
         public bool TriggerPower(GameState State)

@@ -29,7 +29,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public bool debugBoard = false;
         public bool sortByOrder = false;
         public bool interactable = false;
-        public IClientFourzy model;
+        public IClientFourzy game;
 
         public Action<IClientFourzy> onGameFinished;
         public Action<IClientFourzy> onDraw;
@@ -112,11 +112,11 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (isAnimating) return;
 
-            if (model.isOver) return;
+            if (game.isOver) return;
 
-            if (model._Type != GameType.PASSANDPLAY)
+            if (game._Type != GameType.PASSANDPLAY)
             {
-                if (!model.isMyTurn)
+                if (!game.isMyTurn)
                 {
                     onWrongTurn?.Invoke();
                     return;
@@ -148,7 +148,7 @@ namespace Fourzy._Updates.Mechanics.Board
                             break;
 
                         case BoardActionState.CAST_SPELL:
-                            List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(model._State.Board, new HexSpell(0, new BoardLocation()));
+                            List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new HexSpell(0, new BoardLocation()));
 
                             BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
@@ -232,7 +232,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public GamePieceView SpawnPiece(int row, int col, PlayerEnum player, bool sort = true)
         {
-            GamePieceView gamePiece = Instantiate(player == model.playerOneGamepiece.player ? model.playerOneGamepiece : model.playerTwoGamepiece, bitsParent);
+            GamePieceView gamePiece = Instantiate(player == game.playerOneGamepiece.player ? game.playerOneGamepiece : game.playerTwoGamepiece, bitsParent);
 
             gamePiece.gameObject.SetActive(true);
             gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
@@ -260,7 +260,7 @@ namespace Fourzy._Updates.Mechanics.Board
         }
 
         public T SpawnToken<T>(int row, int col, TokenType tokenType, bool sort = true) where T : TokenView
-            => SpawnToken<T>(row, col, GameContentManager.Instance.GetTokenPrefab(tokenType, model._Area), sort);
+            => SpawnToken<T>(row, col, GameContentManager.Instance.GetTokenPrefab(tokenType, game._Area), sort);
 
         public T SpawnToken<T>(int row, int col, TokenView tokenPrefab, bool sort = true) where T : TokenView
         {
@@ -285,9 +285,9 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             List<GamePieceView> result = new List<GamePieceView>();
 
-            if (model._State.WinningLocations != null)
-                for (int locationIndex = 0; locationIndex < model._State.WinningLocations.Count; locationIndex++)
-                    result.Add(BoardBitAt<GamePieceView>(model._State.WinningLocations[locationIndex]));
+            if (game._State.WinningLocations != null)
+                for (int locationIndex = 0; locationIndex < game._State.WinningLocations.Count; locationIndex++)
+                    result.Add(BoardBitAt<GamePieceView>(game._State.WinningLocations[locationIndex]));
 
             return result;
         }
@@ -305,13 +305,13 @@ namespace Fourzy._Updates.Mechanics.Board
 
             aiTurnThread = ThreadsQueuer.Instance.StartThreadForFunc(() =>
             {
-                string gameId = model.GameID;
+                string gameId = game.GameID;
                 
                 PlayerTurnResult turnResults = null;
 
                 //if (model._allTurnRecord.Count > 0)
                 //{
-                    turnResults = model.TakeAITurn(true);
+                    turnResults = game.TakeAITurn(true);
 
                     //clear first before move actions
                     while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
@@ -369,13 +369,13 @@ namespace Fourzy._Updates.Mechanics.Board
             return TakeTurn(playerTurn.GetMove(), true);
         }
         
-        public Coroutine TakeTurn(Direction direction, int location, bool local = false) => TakeTurn(new SimpleMove(model.activePlayerPiece, direction, location), local);
+        public Coroutine TakeTurn(Direction direction, int location, bool local = false) => TakeTurn(new SimpleMove(game.activePlayerPiece, direction, location), local);
 
         public Coroutine TakeTurn(SimpleMove move, bool local = false)
         {
             if (actionState == BoardActionState.CAST_SPELL) CancelSpell();
 
-            if (!model.turnEvaluator.CanIMakeMove(move))
+            if (!game.turnEvaluator.CanIMakeMove(move))
             {
                 Debug.Log("Cannot Make Move");
                 return null;
@@ -387,7 +387,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             //if (model._allTurnRecord.Count > 0)
             //{
-                turnResults = model.TakeTurn(turn, local, true);
+                turnResults = game.TakeTurn(turn, local, true);
 
                 //clear first before move actions
                 while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
@@ -419,7 +419,7 @@ namespace Fourzy._Updates.Mechanics.Board
             switch (spellID)
             {
                 case SpellId.HEX:
-                    spell = new HexSpell(model._State.ActivePlayerId, location);
+                    spell = new HexSpell(game._State.ActivePlayerId, location);
 
                     break;
 
@@ -442,7 +442,7 @@ namespace Fourzy._Updates.Mechanics.Board
             AddIMoveToTurn(spell);
 
             //cast spell
-            onCast?.Invoke(activeSpell, model._State.ActivePlayerId);
+            onCast?.Invoke(activeSpell, game._State.ActivePlayerId);
         }
 
         public TokenSpell InstantiateSpellToken(BoardLocation location, SpellId spellID)
@@ -604,11 +604,11 @@ namespace Fourzy._Updates.Mechanics.Board
         /// <summary>
         /// Will play initial moves
         /// </summary>
-        public Coroutine PlayInitialMoves() => PlayMoves(model.InitialTurns);
+        public Coroutine PlayInitialMoves() => PlayMoves(game.InitialTurns);
 
         public void Initialize(IClientFourzy model, bool hintAreas = true, bool createBits = true)
         {
-            this.model = model;
+            this.game = model;
             turn = null;
             lastCol = 0;
             lastRow = 0;
@@ -661,7 +661,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.HeavyImpact);
 
-            TakeTurn(new SimpleMove(model.activePlayerPiece, GetDirection(selectedBoardLocation.Value), GetLocationFromBoardLocation(selectedBoardLocation.Value)));
+            TakeTurn(new SimpleMove(game.activePlayerPiece, GetDirection(selectedBoardLocation.Value), GetLocationFromBoardLocation(selectedBoardLocation.Value)));
 
             if (touched) OnPointerRelease(Input.mousePosition);
 
@@ -672,20 +672,20 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             Coroutine coroutine = null;
 
-            if (model._allTurnRecord.Count == 0)
+            if (game._allTurnRecord.Count == 0)
             {
-                coroutine = StartCoroutine(BoardUpdateRoutine(model.StartTurn()));
+                coroutine = StartCoroutine(BoardUpdateRoutine(game.StartTurn()));
 
                 //play first turns' before actions
-                boardUpdateRoutines.Add(model._State.UniqueId, coroutine);
+                boardUpdateRoutines.Add(game._State.UniqueId, coroutine);
             }
 
             return coroutine;
         }
 
-        public int GetLocationFromBoardLocation(BoardLocation _boardLocation) => _boardLocation.GetLocation(model);
+        public int GetLocationFromBoardLocation(BoardLocation _boardLocation) => _boardLocation.GetLocation(game);
 
-        public Direction GetDirection(BoardLocation _boardLocation) => _boardLocation.GetTurnDirection(model);
+        public Direction GetDirection(BoardLocation _boardLocation) => _boardLocation.GetTurnDirection(game);
 
         public bool InputMap(BoardLocation location)
         {
@@ -698,8 +698,8 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             Dictionary<BoardLocation, HintBlock> affected = new Dictionary<BoardLocation, HintBlock>();
 
-            TurnEvaluator turnEvaluator = model.turnEvaluator;
-            Piece piece = model.activePlayerPiece;
+            TurnEvaluator turnEvaluator = game.turnEvaluator;
+            Piece piece = game.activePlayerPiece;
 
             CancelRoutine("showHintBlocks");
             CancelRoutine("hideHintBlocks");
@@ -722,7 +722,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     switch (activeSpell)
                     {
                         case SpellId.HEX:
-                            locationsList = SpellEvaluator.GetValidSpellLocations(model._State.Board, new HexSpell(0, new BoardLocation()));
+                            locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new HexSpell(0, new BoardLocation()));
 
                             foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
                                 if (locationsList.Contains(hintBlock.Key))
@@ -767,19 +767,19 @@ namespace Fourzy._Updates.Mechanics.Board
             if (boxCollider2D)
             {
                 topLeft = boxCollider2D.offset + new Vector2(-boxCollider2D.bounds.size.x * .5f / transform.localScale.x, boxCollider2D.bounds.size.y * .5f / transform.localScale.y);
-                step = new Vector3(boxCollider2D.size.x / model.Columns, boxCollider2D.size.y / model.Rows);
+                step = new Vector3(boxCollider2D.size.x / game.Columns, boxCollider2D.size.y / game.Rows);
             }
             else if (rectTransform)
             {
                 topLeft = new Vector3(-rectTransform.rect.size.x / 2f, rectTransform.rect.size.y / 2f);
-                step = new Vector3(rectTransform.rect.width / model.Columns, rectTransform.rect.height / model.Rows);
+                step = new Vector3(rectTransform.rect.width / game.Columns, rectTransform.rect.height / game.Rows);
             }
         }
 
         private bool CheckMove(Vector2 position, bool tap = false)
         {
-            TurnEvaluator turnEvaluator = model.turnEvaluator;
-            Piece piece = model.activePlayerPiece;
+            TurnEvaluator turnEvaluator = game.turnEvaluator;
+            Piece piece = game.activePlayerPiece;
 
             InputMapValue inputMapValue = GetClosestInputMapValue(inputMapActiveOnly, position);
 
@@ -787,13 +787,13 @@ namespace Fourzy._Updates.Mechanics.Board
             {
                 if (tap)
                 {
-                    if (Vec2ToBoardLocation(position).OnBoard(model._State.Board))
+                    if (Vec2ToBoardLocation(position).OnBoard(game._State.Board))
                         negativeVfx.StartVfx(null, (Vector2)transform.position + BoardLocationToVec2(Vec2ToBoardLocation(position)), 0f);
                     else
                         negativeVfx.StartVfx(null, position, 0f);
 
                     //dont show hint area on onboarding game mode
-                    if (model._Type != GameType.ONBOARDING)
+                    if (game._Type != GameType.ONBOARDING)
                     {
                         SetHintAreaColliderState(false);
 
@@ -884,17 +884,17 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             inputMap = new List<InputMapValue>();
 
-            for (int col = 0; col < model.Columns; col++)
+            for (int col = 0; col < game.Columns; col++)
             {
-                for (int row = 0; row < model.Rows; row++)
+                for (int row = 0; row < game.Rows; row++)
                 {
                     //skip diagonals 
-                    if (row == col || (model.Columns - 1) - col == row) continue;
+                    if (row == col || (game.Columns - 1) - col == row) continue;
 
                     //skip inside cells
-                    if (row > 0 && col > 0 && row < model.Rows - 1 && col < model.Columns - 1) continue;
+                    if (row > 0 && col > 0 && row < game.Rows - 1 && col < game.Columns - 1) continue;
 
-                    inputMap.Add(new InputMapValue(model, new BoardLocation(row, col), true));
+                    inputMap.Add(new InputMapValue(game, new BoardLocation(row, col), true));
                 }
             }
         }
@@ -907,9 +907,9 @@ namespace Fourzy._Updates.Mechanics.Board
 
             hintBlocks = new Dictionary<BoardLocation, HintBlock>();
 
-            for (int col = 0; col < model.Columns; col++)
+            for (int col = 0; col < game.Columns; col++)
             {
-                for (int row = 0; row < model.Rows; row++)
+                for (int row = 0; row < game.Rows; row++)
                 {
                     HintBlock hintBlock = GameContentManager.InstantiatePrefab<HintBlock>(GameContentManager.PrefabType.BOARD_HINT_BOX, bitsParent);
                     hintBlock.transform.localPosition = BoardLocationToVec2(row, col);
@@ -921,12 +921,12 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private void UpdateHintArea()
         {
-            if (hintBlocks == null || model.isOver) return;
+            if (hintBlocks == null || game.isOver) return;
 
             List<BoardLocation> affected = new List<BoardLocation>();
 
-            TurnEvaluator turnEvaluator = model.turnEvaluator;
-            Piece piece = model.activePlayerPiece;
+            TurnEvaluator turnEvaluator = game.turnEvaluator;
+            Piece piece = game.activePlayerPiece;
 
             //only active inputMap values
             foreach (InputMapValue inputMapValue in inputMapActiveOnly)
@@ -943,8 +943,8 @@ namespace Fourzy._Updates.Mechanics.Board
             if (BoardBitAt<GamePieceView>(location)) return;
 
             //drop gamepiece at location
-            model._State.Board.AddPiece(model.activePlayerPiece, location);
-            SpawnPiece(location.Row, location.Column, (PlayerEnum)model._State.ActivePlayerId);
+            game._State.Board.AddPiece(game.activePlayerPiece, location);
+            SpawnPiece(location.Row, location.Column, (PlayerEnum)game._State.ActivePlayerId);
         }
 
         private void AddIMoveToTurn(IMove move)
@@ -964,7 +964,11 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (turnResults.Activity.Count == 0) yield break;
 
-            bool isGauntlet = model.puzzleData && model.puzzleData.gauntletStatus != null;
+            //reset ActivePlayerID
+            if (game.puzzleData && !game.puzzleData.hasAIOpponent)
+                game._State.ActivePlayerId = game.me.PlayerId;
+
+            bool isGauntlet = game.puzzleData && game.puzzleData.gauntletStatus != null;
             SimpleMove move = turn != null ? turn.GetMove() : null;
 
             SetHintAreaColliderState(false);
@@ -972,13 +976,13 @@ namespace Fourzy._Updates.Mechanics.Board
             boardBits.ForEach(bit => { if (bit.active) bit.OnBeforeTurn(); });
 
             //if gauntlet game, remove member
-            if (isGauntlet && move != null && move.Piece.PlayerId == model.me.PlayerId)
+            if (isGauntlet && move != null && move.Piece.PlayerId == game.me.PlayerId)
             {
-                List<Creature> members = model._State.Herds[move.Piece.PlayerId].Members;
+                List<Creature> members = game._State.Herds[move.Piece.PlayerId].Members;
                 if (members.Count > 0)
                 {
                     members.RemoveAt(members.Count - 1);
-                    model.puzzleData.pack.RemoveHerdMember();
+                    game.puzzleData.pack.RemoveHerdMember();
                 }
             }
 
@@ -1042,7 +1046,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         GameActionBossPower bossPowerAction = turnResults.Activity[actionIndex] as GameActionBossPower;
 
                         GamePlayManager.instance.gameplayScreen.gameInfoWidget.DisplayPower(bossPowerAction.Power.PowerType);
-                        model.BossMoves++;
+                        game.BossMoves++;
 
                         actionIndex++;
 
@@ -1205,14 +1209,14 @@ namespace Fourzy._Updates.Mechanics.Board
                         switch (_gameEndAction.GameEndType)
                         {
                             case GameEndType.WIN:
-                                model.OnVictory();
-                                onGameFinished?.Invoke(model);
+                                game.OnVictory();
+                                onGameFinished?.Invoke(game);
 
                                 break;
 
                             case GameEndType.DRAW:
-                                model.OnDraw();
-                                onDraw?.Invoke(model);
+                                game.OnDraw();
+                                onDraw?.Invoke(game);
 
                                 break;
 
@@ -1261,26 +1265,26 @@ namespace Fourzy._Updates.Mechanics.Board
             }
 
             //check if gauntlet game finished
-            if (isGauntlet && move != null && move.Piece.PlayerId == model.me.PlayerId)
+            if (isGauntlet && move != null && move.Piece.PlayerId == game.me.PlayerId)
             {
-                if (model._State.Herds[move.Piece.PlayerId].Members.Count == 0 && model._State.WinningLocations == null)
+                if (game._State.Herds[move.Piece.PlayerId].Members.Count == 0 && game._State.WinningLocations == null)
                 {
                     SetHintAreaColliderState(false);
-                    onGameFinished?.Invoke(model);
+                    onGameFinished?.Invoke(game);
                 }
             }
 
             //since puzzle games dont send "lose" event, need to check manually
-            switch (model._Type)
+            switch (game._Type)
             {
                 case GameType.PUZZLE:
-                    if (model.isOver)
+                    if (game.isOver)
                     {
                         //player lost
-                        if (model._State.WinningLocations == null)
+                        if (game._State.WinningLocations == null)
                         {
                             SetHintAreaColliderState(false);
-                            onGameFinished?.Invoke(model);
+                            onGameFinished?.Invoke(game);
                         }
                     }
 
@@ -1309,7 +1313,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     switch (spell.spellId)
                     {
                         case SpellId.HEX:
-                            (new HexSpell(turn.PlayerId, spell.location)).Cast(model._State);
+                            (new HexSpell(turn.PlayerId, spell.location)).Cast(game._State);
                             spell.SetAlpha(1f);
 
                             break;
@@ -1360,7 +1364,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case HintAreaAnimationPattern.DIAGONAL:
-                    for (int diagonalIndex = 0; diagonalIndex < model.Rows * 2 - 1; diagonalIndex++)
+                    for (int diagonalIndex = 0; diagonalIndex < game.Rows * 2 - 1; diagonalIndex++)
                     {
                         for (int col = 0; col <= diagonalIndex; col++)
                         {
@@ -1396,7 +1400,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 case HintAreaAnimationPattern.CIRCLE:
                     List<BoardLocation> animated = new List<BoardLocation>();
 
-                    for (int distance = 0; distance < model.Rows; distance++)
+                    for (int distance = 0; distance < game.Rows; distance++)
                     {
                         foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in affected)
                             if (!animated.Contains(hintBlock.Key) && BoardLocationToVec2(hintBlock.Key).magnitude < distance * step.x)
@@ -1439,7 +1443,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case HintAreaAnimationPattern.DIAGONAL:
-                    for (int diagonalIndex = 0; diagonalIndex < model.Rows * 2 - 1; diagonalIndex++)
+                    for (int diagonalIndex = 0; diagonalIndex < game.Rows * 2 - 1; diagonalIndex++)
                     {
                         for (int col = 0; col <= diagonalIndex; col++)
                         {
@@ -1457,7 +1461,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 case HintAreaAnimationPattern.CIRCLE:
                     List<BoardLocation> animated = new List<BoardLocation>();
 
-                    for (int distance = 0; distance < model.Rows; distance++)
+                    for (int distance = 0; distance < game.Rows; distance++)
                     {
                         foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
                             if (!animated.Contains(hintBlock.Key) && BoardLocationToVec2(hintBlock.Key).magnitude < distance * step.x)
@@ -1485,20 +1489,20 @@ namespace Fourzy._Updates.Mechanics.Board
                 boardBits = new List<BoardBit>();
             }
 
-            if (model == null) yield break;
+            if (game == null) yield break;
 
             int _lastRow = lastRow;
             int _lastCol = lastCol;
 
-            for (int row = _lastRow; row < model.Rows; row++)
+            for (int row = _lastRow; row < game.Rows; row++)
             {
                 lastRow = row;
 
-                for (int col = _lastCol; col < model.Columns; col++)
+                for (int col = _lastCol; col < game.Columns; col++)
                 {
                     lastCol = col;
 
-                    BoardSpace boardSpace = model._State.Board.ContentsAt(row, col);
+                    BoardSpace boardSpace = game._State.Board.ContentsAt(row, col);
 
                     foreach (IToken token in boardSpace.Tokens.Values)
                         SpawnToken(token);

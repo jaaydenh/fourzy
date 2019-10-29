@@ -52,7 +52,7 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_web
-  tokenType: 36
+  tokenType: 38
   volume: 1
   onGamePieceEnter: 0
   onActivate: 0

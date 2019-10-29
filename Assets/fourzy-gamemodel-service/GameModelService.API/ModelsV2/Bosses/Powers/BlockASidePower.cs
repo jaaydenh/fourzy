@@ -7,7 +7,7 @@ namespace FourzyGameModel.Model
 {
     public class BlockASidePower : IBossPower, IMove
     {
-        public string Name { get { return "Global Direction Change"; } }
+        public string Name { get { return "Blocking Wall"; } }
 
         public BossPowerType PowerType { get { return BossPowerType.BlockASide; } }
         public MoveType MoveType { get { return MoveType.BOSSPOWER; } }

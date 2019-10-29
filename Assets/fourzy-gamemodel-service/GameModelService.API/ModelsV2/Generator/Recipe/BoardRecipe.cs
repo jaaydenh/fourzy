@@ -30,5 +30,10 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public void AddIngredient(IBoardIngredient NewIngredient)
+        {
+            Ingredients.Add(NewIngredient);
+            Tokens.Add(NewIngredient.Token);
+        }
     }
 }

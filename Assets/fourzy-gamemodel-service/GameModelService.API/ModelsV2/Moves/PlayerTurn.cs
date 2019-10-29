@@ -37,6 +37,8 @@ namespace FourzyGameModel.Model
 
 
 
+
+
         public PlayerTurn(SimpleMove Move)
         {
             if (Move != null)
@@ -69,6 +71,25 @@ namespace FourzyGameModel.Model
             Moves.Add(new HexSpell(PlayerId, HexLocation));
             this.UniqueId = Guid.NewGuid().ToString();
         }
+
+        public PlayerTurn(SimpleMove Move, IMove Power)
+        {
+            Moves = new List<IMove>() {};
+            PlayerId = Move.Piece.PlayerId;
+            this.UniqueId = Guid.NewGuid().ToString();
+
+            if (Move != null)
+            {
+                Moves.Add(Move);
+            }
+
+            if (Power != null)
+            {
+                Moves.Add(Power);
+            }
+
+        }
+
 
         [JsonConstructor]
         public PlayerTurn(List<IMove> Moves)

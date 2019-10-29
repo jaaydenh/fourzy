@@ -39,7 +39,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 4219423124813351930, guid: 12291801300ee458c8861b1ad4e9066f,
             type: 3}
     - elementName: ARROW
-      tokenType: 5
+      tokenType: 3
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114136037640816306, guid: 6b7f67346b9e845aca14c64f8e4ca2a3,
             type: 3}
     - elementName: GHOST
-      tokenType: 4
+      tokenType: 11
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 5009243331750805650, guid: a8e6195c9f07043dba35b16ee6e88c8d,
             type: 3}
     - elementName: ICE
-      tokenType: 8
+      tokenType: 14
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -119,7 +119,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114147369826523774, guid: 3499a5e46e3be49a6a1cc9f3657fbff2,
             type: 3}
     - elementName: SAND
-      tokenType: 10
+      tokenType: 18
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114716639052643734, guid: 40d8e7ce660604805853c4e89a856058,
             type: 3}
     - elementName: RANDOM_LEFTRIGHT, disabled
-      tokenType: 44
+      tokenType: 46
       tokenIcon: {fileID: 0}
       enabled: 0
       isSpell: 0
@@ -152,7 +152,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114812229785034532, guid: 9f8d0f5a262fb4e459b04790f5461829,
             type: 3}
     - elementName: FRUIT
-      tokenType: 19
+      tokenType: 8
       tokenIcon: {fileID: 21300000, guid: a16244d70e469904a846d683a3093a9e, type: 3}
       enabled: 1
       isSpell: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114437155169781676, guid: 22feb1168e98f4a4ca43fe3e586e82a2,
             type: 3}
     - elementName: WALL, disabled
-      tokenType: 39
+      tokenType: 41
       tokenIcon: {fileID: 0}
       enabled: 0
       isSpell: 0
@@ -185,7 +185,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114437155169781676, guid: 22feb1168e98f4a4ca43fe3e586e82a2,
             type: 3}
     - elementName: SPIDER, disabled
-      tokenType: 37
+      tokenType: 39
       tokenIcon: {fileID: 0}
       enabled: 0
       isSpell: 0
@@ -204,7 +204,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114215564063069762, guid: d481144ced4994d5096bb43cd2d58f83,
             type: 3}
     - elementName: WEB, disabled
-      tokenType: 36
+      tokenType: 38
       tokenIcon: {fileID: 0}
       enabled: 0
       isSpell: 0
@@ -222,7 +222,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114372868681598966, guid: 245c473108a8543699540a258eb529c4,
             type: 3}
     - elementName: WATER
-      tokenType: 3
+      tokenType: 10
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -238,7 +238,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114947796886653976, guid: ed2219bcab6984100806f0122971febe,
             type: 3}
     - elementName: BOUNCE, disabled
-      tokenType: 7
+      tokenType: 61
       tokenIcon: {fileID: 0}
       enabled: 0
       isSpell: 0
@@ -255,7 +255,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114519684257714022, guid: dba4630cc9752451bb282ba3125aa030,
             type: 3}
     - elementName: CIRCLE_BOMB
-      tokenType: 13
+      tokenType: 19
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -271,7 +271,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114814103086142892, guid: 8b58c87404dc148f09df994cec7657eb,
             type: 3}
     - elementName: FIRE, disabled
-      tokenType: 31
+      tokenType: 33
       tokenIcon: {fileID: 0}
       enabled: 0
       isSpell: 0
@@ -289,7 +289,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114115778919009160, guid: 0d7e3c7375ded49a2bc99d0e0d3584aa,
             type: 3}
     - elementName: PUDDLE, disabled
-      tokenType: 45
+      tokenType: 47
       tokenIcon: {fileID: 0}
       enabled: 0
       isSpell: 0
@@ -306,7 +306,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114115778919009160, guid: 0d7e3c7375ded49a2bc99d0e0d3584aa,
             type: 3}
     - elementName: FOURWAY_ARROW
-      tokenType: 6
+      tokenType: 4
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -322,7 +322,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 2073351336018692900, guid: 450ba2ad1f7b54aca8d8d53e8e616920,
             type: 3}
     - elementName: FRUIT_TREE
-      tokenType: 55
+      tokenType: 9
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -338,7 +338,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114673092515962608, guid: 399ed13c770784d6f9dc78a54823d6ae,
             type: 3}
     - elementName: ICE_BLOCK
-      tokenType: 9
+      tokenType: 15
       tokenIcon: {fileID: 21300000, guid: 71c6951ce3a2ccf46a54f1c12bff57da, type: 3}
       enabled: 1
       isSpell: 0
@@ -354,7 +354,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 5190625460180967082, guid: 108a5b1737461436b8c7f5c00db0fe0c,
             type: 3}
     - elementName: SNOW
-      tokenType: 18
+      tokenType: 16
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -370,7 +370,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 6093681135839665814, guid: 969040b848220814e832a220ff8fd5a7,
             type: 3}
     - elementName: HEX
-      tokenType: 33
+      tokenType: 35
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 1
@@ -386,7 +386,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 8868011646140414053, guid: 45b68f66ca61bd34283d32d6fbedc365,
             type: 3}
     - elementName: MOVING_GHOST
-      tokenType: 49
+      tokenType: 13
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -402,7 +402,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114544858063307236, guid: 5144a063c30d69748b84427af4c01094,
             type: 3}
     - elementName: ROTATING_ARROW
-      tokenType: 27
+      tokenType: 7
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -418,7 +418,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114714016604888040, guid: 76a3a3b33c0ba504c9b8c947c4eacff9,
             type: 3}
     - elementName: LURE
-      tokenType: 20
+      tokenType: 26
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -434,7 +434,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 4019648888608874011, guid: b3748e402408cbc44b26e230a5a0aec4,
             type: 3}
     - elementName: MOVE_BLOCKER
-      tokenType: 61
+      tokenType: 60
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0
@@ -450,7 +450,7 @@ MonoBehaviour:
           tokenPrefab: {fileID: 114115778919009160, guid: 10b23b5ed8762074c9185dc01a8e0f64,
             type: 3}
     - elementName: CROSS_BOMB
-      tokenType: 14
+      tokenType: 20
       tokenIcon: {fileID: 0}
       enabled: 1
       isSpell: 0

@@ -328,7 +328,37 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - name: Board_NinePosts
+    ext: json
+    path: LevelDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_CenterPlace
+    ext: json
+    path: LevelDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: Level_CenterStage
+    ext: json
+    path: LevelDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_CoolSpiral
+    ext: json
+    path: LevelDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_CrossyGoopCross
+    ext: json
+    path: LevelDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_CrossyGoopFaceOff
     ext: json
     path: LevelDrafts
     type: 2
@@ -352,6 +382,12 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - name: Level_OnePost
+    ext: json
+    path: LevelDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: Level_Quads
     ext: json
     path: LevelDrafts
@@ -365,6 +401,18 @@ MonoBehaviour:
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: Level_TwoDonuts
+    ext: json
+    path: LevelDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_TwoGoopPosts
+    ext: json
+    path: LevelDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Level_TwoPosts
     ext: json
     path: LevelDrafts
     type: 2
@@ -387,6 +435,12 @@ MonoBehaviour:
     path: 
     type: 1
     objectTypeName: 
+  - name: Level_CrossyGoop
+    ext: json
+    path: PuzzleDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: Puzzle_ArrowConcept_WinIn1
     ext: json
     path: PuzzleDrafts
@@ -1206,6 +1260,12 @@ MonoBehaviour:
     path: PuzzlePacks/PuzzlePack4
     type: 1
     objectTypeName: 
+  - name: 0_Puzzle_BumpGoop_WinIn2
+    ext: json
+    path: PuzzlePacks/PuzzlePack4/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: 1_Compression
     ext: json
     path: PuzzlePacks/PuzzlePack4/puzzles
@@ -1299,6 +1359,12 @@ MonoBehaviour:
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: 3_arrowPackLevel1
+    ext: json
+    path: PuzzlePacks/PuzzlePack6/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 5_ArrowDown
     ext: json
     path: PuzzlePacks/PuzzlePack6/puzzles
     type: 2
@@ -3310,24 +3376,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: GameSparksSettings, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  - name: Groupbox1Background_Hellmade
-    ext: psd
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: eazyNetchecker-Header_Hellmade
-    ext: png
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Header1NetCheckerBackground_Hellmade
-    ext: psd
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: Physics Box
     ext: prefab
     path: 
@@ -3827,6 +3875,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 594
+  m_FileCount: 602
   m_FolderCount: 50
   UpdateAutomatically: 0

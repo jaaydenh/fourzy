@@ -7,6 +7,7 @@ namespace FourzyGameModel.Model
         public GameState FirstState;
         public GameState LastState;
         public GameState State;
+        public AIProfile AIProfile;
 
         public List<GameAction> GameActions;
         public List<PlayerTurn> playerTurnRecord;
@@ -51,6 +52,7 @@ namespace FourzyGameModel.Model
                 AvailableHints.Add(h);
             }
             this.Status = PuzzleStatus.ACTIVE;
+
             initialize();
         }
 

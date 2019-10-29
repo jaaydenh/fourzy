@@ -539,6 +539,51 @@ namespace FourzyGameModel.Model
             return FoundPieces;
         }
 
+        public List<List<BoardLocation>> GetFoursFromLocation(BoardLocation Location)
+        {
+            List<List<BoardLocation>> Fours = new List<List<BoardLocation>>();
+
+            //horizontal
+            for (int c = -3; c <0 ; c++)
+            {
+                List<BoardLocation> Four = new List<BoardLocation>();
+                for (int i=0;i<4;i++)
+                    Four.Add(new BoardLocation(Location.Row, c+i));
+                Fours.Add(Four);
+            }
+
+            //vertical
+            for (int r = -3; r < 0; r++)
+            {
+                List<BoardLocation> Four = new List<BoardLocation>();
+                for (int i = 0; i < 4; i++)
+                    Four.Add(new BoardLocation(r+i, Location.Column));
+                Fours.Add(Four);
+            }
+
+            //Diag high right
+            for (int c = -3; c < 0; c++)
+            {
+                List<BoardLocation> Four = new List<BoardLocation>();
+                for (int i = 0; i < 4; i++)
+                    Four.Add(new BoardLocation(Location.Row + i, c + i));
+                Fours.Add(Four);
+            }
+
+            //Diag high left
+            for (int c = -3; c < 0; c++)
+            {
+                List<BoardLocation> Four = new List<BoardLocation>();
+                for (int i = 0; i < 4; i++)
+                    Four.Add(new BoardLocation(Location.Row+3-i, c + i));
+                Fours.Add(Four);
+            }
+
+            return Fours;
+        }
+
+
+
 
         public void SwapPieces()
         {

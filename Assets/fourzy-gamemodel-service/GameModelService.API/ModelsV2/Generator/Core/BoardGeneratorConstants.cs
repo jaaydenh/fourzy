@@ -40,7 +40,13 @@ namespace FourzyGameModel.Model
         ARROWS_SwIRLING,
         A_COUPLE_OF_ARROWS,
         MATCHING_ARROWS,
-        RIFT_OF_ARROWS
+        RIFT_OF_ARROWS,
+        DOUBLE_ARROW,
+        TRIPLE_ARROW,
+        ARROW_TURN,
+        ARROW_DOUBLETURN,
+        ARROW_WING,
+        SINGULARITY
     }
 
     public enum IngredientType { TERRAIN, LARGEFEATURE, SMALLFEATURE, NOISE,

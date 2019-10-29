@@ -9,7 +9,8 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public IToken Token { get; set; }
+        public TokenType Token { get; set; }
+        public IToken TokenTemplate { get; set; }
         public string Pattern { get; set; }
         public int MinPixels { get; set; }
         public int MaxPixels { get; set; }
@@ -21,7 +22,8 @@ namespace FourzyGameModel.Model
         {
             this.Name = "Tiles";
             this.Type = IngredientType.LARGEFEATURE;
-            this.Token = TokenTemplate;
+            this.Token = TokenTemplate.Type;
+            this.TokenTemplate = TokenTemplate;
             this.Pattern = Pattern;
             this.MinPixels = Min;
             this.MaxPixels = Max;
@@ -49,7 +51,7 @@ namespace FourzyGameModel.Model
                 {
                     int Index = (r % Height) * Width + (c % Width);
                     if (Pattern[Index] == '1')
-                       Board.AddToken(Token, new BoardLocation(r,c), AddTokenMethod.ALWAYS, true);
+                       Board.AddToken(TokenTemplate, new BoardLocation(r,c), AddTokenMethod.ALWAYS, true);
                 }
 
         }

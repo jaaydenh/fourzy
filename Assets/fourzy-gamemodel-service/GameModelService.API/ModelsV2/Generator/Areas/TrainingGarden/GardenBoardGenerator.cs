@@ -16,6 +16,12 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             this.Recipes = new Dictionary<BoardRecipe, int>();
 
             //Easy
+            this.Recipes.Add(SimpleArrow1(), 2);
+            this.Recipes.Add(SimpleArrow2(), 2);
+            this.Recipes.Add(SimpleArrow3(), 2);
+            this.Recipes.Add(SimpleArrow4(), 2);
+            this.Recipes.Add(SimpleArrow5(), 2);
+            this.Recipes.Add(SimpleArrow6(), 2);
             this.Recipes.Add(Simple1(), 2);
             this.Recipes.Add(Simple2(), 2);
             this.Recipes.Add(Simple3(), 2);
@@ -37,6 +43,9 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             this.Recipes.Add(FruitBlob(), 10);
             this.Recipes.Add(StickyBlob(), 10);
             this.Recipes.Add(StickyBlobWithBlocker(), 10);
+            this.Recipes.Add(OrchardSimple1(), 2);
+            this.Recipes.Add(OrchardSimple2(), 2);
+            this.Recipes.Add(OrchardSimple3(), 2);
 
             //Medium
             this.Recipes.Add(TheZero(), 10);
@@ -83,65 +92,112 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         }
 
         //SIMPLE
+        private BoardRecipe SimpleArrow1()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleArrow1");
+            Garden.AddIngredient(new ArrowWingFeature());
+            Garden.AddIngredient(new ArrowWingFeature());
+            return Garden;
+        }
+
+        private BoardRecipe SimpleArrow2()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleArrow2");
+            Garden.AddIngredient(new DoubleArrowFeature());
+            Garden.AddIngredient(new DoubleArrowFeature());
+            return Garden;
+        }
+
+        private BoardRecipe SimpleArrow3()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleArrow3");
+            Garden.AddIngredient(new ArrowTurnFeature());
+            Garden.AddIngredient(new ArrowTurnFeature());
+            return Garden;
+        }
+
+        private BoardRecipe SimpleArrow4()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleArrow4");
+            Garden.AddIngredient(new ArrowTurnFeature());
+            Garden.AddIngredient(new ArrowTurnFeature());
+            return Garden;
+        }
+
+        private BoardRecipe SimpleArrow5()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleArrow5");
+            Garden.AddIngredient(new ArrowDoubleTurnFeature());
+            return Garden;
+        }
+
+        private BoardRecipe SimpleArrow6()
+        {
+            BoardRecipe Garden = new BoardRecipe("SimpleArrow6");
+            Garden.AddIngredient(new ArrowSingularityFeature());
+            Garden.AddIngredient(new ArrowWingFeature());
+
+            return Garden;
+        }
 
         private BoardRecipe Empty1()
         {
             BoardRecipe Garden = new BoardRecipe("Empty1");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
             return Garden;
         }
         private BoardRecipe Empty2()
         {
             BoardRecipe Garden = new BoardRecipe("Empty2");
-            Garden.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.Four, AddTokenMethod.ONLY_TERRAIN, true));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.Four, AddTokenMethod.ONLY_TERRAIN, true));
             return Garden;
         }
 
         private BoardRecipe Empty3()
         {
             BoardRecipe Garden = new BoardRecipe("Empty3");
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.Four, AddTokenMethod.ONLY_TERRAIN, true));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.Four, AddTokenMethod.ONLY_TERRAIN, true));
             return Garden;
         }
 
         private BoardRecipe Empty4()
         {
             BoardRecipe Garden = new BoardRecipe("Empty4");
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
-            Garden.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.SmallSymmetricBlockEdgePattern, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.SmallSymmetricBlockEdgePattern, AddTokenMethod.ALWAYS, true));
             return Garden;
         }
 
         private BoardRecipe Simple1()
         {
             BoardRecipe Garden = new BoardRecipe("Simple1");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.Four, AddTokenMethod.ALWAYS, true));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.Four, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.Four, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.Four, AddTokenMethod.ALWAYS, true));
             return Garden;
         }
 
         private BoardRecipe Simple2()
         {
             BoardRecipe Garden = new BoardRecipe("Simple2");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterFour, AddTokenMethod.ALWAYS, true));
-            Garden.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterFour, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
             return Garden;
         }
 
         private BoardRecipe Simple3()
         {
             BoardRecipe Garden = new BoardRecipe("Simple3");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.WideLine, AddTokenMethod.ALWAYS, true));
-            Garden.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.WideLine, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
             return Garden;
         }
 
         private BoardRecipe OneLineOfGoop()
         {
             BoardRecipe Garden = new BoardRecipe("OneFullLineOfGoop");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.OneFullLine));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.OneFullLine));
 
             return Garden;
         }
@@ -149,7 +205,7 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe OneLineOfFruit()
         {
             BoardRecipe Garden = new BoardRecipe("OneFullLineOfFruit");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.OneFullLine));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.OneFullLine));
 
             return Garden;
         }
@@ -157,23 +213,23 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe CenterTree()
         {
             BoardRecipe Garden = new BoardRecipe("CenterTree");
-            Garden.Ingredients.Add(new Ingredient(new FruitTreeToken(), PatternType.CenterOne));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.TwoRandom));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.TwoRandom));
+            Garden.AddIngredient(new Ingredient(new FruitTreeToken(), PatternType.CenterOne));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.TwoRandom));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.TwoRandom));
             return Garden;
         }
 
         private BoardRecipe CenterFour1()
         {
             BoardRecipe Garden = new BoardRecipe("CenterLineOfFour1");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterLineOfFour));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterLineOfFour));
             return Garden;
         }
 
         private BoardRecipe CenterFour2()
         {
             BoardRecipe Garden = new BoardRecipe("CenterLineOfFour2");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.TwoCenterLinesOfFour));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.TwoCenterLinesOfFour));
 
             return Garden;
         }
@@ -181,7 +237,7 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe CenterFour3()
         {
             BoardRecipe Garden = new BoardRecipe("CenterLineOfFour3");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.ThreeCenterLinesOfFour));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.ThreeCenterLinesOfFour));
             return Garden;
         }
 
@@ -192,8 +248,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe TwoLinesOfFruit()
         {
             BoardRecipe Garden = new BoardRecipe("TwoLinesOfFruit");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.OneFullLine));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.OneFullLine));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.OneFullLine));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.OneFullLine));
 
             return Garden;
         }
@@ -201,8 +257,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe TheZero()
         {
             BoardRecipe Garden = new BoardRecipe("TheZero");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterRing, AddTokenMethod.ALWAYS, true));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.OneFullLine, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterRing, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.OneFullLine, AddTokenMethod.ALWAYS, true));
             return Garden;
         }
 
@@ -210,8 +266,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe MiniCircles()
         {
             BoardRecipe Garden = new BoardRecipe("MiniCircles");
-            Garden.Ingredients.Add(new TileFeature(new StickyToken(), 4, 4, "1110101111100100", -1, -1));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.AlmostFull, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new TileFeature(new StickyToken(), 4, 4, "1110101111100100", -1, -1));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.AlmostFull, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -220,7 +276,7 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe StickyTiles2()
         {
             BoardRecipe Garden = new BoardRecipe("StickyTiles2");
-            Garden.Ingredients.Add(new TileFeature(new StickyToken(),-1,-1,"",-1,-1));
+            Garden.AddIngredient(new TileFeature(new StickyToken(),-1,-1,"",-1,-1));
 
             return Garden;
         }
@@ -229,7 +285,7 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe StickyTiles()
         {
             BoardRecipe Garden = new BoardRecipe("StickyTiles");
-            Garden.Ingredients.Add(new TileFeature(new StickyToken()));
+            Garden.AddIngredient(new TileFeature(new StickyToken()));
 
             return Garden;
         }
@@ -237,8 +293,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe HalfStickyFruit()
         {
             BoardRecipe Garden = new BoardRecipe("HalfStickyFruit");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Half, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.Half, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Half, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.Half, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -246,8 +302,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe HalfArrows()
         {
             BoardRecipe Garden = new BoardRecipe("HalfArrows");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Half, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.Half, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Half, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.Half, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -255,10 +311,10 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe HalfSpikes()
         {
             BoardRecipe Garden = new BoardRecipe("HalfSpikes");
-            Garden.Ingredients.Add(new ArrowCycleFeature(Rotation.CLOCKWISE, new BoardLocation(3, 3), 2, 2));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.EdgeSpikeDuo, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.EdgeSpikeDuo, AddTokenMethod.EMPTY, true));
-            //Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Half, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new ArrowCycleFeature(Rotation.CLOCKWISE, new BoardLocation(3, 3), 2, 2));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.EdgeSpikeDuo, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.EdgeSpikeDuo, AddTokenMethod.EMPTY, true));
+            //Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Half, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -266,10 +322,10 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe EdgeSpikes()
         {
             BoardRecipe Garden = new BoardRecipe("EdgeSpikes");
-            Garden.Ingredients.Add(new ArrowCycleFeature(Rotation.CLOCKWISE, new BoardLocation(3, 3), 2, 2));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.EdgeSpikeDuo, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.EdgeSpikeDuo, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new ArrowCycleFeature(Rotation.CLOCKWISE, new BoardLocation(3, 3), 2, 2));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.EdgeSpikeDuo, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.EdgeSpikeDuo, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -277,9 +333,9 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe EdgeBumps()
         {
             BoardRecipe Garden = new BoardRecipe("EdgeBumps");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.EdgeBumpDuo, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.EdgeBump, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.EdgeBumpDuo, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.EdgeBump, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -287,8 +343,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe BlockerFour()
         {
             BoardRecipe Garden = new BoardRecipe("BlockerFours");
-            Garden.Ingredients.Add(new Ingredient(new FruitTreeToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitTreeToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -297,9 +353,9 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe ArrowFours()
         {
             BoardRecipe Garden = new BoardRecipe("ArrowFours");
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.Four, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.Four, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -307,9 +363,9 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe ThreeFours()
         {
             BoardRecipe Garden = new BoardRecipe("ThreeFours");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -317,10 +373,10 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe CenterTarget()
         {
             BoardRecipe Garden = new BoardRecipe("CenterTarget");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.CenterFour, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.OuterRing, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.TwoRandom, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new SymmetricArrowsFeature());
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.CenterFour, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.OuterRing, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.TwoRandom, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new SymmetricArrowsFeature());
 
             return Garden;
         }
@@ -329,8 +385,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe SymmArrows()
         {
             BoardRecipe Garden = new BoardRecipe("SymmetricArrows");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterFour, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new SymmetricArrowsFeature(true,2));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterFour, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new SymmetricArrowsFeature(true,2));
 
             return Garden;
         }
@@ -338,9 +394,9 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe CenterFourWithBlocking()
         {
             BoardRecipe Garden = new BoardRecipe("CenterFourWithBlocking");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterFour, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.SmallSymmetricBlockEdgePattern, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterFour, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.SmallSymmetricBlockEdgePattern, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -348,9 +404,9 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe CenterFourWithArrows()
         {
             BoardRecipe Garden = new BoardRecipe("CenterFourWithArrows");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.CenterFour, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new ArrowsBlockSideFeature());
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.CenterFour, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.Four, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new ArrowsBlockSideFeature());
 
             return Garden;
         }
@@ -360,8 +416,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe DiagArrows()
         {
             BoardRecipe Garden = new BoardRecipe("DiagArrows");
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.CenterDiagonal, AddTokenMethod.ALWAYS, true));
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.ACouple, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.CenterDiagonal, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.ACouple, AddTokenMethod.EMPTY, true));
 
             return Garden;
         }
@@ -369,7 +425,7 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe FullLines()
         {
             BoardRecipe Garden = new BoardRecipe("FullLines");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.FullLines));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.FullLines));
 
             return Garden;
         }
@@ -377,7 +433,7 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe FruitBlob()
         {
             BoardRecipe Garden = new BoardRecipe("FruitBlob");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.CenterBlob));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.CenterBlob));
 
             return Garden;
         }
@@ -385,7 +441,7 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe StickyBlob()
         {
             BoardRecipe Garden = new BoardRecipe("StickyBlob");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterBlob));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterBlob));
 
             return Garden;
         }
@@ -393,8 +449,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe StickyBlobWithBlocker()
         {
             BoardRecipe Garden = new BoardRecipe("StickyBlobWithBlocker");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterBlob));
-            Garden.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterBlob));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS));
 
             return Garden;
         }
@@ -402,10 +458,10 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe Diagonals()
         {
             BoardRecipe Garden = new BoardRecipe("Diagonals");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.DiagonalLines));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.DiagonalLines));
 
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.Four, AddTokenMethod.EMPTY));
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.Four, AddTokenMethod.EMPTY));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.Four, AddTokenMethod.EMPTY));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.Four, AddTokenMethod.EMPTY));
 
             return Garden;
         }
@@ -414,8 +470,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe LineOfArrows()
         {
             BoardRecipe Garden = new BoardRecipe("LineOfArrows");
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.OneFullLine, AddTokenMethod.EMPTY));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterSixteen, AddTokenMethod.EMPTY));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.OneFullLine, AddTokenMethod.EMPTY));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterSixteen, AddTokenMethod.EMPTY));
 
             return Garden;
         }
@@ -423,8 +479,8 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe CheckeredDirection()
         {
             BoardRecipe Garden = new BoardRecipe("CheckeredDirection");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.AlmostFullCheckers, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.CenterSixteen, AddTokenMethod.EMPTY));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.AlmostFullCheckers, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.CenterSixteen, AddTokenMethod.EMPTY));
 
             return Garden;
         }
@@ -432,9 +488,9 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe GardenSpot()
         {
             BoardRecipe Garden = new BoardRecipe("GardenSpot");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.CenterFour));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.OuterCorners));
-            Garden.Ingredients.Add(new ArrowCycleFeature(Rotation.NONE,new BoardLocation(2,2),4,4));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.CenterFour));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.OuterCorners));
+            Garden.AddIngredient(new ArrowCycleFeature(Rotation.NONE,new BoardLocation(2,2),4,4));
 
             return Garden;
         }
@@ -443,17 +499,17 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe ArrowCycles()
         {
             BoardRecipe Garden = new BoardRecipe("Cycles");
-            Garden.Ingredients.Add(new ArrowCycleFeature());
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterDiagonal,AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new ArrowCycleFeature());
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterDiagonal,AddTokenMethod.ALWAYS, true));
             return Garden;
         }
 
         private BoardRecipe SimpleArrows()
         {
             BoardRecipe Garden = new BoardRecipe("SimpleArrows");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.CenterFour));
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.UP), PatternType.DottedLine));
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.DOWN), PatternType.DottedLine));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.CenterFour));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.UP), PatternType.DottedLine));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.DOWN), PatternType.DottedLine));
             return Garden;
         }
 
@@ -461,40 +517,41 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe CenterFruit()
         {
             BoardRecipe Garden = new BoardRecipe("CenterFruit");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.CenterSixteen));
-            Garden.Ingredients.Add(new ArrowsBlockSideFeature());
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.CenterSixteen));
+            Garden.AddIngredient(new ArrowsBlockSideFeature());
             return Garden;
         }
 
         private BoardRecipe LinesOfFruit()
         {
             BoardRecipe Garden = new BoardRecipe("LinesOfFruit");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.FullLines));
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.FillGaps));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.FullLines));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.FillGaps));
             return Garden;
         }
 
         private BoardRecipe LargeCheckers()
         {
             BoardRecipe Garden = new BoardRecipe("LargeCheckers");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.LargeCheckers));
-            Garden.Ingredients.Add(new HighwayFeature(LineDirection.NONE, 0, 0, true, 1, true, AddTokenMethod.EMPTY, false));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.LargeCheckers));
+            Garden.AddIngredient(new HighwayFeature(LineDirection.NONE, 0, 0, true, 1, true, AddTokenMethod.EMPTY, false));
             return Garden;
         }
 
         private BoardRecipe WideCross()
         {
             BoardRecipe Garden = new BoardRecipe("WideCross");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.DoubleCross));
-            Garden.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.CentralCorners, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.DoubleCross));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.CentralCorners, AddTokenMethod.ALWAYS, true));
             return Garden;
         }
 
         private BoardRecipe CenterGarden()
         {
             BoardRecipe Garden = new BoardRecipe("Center");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterSixteen));
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.TwoRandom, AddTokenMethod.ONLY_TERRAIN, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterSixteen));
+            Garden.AddIngredient(new SymmetricArrowsFeature(true,1));
+            //Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.TwoRandom, AddTokenMethod.ONLY_TERRAIN, true));
 
             return Garden;
         }
@@ -502,10 +559,10 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe SimpleGarden()
         {
             BoardRecipe Garden = new BoardRecipe("Simple");
-            Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.ACouple));
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.CenterOne));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.ACouple));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.CenterOne));
 
-            //Garden.Ingredients.Add(new HighwayFeature(LineDirection.NONE, 0, 0, false, 1, false, AddTokenMethod.EMPTY));
+            //Garden.AddIngredient(new HighwayFeature(LineDirection.NONE, 0, 0, false, 1, false, AddTokenMethod.EMPTY));
 
             return Garden;
         }
@@ -513,61 +570,81 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe SwirlyGarden()
         {
             BoardRecipe Garden = new BoardRecipe("Swirly");
-            Garden.Ingredients.Add(new ArrowPinWheelFeature());
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.FullDots, AddTokenMethod.EMPTY, false));
+            Garden.AddIngredient(new ArrowPinWheelFeature());
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.FullDots, AddTokenMethod.EMPTY, false));
             
             return Garden;
         }
 
+        private BoardRecipe OrchardSimple1()
+        {
+            BoardRecipe Garden = new BoardRecipe("OrchardSimple1");
+            Garden.AddIngredient(new Ingredient(new FruitTreeToken(), PatternType.CenterOne, AddTokenMethod.EMPTY, false));
+            return Garden;
+        }
+
+        private BoardRecipe OrchardSimple2()
+        {
+            BoardRecipe Garden = new BoardRecipe("OrchardSimple2");
+            Garden.AddIngredient(new Ingredient(new FruitTreeToken(), PatternType.TwoRandom, AddTokenMethod.EMPTY, false));
+            return Garden;
+        }
+
+        private BoardRecipe OrchardSimple3()
+        {
+            BoardRecipe Garden = new BoardRecipe("OrchardSimple3");
+            Garden.AddIngredient(new Ingredient(new FruitTreeToken(), PatternType.DottedLine, AddTokenMethod.EMPTY, false));
+            return Garden;
+        }
 
         private BoardRecipe OrchardRecipe()
-    {
-            BoardRecipe Orchard = new BoardRecipe("Orchard");
-            Orchard.Ingredients.Add(new ASmallGroveFeature());
-            Orchard.Ingredients.Add(new TreesDropFruitFeature(2));
+        {
+            BoardRecipe Garden = new BoardRecipe("Orchard");
+            Garden.AddIngredient(new ASmallGroveFeature());
+            Garden.AddIngredient(new TreesDropFruitFeature(2));
 
-            return Orchard; 
+            return Garden; 
     }
 
 
     private BoardRecipe BellasGardenRecipe1()
     {
-            BoardRecipe BellasGarden = new BoardRecipe("BellasGarden");
-            BellasGarden.Ingredients.Add(new Ingredient(new StickyToken(),PatternType.BlockAllEdges, AddTokenMethod.EMPTY, true));
-            BellasGarden.Ingredients.Add(new Ingredient(new FruitToken(),PatternType.HorizontalLine, AddTokenMethod.EMPTY, true));
-            BellasGarden.Ingredients.Add(new Ingredient(new FruitToken(),PatternType.VerticalLine, AddTokenMethod.EMPTY, true));
-            return BellasGarden;
+            BoardRecipe Garden = new BoardRecipe("BellasGarden");
+            Garden.AddIngredient(new Ingredient(new StickyToken(),PatternType.BlockAllEdges, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(),PatternType.HorizontalLine, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(),PatternType.VerticalLine, AddTokenMethod.EMPTY, true));
+            return Garden;
     }
 
         private BoardRecipe BellasGardenRecipe2()
         {
-            BoardRecipe BellasGarden = new BoardRecipe("BellasGarden2");
-            BellasGarden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.BlockAllEdges, AddTokenMethod.EMPTY, true));
-            BellasGarden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CenterOne, AddTokenMethod.EMPTY, true));
-            BellasGarden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.ACouple, AddTokenMethod.EMPTY, true));
-            return BellasGarden;
+            BoardRecipe Garden = new BoardRecipe("BellasGarden2");
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.BlockAllEdges, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CenterOne, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.ACouple, AddTokenMethod.EMPTY, true));
+            return Garden;
         }
 
         private BoardRecipe BellasGardenRecipe3()
         {
-            BoardRecipe BellasGarden = new BoardRecipe("BellasGarden3");
-            BellasGarden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.BlockAllEdges, AddTokenMethod.EMPTY, true));
-            BellasGarden.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.CenterOne, AddTokenMethod.EMPTY, true));
-            BellasGarden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.ACouple, AddTokenMethod.EMPTY, true));
-            return BellasGarden;
+            BoardRecipe Garden = new BoardRecipe("BellasGarden3");
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.BlockAllEdges, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.CenterOne, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.ACouple, AddTokenMethod.EMPTY, true));
+            return Garden;
         }
 
 
         private BoardRecipe AllysGardenRecipe()
     {
             BoardRecipe Garden = new BoardRecipe("AllysGarden");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.AlmostFullCheckers, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new ArrowsBlockSideFeature());
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.AlmostFullCheckers, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new ArrowsBlockSideFeature());
             //InArrowFeature IAF = new InArrowFeature();
             //IAF.AddMethod = AddTokenMethod.EMPTY;
-            //Garden.Ingredients.Add(IAF);
-            //Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RIGHT), PatternType.FillGaps, AddTokenMethod.EMPTY, true));
-            //Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.LEFT), PatternType.FillGaps, AddTokenMethod.EMPTY, true));
+            //Garden.AddIngredient(IAF);
+            //Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RIGHT), PatternType.FillGaps, AddTokenMethod.EMPTY, true));
+            //Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.LEFT), PatternType.FillGaps, AddTokenMethod.EMPTY, true));
 
             return Garden;
     }
@@ -575,14 +652,14 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
     private BoardRecipe PortiasGardenRecipe()
      {
          BoardRecipe Garden = new BoardRecipe("PortiasGarden");
-         Garden.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.SmallPinWheel));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.SmallPinWheel));
          return Garden;
     }
 
     private BoardRecipe SpinGardenRecipe()
     {
             BoardRecipe Garden = new BoardRecipe("SpinGarden");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.SmallPinWheel));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.SmallPinWheel));
             return Garden;
     }
 
@@ -596,38 +673,38 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
 
         private BoardRecipe DoubleStickyRiver2()
         {
-            BoardRecipe StickyRiver = new BoardRecipe("DoubleFruitRiver");
-            StickyRiver.Ingredients.Add(new ASmallGroveFeature());
-            StickyRiver.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.CrossBoardTwoTurnPattern, AddTokenMethod.EMPTY, true));
-            StickyRiver.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.CrossBoardTwoTurnPattern, AddTokenMethod.EMPTY, true));
-            return StickyRiver;
+            BoardRecipe Garden = new BoardRecipe("DoubleFruitRiver");
+            Garden.AddIngredient(new ASmallGroveFeature());
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.CrossBoardTwoTurnPattern, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.CrossBoardTwoTurnPattern, AddTokenMethod.EMPTY, true));
+            return Garden;
         }
 
         private BoardRecipe StickyRiver2()
         {
-            BoardRecipe StickyRiver = new BoardRecipe("RiverOfFruit");
-            StickyRiver.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.SmallSymmetricBlockEdgePattern));
-            StickyRiver.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
-            return StickyRiver;
+            BoardRecipe Garden = new BoardRecipe("RiverOfFruit");
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.SmallSymmetricBlockEdgePattern));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            return Garden;
         }
 
         private BoardRecipe StickyRiverRecipe()
         {
-            BoardRecipe StickyRiver = new BoardRecipe("RiverOfFruit");
-            StickyRiver.Ingredients.Add(new Ingredient(new FruitToken(), PatternType.FullDots, AddTokenMethod.EMPTY, true));
-            StickyRiver.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
-            return StickyRiver;
+            BoardRecipe Garden = new BoardRecipe("RiverOfFruit");
+            Garden.AddIngredient(new Ingredient(new FruitToken(), PatternType.FullDots, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.CrossBoardFourTurnPattern, AddTokenMethod.ALWAYS, true));
+            return Garden;
         }
                
         private BoardRecipe Lucy()
         {
             BoardRecipe Garden = new BoardRecipe("Lucy");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.FullDots, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.FullDots, AddTokenMethod.EMPTY, true));
 
             CrossArrowFeature f = new CrossArrowFeature();
             f.AddMethod= AddTokenMethod.EMPTY;
             f.ReplaceTokens = true;
-            Garden.Ingredients.Add(f);            
+            Garden.AddIngredient(f);            
 
             return Garden;
         }
@@ -635,9 +712,9 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         private BoardRecipe Lucy2()
         {
             BoardRecipe Garden = new BoardRecipe("Lucy2");
-            Garden.Ingredients.Add(new Ingredient(new StickyToken(), PatternType.FullDots, AddTokenMethod.EMPTY, true));
-            Garden.Ingredients.Add(new Ingredient(new BlockerToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
-            Garden.Ingredients.Add(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new StickyToken(), PatternType.FullDots, AddTokenMethod.EMPTY, true));
+            Garden.AddIngredient(new Ingredient(new BlockerToken(), PatternType.CenterOne, AddTokenMethod.ALWAYS, true));
+            Garden.AddIngredient(new Ingredient(new ArrowToken(Direction.RANDOM), PatternType.TwoRandom, AddTokenMethod.ALWAYS, true));
             
             return Garden;
         }

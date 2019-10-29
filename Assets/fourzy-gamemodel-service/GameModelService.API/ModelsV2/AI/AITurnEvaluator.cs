@@ -49,8 +49,8 @@ namespace FourzyGameModel.Model
             List<string> UniqueMoves = new List<string>();
             foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
             {
-                if (UniqueMoves.Contains(move.Value.CompressedString)) continue;
-                UniqueMoves.Add(move.Value.CompressedString);
+                if (UniqueMoves.Contains(move.Value.StateString)) continue;
+                UniqueMoves.Add(move.Value.StateString);
                 if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
                 this.AvailableSimpleMoves.Add(move.Key);
                 foreach (BoardLocation l in move.Value.ActiveSpaces)
@@ -90,8 +90,8 @@ namespace FourzyGameModel.Model
             List<string> UniqueMoves = new List<string>();
             foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
             {
-                if (UniqueMoves.Contains(move.Value.CompressedString)) continue;
-                UniqueMoves.Add(move.Value.CompressedString);
+                if (UniqueMoves.Contains(move.Value.StateString)) continue;
+                UniqueMoves.Add(move.Value.StateString);
                 if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
                 this.AvailableSimpleMoves.Add(move.Key);
                 foreach (BoardLocation l in move.Value.ActiveSpaces)
@@ -117,6 +117,8 @@ namespace FourzyGameModel.Model
             this.Evaluator = new TurnEvaluator(this.EvalState);
             this.EvalState = this.Evaluator.EvaluateTurn(Turn);
             this.EvalState = Evaluator.EvaluateStartOfTurn();
+            this.Evaluator = new TurnEvaluator(this.EvalState);
+
 
             this.AliveSpaces = new HashSet<BoardLocation>();
             this.WinningTurns = new List<PlayerTurn>();
@@ -127,8 +129,8 @@ namespace FourzyGameModel.Model
             List<string> UniqueMoves = new List<string>();
             foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
             {
-                if (UniqueMoves.Contains(move.Value.CompressedString)) continue;
-                UniqueMoves.Add(move.Value.CompressedString);
+                if (UniqueMoves.Contains(move.Value.StateString)) continue;
+                UniqueMoves.Add(move.Value.StateString);
                 if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
                 this.AvailableSimpleMoves.Add(move.Key);
                 foreach (BoardLocation l in move.Value.ActiveSpaces)
@@ -198,7 +200,7 @@ namespace FourzyGameModel.Model
                     //Moves.Clear();
                     //Moves.Add(m);
                     UniqueMoves.Clear();
-                    UniqueMoves.Add(m, OPP.EvalState.CompressedString);
+                    UniqueMoves.Add(m, OPP.EvalState.StateString);
                     break;
                 }
 
@@ -232,7 +234,7 @@ namespace FourzyGameModel.Model
 
                     bool Prune = false;
                     //Moves.Add(m);
-                    if (!Prune && !UniqueMoves.ContainsValue(OPP.EvalState.CompressedString)) UniqueMoves.Add(m, OPP.EvalState.CompressedString);
+                    if (!Prune && !UniqueMoves.ContainsValue(OPP.EvalState.StateString)) UniqueMoves.Add(m, OPP.EvalState.StateString);
                 }
             }
 
@@ -754,6 +756,8 @@ namespace FourzyGameModel.Model
 
         public Dictionary<SimpleMove, int> ScoreMoves(List<SimpleMove> Moves, int TopMoves, AIHeuristicWeight AIWeight, bool Sort = true)
         {
+            if (AIWeight == null) AIWeight = new AIHeuristicWeight();
+
             Dictionary<SimpleMove, int> ScoredMoves = new Dictionary<SimpleMove, int>();
             TurnEvaluator ME = new TurnEvaluator(EvalState);
             foreach (SimpleMove m in Moves)
@@ -812,6 +816,7 @@ namespace FourzyGameModel.Model
         public int Score(int PlayerId, AIHeuristicWeight AIWeight)
         {
             int Score = 0;
+            if (AIWeight == null) AIWeight = new AIHeuristicWeight();
 
             //TurnEvaluator TE = new TurnEvaluator(EvalState);
             //List<BoardLocation> Dead = TE.FindDeadLocations();
@@ -2104,7 +2109,7 @@ namespace FourzyGameModel.Model
             StateBucket[0] = new List<SimpleMoveSequence>();
             StateBucket[0].Add(new SimpleMoveSequence(EvalState));
             HashBucket[0] = new List<string>();
-            HashBucket[0].Add(EvalState.CompressedString);
+            HashBucket[0].Add(EvalState.StateString);
 
             TurnEvaluator TE = null;
             for (int d = 1; d <= SearchDepth; d++)
@@ -2117,9 +2122,9 @@ namespace FourzyGameModel.Model
                 {
 
                     //don't evaluate completed states.
-                    if (S.State.WinnerId >= 0) if (!HashBucket[d].Contains(S.State.CompressedString))
+                    if (S.State.WinnerId >= 0) if (!HashBucket[d].Contains(S.State.StateString))
                         {
-                            HashBucket[d].Add(S.State.CompressedString);
+                            HashBucket[d].Add(S.State.StateString);
                             StateBucket[d].Add(S);
                         }
 
@@ -2128,7 +2133,7 @@ namespace FourzyGameModel.Model
                     {
                         GameState GSTest = TE.EvaluateTurn(m);
                         evaluated_states++;
-                        string id = GSTest.CompressedString;
+                        string id = GSTest.StateString;
                         if (!HashBucket[d].Contains(id))
                         {
                             HashBucket[d].Add(id);
@@ -2154,7 +2159,7 @@ namespace FourzyGameModel.Model
             StateBucket[0] = new List<SimpleMoveSequence>();
             StateBucket[0].Add(new SimpleMoveSequence(EvalState));
             HashBucket[0] = new List<string>();
-            HashBucket[0].Add(EvalState.CompressedString);
+            HashBucket[0].Add(EvalState.StateString);
 
             for (int d = 1; d <= SearchDepth; d++)
             {
@@ -2164,7 +2169,7 @@ namespace FourzyGameModel.Model
                 int evaluated_states = 0;
                 foreach (SimpleMoveSequence S in StateBucket[d - 1])
                 {
-                    string id = S.State.CompressedString;
+                    string id = S.State.StateString;
                     //don't evaluate completed states.
                     if (S.State.WinnerId >= 0)
                         if (!HashBucket[d].Contains(id))
@@ -2192,7 +2197,7 @@ namespace FourzyGameModel.Model
                     {
                         GameState GSTest = TE.EvaluateTurn(m);
                         evaluated_states++;
-                        id = GSTest.CompressedString;
+                        id = GSTest.StateString;
                         if (!HashBucket[d].Contains(id))
                         {
                             HashBucket[d].Add(id);

@@ -14,14 +14,15 @@ namespace FourzyGameModel.Model
         string BlockPattern { get; set; }
 
         public string Name { get { return "Symmetric Arrows"; } }
-        
         public IngredientType Type { get { return IngredientType.SYMMETRICARROWS; } }
+        public TokenType Token { get; }
 
         public SymmetricArrowsFeature(bool inward = true, int BlockedPerSide = 1, string BlockPattern = "")
         {
             this.Inward = inward;
             this.BlockedPerSide = BlockedPerSide;
             this.BlockPattern = BlockPattern;
+            this.Token = TokenType.ARROW;
         }
 
         public void Build(GameBoard Board)

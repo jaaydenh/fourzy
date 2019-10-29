@@ -19,7 +19,7 @@ namespace FourzyGameModel.Model
         {
             byte[] buffer = Encoding.UTF8.GetBytes(text);
             var memoryStream = new MemoryStream();
-            using (var gZipStream = new GZipStream(memoryStream,CompressionLevel.Optimal,true))
+            using (var gZipStream = new GZipStream(memoryStream,CompressionLevel.Fastest,true))
             {
                 gZipStream.Write(buffer, 0, buffer.Length);
             }
