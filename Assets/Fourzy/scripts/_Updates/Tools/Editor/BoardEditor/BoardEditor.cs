@@ -1053,6 +1053,16 @@ namespace Fourzy._Updates.Tools
                     if (R.NumberOfVictoryPaths > 0) currentPuzzleData.Solution = new List<PlayerTurn>(R.Solution);
                 }
 
+                if (GUILayout.Button("Test", GUILayout.Width(90f)))
+                {
+                    GameState GS = new GameState(currentBoard, 1);
+                    GS.Players.Add(1, new Player(1, "Player 1"));
+                    GS.Players.Add(2, new Player(2, "Player 2"));
+
+                    bool Good = PuzzleTestTools.TestSolution(GS, currentPuzzleData.Solution);
+                    EditorUtility.DisplayDialog("Test Result", "Results of Test=" + Good.ToString(), "Ok");
+                }
+
             }
             GUILayout.EndVertical();
         }
