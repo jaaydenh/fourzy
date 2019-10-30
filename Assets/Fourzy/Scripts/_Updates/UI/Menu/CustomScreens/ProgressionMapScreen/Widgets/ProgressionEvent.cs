@@ -243,10 +243,7 @@ namespace Fourzy._Updates.UI.Widgets
                     Rewarded(true);
                     PlayerPrefsWrapper.SetRewardRewarded(id, true);
 
-                    if (EventType == ProgressionEventType.CURRENCY)
-                        new RewardsManager.Reward[] { reward }.AssignRewards();
-
-                    map.CheckMapComplete();
+                    if (EventType == ProgressionEventType.CURRENCY) new RewardsManager.Reward[] { reward }.AssignRewards();
 
                     break;
             }
@@ -320,12 +317,7 @@ namespace Fourzy._Updates.UI.Widgets
                             break;
 
                         case Constants.GAME_MODE_GAUNTLET_GAME:
-                            menuScreen.menuController.GetScreen<PromptScreen>().Prompt("Gauntlet Mode",
-                                "In the gauntlet, you will play a series of gradually more difficult opponents. Default them all to win!",
-                                "PLAY",
-                                null,
-                                () => menuScreen.menuController.GetScreen<VSGamePrompt>().Prompt(5),
-                                null);
+                            menuScreen.menuController.GetScreen<GauntletIntroScreen>()._Prompt();
 
                             break;
                     }

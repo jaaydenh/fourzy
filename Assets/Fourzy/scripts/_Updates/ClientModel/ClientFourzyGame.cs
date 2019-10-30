@@ -142,6 +142,7 @@ namespace Fourzy._Updates.ClientModel
                     switch (_Type)
                     {
                         case Fourzy.GameType.PASSANDPLAY:
+                        case Fourzy.GameType.PRESENTATION:
                             return GameMode.LOCAL_VERSUS;
 
                         case Fourzy.GameType.AI:

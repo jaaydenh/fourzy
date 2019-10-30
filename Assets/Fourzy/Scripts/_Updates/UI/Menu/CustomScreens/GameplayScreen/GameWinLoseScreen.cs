@@ -36,10 +36,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             this.game = game;
 
-            switch (game._Type)
+            switch (game._Mode)
             {
-                case GameType.PASSANDPLAY:
-                case GameType.PRESENTATION:
+                case GameMode.GAUNTLET:
+                    if (game.draw)
+                    {
+                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
+                    }
+                    else
+                    {
+                        if (game.IsWinner() && (game.puzzleData.gauntletStatus.FourzyCount > 0 || game.puzzleData.pack.complete))
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                        else
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
+                    }
+
+                    break;
+
+                case GameMode.LOCAL_VERSUS:
                     if (game.draw)
                     {
                         stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
@@ -83,7 +97,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 SetButtonRowState(true);
             
             //gamepieces
-            //clear old ones
             foreach (GamePieceView gamepiece in gamePieces) Destroy(gamepiece.gameObject);
             gamePieces.Clear();
 
@@ -143,35 +156,43 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OnBGTap()
         {
-            //if gauntlet, exit
-            if (game.puzzleData && game.puzzleData.pack && game.puzzleData.pack.gauntletStatus != null)
+            switch (game._Mode)
             {
-                if (game.puzzleData.pack.gauntletStatus.FourzyCount == 0)
-                    GamePlayManager.instance.gameplayScreen.OnBack();
-                else
-                {
+                case GameMode.GAUNTLET:
                     if (game.IsWinner())
                     {
                         if (game.puzzleData.pack.complete)
-                            GamePlayManager.instance.gameplayScreen.OnBack();
+                            menuController.GetScreen<GauntletWinPrompt>()._Prompt(game);
                         else
-                            menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                        {
+                            if (game.puzzleData.gauntletStatus.FourzyCount == 0)
+                                menuController.GetScreen<GauntletLostPrompt>()._Prompt(game);
+                            else
+                                menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                        }
                     }
                     else
-                        Rematch();
-                }
-            }
-            else
-            {
-                if (rematchButton.gameObject.activeInHierarchy) Rematch();
-                else if (nextGameButton.gameObject.activeInHierarchy) NextGame();
-                else
-                {
-                    if (game.puzzleData && !game.puzzleData.lastInPack)
-                        menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                    {
+                        if (game.puzzleData.gauntletStatus.FourzyCount == 0)
+                            menuController.GetScreen<GauntletLostPrompt>()._Prompt(game);
+                        else
+                            Rematch();
+                    }
+
+                    break;
+
+                default:
+                    if (rematchButton.gameObject.activeInHierarchy) Rematch();
+                    else if (nextGameButton.gameObject.activeInHierarchy) NextGame();
                     else
-                        GamePlayManager.instance.gameplayScreen.OnBack();
-                }
+                    {
+                        if (game.puzzleData && !game.puzzleData.lastInPack)
+                            menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                        else
+                            GamePlayManager.instance.gameplayScreen.OnBack();
+                    }
+
+                    break;
             }
         }
 

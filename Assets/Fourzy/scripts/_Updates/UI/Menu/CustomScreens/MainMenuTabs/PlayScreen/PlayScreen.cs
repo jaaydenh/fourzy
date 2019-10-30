@@ -64,7 +64,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 return;
             }
 
-            menuController.GetScreen<VSGamePrompt>().Prompt(5);
+            menuController.GetScreen<GauntletIntroScreen>()._Prompt();
         }
 
         public void StartTurnGame() => matchmakingScreen.OpenTurnbased();

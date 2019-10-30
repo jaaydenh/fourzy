@@ -533,6 +533,15 @@ MonoBehaviour:
     - _name: PuzzleSelectionScreen
       prefab: {fileID: 748917514867771918, guid: 6c3a261672c02cf42a05a18d13c5889b,
         type: 3}
+    - _name: GauntletIntroPromptScreen
+      prefab: {fileID: 1553800354187221467, guid: e9de294b3fa38ce4d89cb145468e6dad,
+        type: 3}
+    - _name: GauntletLostPromptScreen
+      prefab: {fileID: 3216915219740018543, guid: c7ce8dad1b45f794e93e4a29c89c6ae5,
+        type: 3}
+    - _name: GauntletWinPromptScreen
+      prefab: {fileID: 7658673681696879594, guid: 4045e177651be114cb23d61def7fa00b,
+        type: 3}
 --- !u!1 &1527524902537866
 GameObject:
   m_ObjectHideFlags: 0

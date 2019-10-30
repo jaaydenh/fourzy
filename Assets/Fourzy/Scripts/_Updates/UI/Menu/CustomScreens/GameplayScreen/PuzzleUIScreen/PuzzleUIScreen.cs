@@ -1,13 +1,11 @@
 ﻿//@vadym udod
 
-using System;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using TMPro;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -140,7 +138,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        public void TryUseHint() => GamePlayManager.instance.PlayHint();
+        public void TryUseHint()
+        {
+            GamePlayManager.instance.PlayHint();
+
+            if (GamePlayManager.instance.IsRoutineActive("hintRoutine")) SetHintButtonState(false);
+        }
 
         private void SetHintButtonState(bool state) => hintButton.SetState(state && !game.isOver && game.isMyTurn);
 

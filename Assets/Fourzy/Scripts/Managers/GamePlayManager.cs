@@ -305,8 +305,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type) && !GameManager.Instance.excludeInstructionsFor.Contains(token.Type))
                         tokens.Add(GameContentManager.Instance.GetTokenData(token.Type));
 
-            if (tokens.Count > 0)
-                yield return new WaitForSeconds(.5f);
+            //if (tokens.Count > 0)
+            //    yield return new WaitForSeconds(.5f);
 
             foreach (TokensDataHolder.TokenData token in tokens)
             {
@@ -317,7 +317,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, true);
 
-                yield return new WaitForSeconds(.5f);
+                //yield return new WaitForSeconds(.5f);
             }
         }
 
