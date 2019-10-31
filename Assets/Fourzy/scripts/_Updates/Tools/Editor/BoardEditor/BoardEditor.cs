@@ -1229,6 +1229,8 @@ namespace Fourzy._Updates.Tools
             {
                 if (currentPuzzleData == null) return;
 
+                if (currentPuzzleData.GameBoard == null) currentPuzzleData.GameBoard = currentBoard;
+
                 if (string.IsNullOrEmpty(selectedPath))
                     path = EditorUtility.SaveFilePanelInProject("Save puzzle", currentBoard.BoardName, "json", "Assets/Fourzy/Resources/PuzzleDrafts");
                 else
