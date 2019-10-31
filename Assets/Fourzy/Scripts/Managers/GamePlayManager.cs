@@ -367,7 +367,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
         }
 
-        public void Rematch()
+        public void Rematch(bool resetMembers = false)
         {
             if (game == null) return;
 
@@ -384,7 +384,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 case GameType.AI:
                 case GameType.PUZZLE:
-                    game.Reset();
+                    game._Reset(resetMembers);
 
                     LoadGame(game);
 
@@ -399,7 +399,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                             UserManager.Instance.meAsPlayer.PlayerId)
                         { _Type = GameType.PASSANDPLAY };
                     else
-                        game.Reset();
+                        game._Reset(resetMembers);
 
                     LoadGame(game);
 
@@ -874,7 +874,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (resetBoard)
             {
-                game.Reset();
+                game._Reset();
 
                 for (int turnIndex = 0; turnIndex < lastHintIndex; turnIndex++)
                 {

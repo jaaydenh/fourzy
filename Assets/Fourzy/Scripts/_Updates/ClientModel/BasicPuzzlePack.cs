@@ -67,7 +67,7 @@ namespace Fourzy._Updates.ClientModel
             Initialize();
 
             this.gauntletLevels = gauntletLevels;
-            gauntletStatus = new GauntletStatus() { FourzyCount = Constants.GAUNTLET_DEFAULT_MOVES_COUNT, };
+            gauntletStatus = new GauntletStatus() /*{ FourzyCount = Constants.GAUNTLET_DEFAULT_MOVES_COUNT, }*/;
 
             name = "Beat The Bot";
             packType = PackType.AI_PACK;
@@ -138,28 +138,9 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
-        public IClientFourzy NextUnsolved()
+        public IClientFourzy Next(IClientFourzy current)
         {
-            ClientPuzzleData data = nextUnsolvedData;
-
-            if (data)
-            {
-                data.Initialize();
-
-                switch (data.pack.packType)
-                {
-                    case PackType.PUZZLE_PACK: return new ClientFourzyPuzzle(data);
-
-                    default: return ClientFourzyGame.FromPuzzleData(data);
-                }
-            }
-
-            return null;
-        }
-
-        public IClientFourzy Next(ClientPuzzleData current)
-        {
-            ClientPuzzleData data = enabledPuzzlesData.Next(current);
+            ClientPuzzleData data = enabledPuzzlesData.Next(current.puzzleData);
 
             data.Initialize();
 
@@ -167,11 +148,9 @@ namespace Fourzy._Updates.ClientModel
             {
                 case PackType.PUZZLE_PACK: return new ClientFourzyPuzzle(data);
 
-                default: return ClientFourzyGame.FromPuzzleData(data);
+                default: return ClientFourzyGame.FromPuzzleData(data, current);
             }
         }
-
-        public IClientFourzy Next(IClientFourzy current) => Next(current.puzzleData);
 
         public void StartNextUnsolvedPuzzle(IClientFourzy current = null)
         {
@@ -191,7 +170,7 @@ namespace Fourzy._Updates.ClientModel
                     {
                         case PackType.PUZZLE_PACK: game = new ClientFourzyPuzzle(data); break;
 
-                        default: game = ClientFourzyGame.FromPuzzleData(data); break;
+                        default: game = ClientFourzyGame.FromPuzzleData(data, current); break;
                     }
                 }
             }
@@ -232,10 +211,10 @@ namespace Fourzy._Updates.ClientModel
                 return puzzlesData[levelIndex].herdID;
         }
 
-        public void RemoveHerdMember()
-        {
-            gauntletStatus.FourzyCount = Mathf.Clamp(gauntletStatus.FourzyCount - 1, 0, int.MaxValue);
-        }
+        //public void RemoveHerdMember()
+        //{
+        //    gauntletStatus.FourzyCount = Mathf.Clamp(gauntletStatus.FourzyCount - 1, 0, int.MaxValue);
+        //}
 
         public static implicit operator bool(BasicPuzzlePack pack) => pack != null;
     }

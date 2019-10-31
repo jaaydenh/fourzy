@@ -13,7 +13,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Prompt(
                 LocalizationManager.Value("complete"),
-                string.Format(LocalizationManager.Value("gauntlet_complete"), game.puzzleData.gauntletStatus.FourzyCount),
+                string.Format(LocalizationManager.Value("gauntlet_complete"), game.myMembers.Count),
                 "OK",
                 null,
                 () => GamePlayManager.instance.BackButtonOnClick(),

@@ -10,13 +10,13 @@ namespace FourzyGameModel.Model
 
         //public FourzyGame(Player Player1, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GameOptions Options = null)
 
-        public static GameState Create(Player Human, int GauntletLevel, GauntletStatus Status = null, Area CurrentArea = Area.NONE, int DifficultModfier = -1, GameOptions Options = null, string SeedString = "")
+        public static GameState Create(Player Human, int GauntletLevel, int Members = 999, Area CurrentArea = Area.NONE, int DifficultModfier = -1, GameOptions Options = null, string SeedString = "")
         {
             if (SeedString == "") SeedString = Guid.NewGuid().ToString();
             RandomTools Random = new RandomTools(SeedString);
 
             if (Options == null) Options = new GameOptions();
-            if (Status == null) Status = new GauntletStatus();
+            //if (Status == null) Status = new GauntletStatus();
 
             GameState State = null;
 
@@ -44,7 +44,7 @@ namespace FourzyGameModel.Model
                     break;
             }
             State.Options.MovesReduceHerd = true;
-            State.InitializeHerd(1, Status.FourzyCount);
+            State.InitializeHerd(1, /*Status.FourzyCount*/Members);
             //Do this differently somehow.  Maybe set in Gauntlet?
             State.InitializeHerd(2, 999);
 

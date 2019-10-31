@@ -171,6 +171,8 @@ namespace Fourzy._Updates.ClientModel
 
         public bool isFourzyPuzzle => false;
 
+        public List<Creature> myMembers => State.Herds[me.PlayerId].Members;
+
         public int BossMoves { get; set; }
 
         public GamePiecePrefabData playerOnePrefabData { get; set; }
@@ -225,13 +227,31 @@ namespace Fourzy._Updates.ClientModel
 
         public int Columns => State.Board.Columns;
 
-        public bool isOver => State.WinningLocations != null || (puzzleData && puzzleData.pack && puzzleData.pack.gauntletStatus != null && puzzleData.pack.gauntletStatus.FourzyCount == 0);
+        public bool isOver => State.WinningLocations != null || (puzzleData && puzzleData.pack && puzzleData.pack.gauntletStatus != null && myMembers.Count == 0);
 
         public bool draw { get; set; }
 
         public bool hideOpponent { get; set; } = false;
 
         public Piece activePlayerPiece => new Piece(State.ActivePlayerId, string.IsNullOrEmpty(activePlayer.HerdId) ? 1 : int.Parse(activePlayer.HerdId));
+
+        public Piece playerPiece
+        {
+            get
+            {
+                Player _player = me;
+                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ? 1 : int.Parse(_player.HerdId));
+            }
+        }
+
+        public Piece opponentPiece
+        {
+            get
+            {
+                Player _player = opponent;
+                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ? 1 : int.Parse(_player.HerdId));
+            }
+        }
 
         public List<BoardSpace> boardContent
         {
@@ -376,8 +396,8 @@ namespace Fourzy._Updates.ClientModel
             _Type = Fourzy.GameType.AI;
         }
 
-        public ClientFourzyGame(Player Player1, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GauntletStatus Status = null, GameOptions Options = null)
-            : base(Player1, GauntletLevel, CurrentArea, DifficultModifier, Status, Options)
+        public ClientFourzyGame(Player Player1, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, int membersCount = 999/*GauntletStatus Status = null*/, GameOptions Options = null)
+            : base(Player1, GauntletLevel, CurrentArea, DifficultModifier, /*Status*/membersCount, Options)
         {
             Initialize();
 
@@ -530,6 +550,11 @@ namespace Fourzy._Updates.ClientModel
             draw = true;
         }
 
+        public void RemoveMember()
+        {
+            myMembers.RemoveAt(myMembers.Count - 1);
+        }
+
         /// <summary>
         /// Only work with passplay boards for now
         /// </summary>
@@ -565,16 +590,21 @@ namespace Fourzy._Updates.ClientModel
 
         public PlayerTurnResult StartTurn() => StartTurn(_State);
 
-        public GameState Reset()
+        public GameState _Reset(bool resetMembers = false)
         {
+            int myID = me.PlayerId;
+            Herd current = null;
+
+            if (!resetMembers) current = new Herd(State.Herds[myID]);
             State = new GameState(_FirstState);
+            if (!resetMembers) State.Herds[myID] = current;
 
             Initialize(false);
 
             return State;
         }
 
-        public static ClientFourzyGame FromPuzzleData(ClientPuzzleData puzzleData)
+        public static ClientFourzyGame FromPuzzleData(ClientPuzzleData puzzleData, IClientFourzy current)
         {
             ClientFourzyGame game;
             Player me = UserManager.Instance.meAsPlayer;
@@ -584,7 +614,7 @@ namespace Fourzy._Updates.ClientModel
             {
                 case PackType.AI_PACK:
                     if (puzzleData.gauntletStatus != null)
-                        game = new ClientFourzyGame(me, puzzleData.puzzleIndex, Status: puzzleData.pack.gauntletStatus);
+                        game = new ClientFourzyGame(me, puzzleData.puzzleIndex, /*Status: puzzleData.pack.gauntletStatus*/membersCount: (current != null ? current.myMembers.Count : Constants.GAUNTLET_DEFAULT_MOVES_COUNT));
                     else
                         game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, me);
 

@@ -14,6 +14,8 @@ namespace FourzyGameModel.Model
         public GameType GameType;
 
         #region "Constructors"
+
+        //Primarily Used for Testing.  Should Phase this Out.
         public FourzyGame()
         {
             this.State = new GameState(8, 8);
@@ -37,6 +39,7 @@ namespace FourzyGameModel.Model
             this.GameType = GameType.STANDARD;
         }
 
+        //For 2 Player Games        
         public FourzyGame(Player Player1, Player Player2, GameOptions Options = null)
         {
             if (Options == null) Options = new GameOptions();
@@ -50,6 +53,7 @@ namespace FourzyGameModel.Model
             this.GameType = GameType.STANDARD;
         }
 
+        // Select a Area and create a random board.
         // Active Player Id is set to -1 as the first player is not known when the game is created
         public FourzyGame(Area Area, Player Player1, Player Player2, int FirstPlayerId = -1, GameOptions Options = null)
         {
@@ -113,6 +117,7 @@ namespace FourzyGameModel.Model
             this.GameType = GameType.STANDARD;
         }
 
+        // Pass in a Board
         // Active Player Id is set to -1 as the first player is not known when the game is created
         public FourzyGame(GameBoard Board, Player Player1, Player Player2, int FirstPlayerId = -1, GameOptions Options = null)
         {
@@ -125,7 +130,8 @@ namespace FourzyGameModel.Model
             this.GameType = GameType.STANDARD;
         }
 
-        public FourzyGame(GameBoardDefinition definition, Player Player1, Player Player2, int FirstPlayerId = 1)
+        //Pass in a Board Definition.
+        public FourzyGame(GameBoardDefinition definition, Player Player1, Player Player2, int FirstPlayerId = 1, GameOptions Options = null)
         {
             this.State = new GameState(definition);
             this.State.ActivePlayerId = FirstPlayerId;
@@ -133,8 +139,10 @@ namespace FourzyGameModel.Model
             this.State.Players.Add(1, Player1);
             this.State.Players.Add(2, Player2);
             this.GameType = GameType.STANDARD;
+            if (Options != null) this.State.Options = Options;
         }
 
+        //Pass in a Json String.
         public FourzyGame(string boardJson)
         {
             GameBoardDefinition gbd = JsonConvert.DeserializeObject<GameBoardDefinition>(boardJson);
@@ -145,10 +153,12 @@ namespace FourzyGameModel.Model
             this.GameType = GameType.STANDARD;
         }
         
-        //Create a boss match with a random area board.
-        public FourzyGame(Area Area, BossType Boss, Player Player)
+        //BOSSES
+
+        //Create a boss match in an selected Area.
+        public FourzyGame(Area Area, BossType Boss, Player Player, GameOptions Options = null)
         {
-            this.State = BossGameFactory.CreateBossGame(Area, Boss, Player);
+            this.State = BossGameFactory.CreateBossGame(Area, Boss, Player, Options);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
         }
@@ -169,34 +179,34 @@ namespace FourzyGameModel.Model
         }
 
         //Create a boss match with a specific board.
-        public FourzyGame(GameBoardDefinition definition, BossType Boss, Player Player)
+        public FourzyGame(GameBoardDefinition definition, BossType Boss, Player Player, GameOptions Options = null)
         {
-            this.State = BossGameFactory.CreateBossGame(definition, Boss, Player);
+            this.State = BossGameFactory.CreateBossGame(definition, Boss, Player, Options);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
         }
 
-        public FourzyGame(GameBoardDefinition definition, AIProfile Profile, Player Player1, int FirstPlayerId = 1)
+        //AI GAMES
+
+        public FourzyGame(GameBoardDefinition definition, AIProfile Profile, Player Player1, int FirstPlayerId = 1, Player AI = null)
         {
             this.State = new GameState(definition);
             this.State.ActivePlayerId = FirstPlayerId;
             this.playerTurnRecord = new List<PlayerTurn>();
             this.State.Players.Add(1, Player1);
-            Player AI = new Player(2, Profile.ToString(), Profile);
+            if (AI == null)
+                AI = new Player(2, Profile.ToString(), Profile);
             this.State.Players.Add(2, AI);
             this.GameType = GameType.STANDARD;
         }
 
-        public FourzyGame(Player Human, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, GauntletStatus Status = null, GameOptions Options = null)
-        {
-            //this.State = BossGameFactory.CreateBossGame(Area.TRAINING_GARDEN, BossType.EntryWay, Human);
-            //this.playerTurnRecord = new List<PlayerTurn>();
-            //this.GameType = GameType.AI;
-            //return;
+        //THE GAUNTLET
 
+        public FourzyGame(Player Human, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, int membersCount = 999, GameOptions Options = null)
+        {
             string SeedString = Guid.NewGuid().ToString();
 
-            this.State = GauntletFactory.Create(Human, GauntletLevel, Status, CurrentArea, DifficultModifier, Options, SeedString);
+            this.State = GauntletFactory.Create(Human, GauntletLevel, /*Status*/membersCount, CurrentArea, DifficultModifier, Options, SeedString);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
         }

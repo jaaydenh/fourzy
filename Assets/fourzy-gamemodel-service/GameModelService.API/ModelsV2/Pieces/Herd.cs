@@ -37,5 +37,6 @@ namespace FourzyGameModel.Model
                 }
             }
         }
+        public Herd(Herd original) : this(original.HerdId, original.Members.Count) { }
     }
 }

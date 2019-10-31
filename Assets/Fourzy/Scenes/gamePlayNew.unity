@@ -2071,7 +2071,18 @@ MonoBehaviour:
         target: {fileID: 1899509752}
         memberName: Rematch
         memberType: 8
-        arguments: []
+        arguments:
+        - typeName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+          supportedType: 5
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0, y: 0, z: 0}
+          enumArgument: 
         isDynamic: 0
         isCallEnabled: 1
   onState:
@@ -30977,7 +30988,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 38
+          selectedMember: 36
           isDynamic: 0
         target: {fileID: 783680541}
         memberName: Rematch

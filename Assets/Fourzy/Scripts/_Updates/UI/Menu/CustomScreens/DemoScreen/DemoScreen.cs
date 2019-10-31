@@ -54,6 +54,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void RemoveRarePortalPoints() => UserManager.Instance.rarePortalPoints -= 9;
 
+        public void AddGems() => UserManager.Instance.gems += 5;
+
+        public void RemoveGems() => UserManager.Instance.gems -= 5;
+
         public void SetLanguageEng() => LocalizationManager.Instance.SetCurrentLanguage(SystemLanguage.English);
 
         public void SetLanguageSpanish() => LocalizationManager.Instance.SetCurrentLanguage(SystemLanguage.Spanish);

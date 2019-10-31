@@ -45,7 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                     else
                     {
-                        if (game.IsWinner() && (game.puzzleData.gauntletStatus.FourzyCount > 0 || game.puzzleData.pack.complete))
+                        if (game.IsWinner() && (game.myMembers.Count > 0 || game.puzzleData.pack.complete))
                             stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
                         else
                             stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
@@ -159,13 +159,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (game._Mode)
             {
                 case GameMode.GAUNTLET:
+                    menuController.CloseCurrentScreen();
+
                     if (game.IsWinner())
                     {
                         if (game.puzzleData.pack.complete)
                             menuController.GetScreen<GauntletWinPrompt>()._Prompt(game);
                         else
                         {
-                            if (game.puzzleData.gauntletStatus.FourzyCount == 0)
+                            if (game.myMembers.Count == 0)
                                 menuController.GetScreen<GauntletLostPrompt>()._Prompt(game);
                             else
                                 menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
@@ -173,7 +175,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                     else
                     {
-                        if (game.puzzleData.gauntletStatus.FourzyCount == 0)
+                        if (game.myMembers.Count == 0)
                             menuController.GetScreen<GauntletLostPrompt>()._Prompt(game);
                         else
                             Rematch();

@@ -32,7 +32,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (game == null || !isGauntlet) return;
 
-            movesLeft.SetValue(game.puzzleData.gauntletStatus.FourzyCount);
+            movesLeft.SetValue(game.myMembers.Count);
 
             if (gamepiece && gamepiece.pieceData.ID != game.me.HerdId)
             {
@@ -49,7 +49,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!isOpened || !isGauntlet || game.isMyTurn) return;
 
-            movesLeft.SetValue(game.puzzleData.gauntletStatus.FourzyCount);
+            movesLeft.SetValue(game.myMembers.Count);
             textAnimator.SetTrigger("animate");
         }
 

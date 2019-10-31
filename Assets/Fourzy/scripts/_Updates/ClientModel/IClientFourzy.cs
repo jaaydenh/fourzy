@@ -23,6 +23,7 @@ namespace Fourzy._Updates.ClientModel
         GameStateDataEpoch toGameStateData { get; }
         string GameID { get; set; }
         bool isFourzyPuzzle { get; }
+        List<Creature> myMembers { get; }
 
         List<PlayerTurn> InitialTurns { get; }
 
@@ -42,6 +43,8 @@ namespace Fourzy._Updates.ClientModel
         bool draw { get; set; }
         bool hideOpponent { get; set; }
         Piece activePlayerPiece { get; }
+        Piece playerPiece { get; }
+        Piece opponentPiece { get; }
         
         ClientPuzzleData puzzleData { get; set; }
 
@@ -68,6 +71,7 @@ namespace Fourzy._Updates.ClientModel
         void AddPlayerMagic(int playerId, int value);
         void OnVictory();
         void OnDraw();
+        void RemoveMember();
         IClientFourzy Next();
         PlayerTurnResult StartTurn(GameState gameState);
         PlayerTurnResult StartTurn();
@@ -79,7 +83,7 @@ namespace Fourzy._Updates.ClientModel
         PlayerTurnResult TakeTurn(PlayerTurn playerTurn, bool local, bool returnStartOfNextTurn);
         PlayerTurnResult TakeAITurn(bool ReturnStartOfNextTurn = false);
 
-        GameState Reset();
+        GameState _Reset(bool resetMembers = false);
     }
 }
 

@@ -500,49 +500,235 @@ MonoBehaviour:
     path: 
     type: 1
     objectTypeName: 
-  - name: PuzzlePack1
+  - name: Event1_HowToWin
     ext: 
     path: PuzzlePacks
     type: 1
     objectTypeName: 
   - name: puzzles
     ext: 
-    path: PuzzlePacks/PuzzlePack1
+    path: PuzzlePacks/Event1_HowToWin
     type: 1
     objectTypeName: 
-  - name: 1_WinningVertically
+  - name: HowToWin_01_WinningVertically_WinIn1
     ext: json
-    path: PuzzlePacks/PuzzlePack1/puzzles
+    path: PuzzlePacks/Event1_HowToWin/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 2_WinningHorizontally
+  - name: HowToWin_02_WinningHorizontally_WinIn1
     ext: json
-    path: PuzzlePacks/PuzzlePack1/puzzles
+    path: PuzzlePacks/Event1_HowToWin/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 3_UpOrDown
+  - name: HowToWin_03_WinningDiagonal_LLUR_WinIn1
     ext: json
-    path: PuzzlePacks/PuzzlePack1/puzzles
+    path: PuzzlePacks/Event1_HowToWin/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 4_LeftOrRight
+  - name: HowToWin_04_WinningDiagonal_LRUL_WinIn1
     ext: json
-    path: PuzzlePacks/PuzzlePack1/puzzles
+    path: PuzzlePacks/Event1_HowToWin/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 5_ArrowDown
+  - name: HowToWin_05_Winning_UpOrDown_WinIn2
     ext: json
-    path: PuzzlePacks/PuzzlePack1/puzzles
+    path: PuzzlePacks/Event1_HowToWin/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: HowToWin_06_Winning_LeftOrRight_WinIn2
+    ext: json
+    path: PuzzlePacks/Event1_HowToWin/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: HowToWin_08_Diag_WinIn1
+    ext: json
+    path: PuzzlePacks/Event1_HowToWin/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: HowToWin_09_Diag_WinIn1
+    ext: json
+    path: PuzzlePacks/Event1_HowToWin/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: HowToWin_11_Diag_WinIn1
+    ext: json
+    path: PuzzlePacks/Event1_HowToWin/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: HowToWin_12_Diag_WinIn1
+    ext: json
+    path: PuzzlePacks/Event1_HowToWin/puzzles
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: puzzlePack
     ext: json
-    path: PuzzlePacks/PuzzlePack1
+    path: PuzzlePacks/Event1_HowToWin
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Event2_Goop1
+    ext: 
+    path: PuzzlePacks
+    type: 1
+    objectTypeName: 
+  - name: puzzles
+    ext: 
+    path: PuzzlePacks/Event2_Goop1
+    type: 1
+    objectTypeName: 
+  - name: 1_JustOneGoop_WinIn1
+    ext: json
+    path: PuzzlePacks/Event2_Goop1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 2_PushToWin_WinIn1
+    ext: json
+    path: PuzzlePacks/Event2_Goop1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 3_AvoidTheDraw_WinIn1
+    ext: json
+    path: PuzzlePacks/Event2_Goop1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 4_GoopOnTheEdge_WinIn1
+    ext: json
+    path: PuzzlePacks/Event2_Goop1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 6_Puzzle_Goop_ChainWalls_WinIn1
+    ext: json
+    path: PuzzlePacks/Event2_Goop1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 8_Puzzle_Goop_Chain2_WinIn1
+    ext: json
+    path: PuzzlePacks/Event2_Goop1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: puzzlePack
+    ext: json
+    path: PuzzlePacks/Event2_Goop1
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Event3_vs_Cyclops
+    ext: 
+    path: PuzzlePacks
+    type: 1
+    objectTypeName: 
+  - name: puzzles
+    ext: 
+    path: PuzzlePacks/Event3_vs_Cyclops
+    type: 1
+    objectTypeName: 
+  - name: level1_CenterBlocker_WithHeadStart
+    ext: json
+    path: PuzzlePacks/Event3_vs_Cyclops/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: level2_CenterBlocker_WithHeadStart
+    ext: json
+    path: PuzzlePacks/Event3_vs_Cyclops/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: level3_TwoBlockers_WithHeadStart
+    ext: json
+    path: PuzzlePacks/Event3_vs_Cyclops/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: level4_BigEye_WithHeadStart
+    ext: json
+    path: PuzzlePacks/Event3_vs_Cyclops/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: puzzlePack
+    ext: json
+    path: PuzzlePacks/Event3_vs_Cyclops
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Event4_Arrows1
+    ext: 
+    path: PuzzlePacks
+    type: 1
+    objectTypeName: 
+  - name: puzzles
+    ext: 
+    path: PuzzlePacks/Event4_Arrows1
+    type: 1
+    objectTypeName: 
+  - name: 0_Puzzle_Arrow_Stop_WinIn1
+    ext: json
+    path: PuzzlePacks/Event4_Arrows1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 1_ArrowStopEnd
+    ext: json
+    path: PuzzlePacks/Event4_Arrows1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 2_ArrowStopMiddle
+    ext: json
+    path: PuzzlePacks/Event4_Arrows1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 3_ArrowDown
+    ext: json
+    path: PuzzlePacks/Event4_Arrows1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 4_Arrow_TurnAround
+    ext: json
+    path: PuzzlePacks/Event4_Arrows1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 5_Arrow_Wraparound
+    ext: json
+    path: PuzzlePacks/Event4_Arrows1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 6_TwoTurnArrowPuzzle
+    ext: json
+    path: PuzzlePacks/Event4_Arrows1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 7_ArrowsBlockEntry
+    ext: json
+    path: PuzzlePacks/Event4_Arrows1/puzzles
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: puzzlePack
+    ext: json
+    path: PuzzlePacks/Event4_Arrows1
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -1161,144 +1347,6 @@ MonoBehaviour:
   - name: puzzlePack
     ext: json
     path: PuzzlePacks/PuzzlePack15
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack2
-    ext: 
-    path: PuzzlePacks
-    type: 1
-    objectTypeName: 
-  - name: puzzles
-    ext: 
-    path: PuzzlePacks/PuzzlePack2
-    type: 1
-    objectTypeName: 
-  - name: level1
-    ext: json
-    path: PuzzlePacks/PuzzlePack2/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: level2
-    ext: json
-    path: PuzzlePacks/PuzzlePack2/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: level3
-    ext: json
-    path: PuzzlePacks/PuzzlePack2/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: puzzlePack
-    ext: json
-    path: PuzzlePacks/PuzzlePack2
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack3
-    ext: 
-    path: PuzzlePacks
-    type: 1
-    objectTypeName: 
-  - name: puzzles
-    ext: 
-    path: PuzzlePacks/PuzzlePack3
-    type: 1
-    objectTypeName: 
-  - name: 1_Puzzle_HowToWin_Diag_WinIn1
-    ext: json
-    path: PuzzlePacks/PuzzlePack3/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 2_Puzzle_HowToWin_Diag_WinIn1
-    ext: json
-    path: PuzzlePacks/PuzzlePack3/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 3_Puzzle_HowToWin_Diag_WinIn1
-    ext: json
-    path: PuzzlePacks/PuzzlePack3/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 4_Puzzle_HowToWin_Diag_WinIn1
-    ext: json
-    path: PuzzlePacks/PuzzlePack3/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 5_Puzzle_HowToWin_Diag_WinIn1
-    ext: json
-    path: PuzzlePacks/PuzzlePack3/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 6_Puzzle_HowToWin_Diag_WinIn1
-    ext: json
-    path: PuzzlePacks/PuzzlePack3/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: puzzlePack
-    ext: json
-    path: PuzzlePacks/PuzzlePack3
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PuzzlePack4
-    ext: 
-    path: PuzzlePacks
-    type: 1
-    objectTypeName: 
-  - name: puzzles
-    ext: 
-    path: PuzzlePacks/PuzzlePack4
-    type: 1
-    objectTypeName: 
-  - name: 0_Puzzle_BumpGoop_WinIn2
-    ext: json
-    path: PuzzlePacks/PuzzlePack4/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 1_Compression
-    ext: json
-    path: PuzzlePacks/PuzzlePack4/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 2_CenterStickyCube
-    ext: json
-    path: PuzzlePacks/PuzzlePack4/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 3_PushItToWiinIt
-    ext: json
-    path: PuzzlePacks/PuzzlePack4/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 4_CantStopMe
-    ext: json
-    path: PuzzlePacks/PuzzlePack4/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 5_CrossDiagonal
-    ext: json
-    path: PuzzlePacks/PuzzlePack4/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: puzzlePack
-    ext: json
-    path: PuzzlePacks/PuzzlePack4
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -3875,6 +3923,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 602
+  m_FileCount: 610
   m_FolderCount: 50
   UpdateAutomatically: 0

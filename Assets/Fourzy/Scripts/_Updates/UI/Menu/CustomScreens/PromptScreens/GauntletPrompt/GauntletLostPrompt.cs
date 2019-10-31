@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.UI.Helpers;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -15,10 +16,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Prompt(
                 LocalizationManager.Value("gauntlet_failed"),
                 LocalizationManager.Value("gauntlet_failed_message"),
-                "OK",
-                null,
-                () => GamePlayManager.instance.BackButtonOnClick(),
+                "Replay?",
+                LocalizationManager.Value("no"),
+                () =>
+                {
+                    UserManager.Instance.gems--;
+                    menuController.CloseCurrentScreen();
+                    GamePlayManager.instance.Rematch(true);
+                },
                 () => GamePlayManager.instance.BackButtonOnClick());
+        }
+
+        public override void Open()
+        {
+            base.Open();
+
+            acceptButton.SetState(UserManager.Instance.gems > 0);
         }
     }
 }

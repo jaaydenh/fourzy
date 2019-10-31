@@ -43,9 +43,9 @@ namespace FourzyGameModel.Model
 
         //What locations are the winning pieces
         public List<BoardLocation> WinningLocations { get; set; }
-        
+
         //This might include some other things eventually including GameEffects, ActiveSpells
-        public string StateString { get { return Board.ContentString;  } }
+        public string StateString { get { return Board.ContentString; } }
 
         public string CompressedString { get { return Compression.CompressString(StateString); } }
 
@@ -53,7 +53,7 @@ namespace FourzyGameModel.Model
 
         [JsonIgnore]
         public Action<GameAction> RecordGameAction;
-      
+
         public GameStateData SerializeData()
         {
             GameStateData data = new GameStateData
@@ -107,7 +107,7 @@ namespace FourzyGameModel.Model
         {
             this.Board = new GameBoard(OriginalState.Board);
             //this.Board.RecordGameAction += RecordGameAction;
-            
+
             this.GameEffects = new List<IGameEffect>();
             foreach (IGameEffect e in OriginalState.GameEffects)
             {
@@ -120,9 +120,9 @@ namespace FourzyGameModel.Model
                 this.Players.Add(p, new Player(OriginalState.Players[p]));
             }
             this.Herds = new Dictionary<int, Herd>();
-            foreach (int h in OriginalState.Herds.Keys)
+            foreach (int key in OriginalState.Herds.Keys)
             {
-                this.Herds.Add(h, OriginalState.Herds[h]);
+                this.Herds.Add(key, new Herd(OriginalState.Herds[key]));
             }
             this.RealTime = OriginalState.RealTime;
             this.Time = new Dictionary<int, int>();
@@ -147,7 +147,7 @@ namespace FourzyGameModel.Model
 
         public GameState()
         {
-            this.Board = BoardFactory.CreateDefaultBoard(8,8);
+            this.Board = BoardFactory.CreateDefaultBoard(8, 8);
             this.Board.Parent = this;
             this.ActivePlayerId = 1;
             this.RealTime = false;
@@ -172,7 +172,7 @@ namespace FourzyGameModel.Model
         {
             this.Board = Board;
             this.Board.Parent = this;
-           
+
             this.RealTime = false;
             Initialize();
             this.Board.Random = this.Random;
@@ -260,7 +260,7 @@ namespace FourzyGameModel.Model
             return result;
         }
 
-        
+
         #region "Events"
 
         //Event Recorder
@@ -280,7 +280,7 @@ namespace FourzyGameModel.Model
 
         public void PieceBumpsIntoLocation(MovingPiece Piece, BoardLocation Location)
         {
-            foreach (IGameEffect e in GameEffects) e.PieceBumpsIntoLocation(Piece, Location); 
+            foreach (IGameEffect e in GameEffects) e.PieceBumpsIntoLocation(Piece, Location);
 
             Board.PieceBumpsIntoLocation(Piece, Location);
         }
@@ -308,7 +308,7 @@ namespace FourzyGameModel.Model
 
         public int Opponent(int PlayerId)
         {
-            foreach(var player in Players.Values)
+            foreach (var player in Players.Values)
             {
                 if (player.PlayerId != PlayerId) return player.PlayerId;
             }

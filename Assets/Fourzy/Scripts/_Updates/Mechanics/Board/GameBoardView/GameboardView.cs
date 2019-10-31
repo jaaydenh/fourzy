@@ -99,7 +99,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
 #if UNITY_EDITOR
             //cheats
-            if (interactable) if (Input.GetKeyDown(KeyCode.P)) DropPiece(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            if (interactable) if (Input.GetKeyDown(KeyCode.P)) DropPiece(Camera.main.ScreenToWorldPoint(Input.mousePosition), true);
+            if (interactable) if (Input.GetKeyDown(KeyCode.O)) DropPiece(Camera.main.ScreenToWorldPoint(Input.mousePosition), false);
 #endif
         }
 
@@ -165,7 +166,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case GameManager.PlacementStyle.DEMO_STYLE:
-                    DropPiece(Camera.main.ScreenToWorldPoint(position));
+                    DropPiece(Camera.main.ScreenToWorldPoint(position), true);
 
                     break;
             }
@@ -936,15 +937,16 @@ namespace Fourzy._Updates.Mechanics.Board
             foreach (BoardLocation key in hintBlocks.Keys) hintBlocks[key].SetColliderState(affected.Contains(key));
         }
 
-        private void DropPiece(Vector2 worldPoint)
+        private void DropPiece(Vector2 worldPoint, bool player)
         {
             BoardLocation location = Vec2ToBoardLocation(worldPoint - (Vector2)transform.localPosition);
 
             if (BoardBitAt<GamePieceView>(location)) return;
 
+            Piece _piece = player ? game.playerPiece : game.opponentPiece;
             //drop gamepiece at location
-            game._State.Board.AddPiece(game.activePlayerPiece, location);
-            SpawnPiece(location.Row, location.Column, (PlayerEnum)game._State.ActivePlayerId);
+            game._State.Board.AddPiece(_piece, location);
+            SpawnPiece(location.Row, location.Column, (PlayerEnum)_piece.PlayerId);
         }
 
         private void AddIMoveToTurn(IMove move)
@@ -976,15 +978,7 @@ namespace Fourzy._Updates.Mechanics.Board
             boardBits.ForEach(bit => { if (bit.active) bit.OnBeforeTurn(); });
 
             //if gauntlet game, remove member
-            if (isGauntlet && move != null && move.Piece.PlayerId == game.me.PlayerId)
-            {
-                List<Creature> members = game._State.Herds[move.Piece.PlayerId].Members;
-                if (members.Count > 0)
-                {
-                    members.RemoveAt(members.Count - 1);
-                    game.puzzleData.pack.RemoveHerdMember();
-                }
-            }
+            if (isGauntlet && move != null && move.Piece.PlayerId == game.me.PlayerId && game.myMembers.Count > 0) game.RemoveMember();
 
             //invoke onMoveStart
             onMoveStarted?.Invoke(turn);

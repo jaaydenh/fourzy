@@ -91,6 +91,7 @@ namespace Fourzy._Updates.ClientModel
             set { }
         }
         public bool isFourzyPuzzle => true;
+        public List<Creature> myMembers => State.Herds[me.PlayerId].Members;
 
         public float initializedTime { get; set; }
 
@@ -138,6 +139,24 @@ namespace Fourzy._Updates.ClientModel
         public bool hideOpponent { get; set; } = true;
 
         public Piece activePlayerPiece => new Piece(State.ActivePlayerId, string.IsNullOrEmpty(activePlayer.HerdId) ? 1 : int.Parse(activePlayer.HerdId));
+
+        public Piece playerPiece
+        {
+            get
+            {
+                Player _player = me;
+                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ? 1 : int.Parse(_player.HerdId));
+            }
+        }
+
+        public Piece opponentPiece
+        {
+            get
+            {
+                Player _player = opponent;
+                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ? 1 : int.Parse(_player.HerdId));
+            }
+        }
 
         public ClientPuzzleData puzzleData { get; set; }
 
@@ -282,6 +301,11 @@ namespace Fourzy._Updates.ClientModel
             draw = true;
         }
 
+        public void RemoveMember()
+        {
+            myMembers.RemoveAt(myMembers.Count - 1);
+        }
+
         public IClientFourzy Next()
         {
             if (puzzleData.pack)
@@ -292,7 +316,7 @@ namespace Fourzy._Updates.ClientModel
 
         public PlayerTurnResult StartTurn() => StartTurn(_State);
 
-        public override GameState Reset()
+        public GameState _Reset(bool resetMembers = false)
         {
             Initialize();
 

@@ -248,7 +248,7 @@ namespace Fourzy
                 case AnalyticsGameEvents.GAUNTLET_LEVEL_START:
                     @params.Add(GAUNTLET_ID_KEY, game.puzzleData.pack.packID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAUNTLET_MEMBERS_LEFT_KEY, game.puzzleData.gauntletStatus.FourzyCount);
+                    @params.Add(GAUNTLET_MEMBERS_LEFT_KEY, game.myMembers.Count);
                     @params.Add(MAGIC_LEFT_KEY, game.me.Magic);
                     @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
                     @params.Add(BOARD_JSON_KEY, JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
@@ -258,7 +258,7 @@ namespace Fourzy
                 case AnalyticsGameEvents.GAUNTLET_LEVEL_END:
                     @params.Add(GAUNTLET_ID_KEY, game.puzzleData.pack.packID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAUNTLET_MEMBERS_LEFT_KEY, game.puzzleData.gauntletStatus.FourzyCount);
+                    @params.Add(GAUNTLET_MEMBERS_LEFT_KEY, game.myMembers.Count);
                     @params.Add(MAGIC_LEFT_KEY, game.me.Magic);
                     @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
                     @params.Add(BOARD_JSON_KEY, JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
