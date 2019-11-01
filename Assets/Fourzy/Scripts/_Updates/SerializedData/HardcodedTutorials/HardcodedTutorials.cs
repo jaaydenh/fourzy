@@ -210,6 +210,7 @@ namespace Fourzy._Updates._Tutorial
                                 new OnboardingTask_HighlightButton("AdventureButton"),
                                 //will continue after event tap
                                 new OnboardingTask_HighlightProgressionEvent (-1),
+                                new OnboardingTask_Log("8"),
                             },
                         },
                     },
