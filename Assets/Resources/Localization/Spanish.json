@@ -55,7 +55,7 @@
     },
     {
       "key": "continue",
-      "value": "Hacer continuación"
+      "value": "Continuar"
     },
     {
       "key": "cant_be_empty",
@@ -83,7 +83,7 @@
     },
     {
       "key": "fast_puzzles",
-      "value": "Rompecabezas"
+      "value": "Puzzles"
     },
     {
       "key": "found",
@@ -91,11 +91,11 @@
     },
     {
       "key": "gauntlet",
-      "value": "Guantelete"
+      "value": "Retos"
     },
     {
       "key": "gauntlet_desc",
-      "value": "El guante contiene una serie de desafíos cada vez más difíciles que deben resolverse en un número limitado de movimientos."
+      "value": "Los retos contienen una serie de desafíos cada vez más difíciles que deben resolverse en un número limitado de movimientos."
     },
     {
       "key": "gauntlet_complete",
@@ -103,7 +103,7 @@
     },
     {
       "key": "gauntlet_failed",
-      "value": "Guantelete Fallido"
+      "value": "Reto Perdido"
     },
     {
       "key": "gauntlet_failed_message",
@@ -151,7 +151,7 @@
     },
     {
       "key": "replay_tutorial",
-      "value": "Tutorial de repetición"
+      "value": "Repetir tutorial"
     },
     {
       "key": "reset",
@@ -171,7 +171,7 @@
     },
     {
       "key": "select_board",
-      "value": "Selección de junta"
+      "value": "Selección de juego"
     },
     {
       "key": "settings",
@@ -191,7 +191,7 @@
     },
     {
       "key": "tokens",
-      "value": "Fichas"
+      "value": "Piezas"
     },
     {
       "key": "too_short",
