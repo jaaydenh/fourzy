@@ -1,0 +1,16 @@
+{
+    "name": "Goop 2",
+    "type": 0,
+    "id": "00100",
+    "unlockRequirement": 0,
+    "herdID": "17",
+    "playerName": "NightOwl",
+    "rewards": [
+        {
+            "levelIndex": 9,
+            "rewardType": 5,
+            "name": "",
+            "quantity": 0
+        }
+    ]
+}

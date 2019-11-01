@@ -1,0 +1,16 @@
+{
+    "name": "Interesting Setups",
+    "type": 0,
+    "id": "00110",
+    "unlockRequirement": 0,
+    "herdID": "17",
+    "playerName": "NightOwl",
+    "rewards": [        
+        {
+            "levelIndex": 11,
+            "rewardType": 5,
+            "name": "",
+            "quantity": 0
+        }
+    ]
+}

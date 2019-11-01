@@ -1,0 +1,15 @@
+{
+    "name": "Arrows and Goop",
+    "type": 0,
+    "id": "00050",
+    "unlockRequirement": 0,
+    "herdID": "16",
+    "playerName": "Eeek",
+    "rewards": [        
+    {
+        "levelIndex": 6,
+        "rewardType": 5,
+        "name": "",
+        "quantity": 0
+    }]
+}
