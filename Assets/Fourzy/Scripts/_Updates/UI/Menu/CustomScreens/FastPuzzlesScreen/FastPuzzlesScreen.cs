@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Widgets;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -70,6 +71,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private IEnumerator ShowLeaderboard()
         {
+            NetworkManager.instance.FastCheck();
+
             float timer = 0f;
             //wait 10 seconds
             while ((string.IsNullOrEmpty(LoginManager.playfabID) || !GameManager.NetworkAccess) && timer < 10f)

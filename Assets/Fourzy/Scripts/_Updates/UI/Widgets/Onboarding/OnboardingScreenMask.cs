@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Coffee.UIExtensions;
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Menu.Screens;
@@ -27,13 +28,13 @@ namespace Fourzy._Updates.UI.Widgets
             canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void ShowMasks(Rect[] areas, bool clear = true)
+        public void ShowMasks(OnboardingTask task, bool clear = true)
         {
             Show();
 
             if (clear) Clear();
 
-            foreach (Rect area in areas)
+            foreach (Rect area in task.areas)
                 for (int column = (int)area.x; column < (int)(area.x + area.width); column++)
                     for (int row = (int)area.y; row < (int)(area.y + area.height); row++)
                         AddMaskObject().rectTransform.anchoredPosition =
@@ -42,7 +43,7 @@ namespace Fourzy._Updates.UI.Widgets
                                     new BoardLocation(row, column)) + GamePlayManager.instance.board.transform.position);
         }
 
-        public void ShowMasks(Vector2 position, Vector2 size, bool clear = true)
+        public void ShowMasks(Vector2 anchors, Vector2 size, bool clear = true)
         {
             Show();
 
@@ -50,7 +51,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             AddMaskObject()
                 .Size(size)
-                .SetAnchors(position);
+                .SetAnchors(anchors);
         }
 
         public void Show(float time = .3f)

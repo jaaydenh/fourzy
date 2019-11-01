@@ -1,7 +1,7 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.Mechanics.GameplayScene;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu.Screens;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -104,7 +104,7 @@ namespace Fourzy._Updates.UI.Menu
             if (OnboardingScreen.instance && OnboardingScreen.instance.isTutorialRunning) return;
 
             //check for news
-            if (PlayerPrefsWrapper.GetTutorialFinished(HardcodedTutorials.tutorials[0].data))
+            if (PlayerPrefsWrapper.GetTutorialFinished(HardcodedTutorials.tutorials[0].name))
             {
                 //only force news if onboarding was finished
                 if (GameManager.Instance.unreadNews.Count > 0) GetScreen<NewsPromptScreen>()._Prompt();

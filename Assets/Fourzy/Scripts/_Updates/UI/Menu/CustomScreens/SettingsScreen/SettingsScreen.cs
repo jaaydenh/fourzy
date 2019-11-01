@@ -1,7 +1,7 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.Managers;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Helpers;
 
 namespace Fourzy._Updates.UI.Menu.Screens

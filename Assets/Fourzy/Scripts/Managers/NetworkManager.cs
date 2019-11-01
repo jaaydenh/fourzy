@@ -37,29 +37,32 @@ namespace Fourzy._Updates.Managers
 
         public static Action<NetStatus> onStatusChanged;
 
-        public bool checking => IsRoutineActive("checking");
-
         private NetCheckMethod selected;
 
         public static NetStatus Status { get; private set; }
 
-        public void StartChecking() => StartRoutine("checking", Check());
+        public void StartChecking() => StartRoutine("checking", Check(true));
+
+        public void FastCheck()
+        {
+            if (!IsRoutineActive("check")) StartRoutine("check", _Check());
+        }
 
         private void SetMethod()
         {
             switch (Application.platform)
             {
-                case RuntimePlatform.WindowsEditor:
-                case RuntimePlatform.WindowsPlayer:
-                case RuntimePlatform.XboxOne:
-                    selected = new NetCheckMethod("msftconnecttest", "http://www.msftconnecttest.com/connecttest.txt", "Microsoft Connect Test");
-                    return;
+                //case RuntimePlatform.WindowsEditor:
+                //case RuntimePlatform.WindowsPlayer:
+                //case RuntimePlatform.XboxOne:
+                //    selected = new NetCheckMethod("msftconnecttest", "http://www.msftconnecttest.com/connecttest.txt", "Microsoft Connect Test");
+                //    return;
 
-                case RuntimePlatform.IPhonePlayer:
-                case RuntimePlatform.OSXEditor:
-                case RuntimePlatform.OSXPlayer:
-                    selected = new NetCheckMethod("applehotspot", "https://captive.apple.com/hotspot-detect.html", "<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>");
-                    return;
+                //case RuntimePlatform.IPhonePlayer:
+                //case RuntimePlatform.OSXEditor:
+                //case RuntimePlatform.OSXPlayer:
+                //    selected = new NetCheckMethod("applehotspot", "https://captive.apple.com/hotspot-detect.html", "<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>");
+                //    return;
 
                 default:
                     selected = new NetCheckMethod("google204", "https://clients3.google.com/generate_204", HttpStatusCode.NoContent);
@@ -67,22 +70,27 @@ namespace Fourzy._Updates.Managers
             }
         }
 
-        private IEnumerator Check()
+        private IEnumerator Check(bool continuous)
         {
             do
             {
-                yield return selected.Check();
-                NetStatus previousStatus = Status;
-                Status = selected.GetCheckStatus();
+                yield return StartRoutine("check", _Check());
+                yield return new WaitForSeconds(30f);
+            } while (continuous);
+        }
 
-                if (Status != previousStatus)
-                {
-                    onStatusChanged?.Invoke(Status);
-                    print(Status);
-                }
+        private IEnumerator _Check()
+        {
+            yield return selected.Check();
 
-                yield return checking ? new WaitForSeconds(5f) : null;
-            } while (checking);
+            NetStatus previousStatus = Status;
+            Status = selected.GetCheckStatus();
+
+            if (Status != previousStatus)
+            {
+                onStatusChanged?.Invoke(Status);
+                print(Status);
+            }
         }
     }
 

@@ -1,223 +1,446 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.UI.Widgets;
+using FourzyGameModel.Model;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Fourzy._Updates.Serialized
+namespace Fourzy._Updates._Tutorial
 {
     public class HardcodedTutorials
     {
-        public static List<GameContentManager.Tutorial> tutorials = new List<GameContentManager.Tutorial>()
+        public static List<Tutorial> tutorials = new List<Tutorial>()
         {
-            new GameContentManager.Tutorial()
+            new Tutorial()
             {
-                data = new OnboardingDataHolder()
-                {
-                    tutorialName = "Onboarding",
-                    batches = new OnboardingDataHolder.OnboardingTasksBatch[]
+                name = "Onboarding",
+                data = new OnboardingTasksBatch[]
                     {
                         //step 1: welcome message
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask_OpenGame(GameType.ONBOARDING, "200"),
-                                new OnboardingDataHolder.OnboardingTask_ShowMessage(LocalizationManager.Value("welcome_to_fourzy")),
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.WIZARD_CENTER },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BG },
-                                new OnboardingDataHolder.OnboardingTask_Log("1"),
+                                new OnboardingTask_OpenGame(GameType.ONBOARDING, "200"),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("welcome_to_fourzy")),
+                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BG },
+                                new OnboardingTask_Log("1"),
                             },
                         },
                         //step 2: load tutorial map + show rules
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_BG },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_WIZARD },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_MESSAGE_BOX },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
 
-                                new OnboardingDataHolder.OnboardingTask_OpenGame(GameType.ONBOARDING, "201"),
+                                new OnboardingTask_OpenGame(GameType.ONBOARDING, "201"),
 
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BG },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.WIZARD_CENTER },
-                                new OnboardingDataHolder.OnboardingTask_ShowMessage(LocalizationManager.Value("tap_edge_rule")),
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BOARD_HINT_AREA },
-                                new OnboardingDataHolder.OnboardingTask_Log("2"),
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BG },
+                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("tap_edge_rule")),
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                                new OnboardingTask_Log("2"),
                             },
                         },
                         //step 3: show player where to tap to make move
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_BG },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_BOARD_HINT_AREA },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_WIZARD },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_MESSAGE_BOX },
-                                new OnboardingDataHolder.OnboardingTask_PointAt(new Vector2(0, 6)),
-                                new OnboardingDataHolder.OnboardingTask_LimitInput(new Rect(0f, 6f, 1f, 1f)),
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BOARD_HINT_AREA },
-                                new OnboardingDataHolder.OnboardingTask_ShowMaskedArea(new Rect(0f, 6f, 1f, 1f)),
+                                new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                                new OnboardingTask_PointAt(new Vector2(0, 6)),
+                                new OnboardingTask_LimitInput(new Rect(0f, 6f, 1f, 1f)),
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                                new OnboardingTask_ShowMaskedArea(new Rect(0f, 6f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.SQUARE, Vector2.zero),
                                 //this will skip to next
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.ON_MOVE_STARTED },
-                                new OnboardingDataHolder.OnboardingTask_Log("3"),
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
+                                new OnboardingTask_Log("3"),
                             },
                         },
                         //step 4: cancel input after player move started
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_POINTER },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_BOARD_HINT_AREA },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_MAKSED_AREA },
-                                new OnboardingDataHolder.OnboardingTask_LimitInput(new Rect[0]),
+                                new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                                new OnboardingTask_LimitInput(new Rect[0]),
                                 //this will skip to next
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.ON_MOVE_ENDED },
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
                             },
                         },
                         //step 5: opponent takes turn
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask_PlaceGamepiece(2, FourzyGameModel.Model.Direction.RIGHT, 3),
+                                new OnboardingTask_PlaceGamepiece(2, FourzyGameModel.Model.Direction.RIGHT, 3),
                                 //this will skip to next
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.ON_MOVE_ENDED },
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
                             },
                         },
                         //step 6: players' 2d turn + limit input
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
                                 //this will skip to next
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.ON_MOVE_STARTED },
-                                new OnboardingDataHolder.OnboardingTask_PointAt(new Vector2(7, 5)),
-                                new OnboardingDataHolder.OnboardingTask_LimitInput(new Rect(7f, 5f, 1f, 1f)),
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BOARD_HINT_AREA },
-                                new OnboardingDataHolder.OnboardingTask_ShowMaskedArea(new Rect(7f, 5f, 1f, 1f)),
-                                new OnboardingDataHolder.OnboardingTask_Log("4"),
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
+                                new OnboardingTask_PointAt(new Vector2(7, 5)),
+                                new OnboardingTask_LimitInput(new Rect(7f, 5f, 1f, 1f)),
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                                new OnboardingTask_ShowMaskedArea(new Rect(7f, 5f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.SQUARE, Vector2.zero),
+                                new OnboardingTask_Log("4"),
                             },
                         },
                         //step 7: cancel input after player move started
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_POINTER },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_BOARD_HINT_AREA },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_MAKSED_AREA },
-                                new OnboardingDataHolder.OnboardingTask_LimitInput(new Rect[0]),
+                                new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                                new OnboardingTask_LimitInput(new Rect[0]),
                                 //this will skip to next
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.ON_MOVE_ENDED },
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
                             },
                         },
                         //step 8: opponent takes turn
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask_PlaceGamepiece(2, FourzyGameModel.Model.Direction.DOWN, 4),
+                                new OnboardingTask_PlaceGamepiece(2, FourzyGameModel.Model.Direction.DOWN, 4),
                                 //this will skip to next
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.ON_MOVE_ENDED },
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
                             },
                         },
                         //step 9: show message
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win")),
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BG },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.WIZARD_CENTER },
-                                new OnboardingDataHolder.OnboardingTask_Log("5"),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win")),
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BG },
+                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                                new OnboardingTask_Log("5"),
                             },
                         },
                         //step 10: players' 3rd turn + limit input
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_MESSAGE_BOX },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_WIZARD },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_BG },
-                                new OnboardingDataHolder.OnboardingTask_PointAt(new Vector2(3, 0)),
-                                new OnboardingDataHolder.OnboardingTask_LimitInput(new Rect(3f, 0f, 1f, 1f)),
-                                new OnboardingDataHolder.OnboardingTask_ShowMaskedArea(new Rect(3f, 0f, 1f, 1f)),
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                                new OnboardingTask_PointAt(new Vector2(3, 0)),
+                                new OnboardingTask_LimitInput(new Rect(3f, 0f, 1f, 1f)),
+                                new OnboardingTask_ShowMaskedArea(new Rect(3f, 0f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.SQUARE, Vector2.zero),
                                 //this will skip to next
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.ON_MOVE_STARTED },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BOARD_HINT_AREA },
-                                new OnboardingDataHolder.OnboardingTask_Log("6"),
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                                new OnboardingTask_Log("6"),
                             },
                         },
                         //step 11: cancel input after player move started
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_POINTER },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_BOARD_HINT_AREA },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_MAKSED_AREA },
-                                new OnboardingDataHolder.OnboardingTask_LimitInput(new Rect[0]),
+                                new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                                new OnboardingTask_LimitInput(new Rect[0]),
                                 //this will skip to next
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.ON_MOVE_ENDED },
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
                             },
                         },
                         //step 12: show message
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask_ShowMessage(LocalizationManager.Value("excellent")),
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SHOW_BG },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.WIZARD_CENTER },
-                                new OnboardingDataHolder.OnboardingTask_Log("7"),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("excellent")),
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BG },
+                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                                new OnboardingTask_Log("7"),
                             },
                         },
                         // //step 13: change name message
-                        // new OnboardingDataHolder.OnboardingTasksBatch()
+                        // new OnboardingTasksBatch()
                         // {
-                        //     tasks = new OnboardingDataHolder.OnboardingTask[]
+                        //     tasks = new OnboardingTask[]
                         //     {
-                        //         new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE },
-                        //         new OnboardingDataHolder.OnboardingTask_ShowMessage("Now lets change your name!"),
-                        //         new OnboardingDataHolder.OnboardingTask_Log("8"),
+                        //         new OnboardingTask() { action = OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE },
+                        //         new OnboardingTask_ShowMessage("Now lets change your name!"),
+                        //         new OnboardingTask_Log("8"),
                         //     },
                         // },
                         // //step 14: open changename prompt
-                        // new OnboardingDataHolder.OnboardingTasksBatch()
+                        // new OnboardingTasksBatch()
                         // {
-                        //     tasks = new OnboardingDataHolder.OnboardingTask[]
+                        //     tasks = new OnboardingTask[]
                         //     {
-                        //         new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE },
-                        //         new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT },
-                        //         new OnboardingDataHolder.OnboardingTask_Log("9"),
+                        //         new OnboardingTask() { action = OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE },
+                        //         new OnboardingTask() { action = OnboardingActions.USER_CHANGE_NAME_PROMPT },
+                        //         new OnboardingTask_Log("9"),
                         //     },
                         // },
-                        new OnboardingDataHolder.OnboardingTasksBatch()
+                        new OnboardingTasksBatch()
                         {
-                            tasks = new OnboardingDataHolder.OnboardingTask[]
+                            tasks = new OnboardingTask[]
                             {
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_MESSAGE_BOX },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_WIZARD },
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.HIDE_BG },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                                 //will continue after main menu loaded
-                                new OnboardingDataHolder.OnboardingTask() { action = OnboardingDataHolder.OnboardingActions.LOAD_MAIN_MENU },
+                                new OnboardingTask() { action = OnboardingActions.LOAD_MAIN_MENU },
                                 //new OnboardingDataHolder.OnboardingTask_ExecMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, "openScreen", "tutorialProgressionMap"),
                                 //point at adventure button button
-                                new OnboardingDataHolder.OnboardingTask_HighlightButton("AdventureButton"),
+                                new OnboardingTask_HighlightButton("AdventureButton"),
                                 //will continue after event tap
-                                new OnboardingDataHolder.OnboardingTask_HighlightProgressionEvent (-1),
+                                new OnboardingTask_HighlightProgressionEvent (-1),
                             },
                         },
                     },
-                },
             },
 
         };
 
         public static void Initialize() => tutorials.ForEach(tutorial => tutorial.Initialize());
+    }
+
+    public class Tutorial
+    {
+        public string name;
+        public bool previousState;
+
+        public OnboardingTasksBatch[] data;
+
+        public bool wasFinishedThisSession => !previousState && PlayerPrefsWrapper.GetTutorialFinished(name);
+
+        public void Initialize()
+        {
+            previousState = PlayerPrefsWrapper.GetTutorialFinished(name);
+        }
+    }
+
+    public enum OnboardingActions
+    {
+        SHOW_MESSAGE,
+        HIDE_MESSAGE_BOX,
+
+        POINT_AT,
+        HIDE_POINTER,
+
+        HIGHLIGHT,
+        HIDE_HIGHLIGHT,
+
+        PLAY_INITIAL_MOVES,
+        OPEN_GAME,
+
+        LIMIT_BOARD_INPUT,
+        RESET_BOARD_INPUT,
+
+        HIDE_BG,
+        SHOW_BG,
+
+        HIDE_WIZARD,
+        WIZARD_CENTER,
+
+        PLAYER_2_PLACE_GAMEPIECE,
+        PLAYER_1_PLACE_GAMEPIECE,
+
+        ON_MOVE_ENDED,
+        ON_MOVE_STARTED = 18,
+
+        USER_CHANGE_NAME_PROMPT = 20,
+
+        SHOW_BOARD_HINT_AREA,
+        HIDE_BOARD_HINT_AREA,
+
+        LOG_TUTORIAL,
+
+        SHOW_MASKED_AREA,
+        HIDE_MAKSED_AREA,
+
+        SKIP_TO_NEXT_IF_DEMO_MODE,
+
+        SHOW_OPPONENT,
+        HIDE_OPPONENT,
+
+        LOAD_MAIN_MENU,
+        EXEC_MENU_EVENT,
+
+        HIGHLIGHT_PROGRESSION_EVENT,
+        HIGHLIGHT_CURRENT_SCREEN_BUTTON,
+    }
+
+    public class OnboardingTasksBatch
+    {
+        public OnboardingTask[] tasks;
+
+        public OnboardingTasksBatch()
+        {
+            tasks = new OnboardingTask[0];
+        }
+
+        public bool ContainsAction(OnboardingActions action)
+        {
+            foreach (OnboardingTask task in tasks)
+                if (task.action == action)
+                    return true;
+
+            return false;
+        }
+    }
+
+    public class OnboardingTask
+    {
+        public OnboardingActions action;
+        public bool unfolded;
+
+        public string stringValue;
+        public int intValue;
+        public Vector2 pointAt;
+        public Rect[] areas;
+        public Direction direction;
+        public KeyValuePair<string, object> menuEvent;
+
+        public OnboardingTask()
+        {
+            areas = new Rect[] { new Rect(0, 0, 1, 1), };
+        }
+    }
+
+    //shortcuts
+    public class OnboardingTask_OpenGame : OnboardingTask
+    {
+        public OnboardingTask_OpenGame(GameType type, string gameID)
+        {
+            action = OnboardingActions.OPEN_GAME;
+
+            intValue = (int)type;
+            stringValue = gameID;
+        }
+    }
+
+    public class OnboardingTask_ShowMessage : OnboardingTask
+    {
+        public OnboardingTask_ShowMessage(string message)
+        {
+            action = OnboardingActions.SHOW_MESSAGE;
+            stringValue = message;
+        }
+    }
+
+    public class OnboardingTask_Log : OnboardingTask
+    {
+        public OnboardingTask_Log(string stage)
+        {
+            action = OnboardingActions.LOG_TUTORIAL;
+            stringValue = stage;
+        }
+    }
+
+    public class OnboardingTask_PointAt : OnboardingTask
+    {
+        public OnboardingTask_PointAt(Vector2 at)
+        {
+            action = OnboardingActions.POINT_AT;
+            pointAt = at;
+        }
+    }
+
+    public class OnboardingTask_LimitInput : OnboardingTask
+    {
+        public OnboardingTask_LimitInput(Rect area)
+        {
+            action = OnboardingActions.LIMIT_BOARD_INPUT;
+            areas = new Rect[] { area };
+        }
+
+        public OnboardingTask_LimitInput(Rect[] areas)
+        {
+            action = OnboardingActions.LIMIT_BOARD_INPUT;
+            this.areas = areas;
+        }
+    }
+
+    public class OnboardingTask_ShowMaskedArea : OnboardingTask
+    {
+        public bool customMask => size != Vector2.zero;
+
+        public Vector2 size;
+
+        public OnboardingTask_ShowMaskedArea(Rect area, OnboardingScreenMaskObject.MaskStyle maskStyle, Vector2 size)
+        {
+            action = OnboardingActions.SHOW_MASKED_AREA;
+
+            intValue = (int)maskStyle;
+            areas = new Rect[] { area };
+        }
+
+        public OnboardingTask_ShowMaskedArea(Rect[] areas)
+        {
+            action = OnboardingActions.SHOW_MASKED_AREA;
+            this.areas = areas;
+        }
+
+        public OnboardingTask_ShowMaskedArea(Vector2 position, Vector2 size)
+        {
+            action = OnboardingActions.SHOW_MASKED_AREA;
+            pointAt = position;
+            this.size = size;
+        }
+    }
+
+    public class OnboardingTask_PlaceGamepiece : OnboardingTask
+    {
+        public OnboardingTask_PlaceGamepiece(int playerID, Direction direction, int location)
+        {
+            if (playerID == 1) action = OnboardingActions.PLAYER_1_PLACE_GAMEPIECE;
+            else action = OnboardingActions.PLAYER_2_PLACE_GAMEPIECE;
+            this.direction = direction;
+            intValue = location;
+        }
+    }
+
+    public class OnboardingTask_ExecMenuEvent : OnboardingTask
+    {
+        public OnboardingTask_ExecMenuEvent(string menuName, string command, object value)
+        {
+            action = OnboardingActions.EXEC_MENU_EVENT;
+            stringValue = menuName;
+            menuEvent = new KeyValuePair<string, object>(command, value);
+        }
+    }
+
+    public class OnboardingTask_HighlightProgressionEvent : OnboardingTask
+    {
+        public OnboardingTask_HighlightProgressionEvent(int index)
+        {
+            action = OnboardingActions.HIGHLIGHT_PROGRESSION_EVENT;
+            intValue = index;
+        }
+    }
+
+    public class OnboardingTask_HighlightButton : OnboardingTask
+    {
+        public OnboardingTask_HighlightButton(string buttonName)
+        {
+            action = OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON;
+            stringValue = buttonName;
+        }
     }
 }

@@ -642,6 +642,7 @@ namespace Fourzy._Updates.ClientModel
             collectedItems = new List<RewardsManager.Reward>();
             _allTurnRecord = new List<PlayerTurn>();
 
+            draw = false;
             //assign magic values
             magic = new Dictionary<int, int>();
             foreach (KeyValuePair<int, Player> player in State.Players) magic.Add(player.Key, player.Value.Magic);

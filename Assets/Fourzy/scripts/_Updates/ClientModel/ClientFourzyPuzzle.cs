@@ -333,10 +333,10 @@ namespace Fourzy._Updates.ClientModel
             else
                 hideOpponent = true;
 
+            draw = false;
             magic = new Dictionary<int, int>();
             //assign magic values
-            foreach (KeyValuePair<int, Player> player in State.Players)
-                magic.Add(player.Key, player.Value.Magic);
+            foreach (KeyValuePair<int, Player> player in State.Players) magic.Add(player.Key, player.Value.Magic);
         }
 
         private void AssignPrefabs()

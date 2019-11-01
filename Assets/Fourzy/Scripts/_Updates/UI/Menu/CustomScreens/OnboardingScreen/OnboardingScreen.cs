@@ -3,8 +3,8 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
@@ -27,18 +27,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public bool isTutorialRunning { get; private set; }
         public ButtonExtended currentButton { get; private set; }
-        public OnboardingDataHolder.OnboardingTask currentTask { get; private set; }
-        public OnboardingDataHolder.OnboardingTasksBatch currentBatch { get; private set; }
+        public OnboardingTask currentTask { get; private set; }
+        public OnboardingTasksBatch currentBatch { get; private set; }
 
         [NonSerialized]
-        public GameContentManager.Tutorial tutorial;
+        public Tutorial tutorial;
 
         private int step;
 
         public override void Open()
         {
             //name prompt was closed, so we do next
-            if (tutorial.data.batches[step].ContainsAction(OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT))
+            if (tutorial.data[step].ContainsAction(OnboardingActions.USER_CHANGE_NAME_PROMPT))
                 StartRoutine("nameChanged", .2f, () => Next());
 
             if (isOpened) return;
@@ -84,7 +84,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             });
         }
 
-        public void OpenTutorial(GameContentManager.Tutorial tutorial)
+        public void OpenTutorial(Tutorial tutorial)
         {
             instance = this;
 
@@ -96,15 +96,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             masks.Hide(0f);
             pointer.Hide(0f);
 
-            PlayerPrefsWrapper.SetTutorialOpened(tutorial.data, true);
+            PlayerPrefsWrapper.SetTutorialOpened(tutorial.name, true);
             StartCoroutine(DisplayCurrentStep());
         }
 
-        public bool WillDisplayTutorial(GameContentManager.Tutorial tutorial)
+        public bool WillDisplayTutorial(Tutorial tutorial)
         {
             if (!GameManager.Instance.displayTutorials) return false;
 
-            if (tutorial == null || ((PlayerPrefsWrapper.GetTutorialOpened(tutorial.data) || PlayerPrefsWrapper.GetTutorialFinished(tutorial.data)) && !GameManager.Instance.forceDisplayTutorials))
+            if (tutorial == null || ((PlayerPrefsWrapper.GetTutorialOpened(tutorial.name) || PlayerPrefsWrapper.GetTutorialFinished(tutorial.name)) && !GameManager.Instance.forceDisplayTutorials))
                 return false;
 
             return true;
@@ -119,13 +119,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void UserManagerOnUpdateName()
         {
-            OnboardingDataHolder.OnboardingTasksBatch batch = tutorial.data.batches[step];
+            OnboardingTasksBatch batch = tutorial.data[step];
 
-            foreach (OnboardingDataHolder.OnboardingTask task in batch.tasks)
+            foreach (OnboardingTask task in batch.tasks)
             {
                 switch (task.action)
                 {
-                    case OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT:
+                    case OnboardingActions.USER_CHANGE_NAME_PROMPT:
 
                         break;
                 }
@@ -136,7 +136,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (turn == null || turn.PlayerId < 1) return;
 
-            if (tutorial.data.batches[step].ContainsAction(OnboardingDataHolder.OnboardingActions.ON_MOVE_STARTED))
+            if (tutorial.data[step].ContainsAction(OnboardingActions.ON_MOVE_STARTED))
                 StartRoutine("moveFinishedNext", .5f, () => Next());
         }
 
@@ -144,13 +144,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (turn == null || turn.PlayerId < 1) return;
 
-            if (tutorial.data.batches[step].ContainsAction(OnboardingDataHolder.OnboardingActions.ON_MOVE_ENDED))
+            if (tutorial.data[step].ContainsAction(OnboardingActions.ON_MOVE_ENDED))
                 StartRoutine("moveFinishedNext", .5f, () => Next());
         }
 
         private void OnGameFinished(IClientFourzy game)
         {
-            if (tutorial.data.batches[step].ContainsAction(OnboardingDataHolder.OnboardingActions.PLAY_INITIAL_MOVES))
+            if (tutorial.data[step].ContainsAction(OnboardingActions.PLAY_INITIAL_MOVES))
                 StartRoutine("gameFinishedNext", 2f, () => Next());
         }
 
@@ -181,64 +181,64 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public IEnumerator DisplayCurrentStep()
         {
-            if (step >= tutorial.data.batches.Length)
+            if (step >= tutorial.data.Length)
             {
                 //close onboarding
                 menuController.CloseCurrentScreen();
-                PlayerPrefsWrapper.SetTutorialState(tutorial.data, true);
+                PlayerPrefsWrapper.SetTutorialState(tutorial.name, true);
 
                 yield break;
             }
 
-            currentBatch = tutorial.data.batches[step];
+            currentBatch = tutorial.data[step];
 
             IClientFourzy activeGame = GameManager.Instance.activeGame;
 
-            foreach (OnboardingDataHolder.OnboardingTask task in currentBatch.tasks)
+            foreach (OnboardingTask task in currentBatch.tasks)
             {
                 currentTask = task;
 
                 switch (task.action)
                 {
                     //dialog
-                    case OnboardingDataHolder.OnboardingActions.SHOW_MESSAGE:
+                    case OnboardingActions.SHOW_MESSAGE:
                         if (!dialog.visible) dialog.Show(.2f);
 
                         dialog.DisplayText(task.stringValue);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.HIDE_MESSAGE_BOX:
+                    case OnboardingActions.HIDE_MESSAGE_BOX:
                         dialog.Hide(.2f);
 
                         break;
 
                     //pointer
-                    case OnboardingDataHolder.OnboardingActions.POINT_AT:
+                    case OnboardingActions.POINT_AT:
                         if (!pointer.visible) pointer.Show(.2f);
 
                         pointer.PointAt(new BoardLocation((int)task.pointAt.y, (int)task.pointAt.x));
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.HIDE_POINTER:
+                    case OnboardingActions.HIDE_POINTER:
                         pointer.Hide(.2f);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.HIGHLIGHT:
+                    case OnboardingActions.HIGHLIGHT:
                         if (!highlight.visible) highlight.Show(.2f);
 
                         highlight.ShowHighlight(task.areas);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.HIDE_HIGHLIGHT:
+                    case OnboardingActions.HIDE_HIGHLIGHT:
                         highlight.Hide(.2f);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.SHOW_BOARD_HINT_AREA:
+                    case OnboardingActions.SHOW_BOARD_HINT_AREA:
                         GamePlayManager.instance.board.SetHintAreaSelectableState(false);
                         GamePlayManager.instance.board.ShowHintArea(Mechanics.Board.GameboardView.HintAreaStyle.ANIMATION_LOOP, Mechanics.Board.GameboardView.HintAreaAnimationPattern.DIAGONAL);
 
@@ -246,7 +246,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.HIDE_BOARD_HINT_AREA:
+                    case OnboardingActions.HIDE_BOARD_HINT_AREA:
                         GamePlayManager.instance.board.SetHintAreaSelectableState(true);
                         GamePlayManager.instance.board.HideHintArea(Mechanics.Board.GameboardView.HintAreaAnimationPattern.DIAGONAL);
 
@@ -254,42 +254,42 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.SHOW_MASKED_AREA:
-                        masks.ShowMasks(task.areas);
+                    case OnboardingActions.SHOW_MASKED_AREA:
+                        masks.ShowMasks(task);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.HIDE_MAKSED_AREA:
+                    case OnboardingActions.HIDE_MAKSED_AREA:
                         masks.Hide();
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.LIMIT_BOARD_INPUT:
+                    case OnboardingActions.LIMIT_BOARD_INPUT:
                         GamePlayManager.instance.board.LimitInput(task.areas);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.RESET_BOARD_INPUT:
+                    case OnboardingActions.RESET_BOARD_INPUT:
                         GamePlayManager.instance.board.SetInputMap(true);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.HIDE_BG:
+                    case OnboardingActions.HIDE_BG:
                         bg.Hide(.2f);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.SHOW_BG:
+                    case OnboardingActions.SHOW_BG:
                         bg.Show(.2f);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.PLAY_INITIAL_MOVES:
+                    case OnboardingActions.PLAY_INITIAL_MOVES:
                         if (GamePlayManager.instance) GamePlayManager.instance.board.PlayInitialMoves();
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.OPEN_GAME:
+                    case OnboardingActions.OPEN_GAME:
                         //wait for game to load
                         yield return GameManager.Instance.StartGame(
                             new ClientFourzyGame(
@@ -300,40 +300,40 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.LOG_TUTORIAL:
-                        AnalyticsManager.Instance.LogTutorialEvent(tutorial.data.tutorialName, task.stringValue);
+                    case OnboardingActions.LOG_TUTORIAL:
+                        AnalyticsManager.Instance.LogTutorialEvent(tutorial.name, task.stringValue);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.HIDE_WIZARD:
+                    case OnboardingActions.HIDE_WIZARD:
                         graphics.Hide(.3f);
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.WIZARD_CENTER:
+                    case OnboardingActions.WIZARD_CENTER:
                         graphics.Show(.3f);
 
                         break;
 
                     //player1 make move
-                    case OnboardingDataHolder.OnboardingActions.PLAYER_1_PLACE_GAMEPIECE:
+                    case OnboardingActions.PLAYER_1_PLACE_GAMEPIECE:
                         Player player = activeGame.me;
                         GamePlayManager.instance.board.TakeTurn(new SimpleMove(new Piece(player.PlayerId, int.Parse(player.HerdId)), task.direction, task.intValue));
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.PLAYER_2_PLACE_GAMEPIECE:
+                    case OnboardingActions.PLAYER_2_PLACE_GAMEPIECE:
                         Player opponent = activeGame.opponent;
                         GamePlayManager.instance.board.TakeTurn(new SimpleMove(new Piece(opponent.PlayerId, opponent.HerdId == null ? 1 : int.Parse(opponent.HerdId)), task.direction, task.intValue));
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.USER_CHANGE_NAME_PROMPT:
+                    case OnboardingActions.USER_CHANGE_NAME_PROMPT:
                         menuController.GetScreen<ChangeNamePromptScreen>()._Prompt();
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE:
+                    case OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE:
                         if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE))
                         {
                             Next();
@@ -342,14 +342,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.LOAD_MAIN_MENU:
+                    case OnboardingActions.LOAD_MAIN_MENU:
                         GameManager.Instance.OpenMainMenu();
 
                         while (!FourzyMainMenuController.instance || !FourzyMainMenuController.instance.initialized) yield return null;
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.EXEC_MENU_EVENT:
+                    case OnboardingActions.EXEC_MENU_EVENT:
                         MenuController.AddMenuEvent(task.stringValue, task.menuEvent);
                         MenuController.GetMenu(task.stringValue).ExecuteMenuEvents();
 
@@ -358,7 +358,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                         //will update currentWidget
-                    case OnboardingDataHolder.OnboardingActions.HIGHLIGHT_PROGRESSION_EVENT:
+                    case OnboardingActions.HIGHLIGHT_PROGRESSION_EVENT:
                         if (!GameManager.Instance.isMainMenuLoaded) break;
 
                         Camera3D.Camera3dItemProgressionMap item = FourzyMainMenuController.instance.GetScreen<ProgressionMapScreen>().mapContent._item;
@@ -376,7 +376,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                    case OnboardingDataHolder.OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON:
+                    case OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON:
                         if (!GameManager.Instance.isMainMenuLoaded) break;
 
                         MenuController _menuController = FourzyMainMenuController.instance;

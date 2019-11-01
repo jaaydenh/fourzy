@@ -5,6 +5,7 @@ using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
@@ -69,9 +70,6 @@ namespace Fourzy
             foreach (PrefabTypePair prefabTypePair in typedPrefabs.list)
                 if (!typedPrefabsFastAccess.ContainsKey(prefabTypePair.prefabType))
                     typedPrefabsFastAccess.Add(prefabTypePair.prefabType, prefabTypePair);
-
-            //init tutorials
-            foreach (Tutorial tutorial in HardcodedTutorials.tutorials) tutorial.Initialize();
 
             piecesDataHolder.Initialize();
             passAndPlayDataHolder.Initialize();
@@ -208,8 +206,8 @@ namespace Fourzy
         {
             for (int tutorialIndex = 0; tutorialIndex < HardcodedTutorials.tutorials.Count; tutorialIndex++)
             {
-                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorial + HardcodedTutorials.tutorials[tutorialIndex].data.tutorialName);
-                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorialOpened + HardcodedTutorials.tutorials[tutorialIndex].data.tutorialName);
+                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorial + HardcodedTutorials.tutorials[tutorialIndex].name);
+                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorialOpened + HardcodedTutorials.tutorials[tutorialIndex].name);
             }
         }
 
@@ -236,41 +234,6 @@ namespace Fourzy
             result.transform.localScale = Vector3.one;
 
             return result.GetComponent<T>();
-        }
-
-        [Serializable]
-        public class TutorialsCollection
-        {
-            public List<Tutorial> list;
-        }
-
-        [Serializable]
-        public class Tutorial
-        {
-            [HideInInspector]
-            public string _name;
-            [HideInInspector]
-            public bool previousState;
-
-            [StackableField]
-            [ShowIf("#Check")]
-            public OnboardingDataHolder data;
-
-            public bool wasFinishedThisSession => !previousState && PlayerPrefsWrapper.GetTutorialFinished(data);
-
-            public void Initialize()
-            {
-                if (!data) return;
-
-                previousState = PlayerPrefsWrapper.GetTutorialFinished(data);
-            }
-
-            public bool Check()
-            {
-                _name = data ? data.tutorialName : "No data specified.";
-
-                return true;
-            }
         }
 
         [Serializable]
