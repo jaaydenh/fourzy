@@ -1,0 +1,16 @@
+{
+    "name": "Squishy Fruit",
+    "type": 0,
+    "id": "00070",
+    "unlockRequirement": 0,
+    "herdID": "4",
+    "playerName": "Triangry",
+    "rewards": [
+        {
+            "levelIndex": 9,
+            "rewardType": 5,
+            "name": "",
+            "quantity": 0
+        }
+    ]
+}

@@ -5,7 +5,9 @@
         "boardSpaceData": [
             {
                 "P": null,
-                "T": ["B"]
+                "T": [
+                    "B"
+                ]
             },
             {
                 "P": null,
@@ -33,19 +35,9 @@
             },
             {
                 "P": null,
-                "T": ["B"]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
+                "T": [
+                    "B"
+                ]
             },
             {
                 "P": null,
@@ -114,7 +106,39 @@
             {
                 "P": null,
                 "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
                     "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "B"
                 ]
             },
             {
@@ -215,23 +239,9 @@
             },
             {
                 "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": ["B"]
+                "T": [
+                    "B"
+                ]
             },
             {
                 "P": null,
@@ -259,7 +269,9 @@
             },
             {
                 "P": null,
-                "T": ["B"]
+                "T": [
+                    "B"
+                ]
             }
         ],
         "initialMoves": [],
@@ -289,13 +301,13 @@
                         "pieceType": 0,
                         "Notation": "1"
                     },
-                    "direction": 2,
+                    "direction": 0,
                     "location": 3,
                     "moveType": 0,
-                    "notation": "Move:LEFT3"
+                    "notation": "Move:UP3"
                 }
             ],
-            "Notation": "Move:LEFT3",
+            "Notation": "Move:UP3",
             "timestamp": 0,
             "uniqueId": "e1b0287d-b335-4bc6-8577-08e155a9ceca"
         }
@@ -613,5 +625,7 @@
     },
     "GoalType": 0,
     "MoveLimit": 1,
-    "Complexity": 0
+    "Complexity": 0,
+    "StartingMagic": 0,
+    "AvailableSpells": null
 }

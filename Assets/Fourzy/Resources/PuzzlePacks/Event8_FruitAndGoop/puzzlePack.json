@@ -1,0 +1,16 @@
+{
+    "name": "Fruit and Goop",
+    "type": 0,
+    "id": "00080",
+    "unlockRequirement": 0,
+    "herdID": "4",
+    "playerName": "Triangry",
+    "rewards": [
+        {
+            "levelIndex": 7,
+            "rewardType": 5,
+            "name": "",
+            "quantity": 0
+        }
+    ]
+}

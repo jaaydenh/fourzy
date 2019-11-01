@@ -1,1 +1,629 @@
-{"ID":"a67b5937-5de9-45fe-b090-3957a5e9ee83","Enabled":true,"GameBoard":{"boardSpaceData":[{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":"1","T":null},{"P":null,"T":["AR"]},{"P":"1","T":null},{"P":"1","T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":null},{"P":null,"T":["B"]}],"initialMoves":[],"rows":8,"columns":8,"area":2,"id":"e60bf08e-6037-4e11-b48e-f90e405a3021","boardName":"Arrow_Stop_Middle","enabled":true,"enabledGallery":false,"enabledRealtime":false},"Profile":0,"Boss":0,"FirstTurn":1,"Solution":[{"playerId":1,"playerString":null,"moves":[{"piece":{"conditions":[],"playerId":1,"herdId":0,"UniqueId":"b5a6d49a-01b8-424f-a501-5ae043aeaf4d","pieceType":0,"Notation":"1"},"direction":1,"location":3,"moveType":0,"notation":"Move:DOWN3"}],"Notation":"Move:DOWN3","timestamp":0,"uniqueId":"24b0ffc1-a3e7-49ec-a7ff-81f1b3de9aea"}],"SolutionStateData":{"boardSpaceData":[{"P":"0","T":["B"]},{"P":"2","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":["B"]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"1","T":[]},{"P":"1","T":[]},{"P":"2","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":["s"]},{"P":"2","T":["s"]},{"P":"2","T":["s"]},{"P":"0","T":["s"]},{"P":"0","T":[]},{"P":"1","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":["s"]},{"P":"1","T":["s"]},{"P":"2","T":["s"]},{"P":"0","T":["s"]},{"P":"2","T":[]},{"P":"1","T":[]},{"P":"2","T":[]},{"P":"2","T":[]},{"P":"0","T":["s"]},{"P":"1","T":["s"]},{"P":"1","T":["s"]},{"P":"0","T":["s"]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":["s"]},{"P":"1","T":["s"]},{"P":"1","T":["s"]},{"P":"2","T":["s"]},{"P":"2","T":[]},{"P":"1","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"1","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":[]},{"P":"0","T":["B"]},{"P":"0","T":["B"]},{"P":"0","T":[]},{"P":"0","T":["B"]},{"P":"0","T":["B"]},{"P":"0","T":[]},{"P":"0","T":["B"]},{"P":"0","T":[]},{"P":"0","T":["B"]}],"rows":8,"columns":8,"area":8},"GoalType":0,"MoveLimit":2,"Complexity":0,"StartingMagic":0,"AvailableSpells":null}
+{
+    "ID": "a67b5937-5de9-45fe-b090-3957a5e9ee83",
+    "Enabled": true,
+    "GameBoard": {
+        "boardSpaceData": [
+            {
+                "P": null,
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": "1",
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "AR"
+                ]
+            },
+            {
+                "P": "1",
+                "T": null
+            },
+            {
+                "P": "1",
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "B"
+                ]
+            }
+        ],
+        "initialMoves": [],
+        "rows": 8,
+        "columns": 8,
+        "area": 2,
+        "id": "e60bf08e-6037-4e11-b48e-f90e405a3021",
+        "boardName": "Arrow_Stop_Middle",
+        "enabled": true,
+        "enabledGallery": false,
+        "enabledRealtime": false
+    },
+    "Profile": 0,
+    "Boss": 0,
+    "FirstTurn": 1,
+    "Solution": [
+        {
+            "playerId": 1,
+            "playerString": null,
+            "moves": [
+                {
+                    "piece": {
+                        "conditions": [],
+                        "playerId": 1,
+                        "herdId": 0,
+                        "UniqueId": "b5a6d49a-01b8-424f-a501-5ae043aeaf4d",
+                        "pieceType": 0,
+                        "Notation": "1"
+                    },
+                    "direction": 1,
+                    "location": 3,
+                    "moveType": 0,
+                    "notation": "Move:DOWN3"
+                }
+            ],
+            "Notation": "Move:DOWN3",
+            "timestamp": 0,
+            "uniqueId": "24b0ffc1-a3e7-49ec-a7ff-81f1b3de9aea"
+        }
+    ],
+    "SolutionStateData": {
+        "boardSpaceData": [
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "1",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "1",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "1",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "1",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "1",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            }
+        ],
+        "rows": 8,
+        "columns": 8,
+        "area": 8
+    },
+    "GoalType": 0,
+    "MoveLimit": 1,
+    "Complexity": 0,
+    "StartingMagic": 0,
+    "AvailableSpells": null
+}
