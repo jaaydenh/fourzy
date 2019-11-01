@@ -182,6 +182,53 @@ namespace Fourzy._Updates.UI.Camera3D
             }
         }
 
+        public List<ProgressionEvent> Next(string currentID)
+        {
+            ProgressionEvent current = null;
+
+            foreach (ProgressionEvent @event in widgets)
+            {
+                bool found = false;
+                switch (@event.EventType)
+                {
+                    case ProgressionEvent.ProgressionEventType.GAME:
+                        if (currentID == @event.PuzzlePack.packID)
+                        {
+                            current = @event;
+                            found = true;
+                        }
+
+                        break;
+
+                    case ProgressionEvent.ProgressionEventType.REWARD:
+                        if (currentID == @event.otherRewardID)
+                        {
+                            current = @event;
+                            found = true;
+                        }
+
+                        break;
+                }
+
+                if (found) break;
+            }
+
+            if (current) return current.unlockWhenComplete;
+
+            return new List<ProgressionEvent>();
+        }
+
+        public BasicPuzzlePack GetNextPack(string currentID)
+        {
+            List<ProgressionEvent> nextEvents = Next(currentID);
+
+            foreach (ProgressionEvent @event in nextEvents)
+                if (@event.EventType == ProgressionEvent.ProgressionEventType.GAME)
+                    return @event.PuzzlePack;
+
+            return null;
+        }
+
         public void SetScrollLockedState(bool state) => scrollLocked = state;
 
         public void ResetPlayerPrefs()

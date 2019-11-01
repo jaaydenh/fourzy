@@ -76,6 +76,7 @@ namespace Fourzy._Updates.UI.Camera3D
         {
             item = _item = GetItem() as Camera3dItemProgressionMap;
 
+            GameManager.Instance.currentMap = _item;
             _item.originalTextureWidth = (int)rectTransform.rect.width;
             _item.originalTextureHeight = (int)rectTransform.rect.height;
             _item.ConfigureCamera();

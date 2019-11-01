@@ -306,7 +306,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             aiTurnThread = ThreadsQueuer.Instance.StartThreadForFunc(() =>
             {
-                string gameId = game.GameID;
+                string gameId = game.BoardID;
                 
                 PlayerTurnResult turnResults = null;
 
@@ -324,7 +324,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
                 {
-                    if (GameManager.Instance.activeGame == null || GameManager.Instance.activeGame.GameID != gameId) return;
+                    if (GameManager.Instance.activeGame == null || GameManager.Instance.activeGame.BoardID != gameId) return;
 
                     turn = new ClientPlayerTurn(turnResults.Turn.Moves);
                     turn.PlayerId = turnResults.Turn.PlayerId;

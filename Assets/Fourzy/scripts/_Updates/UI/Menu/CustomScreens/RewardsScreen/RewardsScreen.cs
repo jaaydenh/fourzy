@@ -86,7 +86,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game.puzzleData && game.puzzleData.pack)
                 return game.puzzleData.pack.complete && !PlayerPrefsWrapper.GetRewardRewarded(game.puzzleData.pack.packID);
             else
-                return !PlayerPrefsWrapper.GetGameRewarded(game.GameID);
+                return !PlayerPrefsWrapper.GetGameRewarded(game.BoardID);
         }
 
         public void SetData(IClientFourzy game, bool addTimerRoutine = true)
@@ -109,7 +109,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //assign rewards
             rewards.AssignRewards();
 
-            PlayerPrefsWrapper.SetGameRewarded(game.GameID, true);
+            PlayerPrefsWrapper.SetGameRewarded(game.BoardID, true);
 
             previousXP = UserManager.Instance.xp;
 

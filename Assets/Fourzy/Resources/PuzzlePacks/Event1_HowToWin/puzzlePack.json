@@ -6,11 +6,11 @@
     "herdID": "2",
     "playerName": "Cyclops",
     "rewards": [
-    {
-      "levelIndex": 9,
-      "rewardType": 5,
-      "name": "",
-      "quantity": 0
-    }
+    //{
+    //  "levelIndex": 9,
+    //  "rewardType": 5,
+    //  "name": "",
+    //  "quantity": 0
+    //}
   ]
 }

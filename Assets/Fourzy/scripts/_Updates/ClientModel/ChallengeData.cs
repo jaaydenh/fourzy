@@ -48,7 +48,7 @@ namespace Fourzy._Updates.ClientModel
         public ClientFourzyGame GetGameForMove(PlayerTurn targetMove)
         {
             ClientFourzyGame game = new ClientFourzyGame(originalGameState);
-            game.GameID = challengeInstanceId;
+            game.BoardID = challengeInstanceId;
             game._Type = GameType.TURN_BASED;
             game.challengeData = this;
 

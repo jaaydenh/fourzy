@@ -86,7 +86,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //if so, check if active game is the one that got update, so it can be set as viewed
             if (GameManager.Instance.activeGame != null && GameManager.Instance.activeGame._Type == GameType.TURN_BASED)
             {
-                if (GameManager.Instance.activeGame.GameID == data.challengeInstanceId && data.lastTurnGame.isOver)
+                if (GameManager.Instance.activeGame.BoardID == data.challengeInstanceId && data.lastTurnGame.isOver)
                     PlayerPrefsWrapper.SetGameViewed(data.challengeInstanceId);
             }
 

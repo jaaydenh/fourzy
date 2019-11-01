@@ -21,7 +21,7 @@ namespace Fourzy._Updates.ClientModel
         GameMode _Mode { get; set; }
         Area _Area { get; set; }
         GameStateDataEpoch toGameStateData { get; }
-        string GameID { get; set; }
+        string BoardID { get; set; }
         bool isFourzyPuzzle { get; }
         List<Creature> myMembers { get; }
 

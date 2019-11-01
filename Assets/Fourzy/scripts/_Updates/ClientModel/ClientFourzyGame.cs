@@ -157,7 +157,7 @@ namespace Fourzy._Updates.ClientModel
         }
 
         public float initializedTime { get; set; }
-        public string GameID
+        public string BoardID
         {
             get
             {
@@ -365,7 +365,7 @@ namespace Fourzy._Updates.ClientModel
         public ClientFourzyGame(GameBoardDefinition definition, Player Player1, Player Player2) : base(definition, Player1, Player2)
         {
             initialMoves = new List<SimpleMove>(definition.InitialMoves);
-            GameID = definition.ID;
+            BoardID = definition.ID;
 
             Initialize();
         }
@@ -575,7 +575,7 @@ namespace Fourzy._Updates.ClientModel
                     GameBoardDefinition _gameBoardDefinition = null;
 
                     //get next board
-                    int index = GameContentManager.Instance.passAndPlayDataHolder.gameboards.IndexOf(GameContentManager.Instance.passAndPlayDataHolder.gameboards.Find(board => board.ID == GameID));
+                    int index = GameContentManager.Instance.passAndPlayDataHolder.gameboards.IndexOf(GameContentManager.Instance.passAndPlayDataHolder.gameboards.Find(board => board.ID == BoardID));
 
                     if (index < GameContentManager.Instance.passAndPlayDataHolder.gameboards.Count && index >= 0)
                         _gameBoardDefinition = GameContentManager.Instance.passAndPlayDataHolder.gameboards[index + 1];
@@ -627,7 +627,7 @@ namespace Fourzy._Updates.ClientModel
             }
 
             game.puzzleData = puzzleData;
-            game.GameID = puzzleData.gameBoardDefinition != null ? puzzleData.gameBoardDefinition.ID : "random_level";
+            game.BoardID = puzzleData.gameBoardDefinition != null ? puzzleData.gameBoardDefinition.ID : "random_level";
             game._State.ActivePlayerId = puzzleData.firstTurn < 1 ? game.me.PlayerId : puzzleData.firstTurn;
 
             game.opponent.HerdId = puzzleData.PuzzlePlayer.HerdId;

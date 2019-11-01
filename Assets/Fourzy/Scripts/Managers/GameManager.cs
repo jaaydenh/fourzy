@@ -11,6 +11,7 @@ using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Threading;
 using Fourzy._Updates.Tools;
+using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
@@ -78,6 +79,7 @@ namespace Fourzy
         public PuzzleData dailyPuzzlePack { get; private set; }
         public IClientFourzy activeGame { get; set; }
         public BasicPuzzlePack currentPuzzlePack { get; set; }
+        public Camera3dItemProgressionMap currentMap { get; set; }
         public DependencyStatus dependencyStatus { get; set; }
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public string sessionID { get; private set; }
@@ -219,7 +221,7 @@ namespace Fourzy
             {
                 case GameType.TURN_BASED:
                     if (debugMessages)
-                        Debug.Log($"Starting challenge, id: {game.GameID}");
+                        Debug.Log($"Starting challenge, id: {game.BoardID}");
                     break;
             }
 

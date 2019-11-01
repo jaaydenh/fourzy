@@ -45,7 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
-                    challengeIDLabel.text = $"ChallengeID: {game.GameID}";
+                    challengeIDLabel.text = $"ChallengeID: {game.BoardID}";
 
                     OnUpdateChallenges(ChallengeManager.Instance.Challenges);
                     Open();
@@ -79,7 +79,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game._Type != GameType.TURN_BASED) return;
 
             nextChallenge = null;
-            int currentChallengeIndex = challenges.FindIndex(challenge => challenge.challengeInstanceId == game.GameID);
+            int currentChallengeIndex = challenges.FindIndex(challenge => challenge.challengeInstanceId == game.BoardID);
             for (int challengeIndex = 1; challengeIndex < challenges.Count; challengeIndex++)
             {
                 ChallengeData _challenge;
@@ -105,7 +105,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 case GameType.TURN_BASED:
                     //if there is no next challenge, check if challengeData can be one
-                    if (nextChallenge == null && game.GameID != challengeData.challengeInstanceId)
+                    if (nextChallenge == null && game.BoardID != challengeData.challengeInstanceId)
                     {
                         if (challengeData.canBeNext)
                         {

@@ -84,7 +84,7 @@ namespace Fourzy._Updates.ClientModel
             set { }
         }
 
-        public string GameID
+        public string BoardID
         {
             get => puzzleData.gameBoardDefinition.ID;
 

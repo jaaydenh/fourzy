@@ -280,7 +280,7 @@ namespace Fourzy
                 //if so, check if active game is the one that got update, so it can be set as viewed
                 if (GameManager.Instance.activeGame != null && GameManager.Instance.activeGame._Type == GameType.TURN_BASED)
                 {
-                    if (GameManager.Instance.activeGame.GameID == _challenge.challengeInstanceId && _challenge.lastTurnGame.isOver)
+                    if (GameManager.Instance.activeGame.BoardID == _challenge.challengeInstanceId && _challenge.lastTurnGame.isOver)
                         PlayerPrefsWrapper.SetGameViewed(_challenge.challengeInstanceId);
                 }
 

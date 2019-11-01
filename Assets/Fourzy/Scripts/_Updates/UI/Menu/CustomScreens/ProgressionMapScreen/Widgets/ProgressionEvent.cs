@@ -100,15 +100,15 @@ namespace Fourzy._Updates.UI.Widgets
                 switch (EventType)
                 {
                     case ProgressionEventType.GAME:
-                        switch (PuzzlePack.packType)
-                        {
-                            case PackType.AI_PACK:
-                            case PackType.BOSS_AI_PACK:
+                        //switch (PuzzlePack.packType)
+                        //{
+                        //    case PackType.AI_PACK:
+                        //    case PackType.BOSS_AI_PACK:
                                 return PuzzlePack.complete;
 
-                            default:
-                                return PlayerPrefsWrapper.GetRewardRewarded(id);
-                        }
+                        //    default:
+                        //        return PlayerPrefsWrapper.GetRewardRewarded(id);
+                        //}
 
                     default:
                         return PlayerPrefsWrapper.GetRewardRewarded(id);
@@ -286,10 +286,10 @@ namespace Fourzy._Updates.UI.Widgets
 
                         case PackType.PUZZLE_PACK:
                             //only open prepack prompt if there are any rewards in puzzle pack
-                            if (PuzzlePack.allRewards.Count > 0)
+                            //if (PuzzlePack.allRewards.Count > 0)
                                 menuScreen.menuController.GetScreen<PrePackPrompt>().Prompt(PuzzlePack);
-                            else
-                                PuzzlePack.StartNextUnsolvedPuzzle();
+                            //else
+                            //    PuzzlePack.StartNextUnsolvedPuzzle();
 
                             break;
                     }

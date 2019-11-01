@@ -103,7 +103,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             //add gems
 #if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.O))
+            if (Input.GetKeyDown(KeyCode.U))
                 UserManager.Instance.hints += 3;
             else if (Input.GetKeyDown(KeyCode.I))
                 UserManager.Instance.hints -= 3;
@@ -505,12 +505,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
-                    logGameFinished = PlayerPrefsWrapper.GetGameViewed(game.GameID);
+                    logGameFinished = PlayerPrefsWrapper.GetGameViewed(game.BoardID);
 
                     break;
 
                 case GameType.PUZZLE:
-                    logGameFinished = PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.GameID);
+                    logGameFinished = PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.BoardID);
 
                     break;
 
@@ -556,9 +556,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameType.TURN_BASED:
                     //if game was over and havent been viewed yet, set it to viewed
-                    if (game.asFourzyGame.challengeData.lastTurnGame.isOver && !PlayerPrefsWrapper.GetGameViewed(game.GameID))
+                    if (game.asFourzyGame.challengeData.lastTurnGame.isOver && !PlayerPrefsWrapper.GetGameViewed(game.BoardID))
                     {
-                        PlayerPrefsWrapper.SetGameViewed(game.GameID);
+                        PlayerPrefsWrapper.SetGameViewed(game.BoardID);
 
                         ChallengeManager.OnChallengeUpdateLocal.Invoke(game.asFourzyGame.challengeData);
                     }
@@ -860,7 +860,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private IEnumerator PlayHintRoutine()
         {
-            int lastHintIndex = PlayerPrefsWrapper.GetPuzzleHintProgress(game.GameID);
+            int lastHintIndex = PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID);
 
             bool resetBoard = game._playerTurnRecord.Count != lastHintIndex;
 
@@ -888,7 +888,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             while (IsRoutineActive("gameInit")) yield return null;
 
             board.TakeTurn(game.puzzleData.Solution[lastHintIndex]);
-            PlayerPrefsWrapper.SetPuzzleHintProgress(game.GameID, lastHintIndex + 1 == game.puzzleData.Solution.Count ? 0 : lastHintIndex + 1);
+            PlayerPrefsWrapper.SetPuzzleHintProgress(game.BoardID, lastHintIndex + 1 == game.puzzleData.Solution.Count ? 0 : lastHintIndex + 1);
         }
 
         private IEnumerator StartRealtimeCountdown()

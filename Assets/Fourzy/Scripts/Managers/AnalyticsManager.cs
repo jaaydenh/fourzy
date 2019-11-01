@@ -221,7 +221,7 @@ namespace Fourzy
 
             foreach (KeyValuePair<string, object> p in extraParams) @params.Add(p.Key, p.Value);
 
-            @params.Add(BOARD_ID_KEY, game.GameID);
+            @params.Add(BOARD_ID_KEY, game.BoardID);
             @params.Add(AREA_KEY, game._Area);
 
             switch (gameEventType)
@@ -327,7 +327,7 @@ namespace Fourzy
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
                     @params.Add(HINT_AVAILABLE_KEY, UserManager.Instance.hints > 0);
                     @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.GameID));
+                    @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
                     
                     break;
 
@@ -338,7 +338,7 @@ namespace Fourzy
                     @params.Add(LEVEL_ID, game.puzzleData.ID);
                     @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
                     @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.GameID));
+                    @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
 
                     break;
             }

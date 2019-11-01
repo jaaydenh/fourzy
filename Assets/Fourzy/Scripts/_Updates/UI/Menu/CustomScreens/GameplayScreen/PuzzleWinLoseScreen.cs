@@ -47,18 +47,39 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!game.draw && game.IsWinner())
             {
-                if (game.puzzleData.pack && game.puzzleData.pack.justFinished)
+                if (game.puzzleData.pack/* && game.puzzleData.pack.justFinished*/)
                 {
-                    ////add menu event
-                    //MenuController.AddMenuEvent(
-                    //    Constants.MAIN_MENU_CANVAS_NAME, 
-                    //    new KeyValuePair<string, object>("puzzlePack", GameManager.Instance.currentPuzzlePack));
+                    ////open main menu
+                    //GameManager.Instance.OpenMainMenu();
 
-                    //open main menu
-                    GameManager.Instance.OpenMainMenu();
+                    ////consume
+                    //GameManager.Instance.currentPuzzlePack.justFinished = false;
 
-                    //consume
-                    GameManager.Instance.currentPuzzlePack.justFinished = false;
+                    if (game.puzzleData.lastInPack)
+                    {
+                        //open screen for next event
+                        BasicPuzzlePack nextPack = GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packID);
+                        if (nextPack)
+                        {
+                            switch (nextPack.packType)
+                            {
+                                case PackType.AI_PACK:
+                                case PackType.BOSS_AI_PACK:
+                                    menuController.GetScreen<VSGamePrompt>().Prompt(nextPack, () => GamePlayManager.instance.BackButtonOnClick());
+
+                                    break;
+
+                                case PackType.PUZZLE_PACK:
+                                    menuController.GetScreen<PrePackPrompt>().Prompt(nextPack, () => GamePlayManager.instance.BackButtonOnClick());
+
+                                    break;
+                            }
+                        }
+                        else
+                            GamePlayManager.instance.BackButtonOnClick();
+                    }
+                    else
+                        GamePlayManager.instance.LoadGame(game.Next());
                 }
                 else
                     GamePlayManager.instance.LoadGame(game.Next());

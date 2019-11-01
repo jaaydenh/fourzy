@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Widgets;
+using System;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -18,7 +19,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             menuController.CloseCurrentScreen(true);
         }
 
-        public void Prompt(BasicPuzzlePack puzzlePack)
+        public void Prompt(BasicPuzzlePack puzzlePack, Action onClose = null)
         {
             if (this.puzzlePack == null || this.puzzlePack != puzzlePack)
             {
@@ -35,7 +36,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 menuController.CloseCurrentScreen(false);
                 puzzlePack.StartNextUnsolvedPuzzle();
-            }, () => menuController.CloseCurrentScreen());
+            },
+            onClose ?? (() => menuController.CloseCurrentScreen()));
         }
     }
 }

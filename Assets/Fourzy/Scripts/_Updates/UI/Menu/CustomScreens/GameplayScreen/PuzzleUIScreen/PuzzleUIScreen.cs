@@ -59,8 +59,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (game.puzzleData.pack)
             {
-                nextButton.Hide(0f);
-                nextButton.SetState(false);
+                if (game.puzzleData.pack.complete)
+                {
+                    nextButton.Show(0f);
+                    nextButton.SetState(true);
+                }
 
                 switch (game.puzzleData.pack.packType)
                 {
@@ -75,7 +78,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         movesLeftWidget.SetData(game.asFourzyPuzzle);
 
-                        if (PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.GameID))
+                        if (PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID))
                             completeIcon.PlayForward(true);
                         else
                             completeIcon.AtProgress(0f);
@@ -96,7 +99,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 packInfoTween.SetAlpha(1f);
 
-                if (PlayerPrefsWrapper.GetFastPuzzleComplete(game.GameID))
+                if (PlayerPrefsWrapper.GetFastPuzzleComplete(game.puzzleData.ID))
                     completeIcon.PlayForward(true);
                 else
                     completeIcon.AtProgress(0f);
