@@ -190,6 +190,7 @@ namespace Fourzy._Updates.ClientModel
             PlayerPrefsWrapper.SetPuzzlePackUnlocked(packID, false);
             PlayerPrefsWrapper.SetPuzzlePackOpened(packID, false);
 
+            if (puzzlesData == null) Debug.Log(name);
             puzzlesData.ForEach(_data =>
             {
                 PlayerPrefsWrapper.SetPuzzleChallengeComplete(_data.ID, false);

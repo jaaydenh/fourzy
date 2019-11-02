@@ -334,11 +334,6 @@ namespace Fourzy._Updates.UI.Widgets
                     PlayerPrefsWrapper.SetRewardRewarded(id, false);
 
                     break;
-
-                case ProgressionEventType.GAME:
-                    PuzzlePack.ResetPlayerPrefs();
-
-                    break;
             }
 
             if (string.IsNullOrEmpty(gameObject.scene.name)) return null;

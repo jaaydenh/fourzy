@@ -394,6 +394,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4716829825838954851, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1935594895090930301, guid: c808e81a56ec23d49b7830ab6eacfba9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -503,6 +508,11 @@ PrefabInstance:
         type: 3}
       propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
       value: 41
+      objectReference: {fileID: 0}
+    - target: {fileID: 2190396559276138860, guid: c808e81a56ec23d49b7830ab6eacfba9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 95
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c808e81a56ec23d49b7830ab6eacfba9, type: 3}

@@ -93,6 +93,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             context.alpha = isContextShown ? 1f : 0f;
             context.interactable = isContextShown;
             context.blocksRaycasts = isContextShown;
+
+            if (!isContextShown) FourzyMainMenuController.instance.currentScreen.Open();
         }
 
         private void SetPlacementButtonState(bool state)
