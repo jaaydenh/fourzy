@@ -210,6 +210,7 @@ namespace Fourzy._Updates._Tutorial
                                 new OnboardingTask_HighlightButton("AdventureButton", LocalizationManager.Value("tap_to_open_map")),
                                 //will continue after event tap
                                 new OnboardingTask_HighlightProgressionEvent (-1, LocalizationManager.Value("tap_to_start_playing")),
+                                new OnboardingTask_Log("8"),
                             },
                         },
                     },
