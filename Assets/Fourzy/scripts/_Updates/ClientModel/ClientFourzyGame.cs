@@ -594,10 +594,11 @@ namespace Fourzy._Updates.ClientModel
         {
             int myID = me.PlayerId;
             Herd current = null;
+            bool haveHerds = State.Herds.Count > 0;
 
-            if (!resetMembers) current = new Herd(State.Herds[myID]);
+            if (haveHerds && !resetMembers) current = new Herd(State.Herds[myID]);
             State = new GameState(_FirstState);
-            if (!resetMembers) State.Herds[myID] = current;
+            if (haveHerds && !resetMembers) State.Herds[myID] = current;
 
             Initialize(false);
 

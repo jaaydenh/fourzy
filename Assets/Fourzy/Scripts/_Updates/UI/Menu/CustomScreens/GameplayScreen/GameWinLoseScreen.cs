@@ -20,7 +20,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameObject buttonsRow;
         public ButtonExtended nextGameButton;
         public ButtonExtended rematchButton;
-        //public ButtonExtended continueButton;
 
         public AlphaTween tapToContinue;
 
@@ -85,7 +84,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             tapToContinue.AtProgress(0f);
-            if (RewardsScreen.WillDisplayRewardsScreen(game) || game.puzzleData)
+            if (RewardsScreen.WillDisplayRewardsScreen(game) || (game.puzzleData && game.puzzleData.pack))
             {
                 //display 'tap to continue'
                 tapToContinue.PlayForward(true);

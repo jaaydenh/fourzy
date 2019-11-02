@@ -55,10 +55,10 @@ namespace Fourzy._Updates._Tutorial
                                 new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-                                new OnboardingTask_PointAt(new Vector2(0, 6)),
+                                new OnboardingTask_PointAt(new Vector2(0, 6), LocalizationManager.Value("tap_to_place")),
                                 new OnboardingTask_LimitInput(new Rect(0f, 6f, 1f, 1f)),
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
-                                new OnboardingTask_ShowMaskedArea(new Rect(0f, 6f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.SQUARE, Vector2.zero),
+                                new OnboardingTask_ShowMaskedArea(new Rect(0f, 6f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0, new Vector2(72f, 72f)),
                                 //this will skip to next
                                 new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                                 new OnboardingTask_Log("3"),
@@ -94,10 +94,10 @@ namespace Fourzy._Updates._Tutorial
                             {
                                 //this will skip to next
                                 new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
-                                new OnboardingTask_PointAt(new Vector2(7, 5)),
+                                new OnboardingTask_PointAt(new Vector2(7, 5), LocalizationManager.Value("tap_to_place")),
                                 new OnboardingTask_LimitInput(new Rect(7f, 5f, 1f, 1f)),
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
-                                new OnboardingTask_ShowMaskedArea(new Rect(7f, 5f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.SQUARE, Vector2.zero),
+                                new OnboardingTask_ShowMaskedArea(new Rect(7f, 5f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0, new Vector2(72f, 72f)),
                                 new OnboardingTask_Log("4"),
                             },
                         },
@@ -143,9 +143,9 @@ namespace Fourzy._Updates._Tutorial
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                                new OnboardingTask_PointAt(new Vector2(3, 0)),
+                                new OnboardingTask_PointAt(new Vector2(3, 0), LocalizationManager.Value("tap_to_place")),
                                 new OnboardingTask_LimitInput(new Rect(3f, 0f, 1f, 1f)),
-                                new OnboardingTask_ShowMaskedArea(new Rect(3f, 0f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.SQUARE, Vector2.zero),
+                                new OnboardingTask_ShowMaskedArea(new Rect(3f, 0f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0, new Vector2(72f, 72f)),
                                 //this will skip to next
                                 new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
@@ -207,9 +207,9 @@ namespace Fourzy._Updates._Tutorial
                                 new OnboardingTask() { action = OnboardingActions.LOAD_MAIN_MENU },
                                 //new OnboardingDataHolder.OnboardingTask_ExecMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, "openScreen", "tutorialProgressionMap"),
                                 //point at adventure button button
-                                new OnboardingTask_HighlightButton("AdventureButton"),
+                                new OnboardingTask_HighlightButton("AdventureButton", LocalizationManager.Value("tap_to_open_map")),
                                 //will continue after event tap
-                                new OnboardingTask_HighlightProgressionEvent (-1),
+                                new OnboardingTask_HighlightProgressionEvent (-1, LocalizationManager.Value("tap_to_start_playing")),
                             },
                         },
                     },
@@ -312,7 +312,7 @@ namespace Fourzy._Updates._Tutorial
 
         public string stringValue;
         public int intValue;
-        public Vector2 pointAt;
+        public Vector2 vector2value;
         public Rect[] areas;
         public Direction direction;
         public KeyValuePair<string, object> menuEvent;
@@ -355,10 +355,12 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_PointAt : OnboardingTask
     {
-        public OnboardingTask_PointAt(Vector2 at)
+        public OnboardingTask_PointAt(Vector2 boardLocation, string message = "")
         {
             action = OnboardingActions.POINT_AT;
-            pointAt = at;
+
+            vector2value = boardLocation;
+            stringValue = message;
         }
     }
 
@@ -379,29 +381,13 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_ShowMaskedArea : OnboardingTask
     {
-        public bool customMask => size != Vector2.zero;
-
-        public Vector2 size;
-
         public OnboardingTask_ShowMaskedArea(Rect area, OnboardingScreenMaskObject.MaskStyle maskStyle, Vector2 size)
         {
             action = OnboardingActions.SHOW_MASKED_AREA;
 
             intValue = (int)maskStyle;
             areas = new Rect[] { area };
-        }
-
-        public OnboardingTask_ShowMaskedArea(Rect[] areas)
-        {
-            action = OnboardingActions.SHOW_MASKED_AREA;
-            this.areas = areas;
-        }
-
-        public OnboardingTask_ShowMaskedArea(Vector2 position, Vector2 size)
-        {
-            action = OnboardingActions.SHOW_MASKED_AREA;
-            pointAt = position;
-            this.size = size;
+            vector2value = size;
         }
     }
 
@@ -428,19 +414,24 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_HighlightProgressionEvent : OnboardingTask
     {
-        public OnboardingTask_HighlightProgressionEvent(int index)
+        public OnboardingTask_HighlightProgressionEvent(int index, string message = "")
         {
             action = OnboardingActions.HIGHLIGHT_PROGRESSION_EVENT;
             intValue = index;
+            stringValue = message;
         }
     }
 
     public class OnboardingTask_HighlightButton : OnboardingTask
     {
-        public OnboardingTask_HighlightButton(string buttonName)
+        public string message;
+
+        public OnboardingTask_HighlightButton(string buttonName, string message = "")
         {
             action = OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON;
+
             stringValue = buttonName;
+            this.message = message;
         }
     }
 }

@@ -122,15 +122,13 @@ namespace Fourzy._Updates.UI.Menu
 
             onOpen.Invoke();
 
-            if (isOpened)
-                return;
+            if (isOpened) return;
 
             isOpened = true;
 
             if (defaultCalls)
             {
-                if (tween)
-                    tween.PlayForward(true);
+                if (tween) tween.PlayForward(true);
 
                 SetInteractable(true);
                 canvasGroup.blocksRaycasts = true;

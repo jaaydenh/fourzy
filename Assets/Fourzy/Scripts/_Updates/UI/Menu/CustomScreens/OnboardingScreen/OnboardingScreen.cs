@@ -11,6 +11,7 @@ using FourzyGameModel.Model;
 using System;
 using System.Collections;
 using UnityEngine;
+using Fourzy._Updates.Mechanics.Board;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -193,6 +194,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             currentBatch = tutorial.data[step];
 
             IClientFourzy activeGame = GameManager.Instance.activeGame;
+            Vector2 anchors;
 
             foreach (OnboardingTask task in currentBatch.tasks)
             {
@@ -215,9 +217,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     //pointer
                     case OnboardingActions.POINT_AT:
+                        GameboardView board = GamePlayManager.instance.board;
+
+                        if (board == null) break;
+
                         if (!pointer.visible) pointer.Show(.2f);
 
-                        pointer.PointAt(new BoardLocation((int)task.pointAt.y, (int)task.pointAt.x));
+                        anchors = Camera.main.WorldToViewportPoint(
+                            (Vector2)board.transform.position +
+                            board.BoardLocationToVec2(new BoardLocation((int)task.vector2value.y, (int)task.vector2value.x)));
+
+                        pointer.SetAnchors(anchors);
+                        pointer.SetMessage(task.stringValue);
 
                         break;
 
@@ -255,7 +266,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.SHOW_MASKED_AREA:
-                        masks.ShowMasks(task);
+                        masks.ShowMasks(task, FourzyMainMenuController.instance);
 
                         break;
 
@@ -363,12 +374,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         Camera3D.Camera3dItemProgressionMap item = FourzyMainMenuController.instance.GetScreen<ProgressionMapScreen>().mapContent._item;
 
-                        Vector2 anchors = item.GetCurrentEventCameraRelativePosition();
+                        anchors = item.GetCurrentEventCameraRelativePosition();
 
-                        masks.ShowMasks(anchors, new Vector2(250f, 150f), true);
+                        masks.ShowMask(anchors, new Vector2(250f, 150f), OnboardingScreenMaskObject.MaskStyle.PX_16, true);
 
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(anchors);
+                        pointer.SetMessage(task.stringValue);
 
                         item.SetScrollLockedState(true);
 
@@ -381,6 +393,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         MenuController _menuController = FourzyMainMenuController.instance;
                         MenuScreen screen = _menuController.currentScreen;
+                        OnboardingTask_HighlightButton _buttonTask = task as OnboardingTask_HighlightButton;
 
                         if (screen.GetType() == typeof(MenuTabbedScreen)) screen = (screen as MenuTabbedScreen).CurrentTab;
 
@@ -395,20 +408,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             }
                         }
 
-                        Vector2 screenSize = 
-                            new Vector2(_menuController.canvaseScaler.referenceResolution.x * _menuController.transform.localScale.x,
-                            _menuController.canvaseScaler.referenceResolution.y * _menuController.transform.localScale.y);
-
                         Vector3 position = currentButton.transform.position - screen.transform.position
                             + (Vector3)(currentButton.rectTransform.GetCenterOffset() * _menuController.transform.localScale.x);
 
-                        Vector2 anchor = Vector2.one * .5f + new Vector2(position.x / screenSize.x, position.y / screenSize.y);
+                        Vector2 anchor = Vector2.one * .5f + new Vector2(position.x / _menuController.size.x, position.y / _menuController.size.y);
 
-                        masks.ShowMasks(anchor, new Vector2(350f, 130f), true);
+                        masks.ShowMask(anchor, new Vector2(330f, 122f), OnboardingScreenMaskObject.MaskStyle.PX_16, true);
 
                         //pointer
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(anchor);
+                        pointer.SetMessage(_buttonTask.message);
 
                         break;
                 }

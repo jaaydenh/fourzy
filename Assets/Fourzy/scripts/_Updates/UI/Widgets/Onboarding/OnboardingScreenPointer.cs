@@ -1,15 +1,15 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Mechanics.Board;
-using Fourzy._Updates.Mechanics.GameplayScene;
-using FourzyGameModel.Model;
+using Fourzy._Updates.UI.Helpers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class OnboardingScreenPointer : WidgetBase
     {
-        public RectTransform pointerGraphics;
+        public Image hand;
+        public Badge messagaBox;
 
         protected override void Awake()
         {
@@ -21,22 +21,30 @@ namespace Fourzy._Updates.UI.Widgets
             Hide(0f);
         }
 
-        public void PointAt(BoardLocation location)
-        {
-            SetAnchors(Vector2.zero);
-
-            GameboardView board = GamePlayManager.instance.board;
-
-            if (board == null) return;
-
-            pointerGraphics.anchoredPosition = menuScreen.menuController.WorldToCanvasPoint((board.transform.position + (Vector3)board.BoardLocationToVec2(location)));
-        }
-
         public override WidgetBase SetAnchors(Vector2 anchor)
         {
-            pointerGraphics.anchoredPosition = Vector2.zero;
+            if (anchor.x > .8f)
+                hand.transform.localScale = Vector3.one; 
+            else
+                hand.transform.localScale = new Vector3(-1f, 1f, 1f);
 
             return base.SetAnchors(anchor);
+        }
+
+        public OnboardingScreenPointer SetMessage(string message)
+        {
+            messagaBox.SetValue(message);
+
+            if (rectTransform.anchorMin.x > .8f)
+                messagaBox.SetPivot(Vector2.one);
+            else if (rectTransform.anchorMin.x < .2f)
+                messagaBox.SetPivot(Vector2.up);
+            else
+                messagaBox.SetPivot(new Vector2(.5f, 1f));
+
+            messagaBox.SetPosition(new Vector2(0f, -120f));
+
+            return this;
         }
     }
 }

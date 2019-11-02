@@ -17,18 +17,16 @@ namespace Fourzy._Updates.UI.Widgets
 
         private AlphaTween alphaTween;
         private List<OnboardingScreenMaskObject> masks = new List<OnboardingScreenMaskObject>();
-        private OnboardingScreen onboardingScreen;
 
         private CanvasGroup canvasGroup;
 
         protected void Awake()
         {
-            onboardingScreen = GetComponentInParent<OnboardingScreen>();
             alphaTween = GetComponent<AlphaTween>();
             canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void ShowMasks(OnboardingTask task, bool clear = true)
+        public void ShowMasks(OnboardingTask task,/* MenuController menu,*/ bool clear = true)
         {
             Show();
 
@@ -37,13 +35,23 @@ namespace Fourzy._Updates.UI.Widgets
             foreach (Rect area in task.areas)
                 for (int column = (int)area.x; column < (int)(area.x + area.width); column++)
                     for (int row = (int)area.y; row < (int)(area.y + area.height); row++)
-                        AddMaskObject().rectTransform.anchoredPosition =
-                            onboardingScreen.menuController.WorldToCanvasPoint(
-                                (Vector3)GamePlayManager.instance.board.BoardLocationToVec2(
-                                    new BoardLocation(row, column)) + GamePlayManager.instance.board.transform.position);
+                    {
+                        //AddMaskObject().rectTransform.anchoredPosition =
+                        //    onboardingScreen.menuController.WorldToCanvasPoint(
+                        //        (Vector3)GamePlayManager.instance.board.BoardLocationToVec2(
+                        //            new BoardLocation(row, column)) + GamePlayManager.instance.board.transform.position);
+
+                        Vector2 viewportPoint = Camera.main.WorldToViewportPoint(GamePlayManager.instance.board.BoardLocationToVec2(
+                                    new BoardLocation(row, column)) + (Vector2)GamePlayManager.instance.board.transform.position);
+
+                        AddMaskObject().
+                            Size(task.vector2value).
+                            SetStyle((OnboardingScreenMaskObject.MaskStyle)task.intValue).
+                            SetAnchors(viewportPoint);
+                    }
         }
 
-        public void ShowMasks(Vector2 anchors, Vector2 size, bool clear = true)
+        public void ShowMask(Vector2 anchors, Vector2 size, OnboardingScreenMaskObject.MaskStyle maskStyle, bool clear = true)
         {
             Show();
 
@@ -51,6 +59,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             AddMaskObject()
                 .Size(size)
+                .SetStyle(maskStyle)
                 .SetAnchors(anchors);
         }
 

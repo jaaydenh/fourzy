@@ -20,25 +20,25 @@ namespace Fourzy._Updates.UI.Helpers
         public TextMeshProUGUI targetText;
         
         private bool initialized = false;
+        private RectTransform rectTransform;
 
         protected void Awake()
         {
             Initialize();
         }
 
-        public void SetValue(string value)
+        public Badge SetValue(string value)
         {
             Initialize();
             
-            if (!targetObject)
-                return;
+            if (!targetObject) return this;
 
             if (hideOnEmpty)
             {
                 if (string.IsNullOrEmpty(value))
                 {
                     Hide();
-                    return;
+                    return this;
                 }
 
                 int intValue = -1;
@@ -46,26 +46,35 @@ namespace Fourzy._Updates.UI.Helpers
                 if (int.TryParse(value, out intValue) && intValue == 0)
                 {
                     Hide();
-                    return;
+                    return this;
                 }
             }
 
-            if (!targetText)
-                return;
+            if (!targetText) return this;
 
             Show();
 
             targetText.text = string.Format(format, value);
+
+            return this;
         }
 
-        public void SetValue(float value)
+        public Badge SetValue(float value) => SetValue(value.ToString());
+
+        public Badge SetValue(int value) => SetValue(value.ToString());
+
+        public Badge SetPivot(Vector2 pivot)
         {
-            SetValue(value.ToString());
+            rectTransform.pivot = pivot;
+
+            return this;
         }
 
-        public void SetValue(int value)
+        public Badge SetPosition(Vector2 position)
         {
-            SetValue(value.ToString());
+            rectTransform.localPosition = position;
+
+            return this;
         }
 
         public void Hide()
@@ -98,14 +107,13 @@ namespace Fourzy._Updates.UI.Helpers
 
         private void Initialize()
         {
-            if (initialized)
-                return;
+            if (initialized) return;
 
-            if (thisTarget)
-                targetObject = gameObject;
+            if (thisTarget) targetObject = gameObject;
 
-            if (!targetText)
-                targetText = targetObject.GetComponentInChildren<TextMeshProUGUI>();
+            if (!targetText) targetText = targetObject.GetComponentInChildren<TextMeshProUGUI>();
+
+            rectTransform = GetComponent<RectTransform>();
         }
 
         //editor stuff

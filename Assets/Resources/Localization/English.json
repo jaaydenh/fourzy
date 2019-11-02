@@ -126,6 +126,14 @@
       "value": "Music"
     },
     {
+      "key": "no_connection_fast_puzzle",
+      "value": "Internet connection required to play random puzzle ladder games"
+    },
+    {
+      "key": "no_fast_puzzle_entries",
+      "value": "Be the first to get to the top of the puzzle leaderboard"
+    },
+    {
       "key": "not_found",
       "value": "Not Found"
     },
@@ -188,6 +196,18 @@
     {
       "key": "tap_to_start",
       "value": "Tap to start"
+    },
+    {
+      "key": "tap_to_place",
+      "value": "Touch square\nto place gamepiece"
+    },
+    {
+      "key": "tap_to_open_map",
+      "value": "Press to open\nprogression map"
+    },
+    {
+      "key": "tap_to_start_playing",
+      "value": "Select puzzle and\nstart playing!"
     },
     {
       "key": "tokens",

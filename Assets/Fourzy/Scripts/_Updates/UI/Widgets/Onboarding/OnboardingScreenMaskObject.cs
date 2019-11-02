@@ -22,7 +22,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public OnboardingScreenMaskObject Size(Vector2 size)
         {
-            sizeTween.SetSize(size);
+            if (size != Vector2.zero) sizeTween.SetSize(size);
 
             return this;
         }
@@ -30,13 +30,6 @@ namespace Fourzy._Updates.UI.Widgets
         public OnboardingScreenMaskObject SetStyle(MaskStyle maskStyle)
         {
             image.sprite = styles.list.Find(_style => _style.style == maskStyle).sprite;
-
-            return this;
-        }
-
-        public OnboardingScreenMaskObject SetPosition(MaskStyle maskStyle)
-        {
-            SetAnchors(Vector2.zero);
 
             return this;
         }
@@ -65,8 +58,10 @@ namespace Fourzy._Updates.UI.Widgets
 
         public enum MaskStyle
         {
-            ROUNDED_EDGES,
-            SQUARE,
+            PX_24,
+            PX_16,
+            PX_12,
+            PX_0,
         }
     }
 }

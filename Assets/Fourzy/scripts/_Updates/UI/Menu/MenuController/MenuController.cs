@@ -38,6 +38,7 @@ namespace Fourzy._Updates.UI.Menu
         public float heightRatioAdjusted => Mathf.Lerp(1f, Screen.height / heightScaled, 1f - canvaseScaler.matchWidthOrHeight);
         public float widthAdjusted => canvaseScaler.referenceResolution.x * widthRatioAdjusted;
         public float heightAdjusted => canvaseScaler.referenceResolution.y * heightRatioAdjusted;
+        public Vector2 size { get; private set; }
 
         //editor version of widthAdjusted
         public float _widthAdjusted
@@ -64,6 +65,8 @@ namespace Fourzy._Updates.UI.Menu
 
             widthScaled = Screen.height / canvaseScaler.referenceResolution.y * canvaseScaler.referenceResolution.x;
             heightScaled = Screen.width / canvaseScaler.referenceResolution.x * canvaseScaler.referenceResolution.y;
+
+            size = new Vector2(canvaseScaler.referenceResolution.x * transform.localScale.x, canvaseScaler.referenceResolution.y * transform.localScale.y);
 
             if (!menus.ContainsKey(gameObject.name)) menus.Add(gameObject.name, this);
         }
@@ -218,6 +221,11 @@ namespace Fourzy._Updates.UI.Menu
         public Vector2 WorldToCanvasSize(Vector2 size)
         {
             return new Vector2(WorldToCanvasPoint(new Vector3(size.x, 0f)).x - WorldToCanvasPoint(Vector3.zero).x, WorldToCanvasPoint(new Vector3(0f, size.y)).y - WorldToCanvasPoint(Vector3.zero).y);
+        }
+
+        public Vector2 WorldToViewport(Vector2 worldPoint)
+        {
+            return _camera ? _camera.WorldToViewportPoint(worldPoint) : Camera.main.WorldToViewportPoint(worldPoint);
         }
 
         public virtual void SetState(bool state)

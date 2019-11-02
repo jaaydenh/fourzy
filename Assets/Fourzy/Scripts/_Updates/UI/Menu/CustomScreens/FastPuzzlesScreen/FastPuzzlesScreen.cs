@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using Fourzy._Updates.Managers;
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -14,6 +15,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public LeaderboardPlayerWidget leaderboardWidgetPrefab;
         public RectTransform widgetsParent;
+        public Badge noEntries;
 
         public void StartFastPuzzleGame() => GameManager.Instance.StartGame(GameContentManager.Instance.GetNextFastPuzzle());
 
@@ -47,6 +49,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             ClearEntries();
+
+            if (leaderboardRequestResult.Leaderboard.Count < 2)
+            {
+                noEntries.SetState(true);
+                return;
+            }
+            else
+                noEntries.SetState(false);
 
             foreach (PlayerLeaderboardEntry entry in leaderboardRequestResult.Leaderboard)
                 widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));

@@ -1,9 +1,9 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -11,16 +11,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public AIPlayerUIWidget aiPlayerWidgetPrefab;
         public RectTransform aiPlayersParent;
-        
-        public GridLayoutGroup gridLayoutGroup;
+        public SelectPackWidget selectPackWidgetPrefab;
+        public RectTransform puzzlePacks;
 
-        public override void Open()
+        protected override void Start()
         {
-            base.Open();
+            base.Start();
 
-            OnInitialized();
-
-            LoadAIPlayerWidgets();
+            InitWidgets();
         }
 
         public override void OnBack()
@@ -30,22 +28,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
             menuController.CloseCurrentScreen();
         }
 
-        public void LoadAIPlayerWidgets()
+        public void InitWidgets()
         {
+            //ai widgets
             foreach (Transform child in aiPlayersParent) Destroy(child.gameObject);
 
             foreach (AIPlayersDataHolder.AIPlayerData aiPlayer in GameContentManager.Instance.aiPlayersDataHolder.enabledAIPlayers)
-            {
-                AIPlayerUIWidget widget = Instantiate(aiPlayerWidgetPrefab, aiPlayersParent);
-                widget.transform.localScale = Vector3.one;
+                Instantiate(aiPlayerWidgetPrefab, aiPlayersParent).SetData(aiPlayer);
 
-                widget.SetData(aiPlayer);
-            }
-        }
-
-        public override void ExecuteMenuEvent(MenuEvents menuEvent)
-        {
-
+            //pack widgets
+            foreach (Transform child in puzzlePacks) Destroy(child.gameObject);
+            foreach (BasicPuzzlePack pack in GameContentManager.Instance.externalPuzzlePacks.Values)
+                Instantiate(selectPackWidgetPrefab, puzzlePacks).SetData(pack);
         }
     }
 }

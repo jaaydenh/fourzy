@@ -126,6 +126,14 @@
       "value": "Música"
     },
     {
+      "key": "no_connection_fast_puzzle",
+      "value": "Se requiere conexión a Internet para jugar juegos de escalera aleatorios"
+    },
+    {
+      "key": "no_fast_puzzle_entries",
+      "value": "Sé el primero en llegar a la cima de la tabla de clasificación del rompecabezas"
+    },
+    {
       "key": "not_found",
       "value": "Extraviado"
     },
@@ -188,6 +196,18 @@
     {
       "key": "tap_to_start",
       "value": "Toca para comenzar"
+    },
+    {
+      "key": "tap_to_place",
+      "value": "Toca el cuadrado para\ncolocar la pieza del juego"
+    },
+    {
+      "key": "tap_to_open_map",
+      "value": "Presione para abrir\nel mapa de progresión"
+    },
+    {
+      "key": "tap_to_start_playing",
+      "value": "Selecciona un rompecabezas y comienza a jugar!"
     },
     {
       "key": "tokens",
