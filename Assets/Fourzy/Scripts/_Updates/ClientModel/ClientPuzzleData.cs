@@ -60,6 +60,15 @@ namespace Fourzy._Updates.ClientModel
             set => _progressionIconSet = value;
         }
 
+        public Sprite currentProgressionIcon
+        {
+            get
+            {
+                if (!pack) return progressionIconEmpty;
+                else return pack.puzzlesComplete.Contains(this) ? progressionIconSet : progressionIconEmpty;
+            }
+        }
+
         public bool lastInPack
         {
             get

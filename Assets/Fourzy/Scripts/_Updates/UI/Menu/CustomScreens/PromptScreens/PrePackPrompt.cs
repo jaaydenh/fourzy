@@ -19,7 +19,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             menuController.CloseCurrentScreen(true);
         }
 
-        public void Prompt(BasicPuzzlePack puzzlePack, Action onClose = null)
+        public void Prompt(BasicPuzzlePack puzzlePack, Action onDeny = null, Action onAccept = null)
         {
             if (this.puzzlePack == null || this.puzzlePack != puzzlePack)
             {
@@ -32,12 +32,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 widgets.AddRange(progressWidget.widgets);
             }
 
-            Prompt(puzzlePack.name, null, () =>
+            promptText.gameObject.SetActive(!string.IsNullOrEmpty(puzzlePack.description));
+
+            Prompt(puzzlePack.name, puzzlePack.description,
+            onAccept ?? (() =>
             {
                 menuController.CloseCurrentScreen(false);
                 puzzlePack.StartNextUnsolvedPuzzle();
-            },
-            onClose ?? (() => menuController.CloseCurrentScreen()));
+            }),
+            onDeny ?? (() => menuController.CloseCurrentScreen()));
         }
     }
 }

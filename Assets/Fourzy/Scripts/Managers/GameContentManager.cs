@@ -141,14 +141,11 @@ namespace Fourzy
 
         public void ResetPuzzlePacks()
         {
-            //foreach (PuzzlePacksDataHolder pack in packsDataHolders)
-            //    pack.ResetPlayerPrefs();
+            foreach (BasicPuzzlePack pack in externalPuzzlePacks.Values)
+                pack.ResetPlayerPrefs();
 
             foreach (Camera3dItemProgressionMap progressionMap in progressionMaps)
                 (existingProgressionMaps.Find(__map => __map.mapID == progressionMap.mapID) ?? progressionMap).ResetPlayerPrefs();
-
-            foreach (BasicPuzzlePack pack in externalPuzzlePacks.Values)
-                pack.ResetPlayerPrefs();
         }
 
         public BasicPuzzlePack GetExternalPuzzlePack(string folderName) => externalPuzzlePacks[folderName];
@@ -305,8 +302,8 @@ namespace Fourzy
             REWARDS_PACK_COMPLETE = 17,
             REWARDS_OPEN_PORTAL = 18,
             REWARDS_OPEN_RARE_PORTAL = 19,
+            REWARDS_HINTS = 20,
 
-            REWARDS_CUSTOM = 39,
             #endregion
 
             BOARD_HINT_BOX = 40,

@@ -33,6 +33,7 @@
         GAME_PIECE = 8,
         OPEN_PORTAL = 9,
         OPEN_RARE_PORTAL = 10,
+        HINTS = 11,
 
         CUSTOM = 99,
     }

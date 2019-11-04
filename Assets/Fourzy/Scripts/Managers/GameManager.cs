@@ -266,10 +266,10 @@ namespace Fourzy
 
         public void OpenMainMenu()
         {
+            if (!isMainMenuLoaded) SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
+
             //unload gameplay scene 
             if (activeGame != null) GamePlayManager.instance.UnloadGamePlaySceene();
-
-            if (!isMainMenuLoaded) SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
         }
 
         public void OnPurchaseComplete(Product product)

@@ -21,6 +21,7 @@ namespace Fourzy._Updates.ClientModel
         public string aiPlayerName;
         public string herdID;
         public UnlockRequirementsEnum unlockRequirement;
+        public string description;
 
         public int gauntletLevels { get; private set; } = -1;
         public GauntletStatus gauntletStatus { get; private set; }
@@ -50,6 +51,8 @@ namespace Fourzy._Updates.ClientModel
             unlockRequirement = (UnlockRequirementsEnum)jObject["unlockRequirement"].ToObject<int>();
             herdID = jObject["herdID"].ToObject<string>();
             aiPlayerName = jObject["playerName"].ToObject<string>();
+            JToken descriptionToken = jObject["description"];
+            if (descriptionToken != null) description = descriptionToken.ToObject<string>();
             puzzlePlayer = new Player(2, aiPlayerName) { HerdId = herdID };
 
             RewardIndexed[] _rewards = jObject["rewards"].ToObject<RewardIndexed[]>();
@@ -190,6 +193,7 @@ namespace Fourzy._Updates.ClientModel
             PlayerPrefsWrapper.SetPuzzlePackUnlocked(packID, false);
             PlayerPrefsWrapper.SetPuzzlePackOpened(packID, false);
 
+            if (puzzlesData == null) Debug.Log(name);
             puzzlesData.ForEach(_data =>
             {
                 PlayerPrefsWrapper.SetPuzzleChallengeComplete(_data.ID, false);

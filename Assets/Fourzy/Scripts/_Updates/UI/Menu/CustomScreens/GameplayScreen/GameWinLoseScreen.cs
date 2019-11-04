@@ -182,6 +182,47 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
 
+                case GameMode.AI_PACK:
+                case GameMode.BOSS_AI_PACK:
+                    if (game.puzzleData.lastInPack)
+                    {
+                        //force update map
+                        GameManager.Instance.currentMap.UpdateWidgets();
+
+                        //open screen for next event
+                        BasicPuzzlePack nextPack = GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packID);
+                        nextPack.StartNextUnsolvedPuzzle();
+
+                        if (nextPack)
+                        {
+                            switch (nextPack.packType)
+                            {
+                                case PackType.AI_PACK:
+                                case PackType.BOSS_AI_PACK:
+                                    menuController.GetScreen<VSGamePrompt>().Prompt(
+                                        nextPack, 
+                                        () => GamePlayManager.instance.BackButtonOnClick(),
+                                        () => menuController.CloseCurrentScreen());
+
+                                    break;
+
+                                case PackType.PUZZLE_PACK:
+                                    menuController.GetScreen<PrePackPrompt>().Prompt(
+                                        nextPack, 
+                                        () => GamePlayManager.instance.BackButtonOnClick(),
+                                        () => menuController.CloseCurrentScreen());
+
+                                    break;
+                            }
+                        }
+                        else
+                            GamePlayManager.instance.BackButtonOnClick();
+                    }
+                    else
+                        menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+
+                    break;
+
                 default:
                     if (rematchButton.gameObject.activeInHierarchy) Rematch();
                     else if (nextGameButton.gameObject.activeInHierarchy) NextGame();
@@ -190,7 +231,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         if (game.puzzleData && !game.puzzleData.lastInPack)
                             menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
                         else
-                            GamePlayManager.instance.gameplayScreen.OnBack();
+                            GamePlayManager.instance.BackButtonOnClick();
                     }
 
                     break;
@@ -203,47 +244,38 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (value)
             {
-                //if (game.puzzleData)
-                //{
-                //    continueButton.SetActive(true);
-                //}
-                //else
-                //{
-                    //next button
-                    switch (game._Type)
-                    {
-                        case GameType.TURN_BASED:
-                            nextGameButton.SetActive(turnBasedTab.nextChallenge != null);
+                switch (game._Type)
+                {
+                    case GameType.TURN_BASED:
+                        nextGameButton.SetActive(turnBasedTab.nextChallenge != null);
 
-                            break;
+                        break;
 
-                        default:
-                            nextGameButton.SetActive(false);
+                    default:
+                        nextGameButton.SetActive(false);
 
-                            break;
-                    }
+                        break;
+                }
 
-                    //rematch button
-                    switch (game._Type)
-                    {
-                        case GameType.REALTIME:
-                        case GameType.PRESENTATION:
-                            rematchButton.SetActive(false);
+                //rematch button
+                switch (game._Type)
+                {
+                    case GameType.REALTIME:
+                    case GameType.PRESENTATION:
+                        rematchButton.SetActive(false);
 
-                            break;
+                        break;
 
-                        default:
-                            rematchButton.SetActive(true);
+                    default:
+                        rematchButton.SetActive(true);
 
-                            break;
-                    }
-                //}
+                        break;
+                }
             }
             else
             {
                 nextGameButton.SetActive(false);
                 rematchButton.SetActive(false);
-                //continueButton.SetActive(false);
             }
         }
 

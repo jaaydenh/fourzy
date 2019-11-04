@@ -70,7 +70,7 @@ namespace Fourzy._Updates.UI.Camera3D
             Initialize();
         }
 
-        public void UpdateWidgets() => _item.UpdateWidgets();
+        public void UpdateWidgets() => _item.Open();
 
         public override Camera3DItem Initialize()
         {

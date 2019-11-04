@@ -217,23 +217,34 @@ namespace Fourzy._Updates.Mechanics.Board
             return new BoardLocation(y, x);
         }
 
-        public T BoardBitAt<T>(BoardLocation at) where T : BoardBit =>
-            boardBits.Find(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T)))) as T;
+        public IEnumerable<T> BoardBitsAt<T>(BoardLocation at) where T : BoardBit =>
+            boardBits.
+            Where(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T)))).
+            Cast<T>();
 
-        public List<BoardBit> BoardBitsAt(BoardLocation at) => boardBits.Where(bit => bit.active && bit.location.Equals(at)).ToList();
+        public IEnumerable<T> BoardTokenAt<T>(BoardLocation at, TokenType tokenType) where T : TokenView =>
+            boardBits.
+            Where(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T))) && (bit as TokenView).tokenType == tokenType).
+            Cast<T>();
 
-        public T BoardTokenAt<T>(BoardLocation at, TokenType tokenType) where T : TokenView =>
-            boardBits.Find(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T))) && (bit as TokenView).tokenType == tokenType) as T;
-
-        public List<TokenView> BoardTokensAt(BoardLocation at) =>
-            boardBits.Where(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(TokenView) || bit.GetType().IsSubclassOf(typeof(TokenView)))).Cast<TokenView>().ToList();
+        public IEnumerable<TokenView> BoardTokensAt(BoardLocation at) =>
+            boardBits.Where(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(TokenView) || bit.GetType().IsSubclassOf(typeof(TokenView)))).
+            Cast<TokenView>().
+            ToList();
 
         public T BoardSpellAt<T>(BoardLocation at, SpellId spellId) where T : TokenSpell =>
             boardBits.Find(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T))) && (bit as TokenSpell).spellId == spellId) as T;
 
         public GamePieceView SpawnPiece(int row, int col, PlayerEnum player, bool sort = true)
         {
-            GamePieceView gamePiece = Instantiate(player == game.playerOneGamepiece.player ? game.playerOneGamepiece : game.playerTwoGamepiece, bitsParent);
+            GamePieceView prefab = null;
+
+            if (player == PlayerEnum.ONE)
+                prefab = game.playerOneGamepiece;
+            else if (player == PlayerEnum.TWO)
+                prefab = game.playerTwoGamepiece;
+
+            GamePieceView gamePiece = Instantiate(prefab, bitsParent);
 
             gamePiece.gameObject.SetActive(true);
             gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
@@ -242,8 +253,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             boardBits.Add(gamePiece);
 
-            if (sort)
-                SortBits();
+            if (sort) SortBits();
 
             return gamePiece;
         }
@@ -288,7 +298,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (game._State.WinningLocations != null)
                 for (int locationIndex = 0; locationIndex < game._State.WinningLocations.Count; locationIndex++)
-                    result.Add(BoardBitAt<GamePieceView>(game._State.WinningLocations[locationIndex]));
+                    result.AddRange(BoardBitsAt<GamePieceView>(game._State.WinningLocations[locationIndex]));
 
             return result;
         }
@@ -556,7 +566,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void OnBoardLocationEnter(BoardLocation location, BoardBit bit)
         {
-            List<TokenView> other = BoardTokensAt(location);
+            List<TokenView> other = BoardTokensAt(location).ToList();
 
             other.ForEach(_bit => _bit.OnBitEnter(bit));
 
@@ -941,12 +951,13 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             BoardLocation location = Vec2ToBoardLocation(worldPoint - (Vector2)transform.localPosition);
 
-            if (BoardBitAt<GamePieceView>(location)) return;
+            if (BoardBitsAt<GamePieceView>(location).Count() == 0) return;
 
             Piece _piece = player ? game.playerPiece : game.opponentPiece;
             //drop gamepiece at location
             game._State.Board.AddPiece(_piece, location);
-            SpawnPiece(location.Row, location.Column, (PlayerEnum)_piece.PlayerId);
+
+            SpawnPiece(location.Row, location.Column, (PlayerEnum)_piece.PlayerId).SetPiece(_piece);
         }
 
         private void AddIMoveToTurn(IMove move)
@@ -984,6 +995,7 @@ namespace Fourzy._Updates.Mechanics.Board
             onMoveStarted?.Invoke(turn);
 
             int actionIndex = 0;
+            int pushedPlayerID = -1;
             bool firstGameActionMoveFound = false;
             float customDelay = 0f;
             float delay = 0f;
@@ -1004,6 +1016,7 @@ namespace Fourzy._Updates.Mechanics.Board
                             //spawn gamepiece using first action
                             moveAction = turnResults.Activity[actionIndex].AsMoveAction();
                             newGamePiece = SpawnPiece(moveAction.Start.Row, moveAction.Start.Column, (PlayerEnum)moveAction.Piece.PlayerId, false);
+                            newGamePiece.SetPiece(moveAction.Piece.Piece);
                             newGamePiece.Show(.25f);
                             newGamePiece.ScaleToCurrent(Vector3.zero, .25f);
 
@@ -1015,7 +1028,17 @@ namespace Fourzy._Updates.Mechanics.Board
                         GameAction[] moveActions = GetMoveActions(turnResults.Activity, actionIndex);
                         actionIndex += moveActions.Length;
 
-                        GamePieceView bit = (newGamePiece != null) ? newGamePiece : BoardBitAt<GamePieceView>((moveActions[0] as GameActionMove).Start);
+                        List<GamePieceView> affected = BoardBitsAt<GamePieceView>((moveActions[0] as GameActionMove).Start).ToList();
+                        GamePieceView targetPiece = null;
+                        if (pushedPlayerID != -1)
+                        {
+                            targetPiece = affected.Find(_gp => _gp.piece.PlayerId == pushedPlayerID);
+                            pushedPlayerID = -1;
+                        }
+                        else
+                            targetPiece = affected.First();
+
+                        GamePieceView bit = (newGamePiece != null) ? newGamePiece : targetPiece;
 
                         float waitTime = (newGamePiece != null) ?
                             bit.ExecuteGameAction(moveActions.AddElementToStart(moveAction.InDirection(BoardLocation.Reverse(moveAction.Piece.Direction), 2))) : bit.ExecuteGameAction(moveActions);
@@ -1033,6 +1056,14 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         newGamePiece = null;
                         yield return new WaitForSeconds(waitTime);
+
+                        break;
+
+                    case GameActionType.PUSH:
+                        GameActionPush pushAction = turnResults.Activity[actionIndex] as GameActionPush;
+                        pushedPlayerID = pushAction.PushedPiece.PlayerId;
+
+                        actionIndex++;
 
                         break;
 
@@ -1058,7 +1089,8 @@ namespace Fourzy._Updates.Mechanics.Board
                         {
                             case TokenType.FRUIT:
                                 //play tree sound
-                                BoardTokenAt<TokenView>(tokenDrop.Source, TokenType.FRUIT_TREE).OnActivate();
+                                foreach(TokenView _token in BoardTokenAt<TokenView>(tokenDrop.Source, TokenType.FRUIT_TREE)) _token.OnActivate();
+
                                 break;
                         }
 
@@ -1077,7 +1109,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     case GameActionType.REMOVE_TOKEN:
                         GameActionTokenRemove tokenRemove = turnResults.Activity[actionIndex] as GameActionTokenRemove;
-                        yield return new WaitForSeconds(BoardTokenAt<TokenView>(tokenRemove.Location, tokenRemove.Before.Type)._Destroy(tokenRemove.Reason));
+                        yield return new WaitForSeconds(BoardTokenAt<TokenView>(tokenRemove.Location, tokenRemove.Before.Type).First()._Destroy(tokenRemove.Reason));
 
                         actionIndex++;
 
@@ -1087,7 +1119,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         //destroy gamepiece
                         GameActionDestroyed _destroy = turnResults.Activity[actionIndex] as GameActionDestroyed;
 
-                        token = BoardBitAt<TokenView>(_destroy.End);
+                        token = BoardBitsAt<TokenView>(_destroy.End).FirstOrDefault();
 
                         switch (_destroy.Reason)
                         {
@@ -1101,7 +1133,7 @@ namespace Fourzy._Updates.Mechanics.Board
                                 break;
                         }
 
-                        yield return new WaitForSeconds(BoardBitAt<GamePieceView>(_destroy.End)._Destroy(_destroy.Reason));
+                        yield return new WaitForSeconds(BoardBitsAt<GamePieceView>(_destroy.End).First()._Destroy(_destroy.Reason));
 
                         //and in cases like its a pit, destroy pit too
                         switch (_destroy.Reason)
@@ -1133,7 +1165,10 @@ namespace Fourzy._Updates.Mechanics.Board
                             bombVfx = VfxHolder.instance.GetVfx<Vfx>(VfxType.VFX_BOMB_EXPLOSION).StartVfx(transform, (Vector3)BoardLocationToVec2(effect.Center) + Vector3.back, 0f);
 
                         //destroy bomb
-                        TokenView bomb = BoardTokenAt<TokenView>(effect.Center, TokenType.CIRCLE_BOMB) ?? BoardTokenAt<TokenView>(effect.Center, TokenType.CROSS_BOMB);
+                        TokenView bomb = 
+                            BoardTokenAt<TokenView>(effect.Center, TokenType.CIRCLE_BOMB).FirstOrDefault() ?? 
+                            BoardTokenAt<TokenView>(effect.Center, TokenType.CROSS_BOMB).FirstOrDefault();
+
                         bomb?._Destroy();
 
                         yield return new WaitForSeconds(bombVfx ? bombVfx.duration : 2f);
@@ -1147,7 +1182,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         {
                             GameActionTokenTransition _tokenTransition = turnResults.Activity[actionIndex] as GameActionTokenTransition;
 
-                            yield return new WaitForSeconds(BoardTokenAt<TokenView>(_tokenTransition.Location, _tokenTransition.Before.Type).ExecuteGameAction(_tokenTransition));
+                            yield return new WaitForSeconds(BoardTokenAt<TokenView>(_tokenTransition.Location, _tokenTransition.Before.Type).First().ExecuteGameAction(_tokenTransition));
                         }
                         else if (turnResults.Activity[actionIndex].GetType() == typeof(GameActionTokenMovement))
                         {
@@ -1156,7 +1191,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                             GameActionTokenMovement _tokenMovement = turnResults.Activity[actionIndex] as GameActionTokenMovement;
 
-                            token = BoardTokenAt<TokenView>(_tokenMovement.Start, _tokenMovement.Token.Type);
+                            token = BoardTokenAt<TokenView>(_tokenMovement.Start, _tokenMovement.Token.Type).First();
 
                             switch (_tokenMovement.Reason)
                             {
@@ -1176,7 +1211,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                             GameActionTokenRotation _tokenRotation = turnResults.Activity[actionIndex] as GameActionTokenRotation;
 
-                            token = BoardTokenAt<TokenView>(_tokenRotation.Token.Space.Location, _tokenRotation.Token.Type);
+                            token = BoardTokenAt<TokenView>(_tokenRotation.Token.Space.Location, _tokenRotation.Token.Type).First();
 
                             switch (_tokenRotation.Reason)
                             {
@@ -1502,7 +1537,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         SpawnToken(token);
 
                     foreach (Piece piece in boardSpace.Pieces)
-                        SpawnPiece(row, col, (PlayerEnum)piece.PlayerId);
+                        SpawnPiece(row, col, (PlayerEnum)piece.PlayerId).SetPiece(piece);
 
                     if (delay && (boardSpace.Tokens.Values.Count + boardSpace.Pieces.Count) > 0) yield return new WaitForEndOfFrame();
                 }

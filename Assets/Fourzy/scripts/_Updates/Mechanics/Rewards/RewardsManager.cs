@@ -38,6 +38,9 @@ namespace Fourzy._Updates.Mechanics.Rewards
             //100% give some coins
             rewards.Add(new Reward("", UnityEngine.Random.Range(5, 10) + UserManager.Instance.level, RewardType.COINS));
 
+            //some hints
+            rewards.Add(new Reward("", UnityEngine.Random.Range(2, 4), RewardType.HINTS));
+
             //maybe add gems
             //60%
             if (UnityEngine.Random.value > .4f)
@@ -88,6 +91,7 @@ namespace Fourzy._Updates.Mechanics.Rewards
             UserManager.Instance.rarePortalPoints += rewards.Where(reward => reward.rewardType == RewardType.RARE_PORTAL_POINTS).Sum(reward => reward.quantity);
             UserManager.Instance.coins += rewards.Where(reward => reward.rewardType == RewardType.COINS).Sum(reward => reward.quantity);
             UserManager.Instance.tickets += rewards.Where(reward => reward.rewardType == RewardType.TICKETS).Sum(reward => reward.quantity);
+            UserManager.Instance.hints += rewards.Where(reward => reward.rewardType == RewardType.HINTS).Sum(reward => reward.quantity);
             UserManager.Instance.gems += rewards.Where(reward => reward.rewardType == RewardType.GEMS).Sum(reward => reward.quantity);
 
             //add gamepieces

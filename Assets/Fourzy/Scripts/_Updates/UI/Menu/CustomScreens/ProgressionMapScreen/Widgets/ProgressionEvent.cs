@@ -234,16 +234,21 @@ namespace Fourzy._Updates.UI.Widgets
 
             if (wasRewarded) Rewarded(animate);
 
-            button.interactable = true;
-
             switch (EventType)
             {
                 case ProgressionEventType.CURRENCY:
                 case ProgressionEventType.REWARD:
-                    Rewarded(true);
-                    PlayerPrefsWrapper.SetRewardRewarded(id, true);
+                    if (!wasRewarded)
+                    {
+                        Rewarded(true);
+                        PlayerPrefsWrapper.SetRewardRewarded(id, true);
+                        if (EventType == ProgressionEventType.CURRENCY) new RewardsManager.Reward[] { reward }.AssignRewards();
+                    }
 
-                    if (EventType == ProgressionEventType.CURRENCY) new RewardsManager.Reward[] { reward }.AssignRewards();
+                    break;
+
+                case ProgressionEventType.GAME:
+                    button.interactable = true;
 
                     break;
             }
@@ -256,14 +261,6 @@ namespace Fourzy._Updates.UI.Widgets
             //unlock next events
             unlockWhenComplete.ForEach(@event => @event.Unlock(animate));
             lines.ForEach(line => line.SetColorUnlocked());
-
-            switch (EventType)
-            {
-                case ProgressionEventType.CURRENCY:
-                    button.interactable = false;
-
-                    break;
-            }
 
             _rewarded = true;
             onRewarded.Invoke();
@@ -334,11 +331,6 @@ namespace Fourzy._Updates.UI.Widgets
                     PlayerPrefsWrapper.SetRewardRewarded(id, false);
 
                     break;
-
-                case ProgressionEventType.GAME:
-                    PuzzlePack.ResetPlayerPrefs();
-
-                    break;
             }
 
             if (string.IsNullOrEmpty(gameObject.scene.name)) return null;
@@ -384,6 +376,7 @@ namespace Fourzy._Updates.UI.Widgets
                         Instantiate(GameContentManager.GetPrefab<RewardsScreenWidget>(reward.rewardType.AsPrefabType()), content);
 
                     rewardWidget.SetData(reward);
+                    rewardWidget.transform.localScale = Vector3.one * 1.8f;
                     rewardWidget.ResetAnchors();
 
                     break;
