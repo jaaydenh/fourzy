@@ -27,7 +27,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void Prompt(int gauntletLevels) => Prompt(new BasicPuzzlePack(gauntletLevels));
 
-        public void Prompt(BasicPuzzlePack puzzlePack, Action onClose = null)
+        public void Prompt(BasicPuzzlePack puzzlePack, Action onDeny = null, Action onAccept = null)
         {
             this.puzzlePack = puzzlePack;
 
@@ -67,12 +67,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Prompt(
                 $"Beat {puzzlePack.aiPlayerName}",
                 null,
-                () =>
+                onAccept ?? (() =>
                 {
                     menuController.CloseCurrentScreen(false);
                     puzzlePack.StartNextUnsolvedPuzzle(/*GameManager.Instance.activeGame*/);
-                },
-                onClose ?? (() => menuController.CloseCurrentScreen()));
+                }),
+                onDeny ?? (() => menuController.CloseCurrentScreen()));
         }
 
         private VSGamePromptProgressionWidget AddWidget()

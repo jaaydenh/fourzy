@@ -24,13 +24,13 @@ namespace Fourzy._Updates.UI.Widgets
         public RectTransform rewardsContainerPrefab;
 
         private List<GameObject> markers = new List<GameObject>();
-        private List<Image> icons = new List<Image>();
+        private Dictionary<int, Image> icons = new Dictionary<int, Image>();
         private List<GameObject> containers = new List<GameObject>();
 
         public List<RewardsScreenWidget> widgets { get; private set; }
         public BasicPuzzlePack puzzlePack { get; private set; }
 
-        private int lastIndex;
+        //private int lastIndex;
 
         public override void _Update()
         {
@@ -42,10 +42,9 @@ namespace Fourzy._Updates.UI.Widgets
             slider.value = (float)puzzlePack.puzzlesComplete.Count / puzzlePack.enabledPuzzlesData.Count;
 
             //update stars
-            for (int rewardPuzzleIndex = 0; rewardPuzzleIndex < puzzlePack.rewardPuzzles.Count; rewardPuzzleIndex++)
-                icons[rewardPuzzleIndex].sprite =
-                    puzzlePack.puzzlesComplete.Contains(puzzlePack.rewardPuzzles[rewardPuzzleIndex]) ?
-                    puzzlePack.rewardPuzzles[rewardPuzzleIndex].progressionIconSet : puzzlePack.rewardPuzzles[rewardPuzzleIndex].progressionIconEmpty;
+            for (int puzzleIndex = 0; puzzleIndex < puzzlePack.enabledPuzzlesData.Count; puzzleIndex++)
+                if (icons.ContainsKey(puzzleIndex))
+                    icons[puzzleIndex].sprite = puzzlePack.enabledPuzzlesData[puzzleIndex].currentProgressionIcon;
         }
 
         public PuzzlePackProgressWidget SetData(BasicPuzzlePack puzzlePack)
@@ -57,29 +56,20 @@ namespace Fourzy._Updates.UI.Widgets
 
             Clear();
 
+            ClientPuzzleData lastPuzzleData = null;
             int maxSize = 0;
+            int index;
             float rewardWidgetSampleHeight = 0f;
-            //add new markers
-            //add new icons
+            float positionX;
+
             foreach (ClientPuzzleData puzzleData in puzzlePack.rewardPuzzles)
             {
-                lastIndex = puzzlePack.enabledPuzzlesData.IndexOf(puzzleData);
-                float positionX = (float)(lastIndex + 1) / puzzlePack.enabledPuzzlesData.Count;
+                if (puzzleData.lastInPack) lastPuzzleData = puzzleData;
 
-                TMP_Text markerInstance = Instantiate(markerPrefab, markerParent);
-                markers.Add(markerInstance.gameObject);
-                markerInstance.gameObject.SetActive(true);
+                index = puzzlePack.enabledPuzzlesData.IndexOf(puzzleData);
+                positionX = (float)(index + 1) / puzzlePack.enabledPuzzlesData.Count;
 
-                markerInstance.text = (lastIndex + 1) + "";
-                markerInstance.rectTransform.anchorMin = markerInstance.rectTransform.anchorMax = new Vector2(positionX, .5f);
-
-                Image iconInstance = Instantiate(iconPrefab, markerParent);
-                icons.Add(iconInstance);
-                iconInstance.gameObject.SetActive(true);
-
-                iconInstance.preserveAspect = true;
-                iconInstance.sprite = puzzlePack.puzzlesComplete.Contains(puzzleData) ? puzzleData.progressionIconSet : puzzleData.progressionIconEmpty;
-                iconInstance.rectTransform.anchorMin = iconInstance.rectTransform.anchorMax = new Vector2(positionX, .45f);
+                AddMarkerIcon(puzzleData.currentProgressionIcon, index, positionX);
 
                 //create rewards container
                 RectTransform containerInstance = Instantiate(rewardsContainerPrefab, rewardsParent);
@@ -94,6 +84,7 @@ namespace Fourzy._Updates.UI.Widgets
                     RewardsScreenWidget rewardWidget =
                         Instantiate(GameContentManager.GetPrefab<RewardsScreenWidget>(reward.rewardType.AsPrefabType()), containerInstance);
                     rewardWidget.ResetAnchors();
+                    //rewardWidget.ScaleTo(Vector3.one * .7f, 0f);
 
                     //configure it
                     rewardWidget.SetData(puzzleData, reward);
@@ -102,6 +93,12 @@ namespace Fourzy._Updates.UI.Widgets
 
                     widgets.Add(rewardWidget);
                 }
+            }
+
+            if (!lastPuzzleData)
+            {
+                lastPuzzleData = puzzlePack.enabledPuzzlesData[puzzlePack.enabledPuzzlesData.Count - 1];
+                AddMarkerIcon(lastPuzzleData.currentProgressionIcon, puzzlePack.enabledPuzzlesData.Count - 1, 1f);
             }
 
             rewardsParent.GetComponent<LayoutElement>().minHeight =
@@ -116,7 +113,7 @@ namespace Fourzy._Updates.UI.Widgets
             foreach (GameObject markerGO in markers) Destroy(markerGO);
             markers.Clear();
             //clear icons
-            foreach (Image icon in icons) Destroy(icon.gameObject);
+            foreach (Image icon in icons.Values) Destroy(icon.gameObject);
             icons.Clear();
             //clear reward containers
             foreach (GameObject containerGO in containers) Destroy(containerGO);
@@ -138,6 +135,24 @@ namespace Fourzy._Updates.UI.Widgets
             StartRoutine("animateRewards", AnimateRewardsRoutine(index, delay));
 
             return this;
+        }
+
+        private void AddMarkerIcon(Sprite icon, int index, float positionX)
+        {
+            TMP_Text markerInstance = Instantiate(markerPrefab, markerParent);
+            markers.Add(markerInstance.gameObject);
+            markerInstance.gameObject.SetActive(true);
+
+            markerInstance.text = (index + 1) + "";
+            markerInstance.rectTransform.anchorMin = markerInstance.rectTransform.anchorMax = new Vector2(positionX, 0f);
+
+            Image iconInstance = Instantiate(iconPrefab, markerParent);
+            icons.Add(index, iconInstance);
+            iconInstance.gameObject.SetActive(true);
+
+            iconInstance.preserveAspect = true;
+            iconInstance.sprite = icon;
+            iconInstance.rectTransform.anchorMin = iconInstance.rectTransform.anchorMax = new Vector2(positionX, .35f);
         }
 
         private IEnumerator AnimateRewardsRoutine(int index, float delay)

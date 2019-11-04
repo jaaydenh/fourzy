@@ -49,28 +49,36 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 if (game.puzzleData.pack/* && game.puzzleData.pack.justFinished*/)
                 {
-                    ////open main menu
-                    //GameManager.Instance.OpenMainMenu();
-
                     ////consume
                     //GameManager.Instance.currentPuzzlePack.justFinished = false;
 
                     if (game.puzzleData.lastInPack)
                     {
+                        //force update map
+                        GameManager.Instance.currentMap.UpdateWidgets();
+
                         //open screen for next event
                         BasicPuzzlePack nextPack = GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packID);
+                        nextPack.StartNextUnsolvedPuzzle();
+
                         if (nextPack)
                         {
                             switch (nextPack.packType)
                             {
                                 case PackType.AI_PACK:
                                 case PackType.BOSS_AI_PACK:
-                                    menuController.GetScreen<VSGamePrompt>().Prompt(nextPack, () => GamePlayManager.instance.BackButtonOnClick());
+                                    menuController.GetScreen<VSGamePrompt>().Prompt(
+                                        nextPack,
+                                        () => GamePlayManager.instance.BackButtonOnClick(),
+                                        () => menuController.CloseCurrentScreen());
 
                                     break;
 
                                 case PackType.PUZZLE_PACK:
-                                    menuController.GetScreen<PrePackPrompt>().Prompt(nextPack, () => GamePlayManager.instance.BackButtonOnClick());
+                                    menuController.GetScreen<PrePackPrompt>().Prompt(
+                                        nextPack, 
+                                        () => GamePlayManager.instance.BackButtonOnClick(),
+                                        () => menuController.CloseCurrentScreen());
 
                                     break;
                             }

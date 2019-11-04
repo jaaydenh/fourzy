@@ -5,7 +5,6 @@ using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics._GamePiece
@@ -17,7 +16,6 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public Animator pieceAnimator;
         public AnimationCurve movementCurve;
-        public PlayerEnum player;
 
         public AudioTypes onMoveSfx = AudioTypes.GAME_PIECE_MOVE;
 
@@ -38,12 +36,12 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         private int h_MoveBottom = Animator.StringToHash("MoveDown");
 
         private Direction moveDirection = Direction.NONE;
-        
+
         public GamePieceData pieceData => GamePiecesDataHolder._GetGamePieceData(this);
 
         public GamePieceMouth mouth { get; private set; }
         public GamePieceEyes eyes { get; private set; }
-        public bool isMoving { get; private set; }
+        public Piece piece { get; private set; }
 
         public override Color outlineColor => pieceData.outlineColor;
 
@@ -52,7 +50,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             base.Awake();
 
             if (pieceAnimator == null) pieceAnimator = GetComponent<Animator>();
-            
+
             mouth = GetComponentInChildren<GamePieceMouth>();
             eyes = GetComponentInChildren<GamePieceEyes>();
         }
@@ -178,7 +176,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         public void Sleep()
         {
             CancelRoutine("blinking");
-            
+
             eyes.SetState(GamePieceEyes.EyesState.CLOSED);
 
             if (mouth.statesFastAccess.ContainsKey(GamePieceMouth.MouthState.SLEEPY))
@@ -196,12 +194,14 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void Blink() => eyes.Blink(Random.Range(.2f, .4f));
 
+        public void SetPiece(Piece piece) => this.piece = piece;
+
         public override void OnBeforeMoveAction(params BoardLocation[] locations)
         {
             base.OnBeforeMoveAction();
 
             AudioHolder.instance.PlaySelfSfxOneShotTracked(onMoveSfx);
-            
+
             if (locations.Length < 2) return;
 
             PutMovementDirection(locations.GetDirectionFromLocations());
@@ -225,15 +225,6 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             }
 
             return base._Destroy(reason);
-        }
-
-        public void AddToModel()
-        {
-            if (!gameboard)
-                return;
-
-            //add to board model
-            gameboard.game._State.Board.AddPiece(new Piece((int)player), location);
         }
 
         private IEnumerator BlinkingRoutine()

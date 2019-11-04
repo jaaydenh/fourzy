@@ -157,13 +157,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnTap()
         {
-            if (currentBatch.tasks[currentBatch.tasks.Length - 1] == currentTask)
-            {
-                CancelRoutine("idle");
-                StartRoutine("idle", .1f, () => Next());
-            }
-
             RemoveCurrentButton();
+
+            CancelRoutine("idle");
+            StartRoutine("idle", .1f, () => Next());
         }
 
         private void UpdateCurrentButton(ButtonExtended button)
@@ -372,9 +369,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case OnboardingActions.HIGHLIGHT_PROGRESSION_EVENT:
                         if (!GameManager.Instance.isMainMenuLoaded) break;
 
-                        Camera3D.Camera3dItemProgressionMap item = FourzyMainMenuController.instance.GetScreen<ProgressionMapScreen>().mapContent._item;
+                        ProgressionEvent progressionEvent = null;
 
-                        anchors = item.GetCurrentEventCameraRelativePosition();
+                        if (task.intValue == -1)
+                            progressionEvent = GameManager.Instance.currentMap.GetCurrentEvent();
+                        else
+                            progressionEvent = GameManager.Instance.currentMap.widgets[task.intValue];
+
+                        GameManager.Instance.currentMap.FocusOn(progressionEvent);
+                        anchors = GameManager.Instance.currentMap.GetEventCameraRelativePosition(progressionEvent);
 
                         masks.ShowMask(anchors, new Vector2(250f, 150f), OnboardingScreenMaskObject.MaskStyle.PX_16, true);
 
@@ -382,9 +385,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         pointer.SetAnchors(anchors);
                         pointer.SetMessage(task.stringValue);
 
-                        item.SetScrollLockedState(true);
+                        GameManager.Instance.currentMap.SetScrollLockedState(true);
 
-                        UpdateCurrentButton(item.GetCurrentEvent().button);
+                        UpdateCurrentButton(progressionEvent.button);
 
                         break;
 

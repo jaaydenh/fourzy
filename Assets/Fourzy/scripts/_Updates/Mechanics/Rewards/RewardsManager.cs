@@ -38,6 +38,9 @@ namespace Fourzy._Updates.Mechanics.Rewards
             //100% give some coins
             rewards.Add(new Reward("", UnityEngine.Random.Range(5, 10) + UserManager.Instance.level, RewardType.COINS));
 
+            //some hints
+            rewards.Add(new Reward("", UnityEngine.Random.Range(2, 4), RewardType.HINTS));
+
             //maybe add gems
             //60%
             if (UnityEngine.Random.value > .4f)

@@ -105,13 +105,13 @@ namespace Fourzy._Updates.UI.Camera3D
             }
         }
 
-        public void UpdateWidgets()
+        public void Open()
         {
             Initialize();
 
             gameObject.SetActive(true);
 
-            widgets.ForEach(widget => widget._Update());
+            UpdateWidgets();
 
             CheckMapComplete();
 
@@ -121,9 +121,19 @@ namespace Fourzy._Updates.UI.Camera3D
             //unlock scroll
             SetScrollLockedState(false);
 
-            //focus current one
-            FocusOn(GetCurrentEvent());
+            //focus on a current one
+            ProgressionEvent current = GetCurrentEvent();
+            switch (current.EventType)
+            {
+                case ProgressionEvent.ProgressionEventType.GAME:
+                    if (!current.PuzzlePack.complete)
+                        FocusOn(current);
+
+                    break;
+            }
         }
+
+        public void UpdateWidgets() => widgets.ForEach(widget => widget._Update());
 
         public void SetMenuScreen(MenuScreen menuScreen)
         {
@@ -168,7 +178,7 @@ namespace Fourzy._Updates.UI.Camera3D
             return currentScrollValue;
         }
 
-        public void FocusOn(ProgressionEvent widget) => Scroll(widgets[widgets.IndexOf(widget)].rectTransform.anchoredPosition.x / chunk.size.x, true);
+        public void FocusOn(ProgressionEvent @event) => Scroll(widgets[widgets.IndexOf(@event)].rectTransform.anchoredPosition.x / chunk.size.x, true);
 
         public void OnClick(Vector2 position)
         {
@@ -276,26 +286,23 @@ namespace Fourzy._Updates.UI.Camera3D
                 }
             });
 
-            if (string.IsNullOrEmpty(gameObject.scene.name) && gameObject.activeInHierarchy) UpdateWidgets();
+            if (string.IsNullOrEmpty(gameObject.scene.name) && gameObject.activeInHierarchy) Open();
         }
 
         public ProgressionEvent GetCurrentEvent()
         {
             List<ProgressionEvent> options = widgets.Where(@event => @event._unlocked && !@event._rewarded).ToList();
 
-            if (options.Count == 0)
-                return widgets[0];
+            if (options.Count == 0) return widgets[0];
 
             return options.Find(@event => @event.EventType == ProgressionEvent.ProgressionEventType.GAME) ??
                 options.Find(@event => @event.EventType == ProgressionEvent.ProgressionEventType.CURRENCY);
         }
 
-        public Vector2 GetCurrentEventCameraRelativePosition()
+        public Vector2 GetEventCameraRelativePosition(ProgressionEvent @event)
         {
-            ProgressionEvent current = GetCurrentEvent();
-
-            return new Vector2((current.rectTransform.anchoredPosition.x - (contentPosition - cameraSize.x)) / (cameraSize.x * 2f),
-                current.rectTransform.anchoredPosition.y / (cameraSize.y * 2f));
+            return new Vector2((@event.rectTransform.anchoredPosition.x - (contentPosition - cameraSize.x)) / (cameraSize.x * 2f),
+                @event.rectTransform.anchoredPosition.y / (cameraSize.y * 2f));
         }
 
         public Vector2 GetCurrentEventSize() => GetCurrentEvent().size;

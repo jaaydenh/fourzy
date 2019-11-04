@@ -8,8 +8,8 @@ namespace FourzyGameModel.Model
 
         public GameActionTiming Timing { get { return GameActionTiming.MOVE; } }
 
-        MovingPiece InitiatingPiece { get; set; }
-        MovingPiece PushedPiece { get; set; }
+        public MovingPiece InitiatingPiece { get; set; }
+        public MovingPiece PushedPiece { get; set; }
         BoardLocation Location { get; set; }
 
         public GameActionPush(MovingPiece Initiator, MovingPiece PushedPiece, BoardLocation Location)
