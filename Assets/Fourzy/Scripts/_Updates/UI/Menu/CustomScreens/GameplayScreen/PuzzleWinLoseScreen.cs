@@ -112,7 +112,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 if (game.puzzleData.pack)
                 {
-                    if (!puzzlePackProgressWidget.puzzlePack) puzzlePackProgressWidget.SetData(game.puzzleData.pack);
+                    if (!puzzlePackProgressWidget.puzzlePack || puzzlePackProgressWidget.puzzlePack.packID != game.puzzleData.pack.packID)
+                        puzzlePackProgressWidget.SetData(game.puzzleData.pack);
 
                     yield return new WaitForSeconds(.95f);
 

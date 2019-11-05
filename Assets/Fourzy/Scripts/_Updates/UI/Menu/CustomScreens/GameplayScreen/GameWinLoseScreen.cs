@@ -184,42 +184,47 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 case GameMode.AI_PACK:
                 case GameMode.BOSS_AI_PACK:
-                    if (game.puzzleData.lastInPack)
+                    if (!game.draw && game.IsWinner())
                     {
-                        //force update map
-                        GameManager.Instance.currentMap.UpdateWidgets();
-
-                        //open screen for next event
-                        BasicPuzzlePack nextPack = GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packID);
-                        nextPack.StartNextUnsolvedPuzzle();
-
-                        if (nextPack)
+                        if (game.puzzleData.lastInPack)
                         {
-                            switch (nextPack.packType)
+                            //force update map
+                            GameManager.Instance.currentMap.UpdateWidgets();
+
+                            //open screen for next event
+                            BasicPuzzlePack nextPack = GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packID);
+                            nextPack.StartNextUnsolvedPuzzle();
+
+                            if (nextPack)
                             {
-                                case PackType.AI_PACK:
-                                case PackType.BOSS_AI_PACK:
-                                    menuController.GetScreen<VSGamePrompt>().Prompt(
-                                        nextPack, 
-                                        () => GamePlayManager.instance.BackButtonOnClick(),
-                                        () => menuController.CloseCurrentScreen());
+                                switch (nextPack.packType)
+                                {
+                                    case PackType.AI_PACK:
+                                    case PackType.BOSS_AI_PACK:
+                                        menuController.GetScreen<VSGamePrompt>().Prompt(
+                                            nextPack,
+                                            () => GamePlayManager.instance.BackButtonOnClick(),
+                                            () => menuController.CloseCurrentScreen());
 
-                                    break;
+                                        break;
 
-                                case PackType.PUZZLE_PACK:
-                                    menuController.GetScreen<PrePackPrompt>().Prompt(
-                                        nextPack, 
-                                        () => GamePlayManager.instance.BackButtonOnClick(),
-                                        () => menuController.CloseCurrentScreen());
+                                    case PackType.PUZZLE_PACK:
+                                        menuController.GetScreen<PrePackPrompt>().Prompt(
+                                            nextPack,
+                                            () => GamePlayManager.instance.BackButtonOnClick(),
+                                            () => menuController.CloseCurrentScreen());
 
-                                    break;
+                                        break;
+                                }
                             }
+                            else
+                                GamePlayManager.instance.BackButtonOnClick();
                         }
                         else
-                            GamePlayManager.instance.BackButtonOnClick();
+                            menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.BackButtonOnClick());
                     }
                     else
-                        menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                        Rematch();
 
                     break;
 

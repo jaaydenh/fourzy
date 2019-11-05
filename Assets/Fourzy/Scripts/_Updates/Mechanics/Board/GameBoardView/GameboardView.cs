@@ -317,15 +317,15 @@ namespace Fourzy._Updates.Mechanics.Board
             aiTurnThread = ThreadsQueuer.Instance.StartThreadForFunc(() =>
             {
                 string gameId = game.BoardID;
-                
+
                 PlayerTurnResult turnResults = null;
 
                 //if (model._allTurnRecord.Count > 0)
                 //{
-                    turnResults = game.TakeAITurn(true);
+                turnResults = game.TakeAITurn(true);
 
-                    //clear first before move actions
-                    while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
+                //clear first before move actions
+                while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
                 //}
                 //else
                 //{
@@ -379,7 +379,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             return TakeTurn(playerTurn.GetMove(), true);
         }
-        
+
         public Coroutine TakeTurn(Direction direction, int location, bool local = false) => TakeTurn(new SimpleMove(game.activePlayerPiece, direction, location), local);
 
         public Coroutine TakeTurn(SimpleMove move, bool local = false)
@@ -398,10 +398,10 @@ namespace Fourzy._Updates.Mechanics.Board
 
             //if (model._allTurnRecord.Count > 0)
             //{
-                turnResults = game.TakeTurn(turn, local, true);
+            turnResults = game.TakeTurn(turn, local, true);
 
-                //clear first before move actions
-                while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
+            //clear first before move actions
+            while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
             //}
             //else
             //{
@@ -653,7 +653,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (boardUpdateRoutines != null)
                 foreach (Coroutine boardUpdateRoutine in boardUpdateRoutines.Values)
-                   if(boardUpdateRoutine != null) StopCoroutine(boardUpdateRoutine);
+                    if (boardUpdateRoutine != null) StopCoroutine(boardUpdateRoutine);
 
             boardUpdateRoutines = new Dictionary<string, Coroutine>();
 
@@ -951,7 +951,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             BoardLocation location = Vec2ToBoardLocation(worldPoint - (Vector2)transform.localPosition);
 
-            if (BoardBitsAt<GamePieceView>(location).Count() == 0) return;
+            if (BoardBitsAt<GamePieceView>(location).Count() != 0) return;
 
             Piece _piece = player ? game.playerPiece : game.opponentPiece;
             //drop gamepiece at location
@@ -1089,7 +1089,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         {
                             case TokenType.FRUIT:
                                 //play tree sound
-                                foreach(TokenView _token in BoardTokenAt<TokenView>(tokenDrop.Source, TokenType.FRUIT_TREE)) _token.OnActivate();
+                                foreach (TokenView _token in BoardTokenAt<TokenView>(tokenDrop.Source, TokenType.FRUIT_TREE)) _token.OnActivate();
 
                                 break;
                         }
@@ -1158,15 +1158,15 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         if (effect.Explosion.Count > 9)
                         {
-                            foreach(BoardLocation location in effect.Explosion)
+                            foreach (BoardLocation location in effect.Explosion)
                                 VfxHolder.instance.GetVfx<Vfx>(VfxType.VFX_BOMB_EXPLOSION_LINE).StartVfx(transform, (Vector3)BoardLocationToVec2(location) + Vector3.back, 0f);
                         }
                         else
                             bombVfx = VfxHolder.instance.GetVfx<Vfx>(VfxType.VFX_BOMB_EXPLOSION).StartVfx(transform, (Vector3)BoardLocationToVec2(effect.Center) + Vector3.back, 0f);
 
                         //destroy bomb
-                        TokenView bomb = 
-                            BoardTokenAt<TokenView>(effect.Center, TokenType.CIRCLE_BOMB).FirstOrDefault() ?? 
+                        TokenView bomb =
+                            BoardTokenAt<TokenView>(effect.Center, TokenType.CIRCLE_BOMB).FirstOrDefault() ??
                             BoardTokenAt<TokenView>(effect.Center, TokenType.CROSS_BOMB).FirstOrDefault();
 
                         bomb?._Destroy();
@@ -1249,11 +1249,11 @@ namespace Fourzy._Updates.Mechanics.Board
 
                                 break;
 
-                            //case GameEndType.NOPIECES:
-                            //    SetHintAreaColliderState(false);
-                            //    onGameFinished?.Invoke(model);
+                                //case GameEndType.NOPIECES:
+                                //    SetHintAreaColliderState(false);
+                                //    onGameFinished?.Invoke(model);
 
-                            //    break;
+                                //    break;
                         }
 
                         List<GamePieceView> winningGamepieces = GetWinningPieces();
@@ -1551,7 +1551,7 @@ namespace Fourzy._Updates.Mechanics.Board
             foreach (PlayerTurn turn in turns)
             {
                 yield return TakeTurn(turn.GetMove().Direction, turn.GetMove().Location, true);
-                
+
                 yield return new WaitForSeconds(.5f);
             }
         }
