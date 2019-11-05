@@ -5,12 +5,5 @@
     "unlockRequirement": 0,
     "herdID": "16",
     "playerName": "Eeek",
-    "rewards": [
-        {
-            "levelIndex": 7,
-            "rewardType": 5,
-            "name": "",
-            "quantity": 0
-        }
-    ]
+    "rewards": []
 }

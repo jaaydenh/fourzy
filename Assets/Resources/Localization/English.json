@@ -199,15 +199,15 @@
     },
     {
       "key": "tap_to_place",
-      "value": "Touch square\nto place gamepiece"
+      "value": "Tap to move\nyour piece"
     },
     {
       "key": "tap_to_open_map",
-      "value": "Press to open\nprogression map"
+      "value": "Tap to start\n the first adventure"
     },
     {
       "key": "tap_to_start_playing",
-      "value": "Select puzzle and\nstart playing!"
+      "value": "Start playing\nthe first event!"
     },
     {
       "key": "tokens",

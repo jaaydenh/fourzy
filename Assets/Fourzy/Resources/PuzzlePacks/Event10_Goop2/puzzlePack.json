@@ -5,12 +5,5 @@
     "unlockRequirement": 0,
     "herdID": "17",
     "playerName": "NightOwl",
-    "rewards": [
-        {
-            "levelIndex": 9,
-            "rewardType": 5,
-            "name": "",
-            "quantity": 0
-        }
-    ]
+    "rewards": []
 }

@@ -5,7 +5,7 @@
   "unlockRequirement": 0,
   "herdID": "2",
   "playerName": "Cyclops",
-  "description": "This is a test description for puzzle pack 1",
+  "description": "You will have just 1 or 2 moves to solve each puzzle. Try to win horizontally, vertically or diagonally",
   "rewards": [
     {
       "levelIndex": 2,

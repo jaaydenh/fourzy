@@ -6,11 +6,5 @@
     "herdID": "10",
     "playerName": "Sentinel",
     "rewards": [
-        {
-            "levelIndex": 10,
-            "rewardType": 5,
-            "name": "",
-            "quantity": 0
-        }
     ]
 }
