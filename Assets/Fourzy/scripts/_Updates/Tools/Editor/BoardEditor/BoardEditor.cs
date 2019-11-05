@@ -968,6 +968,9 @@ namespace Fourzy._Updates.Tools
             GUILayout.Label("Data");
             GUILayout.BeginVertical("Box");
             {
+                currentPuzzleData.ID = EditorGUILayout.TextField("Puzzle ID", currentPuzzleData.ID);
+                if (GUILayout.Button("Reset ID"))
+                    currentPuzzleData.ID = Guid.NewGuid().ToString();
                 currentPuzzleData.Boss = (BossType)EditorGUILayout.EnumPopup("Boss Type", currentPuzzleData.Boss);
                 currentPuzzleData.FirstTurn = EditorGUILayout.IntPopup("First Player", currentPuzzleData.FirstTurn, firstTurnDisplayOptions, firstTurnOptions);
                 currentPuzzleData.GoalType = (PuzzleGoalType)EditorGUILayout.EnumPopup("Goal Type", currentPuzzleData.GoalType);

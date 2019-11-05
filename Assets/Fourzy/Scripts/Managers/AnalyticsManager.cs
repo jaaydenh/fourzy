@@ -51,8 +51,7 @@ namespace Fourzy
         {
             get
             {
-                if (instance == null)
-                    Initialize(true);
+                if (instance == null) Initialize(true);
 
                 return instance;
             }
