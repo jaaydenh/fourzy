@@ -153,7 +153,7 @@ MonoBehaviour:
             type: 3}
     - elementName: FRUIT
       tokenType: 8
-      tokenIcon: {fileID: 21300000, guid: a16244d70e469904a846d683a3093a9e, type: 3}
+      tokenIcon: {fileID: 21300000, guid: e00d767c04b95427d9ce87938b0c5df4, type: 3}
       enabled: 1
       isSpell: 0
       spellID: 0
