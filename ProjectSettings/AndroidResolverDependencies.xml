@@ -113,7 +113,7 @@
     <setting name="gradleBuildEnabled" value="True" />
     <setting name="gradleTemplateEnabled" value="False" />
     <setting name="installAndroidPackages" value="True" />
-    <setting name="packageDir" value="Assets/Plugins/Android" />
+    <setting name="packageDir" value="Assets\Plugins\Android" />
     <setting name="patchAndroidManifest" value="True" />
     <setting name="patchMainTemplateGradle" value="True" />
     <setting name="projectExportEnabled" value="False" />

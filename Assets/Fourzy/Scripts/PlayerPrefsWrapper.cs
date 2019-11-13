@@ -7,35 +7,37 @@ namespace Fourzy
 {
     public static class PlayerPrefsWrapper
     {
-        public static string kInstructionPopupDisplayed = "instructionPopupDisplayed_";
-        public static string kPuzzleChallenge = "puzzleChallenge_";
-        public static string kCurrentTheme = "currentTheme_";
-        public static string kThemeUnlocked = "themeUnlocked_";
-        public static string kGamePiecePieces = "gamePiecePieces_";
-        public static string kGamePieceChampions = "gamePieceChampions_";
-        public static string kSelectedGamePiece = "selectedGamePiece_";
-        public static string kTutorial = "tutorial_";
-        public static string kTutorialOpened = "tutorialOpened_";
-        public static string kUserName = "userName_";
-        public static string kCoins = "coins_";
-        public static string kGems = "gems_";
-        public static string kXP = "xp_";
-        public static string kPortalPoints = "portalPoints_";
-        public static string kRarePortalPoints = "rarePortalPoints_";
-        public static string kTickets = "tickets_";
-        public static string kHints = "hints_";
-        public static string kGameViewed = "gameViewed_";
-        public static string kGameRewarded = "gameRewarded_";
-        public static string kRemoteSetting = "remoteSetting_";
-        public static string kInitialProperties = "initialProperties";
-        public static string kFastPuzzle = "fast_puzzle_";
-        public static string kAdventureComplete = "adventure_complete_";
-        public static string kAdventureUnlocked = "adventure_unlocked_";
-        public static string kAdventureNew = "adventure_new_";
-        public static string kPuzzleHintProgress = "puzzle_hint_progress_";
-        public static string kNewsOpened = "news_opened_";
-        public static string kFastPuzzlesLeaderboardVersion = "fast_puzzles_leaderboard_version";
-        public static string kLastProjectVersion = "kProjectVersion";
+        public const string kTutorial = "tutorial_";
+        public const string kTutorialOpened = "tutorialOpened_";
+
+        private const string kInstructionPopupDisplayed = "instructionPopupDisplayed_";
+        private const string kPuzzleChallenge = "puzzleChallenge_";
+        private const string kCurrentTheme = "currentTheme_";
+        private const string kThemeUnlocked = "themeUnlocked_";
+        private const string kGamePiecePieces = "gamePiecePieces_";
+        private const string kGamePieceChampions = "gamePieceChampions_";
+        private const string kSelectedGamePiece = "selectedGamePiece_";
+        private const string kUserName = "userName_";
+        private const string kCoins = "coins_";
+        private const string kGems = "gems_";
+        private const string kXP = "xp_";
+        private const string kPortalPoints = "portalPoints_";
+        private const string kRarePortalPoints = "rarePortalPoints_";
+        private const string kTickets = "tickets_";
+        private const string kHints = "hints_";
+        private const string kHintsTutorialStage = "hintsTutorialStage";
+        private const string kGameViewed = "gameViewed_";
+        private const string kGameRewarded = "gameRewarded_";
+        private const string kRemoteSetting = "remoteSetting_";
+        private const string kInitialProperties = "initialProperties";
+        private const string kFastPuzzle = "fast_puzzle_";
+        private const string kAdventureComplete = "adventure_complete_";
+        private const string kAdventureUnlocked = "adventure_unlocked_";
+        private const string kAdventureNew = "adventure_new_";
+        private const string kPuzzleHintProgress = "puzzle_hint_progress_";
+        private const string kNewsOpened = "news_opened_";
+        private const string kFastPuzzlesLeaderboardVersion = "fast_puzzles_leaderboard_version";
+        private const string kLastProjectVersion = "kProjectVersion";
 
         public static string kEventRewarded = "eventRewarded_";
 
@@ -146,6 +148,10 @@ namespace Fourzy
         public static string GetLastProjectVersion() => PlayerPrefs.GetString(kLastProjectVersion);
 
         public static void SetLastProjectVersion(string value) => PlayerPrefs.SetString(kLastProjectVersion, value);
+
+        public static int GetHintTutorialStage() => PlayerPrefs.GetInt(kHintsTutorialStage, 0);
+
+        public static void SetHintTutorialStage(int value) => PlayerPrefs.SetInt(kHintsTutorialStage, value);
 
         #region Currencies
 

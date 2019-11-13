@@ -21,6 +21,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 widgets.Add(Instantiate(adventureWidgetPrefab, widgetsParent).SetData(map));
         }
 
+        public override void Open()
+        {
+            base.Open();
+
+            HeaderScreen.instance.Close();
+        }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();

@@ -36,22 +36,22 @@ namespace Fourzy._Updates.Mechanics.Rewards
             List<Reward> rewards = new List<Reward>();
 
             //100% give some coins
-            rewards.Add(new Reward("", UnityEngine.Random.Range(5, 10) + UserManager.Instance.level, RewardType.COINS));
+            rewards.Add(new Reward(UnityEngine.Random.Range(5, 10) + UserManager.Instance.level, RewardType.COINS));
 
             //some hints
-            rewards.Add(new Reward("", UnityEngine.Random.Range(2, 4), RewardType.HINTS));
+            rewards.Add(new Reward(UnityEngine.Random.Range(2, 4), RewardType.HINTS));
 
             //maybe add gems
             //60%
             if (UnityEngine.Random.value > .4f)
-                rewards.Add(new Reward("", UnityEngine.Random.Range(1, 3), RewardType.GEMS));
+                rewards.Add(new Reward(UnityEngine.Random.Range(1, 3), RewardType.GEMS));
 
             //add 1 or 2 character progress
             int quantity = UnityEngine.Random.value > .49f ? 1 : 2;
             for (int characterCycle = 0; characterCycle < quantity; characterCycle++)
             {
                 //get random character from selected area
-                rewards.Add(new GamePieceReward("", UnityEngine.Random.Range(10, 20), RewardType.GAME_PIECE, GameContentManager.Instance.currentTheme.gamepieces.list.Random().prefab.pieceData.ID));
+                rewards.Add(new GamePieceReward(UnityEngine.Random.Range(10, 20), RewardType.GAME_PIECE, GameContentManager.Instance.currentTheme.gamepieces.list.Random().prefab.pieceData.ID));
             }
 
             return rewards;
@@ -61,11 +61,11 @@ namespace Fourzy._Updates.Mechanics.Rewards
         {
             return new List<Reward>()
             {
-                new Reward("Reward 1", 90, RewardType.XP),
-                new Reward("Reward 2", 420, RewardType.XP),
-                new Reward("Reward 3", 330, RewardType.PORTAL_POINTS),
-                new Reward("Reward 4", 440, RewardType.PORTAL_POINTS),
-                new Reward("Reward 5", 550, RewardType.XP),
+                new Reward(90, RewardType.XP),
+                new Reward(420, RewardType.XP),
+                new Reward(330, RewardType.PORTAL_POINTS),
+                new Reward(440, RewardType.PORTAL_POINTS),
+                new Reward(550, RewardType.XP),
             };
         }
 
@@ -73,14 +73,14 @@ namespace Fourzy._Updates.Mechanics.Rewards
         {
             return new List<Reward>()
             {
-                new Reward("", 1, RewardType.COINS),
-                new Reward("", 2, RewardType.COINS),
-                new Reward("", 3, RewardType.COINS),
-                new GamePieceReward("", 20, RewardType.GAME_PIECE, "19"),
-                new GamePieceReward("", 20, RewardType.GAME_PIECE, "1"),
-                new Reward("", 5, RewardType.COINS),
-                new Reward("", 6, RewardType.COINS),
-                new Reward("", 7, RewardType.COINS),
+                new Reward(1, RewardType.COINS),
+                new Reward(2, RewardType.COINS),
+                new Reward(3, RewardType.COINS),
+                new GamePieceReward(20, RewardType.GAME_PIECE, "19"),
+                new GamePieceReward(20, RewardType.GAME_PIECE, "1"),
+                new Reward(5, RewardType.COINS),
+                new Reward(6, RewardType.COINS),
+                new Reward(7, RewardType.COINS),
             };
         }
 
@@ -106,9 +106,9 @@ namespace Fourzy._Updates.Mechanics.Rewards
             public List<Reward> Check(IClientFourzy game)
             {
                 if (game.IsWinner())
-                    return new List<Reward>() { new Reward("Victory", 10, RewardType.XP), new Reward("Victory", 10, RewardType.PORTAL_POINTS), };
+                    return new List<Reward>() { new Reward(10, RewardType.XP, "Victory"), new Reward(10, RewardType.PORTAL_POINTS, "Victory"), };
                 else
-                    return new List<Reward>() { new Reward("Loss", 3, RewardType.XP), };
+                    return new List<Reward>() { new Reward(3, RewardType.XP, "Loss"), };
             }
 
             public List<Reward> CustomRewardsCheck(IClientFourzy game, List<Reward> rewards)
@@ -131,26 +131,26 @@ namespace Fourzy._Updates.Mechanics.Rewards
                     {
                         case 8:
                             return new List<Reward>() {
-                                new Reward("8 in a Row", 1000, RewardType.XP),
-                                new Reward("8 in a Row", 1000, RewardType.PORTAL_POINTS),
+                                new Reward(1000, RewardType.XP, "8 in a Row"),
+                                new Reward(1000, RewardType.PORTAL_POINTS, "8 in a Row"),
                             };
 
                         case 7:
                             return new List<Reward>() {
-                                new Reward("7 in a Row", 200, RewardType.XP),
-                                new Reward("7 in a Row", 200, RewardType.PORTAL_POINTS),
+                                new Reward(200, RewardType.XP, "7 in a Row"),
+                                new Reward(200, RewardType.PORTAL_POINTS, "7 in a Row"),
                             };
 
                         case 6:
                             return new List<Reward>() {
-                                new Reward("6 in a Row", 50, RewardType.XP),
-                                new Reward("6 in a Row", 50, RewardType.PORTAL_POINTS),
+                                new Reward(50, RewardType.XP, "6 in a Row"),
+                                new Reward(50, RewardType.PORTAL_POINTS, "6 in a Row"),
                             };
 
                         case 5:
                             return new List<Reward>() {
-                                new Reward("5 in a Row", 20, RewardType.XP),
-                                new Reward("5 in a Row", 20, RewardType.PORTAL_POINTS),
+                                new Reward(20, RewardType.XP, "5 in a Row"),
+                                new Reward(20, RewardType.PORTAL_POINTS, "5 in a Row"),
                             };
 
                         default:
@@ -199,14 +199,14 @@ namespace Fourzy._Updates.Mechanics.Rewards
                     foreach (KeyValuePair<float, int> stage in DURATION_XP_STAGES)
                         if (game.gameDuration <= stage.Key)
                         {
-                            _rewards.Add(new Reward("Fast Play", stage.Value, RewardType.XP));
+                            _rewards.Add(new Reward(stage.Value, RewardType.XP, "Fast Play"));
                             break;
                         }
 
                     foreach (KeyValuePair<float, int> stage in DURATION_PORTAL_POINTS_STAGES)
                         if (game.gameDuration <= stage.Key)
                         {
-                            _rewards.Add(new Reward("Fast Play", stage.Value, RewardType.PORTAL_POINTS));
+                            _rewards.Add(new Reward(stage.Value, RewardType.PORTAL_POINTS, "Fast Play"));
                             break;
                         }
 
@@ -233,9 +233,57 @@ namespace Fourzy._Updates.Mechanics.Rewards
         public class Reward
         {
             public RewardType rewardType;
-            [TextArea]
-            public string name;
             public int quantity;
+            public string customName;
+
+            public string name
+            {
+                get
+                {
+                    if (!string.IsNullOrEmpty(customName)) return customName;
+                    else
+                    {
+                        switch (rewardType)
+                        {
+                            case RewardType.COINS:
+                                return LocalizationManager.Value("coins");
+
+                            case RewardType.GAME_PIECE:
+                                return LocalizationManager.Value("gamepieces");
+
+                            case RewardType.GEMS:
+                                return LocalizationManager.Value("gems");
+
+                            case RewardType.HINTS:
+                                return LocalizationManager.Value("hints");
+
+                            case RewardType.MAGIC:
+                                return LocalizationManager.Value("magic");
+
+                            case RewardType.OPEN_PORTAL:
+                                return LocalizationManager.Value("openportal");
+
+                            case RewardType.OPEN_RARE_PORTAL:
+                                return LocalizationManager.Value("openrareportal");
+
+                            case RewardType.PORTAL_POINTS:
+                                return LocalizationManager.Value("portalpoints");
+
+                            case RewardType.RARE_PORTAL_POINTS:
+                                return LocalizationManager.Value("rareportalpoints");
+
+                            case RewardType.TICKETS:
+                                return LocalizationManager.Value("tickets");
+
+                            case RewardType.XP:
+                                return LocalizationManager.Value("xp");
+
+                            default:
+                                return customName;
+                        }
+                    }
+                }
+            }
 
             public string GetID(string prefix)
             {
@@ -249,11 +297,11 @@ namespace Fourzy._Updates.Mechanics.Rewards
                 }
             }
 
-            public Reward(string name, int quantity, RewardType rewardType)
+            public Reward(int quantity, RewardType rewardType, string customName = "")
             {
                 this.rewardType = rewardType;
-                this.name = name;
                 this.quantity = quantity;
+                this.customName = customName;
             }
 
             public override string ToString()
@@ -276,7 +324,7 @@ namespace Fourzy._Updates.Mechanics.Rewards
         {
             public string gamePieceID;
 
-            public GamePieceReward(string name, int quantity, RewardType rewardType, string gamePieceID) : base(name, quantity, rewardType)
+            public GamePieceReward(int quantity, RewardType rewardType, string gamePieceID, string customName = "") : base(quantity, rewardType, customName)
             {
                 this.gamePieceID = gamePieceID;
             }

@@ -31,6 +31,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             StartRoutine("showLB", ShowLeaderboard());
+
+            HeaderScreen.instance.Close();
         }
 
         private void OnError(PlayFabError error)

@@ -26,9 +26,11 @@ namespace Fourzy._Updates.UI.Widgets
         private int toValue;
         private int _value = 0;
 
+        public override bool visible => gameObject.activeInHierarchy;
+
         protected void Start()
         {
-            if (updateOnStart) SetTo(ValueFromCurrencyType(type), false);
+            if (updateOnStart) SetTo(GameManager.ValueFromCurrencyType(type), false);
 
             UserManager.onCurrencyUpdate += OnCurrencyUpdate;
         }
@@ -40,10 +42,10 @@ namespace Fourzy._Updates.UI.Widgets
 
         public override void _Update()
         {
-            if (ValueFromCurrencyType(type) == _value) return;
+            if (GameManager.ValueFromCurrencyType(type) == _value) return;
 
             CancelRoutine("animate");
-            StartRoutine("animate", .25f, () => SetTo(ValueFromCurrencyType(type), true), null);
+            StartRoutine("animate", .25f, () => SetTo(GameManager.ValueFromCurrencyType(type), true));
         }
 
         public void SetTo(int value, bool animate)
@@ -80,10 +82,6 @@ namespace Fourzy._Updates.UI.Widgets
                 UpdateLabels(value);
         }
 
-        public bool Check() => type == CurrencyType.XP;
-
-        public bool SliderCheck() => type == CurrencyType.PORTAL_POINTS || type == CurrencyType.RARE_PORTAL_POINTS || type == CurrencyType.XP;
-
         public void OnTap()
         {
             switch (type)
@@ -93,38 +91,6 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
-        }
-
-        public static int ValueFromCurrencyType(CurrencyType type)
-        {
-            switch (type)
-            {
-                case CurrencyType.COINS:
-                    return UserManager.Instance.coins;
-
-                case CurrencyType.GEMS:
-                    return UserManager.Instance.gems;
-
-                case CurrencyType.MAGIC:
-                    return UserManager.Instance.coins;
-
-                case CurrencyType.PORTAL_POINTS:
-                    return UserManager.Instance.portalPoints;
-
-                case CurrencyType.RARE_PORTAL_POINTS:
-                    return UserManager.Instance.rarePortalPoints;
-
-                case CurrencyType.TICKETS:
-                    return UserManager.Instance.tickets;
-
-                case CurrencyType.HINTS:
-                    return UserManager.Instance.hints;
-
-                case CurrencyType.XP:
-                    return UserManager.Instance.xp;
-            }
-
-            return 0;
         }
 
         protected virtual void UpdateLabels(int value)
@@ -166,6 +132,10 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (visible && this.type == type) _Update();
         }
+
+        private bool Check() => type == CurrencyType.XP;
+
+        private bool SliderCheck() => type == CurrencyType.PORTAL_POINTS || type == CurrencyType.RARE_PORTAL_POINTS || type == CurrencyType.XP;
 
         private IEnumerator UpdateRoutine(float duration)
         {

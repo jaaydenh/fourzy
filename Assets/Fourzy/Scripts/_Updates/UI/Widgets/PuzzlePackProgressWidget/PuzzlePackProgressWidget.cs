@@ -5,6 +5,7 @@ using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Menu.Screens;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,6 +131,14 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
+        public void CancelWidgetsRewardAnimation()
+        { 
+            if (widgets == null) return;
+
+            CancelRoutine("animateRewards");
+            widgets.ForEach(widget => widget.CanceRewardlAnimation());
+        }
+
         public PuzzlePackProgressWidget AnimateRewardsForIndex(int index, float delay = .5f)
         {
             StartRoutine("animateRewards", AnimateRewardsRoutine(index, delay));
@@ -175,6 +184,9 @@ namespace Fourzy._Updates.UI.Widgets
                 widget.ScaleTo(Vector3.one, Vector3.one * 1.2f, .35f);
 
                 yield return new WaitForSeconds(.25f);
+
+                //animate reward
+                widget.AnimateReward();
 
                 widget.SetChecked(true);
 

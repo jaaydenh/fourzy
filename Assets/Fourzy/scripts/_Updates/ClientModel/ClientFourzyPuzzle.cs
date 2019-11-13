@@ -15,12 +15,16 @@ namespace Fourzy._Updates.ClientModel
     {
         public Action<int, int> onMagic { get; set; }
 
-        public GameState _State => State;
-        public GameState _FirstState
+        public GameState _State
         {
-            get => FirstState;
-            set { }
+            get => State;
+            set => State = value;
         }
+        public GameState _FirstState { get; set; }
+        //{
+        //    get => FirstState;
+        //    set { }
+        //}
 
         public List<PlayerTurn> _playerTurnRecord => playerTurnRecord;
         public List<PlayerTurn> _allTurnRecord { get; set; }
@@ -38,6 +42,7 @@ namespace Fourzy._Updates.ClientModel
 
             set { }
         }
+
         public GameStateDataEpoch toGameStateData
         {
             get
@@ -65,6 +70,7 @@ namespace Fourzy._Updates.ClientModel
                 return result;
             }
         }
+
         public GameType _Type
         {
             get => GameType.PUZZLE;
@@ -127,6 +133,8 @@ namespace Fourzy._Updates.ClientModel
         public int Columns => State.Board.Columns;
 
         public int BossMoves { get; set; }
+
+        public int LoseStreak { get; set; }
 
         public bool isOver =>
             Status == PuzzleStatus.SUCCESS ||
@@ -301,6 +309,17 @@ namespace Fourzy._Updates.ClientModel
             draw = true;
         }
 
+        public void CheckLost()
+        {
+            if (isOver)
+            {
+                if (IsWinner())
+                    LoseStreak = 0;
+                else
+                    LoseStreak++;
+            }
+        }
+
         public void RemoveMember()
         {
             myMembers.RemoveAt(myMembers.Count - 1);
@@ -318,13 +337,20 @@ namespace Fourzy._Updates.ClientModel
 
         public GameState _Reset(bool resetMembers = false)
         {
-            Initialize();
+            State = new GameState(_FirstState);
 
-            return base.Reset();
+            Initialize(false);
+
+            playerTurnRecord = new List<PlayerTurn>();
+            Status = PuzzleStatus.ACTIVE;
+
+            return State;
         }
 
-        private void Initialize()
+        private void Initialize(bool resetFirstState = true)
         {
+            if (resetFirstState) _FirstState = new GameState(State);
+
             collectedItems = new List<RewardsManager.Reward>();
             _allTurnRecord = new List<PlayerTurn>();
 

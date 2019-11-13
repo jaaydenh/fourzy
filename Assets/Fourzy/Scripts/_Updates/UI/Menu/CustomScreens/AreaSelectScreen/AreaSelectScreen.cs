@@ -22,6 +22,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             group = GetComponent<ToggleGroup>();
         }
 
+        public override void Open()
+        {
+            base.Open();
+
+            HeaderScreen.instance.Close();
+        }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();

@@ -13,25 +13,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public MovesLeftWidget movesLeftWidget;
         public ButtonExtended nextButton;
-        public ButtonExtended hintButton;
+        public HintButton hintButton;
 
         public TMP_Text rule;
         public TweenBase completeIcon;
         public AlphaTween packInfoTween;
 
         public IClientFourzy game { get; private set; }
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            UserManager.onCurrencyUpdate += OnCurrencyUpdate;
-        }
-
-        protected void OnDestroy()
-        {
-            UserManager.onCurrencyUpdate -= OnCurrencyUpdate;
-        }
 
         public void Open(IClientFourzy game)
         {
@@ -46,16 +34,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             this.game = game;
 
-            OnCurrencyUpdate(CurrencyType.HINTS);
-
             //hint button
             if (game.puzzleData.Solution.Count > 0)
             {
-                hintButton.SetActive(true);
+                hintButton.Show();
                 SetHintButtonState(true);
             }
             else
-                hintButton.SetActive(false);
+                hintButton.Hide();
 
             if (game.puzzleData.pack)
             {
@@ -124,6 +110,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game._Type == GameType.PUZZLE) movesLeftWidget.UpdateMovesLeft();
 
             SetHintButtonState(true);
+
+            if (!game.isOver && game.isMyTurn)
+            {
+                switch (PlayerPrefsWrapper.GetHintTutorialStage())
+                {
+                    case 0:
+                        if (game.LoseStreak == 2)
+                        {
+                            //lock controls
+                            
+                        }
+
+                        break;
+                }
+            }
         }
 
         public void Next() => GamePlayManager.instance.LoadGame(game.Next());
@@ -149,14 +150,5 @@ namespace Fourzy._Updates.UI.Menu.Screens
         }
 
         private void SetHintButtonState(bool state) => hintButton.SetState(state && !game.isOver && game.isMyTurn);
-
-        private void OnCurrencyUpdate(CurrencyType type)
-        {
-            if (type != CurrencyType.HINTS) return;
-
-            if (game == null || game.puzzleData == null) return;
-
-            hintButton.GetBadge().badge.SetValue(UserManager.Instance.hints);
-        }
     }
 }

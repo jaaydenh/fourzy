@@ -16,7 +16,7 @@ namespace Fourzy._Updates.ClientModel
     {
         Action<int, int> onMagic { get; set; }
         GameState _FirstState { get; set; }
-        GameState _State { get; }
+        GameState _State { get; set; }
         GameType _Type { get; set; }
         GameMode _Mode { get; set; }
         Area _Area { get; set; }
@@ -39,6 +39,7 @@ namespace Fourzy._Updates.ClientModel
         int Rows { get; }
         int Columns { get; }
         int BossMoves { get; set; }
+        int LoseStreak { get; set; }
         bool isOver { get; }
         bool draw { get; set; }
         bool hideOpponent { get; set; }
@@ -71,6 +72,7 @@ namespace Fourzy._Updates.ClientModel
         void AddPlayerMagic(int playerId, int value);
         void OnVictory();
         void OnDraw();
+        void CheckLost();
         void RemoveMember();
         IClientFourzy Next();
         PlayerTurnResult StartTurn(GameState gameState);

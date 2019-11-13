@@ -379,7 +379,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         GameManager.Instance.currentMap.FocusOn(progressionEvent);
                         anchors = GameManager.Instance.currentMap.GetEventCameraRelativePosition(progressionEvent);
 
-                        masks.ShowMask(anchors, new Vector2(250f, 150f), OnboardingScreenMaskObject.MaskStyle.PX_16, true);
+                        masks.ShowMask(anchors, progressionEvent.rectTransform, Vector3.one * .75f);
 
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(anchors);
@@ -416,7 +416,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         Vector2 anchor = Vector2.one * .5f + new Vector2(position.x / _menuController.size.x, position.y / _menuController.size.y);
 
-                        masks.ShowMask(anchor, new Vector2(330f, 122f), OnboardingScreenMaskObject.MaskStyle.PX_16, true);
+                        masks.ShowMask(anchor, currentButton.rectTransform, Vector3.one);
 
                         //pointer
                         if (!pointer.visible) pointer.Show(.2f);

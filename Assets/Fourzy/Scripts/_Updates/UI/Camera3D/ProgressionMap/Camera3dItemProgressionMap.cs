@@ -299,11 +299,9 @@ namespace Fourzy._Updates.UI.Camera3D
                 options.Find(@event => @event.EventType == ProgressionEvent.ProgressionEventType.CURRENCY);
         }
 
-        public Vector2 GetEventCameraRelativePosition(ProgressionEvent @event)
-        {
-            return new Vector2((@event.rectTransform.anchoredPosition.x - (contentPosition - cameraSize.x)) / (cameraSize.x * 2f),
+        public Vector2 GetEventCameraRelativePosition(ProgressionEvent @event) => 
+            new Vector2((@event.rectTransform.anchoredPosition.x - (contentPosition - cameraSize.x)) / (cameraSize.x * 2f),
                 @event.rectTransform.anchoredPosition.y / (cameraSize.y * 2f));
-        }
 
         public Vector2 GetCurrentEventSize() => GetCurrentEvent().size;
 

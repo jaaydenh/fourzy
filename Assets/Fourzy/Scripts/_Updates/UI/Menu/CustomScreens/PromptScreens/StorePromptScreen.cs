@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
 using System;
 using System.Linq;
@@ -56,6 +57,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         widgets.Add(Instantiate(storeItemWidget, productsParent).SetData(product));
             }
             catch (Exception) { }
+        }
+
+        public void OnPurchaseComplete(Product product)
+        {
+            //try get product data
+            MiscGameContentHolder.StoreItemExtraData _data = GameContentManager.Instance.miscGameDataHolder.GetStoreItem(product.definition.id);
+
+            if (!_data) return;
+
+            if (product.definition.id.Contains("hints"))
+            {
+                StoreWidget targetWidget = GetWidgets<StoreWidget>().Find(widget => widget.data == product);
+
+                //animate reward
+                PersistantOverlayScreen.instance.AnimateReward(false, RewardType.HINTS, _data.quantity, targetWidget.IconViewportPosition());
+            }
         }
 
         public static string StoreItemTypeToString(StoreItemType filter)

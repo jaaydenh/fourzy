@@ -58,6 +58,10 @@
       "value": "Continue"
     },
     {
+      "key": "coins",
+      "value": "Coins"
+    },
+    {
       "key": "cant_be_empty",
       "value": "Can't be empty!"
     },
@@ -90,6 +94,10 @@
       "value": "Found"
     },
     {
+      "key": "gamepieces",
+      "value": "Fourzies"
+    },
+    {
       "key": "gauntlet",
       "value": "Gauntlet"
     },
@@ -114,12 +122,20 @@
       "value": "Get 4 in a row to Win!"
     },
     {
+      "key": "gems",
+      "value": "Gems"
+    },
+    {
       "key": "good_job",
       "value": "Good job!"
     },
     {
       "key": "lost",
       "value": "Lost"
+    },
+    {
+      "key": "magic",
+      "value": "Magic"
     },
     {
       "key": "music",
@@ -146,6 +162,18 @@
       "value": "Not your turn"
     },
     {
+      "key": "openportal",
+      "value": "Open Portal"
+    },
+    {
+      "key": "openrareportal",
+      "value": "Open Rare Portal"
+    },
+    {
+      "key": "portalpoints",
+      "value": "Portal Points"
+    },
+    {
       "key": "player_one",
       "value": "Player 1"
     },
@@ -156,6 +184,10 @@
     {
       "key": "puzzle",
       "value": "Puzzle"
+    },
+    {
+      "key": "rareportalpoints",
+      "value": "Rare Portal Points"
     },
     {
       "key": "replay_tutorial",
@@ -210,6 +242,10 @@
       "value": "Start playing\nthe first event!"
     },
     {
+      "key": "tickets",
+      "value": "Tickets"
+    },
+    {
       "key": "tokens",
       "value": "Tokens"
     },
@@ -232,6 +268,10 @@
     {
       "key": "welcome_to_fourzy",
       "value": "Welcome to Fourzy"
+    },
+    {
+      "key": "xp",
+      "value": "XP"
     },
     {
       "key": "won",

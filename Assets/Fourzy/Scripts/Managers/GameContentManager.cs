@@ -170,8 +170,11 @@ namespace Fourzy
 
             foreach (ResourceItem @event in ResourceDB.GetFolder(Constants.PUZZLE_PACKS_ROOT_FOLDER).GetChilds("", ResourceItem.Type.Folder))
             {
+                IEnumerable<ResourceItem> items = @event.GetChilds("", ResourceItem.Type.Asset);
+                if (items.Count() == 0) continue;
+
                 //get puzzlepack file
-                BasicPuzzlePack puzzlePack = new BasicPuzzlePack(@event.GetChilds("", ResourceItem.Type.Asset).First());
+                BasicPuzzlePack puzzlePack = new BasicPuzzlePack(items.First());
 
                 int puzzleIndex = 0;
                 //get puzzle descriptions file
@@ -303,7 +306,6 @@ namespace Fourzy
             REWARDS_OPEN_PORTAL = 18,
             REWARDS_OPEN_RARE_PORTAL = 19,
             REWARDS_HINTS = 20,
-
             #endregion
 
             BOARD_HINT_BOX = 40,

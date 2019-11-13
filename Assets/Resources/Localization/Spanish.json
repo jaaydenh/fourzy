@@ -58,6 +58,10 @@
       "value": "Continuar"
     },
     {
+      "key": "coins",
+      "value": "Monedas"
+    },
+    {
       "key": "cant_be_empty",
       "value": "No puede estar vacio!"
     },
@@ -90,6 +94,10 @@
       "value": "Encontró"
     },
     {
+      "key": "gamepieces",
+      "value": "Fourzies"
+    },
+    {
       "key": "gauntlet",
       "value": "Retos"
     },
@@ -114,12 +122,20 @@
       "value": "Consigue 4 seguidos para ganar!"
     },
     {
+      "key": "gems",
+      "value": "Gemas"
+    },
+    {
       "key": "good_job",
       "value": "Buen trabajo!"
     },
     {
       "key": "lost",
       "value": "Perdida"
+    },
+    {
+      "key": "magic",
+      "value": "Magia"
     },
     {
       "key": "music",
@@ -146,6 +162,18 @@
       "value": "No es tu turno"
     },
     {
+      "key": "openportal",
+      "value": "Portal abierto"
+    },
+    {
+      "key": "openrareportal",
+      "value": "Abrir portal raro"
+    },
+    {
+      "key": "portalpoints",
+      "value": "Puntos de portal"
+    },
+    {
       "key": "player_one",
       "value": "Jugador 1"
     },
@@ -156,6 +184,10 @@
     {
       "key": "puzzle",
       "value": "Rompecabezas"
+    },
+    {
+      "key": "rareportalpoints",
+      "value": "Puntos de portal raros"
     },
     {
       "key": "replay_tutorial",
@@ -210,6 +242,10 @@
       "value": "Selecciona un rompecabezas y comienza a jugar!"
     },
     {
+      "key": "tickets",
+      "value": "Entradas"
+    },
+    {
       "key": "tokens",
       "value": "Piezas"
     },
@@ -232,6 +268,10 @@
     {
       "key": "welcome_to_fourzy",
       "value": "Bienvenido a Fourzy"
+    },
+    {
+      "key": "xp",
+      "value": "XP"
     },
     {
       "key": "won",

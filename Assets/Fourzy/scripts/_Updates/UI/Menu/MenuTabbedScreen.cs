@@ -5,6 +5,7 @@ using Fourzy._Updates.Audio;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Toasts;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
@@ -18,7 +19,6 @@ namespace Fourzy._Updates.UI.Menu
         public static MenuTabbedScreen Instance;
 
         public MenuTab defaultTab;
-        //public bool warp = false;
 
         public RectTransform tabsParent;
         public List<TabButton> tabsButtons;
@@ -35,7 +35,6 @@ namespace Fourzy._Updates.UI.Menu
         private int demoCounter = 0;
 
         public override bool containsSelected => CurrentTab.containsSelected;
-        //public override Selectable DefaultSelectable => CurrentTab.DefaultSelectable;
         public List<MenuTab> tabs { get; private set; }
         public MenuTab CurrentTab => tabs[currentTab];
 
@@ -81,6 +80,8 @@ namespace Fourzy._Updates.UI.Menu
         public override void Open()
         {
             base.Open();
+
+            HeaderScreen.instance.Open();
 
             if (currentTab == -1) return;
 
@@ -219,7 +220,11 @@ namespace Fourzy._Updates.UI.Menu
         {
             base.OnInitialized();
 
-            if (defaultTab && tabs.Contains(defaultTab)) OpenTab(tabs.IndexOf(defaultTab), false);
+            if (defaultTab && tabs.Contains(defaultTab))
+            {
+                HeaderScreen.instance.Open();
+                OpenTab(tabs.IndexOf(defaultTab), false);
+            }
         }
     }
 }

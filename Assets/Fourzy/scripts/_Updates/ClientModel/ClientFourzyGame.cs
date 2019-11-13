@@ -20,7 +20,11 @@ namespace Fourzy._Updates.ClientModel
     {
         public Action<int, int> onMagic { get; set; }
 
-        public GameState _State => State;
+        public GameState _State
+        {
+            get => State;
+            set => State = value;
+        }
         public GameState _FirstState { get; set; }
 
         public List<PlayerTurn> _playerTurnRecord => playerTurnRecord;
@@ -174,6 +178,8 @@ namespace Fourzy._Updates.ClientModel
         public List<Creature> myMembers => State.Herds[me.PlayerId].Members;
 
         public int BossMoves { get; set; }
+
+        public int LoseStreak { get; set; }
 
         public GamePiecePrefabData playerOnePrefabData { get; set; }
         public GamePiecePrefabData playerTwoPrefabData { get; set; }
@@ -550,6 +556,25 @@ namespace Fourzy._Updates.ClientModel
             draw = true;
         }
 
+        public void CheckLost()
+        {
+            if (isOver)
+            {
+                if (IsWinner())
+                    LoseStreak = 0;
+                else
+                    switch (_Mode)
+                    {
+                        case GameMode.AI_PACK:
+                        case GameMode.BOSS_AI_PACK:
+                        case GameMode.GAUNTLET:
+                            LoseStreak++;
+
+                            break;
+                    }
+            }
+        }
+
         public void RemoveMember()
         {
             myMembers.RemoveAt(myMembers.Count - 1);
@@ -615,7 +640,7 @@ namespace Fourzy._Updates.ClientModel
             {
                 case PackType.AI_PACK:
                     if (puzzleData.gauntletStatus != null)
-                        game = new ClientFourzyGame(me, puzzleData.puzzleIndex, /*Status: puzzleData.pack.gauntletStatus*/membersCount: (current != null ? current.myMembers.Count : Constants.GAUNTLET_DEFAULT_MOVES_COUNT));
+                        game = new ClientFourzyGame(me, puzzleData.puzzleIndex, membersCount: (current != null ? current.myMembers.Count : Constants.GAUNTLET_DEFAULT_MOVES_COUNT));
                     else
                         game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, me);
 

@@ -9,6 +9,7 @@ namespace Fourzy._Updates.Tween
         public Vector2 from;
         public Vector2 to;
         public Vector2 control;
+        public bool local = true;
 
         private RectTransform rectTransform;
 
@@ -45,10 +46,15 @@ namespace Fourzy._Updates.Tween
 
         public void SetPosition(Vector3 position)
         {
-            if (rectTransform)
-                rectTransform.anchoredPosition = position;
+            if (local)
+            {
+                if (rectTransform)
+                    rectTransform.anchoredPosition = position;
+                else
+                    transform.localPosition = position;
+            }
             else
-                transform.localPosition = position;
+                transform.position = position;
         }
 
         public static Vector2 GetBezierPoint(Vector2 start, Vector2 control, Vector2 end, float time)

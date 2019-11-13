@@ -66,13 +66,14 @@ namespace Fourzy._Updates.UI.Menu
             widthScaled = Screen.height / canvaseScaler.referenceResolution.y * canvaseScaler.referenceResolution.x;
             heightScaled = Screen.width / canvaseScaler.referenceResolution.x * canvaseScaler.referenceResolution.y;
 
-            size = new Vector2(canvaseScaler.referenceResolution.x * transform.localScale.x, canvaseScaler.referenceResolution.y * transform.localScale.y);
-
             if (!menus.ContainsKey(gameObject.name)) menus.Add(gameObject.name, this);
         }
 
         protected virtual void Start()
         {
+            size = new Vector2(widthAdjusted * transform.localScale.x, heightAdjusted * transform.localScale.y);
+            //print(size + " " + widthScaled + " " + heightScaled + " " + widthAdjusted + " " + heightAdjusted);
+
             StartCoroutine(InitializedRoutine());
         }
 

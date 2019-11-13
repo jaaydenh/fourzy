@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: 8276614275106803738}
   - component: {fileID: 1788369364149222938}
   - component: {fileID: 5338728067139399401}
+  - component: {fileID: 1397942839028682240}
   m_Layer: 5
   m_Name: _ProgressionEventBase
   m_TagString: Untagged
@@ -147,8 +148,8 @@ MonoBehaviour:
   currencyRewardID: 
   reward:
     rewardType: 0
-    name: 
     quantity: 0
+    customName: 
   otherRewardID: 
   unlockWhenComplete: []
   onUnlock:
@@ -490,6 +491,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 194.67, y: 168.27}
   m_EdgeRadius: 0
+--- !u!95 &1397942839028682240
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935594895090930300}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ebbcde3097e1f3a4bb90ebdea8bd0054, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2217385424508899025
 GameObject:
   m_ObjectHideFlags: 0

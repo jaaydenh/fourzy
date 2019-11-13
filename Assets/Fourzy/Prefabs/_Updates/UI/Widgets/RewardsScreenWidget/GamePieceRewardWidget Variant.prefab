@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 5389304240190133609, guid: 171dd682b3ed1c849865bebefaf7cba0,
         type: 3}
       propertyPath: m_Name
-      value: GamePieceRewardWidget
+      value: GamePieceRewardWidget Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5389304240190133608, guid: 171dd682b3ed1c849865bebefaf7cba0,
         type: 3}
@@ -117,10 +117,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 5389304240794467514, guid: 171dd682b3ed1c849865bebefaf7cba0,
+    - target: {fileID: 5389304240190133621, guid: 171dd682b3ed1c849865bebefaf7cba0,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: events.persistentCalls.calls.Array.data[0].genericMenuData.selectedMember
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 5389304240794467513, guid: 171dd682b3ed1c849865bebefaf7cba0,
         type: 3}
@@ -131,6 +131,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 58.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 5389304241904778475, guid: 171dd682b3ed1c849865bebefaf7cba0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5389304240295064639, guid: 171dd682b3ed1c849865bebefaf7cba0,
         type: 3}
@@ -192,6 +197,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 44.34
       objectReference: {fileID: 0}
+    - target: {fileID: 5389304240794467514, guid: 171dd682b3ed1c849865bebefaf7cba0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5389304240558660180, guid: 171dd682b3ed1c849865bebefaf7cba0,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -211,11 +221,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5389304241904778475, guid: 171dd682b3ed1c849865bebefaf7cba0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 171dd682b3ed1c849865bebefaf7cba0, type: 3}

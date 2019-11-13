@@ -115,6 +115,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        public void CloseIfOpened()
+        {
+            if (isCurrent) menuController.CloseCurrentScreen(true);
+        }
+
         public override void Open()
         {
             base.Open();

@@ -63,6 +63,17 @@ namespace Fourzy._Updates.UI.Widgets
                 .SetAnchors(anchors);
         }
 
+        public void ShowMask(Vector2 anchors, RectTransform toCopy, Vector3 scale, bool clear = true)
+        {
+            Show();
+
+            if (clear) Clear();
+
+            AddMaskObject()
+                .SetStyle(toCopy, scale)
+                .SetAnchors(anchors);
+        }
+
         public void Show(float time = .3f)
         {
             //if (alphaTween._value != 0f) return;
@@ -101,7 +112,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             foreach (OnboardingScreenMaskObject mask in masks)
             {
-                Destroy(mask.unmaskRaycast);
+                mask.ClearFilters();
                 Destroy(mask.gameObject);
             }
 
@@ -113,9 +124,6 @@ namespace Fourzy._Updates.UI.Widgets
             OnboardingScreenMaskObject maskInstance = Instantiate(maskPrefab, transform);
             maskInstance.SetActive(true);
             maskInstance.rectTransform.SetAsFirstSibling();
-
-            UnmaskRaycastFilter filter = maskInstance.unmaskRaycast = gameObject.AddComponent<UnmaskRaycastFilter>();
-            filter.targetUnmask = maskInstance.unmask;
 
             masks.Add(maskInstance);
 

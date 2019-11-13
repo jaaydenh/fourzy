@@ -26,6 +26,7 @@ namespace Fourzy._Updates.Mechanics._Vfx
         public Vfx uiLayerCopy { get; private set; }
         public Vfx copyParent { get; private set; }
         public RectTransform parentRectTransform { get; private set; }
+        public RectTransform rectTransform { get; private set; }
 
         protected virtual void Update()
         {
@@ -43,12 +44,12 @@ namespace Fourzy._Updates.Mechanics._Vfx
             this.holder = holder;
 
             gameObject.SetActive(false);
+            rectTransform = GetComponent<RectTransform>();
         }
 
         public virtual Vfx StartVfx()
         {
-            if (copyParent)
-                transform.SetAsLastSibling();
+            if (copyParent) transform.SetAsLastSibling();
 
             isActive = true;
             onStart.Invoke();
@@ -56,15 +57,15 @@ namespace Fourzy._Updates.Mechanics._Vfx
             //check if this is part of ui canvas
             parentRectTransform = GetComponentInParent<RectTransform>();
 
-            if (parentRectTransform && !copyParent)
+            if (parentRectTransform && !copyParent && !rectTransform)
             {
                 if (!uiLayerCopy)
                 {
-                    gameObject.SetActive(false);
-
                     //get a ui layer copy of this vfx
                     uiLayerCopy = Instantiate(this);
                     uiLayerCopy.copyParent = this;
+
+                    gameObject.SetActive(false);
 
                     List<ParticleSystem> particleSystems = new List<ParticleSystem>();
                     //add UIParticle
@@ -160,6 +161,7 @@ namespace Fourzy._Updates.Mechanics._Vfx
 
         UI_VFX_ADD_TIMER = 30,
         UI_TOUCH_VFX = 31,
+        UI_REWARD_ANIMATION_PARTICLE = 32,
 
         LENGTH,
     }

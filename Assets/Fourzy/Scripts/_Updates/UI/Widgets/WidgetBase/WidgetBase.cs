@@ -23,7 +23,7 @@ namespace Fourzy._Updates.UI.Widgets
         public AlphaTween alphaTween { get; protected set; }
         public ButtonExtended button { get; private set; }
 
-        public bool visible => menuScreen.IsWidgetVisible(this);
+        public virtual bool visible => menuScreen.IsWidgetVisible(this);
 
         protected override void Awake()
         {
@@ -115,6 +115,13 @@ namespace Fourzy._Updates.UI.Widgets
         {
             rectTransform.anchorMin = rectTransform.anchorMax = anchor;
             rectTransform.anchoredPosition = Vector2.zero;
+
+            return this;
+        }
+
+        public virtual WidgetBase SetPosition(Vector2 position)
+        {
+            rectTransform.position = position;
 
             return this;
         }

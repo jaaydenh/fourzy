@@ -173,7 +173,7 @@ namespace Fourzy._Updates.ClientModel
                     {
                         case PackType.PUZZLE_PACK: game = new ClientFourzyPuzzle(data); break;
 
-                        default: game = ClientFourzyGame.FromPuzzleData(data, current); break;
+                        default: game = ClientFourzyGame.FromPuzzleData(data, GameManager.Instance.activeGame); break;
                     }
                 }
             }
@@ -228,7 +228,7 @@ namespace Fourzy._Updates.ClientModel
     {
         public int levelIndex;
 
-        public RewardIndexed(int levelIndex, string name, int quantity, RewardType rewardType) : base(name, quantity, rewardType)
+        public RewardIndexed(int levelIndex, int quantity, RewardType rewardType, string name) : base(quantity, rewardType, name)
         {
             this.levelIndex = levelIndex;
         }

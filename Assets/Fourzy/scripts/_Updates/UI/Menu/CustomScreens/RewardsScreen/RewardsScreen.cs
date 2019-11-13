@@ -174,7 +174,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         //add total if needed
                         if (portalKeysWidgets.Count == portalPointsRewards.Count)
-                            portalKeysWidgets.Add(AddWidget(new RewardsManager.Reward("Total", portalPointsRewards.Sum(reward => reward.quantity), RewardType.PORTAL_POINTS), GameContentManager.GetPrefab<RewardsScreenWidget>(GameContentManager.PrefabType.REWARDS_PORTAL_POINTS), portalKeysTab));
+                            portalKeysWidgets.Add(AddWidget(new RewardsManager.Reward(portalPointsRewards.Sum(reward => reward.quantity), RewardType.PORTAL_POINTS, "Total"), GameContentManager.GetPrefab<RewardsScreenWidget>(GameContentManager.PrefabType.REWARDS_PORTAL_POINTS), portalKeysTab));
 
                         scrollRect.normalizedPosition = Vector2.zero;
                     }
@@ -307,7 +307,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (portalKeysWidgets.Count == 0) yield break;
 
             //add total
-            portalKeysWidgets.Add(AddWidget(new RewardsManager.Reward("Total", portalPointsRewards.Sum(reward => reward.quantity), RewardType.PORTAL_POINTS), GameContentManager.GetPrefab<RewardsScreenWidget>(GameContentManager.PrefabType.REWARDS_PORTAL_POINTS), portalKeysTab));
+            portalKeysWidgets.Add(AddWidget(new RewardsManager.Reward(portalPointsRewards.Sum(reward => reward.quantity), RewardType.PORTAL_POINTS, "Total"), GameContentManager.GetPrefab<RewardsScreenWidget>(GameContentManager.PrefabType.REWARDS_PORTAL_POINTS), portalKeysTab));
 
             scrollRect.normalizedPosition = Vector2.zero;
         }

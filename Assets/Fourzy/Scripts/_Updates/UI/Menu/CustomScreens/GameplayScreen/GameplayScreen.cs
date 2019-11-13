@@ -151,10 +151,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             demoGameScreen.Open(game);
             gauntletGameScreen.Open(game);
 
-            //close game win/lose screen
-            if (gameWinLoseScreen.isCurrent) menuController.CloseCurrentScreen(true);
-            //close puzzle win/lose screen
-            if (puzzleWinLoseScreen.isCurrent) menuController.CloseCurrentScreen(true);
+            gameWinLoseScreen.CloseIfOpened();
+            puzzleWinLoseScreen.CloseIfOpened();
+            
 
             spellsListWidget.Open(game, gameplayManager.board, game.me);
 

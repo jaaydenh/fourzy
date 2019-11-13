@@ -87,6 +87,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput += OnNoInput;
 
+            HeaderScreen.instance.Close();
+
             //auto load game if its not realtime mdoe
             if (GameManager.Instance.isRealtime)
             {
@@ -103,8 +105,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             //add gems
 #if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.U))
+            if (Input.GetKeyDown(KeyCode.H))
+            {
                 UserManager.Instance.hints += 3;
+
+                PersistantOverlayScreen.instance.AnimateReward(true, RewardType.HINTS, 3, Vector2.one * .5f);
+            }
             else if (Input.GetKeyDown(KeyCode.I))
                 UserManager.Instance.hints -= 3;
 #endif
@@ -371,6 +377,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (game == null) return;
 
+            board.StopAIThread();
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
@@ -416,7 +423,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (UserManager.Instance.hints <= 0)
             {
-                menuController.GetScreen<StorePromptScreen>().Prompt(StorePromptScreen.StoreItemType.HINTS);
+                PersistantMenuController.instance.GetScreen<StorePromptScreen>().Prompt(StorePromptScreen.StoreItemType.HINTS);
 
                 return;
             }

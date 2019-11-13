@@ -337,6 +337,71 @@ namespace Fourzy
             }, (result) => { Debug.Log($"{stat} updated {_value}"); }, (error) => { Debug.LogError(error.ErrorMessage); });
         }
 
+        public static int ValueFromCurrencyType(CurrencyType type)
+        {
+            switch (type)
+            {
+                case CurrencyType.COINS:
+                    return UserManager.Instance.coins;
+
+                case CurrencyType.GEMS:
+                    return UserManager.Instance.gems;
+
+                case CurrencyType.MAGIC:
+                    return UserManager.Instance.coins;
+
+                case CurrencyType.PORTAL_POINTS:
+                    return UserManager.Instance.portalPoints;
+
+                case CurrencyType.RARE_PORTAL_POINTS:
+                    return UserManager.Instance.rarePortalPoints;
+
+                case CurrencyType.TICKETS:
+                    return UserManager.Instance.tickets;
+
+                case CurrencyType.HINTS:
+                    return UserManager.Instance.hints;
+
+                case CurrencyType.XP:
+                    return UserManager.Instance.xp;
+            }
+
+            return 0;
+        }
+
+        public static CurrencyType RewardToCurrency(RewardType type)
+        {
+            switch (type)
+            {
+                case RewardType.COINS:
+                    return CurrencyType.COINS;
+
+                case RewardType.XP:
+                    return CurrencyType.XP;
+
+                case RewardType.TICKETS:
+                    return CurrencyType.TICKETS;
+
+                case RewardType.MAGIC:
+                    return CurrencyType.MAGIC;
+
+                case RewardType.GEMS:
+                    return CurrencyType.GEMS;
+
+                case RewardType.PORTAL_POINTS:
+                    return CurrencyType.PORTAL_POINTS;
+
+                case RewardType.RARE_PORTAL_POINTS:
+                    return CurrencyType.RARE_PORTAL_POINTS;
+
+                case RewardType.HINTS:
+                    return CurrencyType.HINTS;
+
+                default:
+                    return CurrencyType.NONE;
+            }
+        }
+
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             switch (scene.name)

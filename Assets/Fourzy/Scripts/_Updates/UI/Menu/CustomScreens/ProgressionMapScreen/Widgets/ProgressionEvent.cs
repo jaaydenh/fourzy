@@ -60,7 +60,10 @@ namespace Fourzy._Updates.UI.Widgets
 
         private BasicPuzzlePack _puzzlePack;
         private GamePieceView gamePieceView;
+        private Animator animator;
         private Vector2 _size;
+
+        private bool completeDisplayed = false;
 
         public bool _rewarded { get; private set; }
         public bool _unlocked { get; private set; }
@@ -223,6 +226,13 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
+
+            if (gameObject.activeInHierarchy && menuScreen.isOpened && !completeDisplayed && _rewarded)
+            {
+                completeDisplayed = true;
+
+                StartRoutine("rewardRoutine", RewardAnimationRoutine());
+            }
         }
 
         public virtual void Unlock(bool animate)
@@ -353,6 +363,8 @@ namespace Fourzy._Updates.UI.Widgets
             placeholder.gameObject.SetActive(false);
 
             map = GetComponentInParent<Camera3dItemProgressionMap>();
+            animator = GetComponent<Animator>();
+            completeDisplayed = wasRewarded;
 
             switch (EventType)
             {
@@ -394,6 +406,22 @@ namespace Fourzy._Updates.UI.Widgets
 
             //find chunker
             for (int i = 0; i < obj.childCount; i++) FindSize(obj.GetChild(i).GetComponent<RectTransform>());
+        }
+
+        private IEnumerator RewardAnimationRoutine()
+        {
+            yield return new WaitForSeconds(1f);
+
+            //animate
+            switch (EventType)
+            {
+                case ProgressionEventType.CURRENCY:
+                    animator.SetTrigger("bounce");
+                    Vector2 anchors = map.GetEventCameraRelativePosition(this);
+                    PersistantOverlayScreen.instance.AnimateReward(false, reward.rewardType, reward.quantity, anchors);
+
+                    break;
+            }
         }
 
 #if UNITY_EDITOR

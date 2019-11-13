@@ -477,6 +477,10 @@ MonoBehaviour:
       prefabType: 20
       prefab: {fileID: 2480191876416953368, guid: 338e3b32fc5fa864598347f494ad2be8,
         type: 3}
+    - _name: REWARD_ANIMATION
+      prefabType: 39
+      prefab: {fileID: 6095591697837977738, guid: be53514a1fd76704a87d7986507d93dd,
+        type: 3}
     - _name: PUZZLE_PACK_WIDGET
       prefabType: 41
       prefab: {fileID: 1778221445083718, guid: 8e30d6a9efe1b49459d98a094846c4bc, type: 3}
@@ -530,7 +534,7 @@ MonoBehaviour:
     - _name: NewsPromptScreen
       prefab: {fileID: 6082271716224161652, guid: 168c5ee4c57bfe84fae5edd475e2f554,
         type: 3}
-    - _name: PuzzleSelectionScreen
+    - _name: DemoGameSelectScreen
       prefab: {fileID: 748917514867771918, guid: 6c3a261672c02cf42a05a18d13c5889b,
         type: 3}
     - _name: GauntletIntroPromptScreen

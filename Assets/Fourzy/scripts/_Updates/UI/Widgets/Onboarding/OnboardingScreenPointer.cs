@@ -10,6 +10,7 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public Image hand;
         public Badge messagaBox;
+        public VerticalLayoutGroup container;
 
         protected override void Awake()
         {
@@ -36,11 +37,20 @@ namespace Fourzy._Updates.UI.Widgets
             messagaBox.SetValue(message);
 
             if (rectTransform.anchorMin.x > .8f)
+            {
                 messagaBox.SetPivot(Vector2.one);
+                container.childAlignment = TextAnchor.MiddleRight;
+            }
             else if (rectTransform.anchorMin.x < .2f)
+            {
                 messagaBox.SetPivot(Vector2.up);
+                container.childAlignment = TextAnchor.MiddleLeft;
+            }
             else
+            {
                 messagaBox.SetPivot(new Vector2(.5f, 1f));
+                container.childAlignment = TextAnchor.MiddleCenter;
+            }
 
             messagaBox.SetPosition(new Vector2(0f, -120f));
 

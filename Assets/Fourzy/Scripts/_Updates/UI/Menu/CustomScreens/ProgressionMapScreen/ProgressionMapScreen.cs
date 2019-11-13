@@ -17,6 +17,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             mapContent.UpdateWidgets();
 
             completeText.text = $"{mapContent._item.totalGamesComplete} / {mapContent._item.totalGames}";
+
+            HeaderScreen.instance.Close();
         }
 
         public override void OnBack()

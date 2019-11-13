@@ -18,12 +18,12 @@ namespace Fourzy._Updates.UI.Widgets
             switch (type)
             {
                 case CurrencyType.PORTAL_POINTS:
-                    quantity = Mathf.FloorToInt(CurrencyWidget.ValueFromCurrencyType(type) / Constants.PORTAL_POINTS);
+                    quantity = Mathf.FloorToInt(GameManager.ValueFromCurrencyType(type) / Constants.PORTAL_POINTS);
 
                     break;
 
                 case CurrencyType.RARE_PORTAL_POINTS:
-                    quantity = Mathf.FloorToInt(CurrencyWidget.ValueFromCurrencyType(type) / Constants.RARE_PORTAL_POINTS);
+                    quantity = Mathf.FloorToInt(GameManager.ValueFromCurrencyType(type) / Constants.RARE_PORTAL_POINTS);
 
                     break;
             }

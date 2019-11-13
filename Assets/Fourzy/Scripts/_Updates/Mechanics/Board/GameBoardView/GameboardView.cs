@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using CielaSpike;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
@@ -49,6 +50,7 @@ namespace Fourzy._Updates.Mechanics.Board
         private Dictionary<string, Coroutine> boardUpdateRoutines;
         private Vfx negativeVfx;
         private Thread aiTurnThread;
+        //private Task aiTurnTask;
 
         //for bits creation
         private int lastRow = 0;
@@ -106,7 +108,16 @@ namespace Fourzy._Updates.Mechanics.Board
 
         protected void OnDestroy()
         {
-            if (aiTurnThread != null && aiTurnThread.IsAlive) aiTurnThread.Abort();
+            StopAIThread();
+        }
+
+        public void StopAIThread()
+        {
+            if (aiTurnThread != null && aiTurnThread.IsAlive)
+            {
+                aiTurnThread.Abort();
+                Debug.Log("cancel");
+            }
         }
 
         public void OnPointerDown(Vector2 position)
@@ -305,6 +316,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void TakeAITurn()
         {
+            //StartCoroutine(TakeAITurnRoutine());
+
             if (actionState == BoardActionState.CAST_SPELL) CancelSpell();
 
             if (touched)
@@ -319,9 +332,25 @@ namespace Fourzy._Updates.Mechanics.Board
                 string gameId = game.BoardID;
 
                 PlayerTurnResult turnResults = null;
+                GameboardView _board = this;
+
+
+                //PlayerTurnResult AIResult = new PlayerTurnResult();
+
+                //AIPlayer AI = new PuzzleAI(game._State);
+                //TurnEvaluator turnEvaluator = new TurnEvaluator(game._State);
+
+                //AIResult.Turn = AI.GetTurn();
+                //AIResult.GameState = turnEvaluator.EvaluateTurn(AIResult.Turn);
+                //AIResult.Activity = turnEvaluator.ResultActions;
+                //game._State = AIResult.GameState;
+                //Debug.Log("applied");
+
+                //turnResults = AIResult;
 
                 //if (model._allTurnRecord.Count > 0)
                 //{
+                Debug.Log("applied");
                 turnResults = game.TakeAITurn(true);
 
                 //clear first before move actions
@@ -334,20 +363,27 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
                 {
-                    if (GameManager.Instance.activeGame == null || GameManager.Instance.activeGame.BoardID != gameId) return;
+                    //try
+                    {
+                        if (GameManager.Instance.activeGame == null ||
+                            GameManager.Instance.activeGame.BoardID != gameId ||
+                            GamePlayManager.instance.board != _board) return;
 
-                    turn = new ClientPlayerTurn(turnResults.Turn.Moves);
-                    turn.PlayerId = turnResults.Turn.PlayerId;
-                    turn.PlayerString = turnResults.Turn.PlayerString;
-                    turn.Timestamp = turnResults.Turn.Timestamp;
+                        turn = new ClientPlayerTurn(turnResults.Turn.Moves);
+                        turn.PlayerId = turnResults.Turn.PlayerId;
+                        turn.PlayerString = turnResults.Turn.PlayerString;
+                        turn.Timestamp = turnResults.Turn.Timestamp;
 
-                    turn.AITurn = true;
+                        turn.AITurn = true;
 
-                    boardUpdateRoutines.Add(turnResults.GameState.UniqueId, StartCoroutine(BoardUpdateRoutine(turnResults)));
+                        boardUpdateRoutines.Add(turnResults.GameState.UniqueId, StartCoroutine(BoardUpdateRoutine(turnResults)));
 
-                    //manually reset noInput timer
-                    StandaloneInputModuleExtended.instance.ResetNoInputTimer();
+                        //manually reset noInput timer
+                        StandaloneInputModuleExtended.instance.ResetNoInputTimer();
+                    }
+                    //catch (Exception e) { Debug.LogError(e.Message); }
                 });
+
             });
         }
 
@@ -1293,6 +1329,8 @@ namespace Fourzy._Updates.Mechanics.Board
                 }
             }
 
+            game.CheckLost();
+
             //check if gauntlet game finished
             if (isGauntlet && move != null && move.Piece.PlayerId == game.me.PlayerId)
             {
@@ -1364,6 +1402,59 @@ namespace Fourzy._Updates.Mechanics.Board
             createdSpellTokens.Clear();
 
             boardUpdateRoutines.Remove(turnResults.GameState.UniqueId);
+        }
+
+        //private IEnumerator TakeAITurnRoutine()
+        //{
+        //    this.StartCoroutineAsync(EvaluateAITurn(), out aiTurnTask);
+        //    yield return StartCoroutine(aiTurnTask.Wait());
+        //}
+
+        private IEnumerator EvaluateAITurn()
+        {
+            yield return Ninja.JumpBack;
+
+            string gameId = game.BoardID;
+            PlayerTurnResult turnResults;
+            GameboardView _board = this;
+
+            //turnResults = game.TakeAITurn(true);
+
+            PlayerTurnResult AIResult = new PlayerTurnResult();
+
+
+            AIPlayer AI = new PuzzleAI(game._State);
+            TurnEvaluator turnEvaluator = new TurnEvaluator(game._State);
+
+            AIResult.Turn = AI.GetTurn();
+            AIResult.GameState = turnEvaluator.EvaluateTurn(AIResult.Turn);
+            AIResult.Activity = turnEvaluator.ResultActions;
+            game._State = AIResult.GameState;
+            Debug.Log("applied");
+
+            turnResults = AIResult;
+
+            //clear first before move actions
+            while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
+
+            yield return Ninja.JumpToUnity;
+
+            if (GameManager.Instance.activeGame == null ||
+                GameManager.Instance.activeGame.BoardID != gameId ||
+                GamePlayManager.instance.board != _board)
+                yield break;
+
+            turn = new ClientPlayerTurn(turnResults.Turn.Moves);
+            turn.PlayerId = turnResults.Turn.PlayerId;
+            turn.PlayerString = turnResults.Turn.PlayerString;
+            turn.Timestamp = turnResults.Turn.Timestamp;
+
+            turn.AITurn = true;
+
+            boardUpdateRoutines.Add(turnResults.GameState.UniqueId, StartCoroutine(BoardUpdateRoutine(turnResults)));
+
+            //manually reset noInput timer
+            StandaloneInputModuleExtended.instance.ResetNoInputTimer();
         }
 
         private IEnumerator AnimateHintBlocks(Dictionary<BoardLocation, HintBlock> affected, HintAreaStyle style, HintAreaAnimationPattern pattern)

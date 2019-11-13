@@ -5,6 +5,7 @@ using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
 using System;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -97,7 +98,8 @@ namespace Fourzy._Updates.UI.Widgets
         {
             button.SetState(true);
 
-            UserManager.Instance.hints++;
+            PersistantOverlayScreen.instance.AnimateReward(true, RewardType.HINTS, 3, Vector2.one * .5f);
+            UserManager.Instance.hints += 3;
         }
     }
 }

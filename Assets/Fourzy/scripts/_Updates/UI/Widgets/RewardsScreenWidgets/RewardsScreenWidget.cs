@@ -7,6 +7,7 @@ using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -22,10 +23,15 @@ namespace Fourzy._Updates.UI.Widgets
         public string format = "{0}";
         public GameObject bgImage;
         public GameObject checkedImaged;
+        public GameObject icon;
         public TMP_Text nameLabel;
         public TMP_Text valueLabel;
 
         public AdvancedEvent onChecked;
+
+        private bool _checked = false;
+        private Animator animator;
+        private string rewardCoroutineID;
 
         public RewardsManager.Reward reward { get; private set; }
         public ClientPuzzleData puzzleData { get; private set; }
@@ -49,39 +55,8 @@ namespace Fourzy._Updates.UI.Widgets
         {
             reward = data;
 
-            string nameText = "";
-            string valueText = "";
-
-            switch (reward.rewardType)
-            {
-                case RewardType.CUSTOM:
-                    switch (data.name)
-                    {
-                        case "unlock_fast_puzzles_mode":
-                            valueText = "Mode\nUnlock";
-
-                            break;
-
-                        case "unlock_gauntlet_mode":
-                            valueText = "Mode\nUnlock";
-
-                            break;
-                    }
-
-                    break;
-
-                default:
-                    nameText = swapLabels ? string.Format(format, data.ToString()) : data.name;
-                    valueText = swapLabels ? data.name : string.Format(format, data.ToString());
-
-                    break;
-            }
-
-            if (!string.IsNullOrEmpty(nameText) && nameLabel) nameLabel.text = nameText;
-            if (!string.IsNullOrEmpty(valueText) && valueLabel) valueLabel.text = valueText;
-
             //assign icon
-            switch (reward.rewardType)
+            switch (data.rewardType)
             {
                 case RewardType.GAME_PIECE:
                     //spawn gamepiece
@@ -93,6 +68,17 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
+
+            return SetData(data.rewardType, data.name, data.ToString());
+        }
+
+        public virtual RewardsScreenWidget SetData(RewardType type, string name, string value)
+        {
+            string nameText = swapLabels ? string.Format(format, value) : name;
+            string valueText = swapLabels ? name : string.Format(format, value);
+
+            if (!string.IsNullOrEmpty(nameText) && nameLabel) nameLabel.text = nameText;
+            if (!string.IsNullOrEmpty(valueText) && valueLabel) valueLabel.text = valueText;
 
             return this;
         }
@@ -122,6 +108,28 @@ namespace Fourzy._Updates.UI.Widgets
             }
 
             return this;
+        }
+
+        public void AnimateReward()
+        {
+            if (reward == null) return;
+
+            switch (reward.rewardType)
+            {
+                case RewardType.HINTS:
+                    animator.SetTrigger("bounce");
+                    rewardCoroutineID = PersistantOverlayScreen.instance.AnimateReward(false, reward.rewardType, reward.quantity, Camera.main.WorldToViewportPoint(transform.position));
+
+                    break;
+            }
+        }
+
+        public void CanceRewardlAnimation()
+        {
+            if (string.IsNullOrEmpty(rewardCoroutineID)) return;
+
+            PersistantOverlayScreen.instance.CancelAnimationReward(rewardCoroutineID);
+            rewardCoroutineID = "";
         }
 
         public RewardsScreenWidget PlayAudio(AudioTypes audio)
@@ -192,11 +200,22 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            animator = GetComponent<Animator>();
+        }
+
         private void _Checked(bool state)
         {
-            checkedImaged.SetActive(state);
+            if (state != _checked)
+            {
+                checkedImaged.SetActive(state);
 
-            if (state) onChecked.Invoke();
+                if (state) onChecked.Invoke();
+                _checked = state;
+            }
         }
     }
 }

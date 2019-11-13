@@ -42,3 +42,7 @@ MonoBehaviour:
       type: 4
       options:
       - {fileID: 1368547108588348377, guid: e0cc34537398dce40824d946c1f8ef22, type: 3}
+    - _name: UI_REWARD_ANIMATION_PARTICLE
+      type: 32
+      options:
+      - {fileID: 6780090623127653427, guid: 6b12c356f96cf8f41b79ed2acef557d6, type: 3}
