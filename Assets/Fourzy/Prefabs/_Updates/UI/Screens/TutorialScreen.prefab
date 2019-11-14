@@ -2678,6 +2678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maskPrefab: {fileID: 943629231928316255}
+  bg: {fileID: 3032780295338885039}
 --- !u!114 &2918387301629446013
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using System;
@@ -493,6 +494,25 @@ namespace Fourzy._Updates.Tools
             }
 
             return AnalyticsManager.AnalyticsGameEvents.NONE;
+        }
+
+        public static Vector2 GetViewportPosition(this RectTransform target)
+        {
+            Canvas canvas = target.GetComponentInParent<Canvas>();
+            MenuController menuController = target.GetComponentInParent<MenuController>();
+
+            if (!canvas) return Vector2.zero;
+
+            Vector2 _position = (Vector2)target.position + target.GetCenterOffset() * menuController.transform.localScale.x;
+
+            switch (canvas.renderMode)
+            {
+                case RenderMode.ScreenSpaceOverlay:
+                    return new Vector2(_position.x / menuController.size.x, _position.y / menuController.size.y);
+
+                default:
+                    return Camera.main.WorldToViewportPoint(_position);
+            }
         }
 
         public static string TokenTypeToString(this TokenType type)

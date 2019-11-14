@@ -12,13 +12,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private BasicPuzzlePack puzzlePack;
 
-        public override void OnBack()
-        {
-            base.OnBack();
-
-            menuController.CloseCurrentScreen(true);
-        }
-
         public void Prompt(BasicPuzzlePack puzzlePack, Action onDeny = null, Action onAccept = null)
         {
             if (this.puzzlePack == null || this.puzzlePack != puzzlePack)

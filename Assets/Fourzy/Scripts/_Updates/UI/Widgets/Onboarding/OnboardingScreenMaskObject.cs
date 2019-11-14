@@ -8,6 +8,7 @@ using StackableDecorator;
 using UnityEngine.UI;
 using TMPro;
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.Tools;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -69,7 +70,9 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 ClearObject(child);
 
-                if (!child.gameObject.activeInHierarchy || child.GetComponent<RotationTween>())
+                if (!child.gameObject.activeInHierarchy || 
+                    child.GetComponent<RotationTween>() ||
+                    child.GetComponent<UIOutline>())
                 {
                     Destroy(child.gameObject);
                     continue;

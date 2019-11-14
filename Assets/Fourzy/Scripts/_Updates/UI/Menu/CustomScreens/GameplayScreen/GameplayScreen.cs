@@ -268,6 +268,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             UpdatePlayerTurnGraphics();
 
+            puzzleUI.OnGameStarted();
+
             switch (game._Type)
             {
                 case GameType.PASSANDPLAY:

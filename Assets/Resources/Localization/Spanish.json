@@ -206,16 +206,20 @@
       "value": "Restablecer progreso"
     },
     {
-      "key": "sound_effects",
-      "value": "Efectos de sonido"
+      "key": "settings",
+      "value": "Configuraciones"
     },
     {
       "key": "select_board",
       "value": "Selección de juego"
     },
     {
-      "key": "settings",
-      "value": "Configuraciones"
+      "key": "sound_effects",
+      "value": "Efectos de sonido"
+    },
+    {
+      "key": "suggest_hint_use",
+      "value": "Obtenga ayuda con el próximo movimiento"
     },
     {
       "key": "tap_edge_rule",

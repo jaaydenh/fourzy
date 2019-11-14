@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tools;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Purchasing;
@@ -28,20 +29,7 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public Vector2 IconViewportPosition()
-        {
-            Canvas canvas = menuScreen.menuController.canvas;
-
-            switch (canvas.renderMode)
-            {
-                case RenderMode.ScreenSpaceOverlay:
-                    return new Vector2(icon.transform.position.x / menuScreen.menuController.size.x, 
-                        icon.transform.position.y / menuScreen.menuController.size.y);
-
-                default:
-                    return Camera.main.WorldToViewportPoint(icon.transform.position);
-            }
-        }
+        public Vector2 IconViewportPosition() => icon.rectTransform.GetViewportPosition();
 
         public void OnTap()
         {

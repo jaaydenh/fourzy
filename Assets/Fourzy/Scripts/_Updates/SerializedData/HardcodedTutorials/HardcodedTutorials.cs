@@ -14,6 +14,7 @@ namespace Fourzy._Updates._Tutorial
             new Tutorial()
             {
                 name = "Onboarding",
+                onBack = TutorialOnBack.SHOW_LEAVE_PROMPT,
                 data = new OnboardingTasksBatch[]
                     {
                         //step 1: welcome message
@@ -208,7 +209,11 @@ namespace Fourzy._Updates._Tutorial
                                 //new OnboardingDataHolder.OnboardingTask_ExecMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, "openScreen", "tutorialProgressionMap"),
                                 //point at adventure button button
                                 new OnboardingTask_Log("8"),
-                                new OnboardingTask_HighlightButton("AdventureButton", LocalizationManager.Value("tap_to_open_map")),
+                                new OnboardingTask_HighlightButton(
+                                    "AdventureButton",
+                                    "MainMenuCanvas",
+                                    Vector2.one,
+                                    LocalizationManager.Value("tap_to_open_map")),
                                 new OnboardingTask_Log("9"),
                             },
                         },
@@ -217,13 +222,35 @@ namespace Fourzy._Updates._Tutorial
                             tasks = new OnboardingTask[]
                             {
                                 //will continue after event tap
-                                new OnboardingTask_HighlightProgressionEvent (0, LocalizationManager.Value("tap_to_start_playing")),
+                                new OnboardingTask_HighlightProgressionEvent (
+                                    0,
+                                    Vector3.one * .75f,
+                                    LocalizationManager.Value("tap_to_start_playing")),
                                 new OnboardingTask_Log("10"),
                             },
                         },
                     },
             },
-
+            new Tutorial()
+            {
+                name = "HintInstruction",
+                onBack = TutorialOnBack.IGNORE,
+                data = new OnboardingTasksBatch[]
+                {
+                    new OnboardingTasksBatch()
+                    {
+                        tasks = new OnboardingTask[]
+                        {
+                            new OnboardingTask_HighlightButton(
+                                "HintButton", 
+                                "GameSceneCanvas", 
+                                Vector2.one, 
+                                LocalizationManager.Value("suggest_hint_use"), 
+                                false),
+                        }
+                    }
+                }
+            }
         };
 
         public static void Initialize() => tutorials.ForEach(tutorial => tutorial.Initialize());
@@ -235,6 +262,7 @@ namespace Fourzy._Updates._Tutorial
         public bool previousState;
 
         public OnboardingTasksBatch[] data;
+        public TutorialOnBack onBack;
 
         public bool wasFinishedThisSession => !previousState && PlayerPrefsWrapper.GetTutorialFinished(name);
 
@@ -293,6 +321,12 @@ namespace Fourzy._Updates._Tutorial
 
         HIGHLIGHT_PROGRESSION_EVENT,
         HIGHLIGHT_CURRENT_SCREEN_BUTTON,
+    }
+
+    public enum TutorialOnBack
+    {
+        SHOW_LEAVE_PROMPT,
+        IGNORE,
     }
 
     public class OnboardingTasksBatch
@@ -423,24 +457,36 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_HighlightProgressionEvent : OnboardingTask
     {
-        public OnboardingTask_HighlightProgressionEvent(int index, string message = "")
+        public bool showBG;
+
+        public OnboardingTask_HighlightProgressionEvent(int index, Vector2 scale, string message = "", bool showBG = true)
         {
             action = OnboardingActions.HIGHLIGHT_PROGRESSION_EVENT;
+
             intValue = index;
             stringValue = message;
+            vector2value = scale;
+
+            this.showBG = showBG;
         }
     }
 
     public class OnboardingTask_HighlightButton : OnboardingTask
     {
         public string message;
+        public string menuName;
+        public bool showBG;
 
-        public OnboardingTask_HighlightButton(string buttonName, string message = "")
+        public OnboardingTask_HighlightButton(string buttonName, string menuName, Vector2 scale, string message = "", bool showBG = true)
         {
             action = OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON;
 
             stringValue = buttonName;
+            vector2value = scale;
+            
             this.message = message;
+            this.menuName = menuName;
+            this.showBG = showBG;
         }
     }
 }

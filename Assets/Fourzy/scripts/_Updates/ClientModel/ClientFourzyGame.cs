@@ -562,16 +562,16 @@ namespace Fourzy._Updates.ClientModel
             {
                 if (IsWinner())
                     LoseStreak = 0;
-                else
-                    switch (_Mode)
-                    {
-                        case GameMode.AI_PACK:
-                        case GameMode.BOSS_AI_PACK:
-                        case GameMode.GAUNTLET:
-                            LoseStreak++;
+                //else
+                //    switch (_Mode)
+                //    {
+                //        case GameMode.AI_PACK:
+                //        case GameMode.BOSS_AI_PACK:
+                //        case GameMode.GAUNTLET:
+                //            LoseStreak++;
 
-                            break;
-                    }
+                //            break;
+                //    }
             }
         }
 
@@ -624,6 +624,8 @@ namespace Fourzy._Updates.ClientModel
             if (haveHerds && !resetMembers) current = new Herd(State.Herds[myID]);
             State = new GameState(_FirstState);
             if (haveHerds && !resetMembers) State.Herds[myID] = current;
+
+            LoseStreak++;
 
             Initialize(false);
 

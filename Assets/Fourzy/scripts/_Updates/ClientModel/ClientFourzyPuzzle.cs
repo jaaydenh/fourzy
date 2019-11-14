@@ -315,8 +315,8 @@ namespace Fourzy._Updates.ClientModel
             {
                 if (IsWinner())
                     LoseStreak = 0;
-                else
-                    LoseStreak++;
+                //else
+                //    LoseStreak++;
             }
         }
 
@@ -343,6 +343,8 @@ namespace Fourzy._Updates.ClientModel
 
             playerTurnRecord = new List<PlayerTurn>();
             Status = PuzzleStatus.ACTIVE;
+
+            LoseStreak++;
 
             return State;
         }

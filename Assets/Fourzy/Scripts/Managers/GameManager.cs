@@ -410,6 +410,7 @@ namespace Fourzy
                     MenuController.SetState("MainMenuCanvas", false);
 
                     AudioHolder.instance.StopBGAudio(AudioTypes.BG_MAIN_MENU, .5f);
+                    SceneManager.SetActiveScene(scene);
 
                     break;
 

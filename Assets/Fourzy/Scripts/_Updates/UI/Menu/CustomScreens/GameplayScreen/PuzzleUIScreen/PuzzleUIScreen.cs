@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tween;
@@ -103,6 +104,43 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SetHintButtonState(false);
         }
 
+        public void OnGameStarted()
+        {
+            if (game == null || !game.puzzleData) return;
+
+            if (game.puzzleData.Solution.Count == 0) return;
+
+            int progress = PlayerPrefsWrapper.GetHintTutorialStage();
+            if (game.isMyTurn)
+            {
+                switch (progress)
+                {
+                    case 0:
+                        if (game.LoseStreak == 2)
+                        {
+                            UserManager.Instance.hints++;
+                            PersistantMenuController.instance.GetScreen<OnboardingScreen>().OpenTutorial(HardcodedTutorials.tutorials[1]);
+                            PlayerPrefsWrapper.SetHintTutorialStage(progress + 1);
+
+                            hintButton.SetOutline(1f);
+                        }
+
+                        break;
+
+                    case 1:
+                        if (game.LoseStreak == 6 && UserManager.Instance.hints > 0)
+                        {
+                            //PlayerPrefsWrapper.SetHintTutorialStage(progress + 1);
+
+                            hintButton.SetMessage(LocalizationManager.Value("suggest_hint_use"));
+                            hintButton.SetOutline(1f);
+                        }
+
+                        break;
+                }
+            }
+        }
+
         public void UpdatePlayerTurn()
         {
             if (game == null || game.puzzleData == null) return;
@@ -110,21 +148,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game._Type == GameType.PUZZLE) movesLeftWidget.UpdateMovesLeft();
 
             SetHintButtonState(true);
-
-            if (!game.isOver && game.isMyTurn)
-            {
-                switch (PlayerPrefsWrapper.GetHintTutorialStage())
-                {
-                    case 0:
-                        if (game.LoseStreak == 2)
-                        {
-                            //lock controls
-                            
-                        }
-
-                        break;
-                }
-            }
         }
 
         public void Next() => GamePlayManager.instance.LoadGame(game.Next());

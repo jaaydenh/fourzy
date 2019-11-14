@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu
@@ -14,6 +15,19 @@ namespace Fourzy._Updates.UI.Menu
     /// </summary>
     public class MenuController : MonoBehaviour
     {
+        public static MenuController activeMenu
+        {
+            get
+            {
+                if (PersistantMenuController.instance.screensStack.Count > 0)
+                    return PersistantMenuController.instance;
+                else
+                    return _activeMenu;
+            }
+            set => _activeMenu = value;
+        }
+        private static MenuController _activeMenu;
+
         public static Dictionary<string, MenuController> menus = new Dictionary<string, MenuController>();
         public static Dictionary<string, MenuEvents> menuEvents = new Dictionary<string, MenuEvents>();
 
@@ -29,6 +43,17 @@ namespace Fourzy._Updates.UI.Menu
         public CanvasScaler canvaseScaler { get; private set; }
         public Vector2 canvasToScreenRatio { get; private set; }
         public Canvas canvas { get; private set; }
+
+        public bool state
+        {
+            get
+            {
+                if (canvasRoot)
+                    return canvasRoot.gameObject.activeInHierarchy;
+                else
+                    return gameObject.activeInHierarchy;
+            }
+        }
 
         public float widthScaled { get; private set; }
         public float heightScaled { get; private set; }
@@ -67,6 +92,7 @@ namespace Fourzy._Updates.UI.Menu
             heightScaled = Screen.width / canvaseScaler.referenceResolution.x * canvaseScaler.referenceResolution.y;
 
             if (!menus.ContainsKey(gameObject.name)) menus.Add(gameObject.name, this);
+            if (GetType() != typeof(PersistantMenuController)) activeMenu = this;
         }
 
         protected virtual void Start()
@@ -246,6 +272,7 @@ namespace Fourzy._Updates.UI.Menu
 
             if (state)
             {
+                activeMenu = this;
                 if (currentScreen) currentScreen.Open();
 
                 ExecuteMenuEvents();
@@ -258,15 +285,15 @@ namespace Fourzy._Updates.UI.Menu
         {
             if (!menuEvents.ContainsKey(name)) menuEvents.Add(name, new MenuEvents());
 
-            if (menuEvents.Count == 0 || !gameObject.activeInHierarchy) return;
+            if (menuEvents.Count == 0 || !state) return;
 
             StartCoroutine(InvokeMenuEvents(menuEvents[name]));
         }
 
         protected virtual void OnBack()
         {
-            if (PersistantMenuController.instance.screensStack.Count > 0 || !gameObject.activeInHierarchy) return;
-
+            if (PersistantMenuController.instance.screensStack.Count > 0 || !state) return;
+            
             if (screensStack.Count > 0)
             {
                 MenuScreen menuScreen = screensStack.Peek();

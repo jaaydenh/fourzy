@@ -1,11 +1,15 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class HintButton : CurrencyWidget
     {
+        public Badge label;
+        private UIOutline outline;
+
         public override void Show(float time = 0f)
         {
             SetActive(true);
@@ -23,6 +27,23 @@ namespace Fourzy._Updates.UI.Widgets
         public void SetState(bool value)
         {
             button.SetState(value);
+
+            if (!value)
+            {
+                SetMessage("");
+                SetOutline(0f);
+            }
+        }
+
+        public void SetMessage(string message) => label.SetValue(message);
+
+        public void SetOutline(float value) => outline.intensity = value;
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            outline = GetComponentInChildren<UIOutline>();
         }
     }
 }

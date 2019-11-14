@@ -206,6 +206,10 @@
       "value": "Reset Progress"
     },
     {
+      "key": "settings",
+      "value": "Settings"
+    },
+    {
       "key": "select_board",
       "value": "Board Selection"
     },
@@ -214,8 +218,8 @@
       "value": "Sound Effects"
     },
     {
-      "key": "settings",
-      "value": "Settings"
+      "key": "suggest_hint_use",
+      "value": "Get help with the next move"
     },
     {
       "key": "tap_edge_rule",
