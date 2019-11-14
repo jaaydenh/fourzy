@@ -38,6 +38,7 @@ namespace Fourzy
         private const string kNewsOpened = "news_opened_";
         private const string kFastPuzzlesLeaderboardVersion = "fast_puzzles_leaderboard_version";
         private const string kLastProjectVersion = "kProjectVersion";
+        private const string kLanguageUpdated = "language_updated";
 
         public static string kEventRewarded = "eventRewarded_";
 
@@ -152,6 +153,10 @@ namespace Fourzy
         public static int GetHintTutorialStage() => PlayerPrefs.GetInt(kHintsTutorialStage, 0);
 
         public static void SetHintTutorialStage(int value) => PlayerPrefs.SetInt(kHintsTutorialStage, value);
+
+        public static bool GetLanguageUpdated() => PlayerPrefs.GetInt(kLanguageUpdated, 0) != 0;
+
+        public static void SetLanguageUpdated(bool value) => PlayerPrefs.SetInt(kLanguageUpdated, value ? 1 : 0);
 
         #region Currencies
 

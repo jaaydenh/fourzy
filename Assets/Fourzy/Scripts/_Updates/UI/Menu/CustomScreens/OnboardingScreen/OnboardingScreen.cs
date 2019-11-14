@@ -86,6 +86,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         menuController.CloseCurrentScreen();
                         //close onboarding
                         menuController.CloseCurrentScreen();
+
+                        GameManager.Instance.OpenMainMenu();
                     });
 
                     break;

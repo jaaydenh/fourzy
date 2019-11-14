@@ -98,8 +98,10 @@ namespace Fourzy._Updates.UI.Widgets
         {
             button.SetState(true);
 
-            PersistantOverlayScreen.instance.AnimateReward(true, RewardType.HINTS, 3, Vector2.one * .5f);
-            UserManager.Instance.hints += 3;
+            int reward = 1;
+
+            PersistantOverlayScreen.instance.AnimateReward(true, RewardType.HINTS, reward, Vector2.one * .5f);
+            UserManager.Instance.hints += reward;
         }
     }
 }
