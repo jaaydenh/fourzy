@@ -161,10 +161,10 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 25
+          selectedMember: 27
           isDynamic: 0
         target: {fileID: 114815130631895566}
-        memberName: Show
+        memberName: ShowUnderPointer
         memberType: 8
         arguments:
         - typeName: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
@@ -186,10 +186,10 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 15
+          selectedMember: 16
           isDynamic: 0
         target: {fileID: 114815130631895566}
-        memberName: Hide
+        memberName: HideUndexPointer
         memberType: 8
         arguments:
         - typeName: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
@@ -262,6 +262,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

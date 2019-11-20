@@ -14,7 +14,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 () =>
                 {
                     menuController.CloseCurrentScreen();
-                    menuController.GetScreen<VSGamePrompt>().Prompt(5);
+                    menuController.GetOrAddScreen<VSGamePrompt>().Prompt(5);
                 },
                 null);
         }

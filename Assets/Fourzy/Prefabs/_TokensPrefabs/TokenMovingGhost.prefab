@@ -52,7 +52,7 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_moving_ghost
-  tokenType: 13
+  tokenType: 49
   volume: 1
   onGamePieceEnter: 135
   onActivate: 0

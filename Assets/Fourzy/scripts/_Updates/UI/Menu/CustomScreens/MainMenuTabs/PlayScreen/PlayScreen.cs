@@ -55,7 +55,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //check
             if (!gauntletGameUnlocked)
             {
-                menuController.GetScreen<PromptScreen>().Prompt("The Gauntlet Locked",
+                menuController.GetOrAddScreen<PromptScreen>().Prompt("The Gauntlet Locked",
                     "The gauntlet is where you will play a series of more difficult opponents. Defeat them all to win!",
                     "OK",
                     null,
@@ -64,19 +64,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 return;
             }
 
-            menuController.GetScreen<GauntletIntroScreen>()._Prompt();
+            menuController.GetOrAddScreen<GauntletIntroScreen>()._Prompt();
         }
 
         public void StartTurnGame() => matchmakingScreen.OpenTurnbased();
 
-        public void StartTutorialAdventure() => menuController.GetScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
+        public void StartTutorialAdventure() => menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
 
         public void OpenFastPuzzleScreen()
         {
             //check
             if (!fastPuzzlesUnlocked)
             {
-                menuController.GetScreen<PromptScreen>().Prompt("Random Puzzles Locked",
+                menuController.GetOrAddScreen<PromptScreen>().Prompt("Random Puzzles Locked",
                     "Compete with other players to solve the most puzzles every week!",
                     "OK",
                     null,
@@ -88,13 +88,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             tabsParent.menuController.OpenScreen<FastPuzzlesScreen>();
         }
 
-        public void OpenNews() => menuController.GetScreen<NewsPromptScreen>()._Prompt();
+        public void OpenNews() => menuController.GetOrAddScreen<NewsPromptScreen>()._Prompt();
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
 
-            matchmakingScreen = menuController.GetScreen<MatchmakingScreen>();
+            matchmakingScreen = menuController.GetOrAddScreen<MatchmakingScreen>();
         }
     }
 }

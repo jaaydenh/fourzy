@@ -61,37 +61,72 @@ namespace FourzyGameModel.Model
 
             GameBoard Board = BoardFactory.CreateRandomBoard(Options, Player1, Player2, Area);
 
-            if (Player2.DisplayName == "Easy")
+            switch (Player2.DisplayName)
             {
-                Player2.Profile = AIProfile.BeginnerAI;
-                this.State = new GameState(Board, Options, FirstPlayerId);
+                case "Easy":
+                    Player2.Profile = AIPlayerFactory.RandomProfile(AIDifficulty.Easy);
+                    this.State = new GameState(Board, Options, FirstPlayerId);
+                    break;
+
+                case "Normal":
+                    Player2.Profile = AIPlayerFactory.RandomProfile(AIDifficulty.Medium);
+                    this.State = new GameState(Board, Options, FirstPlayerId);
+                    break;
+
+                case "Hard":
+                    Player2.Profile = AIPlayerFactory.RandomProfile(AIDifficulty.Hard);
+                    this.State = new GameState(Board, Options, FirstPlayerId);
+                    break;
+
+                case "Doctor":
+                    Player2.Profile = AIProfile.DoctorBot;
+                    this.State = new GameState(Board, Options, FirstPlayerId);
+                    break;
+
+                case "Practice":
+                    Player2.Profile = AIProfile.PassBot;
+                    this.State = new GameState(Board, Options, FirstPlayerId);
+                    break;
+
+                case "Entryway":
+                    BossType MyBoss = BossType.EntryWay;
+                    Board = BossFactory.CreateBoard(MyBoss);
+                    this.State = new GameState(Board, Options, FirstPlayerId);
+                    IBoss Boss = BossFactory.Create(MyBoss);
+                    Boss.StartGame(this.State);
+                    Player2.BossType = MyBoss;
+                    Player2.Profile = AIProfile.BossAI;
+                    Player2.SpecialAbilityCount = 1;
+                    break;
+
+                case "DirectionMaster":
+                    BossType MyBoss2 = BossType.DirectionMaster;
+                    Board = BossFactory.CreateBoard(MyBoss2);
+                    this.State = new GameState(Board, Options, FirstPlayerId);
+                    IBoss Boss2 = BossFactory.Create(MyBoss2);
+                    Boss2.StartGame(this.State);
+                    Player2.BossType = MyBoss2;
+                    Player2.Profile = AIProfile.BossAI;
+                    Player2.SpecialAbilityCount = 1;
+                    break;
+
+                case "LordOfGoop":
+                    BossType MyBoss3 = BossType.LordOfGoop;
+                    Board = BossFactory.CreateBoard(MyBoss3);
+                    this.State = new GameState(Board, Options, FirstPlayerId);
+                    IBoss Boss3 = BossFactory.Create(MyBoss3);
+                    Boss3.StartGame(this.State);
+                    Player2.BossType = MyBoss3;
+                    Player2.Profile = AIProfile.BossAI;
+                    Player2.SpecialAbilityCount = 1;
+                    break;
+
+                default:
+                    this.State = new GameState(Board, Options, FirstPlayerId);
+                    break;
+
             }
 
-            else if (Player2.DisplayName == "Normal")
-            {
-                Player2.Profile = AIProfile.PositionBot;
-                this.State = new GameState(Board, Options, FirstPlayerId);
-            }
-
-            else if (Player2.DisplayName == "Hard")
-            {
-                Player2.Profile = AIProfile.SimpleAI;
-                this.State = new GameState(Board, Options, FirstPlayerId);
-            }
-
-            else if (Player2.DisplayName == "Doctor")
-            {
-                Player2.Profile = AIProfile.ScoreBot;
-                this.State = new GameState(Board, Options, FirstPlayerId);
-            }
-
-            else if (Player2.DisplayName == "Practice")
-            {
-                Player2.Profile = AIProfile.PassBot;
-                this.State = new GameState(Board, Options, FirstPlayerId);
-                //this.State.GameEffects.Add(new LifeGameEffect(TokenType.STICKY));
-                this.State.GameEffects.Add(new ShiftTokensGameEffect(TokenType.STICKY,Direction.RIGHT, this.State));
-            }
 
             //else if (Player2.DisplayName == "UFO")
             //{
@@ -105,10 +140,7 @@ namespace FourzyGameModel.Model
             //    Player2.SpecialAbilityCount = 1;
             //}
 
-            else
-            {
-                this.State = new GameState(Board, Options, FirstPlayerId);
-            }
+       
 
             this.State.Players.Add(1, Player1);
             this.State.Players.Add(2, Player2);
@@ -205,6 +237,12 @@ namespace FourzyGameModel.Model
         public FourzyGame(Player Human, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, int membersCount = 999, GameOptions Options = null)
         {
             string SeedString = Guid.NewGuid().ToString();
+
+
+            //this.State = BossGameFactory.CreateBossGame(CurrentArea, BossType.DirectionMaster, new Player(1,"Player"), Options);
+            //this.playerTurnRecord = new List<PlayerTurn>();
+            //this.GameType = GameType.AI;
+
 
             this.State = GauntletFactory.Create(Human, GauntletLevel, /*Status*/membersCount, CurrentArea, DifficultModifier, Options, SeedString);
             this.playerTurnRecord = new List<PlayerTurn>();

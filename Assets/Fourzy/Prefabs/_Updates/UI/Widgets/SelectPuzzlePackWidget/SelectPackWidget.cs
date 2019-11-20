@@ -27,12 +27,12 @@ namespace Fourzy._Updates.UI.Widgets
             switch (pack.packType)
             {
                 case PackType.PUZZLE_PACK:
-                    menuScreen.menuController.GetScreen<PrePackPrompt>().Prompt(pack);
+                    menuScreen.menuController.GetOrAddScreen<PrePackPrompt>().Prompt(pack);
 
                     break;
 
                 default:
-                    menuScreen.menuController.GetScreen<VSGamePrompt>().Prompt(pack);
+                    menuScreen.menuController.GetOrAddScreen<VSGamePrompt>().Prompt(pack);
 
                     break;
             }

@@ -80,14 +80,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             ClientFourzyGame game;
 
             UnityEngine.Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentTheme.themeID);
+            Player player1 = new Player(1, "Player One");
+            Player player2 = new Player(2, "Player Two");
 
             if (data != null)
-                game = new ClientFourzyGame(data, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                game = new ClientFourzyGame(data, player1, player2);
             else
-                game = new ClientFourzyGame(
-                    GameContentManager.Instance.currentTheme.themeID,
-                    UserManager.Instance.meAsPlayer, new Player(2, "Player Two"),
-                    UserManager.Instance.meAsPlayer.PlayerId);
+                game = new ClientFourzyGame(GameContentManager.Instance.currentTheme.themeID, player1, player2, player1.PlayerId);
 
             game._Type = GameType.PASSANDPLAY;
 

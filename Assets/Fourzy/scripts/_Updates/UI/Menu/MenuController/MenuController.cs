@@ -199,7 +199,14 @@ namespace Fourzy._Updates.UI.Menu
             currentScreen.Open();
         }
 
-        public T GetScreen<T>(bool newIfOpened = false) where T : MenuScreen
+        public T GetScreen<T>() where T : MenuScreen
+        {
+            foreach (MenuScreen screen in screens) if (screen.GetType() == typeof(T)) return screen as T;
+
+            return null;
+        }
+
+        public T GetOrAddScreen<T>(bool newIfOpened = false) where T : MenuScreen
         {
             foreach (MenuScreen screen in screens)
                 if (screen.GetType() == typeof(T) && ((screen.isOpened && !newIfOpened) || !screen.isOpened))

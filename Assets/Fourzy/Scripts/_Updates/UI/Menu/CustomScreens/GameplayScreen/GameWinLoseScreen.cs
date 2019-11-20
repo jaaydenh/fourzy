@@ -168,19 +168,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     if (game.IsWinner())
                     {
                         if (game.puzzleData.pack.complete)
-                            menuController.GetScreen<GauntletWinPrompt>()._Prompt(game);
+                            menuController.GetOrAddScreen<GauntletWinPrompt>()._Prompt(game);
                         else
                         {
                             if (game.myMembers.Count == 0)
-                                menuController.GetScreen<GauntletLostPrompt>()._Prompt(game);
+                                menuController.GetOrAddScreen<GauntletLostPrompt>()._Prompt(game);
                             else
-                                menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                                menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
                         }
                     }
                     else
                     {
                         if (game.myMembers.Count == 0)
-                            menuController.GetScreen<GauntletLostPrompt>()._Prompt(game);
+                            menuController.GetOrAddScreen<GauntletLostPrompt>()._Prompt(game);
                         else
                             Rematch();
                     }
@@ -206,7 +206,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 {
                                     case PackType.AI_PACK:
                                     case PackType.BOSS_AI_PACK:
-                                        menuController.GetScreen<VSGamePrompt>().Prompt(
+                                        menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
                                             nextPack,
                                             () => GamePlayManager.instance.BackButtonOnClick(),
                                             () => menuController.CloseCurrentScreen());
@@ -214,7 +214,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                         break;
 
                                     case PackType.PUZZLE_PACK:
-                                        menuController.GetScreen<PrePackPrompt>().Prompt(
+                                        menuController.GetOrAddScreen<PrePackPrompt>().Prompt(
                                             nextPack,
                                             () => GamePlayManager.instance.BackButtonOnClick(),
                                             () => menuController.CloseCurrentScreen());
@@ -226,7 +226,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 GamePlayManager.instance.BackButtonOnClick();
                         }
                         else
-                            menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.BackButtonOnClick());
+                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.BackButtonOnClick());
                     }
                     else
                         Rematch();
@@ -239,7 +239,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     else
                     {
                         if (game.puzzleData && !game.puzzleData.lastInPack)
-                            menuController.GetScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
                         else
                             GamePlayManager.instance.BackButtonOnClick();
                     }
@@ -293,7 +293,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnInitialized();
 
-            turnBasedTab = menuController.GetScreen<TurnBaseScreen>();
+            turnBasedTab = menuController.GetOrAddScreen<TurnBaseScreen>();
         }
     }
 }

@@ -7649,7 +7649,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   events:
-    inspectorListHeight: 173
+    inspectorListHeight: 128
     persistentCalls:
       calls:
       - genericMenuData:
@@ -7696,28 +7696,6 @@ MonoBehaviour:
           enumArgument: 
         isDynamic: 0
         isCallEnabled: 1
-      - genericMenuData:
-          selectedComponent: 5
-          selectedMember: 22
-          isDynamic: 0
-        target: {fileID: 169684871}
-        memberName: OpenScreen
-        memberType: 8
-        arguments:
-        - typeName: Fourzy._Updates.UI.Menu.MenuScreen, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 1
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 0
   onState:
     inspectorListHeight: 83
     persistentCalls:

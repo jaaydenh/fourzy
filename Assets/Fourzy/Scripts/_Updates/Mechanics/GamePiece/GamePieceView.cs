@@ -194,7 +194,10 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void Blink() => eyes.Blink(Random.Range(.2f, .4f));
 
-        public void SetPiece(Piece piece) => this.piece = piece;
+        public void SetPiece(Piece piece)
+        {
+            this.piece = piece;
+        }
 
         public override void OnBeforeMoveAction(params BoardLocation[] locations)
         {

@@ -48,7 +48,7 @@ namespace Fourzy
         {
             AudioHolder.instance.PlaySelfSfxOneShotTracked(_Updates.Serialized.AudioTypes.GAME_LOGO, 1f);
 
-            OnboardingScreen onboardingScreen = PersistantMenuController.instance.GetScreen<OnboardingScreen>();
+            OnboardingScreen onboardingScreen = PersistantMenuController.instance.GetOrAddScreen<OnboardingScreen>();
 
             AsyncOperation async = null;
             bool displayTutorial = onboardingScreen.WillDisplayTutorial(HardcodedTutorials.tutorials[0]);

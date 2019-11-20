@@ -166,13 +166,13 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case RewardType.OPEN_PORTAL:
                     if (puzzleData == null || puzzleData.pack == null)
-                        PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.SIMPLE);
+                        PersistantMenuController.instance.GetOrAddScreen<PortalScreen>().SetData(RewardsManager.PortalType.SIMPLE);
                     else
                     {
                         //check if puzzle was complete and reward wasnt assigned yet
                         if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && !PlayerPrefsWrapper.GetRewardRewarded(puzzleData.GetRewardID(reward)))
                         {
-                            PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.SIMPLE);
+                            PersistantMenuController.instance.GetOrAddScreen<PortalScreen>().SetData(RewardsManager.PortalType.SIMPLE);
                             PlayerPrefsWrapper.SetRewardRewarded(puzzleData.GetRewardID(reward), true);
 
                             SetChecked(true);
@@ -183,13 +183,13 @@ namespace Fourzy._Updates.UI.Widgets
 
                 case RewardType.OPEN_RARE_PORTAL:
                     if (puzzleData == null || puzzleData.pack == null)
-                        PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
+                        PersistantMenuController.instance.GetOrAddScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
                     else
                     {
                         //check if puzzle was complete and reward wasnt assigned yet
                         if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && !PlayerPrefsWrapper.GetRewardRewarded(puzzleData.GetRewardID(reward)))
                         {
-                            PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
+                            PersistantMenuController.instance.GetOrAddScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
                             PlayerPrefsWrapper.SetRewardRewarded(puzzleData.GetRewardID(reward), true);
 
                             SetChecked(true);

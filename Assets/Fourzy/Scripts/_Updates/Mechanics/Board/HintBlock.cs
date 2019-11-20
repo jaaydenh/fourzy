@@ -70,6 +70,26 @@ namespace Fourzy._Updates.Mechanics.Board
             onHide.Invoke();
         }
 
+        /// <summary>
+        /// Only for EDGE_TAP placement style
+        /// </summary>
+        public void ShowUnderPointer(float time)
+        {
+            if (GameManager.Instance.placementStyle != GameManager.PlacementStyle.EDGE_TAP) return;
+
+            Show(time);
+        }
+
+        /// <summary>
+        /// Only for EDGE_TAP placement style
+        /// </summary>
+        public void HideUndexPointer(float time)
+        {
+            if (GameManager.Instance.placementStyle != GameManager.PlacementStyle.EDGE_TAP) return;
+
+            Hide(time);
+        }
+
         public void Animate(float duration = .7f, bool loop = false)
         {
             CancelRoutine("animation");

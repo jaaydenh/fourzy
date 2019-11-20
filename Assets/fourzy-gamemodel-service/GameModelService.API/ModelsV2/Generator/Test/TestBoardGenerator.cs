@@ -77,7 +77,7 @@ namespace FourzyGameModel.Model
                     || Board.ContentsAt(l).TokenCount > 1)
                 { Errors.Add(Board.ContentString, "Corners"); return false; }
 
-            int Dead = AITurnEvaluator.CountTheDead(Board);
+            int Dead = AIScoreEvaluator.CountTheDead(Board);
             if (Dead > MaxDeadSpaces) { Errors.Add(Board.ContentString, "TooManyDead=" + Dead); return false; }
 
             //int Score = AITurnEvaluator.ScoreFours(new GameState(Board, new GameOptions()),1);

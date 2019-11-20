@@ -9,7 +9,6 @@ namespace FourzyGameModel.Model
     public class AITurnEvaluator
     {
 
-
         #region "Properties and Initialization"
         const int WIN_SCORE_VALUE = 10000000;
         const int LOSS_SCORE_VALUE = -10000000;
@@ -34,40 +33,52 @@ namespace FourzyGameModel.Model
             }
         }
 
-        public AITurnEvaluator(GameState State)
+        public AITurnEvaluator(GameState State, AIHeuristicWeight Heuristics = null)
         {
             this.EvalState = State;
             this.Evaluator = new TurnEvaluator(this.EvalState);
             this.EvalState = Evaluator.EvaluateStartOfTurn();
 
+            if (Heuristics == null)
+                this.AIHeuristics = new AIHeuristicWeight();
+            else
+                this.AIHeuristics = Heuristics;
+
             this.AliveSpaces = new HashSet<BoardLocation>();
             this.WinningTurns = new List<PlayerTurn>();
             this.AvailableSimpleMoves = new List<SimpleMove>();
-            Dictionary<SimpleMove, GameState> MoveInfo = Evaluator.GetAvailableMoveInfo();
 
-            //Weed out a few moves if they do the same thing.
-            List<string> UniqueMoves = new List<string>();
-            foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
-            {
-                if (UniqueMoves.Contains(move.Value.StateString)) continue;
-                UniqueMoves.Add(move.Value.StateString);
-                if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
-                this.AvailableSimpleMoves.Add(move.Key);
-                foreach (BoardLocation l in move.Value.ActiveSpaces)
-                {
-                    if (!this.AliveSpaces.Contains(l)) this.AliveSpaces.Add(l);
-                }
-                //this.AliveSpaces.AddRange(move.Value.ActiveSpaces);
-            }
+            this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
+
+            //THIS CODE IS TOO SLOW.
+
+            //Dictionary<SimpleMove, GameState> MoveInfo = Evaluator.GetAvailableMoveInfo();
+            ////Weed out a few moves if they do the same thing.
+            //List<string> UniqueMoves = new List<string>();
+            //foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
+            //{
+            //    if (UniqueMoves.Contains(move.Value.StateString)) continue;
+            //    UniqueMoves.Add(move.Value.StateString);
+            //    if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
+            //    this.AvailableSimpleMoves.Add(move.Key);
+            //    foreach (BoardLocation l in move.Value.ActiveSpaces)
+            //    {
+            //        if (!this.AliveSpaces.Contains(l)) this.AliveSpaces.Add(l);
+            //    }
+            //    //this.AliveSpaces.AddRange(move.Value.ActiveSpaces);
+            //}
+
+
             this.DeadSpaces = Evaluator.FindDeadLocations();
-            this.AIHeuristics = new AIHeuristicWeight();
 
             //this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
             //this.WinningTurns = new List<PlayerTurn>();
-            //foreach (SimpleMove m in Evaluator.GetWinningMoves())
-            //{
-            //    this.WinningTurns.Add(new PlayerTurn(m));
-            //}
+
+            foreach (SimpleMove m in Evaluator.GetWinningMoves(EvalState.ActivePlayerId, AIHeuristics.ConsiderDiagonals))
+            {
+                this.WinningTurns.Add(new PlayerTurn(m));
+            }
+
         }
 
         //Use this constructor when only a subset of moves are to be considered.
@@ -78,37 +89,44 @@ namespace FourzyGameModel.Model
             this.EvalState = Evaluator.EvaluateStartOfTurn();
             this.AliveSpaces = new HashSet<BoardLocation>();
             this.WinningTurns = new List<PlayerTurn>();
+            
             this.AvailableSimpleMoves = new List<SimpleMove>();
-            Dictionary<SimpleMove, GameState> MoveInfo = null;
-
             if (AvailableMoves != null)
                 if (AvailableMoves.Count > 0)
-                    MoveInfo = Evaluator.GetAvailableMoveInfo(AvailableMoves);
-            if (MoveInfo == null) MoveInfo = Evaluator.GetAvailableMoveInfo();
+                    this.AvailableSimpleMoves = AvailableMoves;
+            if (AvailableSimpleMoves.Count ==0) this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
+
+            Dictionary<SimpleMove, GameState> MoveInfo = null;
+
+            //if (AvailableMoves != null)
+            //    if (AvailableMoves.Count > 0)
+            //        MoveInfo = Evaluator.GetAvailableMoveInfo(AvailableMoves);
+            //if (MoveInfo == null) MoveInfo = Evaluator.GetAvailableMoveInfo();
 
             //Weed out moves that are idential.
-            List<string> UniqueMoves = new List<string>();
-            foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
-            {
-                if (UniqueMoves.Contains(move.Value.StateString)) continue;
-                UniqueMoves.Add(move.Value.StateString);
-                if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
-                this.AvailableSimpleMoves.Add(move.Key);
-                foreach (BoardLocation l in move.Value.ActiveSpaces)
-                {
-                    if (!this.AliveSpaces.Contains(l)) this.AliveSpaces.Add(l);
-                }
+            //List<string> UniqueMoves = new List<string>();
+            //foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
+            //{
+            //    if (UniqueMoves.Contains(move.Value.StateString)) continue;
+            //    UniqueMoves.Add(move.Value.StateString);
+            //    if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
+            //    this.AvailableSimpleMoves.Add(move.Key);
+            //    foreach (BoardLocation l in move.Value.ActiveSpaces)
+            //    {
+            //        if (!this.AliveSpaces.Contains(l)) this.AliveSpaces.Add(l);
+            //    }
 
-            }
+            //}
             this.DeadSpaces = Evaluator.FindDeadLocations();
             this.AIHeuristics = new AIHeuristicWeight();
 
             //this.AvailableSimpleMoves = AvailableMoves;
-            //this.WinningTurns = new List<PlayerTurn>();
-            //foreach (SimpleMove m in Evaluator.GetWinningMoves())
-            //{
-            //    this.WinningTurns.Add(new PlayerTurn(m));
-            //}
+            this.WinningTurns = new List<PlayerTurn>();
+            foreach (SimpleMove m in Evaluator.GetWinningMoves(EvalState.ActivePlayerId, AIHeuristics.ConsiderDiagonals))
+            {
+                this.WinningTurns.Add(new PlayerTurn(m));
+            }
+
         }
 
         public AITurnEvaluator(GameState State, PlayerTurn Turn)
@@ -123,30 +141,30 @@ namespace FourzyGameModel.Model
             this.AliveSpaces = new HashSet<BoardLocation>();
             this.WinningTurns = new List<PlayerTurn>();
             this.AvailableSimpleMoves = new List<SimpleMove>();
-            Dictionary<SimpleMove, GameState> MoveInfo = Evaluator.GetAvailableMoveInfo();
+            //Dictionary<SimpleMove, GameState> MoveInfo = Evaluator.GetAvailableMoveInfo();
 
-            //Weed out identical moves.
-            List<string> UniqueMoves = new List<string>();
-            foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
-            {
-                if (UniqueMoves.Contains(move.Value.StateString)) continue;
-                UniqueMoves.Add(move.Value.StateString);
-                if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
-                this.AvailableSimpleMoves.Add(move.Key);
-                foreach (BoardLocation l in move.Value.ActiveSpaces)
-                {
-                    if (!this.AliveSpaces.Contains(l)) this.AliveSpaces.Add(l);
-                }
-            }
+            ////Weed out identical moves.
+            //List<string> UniqueMoves = new List<string>();
+            //foreach (KeyValuePair<SimpleMove, GameState> move in MoveInfo)
+            //{
+            //    if (UniqueMoves.Contains(move.Value.StateString)) continue;
+            //    UniqueMoves.Add(move.Value.StateString);
+            //    if (move.Value.WinnerId == ActivePlayerId) this.WinningTurns.Add(new PlayerTurn(move.Key));
+            //    this.AvailableSimpleMoves.Add(move.Key);
+            //    foreach (BoardLocation l in move.Value.ActiveSpaces)
+            //    {
+            //        if (!this.AliveSpaces.Contains(l)) this.AliveSpaces.Add(l);
+            //    }
+            //}
             this.DeadSpaces = Evaluator.FindDeadLocations();
 
 
-            //this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
-            //this.WinningTurns = new List<PlayerTurn>();
-            //foreach (SimpleMove m in Evaluator.GetWinningMoves())
-            //{
-            //    this.WinningTurns.Add(new PlayerTurn(m));
-            //}
+            this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
+            this.WinningTurns = new List<PlayerTurn>();
+            foreach (SimpleMove m in Evaluator.GetWinningMoves(EvalState.ActivePlayerId, AIHeuristics.ConsiderDiagonals))
+            {
+                this.WinningTurns.Add(new PlayerTurn(m));
+            }
         }
 
         #endregion
@@ -179,46 +197,75 @@ namespace FourzyGameModel.Model
         public List<SimpleMove> GetOkMoves()
         {
             //If we keep track of the resulting state, maybe we can remove some identical moves for consideration.
-            //List<SimpleMove> Moves = new List<SimpleMove>();
-            //Dictionary<SimpleMove, GameState> UniqueMoves = new Dictionary<SimpleMove, GameState>();
+
+            //Only Look at Unique Moves
             Dictionary<SimpleMove, string> UniqueMoves = new Dictionary<SimpleMove, string>();
 
+            //Return moves that are pruned.
+            List<SimpleMove> Moves = new List<SimpleMove>();
+
             bool Threat = false;
+            bool Setup = false;
             foreach (SimpleMove m in AvailableSimpleMoves)
             {
-                //Shortcut some processing if piece count is small, which will happen at start of game.
-                //if (EvalState.Board.FindPieces(m.Piece.PlayerId).Count < 3 
-                //     && EvalState.Board.FindPieces(EvalState.Opponent(m.Piece.PlayerId)).Count < 3)
-                //{
-                //    Moves.Add(m); continue;
-                //}
-
-
                 TurnEvaluator OPP = new TurnEvaluator(Evaluator.EvaluateTurn(new PlayerTurn(m)));
+
+                //Only look at unique moves.
+                if (UniqueMoves.ContainsValue(OPP.EvalState.StateString)) continue;
+                UniqueMoves.Add(m, OPP.EvalState.StateString);
+
+                //Did I Win?? I'll just return this move and be done.
                 if (OPP.EvalState.WinnerId == m.Piece.PlayerId)
                 {
-                    //Moves.Clear();
-                    //Moves.Add(m);
                     UniqueMoves.Clear();
                     UniqueMoves.Add(m, OPP.EvalState.StateString);
                     break;
                 }
 
+                //Did I make my Opponent Win.  Ignore this move.
                 if (OPP.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
 
-                if (AIHeuristics.LookForSetups)
-                {
-                    if (IsASetup()) continue;
-                }
-
+                //Otherwise. Check if My Opponent can win.  Don't make a move where opp can win immediately
                 if (OPP.GetFirstWinningMove() == null)
                 {
+                    //Make the Unblockable move
+                    if (AIHeuristics.LookForUnstoppable)
+                    {
+                        if (IsUnstoppableThreat())
+                        {
+                            UniqueMoves.Clear();
+                            UniqueMoves.Add(m, OPP.EvalState.StateString);
+                            break;
+                        }
+                    }
+
+                    //Use setups if there.
+                    if (AIHeuristics.LookForSetups)
+                    {
+                        if (IsASetup())
+                        {
+                            //When discovering first setup, clear the rest of the moves.
+                            // only make setup moves.
+                            if (!Setup)
+                            {
+                                UniqueMoves.Clear();
+                                Setup = true;
+                            }
+                        }
+                        else
+                        {
+                            //If we have found a setup, ignore this move.
+                            if (Setup) continue;
+                        }
+                    }
+
+
+                    //If I'm Aggressive, always consider the threat first.
                     if (AIHeuristics.IsAggressive)
                     {
-                        //Don't make a move into a setup.
-
                         if (IsAThreat())
                         {
+                            //When discovering first threat, clear the rest of the moves.
                             if (!Threat)
                             {
                                 UniqueMoves.Clear();
@@ -232,14 +279,15 @@ namespace FourzyGameModel.Model
                         }
                     }
 
-                    bool Prune = false;
-                    //Moves.Add(m);
-                    if (!Prune && !UniqueMoves.ContainsValue(OPP.EvalState.StateString)) UniqueMoves.Add(m, OPP.EvalState.StateString);
+                    //Eventually do some additional pruning checks.
+                    //bool Prune = false;
+                    //if (!Prune) Moves.Add(m);
+
+                    Moves.Add(m);
                 }
             }
+            return Moves;
 
-            //return Moves;
-            return UniqueMoves.Keys.ToList();
         }
 
         ////Convert a list of Moves into UniqueMoves.
@@ -336,6 +384,8 @@ namespace FourzyGameModel.Model
         {
             Dictionary<SimpleMove, int> Moves = new Dictionary<SimpleMove, int>();
 
+            bool Setup = false;
+            bool Threat = false;
             foreach (SimpleMove m in AvailableSimpleMoves)
             {
                 //AITurnEvaluator AITE = new AITurnEvaluator(EvalState, new PlayerTurn(m));
@@ -352,21 +402,65 @@ namespace FourzyGameModel.Model
                     break;
                 }
 
-                if (AIHeuristics.LookForSetups)
-                {
-                    //Don't make a move into a setup.
-                    if (IsASetup()) continue;
-                }
-
                 //If make move causes opponent to win, ignore it.
                 if (AITE.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
 
                 //If no winning moves
                 if (!AITE.WinningMove)
                 {
-                    Tuple<SimpleMove, int> Top = AITE.TopMoveScore();
+                       //Make the Unblockable move
+                        if (AIHeuristics.LookForUnstoppable)
+                        {
+                            if (IsUnstoppableThreat())
+                            {
+                                Moves.Clear();
+                                Moves.Add(m, WIN_SCORE_VALUE);
+                                break;
+                            }
+                        }
 
-                    Moves.Add(m, Top.Item2);
+                        //Use setups if there.
+                        if (AIHeuristics.LookForSetups)
+                        {
+                            if (IsASetup())
+                            {
+                                //When discovering first setup, clear the rest of the moves.
+                                // only make setup moves.
+                                if (!Setup)
+                                {
+                                    Moves.Clear();
+                                    Setup = true;
+                                }
+                            }
+                            else
+                            {
+                                //If we have found a setup, ignore this move.
+                                if (Setup) continue;
+                            }
+                        }
+
+
+                        //If I'm Aggressive, always consider the threat first.
+                        if (AIHeuristics.IsAggressive)
+                        {
+                            if (IsAThreat())
+                            {
+                                //When discovering first threat, clear the rest of the moves.
+                                if (!Threat)
+                                {
+                                    Moves.Clear();
+                                    Threat = true;
+                                }
+                            }
+                            else
+                            {
+                                //If found a threat, ignore this move.
+                                if (Threat) continue;
+                            }
+                        }
+
+                         Tuple<SimpleMove, int> Top = AITE.TopMoveScore();
+                         Moves.Add(m, Top.Item2);
                 }
             }
             //Order Ascending to minimize opp value.
@@ -376,25 +470,25 @@ namespace FourzyGameModel.Model
             return Moves.First().Key;
         }
 
-        public SimpleMove GetBadMove(int NumberOfMovesToConsider = 8)
+        public SimpleMove GetOkBadMove(int NumberOfMovesToConsider = 8)
         {
             Dictionary<SimpleMove, int> Moves = new Dictionary<SimpleMove, int>();
 
             //Shuffle up the moves.  Doesn't have to be perfectly random.
-            AvailableSimpleMoves = AvailableSimpleMoves.OrderBy(a => Guid.NewGuid()).ToList();
+            //AvailableSimpleMoves = EvalState.Random.RandomSimpleMoves(AvailableSimpleMoves, NumberOfMovesToConsider);
 
             int moves_evaluated = 0;
-            foreach (SimpleMove m in AvailableSimpleMoves)
+            foreach (SimpleMove m in EvalState.Random.RandomSimpleMoves(GetOkMoves(), NumberOfMovesToConsider))
             {
                 //AITurnEvaluator AITE = new AITurnEvaluator(EvalState, new PlayerTurn(m));
                 TurnEvaluator TE = new TurnEvaluator(EvalState);
                 GameState GS = TE.EvaluateTurn(new PlayerTurn(m));
-                AITurnEvaluator AITE = new AITurnEvaluator(GS);
+                //AITurnEvaluator AITE = new AITurnEvaluator(GS);
                 moves_evaluated++;
 
                 //Player can make a move to win. No further analysis.
                 //This is probably pruned elsewhere
-                if (AITE.EvalState.WinnerId == m.Piece.PlayerId)
+                if (GS.WinnerId == m.Piece.PlayerId)
                 {
                     Moves.Clear();
                     Moves.Add(m, WIN_SCORE_VALUE);
@@ -403,18 +497,42 @@ namespace FourzyGameModel.Model
 
                 //If make move causes opponent to win, ignore it.
                 //  Don't want to give game to opponent.  Probably pruned.
-                if (AITE.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
+                if (GS.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
 
+                TurnEvaluator TE2 = new TurnEvaluator(GS);
                 //If opponent has winning moves, what is the best move the opponent can make
-                if (!AITE.WinningMove)
+                if (TE2.GetFirstWinningMove() == null)
                 {
-                    Tuple<SimpleMove, int> Top = AITE.TopMoveScore();
-
-                    Moves.Add(m, Top.Item2);
+                    AIScoreEvaluator AISE = new AIScoreEvaluator(GS);
+                    Moves.Add(m, AISE.Score(EvalState.Opponent(m.Piece.PlayerId)));
+                    //Tuple<SimpleMove, int> Top = AITE.TopMoveScore();
+                    //Moves.Add(m, Top.Item2);
                 }
 
-                //To save time, we'll look at the first couple of moves and take the worst one.
-                if (moves_evaluated >= NumberOfMovesToConsider) break;
+                ////To save time, we'll look at the first couple of moves and take the worst one.
+                //if (moves_evaluated >= NumberOfMovesToConsider) break;
+            }
+            //Order Ascending to minimize opp value.
+            Moves = Moves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+
+            if (Moves.Count == 0) return null;
+            return Moves.First().Key;
+        }
+
+        public SimpleMove GetAnyBadMove(int NumberOfMovesToConsider = 8)
+        {
+            Dictionary<SimpleMove, int> Moves = new Dictionary<SimpleMove, int>();
+
+            //Shuffle up the moves.  Doesn't have to be perfectly random.
+            //AvailableSimpleMoves = EvalState.Random.RandomSimpleMoves(AvailableSimpleMoves, NumberOfMovesToConsider);
+
+            int moves_evaluated = 0;
+            foreach (SimpleMove m in EvalState.Random.RandomSimpleMoves(AvailableSimpleMoves, NumberOfMovesToConsider))
+            {
+                TurnEvaluator TE = new TurnEvaluator(EvalState);
+                GameState GS = TE.EvaluateTurn(new PlayerTurn(m));
+                AIScoreEvaluator AISE = new AIScoreEvaluator(GS);
+                Moves.Add(m, AISE.Score(EvalState.Opponent(m.Piece.PlayerId)));
             }
             //Order Ascending to minimize opp value.
             Moves = Moves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
@@ -441,8 +559,8 @@ namespace FourzyGameModel.Model
                 }
                 if (WinMoves == MaxWinMoves)
                 {
-                    AITurnEvaluator AITE = new AITurnEvaluator(GS);
-                    WeightedMoves.Add(m, AITE.Score(m.Piece.PlayerId));
+                    AIScoreEvaluator AISE = new AIScoreEvaluator(GS);
+                    WeightedMoves.Add(m, AISE.Score(m.Piece.PlayerId));
                 }
             }
 
@@ -492,7 +610,7 @@ namespace FourzyGameModel.Model
 
         public Tuple<SimpleMove, int> TopMoveScore()
         {
-            Dictionary<SimpleMove, int> WeightedMoves = ScoreMoves();
+            Dictionary<SimpleMove, int> WeightedMoves = ScoreMoves(GetOkMoves(), -1, AIHeuristics, true);
             if (WeightedMoves.Count == 0) return new Tuple<SimpleMove, int>(null, 0);
 
             WeightedMoves = WeightedMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
@@ -545,11 +663,43 @@ namespace FourzyGameModel.Model
             return Moves[EvalState.Board.Random.RandomInteger(BestMove, Moves.Count - 1)];
         }
 
+        public SimpleMove GetFirstAwesomeMove()
+        {
+            foreach (SimpleMove m in AvailableSimpleMoves)
+            {
+                AITurnEvaluator AITE = new AITurnEvaluator(EvalState, new PlayerTurn(m));
+
+                //Otherwise. Check if My Opponent can win.  Don't make a move where opp can win immediately
+                if (AITE.WinningTurns != null)
+                {
+                    return m;
+                }
+
+                //Make the Unblockable move
+                if (AIHeuristics.LookForUnstoppable)
+                {
+                    if (IsUnstoppableThreat())
+                    {
+                        return m;
+                    }
+                }
+
+                //Use setups if there.
+                if (AIHeuristics.LookForSetups)
+                {
+                    if (IsASetup())
+                    {
+                        return m;
+                    }
+                }
+            }
+             return null;
+        }
 
 
         #endregion
 
-        #region "Better Move"
+        //#region "Better Move"
         //Consider a set of moves
         //Look at each move.
         //  Check all the possible my opponent can make
@@ -703,7 +853,7 @@ namespace FourzyGameModel.Model
         //}
 
 
-        #endregion
+        //#endregion
 
         #region "Score Positions"
 
@@ -732,7 +882,7 @@ namespace FourzyGameModel.Model
             if (NumberMoves < 2)
                 return WeightedMoves.Keys.First();
 
-            return WeightedMoves.ElementAt(Evaluator.EvalState.Random.RandomInteger(0, Math.Min(NumberMoves, WeightedMoves.Count))).Key;
+            return WeightedMoves.ElementAt(Evaluator.EvalState.Random.RandomInteger(0, Math.Min(NumberMoves, WeightedMoves.Count-1))).Key;
 
         }
 
@@ -763,19 +913,24 @@ namespace FourzyGameModel.Model
             foreach (SimpleMove m in Moves)
             {
                 GameState GS = ME.EvaluateTurn(new PlayerTurn(m));
-                AITurnEvaluator AITE = new AITurnEvaluator(GS);
+                //AITurnEvaluator AITE = new AITurnEvaluator(GS);
+
+                AIScoreEvaluator AISE = new AIScoreEvaluator(GS);
+                ScoredMoves.Add(m, AISE.Score(m.Piece.PlayerId, AIWeight));
+
                 //AITurnEvaluator AITE = new AITurnEvaluator(EvalState, new PlayerTurn(m));
 
                 //We can look for setup patterns where a player can win multiple ways.
                 //The most classic is the 'FIVE SETUP'
-                if (AIWeight.PruneFiveSetup)
-                {
-                    if (AITE.FindFiveSetup(GS.ActivePlayerId)) continue;
-                }
+                //if (AIWeight.PruneFiveSetup)
+                //{
+                //    if (AITE.IsASetup()) continue;
+                //    //if (AITE.FindFiveSetup(GS.ActivePlayerId)) continue;
+                //}
 
                 //int Score = AITurnEvaluator.Score(GS, m.Piece.PlayerId, AIWeight);
                 //ScoredMoves.Add(m, Score);
-                ScoredMoves.Add(m, AITE.Score(m.Piece.PlayerId, AIWeight));
+                //ScoredMoves.Add(m, AITE.Score(m.Piece.PlayerId, AIWeight));
             }
             if (Sort) ScoredMoves = ScoredMoves.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
             if (TopMoves > 0)
@@ -808,66 +963,66 @@ namespace FourzyGameModel.Model
         //    return Score(EvalState.ActivePlayerId, new AIHeuristicWeight());
         //}
 
-        public int Score(int PlayerId)
-        {
-            return Score(PlayerId, AIHeuristics);
-        }
+        //public int Score(int PlayerId)
+        //{
+        //    return Score(PlayerId, AIHeuristics);
+        //}
 
-        public int Score(int PlayerId, AIHeuristicWeight AIWeight)
-        {
-            int Score = 0;
-            if (AIWeight == null) AIWeight = new AIHeuristicWeight();
+        //public int Score(int PlayerId, AIHeuristicWeight AIWeight)
+        //{
+        //    int Score = 0;
+        //    if (AIWeight == null) AIWeight = new AIHeuristicWeight();
 
-            //TurnEvaluator TE = new TurnEvaluator(EvalState);
-            //List<BoardLocation> Dead = TE.FindDeadLocations();
+        //    //TurnEvaluator TE = new TurnEvaluator(EvalState);
+        //    //List<BoardLocation> Dead = TE.FindDeadLocations();
 
-            //My Pieces
-            Score += ScoreFours(PlayerId) * AIWeight.FourWeight;
-            Score += ScoreFives(PlayerId) * AIWeight.FiveWeight;
-            Score += ScorePositions(EvalState, PlayerId) * AIWeight.PositionWeight;
+        //    //My Pieces
+        //    Score += ScoreFours(PlayerId) * AIWeight.FourWeight;
+        //    Score += ScoreFives(PlayerId) * AIWeight.FiveWeight;
+        //    Score += ScorePositions(EvalState, PlayerId) * AIWeight.PositionWeight;
 
-            //Opponent Pieces
-            if (AIWeight.ConsiderOpponentPieces)
-            {
-                Score -= ScoreFours(EvalState.Opponent(PlayerId)) * AIWeight.FourWeight;
-                Score -= ScoreFives(EvalState.Opponent(PlayerId)) * AIWeight.FiveWeight;
-                Score -= ScorePositions(EvalState, EvalState.Opponent(PlayerId)) * AIWeight.PositionWeight;
-            }
+        //    //Opponent Pieces
+        //    if (AIWeight.ConsiderOpponentPieces)
+        //    {
+        //        Score -= ScoreFours(EvalState.Opponent(PlayerId)) * AIWeight.FourWeight;
+        //        Score -= ScoreFives(EvalState.Opponent(PlayerId)) * AIWeight.FiveWeight;
+        //        Score -= ScorePositions(EvalState, EvalState.Opponent(PlayerId)) * AIWeight.PositionWeight;
+        //    }
 
-            return Score;
-        }
+        //    return Score;
+        //}
 
         // A 'FiveSetup' occurs in a set of five spaces in a row/column/diag where: 
         //    -- the three center spaces are unmovable
         //    -- a player can play on either side to win two ways.
         //
-        public bool FindFiveSetup(int PlayerId)
-        {
-            bool found = false;
-            for (var row = 0; row < EvalState.Board.Rows; row++)
-            {
-                for (var col = 0; col < EvalState.Board.Columns; col++)
-                {
-                    foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
-                    {
-                        switch (Direction)
-                        {
-                            case WinDirection.HORIZONTAL:
-                                if (EvalState.Board.Columns - col < 5) continue; break;
-                            case WinDirection.VERTICAL:
-                                if (EvalState.Board.Rows - row < 5) continue; break;
+        //public bool FindFiveSetup(int PlayerId)
+        //{
+        //    bool found = false;
+        //    for (var row = 0; row < EvalState.Board.Rows; row++)
+        //    {
+        //        for (var col = 0; col < EvalState.Board.Columns; col++)
+        //        {
+        //            foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
+        //            {
+        //                switch (Direction)
+        //                {
+        //                    case WinDirection.HORIZONTAL:
+        //                        if (EvalState.Board.Columns - col < 5) continue; break;
+        //                    case WinDirection.VERTICAL:
+        //                        if (EvalState.Board.Rows - row < 5) continue; break;
 
-                                //case WinDirection.DIAGONAL_NW_SE:
-                                //case WinDirection.DIAGONAL_NE_SW:
-                                //    //continue;
-                        }
-                        found = FindFiveSetup(new BoardLocation(row, col), Direction, PlayerId);
-                        if (found) return true;
-                    }
-                }
-            }
-            return found;
-        }
+        //                        //case WinDirection.DIAGONAL_NW_SE:
+        //                        //case WinDirection.DIAGONAL_NE_SW:
+        //                        //    //continue;
+        //                }
+        //                found = FindFiveSetup(new BoardLocation(row, col), Direction, PlayerId);
+        //                if (found) return true;
+        //            }
+        //        }
+        //    }
+        //    return found;
+        //}
 
 
         //public int Score(int PlayerId, int FourWeight = 10, int FiveWeight = 25, int PositionWeight = 2)
@@ -887,39 +1042,39 @@ namespace FourzyGameModel.Model
         //    return Score;
         //}
 
-        public string ScoreExplanation(int PlayerId)
-        {
-            int Score = 0;
-            int OpponentId = EvalState.Opponent(PlayerId);
+        //public string ScoreExplanation(int PlayerId)
+        //{
+        //    int Score = 0;
+        //    int OpponentId = EvalState.Opponent(PlayerId);
 
-            StringBuilder output = new StringBuilder();
+        //    StringBuilder output = new StringBuilder();
 
-            TurnEvaluator TE = new TurnEvaluator(EvalState);
-            HashSet<BoardLocation> Dead = TE.FindDeadLocations();
+        //    TurnEvaluator TE = new TurnEvaluator(EvalState);
+        //    HashSet<BoardLocation> Dead = TE.FindDeadLocations();
 
-            output.AppendLine("Scoring for Player=" + PlayerId);
-            output.AppendLine("  Opponent=" + OpponentId);
-            output.AppendLine("Dead Space Count=" + Dead.Count);
+        //    output.AppendLine("Scoring for Player=" + PlayerId);
+        //    output.AppendLine("  Opponent=" + OpponentId);
+        //    output.AppendLine("Dead Space Count=" + Dead.Count);
 
-            int MyFour = ScoreFours(PlayerId) * AIConstants.DefaultFourWeight;
-            int TheirFour = ScoreFours(OpponentId) * AIConstants.DefaultFourWeight;
-            int MyFive = ScoreFives(PlayerId) * AIConstants.DefaultFiveWeight;
-            int TheirFive = ScoreFives(OpponentId) * AIConstants.DefaultFiveWeight;
-            int MyPosition = ScorePositions(EvalState, PlayerId) * AIConstants.DefaultPositionWeight;
-            int TheirPosition = ScorePositions(EvalState, OpponentId) * AIConstants.DefaultPositionWeight;
+        //    int MyFour = ScoreFours(PlayerId) * AIConstants.DefaultFourWeight;
+        //    int TheirFour = ScoreFours(OpponentId) * AIConstants.DefaultFourWeight;
+        //    int MyFive = ScoreFives(PlayerId) * AIConstants.DefaultFiveWeight;
+        //    int TheirFive = ScoreFives(OpponentId) * AIConstants.DefaultFiveWeight;
+        //    int MyPosition = ScorePositions(EvalState, PlayerId) * AIConstants.DefaultPositionWeight;
+        //    int TheirPosition = ScorePositions(EvalState, OpponentId) * AIConstants.DefaultPositionWeight;
 
-            Score = MyFive - TheirFive + MyFour - TheirFour + MyPosition - TheirPosition;
+        //    Score = MyFive - TheirFive + MyFour - TheirFour + MyPosition - TheirPosition;
 
-            output.AppendLine("Score=" + Score);
-            output.AppendLine("MyFour=" + MyFour);
-            output.AppendLine("TheirFour=" + TheirFour);
-            output.AppendLine("MyFive=" + MyFive);
-            output.AppendLine("TheirFive=" + TheirFive);
-            output.AppendLine("MyPos=" + MyPosition);
-            output.AppendLine("TheirPos=" + TheirPosition);
+        //    output.AppendLine("Score=" + Score);
+        //    output.AppendLine("MyFour=" + MyFour);
+        //    output.AppendLine("TheirFour=" + TheirFour);
+        //    output.AppendLine("MyFive=" + MyFive);
+        //    output.AppendLine("TheirFive=" + TheirFive);
+        //    output.AppendLine("MyPos=" + MyPosition);
+        //    output.AppendLine("TheirPos=" + TheirPosition);
 
-            return output.ToString();
-        }
+        //    return output.ToString();
+        //}
 
         //public int ScoreFours(int PlayerId)
         //{
@@ -927,36 +1082,36 @@ namespace FourzyGameModel.Model
         //    return ScoreFours(PlayerId, Dead);
         //}
 
-        public int ScoreFours(int PlayerId)
-        {
-            int Score = 0;
-            for (var row = 0; row < EvalState.Board.Rows; row++)
-            {
-                for (var col = 0; col < EvalState.Board.Columns; col++)
-                {
-                    foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
-                    {
-                        switch (Direction)
-                        {
-                            case WinDirection.HORIZONTAL:
-                                if (EvalState.Board.Columns - col < 4) continue; break;
-                            case WinDirection.VERTICAL:
-                                if (EvalState.Board.Rows - row < 4) continue; break;
-                            case WinDirection.DIAGONAL_NE_SW:
-                                if (EvalState.Board.Columns - col < 4) continue;
-                                if (row < EvalState.Board.Rows - 4 - 1) continue; break;
-                            case WinDirection.DIAGONAL_NW_SE:
-                                if (EvalState.Board.Columns - col < 4) continue;
-                                if (EvalState.Board.Rows - row < 4) continue; break;
+        //public int ScoreFours(int PlayerId)
+        //{
+        //    int Score = 0;
+        //    for (var row = 0; row < EvalState.Board.Rows; row++)
+        //    {
+        //        for (var col = 0; col < EvalState.Board.Columns; col++)
+        //        {
+        //            foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
+        //            {
+        //                switch (Direction)
+        //                {
+        //                    case WinDirection.HORIZONTAL:
+        //                        if (EvalState.Board.Columns - col < 4) continue; break;
+        //                    case WinDirection.VERTICAL:
+        //                        if (EvalState.Board.Rows - row < 4) continue; break;
+        //                    case WinDirection.DIAGONAL_NE_SW:
+        //                        if (EvalState.Board.Columns - col < 4) continue;
+        //                        if (row < EvalState.Board.Rows - 4 - 1) continue; break;
+        //                    case WinDirection.DIAGONAL_NW_SE:
+        //                        if (EvalState.Board.Columns - col < 4) continue;
+        //                        if (EvalState.Board.Rows - row < 4) continue; break;
 
-                        }
+        //                }
 
-                        Score += ScoreFour(new BoardLocation(row, col), Direction, PlayerId);
-                    }
-                }
-            }
-            return Score;
-        }
+        //                Score += ScoreFour(new BoardLocation(row, col), Direction, PlayerId);
+        //            }
+        //        }
+        //    }
+        //    return Score;
+        //}
 
         //Need to think through this.
         //public static int ScoreFoursRevised(GameState State, int PlayerId, List<BoardLocation> DeadLocations)
@@ -1030,1062 +1185,1088 @@ namespace FourzyGameModel.Model
         //    return Score;
         //}
 
-        public int ScoreFives(int PlayerId)
+        //public int ScoreFives(int PlayerId)
+        //{
+        //    int Score = 0;
+        //    for (var row = 0; row < EvalState.Board.Rows; row++)
+        //    {
+        //        for (var col = 0; col < EvalState.Board.Columns; col++)
+        //        {
+        //            foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
+        //            {
+        //                switch (Direction)
+        //                {
+        //                    case WinDirection.HORIZONTAL:
+        //                        if (EvalState.Board.Columns - col < 5) continue; break;
+        //                    case WinDirection.VERTICAL:
+        //                        if (EvalState.Board.Rows - row < 5) continue; break;
+
+        //                    case WinDirection.DIAGONAL_NW_SE:
+        //                    case WinDirection.DIAGONAL_NE_SW:
+        //                        continue;
+        //                }
+        //                Score += ScoreFive(new BoardLocation(row, col), Direction, PlayerId);
+        //            }
+        //        }
+        //    }
+        //    return Score;
+        //}
+        //public string ReviewFives(int PlayerId)
+        //{
+        //    int Score = 0;
+        //    StringBuilder output = new StringBuilder();
+        //    for (var row = 0; row < EvalState.Board.Rows; row++)
+        //    {
+        //        for (var col = 0; col < EvalState.Board.Columns; col++)
+        //        {
+        //            foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
+        //            {
+        //                switch (Direction)
+        //                {
+        //                    case WinDirection.HORIZONTAL:
+        //                        if (EvalState.Board.Columns - col < 5) continue; break;
+        //                    case WinDirection.VERTICAL:
+        //                        if (EvalState.Board.Rows - row < 5) continue; break;
+        //                }
+        //                Score += ScoreFive(new BoardLocation(row, col), Direction, PlayerId);
+        //                output.AppendLine(row + "," + col + Direction.ToString() + ':' + Score);
+        //            }
+        //        }
+        //    }
+        //    return output.ToString();
+        //}
+
+        //public int ScoreFour(BoardLocation Location, WinDirection WinDirection, int PlayerId)
+        //{
+        //    int count = 0;
+        //    int alive = 0;
+        //    int i = 0;
+        //    bool contiguous = true;
+        //    BoardLocation loc;
+        //    switch (WinDirection)
+        //    {
+        //        case WinDirection.HORIZONTAL:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 4)
+        //            {
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                {
+        //                    contiguous = false;
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row, Location.Column + i);
+        //            }
+        //            break;
+
+        //        case WinDirection.VERTICAL:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 4)
+        //            {
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                {
+        //                    contiguous = false;
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                }
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column);
+
+        //            }
+
+        //            break;
+        //        case WinDirection.DIAGONAL_NE_SW:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 4)
+        //            {
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                {
+        //                    contiguous = false;
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row - i, Location.Column + i);
+
+        //            }
+        //            break;
+
+
+        //        case WinDirection.DIAGONAL_NW_SE:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 4)
+        //            {
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                {
+        //                    contiguous = false;
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column + i);
+
+        //            }
+        //            break;
+
+        //    }
+
+        //    int score = 0;
+        //    switch (count)
+        //    {
+        //        case 0:
+        //            score = 1;
+        //            break;
+        //        case 1:
+        //            score = 2;
+        //            break;
+        //        case 2:
+        //            score = 9;
+        //            if (contiguous) score += 4;
+        //            score += alive;
+        //            break;
+        //        case 3:
+        //            score = 20;
+        //            if (contiguous) score += 20;
+        //            if (alive > 0) score += 50;
+        //            break;
+        //    }
+
+
+        //    return score;
+        //}
+        //public int ScoreFive(BoardLocation Location, WinDirection WinDirection, int PlayerId)
+        //{
+        //    int multiplier = 0;
+        //    int count = 0;
+        //    int i = 0;
+        //    bool contiguous = true;
+        //    int alive = 0;
+        //    BoardLocation loc;
+        //    switch (WinDirection)
+        //    {
+        //        case WinDirection.HORIZONTAL:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 5)
+        //            {
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                {
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                    contiguous = false;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row, Location.Column + i);
+        //            }
+        //            multiplier = 2;
+
+        //            break;
+
+        //        case WinDirection.VERTICAL:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 5)
+        //            {
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                {
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                    contiguous = false;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column);
+
+        //            }
+        //            multiplier = 2;
+
+        //            break;
+
+        //        case WinDirection.DIAGONAL_NE_SW:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 5)
+        //            {
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                {
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                    contiguous = false;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column - i);
+
+        //            }
+        //            multiplier = 0;
+
+        //            break;
+
+
+        //        case WinDirection.DIAGONAL_NW_SE:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 5)
+        //            {
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                {
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                    contiguous = false;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column + i);
+
+        //            }
+        //            multiplier = 0;
+
+        //            break;
+
+        //    }
+
+        //    int score = 0;
+        //    switch (count)
+        //    {
+        //        case 0:
+        //            score = 1;
+        //            break;
+        //        case 1:
+        //            score = 2;
+        //            break;
+        //        case 2:
+        //            score = 50;
+        //            //if (contiguous) score += 50;
+        //            if (alive > 2)
+        //            {
+        //                if (EvalState.ActivePlayerId == PlayerId)
+        //                    score += 200;
+        //                else
+        //                    score += 50;
+        //            }
+        //            break;
+        //        case 3:
+        //            score = 100;
+        //            if (alive > 1)
+        //                if (EvalState.ActivePlayerId != PlayerId)
+        //                    score += 400;
+        //                else
+        //                    score += 100;
+
+        //            break;
+        //    }
+        //    score = score * multiplier;
+
+        //    return score;
+        //}
+
+        //public bool FindFiveSetup(BoardLocation Location, WinDirection WinDirection, int PlayerId)
+        //{
+        //    int count = 0;
+        //    int i = 0;
+        //    int alive = 0;
+        //    BoardLocation loc;
+        //    switch (WinDirection)
+        //    {
+        //        case WinDirection.HORIZONTAL:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 5)
+        //            {
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return false;
+        //                }
+
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return false;
+        //                }
+
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return false;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
+        //                {
+        //                    count++;
+        //                }
+        //                else
+        //                {
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                    //contiguous = false;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row, Location.Column + i);
+        //            }
+
+        //            break;
+
+        //        case WinDirection.VERTICAL:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 5)
+        //            {
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return false;
+        //                }
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return false;
+        //                }
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return false;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
+        //                    count++;
+        //                else
+        //                {
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                    //contiguous = false;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column);
+
+        //            }
+        //            break;
+
+        //        case WinDirection.DIAGONAL_NE_SW:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 5)
+        //            {
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return false;
+        //                }
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return false;
+        //                }
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return false;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
+        //                    count++;
+        //                else
+        //                {
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                    //contiguous = false;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column - i);
+
+        //            }
+        //            break;
+
+
+        //        case WinDirection.DIAGONAL_NW_SE:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(EvalState.Board) && i < 5)
+        //            {
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
+
+        //                if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return false;
+        //                }
+        //                if (DeadSpaces.Contains(loc))
+        //                {
+        //                    return false;
+        //                }
+        //                else if (EvalState.Board.ContentsAt(loc).ContainsPiece
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && EvalState.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return false;
+        //                }
+
+        //                if (EvalState.Board.ContentsAt(loc).Control == PlayerId
+        //                    && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
+        //                    count++;
+        //                else
+        //                {
+        //                    if (AliveSpaces.Contains(loc)) alive++;
+        //                    //contiguous = false;
+        //                }
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column + i);
+
+        //            }
+
+        //            break;
+
+        //    }
+
+        //    if (count > 1
+        //        && (count + alive) > 4
+        //        && EvalState.ActivePlayerId == PlayerId)
+        //        return true;
+
+        //    return false;
+        //}
+
+        //#endregion
+
+        //#region "Positions"
+        //public static int ScorePositions(GameState State, int PlayerId)
+        //{
+        //    int Score = 0;
+        //    foreach (KeyValuePair<BoardLocation, Piece> p in State.Board.Pieces)
+        //        if (p.Value.PlayerId == PlayerId)
+        //            Score += ScorePosition(p.Key, State.Board);
+        //    return Score;
+        //}
+
+        //public static int ScorePosition(BoardLocation Location, GameBoard Board)
+        //{
+        //    int Score = 0;
+        //    if (Location.Row <= Board.Rows / 2) Score += Location.Row;
+        //    else Score += (Board.Rows - Location.Row);
+
+        //    if (Location.Column <= Board.Columns / 2) Score += Location.Column;
+        //    else Score += (Board.Columns - Location.Column);
+
+        //    return Score;
+        //}
+        //#endregion
+
+        //#region "Counting"
+        //public static int CountTheDead(GameState State)
+        //{
+        //    TurnEvaluator TE = new TurnEvaluator(State);
+        //    return TE.FindDeadLocations().Count;
+        //}
+        //public static int CountTheDead(GameBoard Board)
+        //{
+        //    TurnEvaluator TE = new TurnEvaluator(new GameState(Board, new GameOptions()));
+        //    return TE.FindDeadLocations().Count;
+        //}
+        //public static HashSet<BoardLocation> FindDeadLocations(GameState State)
+        //{
+        //    TurnEvaluator TE = new TurnEvaluator(State);
+        //    return TE.FindDeadLocations();
+        //}
+        //public static HashSet<BoardLocation> FindDeadLocations(GameBoard Board)
+        //{
+        //    TurnEvaluator TE = new TurnEvaluator(new GameState(Board, new GameOptions()));
+        //    return TE.FindDeadLocations();
+        //}
+
+        //public static bool DeadSpace(GameState State, BoardLocation Location, int PlayerId, List<BoardLocation> DeadLocations)
+        //{
+        //    if (!Location.OnBoard(State.Board))
+        //    {
+        //        return true;
+        //    }
+        //    if (!State.Board.ContentsAt(Location).TokensAllowEndHere)
+        //    {
+        //        return true;
+        //    }
+        //    if (DeadLocations.Contains(Location))
+        //    {
+        //        return true;
+        //    }
+        //    else if (State.Board.ContentsAt(Location).ContainsPiece
+        //        && !State.Board.ContentsAt(Location).TokensAllowPushing
+        //        && State.Board.ContentsAt(Location).Control != PlayerId)
+        //    {
+        //        return true;
+        //    }
+
+        //    return false;
+        //}
+
+        //public static Dictionary<int, int> CountFours(GameState State, int PlayerId, HashSet<BoardLocation> DeadLocations)
+        //{
+        //    Dictionary<int, int> Results = new Dictionary<int, int>();
+        //    Results.Add(0, 0);
+        //    Results.Add(1, 0);
+        //    Results.Add(2, 0);
+        //    Results.Add(3, 0);
+
+        //    for (var row = 0; row < State.Board.Rows; row++)
+        //    {
+        //        for (var col = 0; col < State.Board.Columns; col++)
+        //        {
+        //            foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
+        //            {
+        //                switch (Direction)
+        //                {
+        //                    case WinDirection.HORIZONTAL:
+        //                        if (State.Board.Columns - col < 4) continue; break;
+        //                    case WinDirection.VERTICAL:
+        //                        if (State.Board.Rows - row < 4) continue; break;
+        //                    case WinDirection.DIAGONAL_NE_SW:
+        //                        if (State.Board.Columns - col < 4) continue;
+        //                        if (row < State.Board.Rows - 4 - 1) continue; break;
+        //                    case WinDirection.DIAGONAL_NW_SE:
+        //                        if (State.Board.Columns - col < 4) continue;
+        //                        if (State.Board.Rows - row < 4) continue; break;
+
+        //                }
+
+        //                CountFour(State, new BoardLocation(row, col), Direction, PlayerId, DeadLocations, Results);
+        //            }
+        //        }
+        //    }
+        //    return Results;
+        //}
+        //public static int CountFour(GameState State, BoardLocation Location, WinDirection WinDirection, int PlayerId, HashSet<BoardLocation> DeadLocations, Dictionary<int, int> Results)
+        //{
+        //    int count = 0;
+        //    int i = 0;
+        //    bool contiguous = true;
+        //    BoardLocation loc;
+        //    switch (WinDirection)
+        //    {
+        //        case WinDirection.HORIZONTAL:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(State.Board) && i < 4)
+        //            {
+        //                if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadLocations.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (State.Board.ContentsAt(loc).ContainsPiece
+        //                    && !State.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && State.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                    contiguous = false;
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row, Location.Column + i);
+        //            }
+        //            break;
+
+        //        case WinDirection.VERTICAL:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(State.Board) && i < 4)
+        //            {
+
+        //                if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadLocations.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (State.Board.ContentsAt(loc).ContainsPiece
+        //                    && !State.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && State.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                    contiguous = false;
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column);
+
+        //            }
+
+        //            break;
+        //        case WinDirection.DIAGONAL_NE_SW:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(State.Board) && i < 4)
+        //            {
+
+        //                if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadLocations.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (State.Board.ContentsAt(loc).ContainsPiece
+        //                    && !State.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && State.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                    contiguous = false;
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row - i, Location.Column - i);
+
+        //            }
+        //            break;
+
+
+        //        case WinDirection.DIAGONAL_NW_SE:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(State.Board) && i < 4)
+        //            {
+
+        //                if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadLocations.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (State.Board.ContentsAt(loc).ContainsPiece
+        //                    && !State.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && State.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                    contiguous = false;
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column + i);
+
+        //            }
+        //            break;
+
+        //    }
+
+        //    int score = 0;
+        //    switch (count)
+        //    {
+        //        case 0:
+        //            Results[0]++;
+        //            break;
+        //        case 1:
+        //            Results[1]++;
+        //            break;
+        //        case 2:
+        //            Results[2]++;
+        //            break;
+        //        case 3:
+        //            Results[3]++;
+        //            break;
+        //    }
+
+
+        //    return score;
+        //}
+        //public static Dictionary<int, int> CountFives(GameState State, int PlayerId, HashSet<BoardLocation> DeadLocations)
+        //{
+        //    Dictionary<int, int> Results = new Dictionary<int, int>();
+        //    Results.Add(0, 0);
+        //    Results.Add(1, 0);
+        //    Results.Add(2, 0);
+        //    Results.Add(3, 0);
+
+        //    for (var row = 0; row < State.Board.Rows; row++)
+        //    {
+        //        for (var col = 0; col < State.Board.Columns; col++)
+        //        {
+        //            foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
+        //            {
+        //                switch (Direction)
+        //                {
+        //                    case WinDirection.HORIZONTAL:
+        //                        if (State.Board.Columns - col < 5) continue; break;
+        //                    case WinDirection.VERTICAL:
+        //                        if (State.Board.Rows - row < 5) continue; break;
+        //                    case WinDirection.DIAGONAL_NE_SW:
+        //                        if (State.Board.Columns - col < 5) continue;
+        //                        if (row < State.Board.Rows - 5 - 1) continue; break;
+        //                    case WinDirection.DIAGONAL_NW_SE:
+        //                        if (State.Board.Columns - col < 5) continue;
+        //                        if (State.Board.Rows - row < 5) continue; break;
+
+        //                }
+        //                CountFive(State, new BoardLocation(row, col), Direction, PlayerId, DeadLocations, Results);
+        //            }
+        //        }
+        //    }
+        //    return Results;
+        //}
+        //public static int CountFive(GameState State, BoardLocation Location, WinDirection WinDirection, int PlayerId, HashSet<BoardLocation> DeadLocations, Dictionary<int, int> Results)
+        //{
+        //    int count = 0;
+        //    int i = 0;
+        //    bool contiguous = true;
+        //    BoardLocation loc;
+        //    switch (WinDirection)
+        //    {
+        //        case WinDirection.HORIZONTAL:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(State.Board) && i < 5)
+        //            {
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
+
+        //                if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (DeadLocations.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+
+        //                else if (State.Board.ContentsAt(loc).ContainsPiece
+        //                    && !State.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && State.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                    contiguous = false;
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row, Location.Column + i);
+        //            }
+        //            break;
+
+        //        case WinDirection.VERTICAL:
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(State.Board) && i < 5)
+        //            {
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
+
+        //                if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadLocations.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (State.Board.ContentsAt(loc).ContainsPiece
+        //                    && !State.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && State.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                    contiguous = false;
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column);
+
+        //            }
+
+        //            break;
+        //        case WinDirection.DIAGONAL_NE_SW:
+        //            return 0;
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(State.Board) && i < 5)
+        //            {
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
+
+        //                if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadLocations.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (State.Board.ContentsAt(loc).ContainsPiece
+        //                    && !State.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && State.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                    contiguous = false;
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row - i, Location.Column + i);
+
+        //            }
+        //            break;
+
+
+        //        case WinDirection.DIAGONAL_NW_SE:
+        //            return 0;
+        //            loc = new BoardLocation(Location.Row, Location.Column);
+        //            while (loc.OnBoard(State.Board) && i < 5)
+        //            {
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
+
+        //                if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
+        //                {
+        //                    return 0;
+        //                }
+        //                if (DeadLocations.Contains(loc))
+        //                {
+        //                    return 0;
+        //                }
+        //                else if (State.Board.ContentsAt(loc).ContainsPiece
+        //                    && !State.Board.ContentsAt(loc).TokensAllowPushing
+        //                    && State.Board.ContentsAt(loc).Control != PlayerId)
+        //                {
+        //                    return 0;
+        //                }
+
+        //                if (State.Board.ContentsAt(loc).Control == PlayerId)
+        //                    count++;
+        //                else
+        //                    contiguous = false;
+
+        //                i++;
+        //                loc = new BoardLocation(Location.Row + i, Location.Column + i);
+
+        //            }
+        //            break;
+
+        //    }
+
+        //    int score = 0;
+        //    switch (count)
+        //    {
+        //        case 0:
+        //            Results[0]++;
+        //            break;
+        //        case 1:
+        //            Results[1]++;
+        //            break;
+        //        case 2:
+        //            Results[2]++;
+        //            break;
+        //        case 3:
+        //            Results[3]++;
+        //            break;
+        //    }
+
+        //    return score;
+        //}
+        //#endregion
+
+
+
+        //#region "Look Ahead"
+
+        ////A 'Setup' occurs when there are 2 or more ways to win.
+        ////   Active player does a pass action
+        ////   Look for how many moves an opponent can take to win. 
+        ////      if greater than 1, it means that there is likely a 'Setup'
+        ////   == GOOD FOR ACTIVE PLAYER
+
+        public bool PossibleSetup()
         {
-            int Score = 0;
-            for (var row = 0; row < EvalState.Board.Rows; row++)
+            GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove()));
+            AITurnEvaluator AITE = new AITurnEvaluator(GSReview);
+            if (AITE.WinningTurns.Count > 1)
             {
-                for (var col = 0; col < EvalState.Board.Columns; col++)
-                {
-                    foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
-                    {
-                        switch (Direction)
-                        {
-                            case WinDirection.HORIZONTAL:
-                                if (EvalState.Board.Columns - col < 5) continue; break;
-                            case WinDirection.VERTICAL:
-                                if (EvalState.Board.Rows - row < 5) continue; break;
-
-                            case WinDirection.DIAGONAL_NW_SE:
-                            case WinDirection.DIAGONAL_NE_SW:
-                                continue;
-                        }
-                        Score += ScoreFive(new BoardLocation(row, col), Direction, PlayerId);
-                    }
-                }
-            }
-            return Score;
-        }
-        public string ReviewFives(int PlayerId)
-        {
-            int Score = 0;
-            StringBuilder output = new StringBuilder();
-            for (var row = 0; row < EvalState.Board.Rows; row++)
-            {
-                for (var col = 0; col < EvalState.Board.Columns; col++)
-                {
-                    foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
-                    {
-                        switch (Direction)
-                        {
-                            case WinDirection.HORIZONTAL:
-                                if (EvalState.Board.Columns - col < 5) continue; break;
-                            case WinDirection.VERTICAL:
-                                if (EvalState.Board.Rows - row < 5) continue; break;
-                        }
-                        Score += ScoreFive(new BoardLocation(row, col), Direction, PlayerId);
-                        output.AppendLine(row + "," + col + Direction.ToString() + ':' + Score);
-                    }
-                }
-            }
-            return output.ToString();
-        }
-
-        public int ScoreFour(BoardLocation Location, WinDirection WinDirection, int PlayerId)
-        {
-            int count = 0;
-            int alive = 0;
-            int i = 0;
-            bool contiguous = true;
-            BoardLocation loc;
-            switch (WinDirection)
-            {
-                case WinDirection.HORIZONTAL:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 4)
-                    {
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                        {
-                            contiguous = false;
-                            if (AliveSpaces.Contains(loc)) alive++;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row, Location.Column + i);
-                    }
-                    break;
-
-                case WinDirection.VERTICAL:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 4)
-                    {
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                        {
-                            contiguous = false;
-                            if (AliveSpaces.Contains(loc)) alive++;
-                        }
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column);
-
-                    }
-
-                    break;
-                case WinDirection.DIAGONAL_NE_SW:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 4)
-                    {
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                        {
-                            contiguous = false;
-                            if (AliveSpaces.Contains(loc)) alive++;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row - i, Location.Column + i);
-
-                    }
-                    break;
-
-
-                case WinDirection.DIAGONAL_NW_SE:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 4)
-                    {
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                        {
-                            contiguous = false;
-                            if (AliveSpaces.Contains(loc)) alive++;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column + i);
-
-                    }
-                    break;
-
-            }
-
-            int score = 0;
-            switch (count)
-            {
-                case 0:
-                    score = 1;
-                    break;
-                case 1:
-                    score = 2;
-                    break;
-                case 2:
-                    score = 9;
-                    if (contiguous) score += 4;
-                    score += alive;
-                    break;
-                case 3:
-                    score = 20;
-                    if (contiguous) score += 20;
-                    if (alive > 0) score += 50;
-                    break;
-            }
-
-
-            return score;
-        }
-        public int ScoreFive(BoardLocation Location, WinDirection WinDirection, int PlayerId)
-        {
-            int multiplier = 0;
-            int count = 0;
-            int i = 0;
-            bool contiguous = true;
-            int alive = 0;
-            BoardLocation loc;
-            switch (WinDirection)
-            {
-                case WinDirection.HORIZONTAL:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 5)
-                    {
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return 0;
-                        }
-
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                        {
-                            if (AliveSpaces.Contains(loc)) alive++;
-                            contiguous = false;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row, Location.Column + i);
-                    }
-                    multiplier = 2;
-
-                    break;
-
-                case WinDirection.VERTICAL:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 5)
-                    {
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                        {
-                            if (AliveSpaces.Contains(loc)) alive++;
-                            contiguous = false;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column);
-
-                    }
-                    multiplier = 2;
-
-                    break;
-
-                case WinDirection.DIAGONAL_NE_SW:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 5)
-                    {
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                        {
-                            if (AliveSpaces.Contains(loc)) alive++;
-                            contiguous = false;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column - i);
-
-                    }
-                    multiplier = 0;
-
-                    break;
-
-
-                case WinDirection.DIAGONAL_NW_SE:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 5)
-                    {
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                        {
-                            if (AliveSpaces.Contains(loc)) alive++;
-                            contiguous = false;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column + i);
-
-                    }
-                    multiplier = 0;
-
-                    break;
-
-            }
-
-            int score = 0;
-            switch (count)
-            {
-                case 0:
-                    score = 1;
-                    break;
-                case 1:
-                    score = 2;
-                    break;
-                case 2:
-                    score = 50;
-                    //if (contiguous) score += 50;
-                    if (alive > 2)
-                    {
-                        if (EvalState.ActivePlayerId == PlayerId)
-                            score += 200;
-                        else
-                            score += 50;
-                    }
-                    break;
-                case 3:
-                    score = 100;
-                    if (alive > 1)
-                        if (EvalState.ActivePlayerId != PlayerId)
-                            score += 400;
-                        else
-                            score += 100;
-
-                    break;
-            }
-            score = score * multiplier;
-
-            return score;
-        }
-
-        public bool FindFiveSetup(BoardLocation Location, WinDirection WinDirection, int PlayerId)
-        {
-            int count = 0;
-            int i = 0;
-            int alive = 0;
-            BoardLocation loc;
-            switch (WinDirection)
-            {
-                case WinDirection.HORIZONTAL:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 5)
-                    {
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return false;
-                        }
-
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return false;
-                        }
-
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return false;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
-                        {
-                            count++;
-                        }
-                        else
-                        {
-                            if (AliveSpaces.Contains(loc)) alive++;
-                            //contiguous = false;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row, Location.Column + i);
-                    }
-
-                    break;
-
-                case WinDirection.VERTICAL:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 5)
-                    {
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return false;
-                        }
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return false;
-                        }
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return false;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
-                            count++;
-                        else
-                        {
-                            if (AliveSpaces.Contains(loc)) alive++;
-                            //contiguous = false;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column);
-
-                    }
-                    break;
-
-                case WinDirection.DIAGONAL_NE_SW:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 5)
-                    {
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return false;
-                        }
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return false;
-                        }
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return false;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
-                            count++;
-                        else
-                        {
-                            if (AliveSpaces.Contains(loc)) alive++;
-                            //contiguous = false;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column - i);
-
-                    }
-                    break;
-
-
-                case WinDirection.DIAGONAL_NW_SE:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(EvalState.Board) && i < 5)
-                    {
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return false;
-
-                        if (!EvalState.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return false;
-                        }
-                        if (DeadSpaces.Contains(loc))
-                        {
-                            return false;
-                        }
-                        else if (EvalState.Board.ContentsAt(loc).ContainsPiece
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing
-                            && EvalState.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return false;
-                        }
-
-                        if (EvalState.Board.ContentsAt(loc).Control == PlayerId
-                            && !EvalState.Board.ContentsAt(loc).TokensAllowPushing)
-                            count++;
-                        else
-                        {
-                            if (AliveSpaces.Contains(loc)) alive++;
-                            //contiguous = false;
-                        }
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column + i);
-
-                    }
-
-                    break;
-
-            }
-
-            if (count > 1
-                && (count + alive) > 4
-                && EvalState.ActivePlayerId == PlayerId)
                 return true;
+            }
 
             return false;
         }
-
-        #endregion
-
-        #region "Positions"
-        public static int ScorePositions(GameState State, int PlayerId)
-        {
-            int Score = 0;
-            foreach (KeyValuePair<BoardLocation, Piece> p in State.Board.Pieces)
-                if (p.Value.PlayerId == PlayerId)
-                    Score += ScorePosition(p.Key, State.Board);
-            return Score;
-        }
-
-        public static int ScorePosition(BoardLocation Location, GameBoard Board)
-        {
-            int Score = 0;
-            if (Location.Row <= Board.Rows / 2) Score += Location.Row;
-            else Score += (Board.Rows - Location.Row);
-
-            if (Location.Column <= Board.Columns / 2) Score += Location.Column;
-            else Score += (Board.Columns - Location.Column);
-
-            return Score;
-        }
-        #endregion
-
-        #region "Counting"
-        public static int CountTheDead(GameState State)
-        {
-            TurnEvaluator TE = new TurnEvaluator(State);
-            return TE.FindDeadLocations().Count;
-        }
-        public static int CountTheDead(GameBoard Board)
-        {
-            TurnEvaluator TE = new TurnEvaluator(new GameState(Board, new GameOptions()));
-            return TE.FindDeadLocations().Count;
-        }
-        public static HashSet<BoardLocation> FindDeadLocations(GameState State)
-        {
-            TurnEvaluator TE = new TurnEvaluator(State);
-            return TE.FindDeadLocations();
-        }
-        public static HashSet<BoardLocation> FindDeadLocations(GameBoard Board)
-        {
-            TurnEvaluator TE = new TurnEvaluator(new GameState(Board, new GameOptions()));
-            return TE.FindDeadLocations();
-        }
-
-        public static bool DeadSpace(GameState State, BoardLocation Location, int PlayerId, List<BoardLocation> DeadLocations)
-        {
-            if (!Location.OnBoard(State.Board))
-            {
-                return true;
-            }
-            if (!State.Board.ContentsAt(Location).TokensAllowEndHere)
-            {
-                return true;
-            }
-            if (DeadLocations.Contains(Location))
-            {
-                return true;
-            }
-            else if (State.Board.ContentsAt(Location).ContainsPiece
-                && !State.Board.ContentsAt(Location).TokensAllowPushing
-                && State.Board.ContentsAt(Location).Control != PlayerId)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static Dictionary<int, int> CountFours(GameState State, int PlayerId, HashSet<BoardLocation> DeadLocations)
-        {
-            Dictionary<int, int> Results = new Dictionary<int, int>();
-            Results.Add(0, 0);
-            Results.Add(1, 0);
-            Results.Add(2, 0);
-            Results.Add(3, 0);
-
-            for (var row = 0; row < State.Board.Rows; row++)
-            {
-                for (var col = 0; col < State.Board.Columns; col++)
-                {
-                    foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
-                    {
-                        switch (Direction)
-                        {
-                            case WinDirection.HORIZONTAL:
-                                if (State.Board.Columns - col < 4) continue; break;
-                            case WinDirection.VERTICAL:
-                                if (State.Board.Rows - row < 4) continue; break;
-                            case WinDirection.DIAGONAL_NE_SW:
-                                if (State.Board.Columns - col < 4) continue;
-                                if (row < State.Board.Rows - 4 - 1) continue; break;
-                            case WinDirection.DIAGONAL_NW_SE:
-                                if (State.Board.Columns - col < 4) continue;
-                                if (State.Board.Rows - row < 4) continue; break;
-
-                        }
-
-                        CountFour(State, new BoardLocation(row, col), Direction, PlayerId, DeadLocations, Results);
-                    }
-                }
-            }
-            return Results;
-        }
-        public static int CountFour(GameState State, BoardLocation Location, WinDirection WinDirection, int PlayerId, HashSet<BoardLocation> DeadLocations, Dictionary<int, int> Results)
-        {
-            int count = 0;
-            int i = 0;
-            bool contiguous = true;
-            BoardLocation loc;
-            switch (WinDirection)
-            {
-                case WinDirection.HORIZONTAL:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(State.Board) && i < 4)
-                    {
-                        if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadLocations.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (State.Board.ContentsAt(loc).ContainsPiece
-                            && !State.Board.ContentsAt(loc).TokensAllowPushing
-                            && State.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (State.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                            contiguous = false;
-
-                        i++;
-                        loc = new BoardLocation(Location.Row, Location.Column + i);
-                    }
-                    break;
-
-                case WinDirection.VERTICAL:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(State.Board) && i < 4)
-                    {
-
-                        if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadLocations.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (State.Board.ContentsAt(loc).ContainsPiece
-                            && !State.Board.ContentsAt(loc).TokensAllowPushing
-                            && State.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (State.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                            contiguous = false;
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column);
-
-                    }
-
-                    break;
-                case WinDirection.DIAGONAL_NE_SW:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(State.Board) && i < 4)
-                    {
-
-                        if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadLocations.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (State.Board.ContentsAt(loc).ContainsPiece
-                            && !State.Board.ContentsAt(loc).TokensAllowPushing
-                            && State.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (State.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                            contiguous = false;
-
-                        i++;
-                        loc = new BoardLocation(Location.Row - i, Location.Column - i);
-
-                    }
-                    break;
-
-
-                case WinDirection.DIAGONAL_NW_SE:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(State.Board) && i < 4)
-                    {
-
-                        if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadLocations.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (State.Board.ContentsAt(loc).ContainsPiece
-                            && !State.Board.ContentsAt(loc).TokensAllowPushing
-                            && State.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (State.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                            contiguous = false;
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column + i);
-
-                    }
-                    break;
-
-            }
-
-            int score = 0;
-            switch (count)
-            {
-                case 0:
-                    Results[0]++;
-                    break;
-                case 1:
-                    Results[1]++;
-                    break;
-                case 2:
-                    Results[2]++;
-                    break;
-                case 3:
-                    Results[3]++;
-                    break;
-            }
-
-
-            return score;
-        }
-        public static Dictionary<int, int> CountFives(GameState State, int PlayerId, HashSet<BoardLocation> DeadLocations)
-        {
-            Dictionary<int, int> Results = new Dictionary<int, int>();
-            Results.Add(0, 0);
-            Results.Add(1, 0);
-            Results.Add(2, 0);
-            Results.Add(3, 0);
-
-            for (var row = 0; row < State.Board.Rows; row++)
-            {
-                for (var col = 0; col < State.Board.Columns; col++)
-                {
-                    foreach (WinDirection Direction in Enum.GetValues(typeof(WinDirection)))
-                    {
-                        switch (Direction)
-                        {
-                            case WinDirection.HORIZONTAL:
-                                if (State.Board.Columns - col < 5) continue; break;
-                            case WinDirection.VERTICAL:
-                                if (State.Board.Rows - row < 5) continue; break;
-                            case WinDirection.DIAGONAL_NE_SW:
-                                if (State.Board.Columns - col < 5) continue;
-                                if (row < State.Board.Rows - 5 - 1) continue; break;
-                            case WinDirection.DIAGONAL_NW_SE:
-                                if (State.Board.Columns - col < 5) continue;
-                                if (State.Board.Rows - row < 5) continue; break;
-
-                        }
-                        CountFive(State, new BoardLocation(row, col), Direction, PlayerId, DeadLocations, Results);
-                    }
-                }
-            }
-            return Results;
-        }
-        public static int CountFive(GameState State, BoardLocation Location, WinDirection WinDirection, int PlayerId, HashSet<BoardLocation> DeadLocations, Dictionary<int, int> Results)
-        {
-            int count = 0;
-            int i = 0;
-            bool contiguous = true;
-            BoardLocation loc;
-            switch (WinDirection)
-            {
-                case WinDirection.HORIZONTAL:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(State.Board) && i < 5)
-                    {
-                        if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
-
-                        if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-
-                        if (DeadLocations.Contains(loc))
-                        {
-                            return 0;
-                        }
-
-                        else if (State.Board.ContentsAt(loc).ContainsPiece
-                            && !State.Board.ContentsAt(loc).TokensAllowPushing
-                            && State.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (State.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                            contiguous = false;
-
-                        i++;
-                        loc = new BoardLocation(Location.Row, Location.Column + i);
-                    }
-                    break;
-
-                case WinDirection.VERTICAL:
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(State.Board) && i < 5)
-                    {
-                        if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
-
-                        if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadLocations.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (State.Board.ContentsAt(loc).ContainsPiece
-                            && !State.Board.ContentsAt(loc).TokensAllowPushing
-                            && State.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (State.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                            contiguous = false;
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column);
-
-                    }
-
-                    break;
-                case WinDirection.DIAGONAL_NE_SW:
-                    return 0;
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(State.Board) && i < 5)
-                    {
-                        if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
-
-                        if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadLocations.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (State.Board.ContentsAt(loc).ContainsPiece
-                            && !State.Board.ContentsAt(loc).TokensAllowPushing
-                            && State.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (State.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                            contiguous = false;
-
-                        i++;
-                        loc = new BoardLocation(Location.Row - i, Location.Column + i);
-
-                    }
-                    break;
-
-
-                case WinDirection.DIAGONAL_NW_SE:
-                    return 0;
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(State.Board) && i < 5)
-                    {
-                        if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
-
-                        if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadLocations.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (State.Board.ContentsAt(loc).ContainsPiece
-                            && !State.Board.ContentsAt(loc).TokensAllowPushing
-                            && State.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
-
-                        if (State.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                            contiguous = false;
-
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column + i);
-
-                    }
-                    break;
-
-            }
-
-            int score = 0;
-            switch (count)
-            {
-                case 0:
-                    Results[0]++;
-                    break;
-                case 1:
-                    Results[1]++;
-                    break;
-                case 2:
-                    Results[2]++;
-                    break;
-                case 3:
-                    Results[3]++;
-                    break;
-            }
-
-            return score;
-        }
-        #endregion
-
-
-
-        #region "Look Ahead"
-
-        //A 'Setup' occurs when there are 2 or more ways to win.
-        //   Active player does a pass action
-        //   Look for how many moves an opponent can take to win. 
-        //      if greater than 1, it means that there is likely a 'Setup'
-        //   == GOOD FOR ACTIVE PLAYER
 
         public bool IsASetup()
         {
-            GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove() ));
+            GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove()));
             AITurnEvaluator AITE = new AITurnEvaluator(GSReview);
-            if (AITE.WinningTurns.Count > 1) return true;
+
+            //Check if unique states. Not perfect.  
+            //Possible to block 2 winning moves with one 
+            //Possible to only have one resultant state with two different moves.
+
+            if (AITE.WinningTurns.Count > 1)
+            {
+                List<string> WinningStates = new List<string>();
+                foreach (PlayerTurn t in AITE.WinningTurns)
+                {
+                    GameState GS = AITE.Evaluator.EvaluateTurn(t);
+                    if (!WinningStates.Contains(GS.StateString)) WinningStates.Add(GS.StateString);
+                    if (WinningStates.Count > 1) return true;
+                }
+            }
 
             return false;
         }
@@ -2099,121 +2280,138 @@ namespace FourzyGameModel.Model
             return false;
         }
 
-
-        public List<SimpleMoveSequence> LookAhead(int SearchDepth)
+        public bool IsUnstoppableThreat()
         {
-            Dictionary<int, List<SimpleMoveSequence>> StateBucket = new Dictionary<int, List<SimpleMoveSequence>>();
-            Dictionary<int, List<string>> HashBucket = new Dictionary<int, List<string>>();
+            GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove()));
+            AITurnEvaluator AITE = new AITurnEvaluator(GSReview);
+            if (AITE.WinningTurns.Count == 0) return false;
 
-
-            StateBucket[0] = new List<SimpleMoveSequence>();
-            StateBucket[0].Add(new SimpleMoveSequence(EvalState));
-            HashBucket[0] = new List<string>();
-            HashBucket[0].Add(EvalState.StateString);
-
-            TurnEvaluator TE = null;
-            for (int d = 1; d <= SearchDepth; d++)
+            Evaluator.Reset();
+            foreach (SimpleMove m in Evaluator.GetAvailableSimpleMoves())
             {
-                StateBucket[d] = new List<SimpleMoveSequence>();
-                HashBucket[d] = new List<string>();
-
-                int evaluated_states = 0;
-                foreach (SimpleMoveSequence S in StateBucket[d - 1])
-                {
-
-                    //don't evaluate completed states.
-                    if (S.State.WinnerId >= 0) if (!HashBucket[d].Contains(S.State.StateString))
-                        {
-                            HashBucket[d].Add(S.State.StateString);
-                            StateBucket[d].Add(S);
-                        }
-
-                    TE = new TurnEvaluator(S.State);
-                    foreach (SimpleMove m in TE.GetAvailableSimpleMoves())
-                    {
-                        GameState GSTest = TE.EvaluateTurn(m);
-                        evaluated_states++;
-                        string id = GSTest.StateString;
-                        if (!HashBucket[d].Contains(id))
-                        {
-                            HashBucket[d].Add(id);
-
-                            SimpleMoveSequence SMS = new SimpleMoveSequence(S);
-                            SMS.Moves.Add(m);
-                            SMS.State = GSTest;
-
-                            StateBucket[d].Add(SMS);
-                        }
-                    }
-                }
+                GSReview = Evaluator.EvaluateTurn(m);
+                TurnEvaluator WinEvaluator = new TurnEvaluator(GSReview);
+                if (WinEvaluator.GetFirstWinningMove() == null) return false;
             }
 
-            return StateBucket[SearchDepth];
+            return true;
         }
 
-        public List<SimpleMoveSequence> LookAheadWithPriority(int SearchDepth, int MovesPerLevel)
-        {
-            Dictionary<int, List<SimpleMoveSequence>> StateBucket = new Dictionary<int, List<SimpleMoveSequence>>();
-            Dictionary<int, List<string>> HashBucket = new Dictionary<int, List<string>>();
 
-            StateBucket[0] = new List<SimpleMoveSequence>();
-            StateBucket[0].Add(new SimpleMoveSequence(EvalState));
-            HashBucket[0] = new List<string>();
-            HashBucket[0].Add(EvalState.StateString);
+        //public List<SimpleMoveSequence> LookAhead(int SearchDepth)
+        //{
+        //    Dictionary<int, List<SimpleMoveSequence>> StateBucket = new Dictionary<int, List<SimpleMoveSequence>>();
+        //    Dictionary<int, List<string>> HashBucket = new Dictionary<int, List<string>>();
 
-            for (int d = 1; d <= SearchDepth; d++)
-            {
-                StateBucket[d] = new List<SimpleMoveSequence>();
-                HashBucket[d] = new List<string>();
 
-                int evaluated_states = 0;
-                foreach (SimpleMoveSequence S in StateBucket[d - 1])
-                {
-                    string id = S.State.StateString;
-                    //don't evaluate completed states.
-                    if (S.State.WinnerId >= 0)
-                        if (!HashBucket[d].Contains(id))
-                        {
-                            HashBucket[d].Add(id);
-                            StateBucket[d].Add(S);
-                        }
+        //    StateBucket[0] = new List<SimpleMoveSequence>();
+        //    StateBucket[0].Add(new SimpleMoveSequence(EvalState));
+        //    HashBucket[0] = new List<string>();
+        //    HashBucket[0].Add(EvalState.StateString);
 
-                    List<SimpleMove> Moves = null;
-                    TurnEvaluator TE = null;
-                    if (d % 2 == 0)
-                    {
-                        AITurnEvaluator AITE = new AITurnEvaluator(S.State);
-                        Moves = AITE.GetTopOkMoves(1);
-                        TE = AITE.Evaluator;
-                    }
-                    else
-                    {
-                        TE = new TurnEvaluator(S.State);
-                        Moves = TE.GetAvailableSimpleMoves();
-                    }
+        //    TurnEvaluator TE = null;
+        //    for (int d = 1; d <= SearchDepth; d++)
+        //    {
+        //        StateBucket[d] = new List<SimpleMoveSequence>();
+        //        HashBucket[d] = new List<string>();
 
-                    if (Moves == null) continue;
-                    foreach (SimpleMove m in Moves)
-                    {
-                        GameState GSTest = TE.EvaluateTurn(m);
-                        evaluated_states++;
-                        id = GSTest.StateString;
-                        if (!HashBucket[d].Contains(id))
-                        {
-                            HashBucket[d].Add(id);
+        //        int evaluated_states = 0;
+        //        foreach (SimpleMoveSequence S in StateBucket[d - 1])
+        //        {
 
-                            SimpleMoveSequence SMS = new SimpleMoveSequence(S);
-                            SMS.Moves.Add(m);
-                            SMS.State = GSTest;
+        //            //don't evaluate completed states.
+        //            if (S.State.WinnerId >= 0) if (!HashBucket[d].Contains(S.State.StateString))
+        //                {
+        //                    HashBucket[d].Add(S.State.StateString);
+        //                    StateBucket[d].Add(S);
+        //                }
 
-                            StateBucket[d].Add(SMS);
-                        }
-                    }
-                }
-            }
+        //            TE = new TurnEvaluator(S.State);
+        //            foreach (SimpleMove m in TE.GetAvailableSimpleMoves())
+        //            {
+        //                GameState GSTest = TE.EvaluateTurn(m);
+        //                evaluated_states++;
+        //                string id = GSTest.StateString;
+        //                if (!HashBucket[d].Contains(id))
+        //                {
+        //                    HashBucket[d].Add(id);
 
-            return StateBucket[SearchDepth];
-        }
+        //                    SimpleMoveSequence SMS = new SimpleMoveSequence(S);
+        //                    SMS.Moves.Add(m);
+        //                    SMS.State = GSTest;
+
+        //                    StateBucket[d].Add(SMS);
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return StateBucket[SearchDepth];
+        //}
+
+        //public List<SimpleMoveSequence> LookAheadWithPriority(int SearchDepth, int MovesPerLevel)
+        //{
+        //    Dictionary<int, List<SimpleMoveSequence>> StateBucket = new Dictionary<int, List<SimpleMoveSequence>>();
+        //    Dictionary<int, List<string>> HashBucket = new Dictionary<int, List<string>>();
+
+        //    StateBucket[0] = new List<SimpleMoveSequence>();
+        //    StateBucket[0].Add(new SimpleMoveSequence(EvalState));
+        //    HashBucket[0] = new List<string>();
+        //    HashBucket[0].Add(EvalState.StateString);
+
+        //    for (int d = 1; d <= SearchDepth; d++)
+        //    {
+        //        StateBucket[d] = new List<SimpleMoveSequence>();
+        //        HashBucket[d] = new List<string>();
+
+        //        int evaluated_states = 0;
+        //        foreach (SimpleMoveSequence S in StateBucket[d - 1])
+        //        {
+        //            string id = S.State.StateString;
+        //            //don't evaluate completed states.
+        //            if (S.State.WinnerId >= 0)
+        //                if (!HashBucket[d].Contains(id))
+        //                {
+        //                    HashBucket[d].Add(id);
+        //                    StateBucket[d].Add(S);
+        //                }
+
+        //            List<SimpleMove> Moves = null;
+        //            TurnEvaluator TE = null;
+        //            if (d % 2 == 0)
+        //            {
+        //                AITurnEvaluator AITE = new AITurnEvaluator(S.State);
+        //                Moves = AITE.GetTopOkMoves(1);
+        //                TE = AITE.Evaluator;
+        //            }
+        //            else
+        //            {
+        //                TE = new TurnEvaluator(S.State);
+        //                Moves = TE.GetAvailableSimpleMoves();
+        //            }
+
+        //            if (Moves == null) continue;
+        //            foreach (SimpleMove m in Moves)
+        //            {
+        //                GameState GSTest = TE.EvaluateTurn(m);
+        //                evaluated_states++;
+        //                id = GSTest.StateString;
+        //                if (!HashBucket[d].Contains(id))
+        //                {
+        //                    HashBucket[d].Add(id);
+
+        //                    SimpleMoveSequence SMS = new SimpleMoveSequence(S);
+        //                    SMS.Moves.Add(m);
+        //                    SMS.State = GSTest;
+
+        //                    StateBucket[d].Add(SMS);
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return StateBucket[SearchDepth];
+        //}
 
         #endregion
     }

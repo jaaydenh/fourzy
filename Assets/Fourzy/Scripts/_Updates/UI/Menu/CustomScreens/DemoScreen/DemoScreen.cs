@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tween;
-using Fourzy._Updates.UI.Helpers;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -10,7 +9,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public class DemoScreen : MenuScreen
     {
         public CanvasGroup context;
-        public ButtonExtended placementStyleButton;
         public PositionTween buttonPositionTween;
 
         private bool isContextShown = false;
@@ -29,12 +27,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             buttonPositionTween.PlayBackward(false);
         }
 
-        public void ResetPuzzles()
-        {
-            GameContentManager.Instance.ResetFastPuzzles();
-            GameContentManager.Instance.ResetPuzzlePacks();
-            GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
-        }
+        public void ResetPuzzles() => GameManager.Instance.ResetGames();
 
         public void ForceAIPresentation()
         {
@@ -78,13 +71,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void CompleteProgress() => GameContentManager.Instance.progressionMaps[0].CompleteAll();
 
-        public void TogglePiecesPlacementStyle()
-        {
-            if (GameManager.Instance.placementStyle == GameManager.PlacementStyle.DEFAULT)
-                GameManager.Instance.placementStyle = GameManager.PlacementStyle.DEMO_STYLE;
-            else
-                GameManager.Instance.placementStyle = GameManager.PlacementStyle.DEFAULT;
-        }
+        public void SetPlacementStyle(int value) => GameManager.Instance.placementStyle = (GameManager.PlacementStyle)value;
 
         public void Toggle()
         {
@@ -97,30 +84,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (!isContextShown) FourzyMainMenuController.instance.currentScreen.Open();
         }
 
-        private void SetPlacementButtonState(bool state)
-        {
-            if (state)
-            {
-                if (GameManager.Instance.activeGame != null)
-                {
-                    switch (GameManager.Instance.activeGame._Type)
-                    {
-                        case GameType.REALTIME:
-                        case GameType.TURN_BASED:
-
-                            break;
-
-                        default:
-                            placementStyleButton.SetActive(true);
-
-                            break;
-                    }
-                }
-            }
-            else
-                placementStyleButton.SetActive(false);
-        }
-
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -130,8 +93,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GameManager.onSceneChanged += OnSceneChanged;
 
             if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) OnDemo(true);
-
-            SetPlacementButtonState(false);
         }
 
         private void OnDemo(bool state)
@@ -142,7 +103,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnSceneChanged(string sceneName)
         {
-            SetPlacementButtonState(sceneName == Constants.GAMEPLAY_SCENE_NAME);
+
         }
     }
 }

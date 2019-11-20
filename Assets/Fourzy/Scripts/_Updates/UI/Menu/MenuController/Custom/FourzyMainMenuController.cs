@@ -72,7 +72,7 @@ namespace Fourzy._Updates.UI.Menu
                 switch (events.data["openScreen"].ToString())
                 {
                     case "puzzlesScreen":
-                        MenuScreen puzzleSelectScreen = GetScreen<PuzzleSelectionScreen>();
+                        MenuScreen puzzleSelectScreen = GetOrAddScreen<PuzzleSelectionScreen>();
 
                         if (currentScreen != puzzleSelectScreen)
                         {
@@ -83,7 +83,7 @@ namespace Fourzy._Updates.UI.Menu
                         break;
 
                     case "tutorialProgressionMap":
-                        ProgressionMapScreen progressionMapScreen = GetScreen<ProgressionMapScreen>();
+                        ProgressionMapScreen progressionMapScreen = GetOrAddScreen<ProgressionMapScreen>();
 
                         if (currentScreen != progressionMapScreen)
                         {
@@ -107,7 +107,7 @@ namespace Fourzy._Updates.UI.Menu
             if (PlayerPrefsWrapper.GetTutorialFinished(HardcodedTutorials.tutorials[0].name))
             {
                 //only force news if onboarding was finished
-                if (GameManager.Instance.unreadNews.Count > 0) GetScreen<NewsPromptScreen>()._Prompt();
+                if (GameManager.Instance.unreadNews.Count > 0) GetOrAddScreen<NewsPromptScreen>()._Prompt();
             }
         }
     }

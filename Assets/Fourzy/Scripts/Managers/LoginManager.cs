@@ -389,6 +389,9 @@ namespace Fourzy
             OnLoginMessage?.Invoke("Device Authentication Success: " + result.AccountInfo.TitleInfo.DisplayName);
 
             UserManager.Instance.SetDisplayName(result.AccountInfo.TitleInfo.DisplayName, false);
+
+            //update language?
+
         }
 
         private void PlayFabLoginError(PlayFabError error)

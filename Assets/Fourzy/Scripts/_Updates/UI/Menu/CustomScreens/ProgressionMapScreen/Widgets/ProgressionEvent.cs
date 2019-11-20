@@ -287,14 +287,14 @@ namespace Fourzy._Updates.UI.Widgets
                     {
                         case PackType.AI_PACK:
                         case PackType.BOSS_AI_PACK:
-                            menuScreen.menuController.GetScreen<VSGamePrompt>().Prompt(PuzzlePack);
+                            menuScreen.menuController.GetOrAddScreen<VSGamePrompt>().Prompt(PuzzlePack);
 
                             break;
 
                         case PackType.PUZZLE_PACK:
                             //only open prepack prompt if there are any rewards in puzzle pack
                             //if (PuzzlePack.allRewards.Count > 0)
-                                menuScreen.menuController.GetScreen<PrePackPrompt>().Prompt(PuzzlePack);
+                                menuScreen.menuController.GetOrAddScreen<PrePackPrompt>().Prompt(PuzzlePack);
                             //else
                             //    PuzzlePack.StartNextUnsolvedPuzzle();
 
@@ -310,7 +310,7 @@ namespace Fourzy._Updates.UI.Widgets
                     switch (otherRewardID)
                     {
                         case Constants.GAME_MODE_FAST_PUZZLES:
-                            menuScreen.menuController.GetScreen<PromptScreen>().Prompt("Puzzles Ladder",
+                            menuScreen.menuController.GetOrAddScreen<PromptScreen>().Prompt("Puzzles Ladder",
                                 "Compete with other to solve as many puzzle boards in week as possible!",
                                 "PLAY",
                                 null,
@@ -324,7 +324,7 @@ namespace Fourzy._Updates.UI.Widgets
                             break;
 
                         case Constants.GAME_MODE_GAUNTLET_GAME:
-                            menuScreen.menuController.GetScreen<GauntletIntroScreen>()._Prompt();
+                            menuScreen.menuController.GetOrAddScreen<GauntletIntroScreen>()._Prompt();
 
                             break;
                     }

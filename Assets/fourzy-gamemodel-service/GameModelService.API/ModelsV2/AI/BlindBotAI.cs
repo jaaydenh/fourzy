@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,8 +22,12 @@ namespace FourzyGameModel.Model
             foreach (Direction d in TokenConstants.GetDirections())
             {
                 List<SimpleMove> DirectionMoves = TE.GetAvailableSimpleMoves(d);
-                DirectionMoves = DirectionMoves.OrderBy(a => System.Guid.NewGuid()).ToList();
-                Moves.AddRange(DirectionMoves.Take(EvalState.Board.Rows - 2));
+                //Guid sorting is too slow
+                //DirectionMoves = DirectionMoves.OrderBy(a => System.Guid.NewGuid()).ToList();
+                //Moves.AddRange(DirectionMoves.Take(EvalState.Board.Rows - 2));
+                int Vision = DirectionMoves.Count;
+                if (Vision > 2) Vision -= 2;
+                Moves.AddRange(EvalState.Board.Random.RandomSimpleMoves(DirectionMoves, Vision));
             }
 
             AITurnEvaluator AI = new AITurnEvaluator(EvalState, Moves);

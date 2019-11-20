@@ -70,6 +70,7 @@ namespace Fourzy
             set
             {
                 _placementStyle = value;
+                PlayerPrefsWrapper.SetPlacementStyle((int)value);
 
                 onPlacementStyle?.Invoke(_placementStyle);
             }
@@ -85,7 +86,7 @@ namespace Fourzy
         public string sessionID { get; private set; }
 
         private bool configFetched = false;
-        private PlacementStyle _placementStyle = PlacementStyle.DEFAULT;
+        private PlacementStyle _placementStyle;
 
         public bool isMainMenuLoaded
         {
@@ -181,8 +182,8 @@ namespace Fourzy
 
             //PointerInputModuleExtended.noInput += OnNoInput;
 
-            //EazyNetChecker.StartConnectionCheck(false, true);
             NetworkManager.instance.StartChecking();
+            placementStyle = (PlacementStyle)PlayerPrefsWrapper.GetPlacementStyle();
         }
 
         protected void Update()
@@ -270,6 +271,19 @@ namespace Fourzy
 
             //unload gameplay scene 
             if (activeGame != null) GamePlayManager.instance.UnloadGamePlaySceene();
+        }
+
+        public void ResetGames()
+        {
+            GameContentManager.Instance.ResetFastPuzzles();
+            GameContentManager.Instance.ResetPuzzlePacks();
+            GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
+            ResetHintInstructions();
+        }
+
+        public void ResetHintInstructions()
+        {
+            PlayerPrefsWrapper.SetHintTutorialStage(0);
         }
 
         public void OnPurchaseComplete(Product product)
@@ -470,7 +484,7 @@ namespace Fourzy
             if (Application.version != value)
             {
                 //show version popup
-                PersistantMenuController.instance.GetScreen<PromptScreen>().Prompt(
+                PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
                     "New Version Available",
                     "New app version available,\nplease update your app pressing button below",
                     "Update",
@@ -554,7 +568,7 @@ namespace Fourzy
 
 
                 //show daily puzzle popup
-                PersistantMenuController.instance.GetScreen<PromptScreen>().Prompt(
+                PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
                     "New Daily Puzzle",
                     "New Daily Puzzle Available!",
                     "Update",
@@ -716,8 +730,9 @@ namespace Fourzy
 
         public enum PlacementStyle
         {
-            DEFAULT,
+            EDGE_TAP,
             DEMO_STYLE,
+            SWIPE,
         }
     }
 }

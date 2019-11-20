@@ -45,7 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void OpenStore()
         {
             menuController.BackToRoot();
-            MenuTabbedScreen tabbedScreen = menuController.GetScreen<MenuTabbedScreen>();
+            MenuTabbedScreen tabbedScreen = menuController.GetOrAddScreen<MenuTabbedScreen>();
 
             tabbedScreen.OpenTab(0, tabbedScreen.isOpened);
         }

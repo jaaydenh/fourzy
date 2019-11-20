@@ -52,7 +52,7 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_fruit
-  tokenType: 8
+  tokenType: 19
   volume: 1
   onGamePieceEnter: 131
   onActivate: 137

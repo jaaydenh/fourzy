@@ -39,6 +39,7 @@ namespace Fourzy
         private const string kFastPuzzlesLeaderboardVersion = "fast_puzzles_leaderboard_version";
         private const string kLastProjectVersion = "kProjectVersion";
         private const string kLanguageUpdated = "language_updated";
+        private const string kPlacementStyle = "placement_style";
 
         public static string kEventRewarded = "eventRewarded_";
 
@@ -157,6 +158,10 @@ namespace Fourzy
         public static bool GetLanguageUpdated() => PlayerPrefs.GetInt(kLanguageUpdated, 0) != 0;
 
         public static void SetLanguageUpdated(bool value) => PlayerPrefs.SetInt(kLanguageUpdated, value ? 1 : 0);
+
+        public static int GetPlacementStyle() => PlayerPrefs.GetInt(kPlacementStyle, Constants.DEFAULT_PLACEMENT_STYLE);
+
+        public static void SetPlacementStyle(int value) => PlayerPrefs.SetInt(kPlacementStyle, value);
 
         #region Currencies
 

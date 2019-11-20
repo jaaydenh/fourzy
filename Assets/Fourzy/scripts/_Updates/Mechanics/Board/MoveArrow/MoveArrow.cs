@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
@@ -18,13 +17,12 @@ namespace Fourzy._Updates.Mechanics.Board
         private SizeTween arrowSizeTween;
         private ScaleTween arrowScaleTween;
         private AlphaTween arrowAlphaTween;
-
         private SizeTween glowSizeTween;
         private AlphaTween glowAlphaTween;
-
         private AlphaTween markerAlphaTween;
 
         private GameboardView board;
+        private bool isShown = false;
 
         protected override void Awake()
         {
@@ -63,11 +61,13 @@ namespace Fourzy._Updates.Mechanics.Board
 
             CancelRoutine("glow");
             CancelRoutine("end");
+            isShown = false;
         }
 
         public void Animate()
         {
-            //start over again
+            isShown = true;
+
             arrowSizeTween.PlayForward(true);
             arrowAlphaTween.PlayForward(true);
 
@@ -76,25 +76,43 @@ namespace Fourzy._Updates.Mechanics.Board
             markerAlphaTween.playbackTime = arrowSizeTween.playbackTime;
             markerAlphaTween.PlayForward(true);
 
-            StartRoutine("glow", markerAlphaTween.playbackTime - .15f, () => glowAlphaTween.PlayForward(true), null);
+            StartRoutine("glow", markerAlphaTween.playbackTime - .15f, () => glowAlphaTween.PlayForward(true));
 
             StartRoutine("end", markerAlphaTween.playbackTime + .3f, () =>
             {
-                _particleSystem.Play();
+                ParticleExplode();
 
-                arrowScaleTween.PlayForward(true);
+                AnimateHide();
+            });
+        }
 
-                glowAlphaTween.playbackTime = arrowScaleTween.playbackTime;
-                glowAlphaTween.PlayBackward(true);
+        public void AnimateHide()
+        {
+            if (!isShown) return;
+            isShown = false;
 
-                markerAlphaTween.playbackTime = arrowScaleTween.playbackTime;
-                markerAlphaTween.PlayBackward(true);
-            }, null);
+            arrowScaleTween.PlayForward(true);
+
+            glowAlphaTween.playbackTime = arrowScaleTween.playbackTime;
+            glowAlphaTween.PlayBackward(true);
+
+            markerAlphaTween.playbackTime = arrowScaleTween.playbackTime;
+            markerAlphaTween.PlayBackward(true);
+        }
+
+        public void SetProgress(float value)
+        {
+            arrowSizeTween.AtProgress(value);
+            arrowAlphaTween.AtProgress(value);
+
+            glowSizeTween.AtProgress(value);
+            markerAlphaTween.AtProgress(value);
+
+            if (value > 0f) isShown = true;
         }
 
         public void Rotate(Direction direction)
         {
-            //bool origin = SettingsManager.Instance.Get(SettingsManager.KEY_MOVE_ORIGIN);
             bool origin = false;
 
             switch (direction)
@@ -117,8 +135,8 @@ namespace Fourzy._Updates.Mechanics.Board
             }
         }
 
-        public void Position(BoardLocation boardLocation) => 
-            transform.localPosition = board.BoardLocationToVec2(boardLocation.Mirrored(board.game));
-            //transform.localPosition = board.BoardLocationToVec2(SettingsManager.Instance.Get(SettingsManager.KEY_MOVE_ORIGIN) ? boardLocation.Mirrored(board.model) : boardLocation);
+        public void ParticleExplode() => _particleSystem.Play();
+
+        public void Position(BoardLocation boardLocation) => transform.localPosition = board.BoardLocationToVec2(boardLocation.Mirrored(board.game));
     }
 }

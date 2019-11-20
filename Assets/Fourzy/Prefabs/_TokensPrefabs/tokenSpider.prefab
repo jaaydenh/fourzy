@@ -52,7 +52,7 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_spider
-  tokenType: 39
+  tokenType: 37
   volume: 1
   onGamePieceEnter: 0
   onActivate: 0

@@ -28,6 +28,6 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public void OnTap() => menuScreen.menuController.GetScreen<TokenPrompt>().Prompt(tokenData);
+        public void OnTap() => menuScreen.menuController.GetOrAddScreen<TokenPrompt>().Prompt(tokenData);
     }
 }

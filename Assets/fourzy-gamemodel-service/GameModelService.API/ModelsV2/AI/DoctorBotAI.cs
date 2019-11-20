@@ -16,6 +16,7 @@ namespace FourzyGameModel.Model
             AITurnEvaluator AI = new AITurnEvaluator(EvalState);
             AI.AIHeuristics.PruneFiveSetup = true;
             AI.AIHeuristics.LookForSetups = true;
+            AI.AIHeuristics.LookForUnstoppable = true;
             if (AI.WinningTurns.Count > 0) return AI.WinningTurns.First();
 
             SimpleMove Move = AI.GetBestOkMovesWithLeastOppScore();

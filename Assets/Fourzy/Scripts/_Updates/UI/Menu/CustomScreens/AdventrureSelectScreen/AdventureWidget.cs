@@ -49,7 +49,7 @@ namespace Fourzy._Updates.UI.Widgets
         public void OnTap()
         {
             //select
-            menuScreen.menuController.GetScreen<ProgressionMapScreen>().Open(map);
+            menuScreen.menuController.GetOrAddScreen<ProgressionMapScreen>().Open(map);
         }
     }
 }

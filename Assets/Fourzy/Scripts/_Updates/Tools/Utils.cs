@@ -231,6 +231,22 @@ namespace Fourzy._Updates.Tools
             return -1;
         }
 
+        public static int GetLocation(this BoardLocation boardLocation, Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.LEFT:
+                case Direction.RIGHT:
+                    return boardLocation.Row;
+
+                case Direction.UP:
+                case Direction.DOWN:
+                    return boardLocation.Column;
+            }
+
+            return -1;
+        }
+
         public static Direction GetTurnDirection(this BoardLocation boardLocation, IClientFourzy model)
         {
             if (boardLocation.Row == 0)

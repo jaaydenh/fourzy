@@ -133,11 +133,12 @@ namespace FourzyGameModel.Model
             if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;
 
             Dictionary<SimpleMove, GameState> MoveInfo = new Dictionary<SimpleMove, GameState>();
+
             foreach (SimpleMove m in GetAvailableSimpleMoves(PlayerId))
             {
                 MoveInfo.Add(m, new GameState(EvaluateTurn(new PlayerTurn(m))));
             }
-
+  
             return MoveInfo;
         }
 
@@ -154,20 +155,30 @@ namespace FourzyGameModel.Model
         }
 
 
-        public List<SimpleMove> GetWinningMoves(int PlayerId=0)
+        public List<SimpleMove> GetWinningMoves(int PlayerId=0, bool ConsiderDiagonals = true)
         {
             if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;
+
+            DateTime Before = DateTime.Now;
 
             List<SimpleMove> WinningMoves = new List<SimpleMove>();
             foreach (SimpleMove m in GetAvailableSimpleMoves(PlayerId))
             {
-                if (EvaluateTurn(new PlayerTurn(m)).WinnerId == PlayerId) WinningMoves.Add(m);
+                GameState GS = EvaluateTurn(new PlayerTurn(m));
+                if (GS.WinnerId == PlayerId)
+                {
+                    if (!ConsiderDiagonals) 
+                        if (GS.WinningLocations[0].Row != GS.WinningLocations[0].Row
+                            && GS.WinningLocations[0].Column != GS.WinningLocations[0].Column) continue;
+                   WinningMoves.Add(m);
+                }
             }
+            double TimeTaken = DateTime.Now.Subtract(Before).TotalMilliseconds;
 
             return WinningMoves;                
         }
 
-        public SimpleMove GetFirstWinningMove(int PlayerId = 0)
+        public SimpleMove GetFirstWinningMove(int PlayerId = 0, bool ConsiderDiagonals = true)
         {
             if (PlayerId == 0) PlayerId = EvalState.ActivePlayerId;
 
@@ -176,7 +187,14 @@ namespace FourzyGameModel.Model
 
             foreach (SimpleMove m in GetAvailableSimpleMoves(PlayerId))
             {
-                if (EvaluateTurn(new PlayerTurn(m),true).WinnerId == PlayerId) return m;
+                GameState GS = EvaluateTurn(new PlayerTurn(m));
+                if (GS.WinnerId == PlayerId)
+                {
+                    if (!ConsiderDiagonals)
+                        if (GS.WinningLocations[0].Row != GS.WinningLocations[0].Row
+                            && GS.WinningLocations[0].Column != GS.WinningLocations[0].Column) continue;
+                    return m;
+                }
             }
 
             return null;
@@ -254,12 +272,17 @@ namespace FourzyGameModel.Model
                             {
                                 EvalState.WinnerId = this.EvalState.Opponent(this.EvalState.WinnerId);
                                 RecordAction(new GameActionGameEnd(GameEndType.NOPIECES, this.EvalState.WinnerId, null));
+                                return OriginalState;
                                 //RecordAction(new GameActionGameEnd(GameEndType.WIN, this.EvalState.Opponent(this.EvalState.WinnerId), null));
                             }
                         }
 
                         if (!ProcessSimpleMove((SimpleMove)m)) return OriginalState;
-
+                        if (EvalState.Options.MovesReduceHerd)
+                            if (EvalState.Herds.Count > 0)
+                                if (EvalState.Herds[EvalState.ActivePlayerId] != null)
+                                    if (EvalState.Herds[EvalState.ActivePlayerId].Members.Count > 0)
+                                        EvalState.Herds[EvalState.ActivePlayerId].Members.RemoveAt(0);
                         break; 
                     case MoveType.SPELL:
                         if (!ProcessSpell((ISpell)m)) return OriginalState;
@@ -271,6 +294,7 @@ namespace FourzyGameModel.Model
                     case MoveType.PASS:
                         PassMove Pass = (PassMove)m;
                         Player Passer = EvalState.Players[this.EvalState.ActivePlayerId];
+
                         RecordAction(new GameActionPass(Passer));
                         break; 
 
@@ -901,6 +925,7 @@ namespace FourzyGameModel.Model
             }
 
             //foreach (int d in d1_count) if (d > 0) return true;
+         
             foreach (BitArray d in diag1)
             {
                 if (d.Count < 4) continue;

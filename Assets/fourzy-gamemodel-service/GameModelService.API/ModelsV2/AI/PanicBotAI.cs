@@ -29,7 +29,8 @@ namespace FourzyGameModel.Model
             if (Panic) return new PlayerTurn(Move);
 
             // If your score is behind opponent, make a move.
-            if (AI.Score(EvalState.ActivePlayerId) < 100 ) return new PlayerTurn(Move);
+            AIScoreEvaluator AISE = new AIScoreEvaluator(EvalState);
+            if (AISE.Score(EvalState.ActivePlayerId) < 100 ) return new PlayerTurn(Move);
 
             // If your score is higher, then pass.
             return new PlayerTurn(EvalState.ActivePlayerId, new PassMove());

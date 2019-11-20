@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -23,7 +24,7 @@ namespace FourzyGameModel.Model
             this.State.GameSeed = SeedString;
             this.R = new Random(CreateSeed(SeedString));
         }
-        
+
         public void Reset()
         {
             this.R = new Random(CreateSeed());
@@ -48,15 +49,15 @@ namespace FourzyGameModel.Model
             var v = Enum.GetValues(typeof(T));
             return (T)v.GetValue(new Random().Next(v.Length));
         }
-        
+
         public Direction RandomDirection()
         {
-            return (Direction)RandomInteger(0,4);
+            return (Direction)RandomInteger(0, 4);
         }
 
         public Direction RandomDirection(List<Direction> Directions)
         {
-            return Directions[RandomInteger(0, Directions.Count -1)];
+            return Directions[RandomInteger(0, Directions.Count - 1)];
         }
         public CompassDirection RandomCompassDirection(List<CompassDirection> Directions)
         {
@@ -64,14 +65,14 @@ namespace FourzyGameModel.Model
         }
         public CompassDirection RandomCompassDirection()
         {
-            return (CompassDirection)RandomInteger(0,7);
+            return (CompassDirection)RandomInteger(0, 7);
         }
 
         public Rotation RandomRotation()
         {
             return (Rotation)RandomInteger(0, 1);
         }
-        
+
         public LineType RandomLineType()
         {
             return (LineType)RandomInteger(0, 2);
@@ -80,7 +81,7 @@ namespace FourzyGameModel.Model
         public BoardLocation RandomLocation(List<BoardLocation> Locations)
         {
             if (Locations.Count == 0) throw new Exception("No Locations passed to function");
-            return Locations[Range(0, Locations.Count-1)];
+            return Locations[Range(0, Locations.Count - 1)];
         }
 
         public BoardLocation RandomLocation(BoardLocation Reference, int Height, int Width)
@@ -117,7 +118,7 @@ namespace FourzyGameModel.Model
             int Countdown = RandomInteger(0, Total);
             foreach (string key in Items.Keys)
             {
-                Countdown-= Items[key];
+                Countdown -= Items[key];
                 if (Countdown <= 0) return key;
             }
 
@@ -144,15 +145,22 @@ namespace FourzyGameModel.Model
 
         public int Range(int Min, int Max)
         {
-            return R.Next(Min, Max+1);
+            return R.Next(Min, Max + 1);
         }
 
         public int RandomInteger(int Min, int Max)
         {
-            return R.Next(Min, Max+1);
+            return R.Next(Min, Max + 1);
         }
 
-        private int CreateSeed(string SeedString="RandomPlaceHolder")
+        public List<SimpleMove> RandomSimpleMoves(List<SimpleMove> Moves, int NumberToSelect = 1)
+        {
+            return Moves.Select(v => new { v, i = R.Next() })    // Associate a random index to each entry
+                  .OrderBy(x => x.i).Take(NumberToSelect)                // Sort by (at this point fixed) random index 
+                  .Select(x => x.v).ToList();                        // Go back to enumerable of entry
+        }
+
+        private int CreateSeed(string SeedString = "RandomPlaceHolder")
         {
             //int x = Game.GameSeed.ToCharArray().Sum(x => x) % 100;
             int TurnCount = 0;

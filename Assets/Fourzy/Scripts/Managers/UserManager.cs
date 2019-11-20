@@ -270,6 +270,11 @@ namespace Fourzy
             }
         }
 
+        public void SetProfileLanguage(string language, EntityKey entity)
+        {
+            //PlayFabClientAPI.
+        }
+
         //public void UpdateInformation()
         //{
         //    new AccountDetailsRequest().Send((response) =>

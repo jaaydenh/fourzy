@@ -55,7 +55,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             Debug.Log($"Open user challenge {leaderboard.userName}, {leaderboard.userId}");
 
-            menuScreen.menuController.GetScreen<MatchmakingScreen>().StartVSPlayer(leaderboard.userId);
+            menuScreen.menuController.GetOrAddScreen<MatchmakingScreen>().StartVSPlayer(leaderboard.userId);
         }
 
         private GamePieceView AddGamepieceView(string pieceID = "")

@@ -1,7 +1,5 @@
-﻿//modded @vadym udod
+﻿//@vadym udod
 //add scene names constants
-
-using System.Collections.Generic;
 
 namespace Fourzy
 {
@@ -10,6 +8,7 @@ namespace Fourzy
         public const float DEMO_IDLE_TIME = 45f;
         public const float DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME = 8f;
 
+        public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.SWIPE;
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
 
@@ -24,7 +23,7 @@ namespace Fourzy
         public const int aiTurnTimerResetValue = 2;
         public const int addTimerBarEveryXTurn = 2;
         public const int barsToAdd = 1;
-        
+
         public const int running_challenges_count = 100;
         public const int complete_challenges_count = 50;
 

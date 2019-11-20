@@ -87,7 +87,7 @@ namespace Fourzy._Updates.UI.Widgets
             switch (type)
             {
                 case CurrencyType.HINTS:
-                    menuScreen.menuController.GetScreen<StorePromptScreen>().Prompt(StorePromptScreen.StoreItemType.HINTS);
+                    menuScreen.menuController.GetOrAddScreen<StorePromptScreen>().Prompt(StorePromptScreen.StoreItemType.HINTS);
 
                     break;
             }

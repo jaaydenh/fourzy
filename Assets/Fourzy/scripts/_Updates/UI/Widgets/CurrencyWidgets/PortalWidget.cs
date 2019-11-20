@@ -37,13 +37,13 @@ namespace Fourzy._Updates.UI.Widgets
             switch (type)
             {
                 case CurrencyType.PORTAL_POINTS:
-                    PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.SIMPLE);
+                    PersistantMenuController.instance.GetOrAddScreen<PortalScreen>().SetData(RewardsManager.PortalType.SIMPLE);
                     UserManager.Instance.portalPoints -= Constants.PORTAL_POINTS;
 
                     break;
 
                 case CurrencyType.RARE_PORTAL_POINTS:
-                    PersistantMenuController.instance.GetScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
+                    PersistantMenuController.instance.GetOrAddScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
                     UserManager.Instance.rarePortalPoints -= Constants.RARE_PORTAL_POINTS;
 
                     break;

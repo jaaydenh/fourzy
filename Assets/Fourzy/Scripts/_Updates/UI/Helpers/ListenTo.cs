@@ -20,7 +20,6 @@ namespace Fourzy._Updates.UI.Helpers
         private bool listensToSfxState = false;
         private bool listensToAudioState = false;
         private bool listensToDemoModeState = false;
-        private bool listensToPlacementStyle = false;
 
         protected void Awake()
         {
@@ -45,10 +44,6 @@ namespace Fourzy._Updates.UI.Helpers
                         }
 
                         break;
-
-                    //case ListenValues.LOGGED_IN:
-                    //    LoginManager.OnDeviceLoginComplete += OnLogin;
-                    //    break;
 
                     case ListenValues.SETTINGS_SFX_OFF:
                     case ListenValues.SETTINGS_SFX_ON:
@@ -77,13 +72,9 @@ namespace Fourzy._Updates.UI.Helpers
                         }
                         break;
 
-                    case ListenValues.PLACEMENT_STYLE_1:
-                    case ListenValues.PLACEMENT_STYLE_2:
-                        if (!listensToPlacementStyle)
-                        {
-                            listensToPlacementStyle = true;
-                            GameManager.onPlacementStyle += OnPlacementSyle;
-                        }
+                    case ListenValues.PLACEMENT_STYLE:
+                        GameManager.onPlacementStyle += OnPlacementSyle;
+
                         break;
                 }
             }
@@ -109,11 +100,6 @@ namespace Fourzy._Updates.UI.Helpers
 
                         break;
 
-                    //case ListenValues.LOGGED_IN:
-                    //    LoginManager.OnDeviceLoginComplete -= OnLogin;
-
-                    //    break;
-
                     case ListenValues.SETTINGS_SFX_OFF:
                     case ListenValues.SETTINGS_SFX_ON:
                         if (listensToSfxState)
@@ -134,13 +120,8 @@ namespace Fourzy._Updates.UI.Helpers
 
                         break;
 
-                    case ListenValues.PLACEMENT_STYLE_1:
-                    case ListenValues.PLACEMENT_STYLE_2:
-                        if (listensToPlacementStyle)
-                        {
-                            listensToPlacementStyle = false;
-                            SettingsManager.onDemoMode -= OnDemoMode;
-                        }
+                    case ListenValues.PLACEMENT_STYLE:
+                        SettingsManager.onDemoMode -= OnDemoMode;
 
                         break;
                 }
@@ -175,8 +156,7 @@ namespace Fourzy._Updates.UI.Helpers
 
                             break;
 
-                        case ListenValues.PLACEMENT_STYLE_1:
-                        case ListenValues.PLACEMENT_STYLE_2:
+                        case ListenValues.PLACEMENT_STYLE:
                             OnPlacementSyle(GameManager.Instance.placementStyle);
 
                             break;
@@ -192,13 +172,6 @@ namespace Fourzy._Updates.UI.Helpers
                 foreach (ListenTarget target in sorted[ListenValues.INTERNET_ACCESS])
                     target.events.Invoke(string.Format(target.targetText, state));
         }
-
-        //public void OnLogin(bool result)
-        //{
-        //    if (result)
-        //        foreach (ListenTarget target in sorted[ListenValues.LOGGED_IN])
-        //            target.events.Invoke(string.Format(target.targetText, result));
-        //}
 
         public void OnSfx(bool state)
         {
@@ -232,12 +205,8 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void OnPlacementSyle(GameManager.PlacementStyle state)
         {
-            if (state == GameManager.PlacementStyle.DEFAULT)
-                foreach (ListenTarget target in sorted[ListenValues.PLACEMENT_STYLE_1])
-                    target.events.Invoke(string.Format(target.targetText, state));
-            else
-                foreach (ListenTarget target in sorted[ListenValues.PLACEMENT_STYLE_2])
-                    target.events.Invoke(string.Format(target.targetText, state));
+            foreach (ListenTarget target in sorted[ListenValues.PLACEMENT_STYLE])
+                target.events.Invoke(string.Format(target.targetText, (int)state));
         }
     }
 
@@ -257,15 +226,11 @@ namespace Fourzy._Updates.UI.Helpers
         [StackableField]
         public ListenValues type = ListenValues.CHELLENGE_ID;
 
-        [ShowIf("#TargetTextCheck")]
-        [StackableField]
         public string targetText = "{0}";
 
         public bool updateOnStart;
         [Header("Will format target text with value")]
         public QuickStringEvent events;
-
-        public bool TargetTextCheck() => ListenValues.USES_TEXT.HasFlag(type);
 
         public bool Check()
         {
@@ -287,9 +252,6 @@ namespace Fourzy._Updates.UI.Helpers
         SETTINGS_AUDIO_OFF,
         SETTINGS_DEMO_MODE_ON,
         SETTINGS_DEMO_MODE_OFF,
-        PLACEMENT_STYLE_1,
-        PLACEMENT_STYLE_2,
-
-        USES_TEXT = CHELLENGE_ID,
+        PLACEMENT_STYLE,
     }
 }

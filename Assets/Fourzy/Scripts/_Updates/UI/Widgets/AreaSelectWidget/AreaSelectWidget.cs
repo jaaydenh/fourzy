@@ -37,7 +37,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void SelectTheme()
         {
-            menuScreen.menuController.GetScreen<AreaInfoPromptScreen>().Prompt(theme.themeID);
+            menuScreen.menuController.GetOrAddScreen<AreaInfoPromptScreen>().Prompt(theme.themeID);
         }
     }
 }

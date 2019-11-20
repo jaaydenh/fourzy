@@ -22,6 +22,9 @@ namespace FourzyGameModel.Model
         [JsonProperty("herdId")]
         public string HerdId { get; set; }
 
+        [JsonProperty("herdCount")]
+        public int HerdCount { get; set; }
+
         [JsonProperty("magic")]
         public int Magic { get; set; }
 

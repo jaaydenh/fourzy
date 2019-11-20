@@ -101,7 +101,7 @@ namespace Fourzy._Updates.UI.Camera3D
                 finished = true;
                 PlayerPrefsWrapper.SetAdventureComplete(mapID, true);
 
-                MenuController.GetMenu(Constants.MAIN_MENU_CANVAS_NAME).GetScreen<PromptScreen>().Prompt("Adventure map complete", null, null, "OK");
+                MenuController.GetMenu(Constants.MAIN_MENU_CANVAS_NAME).GetOrAddScreen<PromptScreen>().Prompt("Adventure map complete", null, null, "OK");
             }
         }
 

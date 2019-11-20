@@ -92,8 +92,8 @@ namespace FourzyGameModel.Model
 
             foreach (PlayerTurn t in PossibleTurns.Keys)
             {
-                //GameState ResultState = TE.EvaluateTurn(t);
-                AITurnEvaluator AI = new AITurnEvaluator(State,t);
+                GameState ResultState = TE.EvaluateTurn(t);
+                AIScoreEvaluator AI = new AIScoreEvaluator(ResultState);
                 PossibleTurns[t] = AI.Score(State.ActivePlayerId);
             }
 

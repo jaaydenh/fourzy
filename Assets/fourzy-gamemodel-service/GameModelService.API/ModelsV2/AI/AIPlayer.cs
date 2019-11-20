@@ -27,11 +27,16 @@ namespace FourzyGameModel.Model
                     return new BlindBotAI(State);
                 case AIProfile.BadBot:
                     return new BadBotAI(State);
+                case AIProfile.OrthoBot:
+                    return new OrthoBotAI(State);
 
 
                 //This bot will make a good move, but will not win unless last resort.
                 case AIProfile.ExtenderBotAI:
                     return new ExtenderBotAI(State);
+                //This bot will make a good move, but will not win unless last resort.
+                case AIProfile.UnevenBotAI:
+                    return new UnevenBotAI(State);
 
                 //The following AIs have a preference on direction.
 
@@ -52,6 +57,11 @@ namespace FourzyGameModel.Model
 
                 case AIProfile.RotatorBot:
                     return new RotatorBotAI(State);
+
+                //This bot tinkers with Heuristics on only score it's own pieces
+
+                case AIProfile.MeBot:
+                    return new MeBotAI(State);
 
                 //These AI are a bit easier since they will sometimes skip a turn.
 
@@ -92,83 +102,9 @@ namespace FourzyGameModel.Model
         public static AIPlayer Create(GameState State, AIDifficulty Difficulty)
         {
             int Personality = 0;
-            switch (Difficulty)
-            {
-                case AIDifficulty.Pushover:
-                   
-                    Personality = State.Random.RandomInteger(0, 3);
-                    switch (Personality)
-                    {
-                        case 0:
-                            return new ExtenderBotAI(State);
-                        case 1:
-                            return new PanicBotAI(State);
-                        case 2:
-                            return new WaitBotAI(State);
-                        case 3:
-                            return new BadBotAI(State);
-                    }
-                    break;
 
-                case AIDifficulty.Easy:
-                  
-                    Personality = State.Random.RandomInteger(0, 6);
-                    switch (Personality)
-                    {
-                        case 0:
-                            return new LeftBotAI(State);
-                        case 1:
-                            return new RightBotAI(State);
-                        case 2:
-                            return new UpBotAI(State);
-                        case 3:
-                            return new DownBotAI(State);
-                        case 4:
-                            return new VerticalBotAI(State);
-                        case 5:
-                            return new HorizontalBotAI(State);
-                        case 6:
-                            return new RotatorBotAI(State);
-                        case 7:
-                            return new BlindBotAI(State);
-
-                    }
-                    break;
-
-                case AIDifficulty.Medium:
-                    
-                    Personality = State.Random.RandomInteger(0, 2);
-                    switch (Personality)
-                    {
-                        case 0:
-                            return new BeginnerAI(State);
-                        case 1:
-                            return new EasyAI(State);
-
-                        case 2:
-                            return new PositionBot(State);
-                    }
-                    break;
-
-                case AIDifficulty.Hard:
-                    Personality = State.Random.RandomInteger(0, 3);
-                    switch (Personality)
-                    {
-                        case 0:
-                            return new SimpleAI(State);
-                        case 1:
-                            return new ScoreBotAI(State);
-                        case 2:
-                            return new SmartBotAI(State);
-                        case 3:
-                            return new AggressiveAI(State);
-                    }
-                    break;
-
-                case AIDifficulty.Doctor:
-                    return new DoctorBotAI(State);
-            }
-            return null;
+            AIProfile Profile = RandomProfile(Difficulty);
+            return Create(State, Profile);
         }
 
         public static AIProfile RandomProfile(AIDifficulty Difficulty)
@@ -179,21 +115,20 @@ namespace FourzyGameModel.Model
             switch (Difficulty)
             {
                 case AIDifficulty.Pushover:
-                    Personality = Random.RandomInteger(0, 2);
+                    Personality = Random.RandomInteger(0, 0);
                     switch (Personality)
                     {
                         case 0:
-                            return AIProfile.ExtenderBotAI;
-                        case 1:
                             return AIProfile.BadBot;
-                        case 2:
+                        case 1:
                             return AIProfile.WaitBot;
+                    
                     }
                     break;
 
                 case AIDifficulty.Easy:
 
-                    Personality = Random.RandomInteger(0, 8);
+                    Personality = Random.RandomInteger(0, 10);
                     switch (Personality)
                     {
                         case 0:
@@ -209,44 +144,55 @@ namespace FourzyGameModel.Model
                         case 5:
                             return AIProfile.HorizontalBot;
                         case 6:
-                            return AIProfile.RotatorBot;
-                        case 7:
                             return AIProfile.BlindBot;
-                        case 8:
+                        case 7:
                             return AIProfile.EasyAI;
+                        case 8:
+                            return AIProfile.UnevenBotAI;
+                        case 9:
+                            return AIProfile.OrthoBot;
 
                     }
                     break;
 
                 case AIDifficulty.Medium:
                   
-                    Personality = Random.RandomInteger(0, 1);
+                    Personality = Random.RandomInteger(0, 4);
                     switch (Personality)
                     {
                         case 0:
                             return AIProfile.BeginnerAI;
                         case 1:
                             return AIProfile.PositionBot;
+                        case 2:
+                            return AIProfile.MeBot;
+                        case 3:
+                            return AIProfile.ExtenderBotAI;
+                        case 4:
+                            return AIProfile.RotatorBot;
                     }
                     break;
 
                 case AIDifficulty.Hard:
-                    Personality = Random.RandomInteger(0, 3);
+                    Personality = Random.RandomInteger(0, 1);
                     switch (Personality)
                     {
                         case 0:
                             return AIProfile.SimpleAI;
                         case 1:
-                            return AIProfile.ScoreBot;
+                            return AIProfile.AggressiveAI;
                         case 2:
                             return AIProfile.SmartBot;
-                        case 3:
-                            return AIProfile.AggressiveAI;
+                            //case 2:
+                            //    //return AIProfile.SmartBot;
+                            //case 3:
+                            //    //return AIProfile.ScoreBot;
+
                     }
                     break;
 
                 case AIDifficulty.Doctor:
-                    return AIProfile.DoctorBot;
+                    return AIProfile.SimpleAI;
             }
             return AIProfile.PassBot;
         }

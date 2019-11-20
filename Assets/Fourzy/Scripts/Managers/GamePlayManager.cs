@@ -72,8 +72,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         protected void Start()
         {
-            gameplayScreen = menuController.GetScreen<GameplayScreen>();
-            playerPickScreen = menuController.GetScreen<RandomPlayerPickScreen>();
+            gameplayScreen = menuController.GetOrAddScreen<GameplayScreen>();
+            playerPickScreen = menuController.GetOrAddScreen<RandomPlayerPickScreen>();
 
             GameManager.onNetworkAccess += OnNetwork;
             LoginManager.OnDeviceLoginComplete += OnLogin;
@@ -316,7 +316,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             foreach (TokensDataHolder.TokenData token in tokens)
             {
-                TokenPrompt popupUI = menuController.GetScreen<TokenPrompt>(true);
+                TokenPrompt popupUI = menuController.GetOrAddScreen<TokenPrompt>(true);
                 popupUI.Prompt(token);
 
                 yield return new WaitWhile(() => popupUI.isOpened);
@@ -381,7 +381,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
-                    loadingPrompt = menuController.GetScreen<LoadingPromptScreen>();
+                    loadingPrompt = menuController.GetOrAddScreen<LoadingPromptScreen>();
 
                     loadingPrompt.Prompt("", "Loading new game...", null, null, null, null);
 
@@ -423,7 +423,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (UserManager.Instance.hints <= 0)
             {
-                PersistantMenuController.instance.GetScreen<StorePromptScreen>().Prompt(StorePromptScreen.StoreItemType.HINTS);
+                PersistantMenuController.instance.GetOrAddScreen<StorePromptScreen>().Prompt(StorePromptScreen.StoreItemType.HINTS);
 
                 return;
             }
@@ -672,7 +672,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     PauseGame();
 
                     //display prompt
-                    menuController.GetScreen<PromptScreen>().Prompt($"{otherPlayer.NickName} disconnected...", "Other player disconnected.", null, "Back", null, () =>
+                    menuController.GetOrAddScreen<PromptScreen>().Prompt($"{otherPlayer.NickName} disconnected...", "Other player disconnected.", null, "Back", null, () =>
                     {
                         BackButtonOnClick();
                     });
@@ -715,7 +715,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.TURN_BASED:
                 case GameType.REALTIME:
                 case GameType.PASSANDPLAY:
-                    PersistantMenuController.instance.GetScreen<RewardsScreen>().SetData(game);
+                    PersistantMenuController.instance.GetOrAddScreen<RewardsScreen>().SetData(game);
 
                     break;
             }
@@ -802,9 +802,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             switch (board.actionState)
             {
-                case GameboardView.BoardActionState.SIMPLE_MOVE:
-                    board.ShowHintArea(GameboardView.HintAreaStyle.ANIMATION_LOOP, GameboardView.HintAreaAnimationPattern.NONE);
-                    board.SetHintAreaSelectableState(false);
+                case GameboardView.BoardActionState.MOVE:
+                    switch (GameManager.Instance.placementStyle)
+                    {
+                        case GameManager.PlacementStyle.EDGE_TAP:
+                            board.ShowHintArea(GameboardView.HintAreaStyle.ANIMATION_LOOP, GameboardView.HintAreaAnimationPattern.NONE);
+                            board.SetHintAreaSelectableState(false);
+
+                            break;
+                    }
 
                     break;
             }
@@ -815,6 +821,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (game == null) yield break;
 
             yield return StartCoroutine(FadeGameScreen(1f, .5f));
+
+            MenuScreen _screen = menuController.GetScreen<PrePackPrompt>();
+            if (!_screen) _screen = menuController.GetScreen<VSGamePrompt>();
+
+            while (_screen && _screen.isOpened) yield return null;
 
             //instruction boards
             switch (game._Type)

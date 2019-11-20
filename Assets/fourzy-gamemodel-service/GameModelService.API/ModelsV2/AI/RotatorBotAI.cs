@@ -26,13 +26,28 @@ namespace FourzyGameModel.Model
         public PlayerTurn GetTurn()
         {
             TurnEvaluator TE = new TurnEvaluator(EvalState);
-            Direction CurrentDirection = (Direction) (EvalState.Board.FindPieces(EvalState.ActivePlayerId).Count % 4);
+            Direction CurrentDirection = Direction.NONE;
+            switch (EvalState.Board.FindPieces(EvalState.ActivePlayerId).Count % 4)
+            {
+                case 0:
+                    CurrentDirection = Direction.DOWN;
+                    break;
+                case 1:
+                    CurrentDirection = Direction.LEFT;
+                    break;
+                case 2:
+                    CurrentDirection = Direction.UP;
+                    break;
+                case 3:
+                    CurrentDirection = Direction.RIGHT;
+                    break;
+            }
+
             List<SimpleMove> SimpleMoves = TE.GetAvailableSimpleMoves(CurrentDirection);
             int i = 0;
             while (SimpleMoves.Count == 0 && i<4)
             {
                 i++;
-                CurrentDirection = (Direction)((EvalState.Board.FindPieces(EvalState.ActivePlayerId).Count +i) % 4);
                 SimpleMoves = TE.GetAvailableSimpleMoves(CurrentDirection);
             }
 

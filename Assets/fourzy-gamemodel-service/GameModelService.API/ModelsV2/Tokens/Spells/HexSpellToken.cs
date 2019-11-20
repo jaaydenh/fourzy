@@ -123,6 +123,7 @@ namespace FourzyGameModel.Model
 
         public void Fade()
         {
+            if (Visible) Visible = false;
             Space.Parent.RecordGameAction(new GameActionTokenRemove(Space.Location, TransitionType.SPELL_FADE, this));
             Space.RemoveTokens(TokenType.HEX);
         }
@@ -180,7 +181,7 @@ namespace FourzyGameModel.Model
             if (PlayerId == this.PlayerId)
             {
                 Countdown--;
-                if (Countdown == 0) Fade();
+                if (Countdown == 0 && Visible) Fade();
             }
         }
     }

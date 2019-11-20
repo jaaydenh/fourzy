@@ -74,7 +74,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             {
                                 case PackType.AI_PACK:
                                 case PackType.BOSS_AI_PACK:
-                                    menuController.GetScreen<VSGamePrompt>().Prompt(
+                                    menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
                                         nextPack,
                                         () => GamePlayManager.instance.BackButtonOnClick(),
                                         () => menuController.CloseCurrentScreen());
@@ -82,7 +82,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                     break;
 
                                 case PackType.PUZZLE_PACK:
-                                    menuController.GetScreen<PrePackPrompt>().Prompt(
+                                    menuController.GetOrAddScreen<PrePackPrompt>().Prompt(
                                         nextPack, 
                                         () => GamePlayManager.instance.BackButtonOnClick(),
                                         () => menuController.CloseCurrentScreen());

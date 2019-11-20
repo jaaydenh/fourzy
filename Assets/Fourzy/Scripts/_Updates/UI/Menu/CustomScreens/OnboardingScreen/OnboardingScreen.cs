@@ -80,7 +80,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case TutorialOnBack.SHOW_LEAVE_PROMPT:
                     base.OnBack();
 
-                    menuController.GetScreen<PromptScreen>().Prompt("Quit tutorial?", "Leave tutorial level?\nYou can reset tutorial in Options Screen.", () =>
+                    menuController.GetOrAddScreen<PromptScreen>().Prompt("Quit tutorial?", "Leave tutorial level?\nYou can reset tutorial in Options Screen.", () =>
                     {
                         //close prompt
                         menuController.CloseCurrentScreen();
@@ -346,7 +346,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.USER_CHANGE_NAME_PROMPT:
-                        menuController.GetScreen<ChangeNamePromptScreen>()._Prompt();
+                        menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
 
                         break;
 

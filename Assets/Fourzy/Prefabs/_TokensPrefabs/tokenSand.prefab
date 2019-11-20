@@ -52,7 +52,7 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_sand
-  tokenType: 18
+  tokenType: 10
   volume: 1
   onGamePieceEnter: 132
   onActivate: 0

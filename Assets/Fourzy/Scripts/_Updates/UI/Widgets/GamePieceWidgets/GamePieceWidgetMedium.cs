@@ -63,6 +63,6 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void SetSelectedState(bool state) => selectedFrame.gameObject.SetActive(state);
 
-        public void OnTap() => menuScreen.menuController.GetScreen<UpgradeGamePiecePromptScreen>().Prompt(data);
+        public void OnTap() => menuScreen.menuController.GetOrAddScreen<UpgradeGamePiecePromptScreen>().Prompt(data);
     }
 }

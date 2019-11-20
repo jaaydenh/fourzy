@@ -24,6 +24,10 @@ namespace Fourzy._Updates.Mechanics.Board
     {
         public static float HOLD_TIME = .35f;
         public static float QUICK_TAP_TIME = .34f;
+        public static float DISTANCE_TO_TRIGGER_DIRECTION_SELECTION = 100f;
+        public static float DISTANCE_TO_FINISH_SWIPE = 400f;
+        //portion of FINISH_SWIPE
+        public static float DISTANCE_TO_FINISH_SWIPE_ANIMATION = .7f;
         public static bool CAN_CANCEL_TAP = false;
 
         public Transform bitsParent;
@@ -41,6 +45,11 @@ namespace Fourzy._Updates.Mechanics.Board
         public Action onWrongTurn;
 
         private Vector3 topLeft;
+        private Vector2 touchOriginPoint;
+        private Direction swipeDirection;
+        private int originalSwipeLocationIndex;
+        private int currentSwipeLocationIndex;
+        private List<BoardLocation> possibleSwipeLocations;
         private bool touched = false;
         private float holdTimer;
         private float tapStartTime;
@@ -97,7 +106,17 @@ namespace Fourzy._Updates.Mechanics.Board
 
         protected void Update()
         {
-            if (selectedBoardLocation != null && (holdTimer -= Time.deltaTime) <= 0f) OnMove();
+            switch (GameManager.Instance.placementStyle)
+            {
+                case GameManager.PlacementStyle.EDGE_TAP:
+                    if (selectedBoardLocation != null && (holdTimer -= Time.deltaTime) <= 0f) OnMove();
+
+                    break;
+
+                case GameManager.PlacementStyle.SWIPE:
+
+                    break;
+            }
 
 #if UNITY_EDITOR
             //cheats
@@ -137,9 +156,10 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (!interactable) return;
 
-            switch (GameManager.Instance.placementStyle)
+            switch (actionState)
             {
-                case GameManager.PlacementStyle.DEFAULT:
+                case BoardActionState.MOVE:
+                    //cancel move aimation
                     if (selectedBoardLocation != null)
                     {
                         if (!CAN_CANCEL_TAP) return;
@@ -149,35 +169,48 @@ namespace Fourzy._Updates.Mechanics.Board
                         return;
                     }
 
-                    touched = true;
-                    tapStartTime = Time.time;
-
-                    switch (actionState)
+                    switch (GameManager.Instance.placementStyle)
                     {
-                        case BoardActionState.SIMPLE_MOVE:
-                            CheckMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true);
+                        case GameManager.PlacementStyle.EDGE_TAP:
+                        case GameManager.PlacementStyle.SWIPE:
+                            touched = true;
+                            tapStartTime = Time.time;
+
+                            break;
+                    }
+
+                    switch (GameManager.Instance.placementStyle)
+                    {
+                        case GameManager.PlacementStyle.DEMO_STYLE:
+                            DropPiece(Camera.main.ScreenToWorldPoint(position), true);
 
                             break;
 
-                        case BoardActionState.CAST_SPELL:
-                            List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new HexSpell(0, new BoardLocation()));
+                        case GameManager.PlacementStyle.EDGE_TAP:
+                            CheckEdgeTapMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition, true);
 
-                            BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+                            break;
 
-                            if (!locationsList.Contains(touchLocation))
-                                onCastCanceled?.Invoke();
-                            else
-                                CastSpell(touchLocation, activeSpell);
+                        case GameManager.PlacementStyle.SWIPE:
+                            if (touchOriginPoint == Vector2.zero) touchOriginPoint = position;
 
-                            actionState = BoardActionState.SIMPLE_MOVE;
-                            HideHintArea(HintAreaAnimationPattern.DIAGONAL);
                             break;
                     }
 
                     break;
 
-                case GameManager.PlacementStyle.DEMO_STYLE:
-                    DropPiece(Camera.main.ScreenToWorldPoint(position), true);
+                case BoardActionState.CAST_SPELL:
+                    List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new HexSpell(0, new BoardLocation()));
+
+                    BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+
+                    if (!locationsList.Contains(touchLocation))
+                        onCastCanceled?.Invoke();
+                    else
+                        CastSpell(touchLocation, activeSpell);
+
+                    actionState = BoardActionState.MOVE;
+                    HideHintArea(HintAreaAnimationPattern.DIAGONAL);
 
                     break;
             }
@@ -187,7 +220,124 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (!interactable || !touched) return;
 
-            CheckMove(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+            Vector2 positionToWorldPosition = Camera.main.ScreenToWorldPoint(position) - transform.localPosition;
+
+            switch (GameManager.Instance.placementStyle)
+            {
+                case GameManager.PlacementStyle.EDGE_TAP:
+                    CheckEdgeTapMove(positionToWorldPosition);
+
+                    break;
+
+                case GameManager.PlacementStyle.SWIPE:
+                    Vector2 offset = position - touchOriginPoint;
+
+                    if (offset.magnitude >= DISTANCE_TO_TRIGGER_DIRECTION_SELECTION)
+                    {
+                        if (selectedBoardLocation == null)
+                        {
+                            BoardLocation _temp = Vec2ToBoardLocation(positionToWorldPosition);
+
+                            if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))
+                            {
+                                if (offset.x >= 0f) swipeDirection = Direction.RIGHT;
+                                else swipeDirection = Direction.LEFT;
+                            }
+                            else
+                            {
+                                if (offset.y >= 0f) swipeDirection = Direction.UP;
+                                else swipeDirection = Direction.DOWN;
+                            }
+
+                            possibleSwipeLocations = new List<BoardLocation>();
+
+                            TurnEvaluator _turnEvaluator = game.turnEvaluator;
+                            foreach (InputMapValue inputMapValue in inputMapActiveOnly)
+                                if (hintBlocks.ContainsKey(inputMapValue.location) &&
+                                    _turnEvaluator.CanIMakeMove(inputMapValue.Move) &&
+                                    inputMapValue.Move.Direction == swipeDirection)
+                                    possibleSwipeLocations.Add(inputMapValue.location);
+
+                            if (_temp.OnBoard(game._State.Board))
+                                originalSwipeLocationIndex = GetPossibleLocationIndex(_temp.GetLocation(swipeDirection));
+                            else
+                                originalSwipeLocationIndex = possibleSwipeLocations.Count / 2;
+
+                            if(originalSwipeLocationIndex == -1)
+                            {
+                                //no location available
+                                OnPointerRelease(position);
+                                return;
+                            }
+
+                            selectedBoardLocation = new BoardLocation(
+                                swipeDirection, 
+                                possibleSwipeLocations[originalSwipeLocationIndex].GetLocation(swipeDirection), 
+                                game.Rows, 
+                                game.Columns);
+
+                            moveArrow.Rotate(swipeDirection);
+                            moveArrow._Reset();
+                            moveArrow.Position(selectedBoardLocation.Value);
+
+                            ShowHintArea(HintAreaStyle.NONE, HintAreaAnimationPattern.NONE);
+                        }
+                        else
+                        {
+                            float offsetOnDirectionAxis = 0f;
+                            float offsetOnOppositeAxis = 0f;
+
+                            switch (swipeDirection)
+                            {
+                                case Direction.LEFT:
+                                case Direction.RIGHT:
+                                    offsetOnDirectionAxis = offset.x;
+                                    offsetOnOppositeAxis = offset.y;
+
+                                    break;
+
+                                case Direction.UP:
+                                case Direction.DOWN:
+                                    offsetOnDirectionAxis = offset.y;
+                                    offsetOnOppositeAxis = -offset.x;
+
+                                    break;
+                            }
+
+                            float relativeSwipeDistace = GetRelativeSwipeDistace(offsetOnDirectionAxis);
+
+                            //still can change location
+                            if (relativeSwipeDistace < DISTANCE_TO_FINISH_SWIPE_ANIMATION)
+                            {
+                                int offsetIndex = Mathf.RoundToInt(offsetOnOppositeAxis / 100f);
+                                int newLocationIndex = originalSwipeLocationIndex - offsetIndex;
+
+                                if (newLocationIndex > -1 && newLocationIndex < possibleSwipeLocations.Count && newLocationIndex != currentSwipeLocationIndex)
+                                {
+                                    currentSwipeLocationIndex = newLocationIndex;
+                                    selectedBoardLocation = new BoardLocation(
+                                        swipeDirection, 
+                                        possibleSwipeLocations[currentSwipeLocationIndex].GetLocation(swipeDirection), 
+                                        game.Rows, 
+                                        game.Columns);
+                                    moveArrow.Position(selectedBoardLocation.Value);
+                                }
+
+                                //update swipe animation
+                                moveArrow.SetProgress(relativeSwipeDistace / DISTANCE_TO_FINISH_SWIPE_ANIMATION);
+                            }
+                            //force move
+                            else if (relativeSwipeDistace == 1f)
+                            {
+                                OnMove();
+                                moveArrow.ParticleExplode();
+                                moveArrow.AnimateHide();
+                            }
+                        }
+                    }
+
+                    break;
+            }
         }
 
         public void OnPointerRelease(Vector2 position)
@@ -196,9 +346,9 @@ namespace Fourzy._Updates.Mechanics.Board
 
             touched = false;
 
-            switch (actionState)
+            switch (GameManager.Instance.placementStyle)
             {
-                case BoardActionState.SIMPLE_MOVE:
+                case GameManager.PlacementStyle.EDGE_TAP:
                     float tapTime = Time.time - tapStartTime;
 
                     if (tapTime > QUICK_TAP_TIME)
@@ -206,6 +356,44 @@ namespace Fourzy._Updates.Mechanics.Board
                         if (!isAnimating) moveArrow._Reset();
                         selectedBoardLocation = null;
                     }
+
+                    break;
+
+                case GameManager.PlacementStyle.SWIPE:
+                    Vector2 offset = position - touchOriginPoint;
+                    float offsetOnDirectionAxis = 0f;
+
+                    switch (swipeDirection)
+                    {
+                        case Direction.LEFT:
+                        case Direction.RIGHT:
+                            offsetOnDirectionAxis = offset.x;
+
+                            break;
+
+                        case Direction.UP:
+                        case Direction.DOWN:
+                            offsetOnDirectionAxis = offset.y;
+
+                            break;
+                    }
+
+                    float relativeSwipeDistace = GetRelativeSwipeDistace(offsetOnDirectionAxis);
+
+                    if (selectedBoardLocation != null)
+                    {
+                        if (relativeSwipeDistace > DISTANCE_TO_FINISH_SWIPE_ANIMATION)
+                        {
+                            OnMove();
+                            moveArrow.ParticleExplode();
+                        }
+                    }
+
+                    moveArrow.AnimateHide();
+                    touchOriginPoint = Vector2.zero;
+                    selectedBoardLocation = null;
+                    HideHintArea(HintAreaAnimationPattern.NONE);
+
                     break;
             }
         }
@@ -528,7 +716,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void CancelSpell()
         {
-            actionState = BoardActionState.SIMPLE_MOVE;
+            actionState = BoardActionState.MOVE;
             HideHintArea(HintAreaAnimationPattern.CIRCLE);
 
             UpdateHintArea();
@@ -660,7 +848,7 @@ namespace Fourzy._Updates.Mechanics.Board
             lastCol = 0;
             lastRow = 0;
 
-            actionState = BoardActionState.SIMPLE_MOVE;
+            actionState = BoardActionState.MOVE;
             createdSpellTokens = new List<TokenSpell>();
 
             if (moveArrow) moveArrow.SetData(this, HOLD_TIME);
@@ -754,12 +942,30 @@ namespace Fourzy._Updates.Mechanics.Board
 
             switch (actionState)
             {
-                case BoardActionState.SIMPLE_MOVE:
-                    //only active inputMap values
-                    foreach (InputMapValue inputMapValue in inputMapActiveOnly)
-                        if (turnEvaluator.CanIMakeMove(inputMapValue.Move))
-                            if (hintBlocks.ContainsKey(inputMapValue.location))
-                                affected.Add(inputMapValue.location, hintBlocks[inputMapValue.location]);
+                case BoardActionState.MOVE:
+                    switch (GameManager.Instance.placementStyle)
+                    {
+                        case GameManager.PlacementStyle.EDGE_TAP:
+                            //only active inputMap values
+                            foreach (InputMapValue inputMapValue in inputMapActiveOnly)
+                                if (hintBlocks.ContainsKey(inputMapValue.location) && turnEvaluator.CanIMakeMove(inputMapValue.Move))
+                                    affected.Add(inputMapValue.location, hintBlocks[inputMapValue.location]);
+
+                            break;
+
+                        case GameManager.PlacementStyle.SWIPE:
+                            if (selectedBoardLocation == null) return;
+                            Direction targetDir = selectedBoardLocation.Value.GetTurnDirection(game);
+
+                            //only hightight current edge
+                            foreach (InputMapValue inputMapValue in inputMapActiveOnly)
+                                if (hintBlocks.ContainsKey(inputMapValue.location) && 
+                                    turnEvaluator.CanIMakeMove(inputMapValue.Move) && 
+                                    inputMapValue.Move.Direction == targetDir)
+                                    affected.Add(inputMapValue.location, hintBlocks[inputMapValue.location]);
+
+                            break;
+                    }
 
                     break;
 
@@ -823,7 +1029,51 @@ namespace Fourzy._Updates.Mechanics.Board
             }
         }
 
-        private bool CheckMove(Vector2 position, bool tap = false)
+        private void SetNewSwipeLocation()
+        {
+            moveArrow.Position(selectedBoardLocation.Value);
+
+            moveArrow.Animate();
+        }
+
+        private float GetRelativeSwipeDistace(float currentOffset)
+        {
+            switch (swipeDirection)
+            {
+                case Direction.UP:
+                case Direction.RIGHT:
+                    return Mathf.Clamp(currentOffset, 0f, DISTANCE_TO_FINISH_SWIPE) / DISTANCE_TO_FINISH_SWIPE;
+
+                case Direction.DOWN:
+                case Direction.LEFT:
+                    return Mathf.Clamp(currentOffset, -DISTANCE_TO_FINISH_SWIPE, 0f) / -DISTANCE_TO_FINISH_SWIPE;
+            }
+
+            return 0f;
+        }
+
+        private int GetPossibleLocationIndex(int startingLocation)
+        {
+            int location;
+            int currentOffset = 0;
+
+            for (int tries = 0; tries < game.Rows; tries++)
+            {
+                location = startingLocation + currentOffset;
+
+                foreach (BoardLocation boardLocation in possibleSwipeLocations)
+                    if (boardLocation.GetLocation(swipeDirection) == location)
+                        return possibleSwipeLocations.IndexOf(boardLocation);
+
+                currentOffset = -currentOffset + Mathf.RoundToInt(Mathf.Sign(-currentOffset));
+
+                if (location <= 0 || location >= game.Rows) continue;
+            }
+
+            return -1;
+        }
+
+        private bool CheckEdgeTapMove(Vector2 position, bool tap = false)
         {
             TurnEvaluator turnEvaluator = game.turnEvaluator;
             Piece piece = game.activePlayerPiece;
@@ -987,10 +1237,9 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             BoardLocation location = Vec2ToBoardLocation(worldPoint - (Vector2)transform.localPosition);
 
-            if (BoardBitsAt<GamePieceView>(location).Count() != 0) return;
+            if (!location.OnBoard(game._State.Board) || BoardBitsAt<GamePieceView>(location).Count() != 0) return;
 
             Piece _piece = player ? game.playerPiece : game.opponentPiece;
-            //drop gamepiece at location
             game._State.Board.AddPiece(_piece, location);
 
             SpawnPiece(location.Row, location.Column, (PlayerEnum)_piece.PlayerId).SetPiece(_piece);
@@ -1678,7 +1927,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public enum BoardActionState
         {
-            SIMPLE_MOVE,
+            MOVE,
             CAST_SPELL,
         }
 

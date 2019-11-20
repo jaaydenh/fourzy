@@ -82,7 +82,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         if (game.isOver)
                             GamePlayManager.instance.BackButtonOnClick();
                         else
-                            menuController.GetScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => GamePlayManager.instance.BackButtonOnClick());
+                            menuController.GetOrAddScreen<PromptScreen>().Prompt("Leave Game?", "", "Yes", "No", () => GamePlayManager.instance.BackButtonOnClick());
 
                         break;
                 }

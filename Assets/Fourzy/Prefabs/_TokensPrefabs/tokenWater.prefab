@@ -52,7 +52,7 @@ MonoBehaviour:
   onBoardScale: 1
   _radius: 0.65
   name: token_water
-  tokenType: 10
+  tokenType: 3
   volume: 1
   onGamePieceEnter: 133
   onActivate: 0

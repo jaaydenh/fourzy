@@ -30,7 +30,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void OnBGTap()
         {
             //leave game
-            menuController.GetScreen<GameplayScreen>().OnBack();
+            menuController.GetOrAddScreen<GameplayScreen>().OnBack();
         }
     }
 }

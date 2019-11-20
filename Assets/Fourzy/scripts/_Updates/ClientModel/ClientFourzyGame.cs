@@ -449,7 +449,7 @@ namespace Fourzy._Updates.ClientModel
 
                                     AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.turn_based);
 
-                                    MenuController.GetMenu("GameSceneCanvas").GetScreen<PromptScreen>().Prompt("Move failed!", response.Errors.JSON, null, "OK", null);
+                                    MenuController.GetMenu("GameSceneCanvas").GetOrAddScreen<PromptScreen>().Prompt("Move failed!", response.Errors.JSON, null, "OK", null);
                                 }
                                 else
                                 {

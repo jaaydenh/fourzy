@@ -45,8 +45,9 @@ namespace FourzyGameModel.Model
             }
             State.Options.MovesReduceHerd = true;
             State.InitializeHerd(1, /*Status.FourzyCount*/Members);
+
             //Do this differently somehow.  Maybe set in Gauntlet?
-            State.InitializeHerd(2, 999);
+            State.InitializeHerd(2, State.Board.Rows * State.Board.Columns /2);
 
             return State;
         }

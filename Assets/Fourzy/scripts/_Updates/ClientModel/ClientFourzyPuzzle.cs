@@ -21,10 +21,6 @@ namespace Fourzy._Updates.ClientModel
             set => State = value;
         }
         public GameState _FirstState { get; set; }
-        //{
-        //    get => FirstState;
-        //    set { }
-        //}
 
         public List<PlayerTurn> _playerTurnRecord => playerTurnRecord;
         public List<PlayerTurn> _allTurnRecord { get; set; }
