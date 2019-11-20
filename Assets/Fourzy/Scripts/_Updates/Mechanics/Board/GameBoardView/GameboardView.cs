@@ -329,9 +329,8 @@ namespace Fourzy._Updates.Mechanics.Board
                             //force move
                             else if (relativeSwipeDistace == 1f)
                             {
-                                OnMove();
-                                moveArrow.ParticleExplode();
-                                moveArrow.AnimateHide();
+                                OnPointerRelease(position);
+                                return;
                             }
                         }
                     }
