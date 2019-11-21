@@ -35,24 +35,30 @@ namespace Fourzy._Updates.UI.Widgets
         public OnboardingScreenPointer SetMessage(string message)
         {
             messagaBox.SetValue(message);
+            Vector2 pivot = new Vector2(0f, 1f);
+            Vector2 position = new Vector2(0f, -120f);
 
             if (rectTransform.anchorMin.x > .8f)
             {
-                messagaBox.SetPivot(Vector2.one);
+                pivot.x = 1f;
                 container.childAlignment = TextAnchor.MiddleRight;
             }
             else if (rectTransform.anchorMin.x < .2f)
-            {
-                messagaBox.SetPivot(Vector2.up);
                 container.childAlignment = TextAnchor.MiddleLeft;
-            }
             else
             {
-                messagaBox.SetPivot(new Vector2(.5f, 1f));
+                pivot.x = .5f;
                 container.childAlignment = TextAnchor.MiddleCenter;
             }
 
-            messagaBox.SetPosition(new Vector2(0f, -120f));
+            if (rectTransform.anchorMin.y < .3f)
+            {
+                pivot.y = 0f;
+                position.y = 0f;
+            }
+
+            messagaBox.SetPivot(pivot);
+            messagaBox.SetPosition(position);
 
             return this;
         }

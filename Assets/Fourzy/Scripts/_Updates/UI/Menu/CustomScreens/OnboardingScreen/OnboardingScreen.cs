@@ -421,7 +421,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             }
                         }
 
-                        anchors = currentButton.rectTransform.GetViewportPosition();
+                        anchors = currentButton.rectTransform.GetViewportPosition() + _buttonTask.pivotOffset;
 
                         masks.ShowMask(anchors, currentButton.rectTransform, _buttonTask.vector2value, _buttonTask.showBG);
 

@@ -135,7 +135,7 @@ namespace Fourzy._Updates.Mechanics.Board
             if (aiTurnThread != null && aiTurnThread.IsAlive)
             {
                 aiTurnThread.Abort();
-                Debug.Log("cancel");
+                Debug.Log("try cancel");
             }
         }
 
@@ -516,45 +516,25 @@ namespace Fourzy._Updates.Mechanics.Board
 
             aiTurnThread = ThreadsQueuer.Instance.StartThreadForFunc(() =>
             {
-                string gameId = game.BoardID;
-
-                PlayerTurnResult turnResults = null;
-                GameboardView _board = this;
-
-
-                //PlayerTurnResult AIResult = new PlayerTurnResult();
-
-                //AIPlayer AI = new PuzzleAI(game._State);
-                //TurnEvaluator turnEvaluator = new TurnEvaluator(game._State);
-
-                //AIResult.Turn = AI.GetTurn();
-                //AIResult.GameState = turnEvaluator.EvaluateTurn(AIResult.Turn);
-                //AIResult.Activity = turnEvaluator.ResultActions;
-                //game._State = AIResult.GameState;
-                //Debug.Log("applied");
-
-                //turnResults = AIResult;
-
-                //if (model._allTurnRecord.Count > 0)
-                //{
-                Debug.Log("applied");
-                turnResults = game.TakeAITurn(true);
-
-                //clear first before move actions
-                while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
-                //}
-                //else
-                //{
-                //    turnResults = model.TakeAITurn(true);
-                //}
-
-                ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
+                try
                 {
-                    //try
+                    string gameId = game.BoardID;
+
+                    PlayerTurnResult turnResults = null;
+                    GameboardView _board = this;
+
+                    Debug.Log("starting");
+                    turnResults = game.TakeAITurn(true);
+                    Debug.Log("applied");
+
+                    //clear first before move actions
+                    while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
+
+                    ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
                     {
                         if (GameManager.Instance.activeGame == null ||
-                            GameManager.Instance.activeGame.BoardID != gameId ||
-                            GamePlayManager.instance.board != _board) return;
+                                GameManager.Instance.activeGame.BoardID != gameId ||
+                                GamePlayManager.instance.board != _board) return;
 
                         turn = new ClientPlayerTurn(turnResults.Turn.Moves);
                         turn.PlayerId = turnResults.Turn.PlayerId;
@@ -567,10 +547,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         //manually reset noInput timer
                         StandaloneInputModuleExtended.instance.ResetNoInputTimer();
-                    }
-                    //catch (Exception e) { Debug.LogError(e.Message); }
-                });
-
+                    });
+                } catch (ThreadAbortException) { print("Thread cancelled"); }
             });
         }
 
