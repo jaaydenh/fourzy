@@ -20,6 +20,8 @@ MonoBehaviour:
       boardFile: {fileID: 4900000, guid: aac40c8ed6384424388e36010fac578b, type: 3}
     - _name: 'Name: SimpleBoard_Blockers, ID: 2a97dbfb-e037-4d41-869b-411faad09075'
       boardFile: {fileID: 4900000, guid: ef83513f91d0943d58ff211d60f323c3, type: 3}
+    - _name: 'Name: Cross Bombs, ID: 66f1e2cc-7f43-4072-a15e-7a9dfd7fac3d'
+      boardFile: {fileID: 4900000, guid: c40f93e0bc7e0493dbc6ad1a0cd64238, type: 3}
     - _name: 'Name: CheckerGarden, ID: 2ddf1a34-96f7-4541-bf7a-5338174956cd'
       boardFile: {fileID: 4900000, guid: 4b36ca108c8366942a2f4795649a289d, type: 3}
     - _name: 'Name: SimpleBoard_Sticky, ID: 2a97dbfb-e037-4d41-869b-411faad09075'
