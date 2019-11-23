@@ -17,7 +17,7 @@ namespace Fourzy._Updates.UI.Helpers
 
         private Image image;
         private Material material;
-        
+
         private ValueTween valueTween;
 
         protected void Awake()
