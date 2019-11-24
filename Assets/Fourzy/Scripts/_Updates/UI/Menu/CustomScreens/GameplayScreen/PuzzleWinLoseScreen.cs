@@ -13,6 +13,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public Color winColor;
         public Color loseColor;
+        public TMP_Text puzzleStateLine1Text;
         public TMP_Text puzzleStateText;
         public PuzzlePackProgressWidget puzzlePackProgressWidget;
 
@@ -114,6 +115,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 animator.SetTrigger("winTrigger");
 
+                puzzleStateLine1Text.text = LocalizationManager.Value("puzzle");
                 puzzleStateText.text = LocalizationManager.Value("complete");
                 puzzleStateText.color = winColor;
 
@@ -136,7 +138,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 animator.SetTrigger("loseTrigger");
 
-                puzzleStateText.text = LocalizationManager.Value("failed");
+                puzzleStateLine1Text.text = LocalizationManager.Value("failed1");
+                puzzleStateText.text = LocalizationManager.Value("failed2");
                 puzzleStateText.color = loseColor;
             }
         }

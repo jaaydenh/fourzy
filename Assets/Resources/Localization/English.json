@@ -82,8 +82,12 @@
       "value": "Excellent"
     },
     {
-      "key": "failed",
-      "value": "Failed"
+      "key": "failed1",
+      "value": "Try"
+    },
+    {
+      "key": "failed2",
+      "value": "Again"
     },
     {
       "key": "fast_puzzles",
