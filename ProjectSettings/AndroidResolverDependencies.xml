@@ -64,11 +64,11 @@
     <file>Assets/Plugins/Android/androidx.vectordrawable.vectordrawable-animated-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.versionedparcelable.versionedparcelable-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.viewpager.viewpager-1.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.facebook.android.facebook-applinks-5.9.0.aar</file>
-    <file>Assets/Plugins/Android/com.facebook.android.facebook-common-5.9.0.aar</file>
-    <file>Assets/Plugins/Android/com.facebook.android.facebook-core-5.9.0.aar</file>
-    <file>Assets/Plugins/Android/com.facebook.android.facebook-login-5.9.0.aar</file>
-    <file>Assets/Plugins/Android/com.facebook.android.facebook-share-5.9.0.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-applinks-5.11.2.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-common-5.11.2.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-core-5.11.2.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-login-5.11.2.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-share-5.11.2.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-identifier-17.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-base-17.1.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-basement-17.0.0.aar</file>
@@ -113,7 +113,7 @@
     <setting name="gradleBuildEnabled" value="True" />
     <setting name="gradleTemplateEnabled" value="False" />
     <setting name="installAndroidPackages" value="True" />
-    <setting name="packageDir" value="Assets\Plugins\Android" />
+    <setting name="packageDir" value="Assets/Plugins/Android" />
     <setting name="patchAndroidManifest" value="True" />
     <setting name="patchMainTemplateGradle" value="True" />
     <setting name="projectExportEnabled" value="False" />
