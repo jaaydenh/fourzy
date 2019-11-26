@@ -1805,7 +1805,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 118.66999, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 33}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &286430231
@@ -21688,6 +21688,7 @@ MonoBehaviour:
   menuController: {fileID: 0}
   winColor: {r: 0, g: 0.9960785, b: 0.42745098, a: 1}
   loseColor: {r: 1, g: 1, b: 0.13725491, a: 1}
+  puzzleStateLine1Text: {fileID: 2084698021}
   puzzleStateText: {fileID: 1620473604}
   puzzlePackProgressWidget: {fileID: 2019081414}
 --- !u!95 &1690463458
@@ -31902,7 +31903,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 118.66999, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 33}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1978830619
