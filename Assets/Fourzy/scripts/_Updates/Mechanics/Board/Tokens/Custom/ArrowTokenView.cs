@@ -20,15 +20,15 @@ namespace Fourzy._Updates.Mechanics.Board
             switch (direction)
             {
                 case Direction.LEFT:
-                    transform.localEulerAngles = new Vector3(0f, 0f, 90f);
+                    body.transform.localEulerAngles = new Vector3(0f, 0f, 90f);
                     break;
 
                 case Direction.RIGHT:
-                    transform.localEulerAngles = new Vector3(0f, 0f, -90f);
+                    body.transform.localEulerAngles = new Vector3(0f, 0f, -90f);
                     break;
 
                 case Direction.DOWN:
-                    transform.localEulerAngles = new Vector3(0f, 0f, -180f);
+                    body.transform.localEulerAngles = new Vector3(0f, 0f, -180f);
                     break;
             }
 

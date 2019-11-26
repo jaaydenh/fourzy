@@ -79,7 +79,7 @@ namespace FourzyGameModel.Model
             GameActions = ME.ResultActions;
             playerTurnRecord.Add(Turn);
 
-            if (ReturnStartOfNextTurn)
+            if (ReturnStartOfNextTurn && State.WinnerId <0)
             {
                 ME = new TurnEvaluator(State);
                 GameState StartState = ME.EvaluateStartOfTurn();
@@ -87,6 +87,23 @@ namespace FourzyGameModel.Model
                 return new PlayerTurnResult(StartState, GameActions);
             }
 
+            //if (State.WinnerId > 0 && State.WinnerId == State.Opponent(Turn.PlayerId))
+            //{
+            //    Status = PuzzleStatus.FAILED;
+            //    GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.LOSS));
+            //}
+
+            //if (State.WinnerId > 0 && State.WinnerId == Turn.PlayerId)
+            //{
+            //    Status = PuzzleStatus.SUCCESS;
+            //    GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.SUCCESS, PuzzleEvent.VICTORY));
+            //}
+
+            //if (State.WinnerId < 0 && playerTurnRecord.Count >= MoveLimit)
+            //{
+            //    Status = PuzzleStatus.FAILED;
+            //    GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.NOMOREMOVES));
+            //}
 
             return new PlayerTurnResult(State, GameActions, Turn);
         }
@@ -107,7 +124,7 @@ namespace FourzyGameModel.Model
             State = AIResult.GameState;
             GameActions = turnEvaluator.ResultActions;
 
-            if (ReturnStartOfNextTurn)
+            if (State.WinnerId < 0 && ReturnStartOfNextTurn)
             {
                 turnEvaluator = new TurnEvaluator(State);
                 GameState StartState = turnEvaluator.EvaluateStartOfTurn();
@@ -116,8 +133,16 @@ namespace FourzyGameModel.Model
                 AIResult.Activity = GameActions;
             }
 
-            if (State.WinnerId > 0 && State.WinnerId != State.Opponent(AIResult.Turn.PlayerId)) Status = PuzzleStatus.FAILED;
-            if (State.WinnerId == State.Opponent(AIResult.Turn.PlayerId)) Status = PuzzleStatus.SUCCESS; 
+            //if (State.WinnerId > 0 && State.WinnerId != State.Opponent(AIResult.Turn.PlayerId))
+            //{
+            //    Status = PuzzleStatus.FAILED;
+            //    GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.LOSS));
+            //}
+
+            //if (State.WinnerId > 0 && State.WinnerId == State.Opponent(AIResult.Turn.PlayerId))
+            //{ Status = PuzzleStatus.SUCCESS;
+            //    GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.SUCCESS, PuzzleEvent.VICTORY));
+            //}
             
             return AIResult;
         }

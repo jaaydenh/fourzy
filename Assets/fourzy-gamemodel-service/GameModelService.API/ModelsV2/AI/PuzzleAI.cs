@@ -17,6 +17,10 @@ namespace FourzyGameModel.Model
             if (AI.WinningTurns.Count > 0) return AI.WinningTurns.First();
 
             AI.AIHeuristics.LookForSetups = true;
+            AI.AIHeuristics.AvoidSetups = true;
+            AI.AIHeuristics.AvoidUnstoppable = true;
+            AI.AIHeuristics.IsAggressive = true;
+
             SimpleMove Move = AI.GetRandomOkMove(1);
             if (Move == null) return new PlayerTurn(AI.GetBestLostCauseMove());
 

@@ -733,6 +733,7 @@ namespace Fourzy
             EDGE_TAP,
             DEMO_STYLE,
             SWIPE,
+            SWIPE_STYLE_2,
         }
     }
 }

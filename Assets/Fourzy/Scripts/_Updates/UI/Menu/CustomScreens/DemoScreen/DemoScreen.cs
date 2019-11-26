@@ -81,7 +81,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             context.interactable = isContextShown;
             context.blocksRaycasts = isContextShown;
 
-            if (!isContextShown) FourzyMainMenuController.instance.currentScreen.Open();
+            if (!isContextShown && FourzyMainMenuController.instance) FourzyMainMenuController.instance.currentScreen.Open();
         }
 
         protected override void OnInitialized()

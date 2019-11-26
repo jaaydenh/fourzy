@@ -201,7 +201,7 @@ namespace FourzyGameModel.Model
             //Only Look at Unique Moves
             Dictionary<SimpleMove, string> UniqueMoves = new Dictionary<SimpleMove, string>();
 
-            //Return moves that are pruned.
+            //Return moves that are not pruned.
             List<SimpleMove> Moves = new List<SimpleMove>();
 
             bool Threat = false;
@@ -282,6 +282,27 @@ namespace FourzyGameModel.Model
                     //Eventually do some additional pruning checks.
                     //bool Prune = false;
                     //if (!Prune) Moves.Add(m);
+
+                    if (AIHeuristics.AvoidSetups)
+                    {
+                        TurnEvaluator TENext = new TurnEvaluator(OPP.EvalState);
+                        bool opp_setup = false;
+                        foreach (SimpleMove m2 in TENext.GetAvailableSimpleMoves())
+                        {
+                            TENext.Reset();
+                            GameState GSNext = TENext.EvaluateTurn(m2);
+                            AIScoreEvaluator AISE = new AIScoreEvaluator(GSNext);
+                            if (!AISE.IsAThreat()) continue;
+                            if (AIHeuristics.AvoidSetups)
+                                if (AISE.IsASetup())
+                                { opp_setup = true; break; }
+
+                            if (AIHeuristics.AvoidUnstoppable)
+                                if (AISE.IsUnstoppableThreat())
+                                { opp_setup = true; break; }
+                            if (opp_setup) continue;
+                        }
+                    }
 
                     Moves.Add(m);
                 }
@@ -2416,3 +2437,4 @@ namespace FourzyGameModel.Model
         #endregion
     }
 }
+    

@@ -96,7 +96,10 @@ namespace FourzyGameModel.Model
             this.PlayerId = Piece.PlayerId;
             this.HerdId = Piece.HerdId;
             this.PieceType = Piece.PieceType;
-            this.UniqueId = Guid.NewGuid().ToString();
+            if (Piece.UniqueId == null)
+                this.UniqueId = Guid.NewGuid().ToString();
+            else
+                this.UniqueId = Piece.UniqueId;
             foreach (PieceConditionType c in Piece.Conditions)
             {
                 this.Conditions.Add(c);

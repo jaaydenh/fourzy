@@ -247,16 +247,30 @@ namespace Fourzy._Updates.Tools
             return -1;
         }
 
-        public static Direction GetTurnDirection(this BoardLocation boardLocation, IClientFourzy model)
+        public static Direction GetDirection(this BoardLocation boardLocation, IClientFourzy model = null)
         {
-            if (boardLocation.Row == 0)
-                return Direction.DOWN;
-            else if (boardLocation.Row == model.Rows - 1)
-                return Direction.UP;
-            else if (boardLocation.Column == 0)
-                return Direction.RIGHT;
-            else if (boardLocation.Column == model.Columns - 1)
-                return Direction.LEFT;
+            if (model == null)
+            {
+                if (boardLocation.Row == 0)
+                    return Direction.DOWN;
+                else if (boardLocation.Row == 7)
+                    return Direction.UP;
+                else if (boardLocation.Column == 0)
+                    return Direction.RIGHT;
+                else if (boardLocation.Column == 7)
+                    return Direction.LEFT;
+            }
+            else
+            {
+                if (boardLocation.Row == 0)
+                    return Direction.DOWN;
+                else if (boardLocation.Row == model.Rows - 1)
+                    return Direction.UP;
+                else if (boardLocation.Column == 0)
+                    return Direction.RIGHT;
+                else if (boardLocation.Column == model.Columns - 1)
+                    return Direction.LEFT;
+            }
 
             return Direction.NONE;
         }
@@ -281,7 +295,7 @@ namespace Fourzy._Updates.Tools
 
         public static BoardLocation Mirrored(this BoardLocation boardLocation, IClientFourzy model)
         {
-            switch (boardLocation.GetTurnDirection(model))
+            switch (boardLocation.GetDirection(model))
             {
                 case Direction.UP:
                     return new BoardLocation(0, boardLocation.Column);

@@ -81,3 +81,5 @@ MonoBehaviour:
       boardFile: {fileID: 4900000, guid: cec11713aa4fc3d4eacd86133243faef, type: 3}
     - _name: 'Name: CrossBombInstructionBoard, ID: cefb7a62-c34c-4f20-9c62-96b560b1ba89'
       boardFile: {fileID: 4900000, guid: 3d32bbfb8eeda764abea2027d0c3aa13, type: 3}
+    - _name: 'Name: MovingGhostTest, ID: 58fc6d9e-81cb-4c2e-bcf7-cfa8637fc3f2'
+      boardFile: {fileID: 4900000, guid: 0a455a91398ecd448b974fe73465b341, type: 3}

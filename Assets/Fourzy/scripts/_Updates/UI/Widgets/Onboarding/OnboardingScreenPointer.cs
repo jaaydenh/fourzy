@@ -32,7 +32,7 @@ namespace Fourzy._Updates.UI.Widgets
             return base.SetAnchors(anchor);
         }
 
-        public OnboardingScreenPointer SetMessage(string message)
+        public OnboardingScreenPointer SetMessage(string message, Vector2 offset)
         {
             messagaBox.SetValue(message);
             Vector2 pivot = new Vector2(0f, 1f);
@@ -58,7 +58,7 @@ namespace Fourzy._Updates.UI.Widgets
             }
 
             messagaBox.SetPivot(pivot);
-            messagaBox.SetPosition(position);
+            messagaBox.SetPosition(position + offset);
 
             return this;
         }

@@ -36,16 +36,13 @@ namespace Fourzy._Updates.Mechanics.Board
             glowAlphaTween = arrowGlow.GetComponent<AlphaTween>();
 
             markerAlphaTween = marker.GetComponent<AlphaTween>();
-        }
 
-        public void SetData(GameboardView board, float animationDuration)
-        {
-            this.board = board;
+            board = GetComponentInParent<GameboardView>();
 
-            arrowSizeTween.playbackTime = animationDuration * .6f;
-            arrowAlphaTween.playbackTime = animationDuration * .6f;
-            markerAlphaTween.playbackTime = animationDuration;
-            glowAlphaTween.playbackTime = animationDuration * 1.35f;
+            arrowSizeTween.playbackTime = GameboardView.HOLD_TIME * .6f;
+            arrowAlphaTween.playbackTime = GameboardView.HOLD_TIME * .6f;
+            markerAlphaTween.playbackTime = GameboardView.HOLD_TIME;
+            glowAlphaTween.playbackTime = GameboardView.HOLD_TIME * 1.35f;
         }
 
         public void _Reset()
@@ -82,11 +79,11 @@ namespace Fourzy._Updates.Mechanics.Board
             {
                 ParticleExplode();
 
-                AnimateHide();
+                Hide();
             });
         }
 
-        public void AnimateHide()
+        public void Hide()
         {
             if (!isShown) return;
             isShown = false;
@@ -103,10 +100,11 @@ namespace Fourzy._Updates.Mechanics.Board
         public void SetProgress(float value)
         {
             arrowSizeTween.AtProgress(value);
-            arrowAlphaTween.AtProgress(value);
+            arrowAlphaTween.AtProgress(value, PlaybackDirection.FORWARD);
 
             glowSizeTween.AtProgress(value);
             markerAlphaTween.AtProgress(value);
+            glowAlphaTween.AtProgress(value, PlaybackDirection.FORWARD);
 
             if (value > 0f) isShown = true;
         }

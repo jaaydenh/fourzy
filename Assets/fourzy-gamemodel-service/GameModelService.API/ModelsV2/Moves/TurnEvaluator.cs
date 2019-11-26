@@ -187,16 +187,18 @@ namespace FourzyGameModel.Model
 
             foreach (SimpleMove m in GetAvailableSimpleMoves(PlayerId))
             {
+                Reset();
                 GameState GS = EvaluateTurn(new PlayerTurn(m));
                 if (GS.WinnerId == PlayerId)
                 {
                     if (!ConsiderDiagonals)
                         if (GS.WinningLocations[0].Row != GS.WinningLocations[0].Row
                             && GS.WinningLocations[0].Column != GS.WinningLocations[0].Column) continue;
+                    Reset();
                     return m;
                 }
             }
-
+            Reset();
             return null;
         }
 

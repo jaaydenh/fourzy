@@ -17,7 +17,7 @@ namespace Fourzy._Updates.UI.Helpers
         public GameObject targetObject;
         [ShowIf("#ShowCheck")]
         [StackableField]
-        public TextMeshProUGUI targetText;
+        public TMP_Text targetText;
         
         private bool initialized = false;
         private RectTransform rectTransform;
@@ -111,7 +111,7 @@ namespace Fourzy._Updates.UI.Helpers
 
             if (thisTarget) targetObject = gameObject;
 
-            if (!targetText) targetText = targetObject.GetComponentInChildren<TextMeshProUGUI>();
+            if (!targetText) targetText = targetObject.GetComponentInChildren<TMP_Text>();
 
             rectTransform = GetComponent<RectTransform>();
         }

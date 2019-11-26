@@ -234,7 +234,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             board.BoardLocationToVec2(new BoardLocation((int)task.vector2value.y, (int)task.vector2value.x)));
 
                         pointer.SetAnchors(anchors);
-                        pointer.SetMessage(task.stringValue);
+                        pointer.SetMessage(task.stringValue, Vector2.zero);
 
                         break;
 
@@ -394,7 +394,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(anchors);
-                        pointer.SetMessage(_eventTask.stringValue);
+                        pointer.SetMessage(_eventTask.stringValue, Vector2.zero);
 
                         GameManager.Instance.currentMap.SetScrollLockedState(true);
 
@@ -428,7 +428,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         //pointer
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(anchors);
-                        pointer.SetMessage(_buttonTask.message);
+                        pointer.SetMessage(_buttonTask.message, _buttonTask.messageBoxOffset);
 
                         break;
                 }

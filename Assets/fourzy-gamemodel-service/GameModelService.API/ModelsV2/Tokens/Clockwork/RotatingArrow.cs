@@ -22,7 +22,7 @@ namespace FourzyGameModel.Model
 
         public Rotation RotationDirection { get; set; }
         public int Frequency { get; set; }
-        private int CountDown { get; set; }
+        public int CountDown { get; set; }
 
         public char TokenCharacter
         {

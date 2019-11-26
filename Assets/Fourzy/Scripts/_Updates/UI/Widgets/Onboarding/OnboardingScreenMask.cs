@@ -32,6 +32,8 @@ namespace Fourzy._Updates.UI.Widgets
 
             if (clear) Clear();
 
+            bg.color = new Color(0f, 0f, 0f, .3f);
+
             foreach (Rect area in task.areas)
                 for (int column = (int)area.x; column < (int)(area.x + area.width); column++)
                     for (int row = (int)area.y; row < (int)(area.y + area.height); row++)

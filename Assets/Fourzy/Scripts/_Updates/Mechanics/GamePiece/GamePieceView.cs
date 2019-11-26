@@ -199,9 +199,9 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             this.piece = piece;
         }
 
-        public override void OnBeforeMoveAction(params BoardLocation[] locations)
+        public override void OnBeforeMoveAction(bool startTurn, params BoardLocation[] locations)
         {
-            base.OnBeforeMoveAction();
+            base.OnBeforeMoveAction(startTurn, locations);
 
             AudioHolder.instance.PlaySelfSfxOneShotTracked(onMoveSfx);
 
@@ -210,9 +210,9 @@ namespace Fourzy._Updates.Mechanics._GamePiece
             PutMovementDirection(locations.GetDirectionFromLocations());
         }
 
-        public override void OnAfterMove(params BoardLocation[] actionsMoves)
+        public override void OnAfterMove(bool startTurn, params BoardLocation[] actionsMoves)
         {
-            base.OnAfterMove(actionsMoves);
+            base.OnAfterMove(startTurn, actionsMoves);
 
             PlayFinishMovement(actionsMoves.Length > 1);
         }

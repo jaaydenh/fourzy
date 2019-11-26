@@ -15,9 +15,6 @@ namespace Fourzy._Updates.Mechanics
 {
     [RequireComponent(typeof(SortingGroup))]
     [RequireComponent(typeof(AlphaTween))]
-    [RequireComponent(typeof(ScaleTween))]
-    [RequireComponent(typeof(ColorTween))]
-    [RequireComponent(typeof(RotationTween))]
     public abstract class BoardBit : RoutinesBase
     {
         public GameObject _body;
@@ -43,6 +40,7 @@ namespace Fourzy._Updates.Mechanics
         public RectTransform rectTransform { get; private set; }
         public SortingGroup sortingGroup { get; private set; }
         public AlphaTween alphaTween { get; private set; }
+        public PositionTween positionTween { get; private set; }
         public ScaleTween scaleTween { get; private set; }
         public ColorTween colorTween { get; private set; }
         public RotationTween rotationTween { get; private set; }
@@ -113,7 +111,7 @@ namespace Fourzy._Updates.Mechanics
         public virtual void Show(float time)
         {
             if (time == 0f)
-                alphaTween.SetAlpha(0f);
+                alphaTween.SetAlpha(1f);
             else
             {
                 alphaTween.playbackTime = time;
@@ -134,7 +132,7 @@ namespace Fourzy._Updates.Mechanics
 
         public virtual void ScaleFromCurrent(Vector3 value, float time) => Scale(transform.localScale, value, time);
 
-        public virtual void RotateTo(float value, RepeatType repeatType, float time)
+        public virtual void RotateTo(float value, RepeatType repeatType, float time, bool startTurn = false)
         {
             rotationTween.from = rotationTween._value;
             rotationTween.to = Vector3.forward * value;
@@ -151,7 +149,7 @@ namespace Fourzy._Updates.Mechanics
         /// <param name="to"></param>
         /// <param name="rotation"></param>
         /// <param name="time"></param>
-        public virtual float RotateTo(Direction from, Direction to, Rotation rotation, float time = 0f)
+        public virtual float RotateTo(Direction from, Direction to, Rotation rotation, float time = 0f, bool startTurn = false)
         {
             float _from = 0f;
             float _to = 0f;
@@ -284,7 +282,15 @@ namespace Fourzy._Updates.Mechanics
                     spriteRenderer.material = material;
         }
 
-        public virtual float StartMoveRoutine(params GameAction[] actions)
+        public virtual void Position(BoardLocation boardLocation) => transform.localPosition = gameboard.BoardLocationToVec2(boardLocation);
+
+        public virtual void SetPositionFromTo(Vector2 from, Vector2 to)
+        {
+            positionTween.from = from;
+            positionTween.to = to;
+        }
+
+        public virtual float StartMoveRoutine(bool startMove, params GameAction[] actions)
         {
             BoardLocation[] locations = actions.AsBoardLocations();
             float distance = 0f;
@@ -293,18 +299,18 @@ namespace Fourzy._Updates.Mechanics
                 for (int index = 1; index < locations.Length; index++)
                     distance += Vector2.Distance(gameboard.BoardLocationToVec2(locations[index - 1]), gameboard.BoardLocationToVec2(locations[index]));
 
-            StartCoroutine(MoveRoutine(locations));
+            StartCoroutine(MoveRoutine(startMove, locations));
 
             return distance / speed;
         }
 
-        public virtual float ExecuteGameAction(params GameAction[] actions)
+        public virtual float ExecuteGameAction(bool startMove, params GameAction[] actions)
         {
             if (actions == null || actions.Length == 0) return 0f;
 
             switch (actions[0].Type)
             {
-                case GameActionType.MOVE_PIECE: return StartMoveRoutine(actions);
+                case GameActionType.MOVE_PIECE: return StartMoveRoutine(startMove, actions);
             }
 
             return OnGameAction(actions);
@@ -312,17 +318,17 @@ namespace Fourzy._Updates.Mechanics
 
         public virtual float OnGameAction(params GameAction[] actions) { return 0f; }
 
-        public virtual void OnBeforeTurn()
+        public virtual void OnBeforeTurn(bool startTurn)
         {
             turnTokensInteractionList.Clear();
             speedMltp = 1f;
         }
 
-        public virtual void OnAfterTurn() { }
+        public virtual void OnAfterTurn(bool startTurn) { }
 
-        public virtual void OnBeforeMoveAction(params BoardLocation[] actionsMoves) { }
+        public virtual void OnBeforeMoveAction(bool startTurn, params BoardLocation[] actionsMoves) { }
 
-        public virtual void OnAfterMove(params BoardLocation[] actionsMoves) { }
+        public virtual void OnAfterMove(bool startTurn, params BoardLocation[] actionsMoves) { }
 
         public virtual void OnBitEnter(BoardBit other) { }
 
@@ -442,9 +448,10 @@ namespace Fourzy._Updates.Mechanics
             rectTransform = GetComponent<RectTransform>();
             gameboard = GetComponentInParent<GameboardView>();
             alphaTween = GetComponent<AlphaTween>();
+            positionTween = GetComponent<PositionTween>();
             scaleTween = GetComponent<ScaleTween>();
             colorTween = GetComponent<ColorTween>();
-            rotationTween = GetComponent<RotationTween>();
+            rotationTween = GetComponentInChildren<RotationTween>();
             sortingGroup = GetComponent<SortingGroup>();
             circleCollider = GetComponent<CircleCollider2D>();
 
@@ -499,11 +506,11 @@ namespace Fourzy._Updates.Mechanics
             alphaTween.DoParse();
         }
 
-        protected virtual IEnumerator MoveRoutine(params BoardLocation[] actionsMoves)
+        protected virtual IEnumerator MoveRoutine(bool startTurn, params BoardLocation[] actionsMoves)
         {
             if (actionsMoves == null || actionsMoves.Length == 0) yield break;
 
-            OnBeforeMoveAction(actionsMoves);
+            OnBeforeMoveAction(startTurn, actionsMoves);
 
             Vector2 start = gameboard.BoardLocationToVec2(actionsMoves[0]);
             Vector2 end = gameboard.BoardLocationToVec2(actionsMoves[actionsMoves.Length - 1]);
@@ -527,7 +534,7 @@ namespace Fourzy._Updates.Mechanics
             }
             transform.localPosition = end;
 
-            OnAfterMove(actionsMoves);
+            OnAfterMove(startTurn, actionsMoves);
         }
 
         public class BitBuff

@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using System.Collections;
 using UnityEngine;
@@ -16,6 +17,11 @@ namespace Fourzy._Updates.Mechanics.Board
         public float volume = 1f;
         public AudioTypes onGamePieceEnter;
         public AudioTypes onActivate;
+
+        protected Badge countdown;
+
+        protected int currentCountdownValue;
+        protected int frequency;
 
         public override void OnBitEnter(BoardBit other)
         {
@@ -33,5 +39,12 @@ namespace Fourzy._Updates.Mechanics.Board
         }
 
         public virtual IEnumerator OnActivated() { yield break; }
+
+        protected override void OnInitialized()
+        {
+            countdown = GetComponentInChildren<Badge>(true);
+
+            base.OnInitialized();
+        }
     }
 }
