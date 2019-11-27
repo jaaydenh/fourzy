@@ -592,6 +592,8 @@ namespace Fourzy._Updates.Mechanics.Board
             Where(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T)))).
             Cast<T>();
 
+        public T BoardBitsAt<T>(BoardLocation at, string id) where T : BoardBit => boardBits.Find(bit => bit.id == id) as T;
+
         public IEnumerable<T> BoardTokenAt<T>(BoardLocation at, TokenType tokenType) where T : TokenView =>
             boardBits.
             Where(bit => bit.active && bit.location.Equals(at) && (bit.GetType() == typeof(T) || bit.GetType().IsSubclassOf(typeof(T))) && (bit as TokenView).tokenType == tokenType).
@@ -691,9 +693,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     PlayerTurnResult turnResults = null;
                     GameboardView _board = this;
 
-                    Debug.Log("starting");
                     turnResults = game.TakeAITurn(true);
-                    Debug.Log("applied");
 
                     //clear first before move actions
                     while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
@@ -794,13 +794,15 @@ namespace Fourzy._Updates.Mechanics.Board
             UpdateHintArea();
             SetHintAreaSelectableState(true);
 
-            IMove spell = null;
+            IMove move = null;
             TokenSpell token = InstantiateSpellToken(location, spellID);
 
             switch (spellID)
             {
                 case SpellId.HEX:
-                    spell = new HexSpell(game._State.ActivePlayerId, location);
+                    HexSpell spell = new HexSpell(game._State.ActivePlayerId, location);
+                    move = spell;
+                    token.SetData(spell);
 
                     break;
 
@@ -820,7 +822,7 @@ namespace Fourzy._Updates.Mechanics.Board
             //make semi-transparent
             token.SetAlpha(.3f);
 
-            AddIMoveToTurn(spell);
+            AddIMoveToTurn(move);
 
             //cast spell
             onCast?.Invoke(activeSpell, game._State.ActivePlayerId);
@@ -1424,7 +1426,7 @@ namespace Fourzy._Updates.Mechanics.Board
             onMoveStarted?.Invoke(turn);
 
             int actionIndex = 0;
-            int pushedPlayerID = -1;
+            //int pushedPlayerID = -1;
             bool firstGameActionMoveFound = false;
             float customDelay = 0f;
             float delay = 0f;
@@ -1459,15 +1461,16 @@ namespace Fourzy._Updates.Mechanics.Board
                         GameAction[] moveActions = GetMoveActions(turnResults.Activity, actionIndex);
                         actionIndex += moveActions.Length;
 
-                        List<GamePieceView> affected = BoardBitsAt<GamePieceView>((moveActions[0] as GameActionMove).Start).ToList();
-                        GamePieceView targetPiece = null;
-                        if (pushedPlayerID != -1)
-                        {
-                            targetPiece = affected.Find(_gp => _gp.piece.PlayerId == pushedPlayerID);
-                            pushedPlayerID = -1;
-                        }
-                        else
-                            targetPiece = affected.First();
+                        GamePieceView targetPiece = BoardBitsAt<GamePieceView>(moveActions[0].AsMoveAction().Start, moveActions[0].AsMoveAction().Piece.UniqueId);
+                        //List<GamePieceView> affected = BoardBitsAt<GamePieceView>((moveActions[0] as GameActionMove).Start).ToList();
+                        //GamePieceView targetPiece = null;
+                        //if (pushedPlayerID != -1)
+                        //{
+                        //    targetPiece = affected.Find(_gp => _gp.piece.PlayerId == pushedPlayerID);
+                        //    pushedPlayerID = -1;
+                        //}
+                        //else
+                        //    targetPiece = affected.First();
 
                         GamePieceView bit = (newGamePiece != null) ? newGamePiece : targetPiece;
 
@@ -1492,8 +1495,8 @@ namespace Fourzy._Updates.Mechanics.Board
                         break;
 
                     case GameActionType.PUSH:
-                        GameActionPush pushAction = turnResults.Activity[actionIndex] as GameActionPush;
-                        pushedPlayerID = pushAction.PushedPiece.PlayerId;
+                        //GameActionPush pushAction = turnResults.Activity[actionIndex] as GameActionPush;
+                        //pushedPlayerID = pushAction.PushedPiece.PlayerId;
 
                         actionIndex++;
 
@@ -1541,7 +1544,9 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     case GameActionType.REMOVE_TOKEN:
                         GameActionTokenRemove tokenRemove = turnResults.Activity[actionIndex] as GameActionTokenRemove;
-                        yield return new WaitForSeconds(BoardTokenAt<TokenView>(tokenRemove.Location, tokenRemove.Before.Type).First()._Destroy(tokenRemove.Reason));
+                        IEnumerable<TokenView> tokens = BoardTokenAt<TokenView>(tokenRemove.Location, tokenRemove.Before.Type);
+
+                        if (tokens.Count() > 0) yield return new WaitForSeconds(tokens.First()._Destroy(tokenRemove.Reason));
 
                         actionIndex++;
 
@@ -1753,33 +1758,36 @@ namespace Fourzy._Updates.Mechanics.Board
             }
 
             //check if any of created space been covered by gamepieces
-            if (createdSpellTokens.Count > 0)
-                gamePieces.ForEach(gamePiece =>
-                {
-                    TokenSpell spell = createdSpellTokens.Find(spellToken => spellToken.location.Equals(gamePiece.location));
-
-                    //remove it
-                    if (spell)
-                    {
-                        spell._Destroy();
-                        createdSpellTokens.Remove(spell);
-                    }
-                });
-
-            if (turn != null)
+            if (!startTurn)
             {
-                //add spells to model
-                createdSpellTokens.ForEach(spell =>
-                {
-                    switch (spell.spellId)
+                if (createdSpellTokens.Count > 0)
+                    gamePieces.ForEach(gamePiece =>
                     {
-                        case SpellId.HEX:
-                            (new HexSpell(turn.PlayerId, spell.location)).Cast(game._State);
-                            spell.SetAlpha(1f);
+                        TokenSpell spell = createdSpellTokens.Find(spellToken => spellToken.location.Equals(gamePiece.location));
 
-                            break;
-                    }
-                });
+                        //remove it
+                        if (spell)
+                        {
+                            spell._Destroy();
+                            createdSpellTokens.Remove(spell);
+                        }
+                    });
+
+                if (turn != null)
+                {
+                    //add spells to model
+                    createdSpellTokens.ForEach(spell =>
+                    {
+                        switch (spell.spellId)
+                        {
+                            case SpellId.HEX:
+                                (new HexSpell(turn.PlayerId, spell.location)).Cast(game._State);
+                                spell.SetAlpha(1f);
+
+                                break;
+                        }
+                    });
+                }
             }
 
             isAnimating = false;

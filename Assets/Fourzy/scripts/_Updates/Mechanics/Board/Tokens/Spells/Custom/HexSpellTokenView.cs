@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using FourzyGameModel.Model;
 using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
@@ -13,6 +14,24 @@ namespace Fourzy._Updates.Mechanics.Board
             base.OnInitialized();
 
             ShowOutline(true);
+        }
+
+        public override void SetData(ISpell spell)
+        {
+            if (spell.SpellId != SpellId.HEX) return;
+
+            HexSpellToken hex = spell as HexSpellToken;
+            currentCountdownValue = 6;
+
+            countdown.hideOnEmpty = true;
+            countdown.SetValue(currentCountdownValue);
+        }
+
+        public override void OnAfterTurn(bool startTurn)
+        {
+            base.OnAfterTurn(startTurn);
+
+            if (!startTurn) countdown.SetValue(currentCountdownValue--);
         }
     }
 }

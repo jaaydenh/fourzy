@@ -8,5 +8,7 @@ namespace Fourzy._Updates.Mechanics.Board
     public class TokenSpell : TokenView
     {
         public SpellId spellId;
+
+        public virtual void SetData(ISpell spell) { }
     }
 }

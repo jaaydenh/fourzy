@@ -47,6 +47,7 @@ namespace Fourzy._Updates.Mechanics
         public GameboardView gameboard { get; private set; }
         public List<TokenView> turnTokensInteractionList { get; private set; }
         public virtual Color outlineColor { get; }
+        public string id { get; protected set; }
 
         public BoardLocation location
         {

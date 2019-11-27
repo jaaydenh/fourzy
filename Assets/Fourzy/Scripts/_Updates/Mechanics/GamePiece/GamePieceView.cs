@@ -196,6 +196,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
 
         public void SetPiece(Piece piece)
         {
+            id = piece.UniqueId;
             this.piece = piece;
         }
 
