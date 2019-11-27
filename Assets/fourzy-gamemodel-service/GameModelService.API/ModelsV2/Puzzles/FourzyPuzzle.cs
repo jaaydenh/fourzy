@@ -87,23 +87,23 @@ namespace FourzyGameModel.Model
                 return new PlayerTurnResult(StartState, GameActions);
             }
 
-            //if (State.WinnerId > 0 && State.WinnerId == State.Opponent(Turn.PlayerId))
-            //{
-            //    Status = PuzzleStatus.FAILED;
-            //    GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.LOSS));
-            //}
+            if (State.WinnerId > 0 && State.WinnerId == State.Opponent(Turn.PlayerId))
+            {
+                Status = PuzzleStatus.FAILED;
+                GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.LOSS));
+            }
 
-            //if (State.WinnerId > 0 && State.WinnerId == Turn.PlayerId)
-            //{
-            //    Status = PuzzleStatus.SUCCESS;
-            //    GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.SUCCESS, PuzzleEvent.VICTORY));
-            //}
+            if (State.WinnerId > 0 && State.WinnerId == Turn.PlayerId)
+            {
+                Status = PuzzleStatus.SUCCESS;
+                GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.SUCCESS, PuzzleEvent.VICTORY));
+            }
 
-            //if (State.WinnerId < 0 && playerTurnRecord.Count >= MoveLimit)
-            //{
-            //    Status = PuzzleStatus.FAILED;
-            //    GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.NOMOREMOVES));
-            //}
+            if (State.WinnerId < 0 && playerTurnRecord.Count >= MoveLimit)
+            {
+                Status = PuzzleStatus.FAILED;
+                GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.NOMOREMOVES));
+            }
 
             return new PlayerTurnResult(State, GameActions, Turn);
         }
