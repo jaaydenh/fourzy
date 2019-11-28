@@ -1668,34 +1668,42 @@ namespace Fourzy._Updates.Mechanics.Board
                     case GameActionType.GAME_END:
                         SetHintAreaColliderState(false);
 
-                        GameActionGameEnd _gameEndAction = turnResults.Activity[actionIndex] as GameActionGameEnd;
-
-                        switch (_gameEndAction.GameEndType)
+                        if (turnResults.Activity[actionIndex].GetType() == typeof(GameActionGameEnd))
                         {
-                            case GameEndType.WIN:
-                                game.OnVictory();
-                                onGameFinished?.Invoke(game);
+                            GameActionGameEnd _gameEndAction = turnResults.Activity[actionIndex] as GameActionGameEnd;
 
-                                break;
+                            switch (_gameEndAction.GameEndType)
+                            {
+                                case GameEndType.WIN:
+                                    game.OnVictory();
+                                    onGameFinished?.Invoke(game);
 
-                            case GameEndType.DRAW:
-                                game.OnDraw();
-                                onDraw?.Invoke(game);
+                                    break;
 
-                                break;
+                                case GameEndType.DRAW:
+                                    game.OnDraw();
+                                    onDraw?.Invoke(game);
 
-                                //case GameEndType.NOPIECES:
-                                //    SetHintAreaColliderState(false);
-                                //    onGameFinished?.Invoke(model);
+                                    break;
 
-                                //    break;
+                                    //case GameEndType.NOPIECES:
+                                    //    SetHintAreaColliderState(false);
+                                    //    onGameFinished?.Invoke(model);
+
+                                    //    break;
+                            }
+
+                            List<GamePieceView> winningGamepieces = GetWinningPieces();
+                            for (int index = 0; index < winningGamepieces.Count; index++)
+                                winningGamepieces[index].PlayWinAnimation(index * .15f + .15f);
+
+                            actionIndex++;
                         }
-
-                        List<GamePieceView> winningGamepieces = GetWinningPieces();
-                        for (int index = 0; index < winningGamepieces.Count; index++)
-                            winningGamepieces[index].PlayWinAnimation(index * .15f + .15f);
-
-                        actionIndex++;
+                        else if (turnResults.Activity[actionIndex].GetType() == typeof(GameActionPuzzleStatus))
+                        {
+                            // TODO: Handle GameActionPuzzleStatus
+                            actionIndex++;
+                        }
 
                         break;
 
