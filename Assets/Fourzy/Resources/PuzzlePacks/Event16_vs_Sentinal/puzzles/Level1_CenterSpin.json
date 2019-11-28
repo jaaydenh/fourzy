@@ -1,5 +1,5 @@
 {
-  "ID": "1cb13b39-7148-440b-841b-bb93a58db797",
+  "ID": "63ad158c-e211-4d67-b364-2defa1636bb5",
   "Enabled": true,
   "GameBoard": {
     "boardSpaceData": [
@@ -41,30 +41,6 @@
       },
       {
         "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
         "T": null
       },
       {
@@ -77,15 +53,15 @@
       },
       {
         "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
         "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
       },
       {
         "P": null,
@@ -106,86 +82,6 @@
       {
         "P": null,
         "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": [ "S" ]
-      },
-      {
-        "P": null,
-        "T": null
-      },
-      {
-        "P": null,
-        "T": null
       },
       {
         "P": null,
@@ -217,11 +113,115 @@
       },
       {
         "P": null,
+        "T": [ "AR" ]
+      },
+      {
+        "P": null,
+        "T": [ "AD" ]
+      },
+      {
+        "P": null,
         "T": [ "S" ]
       },
       {
         "P": null,
         "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "AU" ]
+      },
+      {
+        "P": null,
+        "T": [ "AL" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
       },
       {
         "P": null,
@@ -264,15 +264,15 @@
     "rows": 8,
     "columns": 8,
     "area": 2,
-    "id": "46630e01-448c-4585-8ec3-71563130b02f",
-    "boardName": "TheKnot",
+    "id": "dd8e9f6a-2da8-454d-bddb-cf4877bd8028",
+    "boardName": "Level_CenterSpin",
     "enabled": true,
     "enabledGallery": true,
     "enabledRealtime": true
   },
-  "Profile": 27,
+  "Profile": 2,
   "Boss": 0,
-  "FirstTurn": 0,
+  "FirstTurn": 1,
   "Solution": [],
   "SolutionStateData": null,
   "GoalType": 0,

@@ -26,7 +26,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public static float QUICK_TAP_TIME = .34f;
         public static float DISTANCE_SELECT_DIRECTION_SWIPE_1 = 40f;
         public static float DISTANCE_SELECT_DIRECTION_SWIPE_2 = 80f;
-        public static float DISTANCE_TO_FINISH_SWIPE = 300f;
+        public static float DISTANCE_TO_FINISH_SWIPE = 200f;
         //portion of FINISH_SWIPE
         public static float DISTANCE_TO_FINISH_SWIPE_ANIMATION = .7f;
         public static bool CAN_CANCEL_TAP = false;
