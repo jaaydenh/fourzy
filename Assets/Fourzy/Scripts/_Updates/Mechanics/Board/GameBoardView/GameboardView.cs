@@ -1426,7 +1426,6 @@ namespace Fourzy._Updates.Mechanics.Board
             onMoveStarted?.Invoke(turn);
 
             int actionIndex = 0;
-            //int pushedPlayerID = -1;
             bool firstGameActionMoveFound = false;
             float customDelay = 0f;
             float delay = 0f;
@@ -1462,15 +1461,6 @@ namespace Fourzy._Updates.Mechanics.Board
                         actionIndex += moveActions.Length;
 
                         GamePieceView targetPiece = BoardBitsAt<GamePieceView>(moveActions[0].AsMoveAction().Start, moveActions[0].AsMoveAction().Piece.UniqueId);
-                        //List<GamePieceView> affected = BoardBitsAt<GamePieceView>((moveActions[0] as GameActionMove).Start).ToList();
-                        //GamePieceView targetPiece = null;
-                        //if (pushedPlayerID != -1)
-                        //{
-                        //    targetPiece = affected.Find(_gp => _gp.piece.PlayerId == pushedPlayerID);
-                        //    pushedPlayerID = -1;
-                        //}
-                        //else
-                        //    targetPiece = affected.First();
 
                         GamePieceView bit = (newGamePiece != null) ? newGamePiece : targetPiece;
 
@@ -1491,14 +1481,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         newGamePiece = null;
                         yield return new WaitForSeconds(waitTime);
-
-                        break;
-
-                    case GameActionType.PUSH:
-                        //GameActionPush pushAction = turnResults.Activity[actionIndex] as GameActionPush;
-                        //pushedPlayerID = pushAction.PushedPiece.PlayerId;
-
-                        actionIndex++;
 
                         break;
 
@@ -1668,27 +1650,48 @@ namespace Fourzy._Updates.Mechanics.Board
                     case GameActionType.GAME_END:
                         SetHintAreaColliderState(false);
 
-                        GameActionGameEnd _gameEndAction = turnResults.Activity[actionIndex] as GameActionGameEnd;
-
-                        switch (_gameEndAction.GameEndType)
+                        if (turnResults.Activity[actionIndex].GetType() == typeof(GameActionGameEnd))
                         {
-                            case GameEndType.WIN:
-                                game.OnVictory();
-                                onGameFinished?.Invoke(game);
+                            GameActionGameEnd _gameEndAction = turnResults.Activity[actionIndex] as GameActionGameEnd;
 
-                                break;
+                            switch (_gameEndAction.GameEndType)
+                            {
+                                case GameEndType.WIN:
+                                    game.OnVictory();
+                                    onGameFinished?.Invoke(game);
 
-                            case GameEndType.DRAW:
-                                game.OnDraw();
-                                onDraw?.Invoke(game);
+                                    break;
 
-                                break;
+                                case GameEndType.DRAW:
+                                    game.OnDraw();
+                                    onDraw?.Invoke(game);
 
-                                //case GameEndType.NOPIECES:
-                                //    SetHintAreaColliderState(false);
-                                //    onGameFinished?.Invoke(model);
+                                    break;
 
-                                //    break;
+                                    //case GameEndType.NOPIECES:
+                                    //    SetHintAreaColliderState(false);
+                                    //    onGameFinished?.Invoke(model);
+
+                                    //    break;
+                            }
+                        }
+                        else if (turnResults.Activity[actionIndex].GetType() == typeof(GameActionPuzzleStatus))
+                        {
+                            GameActionPuzzleStatus puzzleStatusAction = turnResults.Activity[actionIndex] as GameActionPuzzleStatus;
+
+                            switch (puzzleStatusAction.Status)
+                            {
+                                case PuzzleStatus.SUCCESS:
+                                    game.OnVictory();
+                                    onGameFinished?.Invoke(game);
+
+                                    break;
+
+                                case PuzzleStatus.FAILED:
+                                    onGameFinished?.Invoke(game);
+
+                                    break;
+                            }
                         }
 
                         List<GamePieceView> winningGamepieces = GetWinningPieces();
@@ -1741,21 +1744,21 @@ namespace Fourzy._Updates.Mechanics.Board
             }
 
             //since puzzle games dont send "lose" event, need to check manually
-            switch (game._Type)
-            {
-                case GameType.PUZZLE:
-                    if (game.isOver)
-                    {
-                        //player lost
-                        if (game._State.WinningLocations == null)
-                        {
-                            SetHintAreaColliderState(false);
-                            onGameFinished?.Invoke(game);
-                        }
-                    }
+            //switch (game._Type)
+            //{
+            //    case GameType.PUZZLE:
+            //        if (game.isOver)
+            //        {
+            //            //player lost
+            //            if (game._State.WinningLocations == null)
+            //            {
+            //                SetHintAreaColliderState(false);
+            //                onGameFinished?.Invoke(game);
+            //            }
+            //        }
 
-                    break;
-            }
+            //        break;
+            //}
 
             //check if any of created space been covered by gamepieces
             if (!startTurn)
