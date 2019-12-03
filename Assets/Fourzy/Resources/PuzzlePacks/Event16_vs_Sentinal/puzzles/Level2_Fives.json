@@ -1,5 +1,5 @@
 {
-    "ID": "c088ef70-f5bc-4d09-8e20-caa0bac38ac4",
+    "ID": "8661b284-bd3a-4de0-8a45-827f23a8339f",
     "Enabled": true,
     "GameBoard": {
         "boardSpaceData": [
@@ -12,7 +12,7 @@
             {
                 "P": null,
                 "T": [
-                    "AD"
+                    "S"
                 ]
             },
             {
@@ -22,232 +22,8 @@
             {
                 "P": null,
                 "T": [
-                    "AD"
+                    "S"
                 ]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": [
-                    "AD"
-                ]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": [
-                    "B"
-                ]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": [
-                    "."
-                ]
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
-            },
-            {
-                "P": null,
-                "T": null
             },
             {
                 "P": null,
@@ -273,6 +49,140 @@
             },
             {
                 "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AL"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AR"
+                ]
+            },
+            {
+                "P": null,
                 "T": [
                     "AU"
                 ]
@@ -283,8 +193,34 @@
             },
             {
                 "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
                 "T": [
-                    "AU"
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
                 ]
             },
             {
@@ -294,7 +230,83 @@
             {
                 "P": null,
                 "T": [
-                    "AU"
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "S"
                 ]
             },
             {
@@ -308,13 +320,13 @@
         "rows": 8,
         "columns": 8,
         "area": 2,
-        "id": "ff81b1ee-9b4e-4c91-b258-b62c7e68c071",
-        "boardName": "Level5_AngryFruit",
+        "id": "dd8e9f6a-2da8-454d-bddb-cf4877bd8028",
+        "boardName": "Level_Fives",
         "enabled": true,
         "enabledGallery": true,
         "enabledRealtime": true
     },
-    "Profile": 17,
+    "Profile": 2,
     "Boss": 0,
     "FirstTurn": 1,
     "Solution": [],

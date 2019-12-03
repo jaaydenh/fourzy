@@ -8,7 +8,7 @@ namespace Fourzy
         public const float DEMO_IDLE_TIME = 45f;
         public const float DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME = 8f;
 
-        public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.SWIPE;
+        public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.SWIPE_STYLE_2;
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
 

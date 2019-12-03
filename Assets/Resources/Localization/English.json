@@ -227,7 +227,7 @@
     },
     {
       "key": "tap_edge_rule",
-      "value": "Tap on the edge of the board to make a move"
+      "value": "Swipe to make a move"
     },
     {
       "key": "tap_to_continue",
@@ -239,7 +239,7 @@
     },
     {
       "key": "tap_to_place",
-      "value": "Tap to move\nyour piece"
+      "value": "Swipe to move\nyour piece"
     },
     {
       "key": "tap_to_open_map",
