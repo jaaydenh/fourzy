@@ -132,7 +132,7 @@ namespace Fourzy._Updates.UI.Widgets
         }
 
         public void CancelWidgetsRewardAnimation()
-        { 
+        {
             if (widgets == null) return;
 
             CancelRoutine("animateRewards");

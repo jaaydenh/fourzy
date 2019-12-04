@@ -26,9 +26,10 @@ namespace Fourzy._Updates.Mechanics.Board
         public static float QUICK_TAP_TIME = .34f;
         public static float DISTANCE_SELECT_DIRECTION_SWIPE_1 = 40f;
         public static float DISTANCE_SELECT_DIRECTION_SWIPE_2 = 80f;
-        public static float DISTANCE_TO_FINISH_SWIPE = 300f;
+        public static float DISTANCE_TO_FINISH_SWIPE = 250f;
         //portion of FINISH_SWIPE
-        public static float DISTANCE_TO_FINISH_SWIPE_ANIMATION = .7f;
+        public static float DISTANCE_TO_FINISH_SWIPE_ANIMATION = .9f;
+        public static int SOOTB = 1;
         public static bool CAN_CANCEL_TAP = false;
 
         public Transform bitsParent;
@@ -205,15 +206,36 @@ namespace Fourzy._Updates.Mechanics.Board
 
                             //deny if outside the board
                             BoardLocation _temp = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
-                            if (_temp.OnBoard(game._State.Board))
-                            {
-                                touchOriginPoint = position;
 
+                            //check if outside the board
+                            if (_temp.OnBoard(game._State.Board) || 
+                                _temp.Row == -SOOTB ||
+                                _temp.Column == -SOOTB || 
+                                _temp.Row == (game.Rows - 1) + SOOTB || 
+                                _temp.Column == (game.Columns - 1) + SOOTB)
+                            {
                                 List<BoardLocation> locationsToSample = new List<BoardLocation>();
-                                locationsToSample.Add(new BoardLocation(_temp.Row, 0));
-                                locationsToSample.Add(new BoardLocation(_temp.Row, game.Columns - 1));
-                                locationsToSample.Add(new BoardLocation(0, _temp.Column));
-                                locationsToSample.Add(new BoardLocation(game.Rows - 1, _temp.Column));
+
+                                if (_temp.OnBoard(game._State.Board))
+                                {
+                                    locationsToSample.Add(new BoardLocation(_temp.Row, 0));
+                                    locationsToSample.Add(new BoardLocation(_temp.Row, game.Columns - 1));
+                                    locationsToSample.Add(new BoardLocation(0, _temp.Column));
+                                    locationsToSample.Add(new BoardLocation(game.Rows - 1, _temp.Column));
+                                }
+                                else
+                                {
+                                    if (_temp.Row == -SOOTB)
+                                        locationsToSample.Add(new BoardLocation(_temp.Row + SOOTB, _temp.Column));
+                                    else if (_temp.Row == (game.Rows - 1) + SOOTB)
+                                        locationsToSample.Add(new BoardLocation(game.Rows - SOOTB, _temp.Column));
+                                    else if (_temp.Column == -SOOTB)
+                                        locationsToSample.Add(new BoardLocation(_temp.Row, _temp.Column + SOOTB));
+                                    else
+                                        locationsToSample.Add(new BoardLocation(_temp.Row, game.Columns - SOOTB));
+                                }
+
+                                touchOriginPoint = position;
 
                                 //get possible locations
                                 possibleSwipeLocations = new List<BoardLocation>();
@@ -1744,21 +1766,21 @@ namespace Fourzy._Updates.Mechanics.Board
             }
 
             //since puzzle games dont send "lose" event, need to check manually
-            //switch (game._Type)
-            //{
-            //    case GameType.PUZZLE:
-            //        if (game.isOver)
-            //        {
-            //            //player lost
-            //            if (game._State.WinningLocations == null)
-            //            {
-            //                SetHintAreaColliderState(false);
-            //                onGameFinished?.Invoke(game);
-            //            }
-            //        }
+            switch (game._Type)
+            {
+                case GameType.PUZZLE:
+                    if (game.isOver)
+                    {
+                        //player lost
+                        if (game._State.WinningLocations == null)
+                        {
+                            SetHintAreaColliderState(false);
+                            onGameFinished?.Invoke(game);
+                        }
+                    }
 
-            //        break;
-            //}
+                    break;
+            }
 
             //check if any of created space been covered by gamepieces
             if (!startTurn)

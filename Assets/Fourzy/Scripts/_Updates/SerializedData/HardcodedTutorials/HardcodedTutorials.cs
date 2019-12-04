@@ -83,7 +83,7 @@ namespace Fourzy._Updates._Tutorial
                         {
                             tasks = new OnboardingTask[]
                             {
-                                new OnboardingTask_PlaceGamepiece(2, FourzyGameModel.Model.Direction.RIGHT, 3),
+                                new OnboardingTask_PlaceGamepiece(2, Direction.RIGHT, 3),
                                 //this will skip to next
                                 new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
                             },

@@ -154,8 +154,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (_game == null)
             {
                 //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.passAndPlayDataHolder.random, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
-                //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoardByName("RotatingArrowInstructionBoard"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
-                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoard("2"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetPassAndPlayBoardByName("Sand Dunes"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoard("2"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
                 newGame._Type = GameType.PASSANDPLAY;
 
                 GameManager.Instance.activeGame = newGame;

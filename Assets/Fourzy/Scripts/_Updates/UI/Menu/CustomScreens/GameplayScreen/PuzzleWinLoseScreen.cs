@@ -48,6 +48,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (isCurrent) menuController.CloseCurrentScreen(true);
 
+            CancelRoutine("open");
             puzzlePackProgressWidget.CancelWidgetsRewardAnimation();
         }
 

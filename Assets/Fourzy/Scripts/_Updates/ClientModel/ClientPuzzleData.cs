@@ -135,7 +135,7 @@ namespace Fourzy._Updates.ClientModel
                 startingMagic = FourzyGameModel.Model.Constants.PlayerStartingMagic;
 
             //try get hasAIOpponent
-            JToken _hasAIOpponent = jObject["hasAIOpponent "];
+            JToken _hasAIOpponent = jObject["hasAIOpponent"];
             if (_hasAIOpponent != null) hasAIOpponent = _hasAIOpponent.ToObject<bool>();
 
             if (hasAIOpponent)

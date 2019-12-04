@@ -14,8 +14,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public RewardAnimationWidget animationWidgetPrefab;
 
-        private List<string> rewardRoutines = new List<string>();
-
         protected override void Awake()
         {
             base.Awake();
@@ -31,8 +29,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             StartRoutine(animationID, AnimateRewardRoutine(
                 spawnOrigin,
                 type,
-                amount, new Vector2(viewportPoint.x * menuController.size.x, viewportPoint.y * menuController.size.y)),
-                () => rewardRoutines.Remove(animationID));
+                amount, new Vector2(viewportPoint.x * menuController.size.x, viewportPoint.y * menuController.size.y)));
 
             return animationID;
         }

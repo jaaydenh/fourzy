@@ -146,8 +146,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (turn == null || turn.PlayerId < 1) return;
 
-            if (tutorial.data[step].ContainsAction(OnboardingActions.ON_MOVE_STARTED))
-                StartRoutine("moveFinishedNext", .5f, () => Next());
+            if (tutorial.data[step].ContainsAction(OnboardingActions.ON_MOVE_STARTED)) Next();
         }
 
         private void MoveEnded(ClientPlayerTurn turn)
