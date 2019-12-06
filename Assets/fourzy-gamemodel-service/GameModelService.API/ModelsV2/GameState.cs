@@ -247,6 +247,7 @@ namespace FourzyGameModel.Model
             }
             catch { }
             Herds[PlayerId] = new Herd(HerdId, HerdCount);
+            Players[PlayerId].HerdCount = HerdCount;
         }
 
         #endregion "Constructors"

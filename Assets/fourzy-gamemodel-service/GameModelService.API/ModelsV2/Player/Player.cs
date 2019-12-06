@@ -65,6 +65,7 @@ namespace FourzyGameModel.Model
             this.Profile = original.Profile;
             this.SpecialAbilityCount = original.SpecialAbilityCount;
             this.BossType = original.BossType;
+            this.HerdCount = original.HerdCount;
         }
 
         public void UseSpecialAbility()
