@@ -739,15 +739,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             OnGameFinished(game);
         }
 
-        private void OnMoveStarted(ClientPlayerTurn turn)
+        private void OnMoveStarted(ClientPlayerTurn turn, bool startTurn)
         {
+            if (startTurn) return;
+
             gameplayScreen.OnMoveStarted(turn);
 
             onMoveStarted?.Invoke(turn);
         }
 
-        private void OnMoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult)
+        private void OnMoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult, bool startTurn)
         {
+            if (startTurn) return;
+
             if (replayingLastTurn) replayingLastTurn = false;
 
             onMoveEnded?.Invoke(turn);

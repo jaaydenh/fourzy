@@ -196,10 +196,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (!widget.isEmpty)
                         {
-                            if (onePlayerTurnCounter % Constants.addTimerBarEveryXTurn == 0)
-                                widget.AddTimerValue(Constants.barsToAdd, true, true);
+                            if (onePlayerTurnCounter % Constants.ADD_TIMER_BAR_EVERY_X_TURN == 0)
+                                widget.AddTimerValue(Constants.BARS_TO_ADD, true, true);
                             else
-                                widget.AddSmallTimerValue(Constants.circularTimerValue);
+                                widget.AddSmallTimerValue(Constants.CIRCULAR_TIMER_VALUE);
                         }
                     }
                 });
@@ -240,7 +240,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 ActivatePlayerTimer(game._State.ActivePlayerId);
 
                 //reset timers
-                timerWidgets.ForEach(widget => { if (widget.isEmpty) widget.AddTimerValue(Constants.aiTurnTimerResetValue, true, true); });
+                timerWidgets.ForEach(widget => { if (widget.isEmpty) widget.AddTimerValue(Constants.AI_TURN_TIMER_RESET_VALUE, true, true); });
             }
 
             #endregion

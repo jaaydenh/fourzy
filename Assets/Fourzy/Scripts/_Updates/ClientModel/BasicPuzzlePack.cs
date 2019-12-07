@@ -70,7 +70,7 @@ namespace Fourzy._Updates.ClientModel
             Initialize();
 
             this.gauntletLevels = gauntletLevels;
-            gauntletStatus = new GauntletStatus() /*{ FourzyCount = Constants.GAUNTLET_DEFAULT_MOVES_COUNT, }*/;
+            gauntletStatus = new GauntletStatus();
 
             name = "Beat The Bot";
             packType = PackType.AI_PACK;

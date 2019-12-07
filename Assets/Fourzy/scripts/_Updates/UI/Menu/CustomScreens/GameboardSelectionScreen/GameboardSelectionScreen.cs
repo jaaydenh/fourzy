@@ -20,7 +20,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RectTransform gameboardsParent;
         public MiniGameboardWidget miniGameboardPrefab;
 
-        public ToggleGroup toggleGroup { get; private set; }
         public GameBoardDefinition data { get; private set; }
 
         private List<GameBoardDefinition> gameboards;
@@ -29,13 +28,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private bool wasDisabled = false;
         private MiniGameboardWidget selected;
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            toggleGroup = GetComponent<ToggleGroup>();
-        }
 
         protected void OnDisable()
         {

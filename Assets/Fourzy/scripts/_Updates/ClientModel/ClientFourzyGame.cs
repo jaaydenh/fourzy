@@ -93,13 +93,13 @@ namespace Fourzy._Updates.ClientModel
                         switch (GameManager.Instance.characterType)
                         {
                             case GameManager.PassPlayCharactersType.SELECTED_RANDOM:
-                                opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                if (string.IsNullOrEmpty(opponent.HerdId)) opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
 
                                 break;
 
                             case GameManager.PassPlayCharactersType.RANDOM:
-                                me.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
-                                opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                if (string.IsNullOrEmpty(me.HerdId)) me.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                if (string.IsNullOrEmpty(opponent.HerdId)) opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
 
                                 break;
                         }

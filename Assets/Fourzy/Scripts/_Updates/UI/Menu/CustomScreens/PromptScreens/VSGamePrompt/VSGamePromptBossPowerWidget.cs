@@ -26,13 +26,13 @@ namespace Fourzy._Updates.UI.Widgets
                         case BossType.Treant:
                             gameObject.SetActive(true);
 
-                            bossPowerIcon.sprite = GameContentManager.Instance.miscGameDataHolder.GetIcon($"boss_power_{playerData.BossType.ToString()}").sprite;
+                            bossPowerIcon.sprite = GameContentManager.Instance.miscGameDataHolder.GetIcon("BossPowerIcons", $"boss_power_{playerData.BossType.ToString()}").sprite;
                             bossPowerText.text = playerData.BossType.ToString();
 
                             break;
 
                         default:
-                            bossPowerIcon.sprite = GameContentManager.Instance.miscGameDataHolder.GetIcon($"boss_power_{BossType.EntryWay.ToString()}").sprite;
+                            bossPowerIcon.sprite = GameContentManager.Instance.miscGameDataHolder.GetIcon("BossPowerIcons", $"boss_power_{BossType.EntryWay.ToString()}").sprite;
                             bossPowerText.text = BossType.EntryWay.ToString();
 
                             break;

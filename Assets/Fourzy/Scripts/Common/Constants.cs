@@ -1,5 +1,6 @@
 ﻿//@vadym udod
-//add scene names constants
+
+using FourzyGameModel.Model;
 
 namespace Fourzy
 {
@@ -9,6 +10,8 @@ namespace Fourzy
         public const float DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME = 8f;
 
         public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.SWIPE_STYLE_2;
+        public const Area DEFAULT_AREA = Area.TRAINING_GARDEN;
+        public const int DEFAULT_UNLOCKED_THEMES = 6;
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
 
@@ -17,15 +20,15 @@ namespace Fourzy
         public const int REALTIME_COUNTDOWN_SECONDS = 6;
         public const int GAUNTLET_DEFAULT_MOVES_COUNT = 60;
 
-        public const int timerSections = 5;
-        public const int circularTimerValue = 8;
-        public const int initialTimerValue = 3;
-        public const int aiTurnTimerResetValue = 2;
-        public const int addTimerBarEveryXTurn = 2;
-        public const int barsToAdd = 1;
+        public const int TIMER_SECTIONS = 5;
+        public const int CIRCULAR_TIMER_VALUE = 8;
+        public const int INITIAL_TIMER_TIME = 3;
+        public const int AI_TURN_TIMER_RESET_VALUE = 2;
+        public const int ADD_TIMER_BAR_EVERY_X_TURN = 2;
+        public const int BARS_TO_ADD = 1;
 
-        public const int running_challenges_count = 100;
-        public const int complete_challenges_count = 50;
+        public const int RUNNING_CHALLENGES_COUNT = 100;
+        public const int COMPLETE_CHALLENGES_COUNT = 50;
 
         public const string GAME_MODE_FAST_PUZZLES = "unlock_fast_puzzles_mode";
         public const string GAME_MODE_GAUNTLET_GAME = "unlock_gauntlet_mode";

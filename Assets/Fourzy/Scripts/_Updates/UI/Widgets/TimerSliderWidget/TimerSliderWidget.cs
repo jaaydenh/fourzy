@@ -47,7 +47,7 @@ namespace Fourzy._Updates.UI.Widgets
                 //check stage
                 for (int stageIndex = 0; stageIndex < stages.list.Count; stageIndex++)
                 {
-                    if (timerValue / Constants.timerSections <= stages.list[stageIndex].threshold)
+                    if (timerValue / Constants.TIMER_SECTIONS <= stages.list[stageIndex].threshold)
                     {
                         stages.list[stageIndex].@event.Invoke();
 
@@ -65,7 +65,7 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 smallTimerValue = value;
 
-                smallTimerGraphics.fillAmount = smallTimerValue / Constants.circularTimerValue;
+                smallTimerGraphics.fillAmount = smallTimerValue / Constants.CIRCULAR_TIMER_VALUE;
             }
         }
 
@@ -94,43 +94,43 @@ namespace Fourzy._Updates.UI.Widgets
         {
             this.player = player;
 
-            SetTimerValue(Constants.initialTimerValue);
+            SetTimerValue(Constants.INITIAL_TIMER_TIME);
             Show(.3f);
         }
 
         public void AddTimerValue(float value, bool resetSmallTimer, bool vfx = false)
         {
-            timerValueTween.from = timerValue / Constants.timerSections;
-            TimerValue = Mathf.Clamp(TimerValue + value, 0f, Constants.timerSections);
-            timerValueTween.to = timerValue / Constants.timerSections;
+            timerValueTween.from = timerValue / Constants.TIMER_SECTIONS;
+            TimerValue = Mathf.Clamp(TimerValue + value, 0f, Constants.TIMER_SECTIONS);
+            timerValueTween.to = timerValue / Constants.TIMER_SECTIONS;
 
             if (timerValue <= 0f) onValueEmpty?.Invoke(player);
 
             timerValueTween.PlayForward(true);
 
-            if (resetSmallTimer) AddSmallTimerValue(Constants.circularTimerValue);
+            if (resetSmallTimer) AddSmallTimerValue(Constants.CIRCULAR_TIMER_VALUE);
 
-            if (vfx) ShowAddTimerVfx($"+<color=#00FF62>{value * Constants.circularTimerValue}sec!</color>", Vector2.zero, vfxDirection);
+            if (vfx) ShowAddTimerVfx($"+<color=#00FF62>{value * Constants.CIRCULAR_TIMER_VALUE}sec!</color>", Vector2.zero, vfxDirection);
         }
 
         public void SetTimerValue(float value)
         {
-            timerValueTween.from = timerValue / Constants.timerSections;
-            timerValueTween.to = value / Constants.timerSections;
+            timerValueTween.from = timerValue / Constants.TIMER_SECTIONS;
+            timerValueTween.to = value / Constants.TIMER_SECTIONS;
             timerValueTween.PlayForward(true);
 
-            TimerValue = Mathf.Clamp(value, 0f, Constants.timerSections);
+            TimerValue = Mathf.Clamp(value, 0f, Constants.TIMER_SECTIONS);
 
             if (timerValue <= 0f) onValueEmpty?.Invoke(player);
 
-            AddSmallTimerValue(Constants.circularTimerValue);
+            AddSmallTimerValue(Constants.CIRCULAR_TIMER_VALUE);
         }
 
         public void AddSmallTimerValue(float value)
         {
             smallTimerValueTween.from = SmallTimerValue;
 
-            smallTimerValueTween.to = Mathf.Clamp(SmallTimerValue + value, 0f, Constants.circularTimerValue);
+            smallTimerValueTween.to = Mathf.Clamp(SmallTimerValue + value, 0f, Constants.CIRCULAR_TIMER_VALUE);
             smallTimerValueTween.PlayForward(true);
         }
 

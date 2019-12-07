@@ -293,17 +293,7 @@ MonoBehaviour:
   events:
     inspectorListHeight: 83
     persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 3
-          selectedMember: 23
-          isDynamic: 0
-        target: {fileID: 114113304784225340}
-        memberName: BoardSelect
-        memberType: 8
-        arguments: []
-        isDynamic: 0
-        isCallEnabled: 1
+      calls: []
   onState:
     inspectorListHeight: 83
     persistentCalls:

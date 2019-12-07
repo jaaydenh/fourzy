@@ -5,7 +5,6 @@ using Fourzy._Updates.Audio;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
-using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +20,6 @@ namespace Fourzy._Updates.UI.Menu
     [RequireComponent(typeof(CanvasGroup))]
     public class MenuScreen : RoutinesBase
     {
-        //[SerializeField]
-        //private Selectable defaultSelectable;
-
         public AdvancedEvent onClose;
         public AdvancedEvent onOpen;
         public AdvancedEvent onBack;

@@ -39,7 +39,7 @@ namespace Fourzy._Updates.ClientModel
             get
             {
                 if (!_progressionIconEmpty)
-                    _progressionIconEmpty = GameContentManager.Instance.miscGameDataHolder.GetIcon("puzzleProgressionIconEmpty").sprite;
+                    _progressionIconEmpty = GameContentManager.Instance.miscGameDataHolder.GetIcon("ProgressionIcons", "puzzleProgressionIconEmpty").sprite;
 
                 return _progressionIconEmpty;
             }
@@ -52,7 +52,7 @@ namespace Fourzy._Updates.ClientModel
             get
             {
                 if (!_progressionIconSet)
-                    _progressionIconSet = GameContentManager.Instance.miscGameDataHolder.GetIcon("puzzleProgressionIconSet").sprite;
+                    _progressionIconSet = GameContentManager.Instance.miscGameDataHolder.GetIcon("ProgressionIcons", "puzzleProgressionIconSet").sprite;
 
                 return _progressionIconSet;
             }

@@ -40,8 +40,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public Action<IClientFourzy> onGameFinished;
         public Action<IClientFourzy> onDraw;
-        public Action<ClientPlayerTurn> onMoveStarted;
-        public Action<ClientPlayerTurn, PlayerTurnResult> onMoveEnded;
+        public Action<ClientPlayerTurn, bool> onMoveStarted;
+        public Action<ClientPlayerTurn, PlayerTurnResult, bool> onMoveEnded;
         public Action onCastCanceled;
         public Action<SpellId, int> onCast;
         public Action onWrongTurn;
@@ -139,7 +139,6 @@ namespace Fourzy._Updates.Mechanics.Board
             if (aiTurnThread != null && aiTurnThread.IsAlive)
             {
                 aiTurnThread.Abort();
-                Debug.Log("try cancel");
             }
         }
 
@@ -723,8 +722,8 @@ namespace Fourzy._Updates.Mechanics.Board
                     ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
                     {
                         if (GameManager.Instance.activeGame == null ||
-                                GameManager.Instance.activeGame.BoardID != gameId ||
-                                GamePlayManager.instance.board != _board) return;
+                            GameManager.Instance.activeGame.BoardID != gameId ||
+                            GamePlayManager.instance.board != _board) return;
 
                         turn = new ClientPlayerTurn(turnResults.Turn.Moves);
                         turn.PlayerId = turnResults.Turn.PlayerId;
@@ -1428,7 +1427,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             HideHintArea(HintAreaAnimationPattern.NONE);
 
-            if (turnResults.Activity.Count == 0) yield break;
+            //if (turnResults.Activity.Count == 0) yield break;
 
             //reset ActivePlayerID
             if (game.puzzleData && !game.puzzleData.hasAIOpponent)
@@ -1441,11 +1440,8 @@ namespace Fourzy._Updates.Mechanics.Board
             isAnimating = true;
             boardBits.ForEach(bit => { if (bit.active) bit.OnBeforeTurn(startTurn); });
 
-            //if gauntlet game, remove member
-            if (isGauntlet && move != null && move.Piece.PlayerId == game.me.PlayerId && game.myMembers.Count > 0) game.RemoveMember();
-
             //invoke onMoveStart
-            onMoveStarted?.Invoke(turn);
+            onMoveStarted?.Invoke(turn, startTurn);
 
             int actionIndex = 0;
             bool firstGameActionMoveFound = false;
@@ -1755,15 +1751,15 @@ namespace Fourzy._Updates.Mechanics.Board
 
             game.CheckLost();
 
-            //check if gauntlet game finished
-            if (isGauntlet && move != null && move.Piece.PlayerId == game.me.PlayerId)
-            {
-                if (game._State.Herds[move.Piece.PlayerId].Members.Count == 0 && game._State.WinningLocations == null)
-                {
-                    SetHintAreaColliderState(false);
-                    onGameFinished?.Invoke(game);
-                }
-            }
+            ////check if gauntlet game finished
+            //if (isGauntlet && move != null && move.Piece.PlayerId == game.me.PlayerId)
+            //{
+            //    if (game._State.Herds[move.Piece.PlayerId].Members.Count == 0 && game._State.WinningLocations == null)
+            //    {
+            //        SetHintAreaColliderState(false);
+            //        onGameFinished?.Invoke(game);
+            //    }
+            //}
 
             //since puzzle games dont send "lose" event, need to check manually
             switch (game._Type)
@@ -1818,7 +1814,7 @@ namespace Fourzy._Updates.Mechanics.Board
             isAnimating = false;
             boardBits.ForEach(bit => { if (bit.active) bit.OnAfterTurn(startTurn); });
 
-            onMoveEnded?.Invoke(turn, turnResults);
+            onMoveEnded?.Invoke(turn, turnResults, startTurn);
 
             //update hint blocks
             UpdateHintArea();
@@ -1831,58 +1827,52 @@ namespace Fourzy._Updates.Mechanics.Board
             boardUpdateRoutines.Remove(turnResults.GameState.UniqueId);
         }
 
-        //private IEnumerator TakeAITurnRoutine()
+        //private IEnumerator EvaluateAITurn()
         //{
-        //    this.StartCoroutineAsync(EvaluateAITurn(), out aiTurnTask);
-        //    yield return StartCoroutine(aiTurnTask.Wait());
+        //    yield return Ninja.JumpBack;
+
+        //    string gameId = game.BoardID;
+        //    PlayerTurnResult turnResults;
+        //    GameboardView _board = this;
+
+        //    //turnResults = game.TakeAITurn(true);
+
+        //    PlayerTurnResult AIResult = new PlayerTurnResult();
+
+
+        //    AIPlayer AI = new PuzzleAI(game._State);
+        //    TurnEvaluator turnEvaluator = new TurnEvaluator(game._State);
+
+        //    AIResult.Turn = AI.GetTurn();
+        //    AIResult.GameState = turnEvaluator.EvaluateTurn(AIResult.Turn);
+        //    AIResult.Activity = turnEvaluator.ResultActions;
+        //    game._State = AIResult.GameState;
+        //    Debug.Log("applied");
+
+        //    turnResults = AIResult;
+
+        //    //clear first before move actions
+        //    while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
+
+        //    yield return Ninja.JumpToUnity;
+
+        //    if (GameManager.Instance.activeGame == null ||
+        //        GameManager.Instance.activeGame.BoardID != gameId ||
+        //        GamePlayManager.instance.board != _board)
+        //        yield break;
+
+        //    turn = new ClientPlayerTurn(turnResults.Turn.Moves);
+        //    turn.PlayerId = turnResults.Turn.PlayerId;
+        //    turn.PlayerString = turnResults.Turn.PlayerString;
+        //    turn.Timestamp = turnResults.Turn.Timestamp;
+
+        //    turn.AITurn = true;
+
+        //    boardUpdateRoutines.Add(turnResults.GameState.UniqueId, StartCoroutine(BoardUpdateRoutine(turnResults, false)));
+
+        //    //manually reset noInput timer
+        //    StandaloneInputModuleExtended.instance.ResetNoInputTimer();
         //}
-
-        private IEnumerator EvaluateAITurn()
-        {
-            yield return Ninja.JumpBack;
-
-            string gameId = game.BoardID;
-            PlayerTurnResult turnResults;
-            GameboardView _board = this;
-
-            //turnResults = game.TakeAITurn(true);
-
-            PlayerTurnResult AIResult = new PlayerTurnResult();
-
-
-            AIPlayer AI = new PuzzleAI(game._State);
-            TurnEvaluator turnEvaluator = new TurnEvaluator(game._State);
-
-            AIResult.Turn = AI.GetTurn();
-            AIResult.GameState = turnEvaluator.EvaluateTurn(AIResult.Turn);
-            AIResult.Activity = turnEvaluator.ResultActions;
-            game._State = AIResult.GameState;
-            Debug.Log("applied");
-
-            turnResults = AIResult;
-
-            //clear first before move actions
-            while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
-
-            yield return Ninja.JumpToUnity;
-
-            if (GameManager.Instance.activeGame == null ||
-                GameManager.Instance.activeGame.BoardID != gameId ||
-                GamePlayManager.instance.board != _board)
-                yield break;
-
-            turn = new ClientPlayerTurn(turnResults.Turn.Moves);
-            turn.PlayerId = turnResults.Turn.PlayerId;
-            turn.PlayerString = turnResults.Turn.PlayerString;
-            turn.Timestamp = turnResults.Turn.Timestamp;
-
-            turn.AITurn = true;
-
-            boardUpdateRoutines.Add(turnResults.GameState.UniqueId, StartCoroutine(BoardUpdateRoutine(turnResults, false)));
-
-            //manually reset noInput timer
-            StandaloneInputModuleExtended.instance.ResetNoInputTimer();
-        }
 
         private IEnumerator AnimateHintBlocks(Dictionary<BoardLocation, HintBlock> affected, HintAreaStyle style, HintAreaAnimationPattern pattern)
         {
@@ -2051,11 +2041,9 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     BoardSpace boardSpace = game._State.Board.ContentsAt(row, col);
 
-                    foreach (IToken token in boardSpace.Tokens.Values)
-                        SpawnToken(token);
+                    foreach (IToken token in boardSpace.Tokens.Values) SpawnToken(token);
 
-                    foreach (Piece piece in boardSpace.Pieces)
-                        SpawnPiece(row, col, (PlayerEnum)piece.PlayerId).SetPiece(piece);
+                    foreach (Piece piece in boardSpace.Pieces) SpawnPiece(row, col, (PlayerEnum)piece.PlayerId).SetPiece(piece);
 
                     if (delay && (boardSpace.Tokens.Values.Count + boardSpace.Pieces.Count) > 0) yield return new WaitForEndOfFrame();
                 }

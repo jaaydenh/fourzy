@@ -119,7 +119,7 @@ namespace Fourzy
                 .SetShortCode("chalRanked")
                 .SetMaxResponseTimeInMillis(20000)
                 .SetStates(challengeStates)
-                .SetEntryCount(Constants.running_challenges_count)
+                .SetEntryCount(Constants.RUNNING_CHALLENGES_COUNT)
                 .Send(((response) =>
                 {
                     if (response.HasErrors)
@@ -173,7 +173,7 @@ namespace Fourzy
                 .SetShortCode("chalRanked")
                 .SetMaxResponseTimeInMillis(20000)
                 .SetStates(challengeStates)
-                .SetEntryCount(Constants.complete_challenges_count)
+                .SetEntryCount(Constants.COMPLETE_CHALLENGES_COUNT)
                 .Send(((response) =>
                 {
                     if (response.HasErrors)

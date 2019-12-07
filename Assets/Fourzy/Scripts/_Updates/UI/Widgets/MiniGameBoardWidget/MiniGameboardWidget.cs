@@ -28,8 +28,6 @@ namespace Fourzy._Updates.UI.Widgets
 
         public ClientFourzyGame game;
 
-        private GameboardSelectionScreen _screen;
-
         public GameboardView gameboardView { get; private set; }
 
         [HideInInspector, NonSerialized]
@@ -40,8 +38,6 @@ namespace Fourzy._Updates.UI.Widgets
             base.Awake();
 
             gameboardView = GetComponentInChildren<GameboardView>(); 
-
-            _screen = menuScreen as GameboardSelectionScreen;
         }
 
         public void ShowSpinner()
@@ -80,7 +76,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             game = new ClientFourzyGame(data, UserManager.Instance.meAsPlayer, new Player(2, "Player 2"));
             game._Type = GameType.PASSANDPLAY;
-            gameboardGraphics.sprite = sprites.GetGraphics(game._Area);
+            SetArea(game._Area);
 
             gameboardView.Initialize(game, false, false);
 
@@ -89,7 +85,18 @@ namespace Fourzy._Updates.UI.Widgets
             return gameboardView;
         }
 
-        public void BoardSelect() => _screen.SetGame(this);
+        public MiniGameboardWidget SetArea(Area area)
+        {
+            gameboardGraphics.sprite = sprites.GetGraphics(area);
+
+            return this;
+        }
+
+        public GameboardView QuickLoadBoard(GameBoardDefinition data)
+        {
+            SetData(data).StartCoroutine(gameboardView.CreateBitsRoutine());
+            return gameboardView;
+        }
 
         [Serializable]
         public class AreaGraphicsDataCollection

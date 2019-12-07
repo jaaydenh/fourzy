@@ -164,6 +164,18 @@ namespace Fourzy
                     //if (EazyNetChecker.Status == NetStatus.Connected) FirebaseUpdate();
                 }
             });
+
+            if (!PlayerPrefsWrapper.GetInitialPropertiesSet())
+            {
+                //unlock areas
+                foreach (Area area in Enum.GetValues(typeof(Area)))
+                {
+                    bool state = ((int)area & Constants.DEFAULT_UNLOCKED_THEMES) > 0;
+                    if (state) PlayerPrefsWrapper.SetThemeUnlocked((int)area, state);
+                }
+
+                PlayerPrefsWrapper.InitialPropertiesSet(true);
+            }
         }
 
         protected void Start()

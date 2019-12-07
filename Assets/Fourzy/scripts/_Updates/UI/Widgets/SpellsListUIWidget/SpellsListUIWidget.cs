@@ -117,9 +117,9 @@ namespace Fourzy._Updates.UI.Widgets
             spellWidgets.Add(spellWidget);
         }
 
-        public void UpdateSpells(ClientPlayerTurn turn)
+        public void UpdateSpells(ClientPlayerTurn turn, bool startTurn)
         {
-            if (turn == null || turn.PlayerId < 1) return;
+            if (startTurn || turn == null || turn.PlayerId < 1) return;
 
             spellWidgets.ForEach(widget => widget.UpdateWidget(turn.PlayerId));
         }

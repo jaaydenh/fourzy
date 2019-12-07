@@ -104,6 +104,7 @@ namespace Fourzy._Updates.UI.Camera3D
             key = sb.ToString();
         }
 
+        [System.Serializable]
         public class StringEventJoin
         {
             public string command;

@@ -109,7 +109,7 @@ namespace Fourzy
 
         public static bool GetInitialPropertiesSet() => PlayerPrefs.GetInt(kInitialProperties, 0) != 0;
 
-        public static void InitialPropertiesSet() => PlayerPrefs.SetInt(kInitialProperties, 1);
+        public static void InitialPropertiesSet(bool value) => PlayerPrefs.SetInt(kInitialProperties, value ? 1 : 0);
 
         public static string GetRemoteSetting(string key) => PlayerPrefs.GetString(kRemoteSetting + key, "0");
 
