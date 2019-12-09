@@ -113,7 +113,7 @@ namespace MoreMountains.NiceVibrations
                 return;
             }
 
-            if (Android() && !HAPTICS_ONLY)
+            if (Android())
             {
                 switch (type)
                 {
@@ -447,9 +447,9 @@ namespace MoreMountains.NiceVibrations
             }
             else
             {
-#if UNITY_IOS
-					Handheld.Vibrate();
-#endif
+// #if UNITY_IOS
+// 					Handheld.Vibrate();
+// #endif
             }
         }
 

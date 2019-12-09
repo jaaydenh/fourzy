@@ -172,7 +172,7 @@ PlayerSettings:
     iPhone: com.PartyTroll.Fourzy
   buildNumber:
     iPhone: 4
-  AndroidBundleVersionCode: 58
+  AndroidBundleVersionCode: 60
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 28
   AndroidPreferredInstallLocation: 1
