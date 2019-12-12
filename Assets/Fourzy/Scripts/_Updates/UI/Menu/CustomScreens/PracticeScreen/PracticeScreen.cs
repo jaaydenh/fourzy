@@ -22,7 +22,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public StringEventTrigger timerToggle;
         public MiniGameboardWidget miniGameboardPrefab;
 
-        private List<GameBoardDefinition> gameboards;
+        private Dictionary<Area, List<GameBoardDefinition>> gameboards = new Dictionary<Area, List<GameBoardDefinition>>();
         private int currentBoard = -1;
         private MiniGameboardWidget currentGameboardWidget;
 
@@ -33,7 +33,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected override void Start()
         {
-            gameboards = GameContentManager.Instance.passAndPlayGameboards;
+            foreach (GameBoardDefinition gameBoardDefinition in GameContentManager.Instance.passAndPlayGameboards)
+            {
+                if (gameBoardDefinition.Area <= Area.NONE) gameBoardDefinition.Area = Area.TRAINING_GARDEN;
+
+                if (!gameboards.ContainsKey(gameBoardDefinition.Area)) gameboards.Add(gameBoardDefinition.Area, new List<GameBoardDefinition>());
+                gameboards[gameBoardDefinition.Area].Add(gameBoardDefinition);
+            }
 
             //load profiles
             OnWidgetTap(AddWidget(AIProfile.Player, player1select.content, 1));
@@ -88,7 +94,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void NextBoard()
         {
-            if (currentBoard + 1 == gameboards.Count) currentBoard = -1;
+            if (currentBoard + 1 == gameboards[currentAreaWidget.area].Count) currentBoard = -1;
             else currentBoard++;
 
             LoadBoard(currentBoard);
@@ -96,7 +102,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void PreviousBoard()
         {
-            if (currentBoard - 1 == -2) currentBoard = gameboards.Count - 1;
+            if (currentBoard - 1 == -2) currentBoard = gameboards[currentAreaWidget.area].Count - 1;
             else currentBoard--;
 
             LoadBoard(currentBoard);
@@ -104,11 +110,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void Play()
         {
-            Player player1 = new Player(1, player1Profile.aiProfile.ToString(), player1Profile.aiProfile);
-            if (player1Profile.aiProfile != AIProfile.Player) player1.HerdId = player1Profile.prefabData.data.ID;
+            Player player1;
+            if (player1Profile.aiProfile != AIProfile.Player)
+                player1 = new Player(1, player1Profile.aiProfile.ToString(), player1Profile.aiProfile) { HerdId = player1Profile.prefabData.data.ID };
+            else
+                player1 = new Player(1, LocalizationManager.Value("player_one")) { PlayerString = UserManager.Instance.userId };
 
-            Player player2 = new Player(2, player2Profile.aiProfile.ToString(), player2Profile.aiProfile);
-            if (player2Profile.aiProfile != AIProfile.Player) player2.HerdId = player2Profile.prefabData.data.ID;
+            Player player2;
+            if (player2Profile.aiProfile != AIProfile.Player)
+                player2 = new Player(2, player2Profile.aiProfile.ToString(), player2Profile.aiProfile) { HerdId = player2Profile.prefabData.data.ID };
+            else
+            {
+                if (player1.Profile == AIProfile.Player)
+                    player2 = new Player(2, LocalizationManager.Value("player_two"));
+                else
+                    player2 = new Player(2, LocalizationManager.Value("player_one")) { PlayerString = UserManager.Instance.userId };
+            }
 
             GameType type = GameType.PASSANDPLAY;
 
@@ -117,7 +134,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             ClientFourzyGame game;
             if (currentBoard > -1)
-                game = new ClientFourzyGame(gameboards[currentBoard], player1, player2)
+                game = new ClientFourzyGame(gameboards[currentAreaWidget.area][currentBoard], player1, player2)
                 {
                     _Area = currentAreaWidget.area,
                     _Type = type,
@@ -152,6 +169,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             currentAreaWidget = widget;
             currentAreaWidget.Select();
             if (currentGameboardWidget) currentGameboardWidget.SetArea(currentAreaWidget.area);
+
+            currentBoard = -1;
+            LoadBoard(currentBoard);
         }
 
         private void LoadBoard(int index)
@@ -163,7 +183,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gameboard.button.interactable = false;
             gameboard.SetArea(currentAreaWidget.area);
 
-            if (index > -1) gameboard.QuickLoadBoard(gameboards[index]);
+            if (index > -1) gameboard.QuickLoadBoard(gameboards[currentAreaWidget.area][index]);
 
             currentGameboardWidget = gameboard;
         }

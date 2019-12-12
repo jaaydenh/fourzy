@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Managers;
+using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
 using UnityEngine;
 
@@ -72,6 +73,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void CompleteProgress() => GameContentManager.Instance.progressionMaps[0].CompleteAll();
 
         public void SetPlacementStyle(int value) => GameManager.Instance.placementStyle = (GameManager.PlacementStyle)value;
+
+        public void UnlockGamepieces()
+        {
+            GameContentManager.Instance.piecesDataHolder.UnlockAll();
+        }
+
+        public void ResetGamepieces()
+        {
+            GamePiecesDataHolder.ClearGamepiecesData();
+            GameContentManager.Instance.piecesDataHolder.Initialize();
+        }
 
         public void Toggle()
         {

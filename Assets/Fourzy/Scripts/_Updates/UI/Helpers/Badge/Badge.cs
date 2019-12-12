@@ -70,6 +70,16 @@ namespace Fourzy._Updates.UI.Helpers
             return this;
         }
 
+        public Badge SetAnchors(Vector2 value)
+        {
+            rectTransform.anchorMin = rectTransform.anchorMax = value;
+            rectTransform.anchoredPosition = Vector2.zero;
+
+            return this;
+        }
+
+        public Badge ResetAnchors() => SetAnchors(Vector2.one * .5f);
+
         public Badge SetPosition(Vector2 position)
         {
             rectTransform.localPosition = position;

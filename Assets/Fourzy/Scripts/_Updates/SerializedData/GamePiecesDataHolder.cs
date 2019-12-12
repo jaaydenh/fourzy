@@ -34,8 +34,7 @@ namespace Fourzy._Updates.Serialized
 
                 gamePiecesFastAccess.Add(gamePiece.data.ID, gamePiece);
 
-                if (gamePiece.data.enabled)
-                    enabledGamePiecesFastAccess.Add(gamePiece.data.ID, gamePiece);
+                if (gamePiece.data.enabled) enabledGamePiecesFastAccess.Add(gamePiece.data.ID, gamePiece);
             }
         }
 
@@ -59,10 +58,8 @@ namespace Fourzy._Updates.Serialized
             {
                 GamePiecePrefabData gamePieceData = gamePieces.list.Find(gamePiece => gamePiece.data.ID == gamePieceID);
 
-                if (gamePieceData != null)
-                    return gamePieceData.data;
-                else
-                    return null;
+                if (gamePieceData != null) return gamePieceData.data;
+                else return null;
             }
         }
 
@@ -77,10 +74,15 @@ namespace Fourzy._Updates.Serialized
             return prefabData.data;
         }
 
+        public void UnlockAll()
+        {
+            foreach (GamePiecePrefabData gamePiecePrefabData in enabledGamePiecesFastAccess.Values)
+                gamePiecePrefabData.data.Pieces = gamePiecePrefabData.data.piecesToUnlock;
+        }
+
         public static void ClearGamepiecesData()
         {
-            for (int index = 0; index < 50; index++)
-                PlayerPrefsWrapper.GamePieceDeleteData(index + "");
+            for (int index = 0; index < 50; index++) PlayerPrefsWrapper.GamePieceDeleteData(index + "");
         }
 
         public static GamePieceData _GetGamePieceData(GamePieceView gamePiece)

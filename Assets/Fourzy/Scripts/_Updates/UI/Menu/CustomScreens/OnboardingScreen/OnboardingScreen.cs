@@ -103,8 +103,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             step = 0;
 
             menuController.OpenScreen(this);
+
             masks.Hide(0f);
-            pointer.Hide(0f);
+            pointer.Reset();
 
             PlayerPrefsWrapper.SetTutorialOpened(tutorial.name, true);
             StartCoroutine(DisplayCurrentStep());
@@ -427,7 +428,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         //pointer
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(anchors);
-                        pointer.SetMessage(_buttonTask.message, _buttonTask.messageBoxOffset);
+                        pointer.SetMessage(_buttonTask.message, _buttonTask.messagePosition);
 
                         break;
                 }

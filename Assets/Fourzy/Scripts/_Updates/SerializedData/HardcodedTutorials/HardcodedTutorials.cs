@@ -233,6 +233,7 @@ namespace Fourzy._Updates._Tutorial
                         },
                     },
             },
+
             new Tutorial()
             {
                 name = "HintInstruction",
@@ -248,7 +249,7 @@ namespace Fourzy._Updates._Tutorial
                                 "GameSceneCanvas", 
                                 Vector2.one, 
                                 new Vector2(.07f, 0f),
-                                new Vector2(0f, 45f),
+                                new Vector2(.5f, .22f),
                                 LocalizationManager.Value("suggest_hint_use"), 
                                 false),
                         }
@@ -481,9 +482,9 @@ namespace Fourzy._Updates._Tutorial
         public string menuName;
         public bool showBG;
         public Vector2 pivotOffset;
-        public Vector2 messageBoxOffset;
+        public Vector2 messagePosition;
 
-        public OnboardingTask_HighlightButton(string buttonName, string menuName, Vector2 scale, Vector2 pivotOffset, Vector2 messageBoxOffset, string message = "", bool showBG = true)
+        public OnboardingTask_HighlightButton(string buttonName, string menuName, Vector2 scale, Vector2 pivotOffset, Vector2 messagePosition, string message = "", bool showBG = true)
         {
             action = OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON;
 
@@ -491,7 +492,7 @@ namespace Fourzy._Updates._Tutorial
             vector2value = scale;
 
             this.pivotOffset = pivotOffset;
-            this.messageBoxOffset = messageBoxOffset;
+            this.messagePosition = messagePosition;
             this.message = message;
             this.menuName = menuName;
             this.showBG = showBG;
