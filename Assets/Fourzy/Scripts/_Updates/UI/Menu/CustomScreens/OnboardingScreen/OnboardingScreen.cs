@@ -272,7 +272,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.SHOW_MASKED_AREA:
-                        masks.ShowMasks(task, FourzyMainMenuController.instance);
+                        masks.ShowMasks(task);
 
                         break;
 

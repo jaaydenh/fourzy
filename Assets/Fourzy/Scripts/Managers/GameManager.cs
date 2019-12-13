@@ -332,13 +332,7 @@ namespace Fourzy
             if (!NetworkAccess) return;
             Debug.Log("Fetching news..");
 
-            try
-            {
-                PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest(),
-                    result => { latestNews = result.News; onNewsFetched?.Invoke(); },
-                    error => Debug.LogError(error.GenerateErrorReport()));
-            }
-            catch (Exception) { }
+            StartRoutine("fetching_news", FetchingNews());
         }
 
         public static void UpdateGameTypeUserProperty(GameType gameType)
@@ -460,8 +454,8 @@ namespace Fourzy
                     //change gamepad mode
                     StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
 
-                    //check if there are any news
-                    CheckNews();
+                    ////check if there are any news
+                    //CheckNews();
 
                     activeGame = null;
                     currentPuzzlePack = null;
@@ -696,6 +690,23 @@ namespace Fourzy
                     new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
                 { _Type = GameType.PRESENTATION, });
             }
+        }
+
+        private IEnumerator FetchingNews()
+        {
+            while (!LoginManager.Instance.languageChecked) yield return null;
+
+            try
+            {
+                PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest(),
+                    result => {
+                        Debug.Log("News fetched " + result.News.Count);
+                        latestNews = result.News;
+                        onNewsFetched?.Invoke();
+                    },
+                    error => Debug.LogError(error.GenerateErrorReport()));
+            }
+            catch (Exception) { }
         }
 
         private IEnumerator GetRemoteSettingsRoutine()

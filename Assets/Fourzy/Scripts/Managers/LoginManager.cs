@@ -16,6 +16,8 @@ using SA.Foundation.Templates;
 using Fourzy._Updates.UI.Menu.Screens;
 using PlayFab;
 using PlayFab.ClientModels;
+using System.Collections;
+using PlayFab.ProfilesModels;
 
 namespace Fourzy
 {
@@ -27,11 +29,14 @@ namespace Fourzy
         public static event Action<string> OnLoginMessage;
         public static event Action<bool> OnDeviceLoginComplete;
 
-        public static string playfabID;
+        public static string playerMasterAccountID;
+        public static string playerTitleID;
 
         private bool isConnecting;
 
         private PlayFabAuthService _AuthService = PlayFabAuthService.Instance;
+
+        public bool languageChecked { get; private set; } = false;
 
         protected override void Awake()
         {
@@ -353,10 +358,8 @@ namespace Fourzy
 
         private void PlayFabLoginSuccess(LoginResult result)
         {
-            playfabID = result.PlayFabId;
+            playerMasterAccountID = result.PlayFabId;
             //AnalyticsManager.Instance.Identify(result.PlayFabId);
-
-            GameManager.Instance.CheckNews();
 
             if (GameManager.Instance.showInfoToasts) GamesToastsController.ShowTopToast("Device Authentication Success");
 
@@ -367,21 +370,19 @@ namespace Fourzy
                 UserManager.Instance.settingRandomName = true;
                 UserManager.Instance.SetDisplayName(UserManager.CreateNewPlayerName());
             }
-            else
-            {
-                PlayFabClientAPI.GetAccountInfo(
-                    new GetAccountInfoRequest()
-                    {
-                        PlayFabId = result.PlayFabId,
-                    },
-                    OnGetPlayerAccount,
-                    OnPlayFabGetProfileError);
-            }
+
+            PlayFabClientAPI.GetAccountInfo(
+                new GetAccountInfoRequest()
+                {
+                    PlayFabId = result.PlayFabId,
+                },
+                OnGetPlayerAccount,
+                error => Debug.Log("Error retrieving players profile: " + error.ErrorMessage));
         }
 
-        private void OnPlayFabGetProfileError(PlayFabError error)
+        private void OnProfileOK(GetEntityProfileResponse profile)
         {
-            if (GameManager.Instance.showInfoToasts) GamesToastsController.ShowTopToast("Error retrieving players profile: " + error.ErrorMessage);
+            StartCoroutine(SetProfileLanguage(profile.Profile.Language));
         }
 
         private void OnGetPlayerAccount(GetAccountInfoResult result)
@@ -389,9 +390,13 @@ namespace Fourzy
             OnLoginMessage?.Invoke("Device Authentication Success: " + result.AccountInfo.TitleInfo.DisplayName);
 
             UserManager.Instance.SetDisplayName(result.AccountInfo.TitleInfo.DisplayName, false);
+            playerTitleID = result.AccountInfo.TitleInfo.TitlePlayerAccount.Id;
 
-            //update language?
-
+            //get profile
+            PlayFabProfilesAPI.GetProfile(
+                new GetEntityProfileRequest() { Entity = new PlayFab.ProfilesModels.EntityKey() { Id = playerTitleID, Type = "title_player_account" } },
+                OnProfileOK,
+                error => Debug.Log("Error getting profile: " + error.ErrorMessage));
         }
 
         private void PlayFabLoginError(PlayFabError error)
@@ -430,6 +435,41 @@ namespace Fourzy
 
                     callback?.Invoke(leaderboards, string.Empty);
                 });
+        }
+
+        private IEnumerator SetProfileLanguage(string currentLanguageCode)
+        {
+            while (!LocalizationManager.Instance.isReady || string.IsNullOrEmpty(playerTitleID)) yield return null;
+
+            Debug.Log($"Language state: server {currentLanguageCode} ours {LocalizationManager.Instance.languageCode}");
+            if (currentLanguageCode != LocalizationManager.Instance.languageCode)
+            {
+                //updating system language
+                PlayFabProfilesAPI.SetProfileLanguage(new PlayFab.ProfilesModels.SetProfileLanguageRequest()
+                {
+                    Entity = new PlayFab.ProfilesModels.EntityKey() { Id = playerTitleID, Type = "title_player_account" },
+                    ExpectedVersion = 0,
+                    Language = LocalizationManager.Instance.languageCode,
+                }, OnLanguageSetOK, OnLanguageSetError);
+            }
+            else
+            {
+                languageChecked = true;
+                GameManager.Instance.CheckNews();
+            }
+        }
+
+        private void OnLanguageSetOK(SetProfileLanguageResponse response)
+        {
+            Debug.Log("Language updated");
+
+            languageChecked = true;
+            GameManager.Instance.CheckNews();
+        }
+
+        private void OnLanguageSetError(PlayFabError error)
+        {
+            Debug.Log("Language set error " + error.ErrorMessage);
         }
     }
 }

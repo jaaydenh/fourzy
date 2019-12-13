@@ -19,7 +19,9 @@ namespace Fourzy
         private static Dictionary<string, string> localizedText;
         private string missingTextString = "Localized text not found";
 
-        public bool isReady { get; private set; }
+        public string languageCode => cultureInfo.TwoLetterISOLanguageName;
+
+        public bool isReady { get; private set; } = false;
 
         protected override void Awake()
         {
@@ -28,6 +30,8 @@ namespace Fourzy
             cultureInfo = GetCultureInfo(PlayerLanguage);
 
             LoadLocalizedText(PlayerLanguage);
+
+            isReady = true;
         }
 
         public void LoadLocalizedText(SystemLanguage language)
@@ -47,8 +51,6 @@ namespace Fourzy
 
             for (int i = 0; i < loadedData.items.Length; i++)
                 localizedText.Add(loadedData.items[i].key, loadedData.items[i].value);
-
-            isReady = true;
         }
 
         public string GetLocalizedValue(string key)

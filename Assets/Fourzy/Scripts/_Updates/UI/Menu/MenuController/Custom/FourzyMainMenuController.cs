@@ -49,21 +49,21 @@ namespace Fourzy._Updates.UI.Menu
             //    }, OnResult, OnError);
             //}
 
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-                GameManager.Instance.StartGame(GameContentManager.Instance.GetFastPuzzle("ENCHANTED_FOREST_Puzzle_39_WinIn2"));
-            }
+            //if (Input.GetKeyDown(KeyCode.X))
+            //{
+            //    GameManager.Instance.StartGame(GameContentManager.Instance.GetFastPuzzle("ENCHANTED_FOREST_Puzzle_39_WinIn2"));
+            //}
         }
 
-        private void OnResult(ExecuteCloudScriptResult result)
-        {
-            print("good: " + result.ToJson());
-        }
+        //private void OnResult(ExecuteCloudScriptResult result)
+        //{
+        //    print("good: " + result.ToJson());
+        //}
 
-        private void OnError(PlayFabError error)
-        {
-            print("bad: " + error.ToString());
-        }
+        //private void OnError(PlayFabError error)
+        //{
+        //    print("bad: " + error.ToString());
+        //}
 
         protected override void OnInvokeMenuEvents(MenuEvents events)
         {

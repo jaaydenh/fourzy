@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayTutorials: 1
-  forceDisplayTutorials: 1
+  forceDisplayTutorials: 0
   showInfoToasts: 1
   debugMessages: 1
   extraFeatures: 1

@@ -22,7 +22,7 @@ namespace Fourzy._Updates.Mechanics.Board
         private Dictionary<Direction, BoardEdgeXMark> xmarks = new Dictionary<Direction, BoardEdgeXMark>();
         private Dictionary<Direction, GamePieceView> gamepieces = new Dictionary<Direction, GamePieceView>();
 
-        public Direction pickedDirection { get; private set; }
+        public Direction pickedDirection { get; private set; } = Direction.NONE;
 
         protected void Awake()
         {

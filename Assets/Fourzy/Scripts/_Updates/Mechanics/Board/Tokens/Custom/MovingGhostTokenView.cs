@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using FourzyGameModel.Model;
+using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
 {
@@ -14,24 +15,22 @@ namespace Fourzy._Updates.Mechanics.Board
             frequency = movingGhost.Frequency;
             currentCountdownValue = movingGhost.Countdown;
 
-            countdown.hideOnEmpty = frequency == 1;
-            countdown.SetValue(currentCountdownValue);
+            SetValue(currentCountdownValue);
 
             return base.SetData(tokenData);
-        }
-
-        public override void OnBeforeMoveAction(bool startTurn, params BoardLocation[] actionsMoves)
-        {
-            if (!startTurn) currentCountdownValue = 0;
-
-            base.OnBeforeMoveAction(startTurn, actionsMoves);
         }
 
         public override void OnAfterTurn(bool startTurn)
         {
             base.OnAfterTurn(startTurn);
 
-            if (!startTurn) countdown.SetValue(frequency - currentCountdownValue++ - 1);
+            if (startTurn) return;
+
+            if (currentCountdownValue + 1 >= frequency) currentCountdownValue = 0;
+            else currentCountdownValue++;
+            SetValue(currentCountdownValue);
         }
+
+        private void SetValue(int value) => countdown.SetValue(Mathf.Clamp(frequency - value, 1, frequency));
     }
 }

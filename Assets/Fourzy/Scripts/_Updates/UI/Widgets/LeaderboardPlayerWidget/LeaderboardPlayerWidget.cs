@@ -40,7 +40,7 @@ namespace Fourzy._Updates.UI.Widgets
             rankLabel.text = (entry.Position + 1) + "";
             typeLabel.text = entry.StatValue + "";
 
-            if (entry.PlayFabId == LoginManager.playfabID)
+            if (entry.PlayFabId == LoginManager.playerMasterAccountID)
             {
                 rankLabel.color = Color.green;
                 AddGamepieceView(UserManager.Instance.gamePieceID);

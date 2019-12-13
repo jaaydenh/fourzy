@@ -26,7 +26,7 @@ namespace Fourzy._Updates.UI.Widgets
             canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void ShowMasks(OnboardingTask task,/* MenuController menu,*/ bool clear = true)
+        public void ShowMasks(OnboardingTask task, bool clear = true)
         {
             Show();
 
