@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using CielaSpike;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
@@ -215,10 +214,10 @@ namespace Fourzy._Updates.Mechanics.Board
                             BoardLocation _temp = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
                             //check if outside the board
-                            if (_temp.OnBoard(game._State.Board) || 
+                            if (_temp.OnBoard(game._State.Board) ||
                                 _temp.Row == -SOOTB ||
-                                _temp.Column == -SOOTB || 
-                                _temp.Row == (game.Rows - 1) + SOOTB || 
+                                _temp.Column == -SOOTB ||
+                                _temp.Row == (game.Rows - 1) + SOOTB ||
                                 _temp.Column == (game.Columns - 1) + SOOTB)
                             {
                                 List<BoardLocation> locationsToSample = new List<BoardLocation>();
@@ -428,7 +427,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     {
                         if (arrowsController.pickedDirection == Direction.NONE) arrowsController.SetInitialProgress(touchOffset / DISTANCE_SELECT_DIRECTION_SWIPE_2);
 
-                        if (possibleSwipeDirections.Contains(arrowsController.pickedDirection) && 
+                        if (possibleSwipeDirections.Contains(arrowsController.pickedDirection) &&
                             (selectedBoardLocation == null || swipeDirection != arrowsController.pickedDirection))
                         {
                             swipeDirection = arrowsController.pickedDirection;
@@ -713,7 +712,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
         //when playerturn feed externaly (like when playing previous turn)
         //or realtime turn received from another client
-        //local only
         public Coroutine TakeTurn(PlayerTurn playerTurn)
         {
             turn = null;
@@ -753,20 +751,10 @@ namespace Fourzy._Updates.Mechanics.Board
             }
 
             AddIMoveToTurn(move);
+            if (selectedBoardLocation != null) turn.createdOnThisDevice = true;
 
-            PlayerTurnResult turnResults = null;
-
-            //if (model._allTurnRecord.Count > 0)
-            //{
-            turnResults = game.TakeTurn(turn, local, true);
-
-            //clear first before move actions
+            PlayerTurnResult turnResults = game.TakeTurn(turn, local, true);
             while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
-            //}
-            //else
-            //{
-            //    turnResults = model.TakeTurn(turn, local, true);
-            //}
 
             Coroutine coroutine = StartCoroutine(BoardUpdateRoutine(turnResults, false));
 
@@ -1391,13 +1379,10 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private void AddIMoveToTurn(IMove move)
         {
-            if (turn == null)
-                turn = new ClientPlayerTurn(new List<IMove>() { move });
-            else
-                turn.Moves.Add(move);
+            if (turn == null) turn = new ClientPlayerTurn(new List<IMove>() { move });
+            else turn.Moves.Add(move);
 
-            if (move.MoveType == MoveType.SIMPLE && turn.PlayerId == 0)
-                turn.PlayerId = (move as SimpleMove).Piece.PlayerId;
+            if (move.MoveType == MoveType.SIMPLE && turn.PlayerId == 0) turn.PlayerId = (move as SimpleMove).Piece.PlayerId;
         }
 
         private IEnumerator BoardUpdateRoutine(PlayerTurnResult turnResults, bool startTurn)
@@ -1408,6 +1393,7 @@ namespace Fourzy._Updates.Mechanics.Board
             if (game.puzzleData && !game.puzzleData.hasAIOpponent) game._State.ActivePlayerId = game.me.PlayerId;
 
             bool isGauntlet = game.puzzleData && game.puzzleData.gauntletStatus != null;
+            bool localyCreatedTurn = turn != null ? turn.createdOnThisDevice : false;
             SimpleMove move = turn != null ? turn.GetMove() : null;
 
             SetHintAreaColliderState(false);
@@ -1441,8 +1427,12 @@ namespace Fourzy._Updates.Mechanics.Board
                             newGamePiece = SpawnPiece(moveAction.Start.Row, moveAction.Start.Column, (PlayerEnum)moveAction.Piece.PlayerId, false);
                             newGamePiece.SetPiece(moveAction.Piece.Piece);
                             newGamePiece.Show(0f);
-                            //newGamePiece.Show(.25f);
-                            //newGamePiece.ScaleToCurrent(Vector3.zero, .25f);
+
+                            if (!localyCreatedTurn)
+                            {
+                                newGamePiece.Show(.25f);
+                                newGamePiece.ScaleToCurrent(Vector3.zero, .25f);
+                            }
 
                             firstGameActionMoveFound = true;
                         }
@@ -1456,9 +1446,10 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         GamePieceView bit = (newGamePiece != null) ? newGamePiece : targetPiece;
 
-                        float waitTime = 
-                            //(newGamePiece != null) ? bit.ExecuteGameAction(startTurn, moveActions.AddElementToStart(moveAction.InDirection(BoardLocation.Reverse(moveAction.Piece.Direction), 2))) : 
-                            bit.ExecuteGameAction(startTurn, moveActions);
+                        float waitTime = !localyCreatedTurn && (newGamePiece != null)
+                            ? bit.ExecuteGameAction(startTurn, 
+                                moveActions.AddElementToStart(moveAction.InDirection(BoardLocation.Reverse(moveAction.Piece.Direction), 2))) 
+                            : bit.ExecuteGameAction(startTurn, moveActions);
 
                         //check next action
                         if (actionIndex < turnResults.Activity.Count)

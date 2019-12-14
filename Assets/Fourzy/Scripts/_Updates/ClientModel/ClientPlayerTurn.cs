@@ -9,6 +9,7 @@ namespace Fourzy._Updates.ClientModel
     public class ClientPlayerTurn : PlayerTurn
     {
         public bool AITurn = false;
+        public bool createdOnThisDevice = false;
 
         public ClientPlayerTurn(SimpleMove Move) : base(Move)
         {
