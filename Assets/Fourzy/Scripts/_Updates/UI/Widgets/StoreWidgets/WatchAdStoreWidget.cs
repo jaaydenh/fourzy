@@ -66,7 +66,7 @@ namespace Fourzy._Updates.UI.Widgets
             switch (storeScreen.filter)
             {
                 case StorePromptScreen.StoreItemType.HINTS:
-                    MoPubBridge.instance.RequestRewardedVideo();
+                    MoPubBridge.instance.ShowRewardedVideoAd();
 
                     //disable button
                     button.SetState(false);

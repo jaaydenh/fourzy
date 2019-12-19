@@ -53,6 +53,8 @@ MonoBehaviour:
   tapToStartGame: 1
   characterType: 2
   excludeInstructionsFor: 01000000
+  fallbackLatitude: 37.7833
+  fallbackLongitude: 122.4167
 --- !u!114 &6077144665870927472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -715,6 +717,7 @@ Transform:
   - {fileID: 4146861806990582}
   - {fileID: 4417748415124476}
   - {fileID: 224577896050941666}
+  - {fileID: 5299229907400986291}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -892,3 +895,46 @@ MonoBehaviour:
     style: 1
   - prefab: {fileID: 114289499395651876, guid: f4b54656e79739a4aa98818ceae25777, type: 3}
     style: 2
+--- !u!1 &50667142261118135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5299229907400986291}
+  - component: {fileID: 4514558571363403901}
+  m_Layer: 0
+  m_Name: MoPub
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5299229907400986291
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50667142261118135}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4316256013084540}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4514558571363403901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50667142261118135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3944c92c3ea34408d2f7418922e793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -89,7 +89,6 @@ namespace Fourzy._Updates.Managers
             if (Status != previousStatus)
             {
                 onStatusChanged?.Invoke(Status);
-                print(Status);
             }
         }
     }

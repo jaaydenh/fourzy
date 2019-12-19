@@ -84,6 +84,9 @@ namespace Fourzy
         public DependencyStatus dependencyStatus { get; set; }
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public string sessionID { get; private set; }
+        public LocationInfo? lastLocation { get; private set; } = null;
+        public float fallbackLatitude = 37.7833f;
+        public float fallbackLongitude = 122.4167f;
 
         private bool configFetched = false;
         private PlacementStyle _placementStyle;
@@ -101,6 +104,24 @@ namespace Fourzy
                     }
 
                 return mainMenuLoaded;
+            }
+        }
+
+        public float latitude
+        {
+            get
+            {
+                if (lastLocation == null) return fallbackLatitude;
+                else return lastLocation.Value.latitude;
+            }
+        }
+
+        public float longitude
+        {
+            get
+            {
+                if (lastLocation == null) return fallbackLongitude;
+                else return lastLocation.Value.longitude;
             }
         }
 
@@ -180,6 +201,8 @@ namespace Fourzy
 
         protected void Start()
         {
+            if (Instance != this) return;
+
 #if UNITY_IOS
             UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
             UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
@@ -196,6 +219,8 @@ namespace Fourzy
 
             NetworkManager.instance.StartChecking();
             placementStyle = (PlacementStyle)PlayerPrefsWrapper.GetPlacementStyle();
+
+            StartRoutine("location", GetLocation());
         }
 
         protected void Update()
@@ -719,6 +744,37 @@ namespace Fourzy
         private IEnumerator StartingGameRoutine()
         {
             while (!GamePlayManager.instance || !GamePlayManager.instance.isBoardReady) yield return null;
+        }
+
+        private IEnumerator GetLocation()
+        {
+            Debug.Log("loc1");
+            if (!Input.location.isEnabledByUser) { Debug.LogWarning("location services disabled"); yield break; }
+
+            Debug.Log("loc2");
+            Input.location.Start();
+
+            int maxWait = 5;
+            while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+            {
+                yield return new WaitForSeconds(1);
+                maxWait--;
+            }
+
+            if (maxWait < 1)
+            {
+                print("locaiton timed out"); yield break;
+            }
+
+            if (Input.location.status == LocationServiceStatus.Failed)
+            {
+                print("Unable to determine device location");
+                yield break;
+            }
+            else
+                lastLocation = Input.location.lastData;
+
+            Input.location.Stop();
         }
 
         [System.Serializable]
