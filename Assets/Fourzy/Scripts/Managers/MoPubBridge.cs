@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics
@@ -27,6 +28,8 @@ namespace Fourzy._Updates.Mechanics
         private readonly string[] _rewardedVideoAdUnits = { "920b6145fb1546cf8b5cf2ac34638bb7" };
         private readonly string[] _rewardedRichMediaAdUnits = { "a96ae2ef41d44822af45c6328c4e1eb1" };
 #endif
+
+        private Dictionary<string, List<MoPub.Reward>> adUnitToRewardsMapping = new Dictionary<string, List<MoPub.Reward>>();
 
         protected void Awake()
         {
@@ -57,39 +60,43 @@ namespace Fourzy._Updates.Mechanics
             MoPubManager.OnRewardedVideoClosedEvent += OnRewardedVideoClosedEvent;
         }
 
-    protected void OnDestroy()
-    {
-        MoPubManager.OnSdkInitializedEvent -= OnSdkInitializedEvent;
+        protected void OnDestroy()
+        {
+            MoPubManager.OnSdkInitializedEvent -= OnSdkInitializedEvent;
 
-        MoPubManager.OnRewardedVideoLoadedEvent -= OnRewardedVideoLoadedEvent;
-        MoPubManager.OnRewardedVideoFailedEvent -= OnRewardedVideoFailedEvent;
-        MoPubManager.OnRewardedVideoFailedToPlayEvent -= OnRewardedVideoFailedToPlayEvent;
-        MoPubManager.OnRewardedVideoClosedEvent -= OnRewardedVideoClosedEvent;
-    }
+            MoPubManager.OnRewardedVideoLoadedEvent -= OnRewardedVideoLoadedEvent;
+            MoPubManager.OnRewardedVideoFailedEvent -= OnRewardedVideoFailedEvent;
+            MoPubManager.OnRewardedVideoFailedToPlayEvent -= OnRewardedVideoFailedToPlayEvent;
+            MoPubManager.OnRewardedVideoClosedEvent -= OnRewardedVideoClosedEvent;
+        }
 
-    private void OnRewardedVideoClosedEvent(string addUnitID)
-    {
-        if (GameManager.Instance.debugMessages) Debug.Log("rewarded video closed " + addUnitID);
-    }
+        private void OnRewardedVideoClosedEvent(string adUnitID)
+        {
+            if (GameManager.Instance.debugMessages) Debug.Log("rewarded video closed " + adUnitID);
+        }
 
-    private void OnRewardedVideoFailedToPlayEvent(string addUnitID, string error)
-    {
-        Debug.LogWarning("rewarded video failed to play " + addUnitID + " " + error);
-    }
+        private void OnRewardedVideoFailedToPlayEvent(string adUnitID, string error)
+        {
+            Debug.LogWarning("rewarded video failed to play " + adUnitID + " " + error);
+        }
 
-    private void OnRewardedVideoFailedEvent(string addUnitID, string error)
-    {
-        Debug.LogWarning("rewarded video failed " + addUnitID + " " + error);
-    }
+        private void OnRewardedVideoFailedEvent(string adUnitID, string error)
+        {
+            Debug.LogWarning("rewarded video failed " + adUnitID + " " + error);
+        }
 
-    private void OnRewardedVideoLoadedEvent(string addUnitID)
-    {
-        if (GameManager.Instance.debugMessages) Debug.Log("rewarded video loaded " + addUnitID);
+        private void OnRewardedVideoLoadedEvent(string adUnitID)
+        {
+            if (GameManager.Instance.debugMessages) Debug.Log("rewarded video loaded " + adUnitID);
 
-        MoPub.ShowRewardedVideo(addUnitID);
-    }
+            if (!adUnitToRewardsMapping.ContainsKey(adUnitID)) adUnitToRewardsMapping.Add(adUnitID, MoPub.GetAvailableRewards(adUnitID));
 
-    public void ShowRewardedVideoAd()
+            if (adUnitToRewardsMapping.ContainsKey(adUnitID) && adUnitToRewardsMapping[adUnitID].Count > 0) MoPub.SelectReward(adUnitID, adUnitToRewardsMapping[adUnitID][0]);
+
+            MoPub.ShowRewardedVideo(adUnitID);
+        }
+
+        public void ShowRewardedVideoAd()
         {
             if (GameManager.Instance.debugMessages) Debug.Log("requesting video ad, location lat:" + GameManager.Instance.latitude + ", lon:" + GameManager.Instance.longitude);
 
@@ -99,12 +106,12 @@ namespace Fourzy._Updates.Mechanics
             latitude: GameManager.Instance.latitude,
             longitude: GameManager.Instance.longitude,
             customerId: "customer101");
-    }
+        }
 
-    private void OnSdkInitializedEvent(string message)
-    {
-        MoPub.LoadRewardedVideoPluginsForAdUnits(_rewardedVideoAdUnits);
-        MoPub.LoadRewardedVideoPluginsForAdUnits(_rewardedRichMediaAdUnits);
+        private void OnSdkInitializedEvent(string message)
+        {
+            MoPub.LoadRewardedVideoPluginsForAdUnits(_rewardedVideoAdUnits);
+            MoPub.LoadRewardedVideoPluginsForAdUnits(_rewardedRichMediaAdUnits);
+        }
     }
-}
 }
