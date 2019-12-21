@@ -17,6 +17,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public StoreItemType filter { get; private set; }
 
+        protected void OnDestroy()
+        {
+            GameManager.onPurchaseComplete -= OnPurchaseComplete;
+        }
+
         public void Prompt(StoreItemType filter)
         {
             this.filter = filter;
@@ -57,6 +62,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         widgets.Add(Instantiate(storeItemWidget, productsParent).SetData(product));
             }
             catch (Exception) { }
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            GameManager.onPurchaseComplete += OnPurchaseComplete;
         }
 
         public void OnPurchaseComplete(Product product)

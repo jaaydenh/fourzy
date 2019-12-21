@@ -34,6 +34,9 @@ namespace Fourzy
 {
     public class GameManager : RoutinesBase
     {
+        public static Action<Product> onPurchaseComplete;
+        public static Action<Product> onPurchaseFailed;
+
         public static Action onNewsFetched;
         public static Action<bool> onNetworkAccess;
         public static Action<string> onSceneChanged;
@@ -58,6 +61,8 @@ namespace Fourzy
         [Header("Pass And Play games only")]
         public bool tapToStartGame = true;
         public PassPlayCharactersType characterType = PassPlayCharactersType.SELECTED_RANDOM;
+        public float fallbackLatitude = 37.7833f;
+        public float fallbackLongitude = 122.4167f;
         public List<TokenType> excludeInstructionsFor;
 
         /// <summary>
@@ -85,8 +90,6 @@ namespace Fourzy
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public string sessionID { get; private set; }
         public LocationInfo? lastLocation { get; private set; } = null;
-        public float fallbackLatitude = 37.7833f;
-        public float fallbackLongitude = 122.4167f;
 
         private bool configFetched = false;
         private PlacementStyle _placementStyle;
@@ -325,6 +328,8 @@ namespace Fourzy
 
         public void OnPurchaseComplete(Product product)
         {
+            onPurchaseComplete?.Invoke(product);
+
             //try get product data
             MiscGameContentHolder.StoreItemExtraData _data = GameContentManager.Instance.miscGameDataHolder.GetStoreItem(product.definition.id);
 
@@ -347,7 +352,7 @@ namespace Fourzy
 
         public void OnPurchaseFailed(Product product, PurchaseFailureReason reason)
         {
-
+            onPurchaseFailed?.Invoke(product);
         }
 
         public void StartPresentataionGame() => OnNoInput(new KeyValuePair<string, float>("startDemoGame", 0f));
@@ -748,10 +753,8 @@ namespace Fourzy
 
         private IEnumerator GetLocation()
         {
-            Debug.Log("loc1");
             if (!Input.location.isEnabledByUser) { Debug.LogWarning("location services disabled"); yield break; }
 
-            Debug.Log("loc2");
             Input.location.Start();
 
             int maxWait = 5;
