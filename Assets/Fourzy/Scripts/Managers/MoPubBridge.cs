@@ -9,24 +9,19 @@ namespace Fourzy._Updates.Mechanics
     {
         public static MoPubBridge instance;
 
-        public static string AdUnitID = "b195f8dd8ded45fe847ad89ed1d016da";
+#if UNITY_ANDROID || UNITY_EDITOR
+        public static string AdUnitID = "879ae95cf2084bb0aafee3b4f4d576d7";
+#elif UNITY_ISO
+        public static string AdUnitID = "287e9b186b3146a0ac606985ad69d115";
+#endif
 
 #if UNITY_IOS
-    //private readonly string[] _bannerAdUnits =
-    //    { "0ac59b0996d947309c33f59d6676399f", "23b49916add211e281c11231392559e4" };
-
-    //private readonly string[] _interstitialAdUnits =
-    //    { "4f117153f5c24fa6a3a92b818a5eb630", "3aba0056add211e281c11231392559e4" };
 
     private readonly string[] _rewardedVideoAdUnits =
-        { "8f000bd5e00246de9c789eed39ff6096", "98c29e015e7346bd9c380b1467b33850" };
+        { "8f000bd5e00246de9c789eed39ff6096", "faedb21751d9475a8563b37cf3bf9c6a" };
 
-    private readonly string[] _rewardedRichMediaAdUnits = { };
 #elif UNITY_ANDROID || UNITY_EDITOR
-        //private readonly string[] _bannerAdUnits = { "b195f8dd8ded45fe847ad89ed1d016da" };
-        //private readonly string[] _interstitialAdUnits = { "24534e1901884e398f1253216226017e" };
-        private readonly string[] _rewardedVideoAdUnits = { "920b6145fb1546cf8b5cf2ac34638bb7" };
-        private readonly string[] _rewardedRichMediaAdUnits = { "a96ae2ef41d44822af45c6328c4e1eb1" };
+        private readonly string[] _rewardedVideoAdUnits = { "9b75826d5a7c44ccb91a6f73a55eec61" };
 #endif
 
         private Dictionary<string, List<MoPub.Reward>> adUnitToRewardsMapping = new Dictionary<string, List<MoPub.Reward>>();
@@ -45,6 +40,7 @@ namespace Fourzy._Updates.Mechanics
             MoPub.InitializeSdk(new MoPub.SdkConfiguration
             {
                 AdUnitId = AdUnitID,
+                
                 LogLevel = MoPub.LogLevel.Info,
 
                 // Uncomment the following line to allow supported SDK networks to collect user information on the basis
@@ -111,7 +107,6 @@ namespace Fourzy._Updates.Mechanics
         private void OnSdkInitializedEvent(string message)
         {
             MoPub.LoadRewardedVideoPluginsForAdUnits(_rewardedVideoAdUnits);
-            MoPub.LoadRewardedVideoPluginsForAdUnits(_rewardedRichMediaAdUnits);
         }
     }
 }
