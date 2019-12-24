@@ -171,7 +171,7 @@ PlayerSettings:
     Android: com.supermove.fourzy
     iPhone: com.PartyTroll.Fourzy
   buildNumber:
-    iPhone: 5
+    iPhone: 6
   AndroidBundleVersionCode: 61
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 28
