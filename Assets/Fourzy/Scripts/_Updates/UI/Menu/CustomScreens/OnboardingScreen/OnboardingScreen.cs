@@ -234,7 +234,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             board.BoardLocationToVec2(new BoardLocation((int)task.vector2value.y, (int)task.vector2value.x)));
 
                         pointer.SetAnchors(anchors);
-                        pointer.SetMessage(task.stringValue, Vector2.zero);
+                        pointer.SetMessage(task.stringValue);
 
                         break;
 
@@ -394,7 +394,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(anchors);
-                        pointer.SetMessage(_eventTask.stringValue, Vector2.zero);
+                        pointer.SetMessage(_eventTask.stringValue);
 
                         GameManager.Instance.currentMap.SetScrollLockedState(true);
 
@@ -421,14 +421,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             }
                         }
 
-                        anchors = currentButton.rectTransform.GetViewportPosition() + _buttonTask.pivotOffset;
+                        Vector2 viewportPosition = currentButton.rectTransform.GetViewportPosition();
+                        anchors = viewportPosition + _buttonTask.pointerOffset;
+                        _buttonTask.TrySetMessagePivot(viewportPosition);
 
                         masks.ShowMask(anchors, currentButton.rectTransform, _buttonTask.vector2value, _buttonTask.showBG);
 
                         //pointer
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(anchors);
-                        pointer.SetMessage(_buttonTask.message, _buttonTask.messagePosition);
+                        pointer.SetMessage(_buttonTask.message, _buttonTask.messagePositionData);
 
                         break;
                 }

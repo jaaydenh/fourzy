@@ -134,6 +134,10 @@
       "value": "Good job!"
     },
     {
+      "key": "human",
+      "value": "Human"
+    },
+    {
       "key": "lost",
       "value": "Lost"
     },

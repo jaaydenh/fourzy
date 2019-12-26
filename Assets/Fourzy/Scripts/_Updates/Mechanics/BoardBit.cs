@@ -258,6 +258,7 @@ namespace Fourzy._Updates.Mechanics
                     outline = body.AddComponent<SpriteRendererOutline>();
             }
 
+            outline.blueSize = .0015f;
             outline.outlineColor = outlineColor;
             outline.Animate(0f, 1f, 1f, repeat);
         }

@@ -31,6 +31,9 @@ namespace Fourzy._Updates.Mechanics.Board
             SetValue(currentCountdownValue);
         }
 
-        private void SetValue(int value) => countdown.SetValue(Mathf.Clamp(frequency - value, 1, frequency));
+        private void SetValue(int value)
+        {
+            if (frequency != 1) countdown.SetValue(Mathf.Clamp(frequency - value, 1, frequency));
+        }
     }
 }

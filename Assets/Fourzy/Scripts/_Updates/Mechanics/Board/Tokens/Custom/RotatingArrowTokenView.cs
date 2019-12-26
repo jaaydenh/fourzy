@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using FourzyGameModel.Model;
+using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
 {
@@ -14,7 +15,7 @@ namespace Fourzy._Updates.Mechanics.Board
             frequency = rotatingArrow.Frequency;
             currentCountdownValue = rotatingArrow.CountDown;
 
-            countdown.SetValue(currentCountdownValue);
+            SetValue(currentCountdownValue);
 
             return base.SetData(tokenData);
         }
@@ -25,7 +26,13 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (currentCountdownValue - 1 <= 0) currentCountdownValue = frequency;
             else currentCountdownValue--;
-            countdown.SetValue(currentCountdownValue);
+
+            SetValue(currentCountdownValue);
+        }
+
+        private void SetValue(int value)
+        {
+            if (frequency != 1) countdown.SetValue(value);
         }
     }
 }

@@ -70,7 +70,6 @@ namespace Fourzy._Updates.Mechanics.Board
         private Thread aiTurnThread;
         //private Task aiTurnTask;
 
-        //for bits creation
         private int lastRow = 0;
         private int lastCol = 0;
 

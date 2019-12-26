@@ -155,10 +155,19 @@ namespace Fourzy._Updates.UI.Menu
             onClose.Invoke();
         }
 
-        //will remove itself from menuController screens stack
         public void CloseSelf(bool animate = true)
         {
-            menuController.CloseScreen(this, animate);
+            if (menuController)
+            {
+                if (isCurrent) menuController.CloseCurrentScreen(animate);
+                else
+                {
+                    Close(animate);
+                    if (menuController.screensStack.Contains(this)) menuController.screensStack.Remove(this);
+                }
+            }
+            else
+                Close(animate);
         }
 
         public virtual void ExecuteMenuEvent(MenuEvents menuEvent) { }

@@ -20,18 +20,16 @@ namespace Fourzy._Updates.UI.Widgets
 
         protected void OnEnable()
         {
-            MoPubManager.OnRewardedVideoLoadedEvent += OnRewardedVideoLoadedEvent;
-            MoPubManager.OnRewardedVideoFailedEvent += OnRewardedVideoFailedEvent;
-            MoPubManager.OnRewardedVideoFailedToPlayEvent += OnRewardedVideoFailedToPlayEvent;
-            MoPubManager.OnRewardedVideoClosedEvent += OnRewardedVideoClosedEvent;
+            MoPubBridge.onAdFailed += OnRewardedVideoFailed;
+            MoPubBridge.onAdCalceled += OnRewardedVideoFailed;
+            MoPubBridge.onAdPlayed += OnRewardedVideoClosedEvent;
         }
 
         protected void OnDisable()
         {
-            MoPubManager.OnRewardedVideoLoadedEvent -= OnRewardedVideoLoadedEvent;
-            MoPubManager.OnRewardedVideoFailedEvent -= OnRewardedVideoFailedEvent;
-            MoPubManager.OnRewardedVideoFailedToPlayEvent -= OnRewardedVideoFailedToPlayEvent;
-            MoPubManager.OnRewardedVideoClosedEvent -= OnRewardedVideoClosedEvent;
+            MoPubBridge.onAdFailed -= OnRewardedVideoFailed;
+            MoPubBridge.onAdCalceled -= OnRewardedVideoFailed;
+            MoPubBridge.onAdPlayed -= OnRewardedVideoClosedEvent;
         }
 
         public override void _Update()
@@ -82,17 +80,9 @@ namespace Fourzy._Updates.UI.Widgets
             storeScreen = GetComponentInParent<StorePromptScreen>();
         }
 
-        private void OnRewardedVideoLoadedEvent(string adUnitId) { }
+        private void OnRewardedVideoFailed(string adUnitId) => button.SetState(true);
 
-        private void OnRewardedVideoFailedEvent(string adUnitId, string error)
-        {
-            button.SetState(true);
-        }
-
-        private void OnRewardedVideoFailedToPlayEvent(string adUnitId, string error)
-        {
-            button.SetState(true);
-        }
+        private void OnRawardedVideoCalceled(string adUniID) => button.SetState(true);
 
         private void OnRewardedVideoClosedEvent(string adUnitId)
         {

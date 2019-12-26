@@ -35,7 +35,10 @@ namespace Fourzy._Updates.UI.Widgets
             this.playerID = playerID;
             this.aiProfile = aiProfile;
 
-            nameLabel.text = aiProfile.ToString();
+            if (aiProfile == AIProfile.Player)
+                nameLabel.text = LocalizationManager.Value("human");
+            else
+                nameLabel.text = aiProfile.ToString();
 
             UpdateLabelBG(aiProfile);
 

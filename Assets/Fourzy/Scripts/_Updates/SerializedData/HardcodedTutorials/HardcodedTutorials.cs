@@ -214,7 +214,7 @@ namespace Fourzy._Updates._Tutorial
                                     "MainMenuCanvas",
                                     Vector2.one,
                                     Vector2.zero,
-                                    Vector2.zero,
+                                    messagePositionData: null,
                                     LocalizationManager.Value("tap_to_open_map")),
                                 new OnboardingTask_Log("9"),
                             },
@@ -245,12 +245,13 @@ namespace Fourzy._Updates._Tutorial
                         tasks = new OnboardingTask[]
                         {
                             new OnboardingTask_HighlightButton(
-                                "HintButton", 
-                                "GameSceneCanvas", 
-                                Vector2.one, 
+                                "HintButton",
+                                "GameSceneCanvas",
+                                Vector2.one,
                                 new Vector2(.07f, 0f),
-                                new Vector2(.5f, .22f),
-                                LocalizationManager.Value("suggest_hint_use"), 
+                                //new Vector2(0f, 320f)
+                                new OnboardingTask_HighlightButton.MessageBoxPositionData(Vector2.zero, Vector2.up * 105f),
+                                LocalizationManager.Value("suggest_hint_use"),
                                 false),
                         }
                     }
@@ -481,21 +482,40 @@ namespace Fourzy._Updates._Tutorial
         public string message;
         public string menuName;
         public bool showBG;
-        public Vector2 pivotOffset;
-        public Vector2 messagePosition;
+        public Vector2 pointerOffset;
+        public MessageBoxPositionData messagePositionData;
 
-        public OnboardingTask_HighlightButton(string buttonName, string menuName, Vector2 scale, Vector2 pivotOffset, Vector2 messagePosition, string message = "", bool showBG = true)
+        public OnboardingTask_HighlightButton(string buttonName, string menuName, Vector2 scale, Vector2 pointerOffset, MessageBoxPositionData messagePositionData = null, string message = "", bool showBG = true)
         {
             action = OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON;
 
             stringValue = buttonName;
             vector2value = scale;
 
-            this.pivotOffset = pivotOffset;
-            this.messagePosition = messagePosition;
+            this.pointerOffset = pointerOffset;
+            this.messagePositionData = messagePositionData;
             this.message = message;
             this.menuName = menuName;
             this.showBG = showBG;
+        }
+
+        public void TrySetMessagePivot(Vector2 pivot)
+        {
+            if (messagePositionData == null || messagePositionData.pivot != Vector2.zero) return;
+
+            messagePositionData.pivot = pivot;
+        }
+
+        public class MessageBoxPositionData
+        {
+            public Vector2 pivot { get; set; }
+            public Vector2 positionOffset { get; set; }
+
+            public MessageBoxPositionData(Vector2 pivot, Vector2 positionOffset)
+            {
+                this.pivot = pivot;
+                this.positionOffset = positionOffset;
+            }
         }
     }
 }

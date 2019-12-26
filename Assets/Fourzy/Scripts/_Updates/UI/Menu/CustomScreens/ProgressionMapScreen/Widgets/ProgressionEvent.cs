@@ -255,6 +255,15 @@ namespace Fourzy._Updates.UI.Widgets
                         if (EventType == ProgressionEventType.CURRENCY) new RewardsManager.Reward[] { reward }.AssignRewards();
                     }
 
+                    switch (otherRewardID)
+                    {
+                        case Constants.GAME_MODE_FAST_PUZZLES:
+                        case Constants.GAME_MODE_GAUNTLET_GAME:
+                            button.interactable = true;
+
+                            break;
+                    }
+
                     break;
 
                 case ProgressionEventType.GAME:

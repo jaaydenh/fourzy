@@ -224,8 +224,7 @@ namespace Fourzy._Updates.UI.Camera3D
             }
 
             if (current) return current.unlockWhenComplete;
-
-            return new List<ProgressionEvent>();
+            else return new List<ProgressionEvent>();
         }
 
         public BasicPuzzlePack GetNextPack(string currentID)

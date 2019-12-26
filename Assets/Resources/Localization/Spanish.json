@@ -134,6 +134,10 @@
       "value": "Buen trabajo!"
     },
     {
+      "key": "human",
+      "value": "El humano"
+    },
+    {
       "key": "lost",
       "value": "Perdida"
     },

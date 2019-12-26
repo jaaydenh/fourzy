@@ -1,12 +1,13 @@
 ﻿//@vadym udod
 
-using System;
-using System.Collections;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
+using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -40,11 +41,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Debug.Log(error.ErrorMessage);
         }
 
-        private void OnLeaderboardLoaded(GetLeaderboardAroundPlayerResult leaderboardRequestResult)
+        private void OnLeaderboardLoaded(ExecuteCloudScriptResult result)
         {
-            if (leaderboardRequestResult.Version != PlayerPrefsWrapper.GetFastPuzzlesLeaderboardVersion())
+            LeaderboardRequestResult leaderboard = JsonConvert.DeserializeObject<LeaderboardRequestResult>(result.FunctionResult.ToString());
+
+            if (leaderboard.version != PlayerPrefsWrapper.GetFastPuzzlesLeaderboardVersion())
             {
-                PlayerPrefsWrapper.SetFastPuzzlesLeaderboardVersion(leaderboardRequestResult.Version);
+                PlayerPrefsWrapper.SetFastPuzzlesLeaderboardVersion(leaderboard.version);
 
                 //reset all
                 GameContentManager.Instance.ResetFastPuzzles();
@@ -52,7 +55,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             ClearEntries();
 
-            if (leaderboardRequestResult.Leaderboard.Count < 2)
+            if (leaderboard.leaderboard.Count < 2)
             {
                 noEntries.SetState(true);
                 return;
@@ -60,8 +63,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else
                 noEntries.SetState(false);
 
-            foreach (PlayerLeaderboardEntry entry in leaderboardRequestResult.Leaderboard)
-                widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
+            foreach (PlayerLeaderboardEntry entry in leaderboard.leaderboard) widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
         }
 
         private void NetworkAccess(bool state)
@@ -95,11 +97,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (timer >= 10f || !isOpened) yield break;
 
-            //show leaderboard
-            PlayFabClientAPI.GetLeaderboardAroundPlayer(
-                new PlayFab.ClientModels.GetLeaderboardAroundPlayerRequest() { StatisticName = "PuzzlesLB", MaxResultsCount = 6 }, 
-                OnLeaderboardLoaded,
-                OnError);
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "getFastPuzzleLB",
+                FunctionParameter = new { maxCount = 6, }
+            }, OnLeaderboardLoaded, OnError);
+        }
+
+        public class LeaderboardRequestResult
+        {
+            public List<PlayerLeaderboardEntry> leaderboard;
+            public int version;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.UI.Helpers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,14 +34,15 @@ namespace Fourzy._Updates.UI.Widgets
             Hide(0f);
         }
 
-        public OnboardingScreenPointer SetMessage(string message, Vector2 offset)
+        public OnboardingScreenPointer SetMessage(string message, OnboardingTask_HighlightButton.MessageBoxPositionData messagePositionData = null)
         {
             messagaBox.SetValue(message);
 
-            if (offset != Vector2.zero)
+            if (messagePositionData != null)
             {
                 messagaBox.transform.SetParent(root);
-                messagaBox.SetAnchors(offset);
+                messagaBox.SetAnchors(messagePositionData.pivot);
+                messagaBox.SetPosition(messagePositionData.positionOffset);
             }
             else
             {
@@ -70,7 +72,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                 messagaBox.ResetAnchors();
                 messagaBox.SetPivot(pivot);
-                messagaBox.SetPosition(position + offset);
+                messagaBox.SetPosition(position);
             }
 
             return this;

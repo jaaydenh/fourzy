@@ -154,7 +154,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (_game == null)
             {
                 //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.passAndPlayDataHolder.random, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
-                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetPassAndPlayBoardByName("GhostMeeting"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetPassAndPlayBoardByName("Sand Dunes"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
                 //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoard("2"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
                 newGame._Type = GameType.PASSANDPLAY;
 
@@ -233,7 +233,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void OnPointerDown(Vector2 position)
         {
-            //only continue if current opened screen is GameplayScreen
             if (gameplayScreen != menuController.currentScreen || isGamePaused) return;
 
             board.OnPointerDown(position);
@@ -241,7 +240,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void OnPointerMove(Vector2 position)
         {
-            //release controls if current screen isnt GameplayScreen
             if (gameplayScreen != menuController.currentScreen || isGamePaused)
             {
                 OnPointerRelease(position);
@@ -381,9 +379,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
-                    loadingPrompt = menuController.GetOrAddScreen<LoadingPromptScreen>();
+                    loadingPrompt = PersistantMenuController.instance.GetOrAddScreen<LoadingPromptScreen>();
+                    loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, "Loading new game...");
 
-                    loadingPrompt.Prompt("", "Loading new game...", null, null, null, null);
+                    //loadingPrompt.Prompt("", "Loading new game...", null, null, null, null);
 
                     ChallengeManager.Instance.CreateTurnBasedGame(game.opponent.PlayerString, game._Area, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
 
@@ -617,7 +616,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (loadingPrompt && loadingPrompt.isOpened)
             {
-                loadingPrompt.promptText.text = "Failed to create new game...\n" + response.Errors.JSON;
+                loadingPrompt.UpdateInfo("Failed to create new game...\n" + response.Errors.JSON);
                 StartRoutine("closingLoadingPrompt", 5f, () => menuController.CloseCurrentScreen());
             }
         }

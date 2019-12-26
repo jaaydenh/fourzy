@@ -389,7 +389,17 @@ namespace Fourzy
         {
             OnLoginMessage?.Invoke("Device Authentication Success: " + result.AccountInfo.TitleInfo.DisplayName);
 
-            UserManager.Instance.SetDisplayName(result.AccountInfo.TitleInfo.DisplayName, false);
+            // check display name
+            if (string.IsNullOrEmpty(result.AccountInfo.TitleInfo.DisplayName))
+            {
+                UserManager.Instance.settingRandomName = true;
+                UserManager.Instance.SetDisplayName(UserManager.CreateNewPlayerName());
+            }
+            else
+            {
+                UserManager.Instance.SetDisplayName(result.AccountInfo.TitleInfo.DisplayName, false);
+            }
+
             playerTitleID = result.AccountInfo.TitleInfo.TitlePlayerAccount.Id;
 
             //get profile

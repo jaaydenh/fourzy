@@ -82,7 +82,7 @@ namespace Fourzy._Updates.UI.Helpers
 
         public Badge SetPosition(Vector2 position)
         {
-            rectTransform.localPosition = position;
+            rectTransform.anchoredPosition = position;
 
             return this;
         }
