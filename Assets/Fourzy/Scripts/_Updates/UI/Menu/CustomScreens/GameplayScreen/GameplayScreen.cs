@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
@@ -19,6 +20,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public PlayerUIMessagesWidget opponentMessagesWidget;
         public GameInfoWidget gameInfoWidget;
         public ButtonExtended rematchButton;
+        public ButtonExtended helpButton;
 
         public List<TimerSliderWidget> timerWidgets;
 
@@ -40,6 +42,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GauntletGameScreen gauntletGameScreen { get; private set; }
 
         private SpellsListUIWidget spellsListWidget;
+        private UIOutline helpButtonOutline;
 
         private bool timersEnabled => GameManager.Instance.passAndPlayTimer && (game._Type == GameType.PASSANDPLAY || game._Type == GameType.REALTIME);
 
@@ -55,6 +58,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gauntletGameScreen = GetComponentInChildren<GauntletGameScreen>();
 
             spellsListWidget = GetComponentInChildren<SpellsListUIWidget>();
+            helpButtonOutline = helpButton.GetComponent<UIOutline>();
 
             timerWidgets.ForEach(widget => widget.onValueEmpty += OnTimerEmpty);
         }
@@ -144,6 +148,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 timerWidgets.ForEach(widget => widget.Hide(0f));
             }
 
+            //check if help button available
+            helpButton.SetActive(game._Type != GameType.PRESENTATION);
+
             puzzleUI.Open(game);
             turnbaseUI.Open(game);
             passAndPlayUI.Open(game);
@@ -153,12 +160,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             gameWinLoseScreen.CloseIfOpened();
             puzzleWinLoseScreen.CloseIfOpened();
-            
 
             spellsListWidget.Open(game, gameplayManager.board, game.me);
 
             SetResetButtonState(false);
-
+            UpdateHelpButton();
             HideGameInfoWidget(false);
         }
 
@@ -247,6 +253,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             #endregion
 
             spellsListWidget.UpdateSpells(game._State.ActivePlayerId);
+        }
+
+        public void UpdateHelpButton()
+        {
+            helpButtonOutline.intensity = gameplayManager.gameState == Mechanics.GameplayScene.GameState.HELP_STATE ? 1f : 0f;
         }
 
         public void UpdatePlayerTurnGraphics()

@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using UnityEngine;
 
@@ -32,7 +33,11 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private void SetValue(int value)
         {
-            if (frequency != 1) countdown.SetValue(value);
+            if (frequency != 1)
+            {
+                countdown.SetValue(value);
+                countdown.targetText.UpdateTMP_Text();
+            }
         }
     }
 }

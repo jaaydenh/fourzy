@@ -43,6 +43,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         //id of rematch challenge
         private string awaitingChallengeID = "";
         private long epochDelta;
+        private bool logGameFinished;
+        private GameState previousGameState;
 
         public BackgroundConfigurationData currentConfiguration { get; private set; }
         public GameboardView board { get; private set; }
@@ -56,12 +58,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public bool isBoardReady { get; private set; }
         public bool replayingLastTurn { get; private set; }
         public bool gameStarted { get; private set; }
-        public bool isGamePaused { get; private set; }
-
-        /// <summary>
-        /// Used to check if postGame should log the game or not
-        /// </summary>
-        private bool logGameFinished;
+        public GameState gameState { get; private set; }
 
         protected override void Awake()
         {
@@ -176,7 +173,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             awaitingChallengeID = "";
             gameStarted = false;
-            isGamePaused = false;
+            gameState = GameState.OPENNING_GAME;
             isBoardReady = false;
 
             SetGameIfNull(_game);
@@ -233,14 +230,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void OnPointerDown(Vector2 position)
         {
-            if (gameplayScreen != menuController.currentScreen || isGamePaused) return;
+            if (gameplayScreen != menuController.currentScreen) return;
 
             board.OnPointerDown(position);
         }
 
         public void OnPointerMove(Vector2 position)
         {
-            if (gameplayScreen != menuController.currentScreen || isGamePaused)
+            if (gameplayScreen != menuController.currentScreen || gameState != GameState.GAME)
             {
                 OnPointerRelease(position);
 
@@ -252,7 +249,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void OnPointerRelease(Vector2 position)
         {
-            if (isGamePaused) return;
+            if (gameState != GameState.GAME) return;
 
             board.OnPointerRelease(position);
         }
@@ -263,6 +260,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (!gameStarted)
             {
+                gameState = GameState.GAME;
                 gameStarted = true;
                 OnGameStarted();
             }
@@ -309,8 +307,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type) && !GameManager.Instance.excludeInstructionsFor.Contains(token.Type))
                         tokens.Add(GameContentManager.Instance.GetTokenData(token.Type));
 
-            //if (tokens.Count > 0)
-            //    yield return new WaitForSeconds(.5f);
+            if (tokens.Count > 0) gameState = GameState.PREGAME_DISPLAY_INSTRUCTION;
 
             foreach (TokensDataHolder.TokenData token in tokens)
             {
@@ -434,18 +431,38 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void PauseGame()
         {
-            if (isGamePaused) return;
+            if (gameState == GameState.PAUSED) return;
 
-            isGamePaused = true;
+            previousGameState = gameState;
+            gameState = GameState.PAUSED;
             gameplayScreen.OnGamePaused();
         }
 
         public void UnpauseGame()
         {
-            if (!isGamePaused) return;
+            if (gameState != GameState.PAUSED) return;
 
-            isGamePaused = false;
+            gameState = previousGameState;
             gameplayScreen.OnGameUnpaused();
+        }
+
+        public void ToggleHelpState()
+        {
+            if (gameState != GameState.HELP_STATE)
+            {
+                previousGameState = gameState;
+                gameState = GameState.HELP_STATE;
+
+                board.SetHelpState(true);
+            }
+            else
+            {
+                gameState = previousGameState;
+
+                board.SetHelpState(false);
+            }
+
+            gameplayScreen.UpdateHelpButton();
         }
 
         /// <summary>
@@ -457,6 +474,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             board = Instantiate(currentConfiguration.gameboardPrefab, transform);
             board.Initialize(game);
+            board.gameplayManager = this;
             board.transform.localPosition = currentConfiguration.gameboardPrefab.transform.position;
             board.interactable = false;
 
@@ -1025,6 +1043,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
         }
+    }
+
+    public enum GameState
+    {
+        OPENNING_GAME,
+        PREGAME_DISPLAY_INSTRUCTION,
+        GAME,
+        PAUSED,
+        HELP_STATE,
     }
 }
 

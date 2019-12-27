@@ -826,12 +826,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: E_Puzzle_Extra_SecretWin
-    ext: json
-    path: PuzzlePacks/Event14_Extra/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: F_Puzzle_Extra_HiddentFruit
     ext: json
     path: PuzzlePacks/Event14_Extra/puzzles
@@ -1353,12 +1347,6 @@ MonoBehaviour:
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: 7_Puzzle_Fruit2_FreeAndPushInto_WinIn2
-    ext: json
-    path: PuzzlePacks/Event8_FruitAndGoop/puzzles
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 8_Puzzle_Fruit2_Setup_WinIn3
     ext: json
     path: PuzzlePacks/Event8_FruitAndGoop/puzzles
     type: 2
@@ -2339,6 +2327,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 346
+  m_FileCount: 344
   m_FolderCount: 50
   UpdateAutomatically: 0
