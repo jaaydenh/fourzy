@@ -43,7 +43,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 5db00398753d241cab3e77257a69e8e1, type: 3}
-    totalSpriteSurfaceArea: 13825291
+    totalSpriteSurfaceArea: 13833847
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -192,6 +192,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: b3d28afa02db94e2b9ac0b61a57d3c9a, type: 3}
   - {fileID: 21300000, guid: d6e8be0bd4753eb449c2ce1efb0f5474, type: 3}
   - {fileID: 21300000, guid: 9389e22bc00349446af712a67330c0f5, type: 3}
+  - {fileID: 21300000, guid: c4fde52b2a91e8c4887f43fdef0c7733, type: 3}
   - {fileID: 21300000, guid: d6631c2bca5f0c041a9ea87866c0f75e, type: 3}
   - {fileID: 21300000, guid: 64c5be3b643d1c44eb74a01bd99e552d, type: 3}
   - {fileID: 21300000, guid: c2d8404b0b8c0fd43a8af4c5cfb98f19, type: 3}
@@ -406,6 +407,7 @@ SpriteAtlas:
   - Star_0
   - Portal-BoxOff
   - MiniBoard-IcePalace
+  - HelpButton
   - Checkmark-empty
   - MedalA
   - square2

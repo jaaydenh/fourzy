@@ -49,7 +49,7 @@ PrefabInstance:
     - target: {fileID: 7164873701213644608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
       propertyPath: m_Name
-      value: IceBlock
+      value: IceBlock Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}

@@ -10,13 +10,23 @@ PrefabInstance:
     - target: {fileID: 4894820131291420832, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
       propertyPath: m_Name
-      value: Fourzy-01
+      value: Fourzy-01 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 4894820131291420832, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6758403955678389462, guid: 667e3a5446de187459de3d429e0bb215,
+        type: 3}
+      propertyPath: _body
+      value: 
+      objectReference: {fileID: 4162229632722935335}
+    - target: {fileID: 6758403955678389462, guid: 667e3a5446de187459de3d429e0bb215,
+        type: 3}
+      propertyPath: pieceAnimator
+      value: 
+      objectReference: {fileID: 8048561041637068674}
     - target: {fileID: 8983483778679456887, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -72,16 +82,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6758403955678389462, guid: 667e3a5446de187459de3d429e0bb215,
-        type: 3}
-      propertyPath: _body
-      value: 
-      objectReference: {fileID: 4162229632722935335}
-    - target: {fileID: 6758403955678389462, guid: 667e3a5446de187459de3d429e0bb215,
-        type: 3}
-      propertyPath: pieceAnimator
-      value: 
-      objectReference: {fileID: 8048561041637068674}
     - target: {fileID: 6440092945956571861, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
       propertyPath: m_Sprite
@@ -99,22 +99,6 @@ PrefabInstance:
       value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6440092945956571861, guid: 667e3a5446de187459de3d429e0bb215,
-        type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8392033554832181875, guid: 667e3a5446de187459de3d429e0bb215,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 4c1dd7e85cf669e4895a0b9d244b6e4e,
-        type: 3}
-    - target: {fileID: 8392033554832181875, guid: 667e3a5446de187459de3d429e0bb215,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.62
-      objectReference: {fileID: 0}
-    - target: {fileID: 8392033554832181875, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -137,6 +121,39 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: fa0028ad56fa3a24a96739a8df102248,
         type: 3}
+    - target: {fileID: 8459352583755900768, guid: 667e3a5446de187459de3d429e0bb215,
+        type: 3}
+      propertyPath: states.list.Array.data[1].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7071809ec8edcbc43acfcbda1ecca298,
+        type: 3}
+    - target: {fileID: 8459352583755900768, guid: 667e3a5446de187459de3d429e0bb215,
+        type: 3}
+      propertyPath: states.list.Array.data[2]._name
+      value: SLEEPY
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459352583755900768, guid: 667e3a5446de187459de3d429e0bb215,
+        type: 3}
+      propertyPath: states.list.Array.data[0].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b88a90dcdd08aa94ba2e9f4c06edad03,
+        type: 3}
+    - target: {fileID: 8392033554832181875, guid: 667e3a5446de187459de3d429e0bb215,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4c1dd7e85cf669e4895a0b9d244b6e4e,
+        type: 3}
+    - target: {fileID: 8392033554832181875, guid: 667e3a5446de187459de3d429e0bb215,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 8392033554832181875, guid: 667e3a5446de187459de3d429e0bb215,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6264188576232579517, guid: 667e3a5446de187459de3d429e0bb215,
         type: 3}
       propertyPath: m_Sprite
@@ -158,23 +175,6 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8459352583755900768, guid: 667e3a5446de187459de3d429e0bb215,
-        type: 3}
-      propertyPath: states.list.Array.data[1].sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 7071809ec8edcbc43acfcbda1ecca298,
-        type: 3}
-    - target: {fileID: 8459352583755900768, guid: 667e3a5446de187459de3d429e0bb215,
-        type: 3}
-      propertyPath: states.list.Array.data[2]._name
-      value: SLEEPY
-      objectReference: {fileID: 0}
-    - target: {fileID: 8459352583755900768, guid: 667e3a5446de187459de3d429e0bb215,
-        type: 3}
-      propertyPath: states.list.Array.data[0].sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b88a90dcdd08aa94ba2e9f4c06edad03,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 667e3a5446de187459de3d429e0bb215, type: 3}
 --- !u!95 &8048561041637068674 stripped
