@@ -11,7 +11,7 @@ namespace Fourzy
 
         public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.SWIPE_STYLE_2;
         public const Area DEFAULT_AREA = Area.TRAINING_GARDEN;
-        public const int DEFAULT_UNLOCKED_THEMES = 6;
+        public const int DEFAULT_UNLOCKED_THEMES = 30;
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
 

@@ -320,7 +320,7 @@ namespace Fourzy._Updates.UI.Widgets
                     {
                         case Constants.GAME_MODE_FAST_PUZZLES:
                             menuScreen.menuController.GetOrAddScreen<PromptScreen>().Prompt("Puzzles Ladder",
-                                "Compete with other to solve as many puzzle boards in week as possible!",
+                                "Compete to solve the most puzzles and climb to the top of the leaderboard!",
                                 "PLAY",
                                 null,
                                 () =>
