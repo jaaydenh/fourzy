@@ -79,7 +79,13 @@ namespace FourzyGameModel.Model
             GameActions = ME.ResultActions;
             playerTurnRecord.Add(Turn);
 
-            if (ReturnStartOfNextTurn && State.WinnerId <0)
+            if (State.WinnerId < 0 && playerTurnRecord.Count >= MoveLimit)
+            {
+                Status = PuzzleStatus.FAILED;
+                GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.NOMOREMOVES));
+            }
+
+            if (ReturnStartOfNextTurn && State.WinnerId < 0)
             {
                 ME = new TurnEvaluator(State);
                 GameState StartState = ME.EvaluateStartOfTurn();
@@ -97,12 +103,6 @@ namespace FourzyGameModel.Model
             {
                 Status = PuzzleStatus.SUCCESS;
                 GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.SUCCESS, PuzzleEvent.VICTORY));
-            }
-
-            if (State.WinnerId < 0 && playerTurnRecord.Count >= MoveLimit)
-            {
-                Status = PuzzleStatus.FAILED;
-                GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.NOMOREMOVES));
             }
 
             return new PlayerTurnResult(State, GameActions, Turn);

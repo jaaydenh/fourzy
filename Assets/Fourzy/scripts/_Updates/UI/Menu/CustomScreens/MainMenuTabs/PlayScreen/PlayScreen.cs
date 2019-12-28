@@ -77,7 +77,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (!fastPuzzlesUnlocked)
             {
                 menuController.GetOrAddScreen<PromptScreen>().Prompt("Random Puzzles Locked",
-                    "Compete with other players to solve the most puzzles every week!",
+                    "Compete to solve the most puzzles and climb to the top of the leaderboard!",
                     "OK",
                     null,
                     () => menuController.CloseCurrentScreen(),
