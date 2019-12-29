@@ -43,7 +43,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 5db00398753d241cab3e77257a69e8e1, type: 3}
-    totalSpriteSurfaceArea: 13833847
+    totalSpriteSurfaceArea: 13806703
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -214,8 +214,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: da0f387c7b3cc564d9a8577651537c14, type: 3}
   - {fileID: 21300000, guid: 06db818c796280e4a820de91ceeaf13c, type: 3}
   - {fileID: 21300000, guid: ca62ed9c002f40045a1ce400a372d245, type: 3}
-  - {fileID: 21300002, guid: baa829ac81b434043bfc2463fc3a9f65, type: 3}
-  - {fileID: 21300000, guid: baa829ac81b434043bfc2463fc3a9f65, type: 3}
   - {fileID: 21300000, guid: 57fed0cc77c11c44d865024e20118edc, type: 3}
   - {fileID: 21300000, guid: dc0634cc52d567a4f9b82c54ea94a366, type: 3}
   - {fileID: 21300000, guid: 67740cec3c86ee146bb9aba5c75dd727, type: 3}
@@ -429,8 +427,6 @@ SpriteAtlas:
   - green-100
   - Portal-BoxOn
   - 2
-  - PiecesWithoutShadow_BluePiece
-  - PiecesWithoutShadow_RedPiece
   - Button-Back
   - left_c_box
   - StarBackground

@@ -971,7 +971,6 @@ MonoBehaviour:
     piecesProgression:
       list: 5000000096000000f00000002c01000026020000
     pieces: 0
-    champions: 0
   gamePieceParent: {fileID: 224278983151313340}
   progressBar: {fileID: 114244611216992890}
   piecesCount: {fileID: 114524336668811282}
@@ -1110,7 +1109,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 200
+  m_PreferredWidth: 220
   m_PreferredHeight: 330
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -1605,8 +1604,7 @@ MonoBehaviour:
   m_text: 0/0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 21894048186437448, guid: 9d88010131ce14d0aa675e4166b1eefd,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
