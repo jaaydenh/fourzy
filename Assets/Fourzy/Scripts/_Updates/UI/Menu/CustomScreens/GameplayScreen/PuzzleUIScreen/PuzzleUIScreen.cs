@@ -17,6 +17,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public HintButton hintButton;
 
         public TMP_Text rule;
+        public TMP_Text level;
         public TweenBase completeIcon;
         public AlphaTween packInfoTween;
 
@@ -70,7 +71,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         else
                             completeIcon.AtProgress(0f);
 
-                        rule.text = (game.puzzleData.pack.enabledPuzzlesData.IndexOf(game.puzzleData) + 1) + ": " + game.puzzleData.Instructions;
+                        rule.text = game.puzzleData.Instructions;
+                        //level.text = "Level " + (game.puzzleData.pack.enabledPuzzlesData.IndexOf(game.puzzleData) + 1);
 
                         break;
                 }

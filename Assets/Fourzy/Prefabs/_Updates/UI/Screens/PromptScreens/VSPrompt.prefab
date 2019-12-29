@@ -496,8 +496,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Top: 30
+    m_Bottom: 10
   m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 0
@@ -541,7 +541,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 240, y: 50}
+  m_SizeDelta: {x: 250, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2619937604079824774
 CanvasRenderer:
@@ -574,8 +574,7 @@ MonoBehaviour:
   m_text: Name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 21894048186437448, guid: 9d88010131ce14d0aa675e4166b1eefd,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -600,8 +599,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 44
+  m_fontSizeBase: 44
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1352,7 +1351,7 @@ MonoBehaviour:
   m_text: VS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: d79680101d7a64f46852aa9f676ba222, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1377,15 +1376,15 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 52
-  m_fontSizeBase: 52
+  m_fontSize: 68
+  m_fontSizeBase: 68
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_textAlignment: 514
-  m_characterSpacing: -6
+  m_characterSpacing: -5
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1495,7 +1494,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -25, y: 0}
+  m_AnchoredPosition: {x: -25, y: -14}
   m_SizeDelta: {x: -50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2619937605222857800
@@ -1529,8 +1528,7 @@ MonoBehaviour:
   m_text: Boss Bot
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 21894048186437448, guid: 9d88010131ce14d0aa675e4166b1eefd,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1555,8 +1553,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 44
+  m_fontSizeBase: 44
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1572,7 +1570,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 0
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -1769,8 +1767,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -60, y: -40}
+  m_AnchoredPosition: {x: 0, y: 6}
+  m_SizeDelta: {x: -60, y: -28}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4160836064608583006
 CanvasRenderer:
@@ -1828,8 +1826,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3460,7 +3458,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 34
+          selectedMember: 37
           isDynamic: 0
         target: {fileID: 8685335311165154359}
         memberName: Decline
@@ -4551,8 +4549,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 200
-  m_PreferredHeight: 100
+  m_PreferredWidth: 260
+  m_PreferredHeight: 120
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
