@@ -215,10 +215,10 @@ namespace Fourzy._Updates.ClientModel
                     break;
             }
 
-            Instructions += (MoveLimit + " ");
+            Instructions += MoveLimit;
 
-            if (MoveLimit > 1) Instructions += $" {LocalizationManager.Value("moves")}!";
-            else Instructions += $" {LocalizationManager.Value("move")}!";
+            if (MoveLimit > 1) Instructions += $" {LocalizationManager.Value("moves")}";
+            else Instructions += $" {LocalizationManager.Value("move")}";
         }
 
         public static implicit operator bool(ClientPuzzleData data) => data != null;

@@ -51,7 +51,7 @@ namespace Fourzy._Updates.UI.Widgets
             switch (storeScreen.filter)
             {
                 case StorePromptScreen.StoreItemType.HINTS:
-                    titleLabel.text = "Watch ad to receive 1 Hint";
+                    titleLabel.text = LocalizationManager.Value("watch_ad");
 
                     break;
             }

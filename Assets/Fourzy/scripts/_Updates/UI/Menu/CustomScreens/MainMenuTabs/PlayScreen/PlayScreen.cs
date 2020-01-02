@@ -76,8 +76,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //check
             if (!fastPuzzlesUnlocked)
             {
-                menuController.GetOrAddScreen<PromptScreen>().Prompt("Random Puzzles Locked",
-                    "Compete to solve the most puzzles and climb to the top of the leaderboard!",
+                menuController.GetOrAddScreen<PromptScreen>().Prompt(LocalizationManager.Value("puzzle_Ladder_title"),
+                    LocalizationManager.Value("puzzle_Ladder_desc"),
                     "OK",
                     null,
                     () => menuController.CloseCurrentScreen(),

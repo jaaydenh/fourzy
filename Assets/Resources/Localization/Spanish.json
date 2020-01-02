@@ -18,11 +18,11 @@
     },
     {
       "key": "move",
-      "value": "moverse"
+      "value": "movimiento"
     },
     {
       "key": "moves",
-      "value": "se mueve"
+      "value": "movimientos"
     },
     {
       "key": "previous",
@@ -38,7 +38,7 @@
     },
     {
       "key": "hints",
-      "value": "Consejos"
+      "value": "Pistas"
     },
     {
       "key": "pass",
@@ -91,7 +91,7 @@
     },
     {
       "key": "fast_puzzles",
-      "value": "Puzzles"
+      "value": "Puzles"
     },
     {
       "key": "found",
@@ -123,7 +123,7 @@
     },
     {
       "key": "get_4_to_win",
-      "value": "Consigue 4 seguidos para ganar!"
+      "value": "Conecta 4 piezas para ganar"
     },
     {
       "key": "gems",
@@ -159,7 +159,7 @@
     },
     {
       "key": "not_found",
-      "value": "Extraviado"
+      "value": "Por Desbloquear"
     },
     {
       "key": "no_news",
@@ -259,7 +259,7 @@
     },
     {
       "key": "tokens",
-      "value": "Piezas"
+      "value": "Fichas"
     },
     {
       "key": "too_short",
@@ -271,7 +271,7 @@
     },
     {
       "key": "unlocked",
-      "value": "Desbloqueada"
+      "value": "Desbloqueados"
     },
     {
       "key": "versus",
@@ -287,7 +287,7 @@
     },
     {
       "key": "won",
-      "value": "Won"
+      "value": "Ganaste"
     },
     {
       "key": "you",
@@ -312,7 +312,7 @@
     },
     {
       "key": "rankings",
-      "value": "Rankings"
+      "value": "Rango"
     },
 
     {
@@ -369,7 +369,7 @@
     },
     {
       "key": "token_ice_sheet",
-      "value": "Hielo"
+      "value": "Hoja de hielo"
     },
     {
       "key": "token_lure",
@@ -397,7 +397,7 @@
     },
     {
       "key": "token_pit",
-      "value": "Pozo"
+      "value": "Agujero"
     },
     {
       "key": "token_rotating_arrow",
@@ -431,42 +431,41 @@
       "key": "token_hex",
       "value": "Hex"
     },
-
     {
       "key": "token_desc_blocker",
-      "value": "Un bloqueador Las piezas no pueden entrar o moverse por este espacio."
+      "value": "Un arbusto funciona como un obstáculo que bloquea. FOURZIES no pueden entrar o moverse a través de este espacio."
     },
     {
       "key": "token_desc_arrow",
-      "value": "Cuando una pieza entra en un espacio con una flecha, continúa en la dirección de la flecha."
+      "value": "Cuando un Fourzy entra en un espacio con una flecha, este continua en la dirección indicada por la flecha."
     },
     {
       "key": "token_desc_sticky",
-      "value": "Una pieza se detendrá al entrar en un Sticky. Una pieza que ya está en un Sticky puede ser empujada por otra pieza."
+      "value": "Cuando un Fourzy cae en una ficha pegajosa este se detendrá temporalmente. Si un Fourzy ya se encuentra en una pieza pegajosa, otro Fourzy puede empujarla y tomar su lugar."
     },
     {
       "key": "token_desc_ghost",
-      "value": "Una pieza puede atravesar un fantasma pero no puede detenerse en un fantasma."
+      "value": "Un Fourzy puede atravesar un ficha de fantasma pero no puede detenerse en un espacio donde el fantasma esté. "
     },
     {
       "key": "token_desc_pit",
-      "value": "Una pieza que se detiene en un hoyo se retira del juego y luego desaparece."
+      "value": "Cuando un Fourzy cae en un agujero, este desaparecerá y lo perderás del juego completamente."
     },
     {
       "key": "token_desc_ice",
-      "value": "Las piezas se mueven normalmente sobre hielo. Se puede empujar una pieza detenida en una capa de hielo y la nueva pieza ocupará su lugar."
+      "value": "FOURZIES se mueven normalmente sobre las hojas de hielo. Pero cuando un Fourzy se encuentre detenido en en una hoja de hielo, otro Fourzy puede empujarlo y la nueva pieza ocupará su lugar."
     },
     {
       "key": "token_desc_sand",
-      "value": "La arena crea fricción. Una pieza puede pasar por la primera arena pero se detendrá en la segunda arena que alcanza. Otra pieza puede sacar una pieza de arena y ocupar su lugar."
+      "value": "Un Fourzy se detendrá siempre al pasar la primera ficha de arena sin importar donde estén las fichas. Un Fourzy puede empujar a otro y ocupar su lugar."
     },
     {
       "key": "token_desc_fruit",
-      "value": "La fruta se cae de los árboles frutales. Cuando una pieza pasa sobre una fruta, la fruta se aplasta y se convierte en pegajosa."
+      "value": "Las frutas caen de las fichas de árbol. Cuando un Fourzy pasa sobre una fruta, la fruta se aplasta y se convierte en una ficha pegajosa."
     },
     {
       "key": "token_desc_water",
-      "value": "Una pieza que ingresa al agua se detendrá. Una pieza puede ser expulsada del agua, pero solo se moverá 1 espacio."
+      "value": "Cuando un Fourzy cae en una ficha de agua este detendrá. Si otro Fourzy lo empuja tomará su lugar. Al ser movido de una ficha de agua tú Fourzy solo se moverá un cuadro. "
     },
     {
       "key": "token_desc_circle_bomb",
@@ -515,7 +514,7 @@
 
     {
       "key": "win_goal",
-      "value": "GANAR"
+      "value": "Gana"
     },
     {
       "key": "survive_goal",
@@ -524,6 +523,30 @@
     {
       "key": "cover_goal",
       "value": "CUBRIR"
+    },
+    {
+      "key": "random",
+      "value": "Al azar"
+    },
+    {
+      "key": "leave_game",
+      "value": "¿Deseas dejar el juego? "
+    },
+    {
+      "key": "watch_ad",
+      "value": "Ver video por 1 pista"
+    },
+    {
+      "key": "select",
+      "value": "Elegir"
+    },
+    {
+      "key": "puzzle_Ladder_title",
+      "value": "Classificatoria del puzle bloqueada"
+    },
+    {
+      "key": "puzzle_Ladder_desc",
+      "value": "Compete para resolver la mayoría de los puzles y sube a la cima de la tabla de clasificatión"
     }
   ]
 }
