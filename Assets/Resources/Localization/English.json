@@ -107,7 +107,7 @@
     },
     {
       "key": "gauntlet_desc",
-      "value": "The gauntlet contains a series of increasingly difficult challenges that must be solved in a limited number of moves"
+      "value": "The gauntlet contains a series of increasingly difficult challenges that must be solved in a limited number of turns"
     },
     {
       "key": "gauntlet_complete",
@@ -135,7 +135,7 @@
     },
     {
       "key": "human",
-      "value": "Human"
+      "value": "Human\nplayer"
     },
     {
       "key": "lost",
@@ -387,11 +387,11 @@
     },
     {
       "key": "token_ninghty_turn",
-      "value": "Ninghty Turn"
+      "value": "Ninety Lert Turn"
     },
     {
       "key": "token_ninghty_turn_right",
-      "value": "Ninghty Turn"
+      "value": "Ninety Right Turn"
     },
     {
       "key": "token_pit",
@@ -415,7 +415,7 @@
     },
     {
       "key": "token_sticky",
-      "value": "Sticky"
+      "value": "Goop"
     },
     {
       "key": "token_water",
@@ -431,83 +431,83 @@
     },
     {
       "key": "token_desc_blocker",
-      "value": "A blocker. Pieces cannot enter or move through this space."
+      "value": "Blocker. Fourzies cannot enter or move through this space."
     },
     {
       "key": "token_desc_arrow",
-      "value": "When a piece enters a space with an Arrow, it continues in the direction of the Arrow."
+      "value": "When a Fourzy enters a space with an Arrow, it is redirected in the direction of the Arrow."
     },
     {
       "key": "token_desc_sticky",
-      "value": "A piece will stop when entering a Sticky. A piece already on a Sticky can be pushed off a sticky by another piece."
+      "value": "A Fourzy will stop when entering Goop. A Fourzy already stuck in Goop can be pushed off by another Fourzy."
     },
     {
       "key": "token_desc_ghost",
-      "value": "A piece can pass through a Ghost but cannot stop on a Ghost."
+      "value": "A Fourzy can pass through a Ghost but cannot stop on a space with a Ghost."
     },
     {
       "key": "token_desc_pit",
-      "value": "A piece stopping on a Pit is removed from the game and the pit then disappears."
+      "value": "A Fourzy stopping on a Pit is removed from the game and the Pit disappears completely."
     },
     {
       "key": "token_desc_ice",
-      "value": "Pieces move normally over Ice. A piece stopped on an Ice Sheet can be pushed and the new piece will take its place."
+      "value": "Fourzies move normally over Ice. Any Fourzy stopped on Ice can be pushed and the new Fourzy will take its place."
     },
     {
       "key": "token_desc_sand",
-      "value": "Sand creates friction. A piece can pass through the 1st Sand but will stop on the 2nd Sand it reaches. Another piece can push a piece out of Sand and take it's place."
+      "value": "Sand creates friction. A Fourzy will stop on the 2nd sand it enters. Another Fourzy can push a piece out of Sand and take its place."
     },
     {
       "key": "token_desc_fruit",
-      "value": "Fruit are dropped from Fruit Trees. When a piece passes over a Fruit, the Fruit is squished and turns into a Sticky."
+      "value": "Fruit are dropped from Fruit Trees. When a Fourzy moves over or stops on Fruit, the Fruit is squished and turns into Goop."
     },
     {
       "key": "token_desc_water",
-      "value": "A piece entering Water will stop. A piece can be pushed out of Water but will only move 1 space."
+      "value": "A Fourzy entering Water will immediately stop. A Fourzy can be pushed out of Water but will only move 1 space."
     },
     {
       "key": "token_desc_circle_bomb",
-      "value": "When a piece enters a Bomb, the Bomb will explode and remove that piece and any pieces in the 8 surrounding spaces from the game."
+      "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in the 8 surrounding spaces from the game."
     },
     {
       "key": "token_desc_fourway_arrow",
-      "value": "Can be either Left or Right. Will cause a piece to always turn either right or left when passing through this space."
+      "value": "Works in four directions. Sends the Fourzy back where it came from."
     },
     {
       "key": "token_desc_fruit_tree",
-      "value": "Blocker. If a piece is stopped by a Fruit Tree, a Fruit will appear on the opposite side."
+      "value": "Blocker. If a Fourzy is stopped by a Fruit Tree, a Fruit will appear on the opposite side."
     },
     {
       "key": "token_desc_ice_block",
-      "value": "Blocker. Crumbles after blocking a piece."
+      "value": "Blocker. Crumbles and turns into Ice after blocking a Fourzy."
     },
     {
       "key": "token_desc_snow",
-      "value": "Pieces that travel through snow will be turned into ice."
+      "value": "Snow creates friction. A Fourzy will stop on the 2nd Snow it enters. When a Fourzy moves over Snow, the Snow turns into Ice"
     },
     {
       "key": "token_desc_hex",
-      "value": "Hex."
+      "value": "A Fourzy can move through a Hex but cannot stop on Hex. When a Hex is placed on top of another token, it cancels all effects of that token."
     },
     {
       "key": "token_desc_moving_ghost",
-      "value": "Moving Ghost."
+      "value": "This Ghost moves 1 space after each turn."
     },
     {
       "key": "token_desc_rotating_arrow",
-      "value": "Rotating Arrow"
+      "value": "This Arrow rotates to the right 90 degrees after each turn."
     },
     {
       "key": "token_desc_lure",
-      "value": "The lure token should change the direction of a piece and pull the game piece towards it whenever it enters the same row or column as a lure. "
+      "value": "When a Fourzy pass in the same column or row as the Lure, the Fourzy will be pulled the same space as the Lure. The Lure will be eaten by the Fourzy."
     },
     {
       "key": "token_desc_move_blocker",
-      "value": "A blocker. Pieces cannot enter or move through this space."
+      "value": "Blocker. Move Blockers change their location each turn. Pieces cannot enter or move through this space."
     },
     {
       "key": "token_desc_cross_bomb",
-      "value": "Cross Bomb."
+      "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in th same row and Column as the Bomb."
     },
     {
       "key": "win_goal",

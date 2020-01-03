@@ -42,16 +42,15 @@
     },
     {
       "key": "pass",
-      "value": "Pasar"
+      "value": "Paso"
     },
-
     {
       "key": "adventure",
       "value": "Aventuras"
     },
     {
       "key": "complete",
-      "value": "Terminada!"
+      "value": "terminado"
     },
     {
       "key": "continue",
@@ -63,7 +62,7 @@
     },
     {
       "key": "cant_be_empty",
-      "value": "No puede estar vacio!"
+      "value": "No puede estar vacio"
     },
     {
       "key": "change_name",
@@ -75,11 +74,11 @@
     },
     {
       "key": "draw",
-      "value": "Dibujar"
+      "value": "Empate"
     },
     {
       "key": "excellent",
-      "value": "Excelente"
+      "value": "¡Excelente!"
     },
     {
       "key": "failed1",
@@ -87,7 +86,7 @@
     },
     {
       "key": "failed2",
-      "value": "De Nuevo"
+      "value": "de nuevo"
     },
     {
       "key": "fast_puzzles",
@@ -131,15 +130,15 @@
     },
     {
       "key": "good_job",
-      "value": "Buen trabajo!"
+      "value": "Buen trabajo"
     },
     {
       "key": "human",
-      "value": "El humano"
+      "value": "Juagador\nhumano"
     },
     {
       "key": "lost",
-      "value": "Perdida"
+      "value": "Perdiste"
     },
     {
       "key": "magic",
@@ -191,7 +190,7 @@
     },
     {
       "key": "puzzle",
-      "value": "Rompecabezas"
+      "value": "Puzle"
     },
     {
       "key": "rareportalpoints",
@@ -231,11 +230,11 @@
     },
     {
       "key": "tap_edge_rule",
-      "value": "Toca el borde del tablero para hacer un movimiento."
+      "value": "Desliza para mover tu Fourzy."
     },
     {
       "key": "tap_to_continue",
-      "value": "Pulse para continuar..."
+      "value": "Presiona para continuar..."
     },
     {
       "key": "tap_to_start",
@@ -243,15 +242,15 @@
     },
     {
       "key": "tap_to_place",
-      "value": "Toca el cuadrado para\ncolocar la pieza del juego"
+      "value": "Disliza para mover tu Fourzy"
     },
     {
       "key": "tap_to_open_map",
-      "value": "Presione para abrir\nel mapa de progresión"
+      "value": "Presiona para abrir\nel mapa de progresión"
     },
     {
       "key": "tap_to_start_playing",
-      "value": "Selecciona un rompecabezas y comienza a jugar!"
+      "value": "Selecciona un puzle y comienza a jugar"
     },
     {
       "key": "tickets",
@@ -263,11 +262,11 @@
     },
     {
       "key": "too_short",
-      "value": "Demasiado corto!"
+      "value": "Demasiado corto"
     },
     {
       "key": "too_long",
-      "value": "Demasiado largo!"
+      "value": "Demasiado largo"
     },
     {
       "key": "unlocked",
@@ -279,7 +278,7 @@
     },
     {
       "key": "welcome_to_fourzy",
-      "value": "Bienvenido a Fourzy"
+      "value": "Bienvenido(a) a Fourzy"
     },
     {
       "key": "xp",
@@ -293,7 +292,6 @@
       "key": "you",
       "value": "Tú"
     },
-
     {
       "key": "store",
       "value": "Tienda"
@@ -314,7 +312,6 @@
       "key": "rankings",
       "value": "Rango"
     },
-
     {
       "key": "token_arrow",
       "value": "Flecha"
@@ -377,7 +374,7 @@
     },
     {
       "key": "token_move_blocker",
-      "value": "Move Blocker"
+      "value": "Bloque móvil"
     },
     {
       "key": "token_move_blocker_ice",
@@ -489,15 +486,15 @@
     },
     {
       "key": "token_desc_hex",
-      "value": "Hex."
+      "value": "A Fourzy can move through a Hex but cannot stop on Hex. When a Hex is placed on top of another token, it cancels all effects of that token."
     },
     {
       "key": "token_desc_moving_ghost",
-      "value": "Moving Ghost."
+      "value": "This ghost moves 1 space after each move."
     },
     {
       "key": "token_desc_rotating_arrow",
-      "value": "Rotating Arrow"
+      "value": "This arrow rotates to the right 90 degrees after each move."
     },
     {
       "key": "token_desc_lure",
@@ -509,9 +506,8 @@
     },
     {
       "key": "token_desc_cross_bomb",
-      "value": "Cross Bomb."
+      "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in th same row and Column as the Bomb."
     },
-
     {
       "key": "win_goal",
       "value": "Gana"
@@ -530,7 +526,7 @@
     },
     {
       "key": "leave_game",
-      "value": "¿Deseas dejar el juego? "
+      "value": "¿Deseas dejar el juego?"
     },
     {
       "key": "watch_ad",

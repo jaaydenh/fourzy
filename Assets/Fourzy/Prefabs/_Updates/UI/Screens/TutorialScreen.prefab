@@ -127,7 +127,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 28
+          selectedMember: 34
           isDynamic: 0
         target: {fileID: 114675544619200078}
         memberName: OnBack
@@ -136,11 +136,11 @@ MonoBehaviour:
         isDynamic: 0
         isCallEnabled: 1
   onState:
-    inspectorListHeight: 40
+    inspectorListHeight: 83
     persistentCalls:
       calls: []
   offState:
-    inspectorListHeight: 40
+    inspectorListHeight: 83
     persistentCalls:
       calls: []
   playOnClick: 2
@@ -617,8 +617,9 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: tap to continue...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e7a56fcdbd13904eaf96931accdb828, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 99bbdd701151d53408762572faef7f1f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
+  m_sharedMaterial: {fileID: 21894048186437448, guid: 9d88010131ce14d0aa675e4166b1eefd,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2125,9 +2126,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Touch Square To place gamepiece
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e7a56fcdbd13904eaf96931accdb828, type: 2}
-  m_sharedMaterial: {fileID: 21204670121071226, guid: 2e7a56fcdbd13904eaf96931accdb828,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2204,7 +2204,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_subTextObjects:
   - {fileID: 0}
   - {fileID: 0}

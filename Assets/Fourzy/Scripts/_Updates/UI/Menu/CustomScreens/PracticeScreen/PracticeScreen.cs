@@ -47,8 +47,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             AddWidget(AIProfile.EasyAI, player1select.content, 1);
             AddWidget(AIProfile.AggressiveAI, player1select.content, 1);
 
-            OnWidgetTap(AddWidget(AIProfile.EasyAI, player2select.content, 2));
-            AddWidget(AIProfile.Player, player2select.content, 2);
+            OnWidgetTap(AddWidget(AIProfile.Player, player2select.content, 2));
+            AddWidget(AIProfile.EasyAI, player2select.content, 2);
             AddWidget(AIProfile.SimpleAI, player2select.content, 2);
             AddWidget(AIProfile.AggressiveAI, player2select.content, 2);
 
