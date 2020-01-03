@@ -199,6 +199,13 @@ namespace Fourzy
                 }
 
                 PlayerPrefsWrapper.InitialPropertiesSet(true);
+            } else {
+                // temporary until unlock areas is implemented
+                foreach (Area area in Enum.GetValues(typeof(Area)))
+                {
+                    bool state = ((int)area & Constants.DEFAULT_UNLOCKED_THEMES) > 0;
+                    if (state) PlayerPrefsWrapper.SetThemeUnlocked((int)area, state);
+                }
             }
         }
 
