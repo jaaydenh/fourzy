@@ -21,14 +21,14 @@ namespace Fourzy._Updates.UI.Widgets
         protected void OnEnable()
         {
             MoPubBridge.onAdFailed += OnRewardedVideoFailed;
-            MoPubBridge.onAdCalceled += OnRewardedVideoFailed;
+            MoPubBridge.onAdCanceled += OnRewardedVideoFailed;
             MoPubBridge.onAdPlayed += OnRewardedVideoClosedEvent;
         }
 
         protected void OnDisable()
         {
             MoPubBridge.onAdFailed -= OnRewardedVideoFailed;
-            MoPubBridge.onAdCalceled -= OnRewardedVideoFailed;
+            MoPubBridge.onAdCanceled -= OnRewardedVideoFailed;
             MoPubBridge.onAdPlayed -= OnRewardedVideoClosedEvent;
         }
 

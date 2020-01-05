@@ -226,7 +226,7 @@
     },
     {
       "key": "suggest_hint_use",
-      "value": "Obtenga ayuda con el próximo movimiento"
+      "value": "Toca el mago para obtener ayuda."
     },
     {
       "key": "tap_edge_rule",
@@ -543,6 +543,14 @@
     {
       "key": "puzzle_Ladder_desc",
       "value": "Compete para resolver la mayoría de los puzles y sube a la cima de la tabla de clasificatión"
+    },
+    {
+      "key": "gauntlet_title",
+      "value": "Los Retos Locked"
+    },
+    {
+      "key": "ok",
+      "value": "OK"
     }
   ]
 }

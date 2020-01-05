@@ -55,9 +55,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //check
             if (!gauntletGameUnlocked)
             {
-                menuController.GetOrAddScreen<PromptScreen>().Prompt("The Gauntlet Locked",
-                    "The gauntlet is where you will play a series of more difficult opponents. Defeat them all to win!",
-                    "OK",
+                menuController.GetOrAddScreen<PromptScreen>().Prompt(LocalizationManager.Value("gauntlet_title"),
+                    LocalizationManager.Value("gauntlet_desc"),
+                    LocalizationManager.Value("ok"),
                     null,
                     () => menuController.CloseCurrentScreen(),
                     null);
@@ -78,7 +78,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 menuController.GetOrAddScreen<PromptScreen>().Prompt(LocalizationManager.Value("puzzle_Ladder_title"),
                     LocalizationManager.Value("puzzle_Ladder_desc"),
-                    "OK",
+                    LocalizationManager.Value("ok"),
                     null,
                     () => menuController.CloseCurrentScreen(),
                     null);

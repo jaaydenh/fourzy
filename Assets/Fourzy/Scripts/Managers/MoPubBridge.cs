@@ -16,7 +16,7 @@ namespace Fourzy._Updates.Mechanics
         public static Action<string> onAdLoaded;
         public static Action<string> onAdPlayed;
         public static Action<string> onAdFailed;
-        public static Action<string> onAdCalceled;
+        public static Action<string> onAdCanceled;
 
 #if UNITY_ANDROID || UNITY_EDITOR
         public static string AdUnitID = "879ae95cf2084bb0aafee3b4f4d576d7";
@@ -24,12 +24,12 @@ namespace Fourzy._Updates.Mechanics
         public static string AdUnitID = "287e9b186b3146a0ac606985ad69d115";
 #endif
 
-#if UNITY_IOS
+#if UNITY_IOS || UNITY_EDITOR
 
     private readonly string[] _rewardedVideoAdUnits =
         { "8f000bd5e00246de9c789eed39ff6096", "faedb21751d9475a8563b37cf3bf9c6a" };
 
-#elif UNITY_ANDROID || UNITY_EDITOR
+#elif UNITY_ANDROID 
         private readonly string[] _rewardedVideoAdUnits = { "9b75826d5a7c44ccb91a6f73a55eec61" };
 #endif
 
@@ -62,6 +62,7 @@ namespace Fourzy._Updates.Mechanics
             });
 
             MoPub.ReportApplicationOpen("901599511");
+            MoPub.EnableLocationSupport(false);
 
             MoPubManager.OnSdkInitializedEvent += OnSdkInitializedEvent;
 
@@ -127,7 +128,7 @@ namespace Fourzy._Updates.Mechanics
 
         public void ShowRewardedVideoAd()
         {
-            string adUniID = _rewardedVideoAdUnits[0];
+            string adUniID = _rewardedVideoAdUnits[1];
 
             if (GameManager.Instance.debugMessages)
                 Debug.Log("requesting video ad, location lat:" + GameManager.Instance.latitude + ", lon:" + GameManager.Instance.longitude);
@@ -162,7 +163,7 @@ namespace Fourzy._Updates.Mechanics
             cancelRewardedVideo = true;
             loadingPrompt.CloseSelf();
 
-            onAdCalceled?.Invoke(adUniID);
+            onAdCanceled?.Invoke(adUniID);
         }
 
         private void OnSdkInitializedEvent(string message)
