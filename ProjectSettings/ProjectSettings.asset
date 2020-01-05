@@ -171,8 +171,8 @@ PlayerSettings:
     Android: com.supermove.fourzy
     iPhone: com.PartyTroll.Fourzy
   buildNumber:
-    iPhone: 6
-  AndroidBundleVersionCode: 61
+    iPhone: 8
+  AndroidBundleVersionCode: 63
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 28
   AndroidPreferredInstallLocation: 1
@@ -253,7 +253,7 @@ PlayerSettings:
   metalEditorSupport: 1
   metalAPIValidation: 1
   iOSRenderExtraFrameOnPause: 0
-  appleDeveloperTeamID: 
+  appleDeveloperTeamID: 6DD2LZW6T5
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
   iOSManualSigningProvisioningProfileType: 0

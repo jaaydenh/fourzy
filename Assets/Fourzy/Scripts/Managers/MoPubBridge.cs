@@ -20,7 +20,7 @@ namespace Fourzy._Updates.Mechanics
 
 #if UNITY_ANDROID || UNITY_EDITOR
         public static string AdUnitID = "879ae95cf2084bb0aafee3b4f4d576d7";
-#elif UNITY_ISO
+#elif UNITY_IOS
         public static string AdUnitID = "287e9b186b3146a0ac606985ad69d115";
 #endif
 
@@ -48,7 +48,7 @@ namespace Fourzy._Updates.Mechanics
 
         protected void Start()
         {
-            if (instance != this) return;
+            if (instance != this || MoPub.IsSdkInitialized) return;
 
             MoPub.InitializeSdk(new MoPub.SdkConfiguration
             {
@@ -60,6 +60,8 @@ namespace Fourzy._Updates.Mechanics
                 // of legitimate interest.
                 //AllowLegitimateInterest = true,
             });
+
+            MoPub.ReportApplicationOpen("901599511");
 
             MoPubManager.OnSdkInitializedEvent += OnSdkInitializedEvent;
 

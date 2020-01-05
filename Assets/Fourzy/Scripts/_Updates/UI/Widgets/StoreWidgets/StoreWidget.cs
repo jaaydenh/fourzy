@@ -24,8 +24,12 @@ namespace Fourzy._Updates.UI.Widgets
             MiscGameContentHolder.StoreItemExtraData extraData = GameContentManager.Instance.miscGameDataHolder.GetStoreItem(data.definition.id);
             icon.sprite = extraData.icon;
             price.text = data.metadata.isoCurrencyCode + data.metadata.localizedPriceString;
+            
+#if UNITY_IOS || UNITY_EDITOR
             description.text = data.metadata.localizedTitle;
-
+#elif UNITY_ANDROID 
+            description.text = data.metadata.localizedDescription;
+#endif
             return this;
         }
 
