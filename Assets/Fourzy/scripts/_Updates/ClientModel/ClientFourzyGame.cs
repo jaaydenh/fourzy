@@ -33,6 +33,9 @@ namespace Fourzy._Updates.ClientModel
 
         public bool isBoardRandom { get; private set; } = false;
 
+        //sticks and stones addition
+        private int _originalHerdCount;
+
         public Area _Area
         {
             get
@@ -621,7 +624,7 @@ namespace Fourzy._Updates.ClientModel
             Herd current = null;
             bool haveHerds = State.Herds.Count > 0;
 
-            if (haveHerds && !resetMembers) current = new Herd(State.Herds[myID]);
+            if (haveHerds && !resetMembers) current = new Herd(State.Herds[myID].HerdId, _originalHerdCount);
             State = new GameState(_FirstState);
             if (haveHerds && !resetMembers) State.Herds[myID] = current;
 
@@ -665,7 +668,12 @@ namespace Fourzy._Updates.ClientModel
 
         private void Initialize(bool resetFirstState = true)
         {
-            if (resetFirstState) _FirstState = new GameState(State);
+            if (resetFirstState)
+            {
+                _FirstState = new GameState(State);
+
+                if (State.Herds.Count > 0) _originalHerdCount = myMembers.Count;
+            }
 
             collectedItems = new List<RewardsManager.Reward>();
             _allTurnRecord = new List<PlayerTurn>();

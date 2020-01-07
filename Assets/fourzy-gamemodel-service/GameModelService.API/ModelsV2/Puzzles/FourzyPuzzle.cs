@@ -133,16 +133,16 @@ namespace FourzyGameModel.Model
                 AIResult.Activity = GameActions;
             }
 
-            //if (State.WinnerId > 0 && State.WinnerId != State.Opponent(AIResult.Turn.PlayerId))
-            //{
-            //    Status = PuzzleStatus.FAILED;
-            //    GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.LOSS));
-            //}
+            if (State.WinnerId > 0 && State.WinnerId != State.Opponent(AIResult.Turn.PlayerId))
+            {
+                Status = PuzzleStatus.FAILED;
+                GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.FAILED, PuzzleEvent.LOSS));
+            }
 
-            //if (State.WinnerId > 0 && State.WinnerId == State.Opponent(AIResult.Turn.PlayerId))
-            //{ Status = PuzzleStatus.SUCCESS;
-            //    GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.SUCCESS, PuzzleEvent.VICTORY));
-            //}
+            if (State.WinnerId > 0 && State.WinnerId == State.Opponent(AIResult.Turn.PlayerId))
+            { Status = PuzzleStatus.SUCCESS;
+                GameActions.Add(new GameActionPuzzleStatus(PuzzleStatus.SUCCESS, PuzzleEvent.VICTORY));
+            }
             
             return AIResult;
         }

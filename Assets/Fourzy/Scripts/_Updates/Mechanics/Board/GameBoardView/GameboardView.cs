@@ -1463,7 +1463,10 @@ namespace Fourzy._Updates.Mechanics.Board
 
             bool isGauntlet = game.puzzleData && game.puzzleData.gauntletStatus != null;
             bool localyCreatedTurn = turn != null ? turn.createdOnThisDevice : false;
-            SimpleMove move = turn != null ? turn.GetMove() : null;
+
+            if (isGauntlet && turn != null && turn.PlayerId == game.me.PlayerId) game.RemoveMember();
+
+            //SimpleMove move = turn != null ? turn.GetMove() : null;
 
             SetHintAreaColliderState(false);
             isAnimating = true;
@@ -1778,15 +1781,15 @@ namespace Fourzy._Updates.Mechanics.Board
 
             game.CheckLost();
 
-            ////check if gauntlet game finished
-            //if (isGauntlet && move != null && move.Piece.PlayerId == game.me.PlayerId)
-            //{
-            //    if (game._State.Herds[move.Piece.PlayerId].Members.Count == 0 && game._State.WinningLocations == null)
-            //    {
-            //        SetHintAreaColliderState(false);
-            //        onGameFinished?.Invoke(game);
-            //    }
-            //}
+            //check if gauntlet game finished
+            if (isGauntlet && turn != null && turn.PlayerId == game.me.PlayerId)
+            {
+                if (game._State.Herds[turn.PlayerId].Members.Count == 0 && game._State.WinningLocations == null)
+                {
+                    SetHintAreaColliderState(false);
+                    onGameFinished?.Invoke(game);
+                }
+            }
 
             //since puzzle games dont send "lose" event, need to check manually
             switch (game._Type)
