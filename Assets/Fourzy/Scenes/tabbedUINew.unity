@@ -15794,9 +15794,9 @@ MonoBehaviour:
   opponentWidgetPrefab: {fileID: 1742364410870465191, guid: c22be81065d5e2a458c1be446dac62f9,
     type: 3}
   areaWidgetPrefab: {fileID: 1769551510}
-  timerToggle: {fileID: 428472580}
   miniGameboardPrefab: {fileID: 114113304784225340, guid: 753eac7ea7c84784484fb0e32473bd24,
     type: 3}
+  timerToggle: {fileID: 428472580}
   timerButton: {fileID: 513729951}
 --- !u!1 &654639042
 GameObject:
