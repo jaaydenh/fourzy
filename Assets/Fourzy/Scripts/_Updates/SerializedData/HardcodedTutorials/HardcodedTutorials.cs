@@ -23,160 +23,223 @@ namespace Fourzy._Updates._Tutorial
                             tasks = new OnboardingTask[]
                             {
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "200"),
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("welcome_to_fourzy")),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("welcome_to_fourzy"), 0),
                                 new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BG },
                                 new OnboardingTask_Log("1"),
                             },
                         },
-                        //step 2: load tutorial map + show rules
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
                             {
-                                new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-
-                                new OnboardingTask_OpenGame(GameType.ONBOARDING, "201"),
-
-                                new OnboardingTask() { action = OnboardingActions.SHOW_BG },
-                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("tap_edge_rule")),
-                                new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win"), 0),
                                 new OnboardingTask_Log("2"),
                             },
                         },
+                        ////step 2: load tutorial map + show rules
+                        //new OnboardingTasksBatch()
+                        //{
+                        //    tasks = new OnboardingTask[]
+                        //    {
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+
+                        //        new OnboardingTask_OpenGame(GameType.ONBOARDING, "201"),
+
+                        //        new OnboardingTask() { action = OnboardingActions.SHOW_BG },
+                        //        new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                        //        new OnboardingTask_ShowMessage(LocalizationManager.Value("tap_edge_rule"), 1),
+                        //        new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                        //        new OnboardingTask_Log("2"),
+                        //    },
+                        //},
                         //step 3: show player where to tap to make move
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
                             {
                                 new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
+                                //new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-                                new OnboardingTask_PointAt(new Vector2(0, 6), LocalizationManager.Value("tap_to_place")),
-                                new OnboardingTask_LimitInput(new Rect(0f, 6f, 1f, 1f)),
+                                new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding1"),
+                                //new OnboardingTask_PointAt(LocalizationManager.Value("tap_to_place"), new Vector2(0f, 6f), new Vector2(2f, 6f)),
+                                new OnboardingTask_PointAt("", new Vector2(4f, 0f), new Vector2(4f, 2f)),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_down"), 1),
+                                new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
-                                new OnboardingTask_ShowMaskedArea(new Rect(0f, 6f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0, new Vector2(72f, 72f)),
+                                new OnboardingTask_ShowMaskedArea(new Rect(4f, 0f, 1f, 3f), OnboardingScreenMaskObject.MaskStyle.PX_0),
                                 //this will skip to next
-                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
                                 new OnboardingTask_Log("3"),
                             },
                         },
-                        //step 4: cancel input after player move started
-                        new OnboardingTasksBatch()
-                        {
-                            tasks = new OnboardingTask[]
-                            {
-                                new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                                new OnboardingTask_LimitInput(new Rect[0]),
-                                //this will skip to next
-                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
-                            },
-                        },
-                        //step 5: opponent takes turn
-                        new OnboardingTasksBatch()
-                        {
-                            tasks = new OnboardingTask[]
-                            {
-                                new OnboardingTask_PlaceGamepiece(2, Direction.RIGHT, 3),
-                                //this will skip to next
-                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
-                            },
-                        },
-                        //step 6: players' 2d turn + limit input
-                        new OnboardingTasksBatch()
-                        {
-                            tasks = new OnboardingTask[]
-                            {
-                                //this will skip to next
-                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
-                                new OnboardingTask_PointAt(new Vector2(7, 5), LocalizationManager.Value("tap_to_place")),
-                                new OnboardingTask_LimitInput(new Rect(7f, 5f, 1f, 1f)),
-                                new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
-                                new OnboardingTask_ShowMaskedArea(new Rect(7f, 5f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0, new Vector2(72f, 72f)),
-                                new OnboardingTask_Log("4"),
-                            },
-                        },
-                        //step 7: cancel input after player move started
-                        new OnboardingTasksBatch()
-                        {
-                            tasks = new OnboardingTask[]
-                            {
-                                new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                                new OnboardingTask_LimitInput(new Rect[0]),
-                                //this will skip to next
-                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
-                            },
-                        },
-                        //step 8: opponent takes turn
-                        new OnboardingTasksBatch()
-                        {
-                            tasks = new OnboardingTask[]
-                            {
-                                new OnboardingTask_PlaceGamepiece(2, FourzyGameModel.Model.Direction.DOWN, 4),
-                                //this will skip to next
-                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
-                            },
-                        },
-                        //step 9: show message
-                        new OnboardingTasksBatch()
-                        {
-                            tasks = new OnboardingTask[]
-                            {
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win")),
-                                new OnboardingTask() { action = OnboardingActions.SHOW_BG },
-                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
-                                new OnboardingTask_Log("5"),
-                            },
-                        },
-                        //step 10: players' 3rd turn + limit input
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
                             {
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                                new OnboardingTask_PointAt(new Vector2(3, 0), LocalizationManager.Value("tap_to_place")),
-                                new OnboardingTask_LimitInput(new Rect(3f, 0f, 1f, 1f)),
-                                new OnboardingTask_ShowMaskedArea(new Rect(3f, 0f, 1f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0, new Vector2(72f, 72f)),
+                                new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                                new OnboardingTask_Wait(2f),
+                            }
+                        },
+                        ////step 4: cancel input after player move started
+                        //new OnboardingTasksBatch()
+                        //{
+                        //    tasks = new OnboardingTask[]
+                        //    {
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                        //        //new OnboardingTask_LimitInput(new Rect[0]),
+                        //        //this will skip to next
+                        //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                        //        new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding2"),
+                        //    },
+                        //},
+                        //////step 5: opponent takes turn
+                        ////new OnboardingTasksBatch()
+                        ////{
+                        ////    tasks = new OnboardingTask[]
+                        ////    {
+                        ////        new OnboardingTask_PlaceGamepiece(2, Direction.RIGHT, 3),
+                        ////        //this will skip to next
+                        ////        new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                        ////    },
+                        ////},
+                        //step 6: players' 2 turn + limit input
+                        new OnboardingTasksBatch()
+                        {
+                            tasks = new OnboardingTask[]
+                            {
+                                new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding2"),
                                 //this will skip to next
-                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
+                                new OnboardingTask_PointAt("", new Vector2(0f, 3f), new Vector2(2f, 3f)),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1),
+                                new OnboardingTask_LimitInput(new Rect(0f, 3f, 3f, 1f)),
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
-                                new OnboardingTask_Log("6"),
+                                new OnboardingTask_ShowMaskedArea(new Rect(0f, 3f, 3f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0),
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                                new OnboardingTask_Log("4"),
                             },
                         },
+                        ////step 7: cancel input after player move started
+                        //new OnboardingTasksBatch()
+                        //{
+                        //    tasks = new OnboardingTask[]
+                        //    {
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                        //        new OnboardingTask_LimitInput(new Rect[0]),
+                        //        //this will skip to next
+                        //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                        //    },
+                        //},
+                        new OnboardingTasksBatch()
+                        {
+                            tasks = new OnboardingTask[]
+                            {
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                                new OnboardingTask_Wait(2f),
+                            }
+                        },
+                        ////step 8: opponent takes turn
+                        //new OnboardingTasksBatch()
+                        //{
+                        //    tasks = new OnboardingTask[]
+                        //    {
+                        //        new OnboardingTask_PlaceGamepiece(2, FourzyGameModel.Model.Direction.DOWN, 4),
+                        //        //this will skip to next
+                        //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                        //    },
+                        //},
+                        //step 9: show message
+                        //new OnboardingTasksBatch()
+                        //{
+                        //    tasks = new OnboardingTask[]
+                        //    {
+                        //        new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win"), 0),
+                        //        new OnboardingTask() { action = OnboardingActions.SHOW_BG },
+                        //        new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                        //        new OnboardingTask_Log("5"),
+                        //    },
+                        //},
+                        //step 10: players' 3rd turn + limit input
+                        //new OnboardingTasksBatch()
+                        //{
+                        //    tasks = new OnboardingTask[]
+                        //    {
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                        //        new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                        //        new OnboardingTask_PointAt("", new Vector2(3f, 0f), new Vector2(3f, 2f)),
+                        //        new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_down"), 1),
+                        //        new OnboardingTask_LimitInput(new Rect(3f, 0f, 1f, 3f)),
+                        //        new OnboardingTask_ShowMaskedArea(new Rect(3f, 0f, 1f, 3f), OnboardingScreenMaskObject.MaskStyle.PX_0),
+                        //        //this will skip to next
+                        //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
+                        //        new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                        //        new OnboardingTask_Log("6"),
+                        //    },
+                        //},
                         //step 11: cancel input after player move started
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
                             {
-                                new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                                new OnboardingTask_LimitInput(new Rect[0]),
-                                //this will skip to next
+                                new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding3"),
+                                new OnboardingTask_PointAt("", new Vector2(0f, 1f), new Vector2(2f, 1f)),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1),
+                                new OnboardingTask_LimitInput(new Rect(0f, 1f, 3f, 1f)),
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                                new OnboardingTask_ShowMaskedArea(new Rect(0f, 1f, 3f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0),
                                 new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                                new OnboardingTask_Log("4"),
                             },
                         },
-                        //step 12: show message
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
                             {
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("excellent")),
-                                new OnboardingTask() { action = OnboardingActions.SHOW_BG },
-                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
-                                new OnboardingTask_Log("7"),
-                            },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                                new OnboardingTask_Wait(2f),
+                            }
                         },
+                        //new OnboardingTasksBatch()
+                        //{
+                        //    tasks = new OnboardingTask[]
+                        //    {
+                        //        //new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                        //        //new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                        //        //new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
+                        //        //new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                        //        new OnboardingTask_LimitInput(new Rect[0]),
+                        //        //this will skip to next
+                        //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                        //        new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding3"),
+                        //    },
+                        //},
+                        ////step 12: show message
+                        //new OnboardingTasksBatch()
+                        //{
+                        //    tasks = new OnboardingTask[]
+                        //    {
+                        //        new OnboardingTask_ShowMessage(LocalizationManager.Value("excellent"), 0),
+                        //        new OnboardingTask() { action = OnboardingActions.SHOW_BG },
+                        //        new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                        //        new OnboardingTask_Log("7"),
+                        //    },
+                        //},
                         // //step 13: change name message
                         // new OnboardingTasksBatch()
                         // {
@@ -202,8 +265,8 @@ namespace Fourzy._Updates._Tutorial
                             tasks = new OnboardingTask[]
                             {
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                                //new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                //new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                                 //will continue after main menu loaded
                                 new OnboardingTask() { action = OnboardingActions.LOAD_MAIN_MENU },
                                 //new OnboardingDataHolder.OnboardingTask_ExecMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, "openScreen", "tutorialProgressionMap"),
@@ -291,6 +354,7 @@ namespace Fourzy._Updates._Tutorial
 
         PLAY_INITIAL_MOVES,
         OPEN_GAME,
+        GAME_FINISHED,
 
         LIMIT_BOARD_INPUT,
         RESET_BOARD_INPUT,
@@ -305,14 +369,15 @@ namespace Fourzy._Updates._Tutorial
         PLAYER_1_PLACE_GAMEPIECE,
 
         ON_MOVE_ENDED,
-        ON_MOVE_STARTED = 18,
+        ON_MOVE_STARTED,
 
-        USER_CHANGE_NAME_PROMPT = 20,
+        USER_CHANGE_NAME_PROMPT,
 
         SHOW_BOARD_HINT_AREA,
         HIDE_BOARD_HINT_AREA,
 
         LOG_TUTORIAL,
+        WAIT,
 
         SHOW_MASKED_AREA,
         HIDE_MAKSED_AREA,
@@ -386,10 +451,11 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_ShowMessage : OnboardingTask
     {
-        public OnboardingTask_ShowMessage(string message)
+        public OnboardingTask_ShowMessage(string message, int style)
         {
             action = OnboardingActions.SHOW_MESSAGE;
             stringValue = message;
+            intValue = style;
         }
     }
 
@@ -404,11 +470,13 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_PointAt : OnboardingTask
     {
-        public OnboardingTask_PointAt(Vector2 boardLocation, string message = "")
+        public Vector2[] points;
+
+        public OnboardingTask_PointAt(string message = "", params Vector2[] points)
         {
             action = OnboardingActions.POINT_AT;
 
-            vector2value = boardLocation;
+            this.points = points;
             stringValue = message;
         }
     }
@@ -430,13 +498,12 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_ShowMaskedArea : OnboardingTask
     {
-        public OnboardingTask_ShowMaskedArea(Rect area, OnboardingScreenMaskObject.MaskStyle maskStyle, Vector2 size)
+        public OnboardingTask_ShowMaskedArea(Rect area, OnboardingScreenMaskObject.MaskStyle maskStyle)
         {
             action = OnboardingActions.SHOW_MASKED_AREA;
 
             intValue = (int)maskStyle;
             areas = new Rect[] { area };
-            vector2value = size;
         }
     }
 
@@ -474,6 +541,17 @@ namespace Fourzy._Updates._Tutorial
             vector2value = scale;
 
             this.showBG = showBG;
+        }
+    }
+
+    public class OnboardingTask_Wait : OnboardingTask
+    {
+        public float time;
+
+        public OnboardingTask_Wait(float time)
+        {
+            action = OnboardingActions.WAIT;
+            this.time = time;
         }
     }
 

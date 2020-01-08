@@ -213,6 +213,22 @@
       "value": "Restablecer progreso"
     },
     {
+      "key": "rule_swipe_up",
+      "value": "Desliza hacia arriba para moverte"
+    },
+    {
+      "key": "rule_swipe_down",
+      "value": "Desliza hacia abajo para moverte"
+    },
+    {
+      "key": "rule_swipe_left",
+      "value": "Desliza hacia la izquierda para moverte"
+    },
+    {
+      "key": "rule_swipe_right",
+      "value": "Desliza hacia la derecha para moverte"
+    },
+    {
       "key": "settings",
       "value": "Configuraciones"
     },

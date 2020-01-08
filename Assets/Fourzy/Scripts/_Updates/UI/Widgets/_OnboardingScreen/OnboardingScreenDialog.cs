@@ -9,18 +9,16 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public TMP_Text message;
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            Hide(0f);
-        }
-
         public void DisplayText(string text)
         {
-            Show(.2f);
+            if (!visible) Show(.2f);
 
             message.text = text;
+        }
+
+        public void _Hide()
+        {
+            if (visible) Hide(.3f);
         }
     }
 }

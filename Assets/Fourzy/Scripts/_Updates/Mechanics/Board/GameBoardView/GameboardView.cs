@@ -587,7 +587,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public Vector2 BoardLocationToVec2(BoardLocation location) => BoardLocationToVec2(location.Row, location.Column);
 
-        public Vector2 BoardLocationToVec2(int row, int column)
+        public Vector2 BoardLocationToVec2(float row, float column)
         {
             float posX = topLeft.x + step.x * .5f + step.x * column;
             float posY = topLeft.y - step.y * .5f - step.y * row;
@@ -596,12 +596,7 @@ namespace Fourzy._Updates.Mechanics.Board
         }
 
         public BoardLocation Vec2ToBoardLocation(Vector3 vec3)
-        {
-            int x = Mathf.FloorToInt((vec3.x - topLeft.x) / step.x);
-            int y = Mathf.FloorToInt(-(vec3.y - topLeft.y) / step.y);
-
-            return new BoardLocation(y, x);
-        }
+            => new BoardLocation(Mathf.FloorToInt(-(vec3.y - topLeft.y) / step.y), Mathf.FloorToInt((vec3.x - topLeft.x) / step.x));
 
         public IEnumerable<T> BoardBitsAt<T>(BoardLocation at) where T : BoardBit =>
             boardBits.

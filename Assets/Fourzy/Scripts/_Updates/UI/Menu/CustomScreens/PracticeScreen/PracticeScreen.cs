@@ -19,8 +19,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public OpponentWidget opponentWidgetPrefab;
         public PracticeScreenAreaSelectWidget areaWidgetPrefab;
-        public StringEventTrigger timerToggle;
         public MiniGameboardWidget miniGameboardPrefab;
+        public StringEventTrigger timerToggle;
+        public ButtonExtended timerButton;
 
         private Dictionary<Area, List<GameBoardDefinition>> gameboards = new Dictionary<Area, List<GameBoardDefinition>>();
         private int currentBoard = -1;
@@ -62,6 +63,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             LoadBoard(currentBoard);
 
+            SetTimerState(GameManager.Instance.passAndPlayTimer);
+
             base.Start();
         }
 
@@ -72,11 +75,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             HeaderScreen.instance.Close();
         }
 
-        public void ToggleTimer()
-        {
-            timerState = !timerState;
-            timerToggle.TryInvoke(timerState ? "on" : "off");
-        }
+        public void ToggleTimer() => SetTimerState(!timerState);
 
         public void SetArea(PracticeScreenAreaSelectWidget widget)
         {
@@ -164,6 +163,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             return instance;
         }
 
+        private void SetTimerState(bool value)
+        {
+            timerState = value;
+            timerToggle.TryInvoke(timerState ? "on" : "off");
+            GameManager.Instance.passAndPlayTimer = value;
+        }
+
         private void SetAreaWidget(PracticeScreenAreaSelectWidget widget)
         {
             currentAreaWidget = widget;
@@ -228,6 +234,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
+
+            if (player1Profile && player2Profile)
+                timerButton.SetState(player1Profile.aiProfile == AIProfile.Player && player2Profile.aiProfile == AIProfile.Player);
         }
     }
 }

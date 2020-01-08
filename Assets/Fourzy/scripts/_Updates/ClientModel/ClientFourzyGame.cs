@@ -621,12 +621,18 @@ namespace Fourzy._Updates.ClientModel
         public GameState _Reset(bool resetMembers = false)
         {
             int myID = me.PlayerId;
-            Herd current = null;
-            bool haveHerds = State.Herds.Count > 0;
+            int currentHerdCount = 0;
 
-            if (haveHerds && !resetMembers) current = new Herd(State.Herds[myID].HerdId, _originalHerdCount);
+            if (State.Herds.Count > 0 && !resetMembers) currentHerdCount = State.Herds[myID].Members.Count;
             State = new GameState(_FirstState);
-            if (haveHerds && !resetMembers) State.Herds[myID] = current;
+
+            if (State.Herds.Count > 0)
+            {
+                if (resetMembers)
+                    State.Herds[myID] = new Herd(_FirstState.Herds[myID].HerdId, _originalHerdCount);
+                else
+                    State.Herds[myID] = new Herd(_FirstState.Herds[myID].HerdId, currentHerdCount);
+            }
 
             LoseStreak++;
 
@@ -672,7 +678,13 @@ namespace Fourzy._Updates.ClientModel
             {
                 _FirstState = new GameState(State);
 
-                if (State.Herds.Count > 0) _originalHerdCount = myMembers.Count;
+                if (State.Herds.Count > 0)
+                {
+                    _originalHerdCount = myMembers.Count;
+                    int myID = me.PlayerId;
+
+                    State.Herds[myID] = new Herd(_FirstState.Herds[myID].HerdId, _originalHerdCount);
+                }
             }
 
             collectedItems = new List<RewardsManager.Reward>();

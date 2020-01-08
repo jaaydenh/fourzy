@@ -149,7 +149,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //check if help button available
-            helpButton.SetActive(game._Type != GameType.PRESENTATION);
+            switch (game._Type)
+            {
+                case GameType.PRESENTATION:
+                case GameType.ONBOARDING:
+                    helpButton.SetActive(false);
+
+                    break;
+
+                default:
+                    helpButton.SetActive(true);
+
+                    break;
+            }
 
             puzzleUI.Open(game);
             turnbaseUI.Open(game);

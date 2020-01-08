@@ -61,6 +61,12 @@ MonoBehaviour:
       boardFile: {fileID: 4900000, guid: 021aa65a639fde940bd00399be78c6d3, type: 3}
     - _name: 'Name: OnboardingLevelSampleBoard, ID: 200'
       boardFile: {fileID: 4900000, guid: ebd261e9c2fd34c47ad5e28c00108a2e, type: 3}
+    - _name: 'Name: OnboardingBoard1, ID: 5ad8564f-5c97-4d72-a9ae-ede419dbc401'
+      boardFile: {fileID: 4900000, guid: 3651ebc005adf3045a07c874cc19c57e, type: 3}
+    - _name: 'Name: OnboardingBoard2, ID: 32a9a6be-e0ec-4e28-929a-b18bc3a54fd6'
+      boardFile: {fileID: 4900000, guid: f65eab4bd0544dd429da15d3b877aa1e, type: 3}
+    - _name: 'Name: OnboardingBoard3, ID: 5a134b65-c173-48ab-8352-98a8c372d52e'
+      boardFile: {fileID: 4900000, guid: 4f1c1d0bee223d849a398d51971cea20, type: 3}
     - _name: 'Name: IceBlockTokenInstruction, ID: 19'
       boardFile: {fileID: 4900000, guid: f02545c0f85854aceb039af6f9b62848, type: 3}
     - _name: 'Name: SnowTokenInstruction, ID: 20'

@@ -253,14 +253,12 @@ namespace Fourzy._Updates.UI.Menu
         }
 
         public Vector2 WorldToCanvasSize(Vector2 size)
-        {
-            return new Vector2(WorldToCanvasPoint(new Vector3(size.x, 0f)).x - WorldToCanvasPoint(Vector3.zero).x, WorldToCanvasPoint(new Vector3(0f, size.y)).y - WorldToCanvasPoint(Vector3.zero).y);
-        }
+            => new Vector2(
+                WorldToCanvasPoint(new Vector3(size.x, 0f)).x - WorldToCanvasPoint(Vector3.zero).x, 
+                WorldToCanvasPoint(new Vector3(0f, size.y)).y - WorldToCanvasPoint(Vector3.zero).y);
 
         public Vector2 WorldToViewport(Vector2 worldPoint)
-        {
-            return _camera ? _camera.WorldToViewportPoint(worldPoint) : Camera.main.WorldToViewportPoint(worldPoint);
-        }
+            => _camera ? _camera.WorldToViewportPoint(worldPoint) : Camera.main.WorldToViewportPoint(worldPoint);
 
         public virtual void SetState(bool state)
         {

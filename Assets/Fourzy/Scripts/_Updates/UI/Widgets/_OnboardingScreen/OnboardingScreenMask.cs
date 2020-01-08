@@ -1,8 +1,10 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates._Tutorial;
+using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +21,7 @@ namespace Fourzy._Updates.UI.Widgets
         private List<OnboardingScreenMaskObject> masks = new List<OnboardingScreenMaskObject>();
 
         private CanvasGroup canvasGroup;
+        private GameboardView board;
 
         protected void Awake()
         {
@@ -28,6 +31,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void ShowMasks(OnboardingTask task, bool clear = true)
         {
+            board = GamePlayManager.instance.board;
             Show();
 
             if (clear) Clear();
@@ -38,11 +42,15 @@ namespace Fourzy._Updates.UI.Widgets
                 for (int column = (int)area.x; column < (int)(area.x + area.width); column++)
                     for (int row = (int)area.y; row < (int)(area.y + area.height); row++)
                     {
-                        Vector2 viewportPoint = Camera.main.WorldToViewportPoint(GamePlayManager.instance.board.BoardLocationToVec2(
-                                    new BoardLocation(row, column)) + (Vector2)GamePlayManager.instance.board.transform.position);
+                        Vector2 viewportPoint = Camera.main.WorldToViewportPoint(board.BoardLocationToVec2(new BoardLocation(row, column)) + 
+                            (Vector2)GamePlayManager.instance.board.transform.position);
+
+                        //figure size
+                        MenuController menuController = GetComponentInParent<MenuController>();
+                        Vector2 size = menuController.WorldToCanvasSize(board.step);
 
                         AddMaskObject().
-                            Size(task.vector2value).
+                            Size(size).
                             SetStyle((OnboardingScreenMaskObject.MaskStyle)task.intValue).
                             SetAnchors(viewportPoint);
                     }

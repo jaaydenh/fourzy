@@ -214,6 +214,22 @@
       "value": "Reset Progress"
     },
     {
+      "key": "rule_swipe_up",
+      "value": "Swipe up to move"
+    },
+    {
+      "key": "rule_swipe_down",
+      "value": "Swipe down to move"
+    },
+    {
+      "key": "rule_swipe_left",
+      "value": "Swipe left to move"
+    },
+    {
+      "key": "rule_swipe_right",
+      "value": "Swipe right to move"
+    },
+    {
       "key": "settings",
       "value": "Settings"
     },
@@ -228,10 +244,6 @@
     {
       "key": "suggest_hint_use",
       "value": "Ask the Wizard for help"
-    },
-    {
-      "key": "tap_edge_rule",
-      "value": "Swipe to make a move"
     },
     {
       "key": "tap_to_continue",

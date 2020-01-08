@@ -25,6 +25,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public OnboardingScreenPointer pointer;
         public OnboardingScreenHighlight highlight;
         public OnboardingScreenGraphics graphics;
+        public OnboardingScreenInstruction instructions;
 
         public bool isTutorialRunning { get; private set; }
         public ButtonExtended currentButton { get; private set; }
@@ -39,8 +40,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public override void Open()
         {
             //name prompt was closed, so we do next
-            if (tutorial.data[step].ContainsAction(OnboardingActions.USER_CHANGE_NAME_PROMPT))
-                StartRoutine("nameChanged", .2f, () => Next());
+            if (tutorial.data[step].ContainsAction(OnboardingActions.USER_CHANGE_NAME_PROMPT)) StartRoutine("nameChanged", .2f, () => Next());
 
             if (isOpened) return;
 
@@ -210,14 +210,26 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 {
                     //dialog
                     case OnboardingActions.SHOW_MESSAGE:
-                        if (!dialog.visible) dialog.Show(.2f);
+                        OnboardingTask_ShowMessage instructionTask = task as OnboardingTask_ShowMessage;
 
-                        dialog.DisplayText(task.stringValue);
+                        switch (instructionTask.intValue)
+                        {
+                            case 0:
+                                dialog.DisplayText(task.stringValue);
+
+                                break;
+
+                            case 1:
+                                instructions.DisplayText(.15f, task.stringValue);
+
+                                break;
+                        }
 
                         break;
 
                     case OnboardingActions.HIDE_MESSAGE_BOX:
-                        dialog.Hide(.2f);
+                        dialog._Hide();
+                        instructions._Hide();
 
                         break;
 
@@ -227,19 +239,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (board == null) break;
 
-                        if (!pointer.visible) pointer.Show(.2f);
+                        OnboardingTask_PointAt pointAtTask = task as OnboardingTask_PointAt;
 
-                        anchors = Camera.main.WorldToViewportPoint(
-                            (Vector2)board.transform.position +
-                            board.BoardLocationToVec2(new BoardLocation((int)task.vector2value.y, (int)task.vector2value.x)));
-
-                        pointer.SetAnchors(anchors);
+                        pointer.AnimatePointer(pointAtTask.points);
                         pointer.SetMessage(task.stringValue);
 
                         break;
 
                     case OnboardingActions.HIDE_POINTER:
-                        pointer.Hide(.2f);
+                        pointer.HidePointer();
 
                         break;
 
@@ -314,6 +322,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 UserManager.Instance.meAsPlayer,
                                 new Player(2, "Player Two"))
                             { _Type = (GameType)task.intValue });
+
+                        break;
+
+                    case OnboardingActions.GAME_FINISHED:
+                        yield return new WaitForSeconds(1.3f);
+                        Next();
+
+                        break;
+
+                    case OnboardingActions.WAIT:
+                        OnboardingTask_Wait waitTask = task as OnboardingTask_Wait;
+                        yield return new WaitForSeconds(waitTask.time);
+                        Next();
 
                         break;
 
