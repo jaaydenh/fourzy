@@ -57,6 +57,10 @@
       "value": "Continuar"
     },
     {
+      "key": "continue_question",
+      "value": "¿Continuar?"
+    },
+    {
       "key": "coins",
       "value": "Monedas"
     },

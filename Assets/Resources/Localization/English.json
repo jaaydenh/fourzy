@@ -58,6 +58,10 @@
       "value": "Continue"
     },
     {
+      "key": "continue_question",
+      "value": "Continue?"
+    },
+    {
       "key": "coins",
       "value": "Coins"
     },

@@ -16,7 +16,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Prompt(
                 LocalizationManager.Value("gauntlet_failed"),
                 LocalizationManager.Value("gauntlet_failed_message"),
-                "Replay?",
+                LocalizationManager.Value("continue_question"),
                 LocalizationManager.Value("no"),
                 () =>
                 {

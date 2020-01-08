@@ -12,7 +12,7 @@ namespace Fourzy._Updates.UI.Helpers
 
         [Tooltip("Distance that pointer need to trave\n to trigger swipe event")]
         [Range(0f, 1f)]
-        public float swipeDistance = .1f;
+        public float swipeDistance = .07f;
         [Tooltip("Time during which swipe can occur")]
         public float swipeTime = .2f;
 
