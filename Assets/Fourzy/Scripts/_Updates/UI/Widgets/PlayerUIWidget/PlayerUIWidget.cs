@@ -17,8 +17,8 @@ namespace Fourzy._Updates.UI.Widgets
         public int playerNameMaxSize = 9;
 
         private GamePieceView current;
-        private Player assignedPlayer;
 
+        public Player assignedPlayer { get; private set; }
         public IClientFourzy game { get; private set; }
 
         public bool shown { get; private set; } = false;
@@ -60,8 +60,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void ShowPlayerTurnAnimation()
         {
-            if (!current)
-                return;
+            if (!current) return;
 
             current.ShowTurnAnimation();
         }

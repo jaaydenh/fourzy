@@ -301,9 +301,13 @@ namespace Fourzy._Updates.ClientModel
 
         public Player activePlayer => isMyTurn ? me : opponent;
 
-        public ClientPuzzleData puzzleData { get; set; }
-
         public Player unactivePlayer => isMyTurn ? opponent : me;
+
+        public Player player1 => State.Players[1];
+
+        public Player player2 => State.Players[2];
+
+        public ClientPuzzleData puzzleData { get; set; }
 
         public bool isMyTurn => me.PlayerId == State.ActivePlayerId;
 

@@ -15,8 +15,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class GameplayScreen : MenuScreen
     {
-        public PlayerUIWidget playerWidget;
-        public PlayerUIWidget opponentWidget;
+        public PlayerUIWidget player1Widget;
+        public PlayerUIWidget player2Widget;
         public PlayerUIMessagesWidget opponentMessagesWidget;
         public GameInfoWidget gameInfoWidget;
         public ButtonExtended rematchButton;
@@ -98,47 +98,47 @@ namespace Fourzy._Updates.UI.Menu.Screens
             this.gameplayManager = gameplayManager;
             game = gameplayManager.game;
 
-            playerWidget.SetGame(game);
-            opponentWidget.SetGame(game);
+            player1Widget.SetGame(game);
+            player2Widget.SetGame(game);
 
-            playerWidget.Initialize();
-            opponentWidget.Initialize();
+            player1Widget.Initialize();
+            player2Widget.Initialize();
 
-            playerWidget.SetPlayerName(game.me.DisplayName);
-            playerWidget.SetPlayerIcon(game.me);
-            playerWidget.StopPlayerTurnAnimation();
+            player1Widget.SetPlayerName(game.player1.DisplayName);
+            player1Widget.SetPlayerIcon(game.player1);
+            player1Widget.StopPlayerTurnAnimation();
 
             if (game.opponent != null)
             {
-                opponentWidget.SetPlayerName(game.opponent.DisplayName);
-                opponentWidget.SetPlayerIcon(game.opponent);
-                opponentWidget.StopPlayerTurnAnimation();
+                player2Widget.SetPlayerName(game.player2.DisplayName);
+                player2Widget.SetPlayerIcon(game.player2);
+                player2Widget.StopPlayerTurnAnimation();
 
                 if (game.hideOpponent)
                 {
-                    opponentWidget.Hide(.1f);
+                    player2Widget.Hide(.1f);
                 }
                 else
                 {
                     if (game.puzzleData)
                     {
                         if (game.puzzleData.hasAIOpponent)
-                            opponentWidget.Show(.1f);
+                            player2Widget.Show(.1f);
                         else
-                            opponentWidget.Hide(.1f);
+                            player2Widget.Hide(.1f);
                     }
                     else
-                        opponentWidget.Show(.1f);
+                        player2Widget.Show(.1f);
                 }
             }
             else
-                opponentWidget.Hide(.1f);
+                player2Widget.Hide(.1f);
 
             //initialize timer
             if (timersEnabled)
             {
-                timerWidgets[0].AssignPlayer(game.me);
-                timerWidgets[1].AssignPlayer(game.opponent);
+                timerWidgets[0].AssignPlayer(game.player1);
+                timerWidgets[1].AssignPlayer(game.player2);
             }
             //disable timer widgets if not needed
             else
@@ -274,17 +274,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void UpdatePlayerTurnGraphics()
         {
-            if (game.isMyTurn)
+            if (game.activePlayer.PlayerId == player1Widget.assignedPlayer.PlayerId)
             {
-                playerWidget.ShowPlayerTurnAnimation();
-
-                if (!game.hideOpponent) opponentWidget.StopPlayerTurnAnimation();
+                player1Widget.ShowPlayerTurnAnimation();
+                if (!game.hideOpponent) player2Widget.StopPlayerTurnAnimation();
             }
             else
             {
-                playerWidget.StopPlayerTurnAnimation();
-
-                if (!game.hideOpponent) opponentWidget.ShowPlayerTurnAnimation();
+                player2Widget.ShowPlayerTurnAnimation();
+                if (!game.hideOpponent) player1Widget.StopPlayerTurnAnimation();
             }
         }
 
@@ -326,10 +324,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (!game.draw)
             {
-                if (game.IsWinner())
-                    playerWidget.StartWinJumps();
+                if (game.IsWinner(player1Widget.assignedPlayer))
+                    player1Widget.StartWinJumps();
                 else
-                    opponentWidget.StartWinJumps();
+                    player2Widget.StartWinJumps();
             }
 
             if (game.puzzleData)

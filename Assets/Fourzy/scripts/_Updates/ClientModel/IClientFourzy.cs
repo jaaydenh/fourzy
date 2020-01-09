@@ -8,7 +8,6 @@ using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using GameType = Fourzy.GameType;
 
 namespace Fourzy._Updates.ClientModel
 {
@@ -46,7 +45,7 @@ namespace Fourzy._Updates.ClientModel
         Piece activePlayerPiece { get; }
         Piece playerPiece { get; }
         Piece opponentPiece { get; }
-        
+
         ClientPuzzleData puzzleData { get; set; }
 
         TurnEvaluator turnEvaluator { get; }
@@ -61,6 +60,8 @@ namespace Fourzy._Updates.ClientModel
         Player opponent { get; }
         Player activePlayer { get; }
         Player unactivePlayer { get; }
+        Player player1 { get; }
+        Player player2 { get; }
 
         bool isMyTurn { get; }
         float gameDuration { get; }
