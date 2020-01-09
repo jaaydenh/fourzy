@@ -18,6 +18,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RectTransform widgetsParent;
         public Badge noEntries;
 
+        private LoadingPromptScreen loadingPrompt;
+
         public void StartFastPuzzleGame() => GameManager.Instance.StartGame(GameContentManager.Instance.GetNextFastPuzzle());
 
         protected override void Awake()
@@ -29,20 +31,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public override void Open()
         {
+            bool _opened = isOpened;
             base.Open();
 
-            StartRoutine("showLB", ShowLeaderboard());
+            if (!_opened) StartRoutine("showLB", ShowLeaderboard());
 
             HeaderScreen.instance.Close();
         }
 
         private void OnError(PlayFabError error)
         {
+            loadingPrompt.CloseSelf();
             Debug.Log(error.ErrorMessage);
         }
 
         private void OnLeaderboardLoaded(ExecuteCloudScriptResult result)
         {
+            loadingPrompt.CloseSelf();
+
             LeaderboardRequestResult leaderboard = JsonConvert.DeserializeObject<LeaderboardRequestResult>(result.FunctionResult.ToString());
 
             if (leaderboard.version != PlayerPrefsWrapper.GetFastPuzzlesLeaderboardVersion())
@@ -60,8 +66,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 noEntries.SetState(true);
                 return;
             }
-            else
-                noEntries.SetState(false);
+            else noEntries.SetState(false);
 
             foreach (PlayerLeaderboardEntry entry in leaderboard.leaderboard) widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
         }
@@ -70,10 +75,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (isOpened)
             {
-                if (state)
-                    StartRoutine("showLB", ShowLeaderboard());
-                else
-                    ClearEntries();
+                if (state) StartRoutine("showLB", ShowLeaderboard());
+                else ClearEntries();
             }
         }
 
@@ -96,6 +99,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             if (timer >= 10f || !isOpened) yield break;
+
+            loadingPrompt = PersistantMenuController.instance.GetOrAddScreen<LoadingPromptScreen>();
+            loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, "Loading\nleaderboard", () =>
+            {
+                loadingPrompt.CloseSelf();
+                menuController.CloseCurrentScreen();
+            });
 
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {

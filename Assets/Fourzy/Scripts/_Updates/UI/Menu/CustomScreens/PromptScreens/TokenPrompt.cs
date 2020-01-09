@@ -55,20 +55,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 locationBadge.SetState(false);
                 priceBadge.SetValue(data.price);
 
-                if (themes.Count > 0)
-                    priceBadge.targetText.color = themes[0].themeColor;
+                if (themes.Count > 0) priceBadge.targetText.color = themes[0].themeColor;
             }
             else
             {
                 List<string> locations = GameContentManager.Instance.GetTokenThemeNames(data.tokenType);
 
-                if (locations.Count == 6)
-                    locationBadge.SetValue("All");
-                else
-                    locationBadge.SetValue(string.Join(", ", locations));
+                if (locations.Count == 6) locationBadge.SetValue("All");
+                else locationBadge.SetValue(string.Join(", ", locations));
 
-                if (themes.Count > 0)
-                    locationBadge.targetText.color = themes[0].themeColor;
+                if (themes.Count > 0) locationBadge.targetText.color = themes[0].themeColor;
 
                 priceBadge.SetState(false);
             }
@@ -104,20 +100,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 locationBadge.SetState(false);
                 priceBadge.SetValue(data.price);
 
-                if (themes.Count > 0)
-                    priceBadge.targetText.color = themes[0].themeColor;
+                if (themes.Count > 0) priceBadge.targetText.color = themes[0].themeColor;
             }
             else
             {
                 List<string> locations = GameContentManager.Instance.GetTokenThemeNames(data.tokenType);
 
-                if (locations.Count == 6)
-                    locationBadge.SetValue("All");
-                else
-                    locationBadge.SetValue(string.Join(", ", locations));
+                if (locations.Count == 6) locationBadge.SetValue("All");
+                else locationBadge.SetValue(string.Join(", ", locations));
 
-                if (themes.Count > 0)
-                    locationBadge.targetText.color = themes[0].themeColor;
+                if (themes.Count > 0) locationBadge.targetText.color = themes[0].themeColor;
 
                 priceBadge.SetState(false);
             }
