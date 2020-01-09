@@ -73,7 +73,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             HeaderScreen.instance.Close();
+
+            //check if was opened
+            if (!PlayerPrefsWrapper.GetPracticeScreenOpened())
+            {
+                PlayerPrefsWrapper.SetPracticeScreenOpened(true);
+
+                ShowHelp();
+            }
         }
+
+        public void ShowHelp() => 
+            menuController.GetOrAddScreen<PromptScreen>().Prompt(
+                LocalizationManager.Value("practiceScreenPromptTitle"),
+                LocalizationManager.Value("practiceScreenPromptDescription"),
+                null,
+                LocalizationManager.Value("continue"));
 
         public void ToggleTimer() => SetTimerState(!timerState);
 

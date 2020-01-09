@@ -194,6 +194,14 @@
       "value": "Player 2"
     },
     {
+      "key": "practiceScreenPromptTitle",
+      "value": "title"
+    },
+    {
+      "key": "practiceScreenPromptDescription",
+      "value": "description"
+    },
+    {
       "key": "puzzle",
       "value": "Puzzle"
     },

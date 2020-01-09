@@ -40,6 +40,7 @@ namespace Fourzy
         private const string kLastProjectVersion = "kProjectVersion";
         private const string kLanguageUpdated = "language_updated";
         private const string kPlacementStyle = "placement_style";
+        private const string kPracticeScreenOpened = "practiceScreenOpened";
 
         public static string kEventRewarded = "eventRewarded_";
 
@@ -162,6 +163,10 @@ namespace Fourzy
         public static int GetPlacementStyle() => PlayerPrefs.GetInt(kPlacementStyle, Constants.DEFAULT_PLACEMENT_STYLE);
 
         public static void SetPlacementStyle(int value) => PlayerPrefs.SetInt(kPlacementStyle, value);
+
+        public static bool GetPracticeScreenOpened() => PlayerPrefs.GetInt(kPracticeScreenOpened, 0) != 0;
+
+        public static void SetPracticeScreenOpened(bool value) => PlayerPrefs.SetInt(kPracticeScreenOpened, value ? 1 : 0);
 
         #region Currencies
 
