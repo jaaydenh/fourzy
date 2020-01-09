@@ -190,9 +190,11 @@ namespace Fourzy
                     puzzleData.pack = puzzlePack;
 
                     puzzlePack.puzzlesData.Add(puzzleData);
-                    /*if (puzzleData.Enabled) */
-                    puzzlePack.enabledPuzzlesData.Add(puzzleData);
-                    if (puzzleData.rewards.Length > 0) puzzlePack.rewardPuzzles.Add(puzzleData);
+                    if (puzzleData.Enabled)
+                    {
+                        puzzlePack.enabledPuzzlesData.Add(puzzleData);
+                        if (puzzleData.rewards.Length > 0) puzzlePack.rewardPuzzles.Add(puzzleData);
+                    }
 
                     puzzleIndex++;
                 }

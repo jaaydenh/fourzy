@@ -478,13 +478,22 @@ namespace Fourzy._Updates.Tools
             return string.Format("{0},{1},{2},{3}", c.r, c.g, c.b, c.a);
         }
 
-        public static string GetIDFromPuzzleDataFile(this ResourceItem puzzleData)
-        {
-            string text = puzzleData.Load<TextAsset>().text;
-            int from = text.IndexOf('"', text.IndexOf("ID") + 4);
-            int to = text.IndexOf('"', from + 1);
+        public static string GetIDFromPuzzleDataFile(this ResourceItem puzzleData) => GetIDFromPuzzleDataFile(puzzleData.Load<TextAsset>().text);
 
-            return text.Substring(from + 1, to - from - 1);
+        public static string GetIDFromPuzzleDataFile(this string puzzleDataText)
+        {
+            int from = puzzleDataText.IndexOf('"', puzzleDataText.IndexOf("ID") + 4);
+            int to = puzzleDataText.IndexOf('"', from + 1);
+
+            return puzzleDataText.Substring(from + 1, to - from - 1);
+        }
+
+        public static bool GetEnabledFromPuzzleDataFile(this ResourceItem puzzleData) => GetEnabledFromPuzzleDataFile(puzzleData.Load<TextAsset>().text);
+
+        public static bool GetEnabledFromPuzzleDataFile(this string puzzleDataText)
+        {
+            int from = puzzleDataText.IndexOf("Enabled");
+            return puzzleDataText.Substring(from + 9, 6).Contains("true");
         }
 
         /// <summary>
