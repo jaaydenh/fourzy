@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using UnityEngine;
 
@@ -29,6 +30,13 @@ namespace Fourzy._Updates.Mechanics.Board
             if (currentCountdownValue + 1 >= frequency) currentCountdownValue = 0;
             else currentCountdownValue++;
             SetValue(currentCountdownValue);
+        }
+
+        public override TokenView UpdateGraphics()
+        {
+            countdown.targetText.UpdateTMP_Text();
+
+            return base.UpdateGraphics();
         }
 
         private void SetValue(int value)

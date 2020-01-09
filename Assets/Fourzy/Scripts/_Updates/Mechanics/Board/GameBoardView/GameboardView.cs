@@ -157,22 +157,15 @@ namespace Fourzy._Updates.Mechanics.Board
             {
                 BoardLocation _location = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
                 IEnumerable<TokenView> _tokens = BoardBitsAt<TokenView>(_location);
-                if (_tokens.Count() == 0) return;
-
-                TokenView _token = _tokens.First();
-
-                if (!_token)
+                if (_tokens.Count() == 0)
                 {
                     if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE) gameplayManager.ToggleHelpState();
                     return;
                 }
-                else
-                {
-                    if (!lastHighlighted.Contains(_token)) return;
-                }
 
-                PersistantMenuController.instance.GetOrAddScreen<TokenPrompt>()
-                    .Prompt(GameContentManager.Instance.tokensDataHolder.GetTokenData(_token.tokenType));
+                PersistantMenuController.instance.GetOrAddScreen<TokenPrompt>().Prompt(_tokens.First());
+
+                if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE) gameplayManager.ToggleHelpState();
 
                 return;
             }
@@ -1181,9 +1174,9 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 foreach (TokenView token in tokens)
                 {
-                    bool containsType = false;
-                    foreach (TokenView other in tokensToHighlight) if (other.tokenType == token.tokenType) containsType = true;
-                    if (!containsType)
+                    bool contains = false;
+                    foreach (TokenView other in tokensToHighlight) if (other.location.Equals(token.location)) contains = true;
+                    if (!contains)
                     {
                         tokensToHighlight.Add(token);
                         affected.Add(token.location, hintBlocks[token.location]);
@@ -1718,26 +1711,26 @@ namespace Fourzy._Updates.Mechanics.Board
 
                                     break;
 
-                                    //case GameEndType.NOPIECES:
-                                    //    SetHintAreaColliderState(false);
-                                    //    onGameFinished?.Invoke(model);
+                                case GameEndType.NOPIECES:
+                                    SetHintAreaColliderState(false);
+                                    onGameFinished?.Invoke(game);
 
-                                    //    break;
+                                    break;
                             }
                         }
-                        //else if (turnResults.Activity[actionIndex].GetType() == typeof(GameActionPuzzleStatus))
-                        //{
-                        //    GameActionPuzzleStatus puzzleStatusAction = turnResults.Activity[actionIndex] as GameActionPuzzleStatus;
+                        else if (turnResults.Activity[actionIndex].GetType() == typeof(GameActionPuzzleStatus))
+                        {
+                            GameActionPuzzleStatus puzzleStatusAction = turnResults.Activity[actionIndex] as GameActionPuzzleStatus;
 
-                        //    switch (puzzleStatusAction.Status)
-                        //    {
-                        //        case PuzzleStatus.FAILED:
-                        //            SetHintAreaColliderState(false);
-                        //            onGameFinished?.Invoke(game);
+                            switch (puzzleStatusAction.Status)
+                            {
+                                case PuzzleStatus.FAILED:
+                                    SetHintAreaColliderState(false);
+                                    onGameFinished?.Invoke(game);
 
-                        //            break;
-                        //    }
-                        //}
+                                    break;
+                            }
+                        }
 
                         List<GamePieceView> winningGamepieces = GetWinningPieces();
                         for (int index = 0; index < winningGamepieces.Count; index++)
@@ -1786,22 +1779,22 @@ namespace Fourzy._Updates.Mechanics.Board
                 }
             }
 
-            //since puzzle games dont send "lose" event, need to check manually
-            switch (game._Type)
-            {
-                case GameType.PUZZLE:
-                    if (game.isOver)
-                    {
-                        //player lost
-                        if (game._State.WinningLocations == null)
-                        {
-                            SetHintAreaColliderState(false);
-                            onGameFinished?.Invoke(game);
-                        }
-                    }
+            ////since puzzle games dont send "lose" event, need to check manually
+            //switch (game._Type)
+            //{
+            //    case GameType.PUZZLE:
+            //        if (game.isOver)
+            //        {
+            //            //player lost
+            //            if (game._State.WinningLocations == null)
+            //            {
+            //                SetHintAreaColliderState(false);
+            //                onGameFinished?.Invoke(game);
+            //            }
+            //        }
 
-                    break;
-            }
+            //        break;
+            //}
 
             //check if any of created space been covered by gamepieces
             if (!startTurn)

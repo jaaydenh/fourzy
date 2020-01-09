@@ -59,6 +59,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             isTutorialRunning = false;
 
+            pointer.HidePointer();
             RemoveCurrentButton();
             StopAllCoroutines();
 

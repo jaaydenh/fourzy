@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using UnityEngine;
 
@@ -26,6 +27,13 @@ namespace Fourzy._Updates.Mechanics.Board
             currentCountdownValue = 7;
 
             countdown.SetValue(currentCountdownValue);
+        }
+
+        public override TokenView UpdateGraphics()
+        {
+            countdown.targetText.UpdateTMP_Text();
+
+            return base.UpdateGraphics();
         }
 
         public override void OnAfterTurn(bool startTurn)

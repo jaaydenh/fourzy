@@ -40,9 +40,15 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public virtual IEnumerator OnActivated() { yield break; }
 
+        public virtual TokenView UpdateGraphics()
+        {
+            return this;
+        }
+
         protected override void OnInitialized()
         {
             countdown = GetComponentInChildren<Badge>(true);
+            UpdateGraphics();
 
             base.OnInitialized();
         }

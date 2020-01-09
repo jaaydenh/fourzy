@@ -18,12 +18,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public Badge locationBadge;
         public Badge priceBadge;
         public TMP_Text extra;
-        public Image tokenImage;
+        public RectTransform tokenParent;
         public Image tileBGImage;
         public TokensDataHolder.TokenData data { get; private set; }
 
         private GameboardView gameboard;
         private GameBoardDefinition gameboardDefinition;
+        private TokenView currentView;
 
         protected override void Awake()
         {
@@ -36,7 +37,59 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.data = data;
 
-            tokenImage.sprite = GameContentManager.Instance.tokensDataHolder.GetTokenSprite(data);
+            ClearPrevious();
+
+            currentView = Instantiate(GameContentManager.Instance.GetTokenPrefab(data.tokenType), tokenParent);
+            currentView.transform.localPosition = Vector3.zero;
+
+            tileBGImage.enabled = data.showBackgroundTile;
+            tileBGImage.color = data.backgroundTileColor;
+
+            gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
+
+            List<ThemesDataHolder.GameTheme> themes = GameContentManager.Instance.GetTokenThemes(data.tokenType);
+
+            //badges
+            if (data.isSpell)
+            {
+                locationBadge.SetState(false);
+                priceBadge.SetValue(data.price);
+
+                if (themes.Count > 0)
+                    priceBadge.targetText.color = themes[0].themeColor;
+            }
+            else
+            {
+                List<string> locations = GameContentManager.Instance.GetTokenThemeNames(data.tokenType);
+
+                if (locations.Count == 6)
+                    locationBadge.SetValue("All");
+                else
+                    locationBadge.SetValue(string.Join(", ", locations));
+
+                if (themes.Count > 0)
+                    locationBadge.targetText.color = themes[0].themeColor;
+
+                priceBadge.SetState(false);
+            }
+
+            extra.text = LocalizationManager.Value(data.description);
+
+            Prompt(LocalizationManager.Value(data.name), "");
+
+            //play instructions
+            CancelRoutine("tokenInstructions");
+            StartRoutine("tokenInstructions", InstructionRoutine(), () => gameboard.StopBoardUpdates());
+        }
+
+        public virtual void Prompt(TokenView tokenView)
+        {
+            data = GameContentManager.Instance.tokensDataHolder.GetTokenData(tokenView.tokenType);
+
+            ClearPrevious();
+
+            currentView = Instantiate(tokenView, tokenParent);
+            currentView.transform.localPosition = Vector3.zero;
 
             tileBGImage.enabled = data.showBackgroundTile;
             tileBGImage.color = data.backgroundTileColor;
@@ -128,6 +181,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         //        extra.text = "";
         //    }
         //}
+
+        private void ClearPrevious()
+        {
+            if (currentView)
+            {
+                currentView._Destroy();
+            }
+        }
 
         private IEnumerator InstructionRoutine()
         {

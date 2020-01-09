@@ -31,6 +31,13 @@ namespace Fourzy._Updates.Mechanics.Board
             SetValue(currentCountdownValue);
         }
 
+        public override TokenView UpdateGraphics()
+        {
+            countdown.targetText.UpdateTMP_Text();
+
+            return base.UpdateGraphics();
+        }
+
         private void SetValue(int value)
         {
             if (frequency != 1)

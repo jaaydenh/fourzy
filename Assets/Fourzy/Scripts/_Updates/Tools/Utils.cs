@@ -55,6 +55,8 @@ namespace Fourzy._Updates.Tools
 
         public static void UpdateTMP_Text(this TMP_Text target)
         {
+            if (!target) return;
+
             if (target.GetComponentInParent<Canvas>() && target.GetType() == typeof(TextMeshPro))
             {
                 //remember values
