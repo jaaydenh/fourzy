@@ -377,7 +377,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameType.TURN_BASED:
                     loadingPrompt = PersistantMenuController.instance.GetOrAddScreen<LoadingPromptScreen>();
-                    loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, "Loading new game...");
+                    loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, LocalizationManager.Value("loading"));
 
                     //loadingPrompt.Prompt("", "Loading new game...", null, null, null, null);
 

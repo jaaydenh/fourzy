@@ -246,7 +246,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 case GameType.PUZZLE:
                 case GameType.AI:
-                    if (!game.isMyTurn) gameInfoWidget.SetText("Thinking...").ShowDelayed(time: .6f);
+                    if (!game.isMyTurn) gameInfoWidget.SetText(LocalizationManager.Value("thinking")).ShowDelayed(time: .6f);
 
                     break;
             }

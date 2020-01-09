@@ -135,7 +135,7 @@ namespace Fourzy._Updates.Mechanics
 
             cancelRewardedVideo = false;
             loadingPrompt = PersistantMenuController.instance.GetOrAddScreen<LoadingPromptScreen>();
-            loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, "Loading", () => CancelRewardedVideo(adUniID));
+            loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, LocalizationManager.Value("loading"), () => CancelRewardedVideo(adUniID));
 
             //if editor, mimic ad loading
             if (Application.isEditor)

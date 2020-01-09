@@ -101,7 +101,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (timer >= 10f || !isOpened) yield break;
 
             loadingPrompt = PersistantMenuController.instance.GetOrAddScreen<LoadingPromptScreen>();
-            loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, "Loading\nleaderboard", () =>
+            loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, LocalizationManager.Value("loading"), () =>
             {
                 loadingPrompt.CloseSelf();
                 menuController.CloseCurrentScreen();

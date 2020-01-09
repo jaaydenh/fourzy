@@ -73,6 +73,10 @@
       "value": "Cambiar nombre"
     },
     {
+      "key": "challenge",
+      "value": "Desafío"
+    },
+    {
       "key": "current_name",
       "value": "Nombre actual"
     },
@@ -109,6 +113,10 @@
       "value": "Retos"
     },
     {
+      "key": "gauntlet_title",
+      "value": "El Guante"
+    },
+    {
       "key": "gauntlet_desc",
       "value": "Los retos contienen una serie de desafíos cada vez más difíciles que deben resolverse en un número limitado de movimientos."
     },
@@ -143,6 +151,10 @@
     {
       "key": "lost",
       "value": "Perdiste"
+    },
+    {
+      "key": "loading",
+      "value": "Cargando"
     },
     {
       "key": "magic",
@@ -203,6 +215,10 @@
     {
       "key": "puzzle",
       "value": "Puzle"
+    },
+    {
+      "key": "puzzle_ladder_title",
+      "value": "Puzzle Ladder"
     },
     {
       "key": "rareportalpoints",
@@ -283,6 +299,10 @@
     {
       "key": "tickets",
       "value": "Entradas"
+    },
+    {
+      "key": "thinking",
+      "value": "Pensando..."
     },
     {
       "key": "tokens",
@@ -571,10 +591,6 @@
     {
       "key": "puzzle_Ladder_desc",
       "value": "Compete para resolver la mayoría de los puzles y sube a la cima de la tabla de clasificatión"
-    },
-    {
-      "key": "gauntlet_title",
-      "value": "Los Retos Locked"
     },
     {
       "key": "ok",

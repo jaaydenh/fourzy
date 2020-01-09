@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4038829735677674371}
   - component: {fileID: 415917833349774887}
   - component: {fileID: 482841965626420027}
+  - component: {fileID: 3809144752656327461}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -160,6 +161,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3809144752656327461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7220057367027959194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: puzzle_ladder_title
 --- !u!1 &7321869676306327057
 GameObject:
   m_ObjectHideFlags: 0

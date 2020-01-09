@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 4648769813390026904}
   - component: {fileID: 9070206329311344436}
   - component: {fileID: 7473996620775895828}
+  - component: {fileID: 1157328152736037252}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -277,6 +278,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1157328152736037252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8379513697953993316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: gauntlet_title
 --- !u!1 &9046195360807033806
 GameObject:
   m_ObjectHideFlags: 0

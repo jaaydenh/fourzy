@@ -74,6 +74,10 @@
       "value": "Change Name"
     },
     {
+      "key": "challenge",
+      "value": "Challenge"
+    },
+    {
       "key": "current_name",
       "value": "Current name"
     },
@@ -110,6 +114,10 @@
       "value": "Gauntlet"
     },
     {
+      "key": "gauntlet_title",
+      "value": "The Gauntlet"
+    },
+    {
       "key": "gauntlet_desc",
       "value": "The gauntlet contains a series of increasingly difficult challenges that must be solved in a limited number of turns"
     },
@@ -144,6 +152,10 @@
     {
       "key": "lost",
       "value": "Lost"
+    },
+    {
+      "key": "loading",
+      "value": "Loading"
     },
     {
       "key": "magic",
@@ -204,6 +216,10 @@
     {
       "key": "puzzle",
       "value": "Puzzle"
+    },
+    {
+      "key": "puzzle_ladder_title",
+      "value": "Puzzle Ladder"
     },
     {
       "key": "rareportalpoints",
@@ -280,6 +296,10 @@
     {
       "key": "tickets",
       "value": "Tickets"
+    },
+    {
+      "key": "thinking",
+      "value": "Thinking..."
     },
     {
       "key": "tokens",
@@ -568,10 +588,6 @@
     {
       "key": "puzzle_Ladder_desc",
       "value": "Compete to solve the most puzzles and climb to the top of the leaderboard!"
-    },
-    {
-      "key": "gauntlet_title",
-      "value": "The Gauntlet Locked"
     },
     {
       "key": "ok",
