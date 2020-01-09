@@ -193,6 +193,14 @@
       "value": "Jugador 2"
     },
     {
+      "key": "practiceScreenPromptTitle",
+      "value": "title"
+    },
+    {
+      "key": "practiceScreenPromptDescription",
+      "value": "description"
+    },
+    {
       "key": "puzzle",
       "value": "Puzle"
     },
