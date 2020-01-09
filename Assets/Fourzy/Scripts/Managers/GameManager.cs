@@ -230,7 +230,9 @@ namespace Fourzy
             NetworkManager.instance.StartChecking();
             placementStyle = (PlacementStyle)PlayerPrefsWrapper.GetPlacementStyle();
 
+#if !UNITY_IOS
             StartRoutine("location", GetLocation());
+#endif
         }
 
         protected void Update()
@@ -758,9 +760,10 @@ namespace Fourzy
             while (!GamePlayManager.instance || !GamePlayManager.instance.isBoardReady) yield return null;
         }
 
+#if !UNITY_IOS
         private IEnumerator GetLocation()
         {
-            if (!Input.location.isEnabledByUser) { Debug.LogWarning("location services disabled"); yield break; }
+            //if (!Input.location.isEnabledByUser) { Debug.LogWarning("location services disabled"); yield break; }
 
             Input.location.Start();
 
@@ -786,6 +789,7 @@ namespace Fourzy
 
             Input.location.Stop();
         }
+#endif
 
         [System.Serializable]
         public class PuzzleData

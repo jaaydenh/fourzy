@@ -23,7 +23,7 @@ namespace Fourzy._Updates._Tutorial
                             tasks = new OnboardingTask[]
                             {
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "200"),
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("welcome_to_fourzy"), 0),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("welcome_to_fourzy"), 0, .75f),
                                 new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BG },
                                 new OnboardingTask_Log("1"),
@@ -33,7 +33,7 @@ namespace Fourzy._Updates._Tutorial
                         {
                             tasks = new OnboardingTask[]
                             {
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win"), 0),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win"), 0, .75f),
                                 new OnboardingTask_Log("2"),
                             },
                         },
@@ -67,7 +67,7 @@ namespace Fourzy._Updates._Tutorial
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding1"),
                                 //new OnboardingTask_PointAt(LocalizationManager.Value("tap_to_place"), new Vector2(0f, 6f), new Vector2(2f, 6f)),
                                 new OnboardingTask_PointAt("", new Vector2(4f, 0f), new Vector2(4f, 2f)),
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_down"), 1),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_down"), 1, .15f),
                                 new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
                                 new OnboardingTask_ShowMaskedArea(new Rect(4f, 0f, 1f, 3f), OnboardingScreenMaskObject.MaskStyle.PX_0),
@@ -119,7 +119,7 @@ namespace Fourzy._Updates._Tutorial
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding2"),
                                 //this will skip to next
                                 new OnboardingTask_PointAt("", new Vector2(0f, 3f), new Vector2(2f, 3f)),
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1, .15f),
                                 new OnboardingTask_LimitInput(new Rect(0f, 3f, 3f, 1f)),
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
                                 new OnboardingTask_ShowMaskedArea(new Rect(0f, 3f, 3f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0),
@@ -197,7 +197,7 @@ namespace Fourzy._Updates._Tutorial
                             {
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding3"),
                                 new OnboardingTask_PointAt("", new Vector2(0f, 1f), new Vector2(2f, 1f)),
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1),
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1, .15f),
                                 new OnboardingTask_LimitInput(new Rect(0f, 1f, 3f, 1f)),
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
                                 new OnboardingTask_ShowMaskedArea(new Rect(0f, 1f, 3f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0),
@@ -451,11 +451,14 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_ShowMessage : OnboardingTask
     {
-        public OnboardingTask_ShowMessage(string message, int style)
+        public float yAnchor;
+
+        public OnboardingTask_ShowMessage(string message, int style, float yAnchor)
         {
             action = OnboardingActions.SHOW_MESSAGE;
             stringValue = message;
             intValue = style;
+            this.yAnchor = yAnchor;
         }
     }
 

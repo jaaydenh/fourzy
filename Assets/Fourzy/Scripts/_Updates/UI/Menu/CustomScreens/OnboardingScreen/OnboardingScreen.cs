@@ -215,12 +215,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         switch (instructionTask.intValue)
                         {
                             case 0:
-                                dialog.DisplayText(task.stringValue);
+                                dialog.DisplayText(instructionTask.yAnchor, task.stringValue);
 
                                 break;
 
                             case 1:
-                                instructions.DisplayText(.15f, task.stringValue);
+                                instructions.DisplayText(instructionTask.yAnchor, task.stringValue);
 
                                 break;
                         }

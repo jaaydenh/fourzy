@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3943a3ba43944bd4ac953da181782af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AutoShowConsentDialog: 1
+  AutoShowConsentDialog: 0
   LocationAwarenessUsage: Your location is used to provide more targeted advertising.
   ConsentStatusChanged:
     m_PersistentCalls:

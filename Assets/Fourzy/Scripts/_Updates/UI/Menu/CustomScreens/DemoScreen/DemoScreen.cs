@@ -70,7 +70,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             PlayerPrefsWrapper.SetRewardRewarded(Constants.GAME_MODE_GAUNTLET_GAME, true);
         }
 
-        public void CompleteProgress() => GameContentManager.Instance.progressionMaps[0].CompleteAll();
+        public void CompleteProgress() => GameContentManager.Instance.progressionMaps[0].CompleteAll(0);
 
         public void SetPlacementStyle(int value) => GameManager.Instance.placementStyle = (GameManager.PlacementStyle)value;
 

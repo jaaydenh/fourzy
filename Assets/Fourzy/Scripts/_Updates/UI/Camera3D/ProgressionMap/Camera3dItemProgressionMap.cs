@@ -257,17 +257,18 @@ namespace Fourzy._Updates.UI.Camera3D
             }
         }
 
-        public void CompleteAll()
+        public void CompleteAll(int amountToExclude = 0)
         {
             if (!SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) return;
 
-            Array.ForEach(GetComponentsInChildren<ProgressionEvent>(), widget =>
+            ProgressionEvent[] events = GetComponentsInChildren<ProgressionEvent>();
+            for (int eventIndex = 0; eventIndex < events.Length - amountToExclude; eventIndex++)
             {
-                switch (widget.EventType)
+                switch (events[eventIndex].EventType)
                 {
                     case ProgressionEvent.ProgressionEventType.GAME:
 
-                        BasicPuzzlePack pack = GameContentManager.Instance.GetExternalPuzzlePack(widget.packName);
+                        BasicPuzzlePack pack = GameContentManager.Instance.GetExternalPuzzlePack(events[eventIndex].packName);
 
                         PlayerPrefsWrapper.SetPuzzlePackUnlocked(pack.packID, true);
                         PlayerPrefsWrapper.SetPuzzlePackOpened(pack.packID, true);
@@ -283,7 +284,7 @@ namespace Fourzy._Updates.UI.Camera3D
 
                         break;
                 }
-            });
+            }
 
             if (string.IsNullOrEmpty(gameObject.scene.name) && gameObject.activeInHierarchy) Open();
         }
