@@ -36,11 +36,6 @@ namespace Fourzy._Updates.UI.Widgets
             base.Hide(time);
         }
 
-        public void Reset()
-        {
-            Hide(0f);
-        }
-
         public OnboardingScreenPointer AnimatePointer(params Vector2[] points)
         {
             //update board reference

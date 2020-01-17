@@ -106,7 +106,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             menuController.OpenScreen(this);
 
             masks.Hide(0f);
-            pointer.Reset();
+            pointer.Hide(0f);
+            dialog.Hide(0f);
+            instructions.Hide(0f);
 
             PlayerPrefsWrapper.SetTutorialOpened(tutorial.name, true);
             StartCoroutine(DisplayCurrentStep());
