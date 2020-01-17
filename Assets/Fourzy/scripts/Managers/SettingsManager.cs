@@ -18,10 +18,12 @@ namespace Fourzy._Updates.Managers
         public const string KEY_AUDIO = "SETTINGS_AUDIO";
         public const string KEY_DEMO_MODE = "SETTINGS_DEMO_MODE";
         public const string KEY_ANALYTICS_EVENTS = "SETTINGS_ANALYTICS";
+        public const string KEY_PASS_N_PLAY_TIMER = "SETTINGS_TIMER";
 
         public const bool DEFAULT_SFX = true;
         public const bool DEFAULT_AUDIO = true;
         public const bool DEFAULT_DEMO_MODE = false;
+        public const bool DEFAULT_PASS_N_PLAY_TIMER = true;
 
         private static bool initialized = false;
 
@@ -41,6 +43,7 @@ namespace Fourzy._Updates.Managers
             [KEY_SFX] = DEFAULT_SFX,
             [KEY_AUDIO] = DEFAULT_AUDIO,
             [KEY_DEMO_MODE] = DEFAULT_DEMO_MODE,
+            [KEY_PASS_N_PLAY_TIMER] = DEFAULT_PASS_N_PLAY_TIMER,
 
             //temp
             [KEY_ANALYTICS_EVENTS] = false,
@@ -104,7 +107,7 @@ namespace Fourzy._Updates.Managers
                         break;
 
                     default:
-                        if (!instance.values[key]) instance.values[key] = PlayerPrefs.GetInt(key, instance.values[key] ? 1 : 0) == 1 ? true : false;
+                        instance.values[key] = PlayerPrefs.GetInt(key, instance.values[key] ? 1 : 0) == 1 ? true : false;
 
                         break;
                 }

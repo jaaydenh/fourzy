@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
@@ -30,7 +31,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public OpponentWidget player1Profile { get; private set; }
         public OpponentWidget player2Profile { get; private set; }
         public PracticeScreenAreaSelectWidget currentAreaWidget { get; private set; }
-        public bool timerState { get; private set; }
 
         protected override void Start()
         {
@@ -53,8 +53,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             AddWidget(AIProfile.SimpleAI, player2select.content, 2);
             AddWidget(AIProfile.AggressiveAI, player2select.content, 2);
 
-            timerToggle.TryInvoke(timerState ? "on" : "off");
-
             //load areas
             SetArea(AddAreaWidget(Area.TRAINING_GARDEN));
             AddAreaWidget(Area.ENCHANTED_FOREST);
@@ -63,7 +61,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             LoadBoard(currentBoard);
 
-            SetTimerState(GameManager.Instance.passAndPlayTimer);
+            SetTimerState(SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER));
 
             base.Start();
         }
@@ -90,7 +88,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 null,
                 LocalizationManager.Value("continue"));
 
-        public void ToggleTimer() => SetTimerState(!timerState);
+        public void ToggleTimer() => SetTimerState(!SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER));
 
         public void SetArea(PracticeScreenAreaSelectWidget widget)
         {
@@ -180,9 +178,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void SetTimerState(bool value)
         {
-            timerState = value;
-            timerToggle.TryInvoke(timerState ? "on" : "off");
-            GameManager.Instance.passAndPlayTimer = value;
+            timerToggle.TryInvoke(value ? "on" : "off");
+            SettingsManager.Set(SettingsManager.KEY_PASS_N_PLAY_TIMER, value);
         }
 
         private void SetAreaWidget(PracticeScreenAreaSelectWidget widget)

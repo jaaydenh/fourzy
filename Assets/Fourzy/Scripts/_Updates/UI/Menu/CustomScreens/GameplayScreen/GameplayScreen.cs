@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
@@ -44,7 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private SpellsListUIWidget spellsListWidget;
         private UIOutline helpButtonOutline;
 
-        private bool timersEnabled => GameManager.Instance.passAndPlayTimer && (game._Type == GameType.PASSANDPLAY || game._Type == GameType.REALTIME);
+        private bool timersEnabled => SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER) && (game._Type == GameType.PASSANDPLAY || game._Type == GameType.REALTIME);
 
         protected override void Awake()
         {

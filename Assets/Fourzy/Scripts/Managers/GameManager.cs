@@ -57,8 +57,6 @@ namespace Fourzy
         private bool extraFeatures = true;
 
         [Header("Pass And Play games only")]
-        public bool passAndPlayTimer = true;
-        [Header("Pass And Play games only")]
         public bool tapToStartGame = true;
         public PassPlayCharactersType characterType = PassPlayCharactersType.SELECTED_RANDOM;
         public float fallbackLatitude = 37.7833f;
