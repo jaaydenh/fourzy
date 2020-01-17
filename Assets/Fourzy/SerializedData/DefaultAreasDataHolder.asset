@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad8f38f5794a7af42b1018a2450d42d5, type: 3}
-  m_Name: DefaultThemesDataHolder
+  m_Name: DefaultAreasDataHolder
   m_EditorClassIdentifier: 
   themes:
     list:
-    - _name: 'Training Garden: Enabled'
-      name: Training Garden
+    - _name: 'area_garden: Enabled'
+      id: area_garden
       enabled: 1
       themeColor: {r: 0.48584908, g: 1, b: 0.55352443, a: 1}
-      description: 'Sample description Sample description Sample description Sample
-        description '
+      description: 
       levelToUnlock: 0
       themeID: 2
       bgAudio: 101
@@ -81,8 +80,8 @@ MonoBehaviour:
             type: 3}
           gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
             type: 3}
-    - _name: 'Spooky Forest: Enabled'
-      name: Spooky Forest
+    - _name: 'area_forest: Enabled'
+      id: area_forest
       enabled: 1
       themeColor: {r: 0.48584908, g: 1, b: 0.55352443, a: 1}
       description: 'Sample description Sample description Sample description Sample
@@ -143,8 +142,8 @@ MonoBehaviour:
             type: 3}
           gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
             type: 3}
-    - _name: 'Island: Enabled'
-      name: Island
+    - _name: 'area_island: Enabled'
+      id: area_island
       enabled: 1
       themeColor: {r: 1, g: 0.9930853, b: 0.3915094, a: 1}
       description: 
@@ -209,8 +208,8 @@ MonoBehaviour:
             type: 3}
           gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
             type: 3}
-    - _name: 'Frozen Palace: Enabled'
-      name: Frozen Palace
+    - _name: 'area_palace: Enabled'
+      id: area_palace
       enabled: 1
       themeColor: {r: 0.4669811, g: 0.9826793, b: 1, a: 1}
       description: 
@@ -270,8 +269,8 @@ MonoBehaviour:
             type: 3}
           gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
             type: 3}
-    - _name: 'Castle: Disabled'
-      name: Castle
+    - _name: 'area_castle: Disabled'
+      id: area_castle
       enabled: 0
       themeColor: {r: 0, g: 0, b: 0, a: 0}
       description: 
@@ -287,8 +286,8 @@ MonoBehaviour:
         list: []
       configurations:
         list: []
-    - _name: 'Arena: Disabled'
-      name: Arena
+    - _name: 'area_arena: Disabled'
+      id: area_arena
       enabled: 0
       themeColor: {r: 0, g: 0, b: 0, a: 0}
       description: 

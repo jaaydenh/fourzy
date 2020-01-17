@@ -66,7 +66,7 @@ namespace Fourzy._Updates.Serialized
             return GetTheme(area).configurations.list.Find(configuration => configuration.value == value);
         }
 
-        public string GetThemeName(Area area) => GetTheme(area)?.name ?? "theme_not_found";
+        public string GetThemeName(Area area) => GetTheme(area)?.id ?? "theme_not_found";
 
         public Area GetRandomTheme(Area exclude, bool excludeDisabled = true)
         {
@@ -90,7 +90,7 @@ namespace Fourzy._Updates.Serialized
             public string _name;
             
             [ShowIf("#Check"), StackableField]
-            public string name;
+            public string id;
             public bool enabled = true;
             [ShowIf("#ShowIf"), StackableField]
             public Color themeColor;
@@ -120,7 +120,7 @@ namespace Fourzy._Updates.Serialized
 
             public bool Check()
             {
-                _name = $"{name}: {(enabled ? "Enabled" : "Disabled")}";
+                _name = $"{id}: {(enabled ? "Enabled" : "Disabled")}";
 
                 return true;
             }

@@ -127,7 +127,7 @@ namespace Fourzy._Updates.Serialized
                 }
             }
 
-            public List<ThemesDataHolder.GameTheme> GetTokenThemes(ThemesDataHolder themesData)
+            public List<ThemesDataHolder.GameTheme> GetTokenAreas(ThemesDataHolder themesData)
             {
                 List<ThemesDataHolder.GameTheme> result = new List<ThemesDataHolder.GameTheme>();
 
@@ -139,7 +139,7 @@ namespace Fourzy._Updates.Serialized
                 return result;
             }
 
-            public List<string> GetThemeNames(ThemesDataHolder themesDataHolder) => GetTokenThemes(themesDataHolder)?.Select(area => area.name).ToList() ?? null;
+            public List<string> GetAreaNames(ThemesDataHolder themesDataHolder) => GetTokenAreas(themesDataHolder)?.Select(area => LocalizationManager.Value(area.id)).ToList() ?? null;
 
             public Sprite GetTokenSprite()
             {

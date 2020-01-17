@@ -59,7 +59,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             else
             {
-                List<string> locations = GameContentManager.Instance.GetTokenThemeNames(data.tokenType);
+                List<string> locations = GameContentManager.Instance.GetTokenAreaNames(data.tokenType);
 
                 if (locations.Count == 6) locationBadge.SetValue("All");
                 else locationBadge.SetValue(string.Join(", ", locations));
@@ -104,7 +104,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             else
             {
-                List<string> locations = GameContentManager.Instance.GetTokenThemeNames(data.tokenType);
+                List<string> locations = GameContentManager.Instance.GetTokenAreaNames(data.tokenType);
 
                 if (locations.Count == 6) locationBadge.SetValue("All");
                 else locationBadge.SetValue(string.Join(", ", locations));

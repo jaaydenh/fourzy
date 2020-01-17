@@ -95,9 +95,9 @@ namespace Fourzy
 
         public TokensDataHolder.TokenData GetTokenData(TokenType tokenType) => tokensDataHolder.GetTokenData(tokenType);
 
-        public List<ThemesDataHolder.GameTheme> GetTokenThemes(TokenType tokenType) => GetTokenData(tokenType)?.GetTokenThemes(themesDataHolder) ?? null;
+        public List<ThemesDataHolder.GameTheme> GetTokenThemes(TokenType tokenType) => GetTokenData(tokenType)?.GetTokenAreas(themesDataHolder) ?? null;
 
-        public List<string> GetTokenThemeNames(TokenType tokenType) => GetTokenData(tokenType)?.GetThemeNames(themesDataHolder) ?? null;
+        public List<string> GetTokenAreaNames(TokenType tokenType) => GetTokenData(tokenType)?.GetAreaNames(themesDataHolder) ?? null;
 
         public ClientFourzyPuzzle GetNextFastPuzzle(string id = "")
         {

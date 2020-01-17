@@ -29,7 +29,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             this.theme = theme;
 
-            themeNameField.text = theme.name;
+            themeNameField.text = theme.id;
             themePreview.sprite = theme.preview;
 
             toggleExtended.group = toggleGroup;

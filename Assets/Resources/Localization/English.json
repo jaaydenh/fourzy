@@ -46,6 +46,23 @@
     },
 
     {
+      "key": "area_garden",
+      "value": "Training Garden"
+    },
+    {
+      "key": "area_forest",
+      "value": "Enchanted Forest"
+    },
+    {
+      "key": "area_island",
+      "value": "Sandy Island"
+    },
+    {
+      "key": "area_palace",
+      "value": "Ice Palace"
+    },
+
+    {
       "key": "adventure",
       "value": "Adventure"
     },

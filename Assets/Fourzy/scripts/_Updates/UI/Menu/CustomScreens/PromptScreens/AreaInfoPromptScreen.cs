@@ -38,7 +38,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (theme == Area.NONE || _themeData == null) return;
             
-            Prompt(_themeData.name, _themeData.description, null);
+            Prompt(_themeData.id, _themeData.description, null);
 
             //get buy buttons
             if (!PlayerPrefsWrapper.GetThemeUnlocked((int)theme))
