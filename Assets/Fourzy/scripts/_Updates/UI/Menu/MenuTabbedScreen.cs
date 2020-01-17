@@ -99,8 +99,8 @@ namespace Fourzy._Updates.UI.Menu
                     demoCounter = 0;
 
                     //toggle demo mode
-                    SettingsManager.Instance.Toggle(SettingsManager.KEY_DEMO_MODE);
-                    GamesToastsController.ShowTopToast("Demo mode: " + SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE));
+                    SettingsManager.Toggle(SettingsManager.KEY_DEMO_MODE);
+                    GamesToastsController.ShowTopToast("Demo mode: " + SettingsManager.Get(SettingsManager.KEY_DEMO_MODE));
                 }
 
                 return;

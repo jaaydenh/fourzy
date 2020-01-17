@@ -20,6 +20,7 @@ namespace Fourzy._Updates.UI.Helpers
         private bool listensToSfxState = false;
         private bool listensToAudioState = false;
         private bool listensToDemoModeState = false;
+        private bool listensToAnalyticsState = false;
 
         protected void Awake()
         {
@@ -27,8 +28,7 @@ namespace Fourzy._Updates.UI.Helpers
 
             foreach (ListenTarget target in targets.list)
             {
-                if (!sorted.ContainsKey(target.type))
-                    sorted.Add(target.type, new List<ListenTarget>());
+                if (!sorted.ContainsKey(target.type)) sorted.Add(target.type, new List<ListenTarget>());
 
                 sorted[target.type].Add(target);
 
@@ -70,6 +70,16 @@ namespace Fourzy._Updates.UI.Helpers
                             listensToDemoModeState = true;
                             SettingsManager.onDemoMode += OnDemoMode;
                         }
+                        break;
+
+                    case ListenValues.SETTINGS_ANALYTICS_ON:
+                    case ListenValues.SETTINGS_ANALYTICS_OFF:
+                        if (!listensToAnalyticsState)
+                        {
+                            listensToAnalyticsState = true;
+                            SettingsManager.onAnalyticsEvent += OnAnalyticsMode;
+                        }
+
                         break;
 
                     case ListenValues.PLACEMENT_STYLE:
@@ -120,6 +130,16 @@ namespace Fourzy._Updates.UI.Helpers
 
                         break;
 
+                    case ListenValues.SETTINGS_ANALYTICS_ON:
+                    case ListenValues.SETTINGS_ANALYTICS_OFF:
+                        if (listensToAnalyticsState)
+                        {
+                            listensToAnalyticsState = false;
+                            SettingsManager.onAnalyticsEvent -= OnAnalyticsMode;
+                        }
+
+                        break;
+
                     case ListenValues.PLACEMENT_STYLE:
                         SettingsManager.onDemoMode -= OnDemoMode;
 
@@ -140,19 +160,25 @@ namespace Fourzy._Updates.UI.Helpers
 
                         case ListenValues.SETTINGS_SFX_OFF:
                         case ListenValues.SETTINGS_SFX_ON:
-                            OnSfx(SettingsManager.Instance.Get(SettingsManager.KEY_SFX));
+                            OnSfx(SettingsManager.Get(SettingsManager.KEY_SFX));
 
                             break;
 
                         case ListenValues.SETTINGS_AUDIO_OFF:
                         case ListenValues.SETTINGS_AUDIO_ON:
-                            OnAudio(SettingsManager.Instance.Get(SettingsManager.KEY_AUDIO));
+                            OnAudio(SettingsManager.Get(SettingsManager.KEY_AUDIO));
 
                             break;
 
                         case ListenValues.SETTINGS_DEMO_MODE_ON:
                         case ListenValues.SETTINGS_DEMO_MODE_OFF:
-                            OnDemoMode(SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE));
+                            OnDemoMode(SettingsManager.Get(SettingsManager.KEY_DEMO_MODE));
+
+                            break;
+
+                        case ListenValues.SETTINGS_ANALYTICS_ON:
+                        case ListenValues.SETTINGS_ANALYTICS_OFF:
+                            OnAnalyticsMode(SettingsManager.Get(SettingsManager.KEY_ANALYTICS_EVENTS));
 
                             break;
 
@@ -166,47 +192,46 @@ namespace Fourzy._Updates.UI.Helpers
         public void UpdateNoInternet(bool state)
         {
             if (!state)
-                foreach (ListenTarget target in sorted[ListenValues.NO_INTERNET_ACCESS])
-                    target.events.Invoke(string.Format(target.targetText, state));
+                foreach (ListenTarget target in sorted[ListenValues.NO_INTERNET_ACCESS]) target.events.Invoke(string.Format(target.targetText, state));
             else
-                foreach (ListenTarget target in sorted[ListenValues.INTERNET_ACCESS])
-                    target.events.Invoke(string.Format(target.targetText, state));
+                foreach (ListenTarget target in sorted[ListenValues.INTERNET_ACCESS]) target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnSfx(bool state)
         {
             if (state)
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_SFX_ON])
-                    target.events.Invoke(string.Format(target.targetText, state));
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_SFX_ON]) target.events.Invoke(string.Format(target.targetText, state));
             else
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_SFX_OFF])
-                    target.events.Invoke(string.Format(target.targetText, state));
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_SFX_OFF]) target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnAudio(bool state)
         {
             if (state)
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_AUDIO_ON])
-                    target.events.Invoke(string.Format(target.targetText, state));
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_AUDIO_ON]) target.events.Invoke(string.Format(target.targetText, state));
             else
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_AUDIO_OFF])
-                    target.events.Invoke(string.Format(target.targetText, state));
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_AUDIO_OFF]) target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnDemoMode(bool state)
         {
             if (state)
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_DEMO_MODE_ON])
-                    target.events.Invoke(string.Format(target.targetText, state));
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_DEMO_MODE_ON]) target.events.Invoke(string.Format(target.targetText, state));
             else
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_DEMO_MODE_OFF])
-                    target.events.Invoke(string.Format(target.targetText, state));
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_DEMO_MODE_OFF]) target.events.Invoke(string.Format(target.targetText, state));
+        }
+
+        public void OnAnalyticsMode(bool state)
+        {
+            if (state)
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_ANALYTICS_ON]) target.events.Invoke(string.Format(target.targetText, state));
+            else
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_ANALYTICS_OFF]) target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnPlacementSyle(GameManager.PlacementStyle state)
         {
-            foreach (ListenTarget target in sorted[ListenValues.PLACEMENT_STYLE])
-                target.events.Invoke(string.Format(target.targetText, (int)state));
+            foreach (ListenTarget target in sorted[ListenValues.PLACEMENT_STYLE]) target.events.Invoke(string.Format(target.targetText, (int)state));
         }
     }
 
@@ -253,5 +278,7 @@ namespace Fourzy._Updates.UI.Helpers
         SETTINGS_DEMO_MODE_ON,
         SETTINGS_DEMO_MODE_OFF,
         PLACEMENT_STYLE,
+        SETTINGS_ANALYTICS_ON,
+        SETTINGS_ANALYTICS_OFF,
     }
 }

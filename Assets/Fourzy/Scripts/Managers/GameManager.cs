@@ -714,7 +714,7 @@ namespace Fourzy
 
         private void OnNoInput(KeyValuePair<string, float> noInputFilter)
         {
-            if (!SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE) || noInputFilter.Key != "startDemoGame") return;
+            if (!SettingsManager.Get(SettingsManager.KEY_DEMO_MODE) || noInputFilter.Key != "startDemoGame") return;
 
             GameContentManager.Instance.ResetFastPuzzles();
             GameContentManager.Instance.ResetPuzzlePacks();

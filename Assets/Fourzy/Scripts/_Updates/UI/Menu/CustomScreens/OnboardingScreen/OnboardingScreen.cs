@@ -373,7 +373,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE:
-                        if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE))
+                        if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
                         {
                             Next();
                             yield break;

@@ -1280,7 +1280,7 @@ namespace Fourzy._Updates.Mechanics.Board
                         StartRoutine("wrongMove", 1.3f, () => UpdateHintArea(), null);
 
                         //only show in demo mode
-                        if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE))
+                        if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
                         {
                             //light up hint area
                             ShowHintArea(HintAreaStyle.ANIMATION, HintAreaAnimationPattern.NONE);

@@ -12,12 +12,14 @@ namespace Fourzy._Updates.Managers
         public static Action<bool> onSfx;
         public static Action<bool> onAudio;
         public static Action<bool> onDemoMode;
+        public static Action<bool> onAnalyticsEvent;
 
         public const string KEY_SFX = "SETTINGS_SFX";
         public const string KEY_AUDIO = "SETTINGS_AUDIO";
         public const string KEY_DEMO_MODE = "SETTINGS_DEMO_MODE";
+        public const string KEY_ANALYTICS_EVENTS = "SETTINGS_ANALYTICS";
 
-        public const bool DEFAULT_SFX = true; 
+        public const bool DEFAULT_SFX = true;
         public const bool DEFAULT_AUDIO = true;
         public const bool DEFAULT_DEMO_MODE = false;
 
@@ -34,40 +36,47 @@ namespace Fourzy._Updates.Managers
         }
         private static SettingsManager instance;
 
-        public Dictionary<string, OptionValueWrapper> values = new Dictionary<string, OptionValueWrapper>
+        public Dictionary<string, bool> values = new Dictionary<string, bool>
         {
-            [KEY_SFX] = new OptionValueWrapper() { state = false, @default = DEFAULT_SFX, },
-            [KEY_AUDIO] = new OptionValueWrapper() { state = false, @default = DEFAULT_AUDIO, },
-            [KEY_DEMO_MODE] = new OptionValueWrapper() { state = false, @default = DEFAULT_DEMO_MODE, },
+            [KEY_SFX] = DEFAULT_SFX,
+            [KEY_AUDIO] = DEFAULT_AUDIO,
+            [KEY_DEMO_MODE] = DEFAULT_DEMO_MODE,
+
+            //temp
+            [KEY_ANALYTICS_EVENTS] = false,
         };
 
-        public void Set(string key, bool value)
+        public static void Set(string key, bool value)
         {
+            PlayerPrefs.SetInt(key, (Instance.values[key] = value) ? 1 : 0);
+
             switch (key)
             {
                 case KEY_SFX:
-                    PlayerPrefs.SetInt(key, (values[key].state = value) ? 1 : 0);
                     onSfx?.Invoke(value);
 
                     break;
 
                 case KEY_AUDIO:
-                    PlayerPrefs.SetInt(key, (values[key].state = value) ? 1 : 0);
                     onAudio?.Invoke(value);
 
                     break;
 
                 case KEY_DEMO_MODE:
-                    PlayerPrefs.SetInt(key, (values[key].state = value) ? 1 : 0);
                     onDemoMode?.Invoke(value);
+
+                    break;
+
+                case KEY_ANALYTICS_EVENTS:
+                    onAnalyticsEvent?.Invoke(value);
 
                     break;
             }
         }
 
-        public void Toggle(string key) => Set(key, !values[key].state);
+        public static void Toggle(string key) => Set(key, !Instance.values[key]);
 
-        public bool Get(string key) => values[key].state;
+        public static bool Get(string key) => Instance.values[key];
 
         public static void Initialize()
         {
@@ -80,15 +89,26 @@ namespace Fourzy._Updates.Managers
 
             DontDestroyOnLoad(go);
 
-            //get values
-            foreach (KeyValuePair<string, OptionValueWrapper> entry in instance.values)
-                entry.Value.state = PlayerPrefs.GetInt(entry.Key, entry.Value.@default ? 1 : 0) == 1 ? true : false;
-        }
+            List<string> keys = new List<string>(instance.values.Keys);
+            foreach (string key in keys)
+            {
+                switch (key)
+                {
+                    case KEY_ANALYTICS_EVENTS:
+#if UNITY_EDITOR
+                        instance.values[key] = PlayerPrefs.GetInt(key, 0) == 1 ? true : false;
+#else
+                        instance.values[key] = PlayerPrefs.GetInt(key, 1) == 1 ? true : false;
+#endif
 
-        public class OptionValueWrapper
-        {
-            public bool state;
-            public bool @default;
+                        break;
+
+                    default:
+                        if (!instance.values[key]) instance.values[key] = PlayerPrefs.GetInt(key, instance.values[key] ? 1 : 0) == 1 ? true : false;
+
+                        break;
+                }
+            }
         }
     }
 }

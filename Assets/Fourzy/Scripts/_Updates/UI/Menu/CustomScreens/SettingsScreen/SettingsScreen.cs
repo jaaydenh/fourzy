@@ -35,11 +35,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GameManager.Instance.StartPresentataionGame();
         }
 
-        public void ToggleSfx() => SettingsManager.Instance.Toggle(SettingsManager.KEY_SFX);
+        public void ToggleSfx() => SettingsManager.Toggle(SettingsManager.KEY_SFX);
 
-        public void ToggleAudio() => SettingsManager.Instance.Toggle(SettingsManager.KEY_AUDIO);
+        public void ToggleAudio() => SettingsManager.Toggle(SettingsManager.KEY_AUDIO);
 
-        public void ToggleDemoMode() => SettingsManager.Instance.Toggle(SettingsManager.KEY_DEMO_MODE);
+        public void ToggleDemoMode() => SettingsManager.Toggle(SettingsManager.KEY_DEMO_MODE);
 
         protected override void OnInitialized()
         {

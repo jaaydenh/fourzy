@@ -259,7 +259,7 @@ namespace Fourzy._Updates.UI.Camera3D
 
         public void CompleteAll(int amountToExclude = 0)
         {
-            if (!SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) return;
+            if (!SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) return;
 
             ProgressionEvent[] events = GetComponentsInChildren<ProgressionEvent>();
             for (int eventIndex = 0; eventIndex < events.Length - amountToExclude; eventIndex++)

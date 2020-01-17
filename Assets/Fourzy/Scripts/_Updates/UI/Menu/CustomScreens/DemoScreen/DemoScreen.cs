@@ -85,6 +85,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GameContentManager.Instance.piecesDataHolder.Initialize();
         }
 
+        public void ToggleAnalytics()
+        {
+            SettingsManager.Toggle(SettingsManager.KEY_ANALYTICS_EVENTS);
+        }
+
         public void Toggle()
         {
             isContextShown = !isContextShown;
@@ -104,7 +109,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             GameManager.onSceneChanged += OnSceneChanged;
 
-            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) OnDemo(true);
+            if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) OnDemo(true);
         }
 
         private void OnDemo(bool state)

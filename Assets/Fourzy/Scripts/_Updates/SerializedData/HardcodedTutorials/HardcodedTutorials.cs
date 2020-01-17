@@ -311,11 +311,11 @@ namespace Fourzy._Updates._Tutorial
                                 "HintButton",
                                 "GameSceneCanvas",
                                 Vector2.one,
-                                new Vector2(.07f, 0f),
+                                Vector2.zero,
                                 //new Vector2(0f, 320f)
                                 new OnboardingTask_HighlightButton.MessageBoxPositionData(Vector2.zero, Vector2.up * 105f),
                                 LocalizationManager.Value("suggest_hint_use"),
-                                false),
+                                true),
                         }
                     }
                 }

@@ -82,7 +82,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             FourzyPhotonManager.onPlayerDisconnected += OnPlayerDisconnected;
             PhotonNetwork.OnEventCall += OnEventCall;
 
-            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput += OnNoInput;
+            if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput += OnNoInput;
 
             HeaderScreen.instance.Close();
 
@@ -132,7 +132,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             FourzyPhotonManager.onPlayerDisconnected -= OnPlayerDisconnected;
             PhotonNetwork.OnEventCall -= OnEventCall;
 
-            if (SettingsManager.Instance.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput -= OnNoInput;
+            if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput -= OnNoInput;
 
             AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
         }

@@ -48,8 +48,8 @@ namespace Fourzy._Updates.Audio
 
         protected void Start()
         {
-            SfxVolume(SettingsManager.Instance.Get(SettingsManager.KEY_SFX) ? 1f : 0f);
-            AudioVolume(SettingsManager.Instance.Get(SettingsManager.KEY_AUDIO) ? 1f : 0f);
+            SfxVolume(SettingsManager.Get(SettingsManager.KEY_SFX) ? 1f : 0f);
+            AudioVolume(SettingsManager.Get(SettingsManager.KEY_AUDIO) ? 1f : 0f);
         }
 
         protected void Update()

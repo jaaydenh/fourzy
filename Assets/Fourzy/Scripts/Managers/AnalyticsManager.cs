@@ -2,6 +2,7 @@
 
 using Firebase.Analytics;
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
@@ -611,6 +612,8 @@ namespace Fourzy
 
         private void LogFirebaseEvent(string eventType, Dictionary<string, object> @params)
         {
+            if (!SettingsPass()) return;
+
             List<Parameter> firebaseParams = new List<Parameter>();
 
             if (@params != null)
@@ -620,40 +623,42 @@ namespace Fourzy
 
             FirebaseAnalytics.LogEvent(eventType, firebaseParams.ToArray());
 
-            if (DEBUG)
-                Debug.Log("Firebase event sent: " + eventType);
+            if (DEBUG) Debug.Log("Firebase event sent: " + eventType);
         }
 
         private void LogPlayFabPlayerEvent(string eventName, Dictionary<string, object> @params)
         {
+            if (!SettingsPass()) return;
+
             PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
             {
                 EventName = eventName,
                 Body = @params
             }, null, null);
 
-            if (DEBUG)
-                Debug.Log("Playfab event sent: " + eventName);
+            if (DEBUG) Debug.Log("Playfab event sent: " + eventName);
         }
 
         private void LogGameAnalyticsDesignEvent(string value)
         {
+            if (!SettingsPass()) return;
+
             GameAnalytics.NewDesignEvent(value);
 
-            if (DEBUG)
-                Debug.Log("Game Analytics event sent: " + value);
+            if (DEBUG) Debug.Log("Game Analytics event sent: " + value);
         }
 
         private void LogGameAnalyticsErrorEvent(GAErrorSeverity severity, string value)
         {
+            if (!SettingsPass()) return;
+
             GameAnalytics.NewErrorEvent(severity, value);
 
-            if (DEBUG)
-            {
-                Debug.Log("Game Analytics Error event sent: " + value);
-            }
+            if (DEBUG) Debug.Log("Game Analytics Error event sent: " + value);
         }
 
         private bool NetworkPass() => GameManager.NetworkAccess;
+
+        private bool SettingsPass() => SettingsManager.Get(SettingsManager.KEY_ANALYTICS_EVENTS);
     }
 }
