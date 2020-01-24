@@ -17,6 +17,11 @@ namespace Fourzy._Updates.UI.Menu
             base.Open();
         }
 
+        public void _Update()
+        {
+
+        }
+
         public void GameComplete()
         {
 

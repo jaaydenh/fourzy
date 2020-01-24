@@ -59,6 +59,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        public void _Update()
+        {
+
+        }
+
         public void GameComplete()
         {
             HideButton();

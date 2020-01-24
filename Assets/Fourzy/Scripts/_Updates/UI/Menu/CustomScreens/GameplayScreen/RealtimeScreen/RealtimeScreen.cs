@@ -34,6 +34,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             statusAlphaTween.StopTween(true);
         }
 
+        public void _Update()
+        {
+
+        }
+
         public void GameComplete()
         {
 

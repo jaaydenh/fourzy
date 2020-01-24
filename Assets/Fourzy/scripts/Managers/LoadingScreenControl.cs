@@ -21,28 +21,12 @@ namespace Fourzy
         public Slider slider;
         public GameObject bg;
 
-        protected void Awake()
-        {
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
-
         protected void Start()
         {
             StartCoroutine(LoadingRoutine());
 
             bg.GetComponents<OnRatio>().ForEach(o => o.CheckOrientation());
             bg.GetComponent<GameplayBG>().Configure();
-        }
-
-        protected void OnDestroy()
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
-        {
-            SceneManager.SetActiveScene(scene);
-            SceneManager.UnloadSceneAsync(Constants.LOGO_SCENE_NAME);
         }
 
         private IEnumerator LoadingRoutine()
@@ -56,7 +40,7 @@ namespace Fourzy
 
             if (!displayTutorial)
             {
-                async = SceneManager.LoadSceneAsync(Constants.MAIN_MENU_SCENE_NAME);
+                async = SceneManager.LoadSceneAsync(Constants.MAIN_MENU_SCENE_NAME, LoadSceneMode.Single);
                 async.allowSceneActivation = false;
             }
 

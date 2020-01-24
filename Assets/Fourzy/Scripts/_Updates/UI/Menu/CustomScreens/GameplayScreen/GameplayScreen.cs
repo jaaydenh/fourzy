@@ -8,7 +8,6 @@ using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using StackableDecorator;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -62,6 +61,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
             helpButtonOutline = helpButton.GetComponent<UIOutline>();
 
             timerWidgets.ForEach(widget => widget.onValueEmpty += OnTimerEmpty);
+        }
+
+        public override void Open()
+        {
+            base.Open();
+
+            puzzleUI._Update();
+            turnbaseUI._Update();
+            passAndPlayUI._Update();
+            realtimeScreen._Update();
+            demoGameScreen._Update();
+            gauntletGameScreen._Update();
         }
 
         public override void OnBack()

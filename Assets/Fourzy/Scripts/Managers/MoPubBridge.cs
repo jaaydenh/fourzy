@@ -26,8 +26,7 @@ namespace Fourzy._Updates.Mechanics
 
 #if UNITY_IOS || UNITY_EDITOR
 
-    private readonly string[] _rewardedVideoAdUnits =
-        { "8f000bd5e00246de9c789eed39ff6096", "faedb21751d9475a8563b37cf3bf9c6a" };
+        private readonly string[] _rewardedVideoAdUnits = { "faedb21751d9475a8563b37cf3bf9c6a" };
 
 #elif UNITY_ANDROID 
         private readonly string[] _rewardedVideoAdUnits = { "9b75826d5a7c44ccb91a6f73a55eec61" };
@@ -128,7 +127,7 @@ namespace Fourzy._Updates.Mechanics
 
         public void ShowRewardedVideoAd()
         {
-            string adUniID = _rewardedVideoAdUnits[1];
+            string adUniID = _rewardedVideoAdUnits[0];
 
             if (GameManager.Instance.debugMessages)
                 Debug.Log("requesting video ad, location lat:" + GameManager.Instance.latitude + ", lon:" + GameManager.Instance.longitude);

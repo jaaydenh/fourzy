@@ -858,10 +858,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: 7750acfa-b2f8-453c-861e-a0c8ffa71cc6
+  cloudProjectId: 
   framebufferDepthMemorylessMode: 0
-  projectName: Fourzy
-  organizationId: supermove-games
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

@@ -56,7 +56,7 @@ namespace Fourzy._Updates.UI.Widgets
                     }
         }
 
-        public void ShowMask(Vector2 anchors, Vector2 size, OnboardingScreenMaskObject.MaskStyle maskStyle, bool showBG, bool clear = true)
+        public void ShowMask(Vector2 anchors, Vector2 size, OnboardingScreenMaskObject.MaskStyle maskStyle, Vector2 offset, bool showBG, bool clear = true)
         {
             Show();
 
@@ -67,10 +67,11 @@ namespace Fourzy._Updates.UI.Widgets
             AddMaskObject()
                 .Size(size)
                 .SetStyle(maskStyle)
-                .SetAnchors(anchors);
+                .SetAnchors(anchors)
+                .SetLocalPosition(offset);
         }
 
-        public void ShowMask(Vector2 anchors, RectTransform toCopy, Vector3 scale, bool showBG, bool clear = true)
+        public void ShowMask(Vector2 anchors, RectTransform toCopy, Vector3 scale, Vector2 offset, bool showBG, bool clear = true)
         {
             Show();
 
@@ -80,7 +81,8 @@ namespace Fourzy._Updates.UI.Widgets
 
             AddMaskObject()
                 .SetStyle(toCopy, scale)
-                .SetAnchors(anchors);
+                .SetAnchors(anchors)
+                .SetLocalPosition(offset);
         }
 
         public void Show(float time = .3f)

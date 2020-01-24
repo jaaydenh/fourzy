@@ -82,7 +82,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnRewardedVideoFailed(string adUnitId) => button.SetState(true);
 
-        private void OnRawardedVideoCalceled(string adUniID) => button.SetState(true);
+        private void OnRawardedVideoCalceled(string adUnitId) => button.SetState(true);
 
         private void OnRewardedVideoClosedEvent(string adUnitId)
         {

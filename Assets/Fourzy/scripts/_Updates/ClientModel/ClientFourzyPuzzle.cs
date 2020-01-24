@@ -325,6 +325,17 @@ namespace Fourzy._Updates.ClientModel
             myMembers.RemoveAt(myMembers.Count - 1);
         }
 
+        public void AddMembers(int count)
+        {
+            int playerID = me.PlayerId;
+
+            List<Creature> addition = new List<Creature>();
+            for (int index = 0; index < count; index++) addition.Add(new Creature(playerPiece.HerdId));
+
+            State.Herds[playerID].Members.AddRange(addition);
+            State.Players[playerID].HerdCount = State.Herds[playerID].Members.Count;
+        }
+
         public IClientFourzy Next()
         {
             if (puzzleData.pack)

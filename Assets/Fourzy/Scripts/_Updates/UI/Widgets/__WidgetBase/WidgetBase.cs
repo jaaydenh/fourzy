@@ -126,6 +126,13 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
+        public virtual WidgetBase SetLocalPosition(Vector2 position)
+        {
+            rectTransform.anchoredPosition = position;
+
+            return this;
+        }
+
         public virtual WidgetBase ResetAnchors() => SetAnchors(Vector2.one * .5f);
 
         public virtual void SetInteractable(bool state)

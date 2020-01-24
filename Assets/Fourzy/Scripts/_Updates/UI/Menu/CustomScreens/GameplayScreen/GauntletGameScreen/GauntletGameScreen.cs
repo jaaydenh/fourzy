@@ -32,30 +32,38 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (game == null || !isGauntlet) return;
 
-            movesLeft.SetValue(game.myMembers.Count);
-
             if (gamepiece && gamepiece.pieceData.ID != game.me.HerdId)
             {
                 Destroy(gamepiece.gameObject);
                 gamepiece = AddGamepiece(game.me.HerdId);
             }
-            else if (!gamepiece)
-                gamepiece = AddGamepiece(game.me.HerdId);
+            else if (!gamepiece) gamepiece = AddGamepiece(game.me.HerdId);
+
+            Open();
+        }
+
+        public override void Open()
+        {
+            UpdateCounter();
 
             base.Open();
         }
+
+        public void _Update() { }
 
         public void OnMoveStarted()
         {
             if (!isOpened || !isGauntlet || game.isMyTurn) return;
 
-            movesLeft.SetValue(game.myMembers.Count);
-            textAnimator.SetTrigger("animate");
+            UpdateCounter();
         }
 
-        public void UpdatePlayerTurn()
-        {
+        public void UpdatePlayerTurn() { }
 
+        public void UpdateCounter()
+        {
+            movesLeft.SetValue(game.myMembers.Count);
+            textAnimator.SetTrigger("animate");
         }
 
         private GamePieceView AddGamepiece(string id)
