@@ -45,6 +45,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private long epochDelta;
         private bool logGameFinished;
         private GameState previousGameState;
+        private int gauntletRechargedViaGems = 0;
+        private int gauntletRechargedViaAds = 0;
 
         public BackgroundConfigurationData currentConfiguration { get; private set; }
         public GameboardView board { get; private set; }
@@ -172,9 +174,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             CancelRoutine("postGameRoutine");
 
             awaitingChallengeID = "";
-            gameStarted = false;
             gameState = GameState.OPENNING_GAME;
+            gameStarted = false;
             isBoardReady = false;
+            gauntletRechargedViaAds = 0;
 
             SetGameIfNull(_game);
 
@@ -279,6 +282,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 case GameType.PRESENTATION:
                     if (!game.isOver) board.TakeAITurn();
+
+                    break;
+
+                case GameType.PASSANDPLAY:
+                    StandaloneInputModuleExtended.GamepadID = game._State.ActivePlayerId == 1 ? 0 : 1;
 
                     break;
             }
@@ -408,6 +416,53 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+        }
+
+        public void TryContinue()
+        {
+            if (game == null) return;
+
+            gameplayScreen.OnMoveEnded(null, null);
+            UpdatePlayerTurn();
+        }
+
+        public void RechargeByAd()
+        {
+            switch (game._Mode)
+            {
+                case GameMode.GAUNTLET:
+                    gauntletRechargedViaAds++;
+
+                    break;
+            }
+
+            Recharge();
+        }
+
+        public void RechargeByGem()
+        {
+            switch (game._Mode)
+            {
+                case GameMode.GAUNTLET:
+                    gauntletRechargedViaGems++;
+
+                    break;
+            }
+
+            Recharge();
+        }
+
+        public void Recharge()
+        {
+            game.AddMembers(Constants.GAUNTLET_RECHARGE_AMOUNT);
+
+            TryContinue();
+            gameplayScreen.gauntletGameScreen.UpdateCounter();
+        }
+
+        public int GetGauntletRechargePrice()
+        {
+            return (int)Mathf.Pow(Constants.BASE_GAUNTLET_MOVES_COST, gauntletRechargedViaGems);
         }
 
         public void PlayHint()
@@ -776,9 +831,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             gameplayScreen.OnMoveEnded(turn, turnResult);
 
             UpdatePlayerTurn();
-
-            //change active gamepad id
-            StandaloneInputModuleExtended.GamepadID = game._State.ActivePlayerId == 1 ? 0 : 1;
         }
 
         private void OnNetwork(bool state)
@@ -952,7 +1004,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (gameData.challengeInstanceId != game.asFourzyGame.challengeData.challengeInstanceId) yield break;
 
             board.TakeTurn(lastTurn);
-
             UpdatePlayerTurn();
         }
 

@@ -45,6 +45,52 @@
       "value": "Pass"
     },
     {
+      "key": "win_goal_one",
+      "value": "WIN in 1 MOVE!"
+    },
+    {
+      "key": "win_goal_multiple",
+      "value": "WIN in {0} MOVES!"
+    },
+    {
+      "key": "survive_goal_multiple",
+      "value": "SURVIVE for {0} MOVES!"
+    },
+    {
+      "key": "cover_goal_multiple",
+      "value": "COVER in {0} MOVES!"
+    },
+
+    {
+      "key": "win_horizontal_rule",
+      "value": "Win by getting 4 in a row horizontally."
+    },
+    {
+      "key": "win_vertical_rule",
+      "value": "Win by getting 4 in a row vertically."
+    },
+    {
+      "key": "win_diagonal_rule",
+      "value": "Win by getting 4 in a row diagonally."
+    },
+    {
+      "key": "rule_swipe_up",
+      "value": "Swipe up to move"
+    },
+    {
+      "key": "rule_swipe_down",
+      "value": "Swipe down to move"
+    },
+    {
+      "key": "rule_swipe_left",
+      "value": "Swipe left to move"
+    },
+    {
+      "key": "rule_swipe_right",
+      "value": "Swipe right to move"
+    },
+
+    {
       "key": "area_garden",
       "value": "Training Garden"
     },
@@ -257,22 +303,6 @@
       "value": "Reset Progress"
     },
     {
-      "key": "rule_swipe_up",
-      "value": "Swipe up to move"
-    },
-    {
-      "key": "rule_swipe_down",
-      "value": "Swipe down to move"
-    },
-    {
-      "key": "rule_swipe_left",
-      "value": "Swipe left to move"
-    },
-    {
-      "key": "rule_swipe_right",
-      "value": "Swipe right to move"
-    },
-    {
       "key": "settings",
       "value": "Settings"
     },
@@ -335,6 +365,10 @@
     {
       "key": "versus",
       "value": "Versus"
+    },
+    {
+      "key": "watch_ad_to_continue",
+      "value": "Watch Ad to Continue"
     },
     {
       "key": "welcome_to_fourzy",
@@ -567,18 +601,6 @@
     {
       "key": "token_desc_cross_bomb",
       "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in th same row and Column as the Bomb."
-    },
-    {
-      "key": "win_goal",
-      "value": "WIN"
-    },
-    {
-      "key": "survive_goal",
-      "value": "SURVIVE"
-    },
-    {
-      "key": "cover_goal",
-      "value": "COVER"
     },
     {
       "key": "random",

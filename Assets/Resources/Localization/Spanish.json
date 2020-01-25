@@ -45,6 +45,52 @@
       "value": "Paso"
     },
     {
+      "key": "win_goal_one",
+      "value": "¡GANA en 1 MOVE!"
+    },
+    {
+      "key": "win_goal_multiple",
+      "value": "¡GANA en {0} MOVIMIENTOS!"
+    },
+    {
+      "key": "survive_goal_multiple",
+      "value": "¡SOBREVIVA para {0} MOVIMIENTOS!"
+    },
+    {
+      "key": "cover_goal_multiple",
+      "value": "CUBIERTA en {0} MOVIMIENTOS!"
+    },
+
+    {
+      "key": "win_horizontal_rule",
+      "value": "Gana al obtener 4 en fila horizontalmente."
+    },
+    {
+      "key": "win_vertical_rule",
+      "value": "Gana al obtener 4 en fila verticalmente."
+    },
+    {
+      "key": "win_diagonal_rule",
+      "value": "Gana al obtener 4 en fila en diagonal."
+    },
+    {
+      "key": "rule_swipe_up",
+      "value": "Desliza hacia arriba para moverte"
+    },
+    {
+      "key": "rule_swipe_down",
+      "value": "Desliza hacia abajo para moverte"
+    },
+    {
+      "key": "rule_swipe_left",
+      "value": "Desliza hacia la izquierda para moverte"
+    },
+    {
+      "key": "rule_swipe_right",
+      "value": "Desliza hacia la derecha para moverte"
+    },
+
+    {
       "key": "area_garden",
       "value": "Jardín de entrenamiento"
     },
@@ -257,22 +303,6 @@
       "value": "Restablecer progreso"
     },
     {
-      "key": "rule_swipe_up",
-      "value": "Desliza hacia arriba para moverte"
-    },
-    {
-      "key": "rule_swipe_down",
-      "value": "Desliza hacia abajo para moverte"
-    },
-    {
-      "key": "rule_swipe_left",
-      "value": "Desliza hacia la izquierda para moverte"
-    },
-    {
-      "key": "rule_swipe_right",
-      "value": "Desliza hacia la derecha para moverte"
-    },
-    {
       "key": "settings",
       "value": "Configuraciones"
     },
@@ -339,6 +369,10 @@
     {
       "key": "versus",
       "value": "Versus"
+    },
+    {
+      "key": "watch_ad_to_continue",
+      "value": "Ver anuncio para continuar"
     },
     {
       "key": "welcome_to_fourzy",

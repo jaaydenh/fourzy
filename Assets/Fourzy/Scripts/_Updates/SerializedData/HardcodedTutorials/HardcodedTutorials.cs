@@ -17,7 +17,6 @@ namespace Fourzy._Updates._Tutorial
                 onBack = TutorialOnBack.SHOW_LEAVE_PROMPT,
                 data = new OnboardingTasksBatch[]
                     {
-                        //step 1: welcome message
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
@@ -34,45 +33,35 @@ namespace Fourzy._Updates._Tutorial
                             tasks = new OnboardingTask[]
                             {
                                 new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win"), 0, .75f),
+                            },
+                        },
+                        new OnboardingTasksBatch()
+                        {
+                            tasks = new OnboardingTask[]
+                            {
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("win_vertical_rule"), 0, .75f),
                                 new OnboardingTask_Log("2"),
                             },
                         },
-                        ////step 2: load tutorial map + show rules
-                        //new OnboardingTasksBatch()
-                        //{
-                        //    tasks = new OnboardingTask[]
-                        //    {
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
 
-                        //        new OnboardingTask_OpenGame(GameType.ONBOARDING, "201"),
-
-                        //        new OnboardingTask() { action = OnboardingActions.SHOW_BG },
-                        //        new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
-                        //        new OnboardingTask_ShowMessage(LocalizationManager.Value("tap_edge_rule"), 1),
-                        //        new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
-                        //        new OnboardingTask_Log("2"),
-                        //    },
-                        //},
-                        //step 3: show player where to tap to make move
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
                             {
                                 new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                                //new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding1"),
-                                //new OnboardingTask_PointAt(LocalizationManager.Value("tap_to_place"), new Vector2(0f, 6f), new Vector2(2f, 6f)),
+
                                 new OnboardingTask_PointAt("", new Vector2(4f, 0f), new Vector2(4f, 2f)),
                                 new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_down"), 1, .15f),
                                 new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
                                 new OnboardingTask_ShowMaskedArea(new Rect(4f, 0f, 1f, 3f), OnboardingScreenMaskObject.MaskStyle.PX_0),
+
                                 //this will skip to next
-                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                                 new OnboardingTask_Log("3"),
                             },
                         },
@@ -83,64 +72,45 @@ namespace Fourzy._Updates._Tutorial
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                                new OnboardingTask_Wait(2f),
+
+                                new OnboardingTask() {action = OnboardingActions.GAME_FINISHED},
                             }
                         },
-                        ////step 4: cancel input after player move started
-                        //new OnboardingTasksBatch()
-                        //{
-                        //    tasks = new OnboardingTask[]
-                        //    {
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                        //        //new OnboardingTask_LimitInput(new Rect[0]),
-                        //        //this will skip to next
-                        //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
-                        //        new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding2"),
-                        //    },
-                        //},
-                        //////step 5: opponent takes turn
-                        ////new OnboardingTasksBatch()
-                        ////{
-                        ////    tasks = new OnboardingTask[]
-                        ////    {
-                        ////        new OnboardingTask_PlaceGamepiece(2, Direction.RIGHT, 3),
-                        ////        //this will skip to next
-                        ////        new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
-                        ////    },
-                        ////},
-                        //step 6: players' 2 turn + limit input
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
                             {
+                                new OnboardingTask_Wait(1f),
+
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("win_horizontal_rule"), 0, .75f),
+                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BG, },
+
+                                new OnboardingTask_Wait(2f),
+                            }
+                        },
+
+                        new OnboardingTasksBatch()
+                        {
+                            tasks = new OnboardingTask[]
+                            {
+                                new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding2"),
-                                //this will skip to next
+
+                                //new OnboardingTask_Wait(.5f),
+
                                 new OnboardingTask_PointAt("", new Vector2(0f, 3f), new Vector2(2f, 3f)),
                                 new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1, .15f),
                                 new OnboardingTask_LimitInput(new Rect(0f, 3f, 3f, 1f)),
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
                                 new OnboardingTask_ShowMaskedArea(new Rect(0f, 3f, 3f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0),
-                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                                 new OnboardingTask_Log("4"),
                             },
                         },
-                        ////step 7: cancel input after player move started
-                        //new OnboardingTasksBatch()
-                        //{
-                        //    tasks = new OnboardingTask[]
-                        //    {
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                        //        new OnboardingTask_LimitInput(new Rect[0]),
-                        //        //this will skip to next
-                        //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
-                        //    },
-                        //},
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
@@ -148,60 +118,42 @@ namespace Fourzy._Updates._Tutorial
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                                new OnboardingTask_Wait(2f),
+
+                                new OnboardingTask() {action = OnboardingActions.GAME_FINISHED},
                             }
                         },
-                        ////step 8: opponent takes turn
-                        //new OnboardingTasksBatch()
-                        //{
-                        //    tasks = new OnboardingTask[]
-                        //    {
-                        //        new OnboardingTask_PlaceGamepiece(2, FourzyGameModel.Model.Direction.DOWN, 4),
-                        //        //this will skip to next
-                        //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
-                        //    },
-                        //},
-                        //step 9: show message
-                        //new OnboardingTasksBatch()
-                        //{
-                        //    tasks = new OnboardingTask[]
-                        //    {
-                        //        new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win"), 0),
-                        //        new OnboardingTask() { action = OnboardingActions.SHOW_BG },
-                        //        new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
-                        //        new OnboardingTask_Log("5"),
-                        //    },
-                        //},
-                        //step 10: players' 3rd turn + limit input
-                        //new OnboardingTasksBatch()
-                        //{
-                        //    tasks = new OnboardingTask[]
-                        //    {
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
-                        //        new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                        //        new OnboardingTask_PointAt("", new Vector2(3f, 0f), new Vector2(3f, 2f)),
-                        //        new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_down"), 1),
-                        //        new OnboardingTask_LimitInput(new Rect(3f, 0f, 1f, 3f)),
-                        //        new OnboardingTask_ShowMaskedArea(new Rect(3f, 0f, 1f, 3f), OnboardingScreenMaskObject.MaskStyle.PX_0),
-                        //        //this will skip to next
-                        //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
-                        //        new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
-                        //        new OnboardingTask_Log("6"),
-                        //    },
-                        //},
-                        //step 11: cancel input after player move started
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
                             {
+                                new OnboardingTask_Wait(1f),
+
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("win_diagonal_rule"), 0, .75f),
+                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                                new OnboardingTask() { action = OnboardingActions.SHOW_BG, },
+
+                                new OnboardingTask_Wait(2f),
+                            }
+                        },
+
+                        new OnboardingTasksBatch()
+                        {
+                            tasks = new OnboardingTask[]
+                            {
+                                new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding3"),
+
+                                new OnboardingTask_Wait(.5f),
+
                                 new OnboardingTask_PointAt("", new Vector2(0f, 1f), new Vector2(2f, 1f)),
                                 new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1, .15f),
                                 new OnboardingTask_LimitInput(new Rect(0f, 1f, 3f, 1f)),
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
                                 new OnboardingTask_ShowMaskedArea(new Rect(0f, 1f, 3f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0),
-                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
+                                new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                                 new OnboardingTask_Log("4"),
                             },
                         },
@@ -212,70 +164,31 @@ namespace Fourzy._Updates._Tutorial
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                                new OnboardingTask_Wait(2f),
+
+                                new OnboardingTask() {action = OnboardingActions.GAME_FINISHED},
                             }
                         },
-                        //new OnboardingTasksBatch()
-                        //{
-                        //    tasks = new OnboardingTask[]
-                        //    {
-                        //        //new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-                        //        //new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
-                        //        //new OnboardingTask() { action = OnboardingActions.HIDE_BOARD_HINT_AREA },
-                        //        //new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                        //        new OnboardingTask_LimitInput(new Rect[0]),
-                        //        //this will skip to next
-                        //        new OnboardingTask() { action = OnboardingActions.ON_MOVE_ENDED },
-                        //        new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding3"),
-                        //    },
-                        //},
-                        ////step 12: show message
-                        //new OnboardingTasksBatch()
-                        //{
-                        //    tasks = new OnboardingTask[]
-                        //    {
-                        //        new OnboardingTask_ShowMessage(LocalizationManager.Value("excellent"), 0),
-                        //        new OnboardingTask() { action = OnboardingActions.SHOW_BG },
-                        //        new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
-                        //        new OnboardingTask_Log("7"),
-                        //    },
-                        //},
-                        // //step 13: change name message
-                        // new OnboardingTasksBatch()
-                        // {
-                        //     tasks = new OnboardingTask[]
-                        //     {
-                        //         new OnboardingTask() { action = OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE },
-                        //         new OnboardingTask_ShowMessage("Now lets change your name!"),
-                        //         new OnboardingTask_Log("8"),
-                        //     },
-                        // },
-                        // //step 14: open changename prompt
-                        // new OnboardingTasksBatch()
-                        // {
-                        //     tasks = new OnboardingTask[]
-                        //     {
-                        //         new OnboardingTask() { action = OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE },
-                        //         new OnboardingTask() { action = OnboardingActions.USER_CHANGE_NAME_PROMPT },
-                        //         new OnboardingTask_Log("9"),
-                        //     },
-                        // },
                         new OnboardingTasksBatch()
                         {
                             tasks = new OnboardingTask[]
                             {
-                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
-                                //new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
-                                //new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                                //will continue after main menu loaded
+                                new OnboardingTask_Wait(2f),
+                            }
+                        },
+
+                        new OnboardingTasksBatch()
+                        {
+                            tasks = new OnboardingTask[]
+                            {
                                 new OnboardingTask() { action = OnboardingActions.LOAD_MAIN_MENU },
-                                //new OnboardingDataHolder.OnboardingTask_ExecMenuEvent(Constants.MAIN_MENU_CANVAS_NAME, "openScreen", "tutorialProgressionMap"),
+
                                 //point at adventure button button
                                 new OnboardingTask_Log("8"),
                                 new OnboardingTask_HighlightButton(
                                     "AdventureButton",
                                     "MainMenuCanvas",
                                     Vector2.one,
+                                    Vector2.zero,
                                     Vector2.zero,
                                     messagePositionData: null,
                                     LocalizationManager.Value("tap_to_open_map")),
@@ -286,7 +199,6 @@ namespace Fourzy._Updates._Tutorial
                         {
                             tasks = new OnboardingTask[]
                             {
-                                //will continue after event tap
                                 new OnboardingTask_HighlightProgressionEvent (
                                     0,
                                     Vector3.one * .75f,
@@ -312,8 +224,8 @@ namespace Fourzy._Updates._Tutorial
                                 "GameSceneCanvas",
                                 Vector2.one,
                                 Vector2.zero,
-                                //new Vector2(0f, 320f)
-                                new OnboardingTask_HighlightButton.MessageBoxPositionData(Vector2.zero, Vector2.up * 105f),
+                                new Vector2(40f, -40f),
+                                new OnboardingTask_HighlightButton.MessageBoxPositionData(Vector2.zero, Vector2.up * 120f),
                                 LocalizationManager.Value("suggest_hint_use"),
                                 true),
                         }
@@ -564,15 +476,25 @@ namespace Fourzy._Updates._Tutorial
         public string menuName;
         public bool showBG;
         public Vector2 pointerOffset;
+        public Vector2 maskOffset;
         public MessageBoxPositionData messagePositionData;
 
-        public OnboardingTask_HighlightButton(string buttonName, string menuName, Vector2 scale, Vector2 pointerOffset, MessageBoxPositionData messagePositionData = null, string message = "", bool showBG = true)
+        public OnboardingTask_HighlightButton(
+            string buttonName,
+            string menuName,
+            Vector2 scale,
+            Vector2 maskOffset,
+            Vector2 pointerOffset,
+            MessageBoxPositionData messagePositionData = null,
+            string message = "",
+            bool showBG = true)
         {
             action = OnboardingActions.HIGHLIGHT_CURRENT_SCREEN_BUTTON;
 
             stringValue = buttonName;
             vector2value = scale;
 
+            this.maskOffset = maskOffset;
             this.pointerOffset = pointerOffset;
             this.messagePositionData = messagePositionData;
             this.message = message;

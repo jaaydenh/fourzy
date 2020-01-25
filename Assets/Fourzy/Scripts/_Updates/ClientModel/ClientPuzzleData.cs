@@ -202,25 +202,26 @@ namespace Fourzy._Updates.ClientModel
         /// </summary>
         public void GetInstructions()
         {
-            Instructions = LocalizationManager.Value(GoalType.GoalTypeToKey());
-
             switch (GoalType)
             {
-                case PuzzleGoalType.SURVIVE:
-                    Instructions += $" {LocalizationManager.Value("for")} ";
+                case PuzzleGoalType.WIN:
+                    if (MoveLimit < 2)
+                        Instructions = LocalizationManager.Value("win_goal_one");
+                    else
+                        Instructions = string.Format(LocalizationManager.Value("win_goal_multiple"), MoveLimit);
 
                     break;
 
-                default:
-                    Instructions += $" {LocalizationManager.Value("in")} ";
+                case PuzzleGoalType.SURVIVE:
+                    Instructions = string.Format(LocalizationManager.Value("survive_goal_multiple"), MoveLimit);
+
+                    break;
+
+                case PuzzleGoalType.COVER:
+                    Instructions = string.Format(LocalizationManager.Value("cover_goal_multiple"), MoveLimit);
 
                     break;
             }
-
-            Instructions += MoveLimit;
-
-            if (MoveLimit > 1) Instructions += $" {LocalizationManager.Value("moves")}";
-            else Instructions += $" {LocalizationManager.Value("move")}";
         }
 
         public static implicit operator bool(ClientPuzzleData data) => data != null;

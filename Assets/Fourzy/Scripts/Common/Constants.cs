@@ -19,6 +19,8 @@ namespace Fourzy
         public const float MOVE_SPEED_CAP = 16f;
         public const int REALTIME_COUNTDOWN_SECONDS = 6;
         public const int GAUNTLET_DEFAULT_MOVES_COUNT = 60;
+        public const int BASE_GAUNTLET_MOVES_COST = 2;
+        public const int GAUNTLET_RECHARGE_AMOUNT = 10;
 
         public const int TIMER_SECTIONS = 5;
         public const int CIRCULAR_TIMER_VALUE = 8;

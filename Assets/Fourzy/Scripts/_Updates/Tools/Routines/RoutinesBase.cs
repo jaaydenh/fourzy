@@ -169,18 +169,17 @@ namespace Fourzy._Updates.Tools
         public void Stop(bool callOnEnded)
         {
             terminated = true;
+            owner.RemoveRoutine(name);
 
             if (callOnEnded && onEnded != null) onEnded.Invoke();
             if (nested != null) owner.StopCoroutine(nested);
-
-            owner.RemoveRoutine(name);
         }
 
         public void Cancel()
         {
-            onCanceled?.Invoke();
-
             Stop(false);
+
+            onCanceled?.Invoke();
         }
 
         private IEnumerator Wrapper(float time = 0f)

@@ -99,6 +99,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        public void _Update()
+        {
+
+        }
+
         public void OnMoveStarted()
         {
             if (game == null || !game.puzzleData) return;

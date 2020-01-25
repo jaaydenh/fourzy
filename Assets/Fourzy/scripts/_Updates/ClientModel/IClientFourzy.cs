@@ -75,6 +75,7 @@ namespace Fourzy._Updates.ClientModel
         void OnDraw();
         void CheckLost();
         void RemoveMember();
+        void AddMembers(int count);
         IClientFourzy Next();
         PlayerTurnResult StartTurn(GameState gameState);
         PlayerTurnResult StartTurn();

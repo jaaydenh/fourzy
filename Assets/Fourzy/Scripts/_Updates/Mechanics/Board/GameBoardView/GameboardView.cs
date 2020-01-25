@@ -992,9 +992,9 @@ namespace Fourzy._Updates.Mechanics.Board
         /// </summary>
         public Coroutine PlayInitialMoves() => PlayMoves(game.InitialTurns);
 
-        public void Initialize(IClientFourzy model, bool hintAreas = true, bool createBits = true)
+        public void Initialize(IClientFourzy game, bool hintAreas = true, bool createBits = true)
         {
-            this.game = model;
+            this.game = game;
             turn = null;
             lastCol = 0;
             lastRow = 0;
@@ -1002,10 +1002,10 @@ namespace Fourzy._Updates.Mechanics.Board
             actionState = BoardActionState.MOVE;
             createdSpellTokens = new List<TokenSpell>();
 
+            CancelRoutine("lock_board");
+
             CreateInputMap();
-
             StopBoardUpdates();
-
             CalculatePositions();
 
             if (hintAreas) CreateHintArea();
@@ -1194,6 +1194,13 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 HideHintArea(HintAreaAnimationPattern.NONE);
             }
+        }
+
+        public void LockBoard(float time)
+        {
+            CancelRoutine("lock_board");
+            interactable = false;
+            StartRoutine("lock_board", time, () => interactable = true, null);
         }
 
         private void CalculatePositions()
@@ -1828,6 +1835,16 @@ namespace Fourzy._Updates.Mechanics.Board
                     });
                 }
             }
+
+            //add delay if needed
+            if (turn != null)
+                switch (game._Type)
+                {
+                    case GameType.PASSANDPLAY:
+                        yield return new WaitForSeconds(1.5f);
+
+                        break;
+                }
 
             isAnimating = false;
             boardBits.ForEach(bit => { if (bit.active) bit.OnAfterTurn(startTurn); });
