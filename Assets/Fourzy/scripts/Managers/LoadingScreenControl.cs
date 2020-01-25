@@ -42,7 +42,6 @@ namespace Fourzy
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
         {
             SceneManager.SetActiveScene(scene);
-            SceneManager.UnloadSceneAsync(Constants.LOGO_SCENE_NAME);
         }
 
         private IEnumerator LoadingRoutine()

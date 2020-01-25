@@ -44,24 +44,22 @@
       "key": "pass",
       "value": "Paso"
     },
-
     {
       "key": "area_garden",
-      "value": "Jardín de Entrenamiento"
+      "value": "Jardín de entrenamiento"
     },
     {
       "key": "area_forest",
-      "value": "Bosque Encantado"
+      "value": "Bosque encantado"
     },
     {
       "key": "area_island",
-      "value": "Isla Arenosa"
+      "value": "Isla arenosa"
     },
     {
       "key": "area_palace",
-      "value": "Palacio de Hielo"
+      "value": "Palacio de hielo"
     },
-
     {
       "key": "adventure",
       "value": "Aventuras"
@@ -224,11 +222,11 @@
     },
     {
       "key": "practiceScreenPromptTitle",
-      "value": "title"
+      "value": "Versus"
     },
     {
       "key": "practiceScreenPromptDescription",
-      "value": "description"
+      "value": "Practica contra jugadores bot con diferentes personalidades o pasa y juega con un amigo(a)."
     },
     {
       "key": "puzzle",

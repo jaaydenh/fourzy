@@ -44,7 +44,6 @@
       "key": "pass",
       "value": "Pass"
     },
-
     {
       "key": "area_garden",
       "value": "Training Garden"
@@ -61,7 +60,6 @@
       "key": "area_palace",
       "value": "Ice Palace"
     },
-
     {
       "key": "adventure",
       "value": "Adventure"
@@ -224,11 +222,11 @@
     },
     {
       "key": "practiceScreenPromptTitle",
-      "value": "title"
+      "value": "Versus Play"
     },
     {
       "key": "practiceScreenPromptDescription",
-      "value": "description"
+      "value": "Practice against bot players with varying personalities or pass and play with a friend."
     },
     {
       "key": "puzzle",

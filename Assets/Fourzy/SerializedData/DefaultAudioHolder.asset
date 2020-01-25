@@ -24,7 +24,6 @@ MonoBehaviour:
       type: 40
       clips:
       - {fileID: 8300000, guid: e73ff93d18c0b4a7dbc85d4bcba5439b, type: 3}
-      - {fileID: 8300000, guid: 822d54ee289134eb78545be8754e2b56, type: 3}
     - _name: GAME_LOGO
       type: 42
       clips:
@@ -68,7 +67,7 @@ MonoBehaviour:
     - _name: BG_MAIN_MENU
       type: 102
       clips:
-      - {fileID: 8300000, guid: 5a5f16d0b0c3b0846b5dde1042db49da, type: 3}
+      - {fileID: 8300000, guid: 9aa6ca06a2617484ab8c66edbd74c7c7, type: 3}
     - _name: BG_FOREST
       type: 104
       clips:

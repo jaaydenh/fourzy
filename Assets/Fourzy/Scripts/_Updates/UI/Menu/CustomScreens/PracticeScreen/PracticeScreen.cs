@@ -86,7 +86,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 LocalizationManager.Value("practiceScreenPromptTitle"),
                 LocalizationManager.Value("practiceScreenPromptDescription"),
                 null,
-                LocalizationManager.Value("continue"));
+                LocalizationManager.Value("ok"));
 
         public void ToggleTimer() => SetTimerState(!SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER));
 
