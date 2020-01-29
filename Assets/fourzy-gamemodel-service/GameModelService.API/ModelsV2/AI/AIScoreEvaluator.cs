@@ -104,16 +104,23 @@ namespace FourzyGameModel.Model
         public bool IsAThreat()
         {
             GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove()));
-            AITurnEvaluator AITE = new AITurnEvaluator(GSReview);
-            if (AITE.WinningTurns.Count > 0) return true;
+
+            TurnEvaluator TE = new TurnEvaluator(GSReview);
+            if (TE.GetFirstWinningMove() != null) return true;
+            //AITurnEvaluator AITE = new AITurnEvaluator(GSReview);
+            //if (AITE.WinningTurns.Count > 0) return true;
 
             return false;
         }
         public bool IsUnstoppableThreat()
         {
             GameState GSReview = Evaluator.EvaluateTurn(new PlayerTurn(EvalState.ActivePlayerId, new PassMove()));
-            AITurnEvaluator AITE = new AITurnEvaluator(GSReview);
-            if (AITE.WinningTurns.Count == 0) return false;
+ 
+            TurnEvaluator TE = new TurnEvaluator(GSReview);
+            if (TE.GetFirstWinningMove() != null) return true;
+            //AITurnEvaluator AITE = new AITurnEvaluator(GSReview);
+            //if (AITE.WinningTurns.Count == 0) return false;
+
 
             Evaluator.Reset();
             foreach (SimpleMove m in Evaluator.GetAvailableSimpleMoves())
