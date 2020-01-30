@@ -114,10 +114,23 @@ namespace FourzyGameModel.Model
 
             LastState = State;
             TurnEvaluator turnEvaluator = new TurnEvaluator(State);
+            
+            AIPlayer AI = new PuzzleAI(State);
 
-            AIPlayer AI = AI = new PuzzleAI(State);
-            turnEvaluator = new TurnEvaluator(State);
+            //If the player has 2 moves left, check to see if it's possible to win.
+            if ((MoveLimit - (playerTurnRecord.Count / 2 + 1)) == 2)
+            {
+                AITurnEvaluator AITE = new AITurnEvaluator(State);
+                if (!AITE.WinInTwoMoves(State.Opponent(State.ActivePlayerId))) AI = new SimpleAI(State);
+            }
 
+            //If the player has 1 moves left, check to see if there's a winning move.
+            if ((MoveLimit - (playerTurnRecord.Count / 2 + 1)) == 1)
+            {
+                TurnEvaluator TE = new TurnEvaluator(State);
+                if (TE.GetFirstWinningMove(State.Opponent(State.ActivePlayerId)) == null) AI = new SimpleAI(State);             
+            }
+            
             AIResult.Turn = AI.GetTurn();
             AIResult.GameState = turnEvaluator.EvaluateTurn(AIResult.Turn);
             AIResult.Activity = turnEvaluator.ResultActions;

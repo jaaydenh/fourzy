@@ -226,7 +226,7 @@ namespace FourzyGameModel.Model
                 if (OPP.EvalState.WinnerId == EvalState.Opponent(m.Piece.PlayerId)) continue;
 
                 //Otherwise. Check if My Opponent can win.  Don't make a move where opp can win immediately
-                if (OPP.GetFirstWinningMove() == null)
+                if (OPP.GetFirstWinningMove(EvalState.Opponent(m.Piece.PlayerId),AIHeuristics.ConsiderDiagonals) == null)
                 {
                     //Make the Unblockable move
                     if (AIHeuristics.LookForUnstoppable)
@@ -412,7 +412,7 @@ namespace FourzyGameModel.Model
                 //AITurnEvaluator AITE = new AITurnEvaluator(EvalState, new PlayerTurn(m));
                 TurnEvaluator TE = new TurnEvaluator(EvalState);
                 GameState GS = TE.EvaluateTurn(new PlayerTurn(m));
-                AITurnEvaluator AITE = new AITurnEvaluator(GS);
+                AITurnEvaluator AITE = new AITurnEvaluator(GS, AIHeuristics);
 
                 //Player can make a move to win. No further analysis.
 
@@ -522,7 +522,7 @@ namespace FourzyGameModel.Model
 
                 TurnEvaluator TE2 = new TurnEvaluator(GS);
                 //If opponent has winning moves, what is the best move the opponent can make
-                if (TE2.GetFirstWinningMove() == null)
+                if (TE2.GetFirstWinningMove(GS.ActivePlayerId, AIHeuristics.ConsiderDiagonals) == null)
                 {
                     AIScoreEvaluator AISE = new AIScoreEvaluator(GS);
                     Moves.Add(m, AISE.Score(EvalState.Opponent(m.Piece.PlayerId)));
@@ -596,7 +596,7 @@ namespace FourzyGameModel.Model
             foreach (SimpleMove m in AvailableSimpleMoves)
             {
                 TurnEvaluator OPP = new TurnEvaluator(Evaluator.EvaluateTurn(new PlayerTurn(m)));
-                if (OPP.GetFirstWinningMove() == null) return m;
+                if (OPP.GetFirstWinningMove(OPP.EvalState.Opponent(m.Piece.PlayerId),AIHeuristics.ConsiderDiagonals) == null) return m;
             }
 
             return null;
@@ -936,7 +936,7 @@ namespace FourzyGameModel.Model
                 GameState GS = ME.EvaluateTurn(new PlayerTurn(m));
                 //AITurnEvaluator AITE = new AITurnEvaluator(GS);
 
-                AIScoreEvaluator AISE = new AIScoreEvaluator(GS);
+                AIScoreEvaluator AISE = new AIScoreEvaluator(GS, AIWeight);
                 ScoredMoves.Add(m, AISE.Score(m.Piece.PlayerId, AIWeight));
 
                 //AITurnEvaluator AITE = new AITurnEvaluator(EvalState, new PlayerTurn(m));
@@ -2318,6 +2318,24 @@ namespace FourzyGameModel.Model
             return true;
         }
 
+        public bool WinInTwoMoves(int PlayerId)
+        {
+            if (WinningTurns.Count > 0) return true;
+
+            foreach (SimpleMove m in Evaluator.GetAvailableSimpleMoves(PlayerId))
+            {
+                Evaluator.Reset();
+                EvalState.ActivePlayerId = PlayerId;
+                GameState GSReview = Evaluator.EvaluateTurn(m);
+
+                TurnEvaluator TEPass = new TurnEvaluator(GSReview);
+                GameState GSReview2 = TEPass.EvaluateTurn(new PlayerTurn(GSReview.ActivePlayerId, new PassMove()));
+                TurnEvaluator TEWin = new TurnEvaluator(GSReview2);
+                if (TEWin.GetFirstWinningMove() != null) return true;
+            }
+
+            return false;
+        }
 
         //public List<SimpleMoveSequence> LookAhead(int SearchDepth)
         //{
