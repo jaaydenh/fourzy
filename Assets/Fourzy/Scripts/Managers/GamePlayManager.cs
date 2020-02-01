@@ -609,7 +609,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 //case GameType.REALTIME:
-                //    gameplayBGAudio = AudioHolder.instance.PlayBGAudio(AudioTypes.BG_GARDEN_REALTIME, true, .9f, 3f);
+                //    gameplayBGAudio = AudioHolder.instance.PlayBGAudio(AudioTypes.BG_GARDEN_REALTIME, true, 1f, 3f);
                 //    break;
 
                 default:
@@ -620,11 +620,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         if (gameplayBGAudio.type != gameBGAudio)
                         {
                             AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
-                            gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, .9f, 3f);
+                            gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, 1f, 3f);
                         }
                     }
                     else
-                        gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, .9f, 3f);
+                        gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, 1f, 3f);
                     break;
             }
         }

@@ -54,7 +54,7 @@ namespace Fourzy._Updates.UI.Menu
 
             //play bg audio
             if (!AudioHolder.instance.IsBGAudioPlaying(Serialized.AudioTypes.BG_MAIN_MENU))
-                AudioHolder.instance.PlayBGAudio(Serialized.AudioTypes.BG_MAIN_MENU, true, 1f, 1f);
+                AudioHolder.instance.PlayBGAudio(Serialized.AudioTypes.BG_MAIN_MENU, true, .75f, 1f);
         }
 
         protected void OnDestroy()

@@ -172,7 +172,7 @@ PlayerSettings:
     iPhone: com.PartyTroll.Fourzy
   buildNumber:
     iPhone: 1
-  AndroidBundleVersionCode: 63
+  AndroidBundleVersionCode: 10305
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 28
   AndroidPreferredInstallLocation: 1
@@ -276,7 +276,7 @@ PlayerSettings:
   AndroidEnableTango: 0
   androidEnableBanner: 1
   androidUseLowAccuracyLocation: 0
-  androidUseCustomKeystore: 0
+  androidUseCustomKeystore: 1
   m_AndroidBanners:
   - width: 320
     height: 180
@@ -858,10 +858,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: 7750acfa-b2f8-453c-861e-a0c8ffa71cc6
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: Fourzy
+  organizationId: supermove-games
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
