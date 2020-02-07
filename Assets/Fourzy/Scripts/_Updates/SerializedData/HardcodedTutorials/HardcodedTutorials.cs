@@ -39,7 +39,11 @@ namespace Fourzy._Updates._Tutorial
                         {
                             tasks = new OnboardingTask[]
                             {
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("win_vertical_rule"), 0, .75f),
+                                //new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("win_vertical_rule"), 1, /*.75f*/.15f),
                                 new OnboardingTask_Log("2"),
                             },
                         },
@@ -49,8 +53,8 @@ namespace Fourzy._Updates._Tutorial
                             tasks = new OnboardingTask[]
                             {
                                 new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                                //new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                //new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
 
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding1"),
 
@@ -82,8 +86,8 @@ namespace Fourzy._Updates._Tutorial
                             {
                                 new OnboardingTask_Wait(1f),
 
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("win_horizontal_rule"), 0, .75f),
-                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("win_horizontal_rule"), 1, .15f),
+                                //new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BG, },
 
                                 new OnboardingTask_Wait(2f),
@@ -95,7 +99,7 @@ namespace Fourzy._Updates._Tutorial
                             tasks = new OnboardingTask[]
                             {
                                 new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                //new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
 
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding2"),
@@ -128,8 +132,8 @@ namespace Fourzy._Updates._Tutorial
                             {
                                 new OnboardingTask_Wait(1f),
 
-                                new OnboardingTask_ShowMessage(LocalizationManager.Value("win_diagonal_rule"), 0, .75f),
-                                new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                                new OnboardingTask_ShowMessage(LocalizationManager.Value("win_diagonal_rule"), 1, .15f),
+                                //new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
                                 new OnboardingTask() { action = OnboardingActions.SHOW_BG, },
 
                                 new OnboardingTask_Wait(2f),
@@ -141,7 +145,7 @@ namespace Fourzy._Updates._Tutorial
                             tasks = new OnboardingTask[]
                             {
                                 new OnboardingTask() { action = OnboardingActions.HIDE_BG },
-                                new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                                //new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
                                 new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
 
                                 new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding3"),
@@ -190,7 +194,7 @@ namespace Fourzy._Updates._Tutorial
                                     Vector2.one,
                                     Vector2.zero,
                                     Vector2.zero,
-                                    messagePositionData: null,
+                                    new OnboardingTask_HighlightButton.MessageData(Vector2.zero, new Vector2(0f, -165f)),
                                     LocalizationManager.Value("tap_to_open_map")),
                                 new OnboardingTask_Log("9"),
                             },
@@ -225,7 +229,7 @@ namespace Fourzy._Updates._Tutorial
                                 Vector2.one,
                                 Vector2.zero,
                                 new Vector2(40f, -40f),
-                                new OnboardingTask_HighlightButton.MessageBoxPositionData(Vector2.zero, Vector2.up * 120f),
+                                new OnboardingTask_HighlightButton.MessageData(Vector2.zero, Vector2.up * 120f),
                                 LocalizationManager.Value("suggest_hint_use"),
                                 true),
                         }
@@ -477,7 +481,7 @@ namespace Fourzy._Updates._Tutorial
         public bool showBG;
         public Vector2 pointerOffset;
         public Vector2 maskOffset;
-        public MessageBoxPositionData messagePositionData;
+        public MessageData messageData;
 
         public OnboardingTask_HighlightButton(
             string buttonName,
@@ -485,7 +489,7 @@ namespace Fourzy._Updates._Tutorial
             Vector2 scale,
             Vector2 maskOffset,
             Vector2 pointerOffset,
-            MessageBoxPositionData messagePositionData = null,
+            MessageData messagePositionData = null,
             string message = "",
             bool showBG = true)
         {
@@ -496,7 +500,7 @@ namespace Fourzy._Updates._Tutorial
 
             this.maskOffset = maskOffset;
             this.pointerOffset = pointerOffset;
-            this.messagePositionData = messagePositionData;
+            this.messageData = messagePositionData;
             this.message = message;
             this.menuName = menuName;
             this.showBG = showBG;
@@ -504,17 +508,17 @@ namespace Fourzy._Updates._Tutorial
 
         public void TrySetMessagePivot(Vector2 pivot)
         {
-            if (messagePositionData == null || messagePositionData.pivot != Vector2.zero) return;
+            if (messageData == null || messageData.pivot != Vector2.zero) return;
 
-            messagePositionData.pivot = pivot;
+            messageData.pivot = pivot;
         }
 
-        public class MessageBoxPositionData
+        public class MessageData
         {
-            public Vector2 pivot { get; set; }
-            public Vector2 positionOffset { get; set; }
+            public Vector2 pivot;
+            public Vector2 positionOffset;
 
-            public MessageBoxPositionData(Vector2 pivot, Vector2 positionOffset)
+            public MessageData(Vector2 pivot, Vector2 positionOffset)
             {
                 this.pivot = pivot;
                 this.positionOffset = positionOffset;

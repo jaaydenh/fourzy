@@ -54,7 +54,7 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public OnboardingScreenPointer SetMessage(string message, OnboardingTask_HighlightButton.MessageBoxPositionData messagePositionData = null)
+        public OnboardingScreenPointer SetMessage(string message, OnboardingTask_HighlightButton.MessageData messagePositionData = null)
         {
             messagaBox.SetValue(message);
 

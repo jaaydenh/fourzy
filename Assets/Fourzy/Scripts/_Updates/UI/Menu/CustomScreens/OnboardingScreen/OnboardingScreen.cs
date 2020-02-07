@@ -1,17 +1,18 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
+using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tools;
-using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
-using Fourzy._Updates.Mechanics.Board;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -131,6 +132,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 CancelRoutine("moveNext");
                 return;
             }
+            print("next");
 
             step++;
             StartCoroutine(DisplayCurrentStep());
@@ -295,6 +297,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     case OnboardingActions.HIDE_MAKSED_AREA:
                         masks.Hide();
+                        instructions._Hide();
 
                         break;
 
@@ -405,7 +408,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                        //will update currentWidget
+                    //will update currentWidget
                     case OnboardingActions.HIGHLIGHT_PROGRESSION_EVENT:
                         if (!GameManager.Instance.isMainMenuLoaded) break;
 
@@ -460,7 +463,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         //pointer
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(viewportPosition);
-                        pointer.SetMessage(_buttonTask.message, _buttonTask.messagePositionData);
+
+                        if (_buttonTask.messageData != null)
+                        {
+                            instructions.DisplayText(viewportPosition.y, _buttonTask.message);
+                            instructions.SetLocalPosition(_buttonTask.messageData.positionOffset);
+                        }
+                        else
+                            instructions.DisplayText(viewportPosition.y, _buttonTask.message);
+
                         pointer.SetLocalPosition(_buttonTask.pointerOffset);
 
                         break;
