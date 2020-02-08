@@ -31,17 +31,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public bool isTutorialRunning { get; private set; }
         public ButtonExtended currentButton { get; private set; }
         public OnboardingTask currentTask { get; private set; }
-        public OnboardingTasksBatch currentBatch { get; private set; }
+        //public OnboardingTasksBatch currentBatch { get; private set; }
 
         [NonSerialized]
         public Tutorial tutorial;
 
-        private int step;
+        private bool _yield;
 
         public override void Open()
         {
             //name prompt was closed, so we do next
-            if (tutorial.data[step].ContainsAction(OnboardingActions.USER_CHANGE_NAME_PROMPT)) StartRoutine("nameChanged", .2f, () => Next());
+            //if (tutorial.tasks.Any(task => OnboardingActions.USER_CHANGE_NAME_PROMPT.)) StartRoutine("nameChanged", .2f, () => Next());
 
             if (isOpened) return;
 
@@ -102,7 +102,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             isTutorialRunning = true;
             this.tutorial = tutorial;
-            step = 0;
 
             menuController.OpenScreen(this);
 
@@ -110,6 +109,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             pointer.Hide(0f);
             dialog.Hide(0f);
             instructions.Hide(0f);
+            bg.Hide(0f);
+            graphics.Hide(0f);
 
             PlayerPrefsWrapper.SetTutorialOpened(tutorial.name, true);
             StartCoroutine(DisplayCurrentStep());
@@ -125,117 +126,113 @@ namespace Fourzy._Updates.UI.Menu.Screens
             return true;
         }
 
-        public void Next()
-        {
-            if (IsRoutineActive("moveNext"))
-            {
-                CancelRoutine("moveNext");
-                return;
-            }
-            print("next");
+        //public void Next()
+        //{
+        //    if (IsRoutineActive("moveNext"))
+        //    {
+        //        CancelRoutine("moveNext");
+        //        return;
+        //    }
+        //    print("next");
 
-            step++;
-            StartCoroutine(DisplayCurrentStep());
+        //    currentTaskIndex++;
+        //    StartCoroutine(DisplayCurrentStep());
+        //}
+
+        public void SkipToNext()
+        {
+            _yield = false;
+            CancelRoutine("messageYield");
         }
 
         private void UserManagerOnUpdateName()
         {
-            OnboardingTasksBatch batch = tutorial.data[step];
+            //OnboardingTasksBatch batch = tutorial.data[currentTaskIndex];
 
-            foreach (OnboardingTask task in batch.tasks)
-            {
-                switch (task.action)
-                {
-                    case OnboardingActions.USER_CHANGE_NAME_PROMPT:
+            //foreach (OnboardingTask task in batch.tasks)
+            //{
+            //    switch (task.action)
+            //    {
+            //        case OnboardingActions.USER_CHANGE_NAME_PROMPT:
 
-                        break;
-                }
-            }
+            //            break;
+            //    }
+            //}
         }
 
         private void MoveStarted(ClientPlayerTurn turn)
         {
             if (turn == null || turn.PlayerId < 1) return;
 
-            if (tutorial.data[step].ContainsAction(OnboardingActions.ON_MOVE_STARTED)) Next();
+            if (currentTask.action == OnboardingActions.ON_MOVE_STARTED) SkipToNext();
         }
 
         private void MoveEnded(ClientPlayerTurn turn)
         {
             if (turn == null || turn.PlayerId < 1) return;
 
-            if (tutorial.data[step].ContainsAction(OnboardingActions.ON_MOVE_ENDED))
-                StartRoutine("moveNext", .5f, () => Next());
+            if (currentTask.action == OnboardingActions.ON_MOVE_ENDED) SkipToNext();
         }
 
         private void OnGameFinished(IClientFourzy game)
         {
-            if (tutorial.data[step].ContainsAction(OnboardingActions.PLAY_INITIAL_MOVES))
-                StartRoutine("gameFinishedNext", 2f, () => Next());
-            else if (tutorial.data[step].ContainsAction(OnboardingActions.GAME_FINISHED))
-                Next();
+            if (currentTask.action == OnboardingActions.GAME_FINISHED) SkipToNext();
         }
 
-        private void OnTap()
+        private void OnButtonTap()
         {
             RemoveCurrentButton();
-
-            CancelRoutine("idle");
-            StartRoutine("idle", .1f, () => Next());
+            SkipToNext();
         }
 
         private void UpdateCurrentButton(ButtonExtended button)
         {
             currentButton = button;
-            currentButton.onTap += OnTap;
+            currentButton.onTap += OnButtonTap;
         }
 
         private void RemoveCurrentButton()
         {
             if (!currentButton) return;
 
-            currentButton.onTap -= OnTap;
+            currentButton.onTap -= OnButtonTap;
             currentButton = null;
         }
 
         public IEnumerator DisplayCurrentStep()
         {
-            if (step >= tutorial.data.Length)
-            {
-                //close onboarding
-                menuController.CloseCurrentScreen();
-                PlayerPrefsWrapper.SetTutorialState(tutorial.name, true);
-
-                yield break;
-            }
-
-            currentBatch = tutorial.data[step];
-
             IClientFourzy activeGame = GameManager.Instance.activeGame;
             Vector2 anchors;
 
-            for (int taskIndex = 0; taskIndex < currentBatch.tasks.Length; taskIndex++)
+            for (int taskIndex = 0; taskIndex < tutorial.tasks.Length; taskIndex++)
             {
-                currentTask = currentBatch.tasks[taskIndex];
+                currentTask = tutorial.tasks[taskIndex];
 
                 switch (currentTask.action)
                 {
                     //dialog
                     case OnboardingActions.SHOW_MESSAGE:
-                        OnboardingTask_ShowMessage instructionTask = currentTask as OnboardingTask_ShowMessage;
+                        OnboardingTask_ShowMessage messageTask = currentTask as OnboardingTask_ShowMessage;
 
-                        switch (instructionTask.intValue)
+                        switch (messageTask.intValue)
                         {
                             case 0:
-                                dialog.DisplayText(instructionTask.yAnchor, currentTask.stringValue);
+                                dialog.DisplayText(messageTask.yAnchor, currentTask.stringValue);
 
                                 break;
 
                             case 1:
-                                instructions.DisplayText(instructionTask.yAnchor, currentTask.stringValue);
+                                instructions.DisplayText(messageTask.yAnchor, currentTask.stringValue);
 
                                 break;
                         }
+
+                        if (messageTask.skipAfter != -1f)
+                        {
+                            _yield = true;
+                            StartRoutine("messageYield", messageTask.skipAfter, () => SkipToNext(), null);
+                        }
+                        else if (bg.shown) _yield = true;
 
                         break;
 
@@ -259,6 +256,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     case OnboardingActions.HIDE_POINTER:
                         pointer.HidePointer();
+
+                        break;
+
+                    case OnboardingActions.ON_MOVE_STARTED:
+                    case OnboardingActions.ON_MOVE_ENDED:
+                    case OnboardingActions.GAME_FINISHED:
+                        _yield = true;
 
                         break;
 
@@ -340,9 +344,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case OnboardingActions.WAIT:
                         OnboardingTask_Wait waitTask = currentTask as OnboardingTask_Wait;
 
-                        if (taskIndex == currentBatch.tasks.Length - 1)
-                            yield return StartRoutine("moveNext", waitTask.time, () => Next());
-                        else
+                        //if (taskIndex == currentBatch.tasks.Length - 1)
+                        //    yield return StartRoutine("moveNext", waitTask.time, () => Next());
+                        //else
                             yield return new WaitForSeconds(waitTask.time);
 
                         break;
@@ -369,6 +373,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             new SimpleMove(
                                 new Piece(player.PlayerId, int.Parse(player.HerdId)), currentTask.direction, currentTask.intValue));
 
+                        _yield = true;
+
                         break;
 
                     case OnboardingActions.PLAYER_2_PLACE_GAMEPIECE:
@@ -377,6 +383,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             new SimpleMove(
                                 new Piece(opponent.PlayerId, opponent.HerdId == null ? 1 : int.Parse(opponent.HerdId)), currentTask.direction, currentTask.intValue));
 
+                        _yield = true;
+
                         break;
 
                     case OnboardingActions.USER_CHANGE_NAME_PROMPT:
@@ -384,14 +392,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
-                    case OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE:
-                        if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
-                        {
-                            Next();
-                            yield break;
-                        }
+                    //case OnboardingActions.SKIP_TO_NEXT_IF_DEMO_MODE:
+                    //    if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
+                    //    {
+                    //        Next();
+                    //        yield break;
+                    //    }
 
-                        break;
+                    //    break;
 
                     case OnboardingActions.LOAD_MAIN_MENU:
                         GameManager.Instance.OpenMainMenu();
@@ -414,7 +422,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         OnboardingTask_HighlightProgressionEvent _eventTask = currentTask as OnboardingTask_HighlightProgressionEvent;
 
-                        ProgressionEvent progressionEvent = null;
+                        ProgressionEvent progressionEvent;
 
                         if (_eventTask.intValue == -1)
                             progressionEvent = GameManager.Instance.currentMap.GetCurrentEvent();
@@ -428,7 +436,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (!pointer.visible) pointer.Show(.2f);
                         pointer.SetAnchors(anchors);
-                        pointer.SetMessage(_eventTask.stringValue);
+
+                        if (_eventTask.messageData != null)
+                        {
+                            instructions.DisplayText(anchors.y, _eventTask.messageData.message);
+                            instructions.SetLocalPosition(_eventTask.messageData.positionOffset);
+                        }
 
                         GameManager.Instance.currentMap.SetScrollLockedState(true);
 
@@ -466,19 +479,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (_buttonTask.messageData != null)
                         {
-                            instructions.DisplayText(viewportPosition.y, _buttonTask.message);
+                            instructions.DisplayText(viewportPosition.y, _buttonTask.messageData.message);
                             instructions.SetLocalPosition(_buttonTask.messageData.positionOffset);
                         }
-                        else
-                            instructions.DisplayText(viewportPosition.y, _buttonTask.message);
 
                         pointer.SetLocalPosition(_buttonTask.pointerOffset);
 
                         break;
                 }
 
-                while (currentButton) yield return null;
+                while (currentButton || _yield) yield return null;
             }
+
+            //close onboarding
+            menuController.CloseCurrentScreen();
+            PlayerPrefsWrapper.SetTutorialState(tutorial.name, true);
         }
     }
 }

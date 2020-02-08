@@ -1479,10 +1479,10 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 34
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 114675544619200078}
-        memberName: Next
+        memberName: SkipToNext
         memberType: 8
         arguments: []
         isDynamic: 0
