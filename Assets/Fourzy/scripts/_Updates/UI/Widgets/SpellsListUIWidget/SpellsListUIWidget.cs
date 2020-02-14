@@ -25,6 +25,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         protected void Update()
         {
+            if (game == null) return;
+
             switch (game._Type)
             {
                 case GameType.PASSANDPLAY:

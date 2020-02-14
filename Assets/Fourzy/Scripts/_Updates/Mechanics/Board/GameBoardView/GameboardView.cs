@@ -687,7 +687,8 @@ namespace Fourzy._Updates.Mechanics.Board
                 if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE) gameplayManager.ToggleHelpState();
             }
 
-            if (actionState == BoardActionState.CAST_SPELL) CancelSpell();
+            print(actionState);
+            if (actionState == BoardActionState.CAST_SPELL) onCastCanceled?.Invoke();
 
             selectedBoardLocation = null;
             if (touched) OnPointerRelease(Vector2.zero);
@@ -767,7 +768,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE) gameplayManager.ToggleHelpState();
             }
 
-            if (actionState == BoardActionState.CAST_SPELL) CancelSpell();
+            if (actionState == BoardActionState.CAST_SPELL) onCastCanceled?.Invoke();
 
             if (!game.turnEvaluator.CanIMakeMove(move))
             {

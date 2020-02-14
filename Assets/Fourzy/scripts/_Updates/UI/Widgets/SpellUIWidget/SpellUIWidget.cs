@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
-using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using UnityEngine.UI;
 
@@ -36,19 +35,20 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (state == SpellState.UNAVAILABLE) return;
 
-            if (spellsList.activeSpell != null && spellsList.activeSpell != this)
-                spellsList.activeSpell.CancelCast();
+            if (spellsList.activeSpell != null && spellsList.activeSpell != this) spellsList.activeSpell.CancelCast();
 
             switch (state)
             {
                 case SpellState.NONE:
                     state = SpellState.ACTIVE;
                     spellsList.board.PrepareForSpell(spellId);
+
                     break;
 
                 case SpellState.ACTIVE:
                     state = SpellState.NONE;
                     spellsList.board.CancelSpell();
+
                     break;
             }
 
@@ -101,17 +101,33 @@ namespace Fourzy._Updates.UI.Widgets
             //update price badge
             button.GetBadge("price").badge.SetValue(data.price);
 
+            bool? setTo = null;
+
             switch (spellsList.game._Type)
             {
                 case GameType.PASSANDPLAY:
-                    TrySetButtonState(playerId, !spellsList.board.isAnimating);
+                    setTo = !spellsList.board.isAnimating;
 
                     break;
 
                 case GameType.TURN_BASED:
-                    TrySetButtonState(playerId, !spellsList.board.isAnimating && spellsList.game.isMyTurn);
+                    setTo = !spellsList.board.isAnimating && spellsList.game.isMyTurn;
 
                     break;
+            }
+
+            if (setTo != null)
+            {
+                if (setTo.Value)
+                {
+                    if (spellsList.owner.PlayerId != playerId)
+                    {
+                        if (state == SpellState.ACTIVE || state == SpellState.NONE) TrySetButtonState(playerId, false);
+                        return;
+                    }
+                }
+
+                TrySetButtonState(playerId, setTo.Value);
             }
         }
 
