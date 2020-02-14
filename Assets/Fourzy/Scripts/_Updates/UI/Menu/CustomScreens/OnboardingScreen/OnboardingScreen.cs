@@ -213,7 +213,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     //dialog
                     case OnboardingActions.SHOW_MESSAGE:
                         OnboardingTask_ShowMessage messageTask = currentTask as OnboardingTask_ShowMessage;
-
+                        print(currentTask.stringValue);
                         switch (messageTask.intValue)
                         {
                             case 0:
@@ -316,12 +316,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.HIDE_BG:
-                        bg.Hide(.2f);
+                        bg._Hide();
 
                         break;
 
                     case OnboardingActions.SHOW_BG:
-                        bg.Show(.2f);
+                        bg._Show(currentTask.intValue == 0);
 
                         break;
 

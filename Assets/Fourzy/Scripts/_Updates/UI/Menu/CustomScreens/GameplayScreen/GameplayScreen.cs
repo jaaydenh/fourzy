@@ -41,7 +41,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public DemoGameScreen demoGameScreen { get; private set; }
         public GauntletGameScreen gauntletGameScreen { get; private set; }
 
-        private SpellsListUIWidget spellsListWidget;
         private UIOutline helpButtonOutline;
 
         private bool timersEnabled => SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER) && (game._Type == GameType.PASSANDPLAY || game._Type == GameType.REALTIME);
@@ -57,7 +56,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             demoGameScreen = GetComponentInChildren<DemoGameScreen>();
             gauntletGameScreen = GetComponentInChildren<GauntletGameScreen>();
 
-            spellsListWidget = GetComponentInChildren<SpellsListUIWidget>();
             helpButtonOutline = helpButton.GetComponent<UIOutline>();
 
             timerWidgets.ForEach(widget => widget.onValueEmpty += OnTimerEmpty);
@@ -110,6 +108,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             this.gameplayManager = gameplayManager;
             game = gameplayManager.game;
 
+            player1Widget.spellsHolder.Open(game, gameplayManager.board, game.me);
+
             player1Widget.SetGame(game);
             player2Widget.SetGame(game);
 
@@ -135,12 +135,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     if (game.puzzleData)
                     {
                         if (game.puzzleData.hasAIOpponent)
+                        {
                             player2Widget.Show(.1f);
+                            player2Widget.spellsHolder.Open(game, gameplayManager.board, game.opponent);
+                        }
                         else
                             player2Widget.Hide(.1f);
                     }
                     else
+                    {
                         player2Widget.Show(.1f);
+                        player2Widget.spellsHolder.Open(game, gameplayManager.board, game.opponent);
+                    }
                 }
             }
             else
@@ -184,8 +190,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             gameWinLoseScreen.CloseIfOpened();
             puzzleWinLoseScreen.CloseIfOpened();
-
-            spellsListWidget.Open(game, gameplayManager.board, game.me);
 
             SetResetButtonState(false);
             UpdateHelpButton();
@@ -276,7 +280,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             #endregion
 
-            spellsListWidget.UpdateSpells(game._State.ActivePlayerId);
+            player1Widget.spellsHolder.UpdateSpells(game._State.ActivePlayerId);
+            player2Widget.spellsHolder.UpdateSpells(game._State.ActivePlayerId);
         }
 
         public void UpdateHelpButton()

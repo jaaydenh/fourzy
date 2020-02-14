@@ -15,6 +15,7 @@ namespace Fourzy._Updates.UI.Widgets
         public RectTransform pieceParent;
         public Badge magicBadge;
         public int playerNameMaxSize = 9;
+        public SpellsListUIWidget spellsHolder;
 
         private GamePieceView current;
 

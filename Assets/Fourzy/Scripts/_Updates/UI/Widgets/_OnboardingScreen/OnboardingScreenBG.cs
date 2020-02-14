@@ -7,9 +7,9 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public bool shown = false;
 
-        public override void Hide(float time)
+        public void _Hide()
         {
-            base.Hide(time);
+            if (alphaTween._value > 0f) Hide(.3f);
 
             SetInteractable(false);
             BlockRaycast(false);
@@ -17,9 +17,9 @@ namespace Fourzy._Updates.UI.Widgets
             shown = false;
         }
 
-        public override void Show(float time)
+        public void _Show(bool show)
         {
-            base.Show(time);
+            if (show) Show(.3f);
 
             SetInteractable(true);
             BlockRaycast(true);
