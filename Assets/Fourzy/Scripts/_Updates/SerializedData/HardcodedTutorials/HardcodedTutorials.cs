@@ -44,7 +44,7 @@ namespace Fourzy._Updates._Tutorial
 
                     new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
                     new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
-                    new OnboardingTask_ShowMessage(LocalizationManager.Value("win_vertical_rule"), 1, .15f, 2f),
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("win_vertical_rule"), 1, .15f, 5f),
 
                     new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
@@ -65,7 +65,7 @@ namespace Fourzy._Updates._Tutorial
 
                     new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
                     new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
-                    new OnboardingTask_ShowMessage(LocalizationManager.Value("win_horizontal_rule"), 1, .15f, 2f),
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("win_horizontal_rule"), 1, .15f, 5),
 
                     new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
@@ -86,7 +86,7 @@ namespace Fourzy._Updates._Tutorial
 
                     new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
                     new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
-                    new OnboardingTask_ShowMessage(LocalizationManager.Value("win_diagonal_rule"), 1, .15f, 2f),
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("win_diagonal_rule"), 1, .15f, 5f),
 
                     new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                     new OnboardingTask_Wait(1f),

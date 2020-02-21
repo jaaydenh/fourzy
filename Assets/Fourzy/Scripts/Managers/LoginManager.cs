@@ -359,6 +359,13 @@ namespace Fourzy
         private void PlayFabLoginSuccess(LoginResult result)
         {
             playerMasterAccountID = result.PlayFabId;
+
+            Debug.Log("PlayFabId: " + result.PlayFabId);
+            Debug.Log("SessionTicket: " + result.SessionTicket);
+            Debug.Log("EntityToken: " + result.EntityToken.EntityToken);
+            Debug.Log("TokenExpiration: " + result.EntityToken.TokenExpiration);
+            Debug.Log("Entity.Id: " + result.EntityToken.Entity.Id);
+            Debug.Log("Entity.Type: " + result.EntityToken.Entity.Type);
             //AnalyticsManager.Instance.Identify(result.PlayFabId);
 
             if (GameManager.Instance.showInfoToasts) GamesToastsController.ShowTopToast("Device Authentication Success");

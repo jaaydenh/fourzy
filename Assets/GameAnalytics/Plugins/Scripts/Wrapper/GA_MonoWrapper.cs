@@ -7,17 +7,17 @@ namespace GameAnalyticsSDK.Wrapper
 {
     public partial class GA_Wrapper
     {
-#if (UNITY_STANDALONE || UNITY_WSA || UNITY_WP_8_1 || UNITY_SAMSUNGTV) && (!UNITY_EDITOR)
+#if (UNITY_STANDALONE || UNITY_WP_8_1 || UNITY_SAMSUNGTV) && (!UNITY_EDITOR)
 
-        private class UnityCommandCenterListener : GameAnalyticsSDK.Net.ICommandCenterListener
+        private class UnityRemoteConfigsListener : GameAnalyticsSDK.Net.IRemoteConfigsListener
         {
-            public void OnCommandCenterUpdated()
+            public void OnRemoteConfigsUpdated()
             {
-                GameAnalytics.CommandCenterUpdated();
+                GameAnalytics.RemoteConfigsUpdated();
             }
         }
 
-        private static readonly UnityCommandCenterListener unityCommandCenterListener = new UnityCommandCenterListener();
+        private static readonly UnityRemoteConfigsListener unityRemoteConfigsListener = new UnityRemoteConfigsListener();
 
         private static void configureAvailableCustomDimensions01(string list)
         {
@@ -96,7 +96,7 @@ namespace GameAnalyticsSDK.Wrapper
 
         private static void initialize(string gamekey, string gamesecret)
         {
-            GameAnalyticsSDK.Net.GameAnalytics.AddCommandCenterListener(unityCommandCenterListener);
+            GameAnalyticsSDK.Net.GameAnalytics.AddRemoteConfigsListener(unityRemoteConfigsListener);
             GameAnalyticsSDK.Net.GameAnalytics.Initialize(gamekey, gamesecret);
         }
 
@@ -180,42 +180,24 @@ namespace GameAnalyticsSDK.Wrapper
             GameAnalyticsSDK.Net.GameAnalytics.EndSession();
         }
 
-        private static void setFacebookId(string facebookId)
+        private static string getRemoteConfigsValueAsString(string key, string defaultValue)
         {
-            GameAnalyticsSDK.Net.GameAnalytics.SetFacebookId(facebookId);
+            return GameAnalyticsSDK.Net.GameAnalytics.GetRemoteConfigsValueAsString(key, defaultValue);
         }
 
-        private static void setGender(string gender)
+        private static bool isRemoteConfigsReady ()
         {
-            switch(gender)
-            {
-                case "male":
-                    GameAnalyticsSDK.Net.GameAnalytics.SetGender(GameAnalyticsSDK.Net.EGAGender.Male);
-                    break;
-                case "female":
-                    GameAnalyticsSDK.Net.GameAnalytics.SetGender(GameAnalyticsSDK.Net.EGAGender.Female);
-                    break;
-            }
+            return GameAnalyticsSDK.Net.GameAnalytics.IsRemoteConfigsReady();
         }
 
-        private static void setBirthYear(int birthYear)
+        private static string getRemoteConfigsContentAsString()
         {
-            GameAnalyticsSDK.Net.GameAnalytics.SetBirthYear(birthYear);
+            return GameAnalyticsSDK.Net.GameAnalytics.GetRemoteConfigsAsString();
         }
 
-        private static string getCommandCenterValueAsString(string key, string defaultValue)
+        private static void configureAutoDetectAppVersion (bool flag)
         {
-            return GameAnalyticsSDK.Net.GameAnalytics.GetCommandCenterValueAsString(key, defaultValue);
-        }
-
-        private static bool isCommandCenterReady ()
-        {
-            return GameAnalyticsSDK.Net.GameAnalytics.IsCommandCenterReady();
-        }
-
-        private static string getConfigurationsContentAsString()
-        {
-            return GameAnalyticsSDK.Net.GameAnalytics.GetConfigurationsAsString();
+            // not supported
         }
 #endif
     }

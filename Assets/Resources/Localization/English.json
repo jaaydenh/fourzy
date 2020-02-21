@@ -60,18 +60,17 @@
       "key": "cover_goal_multiple",
       "value": "COVER in {0} MOVES!"
     },
-
     {
       "key": "win_horizontal_rule",
-      "value": "Win by getting 4 in a row horizontally."
+      "value": "You won by getting 4 in a row horizontally."
     },
     {
       "key": "win_vertical_rule",
-      "value": "Win by getting 4 in a row vertically."
+      "value": "You won by getting 4 in a row vertically."
     },
     {
       "key": "win_diagonal_rule",
-      "value": "Win by getting 4 in a row diagonally."
+      "value": "You won by getting 4 in a row diagonally."
     },
     {
       "key": "rule_swipe_up",
@@ -89,7 +88,6 @@
       "key": "rule_swipe_right",
       "value": "Swipe right to move"
     },
-
     {
       "key": "area_garden",
       "value": "Training Garden"
@@ -629,6 +627,7 @@
     {
       "key": "ok",
       "value": "OK"
-    }
+    },
+    { "key":"turn_play_button","value":"Online Game" }
   ]
 }

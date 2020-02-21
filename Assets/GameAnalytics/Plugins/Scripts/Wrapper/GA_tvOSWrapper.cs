@@ -35,6 +35,9 @@ namespace GameAnalyticsSDK.Wrapper
 		[DllImport ("__Internal")]
 		private static extern void configureUserId(string userId);
 
+        [DllImport ("__Internal")]
+        private static extern void configureAutoDetectAppVersion(bool flag);
+
 		[DllImport ("__Internal")]
 		private static extern void initialize(string gamekey, string gamesecret);
 
@@ -70,7 +73,7 @@ namespace GameAnalyticsSDK.Wrapper
 
 		[DllImport ("__Internal")]
 		private static extern void addErrorEvent(int severity, string message, string fields);
-		
+
 		[DllImport ("__Internal")]
 		private static extern void setEnabledInfoLog(bool enabled);
 
@@ -89,26 +92,17 @@ namespace GameAnalyticsSDK.Wrapper
 		[DllImport ("__Internal")]
 		private static extern void gameAnalyticsEndSession();
 
-		[DllImport ("__Internal")]
-		private static extern void setFacebookId(string facebookId);
-
-		[DllImport ("__Internal")]
-		private static extern void setGender(string gender);
-
-		[DllImport ("__Internal")]
-		private static extern void setBirthYear(int birthYear);
-
-		private static string getCommandCenterValueAsString(string key, string defaultValue)
+		private static string getRemoteConfigsValueAsString(string key, string defaultValue)
 		{
 			return defaultValue;
 		}
 
-		private static bool isCommandCenterReady ()
+		private static bool isRemoteConfigsReady ()
 		{
 			return false;
 		}
 
-		private static string getConfigurationsContentAsString()
+		private static string getRemoteConfigsContentAsString()
 		{
 			return "";
 		}

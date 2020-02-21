@@ -58,20 +58,19 @@
     },
     {
       "key": "cover_goal_multiple",
-      "value": "CUBIERTA en {0} MOVIMIENTOS!"
+      "value": "CUBIERTA en {0} MOVIMIENTOS!" 
     },
-
     {
       "key": "win_horizontal_rule",
-      "value": "Gana al obtener 4 en fila horizontalmente."
+      "value": "Ganaste al juntar 4 en raya horizontalmente."
     },
     {
       "key": "win_vertical_rule",
-      "value": "Gana al obtener 4 en fila verticalmente."
+      "value": "Ganaste al juntar 4 en raya verticalmente."
     },
     {
       "key": "win_diagonal_rule",
-      "value": "Gana al obtener 4 en fila en diagonal."
+      "value": "Ganaste al juntar 4 en raya diagonalmente."
     },
     {
       "key": "rule_swipe_up",
@@ -89,7 +88,6 @@
       "key": "rule_swipe_right",
       "value": "Desliza hacia la derecha para moverte"
     },
-
     {
       "key": "area_garden",
       "value": "Jardín de entrenamiento"
@@ -645,6 +643,7 @@
     {
       "key": "ok",
       "value": "OK"
-    }
+    },
+    { "key":"turn_play_button","value":"Online Game" }
   ]
 }
