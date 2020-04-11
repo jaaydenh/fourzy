@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 #pragma warning disable 618
 
@@ -8,7 +9,7 @@ public class DemoBoxesGui : MonoBehaviour
     public bool HideUI = false;
 
     /// <summary>A GUI element to show tips in.</summary>
-    public GUIText GuiTextForTips;
+    public Text GuiTextForTips;
 
     private int tipsIndex;
 
