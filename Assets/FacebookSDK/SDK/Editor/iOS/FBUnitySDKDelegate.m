@@ -22,6 +22,7 @@
 
 NSString *const FBUnityMessageName_OnAppRequestsComplete = @"OnAppRequestsComplete";
 NSString *const FBUnityMessageName_OnGetAppLinkComplete = @"OnGetAppLinkComplete";
+NSString *const FBUnityMessageName_OnFriendFinderComplete = @"OnFriendFinderComplete";
 NSString *const FBUnityMessageName_OnGroupCreateComplete = @"OnGroupCreateComplete";
 NSString *const FBUnityMessageName_OnGroupJoinComplete = @"OnGroupJoinComplete";
 NSString *const FBUnityMessageName_OnInitComplete = @"OnInitComplete";
@@ -30,6 +31,8 @@ NSString *const FBUnityMessageName_OnLogoutComplete = @"OnLogoutComplete";
 NSString *const FBUnityMessageName_OnShareLinkComplete = @"OnShareLinkComplete";
 NSString *const FBUnityMessageName_OnFetchDeferredAppLinkComplete = @"OnFetchDeferredAppLinkComplete";
 NSString *const FBUnityMessageName_OnRefreshCurrentAccessTokenComplete = @"OnRefreshCurrentAccessTokenComplete";
+NSString *const FBUnityMessageName_OnUploadImageToMediaLibraryComplete = @"OnUploadImageToMediaLibraryComplete";
+NSString *const FBUnityMessageName_OnUploadVideoToMediaLibraryComplete = @"OnUploadVideoToMediaLibraryComplete";
 
 static NSMutableArray *g_instances;
 

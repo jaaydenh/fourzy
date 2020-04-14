@@ -8,11 +8,11 @@ using GameSparks.Core;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_IOS
-using UnityEngine.SocialPlatforms.GameCenter;
-#endif
-using SA.iOS.GameKit;
-using SA.Foundation.Templates;
+//#if UNITY_IOS
+//using UnityEngine.SocialPlatforms.GameCenter;
+//#endif
+//using SA.iOS.GameKit;
+//using SA.Foundation.Templates;
 using Fourzy._Updates.UI.Menu.Screens;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -111,93 +111,93 @@ namespace Fourzy
                 });
         }
 
-        private void GameCenterLogin()
-        {
-            isConnecting = true;
+        //private void GameCenterLogin()
+        //{
+        //    isConnecting = true;
 
-            ISN_GKLocalPlayer.Authenticate((SA_Result result) =>
-            {
-                if (result.IsSucceeded)
-                {
-                    Debug.Log("Authenticate succeeded!");
+        //    ISN_GKLocalPlayer.Authenticate((SA_Result result) =>
+        //    {
+        //        if (result.IsSucceeded)
+        //        {
+        //            Debug.Log("Authenticate succeeded!");
 
-                    GameSparksGameCenterConnect();
-                }
-                else
-                {
-                    Debug.Log("Authenticate failed! Error with code: " + result.Error.Code + " and description: " + result.Error.Message);
-                    DeviceLogin();
-                }
-            });
-        }
+        //            GameSparksGameCenterConnect();
+        //        }
+        //        else
+        //        {
+        //            Debug.Log("Authenticate failed! Error with code: " + result.Error.Code + " and description: " + result.Error.Message);
+        //            DeviceLogin();
+        //        }
+        //    });
+        //}
 
-        private void GameSparksGameCenterConnect()
-        {
-            ISN_GKLocalPlayer player = ISN_GKLocalPlayer.LocalPlayer;
-            Debug.Log("ISN_GKLocalPlayer.LocalPlayer:Authenticated: " + player.Authenticated);
-            Debug.Log("ISN_GKLocalPlayer.LocalPlayer:PlayerID: " + player.PlayerID);
+        //private void GameSparksGameCenterConnect()
+        //{
+        //    ISN_GKLocalPlayer player = ISN_GKLocalPlayer.LocalPlayer;
+        //    Debug.Log("ISN_GKLocalPlayer.LocalPlayer:Authenticated: " + player.Authenticated);
+        //    Debug.Log("ISN_GKLocalPlayer.LocalPlayer:PlayerID: " + player.PlayerID);
 
-            if (player.Authenticated)
-            {
-                player.GenerateIdentityVerificationSignatureWithCompletionHandler((signatureResult) =>
-                {
-                    if (signatureResult.IsSucceeded)
-                    {
-                        Debug.Log("signatureResult.PublicKeyUrl: " + signatureResult.PublicKeyUrl);
-                        Debug.Log("signatureResult.Timestamp: " + signatureResult.Timestamp);
-                        Debug.Log("signatureResult.Salt.Length: " + signatureResult.Salt.Length);
-                        Debug.Log("signatureResult.Signature.Length: " + signatureResult.Signature.Length);
+        //    if (player.Authenticated)
+        //    {
+        //        player.GenerateIdentityVerificationSignatureWithCompletionHandler((signatureResult) =>
+        //        {
+        //            if (signatureResult.IsSucceeded)
+        //            {
+        //                Debug.Log("signatureResult.PublicKeyUrl: " + signatureResult.PublicKeyUrl);
+        //                Debug.Log("signatureResult.Timestamp: " + signatureResult.Timestamp);
+        //                Debug.Log("signatureResult.Salt.Length: " + signatureResult.Salt.Length);
+        //                Debug.Log("signatureResult.Signature.Length: " + signatureResult.Signature.Length);
 
-                        new GameCenterConnectRequest()
-                            .SetDisplayName(UserManager.Instance.userName)
-                            .SetPublicKeyUrl(signatureResult.PublicKeyUrl)
-                            .SetTimestamp(signatureResult.Timestamp)
-                            .SetSalt(signatureResult.SaltAsBse64String)
-                            .SetSignature(signatureResult.SignatureAsBse64String)
-                            .SetExternalPlayerId(player.PlayerID)
-                            .Send((response) =>
-                            {
-                                if (!response.HasErrors)
-                                {
-                                    //AnalyticsManager.Instance.Identify(response.UserId);
-                                    UserManager.Instance.userId = response.UserId;
-                                    //Mixpanel.Identify(response.UserId);
-                                    //AnalyticsManager.LogCustom("gamecenter_authentication_request");
-                                    //UserManager.Instance.UpdateInformation();
-                                    ChallengeManager.Instance.GetChallengesRequest();
+        //                new GameCenterConnectRequest()
+        //                    .SetDisplayName(UserManager.Instance.userName)
+        //                    .SetPublicKeyUrl(signatureResult.PublicKeyUrl)
+        //                    .SetTimestamp(signatureResult.Timestamp)
+        //                    .SetSalt(signatureResult.SaltAsBse64String)
+        //                    .SetSignature(signatureResult.SignatureAsBse64String)
+        //                    .SetExternalPlayerId(player.PlayerID)
+        //                    .Send((response) =>
+        //                    {
+        //                        if (!response.HasErrors)
+        //                        {
+        //                            //AnalyticsManager.Instance.Identify(response.UserId);
+        //                            UserManager.Instance.userId = response.UserId;
+        //                            //Mixpanel.Identify(response.UserId);
+        //                            //AnalyticsManager.LogCustom("gamecenter_authentication_request");
+        //                            //UserManager.Instance.UpdateInformation();
+        //                            ChallengeManager.Instance.GetChallengesRequest();
 
-                                    //OnLoginMessage?.Invoke("GameCenter Authentication Success: " + response.DisplayName);
+        //                            //OnLoginMessage?.Invoke("GameCenter Authentication Success: " + response.DisplayName);
 
-                                    //if (GameManager.Instance.showInfoToasts)
-                                    //    GamesToastsController.ShowTopToast("GameCenter Authentication Success: " + response.DisplayName);
-                                }
-                                else
-                                {
-                                    Debug.Log("***** Error Authenticating GameCenter: " + response.Errors.JSON);
-                                    //OnLoginMessage?.Invoke("Error Authenticating GameCenter: " + response.Errors.JSON);
+        //                            //if (GameManager.Instance.showInfoToasts)
+        //                            //    GamesToastsController.ShowTopToast("GameCenter Authentication Success: " + response.DisplayName);
+        //                        }
+        //                        else
+        //                        {
+        //                            Debug.Log("***** Error Authenticating GameCenter: " + response.Errors.JSON);
+        //                            //OnLoginMessage?.Invoke("Error Authenticating GameCenter: " + response.Errors.JSON);
 
-                                    //if (GameManager.Instance.showInfoToasts)
-                                    //    GamesToastsController.ShowTopToast("Error Authenticating GameCenter: " + response.Errors.JSON);
+        //                            //if (GameManager.Instance.showInfoToasts)
+        //                            //    GamesToastsController.ShowTopToast("Error Authenticating GameCenter: " + response.Errors.JSON);
 
-                                    //AnalyticsManager.LogError("gamecenter_authentication_request_error", response.Errors.JSON);
-                                }
+        //                            //AnalyticsManager.LogError("gamecenter_authentication_request_error", response.Errors.JSON);
+        //                        }
 
-                                isConnecting = false;
+        //                        isConnecting = false;
 
-                                OnDeviceLoginComplete?.Invoke(!response.HasErrors);
-                            });
-                    }
-                    else
-                    {
-                        Debug.Log("IdentityVerificationSignature has failed: " + signatureResult.Error.FullMessage);
-                    }
-                });
-            }
-            else
-            {
-                DeviceLogin();
-            }
-        }
+        //                        OnDeviceLoginComplete?.Invoke(!response.HasErrors);
+        //                    });
+        //            }
+        //            else
+        //            {
+        //                Debug.Log("IdentityVerificationSignature has failed: " + signatureResult.Error.FullMessage);
+        //            }
+        //        });
+        //    }
+        //    else
+        //    {
+        //        DeviceLogin();
+        //    }
+        //}
 
         //private void GooglePlayLogin()
         //{
@@ -303,13 +303,13 @@ namespace Fourzy
                 {
                     if (!isConnecting)
                     {
-#if UNITY_IOS && !UNITY_EDITOR
-                            Debug.Log("GameCenterLogin");
-                            GameCenterLogin();    
-#else
+//#if UNITY_IOS && !UNITY_EDITOR
+                            //Debug.Log("GameCenterLogin");
+                            //GameCenterLogin();    
+//#else
                         Debug.Log("GameSparks DeviceLogin");
                         DeviceLogin();
-#endif
+//#endif
                     }
                 }
                 else
