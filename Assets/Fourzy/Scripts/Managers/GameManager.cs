@@ -63,6 +63,12 @@ namespace Fourzy
         public float fallbackLongitude = 122.4167f;
         public List<TokenType> excludeInstructionsFor;
 
+        [Header("Landscape settings")]
+        public bool hideTabsBar = true;
+        public bool hideGems = true;
+        public bool hideTickets = true;
+        public bool hidePortalWidgets = true;
+
         /// <summary>
         /// Pieces placement style
         /// </summary>
@@ -78,6 +84,7 @@ namespace Fourzy
                 onPlacementStyle?.Invoke(_placementStyle);
             }
         }
+        public bool Landscape => Screen.width > Screen.height;
         public bool ExtraFeatures => extraFeatures || Application.isEditor;
         public bool isRealtime => PhotonNetwork.room != null;
         public PuzzleData dailyPuzzlePack { get; private set; }

@@ -2,18 +2,20 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Helpers;
-using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class PlayScreen : MenuTab
     {
-        //public PlayerInfoWidget playerInfoIwdget;
+        public RectTransform body;
+        public RectTransform portalsHolder;
         public ButtonExtended fastPuzzleButton;
         public ButtonExtended gauntletGameButton;
 
         private MatchmakingScreen matchmakingScreen;
+        private OnIPhoneX onIPhoneX;
 
         private bool fastPuzzlesUnlocked;
         private bool gauntletGameUnlocked;
@@ -25,18 +27,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             fastPuzzlesUnlocked = PlayerPrefsWrapper.GetRewardRewarded("unlock_fast_puzzles_mode");
             fastPuzzleButton.GetBadge("locked").badge.SetState(!fastPuzzlesUnlocked);
 
-            //if (fastPuzzlesUnlocked)
-            //    fastPuzzleButton.SetMaterial(null);
-            //else
-            //    fastPuzzleButton.SetGreyscaleMaterial();
-
             gauntletGameUnlocked = PlayerPrefsWrapper.GetRewardRewarded("unlock_gauntlet_mode");
             gauntletGameButton.GetBadge("locked").badge.SetState(!gauntletGameUnlocked);
-
-            //if (gauntletGameUnlocked)
-            //    gauntletGameButton.SetMaterial(null);
-            //else
-            //    gauntletGameButton.SetGreyscaleMaterial();
         }
 
         public void ContinueStartTurnBasedGame()
@@ -95,6 +87,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnInitialized();
 
             matchmakingScreen = menuController.GetOrAddScreen<MatchmakingScreen>();
+            onIPhoneX = body.GetComponent<OnIPhoneX>();
+
+            //configure body position
+            if (GameManager.Instance.Landscape)
+            {
+                body.pivot = Vector2.one * .5f;
+                body.anchorMin = body.anchorMax = Vector2.one * .5f;
+
+                body.anchoredPosition = Vector2.zero;
+
+                //portals
+                portalsHolder.gameObject.SetActive(!GameManager.Instance.hidePortalWidgets);
+            }
+            else
+            {
+                body.pivot = new Vector2(.5f, 1f);
+                body.anchorMin = Vector2.up;
+                body.anchorMax = Vector2.one;
+
+                body.offsetMin = Vector2.zero;
+
+                onIPhoneX.CheckPlatform();
+            }
         }
     }
 }

@@ -8,6 +8,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public static HeaderScreen instance;
 
+        public CurrencyWidget hintsWidget;
+        public CurrencyWidget gemsWidget;
+
         protected override void Awake()
         {
             base.Awake();
@@ -50,11 +53,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             tabbedScreen.OpenTab(0, tabbedScreen.isOpened);
         }
 
-        //protected override void OnInitialized()
-        //{
-        //    base.OnInitialized();
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
 
-        //    isOpened = canvasGroup.alpha > 0f;
-        //}
+            if (GameManager.Instance.Landscape)
+            {
+                hintsWidget.SetActive(!GameManager.Instance.hideTickets);
+                gemsWidget.SetActive(!GameManager.Instance.hideGems);
+            }
+        }
     }
 }

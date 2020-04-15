@@ -49,12 +49,15 @@ MonoBehaviour:
   showInfoToasts: 1
   debugMessages: 1
   extraFeatures: 1
-  passAndPlayTimer: 1
   tapToStartGame: 1
   characterType: 2
-  excludeInstructionsFor: 01000000
   fallbackLatitude: 37.7833
   fallbackLongitude: 122.4167
+  excludeInstructionsFor: 01000000
+  hideTabsBar: 1
+  hideGems: 1
+  hideTickets: 1
+  hidePortalWidgets: 1
 --- !u!114 &6077144665870927472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,8 +86,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Purchasing.IAPListener+OnPurchaseCompletedEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   onPurchaseFailed:
     m_PersistentCalls:
       m_Calls:
@@ -99,8 +100,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Purchasing.IAPListener+OnPurchaseFailedEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &1276844110124004
 GameObject:
   m_ObjectHideFlags: 0

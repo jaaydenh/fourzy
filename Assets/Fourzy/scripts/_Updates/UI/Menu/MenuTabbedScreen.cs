@@ -21,6 +21,7 @@ namespace Fourzy._Updates.UI.Menu
         public MenuTab defaultTab;
 
         public RectTransform tabsParent;
+        public RectTransform tabsBar;
         public List<TabButton> tabsButtons;
 
         public AdvancedVector2Event onPointerDown;
@@ -50,11 +51,18 @@ namespace Fourzy._Updates.UI.Menu
             swipeHandler.onSwipe += OnSwipe;
 
             //get tabs
-            tabs = new List<MenuTab>(GetComponentsInChildren<MenuTab>());
+            tabs = new List<MenuTab>(GetComponentsInChildren<MenuTab>(true));
 
             //play bg audio
             if (!AudioHolder.instance.IsBGAudioPlaying(Serialized.AudioTypes.BG_MAIN_MENU))
                 AudioHolder.instance.PlayBGAudio(Serialized.AudioTypes.BG_MAIN_MENU, true, .75f, 1f);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
+            if (GameManager.Instance.Landscape) tabsBar.gameObject.SetActive(!GameManager.Instance.hideTabsBar);
         }
 
         protected void OnDestroy()
