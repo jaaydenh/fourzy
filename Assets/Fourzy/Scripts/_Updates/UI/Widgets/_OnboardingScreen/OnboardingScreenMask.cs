@@ -49,10 +49,10 @@ namespace Fourzy._Updates.UI.Widgets
                         MenuController menuController = GetComponentInParent<MenuController>();
                         Vector2 size = menuController.WorldToCanvasSize(board.step);
 
-                        AddMaskObject().
-                            Size(size).
-                            SetStyle((OnboardingScreenMaskObject.MaskStyle)task.intValue).
-                            SetAnchors(viewportPoint);
+                        AddMaskObject()
+                            .Size(size)
+                            .SetStyle((OnboardingScreenMaskObject.MaskStyle)task.intValue)
+                            .SetAnchors(viewportPoint);
                     }
         }
 

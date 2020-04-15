@@ -17,7 +17,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         [EnumToggleButtons]
         public MatchSide iphoneXMatch = MatchSide.WIDTH;
 
-        protected void Start()
+        protected void Awake()
         {
             if (configureAtStart) Configure();
         }

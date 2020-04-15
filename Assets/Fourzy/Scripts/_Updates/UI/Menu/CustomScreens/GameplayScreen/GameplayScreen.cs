@@ -10,6 +10,7 @@ using FourzyGameModel.Model;
 using StackableDecorator;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -180,6 +181,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
+
+            //position help button
+            Vector2 viewportPoint = Camera.main.WorldToViewportPoint(gameplayManager.board.BoardLocationToVec2(new BoardLocation(0, 0)) + (Vector2)GamePlayManager.instance.board.transform.position);
+            helpButton.rectTransform.anchorMin = helpButton.rectTransform.anchorMax = viewportPoint;
+            if (GameManager.Instance.Landscape)
+                helpButton.rectTransform.anchoredPosition = new Vector2(-140f, 0f);
+            else
+                helpButton.rectTransform.anchoredPosition = new Vector2(0f, 110f);
 
             puzzleUI.Open(game);
             turnbaseUI.Open(game);

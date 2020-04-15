@@ -4,7 +4,6 @@ using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tools;
-using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using StackableDecorator;
 using System;
@@ -88,7 +87,7 @@ namespace Fourzy._Updates.Serialized
         {
             [HideInInspector]
             public string _name;
-            
+
             [ShowIf("#Check"), StackableField]
             public string id;
             public bool enabled = true;
