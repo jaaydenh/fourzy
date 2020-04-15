@@ -97,6 +97,14 @@ namespace Fourzy._Updates.UI.Menu
             tabsButtons[currentTab].Open(false);
         }
 
+        public override void OnBack()
+        {
+            base.OnBack();
+
+            Debug.Log("Closing/Suspending the app.");
+            Application.Quit();
+        }
+
         public void OpenTab(int index, bool animate)
         {
             if (index == currentTab)

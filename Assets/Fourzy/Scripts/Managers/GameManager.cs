@@ -59,15 +59,18 @@ namespace Fourzy
         [Header("Pass And Play games only")]
         public bool tapToStartGame = true;
         public PassPlayCharactersType characterType = PassPlayCharactersType.SELECTED_RANDOM;
-        public float fallbackLatitude = 37.7833f;
-        public float fallbackLongitude = 122.4167f;
-        public List<TokenType> excludeInstructionsFor;
 
         [Header("Landscape settings")]
         public bool hideTabsBar = true;
         public bool hideGems = true;
         public bool hideTickets = true;
         public bool hidePortalWidgets = true;
+
+        [Header("Misc settings")]
+        public bool resetGameOnClose = true;
+        public float fallbackLatitude = 37.7833f;
+        public float fallbackLongitude = 122.4167f;
+        public List<TokenType> excludeInstructionsFor;
 
         /// <summary>
         /// Pieces placement style
@@ -235,7 +238,7 @@ namespace Fourzy
             NetworkManager.instance.StartChecking();
             placementStyle = (PlacementStyle)PlayerPrefsWrapper.GetPlacementStyle();
 
-#if !UNITY_IOS
+#if !UNITY_IOS && !UNITY_ANDROID
             StartRoutine("location", GetLocation());
 #endif
         }
@@ -256,6 +259,11 @@ namespace Fourzy
 #if UNITY_IOS
             MMVibrationManager.iOSReleaseHaptics ();
 #endif
+        }
+
+        protected void OnApplicationQuit()
+        {
+            if (resetGameOnClose) ResetGames();
         }
 
         protected void OnApplicationPause(bool pause)
@@ -765,7 +773,7 @@ namespace Fourzy
             while (!GamePlayManager.instance || !GamePlayManager.instance.isBoardReady) yield return null;
         }
 
-#if !UNITY_IOS
+#if !UNITY_IOS && !UNITY_ANDROID
         private IEnumerator GetLocation()
         {
             //if (!Input.location.isEnabledByUser) { Debug.LogWarning("location services disabled"); yield break; }

@@ -17,6 +17,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public ScrollRect player2select;
         public ScrollRect areasContainer;
         public RectTransform gameboardParent;
+        public RectTransform body;
+        public float landscapeBodyHeight;
 
         public OpponentWidget opponentWidgetPrefab;
         public PracticeScreenAreaSelectWidget areaWidgetPrefab;
@@ -62,6 +64,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
             LoadBoard(currentBoard);
 
             SetTimerState(SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER));
+
+            //configure body
+            if (GameManager.Instance.Landscape)
+            {
+                body.anchorMin = new Vector2(.5f, 0f);
+                body.anchorMax = new Vector2(.5f, 1f);
+
+                body.offsetMin = new Vector2(-landscapeBodyHeight * .5f, 0f);
+                body.offsetMax = new Vector2(landscapeBodyHeight * .5f, 0f);
+            }
+            else
+            {
+                body.anchorMin = Vector2.zero;
+                body.anchorMax = Vector2.one;
+
+                body.offsetMin = body.offsetMax = Vector2.zero;
+            }
 
             base.Start();
         }

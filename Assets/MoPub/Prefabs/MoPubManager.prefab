@@ -52,8 +52,6 @@ MonoBehaviour:
   Initialized:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: MoPubManager+InitializedEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
 --- !u!1 &1679855677268928
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,14 +100,12 @@ MonoBehaviour:
   AutoInitializeOnStart: 0
   itunesAppId: 
   AdUnitId: b195f8dd8ded45fe847ad89ed1d016da
-  LocationAware: 1
+  LocationAware: 0
   AllowLegitimateInterest: 0
   LogLevel: 30
   Initialized:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: MoPubManager+InitializedEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
 --- !u!114 &114781843351734468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,25 +123,15 @@ MonoBehaviour:
   ConsentStatusChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: MoPubConsent+ConsentStatusChangedEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   ConsentDialogLoaded:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: MoPubConsent+ConsentDialogLoadedEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   ConsentDialogFailed:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: MoPubConsent+ConsentDialogFailedEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   ConsentDialogShown:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: MoPubConsent+ConsentDialogShownEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   ConsentDialogDismissed:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: MoPubConsent+ConsentDialogDismissedEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
