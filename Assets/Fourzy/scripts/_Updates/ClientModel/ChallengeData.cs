@@ -1,7 +1,7 @@
 ﻿//@vadym udod
 
 using FourzyGameModel.Model;
-using GameSparks.Core;
+// using GameSparks.Core;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,15 +35,15 @@ namespace Fourzy._Updates.ClientModel
         }
 
         //constructor for when game is received as challenge from server
-        public ChallengeData(GSData challengeData) : 
-            this(JsonConvert.DeserializeObject<GameStateData>(challengeData.GetGSData("scriptData").GetGSData("gameStateData").JSON), challengeData.GetString("challengeId"))
-        {
-            foreach (GSData turnRecord in challengeData.GetGSData("scriptData").GetGSDataList("playerTurnRecord"))
-                playerTurnRecord.Add(JsonConvert.DeserializeObject<PlayerTurn>(turnRecord.JSON));
+        // public ChallengeData(GSData challengeData) : 
+        //     this(JsonConvert.DeserializeObject<GameStateData>(challengeData.GetGSData("scriptData").GetGSData("gameStateData").JSON), challengeData.GetString("challengeId"))
+        // {
+        //     foreach (GSData turnRecord in challengeData.GetGSData("scriptData").GetGSDataList("playerTurnRecord"))
+        //         playerTurnRecord.Add(JsonConvert.DeserializeObject<PlayerTurn>(turnRecord.JSON));
 
-            originalGameState.ActivePlayerId = challengeData.GetGSData("scriptData").GetInt("firstPlayerId").GetValueOrDefault(-1);
-            UpdateLastTurnGame();
-        }
+        //     originalGameState.ActivePlayerId = challengeData.GetGSData("scriptData").GetInt("firstPlayerId").GetValueOrDefault(-1);
+        //     UpdateLastTurnGame();
+        // }
 
         public ClientFourzyGame GetGameForMove(PlayerTurn targetMove)
         {
@@ -85,6 +85,6 @@ namespace Fourzy._Updates.ClientModel
 
         public bool Validate() => !string.IsNullOrEmpty(challengeInstanceId) && originalGameState.Players.Count > 1;
 
-        public static bool ValidateGSData(GSData data) => data.GetGSData("scriptData").ContainsKey("gameStateData") && !string.IsNullOrEmpty(data.GetString("challengeId"));
+        // public static bool ValidateGSData(GSData data) => data.GetGSData("scriptData").ContainsKey("gameStateData") && !string.IsNullOrEmpty(data.GetString("challengeId"));
     }
 }

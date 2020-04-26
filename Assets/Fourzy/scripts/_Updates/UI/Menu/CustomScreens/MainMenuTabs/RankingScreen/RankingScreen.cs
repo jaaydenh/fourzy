@@ -40,7 +40,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             loadingLeaderboard = true;
 
-            LoginManager.Instance.GetWinsLeaderboard(GetLeaderboardCallback);
+            // LoginManager.Instance.GetWinsLeaderboard(GetLeaderboardCallback);
         }
 
         public void GetTrophiesLeaderboard()
@@ -50,7 +50,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             loadingLeaderboard = true;
 
-            LoginManager.Instance.GetCoinsEarnedLeaderboard(GetLeaderboardCallback);
+            // LoginManager.Instance.GetCoinsEarnedLeaderboard(GetLeaderboardCallback);
         }
 
         public void InvokeCurrent()

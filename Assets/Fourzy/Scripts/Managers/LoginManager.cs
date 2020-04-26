@@ -2,9 +2,9 @@
 
 using Fourzy._Updates.UI.Toasts;
 using GameAnalyticsSDK;
-using GameSparks.Api.Requests;
-using GameSparks.Api.Responses;
-using GameSparks.Core;
+// using GameSparks.Api.Requests;
+// using GameSparks.Api.Responses;
+// using GameSparks.Core;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +24,7 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class LoginManager : UnitySingleton<LoginManager>
     {
-        private delegate void FacebookLoginCallback(AuthenticationResponse _resp);
+        // private delegate void FacebookLoginCallback(AuthenticationResponse _resp);
 
         public static event Action<string> OnLoginMessage;
         public static event Action<bool> OnDeviceLoginComplete;
@@ -66,15 +66,15 @@ namespace Fourzy
             Firebase.Messaging.FirebaseMessaging.MessageReceived -= OnMessageReceived;
         }
 
-        public void GetCoinsEarnedLeaderboard(Action<List<RankingScreen.LeaderboardEntry>, string> callback)
-        {
-            GetLeaderboard("puzzlesCompletedLeaderboard", callback, false);
-        }
+        // public void GetCoinsEarnedLeaderboard(Action<List<RankingScreen.LeaderboardEntry>, string> callback)
+        // {
+        //     GetLeaderboard("puzzlesCompletedLeaderboard", callback, false);
+        // }
 
-        public void GetWinsLeaderboard(Action<List<RankingScreen.LeaderboardEntry>, string> callback)
-        {
-            GetLeaderboard("winLossLeaderboard", callback, true);
-        }
+        // public void GetWinsLeaderboard(Action<List<RankingScreen.LeaderboardEntry>, string> callback)
+        // {
+        //     GetLeaderboard("winLossLeaderboard", callback, true);
+        // }
 
         private void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token)
         {
@@ -90,25 +90,25 @@ namespace Fourzy
 
         private void ManagePushNotifications(string token, string deviceOS)
         {
-            new PushRegistrationRequest().SetDeviceOS(deviceOS)
-                .SetPushId(token)
-                .Send((response) =>
-                {
-                    if (response.HasErrors)
-                    {
-                        Debug.Log("***** PushRegistration Request Error: " + response.Errors.JSON);
+            // new PushRegistrationRequest().SetDeviceOS(deviceOS)
+            //     .SetPushId(token)
+            //     .Send((response) =>
+            //     {
+            //         if (response.HasErrors)
+            //         {
+            //             Debug.Log("***** PushRegistration Request Error: " + response.Errors.JSON);
 
-                        //AnalyticsManager.LogError("push_registration_request_error: ", response.Errors.JSON);
-                    }
-                    else
-                    {
-                        Debug.Log("***** PushRegistration Successful: Device OS: " + deviceOS);
+            //             //AnalyticsManager.LogError("push_registration_request_error: ", response.Errors.JSON);
+            //         }
+            //         else
+            //         {
+            //             Debug.Log("***** PushRegistration Successful: Device OS: " + deviceOS);
 
-                        //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
-                        //customAttributes.Add("deviceOS", deviceOS);
-                        //AnalyticsManager.LogCustom("push_registration_request", customAttributes);
-                    }
-                });
+            //             //Dictionary<String, object> customAttributes = new Dictionary<String, object>();
+            //             //customAttributes.Add("deviceOS", deviceOS);
+            //             //AnalyticsManager.LogCustom("push_registration_request", customAttributes);
+            //         }
+            //     });
         }
 
         //private void GameCenterLogin()
@@ -236,44 +236,44 @@ namespace Fourzy
         //    });
         //}
 
-        private void DeviceLogin()
-        {
-            isConnecting = true;
+        // private void DeviceLogin()
+        // {
+        //     isConnecting = true;
 
-            new DeviceAuthenticationRequest()
-                .SetDisplayName(UserManager.Instance.userName)
-                .Send((response) =>
-                {
-                    if (!response.HasErrors)
-                    {
-                        //AnalyticsManager.Instance.Identify(response.UserId);
-                        UserManager.Instance.userId = response.UserId;
-                        //Mixpanel.Identify(response.UserId);
-                        //AnalyticsManager.LogCustom("device_authentication_request");
-                        //UserManager.Instance.UpdateInformation();
-                        ChallengeManager.Instance.GetChallengesRequest();
+        //     new DeviceAuthenticationRequest()
+        //         .SetDisplayName(UserManager.Instance.userName)
+        //         .Send((response) =>
+        //         {
+        //             if (!response.HasErrors)
+        //             {
+        //                 //AnalyticsManager.Instance.Identify(response.UserId);
+        //                 UserManager.Instance.userId = response.UserId;
+        //                 //Mixpanel.Identify(response.UserId);
+        //                 //AnalyticsManager.LogCustom("device_authentication_request");
+        //                 //UserManager.Instance.UpdateInformation();
+        //                 ChallengeManager.Instance.GetChallengesRequest();
 
-                        //OnLoginMessage?.Invoke("Device Authentication Success: " + response.DisplayName);
+        //                 //OnLoginMessage?.Invoke("Device Authentication Success: " + response.DisplayName);
 
-                        //if (GameManager.Instance.showInfoToasts)
-                        //    GamesToastsController.ShowTopToast("Device Authentication Success: " + response.DisplayName);
-                    }
-                    else
-                    {
-                        Debug.Log("***** Error Authenticating Device: " + response.Errors.JSON);
-                        //OnLoginMessage?.Invoke("Error Authenticating Device: " + response.Errors.JSON);
+        //                 //if (GameManager.Instance.showInfoToasts)
+        //                 //    GamesToastsController.ShowTopToast("Device Authentication Success: " + response.DisplayName);
+        //             }
+        //             else
+        //             {
+        //                 Debug.Log("***** Error Authenticating Device: " + response.Errors.JSON);
+        //                 //OnLoginMessage?.Invoke("Error Authenticating Device: " + response.Errors.JSON);
 
-                        //if (GameManager.Instance.showInfoToasts)
-                        //    GamesToastsController.ShowTopToast("Error Authenticating Device: " + response.Errors.JSON);
+        //                 //if (GameManager.Instance.showInfoToasts)
+        //                 //    GamesToastsController.ShowTopToast("Error Authenticating Device: " + response.Errors.JSON);
 
-                        //AnalyticsManager.LogError("device_authentication_request_error", response.Errors.JSON);
-                    }
+        //                 //AnalyticsManager.LogError("device_authentication_request_error", response.Errors.JSON);
+        //             }
 
-                    isConnecting = false;
+        //             isConnecting = false;
 
-                    OnDeviceLoginComplete?.Invoke(!response.HasErrors);
-                });
-        }
+        //             OnDeviceLoginComplete?.Invoke(!response.HasErrors);
+        //         });
+        // }
 
         private void OnNetworkAccess(bool networkAccess)
         {
@@ -288,7 +288,6 @@ namespace Fourzy
 
                 if (!PlayFabClientAPI.IsClientLoggedIn())
                 {
-
                     _AuthService.Authenticate(Authtypes.Silent);
                     //#if UNITY_ANDROID
                     //                    PlayFabAndroidDeviceLogin();
@@ -299,26 +298,26 @@ namespace Fourzy
                     //#endif
                 }
 
-                if (!GS.Authenticated)
-                {
-                    if (!isConnecting)
-                    {
+                // if (!GS.Authenticated)
+                // {
+                //     if (!isConnecting)
+                //     {
 //#if UNITY_IOS && !UNITY_EDITOR
                             //Debug.Log("GameCenterLogin");
                             //GameCenterLogin();    
 //#else
-                        Debug.Log("GameSparks DeviceLogin");
-                        DeviceLogin();
+                        // Debug.Log("GameSparks DeviceLogin");
+                        // DeviceLogin();
 //#endif
-                    }
-                }
-                else
-                {
-                    Debug.Log("CONNECTED");
-                    //UserManager.Instance.UpdateInformation();
-                    ChallengeManager.Instance.GetChallengesRequest();
-                    OnDeviceLoginComplete?.Invoke(true);
-                }
+            //         }
+            //     }
+            //     else
+            //     {
+            //         Debug.Log("CONNECTED");
+            //         //UserManager.Instance.UpdateInformation();
+            //         ChallengeManager.Instance.GetChallengesRequest();
+            //         OnDeviceLoginComplete?.Invoke(true);
+            //     }
             }
         }
 
@@ -421,38 +420,38 @@ namespace Fourzy
             Debug.Log("***** PlayFab Login Error: " + error.ErrorMessage);
         }
 
-        private void GetLeaderboard(string leaderboardShortCode, Action<List<RankingScreen.LeaderboardEntry>, string> callback, bool isWinsLeaderboard)
-        {
-            new LeaderboardDataRequest()
-                .SetLeaderboardShortCode(leaderboardShortCode)
-                .SetEntryCount(100)
-                .Send((response) =>
-                {
-                    if (response.HasErrors)
-                    {
-                        Debug.Log("***** Error Retrieving Leaderboard Data: " + response.Errors.JSON);
-                        callback?.Invoke(null, "Error Retrieving Leaderboard Data: " + response.Errors.JSON);
-                        return;
-                    }
+        // private void GetLeaderboard(string leaderboardShortCode, Action<List<RankingScreen.LeaderboardEntry>, string> callback, bool isWinsLeaderboard)
+        // {
+        //     new LeaderboardDataRequest()
+        //         .SetLeaderboardShortCode(leaderboardShortCode)
+        //         .SetEntryCount(100)
+        //         .Send((response) =>
+        //         {
+        //             if (response.HasErrors)
+        //             {
+        //                 Debug.Log("***** Error Retrieving Leaderboard Data: " + response.Errors.JSON);
+        //                 callback?.Invoke(null, "Error Retrieving Leaderboard Data: " + response.Errors.JSON);
+        //                 return;
+        //             }
 
-                    List<RankingScreen.LeaderboardEntry> leaderboards = new List<RankingScreen.LeaderboardEntry>();
+        //             List<RankingScreen.LeaderboardEntry> leaderboards = new List<RankingScreen.LeaderboardEntry>();
 
-                    foreach (LeaderboardDataResponse._LeaderboardData entry in response.Data)
-                    {
-                        RankingScreen.LeaderboardEntry leaderboard = new RankingScreen.LeaderboardEntry();
-                        leaderboard.userId = entry.UserId;
-                        leaderboard.userName = entry.UserName;
-                        leaderboard.facebookId = entry.ExternalIds.GetString("FB");
-                        leaderboard.rank = entry.Rank.Value;
-                        leaderboard.isWinsLeaderboard = isWinsLeaderboard;
-                        leaderboard.value = isWinsLeaderboard ? entry.JSONData["wins"].ToString() : leaderboard.value = entry.JSONData["completed"].ToString();
+        //             foreach (LeaderboardDataResponse._LeaderboardData entry in response.Data)
+        //             {
+        //                 RankingScreen.LeaderboardEntry leaderboard = new RankingScreen.LeaderboardEntry();
+        //                 leaderboard.userId = entry.UserId;
+        //                 leaderboard.userName = entry.UserName;
+        //                 leaderboard.facebookId = entry.ExternalIds.GetString("FB");
+        //                 leaderboard.rank = entry.Rank.Value;
+        //                 leaderboard.isWinsLeaderboard = isWinsLeaderboard;
+        //                 leaderboard.value = isWinsLeaderboard ? entry.JSONData["wins"].ToString() : leaderboard.value = entry.JSONData["completed"].ToString();
 
-                        leaderboards.Add(leaderboard);
-                    }
+        //                 leaderboards.Add(leaderboard);
+        //             }
 
-                    callback?.Invoke(leaderboards, string.Empty);
-                });
-        }
+        //             callback?.Invoke(leaderboards, string.Empty);
+        //         });
+        // }
 
         private IEnumerator SetProfileLanguage(string currentLanguageCode)
         {

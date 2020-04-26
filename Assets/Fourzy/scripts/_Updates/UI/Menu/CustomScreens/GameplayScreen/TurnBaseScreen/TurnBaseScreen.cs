@@ -22,8 +22,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Awake();
 
-            ChallengeManager.OnChallengesUpdate += OnUpdateChallenges;
-            ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
+            // ChallengeManager.OnChallengesUpdate += OnUpdateChallenges;
+            // ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
         }
 
         protected void OnDestroy()
@@ -32,8 +32,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 switch (game._Type)
                 {
                     case GameType.TURN_BASED:
-                        ChallengeManager.OnChallengesUpdate -= OnUpdateChallenges;
-                        ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
+                        // ChallengeManager.OnChallengesUpdate -= OnUpdateChallenges;
+                        // ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
                         break;
                 }
         }
@@ -47,7 +47,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameType.TURN_BASED:
                     challengeIDLabel.text = $"ChallengeID: {game.BoardID}";
 
-                    OnUpdateChallenges(ChallengeManager.Instance.Challenges);
+                    // OnUpdateChallenges(ChallengeManager.Instance.Challenges);
                     Open();
 
                     break;

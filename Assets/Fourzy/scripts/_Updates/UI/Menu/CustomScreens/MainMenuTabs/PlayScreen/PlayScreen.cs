@@ -33,13 +33,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ContinueStartTurnBasedGame()
         {
-            List<ChallengeData> next = ChallengeManager.Instance.NextChallenges;
+            // List<ChallengeData> next = ChallengeManager.Instance.NextChallenges;
 
             //open game
-            if (next.Count > 0)
-                GameManager.Instance.StartGame(next[0].GetGameForPreviousMove());
-            else
-                StartTurnGame();
+            // if (next.Count > 0)
+            //     GameManager.Instance.StartGame(next[0].GetGameForPreviousMove());
+            // else
+            //     StartTurnGame();
         }
 
         public void StartGauntletAIPack()

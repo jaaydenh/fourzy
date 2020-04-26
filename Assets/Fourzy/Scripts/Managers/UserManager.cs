@@ -2,8 +2,8 @@
 
 using Fourzy._Updates.Mechanics;
 using FourzyGameModel.Model;
-using GameSparks.Api.Requests;
-using GameSparks.Core;
+// using GameSparks.Api.Requests;
+// using GameSparks.Core;
 using PlayFab;
 using PlayFab.ClientModels;
 using System;
@@ -320,21 +320,21 @@ namespace Fourzy
 
         public void GetUserGamePiece()
         {
-            new LogEventRequest().SetEventKey("getGamePiece")
-                .Send((response) =>
-                {
-                    if (response.HasErrors)
-                    {
-                        if (GameManager.Instance.debugMessages)
-                            Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
-                    }
-                    else
-                    {
-                        string serverGamePiece = response.ScriptData.GetInt("gamePieceId") + "";
+            // new LogEventRequest().SetEventKey("getGamePiece")
+            //     .Send((response) =>
+            //     {
+            //         if (response.HasErrors)
+            //         {
+            //             if (GameManager.Instance.debugMessages)
+            //                 Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
+            //         }
+            //         else
+            //         {
+            //             string serverGamePiece = response.ScriptData.GetInt("gamePieceId") + "";
 
-                        if (serverGamePiece != gamePieceID) UpdateSelectedGamePiece(gamePieceID);
-                    }
-                });
+            //             if (serverGamePiece != gamePieceID) UpdateSelectedGamePiece(gamePieceID);
+            //         }
+            //     });
         }
 
         //public void UpdateUserInfo(string uid, string fbId, long? coins, int? rating)
@@ -430,8 +430,8 @@ namespace Fourzy
         {
             if (networkAccess)
             {
-                if (GS.Authenticated)
-                    GetUserGamePiece();
+                // if (GS.Authenticated)
+                //     GetUserGamePiece();
             }
         }
 

@@ -9,7 +9,7 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
-using GameSparks.Api.Responses;
+// using GameSparks.Api.Responses;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -76,8 +76,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             GameManager.onNetworkAccess += OnNetwork;
             LoginManager.OnDeviceLoginComplete += OnLogin;
-            ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
-            ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
+            // ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
+            // ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
 
             //listen to roomPropertyChanged event
             FourzyPhotonManager.onRoomCustomPropertiesChanged += OnRoomCustomPropertiesChanged;
@@ -127,8 +127,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             GameManager.onNetworkAccess -= OnNetwork;
             LoginManager.OnDeviceLoginComplete -= OnLogin;
-            ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
-            ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
+            // ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
+            // ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
 
             FourzyPhotonManager.onRoomCustomPropertiesChanged -= OnRoomCustomPropertiesChanged;
             FourzyPhotonManager.onPlayerDisconnected -= OnPlayerDisconnected;
@@ -389,7 +389,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     //loadingPrompt.Prompt("", "Loading new game...", null, null, null, null);
 
-                    ChallengeManager.Instance.CreateTurnBasedGame(game.opponent.PlayerString, game._Area, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
+                    // ChallengeManager.Instance.CreateTurnBasedGame(game.opponent.PlayerString, game._Area, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
 
                     break;
 
@@ -633,15 +633,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             switch (game._Type)
             {
-                case GameType.TURN_BASED:
-                    //if game was over and havent been viewed yet, set it to viewed
-                    if (game.asFourzyGame.challengeData.lastTurnGame.isOver && !PlayerPrefsWrapper.GetGameViewed(game.BoardID))
-                    {
-                        PlayerPrefsWrapper.SetGameViewed(game.BoardID);
+                // case GameType.TURN_BASED:
+                //     //if game was over and havent been viewed yet, set it to viewed
+                //     if (game.asFourzyGame.challengeData.lastTurnGame.isOver && !PlayerPrefsWrapper.GetGameViewed(game.BoardID))
+                //     {
+                //         PlayerPrefsWrapper.SetGameViewed(game.BoardID);
 
-                        ChallengeManager.OnChallengeUpdateLocal.Invoke(game.asFourzyGame.challengeData);
-                    }
-                    break;
+                //         ChallengeManager.OnChallengeUpdateLocal.Invoke(game.asFourzyGame.challengeData);
+                //     }
+                //     break;
 
                 default:
                     //if current game have puzzle data assigned, set puzzlepack as opened
@@ -657,42 +657,42 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         #region Turn Base Calls
 
-        private void OnChallengeUpdate(ChallengeData gameData)
-        {
-            StartRoutine("takeTurn", PlayTurnBaseTurn(gameData));
-        }
+        // private void OnChallengeUpdate(ChallengeData gameData)
+        // {
+        //     StartRoutine("takeTurn", PlayTurnBaseTurn(gameData));
+        // }
 
-        private void OnChallengesUpdate(List<ChallengeData> challenges)
-        {
-            //if game waits for rematch challenge
-            if (!string.IsNullOrEmpty(awaitingChallengeID))
-            {
-                //find the event we ve been waiting for
-                ChallengeData challenge = challenges.Find(_challenge => _challenge.challengeInstanceId == awaitingChallengeID);
+        // private void OnChallengesUpdate(List<ChallengeData> challenges)
+        // {
+        //     //if game waits for rematch challenge
+        //     if (!string.IsNullOrEmpty(awaitingChallengeID))
+        //     {
+        //         //find the event we ve been waiting for
+        //         ChallengeData challenge = challenges.Find(_challenge => _challenge.challengeInstanceId == awaitingChallengeID);
 
-                if (challenge == null) return;
+        //         if (challenge == null) return;
 
-                GameManager.Instance.StartGame(challenge.lastTurnGame);
-            }
-        }
+        //         GameManager.Instance.StartGame(challenge.lastTurnGame);
+        //     }
+        // }
 
-        private void CreateTurnBasedGameSuccess(LogEventResponse response)
-        {
-            awaitingChallengeID = response.ScriptData.GetString("challengeInstanceId");
-            Debug.Log($"Game created {awaitingChallengeID}");
-        }
+        // private void CreateTurnBasedGameSuccess(LogEventResponse response)
+        // {
+        //     awaitingChallengeID = response.ScriptData.GetString("challengeInstanceId");
+        //     Debug.Log($"Game created {awaitingChallengeID}");
+        // }
 
-        private void CreateTurnBasedGameError(LogEventResponse response)
-        {
-            Debug.Log("***** Error Creating Turn based game: " + response.Errors.JSON);
-            AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.create_turn_base_game);
+        // private void CreateTurnBasedGameError(LogEventResponse response)
+        // {
+        //     Debug.Log("***** Error Creating Turn based game: " + response.Errors.JSON);
+        //     AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.create_turn_base_game);
 
-            if (loadingPrompt && loadingPrompt.isOpened)
-            {
-                loadingPrompt.UpdateInfo("Failed to create new game...\n" + response.Errors.JSON);
-                StartRoutine("closingLoadingPrompt", 5f, () => menuController.CloseCurrentScreen());
-            }
-        }
+        //     if (loadingPrompt && loadingPrompt.isOpened)
+        //     {
+        //         loadingPrompt.UpdateInfo("Failed to create new game...\n" + response.Errors.JSON);
+        //         StartRoutine("closingLoadingPrompt", 5f, () => menuController.CloseCurrentScreen());
+        //     }
+        // }
 
         #endregion
 

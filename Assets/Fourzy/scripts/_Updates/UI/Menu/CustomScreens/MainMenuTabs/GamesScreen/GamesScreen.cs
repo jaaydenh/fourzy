@@ -54,13 +54,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 refreshIndicator.SetAnimationState(true);
 
-                ChallengeManager.Instance.GetChallengesRequest();
+                // ChallengeManager.Instance.GetChallengesRequest();
             }
         }
 
         public void ReloadGamesOnClick()
         {
-            ChallengeManager.Instance.GetChallengesRequest();
+            // ChallengeManager.Instance.GetChallengesRequest();
         }
 
         private void OnChallengesUpdate(List<ChallengeData> data)
@@ -97,8 +97,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             ClearPreviousGames();
 
-            foreach (ChallengeData data in ChallengeManager.Instance.Challenges)
-                AddChallengeWidget(data);
+            // foreach (ChallengeData data in ChallengeManager.Instance.Challenges)
+                // AddChallengeWidget(data);
         }
 
         private ActiveGameWidget AddChallengeWidget(ChallengeData data)

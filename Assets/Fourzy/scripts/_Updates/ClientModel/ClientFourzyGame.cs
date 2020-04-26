@@ -6,8 +6,8 @@ using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
-using GameSparks.Api.Requests;
-using GameSparks.Core;
+// using GameSparks.Api.Requests;
+// using GameSparks.Core;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -442,36 +442,36 @@ namespace Fourzy._Updates.ClientModel
                 {
                     case Fourzy.GameType.TURN_BASED:
                         Debug.Log(JsonConvert.SerializeObject(turn));
-                        new LogChallengeEventRequest().SetEventKey("takeTurnNew")
-                            .SetChallengeInstanceId(challengeData.challengeInstanceId)
-                            .SetEventAttribute("playerTurn", new GSRequestData(JsonConvert.SerializeObject(turn)))
-                            .SetDurable(true)
-                            .Send(response =>
-                            {
-                                if (response.HasErrors)
-                                {
-                                    Debug.Log("***** Error taking turn: " + response.Errors.JSON);
-                                    Debug.Log("Player Turn: " + JsonConvert.SerializeObject(turn));
-                                    Debug.Log("GameStateData: " + JsonConvert.SerializeObject(State.SerializeData()));
+                        // new LogChallengeEventRequest().SetEventKey("takeTurnNew")
+                        //     .SetChallengeInstanceId(challengeData.challengeInstanceId)
+                        //     .SetEventAttribute("playerTurn", new GSRequestData(JsonConvert.SerializeObject(turn)))
+                        //     .SetDurable(true)
+                        //     .Send(response =>
+                        //     {
+                        //         if (response.HasErrors)
+                        //         {
+                        //             Debug.Log("***** Error taking turn: " + response.Errors.JSON);
+                        //             Debug.Log("Player Turn: " + JsonConvert.SerializeObject(turn));
+                        //             Debug.Log("GameStateData: " + JsonConvert.SerializeObject(State.SerializeData()));
 
-                                    AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.turn_based);
+                        //             AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.turn_based);
 
-                                    MenuController.GetMenu("GameSceneCanvas").GetOrAddScreen<PromptScreen>().Prompt("Move failed!", response.Errors.JSON, null, "OK", null);
-                                }
-                                else
-                                {
-                                    Debug.Log("Take Turn Success");
+                        //             MenuController.GetMenu("GameSceneCanvas").GetOrAddScreen<PromptScreen>().Prompt("Move failed!", response.Errors.JSON, null, "OK", null);
+                        //         }
+                        //         else
+                        //         {
+                        //             Debug.Log("Take Turn Success");
 
-                                    //AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.TAKE_TURN, this);
-                                }
-                            });
+                        //             //AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.TAKE_TURN, this);
+                        //         }
+                        //     });
 
 
                         //if user just made a turn, manually update this game without waiting for server response
                         challengeData.playerTurnRecord.Add(turn);
                         challengeData.UpdateLastTurnGame();
 
-                        ChallengeManager.OnChallengeUpdateLocal.Invoke(challengeData);
+                        // ChallengeManager.OnChallengeUpdateLocal.Invoke(challengeData);
 
                         break;
 

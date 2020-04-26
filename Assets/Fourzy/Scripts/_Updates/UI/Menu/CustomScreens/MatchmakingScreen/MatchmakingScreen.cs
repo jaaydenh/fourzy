@@ -5,7 +5,7 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
-using GameSparks.Api.Responses;
+// using GameSparks.Api.Responses;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,8 +38,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             matchMakingStrings = JsonUtility.FromJson<GameStrings>(strings.text).values;
 
-            ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
-            ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
+            // ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
+            // ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
 
             FourzyPhotonManager.onJoinRandomRoomFailed += OnJoinRandomRoomFailed;
             FourzyPhotonManager.onRoomCreated += OnRoomCreated;
@@ -50,8 +50,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected void OnDestroy()
         {
-            ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
-            ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
+            // ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
+            // ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
 
             FourzyPhotonManager.onJoinRandomRoomFailed -= OnJoinRandomRoomFailed;
             FourzyPhotonManager.onRoomCreated -= OnRoomCreated;
@@ -124,62 +124,62 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 Area selectedArea = GameContentManager.Instance.currentTheme.themeID;
                 Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentTheme.themeID);
-                ChallengeManager.Instance.CreateTurnBasedGame(challengedID/*"5ca27b6b4cd5b739c01cbd21"*/, selectedArea, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
+                // ChallengeManager.Instance.CreateTurnBasedGame(challengedID/*"5ca27b6b4cd5b739c01cbd21"*/, selectedArea, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
             }
 
             StartRoutine("randomText", ShowRandomTextRoutine());
         }
 
-        private void OnChallengesUpdate(List<ChallengeData> challenges) => OnChallengeUpdate(challenges.Find(_challenge => _challenge.challengeInstanceId == challengeIdToJoin));
+        // private void OnChallengesUpdate(List<ChallengeData> challenges) => OnChallengeUpdate(challenges.Find(_challenge => _challenge.challengeInstanceId == challengeIdToJoin));
 
-        private void OnChallengeUpdate(ChallengeData challenge)
-        {
-            if (!isOpened || challenge == null || challenge.challengeInstanceId != challengeIdToJoin)
-                return;
+        // private void OnChallengeUpdate(ChallengeData challenge)
+        // {
+        //     if (!isOpened || challenge == null || challenge.challengeInstanceId != challengeIdToJoin)
+        //         return;
 
-            Debug.Log($"Game starts {challenge.challengeInstanceId}");
-            challengeIdToJoin = "";
+        //     Debug.Log($"Game starts {challenge.challengeInstanceId}");
+        //     challengeIdToJoin = "";
 
-            //cancel extra check
-            CancelRoutine("newChallengeExtraCheck");
+        //     //cancel extra check
+        //     CancelRoutine("newChallengeExtraCheck");
 
-            //play GAME_FOUND sfx
-            AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
-            GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
-            timerLabel.text = "Match Found";
+        //     //play GAME_FOUND sfx
+        //     AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
+        //     GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
+        //     timerLabel.text = "Match Found";
 
-            StartRoutine("openGame", 1.5f, () =>
-            {
-                menuController.CloseCurrentScreen();
-                GameManager.Instance.StartGame(challenge.lastTurnGame);
-            });
-        }
+        //     StartRoutine("openGame", 1.5f, () =>
+        //     {
+        //         menuController.CloseCurrentScreen();
+        //         GameManager.Instance.StartGame(challenge.lastTurnGame);
+        //     });
+        // }
 
-        private void CreateTurnBasedGameSuccess(LogEventResponse response)
-        {
-            challengeIdToJoin = response.ScriptData.GetString("challengeInstanceId");
-            Debug.Log($"Game created {challengeIdToJoin}");
+        // private void CreateTurnBasedGameSuccess(LogEventResponse response)
+        // {
+        //     challengeIdToJoin = response.ScriptData.GetString("challengeInstanceId");
+        //     Debug.Log($"Game created {challengeIdToJoin}");
 
-            //start routine to check for this challenge in 5 seconds if OnChallengeStarted wasnt triggered on ChallengeManager
-            StartRoutine("newChallengeExtraCheck", 5f, () => ChallengeManager.Instance.GetChallengeRequest(challengeIdToJoin), null);
-        }
+        //     //start routine to check for this challenge in 5 seconds if OnChallengeStarted wasnt triggered on ChallengeManager
+        //     StartRoutine("newChallengeExtraCheck", 5f, () => ChallengeManager.Instance.GetChallengeRequest(challengeIdToJoin), null);
+        // }
 
-        private void CreateTurnBasedGameError(LogEventResponse response)
-        {
-            if (!isOpened) return;
+        // private void CreateTurnBasedGameError(LogEventResponse response)
+        // {
+        //     if (!isOpened) return;
 
-            Debug.Log("***** Error Creating Turn based game: " + response.Errors.JSON);
-            AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.create_turn_base_game);
+        //     Debug.Log("***** Error Creating Turn based game: " + response.Errors.JSON);
+        //     AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.create_turn_base_game);
 
-            messageLabel.text = "Failed to create new game...";
-            timerLabel.text = response.Errors.JSON;
+        //     messageLabel.text = "Failed to create new game...";
+        //     timerLabel.text = response.Errors.JSON;
 
-            //unblock input
-            SetInteractable(true);
-            backButton.SetActive(true);
+        //     //unblock input
+        //     SetInteractable(true);
+        //     backButton.SetActive(true);
 
-            StopRoutine("randomText", false);
-        }
+        //     StopRoutine("randomText", false);
+        // }
 
         #region Photon callbacks
 
