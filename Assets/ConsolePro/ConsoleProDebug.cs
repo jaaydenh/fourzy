@@ -24,6 +24,13 @@ public static class ConsoleProDebug
 		Debug.Log(inLog + "\nCPAPI:{\"cmd\":\"Filter\" \"name\":\"" + inFilterName + "\"}");
 	}
 
+	// Send a log as a regular log but change its type in ConsolePro
+	// Ex: ConsoleProDebug.LogAsType("Hi", "Error");
+	public static void LogAsType(string inLog, string inTypeName)
+	{
+		Debug.Log(inLog + "\nCPAPI:{\"cmd\":\"LogType\" \"name\":\"" + inTypeName + "\"}");
+	}
+
 	// Watch a variable. This will only produce one log entry regardless of how many times it is logged, allowing you to track variables without spam.
 	// Ex:
 	// void Update() {
@@ -32,6 +39,11 @@ public static class ConsoleProDebug
 	public static void Watch(string inName, string inValue)
 	{
 		Debug.Log(inName + " : " + inValue + "\nCPAPI:{\"cmd\":\"Watch\" \"name\":\"" + inName + "\"}");
+	}
+
+	public static void Search(string inText)
+	{
+		Debug.Log("\nCPAPI:{\"cmd\":\"Search\" \"text\":\"" + inText + "\"}");
 	}
 
 	#if UNITY_EDITOR
