@@ -215,6 +215,8 @@ namespace Fourzy._Updates.UI.Menu
 
         public void OnSwipe(SwipeDirection swipeDirection)
         {
+            if (GameManager.Instance.Landscape) return;
+
             switch (swipeDirection)
             {
                 case SwipeDirection.LEFT:

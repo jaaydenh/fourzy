@@ -6,7 +6,6 @@ using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
-using Sirenix.Utilities;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,14 +18,20 @@ namespace Fourzy
         public const float WAIT_DURATION = 1.7f;
 
         public Slider slider;
-        public GameObject bg;
+        public GameplayBG bg;
+        public OnRatio landscape;
+        public OnRatio portrait;
 
         protected void Start()
         {
             StartCoroutine(LoadingRoutine());
 
-            bg.GetComponents<OnRatio>().ForEach(o => o.CheckOrientation());
-            bg.GetComponent<GameplayBG>().Configure();
+            if (GameManager.Instance.Landscape)
+                landscape.CheckOrientation();
+            else
+                portrait.CheckOrientation();
+
+            bg.Configure();
         }
 
         protected void OnDestroy()
