@@ -149,6 +149,10 @@
       "value": "Excellent"
     },
     {
+      "key": "exit",
+      "value": "Exit Game"
+    },
+    {
       "key": "failed1",
       "value": "Try"
     },
@@ -209,6 +213,10 @@
       "value": "Human\nplayer"
     },
     {
+      "key": "help",
+      "value": "Help"
+    },
+    {
       "key": "lost",
       "value": "Lost"
     },
@@ -239,6 +247,10 @@
     {
       "key": "no_news",
       "value": "No news"
+    },
+    {
+      "key": "news",
+      "value": "News"
     },
     {
       "key": "not_your_turn",
@@ -628,6 +640,9 @@
       "key": "ok",
       "value": "OK"
     },
-    { "key":"turn_play_button","value":"Online Game" }
+    {
+      "key": "turn_play_button",
+      "value": "Online Game"
+    }
   ]
 }

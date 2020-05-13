@@ -43,7 +43,7 @@ namespace Fourzy._Updates.ClientModel
                 if ((int)State.Board.Area > 1)
                     return State.Board.Area;
                 else
-                    return Area.TRAINING_GARDEN;
+                    return Constants.DEFAULT_AREA;
             }
 
             set { }

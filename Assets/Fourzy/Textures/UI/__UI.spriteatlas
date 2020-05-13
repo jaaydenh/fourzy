@@ -43,7 +43,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 5db00398753d241cab3e77257a69e8e1, type: 3}
-    totalSpriteSurfaceArea: 13806703
+    totalSpriteSurfaceArea: 14037103
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -207,6 +207,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 18fc2bab44079a14a9c9b09ea06f3622, type: 3}
   - {fileID: 21300000, guid: ad0645bbbbc81ec4cb9393ae72821901, type: 3}
   - {fileID: 21300000, guid: 41ffcdcb08d62d944ace267d1dc22036, type: 3}
+  - {fileID: 21300000, guid: 6d123bdb0434f8845afeaebf070abdcf, type: 3}
   - {fileID: 21300000, guid: 24c52ceb9c1ddff4abf3d9be00658d65, type: 3}
   - {fileID: 21300000, guid: ea0dcafb532c1684485b05bfb8f6e10b, type: 3}
   - {fileID: 21300000, guid: a2c5542cf118eb242ac632ed2025419d, type: 3}
@@ -420,6 +421,7 @@ SpriteAtlas:
   - BossPower-TreantBoss
   - SecTimer-Circular-On
   - ProgressBar_Portal2
+  - Logo (640x360)
   - Buttons_News
   - hintFillUp
   - TimerBar-Off

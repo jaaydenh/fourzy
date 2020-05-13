@@ -10,7 +10,7 @@ namespace Fourzy
         public const float DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME = 8f;
 
         public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.SWIPE_STYLE_2;
-        public const Area DEFAULT_AREA = Area.TRAINING_GARDEN;
+        public const Area DEFAULT_AREA = Area.ICE_PALACE;
         public const int DEFAULT_UNLOCKED_THEMES = 30;
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
@@ -36,7 +36,8 @@ namespace Fourzy
         public const string GAME_MODE_GAUNTLET_GAME = "unlock_gauntlet_mode";
 
         public const string GAMEPLAY_SCENE_NAME = "gamePlayNew";
-        public const string MAIN_MENU_SCENE_NAME = "tabbedUINew";
+        public const string MAIN_MENU_P_SCENE_NAME = "portraitMainMenu";
+        public const string MAIN_MENU_L_SCENE_NAME = "landscapeMainMenu";
         public const string LOGO_SCENE_NAME = "logo";
         public const string MAIN_MENU_CANVAS_NAME = "MainMenuCanvas";
         public const string GAMEPLAY_MENU_CANVAS_NAME = "GameSceneCanvas";

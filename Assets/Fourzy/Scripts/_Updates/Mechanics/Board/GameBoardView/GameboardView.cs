@@ -687,7 +687,6 @@ namespace Fourzy._Updates.Mechanics.Board
                 if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE) gameplayManager.ToggleHelpState();
             }
 
-            print(actionState);
             if (actionState == BoardActionState.CAST_SPELL) onCastCanceled?.Invoke();
 
             selectedBoardLocation = null;

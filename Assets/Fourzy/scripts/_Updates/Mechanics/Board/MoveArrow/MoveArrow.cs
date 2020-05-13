@@ -39,6 +39,11 @@ namespace Fourzy._Updates.Mechanics.Board
 
             board = GetComponentInParent<GameboardView>();
 
+            //configure distance
+            arrow.transform.localPosition = arrowGlow.transform.localPosition = new Vector2(-board.step.x * 7.5f, 0f);
+            arrowSizeTween.to = new Vector2(board.step.x * 8f, arrowSizeTween.to.y);
+            glowSizeTween.to = new Vector2(board.step.x * 8f, glowSizeTween.to.y);
+
             arrowSizeTween.playbackTime = GameboardView.HOLD_TIME * .6f;
             arrowAlphaTween.playbackTime = GameboardView.HOLD_TIME * .6f;
             markerAlphaTween.playbackTime = GameboardView.HOLD_TIME;

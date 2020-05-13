@@ -1,12 +1,13 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Mechanics.GameplayScene;
 using UnityEngine;
 
 namespace Fourzy._Updates.Tools
 {
     [RequireComponent(typeof(LineRenderer))]
     [ExecuteInEditMode]
-    public class LineRendererWave : MonoBehaviour
+    public class LineRendererWave : MonoBehaviour, IGameplayBGPart
     {
         [Range(5, 20)]
         public int positionCount = 10;
@@ -21,25 +22,32 @@ namespace Fourzy._Updates.Tools
 
         private LineRenderer lineRenderer;
         private float maxOffset;
+        private float originalHeight;
+        private float originalWidth;
+        private bool initialized = false;
 
         protected void Update()
         {
-            UpdateShape();
+            if (Application.isEditor) Initialize();
             Animate();
         }
 
-        public void UpdateShape()
+        public void Initialize()
         {
-            if (!lineRenderer)
-                lineRenderer = GetComponent<LineRenderer>();
+            if (initialized) return;
+
+            if (!lineRenderer) lineRenderer = GetComponent<LineRenderer>();
 
             lineRenderer.positionCount = positionCount;
+            originalHeight = height;
+            originalWidth = lineRenderer.widthMultiplier;
+
+            initialized = true;
         }
 
         public void Animate()
         {
-            if (!lineRenderer)
-                return;
+            if (!lineRenderer) return;
 
             float step = height / positionCount;
             for (int positionIndex = 0; positionIndex < positionCount; positionIndex++)
@@ -56,6 +64,14 @@ namespace Fourzy._Updates.Tools
                         transform.position.y + (positionIndex - (positionCount * .5f)) * step,
                         transform.position.z));
             }
+        }
+
+        public void OnScale(float value)
+        {
+            Initialize();
+
+            lineRenderer.widthMultiplier = originalWidth * value;
+            height = originalHeight * value;
         }
     }
 }

@@ -140,7 +140,7 @@ MonoBehaviour:
           value: 4
           backgroundPrefab: {fileID: 100717712478524717, guid: 6d515f5186767b24fbbfdbebeceb48e7,
             type: 3}
-          gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
+          gameboardPrefab: {fileID: 114604034529016452, guid: e0ef8ade28fee084a8be39c0fc39d8fe,
             type: 3}
     - _name: 'area_island: Enabled'
       id: area_island
@@ -206,7 +206,7 @@ MonoBehaviour:
           value: 4
           backgroundPrefab: {fileID: 100717712478524717, guid: 731e10ebb6b373f4da4738d24d6d9841,
             type: 3}
-          gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
+          gameboardPrefab: {fileID: 114393224895534332, guid: c3be3f0eb44e99848baef0af2e8aa80c,
             type: 3}
     - _name: 'area_palace: Enabled'
       id: area_palace
@@ -265,9 +265,9 @@ MonoBehaviour:
             type: 3}
         - _name: WIDESCREEN
           value: 4
-          backgroundPrefab: {fileID: 100717712478524717, guid: 00abcb6a36e64de4fa5261fc70ad495f,
+          backgroundPrefab: {fileID: 1817477846, guid: 09ae01a83ba5a5e4fbc9f804bd1b437f,
             type: 3}
-          gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
+          gameboardPrefab: {fileID: 114596246813145948, guid: cfe038f1ec8e38041b1fd85b033ce858,
             type: 3}
     - _name: 'area_castle: Disabled'
       id: area_castle

@@ -9,6 +9,8 @@ namespace Fourzy._Updates.UI.Menu
 {
     public class MenuTab : MenuScreen
     {
+        public bool autoAdjustSize = true;
+
         protected MenuTabbedScreen tabsParent;
 
         protected override void Awake()
@@ -17,7 +19,7 @@ namespace Fourzy._Updates.UI.Menu
 
             tabsParent = GetComponentInParent<MenuTabbedScreen>();
 
-            AdjustSize();
+            if (autoAdjustSize) AdjustSize();
         }
 
         public void AdjustSize()
@@ -28,7 +30,7 @@ namespace Fourzy._Updates.UI.Menu
                 GetComponent<LayoutElement>().minWidth = GetComponentInParent<MenuController>()._widthAdjusted;
         }
 
-        public override bool isCurrent => tabsParent?.IsCurrentTab(this) ?? false;
+        public override bool isCurrent => tabsParent?.IsCurrentTab(this) ?? menuController.currentScreen == this;
 
         public override bool IsWidgetVisible(WidgetBase widget) => base.IsWidgetVisible(widget) && isCurrent;
     }

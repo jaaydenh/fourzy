@@ -24,11 +24,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            fastPuzzlesUnlocked = PlayerPrefsWrapper.GetRewardRewarded("unlock_fast_puzzles_mode");
+            fastPuzzlesUnlocked = PlayerPrefsWrapper.GetRewardRewarded("unlock_fast_puzzles_mode") || GameManager.Instance.defaultPuzzlesState;
             fastPuzzleButton.GetBadge("locked").badge.SetState(!fastPuzzlesUnlocked);
 
-            gauntletGameUnlocked = PlayerPrefsWrapper.GetRewardRewarded("unlock_gauntlet_mode");
+            gauntletGameUnlocked = PlayerPrefsWrapper.GetRewardRewarded("unlock_gauntlet_mode") || GameManager.Instance.defaultGauntletState;
             gauntletGameButton.GetBadge("locked").badge.SetState(!gauntletGameUnlocked);
+        }
+
+        public override void OnBack()
+        {
+            base.OnBack();
+
+            if (!tabsParent)
+            {
+                Application.Quit();
+                Debug.Log("App close");
+            }
         }
 
         public void ContinueStartTurnBasedGame()
@@ -87,29 +98,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnInitialized();
 
             matchmakingScreen = menuController.GetOrAddScreen<MatchmakingScreen>();
-            onIPhoneX = body.GetComponent<OnIPhoneX>();
-
-            //configure body position
-            if (GameManager.Instance.Landscape)
-            {
-                body.pivot = Vector2.one * .5f;
-                body.anchorMin = body.anchorMax = Vector2.one * .5f;
-
-                body.anchoredPosition = Vector2.zero;
-
-                //portals
-                portalsHolder.gameObject.SetActive(!GameManager.Instance.hidePortalWidgets);
-            }
-            else
-            {
-                body.pivot = new Vector2(.5f, 1f);
-                body.anchorMin = Vector2.up;
-                body.anchorMax = Vector2.one;
-
-                body.offsetMin = Vector2.zero;
-
-                onIPhoneX.CheckPlatform();
-            }
+            if (body) onIPhoneX = body.GetComponent<OnIPhoneX>();
+            if (portalsHolder) portalsHolder.gameObject.SetActive(!GameManager.Instance.hidePortalWidgets);
+            if (onIPhoneX) onIPhoneX.CheckPlatform();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using ByteSheep.Events;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -31,6 +32,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 //widescreen
                 float scaleBy = _camera.orthographicSize / background.bounds.extents.y;
                 background.transform.localScale = new Vector3(scaleBy, scaleBy, 1f);
+
+                foreach (IGameplayBGPart gameplayBGPart in GetComponentsInChildren<IGameplayBGPart>()) gameplayBGPart.OnScale(scaleBy);
             }
             else
             {
@@ -65,5 +68,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             WIDTH,
             HEIGHT,
         }
+    }
+
+    public interface IGameplayBGPart
+    {
+        void OnScale(float value);
     }
 }

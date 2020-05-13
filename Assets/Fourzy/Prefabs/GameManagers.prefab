@@ -55,6 +55,8 @@ MonoBehaviour:
   hideGems: 1
   hideTickets: 1
   hidePortalWidgets: 1
+  defaultGauntletState: 1
+  defaultPuzzlesState: 1
   resetGameOnClose: 1
   fallbackLatitude: 37.7833
   fallbackLongitude: 122.4167
@@ -416,6 +418,10 @@ MonoBehaviour:
     - _name: MINI_GAME_BOARD
       prefabType: 7
       prefab: {fileID: 1001685059054880, guid: 753eac7ea7c84784484fb0e32473bd24, type: 3}
+    - _name: GAME_PIECE_LANDSCAPE
+      prefabType: 4
+      prefab: {fileID: 2811702351793752031, guid: 0735ca95e50fa9c4084566d206f3dfef,
+        type: 3}
   screens:
     list:
     - _name: TutorialScreen

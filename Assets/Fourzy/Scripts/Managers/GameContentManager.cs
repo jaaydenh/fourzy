@@ -291,6 +291,7 @@ namespace Fourzy
         {
             NONE = 0,
 
+            GAME_PIECE_LANDSCAPE = 4,
             GAME_PIECE_SMALL = 5,
             MINI_GAME_BOARD = 7,
             GAME_PIECE_MEDIUM = 8,

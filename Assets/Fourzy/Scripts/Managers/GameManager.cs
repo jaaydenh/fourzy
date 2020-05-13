@@ -67,6 +67,8 @@ namespace Fourzy
         public bool hidePortalWidgets = true;
 
         [Header("Misc settings")]
+        public bool defaultGauntletState = true;
+        public bool defaultPuzzlesState = true;
         public bool resetGameOnClose = true;
         public float fallbackLatitude = 37.7833f;
         public float fallbackLongitude = 122.4167f;
@@ -98,6 +100,7 @@ namespace Fourzy
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public string sessionID { get; private set; }
         public LocationInfo? lastLocation { get; private set; } = null;
+        public string MainMenuSceneName => Landscape ? Constants.MAIN_MENU_L_SCENE_NAME : Constants.MAIN_MENU_P_SCENE_NAME;
 
         private bool configFetched = false;
         private PlacementStyle _placementStyle;
@@ -108,7 +111,7 @@ namespace Fourzy
             {
                 bool mainMenuLoaded = false;
                 for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
-                    if (SceneManager.GetSceneAt(sceneIndex).name == Constants.MAIN_MENU_SCENE_NAME)
+                    if (SceneManager.GetSceneAt(sceneIndex).name == MainMenuSceneName)
                     {
                         mainMenuLoaded = true;
                         break;
@@ -228,7 +231,7 @@ namespace Fourzy
 
             //NetworkAccess.onNetworkAccess += OnNetworkAccess;
 
-            if (SceneManager.GetActiveScene().name == Constants.MAIN_MENU_SCENE_NAME) StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
+            if (SceneManager.GetActiveScene().name == MainMenuSceneName) StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
 
             //StandaloneInputModuleExtended.instance.AddNoInputFilter("startDemoGame", Constants.DEMO_IDLE_TIME);
             StandaloneInputModuleExtended.instance.AddNoInputFilter("highlightMoves", Constants.DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME);
@@ -329,7 +332,7 @@ namespace Fourzy
 
         public void OpenMainMenu()
         {
-            if (!isMainMenuLoaded) SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
+            if (!isMainMenuLoaded) SceneManager.LoadScene(MainMenuSceneName);
 
             //unload gameplay scene 
             if (activeGame != null) GamePlayManager.instance.UnloadGamePlaySceene();
@@ -486,7 +489,8 @@ namespace Fourzy
 
                     break;
 
-                case Constants.MAIN_MENU_SCENE_NAME:
+                case Constants.MAIN_MENU_L_SCENE_NAME:
+                case Constants.MAIN_MENU_P_SCENE_NAME:
 
                     break;
             }

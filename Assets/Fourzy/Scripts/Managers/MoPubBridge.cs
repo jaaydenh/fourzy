@@ -18,17 +18,15 @@ namespace Fourzy._Updates.Mechanics
         public static Action<string> onAdFailed;
         public static Action<string> onAdCanceled;
 
-#if UNITY_ANDROID || UNITY_EDITOR
-        public static string AdUnitID = "879ae95cf2084bb0aafee3b4f4d576d7";
-#elif UNITY_IOS
+#if UNITY_IOS
         public static string AdUnitID = "287e9b186b3146a0ac606985ad69d115";
+#else
+        public static string AdUnitID = "879ae95cf2084bb0aafee3b4f4d576d7";
 #endif
 
-#if UNITY_IOS || UNITY_EDITOR
-
+#if UNITY_IOS
         private readonly string[] _rewardedVideoAdUnits = { "faedb21751d9475a8563b37cf3bf9c6a" };
-
-#elif UNITY_ANDROID 
+#else
         private readonly string[] _rewardedVideoAdUnits = { "9b75826d5a7c44ccb91a6f73a55eec61" };
 #endif
 

@@ -58,7 +58,7 @@
     },
     {
       "key": "cover_goal_multiple",
-      "value": "CUBIERTA en {0} MOVIMIENTOS!" 
+      "value": "CUBIERTA en {0} MOVIMIENTOS!"
     },
     {
       "key": "win_horizontal_rule",
@@ -149,6 +149,10 @@
       "value": "¡Excelente!"
     },
     {
+      "key": "exit",
+      "value": "Salir del juego"
+    },
+    {
       "key": "failed1",
       "value": "Intenta"
     },
@@ -209,6 +213,10 @@
       "value": "Juagador\nhumano"
     },
     {
+      "key": "help",
+      "value": "Ayuda"
+    },
+    {
       "key": "lost",
       "value": "Perdiste"
     },
@@ -239,6 +247,10 @@
     {
       "key": "no_news",
       "value": "No news"
+    },
+    {
+      "key": "news",
+      "value": "Noticias"
     },
     {
       "key": "not_your_turn",
@@ -644,6 +656,9 @@
       "key": "ok",
       "value": "OK"
     },
-    { "key":"turn_play_button","value":"Online Game" }
+    {
+      "key": "turn_play_button",
+      "value": "Online Game"
+    }
   ]
 }

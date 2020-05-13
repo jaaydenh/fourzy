@@ -21,6 +21,7 @@ namespace Fourzy
         public GameplayBG bg;
         public OnRatio landscape;
         public OnRatio portrait;
+        public GameObject _target;
 
         protected void Start()
         {
@@ -51,11 +52,11 @@ namespace Fourzy
             OnboardingScreen onboardingScreen = PersistantMenuController.instance.GetOrAddScreen<OnboardingScreen>();
 
             AsyncOperation async = null;
-            bool displayTutorial = onboardingScreen.WillDisplayTutorial(HardcodedTutorials.tutorials[0]);
+            bool displayTutorial = onboardingScreen.WillDisplayTutorial(HardcodedTutorials.tutorials[0]) && GameManager.Instance.Landscape;
 
             if (!displayTutorial)
             {
-                async = SceneManager.LoadSceneAsync(Constants.MAIN_MENU_SCENE_NAME, LoadSceneMode.Single);
+                async = SceneManager.LoadSceneAsync(GameManager.Instance.MainMenuSceneName, LoadSceneMode.Single);
                 async.allowSceneActivation = false;
             }
 
