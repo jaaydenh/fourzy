@@ -125,6 +125,10 @@
       "value": "Monedas"
     },
     {
+      "key": "coming_soon",
+      "value": "Próximamente"
+    },
+    {
       "key": "cant_be_empty",
       "value": "No puede estar vacio"
     },
@@ -299,6 +303,10 @@
     {
       "key": "replay_tutorial",
       "value": "Repetir tutorial"
+    },
+    {
+      "key": "random",
+      "value": "Al azar"
     },
     {
       "key": "reset",
@@ -627,10 +635,6 @@
     {
       "key": "cover_goal",
       "value": "CUBRIR"
-    },
-    {
-      "key": "random",
-      "value": "Al azar"
     },
     {
       "key": "leave_game",

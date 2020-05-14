@@ -103,6 +103,8 @@ namespace Fourzy._Updates.Serialized
             public AudioTypes bgAudio;
             [ShowIf("#ShowIf"), StackableField]
             public Sprite preview;
+            [ShowIf("#ShowIf"), StackableField]
+            public Sprite landscapePreview;
 
             [List]
             [ShowIf("#ShowIf"), StackableField]

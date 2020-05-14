@@ -23,6 +23,8 @@ MonoBehaviour:
       themeID: 2
       bgAudio: 101
       preview: {fileID: 21300000, guid: 8a279f21fe54f344cabd91371b364627, type: 3}
+      landscapePreview: {fileID: 21300000, guid: d667c501cbda9964491a786b24aae2ed,
+        type: 3}
       gamepieces:
         list:
         - _name: Blobby
@@ -90,6 +92,8 @@ MonoBehaviour:
       themeID: 4
       bgAudio: 104
       preview: {fileID: 21300000, guid: 69d82d91d5c73814a802f6604eedd55c, type: 3}
+      landscapePreview: {fileID: 21300000, guid: 1c3b37fef723d504c8f8046f5bc33340,
+        type: 3}
       gamepieces:
         list:
         - _name: Blobby
@@ -151,6 +155,8 @@ MonoBehaviour:
       themeID: 8
       bgAudio: 103
       preview: {fileID: 21300000, guid: 490c8d7a991189c46b3b817f5a46067f, type: 3}
+      landscapePreview: {fileID: 21300000, guid: b46531abbff1f7d428c7973c544ce23d,
+        type: 3}
       gamepieces:
         list:
         - _name: Blobby
@@ -217,6 +223,8 @@ MonoBehaviour:
       themeID: 16
       bgAudio: 105
       preview: {fileID: 21300000, guid: 11aad45ccf44a4641b1c1e8d44ad0bb9, type: 3}
+      landscapePreview: {fileID: 21300000, guid: 33820d7792fb0f2489f4bcf56971f93a,
+        type: 3}
       gamepieces:
         list:
         - _name: Blobby
@@ -278,6 +286,7 @@ MonoBehaviour:
       themeID: 32
       bgAudio: 101
       preview: {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
+      landscapePreview: {fileID: 0}
       gamepieces:
         list: []
       tokens:
@@ -295,6 +304,7 @@ MonoBehaviour:
       themeID: 64
       bgAudio: 101
       preview: {fileID: 21300000, guid: aa9238c2179674b0790bd7b3e1d93ddc, type: 3}
+      landscapePreview: {fileID: 0}
       gamepieces:
         list: []
       tokens:

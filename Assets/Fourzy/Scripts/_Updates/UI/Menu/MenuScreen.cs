@@ -104,9 +104,9 @@ namespace Fourzy._Updates.UI.Menu
                 isOpened = true;
             }
 
-            OnInitialized();
-
             initialized = true;
+
+            OnInitialized();
         }
 
         /// <summary>

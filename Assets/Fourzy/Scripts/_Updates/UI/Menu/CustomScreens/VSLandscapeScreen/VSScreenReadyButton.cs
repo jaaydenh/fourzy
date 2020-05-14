@@ -9,8 +9,6 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public Sprite readyBG;
         public Sprite notReadyBG;
-        public Color textReadyColor;
-        public Color textNotReadyColor;
 
         private Image image;
 
@@ -26,7 +24,6 @@ namespace Fourzy._Updates.UI.Widgets
             image.sprite = state ? readyBG : notReadyBG;
 
             button.SetState(state);
-            button.GetLabel().label.color = state ? textReadyColor : textNotReadyColor;
         }
     }
 }

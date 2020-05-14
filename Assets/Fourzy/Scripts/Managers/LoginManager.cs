@@ -367,7 +367,7 @@ namespace Fourzy
             Debug.Log("Entity.Type: " + result.EntityToken.Entity.Type);
             //AnalyticsManager.Instance.Identify(result.PlayFabId);
 
-            if (GameManager.Instance.showInfoToasts) GamesToastsController.ShowTopToast("Device Authentication Success");
+            if (GameManager.Instance.showInfoToasts && !GameManager.Instance.Landscape) GamesToastsController.ShowTopToast("Device Authentication Success");
 
             if (result.NewlyCreated)
             {

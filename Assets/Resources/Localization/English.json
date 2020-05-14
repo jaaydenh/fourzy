@@ -125,6 +125,10 @@
       "value": "Coins"
     },
     {
+      "key": "coming_soon",
+      "value": "Coming Soon"
+    },
+    {
       "key": "cant_be_empty",
       "value": "Can't be empty!"
     },
@@ -299,6 +303,10 @@
     {
       "key": "replay_tutorial",
       "value": "Replay Tutorial"
+    },
+    {
+      "key": "random",
+      "value": "Random"
     },
     {
       "key": "reset",
@@ -611,10 +619,6 @@
     {
       "key": "token_desc_cross_bomb",
       "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in th same row and Column as the Bomb."
-    },
-    {
-      "key": "random",
-      "value": "random"
     },
     {
       "key": "leave_game",

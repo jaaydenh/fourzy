@@ -1,10 +1,13 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Widgets;
+using FourzyGameModel.Model;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -13,6 +16,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public FlowLayoutGroup gamepiecesParent;
         public VSScreenReadyButton readyButton;
+        public Image areaPicker;
         public int optimalColumnCount = 5;
         public int maxGridWidth = 2000;
         [Range(5, 50)]
@@ -32,9 +36,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
         /// </summary>
         public void StartGame()
         {
+            Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentTheme.themeID);
+            //Player player1 = new Player(1, "Player One");
+            Player player1 = UserManager.Instance.meAsPlayer;
+            Player player2 = new Player(2, "Player Two");
 
+            ClientFourzyGame game  = new ClientFourzyGame(GameContentManager.Instance.currentTheme.themeID, player1, player2, player1.PlayerId);
+
+            game._Type = GameType.PASSANDPLAY;
+
+            GameManager.Instance.StartGame(game);
         }
 
+        public override void Open()
+        {
+            base.Open();
+
+            areaPicker.sprite = GameContentManager.Instance.currentTheme.landscapePreview;
+        }
 
         protected override void OnInitialized()
         {
@@ -45,13 +64,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             WidgetSize = widgetPrefab.GetComponent<RectTransform>().rect.size;
 
             //set default ready button state
-            readyButton.SetState(false);
+            //readyButton.SetState(false);
 
             CreatePieces();
         }
 
         private void CreatePieces()
         {
+            print(initialized);
             if (!initialized) return;
 
             //remove prev
