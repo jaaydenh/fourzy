@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 4693621611874812664}
   - component: {fileID: 2414105386385986070}
   - component: {fileID: 1495684253271428971}
+  - component: {fileID: 5509466861795699686}
   m_Layer: 5
   m_Name: GamePieceLandscapeViewPrefab
   m_TagString: Untagged
@@ -377,12 +378,15 @@ MonoBehaviour:
     outlineColor: {r: 0, g: 0, b: 1, a: 1}
     borderColor: {r: 0, g: 1, b: 0, a: 1}
     piecesToUnlock: 40
+    profilePicture: {fileID: 0}
     piecesProgression:
       list: 5000000096000000f00000002c01000026020000
     pieces: 0
   gamePieceParent: {fileID: 277804850831549247}
-  player1Marker: {fileID: 463363525831184792}
-  player2Marker: {fileID: 8021592019998965743}
+  player1Marker: {fileID: 7059523993646234908}
+  player2Marker: {fileID: 1691951879611827861}
+  p1Selection: {fileID: 4466608339721169986}
+  p2Selection: {fileID: 483363664743053633}
 --- !u!114 &2414105386385986070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -411,6 +415,78 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2811702351793752031}
   m_CullTransparentMesh: 0
+--- !u!114 &5509466861795699686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2811702351793752031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c30ba88a1888a2f47821f13b12f89389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 0}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+  events:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 2
+          selectedMember: 32
+          isDynamic: 0
+        target: {fileID: 4693621611874812664}
+        memberName: OnClick
+        memberType: 8
+        arguments: []
+        isDynamic: 0
+        isCallEnabled: 1
+  onState:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls: []
+  offState:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls: []
+  playOnClick: 2
+  changeMaterialOnState: 0
+  scaleOnClick: 0
+  buttonGraphics:
+    list: []
+  labels: []
+  badges: []
 --- !u!1 &4466608339721169986
 GameObject:
   m_ObjectHideFlags: 0

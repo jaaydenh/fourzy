@@ -4,6 +4,7 @@ using Fourzy._Updates.UI.Widgets;
 using System.Collections.Generic;
 using UnityEngine;
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tools;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -38,11 +39,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             CloseSelf();
         }
 
+        public void PickRandom() => OnWidgetSelected(areaWidgets.Random());
+
         private void OnWidgetSelected(AreaSelectWidgetLandscape widget)
         {
             GameContentManager.Instance.currentTheme = widget.Data;
 
-            OnBack();
+            //open vs screen
+            menuController.OpenScreen<VSLandscapeScreen>();
         }
     }
 }

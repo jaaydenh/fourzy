@@ -22,15 +22,12 @@ namespace Fourzy._Updates.Mechanics._Vfx
 
         protected void Awake()
         {
-            if (instance != null)
-                return;
+            if (instance != null) return;
 
             instance = this;
-            vfxDictionary = new Dictionary<VfxType, int>();
-        }
 
-        protected void Start()
-        {
+            vfxDictionary = new Dictionary<VfxType, int>();
+
             pools = new VfxPool[vfxDataHolder.data.list.Count];
 
             for (int poolIndex = 0; poolIndex < vfxDataHolder.data.list.Count; poolIndex++)

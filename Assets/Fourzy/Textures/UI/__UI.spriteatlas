@@ -43,7 +43,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 5db00398753d241cab3e77257a69e8e1, type: 3}
-    totalSpriteSurfaceArea: 16872704
+    totalSpriteSurfaceArea: 16962561
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -63,6 +63,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 7229a1b060353364898853be84f91ee8, type: 3}
   - {fileID: 21300000, guid: a6d9e0c0610df8b41a611f68461df8cf, type: 3}
   - {fileID: 21300000, guid: 4ddbbae076a57c94585611552b02ecb5, type: 3}
+  - {fileID: 21300000, guid: 574acbe0707bb554a9ecf06d6a06573c, type: 3}
   - {fileID: 21300000, guid: 5e87a301d6a104210918553937942022, type: 3}
   - {fileID: 21300000, guid: d667c501cbda9964491a786b24aae2ed, type: 3}
   - {fileID: 21300000, guid: 3ce18601ff6904fabb1b749a56f8ddd7, type: 3}
@@ -80,6 +81,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 166032c1719b55445a29f94220c25c91, type: 3}
   - {fileID: 21300000, guid: 76e64ac1d4fa3cc4098e266779e46bb9, type: 3}
   - {fileID: 21300000, guid: 7a8522d1d4e0bfa4ea5e621199ab45ef, type: 3}
+  - {fileID: 21300000, guid: ddc132d1916084740be790d8261c71ba, type: 3}
   - {fileID: 21300000, guid: 86a9dbf14c8634b27938bf4a41567ad7, type: 3}
   - {fileID: 21300000, guid: 0f2a7d220613cad42b075d48a445623b, type: 3}
   - {fileID: 21300000, guid: 80274542f0247844d9e959f3f8f4e5de, type: 3}
@@ -255,6 +257,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: ea0dcafb532c1684485b05bfb8f6e10b, type: 3}
   - {fileID: 21300000, guid: a2c5542cf118eb242ac632ed2025419d, type: 3}
   - {fileID: 21300000, guid: a1210a4c420ecdf4287b4f2fa24b28ab, type: 3}
+  - {fileID: 21300000, guid: a0bec25c05c4c4c49b0325df12dde2c8, type: 3}
   - {fileID: 21300000, guid: 7000dc6c952ab0649a5b3fe813508f54, type: 3}
   - {fileID: 21300000, guid: da0f387c7b3cc564d9a8577651537c14, type: 3}
   - {fileID: 21300000, guid: 06db818c796280e4a820de91ceeaf13c, type: 3}
@@ -337,6 +340,7 @@ SpriteAtlas:
   - Star-Off
   - Icon-StarOFF
   - SelectorBox-P2
+  - fourzy_box_mask
   - MiniGameBoard
   - AreaWindow_1Garden
   - NotFoundBackground
@@ -354,6 +358,7 @@ SpriteAtlas:
   - SecTimer-Circular-Off
   - Icon-MovesON
   - Icon-LockedArea
+  - button-toggle
   - Star_1
   - Star-win (no shadow)
   - SelectorBox-CPU
@@ -529,6 +534,7 @@ SpriteAtlas:
   - hintFillUp
   - TimerBar-Off
   - glow3
+  - panel3-Sheet
   - Board-Button
   - green-100
   - Portal-BoxOn

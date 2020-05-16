@@ -18,6 +18,7 @@ namespace Fourzy
         public Color outlineColor = Color.blue;
         public Color borderColor = Color.green;
         public int piecesToUnlock = 40;
+        public Sprite profilePicture;
         [List]
         public ProgressionCollection piecesProgression;
 

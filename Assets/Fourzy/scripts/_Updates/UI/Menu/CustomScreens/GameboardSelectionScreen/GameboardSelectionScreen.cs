@@ -5,9 +5,7 @@ using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {

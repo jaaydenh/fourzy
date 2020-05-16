@@ -1,19 +1,23 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics._GamePiece;
+using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class GamePieceWidgetLandscape : WidgetBase
     {
+        public Action<GamePieceWidgetLandscape> onClick;
+
         [HideInInspector]
         public GamePieceData data;
 
         public RectTransform gamePieceParent;
-        public RectTransform player1Marker;
-        public RectTransform player2Marker;
+        public GameObject player1Marker;
+        public GameObject player2Marker;
+        public GameObject p1Selection;
+        public GameObject p2Selection;
 
         public GamePieceView gamePiece { get; private set; }
 
@@ -32,16 +36,27 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        //no need to update widget yet
+        public GamePieceWidgetLandscape SelectAsPlayer(params int[] players)
+        {
+            bool p1 = players.Contains(0);
+            bool p2 = players.Contains(1);
 
-        //public void UpdateData(GamePieceData _data)
-        //{
-        //    if (_data == null || data.ID != _data.ID) return;
+            player1Marker.SetActive(p1);
+            player2Marker.SetActive(p2);
+            p1Selection.SetActive(p1);
+            p2Selection.SetActive(p2);
 
-        //    SetData(_data);
-        //}
+            return this;
+        }
 
-        //public override void _Update() => UpdateData(data);
+        public GamePieceWidgetLandscape SetOnClick(Action<GamePieceWidgetLandscape> action)
+        {
+            onClick = action;
+
+            return this;
+        }
+
+        public void OnClick() => onClick?.Invoke(this);
 
         private GamePieceView AddPiece(string id)
         {

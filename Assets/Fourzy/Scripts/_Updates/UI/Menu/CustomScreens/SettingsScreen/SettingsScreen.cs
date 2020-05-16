@@ -45,7 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnInitialized();
 
-            puzzlesResetButton.SetActive(GameManager.Instance.ExtraFeatures);
+            puzzlesResetButton.SetActive(GameManager.Instance.ExtraFeatures && !GameManager.Instance.Landscape);
         }
     }
 }

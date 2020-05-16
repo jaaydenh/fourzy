@@ -2,20 +2,21 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Board;
-using Fourzy._Updates.UI.Menu.Screens;
+using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
+using StackableDecorator;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using StackableDecorator;
-using TMPro;
-using Fourzy._Updates.Tween;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class MiniGameboardWidget : WidgetBase
     {
+        private Action<MiniGameboardWidget> onClick;
+
         [List]
         public AreaGraphicsDataCollection sprites;
         public Image gameboardGraphics;
@@ -37,7 +38,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base.Awake();
 
-            gameboardView = GetComponentInChildren<GameboardView>(); 
+            gameboardView = GetComponentInChildren<GameboardView>();
         }
 
         public void ShowSpinner()
@@ -68,19 +69,23 @@ namespace Fourzy._Updates.UI.Widgets
             HideSpinner();
         }
 
-        public GameboardView SetData(GameBoardDefinition data)
+        public GameboardView SetData(GameBoardDefinition data, bool updateArea = true)
         {
             this.data = data;
 
-            nameLabel.text = data.BoardName;
+            if (data != null)
+            {
+                if (nameLabel) nameLabel.text = data.BoardName;
 
-            game = new ClientFourzyGame(data, UserManager.Instance.meAsPlayer, new Player(2, "Player 2"));
-            game._Type = GameType.PASSANDPLAY;
-            SetArea(game._Area);
+                game = new ClientFourzyGame(data, UserManager.Instance.meAsPlayer, new Player(2, "Player 2"));
+                game._Type = GameType.PASSANDPLAY;
 
-            gameboardView.Initialize(game, false, false);
+                if (updateArea) SetArea(game._Area);
 
-            questionMark.SetActive(false);
+                gameboardView.Initialize(game, false);
+            }
+
+            questionMark.SetActive(data == null);
 
             return gameboardView;
         }
@@ -92,11 +97,21 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public GameboardView QuickLoadBoard(GameBoardDefinition data)
+        public MiniGameboardWidget QuickLoadBoard(GameBoardDefinition data, bool updateArea = true)
         {
-            SetData(data).StartCoroutine(gameboardView.CreateBitsRoutine());
-            return gameboardView;
+            SetData(data, updateArea);
+
+            return this;
         }
+
+        public MiniGameboardWidget SetOnClick(Action<MiniGameboardWidget> action)
+        {
+            onClick = action;
+
+            return this;
+        }
+
+        public void OnClick() => onClick?.Invoke(this);
 
         [Serializable]
         public class AreaGraphicsDataCollection
