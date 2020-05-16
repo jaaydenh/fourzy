@@ -58,9 +58,17 @@ namespace Fourzy._Updates.UI.Widgets
             boardAlphaTween.SetAlpha(0f);
         }
 
-        public void Select() => selectionGraphics.PlayForward(true);
+        public void Select(float time)
+        {
+            selectionGraphics.playbackTime = time;
+            selectionGraphics.PlayForward(true);
+        }
 
-        public void Deselect() => selectionGraphics.PlayBackward(true);
+        public void Deselect(float time)
+        {
+            selectionGraphics.playbackTime = time;
+            selectionGraphics.PlayBackward(true);
+        }
 
         public void FinishedLoading()
         {

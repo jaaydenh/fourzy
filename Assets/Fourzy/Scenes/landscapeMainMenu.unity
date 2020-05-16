@@ -1217,18 +1217,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 137042229}
   m_CullTransparentMesh: 0
---- !u!114 &139807136 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7361422538885020542, guid: f57e8536acd3c374687b7d764c79018b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1343985494}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f96be5abe74a45945bfcd71d6e55c600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &145496318
 GameObject:
   m_ObjectHideFlags: 0
@@ -9098,6 +9086,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2988661149391660253, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 237
+      objectReference: {fileID: 0}
+    - target: {fileID: 2988661149391660253, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3076262326009705413, guid: f57e8536acd3c374687b7d764c79018b,
         type: 3}
       propertyPath: m_AnchorMin.x
@@ -9318,6 +9316,96 @@ PrefabInstance:
     - target: {fileID: 7293234399102400411, guid: f57e8536acd3c374687b7d764c79018b,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579122300, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579122300, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579122300, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579122300, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579123876, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579123876, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579123876, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579123876, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579123876, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579123876, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579123885, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 237
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579123885, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579124047, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579124047, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579124047, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579124047, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579124047, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7474972325579124047, guid: f57e8536acd3c374687b7d764c79018b,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7475941018041045602, guid: f57e8536acd3c374687b7d764c79018b,
@@ -14535,6 +14623,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &2013367825 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7474972325579123395, guid: f57e8536acd3c374687b7d764c79018b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1343985494}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f96be5abe74a45945bfcd71d6e55c600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2042381416
 GameObject:
   m_ObjectHideFlags: 0
@@ -14666,7 +14766,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 25
+          selectedMember: 28
           isDynamic: 0
         target: {fileID: 2042381420}
         memberName: CloseSelf
@@ -14693,8 +14793,11 @@ MonoBehaviour:
   menuController: {fileID: 0}
   widgetsParent: {fileID: 59318014}
   gridLayout: {fileID: 0}
-  miniGameboardPrefab: {fileID: 7361422538885020542, guid: f57e8536acd3c374687b7d764c79018b,
+  miniGameboardPrefab: {fileID: 7474972325579123395, guid: f57e8536acd3c374687b7d764c79018b,
     type: 3}
+  nextButton: {fileID: 564190038}
+  prevButton: {fileID: 1477837491}
+  filterByCurrentArea: 1
 --- !u!1 &2048286035
 GameObject:
   m_ObjectHideFlags: 0
@@ -20535,14 +20638,13 @@ MonoBehaviour:
   gamepiecesParent: {fileID: 5157298073615348681}
   readyButton: {fileID: 5157298072034820568}
   timerToggle: {fileID: 5157298072539836335}
-  selectedBoardWidget: {fileID: 139807136}
+  selectedBoardWidget: {fileID: 2013367825}
   areaPicker: {fileID: 5157298073194901252}
   profilePics:
   - {fileID: 5157298071736118740}
   - {fileID: 5157298072780988726}
   optimalColumnCount: 5
   maxGridWidth: 2000
-  testPieces: 20
 --- !u!225 &5157298072942827509
 CanvasGroup:
   m_ObjectHideFlags: 0

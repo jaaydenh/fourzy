@@ -4,6 +4,7 @@ using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,14 +17,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RectTransform widgetsParent;
         public GridLayoutGroup gridLayout;
         public MiniGameboardWidget miniGameboardPrefab;
+        public GameObject nextButton;
+        public GameObject prevButton;
+        public bool filterByCurrentArea = true;
 
-        private List<GameBoardDefinition> gameboards;
+        private List<GameBoardDefinition> allBoards;
         private List<MiniGameboardWidget> gameboardWidgets;
+        private List<MiniGameboardWidget> areaBoards;
 
         private MiniGameboardWidget current;
         private int boardsPerPage;
         private int currentPage = -1;
         private int maxPages;
+
+        public List<MiniGameboardWidget> Boards => filterByCurrentArea ? areaBoards : gameboardWidgets;
 
         protected override void OnInitialized()
         {
@@ -50,11 +57,32 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             boardsPerPage = cols * rows;
 
-            gameboards = GameContentManager.Instance.passAndPlayGameboards;
-            maxPages = Mathf.CeilToInt((gameboards.Count + 1) / boardsPerPage);
+            areaBoards = new List<MiniGameboardWidget>();
+            allBoards = GameContentManager.Instance.passAndPlayGameboards;
             gameboardWidgets = new List<MiniGameboardWidget>();
 
             CreateWidgets();
+        }
+
+        public override void Open()
+        {
+            base.Open();
+
+            areaBoards = gameboardWidgets.Where(widget => widget.data == null || (widget.data != null && widget.data.Area == GameContentManager.Instance.currentTheme.themeID)).ToList();
+            maxPages = Mathf.CeilToInt((float)Boards.Count / boardsPerPage);
+
+            if (current)
+            {
+                current.Deselect(0f);
+                current = null;
+            }
+
+            bool buttonsActive = Boards.Count > boardsPerPage + 1;
+            nextButton.SetActive(buttonsActive);
+            prevButton.SetActive(buttonsActive);
+
+            HideBoards();
+
             SetPage(0);
         }
 
@@ -64,10 +92,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void CreateWidgets()
         {
+            //clear old
+            foreach (MiniGameboardWidget widget in gameboardWidgets) Destroy(widget.gameObject);
+            gameboardWidgets.Clear();
+            areaBoards.Clear();
+
             //add random
             gameboardWidgets.Add(Instantiate(miniGameboardPrefab, widgetsParent).SetOnClick(OnMinigameboardClick));
 
-            foreach (GameBoardDefinition boardDefinition in gameboards)
+            foreach (GameBoardDefinition boardDefinition in allBoards)
                 gameboardWidgets.Add(
                     Instantiate(miniGameboardPrefab, widgetsParent)
                         .QuickLoadBoard(boardDefinition, false)
@@ -79,27 +112,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void SetPage(int page)
         {
             //disable prev
-            if (currentPage > -1)
-            {
-                int prevStartIndex = currentPage * boardsPerPage;
-                for (int widgetIndex = prevStartIndex; widgetIndex < prevStartIndex + boardsPerPage; widgetIndex++) gameboardWidgets[widgetIndex].SetActive(false);
-            }
+            if (currentPage > -1) HideBoards();
 
             //enable next
             int startIndex = page * boardsPerPage;
-            for (int widgetIndex = startIndex; widgetIndex < startIndex + boardsPerPage; widgetIndex++) gameboardWidgets[widgetIndex].SetActive(true);
+            int to = Mathf.Min(startIndex + boardsPerPage, Boards.Count);
+            for (int widgetIndex = startIndex; widgetIndex < to; widgetIndex++) Boards[widgetIndex].SetActive(true);
 
             currentPage = page;
         }
 
         private void OnMinigameboardClick(MiniGameboardWidget miniGameboard)
         {
-            if (current) current.Deselect();
+            if (current) current.Deselect(.25f);
 
             onBoardSelected?.Invoke(miniGameboard.data);
             current = miniGameboard;
 
-            current.Select();
+            current.Select(.25f);
+        }
+
+        private void HideBoards()
+        {
+            foreach (MiniGameboardWidget widget in gameboardWidgets) widget.SetActive(false);
         }
     }
 }

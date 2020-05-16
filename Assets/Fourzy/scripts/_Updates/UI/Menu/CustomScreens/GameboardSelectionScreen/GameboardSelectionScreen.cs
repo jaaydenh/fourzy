@@ -59,10 +59,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             data = widget.data;
 
-            if (selected) selected.Deselect();
+            if (selected) selected.Deselect(.25f);
 
             selected = widget;
-            selected.Select();
+            selected.Select(.25f);
         }
 
         public void Play()

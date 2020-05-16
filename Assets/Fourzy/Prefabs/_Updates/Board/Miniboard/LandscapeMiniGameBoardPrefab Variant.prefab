@@ -207,7 +207,7 @@ PrefabInstance:
         type: 3}
       propertyPath: events.persistentCalls.calls.Array.data[0].target
       value: 
-      objectReference: {fileID: 7361422538885020542}
+      objectReference: {fileID: 7474972325579123395}
     - target: {fileID: 3135743218637336795, guid: 753eac7ea7c84784484fb0e32473bd24,
         type: 3}
       propertyPath: events.persistentCalls.calls.Array.data[0].memberName
@@ -226,7 +226,7 @@ PrefabInstance:
     - target: {fileID: 3541101159653066493, guid: 753eac7ea7c84784484fb0e32473bd24,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3832784075828078037, guid: 753eac7ea7c84784484fb0e32473bd24,
         type: 3}
@@ -316,7 +316,7 @@ PrefabInstance:
     - target: {fileID: 8077877109043709861, guid: 753eac7ea7c84784484fb0e32473bd24,
         type: 3}
       propertyPath: m_Color.a
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8077877109043709861, guid: 753eac7ea7c84784484fb0e32473bd24,
         type: 3}
@@ -331,7 +331,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 753eac7ea7c84784484fb0e32473bd24, type: 3}
---- !u!114 &7361422538885020542 stripped
+--- !u!114 &7474972325579123395 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114113304784225340, guid: 753eac7ea7c84784484fb0e32473bd24,
     type: 3}
