@@ -104,7 +104,7 @@ namespace FourzyGameModel.Model
                 Space.ActivePiece.Conditions.Add(PieceConditionType.SINKING);
                 Space.Parent.RecordGameAction(new GameActionPieceCondition(Space.ActivePiece, Space.Location, PieceConditionType.SINKING));
 
-                if (Space.ActivePiece.Conditions.Count(n => n == PieceConditionType.SINKING) >= Constants.TurnsUntilSinkInQuicksand)
+                if (Space.ActivePiece.Conditions.Count(n => n== PieceConditionType.SINKING) >= Constants.TurnsUntilSinkInQuicksand)
                 {
                     Space.Parent.RecordGameAction(new GameActionDestroyed(Space.ActivePiece, Space.Location, DestroyType.QUICKSAND));
                     Space.Pieces.Clear();
@@ -125,7 +125,7 @@ namespace FourzyGameModel.Model
 
         public void EndOfTurn(int TurnCount)
         {
-
+        
         }
 
         public void PieceEntersBoard(MovingPiece Piece)

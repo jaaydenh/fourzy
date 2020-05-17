@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace FourzyGameModel.Model
 {
@@ -101,7 +98,7 @@ namespace FourzyGameModel.Model
 
         public static AIPlayer Create(GameState State, AIDifficulty Difficulty)
         {
-            int Personality = 0;
+            //int Personality = 0;
 
             AIProfile Profile = RandomProfile(Difficulty);
             return Create(State, Profile);

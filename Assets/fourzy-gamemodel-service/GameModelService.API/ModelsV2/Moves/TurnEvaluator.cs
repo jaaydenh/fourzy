@@ -268,37 +268,23 @@ namespace FourzyGameModel.Model
                     case MoveType.SIMPLE:
                         if (EvalState.Options.MovesReduceHerd)
                         {
-                            if (EvalState.Options.MovesReduceHerd)
-                                if (EvalState.Players[EvalState.ActivePlayerId].HerdCount <= 0)
-                                {
-                                    EvalState.WinnerId = this.EvalState.Opponent(this.EvalState.WinnerId);
-                                    RecordAction(new GameActionGameEnd(GameEndType.NOPIECES, this.EvalState.WinnerId, null));
-                                    return OriginalState;
-                                }
-
-                            //if (EvalState.Herds != null) 
-                            //    if (EvalState.Herds.Count > 0)
-                            //if (EvalState.Herds[EvalState.ActivePlayerId].Members.Count < 1 )
-                            //{
-                            //    EvalState.WinnerId = this.EvalState.Opponent(this.EvalState.WinnerId);
-                            //    RecordAction(new GameActionGameEnd(GameEndType.NOPIECES, this.EvalState.WinnerId, null));
-                            //    return OriginalState;
-                            //    //RecordAction(new GameActionGameEnd(GameEndType.WIN, this.EvalState.Opponent(this.EvalState.WinnerId), null));
-                            //}
+                            if (EvalState.Herds != null) 
+                                if (EvalState.Herds.Count > 0)
+                            if (EvalState.Herds[EvalState.ActivePlayerId].Members.Count < 1 )
+                            {
+                                EvalState.WinnerId = this.EvalState.Opponent(this.EvalState.WinnerId);
+                                RecordAction(new GameActionGameEnd(GameEndType.NOPIECES, this.EvalState.WinnerId, null));
+                                return OriginalState;
+                                //RecordAction(new GameActionGameEnd(GameEndType.WIN, this.EvalState.Opponent(this.EvalState.WinnerId), null));
+                            }
                         }
 
                         if (!ProcessSimpleMove((SimpleMove)m)) return OriginalState;
                         if (EvalState.Options.MovesReduceHerd)
-                            if (EvalState.Players[EvalState.ActivePlayerId].HerdCount > 0)
-                                EvalState.Players[EvalState.ActivePlayerId].HerdCount--;
-
-                        //if (EvalState.Options.MovesReduceHerd)
-                        //    if (EvalState.Herds.Count > 0)
-                        //        if (EvalState.Herds[EvalState.ActivePlayerId] != null)
-                        //            if (EvalState.Herds[EvalState.ActivePlayerId].Members.Count > 0)
-                        //                EvalState.Herds[EvalState.ActivePlayerId].Members.RemoveAt(0);
-
-
+                            if (EvalState.Herds.Count > 0)
+                                if (EvalState.Herds[EvalState.ActivePlayerId] != null)
+                                    if (EvalState.Herds[EvalState.ActivePlayerId].Members.Count > 0)
+                                        EvalState.Herds[EvalState.ActivePlayerId].Members.RemoveAt(0);
                         break; 
                     case MoveType.SPELL:
                         if (!ProcessSpell((ISpell)m)) return OriginalState;

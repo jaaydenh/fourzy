@@ -10,6 +10,7 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public Image profileImage;
         public TMP_Text nameLabel;
+        public GameObject[] difficultyLevels;
 
         public VSScreenPlayerWidget SetData(GamePieceData data)
         {
@@ -18,6 +19,13 @@ namespace Fourzy._Updates.UI.Widgets
             profileImage.SetNativeSize();
 
             nameLabel.text = data != null ? data.name : "";
+
+            return this;
+        }
+
+        public VSScreenPlayerWidget DisplayDifficulty(int level)
+        {
+            for (int index = 0; index < difficultyLevels.Length; index++) difficultyLevels[index].SetActive(level == index);
 
             return this;
         }

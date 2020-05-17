@@ -10,5 +10,9 @@ namespace FourzyGameModel.Model
         //Make this Move?
         public PlayerTurn Turn { get; set; }
 
+        public PuzzleTurnInstructions(PlayerTurn Turn)
+        {
+            this.Turn = Turn;
+        }
     }
 }

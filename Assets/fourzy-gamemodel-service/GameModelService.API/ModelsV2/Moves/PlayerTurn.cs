@@ -21,8 +21,11 @@ namespace FourzyGameModel.Model
         public string Notation { get
             {
                 StringBuilder note = new StringBuilder();
+                int count = 0;
                 foreach (IMove m in Moves)
                 {
+                    count++;
+                    if (count > 1) note.Append('|');
                     note.Append(m.Notation);
                 }
                 return note.ToString();
@@ -35,10 +38,18 @@ namespace FourzyGameModel.Model
         [JsonProperty("uniqueId")]
         public string UniqueId { get; private set; }
 
-
-
-
-
+        public PlayerTurn(GameState State, string Notation)
+        {
+            this.PlayerId = State.ActivePlayerId;
+            string[] MoveList = Notation.Split('|');
+            Moves = new List<IMove>() { };
+            foreach (string m in MoveList)
+            {
+                Moves.Add(MoveFactory.CreateSimpleMoveFromNotation(new Piece(State.ActivePlayerId), m));
+            }
+            this.UniqueId = Guid.NewGuid().ToString();
+        }
+               
         public PlayerTurn(SimpleMove Move)
         {
             if (Move != null)

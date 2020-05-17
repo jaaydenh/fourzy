@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace FourzyGameModel.Model
 {
@@ -11,7 +9,7 @@ namespace FourzyGameModel.Model
 
         #region "Properties and Initialization"
         const int WIN_SCORE_VALUE = 10000000;
-        const int LOSS_SCORE_VALUE = -10000000;
+        //const int LOSS_SCORE_VALUE = -10000000;
 
         public GameState EvalState { get; set; }
         public TurnEvaluator Evaluator { get; set; }
@@ -96,7 +94,7 @@ namespace FourzyGameModel.Model
                     this.AvailableSimpleMoves = AvailableMoves;
             if (AvailableSimpleMoves.Count ==0) this.AvailableSimpleMoves = Evaluator.GetAvailableSimpleMoves();
 
-            Dictionary<SimpleMove, GameState> MoveInfo = null;
+            //Dictionary<SimpleMove, GameState> MoveInfo = null;
 
             //if (AvailableMoves != null)
             //    if (AvailableMoves.Count > 0)
@@ -547,7 +545,7 @@ namespace FourzyGameModel.Model
             //Shuffle up the moves.  Doesn't have to be perfectly random.
             //AvailableSimpleMoves = EvalState.Random.RandomSimpleMoves(AvailableSimpleMoves, NumberOfMovesToConsider);
 
-            int moves_evaluated = 0;
+            //int moves_evaluated = 0;
             foreach (SimpleMove m in EvalState.Random.RandomSimpleMoves(AvailableSimpleMoves, NumberOfMovesToConsider))
             {
                 TurnEvaluator TE = new TurnEvaluator(EvalState);

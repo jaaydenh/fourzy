@@ -122,8 +122,7 @@ namespace FourzyGameModel.Model
             this.Herds = new Dictionary<int, Herd>();
             foreach (int key in OriginalState.Herds.Keys)
             {
-                //this.Herds.Add(key, new Herd(OriginalState.Herds[key]));
-                this.Herds.Add(key, OriginalState.Herds[key]);
+                this.Herds.Add(key, new Herd(OriginalState.Herds[key]));
             }
             this.RealTime = OriginalState.RealTime;
             this.Time = new Dictionary<int, int>();
@@ -247,7 +246,6 @@ namespace FourzyGameModel.Model
             }
             catch { }
             Herds[PlayerId] = new Herd(HerdId, HerdCount);
-            Players[PlayerId].HerdCount = HerdCount;
         }
 
         #endregion "Constructors"

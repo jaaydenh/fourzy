@@ -19,7 +19,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public MiniGameboardWidget miniGameboardPrefab;
         public GameObject nextButton;
         public GameObject prevButton;
-        public bool filterByCurrentArea = true;
+        public Area filterByArea = Area.NONE;
 
         private List<GameBoardDefinition> allBoards;
         private List<MiniGameboardWidget> gameboardWidgets;
@@ -30,7 +30,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private int currentPage = -1;
         private int maxPages;
 
-        public List<MiniGameboardWidget> Boards => filterByCurrentArea ? areaBoards : gameboardWidgets;
+        public List<MiniGameboardWidget> Boards => filterByArea != Area.NONE ? areaBoards : gameboardWidgets;
 
         protected override void OnInitialized()
         {
@@ -68,7 +68,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            areaBoards = gameboardWidgets.Where(widget => widget.data == null || (widget.data != null && widget.data.Area == GameContentManager.Instance.currentTheme.themeID)).ToList();
+            areaBoards = gameboardWidgets.Where(widget => widget.data == null || (widget.data != null && widget.data.Area == filterByArea)).ToList();
             maxPages = Mathf.CeilToInt((float)Boards.Count / boardsPerPage);
 
             if (current)
@@ -84,6 +84,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             HideBoards();
 
             SetPage(0);
+        }
+
+        public void Open(Area area)
+        {
+            filterByArea = area;
+
+            menuController.OpenScreen(this);
         }
 
         public void NextPage() => SetPage((currentPage + 1) % maxPages);

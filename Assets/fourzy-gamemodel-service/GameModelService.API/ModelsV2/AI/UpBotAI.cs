@@ -1,8 +1,4 @@
-﻿
-using System;
-using System.Linq;
-
-namespace FourzyGameModel.Model
+﻿namespace FourzyGameModel.Model
 {
     //EASY AI PROFILE
     //Do not always make winning move

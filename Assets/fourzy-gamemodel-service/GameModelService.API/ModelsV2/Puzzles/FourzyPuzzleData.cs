@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FourzyGameModel.Model
 {
@@ -20,6 +18,7 @@ namespace FourzyGameModel.Model
         public int Complexity { get; set; }
         public int StartingMagic { get; set; }
         public List<SpellId> AvailableSpells {get; set;}
+        public Dictionary<string, string> AILibrary { get; set; }
 
         public FourzyPuzzleData()
         {

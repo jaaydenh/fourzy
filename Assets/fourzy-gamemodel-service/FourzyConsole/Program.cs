@@ -13,6 +13,73 @@ namespace FourzyConsole
         {
             List<string> PuzzleIds = new List<string>();
             List<string> Dups = new List<string>();
+            List<string> Failed = new List<string>();
+
+ //           string FilePath = @"E:\projects\FourzyNov2019\fourzy\Assets\Fourzy\Resources\PuzzlePacks";
+            string FilePath = @"E:\projects\FourzyDec2019\fourzy\Assets\Fourzy\Resources\PuzzlePacks\Event15_Tempo\puzzles";
+            string Operation = "CompilePuzzle";
+
+            switch (Operation)
+            {
+
+                case "PuzzleTests":
+                    foreach (string f in System.IO.Directory.GetFiles(FilePath, "*.json", SearchOption.AllDirectories))
+                    {
+                        Console.WriteLine("evaluating f=" + f);
+                        if (f.Contains("puzzlePack")) continue;
+                        string puzzle_json = File.ReadAllText(f);
+                        FourzyPuzzleData puzzle = JsonConvert.DeserializeObject<FourzyPuzzleData>(puzzle_json);
+                        if (PuzzleIds.Contains(puzzle.ID)) {
+                            Dups.Add(f);
+                            Console.WriteLine("Dup in Puzzle:" + f);
+                            puzzle.ID = Guid.NewGuid().ToString();
+                        }
+                        else PuzzleIds.Add(puzzle.ID);
+
+                        if (puzzle.Solution != null)
+                        if (!PuzzleGenerator.TestPuzzle(puzzle))
+                        {
+                            Failed.Add(f);
+                            Console.WriteLine("Solution Failed:" + f);
+                        }
+                        puzzle_json = JsonConvert.SerializeObject(puzzle, Formatting.None);
+                        System.IO.File.WriteAllText(f, puzzle_json);
+                    }
+                    break;
+
+                case "PuzzleGenGarden":
+                    Console.WriteLine("Find Garden Puzzles.");
+                    PuzzleGenerator.FindPuzzles(Area.TRAINING_GARDEN, 3, 3, 30, 25, null, new List<TokenType>() { TokenType.BLOCKER, TokenType.ARROW });
+
+                    //PuzzleGenerator.FindPuzzles(Area.TRAINING_GARDEN, 3, 3, 24, 25);
+                    //PuzzleGenerator.FindPuzzles(Area.TRAINING_GARDEN, 3, 2, 24, 10, null, new List<TokenType>() { TokenType.BLOCKER });
+                    //PuzzleGenerator.FindPuzzles(Area.TRAINING_GARDEN, 3, 2, 24, 10, null, new List<TokenType>() { TokenType.ARROW });
+                    //PuzzleGenerator.FindPuzzles(Area.TRAINING_GARDEN, 3, 2, 24, 10, null, new List<TokenType>() { TokenType.BLOCKER, TokenType.ARROW });
+                    //PuzzleGenerator.FindPuzzles(Area.TRAINING_GARDEN, 2, 1, 24, 50, null, new List<TokenType>() { TokenType.STICKY, TokenType.BLOCKER });
+                    //PuzzleGenerator.FindPuzzles(Area.TRAINING_GARDEN, 3, 1, 24, 50, null, new List<TokenType>() { TokenType.STICKY, TokenType.BLOCKER });
+                    //PuzzleGenerator.FindPuzzles(Area.TRAINING_GARDEN, 2, 1, 24, 50, null, new List<TokenType>() { TokenType.STICKY, TokenType.ARROW, TokenType.BLOCKER });
+                    //PuzzleGenerator.FindPuzzles(Area.TRAINING_GARDEN, 3, 1, 24, 50, null, new List<TokenType>() { TokenType.FRUIT, TokenType.ARROW, TokenType.BLOCKER });
+                    //PuzzleGenerator.FindPuzzles(Area.TRAINING_GARDEN, 3, 1, 24, 50, null, new List<TokenType>() { TokenType.ARROW, TokenType.BLOCKER });
+
+                    break;
+
+                case "CompilePuzzle":
+                    Console.WriteLine("CompileAIMoves.");
+                    foreach (string f in System.IO.Directory.GetFiles(FilePath, "*.json", SearchOption.AllDirectories))
+                    {
+                        Console.WriteLine("evaluating f=" + f);
+                        if (f.Contains("puzzlePack")) continue;
+                        string puzzle_json = File.ReadAllText(f);
+                        FourzyPuzzleData puzzle = JsonConvert.DeserializeObject<FourzyPuzzleData>(puzzle_json);
+                        puzzle = PuzzleGenerator.GeneratePuzzleMoveData(puzzle);
+
+                        puzzle_json = JsonConvert.SerializeObject(puzzle, Formatting.None);
+                        System.IO.File.WriteAllText(f, puzzle_json);
+                    }
+                    break;
+
+            }
+                                 
 
             int MinMoves = 1;
             int MaxMoves = 3;
@@ -21,20 +88,31 @@ namespace FourzyConsole
 
             //foreach (string f in System.IO.Directory.GetFiles(@"E:\projects\FourzyPuzzles\SolveThese", "*.json"))
             //{
+            //    Console.WriteLine("evaluating: " + f);
             //    string board_json = File.ReadAllText(f);
             //    GameBoardDefinition Board = JsonConvert.DeserializeObject<GameBoardDefinition>(board_json);
             //    bool success = PuzzleGenerator.ConvertBoardToPuzzle(Board);
             //    Console.WriteLine(f + ":" + success.ToString());
             //}
 
-            foreach (string f in System.IO.Directory.GetFiles(@"E:\projects\FourzyPuzzles\NewBoards", "*.json"))
-            {
-                string board_json = File.ReadAllText(f);
-                GameBoardDefinition Board = JsonConvert.DeserializeObject<GameBoardDefinition>(board_json);
-                PuzzleGenerator.FindPuzzleInBoard(Board, 3, 1, 24, 2);
-                Console.WriteLine(f);
-            }
+            //foreach (string f in System.IO.Directory.GetFiles(@"E:\projects\FourzyPuzzles\SolveThese", "*.json", SearchOption.AllDirectories))
+            //{
+            //    Console.WriteLine("evaluating: " + f);
+            //    string board_json = File.ReadAllText(f);
+            //    GameBoardDefinition Board = JsonConvert.DeserializeObject<GameBoardDefinition>(board_json);
+            //    PuzzleGenerator.FindPuzzleInBoard(Board, 3, 1, -1, 1, f);
+            //    Console.WriteLine(f + " Complete.");
+            //}
 
+            //foreach (string f in System.IO.Directory.GetFiles(@"E:\projects\FourzyPuzzles\PuzzlePlayBoards", "*.json", SearchOption.AllDirectories))
+            //{
+            //    Console.WriteLine("evaluating: " + f);
+            //    string board_json = File.ReadAllText(f);
+            //    GameBoardDefinition Board = JsonConvert.DeserializeObject<GameBoardDefinition>(board_json);
+            //    bool success = PuzzleGenerator.ConvertBoardToPuzzle(Board, 4, 1, -1, 1, f);
+            //    Console.WriteLine(f + ":" + success.ToString());
+            //}
+                       
 
 
             //foreach (string f in System.IO.Directory.GetFiles(@"E:\projects\FourzyPuzzles\SolveThese", "*.json"))

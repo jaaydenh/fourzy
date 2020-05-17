@@ -65,13 +65,13 @@ namespace FourzyGameModel.Model
         public virtual PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn = false)
         {
 
-            if (Turn.PlayerId == 0 && Turn.PlayerString.Length > 0)
-            {
-                foreach (Player p in State.Players.Values)
-                {
-                    if (Turn.PlayerString == p.PlayerString) { Turn.PlayerId = p.PlayerId; break; }
-                }
-            }
+            // if (Turn.PlayerId == 0 && Turn.PlayerString.Length > 0)
+            // {
+            //     foreach (Player p in State.Players.Values)
+            //     {
+            //         if (Turn.PlayerString == p.PlayerString) { Turn.PlayerId = p.PlayerId; break; }
+            //     }
+            // }
 
             LastState = State;
             TurnEvaluator ME = new TurnEvaluator(State);
@@ -118,14 +118,14 @@ namespace FourzyGameModel.Model
             AIPlayer AI = new PuzzleAI(State);
 
             //If the player has 2 moves left, check to see if it's possible to win.
-            if ((MoveLimit - (playerTurnRecord.Count / 2 + 1)) == 2)
+            if ((MoveLimit - (playerTurnRecord.Count / 2) + 1) == 2)
             {
                 AITurnEvaluator AITE = new AITurnEvaluator(State);
                 if (!AITE.WinInTwoMoves(State.Opponent(State.ActivePlayerId))) AI = new SimpleAI(State);
             }
 
             //If the player has 1 moves left, check to see if there's a winning move.
-            if ((MoveLimit - (playerTurnRecord.Count / 2 + 1)) == 1)
+            if ((MoveLimit - (playerTurnRecord.Count / 2) + 1) == 1)
             {
                 TurnEvaluator TE = new TurnEvaluator(State);
                 if (TE.GetFirstWinningMove(State.Opponent(State.ActivePlayerId)) == null) AI = new SimpleAI(State);             

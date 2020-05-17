@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace FourzyGameModel.Model
+﻿namespace FourzyGameModel.Model
 {
     public class ExtenderBotAI : AIPlayer
     {

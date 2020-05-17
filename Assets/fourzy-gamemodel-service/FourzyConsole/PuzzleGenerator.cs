@@ -9,14 +9,19 @@ namespace FourzyConsole
     {
         const string OutputFolder = @"E:\projects\FourzyPuzzles\";
 
-        public static void FindPuzzles(Area TargetArea, int MaxMoves = 4, int MinMoves = 1, int MaxPieces = 24, int PuzzlesCount = 100)
+        public static void FindPuzzles(Area TargetArea, int MaxMoves = 4, int MinMoves = 1, int MaxPieces = 24, int PuzzlesCount = 100, List<BoardRecipe> Recipes = null, List<TokenType> AvailableTokens = null)
         {
             int found = 0;
             DateTime Start = DateTime.Now;
             Dictionary<GameState, PuzzleTestResults> NewPuzzles = new Dictionary<GameState, PuzzleTestResults>();
             BoardGenerator Generator = new BeginnerGardenRandomGenerator();
-            List<BoardRecipe> Recipes = Generator.GetRecipes(new List<TokenType>() { TokenType.STICKY });
 
+            if (AvailableTokens == null)
+                AvailableTokens = new List<TokenType>() { TokenType.BLOCKER, TokenType.STICKY, TokenType.FRUIT, TokenType.ARROW };
+
+            if (Recipes == null )
+                Recipes = Generator.GetRecipes(AvailableTokens);
+            
             int exception_count = 0;
             List<Exception> E_List = new List<Exception>();
             int Iterations = PuzzlesCount * 10;
@@ -37,7 +42,7 @@ namespace FourzyConsole
                         //FourzyGame Game = new FourzyGame(TargetArea, player1, player2);
                         List<GameState> States = new List<GameState>();
 
-                        AIProfile Player1 = AIProfile.SimpleAI;
+                        AIProfile Player1 = AIProfile.PuzzleAI;
                         AIProfile Player2 = AIProfile.PuzzleAI;
 
                         int pieces = 12;
@@ -108,7 +113,7 @@ namespace FourzyConsole
 
         }
 
-        public static void FindPuzzleInBoard(GameBoardDefinition Board, int MaxMoves = 4, int MinMoves = 1, int MaxPieces = 24, int PuzzlesCount = 1)
+        public static void FindPuzzleInBoard(GameBoardDefinition Board, int MaxMoves = 4, int MinMoves = 1, int MaxPieces = 24, int PuzzlesCount = 1, string name="")
         {
             int found = 0;
             DateTime Start = DateTime.Now;
@@ -145,7 +150,7 @@ namespace FourzyConsole
                     }
 
 
-                    if (Game.State.WinnerId > 0 && Game.State.Board.PieceCount <= MaxPieces)
+                    if (Game.State.WinnerId > 0 && (Game.State.Board.PieceCount <= MaxPieces || MaxPieces <1))
                     {
                         int v = MaxMoves;
                         GameState GS = States[States.Count - (v * 2)];
@@ -157,7 +162,7 @@ namespace FourzyConsole
                         }
 
                         PuzzleTestResults R = PuzzleTestTools.EvaluateState(GS, MaxMoves);
-                        if (R.NumberOfVictoryPaths == 0 || R.NumberOfVictoryPaths > R.VictoryDepth +2)
+                        if (R.NumberOfVictoryPaths == 0 || R.NumberOfVictoryPaths > R.VictoryDepth *2+1)
                         {
                             continue;
                         }
@@ -169,17 +174,17 @@ namespace FourzyConsole
                             continue;
                         }
 
-
                         if (R.VictoryDepth <= MaxMoves && R.VictoryDepth >= MinMoves)
                         {
                             found++;
 
-                            RecordPuzzle(found, Area.TRAINING_GARDEN, GS, R);
+                            RecordPuzzle(found, Area.TRAINING_GARDEN, GS, R, name);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
+                    //Console.WriteLine("Error: " + ex.Message);
                     exception_count++;
                     E_List.Add(ex);
                 }
@@ -188,7 +193,7 @@ namespace FourzyConsole
             }
         }
 
-        public static bool ConvertBoardToPuzzle(GameBoardDefinition Board, int MaxMoves = 4, int MinMoves = 1, int MaxPieces = 24, int PuzzlesCount = 1)
+        public static bool ConvertBoardToPuzzle(GameBoardDefinition Board, int MaxMoves = 4, int MinMoves = 1, int MaxPieces = -1, int PuzzlesCount = 1, string Name="")
         {
 
             GameState GS = new GameState(Board);
@@ -214,7 +219,7 @@ namespace FourzyConsole
 
             if (R.VictoryDepth <= MaxMoves && R.VictoryDepth >= MinMoves)
             {
-                RecordPuzzle(1, Area.TRAINING_GARDEN, GS, R);
+                RecordPuzzle(1, Area.TRAINING_GARDEN, GS, R, Name);
                 return true;
             }
 
@@ -267,9 +272,70 @@ namespace FourzyConsole
             return null; 
         }
 
+        public static FourzyPuzzleData GeneratePuzzleMoveData(FourzyPuzzleData PuzzleData)
+        {
+            GameState GSEval = new GameState(PuzzleData.GameBoard, PuzzleData.FirstTurn);
 
-    //returns a serializable puzzle data object.
-public static FourzyPuzzleData GeneratePuzzleData(Area TargetArea, GameState State, PuzzleTestResults Results)
+            Dictionary<int, List<GameState>> StateBucket = new Dictionary<int, List<GameState>>();
+            Dictionary<string, PuzzleTurnTransition> TurnBucket = new Dictionary<string, PuzzleTurnTransition>();
+
+            TurnEvaluator TE = new TurnEvaluator(GSEval);
+            StateBucket[0] = new List<GameState>();
+            StateBucket[0].Add(GSEval);
+
+            for (int d = 1; d <= PuzzleData.MoveLimit; d++)
+            {
+                StateBucket[d] = new List<GameState>();
+
+                int evaluated_states = 0;
+                foreach (GameState GS in StateBucket[d-1])
+                {
+                    //What moves will the player make
+                    TE = new TurnEvaluator(GS);
+                    foreach (SimpleMove m in TE.GetAvailableSimpleMoves())
+                    {
+
+                        //For each move, evaluate the move
+                        GameState GSTest = TE.EvaluateTurn(m);
+                        
+                        //If either player wins, don't worry about it.  AI will handle
+                        if (GSTest.WinnerId < 0)
+                        {
+                            //Get the AI to make the best move.
+                            AIPlayer AI = new PuzzleAI(GSTest);
+                            PlayerTurn AITurn = AI.GetTurn();
+                            TurnEvaluator AITE = new TurnEvaluator(GSTest);
+                            GameState GSAI = AITE.EvaluateTurn(AITurn);
+
+                            //If there is not a winning move, then record the game state
+                            if (GSAI.WinnerId < 0)
+                                {
+                                    StateBucket[d].Add(GSAI);
+                                    if (!TurnBucket.ContainsKey(GSAI.UniqueId))
+                                        TurnBucket.Add(GSAI.UniqueId, new PuzzleTurnTransition(GS, new PlayerTurn(m), GSAI));
+                                }
+                            }
+
+                        }
+                    }
+
+                    evaluated_states++;
+                }
+
+            PuzzleData.AILibrary = new Dictionary<string, string>();
+            foreach (string gsid in TurnBucket.Keys)
+            {
+                //PuzzleData.AILibrary.Add(gsid, new PuzzleTurnInstructions(TurnBucket[gsid].Turn));
+                PuzzleData.AILibrary.Add(gsid, TurnBucket[gsid].Turn.Notation);
+            }
+
+            return PuzzleData;
+        }
+
+
+
+        //returns a serializable puzzle data object.
+        public static FourzyPuzzleData GeneratePuzzleData(Area TargetArea, GameState State, PuzzleTestResults Results)
 {
         GameBoardData board = State.Board.SerializeData();
         GameBoardDefinition definition = new GameBoardDefinition();
@@ -299,7 +365,7 @@ public static FourzyPuzzleData GeneratePuzzleData(Area TargetArea, GameState Sta
             return puzzle;
     }
 
-        public static void RecordPuzzle(int ID, Area TargetArea, GameState State, PuzzleTestResults Results)
+        public static void RecordPuzzle(int ID, Area TargetArea, GameState State, PuzzleTestResults Results, string Name="")
         {
             GameBoardData board = State.Board.SerializeData();
             GameBoardDefinition definition = new GameBoardDefinition();
@@ -328,23 +394,30 @@ public static FourzyPuzzleData GeneratePuzzleData(Area TargetArea, GameState Sta
             if (puzzle.AvailableSpells.Count == 0) puzzle.StartingMagic = 0;
             else puzzle.StartingMagic = 100;
 
-           
-            string board_filename = OutputFolder + TargetArea.ToString() + "_Board_" + ID.ToString() + "_WinIn" + Results.VictoryDepth.ToString() + ".json";
-            string puzzle_filename = OutputFolder + TargetArea.ToString() + "_Puzzle_" + ID.ToString() + "_WinIn" + Results.VictoryDepth.ToString() + ".json";
+
+            string puzzle_filename = "";
+
+            if (Name == "") puzzle_filename = OutputFolder + TargetArea.ToString() + "_Puzzle_" + ID.ToString() + "_WinIn" + Results.VictoryDepth.ToString() + ".json";
+            else puzzle_filename = OutputFolder + System.IO.Path.GetFileNameWithoutExtension(Name) + ".json"; 
+                    
+            //string puzzle_filename = OutputFolder + TargetArea.ToString() + "_Puzzle_" + ID.ToString() + "_WinIn" + Results.VictoryDepth.ToString() + ".json";
 
             if (System.IO.File.Exists(puzzle_filename))
             {
                 bool good_name = false;
 
-                while (!good_name)
-                {
-                    puzzle_filename = OutputFolder + TargetArea.ToString() + "_Puzzle_" + (++ID).ToString() + "_WinIn" + Results.VictoryDepth.ToString() + ".json";
-                    if (!System.IO.File.Exists(puzzle_filename)) good_name = true;
-                }
+                if (Name == "") puzzle_filename = OutputFolder + TargetArea.ToString() + "_Puzzle_" + (++ID).ToString() + "_WinIn" + Results.VictoryDepth.ToString() + ".json";
+                else puzzle_filename = OutputFolder + System.IO.Path.GetFileNameWithoutExtension(Name) + "_" + (++ID).ToString() +  ".json";
+                
+                //while (!good_name)
+                //{
+                //    puzzle_filename = OutputFolder + TargetArea.ToString() + "_Puzzle_" + (++ID).ToString() + "_WinIn" + Results.VictoryDepth.ToString() + ".json";
+                //    if (!System.IO.File.Exists(puzzle_filename)) good_name = true;
+                //}
             }
 
-            string board_json = JsonConvert.SerializeObject(definition, Formatting.None);
-            System.IO.File.WriteAllText(board_filename, board_json);
+            //string board_json = JsonConvert.SerializeObject(definition, Formatting.None);
+            //System.IO.File.WriteAllText(board_filename, board_json);
 
             string puzzle_json = JsonConvert.SerializeObject(puzzle, Formatting.None);
             System.IO.File.WriteAllText(puzzle_filename, puzzle_json);
@@ -410,6 +483,13 @@ public static FourzyPuzzleData GeneratePuzzleData(Area TargetArea, GameState Sta
 
             return true;
         }
+
+        public static bool TestPuzzle(FourzyPuzzleData PuzzleData)
+        {
+            GameState GS = new GameState(PuzzleData.GameBoard, PuzzleData.FirstTurn);
+            return TestSolution(GS, PuzzleData.Solution);
+        }
+
 
     }
 }

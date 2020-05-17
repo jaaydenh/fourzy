@@ -1019,6 +1019,14 @@ namespace Fourzy._Updates.Mechanics.Board
             UpdateHintArea();
         }
 
+        public void Clear()
+        {
+            game = null;
+
+            CancelRoutine("createBitsRoutine");
+            StartRoutine("createBitsRoutine", CreateBitsRoutine());
+        }
+
         public void StopBoardUpdates()
         {
             CancelRoutine("playMoves");

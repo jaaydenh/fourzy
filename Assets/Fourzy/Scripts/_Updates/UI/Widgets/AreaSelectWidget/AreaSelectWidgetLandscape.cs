@@ -34,8 +34,11 @@ namespace Fourzy._Updates.UI.Widgets
         {
             Data = data;
 
-            localizedText.key = data.id;
-            icon.sprite = data.landscapePreview;
+            if (data != null)
+            {
+                localizedText.key = data.id;
+                icon.sprite = data.landscapePreview;
+            }
 
             return this;
         }

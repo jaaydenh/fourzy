@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates._Tutorial;
+using Fourzy._Updates.Audio;
 using Fourzy._Updates.UI.Menu.Screens;
 using Newtonsoft.Json;
 using PlayFab;
@@ -19,6 +20,15 @@ namespace Fourzy._Updates.UI.Menu
             base.Awake();
 
             instance = this;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
+            //play bg audio
+            if (!AudioHolder.instance.IsBGAudioPlaying(Serialized.AudioTypes.BG_MAIN_MENU))
+                AudioHolder.instance.PlayBGAudio(Serialized.AudioTypes.BG_MAIN_MENU, true, .75f, 1f);
         }
 
         protected void Update()

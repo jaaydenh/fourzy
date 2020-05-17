@@ -101,6 +101,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (body) onIPhoneX = body.GetComponent<OnIPhoneX>();
             if (portalsHolder) portalsHolder.gameObject.SetActive(!GameManager.Instance.hidePortalWidgets);
             if (onIPhoneX) onIPhoneX.CheckPlatform();
+
+            //force open
+            if (GameManager.Instance.Landscape && @default) Open();
         }
     }
 }

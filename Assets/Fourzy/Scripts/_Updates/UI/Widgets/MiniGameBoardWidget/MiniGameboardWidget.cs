@@ -98,6 +98,13 @@ namespace Fourzy._Updates.UI.Widgets
             return gameboardView;
         }
 
+        public MiniGameboardWidget Clear()
+        {
+            gameboardView.Clear();
+
+            return this;
+        }
+
         public MiniGameboardWidget SetArea(Area area)
         {
             gameboardGraphics.sprite = sprites.GetGraphics(area);

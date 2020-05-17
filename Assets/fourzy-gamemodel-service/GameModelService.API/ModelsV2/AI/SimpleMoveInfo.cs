@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace FourzyGameModel.Model
+﻿namespace FourzyGameModel.Model
 {
     public class SimpleMoveInfo
     {
@@ -12,6 +6,5 @@ namespace FourzyGameModel.Model
         public GameState State { get; set; }
         public BoardLocation Alive { get; set; }
     }
-
 
 }

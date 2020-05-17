@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FourzyGameModel.Model
 {
@@ -12,8 +9,8 @@ namespace FourzyGameModel.Model
     {
 
         #region "Properties and Initialization"
-        const int WIN_SCORE_VALUE = 10000000;
-        const int LOSS_SCORE_VALUE = -10000000;
+        //const int WIN_SCORE_VALUE = 10000000;
+        //const int LOSS_SCORE_VALUE = -10000000;
 
         private GameState EvalState { get; set; }
         public AIHeuristicWeight AIHeuristics { get; set; }

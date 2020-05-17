@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-
 namespace FourzyGameModel.Model
 {
     public class FourzyGame
@@ -140,8 +139,6 @@ namespace FourzyGameModel.Model
             //    Player2.SpecialAbilityCount = 1;
             //}
 
-       
-
             this.State.Players.Add(1, Player1);
             this.State.Players.Add(2, Player2);
 
@@ -257,13 +254,13 @@ namespace FourzyGameModel.Model
         public virtual PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn =false )
         {
 
-            if (Turn.PlayerId == 0 && Turn.PlayerString.Length > 0)
-            {
-                foreach (Player p in State.Players.Values)
-                {
-                    if (Turn.PlayerString == p.PlayerString) { Turn.PlayerId = p.PlayerId; break; }
-                }
-            }
+            // if (Turn.PlayerId == 0 && Turn.PlayerString.Length > 0)
+            // {
+            //     foreach (Player p in State.Players.Values)
+            //     {
+            //         if (Turn.PlayerString == p.PlayerString) { Turn.PlayerId = p.PlayerId; break; }
+            //     }
+            // }
 
             LastState = State;
             TurnEvaluator ME = new TurnEvaluator(State);
