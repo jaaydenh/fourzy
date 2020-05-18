@@ -1853,7 +1853,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 switch (game._Type)
                 {
                     case GameType.PASSANDPLAY:
-                        yield return new WaitForSeconds(1.5f);
+                        yield return new WaitForSeconds(Constants.EXTRA_DELAY_BETWEEN_TURNS);
 
                         break;
                 }
