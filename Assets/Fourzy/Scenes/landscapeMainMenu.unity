@@ -8072,6 +8072,16 @@ PrefabInstance:
       propertyPath: passAndPlayTimer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
+        type: 3}
+      propertyPath: showInfoToasts
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
+        type: 3}
+      propertyPath: resetGameOnClose
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1433641275703540861, guid: 3b153745504954e599a747ae789ac703,
         type: 3}
       propertyPath: methods.Array.size
