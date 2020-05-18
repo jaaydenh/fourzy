@@ -1,5 +1,7 @@
 ﻿//@vadym udod
 
+using System;
+using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
@@ -39,15 +41,22 @@ namespace Fourzy._Updates.Mechanics.Board
 
             board = GetComponentInParent<GameboardView>();
 
-            //configure distance
-            arrow.transform.localPosition = arrowGlow.transform.localPosition = new Vector2(-board.step.x * 7.5f, 0f);
-            arrowSizeTween.to = new Vector2(board.step.x * 8f, arrowSizeTween.to.y);
-            glowSizeTween.to = new Vector2(board.step.x * 8f, glowSizeTween.to.y);
-
             arrowSizeTween.playbackTime = GameboardView.HOLD_TIME * .6f;
             arrowAlphaTween.playbackTime = GameboardView.HOLD_TIME * .6f;
             markerAlphaTween.playbackTime = GameboardView.HOLD_TIME;
             glowAlphaTween.playbackTime = GameboardView.HOLD_TIME * 1.35f;
+
+            if (board)
+            {
+                board.onInitialized += OnInitialized;
+
+                if (board.game != null) OnInitialized(board.game);
+            }
+        }
+
+        protected void OnDestroy()
+        {
+            if (board) board.onInitialized -= OnInitialized;
         }
 
         public void _Reset()
@@ -141,5 +150,15 @@ namespace Fourzy._Updates.Mechanics.Board
         public void ParticleExplode() => _particleSystem.Play();
 
         public void Position(BoardLocation boardLocation) => transform.localPosition = board.BoardLocationToVec2(boardLocation.Mirrored(board.game));
+
+        private void OnInitialized(IClientFourzy game)
+        {
+            if (game == null) return;
+
+            //configure distance
+            arrow.transform.localPosition = arrowGlow.transform.localPosition = new Vector2(-board.step.x * 7.5f, 0f);
+            arrowSizeTween.to = new Vector2(board.step.x * 8f, arrowSizeTween.to.y);
+            glowSizeTween.to = new Vector2(board.step.x * 8f, glowSizeTween.to.y);
+        }
     }
 }

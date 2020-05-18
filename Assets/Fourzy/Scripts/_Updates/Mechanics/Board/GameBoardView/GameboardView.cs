@@ -40,6 +40,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public bool interactable = false;
         public IClientFourzy game;
 
+        public Action<IClientFourzy> onInitialized;
         public Action<IClientFourzy> onGameFinished;
         public Action<IClientFourzy> onDraw;
         public Action<ClientPlayerTurn, bool> onMoveStarted;
@@ -1017,6 +1018,8 @@ namespace Fourzy._Updates.Mechanics.Board
             }
 
             UpdateHintArea();
+
+            onInitialized?.Invoke(game);
         }
 
         public void Clear()
@@ -1323,6 +1326,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         moveArrow._Reset();
                         moveArrow.Animate();
+
                     }
 
                     previousLocation = mirrored;

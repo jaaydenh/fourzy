@@ -9,7 +9,7 @@ namespace Fourzy
         public const float DEMO_IDLE_TIME = 45f;
         public const float DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME = 8f;
 
-        public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.SWIPE_STYLE_2;
+        public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.EDGE_TAP;
         public const Area DEFAULT_AREA = Area.ICE_PALACE;
         public const int DEFAULT_UNLOCKED_THEMES = 30;
         public const int PORTAL_POINTS = 100;

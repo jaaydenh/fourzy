@@ -43,10 +43,39 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private int p1DifficultyLevel = -1;
         private int p2DifficultyLevel = -1;
+        private int demoCounter = 0;
 
         public int Columns { get; private set; }
         public int Rows { get; private set; }
         public Vector2 WidgetSize { get; private set; }
+
+        protected void Update()
+        {
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q))
+            {
+                //toggle demo mode
+                SettingsManager.Toggle(SettingsManager.KEY_DEMO_MODE);
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector2 viewportPoint = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+
+                if (viewportPoint.x > .9f && viewportPoint.y > .9f)
+                {
+                    demoCounter++;
+                    if (demoCounter == 5)
+                    {
+                        demoCounter = 0;
+
+                        //toggle demo mode
+                        SettingsManager.Toggle(SettingsManager.KEY_DEMO_MODE);
+                    }
+                }
+                else
+                    demoCounter = 0;
+            }
+        }
 
         /// <summary>
         /// Invoked from ReadyButton
