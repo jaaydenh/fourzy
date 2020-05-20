@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Helpers
@@ -20,6 +21,7 @@ namespace Fourzy._Updates.UI.Helpers
         public static Material GREYSCALE_MATERIAL;
 
         public AdvancedEvent events;
+        public AdvancedPointerDataEvent eventsWithData;
         public AdvancedEvent onState;
         public AdvancedEvent offState;
         public AudioTypes playOnClick = AudioTypes.BUTTON_CLICK;
@@ -197,9 +199,12 @@ namespace Fourzy._Updates.UI.Helpers
             }
         }
 
-        public void OnClick()
+        public override void OnPointerClick(PointerEventData eventData)
         {
+            if (eventData != null) base.OnPointerClick(eventData);
+
             events.Invoke();
+            //eventsWithData.Invoke(eventData);
 
             if (playOnClick != AudioTypes.NONE) AudioHolder.instance.PlaySelfSfxOneShotTracked(playOnClick);
 
@@ -213,9 +218,6 @@ namespace Fourzy._Updates.UI.Helpers
             if (!Application.isPlaying || initialized) return;
 
             initialized = true;
-
-            //add our events to onClick events
-            onClick.AddListener(OnClick);
 
             //get labels/badges
             labelsFastAccess = new Dictionary<string, LabelPair>();

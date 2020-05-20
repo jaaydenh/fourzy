@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Fourzy._Updates.UI.Helpers
 {
-    public class VirtualPointer : MonoBehaviour
+    public class FakeVirtualPointer : MonoBehaviour
     {
         public ScaleTween pressIndicator;
         public bool showTouchVfx = true;

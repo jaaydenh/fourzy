@@ -188,7 +188,7 @@ namespace Fourzy._Updates.UI.Camera3D
             {
                 ProgressionEvent progressionEvent = hit2d.transform.GetComponent<ProgressionEvent>();
 
-                if (progressionEvent) progressionEvent.button.OnClick();
+                if (progressionEvent) progressionEvent.button.OnPointerClick(null);
             }
         }
 

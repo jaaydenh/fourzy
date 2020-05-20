@@ -21,6 +21,7 @@ namespace UnityEngine.EventSystems
 
         public static Action<int> onGamepadIDChanged;
         public static Action<GamepadControlFilter> onFilterChanged;
+        public static Action<GamepadModeFilter> onModeChanged;
         public static Action onBackPressed;
 
         public static int GamepadID
@@ -53,6 +54,18 @@ namespace UnityEngine.EventSystems
             }
         }
 
+        public static GamepadModeFilter GamepadMode
+        {
+            get => gamepadMode;
+
+            set
+            {
+                gamepadMode = value;
+
+                onModeChanged?.Invoke(gamepadMode);
+            }
+        }
+
         public static Vector2 lastMousePos => instance.m_LastMousePosition;
 
         private float m_PrevActionTime;
@@ -67,6 +80,7 @@ namespace UnityEngine.EventSystems
 
         private static int gamepadID = 0;
         private static GamepadControlFilter gamepadFilter;
+        private static GamepadModeFilter gamepadMode;
 
         private static float prevHK1Value;
         private static float prevHK2Value;
@@ -95,90 +109,101 @@ namespace UnityEngine.EventSystems
         {
             if (instance != this) return;
 
-            float _moveSpeed = (lastGOPoinerEnter || last3DGOPoinerEnter ? HOVERED_MOVE_SPEED_SCALE : 1f) * moveSpeed * Time.deltaTime;
-
-            Vector2 joystick1 = new Vector2(Input.GetAxis("Joystick1XAxis"), Input.GetAxis("Joystick1YAxis"));
-            Vector2 joystick2 = new Vector2(Input.GetAxis("Joystick2XAxis"), Input.GetAxis("Joystick2YAxis"));
-
-            if (joystick1 == Vector2.zero) joystick1 = new Vector2(Input.GetAxis("XArcade1HorizontalAxis"), Input.GetAxis("XArcade1VerticalAxis"));
-            if (joystick2 == Vector2.zero) joystick2 = new Vector2(Input.GetAxis("XArcade2HorizontalAxis"), Input.GetAxis("XArcade2VerticalAxis"));
-
-            switch (gamepadFilter)
+            switch (gamepadMode)
             {
-                case GamepadControlFilter.ANY_GAMEPAD:
-                    if (joystick1 != Vector2.zero || joystick2 != Vector2.zero)
-                    {
-                        if (lastJoystick1 != joystick1 || (lastJoystick1 == Vector2.zero && joystick2 == Vector2.zero))
-                            lastChanged = 0;
-                        else if (lastJoystick2 != joystick2 || (lastJoystick2 == Vector2.zero && joystick1 == Vector2.zero))
-                            lastChanged = 1;
+                case GamepadModeFilter.SINGLE_GAMEPAD:
+                    float _moveSpeed = (lastGOPoinerEnter || last3DGOPoinerEnter ? HOVERED_MOVE_SPEED_SCALE : 1f) * moveSpeed * Time.deltaTime;
 
-                        if (lastChanged == 0)
-                            UpdateVirtualPointerPosition(joystick1 * _moveSpeed);
-                        else
-                            UpdateVirtualPointerPosition(joystick2 * _moveSpeed);
+                    Vector2 joystick1 = new Vector2(Input.GetAxis("Joystick1XAxis"), Input.GetAxis("Joystick1YAxis"));
+                    Vector2 joystick2 = new Vector2(Input.GetAxis("Joystick2XAxis"), Input.GetAxis("Joystick2YAxis"));
+
+                    if (joystick1 == Vector2.zero) joystick1 = new Vector2(Input.GetAxis("XArcade1HorizontalAxis"), Input.GetAxis("XArcade1VerticalAxis"));
+                    if (joystick2 == Vector2.zero) joystick2 = new Vector2(Input.GetAxis("XArcade2HorizontalAxis"), Input.GetAxis("XArcade2VerticalAxis"));
+
+                    switch (gamepadFilter)
+                    {
+                        case GamepadControlFilter.ANY_GAMEPAD:
+                            if (joystick1 != Vector2.zero || joystick2 != Vector2.zero)
+                            {
+                                if (lastJoystick1 != joystick1 || (lastJoystick1 == Vector2.zero && joystick2 == Vector2.zero))
+                                    lastChanged = 0;
+                                else if (lastJoystick2 != joystick2 || (lastJoystick2 == Vector2.zero && joystick1 == Vector2.zero))
+                                    lastChanged = 1;
+
+                                if (lastChanged == 0)
+                                    UpdateVirtualPointerPosition(joystick1 * _moveSpeed);
+                                else
+                                    UpdateVirtualPointerPosition(joystick2 * _moveSpeed);
+                            }
+
+                            //check buttons input
+                            if (Input.GetKeyDown(GetKeyCode(0, 0)) || Input.GetKeyDown(GetKeyCode(0, 1)))
+                                SetVirtualPointerState(VirtualPointerState.PRESSED);
+                            else if (Input.GetKeyUp(GetKeyCode(0, 0)) || Input.GetKeyUp(GetKeyCode(0, 1)))
+                            {
+                                if (virtualPointerState == VirtualPointerState.NONE)
+                                    SetVirtualPointerState(VirtualPointerState.RELEASED);
+                            }
+                            //check back button
+                            else if (Input.GetKeyDown(GetKeyCode(1, 0)) || Input.GetKeyDown(GetKeyCode(1, 1)))
+                                onBackPressed?.Invoke();
+
+                            break;
+
+                        case GamepadControlFilter.SPECIFIC_GAMEPAD:
+                            switch (GamepadID)
+                            {
+                                case 0:
+                                    if (joystick1 != Vector2.zero)
+                                    {
+                                        UpdateVirtualPointerPosition(joystick1 * _moveSpeed);
+                                    }
+
+                                    //check buttons input
+                                    if (Input.GetKeyDown(GetKeyCode(0, 0)))
+                                        SetVirtualPointerState(VirtualPointerState.PRESSED);
+                                    else if (Input.GetKeyUp(GetKeyCode(0, 0)))
+                                        SetVirtualPointerState(VirtualPointerState.RELEASED);
+                                    //check back button
+                                    else if (Input.GetKeyDown(GetKeyCode(1, 0)))
+                                        onBackPressed?.Invoke();
+
+                                    break;
+
+                                case 1:
+                                    if (joystick2 != Vector2.zero)
+                                    {
+                                        UpdateVirtualPointerPosition(joystick2 * _moveSpeed);
+                                    }
+
+                                    //check buttons input
+                                    if (Input.GetKeyDown(GetKeyCode(0, 1)))
+                                        SetVirtualPointerState(VirtualPointerState.PRESSED);
+                                    else if (Input.GetKeyUp(GetKeyCode(0, 1)))
+                                        SetVirtualPointerState(VirtualPointerState.RELEASED);
+                                    //check back button
+                                    else if (Input.GetKeyDown(GetKeyCode(1, 1)))
+                                        onBackPressed?.Invoke();
+
+                                    break;
+                            }
+
+                            break;
                     }
 
+                    if (joystick1 != Vector2.zero || joystick2 != Vector2.zero) ResetNoInputTimer();
 
-                    //check buttons input
-                    if (Input.GetKeyDown(GetKeyCode(0, 0)) || Input.GetKeyDown(GetKeyCode(0, 1)))
-                        SetVirtualPointerState(VirtualPointerState.PRESSED);
-                    else if (Input.GetKeyUp(GetKeyCode(0, 0)) || Input.GetKeyUp(GetKeyCode(0, 1)))
-                    {
-                        if (virtualPointerState == VirtualPointerState.NONE)
-                            SetVirtualPointerState(VirtualPointerState.RELEASED);
-                    }
-                    //check back button
-                    else if (Input.GetKeyDown(GetKeyCode(1, 0)) || Input.GetKeyDown(GetKeyCode(1, 1)))
+                    lastJoystick1 = joystick1;
+                    lastJoystick2 = joystick2;
+
+                    break;
+
+                case GamepadModeFilter.MULTIPLE:
+                    if (Input.GetKeyDown(GetKeyCode(1, 0)) || Input.GetKeyDown(GetKeyCode(1, 1)))
                         onBackPressed?.Invoke();
 
                     break;
-
-                case GamepadControlFilter.SPECIFIC_GAMEPAD:
-                    switch (GamepadID)
-                    {
-                        case 0:
-                            if (joystick1 != Vector2.zero)
-                            {
-                                UpdateVirtualPointerPosition(joystick1 * _moveSpeed);
-                            }
-
-                            //check buttons input
-                            if (Input.GetKeyDown(GetKeyCode(0, 0)))
-                                SetVirtualPointerState(VirtualPointerState.PRESSED);
-                            else if (Input.GetKeyUp(GetKeyCode(0, 0)))
-                                SetVirtualPointerState(VirtualPointerState.RELEASED);
-                            //check back button
-                            else if (Input.GetKeyDown(GetKeyCode(1, 0)))
-                                onBackPressed?.Invoke();
-
-                            break;
-
-                        case 1:
-                            if (joystick2 != Vector2.zero)
-                            {
-                                UpdateVirtualPointerPosition(joystick2 * _moveSpeed);
-                            }
-
-                            //check buttons input
-                            if (Input.GetKeyDown(GetKeyCode(0, 1)))
-                                SetVirtualPointerState(VirtualPointerState.PRESSED);
-                            else if (Input.GetKeyUp(GetKeyCode(0, 1)))
-                                SetVirtualPointerState(VirtualPointerState.RELEASED);
-                            //check back button
-                            else if (Input.GetKeyDown(GetKeyCode(1, 1)))
-                                onBackPressed?.Invoke();
-
-                            break;
-                    }
-
-                    break;
             }
-
-            if (joystick1 != Vector2.zero || joystick2 != Vector2.zero) ResetNoInputTimer();
-
-            lastJoystick1 = joystick1;
-            lastJoystick2 = joystick2;
         }
 
         protected void LateUpdate()
@@ -191,7 +216,7 @@ namespace UnityEngine.EventSystems
             prevHK3Value = Input.GetAxisRaw("Hotkey3");
         }
 
-        public KeyCode GetKeyCode(int button, int jIndex)
+        public static KeyCode GetKeyCode(int button, int jIndex)
         {
             string[] jNames = Input.GetJoystickNames();
 
@@ -636,7 +661,7 @@ namespace UnityEngine.EventSystems
         /// <remarks>
         /// This method can be overridden in derived classes to change how touch press events are handled.
         /// </remarks>
-        protected void ProcessTouchPress(PointerEventData pointerEvent, bool pressed, bool released)
+        public void ProcessTouchPress(PointerEventData pointerEvent, bool pressed, bool released)
         {
             var currentOverGo = pointerEvent.pointerCurrentRaycast.gameObject;
 
@@ -788,9 +813,9 @@ namespace UnityEngine.EventSystems
             return move;
         }
 
-        private bool CheckKey(KeyCode key) => Input.GetKeyDown(key) || Input.GetKey(key) || Input.GetKeyUp(key) || Input.GetJoystickNames().Length == 0;
+        public static bool CheckKey(KeyCode key) => Input.GetKeyDown(key) || Input.GetKey(key) || Input.GetKeyUp(key) || Input.GetJoystickNames().Length == 0;
 
-        private bool IsXBoxGamepad(string[] joystickNames, int index) => index >= 0 && index < joystickNames.Length && joystickNames[index].ToLower().Contains("xbox");
+        public static bool IsXBoxGamepad(string[] joystickNames, int index) => index >= 0 && index < joystickNames.Length && joystickNames[index].ToLower().Contains("xbox");
 
         /// <summary>
         /// Calculate and send a move event to the current selected object.
@@ -977,6 +1002,12 @@ namespace UnityEngine.EventSystems
         {
             ANY_GAMEPAD,
             SPECIFIC_GAMEPAD,
+        }
+
+        public enum GamepadModeFilter
+        {
+            SINGLE_GAMEPAD,
+            MULTIPLE,
         }
     }
 }

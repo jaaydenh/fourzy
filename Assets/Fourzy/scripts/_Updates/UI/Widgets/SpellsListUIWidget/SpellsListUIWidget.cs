@@ -34,7 +34,7 @@ namespace Fourzy._Updates.UI.Widgets
                     {
                         case StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD:
 
-                            if (Input.GetKeyDown(StandaloneInputModuleExtended.instance.GetKeyCode(3, 0)) || Input.GetKeyDown(StandaloneInputModuleExtended.instance.GetKeyCode(3, 1)))
+                            if (Input.GetKeyDown(StandaloneInputModuleExtended.GetKeyCode(3, 0)) || Input.GetKeyDown(StandaloneInputModuleExtended.GetKeyCode(3, 1)))
                             {
                                 spellWidgets[0].OnTap();
                             }
@@ -45,7 +45,7 @@ namespace Fourzy._Updates.UI.Widgets
                             switch (StandaloneInputModuleExtended.GamepadID)
                             {
                                 case 0:
-                                    if (Input.GetKeyDown(StandaloneInputModuleExtended.instance.GetKeyCode(3, 0)))
+                                    if (Input.GetKeyDown(StandaloneInputModuleExtended.GetKeyCode(3, 0)))
                                     {
                                         spellWidgets[0].OnTap();
                                     }
@@ -53,7 +53,7 @@ namespace Fourzy._Updates.UI.Widgets
                                     break;
 
                                 case 1:
-                                    if (Input.GetKeyDown(StandaloneInputModuleExtended.instance.GetKeyCode(3, 1)))
+                                    if (Input.GetKeyDown(StandaloneInputModuleExtended.GetKeyCode(3, 1)))
                                     {
                                         spellWidgets[0].OnTap();
                                     }

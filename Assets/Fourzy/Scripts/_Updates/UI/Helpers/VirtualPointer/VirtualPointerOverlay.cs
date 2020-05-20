@@ -9,7 +9,7 @@ namespace Fourzy._Updates.UI.Helpers
 {
     public class VirtualPointerOverlay : MonoBehaviour
     {
-        public VirtualPointer pointer;
+        public FakeVirtualPointer pointer;
 
         public AdvancedEvent onJoystick1;
         public AdvancedEvent onJoystick2;

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Object = UnityEngine.Object;
+using UnityEngine.EventSystems;
 
 namespace ByteSheep.Events
 {
@@ -408,4 +409,5 @@ namespace ByteSheep.Events
     [Serializable] public class AdvancedColorEvent : AdvancedEvent<Color> { }
     [Serializable] public class AdvancedVector2Event : AdvancedEvent<Vector2> { }
     [Serializable] public class AdvancedVector3Event : AdvancedEvent<Vector3> { }
+    [Serializable] public class AdvancedPointerDataEvent : AdvancedEvent<PointerEventData> { }
 }
