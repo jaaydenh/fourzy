@@ -108,7 +108,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 GamePieceView gamepieceView = Instantiate(winningGamepieces[index], transform);
                 
                 gamepieceView.transform.position = winningGamepieces[index].transform.position;
-                gamepieceView.transform.localScale = 75f * Vector3.one;
+                gamepieceView.transform.localScale = (GameManager.Instance.Landscape ? 89f : 75f) * Vector3.one;
                 gamepieceView.PlayWinAnimation(index * .15f + .15f);
 
                 gamePieces.Add(gamepieceView);
