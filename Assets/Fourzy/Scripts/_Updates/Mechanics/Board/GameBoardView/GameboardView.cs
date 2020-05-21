@@ -1137,6 +1137,9 @@ namespace Fourzy._Updates.Mechanics.Board
                         case SpellId.HEX:
                             locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new HexSpell(0, new BoardLocation()));
 
+                            //modify by current spells
+                            foreach (TokenSpell _spell in createdSpellTokens) locationsList.RemoveAll(_location => _location.Equals(_spell.location));
+
                             foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
                                 if (locationsList.Contains(hintBlock.Key))
                                     affected.Add(hintBlock.Key, hintBlock.Value);

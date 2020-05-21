@@ -137,6 +137,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             current = miniGameboard;
 
             current.Select(.25f);
+
+            OnBack();
         }
 
         private void HideBoards()

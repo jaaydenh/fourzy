@@ -23,7 +23,7 @@ namespace Fourzy._Updates.UI.Helpers
                 if (selectable)
                     return selectable.interactable;
                 else
-                    return false;
+                    return gameObject.activeInHierarchy;
             }
         }
 

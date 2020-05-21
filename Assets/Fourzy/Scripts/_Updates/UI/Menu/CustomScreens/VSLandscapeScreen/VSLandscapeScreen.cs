@@ -183,7 +183,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void PickBoard() => menuController.GetScreen<LandscapeGameboardSelectionScreen>().Open(selectedTheme.themeID);
 
-        public void OpenP2Difficulty()
+        public void ToggleP2()
         {
             if (p2DifficultyLevel > -1)
             {
@@ -191,11 +191,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 p2DifficultyLevel = -1;
                 profiles[1].DisplayDifficulty(-1);
             }
-            else
-                difficultyDropdown.Open(false).SetPosition(profiles[1].transform, Vector2.zero).SetOnClick(OnP2DifficultySelected);
+            else PickP2();
         }
 
-        public void OpenP1Difficulty()
+        public void PickP2() => difficultyDropdown.Open(false).SetPosition(profiles[1].transform, Vector2.zero).SetOnClick(OnP2DifficultySelected);
+
+        public void ToggleP1()
         {
             if (p1DifficultyLevel > -1)
             {

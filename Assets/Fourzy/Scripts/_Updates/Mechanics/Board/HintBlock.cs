@@ -19,7 +19,7 @@ namespace Fourzy._Updates.Mechanics.Board
         private AlphaTween alphaTween;
         private SpriteRenderer spriteRenderer;
         private Collider2D _collider2D;
-        private Selectable3D selectable;
+        private SelectableUI selectable;
 
         public bool shown { get; private set; }
         public HintBlockMode mode { get; private set; }
@@ -31,7 +31,7 @@ namespace Fourzy._Updates.Mechanics.Board
             alphaTween = GetComponent<AlphaTween>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             _collider2D = GetComponent<Collider2D>();
-            selectable = GetComponent<Selectable3D>();
+            selectable = GetComponent<SelectableUI>();
 
             shown = false;
         }
@@ -83,7 +83,7 @@ namespace Fourzy._Updates.Mechanics.Board
         /// <summary>
         /// Only for EDGE_TAP placement style
         /// </summary>
-        public void HideUndexPointer(float time)
+        public void HideUnderPointer(float time)
         {
             if (GameManager.Instance.placementStyle != GameManager.PlacementStyle.EDGE_TAP) return;
 

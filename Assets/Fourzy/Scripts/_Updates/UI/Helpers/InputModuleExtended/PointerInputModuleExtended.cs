@@ -63,7 +63,7 @@ namespace UnityEngine.EventSystems
         protected Vector2 previousMousePos { get; set; }
 
         protected SelectableUI lastGOPoinerEnter;
-        protected Selectable3D last3DGOPoinerEnter;
+        protected SelectableUI last3DGOPoinerEnter;
         protected int layerMask;
         protected float noInputTimer;
 
@@ -385,17 +385,14 @@ namespace UnityEngine.EventSystems
             ///
             if (!lastGOPoinerEnter)
             {
-                Camera c = Camera.main;
-                if (c)
+                Camera _camera = Camera.main;
+                if (_camera)
                 {
-                    Vector3 screenToWorld = c.ScreenToWorldPoint(leftData.position);
-                    Vector3 rayPositionAdjusted = new Vector3(screenToWorld.x, screenToWorld.y, c.transform.position.z);
-
-                    RaycastHit2D raycastHit2D = Physics2D.Raycast(c.ScreenToWorldPoint(leftData.position), c.transform.TransformDirection(Vector3.forward), c.farClipPlane, layerMask);
+                    RaycastHit2D raycastHit2D = Physics2D.Raycast(_camera.ScreenToWorldPoint(leftData.position), _camera.transform.TransformDirection(Vector3.forward), _camera.farClipPlane, layerMask);
 
                     if (raycastHit2D)
                     {
-                        Selectable3D selectable = raycastHit2D.transform.GetComponent<Selectable3D>();
+                        SelectableUI selectable = raycastHit2D.transform.GetComponent<SelectableUI>();
 
                         if (selectable)
                         {

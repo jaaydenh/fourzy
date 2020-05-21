@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 114697102148343426}
   - component: {fileID: 210018385296936406}
   - component: {fileID: 1972369424652192106}
-  - component: {fileID: 5044181296420896032}
+  - component: {fileID: 8716384796069173634}
   m_Layer: 8
   m_Name: HintBlock
   m_TagString: Untagged
@@ -143,7 +143,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5044181296420896032
+--- !u!114 &8716384796069173634
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1489538643966412}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 601d9199ec915094a9de0443dc0e79ab, type: 3}
+  m_Script: {fileID: 11500000, guid: a5a45ee8372f7cf4a9f072fa42476070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onPointerEnter:
@@ -189,7 +189,7 @@ MonoBehaviour:
           selectedMember: 16
           isDynamic: 0
         target: {fileID: 114815130631895566}
-        memberName: HideUndexPointer
+        memberName: HideUnderPointer
         memberType: 8
         arguments:
         - typeName: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
@@ -251,6 +251,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:

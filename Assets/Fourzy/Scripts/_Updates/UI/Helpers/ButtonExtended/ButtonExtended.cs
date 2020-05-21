@@ -202,6 +202,8 @@ namespace Fourzy._Updates.UI.Helpers
         {
             if (eventData != null) base.OnPointerClick(eventData);
 
+            if (!interactable) return;
+
             events.Invoke();
 
             if (playOnClick != AudioTypes.NONE) AudioHolder.instance.PlaySelfSfxOneShotTracked(playOnClick);
