@@ -38,6 +38,9 @@ MonoBehaviour:
         - theme: 8
           tokenPrefab: {fileID: 7472852831271248198, guid: bdc89dc2a465198448d8d9fd375f5aba,
             type: 3}
+        - theme: 4
+          tokenPrefab: {fileID: 8161124261732225480, guid: b421a3be3a1174ff1a0daaf24e06497d,
+            type: 3}
     - elementName: ARROW
       tokenType: 5
       tokenIcon: {fileID: 0}
