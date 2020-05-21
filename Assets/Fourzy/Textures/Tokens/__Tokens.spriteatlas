@@ -43,7 +43,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: e1d5cc2cde4784b2daaffb156c3b71d3, type: 3}
-    totalSpriteSurfaceArea: 2602818
+    totalSpriteSurfaceArea: 2619202
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -85,6 +85,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a2c2996baa8a54178be732284e466991, type: 3}
   - {fileID: 21300000, guid: 3afd237b6813946bbbc7c57286b01172, type: 3}
   - {fileID: 21300000, guid: b4c37a7b220787243b0e3b5a48074663, type: 3}
+  - {fileID: 21300000, guid: a35bde9b67f454cec9dc365dfa6b7d4e, type: 3}
   - {fileID: 21300014, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
   - {fileID: 21300016, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
   - {fileID: 21300036, guid: b67d7cdb0303441ad843bdcbde3048ba, type: 3}
@@ -198,6 +199,7 @@ SpriteAtlas:
   - tokenPit
   - tokenWeb
   - tokenRotatingArrow
+  - tokenTree
   - FruitIntoSticky0008
   - FruitIntoSticky0009
   - FruitIntoSticky0019
