@@ -1,6 +1,8 @@
 ﻿//@vadym udod
 
 using System;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.Serialization;
 
 namespace UnityEngine.EventSystems
@@ -214,21 +216,21 @@ namespace UnityEngine.EventSystems
                     break;
 
                 case GamepadModeFilter.MULTIPLE:
-                    if (Input.GetKeyDown(GetKeyCode(1, 0)))
+                    for (int gamepadIndex = 0; gamepadIndex < Gamepad.all.Count; gamepadIndex++)
                     {
-                        BackCallerId = 0;
-                        onBackPressed?.Invoke();
-                    }
-                    else if (Input.GetKeyDown(GetKeyCode(1, 1)))
-                    {
-                        BackCallerId = 1;
-                        onBackPressed?.Invoke();
+                        if (((ButtonControl)Gamepad.all[gamepadIndex]["buttonEast"]).wasPressedThisFrame)
+                        {
+                            BackCallerId = gamepadIndex;
+                            onBackPressed?.Invoke();
+
+                            break;
+                        }
                     }
 
                     break;
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape)) onBackPressed?.Invoke();
+            if (((KeyControl)Keyboard.current["escape"]).wasPressedThisFrame) onBackPressed?.Invoke();
 
             BackCallerId = -1;
         }

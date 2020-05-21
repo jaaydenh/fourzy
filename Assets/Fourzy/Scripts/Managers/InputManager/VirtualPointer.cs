@@ -7,6 +7,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.Managers
@@ -26,9 +28,10 @@ namespace Fourzy._Updates.Managers
 
         private Camera _camera => Camera.main;
 
-        public bool Active { get; private set; }
+        public bool Active { get; private set; } = false;
         public PointerEventData PointerData { get; private set; }
         public Vector3 Position => PointerData.position;
+        public int PointerID => PointerData.pointerId;
         public PointerEventData.FramePressState state { get; private set; }
         public SelectableUI HoverObject { get; private set; }
 
@@ -42,12 +45,9 @@ namespace Fourzy._Updates.Managers
             layerMask = LayerMask.GetMask("UI");
         }
 
-        public VirtualPointer Initialize(Vector2 defaultPos, int index)
+        public VirtualPointer Initialize(Vector2 defaultPos)
         {
             PointerData.position = defaultPos;
-
-            PointerData.pointerId = index;
-            image.sprite = sprites[index];
 
             return this;
         }
@@ -58,6 +58,14 @@ namespace Fourzy._Updates.Managers
 
             if (Active) Show();
             else Hide();
+
+            return this;
+        }
+
+        public VirtualPointer SetIndex(int index)
+        {
+            PointerData.pointerId = index;
+            image.sprite = sprites[index];
 
             return this;
         }
@@ -159,8 +167,7 @@ namespace Fourzy._Updates.Managers
                         lastClickTarget = clickTarget;
                     }
 
-                    //get click func
-                    if (Input.GetKeyDown(StandaloneInputModuleExtended.GetKeyCode(0, PointerData.pointerId)))
+                    if (((ButtonControl)Gamepad.all[PointerData.pointerId]["buttonSouth"]).wasPressedThisFrame)
                     {
                         state = PointerEventData.FramePressState.Pressed;
 
@@ -181,10 +188,11 @@ namespace Fourzy._Updates.Managers
                             ExecuteEvents.Execute(PointerData.pointerPress, PointerData, ExecuteEvents.pointerClickHandler);
 
                         PointerData.eligibleForClick = false;
+                        PointerData.clickCount = 0;
                         PointerData.pointerPress = null;
                         PointerData.rawPointerPress = null;
                     }
-                    else if (Input.GetKeyUp(StandaloneInputModuleExtended.GetKeyCode(0, 0)))
+                    else if (((ButtonControl)Gamepad.all[PointerData.pointerId]["buttonSouth"]).wasReleasedThisFrame)
                     {
                         state = PointerEventData.FramePressState.Released;
 

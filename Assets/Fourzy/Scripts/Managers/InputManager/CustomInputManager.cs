@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace Fourzy._Updates.Managers
 {
@@ -26,7 +27,7 @@ namespace Fourzy._Updates.Managers
 
         public static int GamepadCount { get; private set; }
 
-        private int _gamepadCount => InputSystem.devices.Where(_device => _device is Gamepad).Count();
+        private int _gamepadCount => Gamepad.all.Count;
 
         protected void Awake()
         {
@@ -51,7 +52,12 @@ namespace Fourzy._Updates.Managers
                     else if (change == InputDeviceChange.Removed) GamepadCount--;
 
                     for (int index = 0; index < pointers.Count; index++)
-                        pointers[index].SetState(GamepadCount > index);
+                    {
+                        if (GamepadCount > index)
+                            pointers[index].SetIndex(index);
+                        else
+                            pointers[index].SetState(false);
+                    }
                 }
             };
         }
@@ -63,17 +69,18 @@ namespace Fourzy._Updates.Managers
             //update gampads inputs
             if (GamepadCount == 1)
             {
-                Vector2 value = new Vector2(Input.GetAxis("JoystickAnyX"), Input.GetAxis("JoystickAnyY"));
-
-                for (int gpIndex = 0; gpIndex < MAX_GAMEPAD_COUNT; gpIndex++)
-                    if (pointers[gpIndex].Active && value.magnitude > 0f) pointers[gpIndex].Move(value * gamepadMoveSpeed * Time.deltaTime);
+                Vector2 value = new Vector2(((StickControl)Gamepad.current["leftStick"]).x.ReadValue(), ((StickControl)Gamepad.current["leftStick"]).y.ReadValue());
+                if (value.magnitude > 0f) pointers[0].Move(value * gamepadMoveSpeed * Time.deltaTime);
             }
             else if (GamepadCount > 1)
             {
-                for (int gpIndex = 0; gpIndex < MAX_GAMEPAD_COUNT; gpIndex++)
+                foreach (VirtualPointer pointer in pointers)
                 {
-                    Vector2 value = new Vector2(Input.GetAxis("Joystick" + (gpIndex + 1) + "XAxis"), Input.GetAxis("Joystick" + (gpIndex + 1) + "YAxis"));
-                    if (value.magnitude > 0f) pointers[gpIndex].Move(value * gamepadMoveSpeed * Time.deltaTime);
+                    Vector2 value = new Vector2(
+                        ((StickControl)Gamepad.all[pointer.PointerID]["leftStick"]).x.ReadValue(),
+                        ((StickControl)Gamepad.all[pointer.PointerID]["leftStick"]).y.ReadValue());
+
+                    if (value.magnitude > 0f) pointer.Move(value * gamepadMoveSpeed * Time.deltaTime);
                 }
             }
 
@@ -117,7 +124,8 @@ namespace Fourzy._Updates.Managers
             {
                 VirtualPointer _pointer =
                     Instantiate(pointerPrefab, transform)
-                    .Initialize(defaultPointerPosition, pointerIndex);
+                    .Initialize(defaultPointerPosition)
+                    .SetIndex(pointerIndex);
 
                 hoverObjects.Add(_pointer, null);
                 pointers.Add(_pointer);
