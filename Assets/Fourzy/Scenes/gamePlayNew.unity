@@ -16573,29 +16573,7 @@ MonoBehaviour:
   onPointerDown:
     inspectorListHeight: 83
     persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 2
-          selectedMember: 0
-          isDynamic: 1
-        target: {fileID: 1899509752}
-        memberName: OnPointerDown
-        memberType: 8
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
-        isDynamic: 1
-        isCallEnabled: 1
+      calls: []
   onPointerMove:
     inspectorListHeight: 83
     persistentCalls:
@@ -16625,29 +16603,7 @@ MonoBehaviour:
   onPointerUp:
     inspectorListHeight: 83
     persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 2
-          selectedMember: 2
-          isDynamic: 1
-        target: {fileID: 1899509752}
-        memberName: OnPointerRelease
-        memberType: 8
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
-        isDynamic: 1
-        isCallEnabled: 1
+      calls: []
   dragPositionRelative: 0
   scalePosition: 0
 --- !u!1 &1286818151
@@ -32139,6 +32095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2ecfd8018ae047fe94c8ade413bc44e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchZone: {fileID: 1256455898}
   menuController: {fileID: 2049771981}
   winningParticleGenerator: {fileID: 278685328}
   bgParent: {fileID: 2068058696}

@@ -10,7 +10,6 @@ namespace Fourzy._Updates.UI.Helpers
     public class ButtonExtendedEditor : ButtonEditor
     {
         private SerializedProperty eventProperty;
-        private SerializedProperty eventWithDataProperty;
         private SerializedProperty onStateProperty;
         private SerializedProperty offStateProperty;
         private SerializedProperty sfxProperty;
@@ -28,7 +27,6 @@ namespace Fourzy._Updates.UI.Helpers
             base.OnEnable();
 
             eventProperty = serializedObject.FindProperty("events");
-            eventWithDataProperty = serializedObject.FindProperty("eventsWithData");
             onStateProperty = serializedObject.FindProperty("onState");
             offStateProperty = serializedObject.FindProperty("offState");
             offStateProperty = serializedObject.FindProperty("offState");
@@ -48,7 +46,6 @@ namespace Fourzy._Updates.UI.Helpers
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(eventProperty);
-            EditorGUILayout.PropertyField(eventWithDataProperty);
             EditorGUILayout.PropertyField(onStateProperty);
             EditorGUILayout.PropertyField(offStateProperty);
             EditorGUILayout.PropertyField(sfxProperty);

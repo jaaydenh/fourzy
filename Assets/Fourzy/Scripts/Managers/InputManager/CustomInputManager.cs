@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 namespace Fourzy._Updates.Managers
 {
@@ -24,9 +24,9 @@ namespace Fourzy._Updates.Managers
         private List<VirtualPointer> pointers = new List<VirtualPointer>();
         private Dictionary<VirtualPointer, SelectableUI> hoverObjects = new Dictionary<VirtualPointer, SelectableUI>();
 
-        public static int GamepadsCount { get; private set; }
+        public static int GamepadCount { get; private set; }
 
-        private int _gamepadsCount => Input.GetJoystickNames().Where(_name => !string.IsNullOrEmpty(_name)).Count();
+        private int _gamepadCount => InputSystem.devices.Where(_device => _device is Gamepad).Count();
 
         protected void Awake()
         {
@@ -41,31 +41,34 @@ namespace Fourzy._Updates.Managers
             StandaloneInputModuleExtended.GamepadMode = StandaloneInputModuleExtended.GamepadModeFilter.MULTIPLE;
 
             Initialize();
+
+            InputSystem.onDeviceChange +=
+            (device, change) =>
+            {
+                if (device is Gamepad)
+                {
+                    if (change == InputDeviceChange.Added) GamepadCount++;
+                    else if (change == InputDeviceChange.Removed) GamepadCount--;
+
+                    for (int index = 0; index < pointers.Count; index++)
+                        pointers[index].SetState(GamepadCount > index);
+                }
+            };
         }
 
         protected void Update()
         {
-            //check gamepads connected
-            int count = _gamepadsCount;
-            if (count != GamepadsCount)
-            {
-                GamepadsCount = count;
-
-                for (int index = 0; index < pointers.Count; index++)
-                    pointers[index].SetState(GamepadsCount > index);
-            }
-
-            if (GamepadsCount == 0) return;
+            if (GamepadCount == 0) return;
 
             //update gampads inputs
-            if (GamepadsCount == 1)
+            if (GamepadCount == 1)
             {
                 Vector2 value = new Vector2(Input.GetAxis("JoystickAnyX"), Input.GetAxis("JoystickAnyY"));
-                print(value);
+
                 for (int gpIndex = 0; gpIndex < MAX_GAMEPAD_COUNT; gpIndex++)
                     if (pointers[gpIndex].Active && value.magnitude > 0f) pointers[gpIndex].Move(value * gamepadMoveSpeed * Time.deltaTime);
             }
-            else if (GamepadsCount > 1)
+            else if (GamepadCount > 1)
             {
                 for (int gpIndex = 0; gpIndex < MAX_GAMEPAD_COUNT; gpIndex++)
                 {
@@ -73,7 +76,7 @@ namespace Fourzy._Updates.Managers
                     if (value.magnitude > 0f) pointers[gpIndex].Move(value * gamepadMoveSpeed * Time.deltaTime);
                 }
             }
-            
+
             foreach (VirtualPointer pointer in pointers)
             {
                 if (!pointer.Active) continue;
@@ -120,7 +123,7 @@ namespace Fourzy._Updates.Managers
                 pointers.Add(_pointer);
             }
 
-            GamepadsCount = _gamepadsCount;
+            GamepadCount = _gamepadCount;
 
             initialized = true;
         }

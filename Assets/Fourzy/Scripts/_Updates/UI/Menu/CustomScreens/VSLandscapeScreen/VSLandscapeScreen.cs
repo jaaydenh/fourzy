@@ -10,6 +10,7 @@ using FourzyGameModel.Model;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI.Extensions;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -35,7 +36,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private RectTransform gamePiecesRectTransform;
         private ButtonExtended selectedBoardWidgetButton;
 
-        private List<GamePieceWidgetLandscape> selectedPlayers = new List<GamePieceWidgetLandscape>();
+        private GamePieceWidgetLandscape[] selectedPlayers = new GamePieceWidgetLandscape[2];
 
         private GameBoardDefinition gameBoardDefinition;
         private ThemesDataHolder.GameTheme selectedTheme;
@@ -83,10 +84,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void StartGame()
         {
             Player player1 = UserManager.Instance.meAsPlayer;
-            if (selectedPlayers.Count > 0) player1.HerdId = selectedPlayers[0].data.ID;
+            if (selectedPlayers[0] != null) player1.HerdId = selectedPlayers[0].data.ID;
 
             Player player2 = new Player(2, "Player Two");
-            if (selectedPlayers.Count > 1) player2.HerdId = selectedPlayers[1].data.ID;
+            if (selectedPlayers[1] != null) player2.HerdId = selectedPlayers[1].data.ID;
             if (p2DifficultyLevel > -1) player2.Profile = AIPlayerFactory.RandomProfile((AIDifficulty)p2DifficultyLevel);
 
             ClientFourzyGame game;
@@ -136,32 +137,48 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnBack();
 
-            if (selectedPlayers.Count() > 0)
+            //check backCaller id 
+            GamePieceWidgetLandscape prev;
+            switch (StandaloneInputModuleExtended.BackCallerId)
             {
-                GamePieceWidgetLandscape last = selectedPlayers.Last();
+                case 0:
+                case 1:
+                    if (selectedPlayers[StandaloneInputModuleExtended.BackCallerId] == null)
+                    {
+                        BackToRoot();
+                        return;
+                    }
+                    else
+                    {
+                        prev = selectedPlayers[StandaloneInputModuleExtended.BackCallerId];
+                        selectedPlayers[StandaloneInputModuleExtended.BackCallerId] = null;
+                        prev.SelectAsPlayer(GetSameProfiles(prev, -1));
 
-                switch (selectedPlayers.Count())
-                {
-                    case 2:
-                        last.SelectAsPlayer(selectedPlayers[0] == last ? 0 : -1);
+                        UpdateProfiles();
+                    }
 
-                        selectedPlayers.Remove(last);
+                    break;
 
-                        break;
+                default:
+                    if (selectedPlayers[1] != null || selectedPlayers[0] != null)
+                    {
+                        for (int index = selectedPlayers.Length - 1; index >= 0; index--)
+                        {
+                            if (selectedPlayers[index] == null) continue;
 
-                    case 1:
-                        last.SelectAsPlayer(-1);
+                            prev = selectedPlayers[index];
+                            selectedPlayers[index] = null;
+                            prev.SelectAsPlayer(GetSameProfiles(prev, -1));
 
-                        selectedPlayers.Remove(last);
+                            break;
+                        }
 
-                        break;
-                }
+                        UpdateProfiles();
+                    }
+                    else BackToRoot();
 
-                readyButton.SetState(selectedPlayers.Count == 2);
-                UpdateProfiles();
+                    break;
             }
-            else
-                BackToRoot();
         }
 
         public void PickBoard() => menuController.GetScreen<LandscapeGameboardSelectionScreen>().Open(selectedTheme.themeID);
@@ -264,38 +281,52 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void UpdateProfiles()
         {
             for (int profileIndex = 0; profileIndex < profiles.Length; profileIndex++)
-                profiles[profileIndex].SetData(selectedPlayers.Count > profileIndex ? selectedPlayers[profileIndex].data : null);
+                profiles[profileIndex].SetData(selectedPlayers[profileIndex] != null ? selectedPlayers[profileIndex].data : null);
         }
 
-        private void OnGPSelected(GamePieceWidgetLandscape gm)
+        private void OnGPSelected(PointerEventData data, GamePieceWidgetLandscape piece)
         {
-            if (selectedPlayers.Count == 2)
+            if (CustomInputManager.GamepadCount < 2 || data.pointerId == -1)
             {
-                if (selectedPlayers[1] == selectedPlayers[0]) selectedPlayers[1].SelectAsPlayer(0);
-                else selectedPlayers[1].SelectAsPlayer(-1);
+                for (int index = 0; index < selectedPlayers.Length; index++)
+                {
+                    if (selectedPlayers[index] != null && index == 0) continue;
 
-                selectedPlayers[1] = gm;
+                    UpdateSelectedPlayer(index, piece);
 
-                if (selectedPlayers[1] == selectedPlayers[0]) selectedPlayers[1].SelectAsPlayer(0, 1);
-                else selectedPlayers[1].SelectAsPlayer(1);
+                    break;
+                }
             }
             else
-            {
-                if (selectedPlayers.Count == 0)
-                    gm.SelectAsPlayer(0);
-                else
-                {
-                    if (selectedPlayers[0] == gm)
-                        gm.SelectAsPlayer(0, 1);
-                    else
-                        gm.SelectAsPlayer(1);
-                }
+                UpdateSelectedPlayer(data.pointerId, piece);
 
-                selectedPlayers.Add(gm);
+            readyButton.SetState(selectedPlayers.ToList().TrueForAll(_widget => _widget != null));
+            UpdateProfiles();
+        }
+
+        private int[] GetSameProfiles(GamePieceWidgetLandscape piece, int indexToIgnore)
+        {
+            List<int> result = new List<int>();
+
+            for (int index = 0; index < selectedPlayers.Length; index++)
+            {
+                if (indexToIgnore == index) continue;
+                if (selectedPlayers[index] == piece) result.Add(index);
             }
 
-            readyButton.SetState(selectedPlayers.Count == 2);
-            UpdateProfiles();
+            if (result.Count == 0) result.Add(-1);
+
+            return result.ToArray();
+        }
+
+        private void UpdateSelectedPlayer(int index, GamePieceWidgetLandscape piece)
+        {
+            GamePieceWidgetLandscape prev = selectedPlayers[index];
+            selectedPlayers[index] = piece;
+
+            if (prev != null) prev.SelectAsPlayer(GetSameProfiles(prev, index));
+
+            selectedPlayers[index].SelectAsPlayer(GetSameProfiles(piece, -1));
         }
 
         private void TimerToggleValueSet(bool value)

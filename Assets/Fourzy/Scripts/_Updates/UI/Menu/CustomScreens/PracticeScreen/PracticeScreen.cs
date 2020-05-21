@@ -182,7 +182,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected OpponentWidget AddWidget(AIProfile aiProfile, Transform parent, int playerIndex)
         {
             OpponentWidget instance = Instantiate(opponentWidgetPrefab, parent).SetData(aiProfile, playerIndex);
-            instance.button.onTap += () => OnWidgetTap(instance);
+            instance.button.onTap += data => OnWidgetTap(instance);
 
             return instance;
         }
@@ -190,7 +190,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected PracticeScreenAreaSelectWidget AddAreaWidget(Area area)
         {
             PracticeScreenAreaSelectWidget instance = Instantiate(areaWidgetPrefab, areasContainer.content).SetData(area);
-            instance.button.onTap += () => SetArea(instance);
+            instance.button.onTap += data => SetArea(instance);
 
             return instance;
         }

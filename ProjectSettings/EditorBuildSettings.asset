@@ -20,4 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Fourzy/Scenes/gamePlayNew.unity
     guid: 5ac49ce917313314ca626e8b6c3217fe
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 6b047155eff92054e891973a2ffb856a,
+      type: 2}

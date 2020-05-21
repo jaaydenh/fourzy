@@ -3,12 +3,13 @@
 using Fourzy._Updates.Mechanics._GamePiece;
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class GamePieceWidgetLandscape : WidgetBase
     {
-        public Action<GamePieceWidgetLandscape> onClick;
+        public Action<PointerEventData, GamePieceWidgetLandscape> onClick;
 
         [HideInInspector]
         public GamePieceData data;
@@ -49,14 +50,14 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public GamePieceWidgetLandscape SetOnClick(Action<GamePieceWidgetLandscape> action)
+        public GamePieceWidgetLandscape SetOnClick(Action<PointerEventData, GamePieceWidgetLandscape> action)
         {
             onClick = action;
 
             return this;
         }
 
-        public void OnClick() => onClick?.Invoke(this);
+        private void OnClick(PointerEventData pointerEventData) => onClick?.Invoke(pointerEventData, this);
 
         private GamePieceView AddPiece(string id)
         {
@@ -66,6 +67,13 @@ namespace Fourzy._Updates.UI.Widgets
             _gamePiece.StartBlinking();
 
             return _gamePiece;
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            button.onTap += OnClick;
         }
     }
 }

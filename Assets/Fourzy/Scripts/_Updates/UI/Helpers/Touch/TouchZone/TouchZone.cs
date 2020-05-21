@@ -1,11 +1,15 @@
 ﻿//@vadym udod
 
 using ByteSheep.Events;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class TouchZone : EventTrigger
 {
+    public Action<Vector2, int> onPointerDownData;
+    public Action<Vector2, int> onPointerUpData;
+
     public AdvancedVector2Event onPointerDown;
     public AdvancedVector2Event onPointerMove;
     public AdvancedVector2Event onPointerUp;
@@ -31,6 +35,7 @@ public class TouchZone : EventTrigger
             originPosition = new Vector2(eventData.position.x, eventData.position.y);
 
         onPointerDown.Invoke(originPosition);
+        onPointerDownData?.Invoke(originPosition, eventData.pointerId);
     }
 
     public override void OnDrag(PointerEventData eventData)
@@ -57,10 +62,12 @@ public class TouchZone : EventTrigger
     {
         base.OnPointerUp(eventData);
 
-        if (scalePosition)
-            onPointerUp.Invoke(new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y));
-        else
-            onPointerUp.Invoke(new Vector2(eventData.position.x, eventData.position.y));
+        Vector2 _result;
+        if (scalePosition) _result = new Vector2(eventData.position.x / canvas.transform.lossyScale.x, eventData.position.y / canvas.transform.lossyScale.y);
+        else _result = new Vector2(eventData.position.x, eventData.position.y);
+
+        onPointerUp.Invoke(_result);
+        onPointerUpData.Invoke(_result, eventData.pointerId);
     }
 
     private Canvas CheckObj(Transform @object)

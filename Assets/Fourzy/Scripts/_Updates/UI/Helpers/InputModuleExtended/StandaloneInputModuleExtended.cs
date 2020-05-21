@@ -23,6 +23,7 @@ namespace UnityEngine.EventSystems
         public static Action<GamepadControlFilter> onFilterChanged;
         public static Action<GamepadModeFilter> onModeChanged;
         public static Action onBackPressed;
+        public static int BackCallerId = -2;
 
         public static int GamepadID
         {
@@ -145,8 +146,16 @@ namespace UnityEngine.EventSystems
                                     SetVirtualPointerState(VirtualPointerState.RELEASED);
                             }
                             //check back button
-                            else if (Input.GetKeyDown(GetKeyCode(1, 0)) || Input.GetKeyDown(GetKeyCode(1, 1)))
+                            else if (Input.GetKeyDown(GetKeyCode(1, 0)))
+                            {
+                                BackCallerId = 0;
                                 onBackPressed?.Invoke();
+                            }
+                            else if(Input.GetKeyDown(GetKeyCode(1, 1)))
+                            {
+                                BackCallerId = 1;
+                                onBackPressed?.Invoke();
+                            }
 
                             break;
 
@@ -166,7 +175,10 @@ namespace UnityEngine.EventSystems
                                         SetVirtualPointerState(VirtualPointerState.RELEASED);
                                     //check back button
                                     else if (Input.GetKeyDown(GetKeyCode(1, 0)))
+                                    {
+                                        BackCallerId = 0;
                                         onBackPressed?.Invoke();
+                                    }
 
                                     break;
 
@@ -183,7 +195,10 @@ namespace UnityEngine.EventSystems
                                         SetVirtualPointerState(VirtualPointerState.RELEASED);
                                     //check back button
                                     else if (Input.GetKeyDown(GetKeyCode(1, 1)))
+                                    {
+                                        BackCallerId = 1;
                                         onBackPressed?.Invoke();
+                                    }
 
                                     break;
                             }
@@ -199,11 +214,23 @@ namespace UnityEngine.EventSystems
                     break;
 
                 case GamepadModeFilter.MULTIPLE:
-                    if (Input.GetKeyDown(GetKeyCode(1, 0)) || Input.GetKeyDown(GetKeyCode(1, 1)))
+                    if (Input.GetKeyDown(GetKeyCode(1, 0)))
+                    {
+                        BackCallerId = 0;
                         onBackPressed?.Invoke();
+                    }
+                    else if (Input.GetKeyDown(GetKeyCode(1, 1)))
+                    {
+                        BackCallerId = 1;
+                        onBackPressed?.Invoke();
+                    }
 
                     break;
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape)) onBackPressed?.Invoke();
+
+            BackCallerId = -1;
         }
 
         protected void LateUpdate()
@@ -219,9 +246,6 @@ namespace UnityEngine.EventSystems
         public static KeyCode GetKeyCode(int button, int jIndex)
         {
             string[] jNames = Input.GetJoystickNames();
-
-            //button 1 used as "back" button
-            if (button == 1 && CheckKey(KeyCode.Escape)) return KeyCode.Escape;
 
             switch (jIndex)
             {

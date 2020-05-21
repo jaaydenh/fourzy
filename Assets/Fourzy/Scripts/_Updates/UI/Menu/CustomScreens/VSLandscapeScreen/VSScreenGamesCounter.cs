@@ -24,7 +24,7 @@ namespace Fourzy._Updates.UI.Widgets
             foreach (string option in options)
             {
                 buttons[index].SetLabel(option);
-                buttons[index].onTap += () => OnOptionSelected(index);
+                buttons[index].onTap += data => OnOptionSelected(index);
 
                 index++;
             }

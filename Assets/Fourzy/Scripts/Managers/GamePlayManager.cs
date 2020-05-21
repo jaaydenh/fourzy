@@ -32,6 +32,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public static Action<string> OnGamePlayMessage;
         public static Action<long> OnTimerUpdate;
 
+        public TouchZone touchZone;
         public FourzyGameMenuController menuController;
         public WinningParticleGenerator winningParticleGenerator;
         public Transform bgParent;
@@ -73,6 +74,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             gameplayScreen = menuController.GetOrAddScreen<GameplayScreen>();
             playerPickScreen = menuController.GetOrAddScreen<RandomPlayerPickScreen>();
+
+            touchZone.onPointerDownData += OnPointerDown;
+            touchZone.onPointerUpData += OnPointerRelease;
 
             GameManager.onNetworkAccess += OnNetwork;
             LoginManager.OnDeviceLoginComplete += OnLogin;
@@ -231,8 +235,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        public void OnPointerDown(Vector2 position)
+        public void OnPointerDown(Vector2 position, int pointerId)
         {
+            if (CustomInputManager.GamepadCount == 2 && pointerId > -1 && game._State.ActivePlayerId != (pointerId + 1))
+            {
+                gameplayScreen.OnWrongTurn();
+                return;
+            }
+
             if (gameplayScreen != menuController.currentScreen) return;
 
             board.OnPointerDown(position);
@@ -242,7 +252,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             if (gameplayScreen != menuController.currentScreen || gameState != GameState.GAME)
             {
-                OnPointerRelease(position);
+                OnPointerRelease(position, -1);
 
                 return;
             }
@@ -250,8 +260,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             board.OnPointerMove(position);
         }
 
-        public void OnPointerRelease(Vector2 position)
+        public void OnPointerRelease(Vector2 position, int pointerId)
         {
+            if (CustomInputManager.GamepadCount == 2 && pointerId > -1 && game._State.ActivePlayerId != (pointerId + 1)) return;
             if (gameState != GameState.GAME) return;
 
             board.OnPointerRelease(position);

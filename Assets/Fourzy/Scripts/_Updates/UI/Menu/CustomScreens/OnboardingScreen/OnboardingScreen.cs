@@ -13,6 +13,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -179,7 +180,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (currentTask.action == OnboardingActions.GAME_FINISHED) SkipToNext();
         }
 
-        private void OnButtonTap()
+        private void OnButtonTap(PointerEventData data)
         {
             RemoveCurrentButton();
             SkipToNext();

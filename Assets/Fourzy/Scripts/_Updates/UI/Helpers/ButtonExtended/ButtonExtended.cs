@@ -16,12 +16,11 @@ namespace Fourzy._Updates.UI.Helpers
 {
     public class ButtonExtended : Button
     {
-        public Action onTap;
+        public Action<PointerEventData> onTap;
 
         public static Material GREYSCALE_MATERIAL;
 
         public AdvancedEvent events;
-        public AdvancedPointerDataEvent eventsWithData;
         public AdvancedEvent onState;
         public AdvancedEvent offState;
         public AudioTypes playOnClick = AudioTypes.BUTTON_CLICK;
@@ -204,13 +203,12 @@ namespace Fourzy._Updates.UI.Helpers
             if (eventData != null) base.OnPointerClick(eventData);
 
             events.Invoke();
-            //eventsWithData.Invoke(eventData);
 
             if (playOnClick != AudioTypes.NONE) AudioHolder.instance.PlaySelfSfxOneShotTracked(playOnClick);
 
             if (scaleOnClick && scaleTween) scaleTween.PlayForward(true);
 
-            onTap?.Invoke();
+            onTap?.Invoke(eventData);
         }
 
         private void Initialize()
