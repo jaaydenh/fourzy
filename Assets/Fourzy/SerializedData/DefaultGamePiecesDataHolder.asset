@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gamePieces:
     list:
-    - _name: 'Lil Flame: Fourzy-44 Variant'
+    - _name: Red Dragon Fourzy-44 Variant
       data:
         ID: 44
         name: Red Dragon
@@ -25,6 +25,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: f6418452ef2f81a4791bc6980492754e,
           type: 3}
+        profilePictureOffset: {x: -110, y: 30}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 30
@@ -42,6 +43,7 @@ MonoBehaviour:
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 30
         profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 30
@@ -59,6 +61,7 @@ MonoBehaviour:
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 30
         profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 30
@@ -66,7 +69,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 8699996572201907596, guid: 925db8004f6d91c46bdf3436ff4c509d,
         type: 3}
-    - _name: 'NightOwl: Fourzy-18 Variant'
+    - _name: Night Owl Fourzy-18 Variant
       data:
         ID: 17
         name: Night Owl
@@ -77,6 +80,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: c73c4997af5cca34a9fb7180c31dfcfd,
           type: 3}
+        profilePictureOffset: {x: -22, y: -44}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 30
@@ -95,6 +99,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: fdb4f9674b360df478829d8929e5e9dc,
           type: 3}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -102,7 +107,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 1471794324565520707, guid: d665ff38ef1112249a174524c503b706,
         type: 3}
-    - _name: 'Triangry: Fourzy-03 Variant'
+    - _name: Triangry Fourzy-03 Variant
       data:
         ID: 4
         name: Triangry
@@ -113,6 +118,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: a75f294368bb04d47b950aeb0e806319,
           type: 3}
+        profilePictureOffset: {x: -15, y: -26}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -120,7 +126,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 1273599101791352548, guid: 65a688a21fb925541874435586b5084b,
         type: 3}
-    - _name: 'Mr. Bun: Fourzy-17 Variant'
+    - _name: Mr. Bun Fourzy-17 Variant
       data:
         ID: 5
         name: Mr. Bun
@@ -131,6 +137,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: c1d24a9606b58b742ba08f026865f926,
           type: 3}
+        profilePictureOffset: {x: 0, y: -50}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -138,7 +145,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 7362191402604282324, guid: c2c62a48e1ada1b42ad7157023c2a4b7,
         type: 3}
-    - _name: 'Daisy: Fourzy-06 Variant'
+    - _name: Daisy Fourzy-06 Variant
       data:
         ID: 6
         name: Daisy
@@ -149,6 +156,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: eace5bed472eb3743ac90030a395310d,
           type: 3}
+        profilePictureOffset: {x: 0, y: -30}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -166,6 +174,7 @@ MonoBehaviour:
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
         profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -173,7 +182,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 47512167054787771, guid: 1149fdc4a69a4b74fa28ce0478e05a8b,
         type: 3}
-    - _name: 'SquidMo: Fourzy-08 Variant'
+    - _name: SquidMo Fourzy-08 Variant
       data:
         ID: 8
         name: SquidMo
@@ -184,6 +193,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: 3ad17d444b486a040ae304bbe0839794,
           type: 3}
+        profilePictureOffset: {x: 7, y: -25}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -201,6 +211,7 @@ MonoBehaviour:
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
         profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -218,6 +229,7 @@ MonoBehaviour:
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
         profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -225,7 +237,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 3037363664063910796, guid: b86d0e80064180345b1e74e1b4ae43a5,
         type: 3}
-    - _name: 'Sentinal: Fourzy-11 Variant'
+    - _name: Sentinal Fourzy-11 Variant
       data:
         ID: 10
         name: Sentinal
@@ -236,6 +248,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: f7c08911bfd59784981d16a9f7166cc9,
           type: 3}
+        profilePictureOffset: {x: 0, y: -30}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -243,7 +256,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 441494821392692054, guid: 2e37407a01421e745b25a9b8bd0abcc2,
         type: 3}
-    - _name: 'Droidz: Fourzy-16 Variant'
+    - _name: Droidz Fourzy-16 Variant
       data:
         ID: 11
         name: Droidz
@@ -254,6 +267,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: d0bf6693d52113042818892f0f9097f6,
           type: 3}
+        profilePictureOffset: {x: 4, y: 37}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -261,7 +275,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 5164172713599178379, guid: e99be6bd0874d4540a3b69bee6feecd1,
         type: 3}
-    - _name: 'Cyclops: Fourzy-01 Variant'
+    - _name: Cyclops Fourzy-01 Variant
       data:
         ID: 2
         name: Cyclops
@@ -272,6 +286,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: bab83e858a08f9d40b0b2f4dfc9eb70f,
           type: 3}
+        profilePictureOffset: {x: 11, y: -30}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -290,6 +305,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: 4b92cfda188a7bf4788bb26d7b637be6,
           type: 3}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -307,6 +323,7 @@ MonoBehaviour:
         borderColor: {r: 0.9960785, g: 0.6117647, b: 0, a: 1}
         piecesToUnlock: 30
         profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -314,7 +331,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 6247048933141322455, guid: cdd084f4918991d45b953f7c5eb9a104,
         type: 3}
-    - _name: 'Furrzy: Fourzy-14 Variant'
+    - _name: Furrzy Fourzy-14 Variant
       data:
         ID: 15
         name: Furrzy
@@ -325,6 +342,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         profilePicture: {fileID: 21300000, guid: 21149a38a5e3ba148a7d134d2d0a1626,
           type: 3}
+        profilePictureOffset: {x: -41, y: -19}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -332,7 +350,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 9089172778016556641, guid: 3ce1d35db64c698458539c324d2012b7,
         type: 3}
-    - _name: 'Eeek: Fourzy-13 Variant'
+    - _name: Eeek Fourzy-13 Variant
       data:
         ID: 16
         name: Eeek
@@ -343,6 +361,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         profilePicture: {fileID: 21300000, guid: 298491a9f6dadb646a45618b15cd02c9,
           type: 3}
+        profilePictureOffset: {x: -37, y: -45}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -350,7 +369,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 5140903452275623593, guid: ce89e0e006b15f54981ce6364f561f78,
         type: 3}
-    - _name: 'RainbowBite: Fourzy-19 Variant'
+    - _name: Rainbow Bite Fourzy-19 Variant
       data:
         ID: 18
         name: Rainbow Bite
@@ -361,6 +380,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: f43d6947711d21841a30a77b5a300552,
           type: 3}
+        profilePictureOffset: {x: -86, y: 64}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 30
@@ -379,6 +399,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         profilePicture: {fileID: 21300000, guid: c3503510c7fd65943a48d44c60cd1225,
           type: 3}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -396,6 +417,7 @@ MonoBehaviour:
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
         profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -403,7 +425,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 8625214451842383249, guid: a2d57f29f5cde4b468d92c78b10c4c55,
         type: 3}
-    - _name: 'Mecha Bunny: Fourzy-36 Variant'
+    - _name: Mecha Bunny Fourzy-36 Variant
       data:
         ID: 36
         name: Mecha Bunny
@@ -414,6 +436,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         profilePicture: {fileID: 21300000, guid: 9a8d1e1655e0c1c40b11db96af5c5f22,
           type: 3}
+        profilePictureOffset: {x: -22, y: 109}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -421,7 +444,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 5034072604579296946, guid: 38a77cd11c95a0a4cb7087832a17ee0a,
         type: 3}
-    - _name: 'Techno Bug: Fourzy-45 Variant'
+    - _name: Techno Bug Fourzy-45 Variant
       data:
         ID: 45
         name: Techno Bug
@@ -431,6 +454,7 @@ MonoBehaviour:
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
         profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -438,7 +462,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 3600020066660262105, guid: 0f0b53b410614ad449722edec3378799,
         type: 3}
-    - _name: 'Mr. Hatty: Fourzy-38 Variant'
+    - _name: Mr. Hatty Fourzy-38 Variant
       data:
         ID: 38
         name: Mr. Hatty
@@ -449,6 +473,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         profilePicture: {fileID: 21300000, guid: 0f77731c615de8340afe1a9f37be11df,
           type: 3}
+        profilePictureOffset: {x: 11, y: -50}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0

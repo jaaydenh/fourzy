@@ -103,12 +103,19 @@ namespace Fourzy._Updates.Serialized
     [System.Serializable]
     public class GamePiecePrefabData
     {
-        [HideInInspector]
+        [StackableField, ShowIf("#ShowIf")]
         public string _name;
 
         public GamePieceData data;
         public GamePieceView player1Prefab;
         public GamePieceView player2Prefab;
+
+        private bool ShowIf()
+        {
+            _name = data.name + (player1Prefab ? " " + player1Prefab.name : "");
+
+            return false;
+        }
     }
 
     [System.Serializable]

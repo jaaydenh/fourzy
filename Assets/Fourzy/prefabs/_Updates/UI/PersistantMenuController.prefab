@@ -47448,7 +47448,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6036679001577777360}
+  - {fileID: 8091432579595575468}
   m_Father: {fileID: 2261576473015156951}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47471,7 +47471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointerPrefab: {fileID: -5297103603668720879, guid: db01ab5bcc067c44f8923196c307ec93,
     type: 3}
-  gamepadMoveSpeed: 300
+  gamepadMoveSpeed: 900
 --- !u!225 &7332767945016277502
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -64410,7 +64410,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db01ab5bcc067c44f8923196c307ec93, type: 3}
---- !u!224 &6036679001577777360 stripped
+--- !u!224 &8091432579595575468 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2561453757003684701, guid: db01ab5bcc067c44f8923196c307ec93,
     type: 3}

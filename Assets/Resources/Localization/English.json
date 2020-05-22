@@ -89,6 +89,10 @@
       "value": "Swipe right to move"
     },
     {
+      "key": "aggressive",
+      "value": "AGGRESSIVE"
+    },
+    {
       "key": "area_garden",
       "value": "Training Garden"
     },
@@ -143,6 +147,10 @@
     {
       "key": "current_name",
       "value": "Current name"
+    },
+    {
+      "key": "cpu_difficulty",
+      "value": "CPU DIFFICULTY"
     },
     {
       "key": "draw",
@@ -221,8 +229,16 @@
       "value": "Help"
     },
     {
+      "key": "impossible",
+      "value": "IMPOSSIBLE"
+    },
+    {
       "key": "lost",
       "value": "Lost"
+    },
+    {
+      "key": "lv",
+      "value": "lv"
     },
     {
       "key": "loading",
@@ -231,6 +247,10 @@
     {
       "key": "magic",
       "value": "Magic"
+    },
+    {
+      "key": "medium",
+      "value": "MEDIUM"
     },
     {
       "key": "music",
@@ -327,6 +347,10 @@
     {
       "key": "select_board",
       "value": "Board Selection"
+    },
+    {
+      "key": "simple",
+      "value": "SIMPLE"
     },
     {
       "key": "sound_effects",

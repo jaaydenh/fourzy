@@ -92,6 +92,11 @@ namespace Fourzy._Updates.UI.Widgets
 
                 gameboardView.Initialize(game, false);
             }
+            else
+            {
+                Clear();
+                nameLabel.text = "Random";
+            }
 
             questionMark.SetActive(data == null);
 

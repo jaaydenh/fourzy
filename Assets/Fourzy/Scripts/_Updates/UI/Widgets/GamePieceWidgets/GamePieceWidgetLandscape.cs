@@ -1,9 +1,11 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics._GamePiece;
+using Fourzy._Updates.UI.Helpers;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -17,20 +19,33 @@ namespace Fourzy._Updates.UI.Widgets
         public RectTransform gamePieceParent;
         public GameObject player1Marker;
         public GameObject player2Marker;
-        public GameObject p1Selection;
-        public GameObject p2Selection;
+        public Image p1Selection;
+        public Image p2Selection;
+        public GameObject random;
+
+        private SelectableUI selectableUI;
+        private int[] players;
 
         public GamePieceView gamePiece { get; private set; }
 
         public virtual GamePieceWidgetLandscape SetData(GamePieceData data)
         {
-            if (gamePiece && gamePiece.pieceData.ID != data.ID)
+            if (data != null)
             {
-                Destroy(gamePiece.gameObject);
-                gamePiece = AddPiece(data.ID);
+                if (gamePiece && gamePiece.pieceData.ID != data.ID)
+                {
+                    Destroy(gamePiece.gameObject);
+                    gamePiece = AddPiece(data.ID);
+                }
+                else if (!gamePiece)
+                    gamePiece = AddPiece(data.ID);
+
+                random.SetActive(false);
             }
-            else if (!gamePiece)
-                gamePiece = AddPiece(data.ID);
+            else
+            {
+                random.SetActive(true);
+            }
 
             this.data = data;
 
@@ -42,10 +57,16 @@ namespace Fourzy._Updates.UI.Widgets
             bool p1 = players.Contains(0);
             bool p2 = players.Contains(1);
 
+            this.players = players.Contains(-1) ? null : players;
+
             player1Marker.SetActive(p1);
             player2Marker.SetActive(p2);
-            p1Selection.SetActive(p1);
-            p2Selection.SetActive(p2);
+
+            p1Selection.gameObject.SetActive(p1);
+            p2Selection.gameObject.SetActive(p2);
+
+            p1Selection.fillAmount = p1 && p2 ? .5f : 1f;
+            p2Selection.fillAmount = p1 && p2 ? .5f : 1f;
 
             return this;
         }
@@ -55,6 +76,46 @@ namespace Fourzy._Updates.UI.Widgets
             onClick = action;
 
             return this;
+        }
+
+        private void OnPointerEnter(PointerEventData data)
+        {
+            if (players != null) return;
+
+            switch (data.pointerId)
+            {
+                case 1:
+                    p2Selection.gameObject.SetActive(true);
+                    p2Selection.fillAmount = 1f;
+
+                    break;
+
+                default:
+                    p1Selection.gameObject.SetActive(true);
+                    p1Selection.fillAmount = 1f;
+
+                    break;
+            }
+        }
+
+        private void OnPointerExit(PointerEventData data)
+        {
+            if (players != null) return;
+
+            switch (data.pointerId)
+            {
+                case 1:
+                    p2Selection.gameObject.SetActive(false);
+                    p2Selection.fillAmount = 1f;
+
+                    break;
+
+                default:
+                    p1Selection.gameObject.SetActive(false);
+                    p1Selection.fillAmount = 1f;
+
+                    break;
+            }
         }
 
         private void OnClick(PointerEventData pointerEventData) => onClick?.Invoke(pointerEventData, this);
@@ -72,6 +133,10 @@ namespace Fourzy._Updates.UI.Widgets
         protected override void OnInitialized()
         {
             base.OnInitialized();
+
+            selectableUI = GetComponent<SelectableUI>();
+            selectableUI.onEnter += OnPointerEnter;
+            selectableUI.onLeave += OnPointerExit;
 
             button.onTap += OnClick;
         }

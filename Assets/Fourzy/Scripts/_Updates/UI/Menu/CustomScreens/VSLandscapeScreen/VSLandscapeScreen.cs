@@ -83,11 +83,48 @@ namespace Fourzy._Updates.UI.Menu.Screens
         /// </summary>
         public void StartGame()
         {
+            string herdId;
+            string displaName;
+
+
             Player player1 = UserManager.Instance.meAsPlayer;
-            if (selectedPlayers[0] != null) player1.HerdId = selectedPlayers[0].data.ID;
+            if (selectedPlayers[0] != null)
+            {
+                if (selectedPlayers[0].data != null)
+                {
+                    herdId = selectedPlayers[0].data.ID;
+                    displaName = selectedPlayers[0].data.name;
+                }
+                else
+                {
+                    GamePieceData random = unlockedGamepieces.Random().data;
+                    herdId = random.ID;
+                    displaName = random.name;
+                }
+
+                player1.HerdId = herdId;
+                player1.DisplayName = displaName;
+            }
 
             Player player2 = new Player(2, "Player Two");
-            if (selectedPlayers[1] != null) player2.HerdId = selectedPlayers[1].data.ID;
+            if (selectedPlayers[1] != null)
+            {
+                if (selectedPlayers[1].data != null)
+                {
+                    herdId = selectedPlayers[1].data.ID;
+                    displaName = selectedPlayers[1].data.name;
+                }
+                else
+                {
+                    GamePieceData random = unlockedGamepieces.Random().data;
+                    herdId = random.ID;
+                    displaName = random.name;
+                }
+
+                player2.HerdId = herdId;
+                player2.DisplayName = displaName;
+            }
+
             if (p2DifficultyLevel > -1) player2.Profile = AIPlayerFactory.RandomProfile((AIDifficulty)p2DifficultyLevel);
 
             ClientFourzyGame game;
@@ -120,8 +157,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             else if (selectedTheme == null)
             {
-                //cant select board
-                selectedBoardWidget.Clear();
                 selectedBoardWidgetButton.SetState(false);
 
                 gameBoardDefinition = null;
@@ -175,10 +210,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         UpdateProfiles();
                     }
-                    else BackToRoot();
+                    else
+                    {
+                        BackToRoot();
+                        return;
+                    }
 
                     break;
             }
+
+            readyButton.SetState(selectedPlayers.ToList().TrueForAll(_widget => _widget != null));
         }
 
         public void PickBoard() => menuController.GetScreen<LandscapeGameboardSelectionScreen>().Open(selectedTheme.themeID);
@@ -239,7 +280,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gamePieceWidgets.Clear();
 
             unlockedGamepieces = GameContentManager.Instance.piecesDataHolder.gamePieces.list.Where(_widget => _widget.data.profilePicture);
-            //int piecesCount = testPieces;
             int piecesCount = unlockedGamepieces.Count();
 
             Columns = optimalColumnCount;
@@ -263,26 +303,30 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (gamePiecesRectTransform.sizeDelta.x > _maxGridSize)
                 gamePiecesRectTransform.localScale = new Vector3(_maxGridSize / gamePiecesRectTransform.sizeDelta.x, _maxGridSize / gamePiecesRectTransform.sizeDelta.x);
 
-            //only go though unlocked pieces
-            //for (int testIndex = 0; testIndex < piecesCount; testIndex++)
-            foreach (GamePiecePrefabData prefabData in unlockedGamepieces)
-            {
-                GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>(GameContentManager.PrefabType.GAME_PIECE_LANDSCAPE, gamePiecesRectTransform);
+            foreach (GamePiecePrefabData prefabData in unlockedGamepieces) CreateGamepieceWidget(prefabData.data);
 
-                widget
-                    .SetData(prefabData.data)
-                    //.SetData(GameContentManager.Instance.piecesDataHolder.gamePieces.list[testIndex % GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count].data)
-                    .SetOnClick(OnGPSelected);
+            //add random
+            CreateGamepieceWidget(null);
+        }
 
-                widgets.Add(widget);
-                gamePieceWidgets.Add(widget);
-            }
+        private GamePieceWidgetLandscape CreateGamepieceWidget(GamePieceData data)
+        {
+            GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>(GameContentManager.PrefabType.GAME_PIECE_LANDSCAPE, gamePiecesRectTransform);
+
+            widget
+                .SetData(data)
+                .SetOnClick(OnGPSelected);
+
+            widgets.Add(widget);
+            gamePieceWidgets.Add(widget);
+
+            return widget;
         }
 
         private void UpdateProfiles()
         {
             for (int profileIndex = 0; profileIndex < profiles.Length; profileIndex++)
-                profiles[profileIndex].SetData(selectedPlayers[profileIndex] != null ? selectedPlayers[profileIndex].data : null);
+                profiles[profileIndex].SetData(selectedPlayers[profileIndex]);
         }
 
         private void OnGPSelected(PointerEventData data, GamePieceWidgetLandscape piece)

@@ -89,6 +89,10 @@
       "value": "Desliza hacia la derecha para moverte"
     },
     {
+      "key": "aggressive",
+      "value": "EMPRENDEDOR"
+    },
+    {
       "key": "area_garden",
       "value": "Jardín de entrenamiento"
     },
@@ -143,6 +147,10 @@
     {
       "key": "current_name",
       "value": "Nombre actual"
+    },
+    {
+      "key": "cpu_difficulty",
+      "value": "DIFICULTAD DE LA CPU"
     },
     {
       "key": "draw",
@@ -221,8 +229,16 @@
       "value": "Ayuda"
     },
     {
+      "key": "impossible",
+      "value": "IMPOSIBLE"
+    },
+    {
       "key": "lost",
       "value": "Perdiste"
+    },
+    {
+      "key": "lv",
+      "value": "lv"
     },
     {
       "key": "loading",
@@ -231,6 +247,10 @@
     {
       "key": "magic",
       "value": "Magia"
+    },
+    {
+      "key": "medium",
+      "value": "INTERMEDIO"
     },
     {
       "key": "music",
@@ -327,6 +347,10 @@
     {
       "key": "select_board",
       "value": "Selección de juego"
+    },
+    {
+      "key": "simple",
+      "value": "MODESTO"
     },
     {
       "key": "sound_effects",

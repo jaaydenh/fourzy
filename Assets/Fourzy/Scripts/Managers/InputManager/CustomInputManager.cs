@@ -96,18 +96,21 @@ namespace Fourzy._Updates.Managers
                     if (!hoverObjects[pointer])
                     {
                         hoverObjects[pointer] = pointer.HoverObject;
-                        hoverObjects[pointer].OnEnter();
+                        hoverObjects[pointer].OnEnter(pointer.PointerData);
                     }
                     else if (hoverObjects[pointer] != pointer.HoverObject)
                     {
-                        hoverObjects[pointer].OnExit();
+                        if (hoverObjects.Values.Where(_widget => _widget == hoverObjects[pointer]).Count() == 1)
+                            hoverObjects[pointer].OnExit(pointer.PointerData);
+
                         hoverObjects[pointer] = pointer.HoverObject;
-                        hoverObjects[pointer].OnEnter();
+                        hoverObjects[pointer].OnEnter(pointer.PointerData);
                     }
                 }
                 else if (hoverObjects[pointer])
                 {
-                    hoverObjects[pointer].OnExit();
+                    if (hoverObjects.Values.Where(_widget => _widget == hoverObjects[pointer]).Count() == 1) hoverObjects[pointer].OnExit(pointer.PointerData);
+
                     hoverObjects[pointer] = null;
                 }
             }

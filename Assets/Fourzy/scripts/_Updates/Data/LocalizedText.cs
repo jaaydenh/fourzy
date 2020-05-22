@@ -23,8 +23,17 @@ namespace Fourzy
 
         public void UpdateLocale()
         {
-            if (tmPro) tmPro.text = LocalizationManager.Value(key);
-            else if (text) text.text = LocalizationManager.Value(key);
+            string newString;
+            int _keyIndex = key.IndexOf("{");
+            int _keyEnd = key.IndexOf("}");
+
+            if (_keyIndex > -1 && _keyEnd > -1)
+                newString = key.Replace(key.Substring(_keyIndex, _keyEnd - _keyIndex + 1), LocalizationManager.Value(key.Substring(_keyIndex + 1, _keyEnd - _keyIndex - 1)));
+            else
+                newString = LocalizationManager.Value(key);
+
+            if (tmPro) tmPro.text = newString;
+            else if (text) text.text = newString;
         }
 
         public void UpdateLocale(string _key)

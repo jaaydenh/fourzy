@@ -398,16 +398,16 @@ namespace UnityEngine.EventSystems
                         {
                             if (!last3DGOPoinerEnter || selectable != last3DGOPoinerEnter)
                             {
-                                if (last3DGOPoinerEnter && last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnExit();
+                                if (last3DGOPoinerEnter && last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnExit(leftData);
 
                                 last3DGOPoinerEnter = selectable;
-                                if (last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnEnter();
+                                if (last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnEnter(leftData);
                             }
                         }
                     }
                     else if (last3DGOPoinerEnter)
                     {
-                        if (last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnExit();
+                        if (last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnExit(leftData);
                         last3DGOPoinerEnter = null;
                     }
                 }
@@ -585,7 +585,7 @@ namespace UnityEngine.EventSystems
 
                 if (lastGOPoinerEnter)
                 {
-                    lastGOPoinerEnter.OnExit();
+                    lastGOPoinerEnter.OnExit(currentPointerData);
                     lastGOPoinerEnter = null;
                 }
 
@@ -617,7 +617,7 @@ namespace UnityEngine.EventSystems
 
                     if (lastGOPoinerEnter && lastGOPoinerEnter.transform == t)
                     {
-                        lastGOPoinerEnter.OnExit();
+                        lastGOPoinerEnter.OnExit(currentPointerData);
                         lastGOPoinerEnter = null;
                     }
 
@@ -643,12 +643,12 @@ namespace UnityEngine.EventSystems
                         if (selectableUI && selectableUI.interactable)
                         {
                             lastGOPoinerEnter = selectableUI;
-                            lastGOPoinerEnter.OnEnter();
+                            lastGOPoinerEnter.OnEnter(currentPointerData);
 
                             //cancel last3DGOPOinterEnter
                             if (last3DGOPoinerEnter)
                             {
-                                if (last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnExit();
+                                if (last3DGOPoinerEnter.enabled) last3DGOPoinerEnter.OnExit(currentPointerData);
                                 last3DGOPoinerEnter = null;
                             }
                         }

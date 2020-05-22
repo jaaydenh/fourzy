@@ -11,15 +11,31 @@ namespace Fourzy._Updates.UI.Widgets
         public Image profileImage;
         public TMP_Text nameLabel;
         public GameObject difficultiesHolder;
+        public GameObject random;
         public GameObject[] difficultyLevels;
 
-        public VSScreenPlayerWidget SetData(GamePieceData data)
+        public VSScreenPlayerWidget SetData(GamePieceWidgetLandscape widget)
         {
-            profileImage.sprite = data != null ? data.profilePicture : null;
-            profileImage.color = data != null ? Color.white : Color.clear;
-            profileImage.SetNativeSize();
+            if (widget)
+            {
+                GamePieceData data = widget.data;
 
-            nameLabel.text = data != null ? data.name : "";
+                profileImage.sprite = data != null ? data.profilePicture : null;
+                profileImage.color = data != null ? Color.white : Color.clear;
+                profileImage.rectTransform.anchoredPosition = data != null ? data.profilePictureOffset : Vector2.zero;
+                profileImage.SetNativeSize();
+                random.SetActive(data == null);
+
+                nameLabel.text = data != null ? data.name : "Random";
+            }
+            else
+            {
+                profileImage.sprite = null;
+                profileImage.color = Color.clear;
+
+                random.SetActive(false);
+                nameLabel.text = "";
+            }
 
             return this;
         }
