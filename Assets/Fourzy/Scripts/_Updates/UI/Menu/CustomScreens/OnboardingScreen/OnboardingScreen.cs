@@ -100,6 +100,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             instance = this;
 
+            _yield = false;
             isTutorialRunning = true;
             this.tutorial = tutorial;
 
@@ -236,10 +237,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         OnboardingTask_PointAt pointAtTask = currentTask as OnboardingTask_PointAt;
 
-                        //cut to 1
-                        //if (GameManager.Instance.placementStyle == GameManager.PlacementStyle.EDGE_TAP) pointAtTask.points = new Vector2[] { pointAtTask.points[0], };
-
-                        pointer.AnimatePointer(pointAtTask.points);
+                        pointer.AnimatePointer(
+                            pointAtTask.points.ContainsKey(GameManager.Instance.placementStyle) ? 
+                            pointAtTask.points[GameManager.Instance.placementStyle] : 
+                            pointAtTask.points.Values.First());
                         pointer.SetMessage(currentTask.stringValue);
 
                         break;
@@ -285,7 +286,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.SHOW_MASKED_AREA:
-                        masks.ShowMasks(currentTask);
+                        masks.ShowMasks(currentTask as OnboardingTask_ShowMaskedArea);
 
                         break;
 

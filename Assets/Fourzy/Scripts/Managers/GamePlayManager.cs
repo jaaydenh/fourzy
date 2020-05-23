@@ -196,7 +196,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             winningParticleGenerator.HideParticles();
 
             playerPickScreen.SetData(game);
-            print(game._Area);
+            //print(game._Area);
             LoadBG(game._Area);
             LoadBoard();
 

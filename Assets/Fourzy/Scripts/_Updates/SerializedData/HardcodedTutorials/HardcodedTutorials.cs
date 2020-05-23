@@ -3,12 +3,16 @@
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static Fourzy.GameManager;
 
 namespace Fourzy._Updates._Tutorial
 {
     public class HardcodedTutorials
     {
+        public static Tutorial GetByName(string name) => tutorials.Find(_tutorial => _tutorial.name == name);
+
         public static List<Tutorial> tutorials = new List<Tutorial>()
         {
             new Tutorial()
@@ -24,18 +28,24 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask_Log("1"),
 
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win"), 0, .75f),
-                    
+
                     new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
                     new OnboardingTask() { action = OnboardingActions.HIDE_BG },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
 
                     new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding1"),
 
-                    new OnboardingTask_PointAt("", new Vector2(4f, 0f), new Vector2(4f, 2f)),
+                    new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
+                        [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
+                        [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(4f, 0f) },
+                    }),
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_down"), 1, .15f),
                     new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
                     //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
-                    new OnboardingTask_ShowMaskedArea(new Rect(4f, 0f, 1f, 3f), OnboardingScreenMaskObject.MaskStyle.PX_0),
+                    new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
+                        [PlacementStyle.SWIPE_STYLE_2] = new Rect(4f, 0f, 1f, 3f),
+                        [PlacementStyle.EDGE_TAP] = new Rect(4f, 0f, 1f, 1f),
+                    }, OnboardingScreenMaskObject.MaskStyle.PX_0),
 
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                     new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
@@ -52,11 +62,17 @@ namespace Fourzy._Updates._Tutorial
 
                     new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding2"),
 
-                    new OnboardingTask_PointAt("", new Vector2(0f, 3f), new Vector2(2f, 3f)),
+                    new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
+                        [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(0f, 3f), new Vector2(2f, 3f) },
+                        [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(0f, 3f) },
+                    }),
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1, .15f),
                     new OnboardingTask_LimitInput(new Rect(0f, 3f, 3f, 1f)),
                     //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
-                    new OnboardingTask_ShowMaskedArea(new Rect(0f, 3f, 3f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0),
+                    new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
+                        [PlacementStyle.SWIPE_STYLE_2] = new Rect(0f, 3f, 3f, 1f),
+                        [PlacementStyle.EDGE_TAP] = new Rect(0f, 3f, 1f, 1f),
+                    }, OnboardingScreenMaskObject.MaskStyle.PX_0),
 
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                     new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
@@ -73,11 +89,17 @@ namespace Fourzy._Updates._Tutorial
 
                     new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding3"),
 
-                    new OnboardingTask_PointAt("", new Vector2(0f, 1f), new Vector2(2f, 1f)),
+                    new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>(){
+                        [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(0f, 1f), new Vector2(2f, 1f) },
+                        [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(0f, 1f) },
+                    }),
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1, .15f),
                     new OnboardingTask_LimitInput(new Rect(0f, 1f, 3f, 1f)),
                     //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
-                    new OnboardingTask_ShowMaskedArea(new Rect(0f, 1f, 3f, 1f), OnboardingScreenMaskObject.MaskStyle.PX_0),
+                    new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
+                        [PlacementStyle.SWIPE_STYLE_2] = new Rect(0f, 1f, 3f, 1f),
+                        [PlacementStyle.EDGE_TAP] = new Rect(0f, 1f, 1f, 1f),
+                    }, OnboardingScreenMaskObject.MaskStyle.PX_0),
 
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                     new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
@@ -108,6 +130,107 @@ namespace Fourzy._Updates._Tutorial
                         Vector3.one * .75f,
                         new MessageData(LocalizationManager.Value("tap_to_start_playing"), Vector2.zero, new Vector2(0f, -170f))),
                     new OnboardingTask_Log("7"),
+                },
+            },
+
+            new Tutorial()
+            {
+                name = "OnboardingLandscape",
+                onBack = TutorialOnBack.SHOW_LEAVE_PROMPT,
+                tasks = new OnboardingTask[]
+                {
+                    new OnboardingTask_OpenGame(GameType.ONBOARDING, "200"),
+                    new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
+                    new OnboardingTask() { action = OnboardingActions.SHOW_BG },
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("welcome_to_fourzy"), 0, .75f),
+                    new OnboardingTask_Log("1"),
+
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win"), 0, .75f),
+
+                    new OnboardingTask() { action = OnboardingActions.HIDE_WIZARD },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+
+                    new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding1"),
+
+                    new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
+                        [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
+                        [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(4f, 0f) },
+                    }),
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_tap_1"), 1, .15f),
+                    new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
+                    //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                    new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
+                        [PlacementStyle.SWIPE_STYLE_2] = new Rect(4f, 0f, 1f, 3f),
+                        [PlacementStyle.EDGE_TAP] = new Rect(4f, 0f, 1f, 1f),
+                    }, OnboardingScreenMaskObject.MaskStyle.PX_0),
+
+                    new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                    new OnboardingTask_Log("2"),
+
+                    new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
+                    new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("win_vertical_rule"), 1, .15f, 5f),
+
+                    new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                    new OnboardingTask_Wait(1f),
+
+                    new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding2"),
+
+                    new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>() {
+                        [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(0f, 3f), new Vector2(2f, 3f) },
+                        [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(0f, 3f) },
+                    }),
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_tap_2"), 1, .15f),
+                    new OnboardingTask_LimitInput(new Rect(0f, 3f, 3f, 1f)),
+                    //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                    new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
+                        [PlacementStyle.SWIPE_STYLE_2] = new Rect(0f, 3f, 3f, 1f),
+                        [PlacementStyle.EDGE_TAP] = new Rect(0f, 3f, 1f, 1f),
+                    }, OnboardingScreenMaskObject.MaskStyle.PX_0),
+
+                    new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                    new OnboardingTask_Log("3"),
+
+                    new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
+                    new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("win_horizontal_rule"), 1, .15f, 5),
+
+                    new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_MESSAGE_BOX },
+                    new OnboardingTask_Wait(1f),
+
+                    new OnboardingTask_OpenGame(GameType.ONBOARDING, "onboarding3"),
+
+                    new OnboardingTask_PointAt(new Dictionary<PlacementStyle, Vector2[]>(){
+                        [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(0f, 1f), new Vector2(2f, 1f) },
+                        [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(0f, 1f) },
+                    }),
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_tap_3"), 1, .15f),
+                    new OnboardingTask_LimitInput(new Rect(0f, 1f, 3f, 1f)),
+                    //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+                    new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
+                        [PlacementStyle.SWIPE_STYLE_2] = new Rect(0f, 1f, 3f, 1f),
+                        [PlacementStyle.EDGE_TAP] = new Rect(0f, 1f, 1f, 1f),
+                    }, OnboardingScreenMaskObject.MaskStyle.PX_0),
+
+                    new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
+                    new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
+                    new OnboardingTask_Log("4"),
+
+                    new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
+                    new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("win_diagonal_rule"), 1, .15f, 5f),
+
+                    new OnboardingTask() { action = OnboardingActions.HIDE_BG },
+                    new OnboardingTask_Wait(1f),
+                    new OnboardingTask() { action = OnboardingActions.LOAD_MAIN_MENU },
                 },
             },
 
@@ -283,13 +406,14 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_PointAt : OnboardingTask
     {
-        public Vector2[] points;
+        public Dictionary<PlacementStyle, Vector2[]> points;
 
-        public OnboardingTask_PointAt(string message = "", params Vector2[] points)
+        public OnboardingTask_PointAt(Dictionary<PlacementStyle, Vector2[]> points, string message = "")
         {
             action = OnboardingActions.POINT_AT;
 
             this.points = points;
+            if (points.ContainsKey(PlacementStyle.EDGE_TAP)) vector2value = points[PlacementStyle.EDGE_TAP][0];
             stringValue = message;
         }
     }
@@ -311,12 +435,15 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_ShowMaskedArea : OnboardingTask
     {
-        public OnboardingTask_ShowMaskedArea(Rect area, OnboardingScreenMaskObject.MaskStyle maskStyle)
+        public Dictionary<PlacementStyle, Rect> areasByPlacement;
+
+        public OnboardingTask_ShowMaskedArea(Dictionary<PlacementStyle, Rect> areas, OnboardingScreenMaskObject.MaskStyle maskStyle)
         {
             action = OnboardingActions.SHOW_MASKED_AREA;
 
             intValue = (int)maskStyle;
-            areas = new Rect[] { area };
+            this.areas = new Rect[] { areas.Values.First() };
+            areasByPlacement = areas;
         }
     }
 

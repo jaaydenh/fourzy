@@ -72,6 +72,7 @@
       "key": "win_diagonal_rule",
       "value": "Ganaste al juntar 4 en raya diagonalmente."
     },
+
     {
       "key": "rule_swipe_up",
       "value": "Desliza hacia arriba para moverte"
@@ -88,6 +89,19 @@
       "key": "rule_swipe_right",
       "value": "Desliza hacia la derecha para moverte"
     },
+    {
+      "key": "rule_tap_1",
+      "value": "Tap on the edge to make your move!"
+    },
+    {
+      "key": "rule_tap_2",
+      "value": "Select the outer square to move!"
+    },
+    {
+      "key": "rule_tap_3",
+      "value": "Select the outer square to move!"
+    },
+
     {
       "key": "aggressive",
       "value": "EMPRENDEDOR"

@@ -46,10 +46,13 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public OnboardingScreenPointer HidePointer()
+        public OnboardingScreenPointer HidePointer(bool force = false)
         {
-            StopRoutine("pointerAnimation", false);
-            Hide(.3f);
+            if (force || alphaTween._value > 0f)
+            {
+                StopRoutine("pointerAnimation", false);
+                Hide(.3f);
+            }
 
             return this;
         }

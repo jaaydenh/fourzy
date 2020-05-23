@@ -123,7 +123,7 @@ namespace Fourzy._Updates.UI.Menu
             if (OnboardingScreen.instance && OnboardingScreen.instance.isTutorialRunning) return;
 
             //check for news
-            if (PlayerPrefsWrapper.GetTutorialFinished(HardcodedTutorials.tutorials[0].name))
+            if (PlayerPrefsWrapper.GetTutorialFinished("Onboarding"))
             {
                 //only force news if onboarding was finished
                 if (GameManager.Instance.unreadNews.Count > 0) GetOrAddScreen<NewsPromptScreen>()._Prompt();

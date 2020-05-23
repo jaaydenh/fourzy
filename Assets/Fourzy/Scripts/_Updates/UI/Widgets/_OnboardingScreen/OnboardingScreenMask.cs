@@ -29,7 +29,7 @@ namespace Fourzy._Updates.UI.Widgets
             canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        public void ShowMasks(OnboardingTask task, bool clear = true)
+        public void ShowMasks(OnboardingTask_ShowMaskedArea task, bool clear = true)
         {
             board = GamePlayManager.instance.board;
             Show();
@@ -38,7 +38,10 @@ namespace Fourzy._Updates.UI.Widgets
 
             bg.color = new Color(0f, 0f, 0f, .3f);
 
-            foreach (Rect area in task.areas)
+            Rect[] toUse = task.areas;
+            if (task.areasByPlacement.ContainsKey(GameManager.Instance.placementStyle)) toUse = new Rect[] { task.areasByPlacement[GameManager.Instance.placementStyle] };
+
+            foreach (Rect area in toUse)
                 for (int column = (int)area.x; column < (int)(area.x + area.width); column++)
                     for (int row = (int)area.y; row < (int)(area.y + area.height); row++)
                     {

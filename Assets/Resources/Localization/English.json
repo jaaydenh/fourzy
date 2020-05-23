@@ -72,6 +72,7 @@
       "key": "win_diagonal_rule",
       "value": "You won by getting 4 in a row diagonally."
     },
+
     {
       "key": "rule_swipe_up",
       "value": "Swipe up to move"
@@ -88,6 +89,19 @@
       "key": "rule_swipe_right",
       "value": "Swipe right to move"
     },
+    {
+      "key": "rule_tap_1",
+      "value": "Tap on the edge to make your move!"
+    },
+    {
+      "key": "rule_tap_2",
+      "value": "Select the outer square to move!"
+    },
+    {
+      "key": "rule_tap_3",
+      "value": "Select the outer square to move!"
+    },
+
     {
       "key": "aggressive",
       "value": "AGGRESSIVE"
@@ -375,10 +389,6 @@
     {
       "key": "tap_to_start",
       "value": "Tap to start"
-    },
-    {
-      "key": "tap_to_place",
-      "value": "Swipe to move\nyour piece"
     },
     {
       "key": "tap_to_open_map",
