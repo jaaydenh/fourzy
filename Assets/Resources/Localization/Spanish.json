@@ -289,6 +289,14 @@
       "value": "Abrir portal raro"
     },
     {
+      "key": "on",
+      "value": "On"
+    },
+    {
+      "key": "off",
+      "value": "Off"
+    },
+    {
       "key": "portalpoints",
       "value": "Puntos de portal"
     },
@@ -405,6 +413,10 @@
       "value": "Demasiado largo"
     },
     {
+      "key": "tutorial",
+      "value": "Tutorial"
+    },
+    {
       "key": "unlocked",
       "value": "Desbloqueados"
     },
@@ -451,6 +463,10 @@
     {
       "key": "rankings",
       "value": "Rango"
+    },
+    {
+      "key": "timer",
+      "value": "Temporizador"
     },
     {
       "key": "token_arrow",

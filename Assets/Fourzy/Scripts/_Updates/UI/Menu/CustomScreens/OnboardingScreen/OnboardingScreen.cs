@@ -32,7 +32,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public bool isTutorialRunning { get; private set; }
         public ButtonExtended currentButton { get; private set; }
         public OnboardingTask currentTask { get; private set; }
-        //public OnboardingTasksBatch currentBatch { get; private set; }
 
         [NonSerialized]
         public Tutorial tutorial;
@@ -126,19 +125,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             return true;
         }
-
-        //public void Next()
-        //{
-        //    if (IsRoutineActive("moveNext"))
-        //    {
-        //        CancelRoutine("moveNext");
-        //        return;
-        //    }
-        //    print("next");
-
-        //    currentTaskIndex++;
-        //    StartCoroutine(DisplayCurrentStep());
-        //}
 
         public void SkipToNext()
         {
@@ -249,6 +235,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         if (board == null) break;
 
                         OnboardingTask_PointAt pointAtTask = currentTask as OnboardingTask_PointAt;
+
+                        //cut to 1
+                        //if (GameManager.Instance.placementStyle == GameManager.PlacementStyle.EDGE_TAP) pointAtTask.points = new Vector2[] { pointAtTask.points[0], };
 
                         pointer.AnimatePointer(pointAtTask.points);
                         pointer.SetMessage(currentTask.stringValue);

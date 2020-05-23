@@ -94,8 +94,8 @@ namespace Fourzy._Updates.UI.Widgets
             }
             else
             {
-                Clear();
-                nameLabel.text = "Random";
+                Clear(updateArea);
+                nameLabel.text = LocalizationManager.Value("random");
             }
 
             questionMark.SetActive(data == null);
@@ -103,9 +103,10 @@ namespace Fourzy._Updates.UI.Widgets
             return gameboardView;
         }
 
-        public MiniGameboardWidget Clear()
+        public MiniGameboardWidget Clear(bool updateArea = true)
         {
             gameboardView.Clear();
+            if (updateArea) SetArea(Area.NONE);
 
             return this;
         }

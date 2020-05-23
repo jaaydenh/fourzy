@@ -9,6 +9,7 @@ namespace Fourzy
     public class LocalizedText : MonoBehaviour
     {
         public string key;
+        public bool updateOnStart = true;
 
         private Text text;
         private TextMeshProUGUI tmPro;
@@ -18,7 +19,7 @@ namespace Fourzy
             text = GetComponent<Text>();
             tmPro = GetComponent<TextMeshProUGUI>();
 
-            UpdateLocale();
+            if (updateOnStart) UpdateLocale();
         }
 
         public void UpdateLocale()

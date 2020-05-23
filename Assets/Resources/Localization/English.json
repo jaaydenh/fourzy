@@ -289,6 +289,14 @@
       "value": "Open Rare Portal"
     },
     {
+      "key": "on",
+      "value": "On"
+    },
+    {
+      "key": "off",
+      "value": "Off"
+    },
+    {
       "key": "portalpoints",
       "value": "Portal Points"
     },
@@ -401,6 +409,10 @@
       "value": "Too long!"
     },
     {
+      "key": "tutorial",
+      "value": "Tutorial"
+    },
+    {
       "key": "unlocked",
       "value": "Unlocked"
     },
@@ -447,6 +459,10 @@
     {
       "key": "rankings",
       "value": "Rankings"
+    },
+    {
+      "key": "timer",
+      "value": "Timer"
     },
     {
       "key": "token_arrow",

@@ -150,7 +150,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (selectedTheme != null && prevTheme != selectedTheme)
             {
                 //new theme selected
-                selectedBoardWidget.Clear();
+                //selectedBoardWidget.Clear(false);
+                selectedBoardWidget.SetArea(selectedTheme != null ? selectedTheme.themeID : Area.NONE);
                 selectedBoardWidgetButton.SetState(true);
 
                 gameBoardDefinition = null;
@@ -163,7 +164,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //get board
-            selectedBoardWidget.SetData(gameBoardDefinition, false);
+            selectedBoardWidget.SetData(gameBoardDefinition, selectedTheme == null);
 
             prevTheme = selectedTheme;
         }

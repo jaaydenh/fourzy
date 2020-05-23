@@ -13,6 +13,7 @@ namespace Fourzy._Updates.UI.Widgets
         public GameObject onGraphics;
         public GameObject offGraphics;
         public TMP_Text label;
+        public LocalizedText localizedText;
 
         private bool state;
 
@@ -29,7 +30,7 @@ namespace Fourzy._Updates.UI.Widgets
         public VSScreenToggle UpdateVisuals(bool value)
         {
             label.alignment = value ? TextAlignmentOptions.MidlineLeft : TextAlignmentOptions.MidlineRight;
-            label.text = value ? "On" : "Off";
+            localizedText.UpdateLocale(value ? "on" : "off");
             onGraphics.SetActive(value);
             offGraphics.SetActive(!value);
 
