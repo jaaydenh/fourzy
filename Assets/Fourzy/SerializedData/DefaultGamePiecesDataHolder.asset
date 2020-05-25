@@ -25,7 +25,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: f6418452ef2f81a4791bc6980492754e,
           type: 3}
-        profilePictureOffset: {x: -110, y: 30}
+        profilePictureOffset: {x: -66, y: 14}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 30
@@ -80,7 +80,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: c73c4997af5cca34a9fb7180c31dfcfd,
           type: 3}
-        profilePictureOffset: {x: -22, y: -44}
+        profilePictureOffset: {x: -3, y: -43}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 30
@@ -267,7 +267,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: d0bf6693d52113042818892f0f9097f6,
           type: 3}
-        profilePictureOffset: {x: 4, y: 37}
+        profilePictureOffset: {x: 14, y: 24}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -342,7 +342,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         profilePicture: {fileID: 21300000, guid: 21149a38a5e3ba148a7d134d2d0a1626,
           type: 3}
-        profilePictureOffset: {x: -41, y: -19}
+        profilePictureOffset: {x: -1, y: -30}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -361,7 +361,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         profilePicture: {fileID: 21300000, guid: 298491a9f6dadb646a45618b15cd02c9,
           type: 3}
-        profilePictureOffset: {x: -37, y: -45}
+        profilePictureOffset: {x: -20, y: -52}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -380,7 +380,7 @@ MonoBehaviour:
         piecesToUnlock: 30
         profilePicture: {fileID: 21300000, guid: f43d6947711d21841a30a77b5a300552,
           type: 3}
-        profilePictureOffset: {x: -86, y: 64}
+        profilePictureOffset: {x: -38, y: 61}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 30
@@ -388,7 +388,7 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 8716823118059120996, guid: b2858d767c9ed974b940ad2d493f0703,
         type: 3}
-    - _name: 'WizzleWisp: Fourzy-20 Variant'
+    - _name: Wizzle Wisp Fourzy-20 Variant
       data:
         ID: 19
         name: Wizzle Wisp
@@ -399,7 +399,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         profilePicture: {fileID: 21300000, guid: c3503510c7fd65943a48d44c60cd1225,
           type: 3}
-        profilePictureOffset: {x: 0, y: 0}
+        profilePictureOffset: {x: 0, y: 31}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -436,7 +436,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         profilePicture: {fileID: 21300000, guid: 9a8d1e1655e0c1c40b11db96af5c5f22,
           type: 3}
-        profilePictureOffset: {x: -22, y: 109}
+        profilePictureOffset: {x: -1, y: 61}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
@@ -473,7 +473,7 @@ MonoBehaviour:
         piecesToUnlock: 60
         profilePicture: {fileID: 21300000, guid: 0f77731c615de8340afe1a9f37be11df,
           type: 3}
-        profilePictureOffset: {x: 11, y: -50}
+        profilePictureOffset: {x: 21, y: -28}
         piecesProgression:
           list: 5000000096000000f00000002c01000026020000
         pieces: 0
