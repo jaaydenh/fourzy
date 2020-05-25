@@ -13958,7 +13958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: medium
+  key: level3_cpu
   updateOnStart: 1
 --- !u!114 &923460739
 MonoBehaviour:
@@ -18887,7 +18887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: medium
+  key: level2_cpu
   updateOnStart: 1
 --- !u!114 &1391614908
 MonoBehaviour:
@@ -21443,7 +21443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: impossible
+  key: level4_cpu
   updateOnStart: 1
 --- !u!114 &1580553097
 MonoBehaviour:
@@ -21741,7 +21741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: aggressive
+  key: level1_cpu
   updateOnStart: 1
 --- !u!114 &1586098041
 MonoBehaviour:
@@ -26318,7 +26318,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 26
+          selectedMember: 29
           isDynamic: 0
         target: {fileID: 5157298072942827508}
         memberName: BackToRoot
