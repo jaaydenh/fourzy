@@ -243,10 +243,6 @@
       "value": "Ayuda"
     },
     {
-      "key": "impossible",
-      "value": "IMPOSIBLE"
-    },
-    {
       "key": "lost",
       "value": "Perdiste"
     },
@@ -261,10 +257,6 @@
     {
       "key": "magic",
       "value": "Magia"
-    },
-    {
-      "key": "medium",
-      "value": "INTERMEDIO"
     },
     {
       "key": "music",
@@ -369,10 +361,6 @@
     {
       "key": "select_board",
       "value": "Selección de juego"
-    },
-    {
-      "key": "simple",
-      "value": "MODESTO"
     },
     {
       "key": "sound_effects",
@@ -717,6 +705,22 @@
     {
       "key": "turn_play_button",
       "value": "Online Game"
+    },
+    {
+      "key": "level1_cpu",
+      "value": "FÁCIL"
+    },
+    {
+      "key": "level2_cpu",
+      "value": "MEDIO"
+    },
+    {
+      "key": "level3_cpu",
+      "value": "DIFÍCIL"
+    },
+    {
+      "key": "level4_cpu",
+      "value": "IMPOSIBLE"
     }
   ]
 }

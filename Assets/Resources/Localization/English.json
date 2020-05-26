@@ -72,7 +72,6 @@
       "key": "win_diagonal_rule",
       "value": "You won by getting 4 in a row diagonally."
     },
-
     {
       "key": "rule_swipe_up",
       "value": "Swipe up to move"
@@ -100,11 +99,6 @@
     {
       "key": "rule_tap_3",
       "value": "Select the outer square to move!"
-    },
-
-    {
-      "key": "aggressive",
-      "value": "AGGRESSIVE"
     },
     {
       "key": "area_garden",
@@ -243,10 +237,6 @@
       "value": "Help"
     },
     {
-      "key": "impossible",
-      "value": "IMPOSSIBLE"
-    },
-    {
       "key": "lost",
       "value": "Lost"
     },
@@ -261,10 +251,6 @@
     {
       "key": "magic",
       "value": "Magic"
-    },
-    {
-      "key": "medium",
-      "value": "MEDIUM"
     },
     {
       "key": "music",
@@ -371,10 +357,6 @@
       "value": "Board Selection"
     },
     {
-      "key": "simple",
-      "value": "SIMPLE"
-    },
-    {
       "key": "sound_effects",
       "value": "Sound Effects"
     },
@@ -389,6 +371,10 @@
     {
       "key": "tap_to_start",
       "value": "Tap to start"
+    },
+    {
+      "key": "tap_to_place",
+      "value": "Swipe to move\nyour piece"
     },
     {
       "key": "tap_to_open_map",
@@ -697,6 +683,22 @@
     {
       "key": "turn_play_button",
       "value": "Online Game"
+    },
+    {
+      "key": "level1_cpu",
+      "value": "SIMPLE"
+    },
+    {
+      "key": "level2_cpu",
+      "value": "MEDIUM"
+    },
+    {
+      "key": "level3_cpu",
+      "value": "DIFFICULT"
+    },
+    {
+      "key": "level4_cpu",
+      "value": "IMPOSSIBLE"
     }
   ]
 }

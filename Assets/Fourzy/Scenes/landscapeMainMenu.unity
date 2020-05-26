@@ -8796,7 +8796,7 @@ RectTransform:
   m_GameObject: {fileID: 366809210}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: -0.8, y: 0.8, z: 1}
   m_Children: []
   m_Father: {fileID: 1846405492}
   m_RootOrder: 0
@@ -13920,7 +13920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: medium
+  key: level3_cpu
   updateOnStart: 1
 --- !u!114 &923460739
 MonoBehaviour:
@@ -18996,7 +18996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: medium
+  key: level2_cpu
   updateOnStart: 1
 --- !u!114 &1391614908
 MonoBehaviour:
@@ -21625,7 +21625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: impossible
+  key: level4_cpu
   updateOnStart: 1
 --- !u!114 &1580553097
 MonoBehaviour:
@@ -21923,7 +21923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: aggressive
+  key: level1_cpu
   updateOnStart: 1
 --- !u!114 &1586098041
 MonoBehaviour:
@@ -23882,7 +23882,7 @@ RectTransform:
   m_GameObject: {fileID: 1758041398}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: -0.8, y: 0.8, z: 1}
   m_Children: []
   m_Father: {fileID: 337906628}
   m_RootOrder: 0
