@@ -1,8 +1,13 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Managers;
+using Fourzy._Updates.UI.Helpers;
+using FourzyGameModel.Model;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Fourzy._Updates.Serialized.TokensDataHolder;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -10,15 +15,24 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public Image profileImage;
         public TMP_Text nameLabel;
+        public Badge magic;
         public GameObject difficultiesHolder;
         public GameObject random;
         public GameObject[] difficultyLevels;
+
+        [Header("Spells")]
+        public TokenWidgetSmall spellPrefab;
+        public RectTransform spellsParent;
+
+        private List<TokenWidgetSmall> spells = new List<TokenWidgetSmall>();
+        private GamePieceData data;
+        private GamePieceData prevData;
 
         public VSScreenPlayerWidget SetData(GamePieceWidgetLandscape widget)
         {
             if (widget)
             {
-                GamePieceData data = widget.data;
+                data = widget.data;
 
                 profileImage.sprite = data != null ? data.profilePicture : null;
                 profileImage.color = data != null ? Color.white : Color.clear;
@@ -30,6 +44,8 @@ namespace Fourzy._Updates.UI.Widgets
             }
             else
             {
+                data = null;
+
                 profileImage.sprite = null;
                 profileImage.color = Color.clear;
 
@@ -37,7 +53,33 @@ namespace Fourzy._Updates.UI.Widgets
                 nameLabel.text = "";
             }
 
+            _Update();
+
             return this;
+        }
+
+        public override void _Update()
+        {
+            //toggle magic visibility
+            bool _magic = SettingsManager.Get(SettingsManager.KEY_MAGIC) && data != null;
+
+            if (_magic && prevData != data)
+            {
+                //clear spells list
+                foreach (TokenWidgetSmall spell in spells) Destroy(spell.gameObject);
+                spells.Clear();
+
+                //add spells
+                foreach (SpellId spellId in data.spells) spells.Add(Instantiate(spellPrefab, spellsParent).SetData(GameContentManager.Instance.tokensDataHolder.GetTokenData(spellId)));
+
+                magic.SetValue(data.startingMagic);
+                spellsParent.gameObject.SetActive(true);
+
+                prevData = data;
+            }
+
+            magic.SetState(_magic);
+            spellsParent.gameObject.SetActive(_magic);
         }
 
         public VSScreenPlayerWidget DisplayDifficulty(int level)

@@ -86,7 +86,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             string herdId;
             string displaName;
-
+            int magic = 100;
 
             Player player1 = UserManager.Instance.meAsPlayer;
             if (selectedPlayers[0] != null)
@@ -95,16 +95,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 {
                     herdId = selectedPlayers[0].data.ID;
                     displaName = selectedPlayers[0].data.name;
+                    magic = selectedPlayers[0].data.startingMagic;
                 }
                 else
                 {
                     GamePieceData random = unlockedGamepieces.Random().data;
                     herdId = random.ID;
                     displaName = random.name;
+                    magic = random.startingMagic;
                 }
 
                 player1.HerdId = herdId;
                 player1.DisplayName = displaName;
+                player1.Magic = magic;
             }
 
             Player player2 = new Player(2, "Player Two");
@@ -114,16 +117,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 {
                     herdId = selectedPlayers[1].data.ID;
                     displaName = selectedPlayers[1].data.name;
+                    magic = selectedPlayers[1].data.startingMagic;
                 }
                 else
                 {
                     GamePieceData random = unlockedGamepieces.Random().data;
                     herdId = random.ID;
                     displaName = random.name;
+                    magic = random.startingMagic;
                 }
 
                 player2.HerdId = herdId;
                 player2.DisplayName = displaName;
+                player2.Magic = magic;
             }
 
             if (p2DifficultyLevel > -1) player2.Profile = AIPlayerFactory.RandomProfile((AIDifficulty)p2DifficultyLevel);

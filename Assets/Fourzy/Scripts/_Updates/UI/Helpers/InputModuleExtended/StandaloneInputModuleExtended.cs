@@ -637,17 +637,17 @@ namespace UnityEngine.EventSystems
 
         public static bool OnHotkey1Release() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey1") == 0f;
 
-        public static bool OnHotkey2Press() => prevHK1Value == 0f && Input.GetAxisRaw("Hotkey2") == 1f;
+        public static bool OnHotkey2Press() => prevHK2Value == 0f && Input.GetAxisRaw("Hotkey2") == 1f;
 
-        public static bool OnHotkey2Hold() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey2") == 1f;
+        public static bool OnHotkey2Hold() => prevHK2Value == 1f && Input.GetAxisRaw("Hotkey2") == 1f;
 
-        public static bool OnHotkey2Release() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey2") == 0f;
+        public static bool OnHotkey2Release() => prevHK2Value == 1f && Input.GetAxisRaw("Hotkey2") == 0f;
 
-        public static bool OnHotkey3Press() => prevHK1Value == 0f && Input.GetAxisRaw("Hotkey3") == 1f;
+        public static bool OnHotkey3Press() => prevHK3Value == 0f && Input.GetAxisRaw("Hotkey3") == 1f;
 
-        public static bool OnHotkey3Hold() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey3") == 1f;
+        public static bool OnHotkey3Hold() => prevHK3Value == 1f && Input.GetAxisRaw("Hotkey3") == 1f;
 
-        public static bool OnHotkey3Release() => prevHK1Value == 1f && Input.GetAxisRaw("Hotkey3") == 0f;
+        public static bool OnHotkey3Release() => prevHK3Value == 1f && Input.GetAxisRaw("Hotkey3") == 0f;
 
         private bool ProcessTouchEvents()
         {

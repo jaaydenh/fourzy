@@ -304,6 +304,9 @@ namespace Fourzy._Updates.Mechanics.Board
                 case BoardActionState.CAST_SPELL:
                     List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new HexSpell(0, new BoardLocation()));
 
+                    //modify by current spells
+                    foreach (TokenSpell _spell in createdSpellTokens) locationsList.RemoveAll(_location => _location.Equals(_spell.location));
+
                     BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
                     if (!locationsList.Contains(touchLocation))

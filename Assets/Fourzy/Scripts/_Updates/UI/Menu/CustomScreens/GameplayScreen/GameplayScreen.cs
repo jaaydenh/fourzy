@@ -109,7 +109,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             this.gameplayManager = gameplayManager;
             game = gameplayManager.game;
 
-            player1Widget.spellsHolder.Open(game, gameplayManager.board, game.me);
+            if (game._Type != GameType.PRESENTATION)
+                player1Widget.spellsHolder.Open(game, gameplayManager.board, game.me);
 
             player1Widget.SetGame(game);
             player2Widget.SetGame(game);
@@ -121,7 +122,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             player1Widget.SetPlayerIcon(game.player1);
             player1Widget.StopPlayerTurnAnimation();
 
-            if (game.opponent != null)
+            Player opponent = game.opponent;
+            if (opponent != null)
             {
                 player2Widget.SetPlayerName(game.player2.DisplayName);
                 player2Widget.SetPlayerIcon(game.player2);
@@ -138,7 +140,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         if (game.puzzleData.hasAIOpponent)
                         {
                             player2Widget.Show(.1f);
-                            player2Widget.spellsHolder.Open(game, gameplayManager.board, game.opponent);
+
+                            //load spells only for human opponent
+                            if (opponent.Profile == AIProfile.Player)
+                                player2Widget.spellsHolder.Open(game, gameplayManager.board, game.opponent);
                         }
                         else
                             player2Widget.Hide(.1f);
@@ -146,7 +151,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     else
                     {
                         player2Widget.Show(.1f);
-                        player2Widget.spellsHolder.Open(game, gameplayManager.board, game.opponent);
+
+                        //load spells only for human opponent
+                        if (opponent.Profile == AIProfile.Player)
+                            player2Widget.spellsHolder.Open(game, gameplayManager.board, game.opponent);
                     }
                 }
             }

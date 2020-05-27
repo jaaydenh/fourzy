@@ -20,6 +20,8 @@ MonoBehaviour:
         name: Red Dragon
         enabled: 1
         rarity: 30
+        startingMagic: 200
+        spells: 00000000
         outlineColor: {r: 0, g: 0.4666667, b: 0.9960785, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 30
@@ -33,12 +35,14 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 4199936739902266244, guid: 5991ee940d6515a4db27bfc18cbc1daf,
         type: 3}
-    - _name: 'Sir Knighty: Fourzy-23 Variant'
+    - _name: Sir Knighty Fourzy-23 Variant
       data:
         ID: 23
         name: Sir Knighty
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0.9960785, g: 1, b: 0.11764707, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 30
@@ -51,12 +55,14 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 6776202281948818908, guid: 7288ecd28bdcffb4589a870c4245ad2b,
         type: 3}
-    - _name: 'Masked: Fourzy-09 Variant'
+    - _name: Masked Fourzy-09 Variant
       data:
         ID: 12
         name: Masked
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 0.5411765, b: 0, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 30
@@ -75,6 +81,8 @@ MonoBehaviour:
         name: Night Owl
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 1, b: 0, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 30
@@ -88,12 +96,14 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 1386132387167348578, guid: 1bb3795f602b4ff438aa2c19ec74bd43,
         type: 3}
-    - _name: 'Crossy: Fourzy-02 Variant'
+    - _name: Crossy Fourzy-02 Variant
       data:
         ID: 3
         name: Crossy
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0, g: 1, b: 0.6627451, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 1}
         piecesToUnlock: 30
@@ -113,6 +123,8 @@ MonoBehaviour:
         name: Triangry
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 0.7568628, b: 0, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -132,6 +144,8 @@ MonoBehaviour:
         name: Mr. Bun
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 0.3921569, b: 1, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -151,6 +165,8 @@ MonoBehaviour:
         name: Daisy
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0, g: 0.8980393, b: 1, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -164,12 +180,14 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 6199131635891211940, guid: 4658526f24c70b24a850a3580f07f434,
         type: 3}
-    - _name: 'Spooked: Fourzy-07 Variant'
+    - _name: Spooked Fourzy-07 Variant
       data:
         ID: 7
         name: Spooked
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0.37254903, g: 1, b: 0.53333336, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -188,6 +206,8 @@ MonoBehaviour:
         name: SquidMo
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0.58431375, g: 1, b: 0, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -201,12 +221,14 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 5411715879758530410, guid: 87ebc0fbb276f9344869d893d5765fa0,
         type: 3}
-    - _name: 'Ginger: Fourzy-05 Variant'
+    - _name: Ginger Fourzy-05 Variant
       data:
         ID: 9
         name: Ginger
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0.6392157, g: 0.41176474, b: 0.9960785, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -219,12 +241,14 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 5265662473142153822, guid: 097e58db2ac0e074293d399c982219e9,
         type: 3}
-    - _name: 'Blobby: Fourzy-04 Variant'
+    - _name: Blobby Fourzy-04 Variant
       data:
         ID: 1
         name: Blobby
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 1, b: 0.29411766, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -243,6 +267,8 @@ MonoBehaviour:
         name: Sentinal
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0.8117648, g: 0.9960785, b: 0, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 30
@@ -262,6 +288,8 @@ MonoBehaviour:
         name: Droidz
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0, g: 1, b: 1, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 30
@@ -281,6 +309,8 @@ MonoBehaviour:
         name: Cyclops
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0, g: 1, b: 0.6627451, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -294,12 +324,14 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 1166267820841079138, guid: 49f97f15819037b4995443ef7d37ae84,
         type: 3}
-    - _name: 'The Bot: Fourzy-10 Variant'
+    - _name: The Bot Fourzy-10 Variant
       data:
         ID: 13
         name: The Bot
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 0.36862746, b: 1, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 30
@@ -313,12 +345,14 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 6266431368268073879, guid: 4ecb9bdee92ce9c468e52fdfea476f1c,
         type: 3}
-    - _name: 'MewWhiskey: Fourzy-12 Variant'
+    - _name: MewWhiskey Fourzy-12 Variant
       data:
         ID: 14
         name: MewWhiskey
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0.5882353, g: 0.9960785, b: 0.9960785, a: 1}
         borderColor: {r: 0.9960785, g: 0.6117647, b: 0, a: 1}
         piecesToUnlock: 30
@@ -337,6 +371,8 @@ MonoBehaviour:
         name: Furrzy
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 1, b: 0.30588236, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 60
@@ -356,6 +392,8 @@ MonoBehaviour:
         name: Eeek
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 0.39607847, b: 0.5568628, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
@@ -375,6 +413,8 @@ MonoBehaviour:
         name: Rainbow Bite
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 0.33333334, b: 1, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 30
@@ -394,6 +434,8 @@ MonoBehaviour:
         name: Wizzle Wisp
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0, g: 1, b: 0.53333336, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
@@ -407,12 +449,14 @@ MonoBehaviour:
         type: 3}
       player2Prefab: {fileID: 4688549563729829321, guid: 575c00809413a62488a55dec06d526a4,
         type: 3}
-    - _name: 'Snow Person: Fourzy-21 Variant'
+    - _name: Snow Person Fourzy-21 Variant
       data:
         ID: 21
         name: Snow Person
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 0.5137255, b: 0.52156866, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
@@ -431,6 +475,8 @@ MonoBehaviour:
         name: Mecha Bunny
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 1, g: 0.45882356, b: 1, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
@@ -450,6 +496,8 @@ MonoBehaviour:
         name: Techno Bug
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0.003921569, g: 0.97647065, b: 0.49803925, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
@@ -468,6 +516,8 @@ MonoBehaviour:
         name: Mr. Hatty
         enabled: 1
         rarity: 30
+        startingMagic: 100
+        spells: 00000000
         outlineColor: {r: 0.654902, g: 0.43137258, b: 1, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60

@@ -86,14 +86,15 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void TrySetButtonState(int playerId, bool _state)
         {
-            switch (spellsList.board.game._Type)
-            {
-                case GameType.TURN_BASED:
-                case GameType.PASSANDPLAY:
-                    SetButtonState(spellsList.game.magic[playerId] >= data.price && _state);
+            //switch (spellsList.board.game._Type)
+            //{
+            //    case GameType.TURN_BASED:
+            //    case GameType.PASSANDPLAY:
+            //        SetButtonState(spellsList.game.magic[playerId] >= data.price && _state);
 
-                    break;
-            }
+            //        break;
+            //}
+            SetButtonState(spellsList.game.magic[playerId] >= data.price && _state);
         }
 
         public void UpdateWidget(int playerId)
@@ -101,20 +102,20 @@ namespace Fourzy._Updates.UI.Widgets
             //update price badge
             button.GetBadge("price").badge.SetValue(data.price);
 
-            bool? setTo = null;
+            bool? setTo = !spellsList.board.isAnimating && spellsList.game._State.ActivePlayerId == spellsList.owner.PlayerId;
+            //switch (spellsList.game._Type)
+            //{
+            //    case GameType.PASSANDPLAY:
+            //        setTo = !spellsList.board.isAnimating;
 
-            switch (spellsList.game._Type)
-            {
-                case GameType.PASSANDPLAY:
-                    setTo = !spellsList.board.isAnimating;
+            //        break;
 
-                    break;
+            //    case GameType.AI:
+            //    case GameType.TURN_BASED:
+            //        setTo = !spellsList.board.isAnimating && spellsList.game._State.ActivePlayerId == spellsList.owner.PlayerId;
 
-                case GameType.TURN_BASED:
-                    setTo = !spellsList.board.isAnimating && spellsList.game.isMyTurn;
-
-                    break;
-            }
+            //        break;
+            //}
 
             if (setTo != null)
             {

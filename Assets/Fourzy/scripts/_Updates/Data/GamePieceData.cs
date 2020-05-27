@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using StackableDecorator;
+using FourzyGameModel.Model;
 
 namespace Fourzy
 {
@@ -15,6 +16,8 @@ namespace Fourzy
         public string name;
         public bool enabled;
         public int rarity = 30;
+        public int startingMagic = 100;
+        public List<SpellId> spells;
         public Color outlineColor = Color.blue;
         public Color borderColor = Color.green;
         public int piecesToUnlock = 40;

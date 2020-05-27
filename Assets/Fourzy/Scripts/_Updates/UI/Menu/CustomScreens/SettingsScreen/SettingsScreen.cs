@@ -41,6 +41,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleDemoMode() => SettingsManager.Toggle(SettingsManager.KEY_DEMO_MODE);
 
+        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_MAGIC);
+
         public void StartRealtime()
         {
             menuController.GetScreen<MatchmakingScreen>().OpenRealtime();

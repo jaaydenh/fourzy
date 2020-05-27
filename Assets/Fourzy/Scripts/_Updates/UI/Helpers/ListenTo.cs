@@ -21,6 +21,7 @@ namespace Fourzy._Updates.UI.Helpers
         private bool listensToAudioState = false;
         private bool listensToDemoModeState = false;
         private bool listensToAnalyticsState = false;
+        private bool listensToMagicState = false;
 
         protected void Awake()
         {
@@ -78,6 +79,16 @@ namespace Fourzy._Updates.UI.Helpers
                         {
                             listensToAnalyticsState = true;
                             SettingsManager.onAnalyticsEvent += OnAnalyticsMode;
+                        }
+
+                        break;
+
+                    case ListenValues.SETTINGS_MAGIC_ON:
+                    case ListenValues.SETTINGS_MAGIC_OFF:
+                        if (!listensToMagicState)
+                        {
+                            listensToMagicState = true;
+                            SettingsManager.onMagic += OnMagic;
                         }
 
                         break;
@@ -140,6 +151,16 @@ namespace Fourzy._Updates.UI.Helpers
 
                         break;
 
+                    case ListenValues.SETTINGS_MAGIC_ON:
+                    case ListenValues.SETTINGS_MAGIC_OFF:
+                        if (!listensToMagicState)
+                        {
+                            listensToMagicState = false;
+                            SettingsManager.onMagic -= OnMagic;
+                        }
+
+                        break;
+
                     case ListenValues.PLACEMENT_STYLE:
                         SettingsManager.onDemoMode -= OnDemoMode;
 
@@ -179,6 +200,13 @@ namespace Fourzy._Updates.UI.Helpers
                         case ListenValues.SETTINGS_ANALYTICS_ON:
                         case ListenValues.SETTINGS_ANALYTICS_OFF:
                             OnAnalyticsMode(SettingsManager.Get(SettingsManager.KEY_ANALYTICS_EVENTS));
+
+                            break;
+
+
+                        case ListenValues.SETTINGS_MAGIC_ON:
+                        case ListenValues.SETTINGS_MAGIC_OFF:
+                            OnMagic(SettingsManager.Get(SettingsManager.KEY_MAGIC));
 
                             break;
 
@@ -227,6 +255,14 @@ namespace Fourzy._Updates.UI.Helpers
                 foreach (ListenTarget target in sorted[ListenValues.SETTINGS_ANALYTICS_ON]) target.events.Invoke(string.Format(target.targetText, state));
             else
                 foreach (ListenTarget target in sorted[ListenValues.SETTINGS_ANALYTICS_OFF]) target.events.Invoke(string.Format(target.targetText, state));
+        }
+
+        public void OnMagic(bool state)
+        {
+            if (state)
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_MAGIC_ON]) target.events.Invoke(string.Format(target.targetText, state));
+            else
+                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_MAGIC_OFF]) target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnPlacementSyle(GameManager.PlacementStyle state)
@@ -280,5 +316,7 @@ namespace Fourzy._Updates.UI.Helpers
         PLACEMENT_STYLE,
         SETTINGS_ANALYTICS_ON,
         SETTINGS_ANALYTICS_OFF,
+        SETTINGS_MAGIC_ON,
+        SETTINGS_MAGIC_OFF,
     }
 }
