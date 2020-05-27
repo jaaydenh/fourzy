@@ -107,6 +107,10 @@
       "value": "EMPRENDEDOR"
     },
     {
+      "key": "area_selection",
+      "value": "Selección de área"
+    },
+    {
       "key": "area_garden",
       "value": "Jardín de entrenamiento"
     },
