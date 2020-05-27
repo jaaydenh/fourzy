@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
@@ -28,6 +29,7 @@ namespace Fourzy._Updates.UI.Widgets
         public Sprite p2SelectionSprite;
         public Sprite cpuSelectionSprite;
 
+        private Image currentHighlight;
         private VSLandscapeScreen _menuScreen;
         private SelectableUI selectableUI;
         private int[] players;
@@ -94,44 +96,65 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
+        public void OnPieceSelected(GamePieceWidgetLandscape piece)
+        {
+
+        }
+
         private void OnPointerEnter(PointerEventData data)
         {
-            if (players != null) return;
+            if (players != null || (_menuScreen.selectedPlayers[0] && _menuScreen.selectedPlayers[1])) return;
 
-            switch (data.pointerId)
+            if (CustomInputManager.GamepadCount > 1 && data.pointerId > -1)
             {
-                case 1:
+                switch (data.pointerId)
+                {
+                    case 1:
+                        currentHighlight = p2Selection;
+
+                        p2Selection.sprite = _menuScreen.p2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
+                        p2Selection.gameObject.SetActive(true);
+                        p2Selection.fillAmount = 1f;
+
+                        break;
+
+                    default:
+                        currentHighlight = p1Selection;
+
+                        p1Selection.gameObject.SetActive(true);
+                        p1Selection.fillAmount = 1f;
+
+                        break;
+                }
+            }
+            else
+            {
+                if (_menuScreen.selectedPlayers[0])
+                {
+                    currentHighlight = p2Selection;
+
                     p2Selection.sprite = _menuScreen.p2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
                     p2Selection.gameObject.SetActive(true);
                     p2Selection.fillAmount = 1f;
+                }
+                else
+                {
+                    currentHighlight = p1Selection;
 
-                    break;
-
-                default:
                     p1Selection.gameObject.SetActive(true);
                     p1Selection.fillAmount = 1f;
-
-                    break;
+                }
             }
         }
 
         private void OnPointerExit(PointerEventData data)
         {
-            if (players != null) return;
+            if (players != null || !currentHighlight) return;
 
-            switch (data.pointerId)
+            if (currentHighlight)
             {
-                case 1:
-                    p2Selection.gameObject.SetActive(false);
-                    p2Selection.fillAmount = 1f;
-
-                    break;
-
-                default:
-                    p1Selection.gameObject.SetActive(false);
-                    p1Selection.fillAmount = 1f;
-
-                    break;
+                currentHighlight.gameObject.SetActive(false);
+                currentHighlight = null;
             }
         }
 

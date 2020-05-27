@@ -36,14 +36,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private RectTransform gamePiecesRectTransform;
         private ButtonExtended selectedBoardWidgetButton;
 
-        private GamePieceWidgetLandscape[] selectedPlayers = new GamePieceWidgetLandscape[2];
-
         private GameBoardDefinition gameBoardDefinition;
         private ThemesDataHolder.GameTheme selectedTheme;
         private ThemesDataHolder.GameTheme prevTheme;
 
         private int demoCounter = 0;
 
+        public GamePieceWidgetLandscape[] selectedPlayers { get; private set; } = new GamePieceWidgetLandscape[2];
         public int p1DifficultyLevel { get; private set; } = -1;
         public int p2DifficultyLevel { get; private set; } = -1;
 
@@ -372,6 +371,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             readyButton.SetState(selectedPlayers.ToList().TrueForAll(_widget => _widget != null));
             UpdateProfiles();
+
+            gamePieceWidgets.ForEach(_widget => _widget.OnPieceSelected(piece));
         }
 
         private int[] GetSameProfiles(GamePieceWidgetLandscape piece, int indexToIgnore)
