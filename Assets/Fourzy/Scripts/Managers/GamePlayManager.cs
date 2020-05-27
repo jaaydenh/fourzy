@@ -426,6 +426,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     LoadGame(game);
 
                     break;
+
+                case GameType.REALTIME:
+                    game._Reset(resetMembers);
+
+                    LoadGame(game);
+
+                    PhotonNetwork.RaiseEvent(Constants.REMATCH, null, true, new RaiseEventOptions() { Receivers = ReceiverGroup.Others, });
+
+                    break;
             }
         }
 
@@ -738,6 +747,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 case Constants.TAKE_TURN:
                     StartRoutine("takeTurn", PlayRealtimeTurn(JsonConvert.DeserializeObject<PlayerTurn>(content.ToString())));
+
+                    break;
+
+                case Constants.REMATCH:
+                    game._Reset(false);
+                    LoadGame(game);
 
                     break;
             }

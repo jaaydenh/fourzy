@@ -1294,6 +1294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: not_your_turn
+  updateOnStart: 1
 --- !u!225 &141039655
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -8551,6 +8552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: tap_to_continue
+  updateOnStart: 1
 --- !u!1 &480844070
 GameObject:
   m_ObjectHideFlags: 0
@@ -15132,6 +15134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: rematch
+  updateOnStart: 1
 --- !u!1 &1063412419
 GameObject:
   m_ObjectHideFlags: 0
@@ -15656,6 +15659,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: tap_to_start
+  updateOnStart: 1
 --- !u!1 &1122577623
 GameObject:
   m_ObjectHideFlags: 0
@@ -16182,6 +16186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: next
+  updateOnStart: 1
 --- !u!1 &1244398095
 GameObject:
   m_ObjectHideFlags: 0
@@ -20940,6 +20945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: reset
+  updateOnStart: 1
 --- !u!222 &1613511142
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -32463,7 +32469,7 @@ MonoBehaviour:
     persistentCalls:
       calls: []
   onBackSfx: 3
-  closePreviousWhenOpened: 1
+  closePreviousWhenOpened: 0
   default: 0
   isOpened: 0
   defaultCalls: 1
@@ -33786,6 +33792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: tap_to_continue
+  updateOnStart: 1
 --- !u!1001 &195632050603851330
 PrefabInstance:
   m_ObjectHideFlags: 0

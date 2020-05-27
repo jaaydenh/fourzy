@@ -277,7 +277,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 //rematch button
                 switch (game._Type)
                 {
-                    case GameType.REALTIME:
+                    //case GameType.REALTIME:
                     case GameType.PRESENTATION:
                         rematchButton.SetActive(false);
 
