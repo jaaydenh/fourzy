@@ -10092,9 +10092,9 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 32
+          selectedMember: 37
           isDynamic: 0
-        target: {fileID: 44892454}
+        target: {fileID: 1739894148}
         memberName: ResetTutorial
         memberType: 8
         arguments: []

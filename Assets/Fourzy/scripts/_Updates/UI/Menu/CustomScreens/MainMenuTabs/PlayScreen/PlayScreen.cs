@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Helpers;
 using System.Collections.Generic;
@@ -73,6 +74,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void StartTurnGame() => matchmakingScreen.OpenTurnbased();
 
         public void StartTutorialAdventure() => menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
+
+        public void ResetTutorial() => 
+            PersistantMenuController.instance.GetOrAddScreen<OnboardingScreen>().OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
 
         public void OpenFastPuzzleScreen()
         {
