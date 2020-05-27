@@ -162,6 +162,10 @@
       "value": "Challenge"
     },
     {
+      "key": "choose_your_fouzry",
+      "value": "Choose Your Fourzy"
+    },
+    {
       "key": "current_name",
       "value": "Current name"
     },
@@ -340,6 +344,10 @@
     {
       "key": "replay_tutorial",
       "value": "Replay Tutorial"
+    },
+    {
+      "key": "ready_to_play",
+      "value": "Ready To Play"
     },
     {
       "key": "random",

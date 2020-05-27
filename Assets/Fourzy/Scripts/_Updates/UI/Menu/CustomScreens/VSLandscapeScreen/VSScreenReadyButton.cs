@@ -1,27 +1,29 @@
 ﻿//@vadym udod
 
-using UnityEngine;
-using UnityEngine.UI;
+using Fourzy._Updates.Tween;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class VSScreenReadyButton : WidgetBase
     {
-        public Sprite readyBG;
-        public Sprite notReadyBG;
+        public ColorTween[] tweens;
 
-        private Image image;
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            image = GetComponent<Image>();
-        }
+        private bool previousState = true;
 
         public void SetState(bool state)
         {
-            image.sprite = state ? readyBG : notReadyBG;
+            if (previousState != state)
+            {
+                foreach (ColorTween tween in tweens)
+                {
+                    if (state)
+                        tween.PlayBackward(true);
+                    else
+                        tween.PlayForward(true);
+                }
+
+                previousState = state;
+            }
 
             button.SetState(state);
         }

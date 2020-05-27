@@ -163,6 +163,10 @@
       "value": "Desafío"
     },
     {
+      "key": "choose_your_fouzry",
+      "value": "Elige tu Fourzy"
+    },
+    {
       "key": "current_name",
       "value": "Nombre actual"
     },
@@ -341,6 +345,10 @@
     {
       "key": "replay_tutorial",
       "value": "Repetir tutorial"
+    },
+    {
+      "key": "ready_to_play",
+      "value": "Listo para jugar"
     },
     {
       "key": "random",
