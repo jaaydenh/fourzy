@@ -5,6 +5,7 @@ using FourzyGameModel.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public Action<GameBoardDefinition> onBoardSelected;
 
+        public TMP_Text areaNameField;
         public RectTransform widgetsParent;
         public GridLayoutGroup gridLayout;
         public MiniGameboardWidget miniGameboardPrefab;
@@ -68,6 +70,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
+            areaNameField.text = LocalizationManager.Value(filterByArea != Area.NONE ? GameContentManager.Instance.themesDataHolder.GetThemeName(filterByArea) : "random");
             areaBoards = gameboardWidgets.Where(widget => widget.data == null || (widget.data != null && widget.data.Area == filterByArea)).ToList();
             maxPages = Mathf.CeilToInt((float)Boards.Count / boardsPerPage);
 
