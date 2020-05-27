@@ -42,9 +42,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private ThemesDataHolder.GameTheme selectedTheme;
         private ThemesDataHolder.GameTheme prevTheme;
 
-        private int p1DifficultyLevel = -1;
-        private int p2DifficultyLevel = -1;
         private int demoCounter = 0;
+
+        public int p1DifficultyLevel { get; private set; } = -1;
+        public int p2DifficultyLevel { get; private set; } = -1;
 
         public int Columns { get; private set; }
         public int Rows { get; private set; }
@@ -232,6 +233,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 p2Button.SetLabel("P2");
                 p2DifficultyLevel = -1;
                 profiles[1].DisplayDifficulty(-1);
+
+                if (selectedPlayers[1] != null) selectedPlayers[1].SetP2AsCPU(false);
             }
             else PickP2();
         }
@@ -373,6 +376,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (prev != null) prev.SelectAsPlayer(GetSameProfiles(prev, index));
 
             selectedPlayers[index].SelectAsPlayer(GetSameProfiles(piece, -1));
+            selectedPlayers[index].SetP2AsCPU(p2DifficultyLevel > -1);
         }
 
         private void TimerToggleValueSet(bool value)
@@ -397,6 +401,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnP2DifficultySelected(int option)
         {
+            if (selectedPlayers[1] != null) selectedPlayers[1].SetP2AsCPU(true);
+
             p2Button.SetLabel("CPU");
             p2DifficultyLevel = option;
 

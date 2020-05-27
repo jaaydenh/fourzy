@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
+using Fourzy._Updates.UI.Menu.Screens;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,11 +19,16 @@ namespace Fourzy._Updates.UI.Widgets
 
         public RectTransform gamePieceParent;
         public GameObject player1Marker;
-        public GameObject player2Marker;
+        public Image player2Marker;
         public Image p1Selection;
         public Image p2Selection;
         public GameObject random;
+        public Sprite p2Sprite;
+        public Sprite cpuSprite;
+        public Sprite p2SelectionSprite;
+        public Sprite cpuSelectionSprite;
 
+        private VSLandscapeScreen _menuScreen;
         private SelectableUI selectableUI;
         private int[] players;
 
@@ -60,13 +66,23 @@ namespace Fourzy._Updates.UI.Widgets
             this.players = players.Contains(-1) ? null : players;
 
             player1Marker.SetActive(p1);
-            player2Marker.SetActive(p2);
+            player2Marker.gameObject.SetActive(p2);
 
             p1Selection.gameObject.SetActive(p1);
             p2Selection.gameObject.SetActive(p2);
 
             p1Selection.fillAmount = p1 && p2 ? .5f : 1f;
             p2Selection.fillAmount = p1 && p2 ? .5f : 1f;
+
+            return this;
+        }
+
+        public GamePieceWidgetLandscape SetP2AsCPU(bool state)
+        {
+            player2Marker.sprite = state ? cpuSprite : p2Sprite;
+            player2Marker.SetNativeSize();
+
+            p2Selection.sprite = state ? cpuSelectionSprite : p2SelectionSprite;
 
             return this;
         }
@@ -85,6 +101,7 @@ namespace Fourzy._Updates.UI.Widgets
             switch (data.pointerId)
             {
                 case 1:
+                    p2Selection.sprite = _menuScreen.p2DifficultyLevel > -1 ? cpuSelectionSprite : p2SelectionSprite;
                     p2Selection.gameObject.SetActive(true);
                     p2Selection.fillAmount = 1f;
 
@@ -139,6 +156,8 @@ namespace Fourzy._Updates.UI.Widgets
             selectableUI.onLeave += OnPointerExit;
 
             button.onTap += OnClick;
+
+            _menuScreen = menuScreen as VSLandscapeScreen;
         }
     }
 }

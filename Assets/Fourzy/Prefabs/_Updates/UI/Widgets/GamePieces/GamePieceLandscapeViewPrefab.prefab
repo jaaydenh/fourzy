@@ -307,15 +307,20 @@ MonoBehaviour:
     borderColor: {r: 0, g: 1, b: 0, a: 1}
     piecesToUnlock: 40
     profilePicture: {fileID: 0}
+    profilePictureOffset: {x: 0, y: 0}
     piecesProgression:
       list: 5000000096000000f00000002c01000026020000
     pieces: 0
   gamePieceParent: {fileID: 277804850831549247}
   player1Marker: {fileID: 7059523993646234908}
-  player2Marker: {fileID: 1691951879611827861}
+  player2Marker: {fileID: 3821430393657928187}
   p1Selection: {fileID: 4375048245692054676}
   p2Selection: {fileID: 5057220977651489557}
   random: {fileID: 6532227659231584161}
+  p2Sprite: {fileID: 21300000, guid: 5abb8db9b395b7f40870cb9ee7582101, type: 3}
+  cpuSprite: {fileID: 21300000, guid: 6fc94f556af484a4b835d9eb777113a9, type: 3}
+  p2SelectionSprite: {fileID: 21300000, guid: 4ddbbae076a57c94585611552b02ecb5, type: 3}
+  cpuSelectionSprite: {fileID: 21300000, guid: 80274542f0247844d9e959f3f8f4e5de, type: 3}
 --- !u!114 &2414105386385986070
 MonoBehaviour:
   m_ObjectHideFlags: 0
