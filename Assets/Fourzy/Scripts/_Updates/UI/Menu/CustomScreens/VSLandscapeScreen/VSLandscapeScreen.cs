@@ -176,50 +176,60 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             //check backCaller id 
             GamePieceWidgetLandscape prev;
-            switch (StandaloneInputModuleExtended.BackCallerId)
+            bool removeById = CustomInputManager.GamepadCount > 1 && (StandaloneInputModuleExtended.BackCallerId == 0 || StandaloneInputModuleExtended.BackCallerId == 1);
+
+            if (removeById)
             {
-                case 0:
-                case 1:
-                    if (selectedPlayers[StandaloneInputModuleExtended.BackCallerId] == null)
+                if (selectedPlayers[StandaloneInputModuleExtended.BackCallerId] == null)
+                {
+                    BackToRoot();
+                    return;
+                }
+                else
+                {
+                    prev = selectedPlayers[StandaloneInputModuleExtended.BackCallerId];
+                    selectedPlayers[StandaloneInputModuleExtended.BackCallerId] = null;
+                    prev.SelectAsPlayer(GetSameProfiles(prev, -1));
+
+                    UpdateProfiles();
+                }
+            }
+            else
+            {
+                if (selectedPlayers[1] != null || selectedPlayers[0] != null)
+                {
+                    for (int index = selectedPlayers.Length - 1; index >= 0; index--)
                     {
-                        BackToRoot();
-                        return;
-                    }
-                    else
-                    {
-                        prev = selectedPlayers[StandaloneInputModuleExtended.BackCallerId];
-                        selectedPlayers[StandaloneInputModuleExtended.BackCallerId] = null;
+                        if (selectedPlayers[index] == null) continue;
+
+                        prev = selectedPlayers[index];
+                        selectedPlayers[index] = null;
                         prev.SelectAsPlayer(GetSameProfiles(prev, -1));
 
-                        UpdateProfiles();
+                        break;
                     }
 
-                    break;
-
-                default:
-                    if (selectedPlayers[1] != null || selectedPlayers[0] != null)
-                    {
-                        for (int index = selectedPlayers.Length - 1; index >= 0; index--)
-                        {
-                            if (selectedPlayers[index] == null) continue;
-
-                            prev = selectedPlayers[index];
-                            selectedPlayers[index] = null;
-                            prev.SelectAsPlayer(GetSameProfiles(prev, -1));
-
-                            break;
-                        }
-
-                        UpdateProfiles();
-                    }
-                    else
-                    {
-                        BackToRoot();
-                        return;
-                    }
-
-                    break;
+                    UpdateProfiles();
+                }
+                else
+                {
+                    BackToRoot();
+                    return;
+                }
             }
+            //switch (StandaloneInputModuleExtended.BackCallerId)
+            //{
+            //    case 0:
+            //    case 1:
+                    
+
+            //        break;
+
+            //    default:
+                    
+
+            //        break;
+            //}
 
             readyButton.SetState(selectedPlayers.ToList().TrueForAll(_widget => _widget != null));
         }
@@ -273,6 +283,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             timerToggle.SetState(SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER), false);
             timerToggle.onValueSet += TimerToggleValueSet;
+
+            if (CustomInputManager.GamepadCount < 2)
+            {
+                OnP2DifficultySelected(Constants.DEFAULT_CPU_DIFFICULTY);
+            }
         }
 
         private void CreatePieces()

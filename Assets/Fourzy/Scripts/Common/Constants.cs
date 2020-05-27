@@ -15,6 +15,7 @@ namespace Fourzy
         public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.EDGE_TAP;
 #endif
         public const Area DEFAULT_AREA = Area.ICE_PALACE;
+        public const int DEFAULT_CPU_DIFFICULTY = 1; //0-3
         public const int DEFAULT_UNLOCKED_THEMES = 30;
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
