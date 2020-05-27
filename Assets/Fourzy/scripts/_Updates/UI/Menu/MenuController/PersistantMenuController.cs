@@ -2,6 +2,7 @@
 
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Fourzy._Updates.UI.Menu
 {
@@ -34,6 +35,8 @@ namespace Fourzy._Updates.UI.Menu
                 if (!menuScreen.interactable) return;
 
                 menuScreen.OnBack();
+
+                StandaloneInputModuleExtended.BackEventAvailable = false;
             }
         }
 

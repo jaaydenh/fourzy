@@ -26,6 +26,7 @@ namespace UnityEngine.EventSystems
         public static Action<GamepadModeFilter> onModeChanged;
         public static Action onBackPressed;
         public static int BackCallerId = -2;
+        public static bool BackEventAvailable = false;
 
         public static int GamepadID
         {
@@ -151,11 +152,13 @@ namespace UnityEngine.EventSystems
                             else if (Input.GetKeyDown(GetKeyCode(1, 0)))
                             {
                                 BackCallerId = 0;
+                                BackEventAvailable = true;
                                 onBackPressed?.Invoke();
                             }
-                            else if(Input.GetKeyDown(GetKeyCode(1, 1)))
+                            else if (Input.GetKeyDown(GetKeyCode(1, 1)))
                             {
                                 BackCallerId = 1;
+                                BackEventAvailable = true;
                                 onBackPressed?.Invoke();
                             }
 
@@ -179,6 +182,7 @@ namespace UnityEngine.EventSystems
                                     else if (Input.GetKeyDown(GetKeyCode(1, 0)))
                                     {
                                         BackCallerId = 0;
+                                        BackEventAvailable = true;
                                         onBackPressed?.Invoke();
                                     }
 
@@ -199,6 +203,7 @@ namespace UnityEngine.EventSystems
                                     else if (Input.GetKeyDown(GetKeyCode(1, 1)))
                                     {
                                         BackCallerId = 1;
+                                        BackEventAvailable = true;
                                         onBackPressed?.Invoke();
                                     }
 
@@ -221,6 +226,7 @@ namespace UnityEngine.EventSystems
                         if (((ButtonControl)Gamepad.all[gamepadIndex]["buttonEast"]).wasPressedThisFrame)
                         {
                             BackCallerId = gamepadIndex;
+                            BackEventAvailable = true;
                             onBackPressed?.Invoke();
 
                             break;
@@ -230,7 +236,11 @@ namespace UnityEngine.EventSystems
                     break;
             }
 
-            if (((KeyControl)Keyboard.current["escape"]).wasPressedThisFrame) onBackPressed?.Invoke();
+            if (((KeyControl)Keyboard.current["escape"]).wasPressedThisFrame)
+            {
+                BackEventAvailable = true;
+                onBackPressed?.Invoke();
+            }
 
             BackCallerId = -1;
         }
@@ -934,8 +944,8 @@ namespace UnityEngine.EventSystems
             }
 
             //reset timer
-            if (mouseData.GetButtonState(PointerEventData.InputButton.Left).eventData.PressedThisFrame() || 
-                mouseData.GetButtonState(PointerEventData.InputButton.Middle).eventData.PressedThisFrame() || 
+            if (mouseData.GetButtonState(PointerEventData.InputButton.Left).eventData.PressedThisFrame() ||
+                mouseData.GetButtonState(PointerEventData.InputButton.Middle).eventData.PressedThisFrame() ||
                 mouseData.GetButtonState(PointerEventData.InputButton.Right).eventData.PressedThisFrame())
                 ResetNoInputTimer();
         }

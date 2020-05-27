@@ -191,7 +191,7 @@ namespace Fourzy._Updates.UI.Menu
 
         public void OpenScreen(MenuScreen screen)
         {
-            if (currentScreen && screen.closePreviousWhenOpened) currentScreen.Close();
+            if (currentScreen && currentScreen.isOpened && screen.closePreviousWhenOpened) currentScreen.Close();
 
             SetCurrentScreen(screen);
             screensStack.Push(currentScreen);
@@ -297,7 +297,7 @@ namespace Fourzy._Updates.UI.Menu
 
         protected virtual void OnBack()
         {
-            if (PersistantMenuController.instance.screensStack.Count > 0 || !state) return;
+            if (PersistantMenuController.instance.screensStack.Count > 0 || !state || !StandaloneInputModuleExtended.BackEventAvailable) return;
             
             if (screensStack.Count > 0)
             {
