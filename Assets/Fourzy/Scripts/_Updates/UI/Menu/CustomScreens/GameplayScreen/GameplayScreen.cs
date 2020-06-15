@@ -44,7 +44,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private UIOutline helpButtonOutline;
 
-        private bool timersEnabled => SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER) && (game._Type == GameType.PASSANDPLAY || game._Type == GameType.REALTIME);
+        private bool timersEnabled => SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER) && (game._Type == GameType.PASSANDPLAY || game._Type == GameType.REALTIME || game._Type == GameType.AI);
 
         protected override void Awake()
         {
@@ -194,7 +194,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Vector2 viewportPoint = Camera.main.WorldToViewportPoint(gameplayManager.board.BoardLocationToVec2(new BoardLocation(0, 0)) + (Vector2)GamePlayManager.instance.board.transform.position);
             helpButton.rectTransform.anchorMin = helpButton.rectTransform.anchorMax = viewportPoint;
             if (GameManager.Instance.Landscape)
-                helpButton.rectTransform.anchoredPosition = new Vector2(-140f, 0f);
+                helpButton.rectTransform.anchoredPosition = new Vector2(-160f, 0f);
             else
                 helpButton.rectTransform.anchoredPosition = new Vector2(0f, 110f);
 

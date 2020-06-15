@@ -20,7 +20,7 @@ MonoBehaviour:
         name: Red Dragon
         enabled: 1
         rarity: 30
-        startingMagic: 200
+        startingMagic: 100
         spells: 00000000
         outlineColor: {r: 0, g: 0.4666667, b: 0.9960785, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
