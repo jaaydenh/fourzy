@@ -113,14 +113,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (isRealtime)
             {
-                messageLabel.text = "Finding Match";
+                messageLabel.text = "Searching for opponent...";
 
                 //try join random room
                 PhotonNetwork.JoinRandomRoom();
             }
             else
             {
-                messageLabel.text = "Finding Match";
+                messageLabel.text = "Searching for opponent...";
 
                 Area selectedArea = GameContentManager.Instance.currentTheme.themeID;
                 Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentTheme.themeID);
@@ -187,7 +187,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!isOpened) return;
 
-            messageLabel.text = "Failed to join random room, creating new one...";
+            // messageLabel.text = "Failed to join random room, creating new one...";
             Debug.Log("Failed to join random room, creating new one...");
 
             //create new room
@@ -204,14 +204,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!isOpened) return;
 
-            messageLabel.text = "Waiting for other player to join...";
+            messageLabel.text = "Searching for opponent...";
 
             //unblock input
             SetInteractable(true);
             backButton.SetActive(true);
 
-            StopRoutine("randomText", false);
-            timerLabel.text = string.Empty;
+            // StopRoutine("randomText", false);
+            // timerLabel.text = string.Empty;
         }
 
         private void OnCreateRoomFailed()
@@ -233,7 +233,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             ////fake scene loading
             //StartRoutine("fakeSceneLoading", 4f, () => GameManager.Instance.StartGame());
             //other player connected, switch to gameplay scene
-            GameManager.Instance.StartGame();
+            StartMatch();
         }
 
         private void OnRoomJoined(string roomName)
@@ -243,11 +243,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 ////fake scene loading
                 //StartRoutine("fakeSceneLoading", 4f, () => GameManager.Instance.StartGame());
                 //open gameplay scene
-                GameManager.Instance.StartGame();
+                StartMatch();
             }
         }
 
         #endregion
+
+        private void StartMatch()
+        {
+            //play GAME_FOUND sfx
+            AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
+            GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
+            timerLabel.text = "Match Found";
+
+            GameManager.Instance.StartGame();
+        }
 
         private IEnumerator ShowRandomTextRoutine()
         {

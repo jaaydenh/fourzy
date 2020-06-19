@@ -31,7 +31,9 @@ namespace Fourzy
         public const int CIRCULAR_TIMER_VALUE = 8;
         public const int INITIAL_TIMER_TIME = 3;
         public const int AI_TURN_TIMER_RESET_VALUE = 2;
-        public const int ADD_TIMER_BAR_EVERY_X_TURN = 2;
+
+        // Adds additional time to timer after X turns
+        public const int ADD_TIMER_BAR_EVERY_X_TURN = 1;
         public const int BARS_TO_ADD = 1;
 
         public const int RUNNING_CHALLENGES_COUNT = 100;
