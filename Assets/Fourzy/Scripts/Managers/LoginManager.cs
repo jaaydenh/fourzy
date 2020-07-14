@@ -14,6 +14,7 @@ using UnityEngine;
 //using SA.iOS.GameKit;
 //using SA.Foundation.Templates;
 using Fourzy._Updates.UI.Menu.Screens;
+using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections;
@@ -55,7 +56,7 @@ namespace Fourzy
             GameAnalytics.Initialize();
 
             PlayFabAuthService.OnLoginSuccess += PlayFabLoginSuccess;
-            PlayFabAuthService.OnPlayFabError += PlayFabLoginError;
+            PlayFabAuthService.OnPlayFabError += OnPlayFabError;
         }
 
         protected void OnDestroy()
@@ -302,22 +303,22 @@ namespace Fourzy
                 // {
                 //     if (!isConnecting)
                 //     {
-//#if UNITY_IOS && !UNITY_EDITOR
-                            //Debug.Log("GameCenterLogin");
-                            //GameCenterLogin();    
-//#else
-                        // Debug.Log("GameSparks DeviceLogin");
-                        // DeviceLogin();
-//#endif
-            //         }
-            //     }
-            //     else
-            //     {
-            //         Debug.Log("CONNECTED");
-            //         //UserManager.Instance.UpdateInformation();
-            //         ChallengeManager.Instance.GetChallengesRequest();
-            //         OnDeviceLoginComplete?.Invoke(true);
-            //     }
+                //#if UNITY_IOS && !UNITY_EDITOR
+                //Debug.Log("GameCenterLogin");
+                //GameCenterLogin();    
+                //#else
+                // Debug.Log("GameSparks DeviceLogin");
+                // DeviceLogin();
+                //#endif
+                //         }
+                //     }
+                //     else
+                //     {
+                //         Debug.Log("CONNECTED");
+                //         //UserManager.Instance.UpdateInformation();
+                //         ChallengeManager.Instance.GetChallengesRequest();
+                //         OnDeviceLoginComplete?.Invoke(true);
+                //     }
             }
         }
 
@@ -384,6 +385,59 @@ namespace Fourzy
                 },
                 OnGetPlayerAccount,
                 error => Debug.Log("Error retrieving players profile: " + error.ErrorMessage));
+
+
+            RequestPhotonToken(result);
+        }
+
+        /*
+        * We request Photon authentication token from PlayFab.
+        * This is a crucial step, because Photon uses different authentication tokens
+        * than PlayFab. Thus, you cannot directly use PlayFab SessionTicket and
+        * you need to explicitly request a token. This API call requires you to
+        * pass Photon App ID. App ID may be hard coded, but, in this example,
+        * We are accessing it using convenient static field on PhotonNetwork class
+        * We pass in AuthenticateWithPhoton as a callback to be our next step, if
+        * we have acquired token successfully
+        */
+        private void RequestPhotonToken(LoginResult obj)
+        {
+            Debug.Log("PlayFab authenticated. Requesting photon token...");
+
+            PlayFabClientAPI.GetPhotonAuthenticationToken(new GetPhotonAuthenticationTokenRequest()
+            {
+                PhotonApplicationId = PhotonNetwork.PhotonServerSettings.AppSettings.AppIdRealtime
+            }, AuthenticateWithPhoton, OnPlayFabError);
+        }
+
+        /*
+        * This is the final and the simplest step. We create new AuthenticationValues instance.
+        * This class describes how to authenticate a players inside Photon environment.
+        */
+        private void AuthenticateWithPhoton(GetPhotonAuthenticationTokenResult obj)
+        {
+            LogMessage("Photon token acquired: " + obj.PhotonCustomAuthenticationToken + "  Authentication complete.");
+
+            //We set AuthType to custom, meaning we bring our own, PlayFab authentication procedure.
+            var customAuth = new Photon.Realtime.AuthenticationValues { AuthType = Photon.Realtime.CustomAuthenticationType.Custom };
+            //We add "username" parameter. Do not let it confuse you: PlayFab is expecting this parameter to contain player PlayFab ID (!) and not username.
+            customAuth.AddAuthParameter("username", playerMasterAccountID);    // expected by PlayFab custom auth service
+
+            //We add "token" parameter. PlayFab expects it to contain Photon Authentication Token issues to your during previous step.
+            customAuth.AddAuthParameter("token", obj.PhotonCustomAuthenticationToken);
+
+            //We finally tell Photon to use this authentication parameters throughout the entire application.
+            PhotonNetwork.AuthValues = customAuth;
+        }
+
+        private void OnPlayFabError(PlayFabError obj)
+        {
+            LogMessage(obj.GenerateErrorReport());
+        }
+
+        public void LogMessage(string message)
+        {
+            Debug.Log("Login Manager: " + message);
         }
 
         private void OnProfileOK(GetEntityProfileResponse profile)
@@ -413,11 +467,6 @@ namespace Fourzy
                 new GetEntityProfileRequest() { Entity = new PlayFab.ProfilesModels.EntityKey() { Id = playerTitleID, Type = "title_player_account" } },
                 OnProfileOK,
                 error => Debug.Log("Error getting profile: " + error.ErrorMessage));
-        }
-
-        private void PlayFabLoginError(PlayFabError error)
-        {
-            Debug.Log("***** PlayFab Login Error: " + error.ErrorMessage);
         }
 
         // private void GetLeaderboard(string leaderboardShortCode, Action<List<RankingScreen.LeaderboardEntry>, string> callback, bool isWinsLeaderboard)

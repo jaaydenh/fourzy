@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Tween;
+using Photon.Pun;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -46,7 +47,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void CheckWaitingForOtherPlayer()
         {
-            if (PhotonNetwork.room == null) return;
+            if (PhotonNetwork.CurrentRoom == null) return;
 
             if (!FourzyPhotonManager.CheckPlayersReady())
             {

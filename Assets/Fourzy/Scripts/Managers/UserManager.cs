@@ -4,6 +4,7 @@ using Fourzy._Updates.Mechanics;
 using FourzyGameModel.Model;
 // using GameSparks.Api.Requests;
 // using GameSparks.Core;
+using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
 using System;
@@ -57,9 +58,9 @@ namespace Fourzy
             {
                 PlayerPrefsWrapper.SetSelectedGamePiece(value);
 
-                if (PhotonNetwork.connected)
+                if (PhotonNetwork.IsConnected)
                     //update photon player property
-                    PhotonNetwork.player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable()
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable()
                     {
                         ["gp"] = value,
                     });
@@ -156,7 +157,7 @@ namespace Fourzy
 
         public float levelProgress => GetProgression(xp);
 
-        public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceID + ""};
+        public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceID + "" };
 
         protected override void Awake()
         {
@@ -257,7 +258,7 @@ namespace Fourzy
 
         public void SetDisplayName(string value, bool updatePlayFabDisplayName = true)
         {
-            if (PhotonNetwork.connected) PhotonNetwork.player.NickName = value;
+            if (PhotonNetwork.IsConnected) PhotonNetwork.NickName = value;
 
             PlayerPrefsWrapper.SetUsetName(value);
 

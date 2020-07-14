@@ -1,5 +1,6 @@
 ﻿//modded @vadym udod
 
+using ExitGames.Client.Photon;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
@@ -11,6 +12,7 @@ using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 // using GameSparks.Api.Responses;
 using Newtonsoft.Json;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -84,9 +86,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             // ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
 
             //listen to roomPropertyChanged event
-            FourzyPhotonManager.onRoomCustomPropertiesChanged += OnRoomCustomPropertiesChanged;
-            FourzyPhotonManager.onPlayerDisconnected += OnPlayerDisconnected;
-            PhotonNetwork.OnEventCall += OnEventCall;
+            FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
+            FourzyPhotonManager.onPlayerLeftRoom += OnPlayerLeftRoom;
+            // PhotonNetwork.OnEventCall += OnEventCall;
 
             if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput += OnNoInput;
 
@@ -99,7 +101,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 FourzyPhotonManager.SetClientReady();
                 gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer();
 
-                OnRoomCustomPropertiesChanged(PhotonNetwork.room.CustomProperties);
+                OnRoomPropertiesUpdate(PhotonNetwork.CurrentRoom.CustomProperties);
             }
             else LoadGame(GameManager.Instance.activeGame);
         }
@@ -134,9 +136,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             // ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
             // ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
 
-            FourzyPhotonManager.onRoomCustomPropertiesChanged -= OnRoomCustomPropertiesChanged;
-            FourzyPhotonManager.onPlayerDisconnected -= OnPlayerDisconnected;
-            PhotonNetwork.OnEventCall -= OnEventCall;
+            FourzyPhotonManager.onRoomPropertiesUpdate -= OnRoomPropertiesUpdate;
+            FourzyPhotonManager.onPlayerLeftRoom -= OnPlayerLeftRoom;
+            // PhotonNetwork.OnEventCall -= OnEventCall;
 
             if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput -= OnNoInput;
 
@@ -158,7 +160,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.passAndPlayDataHolder.random, UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
                 //ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetPassAndPlayBoardByName("Sand Dunes"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
-                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoard("20"), UserManager.Instance.meAsPlayer, new Player(2, "Player Two"));
+                ClientFourzyGame newGame = new ClientFourzyGame(GameContentManager.Instance.GetMiscBoard("20"), UserManager.Instance.meAsPlayer, new FourzyGameModel.Model.Player(2, "Player Two"));
                 newGame._Type = GameType.PASSANDPLAY;
 
                 GameManager.Instance.activeGame = newGame;
@@ -209,15 +211,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public void CreateRealtimeGame()
         {
             //only continue if master
-            if (PhotonNetwork.isMasterClient)
+            if (PhotonNetwork.IsMasterClient)
             {
                 //ready me
-                Player me = new Player(1, UserManager.Instance.userName);
+                FourzyGameModel.Model.Player me = new FourzyGameModel.Model.Player(1, UserManager.Instance.userName);
                 me.PlayerString = "1";
                 me.HerdId = UserManager.Instance.gamePieceID + "";
                 //ready opponent
-                Player opponen = new Player(2, PhotonNetwork.otherPlayers[0].NickName);
-                opponen.HerdId = PhotonNetwork.otherPlayers[0].CustomProperties.ContainsKey("gp") ? PhotonNetwork.otherPlayers[0].CustomProperties["gp"].ToString() : "1";
+                FourzyGameModel.Model.Player opponen = new FourzyGameModel.Model.Player(2, PhotonNetwork.PlayerListOthers[0].NickName);
+                opponen.HerdId = PhotonNetwork.PlayerListOthers[0].CustomProperties.ContainsKey("gp") ? PhotonNetwork.PlayerListOthers[0].CustomProperties["gp"].ToString() : "1";
                 opponen.PlayerString = "2";
 
                 //load realtime game
@@ -228,9 +230,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 //add realtime data
                 gameStateData.realtimeData = new RealtimeData() { createdEpoch = Utils.EpochMilliseconds(), };
 
-                //send this game data to other player
-                PhotonNetwork.RaiseEvent(Constants.GAME_DATA, JsonConvert.SerializeObject(gameStateData), true, new RaiseEventOptions() { Receivers = ReceiverGroup.Others, });
-
+                var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                eventOptions.Flags.HttpForward = true;
+                eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+                Debug.Log("CreateRealtimeGame");
+                var result = PhotonNetwork.RaiseEvent(Constants.GAME_DATA, JsonConvert.SerializeObject(gameStateData), eventOptions, SendOptions.SendReliable);
+                Debug.Log("Photon create game event result: " + result);
                 LoadGame(_game);
             }
         }
@@ -417,7 +422,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     if (game.asFourzyGame.isBoardRandom)
                         game = new ClientFourzyGame(
                             game._Area,
-                            UserManager.Instance.meAsPlayer, new Player(2, "Player Two"),
+                            UserManager.Instance.meAsPlayer, new FourzyGameModel.Model.Player(2, "Player Two"),
                             UserManager.Instance.meAsPlayer.PlayerId)
                         { _Type = GameType.PASSANDPLAY };
                     else
@@ -432,8 +437,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     LoadGame(game);
 
-                    PhotonNetwork.RaiseEvent(Constants.REMATCH, null, true, new RaiseEventOptions() { Receivers = ReceiverGroup.Others, });
-
+                    var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                    eventOptions.Flags.HttpForward = true;
+                    eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+                    var result = PhotonNetwork.RaiseEvent(Constants.REMATCH, null, eventOptions, SendOptions.SendReliable);
+                    Debug.Log("Photon rematch event result: " + result);
                     break;
             }
         }
@@ -718,11 +726,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         #region Photon Callbacks
 
-        private void OnRoomCustomPropertiesChanged(ExitGames.Client.Photon.Hashtable values)
+        private void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable values)
         {
             if (values.ContainsKey(Constants.PLAYER_1_READY) || values.ContainsKey(Constants.PLAYER_2_READY))
             {
-                if (PhotonNetwork.isMasterClient)
+                if (PhotonNetwork.IsMasterClient)
                 {
                     if (FourzyPhotonManager.CheckPlayersReady()) CreateRealtimeGame();
                 }
@@ -731,7 +739,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (values.ContainsKey(Constants.EPOCH_KEY))
             {
                 //update epoch delta
-                if (!PhotonNetwork.isMasterClient) epochDelta = values.ContainsKey(Constants.EPOCH_KEY) ? FourzyPhotonManager.GetRoomProperty(Constants.EPOCH_KEY, 0L) - Utils.EpochMilliseconds() : 0L;
+                if (!PhotonNetwork.IsMasterClient) epochDelta = values.ContainsKey(Constants.EPOCH_KEY) ? FourzyPhotonManager.GetRoomProperty(Constants.EPOCH_KEY, 0L) - Utils.EpochMilliseconds() : 0L;
             }
         }
 
@@ -758,7 +766,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        private void OnPlayerDisconnected(PhotonPlayer otherPlayer)
+        private void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
         {
             switch (game._Type)
             {
@@ -1113,8 +1121,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     yield return new WaitForSeconds(3f);
 
                     LoadGame(new ClientFourzyGame(GameContentManager.Instance.themesDataHolder.GetRandomTheme(Area.NONE),
-                        new Player(1, "AI Player 1") { PlayerString = "1" },
-                        new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
+                        new FourzyGameModel.Model.Player(1, "AI Player 1") { PlayerString = "1" },
+                        new FourzyGameModel.Model.Player(2, "AI Player 2") { PlayerString = "2" }, 1)
                     { _Type = GameType.PRESENTATION, });
 
                     break;

@@ -17,6 +17,7 @@ using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 using MoreMountains.NiceVibrations;
 using Newtonsoft.Json;
+using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
 using System;
@@ -91,7 +92,7 @@ namespace Fourzy
         }
         public bool Landscape => Screen.width > Screen.height;
         public bool ExtraFeatures => extraFeatures || Application.isEditor;
-        public bool isRealtime => PhotonNetwork.room != null;
+        public bool isRealtime => PhotonNetwork.CurrentRoom != null;
         public PuzzleData dailyPuzzlePack { get; private set; }
         public IClientFourzy activeGame { get; set; }
         public BasicPuzzlePack currentPuzzlePack { get; set; }
@@ -166,7 +167,7 @@ namespace Fourzy
 
 
 #if UNITY_IOS || UNITY_ANDROID
-                if (value) Handheld.Vibrate();
+            if (value) Handheld.Vibrate();
 #endif
 
             APP_REMOTE_SETTINGS_DEFAULTS = new Dictionary<string, object>()
@@ -210,7 +211,9 @@ namespace Fourzy
                 }
 
                 PlayerPrefsWrapper.InitialPropertiesSet(true);
-            } else {
+            }
+            else
+            {
                 // temporary until unlock areas is implemented
                 foreach (Area area in Enum.GetValues(typeof(Area)))
                 {
@@ -260,7 +263,7 @@ namespace Fourzy
             //NetworkAccess.onNetworkAccess -= OnNetworkAccess;
 
 #if UNITY_IOS
-            MMVibrationManager.iOSReleaseHaptics ();
+            MMVibrationManager.iOSReleaseHaptics();
 #endif
         }
 
@@ -319,7 +322,7 @@ namespace Fourzy
                 PhotonNetwork.LoadLevel(Constants.GAMEPLAY_SCENE_NAME);
 
                 //lock this room if master client
-                if (PhotonNetwork.isMasterClient) PhotonNetwork.room.IsOpen = false;
+                if (PhotonNetwork.IsMasterClient) PhotonNetwork.CurrentRoom.IsOpen = false;
             }
             else
             {
@@ -367,8 +370,8 @@ namespace Fourzy
                 //analytics
                 if (activeGame != null)
                     AnalyticsManager.Instance.LogGame(
-                        AnalyticsManager.AnalyticsGameEvents.PUZZLE_HINT_STORE_HINT_PURCHASE, 
-                        activeGame, 
+                        AnalyticsManager.AnalyticsGameEvents.PUZZLE_HINT_STORE_HINT_PURCHASE,
+                        activeGame,
                         AnalyticsManager.AnalyticsProvider.ALL,
                         new KeyValuePair<string, object>(AnalyticsManager.HINT_STORE_ITEMS_KEY, StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)),
                         new KeyValuePair<string, object>(AnalyticsManager.STORE_ITEM_KEY, _data.id));
@@ -755,7 +758,8 @@ namespace Fourzy
             try
             {
                 PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest(),
-                    result => {
+                    result =>
+                    {
                         Debug.Log("News fetched " + result.News.Count);
                         latestNews = result.News;
                         onNewsFetched?.Invoke();

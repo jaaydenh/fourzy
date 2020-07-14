@@ -62,10 +62,12 @@ namespace Fourzy._Updates.UI.Widgets
 
         public GamePieceWidgetLandscape SelectAsPlayer(params int[] players)
         {
-            bool p1 = players.Contains(0);
-            bool p2 = players.Contains(1);
+            bool p1 = Array.IndexOf(players, 0) != -1;// .Contains(0);
+            bool p2 = Array.IndexOf(players, 1) != -1;
+            // bool p2 = players.Contains(1);
 
-            this.players = players.Contains(-1) ? null : players;
+            this.players = Array.IndexOf(players, -1) != -1 ? null : players;
+            // this.players = players.Contains(-1) ? null : players;
 
             player1Marker.SetActive(p1);
             player2Marker.gameObject.SetActive(p2);
