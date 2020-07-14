@@ -52,7 +52,7 @@ namespace Fourzy
             OnboardingScreen onboardingScreen = PersistantMenuController.instance.GetOrAddScreen<OnboardingScreen>();
 
             AsyncOperation async = null;
-            bool displayTutorial = onboardingScreen.WillDisplayTutorial(HardcodedTutorials.GetByName("Onboarding")) && GameManager.Instance.Landscape;
+            bool displayTutorial = onboardingScreen.WillDisplayTutorial(HardcodedTutorials.GetByName("Onboarding"))/* && GameManager.Instance.Landscape*/;
 
             if (!displayTutorial)
             {

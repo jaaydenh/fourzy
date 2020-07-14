@@ -12766,7 +12766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 853.1049
+  m_MinWidth: 750.375
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -29909,7 +29909,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 22
+          selectedMember: 23
           isDynamic: 0
         target: {fileID: 1137210155}
         memberName: AdjustSize
@@ -29923,7 +29923,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 22
+          selectedMember: 23
           isDynamic: 0
         target: {fileID: 1137210155}
         memberName: AdjustSize
@@ -29937,7 +29937,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 22
+          selectedMember: 23
           isDynamic: 0
         target: {fileID: 1137210155}
         memberName: AdjustSize
@@ -30003,7 +30003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 853.1049
+  m_MinWidth: 750.375
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -44209,7 +44209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 853.1049
+  m_MinWidth: 750.375
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1

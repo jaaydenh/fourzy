@@ -37,14 +37,25 @@ namespace Fourzy._Updates.UI.Menu
         [HideInInspector]
         public MenuController menuController;
 
-        public bool initialized { get; protected set; }
-        public RectTransform rectTransform { get; protected set; }
-        public LayoutElement layoutElement { get; protected set; }
-        public bool inputBlocked => canvasGroup.blocksRaycasts && !canvasGroup.interactable;
-
         protected CanvasGroup canvasGroup;
         protected TweenBase tween;
         protected List<WidgetBase> widgets;
+        protected bool initialized = false;
+
+        public bool Initialized
+        {
+            get
+            {
+                if (!enabled) return true;
+                else if (!gameObject.activeInHierarchy) return true;
+                else return initialized;
+            }
+
+            protected set => initialized = value;
+        }
+        public RectTransform rectTransform { get; protected set; }
+        public LayoutElement layoutElement { get; protected set; }
+        public bool inputBlocked => canvasGroup.blocksRaycasts && !canvasGroup.interactable;
 
         public bool interactable
         {

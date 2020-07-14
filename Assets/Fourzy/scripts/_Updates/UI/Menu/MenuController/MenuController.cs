@@ -315,7 +315,7 @@ namespace Fourzy._Updates.UI.Menu
 
         private IEnumerator InitializedRoutine()
         {
-            while (!screens.TrueForAll(screen => screen.initialized)) yield return null;
+            while (!screens.TrueForAll(screen => screen.Initialized)) yield return null;
 
             OnInitialized();
             initialized = true;

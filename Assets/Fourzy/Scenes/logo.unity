@@ -1265,6 +1265,21 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 114079966796045236, guid: 3b153745504954e599a747ae789ac703,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 311
+      objectReference: {fileID: 0}
+    - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
+        type: 3}
+      propertyPath: displayTutorials
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
+        type: 3}
+      propertyPath: forceDisplayTutorials
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6077144665870927472, guid: 3b153745504954e599a747ae789ac703,
         type: 3}
       propertyPath: onPurchaseComplete.m_PersistentCalls.m_Calls.Array.size
@@ -1507,7 +1522,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8112d1a83a4273441a8a88b9ee2b7c99, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f3c172fa714592a4f83f25a91b9925f0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1760,7 +1775,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 750, y: 1334}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.8
+  m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
