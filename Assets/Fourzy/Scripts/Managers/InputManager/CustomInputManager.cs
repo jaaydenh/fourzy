@@ -38,7 +38,7 @@ namespace Fourzy._Updates.Managers
             }
 
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
             StandaloneInputModuleExtended.GamepadMode = StandaloneInputModuleExtended.GamepadModeFilter.MULTIPLE;
 
             Initialize();
