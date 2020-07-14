@@ -29,7 +29,7 @@ Transform:
   m_LocalScale: {x: 1.1024, y: 1.1024, z: 1.1024}
   m_Children: []
   m_Father: {fileID: 503606097}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &696933393
 SpriteRenderer:
@@ -45,6 +45,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -56,6 +57,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -67,7 +69,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: 2623bb5faf7abbc4da6c39584f50e9de, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -104,11 +106,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 965211684}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.41, z: 0}
-  m_LocalScale: {x: 1.2043, y: 1.2043, z: 1.2043}
+  m_LocalPosition: {x: 0, y: 7.67, z: 0}
+  m_LocalScale: {x: 1.1175904, y: 1.1175904, z: 1.1175904}
   m_Children: []
   m_Father: {fileID: 503606097}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &965211686
 SpriteRenderer:
@@ -124,6 +126,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -135,6 +138,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -147,7 +151,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -3
-  m_Sprite: {fileID: 21300000, guid: 98e64f32d8322924fbc0889a66ca5ae8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4f65f2d794ca2344dbaf38b853013b98, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -187,8 +191,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 965211685}
   - {fileID: 696933392}
+  - {fileID: 965211685}
   - {fileID: 4687986568616748350}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -207,6 +211,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -218,6 +223,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -229,7 +235,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -2
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 178622a40076d27409e51ef241f26fe9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -254,6 +260,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   background: {fileID: 1817477847}
+  configureAtStart: 1
+  ipadMatch: 1
+  iphoneMatch: 1
+  iphoneXMatch: 0
 --- !u!1 &1900680287
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,6 +377,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -378,6 +389,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -392,15 +404,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -4.156, y: -7.9729996, z: -0.5}
-  - {x: -4.1845326, y: -7.5789995, z: -0.5}
-  - {x: -4.160459, y: -7.185, z: -0.5}
-  - {x: -4.0835776, y: -6.791, z: -0.5}
-  - {x: -4.0345616, y: -6.397, z: -0.5}
-  - {x: -4.0845037, y: -6.003, z: -0.5}
-  - {x: -4.115895, y: -5.6089997, z: -0.5}
-  - {x: -4.0006433, y: -5.2149997, z: -0.5}
-  - {x: -3.889514, y: -4.8209996, z: -0.5}
-  - {x: -4.032944, y: -4.427, z: -0.5}
+  - {x: -4.1404133, y: -7.5789995, z: -0.5}
+  - {x: -4.1434, y: -7.185, z: -0.5}
+  - {x: -4.093708, y: -6.791, z: -0.5}
+  - {x: -4.022434, y: -6.397, z: -0.5}
+  - {x: -4.0778174, y: -6.003, z: -0.5}
+  - {x: -4.2224746, y: -5.6089997, z: -0.5}
+  - {x: -4.368724, y: -5.2149997, z: -0.5}
+  - {x: -4.1899357, y: -4.8209996, z: -0.5}
+  - {x: -3.9557154, y: -4.427, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -611,6 +623,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -622,6 +635,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -636,15 +650,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -4.41, y: 5.89, z: -0.5}
-  - {x: -4.37785, y: 6.2839994, z: -0.5}
-  - {x: -4.3649917, y: 6.6779995, z: -0.5}
-  - {x: -4.4219656, y: 7.0719995, z: -0.5}
-  - {x: -4.529499, y: 7.4659996, z: -0.5}
-  - {x: -4.466841, y: 7.8599997, z: -0.5}
-  - {x: -4.3175974, y: 8.254, z: -0.5}
-  - {x: -4.184084, y: 8.648, z: -0.5}
-  - {x: -4.2471666, y: 9.042, z: -0.5}
-  - {x: -4.3521786, y: 9.436, z: -0.5}
+  - {x: -4.423359, y: 6.2839994, z: -0.5}
+  - {x: -4.3831215, y: 6.6779995, z: -0.5}
+  - {x: -4.3133154, y: 7.0719995, z: -0.5}
+  - {x: -4.323224, y: 7.4659996, z: -0.5}
+  - {x: -4.3757463, y: 7.8599997, z: -0.5}
+  - {x: -4.323982, y: 8.254, z: -0.5}
+  - {x: -4.1899886, y: 8.648, z: -0.5}
+  - {x: -4.2148275, y: 9.042, z: -0.5}
+  - {x: -4.427857, y: 9.436, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -813,6 +827,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -824,6 +839,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -838,15 +854,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -4.156, y: -7.9729996, z: -0.5}
-  - {x: -4.127249, y: -7.5789995, z: -0.5}
-  - {x: -4.1319566, y: -7.185, z: -0.5}
-  - {x: -4.132474, y: -6.791, z: -0.5}
-  - {x: -4.0568085, y: -6.397, z: -0.5}
-  - {x: -3.993162, y: -6.003, z: -0.5}
-  - {x: -4.0962353, y: -5.6089997, z: -0.5}
-  - {x: -4.2731256, y: -5.2149997, z: -0.5}
-  - {x: -4.355955, y: -4.8209996, z: -0.5}
-  - {x: -4.1421037, y: -4.427, z: -0.5}
+  - {x: -4.1229362, y: -7.5789995, z: -0.5}
+  - {x: -4.1321125, y: -7.185, z: -0.5}
+  - {x: -4.2003326, y: -6.791, z: -0.5}
+  - {x: -4.2635574, y: -6.397, z: -0.5}
+  - {x: -4.158339, y: -6.003, z: -0.5}
+  - {x: -4.0013566, y: -5.6089997, z: -0.5}
+  - {x: -3.948393, y: -5.2149997, z: -0.5}
+  - {x: -4.050317, y: -4.8209996, z: -0.5}
+  - {x: -4.091581, y: -4.427, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -1015,6 +1031,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1026,6 +1043,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1040,15 +1058,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -4.41, y: 5.89, z: -0.5}
-  - {x: -4.4385324, y: 6.2839994, z: -0.5}
-  - {x: -4.4144588, y: 6.6779995, z: -0.5}
-  - {x: -4.3375773, y: 7.0719995, z: -0.5}
-  - {x: -4.2885613, y: 7.4659996, z: -0.5}
-  - {x: -4.3385034, y: 7.8599997, z: -0.5}
-  - {x: -4.3698945, y: 8.254, z: -0.5}
-  - {x: -4.254643, y: 8.648, z: -0.5}
-  - {x: -4.1435137, y: 9.042, z: -0.5}
-  - {x: -4.286944, y: 9.436, z: -0.5}
+  - {x: -4.394413, y: 6.2839994, z: -0.5}
+  - {x: -4.3974, y: 6.6779995, z: -0.5}
+  - {x: -4.3477077, y: 7.0719995, z: -0.5}
+  - {x: -4.276434, y: 7.4659996, z: -0.5}
+  - {x: -4.331817, y: 7.8599997, z: -0.5}
+  - {x: -4.4764743, y: 8.254, z: -0.5}
+  - {x: -4.6227236, y: 8.648, z: -0.5}
+  - {x: -4.4439354, y: 9.042, z: -0.5}
+  - {x: -4.209715, y: 9.436, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -1217,6 +1235,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1228,6 +1247,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1242,15 +1262,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 4.13, y: -7.9729996, z: -0.5}
-  - {x: 4.16215, y: -7.5789995, z: -0.5}
-  - {x: 4.1750083, y: -7.185, z: -0.5}
-  - {x: 4.1180344, y: -6.791, z: -0.5}
-  - {x: 4.010501, y: -6.397, z: -0.5}
-  - {x: 4.0731587, y: -6.003, z: -0.5}
-  - {x: 4.2224026, y: -5.6089997, z: -0.5}
-  - {x: 4.355916, y: -5.2149997, z: -0.5}
-  - {x: 4.2928333, y: -4.8209996, z: -0.5}
-  - {x: 4.1878214, y: -4.427, z: -0.5}
+  - {x: 4.116641, y: -7.5789995, z: -0.5}
+  - {x: 4.1568785, y: -7.185, z: -0.5}
+  - {x: 4.2266846, y: -6.791, z: -0.5}
+  - {x: 4.216776, y: -6.397, z: -0.5}
+  - {x: 4.1642537, y: -6.003, z: -0.5}
+  - {x: 4.216018, y: -5.6089997, z: -0.5}
+  - {x: 4.3500113, y: -5.2149997, z: -0.5}
+  - {x: 4.3251724, y: -4.8209996, z: -0.5}
+  - {x: 4.112143, y: -4.427, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -1419,6 +1439,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1430,6 +1451,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1444,15 +1466,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 4.37, y: 5.89, z: -0.5}
-  - {x: 4.4021497, y: 6.2839994, z: -0.5}
-  - {x: 4.415008, y: 6.6779995, z: -0.5}
-  - {x: 4.358034, y: 7.0719995, z: -0.5}
-  - {x: 4.2505007, y: 7.4659996, z: -0.5}
-  - {x: 4.3131585, y: 7.8599997, z: -0.5}
-  - {x: 4.4624023, y: 8.254, z: -0.5}
-  - {x: 4.595916, y: 8.648, z: -0.5}
-  - {x: 4.532833, y: 9.042, z: -0.5}
-  - {x: 4.427821, y: 9.436, z: -0.5}
+  - {x: 4.356641, y: 6.2839994, z: -0.5}
+  - {x: 4.3968782, y: 6.6779995, z: -0.5}
+  - {x: 4.4666843, y: 7.0719995, z: -0.5}
+  - {x: 4.4567757, y: 7.4659996, z: -0.5}
+  - {x: 4.4042535, y: 7.8599997, z: -0.5}
+  - {x: 4.456018, y: 8.254, z: -0.5}
+  - {x: 4.590011, y: 8.648, z: -0.5}
+  - {x: 4.565172, y: 9.042, z: -0.5}
+  - {x: 4.352143, y: 9.436, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -1621,6 +1643,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1632,6 +1655,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1646,15 +1670,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 4.13, y: -7.9729996, z: -0.5}
-  - {x: 4.1014676, y: -7.5789995, z: -0.5}
-  - {x: 4.125541, y: -7.185, z: -0.5}
-  - {x: 4.2024226, y: -6.791, z: -0.5}
-  - {x: 4.2514386, y: -6.397, z: -0.5}
-  - {x: 4.2014966, y: -6.003, z: -0.5}
-  - {x: 4.1701055, y: -5.6089997, z: -0.5}
-  - {x: 4.285357, y: -5.2149997, z: -0.5}
-  - {x: 4.3964863, y: -4.8209996, z: -0.5}
-  - {x: 4.253056, y: -4.427, z: -0.5}
+  - {x: 4.145587, y: -7.5789995, z: -0.5}
+  - {x: 4.1426, y: -7.185, z: -0.5}
+  - {x: 4.192292, y: -6.791, z: -0.5}
+  - {x: 4.263566, y: -6.397, z: -0.5}
+  - {x: 4.208183, y: -6.003, z: -0.5}
+  - {x: 4.0635257, y: -5.6089997, z: -0.5}
+  - {x: 3.9172764, y: -5.2149997, z: -0.5}
+  - {x: 4.0960646, y: -4.8209996, z: -0.5}
+  - {x: 4.330285, y: -4.427, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -1823,6 +1847,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1834,6 +1859,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1848,15 +1874,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 4.13, y: -7.9729996, z: -0.5}
-  - {x: 4.1587515, y: -7.5789995, z: -0.5}
-  - {x: 4.1540437, y: -7.185, z: -0.5}
-  - {x: 4.1535263, y: -6.791, z: -0.5}
-  - {x: 4.229192, y: -6.397, z: -0.5}
-  - {x: 4.292838, y: -6.003, z: -0.5}
-  - {x: 4.189765, y: -5.6089997, z: -0.5}
-  - {x: 4.0128746, y: -5.2149997, z: -0.5}
-  - {x: 3.9300454, y: -4.8209996, z: -0.5}
-  - {x: 4.1438966, y: -4.427, z: -0.5}
+  - {x: 4.163064, y: -7.5789995, z: -0.5}
+  - {x: 4.1538877, y: -7.185, z: -0.5}
+  - {x: 4.0856676, y: -6.791, z: -0.5}
+  - {x: 4.022443, y: -6.397, z: -0.5}
+  - {x: 4.127661, y: -6.003, z: -0.5}
+  - {x: 4.2846437, y: -5.6089997, z: -0.5}
+  - {x: 4.3376074, y: -5.2149997, z: -0.5}
+  - {x: 4.2356834, y: -4.8209996, z: -0.5}
+  - {x: 4.1944194, y: -4.427, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -2025,6 +2051,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2036,6 +2063,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2050,15 +2078,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -4.156, y: -7.9729996, z: -0.5}
-  - {x: -4.1238503, y: -7.5789995, z: -0.5}
-  - {x: -4.110992, y: -7.185, z: -0.5}
-  - {x: -4.167966, y: -6.791, z: -0.5}
-  - {x: -4.2754993, y: -6.397, z: -0.5}
-  - {x: -4.2128415, y: -6.003, z: -0.5}
-  - {x: -4.0635977, y: -5.6089997, z: -0.5}
-  - {x: -3.9300842, y: -5.2149997, z: -0.5}
-  - {x: -3.993167, y: -4.8209996, z: -0.5}
-  - {x: -4.098179, y: -4.427, z: -0.5}
+  - {x: -4.169359, y: -7.5789995, z: -0.5}
+  - {x: -4.129122, y: -7.185, z: -0.5}
+  - {x: -4.0593157, y: -6.791, z: -0.5}
+  - {x: -4.0692244, y: -6.397, z: -0.5}
+  - {x: -4.1217465, y: -6.003, z: -0.5}
+  - {x: -4.069982, y: -5.6089997, z: -0.5}
+  - {x: -3.935989, y: -5.2149997, z: -0.5}
+  - {x: -3.9608278, y: -4.8209996, z: -0.5}
+  - {x: -4.173857, y: -4.427, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -2227,6 +2255,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2238,6 +2267,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2252,15 +2282,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -4.41, y: 5.8900003, z: -0.5}
-  - {x: -4.3812485, y: 6.2840004, z: -0.5}
-  - {x: -4.3859563, y: 6.678, z: -0.5}
-  - {x: -4.3864737, y: 7.072, z: -0.5}
-  - {x: -4.310808, y: 7.466, z: -0.5}
-  - {x: -4.247162, y: 7.86, z: -0.5}
-  - {x: -4.350235, y: 8.254, z: -0.5}
-  - {x: -4.5271254, y: 8.648, z: -0.5}
-  - {x: -4.609955, y: 9.042, z: -0.5}
-  - {x: -4.3961034, y: 9.436, z: -0.5}
+  - {x: -4.376936, y: 6.2840004, z: -0.5}
+  - {x: -4.386112, y: 6.678, z: -0.5}
+  - {x: -4.4543324, y: 7.072, z: -0.5}
+  - {x: -4.517557, y: 7.466, z: -0.5}
+  - {x: -4.4123387, y: 7.86, z: -0.5}
+  - {x: -4.2553563, y: 8.254, z: -0.5}
+  - {x: -4.2023926, y: 8.648, z: -0.5}
+  - {x: -4.3043165, y: 9.042, z: -0.5}
+  - {x: -4.3455806, y: 9.436, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -2429,6 +2459,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2440,6 +2471,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2454,15 +2486,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 4.37, y: 5.8900003, z: -0.5}
-  - {x: 4.3987513, y: 6.2840004, z: -0.5}
-  - {x: 4.3940434, y: 6.678, z: -0.5}
-  - {x: 4.393526, y: 7.072, z: -0.5}
-  - {x: 4.4691916, y: 7.466, z: -0.5}
-  - {x: 4.532838, y: 7.86, z: -0.5}
-  - {x: 4.4297647, y: 8.254, z: -0.5}
-  - {x: 4.2528744, y: 8.648, z: -0.5}
-  - {x: 4.170045, y: 9.042, z: -0.5}
-  - {x: 4.3838964, y: 9.436, z: -0.5}
+  - {x: 4.403064, y: 6.2840004, z: -0.5}
+  - {x: 4.3938875, y: 6.678, z: -0.5}
+  - {x: 4.3256674, y: 7.072, z: -0.5}
+  - {x: 4.2624426, y: 7.466, z: -0.5}
+  - {x: 4.367661, y: 7.86, z: -0.5}
+  - {x: 4.5246434, y: 8.254, z: -0.5}
+  - {x: 4.577607, y: 8.648, z: -0.5}
+  - {x: 4.475683, y: 9.042, z: -0.5}
+  - {x: 4.434419, y: 9.436, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -2631,6 +2663,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2642,6 +2675,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2656,15 +2690,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 4.37, y: 5.89, z: -0.5}
-  - {x: 4.3414674, y: 6.2839994, z: -0.5}
-  - {x: 4.365541, y: 6.6779995, z: -0.5}
-  - {x: 4.4424224, y: 7.0719995, z: -0.5}
-  - {x: 4.4914384, y: 7.4659996, z: -0.5}
-  - {x: 4.4414964, y: 7.8599997, z: -0.5}
-  - {x: 4.410105, y: 8.254, z: -0.5}
-  - {x: 4.525357, y: 8.648, z: -0.5}
-  - {x: 4.636486, y: 9.042, z: -0.5}
-  - {x: 4.493056, y: 9.436, z: -0.5}
+  - {x: 4.3855867, y: 6.2839994, z: -0.5}
+  - {x: 4.3826, y: 6.6779995, z: -0.5}
+  - {x: 4.432292, y: 7.0719995, z: -0.5}
+  - {x: 4.503566, y: 7.4659996, z: -0.5}
+  - {x: 4.4481826, y: 7.8599997, z: -0.5}
+  - {x: 4.3035254, y: 8.254, z: -0.5}
+  - {x: 4.157276, y: 8.648, z: -0.5}
+  - {x: 4.3360643, y: 9.042, z: -0.5}
+  - {x: 4.570285, y: 9.436, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
