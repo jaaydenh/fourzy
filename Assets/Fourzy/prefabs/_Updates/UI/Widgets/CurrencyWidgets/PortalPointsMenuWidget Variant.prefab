@@ -87,8 +87,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   onValueChangeString:
     inspectorListHeight: 63
     persistentCalls:
@@ -148,7 +146,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6658682283314679574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -157,8 +155,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: ba103a5a8517a824eb4290b5935c25a0, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
@@ -168,6 +164,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1001 &3684737547048925251
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -178,6 +175,58 @@ PrefabInstance:
     - target: {fileID: 1097017916966598, guid: 911f3ecd384c3c84987386e5fbc4bd19, type: 3}
       propertyPath: m_Name
       value: PortalPointsMenuWidget Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 114388624232748730, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: cddff038b2840a948b55c4ff525b3f87,
+        type: 3}
+    - target: {fileID: 114600144459603598, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_textInfo.textComponent
+      value: 
+      objectReference: {fileID: 3654096601239791309}
+    - target: {fileID: 114600144459603598, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114600144459603598, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114600144459603598, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_textAlignment
+      value: 258
+      objectReference: {fileID: 0}
+    - target: {fileID: 114881851411643808, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9388d018e15a41842b7dec87f49478ae,
+        type: 3}
+    - target: {fileID: 224171041806801702, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 224171041806801702, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 224171041806801702, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224171041806801702, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 224480733714333564, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
@@ -284,26 +333,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 224171041806801702, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 224171041806801702, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 224171041806801702, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224171041806801702, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 224690942906249098, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -318,41 +347,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114600144459603598, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: m_textInfo.textComponent
-      value: 
-      objectReference: {fileID: 3654096601239791309}
-    - target: {fileID: 114600144459603598, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114600144459603598, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114600144459603598, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: m_textAlignment
-      value: 258
-      objectReference: {fileID: 0}
-    - target: {fileID: 3502583273549955641, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 7030889984526411541}
-    - target: {fileID: 3502583273549955641, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: onState.inspectorListHeight
-      value: 83
-      objectReference: {fileID: 0}
-    - target: {fileID: 3502583273549955641, guid: 911f3ecd384c3c84987386e5fbc4bd19,
-        type: 3}
-      propertyPath: offState.inspectorListHeight
-      value: 83
       objectReference: {fileID: 0}
     - target: {fileID: 2618477404747887170, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
@@ -369,18 +363,21 @@ PrefabInstance:
       propertyPath: slider
       value: 
       objectReference: {fileID: 1171170069531623530}
-    - target: {fileID: 114881851411643808, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+    - target: {fileID: 3502583273549955641, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
-      propertyPath: m_Sprite
+      propertyPath: m_TargetGraphic
       value: 
-      objectReference: {fileID: 21300000, guid: 9388d018e15a41842b7dec87f49478ae,
+      objectReference: {fileID: 7030889984526411541}
+    - target: {fileID: 3502583273549955641, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
-    - target: {fileID: 114388624232748730, guid: 911f3ecd384c3c84987386e5fbc4bd19,
+      propertyPath: onState.inspectorListHeight
+      value: 83
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502583273549955641, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: cddff038b2840a948b55c4ff525b3f87,
-        type: 3}
+      propertyPath: offState.inspectorListHeight
+      value: 83
+      objectReference: {fileID: 0}
     - target: {fileID: 5887906232011457819, guid: 911f3ecd384c3c84987386e5fbc4bd19,
         type: 3}
       propertyPath: m_textInfo.textComponent
@@ -397,7 +394,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &3476468289744886171 stripped
