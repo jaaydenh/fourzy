@@ -365,6 +365,19 @@ namespace Fourzy._Updates.Tools
             }
         }
 
+        public static BoardLocation ToBoardLocation(this PlayerTurn turn, IClientFourzy model) => ToBoardLocation(turn.GetMove(), model);
+
+        public static BoardLocation ToBoardLocation(this SimpleMove move, IClientFourzy model)
+        {
+            switch (move.Direction)
+            {
+                case Direction.UP: return new BoardLocation(model.Rows - 1, move.Location);
+                case Direction.DOWN: return new BoardLocation(0, move.Location);
+                case Direction.LEFT: return new BoardLocation(move.Location, model.Columns - 1);
+                default: return new BoardLocation(move.Location, 0);
+            }
+        }
+
         /// <summary>
         /// Removes last element
         /// </summary>

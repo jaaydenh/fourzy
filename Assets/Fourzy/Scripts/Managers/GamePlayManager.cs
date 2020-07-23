@@ -116,6 +116,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
             else if (Input.GetKeyDown(KeyCode.I))
                 UserManager.Instance.hints -= 3;
+            else if (Input.GetKeyDown(KeyCode.V))
+                DisplayHint(new PlayerTurn(new SimpleMove(new Piece(1), Direction.DOWN, 3)));
+            else if (Input.GetKeyDown(KeyCode.B))
+                DisplayHint(new PlayerTurn(new SimpleMove(new Piece(1), Direction.UP, 3)));
+            else if (Input.GetKeyDown(KeyCode.N))
+                DisplayHint(new PlayerTurn(new SimpleMove(new Piece(1), Direction.LEFT, 3)));
+            else if (Input.GetKeyDown(KeyCode.M))
+                DisplayHint(new PlayerTurn(new SimpleMove(new Piece(1), Direction.RIGHT, 3)));
 #endif
         }
 
@@ -538,6 +546,60 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             gameplayScreen.UpdateHelpButton();
+        }
+
+        public void DisplayHint(PlayerTurn turn, string hintMessage = "")
+        {
+            BoardLocation location = turn.GetMove().ToBoardLocation(game);
+            BoardLocation next = location.Neighbor(turn.GetMove().Direction, 2);
+
+            _Tutorial.OnboardingTask_PointAt pointAtTask = new _Tutorial.OnboardingTask_PointAt(new Dictionary<GameManager.PlacementStyle, Vector2[]>()
+            {
+                [GameManager.PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(location.Column, location.Row) },
+                [GameManager.PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(location.Column, location.Row), new Vector2(next.Column, next.Row) }
+            },
+            hintMessage);
+
+            Rect swipeRect;
+            switch (turn.GetMove().Direction)
+            {
+                case Direction.UP:
+                    swipeRect = new Rect(location.Column, location.Row - 2, 1f, 3f);
+
+                    break;
+
+                case Direction.DOWN:
+                    swipeRect = new Rect(location.Column, location.Row, 1f, 3f);
+
+                    break;
+
+                case Direction.LEFT:
+                    swipeRect = new Rect(location.Column - 2, location.Row, 3f, 1f);
+
+                    break;
+
+                default:
+                    swipeRect = new Rect(location.Column, location.Row, 3f, 1f);
+
+                    break;
+            }
+
+            _Tutorial.OnboardingTask_ShowMaskedArea maskTask = new _Tutorial.OnboardingTask_ShowMaskedArea(new Dictionary<GameManager.PlacementStyle, Rect>()
+            {
+                [GameManager.PlacementStyle.EDGE_TAP] = new Rect(location.Column, location.Row, 1f, 1f),
+                [GameManager.PlacementStyle.SWIPE_STYLE_2] = swipeRect
+            }, UI.Widgets.OnboardingScreenMaskObject.MaskStyle.PX_0);
+
+            PersistantMenuController.instance.GetOrAddScreen<OnboardingScreen>().OpenTutorial(new _Tutorial.Tutorial()
+            {
+                name = "hint move",
+                onBack = _Tutorial.TutorialOnBack.IGNORE,
+                tasks = new _Tutorial.OnboardingTask[] {
+                    pointAtTask,
+                    maskTask,
+                    new _Tutorial.OnboardingTask() { action = _Tutorial.OnboardingActions.ON_MOVE_STARTED, }
+                }
+            });
         }
 
         /// <summary>
@@ -1004,7 +1066,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             while (IsRoutineActive("gameInit")) yield return null;
 
-            board.TakeTurn(game.puzzleData.Solution[lastHintIndex]);
+            //play hint
+            //board.TakeTurn(game.puzzleData.Solution[lastHintIndex]);
+
+            //display hint
+            DisplayHint(game.puzzleData.Solution[lastHintIndex]);
+
             PlayerPrefsWrapper.SetPuzzleHintProgress(game.BoardID, lastHintIndex + 1 == game.puzzleData.Solution.Count ? 0 : lastHintIndex + 1);
         }
 

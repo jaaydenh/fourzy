@@ -98,8 +98,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenTutorial(Tutorial tutorial)
         {
+            print(tutorial.name);
+            StopAllCoroutines();
             instance = this;
 
+            RemoveCurrentButton();
             _yield = false;
             isTutorialRunning = true;
             this.tutorial = tutorial;
