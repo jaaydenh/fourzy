@@ -6,6 +6,7 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
 // using GameSparks.Api.Responses;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,11 +42,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             // ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
             // ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
 
-            FourzyPhotonManager.onJoinRandomRoomFailed += OnJoinRandomRoomFailed;
-            FourzyPhotonManager.onRoomCreated += OnRoomCreated;
+            FourzyPhotonManager.onJoinRandomFailed += OnJoinRandomFailed;
+            FourzyPhotonManager.onCreateRoom += OnRoomCreated;
             FourzyPhotonManager.onCreateRoomFailed += OnCreateRoomFailed;
-            FourzyPhotonManager.onPlayerConnected += OnPlayerConnected;
-            FourzyPhotonManager.onRoomJoined += OnRoomJoined;
+            FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEnteredRoom;
+            FourzyPhotonManager.onJoinedRoom += OnRoomJoined;
         }
 
         protected void OnDestroy()
@@ -53,11 +54,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             // ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
             // ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
 
-            FourzyPhotonManager.onJoinRandomRoomFailed -= OnJoinRandomRoomFailed;
-            FourzyPhotonManager.onRoomCreated -= OnRoomCreated;
+            FourzyPhotonManager.onJoinRandomFailed -= OnJoinRandomFailed;
+            FourzyPhotonManager.onCreateRoom -= OnRoomCreated;
             FourzyPhotonManager.onCreateRoomFailed -= OnCreateRoomFailed;
-            FourzyPhotonManager.onPlayerConnected -= OnPlayerConnected;
-            FourzyPhotonManager.onRoomJoined -= OnRoomJoined;
+            FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEnteredRoom;
+            FourzyPhotonManager.onJoinedRoom -= OnRoomJoined;
         }
 
         public override void Close(bool animate = true)
@@ -183,20 +184,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         #region Photon callbacks
 
-        private void OnJoinRandomRoomFailed()
+        private void OnJoinRandomFailed()
         {
             if (!isOpened) return;
 
             // messageLabel.text = "Failed to join random room, creating new one...";
             Debug.Log("Failed to join random room, creating new one...");
 
+            var options = new Photon.Realtime.RoomOptions { MaxPlayers = 2 };
+
             //create new room
             PhotonNetwork.CreateRoom(
                 Guid.NewGuid().ToString(),
-                new RoomOptions()
-                {
-                    MaxPlayers = 2,
-                },
+                options,
                 null);
         }
 
@@ -228,7 +228,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             timerLabel.text = string.Empty;
         }
 
-        private void OnPlayerConnected(PhotonPlayer otherPlayer)
+        private void OnPlayerEnteredRoom(Photon.Realtime.Player otherPlayer)
         {
             ////fake scene loading
             //StartRoutine("fakeSceneLoading", 4f, () => GameManager.Instance.StartGame());
@@ -238,7 +238,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnRoomJoined(string roomName)
         {
-            if (PhotonNetwork.room.PlayerCount == 2)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 ////fake scene loading
                 //StartRoutine("fakeSceneLoading", 4f, () => GameManager.Instance.StartGame());

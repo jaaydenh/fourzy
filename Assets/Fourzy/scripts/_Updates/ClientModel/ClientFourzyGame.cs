@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using ExitGames.Client.Photon;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
@@ -9,6 +10,7 @@ using FourzyGameModel.Model;
 // using GameSparks.Api.Requests;
 // using GameSparks.Core;
 using Newtonsoft.Json;
+using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -288,7 +290,7 @@ namespace Fourzy._Updates.ClientModel
                 switch (_Type)
                 {
                     case Fourzy.GameType.REALTIME:
-                        return State.Players.Values.ToList().Find(_player => _player.PlayerString == (PhotonNetwork.isMasterClient ? "1" : "2")) ?? State.Players[1];
+                        return State.Players.Values.ToList().Find(_player => _player.PlayerString == (PhotonNetwork.IsMasterClient ? "1" : "2")) ?? State.Players[1];
 
                     default:
                         return State.Players.Values.ToList().Find(_player => _player.PlayerString == UserManager.Instance.userId) ?? State.Players[1];
@@ -476,9 +478,11 @@ namespace Fourzy._Updates.ClientModel
                         break;
 
                     case Fourzy.GameType.REALTIME:
-                        //notify other about this turn
-                        PhotonNetwork.RaiseEvent(Constants.TAKE_TURN, JsonConvert.SerializeObject(turn), true, new RaiseEventOptions() { Receivers = ReceiverGroup.Others });
-
+                        var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                        eventOptions.Flags.HttpForward = true;
+                        eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+                        var result = PhotonNetwork.RaiseEvent(Constants.TAKE_TURN, JsonConvert.SerializeObject(turn), eventOptions, SendOptions.SendReliable);
+                        Debug.Log("Photon take turn event result: " + result);
                         break;
                 }
             }
@@ -503,9 +507,11 @@ namespace Fourzy._Updates.ClientModel
             {
                 //AI turn played on realtime mode it means that players timer is empty, send this turn to another player too
                 case Fourzy.GameType.REALTIME:
-                    //notify other about this turn
-                    PhotonNetwork.RaiseEvent(Constants.TAKE_TURN, JsonConvert.SerializeObject(result.Turn), true, new RaiseEventOptions() { Receivers = ReceiverGroup.Others });
-
+                    var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                    eventOptions.Flags.HttpForward = true;
+                    eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+                    var result1 = PhotonNetwork.RaiseEvent(Constants.TAKE_TURN, JsonConvert.SerializeObject(result.Turn), eventOptions, SendOptions.SendReliable);
+                    Debug.Log("Photon AI take turn event result: " + result1);
                     break;
             }
 
