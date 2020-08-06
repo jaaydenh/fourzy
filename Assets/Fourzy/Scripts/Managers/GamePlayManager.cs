@@ -605,7 +605,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 tasks = new _Tutorial.OnboardingTask[] {
                     pointAtTask,
                     maskTask,
-                    new _Tutorial.OnboardingTask() { action = _Tutorial.OnboardingActions.ON_MOVE_STARTED, }
+                    new _Tutorial.OnboardingTask_LimitInput(new Rect(location.Column, location.Row, 1f, 1f)),
+                    new _Tutorial.OnboardingTask() { action = _Tutorial.OnboardingActions.ON_MOVE_STARTED, },
+                    new _Tutorial.OnboardingTask() { action = _Tutorial.OnboardingActions.RESET_BOARD_INPUT, }
                 }
             });
         }
