@@ -55,6 +55,8 @@ namespace Fourzy._Updates.UI.Menu
                 }
                 else
                 {
+                    currentScreen = null;
+
                     MenuController underlayingMenuController = GetMenu(Constants.GAMEPLAY_MENU_CANVAS_NAME) ?? GetMenu(Constants.MAIN_MENU_CANVAS_NAME);
 
                     if (underlayingMenuController.screensStack.Count > 0) underlayingMenuController.screensStack.Peek().Open();

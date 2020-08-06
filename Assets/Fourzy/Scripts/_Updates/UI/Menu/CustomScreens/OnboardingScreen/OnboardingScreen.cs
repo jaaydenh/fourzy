@@ -98,7 +98,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenTutorial(Tutorial tutorial)
         {
-            print(tutorial.name);
             StopAllCoroutines();
             instance = this;
 
@@ -107,7 +106,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             isTutorialRunning = true;
             this.tutorial = tutorial;
 
-            menuController.OpenScreen(this);
+            if (menuController.currentScreen != this) menuController.OpenScreen(this);
 
             masks.Hide(0f);
             pointer.Hide(0f);

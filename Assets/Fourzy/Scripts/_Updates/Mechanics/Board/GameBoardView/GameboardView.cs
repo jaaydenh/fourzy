@@ -31,6 +31,9 @@ namespace Fourzy._Updates.Mechanics.Board
         public static float EXPECTED_SWIPE_SPEED = 13f;
         public static float MAX_SWIPE_SPEED_MLT = 5f;
         public static float DISTANCE_TO_FINISH_SWIPE_ANIMATION = .9f;
+        /// <summary>
+        /// How far outside the board touch can be picked up for Swipe2 intup method (1 == 1 cell), currently broken and will be fixed when is needed (workds only with value 1)
+        /// </summary>
         public static int SOOTB = 1;
         public static bool CAN_CANCEL_TAP = false;
 

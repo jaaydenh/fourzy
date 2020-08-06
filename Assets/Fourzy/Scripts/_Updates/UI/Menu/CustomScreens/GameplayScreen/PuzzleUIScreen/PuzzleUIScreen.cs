@@ -118,7 +118,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game.puzzleData.Solution.Count == 0) return;
 
             int progress = PlayerPrefsWrapper.GetHintTutorialStage();
-            print(progress);
 
             if (game.isMyTurn)
             {

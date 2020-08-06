@@ -145,6 +145,8 @@ namespace Fourzy._Updates.UI.Menu
                     SetCurrentScreen(menuScreen);
                     menuScreen.Open();
                 }
+                else
+                    currentScreen = null;
             }
         }
 
@@ -160,6 +162,8 @@ namespace Fourzy._Updates.UI.Menu
                     screen.Close(animate);
                 }
             }
+
+            if (screensStack.Count == 0) currentScreen = null;
         }
 
         public void BackToRoot()
