@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using MoPubInternal.ThirdParty.MiniJSON;
+using MJ = MoPubInternal.ThirdParty.MiniJSON;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,7 +38,7 @@ public abstract class AbstractNativeAd : MonoBehaviour
 
         public static Data FromJson(string json)
         {
-            var obj = Json.Deserialize(json) as Dictionary<string, object> ?? new Dictionary<string, object>();
+            var obj = MJ.Json.Deserialize(json) as Dictionary<string, object> ?? new Dictionary<string, object>();
 
             object value;
             return new Data {

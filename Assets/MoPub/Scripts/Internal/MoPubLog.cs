@@ -14,7 +14,7 @@ public static class MoPubLog
 
     public static class ConsentLogEvent
     {
-        public const string Updated = "Consent changed to {0} from {1}: PII can{2} be collected.";
+        public const string Updated = "Consent changed from {0} to {1} : PII can{2} be collected.";
         public const string LoadAttempted = "Attempting to load consent dialog";
         public const string LoadSuccess = "Consent dialog loaded";
         public const string LoadFailed = "Consent dialog failed: {0}";

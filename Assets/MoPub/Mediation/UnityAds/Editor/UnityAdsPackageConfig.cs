@@ -9,15 +9,15 @@ public class UnityAdsPackageConfig : PackageConfig
 
     public override string Version
     {
-        get { return /*UNITY_PACKAGE_VERSION*/"1.1.4"; }
+        get { return /*UNITY_PACKAGE_VERSION*/"1.2.5"; }
     }
 
     public override Dictionary<Platform, string> NetworkSdkVersions
     {
         get {
             return new Dictionary<Platform, string> {
-                { Platform.ANDROID, /*ANDROID_SDK_VERSION*/"3.2.0" },
-                { Platform.IOS, /*IOS_SDK_VERSION*/"3.2.0" }
+                { Platform.ANDROID, /*ANDROID_SDK_VERSION*/"3.4.6" },
+                { Platform.IOS, /*IOS_SDK_VERSION*/"3.4.6" }
             };
         }
     }

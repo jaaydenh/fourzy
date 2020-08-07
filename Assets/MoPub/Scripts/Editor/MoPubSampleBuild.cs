@@ -16,16 +16,23 @@ class MoPubSampleBuild
     static void PerformBuild ()
     {
         var platform = EditorUserBuildSettings.activeBuildTarget;
+        var isAndroidBuild = platform.ToString() == "Android";
         var sdkVersion = MoPub.MoPubSdkVersion;
         var args = Environment.GetCommandLineArgs();
         var lastCommit = args.First(a => a.StartsWith(LAST_COMMIT_PREFIX)).Substring(LAST_COMMIT_PREFIX.Length);
         var filename = string.Format("MoPubSampleUnity{0}_{1}+{2}{3}", platform, sdkVersion, lastCommit,
-                                     platform.ToString() == "Android" ? ".apk" : "");
+                                     isAndroidBuild ? ".apk" : "");
+
+        if (!isAndroidBuild) {
+            // Needed to generate xcworkspace for iOS builds (which is needed for XCode archival & export)
+            EditorUserBuildSettings.iOSBuildConfigType = iOSBuildType.Debug;
+        }
 
         BuildPipeline.BuildPlayer(new BuildPlayerOptions {
             scenes = EditorBuildSettings.scenes.Select(s => s.path).ToArray(),
             locationPathName = "Build/" + filename,
-            target = platform
+            target = platform,
+            options = BuildOptions.Development // Needed for SSL Proxying
         });
     }
 }

@@ -485,12 +485,6 @@ __deprecated_msg("createBanner has been deprecated, please use requestBanner ins
 }
 
 
-- (void)interstitialWillDisappear:(MPInterstitialAdController*)interstitial
-{
-    UnityPause(false);
-}
-
-
 - (void)interstitialDidDisappear:(MPInterstitialAdController*)interstitial
 {
     UnityPause(false);

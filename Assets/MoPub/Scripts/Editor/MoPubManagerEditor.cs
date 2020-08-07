@@ -25,7 +25,6 @@ public class MoPubManagerEditor : Editor
 
     public override void OnInspectorGUI()
     {
-#if UNITY_2017_1_OR_NEWER
         GUILayout.Space(3);
         // A drop-menu for conveniently adding one or more NetworkConfig objects (found in mediation adapters)
         // to the MoPubManager gameobject.
@@ -33,8 +32,6 @@ public class MoPubManagerEditor : Editor
                                            FocusType.Keyboard, GUILayout.ExpandWidth(false)))
             ShowNetworksMenu();
         GUILayout.Space(3);
-#endif
-
         DrawDefaultInspector();
     }
 

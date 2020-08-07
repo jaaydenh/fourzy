@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using MoPubInternal.ThirdParty.MiniJSON;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,13 +27,13 @@ public class MoPubManager : MonoBehaviour
     // Fired when an ad fails to load for the banner
     public static event Action<string, string> OnAdFailedEvent;
 
-    // Android only. Fired when a banner ad is clicked
+    // Fired when a banner ad is clicked
     public static event Action<string> OnAdClickedEvent;
 
-    // Android only. Fired when a banner ad expands to encompass a greater portion of the screen
+    // Fired when a banner ad expands to encompass a greater portion of the screen
     public static event Action<string> OnAdExpandedEvent;
 
-    // Android only. Fired when a banner ad collapses back to its initial size
+    // Fired when a banner ad collapses back to its initial size
     public static event Action<string> OnAdCollapsedEvent;
 
     // Fired when an interstitial ad is loaded and ready to be shown
@@ -50,10 +48,10 @@ public class MoPubManager : MonoBehaviour
     // Fired when an interstitial ad expires
     public static event Action<string> OnInterstitialExpiredEvent;
 
-    // Android only. Fired when an interstitial ad is displayed
+    // Fired when an interstitial ad is displayed
     public static event Action<string> OnInterstitialShownEvent;
 
-    // Android only. Fired when an interstitial ad is clicked
+    // Fired when an interstitial ad is clicked
     public static event Action<string> OnInterstitialClickedEvent;
 
     // Fired when a rewarded video finishes loading and is ready to be displayed
@@ -83,6 +81,21 @@ public class MoPubManager : MonoBehaviour
     // iOS only. Fired when a rewarded video event causes another application to open
     public static event Action<string> OnRewardedVideoLeavingApplicationEvent;
 
+#if mopub_native_beta
+
+    // Fired when a native ad is loaded
+    public static event Action<string, AbstractNativeAd.Data> OnNativeLoadEvent;
+
+    // Fired when a native ad is shown
+    public static event Action<string> OnNativeImpressionEvent;
+
+    // Fired when a native ad is clicked
+    public static event Action<string> OnNativeClickEvent;
+
+    // Fired when a native ad fails to load
+    public static event Action<string, string> OnNativeFailEvent;
+
+#endif
 
     // Fired when the SDK has been notified of a change in the user's consent status for data tracking.
     public static event Action<MoPub.Consent.Status, MoPub.Consent.Status, bool> OnConsentStatusChangedEvent;
@@ -166,11 +179,11 @@ public class MoPubManager : MonoBehaviour
     public InitializedEvent Initialized;
 
     // API to make calls to the platform-specific MoPub SDK.
-    internal MoPubPlatformApi MoPubPlatformApi { get; private set; }
+    internal static MoPubPlatformApi MoPubPlatformApi { get; private set; }
 
 
     // Whether the consent dialog is being shown
-    private bool consentDialogShown;
+    private static bool consentDialogShown;
 
 
     // Forwards invocations of C# event OnSdkInitializedEvent to UnityEvent OnInitialized.
@@ -191,15 +204,16 @@ public class MoPubManager : MonoBehaviour
             Debug.LogWarning("Another production MoPubManager singleton instance already exists.  That object will initialize the SDK instead of this one.");
         }
 
-        MoPubPlatformApi = new
+        if (MoPubPlatformApi == null)
+            MoPubPlatformApi = new
 #if UNITY_EDITOR
-            MoPubUnityEditor
+                MoPubUnityEditor
 #elif UNITY_ANDROID
-            MoPubAndroid
+                MoPubAndroid
 #else
-            MoPubiOS
+                MoPubiOS
 #endif
-            ();
+                ();
 
         OnSdkInitializedEvent += fwdSdkInitialized;
         if (transform.parent == null)
@@ -297,13 +311,15 @@ public class MoPubManager : MonoBehaviour
 
     public void EmitConsentDialogShownEvent()
     {
+        consentDialogShown = true;
+
         MoPubLog.Log("EmitConsentDialogShownEvent", MoPubLog.ConsentLogEvent.ShowSuccess);
         var evt = OnConsentDialogShownEvent;
         if (evt != null) evt();
     }
 
 
-    public void EmitConsentDialogDismissedEvent()
+    public static void EmitConsentDialogDismissedEvent()
     {
         MoPubLog.Log("EmitConsentDialogDismissedEvent", MoPubLog.ConsentLogEvent.Dismissed);
         var evt = OnConsentDialogDismissedEvent;
@@ -320,12 +336,20 @@ public class MoPubManager : MonoBehaviour
         var adUnitId = args[0];
         var width = args[1];
         var height = args[2];
+        float parsedHeight;
+        var parseSucceeded = float.TryParse(height, NumberStyles.Float, CultureInfo.InvariantCulture,
+            out parsedHeight);
 
         MoPubLog.Log("EmitAdLoadedEvent", MoPubLog.AdLogEvent.LoadSuccess);
         MoPubLog.Log("EmitAdLoadedEvent", "Size received: {0}x{1}", width, height);
         MoPubLog.Log("EmitAdLoadedEvent", MoPubLog.AdLogEvent.ShowSuccess);
+        if (!parseSucceeded) {
+            EmitAdFailedEvent(MoPubUtils.EncodeArgs(adUnitId, "Failed to parse AdLoadedEvent due to invalid ad " +
+                                                              "height: (" + height + ")"));
+            return;
+        }
         var evt = OnAdLoadedEvent;
-        if (evt != null) evt(adUnitId, Single.Parse(height, CultureInfo.InvariantCulture));
+        if (evt != null) evt(adUnitId, parsedHeight);
     }
 
 
@@ -519,11 +543,20 @@ public class MoPubManager : MonoBehaviour
         var args = MoPubUtils.DecodeArgs(argsJson, min: 3);
         var adUnitId = args[0];
         var label = args[1];
-        var amountStr = args[2];
+        var amount = args[2];
+        float parsedAmount;
+        var parseSucceeded = float.TryParse(amount, NumberStyles.Float, CultureInfo.InvariantCulture,
+            out parsedAmount);
 
-        MoPubLog.Log("EmitRewardedVideoReceivedRewardEvent", MoPubLog.AdLogEvent.ShouldReward, label, amountStr);
+        MoPubLog.Log("EmitRewardedVideoReceivedRewardEvent", MoPubLog.AdLogEvent.ShouldReward, label, amount);
+        if (!parseSucceeded) {
+            EmitRewardedVideoFailedEvent(MoPubUtils.EncodeArgs(adUnitId,
+                "Failed to parse RewardedVideoReceivedRewardEvent due to invalid rewarded amount: (" + amount + ")." +
+                " Please ensure the reward info is configured properly on your advertising dashboard."));
+            return;
+        }
         var evt = OnRewardedVideoReceivedRewardEvent;
-        if (evt != null) evt(adUnitId, label, Single.Parse(amountStr, CultureInfo.InvariantCulture));
+        if (evt != null) evt(adUnitId, label, parsedAmount);
     }
 
 
@@ -548,6 +581,52 @@ public class MoPubManager : MonoBehaviour
     }
 
 
+#if mopub_native_beta
+    public void EmitNativeLoadEvent(string argsJson)
+    {
+        var args = MoPubUtils.DecodeArgs(argsJson, min: 2);
+        var adUnitId = args[0];
+        var data = AbstractNativeAd.Data.FromJson(args[1]);
+
+        MoPubLog.Log("EmitNativeLoadEvent", MoPubLog.AdLogEvent.LoadSuccess);
+        EmitNativeLoadEvent(adUnitId, data);
+    }
+
+
+    public void EmitNativeFailEvent(string argsJson)
+    {
+        var args = MoPubUtils.DecodeArgs(argsJson, min: 2);
+        var adUnitId = args[0];
+        var error = args[1];
+
+        MoPubLog.Log("EmitNativeFailEvent", MoPubLog.AdLogEvent.LoadFailed, adUnitId, error);
+        var evt = OnNativeFailEvent;
+        if (evt != null) evt(adUnitId, error);
+    }
+
+
+    public void EmitNativeLoadEvent(string adUnitId, AbstractNativeAd.Data nativeAdData)
+    {
+        var evt = OnNativeLoadEvent;
+        if (evt != null) evt(adUnitId, nativeAdData);
+    }
+
+
+    public void EmitNativeImpressionEvent(string adUnitId)
+    {
+        MoPubLog.Log("EmitNativeImpressionEvent", MoPubLog.AdLogEvent.ShowSuccess);
+        var evt = OnNativeImpressionEvent;
+        if (evt != null) evt(adUnitId);
+    }
+
+
+    public void EmitNativeClickEvent(string adUnitId)
+    {
+        MoPubLog.Log("EmitNativeClickEvent", MoPubLog.AdLogEvent.Tapped);
+        var evt = OnNativeClickEvent;
+        if (evt != null) evt(adUnitId);
+    }
+#endif
 
     public void EmitImpressionTrackedEvent(string argsJson)
     {
@@ -574,10 +653,10 @@ public class MoPubManager : MonoBehaviour
     /// <param name="applicationPaused">True when the application is pausing; False when the application is resuming.</param>
     public static void EmitConsentDialogDismissedIfApplicable(bool applicationPaused)
     {
-        if (applicationPaused || !Instance.consentDialogShown) return;
+        if (applicationPaused || !consentDialogShown) return;
 
-        Instance.EmitConsentDialogDismissedEvent();
-        Instance.consentDialogShown = false;
+        EmitConsentDialogDismissedEvent();
+        consentDialogShown = false;
     }
 
 

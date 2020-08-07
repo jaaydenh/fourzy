@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using MoPubInternal.ThirdParty.MiniJSON;
+using MJ = MoPubInternal.ThirdParty.MiniJSON;
 using UnityEngine;
 #if UNITY_EDITOR
 using System;
@@ -137,7 +137,6 @@ internal class MoPubUnityEditor : MoPubPlatformApi
 
     internal override void LoadConsentDialog()
     {
-        MoPubLog.Log("LoadConsentDialog", MoPubLog.ConsentLogEvent.LoadAttempted);
         WaitOneFrame(() => {
             IsConsentDialogReady = true;
             MoPubManager.Instance.EmitConsentDialogLoadedEvent();
@@ -150,7 +149,6 @@ internal class MoPubUnityEditor : MoPubPlatformApi
 
     internal override void ShowConsentDialog()
     {
-        MoPubLog.Log("ShowConsentDialog", MoPubLog.ConsentLogEvent.ShowAttempted);
         if (!IsConsentDialogReady) {
             Debug.LogError("Called ShowConsentDialog before consent dialog loaded!");
             return;
@@ -240,7 +238,7 @@ internal class MoPubUnityEditor : MoPubPlatformApi
 
     public static string ArgsToJson(params string[] args)
     {
-        return Json.Serialize(args);
+        return MJ.Json.Serialize(args);
     }
 
 

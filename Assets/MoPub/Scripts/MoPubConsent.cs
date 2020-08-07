@@ -102,26 +102,20 @@ public class MoPubConsent : MonoBehaviour
     {
         if (ConsentStatusChanged != null)
             ConsentStatusChanged.Invoke(oldConsent, newConsent, canCollectPersonalInfo);
-        if (AutoShowConsentDialog && ShouldShowConsentDialog) {
-            if (IsConsentDialogReady)  // Already loaded?
-                ShowConsentDialog();
-            else
-                LoadConsentDialog();
-        }
+        ShowConsentDialogIfNeeded();
     }
 
     private void fwdConsentDialogLoaded()
     {
         if (ConsentDialogLoaded != null)
             ConsentDialogLoaded.Invoke();
-        if (AutoShowConsentDialog)
-            ShowConsentDialog();
+        ShowConsentDialogIfNeeded();
     }
 
     private void fwdConsentDialogFailed(string error)
     {
         if (ConsentDialogFailed != null)
-            ConsentDialogFailed.Invoke(error);
+            ConsentDialogFailed.Invoke("Consent dialog failed to load: " + error);
     }
 
     private void fwdConsentDialogShown()
@@ -136,6 +130,21 @@ public class MoPubConsent : MonoBehaviour
             ConsentDialogDismissed.Invoke();
     }
 
+    private void OnSdkInitialized(string adUnitId)
+    {
+        ShowConsentDialogIfNeeded();
+    }
+
+    private void ShowConsentDialogIfNeeded()
+    {
+        if (!AutoShowConsentDialog || !ShouldShowConsentDialog) return;
+
+        if (IsConsentDialogReady)
+            ShowConsentDialog();
+        else
+            LoadConsentDialog();
+    }
+
 
     void OnEnable()
     {
@@ -144,11 +153,15 @@ public class MoPubConsent : MonoBehaviour
         MoPubManager.OnConsentDialogFailedEvent += fwdConsentDialogFailed;
         MoPubManager.OnConsentDialogShownEvent += fwdConsentDialogShown;
         MoPubManager.OnConsentDialogDismissedEvent += fwdConsentDialogDismissed;
+        MoPubManager.OnSdkInitializedEvent += OnSdkInitialized;
+
+        if (MoPubManager.Instance != null && MoPub.IsSdkInitialized)
+            ShowConsentDialogIfNeeded();
     }
 
 
     // Required to get enablement checkbox in the inspector
-    void Start() {}
+    void Start() { }
 
 
     void OnDisable()
@@ -158,5 +171,6 @@ public class MoPubConsent : MonoBehaviour
         MoPubManager.OnConsentDialogFailedEvent -= fwdConsentDialogFailed;
         MoPubManager.OnConsentDialogShownEvent -= fwdConsentDialogShown;
         MoPubManager.OnConsentDialogDismissedEvent -= fwdConsentDialogDismissed;
+        MoPubManager.OnSdkInitializedEvent -= OnSdkInitialized;
     }
 }

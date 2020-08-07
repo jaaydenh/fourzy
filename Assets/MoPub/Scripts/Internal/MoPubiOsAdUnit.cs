@@ -19,10 +19,12 @@ using System.Runtime.InteropServices;
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
 internal class MoPubiOSAdUnit : MoPubAdUnit
 {
-    internal MoPubiOSAdUnit(string adUnitId, string adType = null)
+    internal MoPubiOSAdUnit(string adUnitId, string adType = null) : base (adUnitId, adType) { }
+
+
+    internal override bool IsPluginReady()
     {
-        AdUnitId = adUnitId;
-        SelectedReward = new MoPub.Reward { Label = string.Empty };
+        return _moPubIsPluginReady(AdUnitId);
     }
 
 
@@ -34,39 +36,42 @@ internal class MoPubiOSAdUnit : MoPubAdUnit
     }
 
 
-    [Obsolete("CreateBanner is deprecated and will be removed soon, please use RequestBanner instead.")]
-    internal override void CreateBanner(MoPub.AdPosition position, MoPub.BannerType bannerType)
-    {
-        _moPubCreateBanner((int) bannerType, (int) position, AdUnitId);
-    }
-
-
     internal override void DestroyBanner()
     {
+        if (!CheckPluginReady()) return;
+
         _moPubDestroyBanner(AdUnitId);
     }
 
 
     internal override void ShowBanner(bool shouldShow)
     {
+        if (!CheckPluginReady()) return;
+
         _moPubShowBanner(AdUnitId, shouldShow);
     }
 
 
     internal override void RefreshBanner(string keywords = "", string userDataKeywords = "")
     {
+        if (!CheckPluginReady()) return;
+
         _moPubRefreshBanner(AdUnitId, keywords, userDataKeywords);
     }
 
 
     internal override void SetAutorefresh(bool enabled)
     {
+        if (!CheckPluginReady()) return;
+
         _moPubSetAutorefreshEnabled(AdUnitId, enabled);
     }
 
 
     internal override void ForceRefresh()
     {
+        if (!CheckPluginReady()) return;
+
         _moPubForceRefresh(AdUnitId);
     }
 
@@ -87,12 +92,16 @@ internal class MoPubiOSAdUnit : MoPubAdUnit
 
     internal override void ShowInterstitialAd()
     {
+        if (!CheckPluginReady()) return;
+
         _moPubShowInterstitialAd(AdUnitId);
     }
 
 
     internal override void DestroyInterstitialAd()
     {
+        if (!CheckPluginReady()) return;
+
         _moPubDestroyInterstitialAd(AdUnitId);
     }
 
@@ -109,6 +118,15 @@ internal class MoPubiOSAdUnit : MoPubAdUnit
     }
 
 
+    // If a rewarded video ad is loaded this will take over the screen and show the ad
+    internal override void ShowRewardedVideo(string customData)
+    {
+        if (!CheckPluginReady()) return;
+
+        _moPubShowRewardedVideo(AdUnitId, SelectedReward.Label, SelectedReward.Amount, customData);
+    }
+
+
     // Queries if a rewarded video ad has been loaded for the given ad unit id.
     internal override bool HasRewardedVideo()
     {
@@ -120,6 +138,8 @@ internal class MoPubiOSAdUnit : MoPubAdUnit
     // a successful requestRewardedVideo() call.
     internal override List<MoPub.Reward> GetAvailableRewards()
     {
+        if (!CheckPluginReady()) return new List<MoPub.Reward>();
+
         var amount = 0;
         var rewardList = _mopubGetAvailableRewards(AdUnitId) ?? string.Empty;
         var rewards = from rewardString in rewardList.Split(',')
@@ -131,15 +151,10 @@ internal class MoPubiOSAdUnit : MoPubAdUnit
         return rewards.ToList();
     }
 
-
-    // If a rewarded video ad is loaded this will take over the screen and show the ad
-    internal override void ShowRewardedVideo(string customData)
-    {
-        _moPubShowRewardedVideo(AdUnitId, SelectedReward.Label, SelectedReward.Amount, customData);
-    }
-
     internal override void SelectReward(MoPub.Reward selectedReward)
     {
+        if (!CheckPluginReady()) return;
+
         SelectedReward = selectedReward;
     }
 
@@ -160,8 +175,8 @@ internal class MoPubiOSAdUnit : MoPubAdUnit
 
 #if ENABLE_IL2CPP && UNITY_ANDROID
     // IL2CPP on Android scrubs DllImports, so we need to provide stubs to unblock compilation
+    private static bool _moPubIsPluginReady(string adUnitId) { return false; }
     private static void _moPubRequestBanner(float width, float height, int position, string adUnitId) {}
-    private static void _moPubCreateBanner(int bannerType, int position, string adUnitId) {}
     private static void _moPubDestroyBanner(string adUnitId) {}
     private static void _moPubShowBanner(string adUnitId, bool shouldShow) {}
     private static void _moPubRefreshBanner(string adUnitId, string keywords, string userDataKeywords) {}
@@ -180,11 +195,10 @@ internal class MoPubiOSAdUnit : MoPubAdUnit
                                                 string customData) {}
 #else
     [DllImport("__Internal")]
-    private static extern void _moPubRequestBanner(float width, float height, int position, string adUnitId);
-
+    private static extern bool _moPubIsPluginReady(string adUnitId);
 
     [DllImport("__Internal")]
-    private static extern void _moPubCreateBanner(int bannerType, int position, string adUnitId);
+    private static extern void _moPubRequestBanner(float width, float height, int position, string adUnitId);
 
 
     [DllImport("__Internal")]

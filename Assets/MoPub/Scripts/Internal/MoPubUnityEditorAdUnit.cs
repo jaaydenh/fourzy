@@ -2,8 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using MoPubInternal.ThirdParty.MiniJSON;
-using UnityEngine;
 
 /// <summary>
 /// Bridge between the MoPub Unity AdUnit-specific API and In-Editor implementation.
@@ -20,22 +18,16 @@ internal class MoPubUnityEditorAdUnit : MoPubAdUnit
 {
     private bool _requested;
 
-    internal MoPubUnityEditorAdUnit(string adUnitId, string adType = null)
+    internal MoPubUnityEditorAdUnit(string adUnitId, string adType = null) : base(adUnitId, adType) { }
+
+    internal override bool IsPluginReady()
     {
-        AdUnitId = adUnitId;
-        SelectedReward = new MoPub.Reward { Label = string.Empty };
+        return _requested;
     }
 
     #region Banners
 
     internal override void RequestBanner(float width, float height, MoPub.AdPosition position)
-    {
-        RequestAdUnit();
-        ForceRefresh();
-    }
-
-    [Obsolete("CreateBanner is deprecated and will be removed soon, please use RequestBanner instead.")]
-    internal override void CreateBanner(MoPub.AdPosition position, MoPub.BannerType bannerType = MoPub.BannerType.Size320x50)
     {
         RequestAdUnit();
         ForceRefresh();
@@ -48,7 +40,8 @@ internal class MoPubUnityEditorAdUnit : MoPubAdUnit
 
     internal override void RefreshBanner(string keywords = "", string userDataKeywords = "")
     {
-        ForceRefresh();
+        if (CheckAdUnitRequested())
+            ForceRefresh();
     }
 
     internal override void DestroyBanner()
@@ -56,10 +49,15 @@ internal class MoPubUnityEditorAdUnit : MoPubAdUnit
         CheckAdUnitRequested();
     }
 
-    internal override void SetAutorefresh(bool enabled) { }
+    internal override void SetAutorefresh(bool enabled)
+    {
+        CheckAdUnitRequested();
+    }
 
     internal override void ForceRefresh()
     {
+        if (!CheckAdUnitRequested()) return;
+
         MoPubUnityEditor.WaitOneFrame(() => {
             MoPubManager.Instance.EmitAdLoadedEvent(MoPubUnityEditor.ArgsToJson(AdUnitId, "320", "50"));
         });
@@ -79,20 +77,21 @@ internal class MoPubUnityEditorAdUnit : MoPubAdUnit
 
     internal override bool IsInterstitialReady()
     {
-        return CheckAdUnitRequested();
+        return _requested;
     }
 
     internal override void ShowInterstitialAd()
     {
-        if (CheckAdUnitRequested())
+        if (!CheckAdUnitRequested()) return;
+
+        MoPubUnityEditor.WaitOneFrame(() => {
+            var json = MoPubUnityEditor.ArgsToJson(AdUnitId);
+            MoPubManager.Instance.EmitInterstitialShownEvent(json);
             MoPubUnityEditor.WaitOneFrame(() => {
-                var json = MoPubUnityEditor.ArgsToJson(AdUnitId);
-                MoPubManager.Instance.EmitInterstitialShownEvent(json);
-                MoPubUnityEditor.WaitOneFrame(() => {
-                    MoPubManager.Instance.EmitInterstitialDismissedEvent(json);
-                    MoPubUnityEditor.SimulateApplicationResume();
-                });
+                MoPubManager.Instance.EmitInterstitialDismissedEvent(json);
+                MoPubUnityEditor.SimulateApplicationResume();
             });
+        });
     }
 
     internal override void DestroyInterstitialAd()
@@ -121,25 +120,28 @@ internal class MoPubUnityEditorAdUnit : MoPubAdUnit
 
     internal override List<MoPub.Reward> GetAvailableRewards()
     {
+        CheckAdUnitRequested();
         return new List<MoPub.Reward>();
     }
 
     internal override void ShowRewardedVideo(string customData)
     {
-        if (CheckAdUnitRequested())
+        if (!CheckAdUnitRequested()) return;
+
+        MoPubUnityEditor.WaitOneFrame(() => {
+            var json = MoPubUnityEditor.ArgsToJson(AdUnitId);
+            MoPubManager.Instance.EmitRewardedVideoShownEvent(json);
             MoPubUnityEditor.WaitOneFrame(() => {
-                var json = MoPubUnityEditor.ArgsToJson(AdUnitId);
-                MoPubManager.Instance.EmitRewardedVideoShownEvent(json);
-                MoPubUnityEditor.WaitOneFrame(() => {
-                    MoPubManager.Instance.EmitRewardedVideoClosedEvent(json);
-                    MoPubUnityEditor.SimulateApplicationResume();
-                });
+                MoPubManager.Instance.EmitRewardedVideoClosedEvent(json);
+                MoPubUnityEditor.SimulateApplicationResume();
             });
+        });
     }
 
     internal override void SelectReward(MoPub.Reward selectedReward)
     {
-        SelectedReward = selectedReward;
+        if (CheckAdUnitRequested())
+            SelectedReward = selectedReward;
     }
 
     #endregion
@@ -180,10 +182,7 @@ internal class MoPubUnityEditorAdUnit : MoPubAdUnit
 
     private bool CheckAdUnitRequested()
     {
-        if (_requested) return true;
-
-        Debug.LogError("Ad unit id has not been loaded: " + AdUnitId);
-        return false;
+        return CheckPluginReady() && _requested;
     }
 }
 #endif

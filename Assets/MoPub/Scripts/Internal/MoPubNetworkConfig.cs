@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using MoPubInternal.ThirdParty.MiniJSON;
+using MJ = MoPubInternal.ThirdParty.MiniJSON;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -118,7 +118,7 @@ public abstract class MoPubNetworkConfig : MonoBehaviour
         public override string ToString()
         {
             var val = value;
-            return val is string ? (string)val : Json.Serialize(val);
+            return val is string ? (string)val : MJ.Json.Serialize(val);
         }
     }
 
@@ -302,9 +302,7 @@ public abstract class MoPubNetworkConfig : MonoBehaviour
 
             // Now draw the actual field (label + value) next to the toggle.  Have to indent the label, and also disable
             // the value entry if the field is not enabled.
-#if UNITY_2017_1_OR_NEWER
             using (new EditorGUI.IndentLevelScope(property.hasVisibleChildren ? 2 : 1))
-#endif
             using (new EditorGUI.DisabledScope(!isEnabled))
                 EditorGUI.PropertyField(position, property, label2, isEnabled);
         }

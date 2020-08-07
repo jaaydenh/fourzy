@@ -20,15 +20,17 @@ internal class MoPubAndroidAdUnit : MoPubAdUnit {
     private readonly Dictionary<MoPub.Reward, AndroidJavaObject> _rewardsDict =
         new Dictionary<MoPub.Reward, AndroidJavaObject>();
 
-    internal MoPubAndroidAdUnit(string adUnitId, string adType = null)
+    internal MoPubAndroidAdUnit(string adUnitId, string adType = null) : base (adUnitId, adType)
     {
-        if (adType != "Banner" && adType != "Interstitial" && adType != "RewardedVideo" && adType != "Native")
-            Debug.LogErrorFormat("FATAL ERROR: Invalid ad type for Android Plugin: \"{0}\"", adType);
-
         _plugin = new AndroidJavaObject("com.mopub.unity.MoPub" + adType + "UnityPlugin", adUnitId);
-        AdUnitId = adUnitId;
-        SelectedReward = new MoPub.Reward { Label = string.Empty };
     }
+
+
+    internal override bool IsPluginReady()
+    {
+        return _plugin.Call<bool>("isPluginReady");
+    }
+
 
     #region Banners
 
@@ -38,40 +40,42 @@ internal class MoPubAndroidAdUnit : MoPubAdUnit {
     }
 
 
-    [Obsolete("CreateBanner is deprecated and will be removed soon, please use RequestBanner instead.")]
-    internal override void CreateBanner(MoPub.AdPosition position,
-        MoPub.BannerType bannerType = MoPub.BannerType.Size320x50)
-    {
-        _plugin.Call("createBanner", (int) position);
-    }
-
-
     internal override void ShowBanner(bool shouldShow)
     {
+        if (!CheckPluginReady()) return;
+
         _plugin.Call("hideBanner", !shouldShow);
     }
 
 
     internal override void RefreshBanner(string keywords = "", string userDataKeywords = "")
     {
+        if (!CheckPluginReady()) return;
+
         _plugin.Call("refreshBanner", keywords, userDataKeywords);
     }
 
 
     internal override void DestroyBanner()
     {
+        if (!CheckPluginReady()) return;
+
         _plugin.Call("destroyBanner");
     }
 
 
     internal override void SetAutorefresh(bool enabled)
     {
+        if (!CheckPluginReady()) return;
+
         _plugin.Call("setAutorefreshEnabled", enabled);
     }
 
 
     internal override void ForceRefresh()
     {
+        if (!CheckPluginReady()) return;
+
         _plugin.Call("forceRefresh");
     }
 
@@ -87,17 +91,22 @@ internal class MoPubAndroidAdUnit : MoPubAdUnit {
 
     internal override void ShowInterstitialAd()
     {
+        if (!CheckPluginReady()) return;
+
         _plugin.Call("show");
     }
 
 
-    internal override bool IsInterstitialReady() {
+    internal override bool IsInterstitialReady()
+    {
         return _plugin.Call<bool>("isReady");
     }
 
 
     internal override void DestroyInterstitialAd()
     {
+        if (!CheckPluginReady()) return;
+
         _plugin.Call("destroy");
     }
 
@@ -117,6 +126,8 @@ internal class MoPubAndroidAdUnit : MoPubAdUnit {
 
     internal override void ShowRewardedVideo(string customData)
     {
+        if (!CheckPluginReady()) return;
+
         _plugin.Call("showRewardedVideo", customData);
     }
 
@@ -129,14 +140,13 @@ internal class MoPubAndroidAdUnit : MoPubAdUnit {
 
     internal override List<MoPub.Reward> GetAvailableRewards()
     {
+        if (!CheckPluginReady()) return new List<MoPub.Reward>();
+
         // Clear any existing reward object mappings between Unity and Android Java
         _rewardsDict.Clear();
 
         using (var obj = _plugin.Call<AndroidJavaObject>("getAvailableRewards")) {
             var rewardsJavaObjArray = AndroidJNIHelper.ConvertFromJNIArray<AndroidJavaObject[]>(obj.GetRawObject());
-            if (rewardsJavaObjArray.Length <= 1)
-                return new List<MoPub.Reward>(_rewardsDict.Keys);
-
             foreach (var r in rewardsJavaObjArray) {
                 _rewardsDict.Add(
                     new MoPub.Reward { Label = r.Call<string>("getLabel"), Amount = r.Call<int>("getAmount") }, r);
@@ -149,6 +159,8 @@ internal class MoPubAndroidAdUnit : MoPubAdUnit {
 
     internal override void SelectReward(MoPub.Reward selectedReward)
     {
+        if (!CheckPluginReady()) return;
+
         AndroidJavaObject rewardJavaObj;
         if (_rewardsDict.TryGetValue(selectedReward, out rewardJavaObj))
             _plugin.Call("selectReward", rewardJavaObj);
@@ -163,6 +175,8 @@ internal class MoPubAndroidAdUnit : MoPubAdUnit {
 
     internal override void RequestNativeAd()
     {
+        if (!CheckPluginReady()) return;
+
         _plugin.Call("requestNativeAd");
     }
 

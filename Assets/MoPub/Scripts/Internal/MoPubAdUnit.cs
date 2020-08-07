@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Bridge between the MoPub Unity AdUnit-specific API and platform-specific implementations.
@@ -12,12 +13,25 @@ using System.Collections.Generic;
 /// For platform-specific implementations, see
 /// <see cref="MoPubUnityEditorAdUnit"/>, <see cref="MoPubAndroidAdUnit"/>, and <see cref="MoPubiOSAdUnit"/>.
 /// </para>
-internal abstract class MoPubAdUnit
+internal class MoPubAdUnit
 {
-    protected string AdUnitId;
+    public static readonly MoPubAdUnit NullMoPubAdUnit = new MoPubAdUnit(null);
+
+    protected readonly string AdUnitId;
+    protected readonly string AdType;
+
+    protected MoPubAdUnit(string adUnitId, string adType = null)
+    {
+        AdUnitId = adUnitId;
+        AdType = adType;
+        SelectedReward = new MoPub.Reward { Label = string.Empty };
+    }
 
     internal static MoPubAdUnit CreateMoPubAdUnit(string adUnitId, string adType = null)
     {
+        if (adType != "Banner" && adType != "Interstitial" && adType != "RewardedVideo" && adType != "Native")
+            Debug.LogErrorFormat("FATAL ERROR: Invalid ad type for MoPubAdUnit: \"{0}\"", adType);
+
         // Choose created class based on target platform...
         return new
 #if UNITY_EDITOR
@@ -31,46 +45,50 @@ internal abstract class MoPubAdUnit
     }
 
 
+    internal virtual bool IsPluginReady()
+    {
+        return false;
+    }
+
+
     #region Banners
 
 
-    internal abstract void RequestBanner(float width, float height, MoPub.AdPosition position);
+    internal virtual void RequestBanner(float width, float height, MoPub.AdPosition position) { }
 
 
-    [Obsolete("CreateBanner is deprecated and will be removed soon, please use RequestBanner instead.")]
-    internal abstract void CreateBanner(MoPub.AdPosition position,
-        MoPub.BannerType bannerType = MoPub.BannerType.Size320x50);
+    internal virtual void ShowBanner(bool shouldShow) { }
 
 
-    internal abstract void ShowBanner(bool shouldShow);
+    internal virtual void RefreshBanner(string keywords = "", string userDataKeywords = "") { }
 
 
-    internal abstract void RefreshBanner(string keywords = "", string userDataKeywords = "");
+    internal virtual void DestroyBanner() { }
 
 
-    internal abstract void DestroyBanner();
+    internal virtual void SetAutorefresh(bool enabled) { }
 
 
-    internal abstract void SetAutorefresh(bool enabled);
-
-
-    internal abstract void ForceRefresh();
+    internal virtual void ForceRefresh() { }
 
     #endregion Banners
 
 
     #region Interstitials
 
-    internal abstract void RequestInterstitialAd(string keywords = "", string userDataKeywords = "");
+    internal virtual void RequestInterstitialAd(string keywords = "", string userDataKeywords = "") { }
 
 
-    internal abstract bool IsInterstitialReady();
+    internal virtual bool IsInterstitialReady()
+    {
+        return false;
+    }
 
 
-    internal abstract void ShowInterstitialAd();
+    internal virtual void ShowInterstitialAd() { }
 
 
-    internal abstract void DestroyInterstitialAd();
+    internal virtual void DestroyInterstitialAd() { }
 
     #endregion Interstitials
 
@@ -79,25 +97,25 @@ internal abstract class MoPubAdUnit
 
     protected MoPub.Reward SelectedReward;
 
-    internal abstract void RequestRewardedVideo(List<MoPub.LocalMediationSetting> mediationSettings = null,
+    internal virtual void RequestRewardedVideo(List<MoPub.LocalMediationSetting> mediationSettings = null,
         string keywords = null,
         string userDataKeywords = null, double latitude = MoPub.LatLongSentinel,
-        double longitude = MoPub.LatLongSentinel, string customerId = null);
+        double longitude = MoPub.LatLongSentinel, string customerId = null) { }
 
 
     // Queries if a rewarded video ad has been loaded for the given ad unit id.
-    internal abstract bool HasRewardedVideo();
+    internal virtual bool HasRewardedVideo() { return false; }
 
 
     // Queries all of the available rewards for the ad unit. This is only valid after
     // a successful requestRewardedVideo() call.
-    internal abstract List<MoPub.Reward> GetAvailableRewards();
+    internal virtual List<MoPub.Reward> GetAvailableRewards() { return null; }
 
 
     // If a rewarded video ad is loaded this will take over the screen and show the ad
-    internal abstract void ShowRewardedVideo(string customData);
+    internal virtual void ShowRewardedVideo(string customData) { }
 
-    internal abstract void SelectReward(MoPub.Reward selectedReward);
+    internal virtual void SelectReward(MoPub.Reward selectedReward) { }
 
     #endregion RewardedVideos
 
@@ -105,9 +123,22 @@ internal abstract class MoPubAdUnit
 #if mopub_native_beta
     #region NativeAds
 
-    internal abstract void RequestNativeAd();
+    internal virtual void RequestNativeAd() { }
 
     #endregion NativeAds
 
 #endif
+
+
+    protected bool CheckPluginReady()
+    {
+        var isReady = IsPluginReady();
+
+        if (!isReady)
+            Debug.LogErrorFormat("Invalid call to MoPub API; {0} AdUnit with ID {1} has not been requested yet.",
+                AdType, AdUnitId);
+
+        return isReady;
+
+    }
 }

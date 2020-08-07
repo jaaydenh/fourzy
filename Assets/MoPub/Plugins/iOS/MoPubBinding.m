@@ -21,13 +21,13 @@
 static double LAT_LONG_SENTINEL = 99999.0;
 
 // Converts an NSString into a const char* ready to be sent to Unity
-static char* cStringCopy(NSString* input)
+static char* moPubcStringCopy(NSString* input)
 {
     const char* string = [input UTF8String];
     return string ? strdup(string) : NULL;
 }
 
-static NSArray<Class<MPAdapterConfiguration>>* extractNetworkClasses(const char* networkClassesString) {
+static NSArray<Class<MPAdapterConfiguration>>* moPubExtractNetworkClasses(const char* networkClassesString) {
     NSString* networksString = GetStringParam(networkClassesString);
     if (networksString.length == 0)
         return nil;
@@ -43,7 +43,7 @@ static NSArray<Class<MPAdapterConfiguration>>* extractNetworkClasses(const char*
    return networks;
 }
 
-static NSArray<id<MPMediationSettingsProtocol>>* extractMediationSettings(const char* mediationSettingsJson) {
+static NSArray<id<MPMediationSettingsProtocol>>* moPubExtractMediationSettings(const char* mediationSettingsJson) {
     NSString* jsonString = GetStringParam(mediationSettingsJson);
     if (jsonString.length == 0)
         return nil;
@@ -74,7 +74,7 @@ static NSArray<id<MPMediationSettingsProtocol>>* extractMediationSettings(const 
 }
 
 
-static NSMutableDictionary<NSString*, NSDictionary<NSString*, id>*>* extractNetworkConfigurations(const char* networkConfigurationJson)
+static NSMutableDictionary<NSString*, NSDictionary<NSString*, id>*>* moPubExtractNetworkConfigurations(const char* networkConfigurationJson)
 {
     NSString* jsonString = GetStringParam(networkConfigurationJson);
     if (jsonString.length == 0)
@@ -87,7 +87,7 @@ static NSMutableDictionary<NSString*, NSDictionary<NSString*, id>*>* extractNetw
 }
 
 
-static NSMutableDictionary<NSString*, NSDictionary<NSString*, NSString*>*>* extractMoPubRequestOptions(const char* moPubRequestOptionsJson)
+static NSMutableDictionary<NSString*, NSDictionary<NSString*, NSString*>*>* moPubExtractMoPubRequestOptions(const char* moPubRequestOptionsJson)
 {
     NSString* jsonString = GetStringParam(moPubRequestOptionsJson);
     if (jsonString.length == 0)
@@ -100,7 +100,7 @@ static NSMutableDictionary<NSString*, NSDictionary<NSString*, NSString*>*>* extr
 }
 
 
-static void subscribeToConsentNotifications()
+static void moPubSubscribeToConsentNotifications()
 {
     static id observerId = nil;
 
@@ -127,16 +127,16 @@ void _moPubInitializeSdk(const char* adUnitIdString,
                          const char* networkConfigurationJson,
                          const char* moPubRequestOptionsJson)
 {
-    subscribeToConsentNotifications();
+    moPubSubscribeToConsentNotifications();
 
     NSString* adUnitId = GetStringParam(adUnitIdString);
     MPMoPubConfiguration* config = [[MPMoPubConfiguration alloc] initWithAdUnitIdForAppInitialization:adUnitId];
-    config.additionalNetworks = extractNetworkClasses(additionalNetworksString);
-    config.globalMediationSettings = extractMediationSettings(mediationSettingsJson);
+    config.additionalNetworks = moPubExtractNetworkClasses(additionalNetworksString);
+    config.globalMediationSettings = moPubExtractMediationSettings(mediationSettingsJson);
     config.allowLegitimateInterest = allowLegitimateInterest;
     config.loggingLevel = (MPBLogLevel) logLevel;
-    config.mediatedNetworkConfigurations = extractNetworkConfigurations(networkConfigurationJson);
-    config.moPubRequestOptions = extractMoPubRequestOptions(moPubRequestOptionsJson);
+    config.mediatedNetworkConfigurations = moPubExtractNetworkConfigurations(networkConfigurationJson);
+    config.moPubRequestOptions = moPubExtractMoPubRequestOptions(moPubRequestOptionsJson);
     NSString* logLevelString = [[NSNumber numberWithInt:logLevel] stringValue];
     [[MoPub sharedInstance] initializeSdkWithConfiguration:config completion:^{
         [MoPubManager sendUnityEvent:@"EmitSdkInitializedEvent" withArgs:@[adUnitId, logLevelString]];
@@ -150,7 +150,7 @@ bool _moPubIsSdkInitialized()
 
 const char* _moPubGetSDKVersion()
 {
-    return cStringCopy([MoPub sharedInstance].version);
+    return moPubcStringCopy([MoPub sharedInstance].version);
 }
 
 void _moPubSetAllowLegitimateInterest(bool allowLegitimateInterest)
@@ -193,6 +193,11 @@ void _moPubForceWKWebView(bool shouldForce)
     [MoPub sharedInstance].forceWKWebView = (shouldForce ? YES : NO);
 }
 
+bool _moPubIsPluginReady(const char* adUnitId)
+{
+    // MoPubManagers are lazily initialized, so they are always "ready"
+    return true;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Banners
@@ -202,16 +207,6 @@ void _moPubRequestBanner(float width, float height, int bannerPosition, const ch
     MoPubAdPosition position = (MoPubAdPosition)bannerPosition;
 
     [[MoPubManager managerForAdunit:GetStringParam(adUnitId)] requestBanner:width height:height atPosition:position];
-}
-
-
-__deprecated_msg("createBanner has been deprecated, please use requestBanner instead.")
-void _moPubCreateBanner(int bannerType, int bannerPosition, const char* adUnitId)
-{
-    MoPubBannerType type = (MoPubBannerType)bannerType;
-    MoPubAdPosition position = (MoPubAdPosition)bannerPosition;
-
-    [[MoPubManager managerForAdunit:GetStringParam(adUnitId)] createBanner:type atPosition:position];
 }
 
 
@@ -289,7 +284,7 @@ void _moPubDestroyInterstitialAd(const char* adUnitId)
 void _moPubRequestRewardedVideo(const char* adUnitIdStr, const char* json, const char* keywords, const char* userDataKeywords,
                                 double latitude, double longitude, const char* customerId)
 {
-    NSArray* mediationSettings = extractMediationSettings(json);
+    NSArray* mediationSettings = moPubExtractMediationSettings(json);
     CLLocation* location = nil;
     if (latitude != LAT_LONG_SENTINEL && longitude != LAT_LONG_SENTINEL)
         location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
@@ -324,7 +319,7 @@ const char* _mopubGetAvailableRewards(const char* adUnitId)
     }];
 
     NSString* rewardsString = [rewardStrings componentsJoinedByString:@","];
-    return cStringCopy(rewardsString);
+    return moPubcStringCopy(rewardsString);
 }
 
 void _moPubShowRewardedVideo(const char* adUnitId, const char* currencyName, int currencyAmount, const char* customData)
@@ -407,7 +402,7 @@ const char* _moPubCurrentConsentPrivacyPolicyUrl(const char* isoLanguageCode)
     NSURL* url = isoLanguageCode != nil
         ? [[MoPub sharedInstance] currentConsentPrivacyPolicyUrlWithISOLanguageCode:GetStringParam(isoLanguageCode)]
         : [[MoPub sharedInstance] currentConsentPrivacyPolicyUrl];
-    return url != nil ? cStringCopy([url absoluteString]) : nil;
+    return url != nil ? moPubcStringCopy([url absoluteString]) : nil;
 }
 
 const char* _moPubCurrentConsentVendorListUrl(const char* isoLanguageCode)
@@ -415,7 +410,7 @@ const char* _moPubCurrentConsentVendorListUrl(const char* isoLanguageCode)
     NSURL* url = isoLanguageCode != nil
         ? [[MoPub sharedInstance] currentConsentVendorListUrlWithISOLanguageCode:GetStringParam(isoLanguageCode)]
         : [[MoPub sharedInstance] currentConsentVendorListUrl];
-    return url != nil ? cStringCopy([url absoluteString]) : nil;
+    return url != nil ? moPubcStringCopy([url absoluteString]) : nil;
 }
 
 void _moPubGrantConsent()
@@ -430,31 +425,31 @@ void _moPubRevokeConsent()
 
 const char* _moPubCurrentConsentIabVendorListFormat()
 {
-    return cStringCopy([[MoPub sharedInstance] currentConsentIabVendorListFormat]);
+    return moPubcStringCopy([[MoPub sharedInstance] currentConsentIabVendorListFormat]);
 }
 
 const char* _moPubCurrentConsentPrivacyPolicyVersion()
 {
-    return cStringCopy([[MoPub sharedInstance] currentConsentPrivacyPolicyVersion]);
+    return moPubcStringCopy([[MoPub sharedInstance] currentConsentPrivacyPolicyVersion]);
 }
 
 const char* _moPubCurrentConsentVendorListVersion()
 {
-    return cStringCopy([[MoPub sharedInstance] currentConsentVendorListVersion]);
+    return moPubcStringCopy([[MoPub sharedInstance] currentConsentVendorListVersion]);
 }
 
 const char* _moPubPreviouslyConsentedIabVendorListFormat()
 {
-    return cStringCopy([[MoPub sharedInstance] previouslyConsentedIabVendorListFormat]);
+    return moPubcStringCopy([[MoPub sharedInstance] previouslyConsentedIabVendorListFormat]);
 }
 
 const char* _moPubPreviouslyConsentedPrivacyPolicyVersion()
 {
-    return cStringCopy([[MoPub sharedInstance] previouslyConsentedPrivacyPolicyVersion]);
+    return moPubcStringCopy([[MoPub sharedInstance] previouslyConsentedPrivacyPolicyVersion]);
 }
 
 const char* _moPubPreviouslyConsentedVendorListVersion()
 {
-    return cStringCopy([[MoPub sharedInstance] previouslyConsentedVendorListVersion]);
+    return moPubcStringCopy([[MoPub sharedInstance] previouslyConsentedVendorListVersion]);
 }
 

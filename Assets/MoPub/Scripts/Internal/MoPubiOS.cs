@@ -128,7 +128,6 @@ internal class MoPubiOS : MoPubPlatformApi
 
     internal override void LoadConsentDialog()
     {
-        MoPubLog.Log("LoadConsentDialog", MoPubLog.ConsentLogEvent.LoadAttempted);
         _moPubLoadConsentDialog();
     }
 
@@ -142,7 +141,6 @@ internal class MoPubiOS : MoPubPlatformApi
 
     internal override void ShowConsentDialog()
     {
-        MoPubLog.Log("ShowConsentDialog", MoPubLog.ConsentLogEvent.ShowAttempted);
         _moPubShowConsentDialog();
     }
 
@@ -175,7 +173,7 @@ internal class MoPubiOS : MoPubPlatformApi
     internal override string CurrentConsentPrivacyPolicyUrl
     {
         get {
-            return _moPubCurrentConsentPrivacyPolicyUrl(MoPub.ConsentLanguageCode);;
+            return _moPubCurrentConsentPrivacyPolicyUrl(MoPub.ConsentLanguageCode);
         }
         set { }
     }
@@ -184,7 +182,7 @@ internal class MoPubiOS : MoPubPlatformApi
     internal override string CurrentVendorListUrl
     {
         get {
-            return _moPubCurrentConsentVendorListUrl(MoPub.ConsentLanguageCode);;
+            return _moPubCurrentConsentVendorListUrl(MoPub.ConsentLanguageCode);
         }
         set { }
     }

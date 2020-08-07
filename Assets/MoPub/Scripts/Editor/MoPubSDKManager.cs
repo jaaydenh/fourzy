@@ -3,13 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Security;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using marijnz.EditorCoroutines;
-using MoPubInternal.ThirdParty.MiniJSON;
+using MJ = MoPubInternal.ThirdParty.MiniJSON;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -127,8 +123,7 @@ public class MoPubSDKManager : EditorWindow
 
     // Async download operations tracked here.
     private EditorCoroutines.EditorCoroutine coroutine;
-    private WebClient downloader;
-    private float progress;
+    private UnityWebRequest downloader;
     private string activity;
     private bool legacyMoPub;
     private bool legacyMediation;
@@ -204,19 +199,33 @@ public class MoPubSDKManager : EditorWindow
         yield return null;
 
         activity = "Downloading SDK version manifest...";
-        var www = new UnityWebRequest(staging ? stagingURL : manifestURL);
+
+        UnityWebRequest www = new UnityWebRequest(staging ? stagingURL : manifestURL) {
+            downloadHandler = new DownloadHandlerBuffer(),
+            timeout = 10, // seconds
+        };
         yield return www.SendWebRequest();
+
+        if (!string.IsNullOrEmpty(www.error)) {
+            Debug.LogError(www.error);
+            EditorUtility.DisplayDialog(
+                "SDK Manager Service",
+                "The services we need are not accessible. Please consider integrating manually.\n\n" +
+                "For instructions, see " + helpLink,
+                "OK");
+        }
 
         var json = www.downloadHandler.text;
         if (string.IsNullOrEmpty(json)) {
             json = "{}";
-            Debug.LogError("Unable to retrieve SDK version manifest");
+            Debug.LogError("Unable to retrieve SDK version manifest.  Showing installed SDKs only.");
         }
+        www.Dispose();
 
         // Got the file.  Now extract info on latest SDKs available.
         mopubSdkInfo = new SdkInfo();
         sdkInfo.Clear();
-        var dict = Json.Deserialize(json) as Dictionary<string,object>;
+        var dict = MJ.Json.Deserialize(json) as Dictionary<string,object>;
         if (dict != null) {
             object obj;
             if (dict.TryGetValue("mopubBaseConfig", out obj)) {
@@ -303,10 +312,6 @@ public class MoPubSDKManager : EditorWindow
         // Indicate async operation in progress.
         using (new EditorGUILayout.HorizontalScope(GUILayout.ExpandWidth(false)))
             EditorGUILayout.LabelField(stillWorking ? activity : " ");
-        if (stillWorking && progress > 0 &&
-                EditorUtility.DisplayCancelableProgressBar("MoPub SDK Manager", activity, progress) &&
-                Event.current.rawType == EventType.Repaint)  // OnGUI gets called several times per frame...
-            CancelOperation();
 
         using (new EditorGUILayout.HorizontalScope()) {
             GUILayout.Space(10);
@@ -404,17 +409,14 @@ public class MoPubSDKManager : EditorWindow
         // Stop any async action taking place.
 
         if (downloader != null) {
-            downloader.CancelAsync(); // The coroutine should resume and clean up.
+            downloader.Abort();  // The coroutine should resume and clean up.
             return;
         }
 
         if (coroutine != null)
             this.StopCoroutine(coroutine.routine);
-        if (progress > 0)
-            EditorUtility.ClearProgressBar();
         coroutine = null;
         downloader = null;
-        progress = 0;
     }
 
 
@@ -427,72 +429,52 @@ public class MoPubSDKManager : EditorWindow
 
     private IEnumerator DownloadSDK(SdkInfo info)
     {
-        // Wait one frame so that we don't try to show the progress bar in the middle of OnGUI().
-        yield return null;
-
-        // Track download progress (updated by event callbacks below).
-        bool ended = false;
-        bool cancelled = false;
-        Exception error = null;
-        int oldPercentage = 0, newPercentage = 0;
-
         var path = Path.Combine(downloadDir, info.Filename);
 
-        Debug.LogFormat("Downloading {0} to {1}", info.Url, path);
         activity = string.Format("Downloading {0}...", info.Filename);
-        progress = 0.01f;  // Set > 0 in order to show progress bar.
-
-        // Hook the certificate-fixer callback to make TLS1.0 work (on some sites, anyway).
-        ServicePointManager.ServerCertificateValidationCallback = RemoteCertificateValidationCallback;
+        Debug.Log(activity);
 
         // Start the async download job.
-        downloader = new WebClient();
-        downloader.Encoding = Encoding.UTF8;
-        downloader.DownloadProgressChanged += (sender, args) => { newPercentage = args.ProgressPercentage; };
-        downloader.DownloadFileCompleted += (sender, args) => { ended = true; cancelled = args.Cancelled; error = args.Error; };
-        downloader.DownloadFileAsync(new Uri(info.Url), path);
+        downloader = new UnityWebRequest(info.Url) {
+            downloadHandler = new DownloadHandlerFile(path),
+            timeout = 60, // seconds
+        };
+        downloader.SendWebRequest();
 
         // Pause until download done/cancelled/fails, keeping progress bar up to date.
-        while (!ended) {
-            Repaint();
-            yield return new WaitUntil(() => ended || newPercentage > oldPercentage);
-            oldPercentage = newPercentage;
-            progress = oldPercentage / 100.0f;
+        while (!downloader.isDone) {
+            yield return null;
+            var progress = Mathf.FloorToInt(downloader.downloadProgress * 100);
+            if (EditorUtility.DisplayCancelableProgressBar("MoPub SDK Manager", activity, progress))
+                downloader.Abort();
         }
-        if (error != null) {
+        EditorUtility.ClearProgressBar();
+
+        if (string.IsNullOrEmpty(downloader.error))
+            AssetDatabase.ImportPackage(path, true);  // OK, got the file, so let the user import it if they want.
+        else {
+            var error = downloader.error;
+            if (downloader.isNetworkError) {
+                if (error.EndsWith("destination host"))
+                    error += ": " + info.Url;
+            } else if (downloader.isHttpError) {
+                switch (downloader.responseCode) {
+                    case 404:
+                        var file = Path.GetFileName(new Uri(info.Url).LocalPath);
+                        error = string.Format("File {0} not found on server.", file);
+                        break;
+                    default:
+                        error = downloader.responseCode + "\n" + error;
+                        break;
+                }
+            }
+
             Debug.LogError(error);
-            cancelled = true;
         }
 
         // Reset async state so the GUI is operational again.
+        downloader.Dispose();
         downloader = null;
         coroutine = null;
-        progress = 0;
-        EditorUtility.ClearProgressBar();
-
-        if (!cancelled)
-            AssetDatabase.ImportPackage(path, true);  // OK, got the file, so let the user import it if they want.
-        else
-            Debug.Log("Download terminated.");
-    }
-
-
-    // Found the following workaround for TLS negotiation issues here:
-    //   https://forum.unity.com/threads/how-to-properly-download-and-save-big-size-file.455384/#post-2975169
-    // This occurs because of Unity's old (when using .NET < 4.5) TLS implementation which is no longer compatible
-    // with some sites' download security policies.
-    // This only seems to help in some cases (e.g. Firebase storage) but not others (e.g. Github).
-    private static bool RemoteCertificateValidationCallback(System.Object sender, X509Certificate certificate,
-                                                            X509Chain chain, SslPolicyErrors sslPolicyErrors)
-    {
-        if (sslPolicyErrors != SslPolicyErrors.None &&
-              chain.ChainStatus.Any(s => s.Status != X509ChainStatusFlags.RevocationStatusUnknown)) {
-            chain.ChainPolicy.RevocationFlag = X509RevocationFlag.EntireChain;
-            chain.ChainPolicy.RevocationMode = X509RevocationMode.Online;
-            chain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 1, 0);
-            chain.ChainPolicy.VerificationFlags = X509VerificationFlags.AllFlags;
-            return chain.Build((X509Certificate2)certificate);
-        }
-        return true;
     }
 }

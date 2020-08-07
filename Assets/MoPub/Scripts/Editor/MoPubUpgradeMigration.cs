@@ -42,6 +42,8 @@ public static class MoPubUpgradeMigration
     };
 
     private static readonly string[] RedundantJars = {
+        "Assets/MoPub/Plugins/Android/mopub-sdk-interstitial.aar",
+        "Assets/MoPub/Plugins/Android/mopub-sdk-rewardedvideo.aar",
         "Assets/MoPub/Plugins/Android/MoPub.plugin/libs/mopub-sdk-banner.jar",
         "Assets/MoPub/Plugins/Android/MoPub.plugin/libs/mopub-sdk-base.jar",
         "Assets/MoPub/Plugins/Android/MoPub.plugin/libs/mopub-sdk-interstitial.jar",

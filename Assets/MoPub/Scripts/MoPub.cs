@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using MoPubInternal.ThirdParty.MiniJSON;
 using UnityEngine;
+using MJ = MoPubInternal.ThirdParty.MiniJSON;
 
 /// <summary>
 /// MoPub Unity API for publishers, including documentation.
@@ -21,7 +21,7 @@ public abstract class MoPub : MoPubBase
     /// Please see <a href="https://github.com/mopub/mopub-unity-sdk">our GitHub repository</a> for details.
     /// </para>
     /// </summary>
-    public const string MoPubSdkVersion = "5.9.0";
+    public const string MoPubSdkVersion = "5.13.1";
 
 
     #region SdkSetup
@@ -58,8 +58,8 @@ public abstract class MoPub : MoPubBase
 
         ValidateAdUnitForSdkInit(sdkConfiguration.AdUnitId);
 
-        MoPubManager.Instance.MoPubPlatformApi.InitializeSdk(sdkConfiguration);
-        MoPubManager.Instance.MoPubPlatformApi.SetEngineInformation("unity", Application.unityVersion);
+        MoPubManager.MoPubPlatformApi.InitializeSdk(sdkConfiguration);
+        MoPubManager.MoPubPlatformApi.SetEngineInformation("unity", Application.unityVersion);
         CachedLogLevel = sdkConfiguration.LogLevel;
     }
 
@@ -113,7 +113,7 @@ public abstract class MoPub : MoPubBase
     public static void EnableLocationSupport(bool shouldUseLocation)
     {
         ValidateInit();
-        MoPubManager.Instance.MoPubPlatformApi.EnableLocationSupport(shouldUseLocation);
+        MoPubManager.MoPubPlatformApi.EnableLocationSupport(shouldUseLocation);
     }
 
 
@@ -124,7 +124,7 @@ public abstract class MoPub : MoPubBase
     public static void ReportApplicationOpen(string iTunesAppId = null)
     {
         ValidateInit();
-        MoPubManager.Instance.MoPubPlatformApi.ReportApplicationOpen(iTunesAppId);
+        MoPubManager.MoPubPlatformApi.ReportApplicationOpen(iTunesAppId);
     }
 
 
@@ -134,7 +134,7 @@ public abstract class MoPub : MoPubBase
     /// <returns>A string with the MoPub SDK platform and version.</returns>
     public static string SdkName
     {
-        get { return MoPubManager.Instance.MoPubPlatformApi.SdkName; }
+        get { return MoPubManager.MoPubPlatformApi.SdkName; }
     }
 
 
@@ -143,7 +143,7 @@ public abstract class MoPub : MoPubBase
     /// </summary>
     /// <returns>true if a call to initialize the SDK has been made; false otherwise.</returns>
     public static bool IsSdkInitialized {
-        get { return MoPubManager.Instance.MoPubPlatformApi.IsSdkInitialized; }
+        get { return MoPubManager.MoPubPlatformApi != null && MoPubManager.MoPubPlatformApi.IsSdkInitialized; }
     }
 
 
@@ -156,12 +156,12 @@ public abstract class MoPub : MoPubBase
     public static LogLevel SdkLogLevel
     {
         get {
-            var logLevel = MoPubManager.Instance.MoPubPlatformApi.SdkLogLevel;
+            var logLevel = MoPubManager.MoPubPlatformApi.SdkLogLevel;
             CachedLogLevel = logLevel;
             return logLevel;
         }
         set {
-            MoPubManager.Instance.MoPubPlatformApi.SdkLogLevel = value;
+            MoPubManager.MoPubPlatformApi.SdkLogLevel = value;
             CachedLogLevel = value;
         }
     }
@@ -174,8 +174,8 @@ public abstract class MoPub : MoPubBase
     /// </summary>
     public static bool AllowLegitimateInterest
     {
-        get { return MoPubManager.Instance.MoPubPlatformApi.AllowLegitimateInterest; }
-        set { MoPubManager.Instance.MoPubPlatformApi.AllowLegitimateInterest = value; }
+        get { return MoPubManager.MoPubPlatformApi.AllowLegitimateInterest; }
+        set { MoPubManager.MoPubPlatformApi.AllowLegitimateInterest = value; }
     }
 
 
@@ -193,7 +193,7 @@ public abstract class MoPub : MoPubBase
     /// </remarks>
     public static void AddFacebookTestDeviceId(string hashedDeviceId)
     {
-        MoPubManager.Instance.MoPubPlatformApi.AddFacebookTestDeviceId(hashedDeviceId);
+        MoPubManager.MoPubPlatformApi.AddFacebookTestDeviceId(hashedDeviceId);
     }
 
 
@@ -209,7 +209,7 @@ public abstract class MoPub : MoPubBase
     /// <param name="shouldForce">Whether to attempt to force the usage of WKWebView or not.</param>
     public static void ForceWKWebView(bool shouldForce)
     {
-        MoPubManager.Instance.MoPubPlatformApi.ForceWKWebView(shouldForce);
+        MoPubManager.MoPubPlatformApi.ForceWKWebView(shouldForce);
     }
 
 
@@ -229,39 +229,11 @@ public abstract class MoPub : MoPubBase
     public static void RequestBanner(string adUnitId, AdPosition position,
         MaxAdSize maxAdSize = MaxAdSize.Width320Height50)
     {
-        ValidateInit();
-
         var width = maxAdSize.Width();
         var height = maxAdSize.Height();
         MoPubLog.Log("RequestBanner", MoPubLog.AdLogEvent.LoadAttempted);
         MoPubLog.Log("RequestBanner", "Size requested: " + width + "x" + height);
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.RequestBanner(width, height, position);
-        else
-            ReportAdUnitNotFound(adUnitId);
-    }
-
-
-    /// <summary>
-    /// Requests a banner ad and immediately shows it once loaded. (Deprecated)
-    /// </summary>
-    /// <param name="adUnitId">A string with the ad unit id.</param>
-    /// <param name="position">Where in the screen to position the loaded ad. See <see cref="MoPub.AdPosition"/>.
-    /// </param>
-    /// <param name="bannerType">The size of the banner to load. See <see cref="MoPub.BannerType"/>.</param>
-    [Obsolete("CreateBanner is deprecated and will be removed soon, please use RequestBanner instead.")]
-    public static void CreateBanner(string adUnitId, AdPosition position,
-        BannerType bannerType = BannerType.Size320x50)
-    {
-        ValidateInit();
-
-        MoPubLog.Log("CreateBanner", MoPubLog.AdLogEvent.LoadAttempted);
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.CreateBanner(position, bannerType);
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).RequestBanner(width, height, position);
     }
 
 
@@ -273,14 +245,8 @@ public abstract class MoPub : MoPubBase
     /// <remarks>Banners are automatically shown after first loading.</remarks>
     public static void ShowBanner(string adUnitId, bool shouldShow)
     {
-        ValidateInit();
-
         if (shouldShow) MoPubLog.Log("ShowBanner", MoPubLog.AdLogEvent.ShowAttempted);
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.ShowBanner(shouldShow);
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).ShowBanner(shouldShow);
     }
 
 
@@ -295,14 +261,8 @@ public abstract class MoPub : MoPubBase
     /// (See <see cref="CanCollectPersonalInfo"/>).</remarks>
     public static void RefreshBanner(string adUnitId, string keywords, string userDataKeywords = "")
     {
-        ValidateInit();
-
         MoPubLog.Log("RefreshBanner", MoPubLog.AdLogEvent.ShowAttempted);
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.RefreshBanner(keywords, userDataKeywords);
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).RefreshBanner(keywords, userDataKeywords);
     }
 
 
@@ -313,13 +273,8 @@ public abstract class MoPub : MoPubBase
     /// <param name="enabled">Whether to enable or disable autorefresh.</param>
     public static void SetAutorefresh(string adUnitId, bool enabled)
     {
-        ValidateInit();
+        AdUnitManager.GetAdUnit(adUnitId).SetAutorefresh(enabled);
 
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.SetAutorefresh(enabled);
-        else
-            ReportAdUnitNotFound(adUnitId);
     }
 
 
@@ -329,14 +284,8 @@ public abstract class MoPub : MoPubBase
     /// <param name="adUnitId">A string with the ad unit id.</param>
     public static void ForceRefresh(string adUnitId)
     {
-        ValidateInit();
-
         MoPubLog.Log("ForceRefresh", MoPubLog.AdLogEvent.ShowAttempted);
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.ForceRefresh();
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).ForceRefresh();
     }
 
 
@@ -346,13 +295,7 @@ public abstract class MoPub : MoPubBase
     /// <param name="adUnitId">A string with the ad unit id.</param>
     public static void DestroyBanner(string adUnitId)
     {
-        ValidateInit();
-
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.DestroyBanner();
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).DestroyBanner();
     }
 
 
@@ -375,14 +318,8 @@ public abstract class MoPub : MoPubBase
     /// (See <see cref="CanCollectPersonalInfo"/>).</remarks>
     public static void RequestInterstitialAd(string adUnitId, string keywords = "", string userDataKeywords = "")
     {
-        ValidateInit();
-
         MoPubLog.Log("RequestInterstitialAd", MoPubLog.AdLogEvent.LoadAttempted);
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.RequestInterstitialAd(keywords, userDataKeywords);
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).RequestInterstitialAd(keywords, userDataKeywords);
     }
 
 
@@ -393,14 +330,8 @@ public abstract class MoPub : MoPubBase
     /// <remarks><see cref="MoPubManager.OnInterstitialLoadedEvent"/> must have been triggered already.</remarks>
     public static void ShowInterstitialAd(string adUnitId)
     {
-        ValidateInit();
-
         MoPubLog.Log("ShowInterstitialAd", MoPubLog.AdLogEvent.ShowAttempted);
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.ShowInterstitialAd();
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).ShowInterstitialAd();
     }
 
 
@@ -410,13 +341,7 @@ public abstract class MoPub : MoPubBase
     /// <param name="adUnitId">A string with the ad unit id.</param>
     public static bool IsInterstitialReady(string adUnitId)
     {
-        ValidateInit();
-
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            return plugin.IsInterstitialReady();
-        ReportAdUnitNotFound(adUnitId);
-        return false;
+        return AdUnitManager.GetAdUnit(adUnitId).IsInterstitialReady();
     }
 
 
@@ -426,13 +351,7 @@ public abstract class MoPub : MoPubBase
     /// <param name="adUnitId">A string with the ad unit id.</param>
     public static void DestroyInterstitialAd(string adUnitId)
     {
-        ValidateInit();
-
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.DestroyInterstitialAd();
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).DestroyInterstitialAd();
     }
 
 
@@ -462,14 +381,9 @@ public abstract class MoPub : MoPubBase
                                             double latitude = LatLongSentinel, double longitude = LatLongSentinel,
                                             string customerId = null)
     {
-        ValidateInit();
-
         MoPubLog.Log("RequestRewardedVideo", MoPubLog.AdLogEvent.LoadAttempted);
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.RequestRewardedVideo(mediationSettings, keywords, userDataKeywords, latitude, longitude, customerId);
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).RequestRewardedVideo(mediationSettings, keywords, userDataKeywords, latitude,
+            longitude, customerId);
     }
 
 
@@ -481,14 +395,9 @@ public abstract class MoPub : MoPubBase
     /// <remarks><see cref="MoPubManager.OnRewardedVideoLoadedEvent"/> must have been triggered already.</remarks>
     public static void ShowRewardedVideo(string adUnitId, string customData = null)
     {
-        ValidateInit();
-
         MoPubLog.Log("ShowRewardedVideo", MoPubLog.AdLogEvent.ShowAttempted);
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.ShowRewardedVideo(customData);
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).ShowRewardedVideo(customData);
+
     }
 
 
@@ -500,13 +409,7 @@ public abstract class MoPub : MoPubBase
     /// </returns>
     public static bool HasRewardedVideo(string adUnitId)
     {
-        ValidateInit();
-
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            return plugin.HasRewardedVideo();
-        ReportAdUnitNotFound(adUnitId);
-        return false;
+        return AdUnitManager.GetAdUnit(adUnitId).HasRewardedVideo();
     }
 
 
@@ -517,15 +420,7 @@ public abstract class MoPub : MoPubBase
     /// <returns>A list of <see cref="MoPub.Reward"/>s for the given ad unit id.</returns>
     public static List<Reward> GetAvailableRewards(string adUnitId)
     {
-        ValidateInit();
-
-        MoPubAdUnit plugin;
-        if (!AdUnits.TryGetValue(adUnitId, out plugin)) {
-            ReportAdUnitNotFound(adUnitId);
-            return null;
-        }
-
-        var rewards = plugin.GetAvailableRewards();
+        var rewards = AdUnitManager.GetAdUnit(adUnitId).GetAvailableRewards();
         Debug.Log(String.Format("GetAvailableRewards found {0} rewards for ad unit {1}", rewards.Count, adUnitId));
         return rewards;
     }
@@ -538,13 +433,7 @@ public abstract class MoPub : MoPubBase
     /// <param name="selectedReward">See <see cref="MoPub.Reward"/>.</param>
     public static void SelectReward(string adUnitId, Reward selectedReward)
     {
-        ValidateInit();
-
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.SelectReward(selectedReward);
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).SelectReward(selectedReward);
     }
 
 
@@ -557,14 +446,8 @@ public abstract class MoPub : MoPubBase
 
     public static void RequestNativeAd(string adUnitId)
     {
-        ValidateInit();
-
         MoPubLog.Log("RequestNativeAd", MoPubLog.AdLogEvent.LoadAttempted);
-        MoPubAdUnit plugin;
-        if (AdUnits.TryGetValue(adUnitId, out plugin))
-            plugin.RequestNativeAd();
-        else
-            ReportAdUnitNotFound(adUnitId);
+        AdUnitManager.GetAdUnit(adUnitId).RequestNativeAd();
     }
 
 
@@ -577,7 +460,7 @@ public abstract class MoPub : MoPubBase
     /// Whether or not this app is allowed to collect Personally Identifiable Information (PII) from the user.
     /// </summary>
     public static bool CanCollectPersonalInfo {
-        get { return MoPubManager.Instance.MoPubPlatformApi.CanCollectPersonalInfo; }
+        get { return MoPubManager.MoPubPlatformApi.CanCollectPersonalInfo; }
     }
 
 
@@ -586,7 +469,7 @@ public abstract class MoPub : MoPubBase
     /// <see cref="MoPub.Consent.Status"> for the values and their meanings.
     /// </summary>
     public static Consent.Status CurrentConsentStatus {
-        get { return MoPubManager.Instance.MoPubPlatformApi.CurrentConsentStatus; }
+        get { return MoPubManager.MoPubPlatformApi.CurrentConsentStatus; }
     }
 
 
@@ -594,7 +477,7 @@ public abstract class MoPub : MoPubBase
     /// Checks to see if a publisher should load and then show a consent dialog.
     /// </summary>
     public static bool ShouldShowConsentDialog {
-        get { return MoPubManager.Instance.MoPubPlatformApi.ShouldShowConsentDialog; }
+        get { return MoPubManager.MoPubPlatformApi.ShouldShowConsentDialog; }
     }
 
 
@@ -605,8 +488,12 @@ public abstract class MoPub : MoPubBase
     /// </summary>
     public static void LoadConsentDialog()
     {
-        MoPubLog.Log("LoadConsentDialog", MoPubLog.ConsentLogEvent.LoadAttempted);
-        MoPubManager.Instance.MoPubPlatformApi.LoadConsentDialog();
+        if (IsGdprApplicable ?? false) {
+            MoPubLog.Log("LoadConsentDialog", MoPubLog.ConsentLogEvent.LoadAttempted);
+            MoPubManager.MoPubPlatformApi.LoadConsentDialog();
+        } else {
+            MoPubManager.Instance.EmitConsentDialogFailedEvent(MoPubUtils.EncodeArgs("GDPR does not apply."));
+        }
     }
 
 
@@ -614,7 +501,7 @@ public abstract class MoPub : MoPubBase
     /// Flag indicating whether the MoPub consent dialog is currently loaded and showable.
     /// </summary>
     public static bool IsConsentDialogReady {
-        get { return MoPubManager.Instance.MoPubPlatformApi.IsConsentDialogReady; }
+        get { return MoPubManager.MoPubPlatformApi.IsConsentDialogReady; }
     }
 
 
@@ -624,7 +511,7 @@ public abstract class MoPub : MoPubBase
     public static void ShowConsentDialog()
     {
         MoPubLog.Log("ShowConsentDialog", MoPubLog.ConsentLogEvent.ShowAttempted);
-        MoPubManager.Instance.MoPubPlatformApi.ShowConsentDialog();
+        MoPubManager.MoPubPlatformApi.ShowConsentDialog();
     }
 
 
@@ -635,7 +522,7 @@ public abstract class MoPub : MoPubBase
     /// True for Yes, False for No, Null for Unknown (from startup until server responds during SDK initialization).
     /// </returns>
     public static bool? IsGdprApplicable {
-        get { return MoPubManager.Instance.MoPubPlatformApi.IsGdprApplicable; }
+        get { return MoPubManager.MoPubPlatformApi.IsGdprApplicable; }
     }
 
 
@@ -644,7 +531,7 @@ public abstract class MoPub : MoPubBase
     /// user unless this app is uninstalled or the data for this app is cleared.
     /// </summary>
     public static void ForceGdprApplicable() {
-        MoPubManager.Instance.MoPubPlatformApi.ForceGdprApplicable();
+        MoPubManager.MoPubPlatformApi.ForceGdprApplicable();
     }
 
 
@@ -660,7 +547,7 @@ public abstract class MoPub : MoPubBase
         /// </summary>
         public static void GrantConsent()
         {
-            MoPubManager.Instance.MoPubPlatformApi.GrantConsent();
+            MoPubManager.MoPubPlatformApi.GrantConsent();
         }
 
 
@@ -669,7 +556,7 @@ public abstract class MoPub : MoPubBase
         /// </summary>
         public static void RevokeConsent()
         {
-            MoPubManager.Instance.MoPubPlatformApi.RevokeConsent();
+            MoPubManager.MoPubPlatformApi.RevokeConsent();
         }
 
 
@@ -678,7 +565,7 @@ public abstract class MoPub : MoPubBase
         /// </summary>
         public static Uri CurrentConsentPrivacyPolicyUrl {
             get {
-                return MoPubUtils.UrlFromString(MoPubManager.Instance.MoPubPlatformApi.CurrentConsentPrivacyPolicyUrl);
+                return MoPubUtils.UrlFromString(MoPubManager.MoPubPlatformApi.CurrentConsentPrivacyPolicyUrl);
             }
         }
 
@@ -687,7 +574,7 @@ public abstract class MoPub : MoPubBase
         /// </summary>
         public static Uri CurrentVendorListUrl {
             get {
-                return MoPubUtils.UrlFromString(MoPubManager.Instance.MoPubPlatformApi.CurrentVendorListUrl);
+                return MoPubUtils.UrlFromString(MoPubManager.MoPubPlatformApi.CurrentVendorListUrl);
             }
         }
 
@@ -696,7 +583,7 @@ public abstract class MoPub : MoPubBase
         /// The list of vendors this user has consented to in IAB format.
         /// </summary>
         public static string CurrentConsentIabVendorListFormat {
-            get { return MoPubManager.Instance.MoPubPlatformApi.CurrentConsentIabVendorListFormat; }
+            get { return MoPubManager.MoPubPlatformApi.CurrentConsentIabVendorListFormat; }
         }
 
 
@@ -704,7 +591,7 @@ public abstract class MoPub : MoPubBase
         /// The version for the privacy policy this user has consented to.
         /// </summary>
         public static string CurrentConsentPrivacyPolicyVersion {
-            get { return MoPubManager.Instance.MoPubPlatformApi.CurrentConsentPrivacyPolicyVersion; }
+            get { return MoPubManager.MoPubPlatformApi.CurrentConsentPrivacyPolicyVersion; }
         }
 
 
@@ -712,7 +599,7 @@ public abstract class MoPub : MoPubBase
         /// The version for the list of vendors this user has consented to.
         /// </summary>
         public static string CurrentConsentVendorListVersion {
-            get { return MoPubManager.Instance.MoPubPlatformApi.CurrentConsentVendorListVersion; }
+            get { return MoPubManager.MoPubPlatformApi.CurrentConsentVendorListVersion; }
         }
 
 
@@ -720,7 +607,7 @@ public abstract class MoPub : MoPubBase
         /// The list of vendors this user has previously consented to in IAB format.
         /// </summary>
         public static string PreviouslyConsentedIabVendorListFormat {
-            get { return MoPubManager.Instance.MoPubPlatformApi.PreviouslyConsentedIabVendorListFormat; }
+            get { return MoPubManager.MoPubPlatformApi.PreviouslyConsentedIabVendorListFormat; }
         }
 
 
@@ -728,7 +615,7 @@ public abstract class MoPub : MoPubBase
         /// The version for the privacy policy this user has previously consented to.
         /// </summary>
         public static string PreviouslyConsentedPrivacyPolicyVersion {
-            get { return MoPubManager.Instance.MoPubPlatformApi.PreviouslyConsentedPrivacyPolicyVersion; }
+            get { return MoPubManager.MoPubPlatformApi.PreviouslyConsentedPrivacyPolicyVersion; }
         }
 
 
@@ -736,7 +623,7 @@ public abstract class MoPub : MoPubBase
         /// The version for the vendor list this user has previously consented to.
         /// </summary>
         public static string PreviouslyConsentedVendorListVersion {
-            get { return MoPubManager.Instance.MoPubPlatformApi.PreviouslyConsentedVendorListVersion; }
+            get { return MoPubManager.MoPubPlatformApi.PreviouslyConsentedVendorListVersion; }
         }
     }
 
@@ -834,16 +721,6 @@ public abstract class MoPub : MoPubBase
     }
 
 
-    [Obsolete("BannerType is deprecated, please use MaxAdSize instead (via new CreateBanner).")]
-    public enum BannerType
-    {
-        Size320x50,
-        Size300x250,
-        Size728x90,
-        Size160x600
-    }
-
-
     /// <summary>
     /// The maximum size, in density-independent pixels (DIPs), an ad should have.
     /// </summary>
@@ -925,7 +802,7 @@ public abstract class MoPub : MoPubBase
                          where n.NetworkConfiguration != null
                          where !String.IsNullOrEmpty(n.AdapterConfigurationClassName)
                          select n;
-                return Json.Serialize(nc.ToDictionary(n => n.AdapterConfigurationClassName,
+                return MJ.Json.Serialize(nc.ToDictionary(n => n.AdapterConfigurationClassName,
                                                       n => n.NetworkConfiguration));
             }
         }
@@ -937,7 +814,7 @@ public abstract class MoPub : MoPubBase
                          where n.MediationSettings != null
                          where !String.IsNullOrEmpty(n.MediationSettingsClassName)
                          select n;
-                return Json.Serialize(ms.ToDictionary(n => n.MediationSettingsClassName,
+                return MJ.Json.Serialize(ms.ToDictionary(n => n.MediationSettingsClassName,
                                                       n => n.MediationSettings));
             }
         }
@@ -950,7 +827,7 @@ public abstract class MoPub : MoPubBase
                          where n.MoPubRequestOptions != null
                          where !String.IsNullOrEmpty(n.AdapterConfigurationClassName)
                          select n;
-                return Json.Serialize(ro.ToDictionary(n => n.AdapterConfigurationClassName,
+                return MJ.Json.Serialize(ro.ToDictionary(n => n.AdapterConfigurationClassName,
                                                       n => n.MoPubRequestOptions));
             }
         }
@@ -1000,7 +877,7 @@ public abstract class MoPub : MoPubBase
             var ms = from n in localMediationSettings ?? Enumerable.Empty<LocalMediationSetting>()
                      where n != null && !String.IsNullOrEmpty(n.MediationSettingsClassName)
                      select n;
-            return Json.Serialize(ms.ToDictionary(n => n.MediationSettingsClassName, n => n));
+            return MJ.Json.Serialize(ms.ToDictionary(n => n.MediationSettingsClassName, n => n));
         }
 
 
@@ -1048,8 +925,9 @@ public abstract class MoPub : MoPubBase
         public class AppLovin   : SupportedNetwork { public AppLovin()   : base("AppLovin") { } }
         public class Chartboost : SupportedNetwork { public Chartboost() : base("Chartboost") { } }
         public class Facebook   : SupportedNetwork { public Facebook()   : base("Facebook") { } }
+        public class Flurry     : SupportedNetwork { public Flurry()     : base("Flurry") { } }
         public class IronSource : SupportedNetwork { public IronSource() : base("IronSource") { } }
-        public class OnebyAOL   : SupportedNetwork { public OnebyAOL()   : base("Millennial") { } }
+        public class Mintegral  : SupportedNetwork { public Mintegral()  : base("Mintegral") { } }
         public class Tapjoy     : SupportedNetwork { public Tapjoy()     : base("Tapjoy") { } }
         public class Unity      : SupportedNetwork { public Unity()      : base("UnityAds") { } }
         public class Verizon    : SupportedNetwork { public Verizon()    : base("Verizon") { } }
@@ -1078,6 +956,7 @@ public abstract class MoPub : MoPubBase
 
     public struct ImpressionData
     {
+        public string AppVersion;
         public string AdUnitId;
         public string AdUnitName;
         public string AdUnitFormat;
@@ -1097,14 +976,17 @@ public abstract class MoPub : MoPubBase
         public static ImpressionData FromJson(string json)
         {
             var impData = new ImpressionData();
-            if (String.IsNullOrEmpty(json)) return impData;
+            if (string.IsNullOrEmpty(json)) return impData;
 
-            var fields = Json.Deserialize(json) as Dictionary<string, object>;
+            var fields = MJ.Json.Deserialize(json) as Dictionary<string, object>;
             if (fields == null) return impData;
 
             object obj;
             double parsedDouble;
             int parsedInt;
+
+            if (fields.TryGetValue("app_version", out obj) && obj != null)
+                impData.AppVersion = obj.ToString();
 
             if (fields.TryGetValue("adunit_id", out obj) && obj != null)
                 impData.AdUnitId = obj.ToString();
@@ -1122,7 +1004,8 @@ public abstract class MoPub : MoPubBase
                 impData.Currency = obj.ToString();
 
             if (fields.TryGetValue("publisher_revenue", out obj) && obj != null
-                && Double.TryParse(obj.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out parsedDouble))
+                && double.TryParse(MoPubUtils.InvariantCultureToString(obj), NumberStyles.Any,
+                    CultureInfo.InvariantCulture, out parsedDouble))
                 impData.PublisherRevenue = parsedDouble;
 
             if (fields.TryGetValue("adgroup_id", out obj) && obj != null)
@@ -1135,7 +1018,8 @@ public abstract class MoPub : MoPubBase
                 impData.AdGroupType = obj.ToString();
 
             if (fields.TryGetValue("adgroup_priority", out obj) && obj != null
-                && Int32.TryParse(obj.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out parsedInt))
+                && int.TryParse(MoPubUtils.InvariantCultureToString(obj), NumberStyles.Any,
+                    CultureInfo.InvariantCulture, out parsedInt))
                 impData.AdGroupPriority = parsedInt;
 
             if (fields.TryGetValue("country", out obj) && obj != null)
@@ -1181,7 +1065,7 @@ public abstract class MoPub : MoPubBase
 
     private static void LoadPluginsForAdUnits(string[] adUnitIds, string adType = null)
     {
-        foreach (var adUnitId in adUnitIds) AdUnits[adUnitId] = MoPubAdUnit.CreateMoPubAdUnit(adUnitId, adType);
+        AdUnitManager.InitAdUnits(adUnitIds, adType);
 
         Debug.LogFormat("{0} {1} AdUnits loaded for plugins:\n{2}", adUnitIds.Length, adType ?? "",
             string.Join(", ", adUnitIds));
@@ -1190,7 +1074,7 @@ public abstract class MoPub : MoPubBase
 
     private static void ValidateAdUnitForSdkInit(string adUnitId)
     {
-        _validInit = !String.IsNullOrEmpty(adUnitId);
+        _validInit = !string.IsNullOrEmpty(adUnitId);
         ValidateInit("FATAL ERROR: A valid ad unit ID is needed to initialize the MoPub SDK.\n" +
                      "Please enter an ad unit ID from your app into the MoPubManager GameObject.");
     }
@@ -1227,8 +1111,34 @@ public abstract class MoPub : MoPubBase
     }
 
 
-    private static readonly Dictionary<string, MoPubAdUnit> AdUnits = new Dictionary<string, MoPubAdUnit>();
+
     public static LogLevel CachedLogLevel;
+
+    private static class AdUnitManager
+    {
+        private static readonly Dictionary<string, MoPubAdUnit> AdUnits = new Dictionary<string, MoPubAdUnit>();
+
+        public static void InitAdUnits(string[] adUnitIds, string adType)
+        {
+            foreach (var adUnitId in adUnitIds) AdUnits[adUnitId] = MoPubAdUnit.CreateMoPubAdUnit(adUnitId, adType);
+        }
+
+        public static void InitAdUnits(string adType, params string[] adUnitIds)
+        {
+            InitAdUnits(adUnitIds, adType);
+        }
+
+        public static MoPubAdUnit GetAdUnit(string adUnitId)
+        {
+            ValidateInit();
+            MoPubAdUnit adUnit;
+            if (AdUnits.TryGetValue(adUnitId, out adUnit))
+                return adUnit;
+
+            ReportAdUnitNotFound(adUnitId);
+            return MoPubAdUnit.NullMoPubAdUnit;
+        }
+    }
 
 
     #endregion Internal

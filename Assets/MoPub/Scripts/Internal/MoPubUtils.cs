@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using MoPubInternal.ThirdParty.MiniJSON;
+using MJ = MoPubInternal.ThirdParty.MiniJSON;
 using UnityEngine;
 
 public class MoPubUtils {
@@ -55,12 +55,16 @@ public class MoPubUtils {
         }
     }
 
+    public static string EncodeArgs(params string[] args)
+    {
+        return MJ.Json.Serialize(args);
+    }
 
     // Will return a non-null array of strings with at least 'min' non-null string values at the front.
     public static string[] DecodeArgs(string argsJson, int min)
     {
         var err = false;
-        var args = Json.Deserialize(argsJson) as List<object>;
+        var args = MJ.Json.Deserialize(argsJson) as List<object>;
         if (args == null) {
             Debug.LogError("Invalid JSON data: " + argsJson);
             args = new List<object>();
@@ -73,5 +77,10 @@ public class MoPubUtils {
                 args.Add("");
         }
         return args.Select(v => v.ToString()).ToArray();
+    }
+
+    public static string InvariantCultureToString(object obj)
+    {
+        return string.Format(CultureInfo.InvariantCulture, "{0}", obj);
     }
 }

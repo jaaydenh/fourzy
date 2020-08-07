@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using UnityEngine;
-#if UNITY_2017_1_OR_NEWER
-using UnityEngine.TestTools;
-#endif
+
+// ReSharper disable Unity.IncorrectMonoBehaviourInstantiation
 
 namespace Tests
 {
@@ -10,58 +10,95 @@ namespace Tests
     public class MoPubManagerTests : MoPubTest
     {
         [Test]
-        public void DecodeArgsWithNullShouldErrorAndYieldEmptyList()
+        public void EmitAdLoadedEventShouldTriggerOnAdLoadedEvent()
         {
-            var res = MoPubUtils.DecodeArgs(null, 0);
-
-            LogAssert.Expect(LogType.Error, "Invalid JSON data: ");
-            Assert.That(res, Is.Not.Null);
-            Assert.That(res.Length, Is.EqualTo(0));
+            TestEmitAdLoadedEvent("1234", 320, 50.0f);
         }
 
         [Test]
-        public void DecodeArgsWithInvalidShouldErrorAndYieldEmptyList()
+        public void EmitAdLoadedEventShouldParseIntHeight()
         {
-            var res = MoPubUtils.DecodeArgs("{\"a\"]", 0);
-
-            LogAssert.Expect(LogType.Error, "Invalid JSON data: {\"a\"]");
-            Assert.That(res, Is.Not.Null);
-            Assert.That(res.Length, Is.EqualTo(0));
+            TestEmitAdLoadedEvent("1234", 320, 50);
         }
 
         [Test]
-        public void DecodeArgsWithValueShouldYieldListWithValue()
+        public void EmitAdLoadedEventShouldGracefullyHandleParseFailure()
         {
-            var res = MoPubUtils.DecodeArgs("[\"a\"]", 0);
-
-            Assert.That(res, Is.Not.Null);
-            Assert.That(res.Length, Is.EqualTo(1));
-            Assert.That(res[0], Is.EqualTo("a"));
+            TestEmitAdLoadedEvent("1234", 320, " ", true);
         }
 
         [Test]
-        public void DecodeArgsWithoutMinimumValuesShouldErrorAndYieldListWithDesiredLength()
+        public void EmitRewardedVideoReceivedRewardEventShouldTriggerOnRewardedVideoReceivedRewardEvent()
         {
-            var res = MoPubUtils.DecodeArgs("[\"a\", \"b\"]", 3);
-
-            LogAssert.Expect(LogType.Error, "Missing one or more values: [\"a\", \"b\"] (expected 3)");
-            Assert.That(res, Is.Not.Null);
-            Assert.That(res.Length, Is.EqualTo(3));
-            Assert.That(res[0], Is.EqualTo("a"));
-            Assert.That(res[1], Is.EqualTo("b"));
-            Assert.That(res[2], Is.EqualTo(""));
+            TestEmitRewardedVideoReceivedRewardEvent("1234", "coins", 50.0f);
         }
 
         [Test]
-        public void DecodeArgsWithExpectedValuesShouldYieldListWithDesiredValues()
+        public void EmitRewardedVideoReceivedRewardEventShouldParseIntHeight()
         {
-            var res = MoPubUtils.DecodeArgs("[\"a\", \"b\", \"c\"]", 3);
+            TestEmitRewardedVideoReceivedRewardEvent("1234", "coins", 50);
+        }
 
-            Assert.That(res, Is.Not.Null);
-            Assert.That(res.Length, Is.EqualTo(3));
-            Assert.That(res[0], Is.EqualTo("a"));
-            Assert.That(res[1], Is.EqualTo("b"));
-            Assert.That(res[2], Is.EqualTo("c"));
+        [Test]
+        public void EmitRewardedVideoReceivedRewardEventShouldGracefullyHandleParseFailure()
+        {
+            TestEmitRewardedVideoReceivedRewardEvent("1234", "coins", " ", true);
+        }
+
+        private static void TestEmitAdLoadedEvent(string adUnitId, object width, object height, bool shouldFail = false)
+        {
+            const string successMessage = "OnAdLoadedEvent triggered.";
+            Action<string, float> successHandler = (_adUnitId, _height) => {
+                Assert.That(_adUnitId, Is.EqualTo(adUnitId));
+                Assert.That(_height, Is.EqualTo(height));
+                Debug.Log(successMessage);
+            };
+
+            const string failureMessage = "OnAdFailedEvent triggered.";
+            Action<string, string> failureHandler = (_adUnitId, _error) => {
+                Assert.That(_adUnitId, Is.EqualTo(adUnitId));
+                Debug.Log(failureMessage);
+            };
+
+            MoPubManager.OnAdLoadedEvent += successHandler;
+            MoPubManager.OnAdFailedEvent += failureHandler;
+            try {
+                var mpm = new MoPubManager();
+                mpm.EmitAdLoadedEvent(MoPubUtils.EncodeArgs(adUnitId, width.ToString(), height.ToString()));
+                LogAssert.Expect(LogType.Log, shouldFail ? failureMessage : successMessage);
+            } finally {
+                MoPubManager.OnAdLoadedEvent -= successHandler;
+                MoPubManager.OnAdFailedEvent -= failureHandler;
+            }
+        }
+
+        private static void TestEmitRewardedVideoReceivedRewardEvent(string adUnitId, string label, object amount,
+            bool shouldFail = false)
+        {
+            const string successMessage = "OnRewardedVideoReceivedRewardEvent triggered.";
+            Action<string, string, float> successHandler = (_adUnitId, _label, _amount) => {
+                Assert.That(_adUnitId, Is.EqualTo(adUnitId));
+                Assert.That(_label, Is.EqualTo(label));
+                Assert.That(_amount, Is.EqualTo(amount));
+                Debug.Log(successMessage);
+            };
+
+            const string failureMessage = "OnRewardedVideoFailedEvent triggered.";
+            Action<string, string> failureHandler = (_adUnitId, _error) => {
+                Assert.That(_adUnitId, Is.EqualTo(adUnitId));
+                Debug.Log(failureMessage);
+            };
+
+            MoPubManager.OnRewardedVideoReceivedRewardEvent += successHandler;
+            MoPubManager.OnRewardedVideoFailedEvent += failureHandler;
+            try {
+                var mpm = new MoPubManager();
+                mpm.EmitRewardedVideoReceivedRewardEvent(MoPubUtils.EncodeArgs(adUnitId, label, amount.ToString()));
+                LogAssert.Expect(LogType.Log, shouldFail ? failureMessage : successMessage);
+            } finally {
+                MoPubManager.OnRewardedVideoReceivedRewardEvent -= successHandler;
+                MoPubManager.OnRewardedVideoFailedEvent -= failureHandler;
+            }
         }
     }
 }
