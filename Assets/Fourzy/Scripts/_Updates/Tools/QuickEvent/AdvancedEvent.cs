@@ -93,13 +93,18 @@ namespace ByteSheep.Events
 
         public static Type[] CombineArgumentTypes(AdvancedArgumentCache[] arguments)
         {
-            Type[] argumentTypes = new Type[arguments.Length];
-            for (int i = 0; i < argumentTypes.Length; i++)
+            List<Type> _argumentTypes = new List<Type>();
+
+            if (arguments != null)
             {
-                //if (arguments[i].GetArgumentValue() != null)
-                    argumentTypes[i] = arguments[i].GetArgumentValue().GetType();
+                //Type[] argumentTypes = new Type[arguments.Length];
+                for (int i = 0; i < arguments.Length; i++)
+                {
+                    if (arguments[i] != null && arguments[i].GetArgumentValue() != null)
+                        _argumentTypes.Add(arguments[i].GetArgumentValue().GetType());
+                }
             }
-            return argumentTypes;
+            return _argumentTypes.ToArray();
         }
     }
 
@@ -259,8 +264,16 @@ namespace ByteSheep.Events
                 if (!persistentCall.isCallEnabled || (object)persistentCall.target == null || persistentCall.memberName == "")
                     continue;
 
-                persistentCall.argumentValues = AdvancedArgumentCache.CombineArguments(persistentCall.arguments);
-                persistentCall.argumentTypes = AdvancedArgumentCache.CombineArgumentTypes(persistentCall.arguments);
+                if(persistentCall.arguments != null)
+                {
+                    persistentCall.argumentValues = AdvancedArgumentCache.CombineArguments(persistentCall.arguments);
+                    persistentCall.argumentTypes = AdvancedArgumentCache.CombineArgumentTypes(persistentCall.arguments);
+                }
+                else
+                {
+                    persistentCall.argumentValues = new object[0];
+                    persistentCall.argumentTypes = new Type[0];
+                }
 
                 if (persistentCall.memberType == MemberTypes.Method)
                 {

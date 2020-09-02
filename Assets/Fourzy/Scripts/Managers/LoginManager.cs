@@ -53,8 +53,6 @@ namespace Fourzy
 
         protected void Start()
         {
-            GameAnalytics.Initialize();
-
             PlayFabAuthService.OnLoginSuccess += PlayFabLoginSuccess;
             PlayFabAuthService.OnPlayFabError += OnPlayFabError;
         }

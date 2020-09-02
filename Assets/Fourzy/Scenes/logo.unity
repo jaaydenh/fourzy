@@ -743,6 +743,11 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
+    - target: {fileID: 6201788421735979070, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6901439131794943948, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -2100,6 +2105,7 @@ GameObject:
   - component: {fileID: 1897861374}
   - component: {fileID: 1897861377}
   - component: {fileID: 1897861376}
+  - component: {fileID: 1897861378}
   m_Layer: 5
   m_Name: LoadingController
   m_TagString: Untagged
@@ -2328,3 +2334,15 @@ MonoBehaviour:
           enumArgument: 
         isDynamic: 0
         isCallEnabled: 1
+--- !u!114 &1897861378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897861373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f2f9f4ac79843e4197f07f9ca6c1f76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
