@@ -10,7 +10,6 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
-// using GameSparks.Api.Responses;
 using Newtonsoft.Json;
 using Photon.Pun;
 using System;
@@ -178,6 +177,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 GameManager.Instance.activeGame = _game;
 
             game = GameManager.Instance.activeGame;
+
+            Debug.Log($"Type: {game._Type} Mode: {game._Mode}");
         }
 
         public void LoadGame(IClientFourzy _game)

@@ -44,7 +44,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private UIOutline helpButtonOutline;
 
-        private bool timersEnabled => SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER) && (game._Type == GameType.PASSANDPLAY || game._Type == GameType.REALTIME || game._Type == GameType.AI);
+        private bool timersEnabled => 
+            SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER) && 
+            (game._Mode != GameMode.GAUNTLET) &&
+            (game._Type == GameType.PASSANDPLAY || game._Type == GameType.REALTIME || game._Type == GameType.AI);
 
         protected override void Awake()
         {

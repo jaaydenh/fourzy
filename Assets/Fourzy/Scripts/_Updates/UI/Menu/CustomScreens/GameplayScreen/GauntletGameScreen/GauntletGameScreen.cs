@@ -3,7 +3,6 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
-using System.Collections;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -15,7 +14,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public IClientFourzy game { get; private set; }
 
-        private bool isGauntlet => game.puzzleData && game.puzzleData.gauntletStatus != null;
         private GamePieceView gamepiece;
         private Animator textAnimator;
 
@@ -30,7 +28,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.game = game;
 
-            if (game == null || !isGauntlet) return;
+            if (game == null || game._Mode != GameMode.GAUNTLET) return;
 
             if (gamepiece && gamepiece.pieceData.ID != game.me.HerdId)
             {
@@ -53,7 +51,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OnMoveStarted()
         {
-            if (!isOpened || !isGauntlet || game.isMyTurn) return;
+            if (!isOpened || game._Mode != GameMode.GAUNTLET || game.isMyTurn) return;
 
             UpdateCounter();
         }

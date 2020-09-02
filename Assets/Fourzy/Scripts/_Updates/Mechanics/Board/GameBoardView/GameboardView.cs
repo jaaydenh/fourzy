@@ -1477,10 +1477,7 @@ namespace Fourzy._Updates.Mechanics.Board
             //reset ActivePlayerID
             if (game.puzzleData && !game.puzzleData.hasAIOpponent) game._State.ActivePlayerId = game.me.PlayerId;
 
-            bool isGauntlet = game.puzzleData && game.puzzleData.gauntletStatus != null;
             bool localyCreatedTurn = turn != null ? turn.createdOnThisDevice : false;
-
-            if (isGauntlet && turn != null && turn.PlayerId == game.me.PlayerId) game.RemoveMember();
 
             //SimpleMove move = turn != null ? turn.GetMove() : null;
 
@@ -1798,7 +1795,7 @@ namespace Fourzy._Updates.Mechanics.Board
             game.CheckLost();
 
             //check if gauntlet game finished
-            if (isGauntlet && turn != null && turn.PlayerId == game.me.PlayerId)
+            if (game._Mode == GameMode.GAUNTLET && turn != null && turn.PlayerId == game.me.PlayerId)
             {
                 if (game._State.Herds[turn.PlayerId].Members.Count == 0 && game._State.WinningLocations == null)
                 {

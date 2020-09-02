@@ -43,10 +43,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_MAGIC);
 
-        public void StartRealtime()
-        {
-            menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
-        }
+        public void StartRealtime() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
 
         protected override void OnInitialized()
         {
