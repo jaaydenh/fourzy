@@ -116,8 +116,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 messageLabel.text = "Searching for opponent...";
 
-                //try join random room
-                PhotonNetwork.JoinRandomRoom();
+                FourzyPhotonManager.JoinRandomRoom();
             }
             else
             {

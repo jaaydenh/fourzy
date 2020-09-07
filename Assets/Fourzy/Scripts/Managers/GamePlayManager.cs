@@ -87,7 +87,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //listen to roomPropertyChanged event
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
             FourzyPhotonManager.onPlayerLeftRoom += OnPlayerLeftRoom;
-            // PhotonNetwork.OnEventCall += OnEventCall;
+            FourzyPhotonManager.onEvent += OnEventCall;
 
             if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput += OnNoInput;
 
@@ -145,7 +145,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             FourzyPhotonManager.onRoomPropertiesUpdate -= OnRoomPropertiesUpdate;
             FourzyPhotonManager.onPlayerLeftRoom -= OnPlayerLeftRoom;
-            // PhotonNetwork.OnEventCall -= OnEventCall;
+            FourzyPhotonManager.onEvent -= OnEventCall;
 
             if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput -= OnNoInput;
 
@@ -808,18 +808,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        private void OnEventCall(byte eventCode, object content, int senderId)
+        private void OnEventCall(EventData data)
         {
             //will be called on other client
-            switch (eventCode)
+            switch (data.Code)
             {
                 case Constants.GAME_DATA:
-                    LoadGame(new ClientFourzyGame(JsonConvert.DeserializeObject<GameStateDataEpoch>(content.ToString())));
+                    LoadGame(new ClientFourzyGame(JsonConvert.DeserializeObject<GameStateDataEpoch>(data.CustomData.ToString())));
 
                     break;
 
                 case Constants.TAKE_TURN:
-                    StartRoutine("takeTurn", PlayRealtimeTurn(JsonConvert.DeserializeObject<PlayerTurn>(content.ToString())));
+                    StartRoutine("takeTurn", PlayRealtimeTurn(JsonConvert.DeserializeObject<PlayerTurn>(data.CustomData.ToString())));
 
                     break;
 

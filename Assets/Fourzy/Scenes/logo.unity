@@ -1278,12 +1278,12 @@ PrefabInstance:
     - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
         type: 3}
       propertyPath: displayTutorials
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114771313682951538, guid: 3b153745504954e599a747ae789ac703,
         type: 3}
       propertyPath: forceDisplayTutorials
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6077144665870927472, guid: 3b153745504954e599a747ae789ac703,
         type: 3}

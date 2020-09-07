@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Fourzy
 {
-    public class FourzyPhotonManager : MonoBehaviourPunCallbacks
+    public class FourzyPhotonManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         public static FourzyPhotonManager Instance
         {
@@ -31,10 +31,12 @@ namespace Fourzy
         public static Action<Player> onPlayerEnteredRoom;
         public static Action<Player> onPlayerLeftRoom;
         public static Action<Hashtable> onRoomPropertiesUpdate;
+        public static Action<EventData> onEvent;
 
         public static bool DEBUG = false;
 
         private static FourzyPhotonManager instance;
+        private static string lastTask;
 
         public static void Initialize(bool DEBUG = true)
         {
@@ -59,6 +61,20 @@ namespace Fourzy
 
         #region Callbacks
 
+        public override void OnEnable()
+        {
+            base.OnEnable();
+
+            PhotonNetwork.AddCallbackTarget(this);
+        }
+
+        public override void OnDisable()
+        {
+            base.OnDisable();
+
+            PhotonNetwork.RemoveCallbackTarget(this);
+        }
+
         public override void OnConnected()
         {
             base.OnConnected();
@@ -76,7 +92,6 @@ namespace Fourzy
 
             onConnectedToMaster?.Invoke();
 
-            //join default lobby
             PhotonNetwork.JoinLobby();
         }
 
@@ -90,6 +105,16 @@ namespace Fourzy
             PhotonNetwork.NickName = UserManager.Instance.userName;
 
             onJoinedLobby?.Invoke(PhotonNetwork.CurrentLobby.Name);
+
+
+            switch (lastTask)
+            {
+                case "joinRandomRoom":
+                    if (DEBUG) Debug.Log($"Last task set to {lastTask}");
+                    JoinRandomRoom();
+
+                    break;
+            }
         }
 
         public override void OnCreateRoomFailed(short returnCode, string message)
@@ -162,6 +187,12 @@ namespace Fourzy
 
         #endregion
 
+
+        public void OnEvent(EventData photonEvent)
+        {
+            onEvent?.Invoke(photonEvent);
+        }
+
         public static void SetClientReady()
         {
             if (PhotonNetwork.CurrentRoom == null) return;
@@ -185,5 +216,28 @@ namespace Fourzy
         public static bool CheckPlayersReady() =>
             (PhotonNetwork.IsMasterClient && GetRoomProperty(Constants.PLAYER_2_READY, false)) ||
             (!PhotonNetwork.IsMasterClient && GetRoomProperty(Constants.PLAYER_1_READY, false));
+
+        public static void JoinRandomRoom()
+        {
+            lastTask = "joinRandomRoom";
+
+            switch (PhotonNetwork.NetworkClientState)
+            {
+                case ClientState.JoinedLobby: break;
+
+                case ClientState.Authenticated:
+                    PhotonNetwork.JoinLobby();
+
+                    return;
+
+                default:
+                    PhotonNetwork.ConnectUsingSettings();
+
+                    return;
+            }
+
+            lastTask = "";
+            PhotonNetwork.JoinRandomRoom();
+        }
     }
 }
