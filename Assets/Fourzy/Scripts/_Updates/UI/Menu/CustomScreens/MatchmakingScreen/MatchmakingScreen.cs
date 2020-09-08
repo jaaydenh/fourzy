@@ -47,6 +47,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onCreateRoomFailed += OnCreateRoomFailed;
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEnteredRoom;
             FourzyPhotonManager.onJoinedRoom += OnRoomJoined;
+            FourzyPhotonManager.onConnectionTimeOut += OnConnectionTimeOut;
         }
 
         protected void OnDestroy()
@@ -59,14 +60,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onCreateRoomFailed -= OnCreateRoomFailed;
             FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEnteredRoom;
             FourzyPhotonManager.onJoinedRoom -= OnRoomJoined;
+            FourzyPhotonManager.onConnectionTimeOut -= OnConnectionTimeOut;
         }
 
         public override void Close(bool animate = true)
         {
             base.Close(animate);
 
-            if (isRealtime) PhotonNetwork.LeaveRoom();
+            if (isRealtime) FourzyPhotonManager.TryLeaveRoom();
 
+            StopRoutine("multiplayerTimeout", false);
             StopRoutine("randomText", false);
             timerLabel.text = string.Empty;
         }
@@ -187,7 +190,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!isOpened) return;
 
-            // messageLabel.text = "Failed to join random room, creating new one...";
             Debug.Log("Failed to join random room, creating new one...");
 
             var options = new Photon.Realtime.RoomOptions { MaxPlayers = 2 };
@@ -197,6 +199,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 Guid.NewGuid().ToString(),
                 options,
                 null);
+
+            //start timeout timer
+            StartRoutine("multiplayerTimeout", Constants.REALTIME_OPPONENT_WAIT_TIME, OnMultiplayerTimerTimedOut, null);
         }
 
         private void OnRoomCreated(string roomName)
@@ -208,9 +213,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //unblock input
             SetInteractable(true);
             backButton.SetActive(true);
-
-            // StopRoutine("randomText", false);
-            // timerLabel.text = string.Empty;
         }
 
         private void OnCreateRoomFailed()
@@ -256,6 +258,35 @@ namespace Fourzy._Updates.UI.Menu.Screens
             timerLabel.text = "Match Found";
 
             GameManager.Instance.StartGame();
+        }
+
+        private void OnMultiplayerTimerTimedOut()
+        {
+            //leave room and close screen
+            PhotonNetwork.LeaveRoom();
+
+            OnBack();
+
+            //open prompt screen
+            PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
+                LocalizationManager.Value("timed_out_title"),
+                LocalizationManager.Value("timed_out_text"), null,
+                LocalizationManager.Value("back"), null, null);
+        }
+
+        private void OnConnectionTimeOut()
+        {
+            //unblock input
+            SetInteractable(true);
+            backButton.SetActive(true);
+
+            OnBack();
+
+            //open prompt screen
+            PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
+                "Connection failed.",
+                "Failed to connect to multiplayer server :(", null,
+                LocalizationManager.Value("back"), null, null);
         }
 
         private IEnumerator ShowRandomTextRoutine()

@@ -23,6 +23,8 @@ namespace Fourzy
         public const float BASE_MOVE_SPEED = 8f;
         public const float MOVE_SPEED_CAP = 16f;
         public const int REALTIME_COUNTDOWN_SECONDS = 6;
+        public const float REALTIME_OPPONENT_WAIT_TIME = 30f;
+        public const float PHOTON_CONNECTION_WAIT_TIME = 5f;
         public const int GAUNTLET_DEFAULT_MOVES_COUNT = 60;
         public const int BASE_GAUNTLET_MOVES_COST = 2;
         public const int GAUNTLET_RECHARGE_AMOUNT = 10;

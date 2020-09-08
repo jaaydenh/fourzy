@@ -33,6 +33,10 @@
       "value": "Próximo"
     },
     {
+      "key": "back",
+      "value": "Espalda"
+    },
+    {
       "key": "buy",
       "value": "Comprar"
     },
@@ -409,6 +413,14 @@
     {
       "key": "tickets",
       "value": "Entradas"
+    },
+    {
+      "key": "timed_out_title",
+      "value": "Caducado :("
+    },
+    {
+      "key": "timed_out_text",
+      "value": "Nadie se unió a tu juego."
     },
     {
       "key": "thinking",

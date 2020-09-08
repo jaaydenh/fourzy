@@ -221,6 +221,9 @@ namespace Fourzy
                     if (state) PlayerPrefsWrapper.SetThemeUnlocked((int)area, state);
                 }
             }
+
+            //initialize photon
+            FourzyPhotonManager.Initialize(DEBUG: true);
         }
 
         protected void Start()

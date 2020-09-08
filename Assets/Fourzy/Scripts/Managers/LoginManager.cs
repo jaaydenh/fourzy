@@ -282,9 +282,6 @@ namespace Fourzy
 
             if (networkAccess)
             {
-                //initialize photon
-                FourzyPhotonManager.Initialize(DEBUG: true);
-
                 if (!PlayFabClientAPI.IsClientLoggedIn())
                 {
                     _AuthService.Authenticate(Authtypes.Silent);

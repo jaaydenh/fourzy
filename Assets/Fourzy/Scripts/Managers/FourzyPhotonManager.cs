@@ -31,12 +31,16 @@ namespace Fourzy
         public static Action<Player> onPlayerEnteredRoom;
         public static Action<Player> onPlayerLeftRoom;
         public static Action<Hashtable> onRoomPropertiesUpdate;
+        public static Action onDisconnectedFromServer;
         public static Action<EventData> onEvent;
+        public static Action onConnectionTimeOut;
 
         public static bool DEBUG = false;
 
         private static FourzyPhotonManager instance;
         private static string lastTask;
+
+        private Coroutine connectionTimedOutRoutine;
 
         public static void Initialize(bool DEBUG = true)
         {
@@ -53,8 +57,7 @@ namespace Fourzy
             go.transform.SetParent(null);
             instance = go.AddComponent<FourzyPhotonManager>();
 
-            PhotonNetwork.ConnectUsingSettings();
-            PhotonNetwork.GameVersion = "1";
+            instance.ConnectUsingSettings(false);
 
             DontDestroyOnLoad(go);
         }
@@ -78,6 +81,7 @@ namespace Fourzy
         public override void OnConnected()
         {
             base.OnConnected();
+
             if (DEBUG) Debug.Log($"Connected to photon.");
         }
 
@@ -92,12 +96,14 @@ namespace Fourzy
 
             onConnectedToMaster?.Invoke();
 
-            PhotonNetwork.JoinLobby();
+            JoinDefaultLobby();
         }
 
         public override void OnJoinedLobby()
         {
             base.OnJoinedLobby();
+
+            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
 
             if (DEBUG) Debug.Log($"Joined lobby: {(string.IsNullOrEmpty(PhotonNetwork.CurrentLobby.Name) ? "DEFAULT" : PhotonNetwork.CurrentLobby.Name)}.");
 
@@ -105,7 +111,6 @@ namespace Fourzy
             PhotonNetwork.NickName = UserManager.Instance.userName;
 
             onJoinedLobby?.Invoke(PhotonNetwork.CurrentLobby.Name);
-
 
             switch (lastTask)
             {
@@ -124,6 +129,8 @@ namespace Fourzy
             if (DEBUG) Debug.Log($"Failed to create new Room.");
 
             onCreateRoomFailed?.Invoke();
+
+            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
@@ -133,14 +140,18 @@ namespace Fourzy
             if (DEBUG) Debug.Log($"Failied to join room.");
 
             onJoinRoomFailed?.Invoke();
+
+            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
         }
 
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
             base.OnJoinRandomFailed(returnCode, message);
-            if (DEBUG) Debug.Log($"Failied to join random room.");
+            if (DEBUG) Debug.Log($"Failied to join random room. {returnCode} code {message} message.");
 
             onJoinRandomFailed?.Invoke();
+
+            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
         }
 
         public override void OnCreatedRoom()
@@ -150,6 +161,8 @@ namespace Fourzy
             if (DEBUG) Debug.Log($"Room created: {PhotonNetwork.CurrentRoom.Name}.");
 
             onCreateRoom?.Invoke(PhotonNetwork.CurrentRoom.Name);
+
+            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
         }
 
         public override void OnJoinedRoom()
@@ -159,6 +172,8 @@ namespace Fourzy
             if (DEBUG) Debug.Log($"Room joined: {PhotonNetwork.CurrentRoom.Name}.");
 
             onJoinedRoom?.Invoke(PhotonNetwork.CurrentRoom.Name);
+
+            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -185,13 +200,16 @@ namespace Fourzy
             onRoomPropertiesUpdate?.Invoke(propertiesThatChanged);
         }
 
-        #endregion
-
-
-        public void OnEvent(EventData photonEvent)
+        public override void OnDisconnected(DisconnectCause cause)
         {
-            onEvent?.Invoke(photonEvent);
+            base.OnDisconnected(cause);
+
+            if (DEBUG) Debug.Log($"Disconnected from server.");
+
+            onDisconnectedFromServer?.Invoke();
         }
+
+        #endregion
 
         public static void SetClientReady()
         {
@@ -201,6 +219,12 @@ namespace Fourzy
             {
                 [PhotonNetwork.IsMasterClient ? Constants.PLAYER_1_READY : Constants.PLAYER_2_READY] = true,
             });
+        }
+
+        public static void TryLeaveRoom()
+        {
+            if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.NetworkClientState != Photon.Realtime.ClientState.Leaving)
+                PhotonNetwork.LeaveRoom();
         }
 
         public static T GetRoomProperty<T>(string key, T defaultValue)
@@ -226,18 +250,55 @@ namespace Fourzy
                 case ClientState.JoinedLobby: break;
 
                 case ClientState.Authenticated:
-                    PhotonNetwork.JoinLobby();
+                    instance.JoinDefaultLobby();
 
                     return;
 
                 default:
-                    PhotonNetwork.ConnectUsingSettings();
+                    instance.ConnectUsingSettings();
 
                     return;
             }
 
             lastTask = "";
             PhotonNetwork.JoinRandomRoom();
+            instance.RunTimeoutRoutine();
+        }
+
+        public void OnEvent(EventData photonEvent)
+        {
+            onEvent?.Invoke(photonEvent);
+        }
+
+        private void ConnectUsingSettings(bool runTimeOutRoutine = true)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.GameVersion = "1";
+
+            if (runTimeOutRoutine) RunTimeoutRoutine();
+        }
+
+        private void JoinDefaultLobby()
+        {
+            PhotonNetwork.JoinLobby();
+
+            RunTimeoutRoutine();
+        }
+
+        private void RunTimeoutRoutine()
+        {
+            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
+            connectionTimedOutRoutine = StartCoroutine(OnConnectionTimedOut());
+        }
+
+        private System.Collections.IEnumerator OnConnectionTimedOut()
+        {
+            yield return new WaitForSeconds(Constants.PHOTON_CONNECTION_WAIT_TIME);
+
+            PhotonNetwork.Disconnect();
+            onConnectionTimeOut?.Invoke();
+
+            connectionTimedOutRoutine = null;
         }
     }
 }

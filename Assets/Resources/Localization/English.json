@@ -33,6 +33,10 @@
       "value": "Next"
     },
     {
+      "key": "back",
+      "value": "Back"
+    },
+    {
       "key": "buy",
       "value": "Buy"
     },
@@ -404,6 +408,14 @@
     {
       "key": "tickets",
       "value": "Tickets"
+    },
+    {
+      "key": "timed_out_title",
+      "value": "Timed out :("
+    },
+    {
+      "key": "timed_out_text",
+      "value": "Nobody joined your game."
     },
     {
       "key": "thinking",

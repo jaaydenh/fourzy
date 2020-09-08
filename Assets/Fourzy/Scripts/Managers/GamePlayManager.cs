@@ -390,7 +390,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 case GameType.REALTIME:
-                    PhotonNetwork.LeaveRoom();
+                    FourzyPhotonManager.TryLeaveRoom();
 
                     break;
             }
@@ -938,13 +938,28 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (!state)
             {
+                if (game._Type == GameType.REALTIME)
+                {
+                    PauseGame();
+
+                    //open prompt screen
+                    PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
+                        "Connection failed.",
+                        "Failed to connect to multiplayer server :(", null,
+                        LocalizationManager.Value("back"), null, () =>
+                        {
+                            PersistantMenuController.instance.CloseCurrentScreen();
+                            BackButtonOnClick();
+                        });
+                }
+
                 switch (game._Type)
                 {
                     case GameType.FRIEND:
                     case GameType.LEADERBOARD:
-                    case GameType.REALTIME:
                     case GameType.TURN_BASED:
                         noNetworkOverlay.SetActive(true);
+
                         break;
                 }
             }

@@ -2105,7 +2105,6 @@ GameObject:
   - component: {fileID: 1897861374}
   - component: {fileID: 1897861377}
   - component: {fileID: 1897861376}
-  - component: {fileID: 1897861378}
   m_Layer: 5
   m_Name: LoadingController
   m_TagString: Untagged
@@ -2334,15 +2333,3 @@ MonoBehaviour:
           enumArgument: 
         isDynamic: 0
         isCallEnabled: 1
---- !u!114 &1897861378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1897861373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f2f9f4ac79843e4197f07f9ca6c1f76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
