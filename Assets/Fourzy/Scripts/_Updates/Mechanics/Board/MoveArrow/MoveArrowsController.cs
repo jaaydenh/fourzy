@@ -33,6 +33,8 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             Direction direction;
 
+            IClientFourzy game = GameManager.Instance.activeGame;
+
             foreach (BoardLocation location in possibleLocations)
             {
                 direction = location.GetDirection();
@@ -45,9 +47,8 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 arrows.Add(direction, arrowInstance);
 
-                IClientFourzy game = GameManager.Instance.activeGame;
                 //add gamepieces
-                GamePieceView gamepiece = Instantiate(game.activePlayer.PlayerId == game.me.PlayerId ? game.playerOneGamepiece : game.playerTwoGamepiece, transform);
+                GamePieceView gamepiece = Instantiate(game.activePlayerGamePiece, transform);
                 gamepiece.SetAlpha(BASE_PROGRESS * 6f);
                 BoardLocation newLocation = location.Neighbor(direction, -1);
                 gamepiece.transform.localPosition = board.BoardLocationToVec2(newLocation);

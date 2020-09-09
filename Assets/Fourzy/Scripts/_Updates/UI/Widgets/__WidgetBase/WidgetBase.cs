@@ -156,11 +156,11 @@ namespace Fourzy._Updates.UI.Widgets
         public virtual void Initialize()
         {
             if (initialized) return;
-
-            initialized = true;
             base.Awake();
 
             OnInitialized();
+
+            initialized = true;
         }
 
         protected virtual void OnInitialized()

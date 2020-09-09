@@ -4,8 +4,6 @@ using ExitGames.Client.Photon;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
-using Fourzy._Updates.UI.Menu;
-using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
 // using GameSparks.Api.Requests;
 // using GameSparks.Core;
@@ -278,27 +276,14 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
-        public GamePieceView playerGamePiece => me.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
+        public GamePieceView myGamePiece => me.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
 
         public GamePieceView opponentGamePiece => opponent.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
 
-        //will try to return Player with same playerID as this user, otherwise first player
-        public Player me
-        {
-            get
-            {
-                switch (_Type)
-                {
-                    case Fourzy.GameType.REALTIME:
-                        return State.Players.Values.ToList().Find(_player => _player.PlayerString == (PhotonNetwork.IsMasterClient ? "1" : "2")) ?? State.Players[1];
+        public GamePieceView activePlayerGamePiece => State.ActivePlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
 
-                    default:
-                        return State.Players.Values.ToList().Find(_player => _player.PlayerString == UserManager.Instance.userId) ?? State.Players[1];
-                }
-            }
-        }
+        public Player me => State.Players.Values.ToList().Find(_player => _player.PlayerString == UserManager.Instance.userId) ?? State.Players[1];
 
-        //opposite of "me"
         public Player opponent => State.Players[(PlayerEnum)me.PlayerId == PlayerEnum.ONE ? (int)PlayerEnum.TWO : (int)PlayerEnum.ONE];
 
         public Player activePlayer => isMyTurn ? me : opponent;
@@ -483,6 +468,7 @@ namespace Fourzy._Updates.ClientModel
                         eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
                         var result = PhotonNetwork.RaiseEvent(Constants.TAKE_TURN, JsonConvert.SerializeObject(turn), eventOptions, SendOptions.SendReliable);
                         Debug.Log("Photon take turn event result: " + result);
+
                         break;
                 }
             }
@@ -512,6 +498,7 @@ namespace Fourzy._Updates.ClientModel
                     eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
                     var result1 = PhotonNetwork.RaiseEvent(Constants.TAKE_TURN, JsonConvert.SerializeObject(result.Turn), eventOptions, SendOptions.SendReliable);
                     Debug.Log("Photon AI take turn event result: " + result1);
+
                     break;
             }
 
@@ -660,6 +647,14 @@ namespace Fourzy._Updates.ClientModel
             Initialize(false);
 
             return State;
+        }
+
+        public void ReversePlayers()
+        {
+            Player _temp = player1;
+
+            State.Players[1] = player2;
+            State.Players[2] = _temp;
         }
 
         public static ClientFourzyGame FromPuzzleData(ClientPuzzleData puzzleData, IClientFourzy current)

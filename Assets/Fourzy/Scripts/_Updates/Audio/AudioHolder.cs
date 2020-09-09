@@ -75,9 +75,10 @@ namespace Fourzy._Updates.Audio
 
         public bool PlaySfxOneShotTracked(AudioTypes type, AudioSource source, float volume = 1f)
         {
+            if (!SettingsManager.Get(SettingsManager.KEY_SFX)) return false;
+
             AudioClip clip = GetAudioClip(type);
-            if (!clip)
-                return false;
+            if (!clip) return false;
 
             if (currentPlayedPool.ContainsKey(clip))
             {

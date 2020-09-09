@@ -13,6 +13,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         public override void _Update()
         {
+            if (!initialized) return;
+
             int quantity = 0;
 
             switch (type)

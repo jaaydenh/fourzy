@@ -31,8 +31,9 @@ namespace Fourzy._Updates.ClientModel
 
         GamePieceView playerOneGamepiece { get; }
         GamePieceView playerTwoGamepiece { get; }
+        GamePieceView activePlayerGamePiece { get; }
 
-        GamePieceView playerGamePiece { get; }
+        GamePieceView myGamePiece { get; }
         GamePieceView opponentGamePiece { get; }
 
         int Rows { get; }

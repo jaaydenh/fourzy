@@ -2,6 +2,7 @@
 
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu;

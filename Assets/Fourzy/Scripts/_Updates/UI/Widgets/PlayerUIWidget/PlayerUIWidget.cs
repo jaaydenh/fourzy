@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using TMPro;
@@ -50,7 +51,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             if (current) Destroy(current.gameObject);
 
-            current = Instantiate(game.me == player ? game.playerGamePiece : game.opponentGamePiece, pieceParent);
+            current = Instantiate(player.PlayerId == 1 ? game.playerOneGamepiece : game.playerTwoGamepiece, pieceParent);
             current.transform.localPosition = Vector3.zero;
             current.transform.localScale = Vector3.one * 94f;
 

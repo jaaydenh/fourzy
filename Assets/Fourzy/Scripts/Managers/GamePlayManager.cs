@@ -211,7 +211,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             LoadBG(game._Area);
             LoadBoard();
 
-            gameplayScreen.InitUI(this);
+            gameplayScreen.InitializeUI(this);
             OnNetwork(GameManager.NetworkAccess);
 
             StartRoutine("gameInit", GameInitRoutine());
@@ -222,17 +222,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             //only continue if master
             if (PhotonNetwork.IsMasterClient)
             {
-                //ready me
-                FourzyGameModel.Model.Player me = new FourzyGameModel.Model.Player(1, UserManager.Instance.userName);
-                me.PlayerString = "1";
-                me.HerdId = UserManager.Instance.gamePieceID + "";
                 //ready opponent
                 FourzyGameModel.Model.Player opponen = new FourzyGameModel.Model.Player(2, PhotonNetwork.PlayerListOthers[0].NickName);
                 opponen.HerdId = PhotonNetwork.PlayerListOthers[0].CustomProperties.ContainsKey("gp") ? PhotonNetwork.PlayerListOthers[0].CustomProperties["gp"].ToString() : "1";
                 opponen.PlayerString = "2";
 
                 //load realtime game
-                ClientFourzyGame _game = new ClientFourzyGame(GameContentManager.Instance.currentTheme.themeID, me, opponen, 1)
+                ClientFourzyGame _game = new ClientFourzyGame(GameContentManager.Instance.currentTheme.themeID, UserManager.Instance.meAsPlayer, opponen, 1)
                 { _Type = GameType.REALTIME, _Area = GameContentManager.Instance.currentTheme.themeID };
 
                 GameStateDataEpoch gameStateData = _game.toGameStateData;
@@ -814,7 +810,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (data.Code)
             {
                 case Constants.GAME_DATA:
-                    LoadGame(new ClientFourzyGame(JsonConvert.DeserializeObject<GameStateDataEpoch>(data.CustomData.ToString())));
+                    ClientFourzyGame _realtimeGame = new ClientFourzyGame(JsonConvert.DeserializeObject<GameStateDataEpoch>(data.CustomData.ToString()));
+                    //assign proper user id
+                    _realtimeGame.player2.PlayerString = UserManager.Instance.userId;
+
+                    LoadGame(_realtimeGame);
 
                     break;
 

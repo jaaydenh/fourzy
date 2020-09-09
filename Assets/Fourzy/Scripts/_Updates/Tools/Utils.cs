@@ -141,6 +141,8 @@ namespace Fourzy._Updates.Tools
             return list;
         }
 
+        public static bool ComparePlayers(this Player player1, Player player2) => player1.PlayerString == player2.PlayerString;
+
         /// <summary>
         /// Add element to array
         /// </summary>

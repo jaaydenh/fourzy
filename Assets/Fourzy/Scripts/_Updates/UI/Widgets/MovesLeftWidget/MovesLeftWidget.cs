@@ -34,7 +34,7 @@ namespace Fourzy._Updates.UI.Widgets
                 GameObject gmHolder = Instantiate(gamePieceHolderPrefab, container);
                 gmHolder.SetActive(true);
 
-                GamePieceView gamePiece = Instantiate(puzzle.playerGamePiece, gmHolder.transform);
+                GamePieceView gamePiece = Instantiate(puzzle.myGamePiece, gmHolder.transform);
 
                 gamePiece.transform.localPosition = Vector3.zero;
                 gamePiece.transform.localScale = Vector3.one * 70f;

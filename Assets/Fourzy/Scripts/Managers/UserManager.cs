@@ -165,7 +165,7 @@ namespace Fourzy
 
             if (InstanceExists) return;
 
-            userId = "none";
+            userId = SystemInfo.deviceUniqueIdentifier;
             GameManager.onNetworkAccess += OnNetworkAccess;
         }
 

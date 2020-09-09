@@ -107,7 +107,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        public void InitUI(GamePlayManager gameplayManager)
+        public void InitializeUI(GamePlayManager gameplayManager)
         {
             this.gameplayManager = gameplayManager;
             game = gameplayManager.game;
