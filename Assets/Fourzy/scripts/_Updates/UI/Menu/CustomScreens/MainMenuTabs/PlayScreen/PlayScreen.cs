@@ -5,6 +5,7 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Helpers;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -96,6 +97,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         }
 
         public void OpenNews() => menuController.GetOrAddScreen<NewsPromptScreen>()._Prompt();
+
+        public void OpenDiscord()
+        {
+            Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/nMZ3MgE"/*)*/);
+        }
 
         protected override void OnInitialized()
         {

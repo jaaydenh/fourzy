@@ -43,7 +43,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 5db00398753d241cab3e77257a69e8e1, type: 3}
-    totalSpriteSurfaceArea: 23507705
+    totalSpriteSurfaceArea: 23524089
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -129,6 +129,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 934f3d74825796549ba80461730db3fd, type: 3}
   - {fileID: 21300000, guid: b4e21084b2156414e9865a8bf3531a43, type: 3}
   - {fileID: 21300000, guid: 003e9984d3ef441458ebdce1d8842400, type: 3}
+  - {fileID: 21300000, guid: d77b7b84508538b4c9d7fd2a5885317e, type: 3}
   - {fileID: 21300000, guid: 34ddef948d2195e42aa9ef6604de215d, type: 3}
   - {fileID: 21300000, guid: 2c6934b4ccad844539ae931642e9c31d, type: 3}
   - {fileID: 21300000, guid: f1e8e4c4cced3774b994d7fb3dfccfde, type: 3}
@@ -426,6 +427,7 @@ SpriteAtlas:
   - PuzzleTitleBox
   - Button_VS-full
   - Bots-04-Blue
+  - discord
   - Portal
   - buttonYellow
   - iconFourzyShadow
