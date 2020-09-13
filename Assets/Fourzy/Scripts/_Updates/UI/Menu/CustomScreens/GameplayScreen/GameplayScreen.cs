@@ -32,7 +32,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public MenuScreen tapToStartOverlay;
 
         private IClientFourzy game;
-        private GamePlayManager gameplayManager;
+        private GamePlayManager gameplayManager; 
         private int onePlayerTurnCounter;
 
         public PuzzleUIScreen puzzleUI { get; private set; }
@@ -43,11 +43,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GauntletGameScreen gauntletGameScreen { get; private set; }
 
         private UIOutline helpButtonOutline;
-
-        private bool timersEnabled => 
-            SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER) && 
-            (game._Mode != GameMode.GAUNTLET) &&
-            (game._Type == GameType.PASSANDPLAY || game._Type == GameType.REALTIME || game._Type == GameType.AI);
+        private bool timersEnabled;
 
         protected override void Awake()
         {
@@ -111,6 +107,35 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.gameplayManager = gameplayManager;
             game = gameplayManager.game;
+
+            //use timer?
+            switch (game._Mode)
+            {
+                case GameMode.GAUNTLET:
+                    timersEnabled = false;
+
+                    break;
+            }
+
+            switch (game._Type)
+            {
+                //case GameType.AI:
+                case GameType.PASSANDPLAY:
+                    timersEnabled = SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER);
+
+                    break;
+
+                case GameType.REALTIME:
+                    timersEnabled = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_TIMER_KEY, false);
+
+                    break;
+
+                default:
+                    timersEnabled = false;
+
+                    break;
+            }
+            //timer end
 
             if (game._Type != GameType.PRESENTATION)
                 player1Widget.spellsHolder.Open(game, gameplayManager.board, game.me);

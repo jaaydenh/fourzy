@@ -71,9 +71,12 @@ namespace Fourzy
         #endregion
 
         //photon
-        public const string PLAYER_1_READY = "p1ready";
-        public const string PLAYER_2_READY = "p2ready";
-        public const string EPOCH_KEY = "mc_epoch";
+        public static readonly string REALTIME_PLAYER_1_READY = "p1ready";
+        public static readonly string REALTIME_PLAYER_2_READY = "p2ready";
+        public static readonly string REALTIME_GAMEPIECE_KEY = "gamepiece";
+        public static readonly string REALTIME_DEFAULT_GAMEPIECE_KEY = "1";
+        public static readonly string REALTIME_TIMER_KEY = "timer";
+        public static readonly string EPOCH_KEY = "mc_epoch";
 
         //events codes
         public const byte GAME_DATA = 0;

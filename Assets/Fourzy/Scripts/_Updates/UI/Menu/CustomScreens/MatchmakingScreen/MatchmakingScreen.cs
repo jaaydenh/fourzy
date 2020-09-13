@@ -192,16 +192,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Debug.Log("Failed to join random room, creating new one...");
 
-            var options = new Photon.Realtime.RoomOptions { MaxPlayers = 2 };
-
-            //create new room
-            PhotonNetwork.CreateRoom(
-                Guid.NewGuid().ToString(),
-                options,
-                null);
-
-            //start timeout timer
-            StartRoutine("multiplayerTimeout", Constants.REALTIME_OPPONENT_WAIT_TIME, OnMultiplayerTimerTimedOut, null);
+            FourzyPhotonManager.CreateRoom();
         }
 
         private void OnRoomCreated(string roomName)
@@ -213,6 +204,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //unblock input
             SetInteractable(true);
             backButton.SetActive(true);
+
+            //start timeout timer
+            StartRoutine("multiplayerTimeout", Constants.REALTIME_OPPONENT_WAIT_TIME, OnMultiplayerTimerTimedOut, null);
         }
 
         private void OnCreateRoomFailed()

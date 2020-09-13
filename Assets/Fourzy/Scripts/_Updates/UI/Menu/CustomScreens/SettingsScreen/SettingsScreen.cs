@@ -19,7 +19,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             menuController.CloseCurrentScreen();
 
-            PersistantMenuController.instance.GetOrAddScreen<OnboardingScreen>().OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
+            PersistantMenuController.instance
+                .GetOrAddScreen<OnboardingScreen>()
+                .OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
         }
 
         public void ResetPuzzles()
@@ -44,6 +46,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_MAGIC);
 
         public void StartRealtime() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
+
+        public void ToggleRealtimeTimer() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_TIMER);
 
         protected override void OnInitialized()
         {

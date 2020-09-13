@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using ExitGames.Client.Photon;
+using Fourzy._Updates.Managers;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -93,6 +94,8 @@ namespace Fourzy
             base.OnConnectedToMaster();
 
             if (DEBUG) Debug.Log($"Connected to master.");
+
+            UpdatePlayerGamepiece(UserManager.Instance.gamePieceID);
 
             onConnectedToMaster?.Invoke();
 
@@ -217,7 +220,7 @@ namespace Fourzy
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable()
             {
-                [PhotonNetwork.IsMasterClient ? Constants.PLAYER_1_READY : Constants.PLAYER_2_READY] = true,
+                [PhotonNetwork.IsMasterClient ? Constants.REALTIME_PLAYER_1_READY : Constants.REALTIME_PLAYER_2_READY] = true,
             });
         }
 
@@ -238,8 +241,8 @@ namespace Fourzy
         }
 
         public static bool CheckPlayersReady() =>
-            (PhotonNetwork.IsMasterClient && GetRoomProperty(Constants.PLAYER_2_READY, false)) ||
-            (!PhotonNetwork.IsMasterClient && GetRoomProperty(Constants.PLAYER_1_READY, false));
+            (PhotonNetwork.IsMasterClient && GetRoomProperty(Constants.REALTIME_PLAYER_2_READY, false)) ||
+            (!PhotonNetwork.IsMasterClient && GetRoomProperty(Constants.REALTIME_PLAYER_1_READY, false));
 
         public static void JoinRandomRoom()
         {
@@ -263,6 +266,41 @@ namespace Fourzy
             lastTask = "";
             PhotonNetwork.JoinRandomRoom();
             instance.RunTimeoutRoutine();
+        }
+
+        public static void CreateRoom()
+        {
+            var options = new Photon.Realtime.RoomOptions
+            {
+                MaxPlayers = 2,
+                CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
+                {
+                    [Constants.REALTIME_TIMER_KEY] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER)
+                }
+            };
+
+            //create new room
+            PhotonNetwork.CreateRoom(
+                Guid.NewGuid().ToString(),
+                options,
+                null);
+
+            instance.RunTimeoutRoutine();
+        }
+
+        public static void UpdatePlayerGamepiece(string value)
+        {
+            if (PhotonNetwork.IsConnected)
+                PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable()
+                {
+                    [Constants.REALTIME_GAMEPIECE_KEY] = value,
+                });
+        }
+
+        public static string GetOpponentGamepiece()
+        {
+            Hashtable _porps = PhotonNetwork.PlayerListOthers[0].CustomProperties;
+            return _porps.ContainsKey(Constants.REALTIME_GAMEPIECE_KEY) ? _porps[Constants.REALTIME_GAMEPIECE_KEY].ToString() : Constants.REALTIME_DEFAULT_GAMEPIECE_KEY;
         }
 
         public void OnEvent(EventData photonEvent)

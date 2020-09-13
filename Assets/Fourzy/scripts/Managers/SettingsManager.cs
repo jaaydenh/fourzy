@@ -14,19 +14,23 @@ namespace Fourzy._Updates.Managers
         public static Action<bool> onDemoMode;
         public static Action<bool> onMagic;
         public static Action<bool> onAnalyticsEvent;
+        public static Action<bool> onLocalTimer;
+        public static Action<bool> onRealtimeTimer;
 
         public const string KEY_SFX = "SETTINGS_SFX";
         public const string KEY_AUDIO = "SETTINGS_AUDIO";
         public const string KEY_DEMO_MODE = "SETTINGS_DEMO_MODE";
         public const string KEY_ANALYTICS_EVENTS = "SETTINGS_ANALYTICS";
-        public const string KEY_PASS_N_PLAY_TIMER = "SETTINGS_TIMER";
         public const string KEY_MAGIC = "SETTINGS_MAGIC";
+        public const string KEY_REALTIME_TIMER = "SETTINGS_REALTIME_TIMER";
+        public const string KEY_LOCAL_TIMER = "SETTINGS_LOCAL_TIMER";
 
         public const bool DEFAULT_SFX = true;
         public const bool DEFAULT_AUDIO = true;
         public const bool DEFAULT_DEMO_MODE = false;
-        public const bool DEFAULT_PASS_N_PLAY_TIMER = true;
         public const bool DEFAULT_MAGIC = true;
+        public const bool DEFAULT_LOCAL_TIMER = true;
+        public const bool DEFAULT_REALTIME_TIMER = true;
 
         private static bool initialized = false;
 
@@ -46,8 +50,9 @@ namespace Fourzy._Updates.Managers
             [KEY_SFX] = DEFAULT_SFX,
             [KEY_AUDIO] = DEFAULT_AUDIO,
             [KEY_DEMO_MODE] = DEFAULT_DEMO_MODE,
-            [KEY_PASS_N_PLAY_TIMER] = DEFAULT_PASS_N_PLAY_TIMER,
             [KEY_MAGIC] = DEFAULT_MAGIC,
+            [KEY_LOCAL_TIMER] = DEFAULT_LOCAL_TIMER,
+            [KEY_REALTIME_TIMER] = DEFAULT_REALTIME_TIMER,
 
             //temp
             [KEY_ANALYTICS_EVENTS] = false,
@@ -81,6 +86,16 @@ namespace Fourzy._Updates.Managers
 
                 case KEY_MAGIC:
                     onMagic?.Invoke(value);
+
+                    break;
+
+                case KEY_REALTIME_TIMER:
+                    onRealtimeTimer?.Invoke(value);
+
+                    break;
+
+                case KEY_LOCAL_TIMER:
+                    onLocalTimer?.Invoke(value);
 
                     break;
             }

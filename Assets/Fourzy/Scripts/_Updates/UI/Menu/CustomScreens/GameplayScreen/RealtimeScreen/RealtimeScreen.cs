@@ -97,7 +97,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             statusAlphaTween.StopTween(true);
             statusScaleTween.StopTween(true);
 
-            menuController.CloseCurrentScreen(true);
+            CloseSelf();
         }
     }
 }

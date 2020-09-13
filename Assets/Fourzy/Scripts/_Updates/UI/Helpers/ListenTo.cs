@@ -22,6 +22,8 @@ namespace Fourzy._Updates.UI.Helpers
         private bool listensToDemoModeState = false;
         private bool listensToAnalyticsState = false;
         private bool listensToMagicState = false;
+        private bool listensToLocalTimer = false;
+        private bool listensToRealtimeTimer = false;
 
         protected void Awake()
         {
@@ -93,6 +95,26 @@ namespace Fourzy._Updates.UI.Helpers
 
                         break;
 
+                    case ListenValues.SETTINGS_LOCAL_TIMER_ON:
+                    case ListenValues.SETTINGS_LOCAL_TIMER_OFF:
+                        if (!listensToLocalTimer)
+                        {
+                            listensToLocalTimer = true;
+                            SettingsManager.onLocalTimer += OnLocalTimer;
+                        }
+
+                        break;
+
+                    case ListenValues.SETTINGS_REALTIME_TIMER_ON:
+                    case ListenValues.SETTINGS_REALTIME_TIMER_OFF:
+                        if (!listensToRealtimeTimer)
+                        {
+                            listensToRealtimeTimer = true;
+                            SettingsManager.onRealtimeTimer += OnRealtimeTimer;
+                        }
+
+                        break;
+
                     case ListenValues.PLACEMENT_STYLE:
                         GameManager.onPlacementStyle += OnPlacementSyle;
 
@@ -153,10 +175,30 @@ namespace Fourzy._Updates.UI.Helpers
 
                     case ListenValues.SETTINGS_MAGIC_ON:
                     case ListenValues.SETTINGS_MAGIC_OFF:
-                        if (!listensToMagicState)
+                        if (listensToMagicState)
                         {
                             listensToMagicState = false;
                             SettingsManager.onMagic -= OnMagic;
+                        }
+
+                        break;
+
+                    case ListenValues.SETTINGS_REALTIME_TIMER_ON:
+                    case ListenValues.SETTINGS_REALTIME_TIMER_OFF:
+                        if (listensToRealtimeTimer)
+                        {
+                            listensToRealtimeTimer = false;
+                            SettingsManager.onRealtimeTimer -= OnRealtimeTimer;
+                        }
+
+                        break;
+
+                    case ListenValues.SETTINGS_LOCAL_TIMER_ON:
+                    case ListenValues.SETTINGS_LOCAL_TIMER_OFF:
+                        if (listensToLocalTimer)
+                        {
+                            listensToLocalTimer = false;
+                            SettingsManager.onLocalTimer -= OnLocalTimer;
                         }
 
                         break;
@@ -210,6 +252,20 @@ namespace Fourzy._Updates.UI.Helpers
 
                             break;
 
+
+                        case ListenValues.SETTINGS_LOCAL_TIMER_ON:
+                        case ListenValues.SETTINGS_LOCAL_TIMER_OFF:
+                            OnLocalTimer(SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER));
+
+                            break;
+
+
+                        case ListenValues.SETTINGS_REALTIME_TIMER_ON:
+                        case ListenValues.SETTINGS_REALTIME_TIMER_OFF:
+                            OnRealtimeTimer(SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER));
+
+                            break;
+
                         case ListenValues.PLACEMENT_STYLE:
                             OnPlacementSyle(GameManager.Instance.placementStyle);
 
@@ -219,50 +275,50 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void UpdateNoInternet(bool state)
         {
-            if (!state)
-                foreach (ListenTarget target in sorted[ListenValues.NO_INTERNET_ACCESS]) target.events.Invoke(string.Format(target.targetText, state));
-            else
-                foreach (ListenTarget target in sorted[ListenValues.INTERNET_ACCESS]) target.events.Invoke(string.Format(target.targetText, state));
+            foreach (ListenTarget target in sorted[state ? ListenValues.INTERNET_ACCESS : ListenValues.NO_INTERNET_ACCESS]) 
+                target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnSfx(bool state)
         {
-            if (state)
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_SFX_ON]) target.events.Invoke(string.Format(target.targetText, state));
-            else
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_SFX_OFF]) target.events.Invoke(string.Format(target.targetText, state));
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_SFX_ON: ListenValues.SETTINGS_SFX_OFF]) 
+                target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnAudio(bool state)
         {
-            if (state)
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_AUDIO_ON]) target.events.Invoke(string.Format(target.targetText, state));
-            else
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_AUDIO_OFF]) target.events.Invoke(string.Format(target.targetText, state));
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_AUDIO_ON : ListenValues.SETTINGS_AUDIO_OFF]) 
+                target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnDemoMode(bool state)
         {
-            if (state)
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_DEMO_MODE_ON]) target.events.Invoke(string.Format(target.targetText, state));
-            else
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_DEMO_MODE_OFF]) target.events.Invoke(string.Format(target.targetText, state));
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_DEMO_MODE_ON : ListenValues.SETTINGS_DEMO_MODE_OFF])
+                target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnAnalyticsMode(bool state)
         {
-            if (state)
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_ANALYTICS_ON]) target.events.Invoke(string.Format(target.targetText, state));
-            else
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_ANALYTICS_OFF]) target.events.Invoke(string.Format(target.targetText, state));
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_ANALYTICS_ON : ListenValues.SETTINGS_ANALYTICS_OFF]) 
+                target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnMagic(bool state)
         {
-            if (state)
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_MAGIC_ON]) target.events.Invoke(string.Format(target.targetText, state));
-            else
-                foreach (ListenTarget target in sorted[ListenValues.SETTINGS_MAGIC_OFF]) target.events.Invoke(string.Format(target.targetText, state));
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_MAGIC_ON : ListenValues.SETTINGS_MAGIC_OFF])
+                target.events.Invoke(string.Format(target.targetText, state));
+        }
+
+        public void OnRealtimeTimer(bool state)
+        {
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_REALTIME_TIMER_ON : ListenValues.SETTINGS_REALTIME_TIMER_OFF]) 
+                target.events.Invoke(string.Format(target.targetText, state));
+        }
+
+        public void OnLocalTimer(bool state)
+        {
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_LOCAL_TIMER_ON : ListenValues.SETTINGS_LOCAL_TIMER_OFF]) 
+                target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnPlacementSyle(GameManager.PlacementStyle state)
@@ -318,5 +374,9 @@ namespace Fourzy._Updates.UI.Helpers
         SETTINGS_ANALYTICS_OFF,
         SETTINGS_MAGIC_ON,
         SETTINGS_MAGIC_OFF,
+        SETTINGS_REALTIME_TIMER_ON,
+        SETTINGS_REALTIME_TIMER_OFF,
+        SETTINGS_LOCAL_TIMER_ON,
+        SETTINGS_LOCAL_TIMER_OFF,
     }
 }

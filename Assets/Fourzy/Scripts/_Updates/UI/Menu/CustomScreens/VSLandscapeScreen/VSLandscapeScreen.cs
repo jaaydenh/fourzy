@@ -19,7 +19,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public FlowLayoutGroup gamepiecesParent;
         public VSScreenReadyButton readyButton;
-        public VSScreenToggle timerToggle;
+        public ButtonExtended timerToggle;
         public MiniGameboardWidget selectedBoardWidget;
         public ButtonExtended areaPicker;
         public ButtonExtended p1Button;
@@ -76,6 +76,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 else
                     demoCounter = 0;
             }
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
+            timerToggle.SetState(p2DifficultyLevel < 0);
         }
 
         /// <summary>
@@ -245,6 +252,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (p2DifficultyLevel > -1)
             {
+                timerToggle.SetState(true);
+
                 p2Button.SetLabel("P2");
                 p2DifficultyLevel = -1;
                 profiles[1].DisplayDifficulty(-1);
@@ -268,6 +277,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 difficultyDropdown.Open(true).SetPosition(profiles[0].transform, Vector2.zero).SetOnClick(OnP1DifficultySelected);
         }
 
+        public void ToggleLocalTimer() => SettingsManager.Toggle(SettingsManager.KEY_LOCAL_TIMER);
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -285,9 +296,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             readyButton.SetState(false);
 
             CreatePieces();
-
-            timerToggle.SetState(SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER), false);
-            timerToggle.onValueSet += TimerToggleValueSet;
 
             if (CustomInputManager.GamepadCount < 2)
             {
@@ -398,12 +406,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (prev != null) prev.SelectAsPlayer(GetSameProfiles(prev, index));
 
             selectedPlayers[index].SelectAsPlayer(GetSameProfiles(piece, -1));
-            selectedPlayers[index].SetP2AsCPU(p2DifficultyLevel > -1);
-        }
 
-        private void TimerToggleValueSet(bool value)
-        {
-            SettingsManager.Set(SettingsManager.KEY_PASS_N_PLAY_TIMER, value);
+            bool isP2CPU = p2DifficultyLevel > -1;
+
+            selectedPlayers[index].SetP2AsCPU(isP2CPU);
         }
 
         private void OnBoardSelected(GameBoardDefinition boardDefinition)
@@ -429,6 +435,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             p2DifficultyLevel = option;
 
             profiles[1].DisplayDifficulty(option);
+
+            timerToggle.SetState(p2DifficultyLevel < 0);
         }
 
         public enum CURRENT_VS_STAGE

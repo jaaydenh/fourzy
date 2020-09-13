@@ -207,6 +207,8 @@ namespace Fourzy
             DEBUG = _DEBUG;
 
             DontDestroyOnLoad(go);
+
+            if (DEBUG) Debug.Log("Analytics manager initialized.");
         }
 
         public void LogGame(

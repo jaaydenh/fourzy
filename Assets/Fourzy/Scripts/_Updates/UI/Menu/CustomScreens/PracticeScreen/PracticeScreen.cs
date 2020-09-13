@@ -63,7 +63,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             LoadBoard(currentBoard);
 
-            SetTimerState(SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER));
+            SetTimerState(SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER));
 
             //configure body
             if (GameManager.Instance.Landscape)
@@ -107,7 +107,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 null,
                 LocalizationManager.Value("ok"));
 
-        public void ToggleTimer() => SetTimerState(!SettingsManager.Get(SettingsManager.KEY_PASS_N_PLAY_TIMER));
+        public void ToggleTimer() => SetTimerState(!SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER));
 
         public void SetArea(PracticeScreenAreaSelectWidget widget)
         {
@@ -145,7 +145,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (player1Profile.aiProfile != AIProfile.Player)
                 player1 = new Player(1, player1Profile.aiProfile.ToString(), player1Profile.aiProfile) { HerdId = player1Profile.prefabData.data.ID };
             else
-                player1 = new Player(1, LocalizationManager.Value("player_one")) { PlayerString = UserManager.Instance.userId };
+                player1 = new Player(1, LocalizationManager.Value("player_one")) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceID };
 
             Player player2;
             if (player2Profile.aiProfile != AIProfile.Player)
@@ -153,9 +153,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else
             {
                 if (player1.Profile == AIProfile.Player)
-                    player2 = new Player(2, LocalizationManager.Value("player_two"));
+                    player2 = new Player(2, LocalizationManager.Value("player_two")) { HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID };
                 else
-                    player2 = new Player(2, LocalizationManager.Value("player_one")) { PlayerString = UserManager.Instance.userId };
+                    player2 = new Player(2, LocalizationManager.Value("player_one")) { PlayerString = UserManager.Instance.userId, HerdId = player1Profile.prefabData.data.ID };
             }
 
             GameType type = GameType.PASSANDPLAY;
@@ -198,7 +198,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void SetTimerState(bool value)
         {
             timerToggle.TryInvoke(value ? "on" : "off");
-            SettingsManager.Set(SettingsManager.KEY_PASS_N_PLAY_TIMER, value);
+            SettingsManager.Set(SettingsManager.KEY_LOCAL_TIMER, value);
         }
 
         private void SetAreaWidget(PracticeScreenAreaSelectWidget widget)

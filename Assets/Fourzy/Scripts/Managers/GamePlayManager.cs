@@ -223,9 +223,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (PhotonNetwork.IsMasterClient)
             {
                 //ready opponent
-                FourzyGameModel.Model.Player opponen = new FourzyGameModel.Model.Player(2, PhotonNetwork.PlayerListOthers[0].NickName);
-                opponen.HerdId = PhotonNetwork.PlayerListOthers[0].CustomProperties.ContainsKey("gp") ? PhotonNetwork.PlayerListOthers[0].CustomProperties["gp"].ToString() : "1";
-                opponen.PlayerString = "2";
+                FourzyGameModel.Model.Player opponen = new FourzyGameModel.Model.Player(2, PhotonNetwork.PlayerListOthers[0].NickName)
+                {
+                    HerdId = FourzyPhotonManager.GetOpponentGamepiece(),
+                    PlayerString = "2"
+                };
 
                 //load realtime game
                 ClientFourzyGame _game = new ClientFourzyGame(GameContentManager.Instance.currentTheme.themeID, UserManager.Instance.meAsPlayer, opponen, 1)
@@ -238,7 +240,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 var eventOptions = new Photon.Realtime.RaiseEventOptions();
                 eventOptions.Flags.HttpForward = true;
                 eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
-                Debug.Log("CreateRealtimeGame");
                 var result = PhotonNetwork.RaiseEvent(Constants.GAME_DATA, JsonConvert.SerializeObject(gameStateData), eventOptions, SendOptions.SendReliable);
                 Debug.Log("Photon create game event result: " + result);
                 LoadGame(_game);
@@ -789,7 +790,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable values)
         {
-            if (values.ContainsKey(Constants.PLAYER_1_READY) || values.ContainsKey(Constants.PLAYER_2_READY))
+            if (values.ContainsKey(Constants.REALTIME_PLAYER_1_READY) || values.ContainsKey(Constants.REALTIME_PLAYER_2_READY))
             {
                 if (PhotonNetwork.IsMasterClient)
                 {

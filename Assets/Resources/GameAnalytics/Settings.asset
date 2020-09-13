@@ -34,6 +34,9 @@ MonoBehaviour:
   Build:
   - 1.3.6
   - 1.3.6
+  SelectedPlatformOrganization:
+  - 
+  - 
   SelectedPlatformStudio:
   - SuperMove Games
   - SuperMove Games
@@ -41,6 +44,7 @@ MonoBehaviour:
   - Fourzy
   - Fourzy - Android
   SelectedPlatformGameID: 5d84000070840000
+  SelectedOrganization: 
   SelectedStudio: 0100000001000000
   SelectedGame: 0200000001000000
   NewVersion: 6.0.14
@@ -61,6 +65,8 @@ MonoBehaviour:
   SignUpOpen: 0
   StudioName: SuperMove Games
   GameName: Fourzy
+  OrganizationName: 
+  OrganizationIdentifier: 
   EmailGA: jaayden.halko@gmail.com
   IntroScreen: 0
   InfoLogEditor: 0
@@ -96,10 +102,10 @@ MonoBehaviour:
   macIcon: {fileID: 0}
   windowsPhoneIcon: {fileID: 0}
   UsePlayerSettingsBuildNumber: 1
-  SubmitErrors: 1
+  SubmitErrors: 0
   MaxErrorCount: 10
-  SubmitFpsAverage: 1
-  SubmitFpsCritical: 1
+  SubmitFpsAverage: 0
+  SubmitFpsCritical: 0
   IncludeGooglePlay: 1
   FpsCriticalThreshold: 20
   FpsCirticalSubmitInterval: 1

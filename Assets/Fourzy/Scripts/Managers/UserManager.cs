@@ -58,12 +58,7 @@ namespace Fourzy
             {
                 PlayerPrefsWrapper.SetSelectedGamePiece(value);
 
-                if (PhotonNetwork.IsConnected)
-                    //update photon player property
-                    PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable()
-                    {
-                        ["gp"] = value,
-                    });
+                FourzyPhotonManager.UpdatePlayerGamepiece(value);
             }
         }
 
@@ -269,6 +264,8 @@ namespace Fourzy
                     ChangeDisplayNameResult,
                     OnPlayFabError);
             }
+            else
+                settingRandomName = false;
         }
 
         public void SetProfileLanguage(string language, EntityKey entity)
