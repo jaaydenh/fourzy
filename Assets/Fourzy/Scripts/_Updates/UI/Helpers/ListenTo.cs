@@ -270,6 +270,11 @@ namespace Fourzy._Updates.UI.Helpers
                             OnPlacementSyle(GameManager.Instance.placementStyle);
 
                             break;
+
+                        case ListenValues.APP_VERSION:
+                            OnVersion();
+
+                            break;
                     }
         }
 
@@ -325,6 +330,11 @@ namespace Fourzy._Updates.UI.Helpers
         {
             foreach (ListenTarget target in sorted[ListenValues.PLACEMENT_STYLE]) target.events.Invoke(string.Format(target.targetText, (int)state));
         }
+
+        public void OnVersion()
+        {
+            foreach (ListenTarget target in sorted[ListenValues.APP_VERSION]) target.events.Invoke(string.Format(target.targetText, Application.version));
+        }
     }
 
     [Serializable]
@@ -378,5 +388,6 @@ namespace Fourzy._Updates.UI.Helpers
         SETTINGS_REALTIME_TIMER_OFF,
         SETTINGS_LOCAL_TIMER_ON,
         SETTINGS_LOCAL_TIMER_OFF,
+        APP_VERSION,
     }
 }

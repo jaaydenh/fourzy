@@ -646,6 +646,10 @@ namespace Fourzy._Updates.ClientModel
 
             Initialize(false);
 
+            //need to reassign values, lazy fix
+            _Type = _type;
+            AssignPrefabs(true);
+
             return State;
         }
 
@@ -712,9 +716,9 @@ namespace Fourzy._Updates.ClientModel
             foreach (KeyValuePair<int, Player> player in State.Players) magic.Add(player.Key, player.Value.Magic);
         }
 
-        private void AssignPrefabs()
+        private void AssignPrefabs(bool force = false)
         {
-            if (playerOnePrefabData == null)
+            if (playerOnePrefabData == null || force)
             {
                 string player1HerdId = "1";
                 if (State.Players[1].HerdId != null) player1HerdId = State.Players[1].HerdId;
@@ -725,7 +729,7 @@ namespace Fourzy._Updates.ClientModel
                     playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(UserManager.Instance.gamePieceID);
             }
 
-            if (playerTwoPrefabData == null)
+            if (playerTwoPrefabData == null || force)
             {
                 string player2HerdId = "1";
                 if (State.Players[2].HerdId != null) player2HerdId = State.Players[2].HerdId;

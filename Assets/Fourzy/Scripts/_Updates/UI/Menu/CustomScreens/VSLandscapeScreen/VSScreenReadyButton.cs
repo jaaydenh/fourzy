@@ -1,11 +1,17 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Tween;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class VSScreenReadyButton : WidgetBase
     {
+        public Sprite buttonOnGraphics;
+        public Sprite buttonOffGraphics;
+
+        public Image buttonImage;
         public ColorTween[] tweens;
 
         private bool previousState = true;
@@ -21,6 +27,8 @@ namespace Fourzy._Updates.UI.Widgets
                     else
                         tween.PlayForward(true);
                 }
+
+                buttonImage.sprite = state ? buttonOnGraphics : buttonOffGraphics;
 
                 previousState = state;
             }

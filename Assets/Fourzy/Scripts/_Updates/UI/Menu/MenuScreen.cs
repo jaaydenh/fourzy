@@ -139,7 +139,7 @@ namespace Fourzy._Updates.UI.Menu
 
                 SetInteractable(true);
                 canvasGroup.blocksRaycasts = true;
-            }
+            }   
         }
 
         /// <summary>

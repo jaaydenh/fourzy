@@ -135,9 +135,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void Rematch()
         {
-            GamePlayManager.instance.Rematch();
-
             if (isCurrent) menuController.CloseCurrentScreen(true);
+            GamePlayManager.instance.Rematch();
         }
 
         public void NextGame()
