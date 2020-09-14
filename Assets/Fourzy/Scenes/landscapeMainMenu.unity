@@ -23368,7 +23368,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 42
+          selectedMember: 44
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: StartGauntletAIPack
@@ -33873,7 +33873,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5157298072539836330}
-  - component: {fileID: 5157298072539836335}
   - component: {fileID: 5157298072539836332}
   - component: {fileID: 5157298072539836333}
   - component: {fileID: 5157298072539836334}
@@ -34003,22 +34002,6 @@ MonoBehaviour:
       propagate: 0
   labels: []
   badges: []
---- !u!114 &5157298072539836335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5157298072539836331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2985329f071c0f4bb6f019582897536, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onGraphics: {fileID: 133525159}
-  offGraphics: {fileID: 1256248022}
-  label: {fileID: 1483979281}
-  localizedText: {fileID: 1483979283}
 --- !u!114 &5157298072539836336
 MonoBehaviour:
   m_ObjectHideFlags: 0

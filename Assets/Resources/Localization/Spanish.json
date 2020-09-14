@@ -37,6 +37,10 @@
       "value": "Espalda"
     },
     {
+      "key": "back_to_menu",
+      "value": "Volver al menú"
+    },
+    {
       "key": "buy",
       "value": "Comprar"
     },

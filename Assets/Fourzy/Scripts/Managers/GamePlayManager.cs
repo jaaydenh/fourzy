@@ -448,6 +448,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
                     var result = PhotonNetwork.RaiseEvent(Constants.REMATCH, null, eventOptions, SendOptions.SendReliable);
                     Debug.Log("Photon rematch event result: " + result);
+
                     break;
             }
         }

@@ -37,6 +37,10 @@
       "value": "Back"
     },
     {
+      "key": "back_to_menu",
+      "value": "Back To Menu"
+    },
+    {
       "key": "buy",
       "value": "Buy"
     },

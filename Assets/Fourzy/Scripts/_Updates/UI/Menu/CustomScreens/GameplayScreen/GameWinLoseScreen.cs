@@ -5,6 +5,7 @@ using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public Color winColor;
         public Color loseColor;
         public TMP_Text stateLabel;
+        public TMP_Text tapToContinueLabel;
+        public RectTransform piecesParent;
 
         public GameObject buttonsRow;
         public ButtonExtended nextGameButton;
@@ -34,6 +37,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             menuController.OpenScreen(this);
 
             this.game = game;
+            string bgTapText = "";
 
             switch (game._Mode)
             {
@@ -41,13 +45,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     if (game.draw)
                     {
                         stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
+                        bgTapText = LocalizationManager.Value("continue");
                     }
                     else
                     {
                         if (game.IsWinner() && (game.myMembers.Count > 0 || game.puzzleData.pack.complete))
+                        {
                             stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                            bgTapText = LocalizationManager.Value("continue");
+                        }
                         else
+                        {
                             stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
+
+                            if (game.myMembers.Count > 0)
+                                bgTapText = LocalizationManager.Value("rematch");
+                            else
+                                bgTapText = LocalizationManager.Value("back_to_menu");
+                        }
                     }
 
                     break;
@@ -87,6 +102,25 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (RewardsScreen.WillDisplayRewardsScreen(game) || (game.puzzleData && game.puzzleData.pack))
             {
                 //display 'tap to continue'
+                if (string.IsNullOrEmpty(bgTapText))
+                {
+                    switch (Application.platform)
+                    {
+                        case RuntimePlatform.IPhonePlayer:
+                        case RuntimePlatform.Android:
+                            bgTapText = LocalizationManager.Value("tap_to_continue");
+
+                            break;
+
+                        default:
+                            bgTapText = LocalizationManager.Value("back_to_menu");
+
+                            break;
+
+                    }
+                }
+
+                tapToContinueLabel.text = bgTapText;
                 tapToContinue.PlayForward(true);
                 SetButtonRowState(false);
 
@@ -94,7 +128,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             else
                 SetButtonRowState(true);
-            
+
             //gamepieces
             foreach (GamePieceView gamepiece in gamePieces) Destroy(gamepiece.gameObject);
             gamePieces.Clear();
@@ -105,8 +139,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //move them to ui layer
             for (int index = 0; index < winningGamepieces.Count; index++)
             {
-                GamePieceView gamepieceView = Instantiate(winningGamepieces[index], transform);
-                
+                GamePieceView gamepieceView = Instantiate(winningGamepieces[index], piecesParent);
+
                 gamepieceView.transform.position = winningGamepieces[index].transform.position;
                 gamepieceView.transform.localScale = (GameManager.Instance.Landscape ? 89f : 75f) * Vector3.one;
                 gamepieceView.PlayWinAnimation(index * .15f + .15f);
@@ -171,7 +205,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         else
                         {
                             if (game.myMembers.Count == 0)
-                                menuController.GetOrAddScreen<GauntletLostPrompt>()._Prompt(game);
+                                OnGauntletLost();
                             else
                                 menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
                         }
@@ -179,7 +213,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     else
                     {
                         if (game.myMembers.Count == 0)
-                            menuController.GetOrAddScreen<GauntletLostPrompt>()._Prompt(game);
+                            OnGauntletLost();
                         else
                             Rematch();
                     }
@@ -254,12 +288,40 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        private void OnGauntletLost()
+        {
+            switch (Application.platform)
+            {
+                case RuntimePlatform.IPhonePlayer:
+                case RuntimePlatform.Android:
+                    menuController.GetOrAddScreen<GauntletLostPrompt>()._Prompt(game);
+
+                    break;
+
+                default:
+                    menuController
+                        .GetOrAddScreen<PromptScreen>()
+                        .Prompt("Challenge Failed", "Gauntlet challenge failed, want to restart it?",
+                            () =>
+                            {
+                                game.puzzleData.pack.ResetPlayerPrefs();
+                                game.AddMembers(Constants.GAUNTLET_DEFAULT_MOVES_COUNT);
+
+                                menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack);
+                            },
+                            () => GamePlayManager.instance.BackButtonOnClick());
+
+                    break;
+            }
+        }
+
         private void SetButtonRowState(bool value)
         {
             buttonsRow.SetActive(value);
 
             if (value)
             {
+                //next game button
                 switch (game._Type)
                 {
                     case GameType.TURN_BASED:
