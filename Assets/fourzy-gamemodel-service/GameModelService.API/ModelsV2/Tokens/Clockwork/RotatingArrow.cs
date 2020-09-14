@@ -91,6 +91,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public RotatingArrowToken(Direction Orientation, Rotation RotateDirection, int Frequency = 1)
         {
             StandardTokenInit();

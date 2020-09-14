@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace FourzyGameModel.Model
 {
@@ -31,11 +32,19 @@ namespace FourzyGameModel.Model
         [JsonProperty("special")]
         public int SpecialAbilityCount { get; set; }
 
+        [JsonProperty("spells")]
+        public List<ISpell> AvailableSpells { get; set;}
+               
+        //I think we should remove these from the player object.  No impact on gameplay
+
         [JsonProperty("selectedArea")]
         public Area SelectedArea { get; set; }
 
         [JsonProperty("experience")]
         public PlayerExperience Experience { get; set; }
+
+        //Consider removing the above properties and place in a factory for creating a game.
+
 
         [JsonConstructor]
         public Player(int PlayerId, string DisplayName, AIProfile Profile = AIProfile.Player)
@@ -49,6 +58,7 @@ namespace FourzyGameModel.Model
             this.Profile = Profile;
             this.SpecialAbilityCount = 0;
             this.BossType = BossType.None;
+            this.AvailableSpells = new List<ISpell>() { };
         }
 
         public Player(Player original)
@@ -65,6 +75,11 @@ namespace FourzyGameModel.Model
             this.Profile = original.Profile;
             this.SpecialAbilityCount = original.SpecialAbilityCount;
             this.BossType = original.BossType;
+
+            this.AvailableSpells = new List<ISpell>() { };
+            if (original.AvailableSpells != null)
+                foreach (ISpell s in original.AvailableSpells) this.AvailableSpells.Add(s);
+
         }
 
         public void UseSpecialAbility()

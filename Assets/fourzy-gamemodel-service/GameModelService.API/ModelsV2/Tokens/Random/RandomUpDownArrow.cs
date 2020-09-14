@@ -52,6 +52,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public bool HasDynamicFeature
         {
             get

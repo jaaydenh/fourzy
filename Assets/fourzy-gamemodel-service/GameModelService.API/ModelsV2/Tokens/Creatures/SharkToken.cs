@@ -70,6 +70,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public SharkToken(Direction Orientation, bool OnSurface = false)
         {
             StandardTokenInit();

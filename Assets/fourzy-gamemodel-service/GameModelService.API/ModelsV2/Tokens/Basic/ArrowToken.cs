@@ -137,7 +137,15 @@ namespace FourzyGameModel.Model
                 return TokenConstants.COMPLEXITY_BASIC;                
             }
         }
-               
+
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public Direction GetDirection(MovingPiece Piece)
         {
             if (Active) return Orientation;

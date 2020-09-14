@@ -73,6 +73,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public HexSpellToken(int PlayerId, int Duration = SpellConstants.DefaultHexDuration)
         {
             StandardTokenInit();
@@ -178,11 +186,11 @@ namespace FourzyGameModel.Model
 
         public void StartOfTurn(int PlayerId)
         {
-            if (PlayerId == this.PlayerId)
-            {
+            //if (PlayerId == this.PlayerId)
+            //{
                 Countdown--;
                 if (Countdown == 0 && Visible) Fade();
-            }
+            //}
         }
     }
 }

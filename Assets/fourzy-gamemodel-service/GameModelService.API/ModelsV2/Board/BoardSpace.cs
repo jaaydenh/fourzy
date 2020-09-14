@@ -98,6 +98,21 @@ namespace FourzyGameModel.Model
                 return false;
             }
         }
+
+        public bool ContainsDisruption
+        { 
+            get
+            {
+                //default is false, if any tokens provide is movable, then entire square is movable.
+                foreach (IToken t in Tokens.Values)
+                {
+                    if (t.DisruptsWin) return true;
+                }
+                return false;
+            }
+        }
+        
+
         public bool ContainsOnlyTerrain
         {
             get
@@ -498,10 +513,12 @@ namespace FourzyGameModel.Model
         }
 
         /// <summary>The player Id of the piece that controls this space</summary>
+        /// some tokens and effects to prevent winning.
         public int Control
         {
             get
             {
+                if (ContainsDisruption) return 0;
                 if (ContainsPiece) return ActivePiece.PlayerId;
                 return 0;
             }
@@ -643,6 +660,17 @@ namespace FourzyGameModel.Model
             foreach (KeyValuePair<int, IToken> t in Tokens.OrderBy(key => key.Key))
             {
                 if (t.Value.Type == Type)
+                {
+                    Tokens.Remove(t.Key);
+                }
+            }
+        }
+
+        public void RemoveTerrain()
+        {
+            foreach (KeyValuePair<int, IToken> t in Tokens.OrderBy(key => key.Key))
+            {
+                if (t.Value.Classification == TokenClassification.TERRAIN)
                 {
                     Tokens.Remove(t.Key);
                 }

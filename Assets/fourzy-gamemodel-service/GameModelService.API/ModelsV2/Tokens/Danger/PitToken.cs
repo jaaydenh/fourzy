@@ -69,6 +69,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public bool Filled { get; set; }
 
         public PitToken(bool Filled = false)

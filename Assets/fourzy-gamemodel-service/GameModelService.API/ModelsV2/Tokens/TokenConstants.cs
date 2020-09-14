@@ -31,6 +31,7 @@ namespace FourzyGameModel.Model
         public const char CircleBomb = '0';
         public const char Cold = 'g';
         public const char CrossBomb = '-';
+        public const char Darkness = 'd';
         public const char Fallaway = 'v';
         public const char Fire = 'F';
         public const char Flowers = 'f';
@@ -44,12 +45,14 @@ namespace FourzyGameModel.Model
         public const char Guard = '!';
         public const char Grass = ',';
         public const char Hex = 'H';
+        public const char Hold = 'j';
         public const char HiddenBomb = 'h';
         public const char Ice = 'i';
         public const char IceBlock = 'I';
         public const char Lava = 'l';
         public const char LeftTurn = ')';
         public const char Lure = 'K';
+        public const char MagicWater = 'w';
         public const char MoveBlocker = 'M';
         public const char MovingCloud = 'C';
         public const char MovingGhost = 'o';
@@ -59,6 +62,10 @@ namespace FourzyGameModel.Model
         public const char PopUpBlocker = 'U';
         public const char Portal = '@';
         public const char Puddle = 'p';
+        public const char PreGoop = 'P';
+        public const char PreIce = '6';
+        public const char Prison = 'r';
+        public const char Rainbow = 'R';
         public const char RandomFourWay = ':';
         public const char RandomLeftRight = '_';
         public const char RandomUpDown = '|';
@@ -69,12 +76,16 @@ namespace FourzyGameModel.Model
         public const char Snow = '*';
         public const char Snowman = '8';
         public const char Spider = '9';
+        public const char Specter = '3';
         public const char SpiderWeb = 'W';
         public const char SpringyBlocker = '`';
+        public const char Sprout = 'u';
         public const char Sticky = 'S';
         public const char Switch = ']';
         public const char ToggleArrow = '^';
+        public const char Trap = 't';
         public const char TrapDoor = '/';
+        public const char TrickleWater = 'k';
         public const char ThinIce = '2';
         public const char Quicksand = 'q';
         public const char Volcano = 'V';
@@ -92,6 +103,8 @@ namespace FourzyGameModel.Model
 
         public const char Clockwise = '+';
         public const char CounterClockwise = '-';
+
+        public const int DefaultCountdown = 4;
 
         public const int COMPLEXITY_SIMPLE = 1;
         public const int COMPLEXITY_BASIC = 2;

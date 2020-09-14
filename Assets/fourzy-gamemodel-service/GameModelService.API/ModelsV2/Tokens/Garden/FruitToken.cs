@@ -68,6 +68,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public bool Squashed { get; set; }
 
         public FruitToken()

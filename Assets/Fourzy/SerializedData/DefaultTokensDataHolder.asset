@@ -301,8 +301,8 @@ MonoBehaviour:
       tokenType: 20
       tokenIcon: {fileID: 0}
       enabled: 1
-      isSpell: 0
-      spellID: 0
+      isSpell: 1
+      spellID: 12
       basePrice: 50
       description: token_desc_lure
       showBackgroundTile: 0

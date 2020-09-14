@@ -72,7 +72,15 @@ namespace FourzyGameModel.Model
                 return TokenConstants.COMPLEXITY_MEDIUM;
             }
         }
-        
+
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public VolcanoToken()
         {
 

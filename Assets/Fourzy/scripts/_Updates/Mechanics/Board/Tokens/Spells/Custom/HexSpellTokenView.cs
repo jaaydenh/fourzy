@@ -22,9 +22,7 @@ namespace Fourzy._Updates.Mechanics.Board
             if (spell.SpellId != SpellId.HEX) return;
 
             HexSpellToken hex = spell as HexSpellToken;
-            //currentCountdownValue = hex.Countdown;
-            //temp solutions, as HEX token does not exists at this moment, it only getting creating from spell inside model code
-            currentCountdownValue = 7;
+            currentCountdownValue = SpellConstants.DefaultHexDuration - 1;
 
             countdown.SetValue(currentCountdownValue);
         }

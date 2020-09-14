@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FourzyGameModel.Model
 {
@@ -27,6 +28,21 @@ namespace FourzyGameModel.Model
             this.Cost = SpellConstants.CostHexSpell;
             this.PlayerId = PlayerId;
             this.RequiresLocation = true;
+        }
+
+        public List<BoardLocation> GetValidSpellLocations(GameBoard Board)
+        {
+            List<BoardLocation> Locations = new List<BoardLocation>() { };
+
+            foreach (BoardSpace s in Board.Contents)
+            {
+                if (!s.ContainsSpell
+                        && !Board.Corners.Contains(s.Location)
+                        && !s.ContainsPiece)
+                    Locations.Add(s.Location);
+            }
+
+            return Locations;
         }
 
         public bool Cast(GameState State)

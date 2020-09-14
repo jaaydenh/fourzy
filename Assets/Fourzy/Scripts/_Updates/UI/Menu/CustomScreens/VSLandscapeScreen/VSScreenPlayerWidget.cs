@@ -19,6 +19,7 @@ namespace Fourzy._Updates.UI.Widgets
         public GameObject difficultiesHolder;
         public GameObject random;
         public GameObject[] difficultyLevels;
+        public LocalizedText localizedText;
 
         [Header("Spells")]
         public TokenWidgetSmall spellPrefab;
@@ -50,7 +51,7 @@ namespace Fourzy._Updates.UI.Widgets
                 profileImage.color = Color.clear;
 
                 random.SetActive(false);
-                nameLabel.text = "";
+                localizedText.UpdateLocale();
             }
 
             _Update();

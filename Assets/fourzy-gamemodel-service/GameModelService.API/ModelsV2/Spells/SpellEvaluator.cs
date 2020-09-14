@@ -14,14 +14,11 @@ namespace FourzyGameModel.Model
 
             switch (Spell.SpellId)
             {
-                case SpellId.HEX:
-                    foreach (BoardSpace s in Board.Contents)
-                    {
-                        if (!s.ContainsSpell 
-                                && !Board.Corners.Contains(s.Location)
-                                && !s.ContainsPiece     )  
-                            Locations.Add(s.Location);
-                    }
+                case SpellId.SUN:
+                    int a = 1;
+                    break;
+                default:
+                    Locations = Spell.GetValidSpellLocations(Board);
                     break;
             }
 

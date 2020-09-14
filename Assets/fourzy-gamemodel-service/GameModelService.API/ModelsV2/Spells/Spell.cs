@@ -1,4 +1,6 @@
-﻿namespace FourzyGameModel.Model
+﻿using System.Collections.Generic;
+
+namespace FourzyGameModel.Model
 {
     public interface ISpell 
     {
@@ -8,8 +10,7 @@
         SpellId SpellId { get;  }
         int Cost { get; set; }
         bool Cast(GameState State);
-        void StartOfTurn(int PlayerId);
-        string Export();
         bool RequiresLocation { get; set; }
+        List<BoardLocation> GetValidSpellLocations(GameBoard Board);
     }
 }

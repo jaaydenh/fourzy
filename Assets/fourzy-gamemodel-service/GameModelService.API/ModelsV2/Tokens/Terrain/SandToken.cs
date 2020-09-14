@@ -69,6 +69,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public SandToken()
         {
             StandardTokenInit();

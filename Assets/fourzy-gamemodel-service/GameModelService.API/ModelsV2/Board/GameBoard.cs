@@ -126,6 +126,40 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public List<BoardLocation> Edge(Direction EdgeDirection)
+        {
+            List<BoardLocation> Locations = new List<BoardLocation>();
+            switch (EdgeDirection)
+            {
+                case Direction.UP:
+                    for (int r = 1; r < Rows - 1; r++)
+                    {
+                        Locations.Add(new BoardLocation(r, 0));
+                    }
+                    break;
+                case Direction.DOWN:
+                    for (int r = 1; r < Rows - 1; r++)
+                    {
+                        Locations.Add(new BoardLocation(r, Columns - 1));
+                    }
+                    break;
+                case Direction.LEFT:
+                    for (int c = 1; c < Columns - 1; c++)
+                    {
+                        Locations.Add(new BoardLocation(0, c));
+                    }
+                    break;
+                case Direction.RIGHT:
+                    for (int c = 1; c < Columns - 1; c++)
+                    {
+                        Locations.Add(new BoardLocation(Rows - 1, c));
+
+                    }
+                    break;
+            }
+            return Locations;
+        }
+
         #endregion
 
         public BoardSpace[,] Contents;
@@ -285,6 +319,24 @@ namespace FourzyGameModel.Model
             }
             throw new Exception("No Corner Specified.");
         }
+
+        public List<BoardLocation> GetColumn(int Column)
+        {
+            List<BoardLocation> Spaces = new List<BoardLocation>();
+            for (int r = 0; r < Rows; r++)
+                Spaces.Add(new BoardLocation(r, Columns));
+            return Spaces;
+        }
+
+        public List<BoardLocation> GetRow(int Row)
+        {
+            List<BoardLocation> Spaces = new List<BoardLocation>();
+            for (int c = 0; c < Columns; c++)
+                Spaces.Add(new BoardLocation(Row, c));
+
+            return Spaces;
+        }
+
 
         public List<BoardLocation> GetEmptySpaces()
         {
@@ -521,6 +573,23 @@ namespace FourzyGameModel.Model
 
             return FoundPiece;
         }
+
+        public List<BoardLocation> FindControl(int PlayerId = -1)
+        {
+            List<BoardLocation> FoundPieces = new List<BoardLocation>() { };
+
+            for (int r = 0; r < Rows; r++)
+            {
+                for (int c = 0; c < Columns; c++)
+                {
+                    if (Contents[r, c].Control == PlayerId)
+                            FoundPieces.Add(new BoardLocation(r, c));
+                }
+            }
+
+            return FoundPieces;
+        }
+
 
         public List<BoardLocation> FindPieceLocations(int PlayerId = -1)
         {

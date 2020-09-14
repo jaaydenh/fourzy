@@ -11,6 +11,7 @@ namespace FourzyGameModel.Model
         bool Delete { get; set; }
         TokenClassification Classification { get; }
         int Complexity { get;  }
+        bool DisruptsWin { get; }
 
         [JsonIgnore]
         BoardSpace Space { get; set; }
@@ -19,7 +20,7 @@ namespace FourzyGameModel.Model
         bool pieceMustStopOn { get; set; }
         bool pieceCanEndMoveOn { get; set; }
         bool isMoveable { get; set; }
-
+            
         int addFriction { get; set; }
 
         //Adjust momentum will increase or decrease value 

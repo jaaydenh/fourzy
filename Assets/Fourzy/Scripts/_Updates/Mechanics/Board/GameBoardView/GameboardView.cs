@@ -805,28 +805,174 @@ namespace Fourzy._Updates.Mechanics.Board
             SetHintAreaSelectableState(true);
 
             IMove move = null;
-            TokenSpell token = InstantiateSpellToken(location, spellID);
+            ISpell spell = null;
+
+            TokenSpell token = SpawnToken<TokenSpell>(location.Row, location.Column, spellID.ToTokenType());
 
             switch (spellID)
             {
                 case SpellId.HEX:
-                    HexSpell spell = new HexSpell(game._State.ActivePlayerId, location);
-                    move = spell;
-                    token.SetData(spell);
+                    HexSpell hex = new HexSpell(game._State.ActivePlayerId, location);
+
+                    move = hex;
+                    spell = hex;
 
                     break;
 
-                    //case SpellId.FIRE_WALL:
-                    //    spell = new FireWallSpell(game.State.ActivePlayerId, location);
-                    //    token = SpawnToken(new FireToken()) as TokenSpell;
-                    //    break;
+                case SpellId.HOLD_FOURZY:
+                    HoldFourzySpell hold = new HoldFourzySpell(game._State.ActivePlayerId, location);
 
-                    //case SpellId.ICE_WALL:
-                    //    spell = new IceWallSpell(location);
-                    //    token = SpawnToken(new IceToken()) as TokenSpell;
-                    //    break;
+                    move = hold;
+                    spell = hold;
+
+                    break;
+
+                case SpellId.PRISON:
+                    PrisonSpell prison = new PrisonSpell(game._State.ActivePlayerId, location);
+
+                    move = prison;
+                    spell = prison;
+
+                    break;
+
+                case SpellId.DARKNESS:
+                    DarknessSpell darkness = new DarknessSpell(game._State.ActivePlayerId, location);
+
+                    move = darkness;
+                    spell = darkness;
+
+                    break;
+
+                case SpellId.FRUIT:
+                    FruitSpell fruit = new FruitSpell(game._State.ActivePlayerId, location);
+
+                    move = fruit;
+                    spell = fruit;
+
+                    break;
+
+                case SpellId.SLURP:
+                    SlurpSpell slurp = new SlurpSpell(game._State.ActivePlayerId, location);
+
+                    move = slurp;
+                    spell = slurp;
+
+                    break;
+
+                case SpellId.SQUIRT_WATER:
+                    SquirtWaterSpell squirtWater = new SquirtWaterSpell(game._State.ActivePlayerId, location);
+
+                    move = squirtWater;
+                    spell = squirtWater;
+
+                    break;
+
+                case SpellId.THROW_BOMB:
+                    BombSpell bomb = new BombSpell(game._State.ActivePlayerId, location);
+
+                    move = bomb;
+                    spell = bomb;
+
+                    break;
+
+                case SpellId.PLACE_LURE:
+                    LureSpell lure = new LureSpell(game._State.ActivePlayerId, location);
+
+                    move = lure;
+                    spell = lure;
+
+                    break;
+
+                case SpellId.ICE_WALL:
+                    IceWallSpell iceWall = new IceWallSpell(location);
+
+                    move = iceWall;
+                    spell = iceWall;
+
+                    break;
+
+                case SpellId.FIRE_WALL:
+                    FireWallSpell fireWall = new FireWallSpell(game._State.ActivePlayerId, location);
+
+                    move = fireWall;
+                    spell = fireWall;
+
+                    break;
+
+                case SpellId.DIG:
+                    DigSpell dig = new DigSpell(game._State.ActivePlayerId, location);
+
+                    move = dig;
+                    spell = dig;
+
+                    break;
+
+                case SpellId.GROWL:
+                    GrowlSpell growl = new GrowlSpell(game._State.ActivePlayerId, location);
+
+                    move = growl;
+                    spell = growl;
+
+                    break;
+
+                case SpellId.SUMMON_SPECTER:
+                    SpecterSpell specter = new SpecterSpell(game._State.ActivePlayerId, location);
+
+                    move = specter;
+                    spell = specter;
+
+                    break;
+
+                case SpellId.RAINBOW:
+                    RainbowSpell rainbow = new RainbowSpell(game._State.ActivePlayerId, location);
+
+                    move = rainbow;
+                    spell = rainbow;
+
+                    break;
+
+                case SpellId.PUNCH:
+                    PunchSpell punch = new PunchSpell(game._State.ActivePlayerId, location);
+
+                    move = punch;
+                    spell = punch;
+
+                    break;
+
+                case SpellId.FREEZE:
+                    FreezeSpell freeze = new FreezeSpell(game._State.ActivePlayerId, location);
+
+                    move = freeze;
+                    spell = freeze;
+
+                    break;
+
+                case SpellId.MELT:
+                    MeltSpell melt = new MeltSpell(game._State.ActivePlayerId, location);
+
+                    move = melt;
+                    spell = melt;
+
+                    break;
+
+                case SpellId.LIFE:
+                    LifeSpell life = new LifeSpell(game._State.ActivePlayerId, location);
+
+                    move = life;
+                    spell = life;
+
+                    break;
+
+                case SpellId.DEATH:
+                    DeathSpell death = new DeathSpell(game._State.ActivePlayerId, location);
+
+                    move = death;
+                    spell = death;
+
+                    break;
             }
 
+            token.SetData(spell);
             createdSpellTokens.Add(token);
 
             //make semi-transparent
@@ -836,30 +982,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
             //cast spell
             onCast?.Invoke(activeSpell, game._State.ActivePlayerId);
-        }
-
-        public TokenSpell InstantiateSpellToken(BoardLocation location, SpellId spellID)
-        {
-            TokenSpell token = null;
-
-            switch (spellID)
-            {
-                case SpellId.HEX:
-                    token = SpawnToken<TokenSpell>(location.Row, location.Column, TokenType.HEX);
-                    break;
-
-                    //case SpellId.FIRE_WALL:
-                    //    spell = new FireWallSpell(game.State.ActivePlayerId, location);
-                    //    token = SpawnToken(new FireToken()) as TokenSpell;
-                    //    break;
-
-                    //case SpellId.ICE_WALL:
-                    //    spell = new IceWallSpell(location);
-                    //    token = SpawnToken(new IceToken()) as TokenSpell;
-                    //    break;
-            }
-
-            return token;
         }
 
         public void PrepareForSpell(SpellId spellId)
@@ -1143,17 +1265,24 @@ namespace Fourzy._Updates.Mechanics.Board
                         case SpellId.HEX:
                             locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new HexSpell(0, new BoardLocation()));
 
-                            //modify by current spells
-                            foreach (TokenSpell _spell in createdSpellTokens) locationsList.RemoveAll(_location => _location.Equals(_spell.location));
+                            break;
 
-                            foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
-                                if (locationsList.Contains(hintBlock.Key))
-                                    affected.Add(hintBlock.Key, hintBlock.Value);
+                        case SpellId.PLACE_LURE:
+                            locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new LureSpell(0, new BoardLocation()));
 
-                            SetHintAreaColliderState(true);
-                            SetHintAreaSelectableState(false);
                             break;
                     }
+
+
+                    //modify by current spells
+                    foreach (TokenSpell _spell in createdSpellTokens) locationsList.RemoveAll(_location => _location.Equals(_spell.location));
+
+                    foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
+                        if (locationsList.Contains(hintBlock.Key))
+                            affected.Add(hintBlock.Key, hintBlock.Value);
+
+                    SetHintAreaColliderState(true);
+                    SetHintAreaSelectableState(false);
                     break;
 
             }
@@ -1566,8 +1695,10 @@ namespace Fourzy._Updates.Mechanics.Board
                         GameActionTokenDrop tokenDrop = turnResults.Activity[actionIndex] as GameActionTokenDrop;
 
                         Debug.Log($"Spawned: {tokenDrop.Token.Type}, Reason: {tokenDrop.Reason}");
+
                         //add new token
-                        token = SpawnToken(tokenDrop.Token);
+                        token = SpawnToken<TokenView>(tokenDrop.Destination.Row, tokenDrop.Destination.Column, tokenDrop.Token.Type);
+                        token.SetData(tokenDrop.Token);
                         token.Show(.5f);
 
                         switch (tokenDrop.Token.Type)
@@ -1578,13 +1709,6 @@ namespace Fourzy._Updates.Mechanics.Board
 
                                 break;
                         }
-
-                        //switch (tokenDrop.Reason)
-                        //{
-                        //    case TransitionType.BOSS_POWER:
-
-                        //        break;
-                        //}
 
                         yield return new WaitForSeconds(.5f);
 

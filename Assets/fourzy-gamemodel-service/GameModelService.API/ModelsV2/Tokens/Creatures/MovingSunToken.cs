@@ -68,6 +68,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public MovingSunToken(Direction Orientation)
         {
             StandardTokenInit();

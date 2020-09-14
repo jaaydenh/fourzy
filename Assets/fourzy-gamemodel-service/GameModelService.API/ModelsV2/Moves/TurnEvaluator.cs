@@ -760,6 +760,14 @@ namespace FourzyGameModel.Model
         #region "Spells"
         public bool ProcessSpell(ISpell Spell)
         {
+            foreach (IGameEffect e in EvalState.GameEffects)
+            {
+                if (e.Type == GameEffectType.VOID) {
+                    RecordAction(new GameActionSpell(Spell));
+                    return false;
+                    }
+            }
+
             if (EvalState.Players[Spell.PlayerId].Magic >= Spell.Cost)
             {
                 EvalState.Players[Spell.PlayerId].Magic -= Spell.Cost;
@@ -768,6 +776,14 @@ namespace FourzyGameModel.Model
                     RecordAction(new GameActionSpell(Spell));
                     return true;
                 }
+                else
+                {
+                    RecordAction(new GameActionSpellFizzle(Spell));
+                }
+            }
+            else
+            {
+                RecordAction(new GameActionSpellFizzle(Spell, SpellFailureType.NOT_ENOUGH_MAGIC));
             }
             return false;
         }
@@ -875,8 +891,10 @@ namespace FourzyGameModel.Model
 
         public bool DidPlayerWinRevised(int PlayerId)
         {
-            Dictionary<BoardLocation, Piece> Pieces = EvalState.Board.Pieces;
-            if (Pieces.Count < 4) return false;
+            //Dictionary<BoardLocation, Piece> Pieces = EvalState.Board.Pieces;
+            //if (Pieces.Count < 4) return false;
+            List<BoardLocation> Control = EvalState.Board.FindControl(PlayerId);
+            if (Control.Count < 4) return false;
 
             BitArray[] columns = new BitArray[EvalState.Board.Columns];
             BitArray[] rows = new BitArray[EvalState.Board.Rows];
@@ -888,8 +906,11 @@ namespace FourzyGameModel.Model
             for (int i = 0; i < EvalState.Board.Rows + EvalState.Board.Columns; i++) diag1[i] = new BitArray(Math.Max(EvalState.Board.Rows, EvalState.Board.Columns));
             for (int i = 0; i < EvalState.Board.Rows + EvalState.Board.Columns; i++) diag2[i] = new BitArray(Math.Max(EvalState.Board.Rows, EvalState.Board.Columns));
 
-            Pieces = Pieces.Where(kvp => kvp.Value.PlayerId == PlayerId).ToDictionary(i => i.Key, i => i.Value);
-            foreach (BoardLocation l in Pieces.Keys)
+            
+            //Pieces = Pieces.Where(kvp => kvp.Value.PlayerId == PlayerId).ToDictionary(i => i.Key, i => i.Value);
+            //foreach (BoardLocation l in Pieces.Keys)
+
+            foreach(BoardLocation l in Control)
             {
                 //if (EvalState.Board.Pieces[l].PlayerId != PlayerId) continue;
                 //if (EvalState.Board.ContentsAt(l).ActivePiece.PlayerId != PlayerId) continue;

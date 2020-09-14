@@ -140,6 +140,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public Direction GetDirection(MovingPiece Piece)
         {
             return Orientation;

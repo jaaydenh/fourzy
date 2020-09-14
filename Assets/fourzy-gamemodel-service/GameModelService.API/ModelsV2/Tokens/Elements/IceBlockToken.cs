@@ -64,6 +64,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public IceBlockToken()
         {
             //StandardTokenProperties

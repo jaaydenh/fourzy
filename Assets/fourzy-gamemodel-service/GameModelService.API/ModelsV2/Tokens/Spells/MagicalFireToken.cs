@@ -74,6 +74,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public MagicFireToken(int PlayerId, int Duration = SpellConstants.DefaultFireWallDuration)
         {
             StandardTokenInit();
@@ -158,11 +166,11 @@ namespace FourzyGameModel.Model
 
         public void StartOfTurn(int PlayerId)
         {
-            if (PlayerId == this.PlayerId)
-            {
+            //if (PlayerId == this.PlayerId)
+            //{
                 Countdown--;
                 if (Countdown == 0) Fade();
-            }
+            //}
 
         }
     }

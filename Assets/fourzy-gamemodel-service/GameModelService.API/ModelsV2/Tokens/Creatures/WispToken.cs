@@ -68,6 +68,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public int Chance;
 
         public WispToken(int ChanceToMove = TokenConstants.WispMovePercentage)

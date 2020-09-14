@@ -83,7 +83,14 @@ namespace FourzyGameModel.Model
             }
         }
 
-
+        public bool DisruptsWin
+        {
+            get
+            {
+                return true;
+            }
+        }
+               
         public MovingGhostToken(TokenColor Color, Direction Orientation)
         {
             StandardTokenInit();

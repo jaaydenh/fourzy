@@ -71,6 +71,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public StickyToken()
         {
             StandardTokenInit();

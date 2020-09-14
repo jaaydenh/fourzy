@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics.Board;
+using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using StackableDecorator;
 using System;
@@ -85,9 +86,6 @@ namespace Fourzy._Updates.Serialized
             [ShowIf("#ShowSpellData")]
             [StackableField]
             public SpellId spellID;
-            [ShowIf("#ShowSpellData")]
-            [StackableField]
-            public int basePrice;
 
             [ShowIf("#ShowOther")]
             [StackableField]
@@ -123,7 +121,8 @@ namespace Fourzy._Updates.Serialized
                 get
                 {
                     //get price depending on spell
-                    return basePrice;
+                    if (isSpell) return spellID.GetSpellPrice();
+                    else return 10;
                 }
             }
 

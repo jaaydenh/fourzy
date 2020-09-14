@@ -134,7 +134,7 @@ namespace Fourzy._Updates.Tools
 
             var list = enumerable as IList<T> ?? enumerable.ToList();
             var toAddList = toAdd as IList<T> ?? toAdd.ToList();
-            
+
             for (int _index = index; _index < index + toAddList.Count; _index++)
                 list.Insert(_index, toAddList[_index - index]);
 
@@ -948,6 +948,127 @@ namespace Fourzy._Updates.Tools
                 default:
                     return TokenType.BLOCKER;
             }
+        }
+
+        public static int GetSpellPrice(this SpellId spellID)
+        {
+            switch (spellID)
+            {
+                case SpellId.HEX:
+                    return SpellConstants.CostHexSpell;
+
+                case SpellId.THROW_BOMB:
+                    return SpellConstants.DefaultBombCost;
+
+                case SpellId.DIG:
+                    return SpellConstants.DefaultDigCost;
+
+                case SpellId.FREEZE:
+                    return SpellConstants.DefaultFreezeCost;
+
+                case SpellId.HOLD_FOURZY:
+                    return SpellConstants.DefaultHoldCost;
+
+                case SpellId.DARKNESS:
+                    return SpellConstants.DefaultDarknessCost;
+
+                case SpellId.PRISON:
+                    return SpellConstants.DefaultPrisonCost;
+
+                case SpellId.MISDIRECTION:
+                    return SpellConstants.DefaultMisdirectionCost;
+
+                case SpellId.FRUIT:
+                    return SpellConstants.DefaultFruitCost;
+
+                case SpellId.PLACE_LURE:
+                    return SpellConstants.DefaultLureCost;
+
+                case SpellId.RAINBOW:
+                    return SpellConstants.DefaultRainbowCost;
+
+                case SpellId.GROWL:
+                    return SpellConstants.DefaultGrowlCost;
+
+                case SpellId.SLURP:
+                    return SpellConstants.DefaultSlurpCost;
+
+                case SpellId.SUMMON_SPECTER:
+                    return SpellConstants.DefaultSpecterCost;
+
+                //case SpellId.:
+                //    return SpellConstants.CostAlterArrowsSpell;
+
+                case SpellId.ICE_WALL:
+                    return SpellConstants.CostIceWallSpell;
+
+                case SpellId.FIRE_WALL:
+                    return SpellConstants.CostFireWallSpell;
+
+                case SpellId.MELT:
+                    return SpellConstants.DefaultMeltCost;
+
+                case SpellId.PUNCH:
+                    return SpellConstants.DefaultPunchCost;
+
+                case SpellId.LIFE:
+                    return SpellConstants.DefaultLifeCost;
+
+                case SpellId.DEATH:
+                    return SpellConstants.DefaultDeathCost;
+            }
+
+            return 10;
+        }
+
+        public static TokenType ToTokenType(this SpellId spell)
+        {
+            switch (spell)
+            {
+                case SpellId.HEX:
+                    return TokenType.HEX;
+
+                case SpellId.HOLD_FOURZY:
+                    return TokenType.HOLD;
+
+                case SpellId.PRISON:
+                    return TokenType.PRISON;
+
+                case SpellId.DARKNESS:
+                    return TokenType.DARKNESS;
+
+                case SpellId.MISDIRECTION:
+                    return TokenType.MISDIRECTION;
+
+                case SpellId.FRUIT:
+                    return TokenType.FRUIT;
+
+                case SpellId.THROW_BOMB:
+                    return TokenType.CIRCLE_BOMB;
+
+                case SpellId.PLACE_LURE:
+                    return TokenType.LURE;
+
+                case SpellId.ICE_WALL:
+                    return TokenType.ICE_BLOCK;
+
+                case SpellId.FIRE_WALL:
+                    return TokenType.FIRE;
+
+                case SpellId.DIG:
+                    return TokenType.PIT;
+
+                case SpellId.SUMMON_SPECTER:
+                    return TokenType.SPECTER;
+
+                case SpellId.RAINBOW:
+                    return TokenType.RAINBOW;
+
+                case SpellId.MOVE_GHOST:
+                    return TokenType.MOVING_GHOST;
+            }
+
+            return TokenType.NONE;
         }
 
         public static bool IsSet<T>(T flags, T flag) where T : struct

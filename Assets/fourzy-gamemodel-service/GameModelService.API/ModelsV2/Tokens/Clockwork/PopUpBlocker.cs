@@ -68,6 +68,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public int Frequency { get; set; }
         public int Countdown { get; set; }
         public bool Raised { get; set; }

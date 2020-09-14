@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FourzyGameModel.Model
 {
@@ -24,10 +25,39 @@ namespace FourzyGameModel.Model
             this.PlayerId = PlayerId;
             this.RequiresLocation = true;
         }
+        
+        // Not another spell
+        // Not a corner
+        // Does not contain a piece
+        // Only terrain.  No arrows.
+        // No fire.  (Not implemented yet)
+
+        public List<BoardLocation> GetValidSpellLocations(GameBoard Board)
+        {
+            List<BoardLocation> Locations = new List<BoardLocation>() { };
+
+            foreach (BoardSpace s in Board.Contents)
+            {
+                if (ValidLocationTarget(s))
+                    Locations.Add(s.Location);
+            }
+
+            return Locations;
+        }
+
+        public bool ValidLocationTarget(BoardSpace s)
+        {
+            if (s.ContainsSpell
+                || s.ContainsOnlyTerrain
+                || s.Parent.Corners.Contains(s.Location)
+                || s.ContainsPiece) return false;
+            return true;
+        }
 
         public bool Cast(GameState State)
         {
-            if (State.Board.ContentsAt(Location).Empty)
+            BoardSpace s = State.Board.ContentsAt(Location);
+            if (ValidLocationTarget(s))
             {
                 State.Board.ContentsAt(Location).AddToken(new IceBlockToken());
                 return true;

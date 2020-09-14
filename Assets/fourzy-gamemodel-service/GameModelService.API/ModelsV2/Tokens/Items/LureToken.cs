@@ -70,6 +70,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public bool Eaten { get; set; }
 
         public LureToken(bool Eaten = false)

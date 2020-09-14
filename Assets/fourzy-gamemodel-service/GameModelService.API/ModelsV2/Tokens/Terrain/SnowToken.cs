@@ -73,6 +73,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public SnowToken(int Depth = 1)
         {
             StandardTokenInit();

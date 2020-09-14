@@ -21,7 +21,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0, g: 0.4666667, b: 0.9960785, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 30
@@ -42,7 +42,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0.9960785, g: 1, b: 0.11764707, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 30
@@ -62,7 +62,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 0.5411765, b: 0, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 30
@@ -82,7 +82,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 1, b: 0, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 30
@@ -103,7 +103,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0, g: 1, b: 0.6627451, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 1}
         piecesToUnlock: 30
@@ -124,7 +124,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 0.7568628, b: 0, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -145,7 +145,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 0.3921569, b: 1, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -166,7 +166,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0, g: 0.8980393, b: 1, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -187,7 +187,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0.37254903, g: 1, b: 0.53333336, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -207,7 +207,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0.58431375, g: 1, b: 0, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -228,7 +228,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0.6392157, g: 0.41176474, b: 0.9960785, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -248,7 +248,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 1, b: 0.29411766, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -268,7 +268,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0.8117648, g: 0.9960785, b: 0, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 30
@@ -289,7 +289,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0, g: 1, b: 1, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 30
@@ -310,7 +310,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0, g: 1, b: 0.6627451, a: 1}
         borderColor: {r: 1, g: 1, b: 1, a: 0}
         piecesToUnlock: 30
@@ -331,7 +331,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 0.36862746, b: 1, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 30
@@ -352,7 +352,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0.5882353, g: 0.9960785, b: 0.9960785, a: 1}
         borderColor: {r: 0.9960785, g: 0.6117647, b: 0, a: 1}
         piecesToUnlock: 30
@@ -372,7 +372,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 1, b: 0.30588236, a: 1}
         borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
         piecesToUnlock: 60
@@ -393,7 +393,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 0.39607847, b: 0.5568628, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
@@ -414,7 +414,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 0.33333334, b: 1, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 30
@@ -435,7 +435,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0, g: 1, b: 0.53333336, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
@@ -456,7 +456,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 0.5137255, b: 0.52156866, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
@@ -476,7 +476,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 1, g: 0.45882356, b: 1, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
@@ -497,7 +497,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0.003921569, g: 0.97647065, b: 0.49803925, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60
@@ -517,7 +517,7 @@ MonoBehaviour:
         enabled: 1
         rarity: 30
         startingMagic: 100
-        spells: 00000000
+        spells: 
         outlineColor: {r: 0.654902, g: 0.43137258, b: 1, a: 1}
         borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
         piecesToUnlock: 60

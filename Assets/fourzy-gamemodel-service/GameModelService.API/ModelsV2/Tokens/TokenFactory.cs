@@ -14,6 +14,8 @@ namespace FourzyGameModel.Model
             {
                 case TokenConstants.Arrow:
                     return new ArrowToken(TokenNotation);
+                case TokenConstants.ArrowOnce:
+                    return new ArrowOnceToken(TokenNotation);
                 case TokenConstants.Blocker:
                     return new BlockerToken();
                 case TokenConstants.Bounce:
@@ -24,6 +26,8 @@ namespace FourzyGameModel.Model
                     return new ColdToken();
                 case TokenConstants.CrossBomb:
                     return new CrossBombToken(TokenNotation);
+                case TokenConstants.Darkness:
+                    return new DarknessToken(TokenNotation);
                 case TokenConstants.Fire:
                     return new FireToken();
                 case TokenConstants.Flowers:
@@ -50,6 +54,8 @@ namespace FourzyGameModel.Model
                     return new HexSpellToken(TokenNotation);
                 case TokenConstants.HiddenBomb:
                     return new HiddenBombToken(TokenNotation);
+                case TokenConstants.Hold:
+                    return new HoldSpellToken(TokenNotation);
                 case TokenConstants.Ice:
                     return new IceToken();
                 case TokenConstants.IceBlock:
@@ -78,6 +84,8 @@ namespace FourzyGameModel.Model
                     return new PortalToken(TokenNotation);
                 case TokenConstants.Puddle:
                     return new PuddleToken();
+                case TokenConstants.Rainbow:
+                    return new RainbowToken();
                 case TokenConstants.RandomFourWay:
                     return new FourWayRandomArrowToken();
                 case TokenConstants.RandomLeftRight:

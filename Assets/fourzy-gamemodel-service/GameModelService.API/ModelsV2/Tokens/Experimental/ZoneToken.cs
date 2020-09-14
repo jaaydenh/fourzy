@@ -74,6 +74,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public ZoneToken(TokenColor Color)
         {
             StandardTokenInit();

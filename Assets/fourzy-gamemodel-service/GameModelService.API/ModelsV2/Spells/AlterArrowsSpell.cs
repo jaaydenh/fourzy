@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FourzyGameModel.Model
 {
@@ -23,11 +24,21 @@ namespace FourzyGameModel.Model
             this.RequiresLocation = false;
         }
 
+        //This spell doesn't require a location.
+        public List<BoardLocation> GetValidSpellLocations(GameBoard Board)
+        {
+            //List<BoardLocation> Locations = Board.FindTokenLocations(TokenType.ARROW);
+            List<BoardLocation> Locations = new List<BoardLocation>() { };
+            return Locations;
+        }
+
         public bool Cast(GameState State)
         {
             foreach(IToken t in State.Board.FindTokens(TokenType.ARROW))
             {
+                Direction d0 = t.Orientation; 
                 t.Orientation = Orientation;
+                State.Board.RecordGameAction(new GameActionTokenRotation(t, TransitionType.SPELL_CAST, Rotation.CLOCKWISE, d0, t.Orientation));
             }
             return true;
         }
@@ -41,6 +52,7 @@ namespace FourzyGameModel.Model
         {
             return "";
         }
+
 
     }
 }

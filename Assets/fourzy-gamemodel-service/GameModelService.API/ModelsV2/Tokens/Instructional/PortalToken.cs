@@ -75,6 +75,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+        
         public PortalToken(TokenColor Color)
         {
             StandardTokenInit();

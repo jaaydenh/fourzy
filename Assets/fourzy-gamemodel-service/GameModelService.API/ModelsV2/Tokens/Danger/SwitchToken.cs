@@ -70,6 +70,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public TokenColor Color { get; set; }
 
         public SwitchToken(TokenColor Color)

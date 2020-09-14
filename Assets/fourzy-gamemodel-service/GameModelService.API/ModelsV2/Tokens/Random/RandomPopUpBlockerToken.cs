@@ -62,6 +62,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public int Percentage { get; set; }
         public bool Raised { get; set; }
 

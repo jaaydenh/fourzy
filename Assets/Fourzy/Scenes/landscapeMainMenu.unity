@@ -7104,6 +7104,7 @@ GameObject:
   - component: {fileID: 185326408}
   - component: {fileID: 185326410}
   - component: {fileID: 185326409}
+  - component: {fileID: 185326411}
   m_Layer: 5
   m_Name: Name
   m_TagString: Untagged
@@ -7249,6 +7250,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 185326407}
   m_CullTransparentMesh: 0
+--- !u!114 &185326411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185326407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: player_two
+  updateOnStart: 1
 --- !u!1 &199698099
 GameObject:
   m_ObjectHideFlags: 0
@@ -24776,6 +24791,7 @@ GameObject:
   - component: {fileID: 1650039997}
   - component: {fileID: 1650039999}
   - component: {fileID: 1650039998}
+  - component: {fileID: 1650040000}
   m_Layer: 5
   m_Name: Name
   m_TagString: Untagged
@@ -24821,7 +24837,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: Player 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 77a688003cc01994294c5d7aa04de51b, type: 2}
@@ -24890,13 +24906,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1650039998}
-    characterCount: 0
+    characterCount: 8
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -24921,6 +24937,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1650039996}
   m_CullTransparentMesh: 0
+--- !u!114 &1650040000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650039996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: player_one
+  updateOnStart: 1
 --- !u!1 &1665975714
 GameObject:
   m_ObjectHideFlags: 0
@@ -32804,6 +32834,7 @@ MonoBehaviour:
   difficultiesHolder: {fileID: 0}
   random: {fileID: 927373553}
   difficultyLevels: []
+  localizedText: {fileID: 1650040000}
   spellPrefab: {fileID: 2300206026169421546, guid: b70322bd9134f3847b7b40934eec7d8a,
     type: 3}
   spellsParent: {fileID: 2021547002}
@@ -34518,6 +34549,7 @@ MonoBehaviour:
   - {fileID: 85576683}
   - {fileID: 1344920401}
   - {fileID: 395690613}
+  localizedText: {fileID: 185326411}
   spellPrefab: {fileID: 2300206026169421546, guid: b70322bd9134f3847b7b40934eec7d8a,
     type: 3}
   spellsParent: {fileID: 1711981030}

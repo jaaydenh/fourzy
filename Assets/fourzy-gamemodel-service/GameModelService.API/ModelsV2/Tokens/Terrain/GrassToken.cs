@@ -73,6 +73,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public GrassToken(int Height = 1)
         {
             StandardTokenInit();

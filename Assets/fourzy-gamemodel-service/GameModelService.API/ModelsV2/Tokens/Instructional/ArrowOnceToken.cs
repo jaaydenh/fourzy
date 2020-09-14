@@ -44,7 +44,7 @@ namespace FourzyGameModel.Model
         {
             get
             {
-                return TokenConstants.Arrow + TokenConstants.DirectionString(Orientation);
+                return TokenConstants.ArrowOnce + TokenConstants.DirectionString(Orientation);
             }
         }
 
@@ -52,7 +52,7 @@ namespace FourzyGameModel.Model
         {
             get
             {
-                return new List<string>() { TokenConstants.Arrow.ToString(), TokenConstants.DirectionString(Orientation) };
+                return new List<string>() { TokenConstants.ArrowOnce.ToString(), TokenConstants.DirectionString(Orientation) };
             }
         }
 
@@ -78,7 +78,7 @@ namespace FourzyGameModel.Model
                 this.Orientation = Direction.DOWN;
             }
 
-            this.Type = TokenType.ARROW;
+            this.Type = TokenType.ARROW_ONCE;
             this.changePieceDirection = true;
         }
 
@@ -139,10 +139,22 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public void Fade()
+        {
+            this.Delete = true;
+             Space.Parent.RecordGameAction(new GameActionTokenTransition(Space.Location, TransitionType.SPELL_FADE, this, null));
+        }
 
         public Direction GetDirection(MovingPiece Piece)
         {
-            this.Delete = true;
             return Orientation;
         }
 
@@ -169,11 +181,12 @@ namespace FourzyGameModel.Model
 
         public void PieceEntersSpace(MovingPiece Piece)
         {
-
+            if (Piece.Location.Equals(Space.Location)) Fade();
         }
 
         public void PieceLeavesSpace(MovingPiece Piece)
         {
+            if (Piece.Location.Equals(Space.Location)) Space.RemoveOneToken(TokenType.ARROW_ONCE);
         }
 
         public void PieceBumpsIntoLocation(MovingPiece Piece, BoardLocation Location)

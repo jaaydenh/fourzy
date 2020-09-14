@@ -10,9 +10,11 @@
     //FLYING: Ignores terrain
     //SCARED: Won't go near ghosts and maybe some other tokens.
 
-    public enum PieceConditionType { DEAD, FROZEN, FIERY, CURSED, POISONED, SHRUNKEN, GIANT, FLYING, STUCK, SCARED, FALLING, SINKING, WIND, NONE, INERTIA,
+    public enum PieceConditionType { DEAD, FROZEN, FIERY, CURSED, POISONED, SHRUNKEN, GIANT,
+        FLYING, STUCK, SCARED, FALLING, SINKING, WIND, NONE, INERTIA,
         STRAIGHT,
         PUSHED_UP, PUSHED_DOWN, PUSHED_RIGHT, PUSHED_LEFT,
-        LURED
+        LURED,
+        STUNNED
     }
 }

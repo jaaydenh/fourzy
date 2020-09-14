@@ -72,6 +72,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public WallToken(bool Top, bool Bottom, bool Left, bool Right)
         {
             StandardTokenInit();

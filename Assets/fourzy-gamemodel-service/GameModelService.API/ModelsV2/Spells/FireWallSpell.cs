@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FourzyGameModel.Model
 {
@@ -26,10 +27,33 @@ namespace FourzyGameModel.Model
             this.RequiresLocation = true;
     }
 
-    public bool Cast(GameState State)
+        public List<BoardLocation> GetValidSpellLocations(GameBoard Board)
         {
-            if (State.Board.ContentsAt(Location).Empty)
+            List<BoardLocation> Locations = new List<BoardLocation>() { };
+
+            foreach (BoardSpace s in Board.Contents)
             {
+                if (AllowedLocationTarget(s))
+                    Locations.Add(s.Location);
+            }
+
+            return Locations;
+        }
+
+        public bool AllowedLocationTarget(BoardSpace s)
+        {
+            if (s.ContainsSpell
+                      || s.Parent.Corners.Contains(s.Location)
+                      || s.ContainsPiece) return false;
+                return true;
+        }
+
+        public bool Cast(GameState State)
+        {
+            BoardSpace s = State.Board.ContentsAt(Location);
+            if (AllowedLocationTarget(s))
+            {
+                State.Board.RecordGameAction(new GameActionTokenDrop(new MagicFireToken(PlayerId, Duration), TransitionType.SPELL_CAST, s.Location, s.Location));
                 State.Board.ContentsAt(Location).AddToken(new MagicFireToken(PlayerId, Duration));
                 return true;
             }

@@ -67,7 +67,15 @@ namespace FourzyGameModel.Model
                 return TokenConstants.COMPLEXITY_NORMAL;
             }
         }
-        
+
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public bool Squashed { get; set; }
 
         public SnowManToken()

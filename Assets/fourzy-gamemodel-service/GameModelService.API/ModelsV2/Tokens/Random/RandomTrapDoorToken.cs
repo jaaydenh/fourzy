@@ -70,6 +70,14 @@ namespace FourzyGameModel.Model
             }
         }
 
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public bool Open { get; set; }
         public TokenColor Color { get; set; }
         public int ChanceOpen { get; set; }

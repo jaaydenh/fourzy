@@ -72,7 +72,15 @@ namespace FourzyGameModel.Model
                 return TokenConstants.COMPLEXITY_BASIC;
             }
         }
-        
+
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public PuddleToken()
         {
             StandardTokenInit();

@@ -23,8 +23,10 @@ namespace FourzyGameModel.Model
 
         //Customization
         public TokenType LifeToken { get; set; }
+        public int Countdown { get; set; }
+        public int Frequency { get; set; }
 
-        public LifeGameEffect(TokenType LifeToken, GameState Parent = null)
+        public LifeGameEffect(TokenType LifeToken, int ActivateFrequency = GameEffectConstants.DefaultFrequency, GameState Parent = null)
         {
             this.Name = "Life Game Effect";
             this.Type = GameEffectType.LIFE;
@@ -59,6 +61,23 @@ namespace FourzyGameModel.Model
         //Events
         public void EndOfTurn(int PlayerId)
         {
+
+            if (Countdown > 0)
+            {
+                Countdown--;
+            } else
+            {
+                return;
+            }
+
+            if (Countdown > 0)
+            {
+                return;
+            }
+            Countdown = Frequency;
+
+            Parent.Board.RecordGameAction(new GameActionGameEffect(this));
+
             List<BoardLocation> TokenLocations = Parent.Board.FindTokenLocations(this.LifeToken);
             List<BoardLocation> Death = new List<BoardLocation>();
             Dictionary<BoardLocation, int> Birth = new Dictionary<BoardLocation, int>();

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
 {
-    public class LureTokenView : TokenView
+    public class LureTokenView : TokenSpell
     {
         public LureToken token { get; private set; }
 

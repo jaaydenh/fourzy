@@ -25,7 +25,10 @@ namespace FourzyGameModel.Model
         public TokenType ShiftToken { get; set; }
         public Direction ShiftDirection { get; set; }
 
-        public ShiftTokensGameEffect(TokenType ShiftToken, Direction ShiftDirection, GameState Parent = null)
+        public int Countdown { get; set; }
+        public int Frequency { get; set; }
+
+        public ShiftTokensGameEffect(TokenType ShiftToken, Direction ShiftDirection, GameState Parent = null, int ActivateFrequency =3)
         {
             this.Name = "Life Game Effect";
             this.Type = GameEffectType.LIFE;
@@ -33,6 +36,8 @@ namespace FourzyGameModel.Model
             this.Parent = Parent;
             this.ShiftToken = ShiftToken;
             this.ShiftDirection = ShiftDirection;
+            this.Frequency = ActivateFrequency;
+            this.Countdown = ActivateFrequency;
 
             Initialize();
         }

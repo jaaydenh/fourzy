@@ -67,6 +67,14 @@ namespace FourzyGameModel.Model
                 return TokenConstants.COMPLEXITY_NORMAL;
             }
         }
+        
+        public bool DisruptsWin
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         public FountainToken()
         {
