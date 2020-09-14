@@ -20,6 +20,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected Action onAccept;
         protected Action onDecline;
 
+        protected bool closeOnAccept;
+
         public override void OnBack()
         {
             base.OnBack();
@@ -27,10 +29,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (defaultCalls) Decline();
         }
 
-        public virtual void Prompt(string title, string text, Action accept = null, Action decline = null) => 
+        public virtual PromptScreen Prompt(string title, string text, Action accept = null, Action decline = null) => 
             Prompt(title, text, LocalizationManager.Value("yes"), LocalizationManager.Value("no"), accept, decline);
 
-        public virtual void Prompt(string title, string text, string yes, string no, Action accept = null, Action decline = null)
+        public virtual PromptScreen Prompt(string title, string text, string yes, string no, Action accept = null, Action decline = null)
         {
             onDecline = decline;
             onAccept = accept;
@@ -42,18 +44,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (promptText) promptText.text = text;
 
-            Prompt();
+            return Prompt();
         }
 
-        public virtual void Prompt()
+        public virtual PromptScreen Prompt()
         {
             transform.SetAsLastSibling();
             menuController.OpenScreen(this);
+
+            closeOnAccept = false;
+
+            return this;
         }
 
         public virtual void Accept()
         {
             onAccept?.Invoke();
+
+            if (closeOnAccept) CloseSelf();
         }
 
         public virtual void Decline()
@@ -61,7 +69,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (onDecline != null)
                 onDecline.Invoke();
             else
-                menuController.CloseCurrentScreen();
+                CloseSelf();
         }
 
         public void UpdateAcceptButton(string yes)
@@ -90,6 +98,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     declineButton.SetLabel(no);
                 }
             }
+        }
+
+        public PromptScreen CloseOnAccept()
+        {
+            closeOnAccept = true;
+
+            return this;
         }
     }
 }

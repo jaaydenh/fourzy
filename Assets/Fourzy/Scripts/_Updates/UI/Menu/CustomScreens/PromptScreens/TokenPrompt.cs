@@ -130,11 +130,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             CancelRoutine("tokenInstructions");
         }
 
-        public override void Prompt()
+        public override PromptScreen Prompt()
         {
             base.Prompt();
 
             //StartCoroutine(AdjustOverflow());
+
+            return this;
         }
 
         //private IEnumerator AdjustOverflow()

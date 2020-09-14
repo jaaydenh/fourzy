@@ -49,6 +49,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleRealtimeTimer() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_TIMER);
 
+        public void ShowFriendsScreen() => menuController.GetOrAddScreen<FriendsScreen>().Prompt();
+
         protected override void OnInitialized()
         {
             base.OnInitialized();

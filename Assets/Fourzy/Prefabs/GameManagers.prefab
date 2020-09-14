@@ -469,6 +469,12 @@ MonoBehaviour:
     - _name: GauntletWinPromptScreen
       prefab: {fileID: 7658673681696879594, guid: 4045e177651be114cb23d61def7fa00b,
         type: 3}
+    - _name: InputFieldPromptScreen
+      prefab: {fileID: 1281021656652057426, guid: 865676bc696b3e4448f176b4b7d7ce7d,
+        type: 3}
+    - _name: FriendsScreen
+      prefab: {fileID: 3913719292092202775, guid: a0274cd27aafb9e4faeb9c75668550f9,
+        type: 3}
 --- !u!1 &1527524902537866
 GameObject:
   m_ObjectHideFlags: 0

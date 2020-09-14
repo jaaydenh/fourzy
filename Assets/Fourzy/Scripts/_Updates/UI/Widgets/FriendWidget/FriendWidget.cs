@@ -1,47 +1,75 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.UI.Menu.Screens;
+using Fourzy._Updates.UI.Toasts;
+using PlayFab;
+using PlayFab.ClientModels;
+using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
     public class FriendWidget : WidgetBase
     {
+        public Action<FriendWidget> onFriendRemoved;
+
         public TMP_Text nameLabel;
-        public Image profilePicture;
-        public Texture2D defaultProfilePicture;
-        public Image onlineTexture;
+        public RectTransform gamepieceParent;
 
-        //private Friend friend;
+        private FriendInfo friendInfo;
+        private bool removing;
 
-        //public void SetData(Friend friend)
-        //{
-        //    this.friend = friend;
-
-        //    nameLabel.text = friend.userName;
-        //    onlineTexture.color = friend.isOnline ? Color.green : Color.gray;
-
-        //    if (friend.facebookId != null)
-        //    {
-        //        StartCoroutine(UserManager.Instance.GetFBPicture(friend.facebookId, (sprite) =>
-        //        {
-        //            profilePicture.sprite = sprite;
-        //        }));
-        //    }
-        //    else
-        //    {
-        //        profilePicture.sprite = Sprite.Create(defaultProfilePicture,
-        //            new Rect(0, 0, defaultProfilePicture.width, defaultProfilePicture.height),
-        //            new Vector2(0.5f, 0.5f));
-        //    }
-        //}
-
-        public void OpenNewFriendChallengeGame()
+        public FriendWidget SetData(FriendInfo friendInfo)
         {
-            //ViewController.instance.ChangeView(ViewController.instance.viewGameboardSelection);
-            //ViewController.instance.HideTabView();
-            //ViewGameBoardSelection.instance.TransitionToViewGameBoardSelection(GameType.FRIEND, id, userName, profilePicture);
+            this.friendInfo = friendInfo;
+
+            nameLabel.text = friendInfo.TitleDisplayName;
+
+            return this;
+        }
+
+        public FriendWidget SetOnFriendRemoved(Action<FriendWidget> action)
+        {
+            onFriendRemoved = action;
+
+            return this;
+        }
+
+        public void ShowUnfollowPrompt()
+        {
+            if (removing) return;
+
+            menuScreen.menuController
+                .GetOrAddScreen<PromptScreen>()
+                .Prompt($"Unfollow {friendInfo.TitleDisplayName}", "", () => Unfollow(), null)
+                .CloseOnAccept();
+        }
+
+        public FriendWidget Unfollow()
+        {
+            if (removing) return this;
+
+            PlayFabClientAPI.RemoveFriend(new RemoveFriendRequest() { FriendPlayFabId = friendInfo.FriendPlayFabId }, OnRemoveFriend, OnRemoveFriendError);
+            removing = true;
+
+            return this;
+        }
+
+        private void OnRemoveFriendError(PlayFabError obj)
+        {
+            removing = false;
+
+            GamesToastsController.ShowTopToast($"Failed: {obj.ErrorMessage}");
+        }
+
+        private void OnRemoveFriend(RemoveFriendResult obj)
+        {
+            removing = false;
+
+            onFriendRemoved?.Invoke(this);
+
+            GamesToastsController.ShowTopToast($"Unfollowed: {friendInfo.TitleDisplayName}");
         }
     }
 }
