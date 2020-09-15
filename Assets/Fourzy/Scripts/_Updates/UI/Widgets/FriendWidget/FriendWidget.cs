@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Toasts;
 using PlayFab;
@@ -16,9 +17,12 @@ namespace Fourzy._Updates.UI.Widgets
 
         public TMP_Text nameLabel;
         public RectTransform gamepieceParent;
+        public StringEventTrigger statusIcon;
 
         private FriendInfo friendInfo;
         private bool removing;
+
+        public string friendID => friendInfo.FriendPlayFabId;
 
         public FriendWidget SetData(FriendInfo friendInfo)
         {
@@ -33,6 +37,18 @@ namespace Fourzy._Updates.UI.Widgets
         {
             onFriendRemoved = action;
 
+            return this;
+        }
+
+        public FriendWidget UpdateOnlineStatus(bool state)
+        {
+            statusIcon.TryInvoke(state ? "on" : "off");
+
+            return this;
+        }
+
+        public FriendWidget UpdateState(string state)
+        {
             return this;
         }
 

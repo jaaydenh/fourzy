@@ -1,10 +1,12 @@
 ﻿//@vadym udod
 
+using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
+using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -27,10 +29,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public AlphaTween tapToContinue;
 
         private IClientFourzy game;
+        private PromptScreen waitingScreen;
         private TurnBaseScreen turnBasedTab;
         private bool showButtonRow = false;
 
         private List<GamePieceView> gamePieces = new List<GamePieceView>();
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
+        }
+
+        protected void OnDestroy()
+        {
+            FourzyPhotonManager.onRoomPropertiesUpdate -= OnRoomPropertiesUpdate;
+        }
 
         public void Open(IClientFourzy game)
         {
@@ -167,10 +182,40 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        public void OnGameStarted()
+        {
+        }
+
         public void Rematch()
         {
-            if (isCurrent) menuController.CloseCurrentScreen(true);
-            GamePlayManager.instance.Rematch();
+            switch (game._Type)
+            {
+                case GameType.REALTIME:
+                    if (!waitingScreen)
+                    {
+                        FourzyPhotonManager.SetClientRematchReady();
+
+                        //send rematch request
+                        var result = PhotonNetwork.RaiseEvent(
+                            Constants.REMATCH_REQUEST,
+                            null,
+                            new Photon.Realtime.RaiseEventOptions() { Flags = new Photon.Realtime.WebFlags(Photon.Realtime.WebFlags.HttpForwardConst) { HttpForward = true } },
+                            SendOptions.SendReliable);
+
+                        //open waiting prompt
+                        waitingScreen = menuController.GetOrAddScreen<PromptScreen>()
+                            .Prompt("Rematch Requested", "Waiting for other player to accept request.", "Leave Game", null, () => GamePlayManager.instance.BackButtonOnClick(), null)
+                            .CloseOnAccept();
+                    }
+
+                    break;
+
+                default:
+                    if (isCurrent) menuController.CloseCurrentScreen(true);
+                    GamePlayManager.instance.Rematch();
+
+                    break;
+            }
         }
 
         public void NextGame()
@@ -274,7 +319,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 default:
-                    if (rematchButton.gameObject.activeInHierarchy) Rematch();
+                    if (rematchButton.gameObject.activeInHierarchy)
+                    {
+                        switch (game._Type)
+                        {
+                            case GameType.REALTIME:
+                                GamePlayManager.instance.BackButtonOnClick();
+
+                                break;
+
+                            default:
+                                Rematch();
+                                break;
+                        }
+                    }
                     else if (nextGameButton.gameObject.activeInHierarchy) NextGame();
                     else
                     {
@@ -355,6 +413,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 nextGameButton.SetActive(false);
                 rematchButton.SetActive(false);
             }
+        }
+
+        private void OnRoomPropertiesUpdate(Hashtable values)
+        {
+            if (FourzyPhotonManager.CheckPlayersRematchReady() && waitingScreen && waitingScreen.isOpened) waitingScreen.CloseSelf();
+            waitingScreen = null;
         }
 
         protected override void OnInitialized()

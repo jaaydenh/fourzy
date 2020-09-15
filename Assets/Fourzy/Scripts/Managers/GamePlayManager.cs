@@ -41,6 +41,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public RectTransform hintBlocksParent;
 
         private AudioHolder.BGAudio gameplayBGAudio;
+        private PromptScreen waitingScreen;
 
         //id of rematch challenge
         private string awaitingChallengeID = "";
@@ -99,8 +100,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 //notify that this client is ready
                 FourzyPhotonManager.SetClientReady();
                 gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer();
-
-                OnRoomPropertiesUpdate(PhotonNetwork.CurrentRoom.CustomProperties);
             }
             else LoadGame(GameManager.Instance.activeGame);
         }
@@ -324,6 +323,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             board.interactable = true;
             board.OnPlayManagerReady();
             game.SetInitialTime(Time.time);
+
+            switch (game._Type)
+            {
+                case GameType.REALTIME:
+                    if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) FourzyPhotonManager.ResetRematchState();
+
+                    break;
+            }
         }
 
         private IEnumerator ShowTokenInstructionPopupRoutine()
@@ -442,12 +449,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     game._Reset(resetMembers);
 
                     LoadGame(game);
-
-                    var eventOptions = new Photon.Realtime.RaiseEventOptions();
-                    eventOptions.Flags.HttpForward = true;
-                    eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
-                    var result = PhotonNetwork.RaiseEvent(Constants.REMATCH, null, eventOptions, SendOptions.SendReliable);
-                    Debug.Log("Photon rematch event result: " + result);
 
                     break;
             }
@@ -804,6 +805,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 //update epoch delta
                 if (!PhotonNetwork.IsMasterClient) epochDelta = values.ContainsKey(Constants.EPOCH_KEY) ? FourzyPhotonManager.GetRoomProperty(Constants.EPOCH_KEY, 0L) - Utils.EpochMilliseconds() : 0L;
             }
+
+            if (FourzyPhotonManager.CheckPlayersRematchReady())
+            {
+                Rematch(); 
+                
+                if (waitingScreen && waitingScreen.isOpened) waitingScreen.CloseSelf();
+                waitingScreen = null;
+            }
         }
 
         private void OnEventCall(EventData data)
@@ -814,7 +823,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case Constants.GAME_DATA:
                     ClientFourzyGame _realtimeGame = new ClientFourzyGame(JsonConvert.DeserializeObject<GameStateDataEpoch>(data.CustomData.ToString()));
                     //assign proper user id
-                    _realtimeGame.player2.PlayerString = UserManager.Instance.userId;
+                    _realtimeGame.SetPlayer2ID(UserManager.Instance.userId);
 
                     LoadGame(_realtimeGame);
 
@@ -825,9 +834,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
 
-                case Constants.REMATCH:
-                    game._Reset(false);
-                    LoadGame(game);
+                case Constants.REMATCH_REQUEST:
+                    waitingScreen = menuController.GetOrAddScreen<PromptScreen>()
+                        .Prompt($"{game.opponent.DisplayName} wants to play again with you!", "Accept?", FourzyPhotonManager.SetClientRematchReady, BackButtonOnClick)
+                        .CloseOnAccept();
+                    waitingScreen.BlockInput(5f);
 
                     break;
             }
@@ -838,17 +849,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 case GameType.REALTIME:
-                    //only if game is not finished
-                    if (game.isOver) return;
-
                     //pause game
                     PauseGame();
 
                     //display prompt
-                    menuController.GetOrAddScreen<PromptScreen>().Prompt($"{otherPlayer.NickName} disconnected...", "Other player disconnected.", null, "Back", null, () =>
-                    {
-                        BackButtonOnClick();
-                    });
+                    PersistantMenuController.instance.GetOrAddScreen<PromptScreen>()
+                        .Prompt($"{otherPlayer.NickName} disconnected...", "Other player disconnected.", "Back", null, BackButtonOnClick, null).CloseOnAccept();
 
                     break;
             }

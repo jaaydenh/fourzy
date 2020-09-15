@@ -385,16 +385,6 @@ namespace Fourzy
             RequestPhotonToken(result);
         }
 
-        /*
-        * We request Photon authentication token from PlayFab.
-        * This is a crucial step, because Photon uses different authentication tokens
-        * than PlayFab. Thus, you cannot directly use PlayFab SessionTicket and
-        * you need to explicitly request a token. This API call requires you to
-        * pass Photon App ID. App ID may be hard coded, but, in this example,
-        * We are accessing it using convenient static field on PhotonNetwork class
-        * We pass in AuthenticateWithPhoton as a callback to be our next step, if
-        * we have acquired token successfully
-        */
         private void RequestPhotonToken(LoginResult obj)
         {
             Debug.Log("PlayFab authenticated. Requesting photon token...");
@@ -405,24 +395,17 @@ namespace Fourzy
             }, AuthenticateWithPhoton, OnPlayFabError);
         }
 
-        /*
-        * This is the final and the simplest step. We create new AuthenticationValues instance.
-        * This class describes how to authenticate a players inside Photon environment.
-        */
         private void AuthenticateWithPhoton(GetPhotonAuthenticationTokenResult obj)
         {
             LogMessage("Photon token acquired: " + obj.PhotonCustomAuthenticationToken + "  Authentication complete.");
 
-            //We set AuthType to custom, meaning we bring our own, PlayFab authentication procedure.
             var customAuth = new Photon.Realtime.AuthenticationValues { AuthType = Photon.Realtime.CustomAuthenticationType.Custom };
-            //We add "username" parameter. Do not let it confuse you: PlayFab is expecting this parameter to contain player PlayFab ID (!) and not username.
-            customAuth.AddAuthParameter("username", playerMasterAccountID);    // expected by PlayFab custom auth service
-
-            //We add "token" parameter. PlayFab expects it to contain Photon Authentication Token issues to your during previous step.
+            customAuth.AddAuthParameter("username", playerMasterAccountID);
             customAuth.AddAuthParameter("token", obj.PhotonCustomAuthenticationToken);
 
-            //We finally tell Photon to use this authentication parameters throughout the entire application.
             PhotonNetwork.AuthValues = customAuth;
+
+            FourzyPhotonManager.Connect();
         }
 
         private void OnPlayFabError(PlayFabError obj)

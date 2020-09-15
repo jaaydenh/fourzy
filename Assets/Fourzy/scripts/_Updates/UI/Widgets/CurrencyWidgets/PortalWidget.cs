@@ -29,7 +29,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
-
+            print("name");
             button.GetBadge("value").badge.SetValue(quantity);
             button.SetState(quantity > 0);
         }

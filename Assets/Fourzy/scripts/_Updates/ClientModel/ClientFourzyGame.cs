@@ -463,11 +463,13 @@ namespace Fourzy._Updates.ClientModel
                         break;
 
                     case Fourzy.GameType.REALTIME:
-                        var eventOptions = new Photon.Realtime.RaiseEventOptions();
-                        eventOptions.Flags.HttpForward = true;
-                        eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
-                        var result = PhotonNetwork.RaiseEvent(Constants.TAKE_TURN, JsonConvert.SerializeObject(turn), eventOptions, SendOptions.SendReliable);
-                        Debug.Log("Photon take turn event result: " + result);
+                        var result = PhotonNetwork.RaiseEvent(
+                            Constants.TAKE_TURN, 
+                            JsonConvert.SerializeObject(turn), 
+                            new Photon.Realtime.RaiseEventOptions() { Flags = new Photon.Realtime.WebFlags(Photon.Realtime.WebFlags.HttpForwardConst) { HttpForward = true } }, 
+                            SendOptions.SendReliable);
+
+                        //Debug.Log("Photon take turn event result: " + result);
 
                         break;
                 }
@@ -653,14 +655,11 @@ namespace Fourzy._Updates.ClientModel
             return State;
         }
 
-        public void ReversePlayers()
+        public void SetPlayer2ID(string id)
         {
-            Player _temp = player1;
-
-            State.Players[1] = player2;
-            State.Players[2] = _temp;
+            _FirstState.Players[2].PlayerString = id;
+            _State.Players[2].PlayerString = id;
         }
-
         public static ClientFourzyGame FromPuzzleData(ClientPuzzleData puzzleData, IClientFourzy current)
         {
             ClientFourzyGame game;

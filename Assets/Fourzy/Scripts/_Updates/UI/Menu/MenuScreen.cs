@@ -161,6 +161,7 @@ namespace Fourzy._Updates.UI.Menu
 
                 SetInteractable(false);
                 canvasGroup.blocksRaycasts = false;
+                CancelRoutine("blockInput");
             }
 
             onClose.Invoke();
@@ -192,6 +193,13 @@ namespace Fourzy._Updates.UI.Menu
         {
             SetInteractable(false);
             canvasGroup.blocksRaycasts = true;
+        }
+
+        public virtual void BlockInput(float time)
+        {
+            BlockInput();
+
+            StartRoutine("blockInput", time, () => SetInteractable(true), null);
         }
 
         public virtual void OnBack()

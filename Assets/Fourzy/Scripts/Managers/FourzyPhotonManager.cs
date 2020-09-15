@@ -5,6 +5,7 @@ using Fourzy._Updates.Managers;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy
@@ -35,6 +36,7 @@ namespace Fourzy
         public static Action onDisconnectedFromServer;
         public static Action<EventData> onEvent;
         public static Action onConnectionTimeOut;
+        public static Action<List<FriendInfo>> onFriendsUpdated;
 
         public static bool DEBUG = false;
 
@@ -58,9 +60,12 @@ namespace Fourzy
             go.transform.SetParent(null);
             instance = go.AddComponent<FourzyPhotonManager>();
 
-            instance.ConnectUsingSettings(false);
-
             DontDestroyOnLoad(go);
+        }
+
+        public static void Connect()
+        {
+            instance.ConnectUsingSettings(false);
         }
 
         #region Callbacks
@@ -84,6 +89,15 @@ namespace Fourzy
             base.OnConnected();
 
             if (DEBUG) Debug.Log($"Connected to photon.");
+        }
+
+        public override void OnFriendListUpdate(List<FriendInfo> friendList)
+        {
+            base.OnFriendListUpdate(friendList);
+
+            onFriendsUpdated?.Invoke(friendList);
+
+            if (DEBUG) Debug.Log("Photon friends list updated");
         }
 
         /// <summary>
@@ -223,6 +237,15 @@ namespace Fourzy
                 [PhotonNetwork.IsMasterClient ? Constants.REALTIME_PLAYER_1_READY : Constants.REALTIME_PLAYER_2_READY] = true,
             });
         }
+        public static void SetClientRematchReady()
+        {
+            if (PhotonNetwork.CurrentRoom == null) return;
+
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable()
+            {
+                [PhotonNetwork.IsMasterClient ? Constants.REALTIME_PLAYER_1_REMATCH : Constants.REALTIME_PLAYER_2_REMATCH] = true,
+            });
+        }
 
         public static void TryLeaveRoom()
         {
@@ -241,8 +264,23 @@ namespace Fourzy
         }
 
         public static bool CheckPlayersReady() =>
-            (PhotonNetwork.IsMasterClient && GetRoomProperty(Constants.REALTIME_PLAYER_2_READY, false)) ||
-            (!PhotonNetwork.IsMasterClient && GetRoomProperty(Constants.REALTIME_PLAYER_1_READY, false));
+            (/*PhotonNetwork.IsMasterClient && */GetRoomProperty(Constants.REALTIME_PLAYER_2_READY, false)) /*||*/ &&
+            (/*!PhotonNetwork.IsMasterClient && */GetRoomProperty(Constants.REALTIME_PLAYER_1_READY, false));
+
+        public static bool CheckPlayersRematchReady() =>
+            GetRoomProperty(Constants.REALTIME_PLAYER_1_REMATCH, false) && GetRoomProperty(Constants.REALTIME_PLAYER_2_REMATCH, false);
+
+        public static bool CheckPlayerRematchReady() => 
+            PhotonNetwork.IsMasterClient ? GetRoomProperty(Constants.REALTIME_PLAYER_1_REMATCH, false) : GetRoomProperty(Constants.REALTIME_PLAYER_2_REMATCH, false);
+
+        public static void ResetRematchState()
+        {
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable()
+            {
+                [Constants.REALTIME_PLAYER_1_REMATCH] = false,
+                [Constants.REALTIME_PLAYER_2_REMATCH] = false,
+            });
+        }
 
         public static void JoinRandomRoom()
         {

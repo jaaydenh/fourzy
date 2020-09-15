@@ -353,6 +353,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             UpdatePlayerTurnGraphics();
 
             puzzleUI.OnGameStarted();
+            gameWinLoseScreen.OnGameStarted();
 
             switch (game._Type)
             {

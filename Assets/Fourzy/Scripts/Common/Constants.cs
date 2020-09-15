@@ -73,6 +73,8 @@ namespace Fourzy
         //photon
         public static readonly string REALTIME_PLAYER_1_READY = "p1ready";
         public static readonly string REALTIME_PLAYER_2_READY = "p2ready";
+        public static readonly string REALTIME_PLAYER_1_REMATCH = "p1rematch";
+        public static readonly string REALTIME_PLAYER_2_REMATCH = "p2rematch";
         public static readonly string REALTIME_GAMEPIECE_KEY = "gamepiece";
         public static readonly string REALTIME_DEFAULT_GAMEPIECE_KEY = "1";
         public static readonly string REALTIME_TIMER_KEY = "timer";
@@ -81,7 +83,7 @@ namespace Fourzy
         //events codes
         public const byte GAME_DATA = 0;
         public const byte TAKE_TURN = 1;
-        public const byte REMATCH = 2;
+        public const byte REMATCH_REQUEST = 2;
 
         public const string CreateGameEndpoint = "http://fourzyfunctions.azurewebsites.net/api/CreateGame";
     }

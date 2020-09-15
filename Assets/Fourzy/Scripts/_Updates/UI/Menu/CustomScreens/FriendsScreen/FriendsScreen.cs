@@ -2,10 +2,12 @@
 
 using Fourzy._Updates.UI.Toasts;
 using Fourzy._Updates.UI.Widgets;
+using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -16,11 +18,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RectTransform widgetsParent;
 
         private List<FriendWidget> friends = new List<FriendWidget>();
+        private List<FriendInfo> friendsData = new List<FriendInfo>();
 
         private string lastAddFriendName;
         private int listUpdates;
         private bool keepUpdating;
         private bool isUpdating;
+
+        public string[] friendsIDs => friendsData.Select(_friend => _friend.FriendPlayFabId).ToArray();
 
         public override void Open()
         {
@@ -29,6 +34,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //start playfab pull friends routine
             keepUpdating = true;
             StartRoutine("listUpdates", UpdateFriendsListRoutine(), null, null);
+
+            Clear();
         }
 
         public override void Close(bool animate = true)
@@ -50,8 +57,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             PlayFabClientAPI.GetFriendsList(
                 new GetFriendsListRequest() /*{ ProfileConstraints = new PlayerProfileViewConstraints() { ShowDisplayName = true, } }*/,
-                OnGetFriendsListResult, 
+                OnGetFriendsListResult,
                 OnGetFriendsError);
+        }
+
+        public void Clear()
+        {
+            foreach (FriendWidget widget in friends) Destroy(widget.gameObject);
+            friends.Clear();
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            FourzyPhotonManager.onFriendsUpdated += OnPhotonFriendsUpdated;
         }
 
         private void OnGetFriendsError(PlayFabError obj)
@@ -65,19 +85,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnGetFriendsListResult(GetFriendsListResult obj)
         {
+            if (!isOpened) return;
+
+            friendsData = obj.Friends;
+            Debug.Log($"Playfab friends {obj.Friends.Count}");
+
+            if (obj.Friends.Count > 0)
+            {
+                //get photon friends list
+                PhotonNetwork.FindFriends(friendsIDs);
+            }
+            else
+                isUpdating = false;
+        }
+
+        private void OnPhotonFriendsUpdated(List<Photon.Realtime.FriendInfo> _friends)
+        {
             isUpdating = false;
 
             if (!isOpened) return;
 
-            Debug.Log("Updating friends");
-            //update list entries
-            foreach (FriendWidget widget in friends) Destroy(widget.gameObject);
-            friends.Clear();
+            Clear();
 
-            foreach (FriendInfo friend in obj.Friends)
-                friends.Add(Instantiate(widgetPrefab, widgetsParent)
-                    .SetData(friend)
-                    .SetOnFriendRemoved(OnFriendRemoved));
+            for (int friendIndex = 0; friendIndex < _friends.Count; friendIndex++)
+                if (friendIndex < friendsData.Count)
+                    friends.Add(Instantiate(widgetPrefab, widgetsParent)
+                        .SetData(friendsData[friendIndex])
+                        .SetOnFriendRemoved(OnFriendRemoved)
+                        .UpdateOnlineStatus(_friends[friendIndex].IsOnline));
         }
 
         private void OnFriendRemoved(FriendWidget widget)
