@@ -23,6 +23,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             inputField.text = "";
+            inputField.ActivateInputField();
         }
 
         public override void Accept()
