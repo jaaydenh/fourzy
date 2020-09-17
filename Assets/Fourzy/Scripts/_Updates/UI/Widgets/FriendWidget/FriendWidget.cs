@@ -18,6 +18,7 @@ namespace Fourzy._Updates.UI.Widgets
         public TMP_Text nameLabel;
         public RectTransform gamepieceParent;
         public StringEventTrigger statusIcon;
+        //public ButtonExtended playButton;
 
         private FriendInfo friendInfo;
         private bool removing;

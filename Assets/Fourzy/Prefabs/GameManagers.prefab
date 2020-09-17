@@ -475,6 +475,9 @@ MonoBehaviour:
     - _name: FriendsScreen
       prefab: {fileID: 3913719292092202775, guid: a0274cd27aafb9e4faeb9c75668550f9,
         type: 3}
+    - _name: LobbyPrompt
+      prefab: {fileID: 6186301521444083483, guid: 2e1e79e4b00875b4da8788ac7738c62e,
+        type: 3}
 --- !u!1 &1527524902537866
 GameObject:
   m_ObjectHideFlags: 0

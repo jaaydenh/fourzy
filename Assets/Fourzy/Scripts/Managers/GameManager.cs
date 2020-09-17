@@ -122,6 +122,22 @@ namespace Fourzy
             }
         }
 
+        public bool isGameplaySceneLoaded
+        {
+            get
+            {
+                bool mainMenuLoaded = false;
+                for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+                    if (SceneManager.GetSceneAt(sceneIndex).name == Constants.GAMEPLAY_SCENE_NAME)
+                    {
+                        mainMenuLoaded = true;
+                        break;
+                    }
+
+                return mainMenuLoaded;
+            }
+        }
+
         public float latitude
         {
             get
@@ -162,6 +178,7 @@ namespace Fourzy
             SceneManager.sceneUnloaded += OnSceneUnloaded;
 
             NetworkManager.onStatusChanged += OnNetStatusChanged;
+            FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEntered;
 
             //to modify manifest file
             bool value = false;
@@ -257,10 +274,12 @@ namespace Fourzy
         {
             //force demo game
             if (StandaloneInputModuleExtended.OnHotkey1Press()) StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
+            if (Input.GetKeyDown(KeyCode.Z)) PhotonNetwork.Disconnect();
         }
 
         protected void OnDestroy()
         {
+            FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEntered;
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
 
@@ -321,20 +340,17 @@ namespace Fourzy
         /// </summary>
         public void StartGame()
         {
-            if (isRealtime)
-            {
-                PhotonNetwork.LoadLevel(Constants.GAMEPLAY_SCENE_NAME);
-
-                //lock this room if master client
-                if (PhotonNetwork.IsMasterClient) PhotonNetwork.CurrentRoom.IsOpen = false;
-            }
-            else
-            {
+            //if (isRealtime)
+            //{
+            //    PhotonNetwork.LoadLevel(Constants.GAMEPLAY_SCENE_NAME);
+            //}
+            //else
+            //{
                 if (isMainMenuLoaded)
                     SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME, LoadSceneMode.Additive);
                 else
                     SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME);
-            }
+            //}
         }
 
         public void OpenMainMenu()
@@ -342,7 +358,7 @@ namespace Fourzy
             if (!isMainMenuLoaded) SceneManager.LoadScene(MainMenuSceneName);
 
             //unload gameplay scene 
-            if (activeGame != null) GamePlayManager.instance.UnloadGamePlaySceene();
+            if (isGameplaySceneLoaded) GamePlayManager.instance.UnloadGamePlaySceene();
         }
 
         public void ResetGames()
@@ -732,6 +748,12 @@ namespace Fourzy
                 if (dependencyStatus == DependencyStatus.Available)
                     FirebaseUpdate();
             }
+        }
+
+        private void OnPlayerEntered(Photon.Realtime.Player obj)
+        {
+            //lock room 
+            PhotonNetwork.CurrentRoom.IsVisible = false;
         }
 
         private void OnNetStatusChanged(NetStatus status) => onNetworkAccess?.Invoke(status == NetStatus.Connected);

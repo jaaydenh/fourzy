@@ -43,7 +43,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 5db00398753d241cab3e77257a69e8e1, type: 3}
-    totalSpriteSurfaceArea: 23585267
+    totalSpriteSurfaceArea: 23597811
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -155,6 +155,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 15c367a545f1cc64ca0e20bac393822a, type: 3}
   - {fileID: 21300000, guid: cd5aa6b5bf130b84faeeebb971b98f13, type: 3}
   - {fileID: 21300000, guid: 1a3d0bc59bf31b340bcf12f6cc7f1b69, type: 3}
+  - {fileID: 21300000, guid: c4ddcbc5d3c45144f85b3d96ed825d69, type: 3}
   - {fileID: 21300000, guid: 9d26d3d541fbd0c4a98840ca515afbe9, type: 3}
   - {fileID: 21300000, guid: ba9cd7d51f15c5947a377e2a561d7fa5, type: 3}
   - {fileID: 21300000, guid: ecc9e1168c677459cbf8a9f82d590e58, type: 3}
@@ -455,6 +456,7 @@ SpriteAtlas:
   - BossPower-Necromancer
   - news_icon
   - AreaWindow_Random
+  - buttonTertiaryx05
   - Logo
   - Button-Back
   - ChampionStar

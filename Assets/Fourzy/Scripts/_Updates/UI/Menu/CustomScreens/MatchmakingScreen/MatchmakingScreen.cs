@@ -67,8 +67,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Close(animate);
 
-            if (isRealtime) FourzyPhotonManager.TryLeaveRoom();
-
             StopRoutine("multiplayerTimeout", false);
             StopRoutine("randomText", false);
             timerLabel.text = string.Empty;
@@ -80,7 +78,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             base.OnBack();
 
-            menuController.CloseCurrentScreen();
+            CloseSelf();
+            if (isRealtime) FourzyPhotonManager.TryLeaveRoom();
         }
 
         public void OpenTurnbased()
@@ -192,7 +191,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Debug.Log("Failed to join random room, creating new one...");
 
-            FourzyPhotonManager.CreateRoom();
+            FourzyPhotonManager.CreateRoom(RoomType.QUICKMATCH);
         }
 
         private void OnRoomCreated(string roomName)
@@ -225,20 +224,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnPlayerEnteredRoom(Photon.Realtime.Player otherPlayer)
         {
-            ////fake scene loading
-            //StartRoutine("fakeSceneLoading", 4f, () => GameManager.Instance.StartGame());
+            if (!isOpened) return;
+
             //other player connected, switch to gameplay scene
             StartMatch();
+
+            CloseSelf();
         }
 
         private void OnRoomJoined(string roomName)
         {
+            if (!isOpened) return;
+
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                ////fake scene loading
-                //StartRoutine("fakeSceneLoading", 4f, () => GameManager.Instance.StartGame());
                 //open gameplay scene
                 StartMatch();
+
+                CloseSelf();
             }
         }
 

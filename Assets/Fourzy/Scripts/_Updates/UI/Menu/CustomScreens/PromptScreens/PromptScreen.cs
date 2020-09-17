@@ -21,6 +21,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected Action onDecline;
 
         protected bool closeOnAccept;
+        protected bool closeOnDecline;
 
         public override void OnBack()
         {
@@ -66,10 +67,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public virtual void Decline()
         {
+            bool closeCalled = false;
+
             if (onDecline != null)
                 onDecline.Invoke();
             else
+            {
+                closeCalled = true;
                 CloseSelf();
+            }
+
+            if (!closeCalled && closeOnDecline) CloseSelf();
         }
 
         public void UpdateAcceptButton(string yes)
@@ -103,6 +111,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public PromptScreen CloseOnAccept()
         {
             closeOnAccept = true;
+
+            return this;
+        }
+
+        public PromptScreen CloseOnDecline()
+        {
+            closeOnDecline = true;
 
             return this;
         }

@@ -241,6 +241,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
                 var result = PhotonNetwork.RaiseEvent(Constants.GAME_DATA, JsonConvert.SerializeObject(gameStateData), eventOptions, SendOptions.SendReliable);
                 Debug.Log("Photon create game event result: " + result);
+
                 LoadGame(_game);
             }
         }
@@ -384,20 +385,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public void BackButtonOnClick()
         {
             //analytics
-            if (!game.isOver)
+            if (game != null && !game.isOver)
                 AnalyticsManager.Instance.LogGame(game._Mode.GameModeToAnalyticsEvent(false), game,
                     extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAME_RESULT_KEY, AnalyticsManager.GameResultType.Abandoned));
 
             GameManager.Instance.OpenMainMenu();
 
             //disconnect if realtime
-            switch (game._Type)
-            {
-                case GameType.REALTIME:
-                    FourzyPhotonManager.TryLeaveRoom();
-
-                    break;
-            }
+            if (PhotonNetwork.CurrentRoom != null) FourzyPhotonManager.TryLeaveRoom();
         }
 
         public void UnloadGamePlaySceene()
@@ -854,7 +849,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     //display prompt
                     PersistantMenuController.instance.GetOrAddScreen<PromptScreen>()
-                        .Prompt($"{otherPlayer.NickName} disconnected...", "Other player disconnected.", "Back", null, BackButtonOnClick, null).CloseOnAccept();
+                        .Prompt($"{otherPlayer.NickName} disconnected...", "Other player disconnected.", null, "Back", null, BackButtonOnClick).CloseOnDecline();
 
                     break;
             }

@@ -98,10 +98,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenNews() => menuController.GetOrAddScreen<NewsPromptScreen>()._Prompt();
 
-        public void OpenDiscord()
-        {
-            Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/nMZ3MgE"/*)*/);
-        }
+        public void OpenDiscord() => Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/nMZ3MgE"/*)*/);
+
+        public void OpenOnlineLobby() => menuController.GetOrAddScreen<LobbyPromptScreen>().Prompt();
+
+        public void StartRealtime() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
 
         protected override void OnInitialized()
         {

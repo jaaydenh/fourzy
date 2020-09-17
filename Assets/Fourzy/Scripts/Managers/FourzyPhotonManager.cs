@@ -24,6 +24,7 @@ namespace Fourzy
 
         //callback events
         public static Action onConnectedToMaster;
+        public static Action onDisconnectedFromServer;
         public static Action<string> onJoinedLobby;
         public static Action onCreateRoomFailed;
         public static Action onJoinRoomFailed;
@@ -33,15 +34,19 @@ namespace Fourzy
         public static Action<Player> onPlayerEnteredRoom;
         public static Action<Player> onPlayerLeftRoom;
         public static Action<Hashtable> onRoomPropertiesUpdate;
-        public static Action onDisconnectedFromServer;
         public static Action<EventData> onEvent;
         public static Action onConnectionTimeOut;
         public static Action<List<FriendInfo>> onFriendsUpdated;
+        public static Action<List<RoomInfo>> onRoomsListUpdated;
 
         public static bool DEBUG = false;
 
         private static FourzyPhotonManager instance;
         private static string lastTask;
+        private static Action lastTaskAction;
+        private static TypedLobby quickmatchLobby = new TypedLobby("QuickmatchLobby", LobbyType.AsyncRandomLobby);
+
+        public List<RoomInfo> roomsInfo = new List<RoomInfo>();
 
         private Coroutine connectionTimedOutRoutine;
 
@@ -113,7 +118,18 @@ namespace Fourzy
 
             onConnectedToMaster?.Invoke();
 
-            JoinDefaultLobby();
+            switch (lastTask)
+            {
+                case "joinRandomRoom":
+                    JoinLobby(quickmatchLobby);
+
+                    break;
+
+                default:
+                    JoinLobby();
+
+                    break;
+            }
         }
 
         public override void OnJoinedLobby()
@@ -132,8 +148,24 @@ namespace Fourzy
             switch (lastTask)
             {
                 case "joinRandomRoom":
-                    if (DEBUG) Debug.Log($"Last task set to {lastTask}");
-                    JoinRandomRoom();
+                    if (PhotonNetwork.CurrentLobby.IsDefault)
+                        JoinLobby(quickmatchLobby);
+                    else
+                    {
+                        if (DEBUG) Debug.Log($"Last task set to {lastTask}");
+                        lastTaskAction();
+                    }
+
+                    break;
+
+                case "createRoom":
+                    if (PhotonNetwork.CurrentLobby.IsDefault)
+                    {
+                        if (DEBUG) Debug.Log($"Last task set to {lastTask}");
+                        lastTaskAction();
+                    }
+                    else
+                        JoinLobby();
 
                     break;
             }
@@ -154,7 +186,7 @@ namespace Fourzy
         {
             base.OnJoinRoomFailed(returnCode, message);
 
-            if (DEBUG) Debug.Log($"Failied to join room.");
+            if (DEBUG) Debug.Log($"Failied to join room: {message}");
 
             onJoinRoomFailed?.Invoke();
 
@@ -180,6 +212,14 @@ namespace Fourzy
             onCreateRoom?.Invoke(PhotonNetwork.CurrentRoom.Name);
 
             if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
+        }
+
+        public override void OnRoomListUpdate(List<RoomInfo> roomList)
+        {
+            base.OnRoomListUpdate(roomList);
+
+            roomsInfo = roomList;
+            onRoomsListUpdated?.Invoke(roomList);
         }
 
         public override void OnJoinedRoom()
@@ -264,13 +304,12 @@ namespace Fourzy
         }
 
         public static bool CheckPlayersReady() =>
-            (/*PhotonNetwork.IsMasterClient && */GetRoomProperty(Constants.REALTIME_PLAYER_2_READY, false)) /*||*/ &&
-            (/*!PhotonNetwork.IsMasterClient && */GetRoomProperty(Constants.REALTIME_PLAYER_1_READY, false));
+            (GetRoomProperty(Constants.REALTIME_PLAYER_2_READY, false)) && (GetRoomProperty(Constants.REALTIME_PLAYER_1_READY, false));
 
         public static bool CheckPlayersRematchReady() =>
             GetRoomProperty(Constants.REALTIME_PLAYER_1_REMATCH, false) && GetRoomProperty(Constants.REALTIME_PLAYER_2_REMATCH, false);
 
-        public static bool CheckPlayerRematchReady() => 
+        public static bool CheckPlayerRematchReady() =>
             PhotonNetwork.IsMasterClient ? GetRoomProperty(Constants.REALTIME_PLAYER_1_REMATCH, false) : GetRoomProperty(Constants.REALTIME_PLAYER_2_REMATCH, false);
 
         public static void ResetRematchState()
@@ -285,43 +324,106 @@ namespace Fourzy
         public static void JoinRandomRoom()
         {
             lastTask = "joinRandomRoom";
+            lastTaskAction = JoinRandomRoom;
 
-            switch (PhotonNetwork.NetworkClientState)
+            if (!PhotonNetwork.IsConnected)
             {
-                case ClientState.JoinedLobby: break;
-
-                case ClientState.Authenticated:
-                    instance.JoinDefaultLobby();
-
-                    return;
-
-                default:
-                    instance.ConnectUsingSettings();
-
-                    return;
+                instance.ConnectUsingSettings();
+                return;
+            }
+            else if (PhotonNetwork.CurrentLobby == null || PhotonNetwork.CurrentLobby.IsDefault)
+            {
+                instance.JoinLobby(quickmatchLobby);
+                return;
             }
 
             lastTask = "";
+            lastTaskAction = null;
+
             PhotonNetwork.JoinRandomRoom();
             instance.RunTimeoutRoutine();
         }
 
-        public static void CreateRoom()
+        public static void JoinRoom(string roomName)
         {
-            var options = new Photon.Realtime.RoomOptions
+            PhotonNetwork.JoinRoom(roomName);
+        }
+
+        public static void CreateRoom(RoomType type, string expectedUser = "")
+        {
+            lastTask = "createRoom";
+
+            lastTaskAction = () => CreateRoom(type, expectedUser);
+
+            if (!PhotonNetwork.IsConnected)
             {
-                MaxPlayers = 2,
-                CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
+                instance.ConnectUsingSettings();
+                return;
+            }
+            else if (PhotonNetwork.CurrentLobby == null)
+            {
+                switch (type)
                 {
-                    [Constants.REALTIME_TIMER_KEY] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER)
+                    case RoomType.QUICKMATCH:
+                        instance.JoinLobby(quickmatchLobby);
+
+                        break;
+
+                    default:
+                        instance.JoinLobby();
+
+                        break;
                 }
+
+                return;
+            }
+
+            lastTask = "";
+            lastTaskAction = null;
+
+            Hashtable properties = new ExitGames.Client.Photon.Hashtable()
+            {
+                [Constants.REALTIME_TIMER_KEY] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
+                [Constants.REALTIME_GAMEPIECE_KEY] = UserManager.Instance.gamePieceID,
             };
+            string roomName;
+            List<string> customProperties = new List<string>() { Constants.REALTIME_GAMEPIECE_KEY, };
+            List<string> expectedUsers = new List<string>();
+
+            switch (type)
+            {
+                case RoomType.LOBBY_ROOM:
+                    roomName = $"{UserManager.Instance.userName}'s room";
+                    customProperties.Add(Constants.REALTIME_ROOM_TYPE_KEY);
+                    properties.Add(Constants.REALTIME_ROOM_TYPE_KEY, (int)type);
+
+                    break;
+
+                case RoomType.DIRECT_INVITE:
+                    roomName = $"{UserManager.Instance.userName} challenged you!";
+
+                    if (!string.IsNullOrEmpty(expectedUser)) expectedUsers.Add(expectedUser);
+
+                    break;
+
+                default:
+                    roomName = Guid.NewGuid().ToString();
+                    //isVisible = false;
+
+                    break;
+            }
 
             //create new room
             PhotonNetwork.CreateRoom(
-                Guid.NewGuid().ToString(),
-                options,
-                null);
+                roomName,
+                new Photon.Realtime.RoomOptions
+                {
+                    MaxPlayers = 2,
+                    CustomRoomProperties = properties,
+                    CustomRoomPropertiesForLobby = customProperties.ToArray(),
+                },
+                null,
+                expectedUsers.ToArray());
 
             instance.RunTimeoutRoutine();
         }
@@ -354,9 +456,9 @@ namespace Fourzy
             if (runTimeOutRoutine) RunTimeoutRoutine();
         }
 
-        private void JoinDefaultLobby()
+        private void JoinLobby(TypedLobby lobby = null)
         {
-            PhotonNetwork.JoinLobby();
+            PhotonNetwork.JoinLobby(lobby);
 
             RunTimeoutRoutine();
         }
@@ -376,5 +478,12 @@ namespace Fourzy
 
             connectionTimedOutRoutine = null;
         }
+    }
+
+    public enum RoomType
+    {
+        QUICKMATCH,
+        DIRECT_INVITE,
+        LOBBY_ROOM,
     }
 }

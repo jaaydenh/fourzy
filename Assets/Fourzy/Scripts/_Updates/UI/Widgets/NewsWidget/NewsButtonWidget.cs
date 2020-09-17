@@ -13,6 +13,11 @@ namespace Fourzy._Updates.UI.Widgets
             GameManager.onNewsFetched += OnNewsFetched;
         }
 
+        protected void OnDestroy()
+        {
+            GameManager.onNewsFetched -= OnNewsFetched;
+        }
+
         public override void _Update()
         {
             base._Update();

@@ -11,6 +11,11 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public CurrencyType type;
 
+        protected void OnDestroy()
+        {
+            UserManager.onCurrencyUpdate -= OnCurrencyUpdate;
+        }
+
         public override void _Update()
         {
             if (!initialized) return;
@@ -29,7 +34,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                     break;
             }
-            print("name");
+
             button.GetBadge("value").badge.SetValue(quantity);
             button.SetState(quantity > 0);
         }

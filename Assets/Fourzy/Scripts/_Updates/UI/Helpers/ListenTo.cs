@@ -2,6 +2,7 @@
 
 using ByteSheep.Events;
 using Fourzy._Updates.Managers;
+using Photon.Pun;
 using StackableDecorator;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,8 @@ namespace Fourzy._Updates.UI.Helpers
         private bool listensToMagicState = false;
         private bool listensToLocalTimer = false;
         private bool listensToRealtimeTimer = false;
+        private bool listensToPhotonConnectedState = false;
+        private bool listensToPhotonDisconnectedState = false;
 
         protected void Awake()
         {
@@ -119,6 +122,23 @@ namespace Fourzy._Updates.UI.Helpers
                         GameManager.onPlacementStyle += OnPlacementSyle;
 
                         break;
+
+                    case ListenValues.PHOTON_CONNECTED_DEFAULT_LOBBY:
+                    case ListenValues.PHOTON_CONNECTED_QUICKMATCH_LOBBY:
+                        if (!listensToPhotonConnectedState)
+                        {
+                            listensToPhotonConnectedState = true;
+                            FourzyPhotonManager.onJoinedLobby += OnPhotonConnected;
+                        }
+
+                        break;
+                    case ListenValues.PHOTON_DISCONNECTED:
+                        if (!listensToPhotonDisconnectedState)
+                        {
+                            listensToPhotonDisconnectedState = true;
+                            FourzyPhotonManager.onDisconnectedFromServer += OnPhotonDisconnected;
+                        }
+                        break;
                 }
             }
         }
@@ -207,6 +227,25 @@ namespace Fourzy._Updates.UI.Helpers
                         SettingsManager.onDemoMode -= OnDemoMode;
 
                         break;
+
+                    case ListenValues.PHOTON_CONNECTED_DEFAULT_LOBBY:
+                    case ListenValues.PHOTON_CONNECTED_QUICKMATCH_LOBBY:
+                        if (listensToPhotonConnectedState)
+                        {
+                            listensToPhotonConnectedState = false;
+                            FourzyPhotonManager.onJoinedLobby -= OnPhotonConnected;
+                        }
+
+                        break;
+
+                    case ListenValues.PHOTON_DISCONNECTED:
+                        if (listensToPhotonDisconnectedState)
+                        {
+                            listensToPhotonDisconnectedState = false;
+                            FourzyPhotonManager.onDisconnectedFromServer -= OnPhotonDisconnected;
+                        }
+
+                        break;
                 }
         }
 
@@ -275,24 +314,35 @@ namespace Fourzy._Updates.UI.Helpers
                             OnVersion();
 
                             break;
+
+                        case ListenValues.PHOTON_CONNECTED_DEFAULT_LOBBY:
+                        case ListenValues.PHOTON_CONNECTED_QUICKMATCH_LOBBY:
+                            if (PhotonNetwork.CurrentLobby != null) OnPhotonConnected(PhotonNetwork.CurrentLobby != null ? PhotonNetwork.CurrentLobby.Name : "");
+
+                            break;
+
+                        case ListenValues.PHOTON_DISCONNECTED:
+                            if (PhotonNetwork.CurrentLobby == null) OnPhotonDisconnected();
+
+                            break;
                     }
         }
 
         public void UpdateNoInternet(bool state)
         {
-            foreach (ListenTarget target in sorted[state ? ListenValues.INTERNET_ACCESS : ListenValues.NO_INTERNET_ACCESS]) 
+            foreach (ListenTarget target in sorted[state ? ListenValues.INTERNET_ACCESS : ListenValues.NO_INTERNET_ACCESS])
                 target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnSfx(bool state)
         {
-            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_SFX_ON: ListenValues.SETTINGS_SFX_OFF]) 
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_SFX_ON : ListenValues.SETTINGS_SFX_OFF])
                 target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnAudio(bool state)
         {
-            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_AUDIO_ON : ListenValues.SETTINGS_AUDIO_OFF]) 
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_AUDIO_ON : ListenValues.SETTINGS_AUDIO_OFF])
                 target.events.Invoke(string.Format(target.targetText, state));
         }
 
@@ -304,7 +354,7 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void OnAnalyticsMode(bool state)
         {
-            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_ANALYTICS_ON : ListenValues.SETTINGS_ANALYTICS_OFF]) 
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_ANALYTICS_ON : ListenValues.SETTINGS_ANALYTICS_OFF])
                 target.events.Invoke(string.Format(target.targetText, state));
         }
 
@@ -316,13 +366,13 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void OnRealtimeTimer(bool state)
         {
-            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_REALTIME_TIMER_ON : ListenValues.SETTINGS_REALTIME_TIMER_OFF]) 
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_REALTIME_TIMER_ON : ListenValues.SETTINGS_REALTIME_TIMER_OFF])
                 target.events.Invoke(string.Format(target.targetText, state));
         }
 
         public void OnLocalTimer(bool state)
         {
-            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_LOCAL_TIMER_ON : ListenValues.SETTINGS_LOCAL_TIMER_OFF]) 
+            foreach (ListenTarget target in sorted[state ? ListenValues.SETTINGS_LOCAL_TIMER_ON : ListenValues.SETTINGS_LOCAL_TIMER_OFF])
                 target.events.Invoke(string.Format(target.targetText, state));
         }
 
@@ -334,6 +384,20 @@ namespace Fourzy._Updates.UI.Helpers
         public void OnVersion()
         {
             foreach (ListenTarget target in sorted[ListenValues.APP_VERSION]) target.events.Invoke(string.Format(target.targetText, Application.version));
+        }
+
+        public void OnPhotonDisconnected()
+        {
+            foreach (ListenTarget target in sorted[ListenValues.PHOTON_DISCONNECTED]) target.events.Invoke(string.Format(target.targetText, "NO_LOBBY"));
+        }
+
+        public void OnPhotonConnected(string lobbyName)
+        {
+            ListenValues _type = string.IsNullOrEmpty(lobbyName) ? ListenValues.PHOTON_CONNECTED_DEFAULT_LOBBY : ListenValues.PHOTON_CONNECTED_QUICKMATCH_LOBBY;
+
+            if (sorted.ContainsKey(_type))
+                foreach (ListenTarget target in sorted[_type]) 
+                    target.events.Invoke(string.Format(target.targetText, lobbyName));
         }
     }
 
@@ -389,5 +453,8 @@ namespace Fourzy._Updates.UI.Helpers
         SETTINGS_LOCAL_TIMER_ON,
         SETTINGS_LOCAL_TIMER_OFF,
         APP_VERSION,
+        PHOTON_CONNECTED_DEFAULT_LOBBY,
+        PHOTON_DISCONNECTED,
+        PHOTON_CONNECTED_QUICKMATCH_LOBBY,
     }
 }

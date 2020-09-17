@@ -76,6 +76,7 @@ namespace Fourzy
         public static readonly string REALTIME_PLAYER_1_REMATCH = "p1rematch";
         public static readonly string REALTIME_PLAYER_2_REMATCH = "p2rematch";
         public static readonly string REALTIME_GAMEPIECE_KEY = "gamepiece";
+        public static readonly string REALTIME_ROOM_TYPE_KEY = "roomType";
         public static readonly string REALTIME_DEFAULT_GAMEPIECE_KEY = "1";
         public static readonly string REALTIME_TIMER_KEY = "timer";
         public static readonly string EPOCH_KEY = "mc_epoch";
