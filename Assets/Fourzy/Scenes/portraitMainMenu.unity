@@ -58439,7 +58439,6 @@ GameObject:
   - component: {fileID: 2141487903}
   - component: {fileID: 2141487902}
   - component: {fileID: 2141487901}
-  - component: {fileID: 2141487905}
   m_Layer: 5
   m_Name: OnlineButton
   m_TagString: Untagged
@@ -58600,78 +58599,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2141487899}
   m_CullTransparentMesh: 0
---- !u!114 &2141487905
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141487899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7bacea1077e20041b2416ba3fef29df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targets:
-    list:
-    - _name: PHOTON_CONNECTED_DEFAULT_LOBBY
-      type: 19
-      targetText: 
-      updateOnStart: 1
-      events:
-        inspectorListHeight: 63
-        persistentCalls:
-          calls:
-          - genericMenuData:
-              selectedComponent: 4
-              selectedMember: 19
-              isDynamic: 0
-            target: {fileID: 2141487902}
-            memberName: SetState
-            memberType: 8
-            argument:
-              supportedType: 4
-              stringArgument: 
-              intArgument: 0
-              floatArgument: 0
-              boolArgument: 1
-              colorArgument: {r: 0, g: 0, b: 0, a: 0}
-              vector2Argument: {x: 0, y: 0}
-              vector3Argument: {x: 0, y: 0, z: 0}
-              objectArgument: {fileID: 0}
-              gameObjectArgument: {fileID: 0}
-              transformArgument: {fileID: 0}
-            isDynamic: 0
-            isCallEnabled: 1
-    - _name: PHOTON_DISCONNECTED
-      type: 20
-      targetText: 
-      updateOnStart: 1
-      events:
-        inspectorListHeight: 63
-        persistentCalls:
-          calls:
-          - genericMenuData:
-              selectedComponent: 4
-              selectedMember: 19
-              isDynamic: 0
-            target: {fileID: 2141487902}
-            memberName: SetState
-            memberType: 8
-            argument:
-              supportedType: 4
-              stringArgument: 
-              intArgument: 0
-              floatArgument: 0
-              boolArgument: 0
-              colorArgument: {r: 0, g: 0, b: 0, a: 0}
-              vector2Argument: {x: 0, y: 0}
-              vector3Argument: {x: 0, y: 0, z: 0}
-              objectArgument: {fileID: 0}
-              gameObjectArgument: {fileID: 0}
-              transformArgument: {fileID: 0}
-            isDynamic: 0
-            isCallEnabled: 1
 --- !u!1 &2143300909
 GameObject:
   m_ObjectHideFlags: 0

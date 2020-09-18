@@ -60,6 +60,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public virtual void Accept()
         {
+            if (inputBlocked) return;
+
             onAccept?.Invoke();
 
             if (closeOnAccept) CloseSelf();
@@ -67,6 +69,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public virtual void Decline()
         {
+            if (inputBlocked) return;
+
             bool closeCalled = false;
 
             if (onDecline != null)

@@ -3,6 +3,7 @@
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Tools;
+using Fourzy._Updates.UI.Menu.Screens;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -15,6 +16,8 @@ namespace Fourzy._Updates.UI.Widgets
         public RectTransform gamepieceParent;
 
         protected RoomInfo data;
+
+        private LobbyPromptScreen _menuScreen;
 
         public string roomName => data.Name;
 
@@ -36,9 +39,13 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public void JoinGame()
+        public void JoinGame() => _menuScreen.JoinRoom(data.Name);
+
+        protected override void OnInitialized()
         {
-            FourzyPhotonManager.JoinRoom(data.Name);
+            base.OnInitialized();
+
+            _menuScreen = menuScreen as LobbyPromptScreen;
         }
     }
 }

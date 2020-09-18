@@ -3,6 +3,8 @@
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Helpers;
+using Photon.Pun;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -16,11 +18,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public ButtonExtended fastPuzzleButton;
         public ButtonExtended gauntletGameButton;
 
+        private PromptScreen connectingPrompt;
         private MatchmakingScreen matchmakingScreen;
         private OnIPhoneX onIPhoneX;
 
+        private bool listenTo = false;
         private bool fastPuzzlesUnlocked;
         private bool gauntletGameUnlocked;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            FourzyPhotonManager.onJoinedLobby += OnJoinedLobby;
+            FourzyPhotonManager.onConnectionTimeOut += OnConnectionTimedOut;
+        }
+
+        protected void OnDestroy()
+        {
+            FourzyPhotonManager.onJoinedLobby -= OnJoinedLobby;
+            FourzyPhotonManager.onConnectionTimeOut -= OnConnectionTimedOut;
+        }
 
         public override void Open()
         {
@@ -100,7 +118,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenDiscord() => Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/nMZ3MgE"/*)*/);
 
-        public void OpenOnlineLobby() => menuController.GetOrAddScreen<LobbyPromptScreen>().Prompt();
+        public void OpenOnlineLobby()
+        {
+            if (FourzyPhotonManager.ConnectedAndReady && FourzyPhotonManager.IsDefaultLobby)
+                menuController.GetOrAddScreen<LobbyPromptScreen>().Prompt();
+            else
+            {
+                listenTo = true;
+
+                connectingPrompt = PersistantMenuController.instance.GetOrAddScreen<PromptScreen>()
+                    .Prompt("Connecting to server", "", null, "Back", null, () => listenTo = false)
+                    .CloseOnDecline();
+
+                if (PhotonNetwork.NetworkClientState != Photon.Realtime.ClientState.Authenticating)
+                    FourzyPhotonManager.Instance.JoinLobby();
+            }
+        }
 
         public void StartRealtime() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
 
@@ -115,6 +148,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             //force open
             if (GameManager.Instance.Landscape && @default) Open();
+        }
+
+        private void OnJoinedLobby(string lobbyName)
+        {
+            if (!listenTo) return;
+
+            connectingPrompt.CloseSelf();
+
+            menuController.GetOrAddScreen<LobbyPromptScreen>().Prompt();
+        }
+
+        private void OnConnectionTimedOut()
+        {
+            if (!listenTo) return;
+
+            connectingPrompt.CloseSelf();
         }
     }
 }

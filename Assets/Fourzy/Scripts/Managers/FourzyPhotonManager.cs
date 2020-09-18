@@ -26,8 +26,8 @@ namespace Fourzy
         public static Action onConnectedToMaster;
         public static Action onDisconnectedFromServer;
         public static Action<string> onJoinedLobby;
-        public static Action onCreateRoomFailed;
-        public static Action onJoinRoomFailed;
+        public static Action<string> onCreateRoomFailed;
+        public static Action<string> onJoinRoomFailed;
         public static Action onJoinRandomFailed;
         public static Action<string> onCreateRoom;
         public static Action<string> onJoinedRoom;
@@ -40,15 +40,27 @@ namespace Fourzy
         public static Action<List<RoomInfo>> onRoomsListUpdated;
 
         public static bool DEBUG = false;
+        public static TypedLobby quickmatchLobby = new TypedLobby("QuickmatchLobby", LobbyType.AsyncRandomLobby);
 
         private static FourzyPhotonManager instance;
         private static string lastTask;
         private static Action lastTaskAction;
-        private static TypedLobby quickmatchLobby = new TypedLobby("QuickmatchLobby", LobbyType.AsyncRandomLobby);
 
         public List<RoomInfo> roomsInfo = new List<RoomInfo>();
 
         private Coroutine connectionTimedOutRoutine;
+
+        /// <summary>
+        /// Please check if you'r connected first <see cref="PhotonNetwork.IsConnectedAndReady"/>
+        /// </summary>
+        public static bool IsDefaultLobby => PhotonNetwork.CurrentLobby != null && PhotonNetwork.CurrentLobby.IsDefault;
+
+        /// <summary>
+        /// Please check if you'r connected first <see cref="PhotonNetwork.IsConnectedAndReady"/>
+        /// </summary>
+        public static bool IsQMLobby => PhotonNetwork.CurrentLobby != null && !PhotonNetwork.CurrentLobby.IsDefault;
+
+        public static bool ConnectedAndReady => PhotonNetwork.IsConnectedAndReady;
 
         public static void Initialize(bool DEBUG = true)
         {
@@ -125,6 +137,11 @@ namespace Fourzy
 
                     break;
 
+                case "joiningLobby":
+                    lastTaskAction();
+
+                    break;
+
                 default:
                     JoinLobby();
 
@@ -175,9 +192,9 @@ namespace Fourzy
         {
             base.OnCreateRoomFailed(returnCode, message);
 
-            if (DEBUG) Debug.Log($"Failed to create new Room.");
+            if (DEBUG) Debug.Log($"Failed to create new Room. {message}");
 
-            onCreateRoomFailed?.Invoke();
+            onCreateRoomFailed?.Invoke(message);
 
             if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
         }
@@ -188,7 +205,7 @@ namespace Fourzy
 
             if (DEBUG) Debug.Log($"Failied to join room: {message}");
 
-            onJoinRoomFailed?.Invoke();
+            onJoinRoomFailed?.Invoke(message);
 
             if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
         }
@@ -448,7 +465,7 @@ namespace Fourzy
             onEvent?.Invoke(photonEvent);
         }
 
-        private void ConnectUsingSettings(bool runTimeOutRoutine = true)
+        public void ConnectUsingSettings(bool runTimeOutRoutine = true)
         {
             PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.GameVersion = "1";
@@ -456,10 +473,21 @@ namespace Fourzy
             if (runTimeOutRoutine) RunTimeoutRoutine();
         }
 
-        private void JoinLobby(TypedLobby lobby = null)
+        public void JoinLobby(TypedLobby lobby = null)
         {
-            PhotonNetwork.JoinLobby(lobby);
+            lastTask = "joiningLobby";
+            TypedLobby _copy = lobby;
+            lastTaskAction = () => JoinLobby(_copy);
 
+            if (!PhotonNetwork.IsConnected)
+            {
+                ConnectUsingSettings();
+                return;
+            }
+
+            lastTask = "";
+            lastTaskAction = null;
+            PhotonNetwork.JoinLobby(lobby);
             RunTimeoutRoutine();
         }
 

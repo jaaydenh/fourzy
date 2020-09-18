@@ -208,11 +208,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             StartRoutine("multiplayerTimeout", Constants.REALTIME_OPPONENT_WAIT_TIME, OnMultiplayerTimerTimedOut, null);
         }
 
-        private void OnCreateRoomFailed()
+        private void OnCreateRoomFailed(string error)
         {
             if (!isOpened) return;
 
-            messageLabel.text = "Failed to create new room.";
+            messageLabel.text = $"Failed to create new room. {error}";
 
             //unblock input
             SetInteractable(true);
