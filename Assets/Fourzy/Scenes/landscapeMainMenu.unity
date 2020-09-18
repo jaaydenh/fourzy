@@ -19503,7 +19503,7 @@ MonoBehaviour:
   m_text: Quickmatch
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: e3398873146f24937a8ce9bb6a1c44a0, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: b30aa28be200e4147982d1dd0ea6641c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

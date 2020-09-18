@@ -2,6 +2,7 @@
 
 using ExitGames.Client.Photon;
 using Fourzy._Updates.Managers;
+using Fourzy._Updates.Tools;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -43,8 +44,7 @@ namespace Fourzy
         public static TypedLobby quickmatchLobby = new TypedLobby("QuickmatchLobby", LobbyType.AsyncRandomLobby);
 
         private static FourzyPhotonManager instance;
-        private static string lastTask;
-        private static Action lastTaskAction;
+        private static StackModified<KeyValuePair<string, Action>> tasks = new StackModified<KeyValuePair<string, Action>>();
 
         public List<RoomInfo> roomsInfo = new List<RoomInfo>();
 
@@ -130,22 +130,25 @@ namespace Fourzy
 
             onConnectedToMaster?.Invoke();
 
-            switch (lastTask)
+            if (tasks.Count > 0)
             {
-                case "joinRandomRoom":
-                    JoinLobby(quickmatchLobby);
+                switch (tasks.Peek().Key)
+                {
+                    case "joinRandomRoom":
+                        JoinLobby(quickmatchLobby);
 
-                    break;
+                        break;
 
-                case "joiningLobby":
-                    lastTaskAction();
+                    case "joinLobby":
+                        tasks.Pop().Value();
 
-                    break;
+                        break;
 
-                default:
-                    JoinLobby();
+                    default:
+                        JoinLobby();
 
-                    break;
+                        break;
+                }
             }
         }
 
@@ -162,29 +165,31 @@ namespace Fourzy
 
             onJoinedLobby?.Invoke(PhotonNetwork.CurrentLobby.Name);
 
-            switch (lastTask)
+            if (tasks.Count > 0)
             {
-                case "joinRandomRoom":
-                    if (PhotonNetwork.CurrentLobby.IsDefault)
-                        JoinLobby(quickmatchLobby);
-                    else
-                    {
-                        if (DEBUG) Debug.Log($"Last task set to {lastTask}");
-                        lastTaskAction();
-                    }
 
-                    break;
+                switch (tasks.Peek().Key)
+                {
+                    case "joinRandomRoom":
+                        //if (DEBUG) Debug.Log($"Last task set to {tasks.Peek().Key}");
 
-                case "createRoom":
-                    if (PhotonNetwork.CurrentLobby.IsDefault)
-                    {
-                        if (DEBUG) Debug.Log($"Last task set to {lastTask}");
-                        lastTaskAction();
-                    }
-                    else
-                        JoinLobby();
+                        if (PhotonNetwork.CurrentLobby.IsDefault)
+                            JoinLobby(quickmatchLobby);
+                        else
+                        {
+                            tasks.Pop().Value();
+                        }
 
-                    break;
+                        break;
+
+                    case "createRoom":
+                        if (PhotonNetwork.CurrentLobby.IsDefault)
+                            tasks.Pop().Value();
+                        else
+                            JoinLobby();
+
+                        break;
+                }
             }
         }
 
@@ -340,8 +345,9 @@ namespace Fourzy
 
         public static void JoinRandomRoom()
         {
-            lastTask = "joinRandomRoom";
-            lastTaskAction = JoinRandomRoom;
+            tasks.Push(new KeyValuePair<string, Action>("joinRandomRoom", JoinRandomRoom));
+            //lastTask = "joinRandomRoom";
+            //lastTaskAction = JoinRandomRoom;
 
             if (!PhotonNetwork.IsConnected)
             {
@@ -354,8 +360,9 @@ namespace Fourzy
                 return;
             }
 
-            lastTask = "";
-            lastTaskAction = null;
+            //lastTask = "";
+            //lastTaskAction = null;
+            tasks.Pop();
 
             PhotonNetwork.JoinRandomRoom();
             instance.RunTimeoutRoutine();
@@ -363,14 +370,37 @@ namespace Fourzy
 
         public static void JoinRoom(string roomName)
         {
+            tasks.Push(new KeyValuePair<string, Action>("joinRoom", () => JoinRoom(roomName)));
+            //lastTask = "joinRoom";
+            //lastTaskAction = () => JoinRoom(roomName);
+
+            if (!PhotonNetwork.IsConnected)
+            {
+                instance.ConnectUsingSettings();
+                return;
+            }
+            else if (PhotonNetwork.CurrentLobby == null)
+            {
+                instance.JoinLobby();
+                return;
+            }
+            else if (PhotonNetwork.NetworkClientState == ClientState.Authenticating)
+            {
+                return;
+            }
+
+            //lastTask = "";
+            //lastTaskAction = null;
+            tasks.Pop();
+
             PhotonNetwork.JoinRoom(roomName);
         }
 
         public static void CreateRoom(RoomType type, string expectedUser = "")
         {
-            lastTask = "createRoom";
-
-            lastTaskAction = () => CreateRoom(type, expectedUser);
+            tasks.Push(new KeyValuePair<string, Action>("createRoom", () => CreateRoom(type, expectedUser)));
+            //lastTask = "createRoom";
+            //lastTaskAction = () => CreateRoom(type, expectedUser);
 
             if (!PhotonNetwork.IsConnected)
             {
@@ -395,8 +425,9 @@ namespace Fourzy
                 return;
             }
 
-            lastTask = "";
-            lastTaskAction = null;
+            tasks.Pop();
+            //lastTask = "";
+            //lastTaskAction = null;
 
             Hashtable properties = new ExitGames.Client.Photon.Hashtable()
             {
@@ -475,9 +506,10 @@ namespace Fourzy
 
         public void JoinLobby(TypedLobby lobby = null)
         {
-            lastTask = "joiningLobby";
             TypedLobby _copy = lobby;
-            lastTaskAction = () => JoinLobby(_copy);
+            tasks.Push(new KeyValuePair<string, Action>("joinLobby", () => JoinLobby(_copy)));
+            //lastTask = "joiningLobby";
+            //lastTaskAction = () => JoinLobby(_copy);
 
             if (!PhotonNetwork.IsConnected)
             {
@@ -485,8 +517,9 @@ namespace Fourzy
                 return;
             }
 
-            lastTask = "";
-            lastTaskAction = null;
+            //lastTask = "";
+            //lastTaskAction = null;
+            tasks.Pop();
             PhotonNetwork.JoinLobby(lobby);
             RunTimeoutRoutine();
         }

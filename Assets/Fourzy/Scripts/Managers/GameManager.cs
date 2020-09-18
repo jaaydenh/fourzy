@@ -274,7 +274,7 @@ namespace Fourzy
         {
             //force demo game
             if (StandaloneInputModuleExtended.OnHotkey1Press()) StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
-            if (Input.GetKeyDown(KeyCode.Z)) PhotonNetwork.Disconnect();
+            //if (Input.GetKeyDown(KeyCode.Z)) PhotonNetwork.Disconnect();
             //if (Input.GetKeyDown(KeyCode.X)) print(PhotonNetwork.NetworkClientState);
         }
 

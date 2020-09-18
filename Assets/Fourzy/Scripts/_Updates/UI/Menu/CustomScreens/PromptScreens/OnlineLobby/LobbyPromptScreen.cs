@@ -47,6 +47,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             DisplayRooms(FourzyPhotonManager.Instance.roomsInfo);
+
         }
 
         public void CreateRoom()
@@ -82,17 +83,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             rooms.Clear();
         }
 
-        private void RemoveRoom(string roomName)
-        {
-            PhotonRoomWidget toRemove = rooms.Find(_widget => _widget.roomName == roomName);
-
-            if (toRemove)
-            {
-                Destroy(toRemove.gameObject);
-                rooms.Remove(toRemove);
-            }
-        }
-
         private void OnRoomsUpdated(List<RoomInfo> _rooms) => DisplayRooms(roomsData = _rooms);
 
         private void OnJoinedRoom(string roomName)
@@ -100,8 +90,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (!isOpened) return;
 
             if (waitingPrompt) waitingPrompt.CloseSelf();
-
-            BlockInput();
 
             //play GAME_FOUND sfx
             AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
