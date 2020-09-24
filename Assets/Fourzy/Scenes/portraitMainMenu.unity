@@ -1372,7 +1372,6 @@ RectTransform:
   m_Children:
   - {fileID: 1389158773}
   - {fileID: 1069005259}
-  - {fileID: 67450306}
   m_Father: {fileID: 351924086}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1915,11 +1914,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2080292210}
-  m_Father: {fileID: 44892452}
-  m_RootOrder: 2
+  m_Father: {fileID: 688260541}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0}
@@ -13835,7 +13834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 749.8154
+  m_MinWidth: 750.9422
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -18560,6 +18559,7 @@ RectTransform:
   - {fileID: 1271688372}
   - {fileID: 3030415}
   - {fileID: 1203184438}
+  - {fileID: 67450306}
   m_Father: {fileID: 719645817}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20140,7 +20140,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00015258789}
+  m_AnchoredPosition: {x: 0, y: 0.000020641024}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &719645818
@@ -20172,7 +20172,7 @@ MonoBehaviour:
   m_Padding:
     m_Left: 50
     m_Right: 50
-    m_Top: 120
+    m_Top: 130
     m_Bottom: 0
   m_ChildAlignment: 1
   m_Spacing: 0
@@ -32462,7 +32462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 749.8154
+  m_MinWidth: 750.9422
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -47261,7 +47261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 749.8154
+  m_MinWidth: 750.9422
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
