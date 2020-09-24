@@ -80,11 +80,6 @@ namespace Fourzy
             DontDestroyOnLoad(go);
         }
 
-        public static void Connect()
-        {
-            instance.ConnectUsingSettings(false);
-        }
-
         #region Callbacks
 
         public override void OnEnable()
@@ -299,6 +294,7 @@ namespace Fourzy
                 [PhotonNetwork.IsMasterClient ? Constants.REALTIME_PLAYER_1_READY : Constants.REALTIME_PLAYER_2_READY] = true,
             });
         }
+
         public static void SetClientRematchReady()
         {
             if (PhotonNetwork.CurrentRoom == null) return;
@@ -336,6 +332,8 @@ namespace Fourzy
 
         public static void ResetRematchState()
         {
+            if (PhotonNetwork.CurrentRoom == null) return;
+
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable()
             {
                 [Constants.REALTIME_PLAYER_1_REMATCH] = false,

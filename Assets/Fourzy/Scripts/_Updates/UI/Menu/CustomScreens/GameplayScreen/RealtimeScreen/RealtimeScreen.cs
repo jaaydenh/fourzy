@@ -45,7 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         }
 
-        public void CheckWaitingForOtherPlayer()
+        public void CheckWaitingForOtherPlayer(string text)
         {
             if (PhotonNetwork.CurrentRoom == null) return;
 
@@ -53,7 +53,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 menuController.OpenScreen(this);
 
-                statusLabel.text = "Waiting for other player...";
+                statusLabel.text = text;
 
                 //animate
                 statusAlphaTween.repeat = RepeatType.PING_PONG;

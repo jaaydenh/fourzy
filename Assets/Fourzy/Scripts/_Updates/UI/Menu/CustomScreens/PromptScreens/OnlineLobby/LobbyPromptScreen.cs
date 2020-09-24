@@ -47,7 +47,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             DisplayRooms(FourzyPhotonManager.Instance.roomsInfo);
-
         }
 
         public void CreateRoom()

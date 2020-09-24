@@ -60,6 +60,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public virtual void Accept()
         {
+            print("nani");
+
             if (inputBlocked) return;
 
             onAccept?.Invoke();

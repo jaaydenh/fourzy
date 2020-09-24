@@ -154,7 +154,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!listenTo) return;
 
-            connectingPrompt.CloseSelf();
+            connectingPrompt.Decline();
 
             menuController.GetOrAddScreen<LobbyPromptScreen>().Prompt();
         }

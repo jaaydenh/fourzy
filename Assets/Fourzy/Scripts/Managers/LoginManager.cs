@@ -405,7 +405,7 @@ namespace Fourzy
 
             PhotonNetwork.AuthValues = customAuth;
 
-            FourzyPhotonManager.Connect();
+            FourzyPhotonManager.Instance.JoinLobby();
         }
 
         private void OnPlayFabError(PlayFabError obj)

@@ -62,7 +62,7 @@ namespace Fourzy._Updates.ClientModel
                 foreach (var player in State.Players) result.Players.Add(player.Key, new Player(player.Value));
 
                 result.WinnerId = State.WinnerId;
-                result.ActivePlayerId = 1;
+                result.ActivePlayerId = State.ActivePlayerId;
                 result.GameSeed = _Type.ToString();
 
                 result.GameEffects = new List<IGameEffect>();
@@ -114,7 +114,7 @@ namespace Fourzy._Updates.ClientModel
                 switch (_Type)
                 {
                     case Fourzy.GameType.PASSANDPLAY:
-                        State.ActivePlayerId = UnityEngine.Random.value > .5f ? 1 : 2;
+                        SetRandomActivePlayerID();
 
                         break;
                 }
@@ -274,6 +274,11 @@ namespace Fourzy._Updates.ClientModel
 
                 return result;
             }
+        }
+
+        public void SetRandomActivePlayerID()
+        {
+            State.ActivePlayerId = UnityEngine.Random.value > .5f ? 1 : 2;
         }
 
         public GamePieceView myGamePiece => me.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;

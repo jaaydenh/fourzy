@@ -359,7 +359,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 default:
                     menuController
                         .GetOrAddScreen<PromptScreen>()
-                        .Prompt("Challenge Failed", "Gauntlet challenge failed, want to restart it?",
+                        .Prompt("Your journey has ended", "You have no more Fourzies to play.",
+                            "Retry",
+                            "Quit",
                             () =>
                             {
                                 game.puzzleData.pack.ResetPlayerPrefs();

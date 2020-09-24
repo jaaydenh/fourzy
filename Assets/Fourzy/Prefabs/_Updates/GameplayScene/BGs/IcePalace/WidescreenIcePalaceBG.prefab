@@ -121,7 +121,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1900680288
 Transform:
   m_ObjectHideFlags: 0
@@ -150,8 +150,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -244,15 +244,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -5.67, y: -4.38, z: -0.5}
-  - {x: -5.6595755, y: -4.18, z: -0.5}
-  - {x: -5.7025537, y: -3.9799998, z: -0.5}
-  - {x: -5.746317, y: -3.78, z: -0.5}
-  - {x: -5.6657043, y: -3.58, z: -0.5}
-  - {x: -5.5345902, y: -3.3799999, z: -0.5}
-  - {x: -5.4961634, y: -3.1799998, z: -0.5}
-  - {x: -5.5839458, y: -2.9799998, z: -0.5}
-  - {x: -5.608647, y: -2.78, z: -0.5}
-  - {x: -5.449668, y: -2.58, z: -0.5}
+  - {x: -5.6387353, y: -4.18, z: -0.5}
+  - {x: -5.637842, y: -3.9799998, z: -0.5}
+  - {x: -5.651394, y: -3.78, z: -0.5}
+  - {x: -5.5890937, y: -3.58, z: -0.5}
+  - {x: -5.5031533, y: -3.3799999, z: -0.5}
+  - {x: -5.571798, y: -3.1799998, z: -0.5}
+  - {x: -5.742364, y: -2.9799998, z: -0.5}
+  - {x: -5.9186153, y: -2.78, z: -0.5}
+  - {x: -5.7149386, y: -2.58, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -325,7 +325,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8190391792597169714
 Transform:
   m_ObjectHideFlags: 0
@@ -354,8 +354,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.314
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -448,15 +448,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 6.8830004, y: 3.4320006, z: -0.5}
-  - {x: 6.8878407, y: 3.6320007, z: -0.5}
-  - {x: 6.9422297, y: 3.8320007, z: -0.5}
-  - {x: 6.9641523, y: 4.0320005, z: -0.5}
-  - {x: 6.9239225, y: 4.232001, z: -0.5}
-  - {x: 6.9293103, y: 4.4320006, z: -0.5}
-  - {x: 7.0445976, y: 4.6320004, z: -0.5}
-  - {x: 7.10155, y: 4.8320007, z: -0.5}
-  - {x: 6.9364977, y: 5.0320005, z: -0.5}
-  - {x: 6.703799, y: 5.232001, z: -0.5}
+  - {x: 6.9059033, y: 3.6320007, z: -0.5}
+  - {x: 6.9493804, y: 3.8320007, z: -0.5}
+  - {x: 6.9210477, y: 4.0320005, z: -0.5}
+  - {x: 6.8268266, y: 4.232001, z: -0.5}
+  - {x: 6.7450385, y: 4.4320006, z: -0.5}
+  - {x: 6.8756833, y: 4.6320004, z: -0.5}
+  - {x: 7.058563, y: 4.8320007, z: -0.5}
+  - {x: 7.122755, y: 5.0320005, z: -0.5}
+  - {x: 7.006043, y: 5.232001, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -612,8 +612,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.666
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -706,15 +706,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -4.25, y: 3.4999995, z: -0.5}
-  - {x: -4.2439213, y: 3.6999996, z: -0.5}
-  - {x: -4.213974, y: 3.8999996, z: -0.5}
-  - {x: -4.1510057, y: 4.0999994, z: -0.5}
-  - {x: -4.1725736, y: 4.2999997, z: -0.5}
-  - {x: -4.2863674, y: 4.4999995, z: -0.5}
-  - {x: -4.4468856, y: 4.6999993, z: -0.5}
-  - {x: -4.306592, y: 4.8999996, z: -0.5}
-  - {x: -4.101275, y: 5.0999994, z: -0.5}
-  - {x: -3.9623804, y: 5.2999997, z: -0.5}
+  - {x: -4.231954, y: 3.6999996, z: -0.5}
+  - {x: -4.185403, y: 3.8999996, z: -0.5}
+  - {x: -4.1933203, y: 4.0999994, z: -0.5}
+  - {x: -4.2246323, y: 4.2999997, z: -0.5}
+  - {x: -4.161654, y: 4.4999995, z: -0.5}
+  - {x: -4.051665, y: 4.6999993, z: -0.5}
+  - {x: -4.1075954, y: 4.8999996, z: -0.5}
+  - {x: -4.3000703, y: 5.0999994, z: -0.5}
+  - {x: -4.5369964, y: 5.2999997, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -735,7 +735,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 0.5529412}
+      key0: {r: 1, g: 1, b: 1, a: 0.25882354}
       key1: {r: 1, g: 0, b: 0.71488476, a: 0.78431374}
       key2: {r: 1, g: 1, b: 1, a: 0.27450982}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -787,7 +787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &223907062826302284
 Transform:
   m_ObjectHideFlags: 0
@@ -816,8 +816,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.314
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -910,15 +910,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -5.67, y: -4.38, z: -0.5}
-  - {x: -5.6651597, y: -4.18, z: -0.5}
-  - {x: -5.6107707, y: -3.9799998, z: -0.5}
-  - {x: -5.588848, y: -3.78, z: -0.5}
-  - {x: -5.629078, y: -3.58, z: -0.5}
-  - {x: -5.62369, y: -3.3799999, z: -0.5}
-  - {x: -5.508403, y: -3.1799998, z: -0.5}
-  - {x: -5.4514503, y: -2.9799998, z: -0.5}
-  - {x: -5.616503, y: -2.78, z: -0.5}
-  - {x: -5.8492017, y: -2.58, z: -0.5}
+  - {x: -5.647097, y: -4.18, z: -0.5}
+  - {x: -5.60362, y: -3.9799998, z: -0.5}
+  - {x: -5.631953, y: -3.78, z: -0.5}
+  - {x: -5.726174, y: -3.58, z: -0.5}
+  - {x: -5.807962, y: -3.3799999, z: -0.5}
+  - {x: -5.677317, y: -3.1799998, z: -0.5}
+  - {x: -5.494437, y: -2.9799998, z: -0.5}
+  - {x: -5.4302454, y: -2.78, z: -0.5}
+  - {x: -5.5469575, y: -2.58, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -991,7 +991,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &978945903458584463
 Transform:
   m_ObjectHideFlags: 0
@@ -1020,8 +1020,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.314
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -1114,15 +1114,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 2.64, y: -5.2, z: -0.5}
-  - {x: 2.6448402, y: -5, z: -0.5}
-  - {x: 2.6992295, y: -4.7999997, z: -0.5}
-  - {x: 2.7211523, y: -4.6, z: -0.5}
-  - {x: 2.6809223, y: -4.3999996, z: -0.5}
-  - {x: 2.68631, y: -4.2, z: -0.5}
-  - {x: 2.8015976, y: -3.9999998, z: -0.5}
-  - {x: 2.8585498, y: -3.7999997, z: -0.5}
-  - {x: 2.6934974, y: -3.6, z: -0.5}
-  - {x: 2.4607983, y: -3.3999999, z: -0.5}
+  - {x: 2.662903, y: -5, z: -0.5}
+  - {x: 2.7063801, y: -4.7999997, z: -0.5}
+  - {x: 2.6780477, y: -4.6, z: -0.5}
+  - {x: 2.5838263, y: -4.3999996, z: -0.5}
+  - {x: 2.5020382, y: -4.2, z: -0.5}
+  - {x: 2.6326828, y: -3.9999998, z: -0.5}
+  - {x: 2.8155632, y: -3.7999997, z: -0.5}
+  - {x: 2.8797548, y: -3.6, z: -0.5}
+  - {x: 2.7630424, y: -3.3999999, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -1372,8 +1372,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.666
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -1466,15 +1466,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -7.26, y: 3.5269995, z: -0.5}
-  - {x: -7.2539215, y: 3.7269995, z: -0.5}
-  - {x: -7.223974, y: 3.9269996, z: -0.5}
-  - {x: -7.161006, y: 4.1269994, z: -0.5}
-  - {x: -7.182574, y: 4.3269997, z: -0.5}
-  - {x: -7.2963676, y: 4.5269995, z: -0.5}
-  - {x: -7.456886, y: 4.7269993, z: -0.5}
-  - {x: -7.316592, y: 4.9269996, z: -0.5}
-  - {x: -7.111275, y: 5.1269994, z: -0.5}
-  - {x: -6.9723806, y: 5.3269997, z: -0.5}
+  - {x: -7.238663, y: 3.7269995, z: -0.5}
+  - {x: -7.1956644, y: 3.9269996, z: -0.5}
+  - {x: -7.207975, y: 4.1269994, z: -0.5}
+  - {x: -7.232882, y: 4.3269997, z: -0.5}
+  - {x: -7.1588335, y: 4.5269995, z: -0.5}
+  - {x: -7.059905, y: 4.7269993, z: -0.5}
+  - {x: -7.1389194, y: 4.9269996, z: -0.5}
+  - {x: -7.3351293, y: 5.1269994, z: -0.5}
+  - {x: -7.546799, y: 5.3269997, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -1495,7 +1495,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 0.5529412}
+      key0: {r: 1, g: 1, b: 1, a: 0.25882354}
       key1: {r: 1, g: 0, b: 0.71488476, a: 0.78431374}
       key2: {r: 1, g: 1, b: 1, a: 0.27450982}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -1657,8 +1657,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.666
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -1751,15 +1751,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 2.64, y: -5.2, z: -0.5}
-  - {x: 2.6460788, y: -5, z: -0.5}
-  - {x: 2.676026, y: -4.7999997, z: -0.5}
-  - {x: 2.7389944, y: -4.6, z: -0.5}
-  - {x: 2.7174265, y: -4.3999996, z: -0.5}
-  - {x: 2.6036325, y: -4.2, z: -0.5}
-  - {x: 2.4431145, y: -3.9999998, z: -0.5}
-  - {x: 2.5834079, y: -3.7999997, z: -0.5}
-  - {x: 2.788725, y: -3.6, z: -0.5}
-  - {x: 2.9276197, y: -3.3999999, z: -0.5}
+  - {x: 2.6728284, y: -5, z: -0.5}
+  - {x: 2.6608808, y: -4.7999997, z: -0.5}
+  - {x: 2.5912247, y: -4.6, z: -0.5}
+  - {x: 2.539492, y: -4.3999996, z: -0.5}
+  - {x: 2.6469717, y: -4.2, z: -0.5}
+  - {x: 2.8042212, y: -3.9999998, z: -0.5}
+  - {x: 2.8434782, y: -3.7999997, z: -0.5}
+  - {x: 2.738972, y: -3.6, z: -0.5}
+  - {x: 2.7110255, y: -3.3999999, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -1832,7 +1832,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4044379936156559834
 Transform:
   m_ObjectHideFlags: 0
@@ -1861,8 +1861,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -1955,15 +1955,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -4.25, y: 3.4999995, z: -0.5}
-  - {x: -4.2395754, y: 3.6999996, z: -0.5}
-  - {x: -4.2825537, y: 3.8999996, z: -0.5}
-  - {x: -4.326317, y: 4.0999994, z: -0.5}
-  - {x: -4.245704, y: 4.2999997, z: -0.5}
-  - {x: -4.11459, y: 4.4999995, z: -0.5}
-  - {x: -4.0761633, y: 4.6999993, z: -0.5}
-  - {x: -4.1639457, y: 4.8999996, z: -0.5}
-  - {x: -4.188647, y: 5.0999994, z: -0.5}
-  - {x: -4.029668, y: 5.2999997, z: -0.5}
+  - {x: -4.218735, y: 3.6999996, z: -0.5}
+  - {x: -4.217842, y: 3.8999996, z: -0.5}
+  - {x: -4.231394, y: 4.0999994, z: -0.5}
+  - {x: -4.1690936, y: 4.2999997, z: -0.5}
+  - {x: -4.0831532, y: 4.4999995, z: -0.5}
+  - {x: -4.151798, y: 4.6999993, z: -0.5}
+  - {x: -4.322364, y: 4.8999996, z: -0.5}
+  - {x: -4.4986153, y: 5.0999994, z: -0.5}
+  - {x: -4.2949386, y: 5.2999997, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -2065,8 +2065,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.666
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -2159,15 +2159,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 6.8830004, y: 3.4320002, z: -0.5}
-  - {x: 6.889079, y: 3.6320002, z: -0.5}
-  - {x: 6.9190264, y: 3.8320003, z: -0.5}
-  - {x: 6.9819946, y: 4.032, z: -0.5}
-  - {x: 6.960427, y: 4.2320004, z: -0.5}
-  - {x: 6.846633, y: 4.432, z: -0.5}
-  - {x: 6.686115, y: 4.632, z: -0.5}
-  - {x: 6.8264084, y: 4.8320003, z: -0.5}
-  - {x: 7.0317254, y: 5.032, z: -0.5}
-  - {x: 7.17062, y: 5.2320004, z: -0.5}
+  - {x: 6.9103317, y: 3.6320002, z: -0.5}
+  - {x: 6.9039903, y: 3.8320003, z: -0.5}
+  - {x: 6.9100823, y: 4.032, z: -0.5}
+  - {x: 6.9894896, y: 4.2320004, z: -0.5}
+  - {x: 7.040386, y: 4.432, z: -0.5}
+  - {x: 6.9261675, y: 4.632, z: -0.5}
+  - {x: 6.747043, y: 4.8320003, z: -0.5}
+  - {x: 6.7044067, y: 5.032, z: -0.5}
+  - {x: 6.92207, y: 5.2320004, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -2188,7 +2188,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 0.5529412}
+      key0: {r: 1, g: 1, b: 1, a: 0.25882354}
       key1: {r: 1, g: 0, b: 0.71488476, a: 0.78431374}
       key2: {r: 1, g: 1, b: 1, a: 0.27450982}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -2269,8 +2269,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.666
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -2363,15 +2363,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 5.13, y: -4.45, z: -0.5}
-  - {x: 5.136079, y: -4.25, z: -0.5}
-  - {x: 5.166026, y: -4.0499997, z: -0.5}
-  - {x: 5.2289944, y: -3.85, z: -0.5}
-  - {x: 5.2074265, y: -3.6499999, z: -0.5}
-  - {x: 5.0936327, y: -3.4499998, z: -0.5}
-  - {x: 4.9331145, y: -3.2499998, z: -0.5}
-  - {x: 5.073408, y: -3.0499997, z: -0.5}
-  - {x: 5.278725, y: -2.85, z: -0.5}
-  - {x: 5.4176197, y: -2.6499999, z: -0.5}
+  - {x: 5.140026, y: -4.25, z: -0.5}
+  - {x: 5.148924, y: -4.0499997, z: -0.5}
+  - {x: 5.2115574, y: -3.85, z: -0.5}
+  - {x: 5.2540293, y: -3.6499999, z: -0.5}
+  - {x: 5.16141, y: -3.4499998, z: -0.5}
+  - {x: 5.0081944, y: -3.2499998, z: -0.5}
+  - {x: 4.979856, y: -3.0499997, z: -0.5}
+  - {x: 5.171991, y: -2.85, z: -0.5}
+  - {x: 5.3985214, y: -2.6499999, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -2444,7 +2444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8566103753969880675
 Transform:
   m_ObjectHideFlags: 0
@@ -2473,8 +2473,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -2567,15 +2567,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 2.64, y: -5.2, z: -0.5}
-  - {x: 2.6504247, y: -5, z: -0.5}
-  - {x: 2.6074464, y: -4.7999997, z: -0.5}
-  - {x: 2.5636833, y: -4.6, z: -0.5}
-  - {x: 2.6442957, y: -4.3999996, z: -0.5}
-  - {x: 2.7754102, y: -4.2, z: -0.5}
-  - {x: 2.8138368, y: -3.9999998, z: -0.5}
-  - {x: 2.7260547, y: -3.7999997, z: -0.5}
-  - {x: 2.7013533, y: -3.6, z: -0.5}
-  - {x: 2.8603323, y: -3.3999999, z: -0.5}
+  - {x: 2.671265, y: -5, z: -0.5}
+  - {x: 2.672158, y: -4.7999997, z: -0.5}
+  - {x: 2.6586063, y: -4.6, z: -0.5}
+  - {x: 2.7209065, y: -4.3999996, z: -0.5}
+  - {x: 2.8068469, y: -4.2, z: -0.5}
+  - {x: 2.7382023, y: -3.9999998, z: -0.5}
+  - {x: 2.5676365, y: -3.7999997, z: -0.5}
+  - {x: 2.3913848, y: -3.6, z: -0.5}
+  - {x: 2.5950615, y: -3.3999999, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -2677,8 +2677,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.666
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -2771,15 +2771,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 4.27, y: 3.46, z: -0.5}
-  - {x: 4.2760787, y: 3.66, z: -0.5}
-  - {x: 4.306026, y: 3.8600001, z: -0.5}
-  - {x: 4.368994, y: 4.06, z: -0.5}
-  - {x: 4.3474264, y: 4.26, z: -0.5}
-  - {x: 4.2336326, y: 4.46, z: -0.5}
-  - {x: 4.0731144, y: 4.66, z: -0.5}
-  - {x: 4.213408, y: 4.86, z: -0.5}
-  - {x: 4.418725, y: 5.06, z: -0.5}
-  - {x: 4.5576196, y: 5.26, z: -0.5}
+  - {x: 4.277323, y: 3.66, z: -0.5}
+  - {x: 4.316126, y: 3.8600001, z: -0.5}
+  - {x: 4.3699756, y: 4.06, z: -0.5}
+  - {x: 4.322998, y: 4.26, z: -0.5}
+  - {x: 4.2026076, y: 4.46, z: -0.5}
+  - {x: 4.1020007, y: 4.66, z: -0.5}
+  - {x: 4.25837, y: 4.86, z: -0.5}
+  - {x: 4.467401, y: 5.06, z: -0.5}
+  - {x: 4.542134, y: 5.26, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -2800,7 +2800,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 0.5529412}
+      key0: {r: 1, g: 1, b: 1, a: 0.25882354}
       key1: {r: 1, g: 0, b: 0.71488476, a: 0.78431374}
       key2: {r: 1, g: 1, b: 1, a: 0.27450982}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -2852,7 +2852,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5056956789287293029
 Transform:
   m_ObjectHideFlags: 0
@@ -2881,8 +2881,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -2975,15 +2975,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 5.13, y: -4.45, z: -0.5}
-  - {x: 5.1404247, y: -4.25, z: -0.5}
-  - {x: 5.0974464, y: -4.0499997, z: -0.5}
-  - {x: 5.0536833, y: -3.85, z: -0.5}
-  - {x: 5.134296, y: -3.6499999, z: -0.5}
-  - {x: 5.26541, y: -3.4499998, z: -0.5}
-  - {x: 5.303837, y: -3.2499998, z: -0.5}
-  - {x: 5.2160544, y: -3.0499997, z: -0.5}
-  - {x: 5.1913533, y: -2.85, z: -0.5}
-  - {x: 5.3503323, y: -2.6499999, z: -0.5}
+  - {x: 5.161265, y: -4.25, z: -0.5}
+  - {x: 5.162158, y: -4.0499997, z: -0.5}
+  - {x: 5.1486063, y: -3.85, z: -0.5}
+  - {x: 5.2109065, y: -3.6499999, z: -0.5}
+  - {x: 5.296847, y: -3.4499998, z: -0.5}
+  - {x: 5.2282023, y: -3.2499998, z: -0.5}
+  - {x: 5.0576363, y: -3.0499997, z: -0.5}
+  - {x: 4.881385, y: -2.85, z: -0.5}
+  - {x: 5.0850616, y: -2.6499999, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -3056,7 +3056,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2497832914501255948
 Transform:
   m_ObjectHideFlags: 0
@@ -3085,8 +3085,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -3179,15 +3179,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -7.26, y: 3.5269995, z: -0.5}
-  - {x: -7.2495756, y: 3.7269995, z: -0.5}
-  - {x: -7.292554, y: 3.9269996, z: -0.5}
-  - {x: -7.336317, y: 4.1269994, z: -0.5}
-  - {x: -7.2557044, y: 4.3269997, z: -0.5}
-  - {x: -7.1245904, y: 4.5269995, z: -0.5}
-  - {x: -7.0861635, y: 4.7269993, z: -0.5}
-  - {x: -7.173946, y: 4.9269996, z: -0.5}
-  - {x: -7.198647, y: 5.1269994, z: -0.5}
-  - {x: -7.039668, y: 5.3269997, z: -0.5}
+  - {x: -7.2287354, y: 3.7269995, z: -0.5}
+  - {x: -7.2278423, y: 3.9269996, z: -0.5}
+  - {x: -7.241394, y: 4.1269994, z: -0.5}
+  - {x: -7.179094, y: 4.3269997, z: -0.5}
+  - {x: -7.0931535, y: 4.5269995, z: -0.5}
+  - {x: -7.161798, y: 4.7269993, z: -0.5}
+  - {x: -7.332364, y: 4.9269996, z: -0.5}
+  - {x: -7.5086155, y: 5.1269994, z: -0.5}
+  - {x: -7.304939, y: 5.3269997, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -3341,7 +3341,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8841413354533228457
 Transform:
   m_ObjectHideFlags: 0
@@ -3370,8 +3370,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.314
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -3464,15 +3464,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -2.72, y: -5.2, z: -0.5}
-  - {x: -2.71516, y: -5, z: -0.5}
-  - {x: -2.6607707, y: -4.7999997, z: -0.5}
-  - {x: -2.6388478, y: -4.6, z: -0.5}
-  - {x: -2.6790779, y: -4.3999996, z: -0.5}
-  - {x: -2.67369, y: -4.2, z: -0.5}
-  - {x: -2.5584025, y: -3.9999998, z: -0.5}
-  - {x: -2.5014503, y: -3.7999997, z: -0.5}
-  - {x: -2.6665027, y: -3.6, z: -0.5}
-  - {x: -2.8992019, y: -3.3999999, z: -0.5}
+  - {x: -2.697097, y: -5, z: -0.5}
+  - {x: -2.65362, y: -4.7999997, z: -0.5}
+  - {x: -2.6819525, y: -4.6, z: -0.5}
+  - {x: -2.7761738, y: -4.3999996, z: -0.5}
+  - {x: -2.857962, y: -4.2, z: -0.5}
+  - {x: -2.7273173, y: -3.9999998, z: -0.5}
+  - {x: -2.544437, y: -3.7999997, z: -0.5}
+  - {x: -2.4802454, y: -3.6, z: -0.5}
+  - {x: -2.5969577, y: -3.3999999, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -3545,7 +3545,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1953703768266437786
 Transform:
   m_ObjectHideFlags: 0
@@ -3574,8 +3574,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.314
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -3668,15 +3668,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -7.26, y: 3.527, z: -0.5}
-  - {x: -7.25516, y: 3.727, z: -0.5}
-  - {x: -7.200771, y: 3.927, z: -0.5}
-  - {x: -7.1788483, y: 4.127, z: -0.5}
-  - {x: -7.219078, y: 4.327, z: -0.5}
-  - {x: -7.2136903, y: 4.527, z: -0.5}
-  - {x: -7.098403, y: 4.7269998, z: -0.5}
-  - {x: -7.0414505, y: 4.927, z: -0.5}
-  - {x: -7.206503, y: 5.127, z: -0.5}
-  - {x: -7.439202, y: 5.327, z: -0.5}
+  - {x: -7.2370973, y: 3.727, z: -0.5}
+  - {x: -7.19362, y: 3.927, z: -0.5}
+  - {x: -7.221953, y: 4.127, z: -0.5}
+  - {x: -7.316174, y: 4.327, z: -0.5}
+  - {x: -7.397962, y: 4.527, z: -0.5}
+  - {x: -7.2673173, y: 4.7269998, z: -0.5}
+  - {x: -7.0844374, y: 4.927, z: -0.5}
+  - {x: -7.0202456, y: 5.127, z: -0.5}
+  - {x: -7.1369576, y: 5.327, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -3749,7 +3749,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2990716131111500617
 Transform:
   m_ObjectHideFlags: 0
@@ -3778,8 +3778,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -3872,15 +3872,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -2.72, y: -5.2, z: -0.5}
-  - {x: -2.7095754, y: -5, z: -0.5}
-  - {x: -2.7525537, y: -4.7999997, z: -0.5}
-  - {x: -2.7963169, y: -4.6, z: -0.5}
-  - {x: -2.7157044, y: -4.3999996, z: -0.5}
-  - {x: -2.58459, y: -4.2, z: -0.5}
-  - {x: -2.5461633, y: -3.9999998, z: -0.5}
-  - {x: -2.6339455, y: -3.7999997, z: -0.5}
-  - {x: -2.6586468, y: -3.6, z: -0.5}
-  - {x: -2.499668, y: -3.3999999, z: -0.5}
+  - {x: -2.6887352, y: -5, z: -0.5}
+  - {x: -2.6878421, y: -4.7999997, z: -0.5}
+  - {x: -2.7013938, y: -4.6, z: -0.5}
+  - {x: -2.6390936, y: -4.3999996, z: -0.5}
+  - {x: -2.5531533, y: -4.2, z: -0.5}
+  - {x: -2.6217978, y: -3.9999998, z: -0.5}
+  - {x: -2.7923636, y: -3.7999997, z: -0.5}
+  - {x: -2.9686153, y: -3.6, z: -0.5}
+  - {x: -2.7649386, y: -3.3999999, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -3953,7 +3953,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8545327230071494076
 Transform:
   m_ObjectHideFlags: 0
@@ -3982,8 +3982,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -4076,15 +4076,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 6.883, y: 3.4320002, z: -0.5}
-  - {x: 6.8934245, y: 3.6320002, z: -0.5}
-  - {x: 6.850446, y: 3.8320003, z: -0.5}
-  - {x: 6.806683, y: 4.032, z: -0.5}
-  - {x: 6.8872957, y: 4.2320004, z: -0.5}
-  - {x: 7.0184097, y: 4.432, z: -0.5}
-  - {x: 7.0568366, y: 4.632, z: -0.5}
-  - {x: 6.969054, y: 4.8320003, z: -0.5}
-  - {x: 6.944353, y: 5.032, z: -0.5}
-  - {x: 7.103332, y: 5.2320004, z: -0.5}
+  - {x: 6.9142647, y: 3.6320002, z: -0.5}
+  - {x: 6.915158, y: 3.8320003, z: -0.5}
+  - {x: 6.901606, y: 4.032, z: -0.5}
+  - {x: 6.9639063, y: 4.2320004, z: -0.5}
+  - {x: 7.0498466, y: 4.432, z: -0.5}
+  - {x: 6.981202, y: 4.632, z: -0.5}
+  - {x: 6.810636, y: 4.8320003, z: -0.5}
+  - {x: 6.6343846, y: 5.032, z: -0.5}
+  - {x: 6.8380613, y: 5.2320004, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -4186,8 +4186,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.666
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -4280,15 +4280,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -2.72, y: -5.2, z: -0.5}
-  - {x: -2.7139213, y: -5, z: -0.5}
-  - {x: -2.683974, y: -4.7999997, z: -0.5}
-  - {x: -2.6210058, y: -4.6, z: -0.5}
-  - {x: -2.6425736, y: -4.3999996, z: -0.5}
-  - {x: -2.7563677, y: -4.2, z: -0.5}
-  - {x: -2.9168856, y: -3.9999998, z: -0.5}
-  - {x: -2.7765923, y: -3.7999997, z: -0.5}
-  - {x: -2.5712752, y: -3.6, z: -0.5}
-  - {x: -2.4323804, y: -3.3999999, z: -0.5}
+  - {x: -2.7464437, y: -5, z: -0.5}
+  - {x: -2.7200282, y: -4.7999997, z: -0.5}
+  - {x: -2.641357, y: -4.6, z: -0.5}
+  - {x: -2.600253, y: -4.3999996, z: -0.5}
+  - {x: -2.6526668, y: -4.2, z: -0.5}
+  - {x: -2.6748447, y: -3.9999998, z: -0.5}
+  - {x: -2.553109, y: -3.7999997, z: -0.5}
+  - {x: -2.4542687, y: -3.6, z: -0.5}
+  - {x: -2.6120055, y: -3.3999999, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -4361,7 +4361,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3839614409660093761
 Transform:
   m_ObjectHideFlags: 0
@@ -4390,8 +4390,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.314
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -4484,15 +4484,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 5.13, y: -4.45, z: -0.5}
-  - {x: 5.1348405, y: -4.25, z: -0.5}
-  - {x: 5.1892295, y: -4.0499997, z: -0.5}
-  - {x: 5.211152, y: -3.85, z: -0.5}
-  - {x: 5.1709223, y: -3.6499999, z: -0.5}
-  - {x: 5.17631, y: -3.4499998, z: -0.5}
-  - {x: 5.2915974, y: -3.2499998, z: -0.5}
-  - {x: 5.34855, y: -3.0499997, z: -0.5}
-  - {x: 5.1834974, y: -2.85, z: -0.5}
-  - {x: 4.9507985, y: -2.6499999, z: -0.5}
+  - {x: 5.152903, y: -4.25, z: -0.5}
+  - {x: 5.19638, y: -4.0499997, z: -0.5}
+  - {x: 5.1680474, y: -3.85, z: -0.5}
+  - {x: 5.0738263, y: -3.6499999, z: -0.5}
+  - {x: 4.9920382, y: -3.4499998, z: -0.5}
+  - {x: 5.122683, y: -3.2499998, z: -0.5}
+  - {x: 5.305563, y: -3.0499997, z: -0.5}
+  - {x: 5.369755, y: -2.85, z: -0.5}
+  - {x: 5.2530427, y: -2.6499999, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -4594,8 +4594,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.666
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -4688,15 +4688,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -5.67, y: -4.38, z: -0.5}
-  - {x: -5.6639214, y: -4.18, z: -0.5}
-  - {x: -5.633974, y: -3.9799998, z: -0.5}
-  - {x: -5.571006, y: -3.78, z: -0.5}
-  - {x: -5.5925736, y: -3.58, z: -0.5}
-  - {x: -5.7063675, y: -3.3799999, z: -0.5}
-  - {x: -5.8668857, y: -3.1799998, z: -0.5}
-  - {x: -5.726592, y: -2.9799998, z: -0.5}
-  - {x: -5.521275, y: -2.78, z: -0.5}
-  - {x: -5.3823805, y: -2.58, z: -0.5}
+  - {x: -5.64977, y: -4.18, z: -0.5}
+  - {x: -5.603302, y: -3.9799998, z: -0.5}
+  - {x: -5.618093, y: -3.78, z: -0.5}
+  - {x: -5.707544, y: -3.58, z: -0.5}
+  - {x: -5.8293543, y: -3.3799999, z: -0.5}
+  - {x: -5.70521, y: -3.1799998, z: -0.5}
+  - {x: -5.5249996, y: -2.9799998, z: -0.5}
+  - {x: -5.4175906, y: -2.78, z: -0.5}
+  - {x: -5.5194554, y: -2.58, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -4769,7 +4769,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3112745595063018889
 Transform:
   m_ObjectHideFlags: 0
@@ -4798,8 +4798,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.314
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -4892,15 +4892,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: -4.25, y: 3.5, z: -0.5}
-  - {x: -4.2451596, y: 3.7, z: -0.5}
-  - {x: -4.1907706, y: 3.9, z: -0.5}
-  - {x: -4.168848, y: 4.1, z: -0.5}
-  - {x: -4.209078, y: 4.3, z: -0.5}
-  - {x: -4.20369, y: 4.5, z: -0.5}
-  - {x: -4.0884027, y: 4.7, z: -0.5}
-  - {x: -4.0314503, y: 4.9, z: -0.5}
-  - {x: -4.1965027, y: 5.1, z: -0.5}
-  - {x: -4.4292016, y: 5.3, z: -0.5}
+  - {x: -4.227097, y: 3.7, z: -0.5}
+  - {x: -4.18362, y: 3.9, z: -0.5}
+  - {x: -4.2119527, y: 4.1, z: -0.5}
+  - {x: -4.306174, y: 4.3, z: -0.5}
+  - {x: -4.387962, y: 4.5, z: -0.5}
+  - {x: -4.257317, y: 4.7, z: -0.5}
+  - {x: -4.074437, y: 4.9, z: -0.5}
+  - {x: -4.0102453, y: 5.1, z: -0.5}
+  - {x: -4.1269574, y: 5.3, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -4973,7 +4973,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1054029620102685651
 Transform:
   m_ObjectHideFlags: 0
@@ -5002,8 +5002,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0.314
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -5096,15 +5096,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 4.27, y: 3.4600005, z: -0.5}
-  - {x: 4.2748404, y: 3.6600006, z: -0.5}
-  - {x: 4.3292294, y: 3.8600006, z: -0.5}
-  - {x: 4.351152, y: 4.0600004, z: -0.5}
-  - {x: 4.310922, y: 4.2600007, z: -0.5}
-  - {x: 4.31631, y: 4.4600005, z: -0.5}
-  - {x: 4.431597, y: 4.6600003, z: -0.5}
-  - {x: 4.4885497, y: 4.8600006, z: -0.5}
-  - {x: 4.3234973, y: 5.0600004, z: -0.5}
-  - {x: 4.0907984, y: 5.2600007, z: -0.5}
+  - {x: 4.292903, y: 3.6600006, z: -0.5}
+  - {x: 4.33638, y: 3.8600006, z: -0.5}
+  - {x: 4.3080473, y: 4.0600004, z: -0.5}
+  - {x: 4.213826, y: 4.2600007, z: -0.5}
+  - {x: 4.132038, y: 4.4600005, z: -0.5}
+  - {x: 4.262683, y: 4.6600003, z: -0.5}
+  - {x: 4.445563, y: 4.8600006, z: -0.5}
+  - {x: 4.5097547, y: 5.0600004, z: -0.5}
+  - {x: 4.3930426, y: 5.2600007, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -9949,7 +9949,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2989115943640333619
 Transform:
   m_ObjectHideFlags: 0
@@ -9978,8 +9978,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionCount: 10
   height: 2
-  animationTimeOffset: 0
   animationSpeed: 1
+  fps: 30
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -10072,15 +10072,15 @@ LineRenderer:
   m_SortingOrder: 100
   m_Positions:
   - {x: 4.27, y: 3.46, z: -0.5}
-  - {x: 4.2804246, y: 3.66, z: -0.5}
-  - {x: 4.2374463, y: 3.8600001, z: -0.5}
-  - {x: 4.193683, y: 4.06, z: -0.5}
-  - {x: 4.274296, y: 4.26, z: -0.5}
-  - {x: 4.40541, y: 4.46, z: -0.5}
-  - {x: 4.4438367, y: 4.66, z: -0.5}
-  - {x: 4.3560543, y: 4.86, z: -0.5}
-  - {x: 4.331353, y: 5.06, z: -0.5}
-  - {x: 4.490332, y: 5.26, z: -0.5}
+  - {x: 4.301265, y: 3.66, z: -0.5}
+  - {x: 4.302158, y: 3.8600001, z: -0.5}
+  - {x: 4.288606, y: 4.06, z: -0.5}
+  - {x: 4.3509064, y: 4.26, z: -0.5}
+  - {x: 4.4368467, y: 4.46, z: -0.5}
+  - {x: 4.368202, y: 4.66, z: -0.5}
+  - {x: 4.197636, y: 4.86, z: -0.5}
+  - {x: 4.0213847, y: 5.06, z: -0.5}
+  - {x: 4.2250614, y: 5.26, z: -0.5}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1

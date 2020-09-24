@@ -13,10 +13,10 @@ namespace Fourzy._Updates.Tools
         public int positionCount = 10;
         [Range(.5f, 10f)]
         public float height = 1f;
-        [Range(0f, 1f)]
-        public float animationTimeOffset;
         [Range(0f, 3f)]
         public float animationSpeed;
+        [Range(5, 60)]
+        public int fps = 30;
 
         public AnimationCurve animationCurve;
 
@@ -24,12 +24,20 @@ namespace Fourzy._Updates.Tools
         private float maxOffset;
         private float originalHeight;
         private float originalWidth;
+        private float step;
+        private float timer = 0;
         private bool initialized = false;
+        private float randomStart;
 
         protected void Update()
         {
             if (Application.isEditor) Initialize();
-            Animate();
+
+            if ((timer += Time.deltaTime) >= step)
+            {
+                timer -= step;
+                Animate();
+            }
         }
 
         public void Initialize()
@@ -41,6 +49,9 @@ namespace Fourzy._Updates.Tools
             lineRenderer.positionCount = positionCount;
             originalHeight = height;
             originalWidth = lineRenderer.widthMultiplier;
+            step = 1f / fps;
+            timer = 0f;
+            randomStart = Random.value;
 
             initialized = true;
         }
@@ -53,7 +64,7 @@ namespace Fourzy._Updates.Tools
             for (int positionIndex = 0; positionIndex < positionCount; positionIndex++)
             {
                 float relativeIndex = (float)positionIndex / positionCount;
-                float offsetValue = animationCurve.Evaluate(relativeIndex + Time.time * animationSpeed + animationTimeOffset);
+                float offsetValue = animationCurve.Evaluate(relativeIndex + randomStart + Time.time * animationSpeed);
 
                 if (offsetValue > maxOffset)
                     maxOffset = offsetValue;

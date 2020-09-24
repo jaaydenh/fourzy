@@ -52,7 +52,7 @@ namespace Fourzy._Updates.ClientModel
                 foreach (var player in State.Players) result.Players.Add(player.Key, new Player(player.Value));
 
                 result.WinnerId = State.WinnerId;
-                result.ActivePlayerId = 1;
+                result.ActivePlayerId = State.ActivePlayerId;
                 result.GameSeed = _Type.ToString();
 
                 result.GameEffects = new List<IGameEffect>();

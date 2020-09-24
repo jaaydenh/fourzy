@@ -99,7 +99,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 //notify that this client is ready
                 FourzyPhotonManager.SetClientReady();
-                gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer();
+                gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for other player...");
             }
             else LoadGame(GameManager.Instance.activeGame);
         }
@@ -229,8 +229,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 };
 
                 //load realtime game
-                ClientFourzyGame _game = new ClientFourzyGame(GameContentManager.Instance.currentTheme.themeID, UserManager.Instance.meAsPlayer, opponen, 1)
-                { _Type = GameType.REALTIME, _Area = GameContentManager.Instance.currentTheme.themeID };
+                ClientFourzyGame _game = new ClientFourzyGame(
+                    GameContentManager.Instance.enabledThemes.Random().themeID, 
+                    UserManager.Instance.meAsPlayer, 
+                    opponen, 
+                    UnityEngine.Random.value > .5f ? 1 : 2)
+                { _Type = GameType.REALTIME };
 
                 GameStateDataEpoch gameStateData = _game.toGameStateData;
                 //add realtime data
@@ -328,7 +332,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 case GameType.REALTIME:
-                    if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) FourzyPhotonManager.ResetRematchState();
+                    FourzyPhotonManager.ResetRematchState();
 
                     break;
             }
@@ -803,10 +807,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (FourzyPhotonManager.CheckPlayersRematchReady())
             {
-                Rematch(); 
-                
                 if (waitingScreen && waitingScreen.isOpened) waitingScreen.CloseSelf();
                 waitingScreen = null;
+
+                gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
+                CreateRealtimeGame();
+                //Rematch();
             }
         }
 
@@ -816,6 +822,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (data.Code)
             {
                 case Constants.GAME_DATA:
+                    print(JsonConvert.DeserializeObject<GameStateDataEpoch>(data.CustomData.ToString()).ActivePlayerId);
                     ClientFourzyGame _realtimeGame = new ClientFourzyGame(JsonConvert.DeserializeObject<GameStateDataEpoch>(data.CustomData.ToString()));
                     //assign proper user id
                     _realtimeGame.SetPlayer2ID(UserManager.Instance.userId);
@@ -831,7 +838,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 case Constants.REMATCH_REQUEST:
                     waitingScreen = menuController.GetOrAddScreen<PromptScreen>()
-                        .Prompt($"{game.opponent.DisplayName} wants to play again with you!", "Accept?", FourzyPhotonManager.SetClientRematchReady, BackButtonOnClick)
+                        .Prompt($"{game.opponent.DisplayName} wants to play again with you!", "Accept?", () =>
+                        {
+                            FourzyPhotonManager.SetClientRematchReady();
+                            gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
+                        }, BackButtonOnClick)
                         .CloseOnAccept();
                     waitingScreen.BlockInput(5f);
 
