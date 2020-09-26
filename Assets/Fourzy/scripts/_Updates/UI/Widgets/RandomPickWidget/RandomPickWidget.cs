@@ -35,13 +35,17 @@ namespace Fourzy._Updates.UI.Widgets
             CreateItems();
         }
 
-        public void StartPick()
+        public float StartPick(float delay, bool show = true)
         {
+            if (show) Show(0f);
+
             spinValue = 0f;
             lastItemIndex = 0;
             targetSpinValue = (itemsCount * 5f) * step;
             
-            StartRoutine("spin", SpinRoutine());
+            StartRoutine("spin", SpinRoutine(delay), null, null);
+
+            return delay + ANIMATION_TIME;
         }
 
         public void Cancel()
@@ -85,9 +89,9 @@ namespace Fourzy._Updates.UI.Widgets
             widget.scaleTween.SetScale(Vector3.one * Mathf.Clamp(nomalizedRelativePosition * SCALE_VALUE, .75f, SCALE_VALUE));
         }
 
-        private IEnumerator SpinRoutine()
+        private IEnumerator SpinRoutine(float delay)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(delay);
 
             float timer = 0f;
             while ((timer += Time.deltaTime) < ANIMATION_TIME)

@@ -822,7 +822,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (data.Code)
             {
                 case Constants.GAME_DATA:
-                    print(JsonConvert.DeserializeObject<GameStateDataEpoch>(data.CustomData.ToString()).ActivePlayerId);
                     ClientFourzyGame _realtimeGame = new ClientFourzyGame(JsonConvert.DeserializeObject<GameStateDataEpoch>(data.CustomData.ToString()));
                     //assign proper user id
                     _realtimeGame.SetPlayer2ID(UserManager.Instance.userId);
@@ -844,7 +843,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                             gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
                         }, BackButtonOnClick)
                         .CloseOnAccept();
-                    waitingScreen.BlockInput(5f);
 
                     break;
             }

@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Widgets;
 using Photon.Pun;
 using System.Collections;
 using TMPro;
@@ -12,6 +13,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public class RealtimeScreen : MenuScreen
     {
         public TMP_Text statusLabel;
+        public RandomPickWidget randomPickWidget;
 
         private AlphaTween statusAlphaTween;
         private ScaleTween statusScaleTween;
@@ -26,7 +28,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             statusRotationTween = statusLabel.GetComponent<RotationTween>();
         }
 
-        public void Open(IClientFourzy game) { }
+        public void Open(IClientFourzy game)
+        {
+            randomPickWidget.SetData(game.activePlayer.DisplayName, game.unactivePlayer.DisplayName);
+        }
 
         public override void Open()
         {
@@ -70,6 +75,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private IEnumerator CountdownRoutine(float duration)
         {
+            statusLabel.text = "";
+
+            //1.2 seconds delay after player picked
+            yield return new WaitForSeconds(randomPickWidget.StartPick(.8f) + 1.2f);
+            randomPickWidget.Hide(.2f);
+
             yield return new WaitForSeconds(duration % 1f);
 
             statusAlphaTween.playbackTime = .5f;

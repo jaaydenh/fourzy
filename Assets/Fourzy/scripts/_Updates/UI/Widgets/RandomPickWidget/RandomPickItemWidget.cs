@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using TMPro;
-using UnityEngine;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -13,19 +12,21 @@ namespace Fourzy._Updates.UI.Widgets
 
         public float offset { get; private set; }
 
-        public void SetData(float offset,  string value)
+        public RandomPickItemWidget SetData(float offset,  string value)
         {
             this.offset = offset;
 
             label.text = value.Length > NAME_MAX_CHARS ? value.Substring(0, NAME_MAX_CHARS) + "..." : value;
+
+            return this;
         }
 
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
+        //protected override void OnInitialized()
+        //{
+        //    base.OnInitialized();
 
-            alphaTween.OnInitialized();
-            scaleTween.OnInitialized();
-        }
+        //    alphaTween.OnInitialized();
+        //    scaleTween.OnInitialized();
+        //}
     }
 }

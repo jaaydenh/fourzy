@@ -26,11 +26,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameType.TURN_BASED:
                     if (game.asFourzyGame.challengeData.haveMoves)
                     {
-                        if (isOpened)
-                            menuController.CloseCurrentScreen();
+                        if (isOpened) CloseSelf();
                     }
                     else
                         randomPickWidget.SetData(game.activePlayer.DisplayName, game.unactivePlayer.DisplayName);
+
+                    break;
+
+                case GameType.REALTIME:
+                case GameType.PASSANDPLAY:
+                    randomPickWidget.SetData(game.activePlayer.DisplayName, game.unactivePlayer.DisplayName);
+
                     break;
             }
         }
@@ -39,9 +45,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (menuController.currentScreen != this) menuController.OpenScreen(this);
 
-            randomPickWidget.StartPick();
+            randomPickWidget.StartPick(1f, true);
 
-            StartRoutine("playerPicked", RandomPickWidget.ANIMATION_TIME + 1.1f, () => DisplayWinner(), () => randomPickWidget.Cancel());
+            StartRoutine("playerPicked", RandomPickWidget.ANIMATION_TIME + 1.1f, DisplayWinner, randomPickWidget.Cancel);
         }
 
         public void DisplayWinner()
@@ -49,7 +55,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //assign new active player
             GamePlayManager.instance.UpdatePlayerTurn();
 
-            StartRoutine("fadeRoutine", .7f, () => { menuController.CloseCurrentScreen(); });
+            StartRoutine("fadeRoutine", .7f, () => CloseSelf());
         }
     }
 }
