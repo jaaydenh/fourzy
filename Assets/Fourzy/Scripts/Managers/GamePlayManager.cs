@@ -230,9 +230,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 //load realtime game
                 ClientFourzyGame _game = new ClientFourzyGame(
-                    GameContentManager.Instance.enabledThemes.Random().themeID, 
-                    UserManager.Instance.meAsPlayer, 
-                    opponen, 
+                    GameContentManager.Instance.enabledThemes.Random().themeID,
+                    UserManager.Instance.meAsPlayer,
+                    opponen,
                     UnityEngine.Random.value > .5f ? 1 : 2)
                 { _Type = GameType.REALTIME };
 
@@ -396,7 +396,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             GameManager.Instance.OpenMainMenu();
 
             //disconnect if realtime
-            if (PhotonNetwork.CurrentRoom != null) FourzyPhotonManager.TryLeaveRoom();
+            if (PhotonNetwork.CurrentRoom != null)
+            {
+                FourzyPhotonManager.TryLeaveRoom();
+                FourzyPhotonManager.Instance.JoinLobby();
+            }
         }
 
         public void UnloadGamePlaySceene()

@@ -344,8 +344,6 @@ namespace Fourzy
         public static void JoinRandomRoom()
         {
             tasks.Push(new KeyValuePair<string, Action>("joinRandomRoom", JoinRandomRoom));
-            //lastTask = "joinRandomRoom";
-            //lastTaskAction = JoinRandomRoom;
 
             if (!PhotonNetwork.IsConnected)
             {
@@ -358,8 +356,6 @@ namespace Fourzy
                 return;
             }
 
-            //lastTask = "";
-            //lastTaskAction = null;
             tasks.Pop();
 
             PhotonNetwork.JoinRandomRoom();
@@ -369,8 +365,6 @@ namespace Fourzy
         public static void JoinRoom(string roomName)
         {
             tasks.Push(new KeyValuePair<string, Action>("joinRoom", () => JoinRoom(roomName)));
-            //lastTask = "joinRoom";
-            //lastTaskAction = () => JoinRoom(roomName);
 
             if (!PhotonNetwork.IsConnected)
             {
@@ -382,13 +376,13 @@ namespace Fourzy
                 instance.JoinLobby();
                 return;
             }
-            else if (PhotonNetwork.NetworkClientState == ClientState.Authenticating)
+            else if (
+                PhotonNetwork.NetworkClientState == ClientState.Authenticating ||
+                PhotonNetwork.NetworkClientState == ClientState.Leaving)
             {
                 return;
             }
 
-            //lastTask = "";
-            //lastTaskAction = null;
             tasks.Pop();
 
             PhotonNetwork.JoinRoom(roomName);
@@ -397,8 +391,6 @@ namespace Fourzy
         public static void CreateRoom(RoomType type, string expectedUser = "")
         {
             tasks.Push(new KeyValuePair<string, Action>("createRoom", () => CreateRoom(type, expectedUser)));
-            //lastTask = "createRoom";
-            //lastTaskAction = () => CreateRoom(type, expectedUser);
 
             if (!PhotonNetwork.IsConnected)
             {
@@ -424,8 +416,6 @@ namespace Fourzy
             }
 
             tasks.Pop();
-            //lastTask = "";
-            //lastTaskAction = null;
 
             Hashtable properties = new ExitGames.Client.Photon.Hashtable()
             {
@@ -506,17 +496,17 @@ namespace Fourzy
         {
             TypedLobby _copy = lobby;
             tasks.Push(new KeyValuePair<string, Action>("joinLobby", () => JoinLobby(_copy)));
-            //lastTask = "joiningLobby";
-            //lastTaskAction = () => JoinLobby(_copy);
 
             if (!PhotonNetwork.IsConnected)
             {
                 ConnectUsingSettings();
                 return;
             }
+            else if (
+                PhotonNetwork.NetworkClientState == ClientState.Authenticating ||
+                PhotonNetwork.NetworkClientState == ClientState.Leaving)
+                return;
 
-            //lastTask = "";
-            //lastTaskAction = null;
             tasks.Pop();
             PhotonNetwork.JoinLobby(lobby);
             RunTimeoutRoutine();

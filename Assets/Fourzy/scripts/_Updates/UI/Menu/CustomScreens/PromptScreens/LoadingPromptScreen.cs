@@ -11,6 +11,28 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameObject circular;
         public Image progress;
 
+        public LoadingPromptScreen SetType(LoadingPromptType type)
+        {
+            switch (type)
+            {
+                case LoadingPromptType.BASIC:
+                    circular.SetActive(true);
+                    progress.transform.parent.gameObject.SetActive(false);
+
+                    break;
+
+                case LoadingPromptType.PROGRESS:
+                    circular.SetActive(false);
+                    progress.transform.parent.gameObject.SetActive(true);
+
+                    progress.fillAmount = 0f;
+
+                    break;
+            }
+
+            return this;
+        }
+
         public void _Prompt(LoadingPromptType type, string message, Action onDeny = null)
         {
             switch (type)
@@ -33,11 +55,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Prompt(message, null, null, null, null, onDeny);
         }
 
-        public override void Decline()
-        {
-            if (onDecline == null) return;
-            else onDecline.Invoke();
-        }
+        //public override void Decline()
+        //{
+        //    if (onDecline == null) return;
+        //    else onDecline.Invoke();
+        //}
 
         public void SetProgress(float value) => progress.fillAmount = value;
 
