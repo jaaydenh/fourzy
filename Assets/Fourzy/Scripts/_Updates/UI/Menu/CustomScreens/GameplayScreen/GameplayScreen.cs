@@ -142,8 +142,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             //timer end
 
+            Player me = game.me;
+
             if (game._Type != GameType.PRESENTATION)
-                player1Widget.spellsHolder.Open(game, gameplayManager.board, game.me);
+                player1Widget.spellsHolder.Open(game, gameplayManager.board, me);
 
             player1Widget.SetGame(game);
             player2Widget.SetGame(game);
@@ -151,15 +153,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             player1Widget.Initialize();
             player2Widget.Initialize();
 
-            player1Widget.SetPlayerName(game.player1.DisplayName);
-            player1Widget.SetPlayerIcon(game.player1);
+            player1Widget.SetPlayerName(me.DisplayName);
+            player1Widget.SetPlayerIcon(me);
             player1Widget.StopPlayerTurnAnimation();
 
             Player opponent = game.opponent;
             if (opponent != null)
             {
-                player2Widget.SetPlayerName(game.player2.DisplayName);
-                player2Widget.SetPlayerIcon(game.player2);
+                player2Widget.SetPlayerName(opponent.DisplayName);
+                player2Widget.SetPlayerIcon(opponent);
                 player2Widget.StopPlayerTurnAnimation();
 
                 if (game.hideOpponent)
@@ -176,7 +178,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                             //load spells only for human opponent
                             if (opponent.Profile == AIProfile.Player)
-                                player2Widget.spellsHolder.Open(game, gameplayManager.board, game.opponent);
+                                player2Widget.spellsHolder.Open(game, gameplayManager.board, opponent);
                         }
                         else
                             player2Widget.Hide(.1f);
@@ -187,7 +189,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         //load spells only for human opponent
                         if (opponent.Profile == AIProfile.Player)
-                            player2Widget.spellsHolder.Open(game, gameplayManager.board, game.opponent);
+                            player2Widget.spellsHolder.Open(game, gameplayManager.board, opponent);
                     }
                 }
             }

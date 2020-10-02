@@ -526,6 +526,10 @@
       "value": "Cross Bomb"
     },
     {
+      "key": "token_darkness",
+      "value": "Darkness"
+    },
+    {
       "key": "token_fourway_arrow",
       "value": "Fourway Arrow"
     },
@@ -612,6 +616,10 @@
     {
       "key": "token_desc_blocker",
       "value": "Blocker. Fourzies cannot enter or move through this space."
+    },
+    {
+      "key": "token_desc_darkness",
+      "value": "The purpose of the Darkness token will be to hide a square on the board and to prevent a win using anything on that square."
     },
     {
       "key": "token_desc_arrow",

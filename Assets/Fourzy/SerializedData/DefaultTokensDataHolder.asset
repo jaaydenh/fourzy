@@ -22,7 +22,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_blocker
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -47,7 +46,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_arrow
       showBackgroundTile: 1
       backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
@@ -63,7 +61,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_sticky
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -79,7 +76,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_ghost
       showBackgroundTile: 1
       backgroundTileColor: {r: 1, g: 0.81154126, b: 0.4292453, a: 1}
@@ -95,7 +91,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_pit
       showBackgroundTile: 1
       backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
@@ -111,7 +106,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_ice
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -127,7 +121,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_sand
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -143,7 +136,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_fruit
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -159,7 +151,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_water
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -175,7 +166,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_circle_bomb
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -191,7 +181,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_fourway_arrow
       showBackgroundTile: 1
       backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
@@ -207,7 +196,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_fruit_tree
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -223,7 +211,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_ice_block
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -239,7 +226,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 0
       description: token_desc_snow
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -255,7 +241,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 1
       spellID: 0
-      basePrice: 50
       description: token_desc_hex
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -271,7 +256,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 50
       description: token_desc_moving_ghost
       showBackgroundTile: 1
       backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
@@ -287,7 +271,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 50
       description: token_desc_rotating_arrow
       showBackgroundTile: 1
       backgroundTileColor: {r: 1, g: 0.8117647, b: 0.42745098, a: 1}
@@ -303,7 +286,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 1
       spellID: 12
-      basePrice: 50
       description: token_desc_lure
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -319,7 +301,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 50
       description: token_desc_move_blocker
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -335,7 +316,6 @@ MonoBehaviour:
       enabled: 1
       isSpell: 0
       spellID: 0
-      basePrice: 50
       description: token_desc_cross_bomb
       showBackgroundTile: 0
       backgroundTileColor: {r: 0, g: 0, b: 0, a: 0}
@@ -344,4 +324,19 @@ MonoBehaviour:
         list:
         - theme: 127
           tokenPrefab: {fileID: 5202903507806380162, guid: 2c12f4e84bd8e3446a7991d7a1971736,
+            type: 3}
+    - elementName: DARKNESS
+      tokenType: 64
+      tokenIcon: {fileID: 0}
+      enabled: 1
+      isSpell: 1
+      spellID: 3
+      description: token_desc_darkness
+      showBackgroundTile: 1
+      backgroundTileColor: {r: 1, g: 1, b: 1, a: 1}
+      gameboardInstructionID: 7722f447-2374-4956-8336-4411d523884a
+      themesTokens:
+        list:
+        - theme: 127
+          tokenPrefab: {fileID: 3223135564173513793, guid: 315ed889bb96a1149985c708584fb06a,
             type: 3}

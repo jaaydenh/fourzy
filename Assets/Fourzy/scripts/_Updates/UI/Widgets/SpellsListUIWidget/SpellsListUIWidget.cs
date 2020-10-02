@@ -101,13 +101,15 @@ namespace Fourzy._Updates.UI.Widgets
 
                     case GameType.AI:
                     case GameType.PASSANDPLAY:
-                        List<SpellId> spells = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(owner.HerdId).spells;
+                        //List<SpellId> spells = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(owner.HerdId).spells;
 
-                        if (spells.Count > 0)
-                            foreach (SpellId spell in spells)
-                                AddSpell(spell);
-                        else
+                        //if (spells.Count > 0)
+                        //    foreach (SpellId spell in spells)
+                        //        AddSpell(spell);
+                        //else
                             AddSpell(SpellId.HEX);
+                            AddSpell(SpellId.PLACE_LURE);
+                            //AddSpell(SpellId.DARKNESS);
 
                         break;
 

@@ -1271,6 +1271,11 @@ namespace Fourzy._Updates.Mechanics.Board
                             locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new LureSpell(0, new BoardLocation()));
 
                             break;
+
+                        case SpellId.DARKNESS:
+                            locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new DarknessSpell(0, new BoardLocation()));
+
+                            break;
                     }
 
 
@@ -1927,23 +1932,6 @@ namespace Fourzy._Updates.Mechanics.Board
                     onGameFinished?.Invoke(game);
                 }
             }
-
-            ////since puzzle games dont send "lose" event, need to check manually
-            //switch (game._Type)
-            //{
-            //    case GameType.PUZZLE:
-            //        if (game.isOver)
-            //        {
-            //            //player lost
-            //            if (game._State.WinningLocations == null)
-            //            {
-            //                SetHintAreaColliderState(false);
-            //                onGameFinished?.Invoke(game);
-            //            }
-            //        }
-
-            //        break;
-            //}
 
             //check if any of created space been covered by gamepieces
             if (!startTurn)

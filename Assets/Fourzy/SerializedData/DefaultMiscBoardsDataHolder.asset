@@ -89,3 +89,5 @@ MonoBehaviour:
       boardFile: {fileID: 4900000, guid: 3d32bbfb8eeda764abea2027d0c3aa13, type: 3}
     - _name: 'Name: MovingGhostTest, ID: 58fc6d9e-81cb-4c2e-bcf7-cfa8637fc3f2'
       boardFile: {fileID: 4900000, guid: 0a455a91398ecd448b974fe73465b341, type: 3}
+    - _name: 'Name: darkness, ID: 7722f447-2374-4956-8336-4411d523884a'
+      boardFile: {fileID: 4900000, guid: 39bbe508e1785c2418af82e98b7ba047, type: 3}

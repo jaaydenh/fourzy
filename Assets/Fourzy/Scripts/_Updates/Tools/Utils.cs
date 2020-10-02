@@ -642,6 +642,9 @@ namespace Fourzy._Updates.Tools
                 case TokenType.CROSS_BOMB:
                     return TokenConstants.CrossBomb.ToString();
 
+                case TokenType.DARKNESS:
+                    return TokenConstants.Darkness.ToString();
+
                 case TokenType.FIRE:
                     return TokenConstants.Fire.ToString();
 
@@ -848,6 +851,9 @@ namespace Fourzy._Updates.Tools
 
                 case TokenConstants.Cold:
                     return TokenType.COLD;
+
+                case TokenConstants.Darkness:
+                    return TokenType.DARKNESS;
 
                 case TokenConstants.Fire:
                     return TokenType.FIRE;

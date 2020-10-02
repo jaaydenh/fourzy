@@ -6,7 +6,6 @@ using UnityEngine;
 namespace Fourzy._Updates.Tools
 {
     [RequireComponent(typeof(LineRenderer))]
-    [ExecuteInEditMode]
     public class LineRendererWave : MonoBehaviour, IGameplayBGPart
     {
         [Range(5, 20)]
@@ -29,10 +28,13 @@ namespace Fourzy._Updates.Tools
         private bool initialized = false;
         private float randomStart;
 
+        protected void Awake()
+        {
+            Initialize();
+        }
+
         protected void Update()
         {
-            if (Application.isEditor) Initialize();
-
             if ((timer += Time.deltaTime) >= step)
             {
                 timer -= step;

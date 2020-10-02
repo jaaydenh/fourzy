@@ -42,7 +42,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public override void _Update()
         {
-            if (GameManager.ValueFromCurrencyType(type) == _value) return;
+            if (GameManager.ValueFromCurrencyType(type) == _value || !gameObject.activeInHierarchy) return;
 
             CancelRoutine("animate");
             StartRoutine("animate", .25f, () => SetTo(GameManager.ValueFromCurrencyType(type), true));

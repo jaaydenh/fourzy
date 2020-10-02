@@ -531,6 +531,10 @@
       "value": "Bomba cruzada"
     },
     {
+      "key": "token_darkness",
+      "value": "Oscuridad"
+    },
+    {
       "key": "token_fourway_arrow",
       "value": "Flecha de cuatro vías"
     },
@@ -617,6 +621,10 @@
     {
       "key": "token_desc_blocker",
       "value": "Un arbusto funciona como un obstáculo que bloquea. FOURZIES no pueden entrar o moverse a través de este espacio."
+    },
+    {
+      "key": "token_desc_darkness",
+      "value": "El propósito de la ficha de Oscuridad será ocultar un cuadrado en el tablero y evitar una victoria usando cualquier elemento de ese cuadrado."
     },
     {
       "key": "token_desc_arrow",
