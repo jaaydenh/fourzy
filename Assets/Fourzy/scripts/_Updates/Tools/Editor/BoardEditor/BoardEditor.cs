@@ -754,6 +754,7 @@ namespace Fourzy._Updates.Tools
                         int countdown = 0;
                         int frequency = 0;
                         bool check = false;
+                        int playerTurn = 1;
 
                         //if token have extra data to set
                         switch (tokenType)
@@ -887,6 +888,54 @@ namespace Fourzy._Updates.Tools
                                             + (check ? "1" : "0");
                                     }
                                 }
+                                break;
+
+                            case TokenType.HEX:
+                                if (commonTokens[selectedTokenIndex].token.StringToToken() != TokenType.HEX || commonTokens[selectedTokenIndex].token.Length < 3)
+                                {
+                                    string notation =
+                                        tokenType.TokenTypeToString()
+                                        + 1
+                                        + SpellConstants.DefaultHexDuration;
+
+                                    commonTokens[selectedTokenIndex].token = notation;
+
+                                    for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                                        selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] = notation;
+                                }
+
+                                playerTurn = EditorGUILayout.IntPopup("Player ", int.Parse(commonTokens[selectedTokenIndex].token.Substring(1, 1)), firstTurnDisplayOptions, firstTurnOptions);
+
+                                countdown = EditorGUILayout.IntPopup(
+                                    "Countdown",
+                                    int.Parse(commonTokens[selectedTokenIndex].token.Substring(2, 1)),
+                                    rotatingArrowCountdownDisplayOptions,
+                                    rotatingArrowCountdownOptions);
+
+                                break;
+
+                            case TokenType.DARKNESS:
+                                if (commonTokens[selectedTokenIndex].token.StringToToken() != TokenType.DARKNESS || commonTokens[selectedTokenIndex].token.Length < 3)
+                                {
+                                    string notation =
+                                        tokenType.TokenTypeToString()
+                                        + 1
+                                        + SpellConstants.DefaultDarknessDuration;
+
+                                    commonTokens[selectedTokenIndex].token = notation;
+
+                                    for (int boardSpaceIndex = 0; boardSpaceIndex < selectedBoardSpaceData.Count; boardSpaceIndex++)
+                                        selectedBoardSpaceData[boardSpaceIndex].data.T[commonTokens[selectedTokenIndex].indicies[boardSpaceIndex]] = notation;
+                                }
+
+                                playerTurn = EditorGUILayout.IntPopup("Player ", int.Parse(commonTokens[selectedTokenIndex].token.Substring(1, 1)), firstTurnDisplayOptions, firstTurnOptions);
+
+                                countdown = EditorGUILayout.IntPopup(
+                                    "Countdown",
+                                    int.Parse(commonTokens[selectedTokenIndex].token.Substring(2, 1)),
+                                    rotatingArrowCountdownDisplayOptions,
+                                    rotatingArrowCountdownOptions);
+
                                 break;
 
                             default:

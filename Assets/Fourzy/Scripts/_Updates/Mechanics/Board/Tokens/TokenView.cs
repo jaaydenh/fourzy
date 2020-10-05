@@ -48,6 +48,8 @@ namespace Fourzy._Updates.Mechanics.Board
         protected override void OnInitialized()
         {
             countdown = GetComponentInChildren<Badge>(true);
+            countdown.Initialize();
+
             UpdateGraphics();
 
             base.OnInitialized();

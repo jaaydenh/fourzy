@@ -43,7 +43,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: e1d5cc2cde4784b2daaffb156c3b71d3, type: 3}
-    totalSpriteSurfaceArea: 2619202
+    totalSpriteSurfaceArea: 2684738
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -76,6 +76,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: db7b4a68569c64f2ab1ef70fac2986ef, type: 3}
   - {fileID: 21300000, guid: 7732e1a8e6d544f739dfbc78fb7055f4, type: 3}
   - {fileID: 21300000, guid: 7f3fefa8f9777451ca0f4e5af0ede456, type: 3}
+  - {fileID: 21300000, guid: b23446c843fdeac4d8a0dd4a2bfcb227, type: 3}
   - {fileID: 21300000, guid: 97926709586254e1fa12a1694073c321, type: 3}
   - {fileID: 21300000, guid: 2a388679cb20442be9eae172db2046dd, type: 3}
   - {fileID: 21300000, guid: 9daaa4893d4e27b4bbc1dd74873d6d70, type: 3}
@@ -190,6 +191,7 @@ SpriteAtlas:
   - tokenGhost1
   - tokenSpider
   - Coin
+  - darkness
   - tokenFourWayArrow1
   - tokenGhost3
   - sticky

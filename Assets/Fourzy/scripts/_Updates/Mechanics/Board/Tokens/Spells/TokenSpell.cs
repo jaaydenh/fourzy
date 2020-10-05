@@ -1,7 +1,6 @@
 ﻿//vadym udod
 
 using FourzyGameModel.Model;
-using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
 {
@@ -9,6 +8,11 @@ namespace Fourzy._Updates.Mechanics.Board
     {
         public SpellId spellId;
 
-        public virtual void SetData(ISpell spell) { }
+        public ISpell spell;
+
+        public virtual void SetData(ISpell spell)
+        {
+            this.spell = spell;
+        }
     }
 }

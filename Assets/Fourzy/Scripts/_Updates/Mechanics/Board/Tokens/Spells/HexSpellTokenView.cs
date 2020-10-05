@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using UnityEngine;
 
@@ -21,24 +20,29 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (spell.SpellId != SpellId.HEX) return;
 
-            HexSpellToken hex = spell as HexSpellToken;
-            currentCountdownValue = SpellConstants.DefaultHexDuration - 1;
+            base.SetData(spell);
+
+            currentCountdownValue = (spell as HexSpell).Duration - 1;
 
             countdown.SetValue(currentCountdownValue);
         }
 
-        public override TokenView UpdateGraphics()
+        public override TokenView SetData(IToken tokenData = null)
         {
-            countdown.targetText.UpdateTMP_Text();
+            if (tokenData == null || tokenData.Type != TokenType.HEX) return base.SetData(tokenData);
 
-            return base.UpdateGraphics();
+            currentCountdownValue = (tokenData as HexSpellToken).Countdown - 1;
+            countdown.SetValue(currentCountdownValue);
+
+            return base.SetData(tokenData);
         }
 
         public override void OnAfterTurn(bool startTurn)
         {
             base.OnAfterTurn(startTurn);
 
-            /*if (!startTurn) */countdown.SetValue(currentCountdownValue--);
+            /*if (!startTurn) */
+            countdown.SetValue(currentCountdownValue--);
         }
     }
 }

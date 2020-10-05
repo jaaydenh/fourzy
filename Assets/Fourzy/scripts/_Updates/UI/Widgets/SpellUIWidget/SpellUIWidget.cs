@@ -84,38 +84,13 @@ namespace Fourzy._Updates.UI.Widgets
             button.interactable = true;
         }
 
-        public void TrySetButtonState(int playerId, bool _state)
-        {
-            //switch (spellsList.board.game._Type)
-            //{
-            //    case GameType.TURN_BASED:
-            //    case GameType.PASSANDPLAY:
-            //        SetButtonState(spellsList.game.magic[playerId] >= data.price && _state);
-
-            //        break;
-            //}
-            SetButtonState(spellsList.game.magic[playerId] >= data.price && _state);
-        }
+        public void TrySetButtonState(int playerId, bool _state) => SetButtonState(spellsList.game.magic[playerId] >= data.price && _state);
 
         public void UpdateWidget(int playerId)
         {
-            //update price badge
             button.GetBadge("price").badge.SetValue(data.price);
 
             bool? setTo = !spellsList.board.isAnimating && spellsList.game._State.ActivePlayerId == spellsList.owner.PlayerId;
-            //switch (spellsList.game._Type)
-            //{
-            //    case GameType.PASSANDPLAY:
-            //        setTo = !spellsList.board.isAnimating;
-
-            //        break;
-
-            //    case GameType.AI:
-            //    case GameType.TURN_BASED:
-            //        setTo = !spellsList.board.isAnimating && spellsList.game._State.ActivePlayerId == spellsList.owner.PlayerId;
-
-            //        break;
-            //}
 
             if (setTo != null)
             {
@@ -139,10 +114,12 @@ namespace Fourzy._Updates.UI.Widgets
                 case SpellState.NONE:
                 case SpellState.UNAVAILABLE:
                     selectedBG.PlayBackward(true);
+
                     break;
 
                 case SpellState.ACTIVE:
                     selectedBG.PlayForward(true);
+
                     break;
             }
         }

@@ -1,8 +1,6 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
-using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
 {
@@ -12,25 +10,27 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (spell.SpellId != SpellId.DARKNESS) return;
 
-            DarknessSpell darkness = spell as DarknessSpell;
-            currentCountdownValue = darkness.Duration;
-            Debug.Log(currentCountdownValue);
+            base.SetData(spell);
+
+            currentCountdownValue = (spell as DarknessSpell).Duration - 1;
 
             countdown.SetValue(currentCountdownValue);
         }
 
-        public override TokenView UpdateGraphics()
+        public override TokenView SetData(IToken tokenData = null)
         {
-            countdown.targetText.UpdateTMP_Text();
+            if (tokenData == null || tokenData.Type != TokenType.DARKNESS) return base.SetData(tokenData);
 
-            return base.UpdateGraphics();
+            currentCountdownValue = (tokenData as DarknessToken).Countdown - 1;
+            countdown.SetValue(currentCountdownValue);
+
+            return base.SetData(tokenData);
         }
 
         public override void OnAfterTurn(bool startTurn)
         {
             base.OnAfterTurn(startTurn);
 
-            Debug.Log(currentCountdownValue);
             /*if (!startTurn) */
             countdown.SetValue(currentCountdownValue--);
         }

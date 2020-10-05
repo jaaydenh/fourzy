@@ -9,7 +9,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,56 +51,6 @@ namespace Fourzy._Updates.Tools
         public static Vector2 VectorFromAngle(this float angle) => new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle));
 
         public static string RemoveLastChar(this string value) => value.Substring(0, value.Length - 2);
-
-        public static void UpdateTMP_Text(this TMP_Text target)
-        {
-            if (!target) return;
-
-            if (target.GetComponentInParent<Canvas>() && target.GetType() == typeof(TextMeshPro))
-            {
-                //remember values
-                TextMeshPro prev = target as TextMeshPro;
-
-                //reset object
-                RectTransform rectTransform = target.GetComponent<RectTransform>();
-                Vector2 size = rectTransform.sizeDelta;
-                GameObject tGO = target.gameObject;
-                GameObject.DestroyImmediate(target);
-                GameObject.DestroyImmediate(prev.renderer);
-                GameObject.DestroyImmediate(prev.meshFilter);
-
-                //reset to UI version
-                TextMeshProUGUI tmp = tGO.AddComponent<TextMeshProUGUI>();
-
-                tmp.font = prev.font;
-                tmp.fontSize = prev.fontSize * .13f;
-                tmp.fontSharedMaterials = prev.fontSharedMaterials;
-                tmp.alignment = prev.alignment;
-                tmp.rectTransform.sizeDelta = size;
-                tmp.text = prev.text;
-            }
-            else if (!target.GetComponentInParent<Canvas>() && target.GetType() == typeof(TextMeshProUGUI))
-            {
-                //remember values
-                TextMeshProUGUI prev = target as TextMeshProUGUI;
-
-                //reset object
-                RectTransform rectTransform = target.GetComponent<RectTransform>();
-                Vector2 size = rectTransform.sizeDelta;
-                GameObject tGO = target.gameObject;
-                GameObject.Destroy(target);
-
-                //reset to UI version
-                TextMeshPro tmp = tGO.AddComponent<TextMeshPro>();
-
-                tmp.font = prev.font;
-                tmp.fontSize = prev.fontSize * 7.7f;
-                tmp.fontSharedMaterials = prev.fontSharedMaterials;
-                tmp.alignment = prev.alignment;
-                tmp.rectTransform.sizeDelta = rectTransform.sizeDelta;
-                tmp.text = prev.text;
-            }
-        }
 
         public static T Random<T>(this IEnumerable<T> enumerable)
         {

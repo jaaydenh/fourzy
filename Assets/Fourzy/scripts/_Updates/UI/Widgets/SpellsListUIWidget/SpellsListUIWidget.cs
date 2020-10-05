@@ -109,7 +109,7 @@ namespace Fourzy._Updates.UI.Widgets
                         //else
                             AddSpell(SpellId.HEX);
                             AddSpell(SpellId.PLACE_LURE);
-                            //AddSpell(SpellId.DARKNESS);
+                            AddSpell(SpellId.DARKNESS);
 
                         break;
 
@@ -126,7 +126,11 @@ namespace Fourzy._Updates.UI.Widgets
             board.onMoveStarted += UpdateSpells;
         }
 
-        public void OnCast(SpellId spellId, int playerId) => activeSpell?.OnCast(playerId);
+        public void OnCast(SpellId spellId, int playerId)
+        {
+            activeSpell?.OnCast(playerId);
+            spellWidgets.ForEach(widget => widget.UpdateWidget(playerId));
+        }
 
         public void CancelCurrentSpell() => activeSpell?.CancelCast();
 

@@ -96,6 +96,26 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3771485722811465049, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4629114493590469003, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5196024043650532711, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247255820136418216, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7027576155741761494, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
       propertyPath: m_SortingOrder

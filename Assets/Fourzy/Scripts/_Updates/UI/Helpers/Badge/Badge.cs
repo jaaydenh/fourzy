@@ -1,8 +1,8 @@
 ﻿//@vadym udod
 
+using StackableDecorator;
 using TMPro;
 using UnityEngine;
-using StackableDecorator;
 
 namespace Fourzy._Updates.UI.Helpers
 {
@@ -11,16 +11,16 @@ namespace Fourzy._Updates.UI.Helpers
         public bool hideOnEmpty = true;
         public bool thisTarget = true;
         public string format = "{0}";
-        
+
         [ShowIf("#ShowCheck")]
         [StackableField]
         public GameObject targetObject;
-        [ShowIf("#ShowCheck")]
-        [StackableField]
-        public TMP_Text targetText;
-        
+
         private bool initialized = false;
         private RectTransform rectTransform;
+        private TextMeshPro meshText;
+        private TextMeshProUGUI uiText;
+        private Canvas canvas;
 
         protected void Awake()
         {
@@ -30,7 +30,7 @@ namespace Fourzy._Updates.UI.Helpers
         public Badge SetValue(string value)
         {
             Initialize();
-            
+
             if (!targetObject) return this;
 
             if (hideOnEmpty)
@@ -50,11 +50,18 @@ namespace Fourzy._Updates.UI.Helpers
                 }
             }
 
-            if (!targetText) return this;
+            if (!meshText && !uiText)
+            {
+                Debug.Log($"No mesh text or uiText on {name}");
+                return this;
+            }
 
             Show();
 
-            targetText.text = string.Format(format, value);
+            UpdateTextComponents();
+
+            if (canvas) uiText.text = string.Format(format, value);
+            else meshText.text = string.Format(format, value);
 
             return this;
         }
@@ -115,21 +122,64 @@ namespace Fourzy._Updates.UI.Helpers
                 Hide();
         }
 
-        private void Initialize()
+        public void SetColor(Color color)
+        {
+            if (!meshText && !uiText)
+            {
+                Debug.Log($"No mesh text or uiText on {name}");
+                return;
+            }
+
+            UpdateTextComponents();
+
+            if (canvas) uiText.color = color;
+            else meshText.color = color;
+        }
+
+        public void Initialize()
         {
             if (initialized) return;
 
             if (thisTarget) targetObject = gameObject;
 
-            if (!targetText) targetText = targetObject.GetComponentInChildren<TMP_Text>();
+            meshText = targetObject.GetComponentInChildren<TextMeshPro>(true);
+            uiText = targetObject.GetComponentInChildren<TextMeshProUGUI>(true);
 
             rectTransform = GetComponent<RectTransform>();
+
+            UpdateValues();
+        }
+
+        public Badge UpdateValues()
+        {
+            canvas = GetComponentInParent<Canvas>();
+
+            return this;
+        }
+
+        public Badge UpdateTextComponents()
+        {
+            if (!meshText && !uiText)
+            {
+                Debug.Log($"No mesh text or uiText on {name}");
+                return this;
+            }
+
+            if (canvas)
+            {
+                uiText.gameObject.SetActive(true);
+                if (meshText) meshText.gameObject.SetActive(false);
+            }
+            else
+            {
+                if (uiText) uiText.gameObject.SetActive(false);
+                meshText.gameObject.SetActive(true);
+            }
+
+            return this;
         }
 
         //editor stuff
-        public bool ShowCheck()
-        {
-            return !thisTarget;
-        }
+        private bool ShowCheck() => !thisTarget;
     }
 }

@@ -64,6 +64,7 @@ namespace Fourzy._Updates.Mechanics.Board
         private List<Direction> possibleSwipeDirections;
         private List<BoardLocation> blockedSwipeLocations;
         private List<TokenView> lastHighlighted = new List<TokenView>();
+        //private List<ISpell> spawningSpells = new List<ISpell>(); 
         private bool touched = false;
         private float holdTimer;
         private float tapStartTime;
@@ -751,12 +752,21 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     switch (spell.SpellId)
                     {
-                        //HEX spell
                         case SpellId.HEX:
-                            HexSpell hexSpell = spell as HexSpell;
+                            CastSpell((spell as HexSpell).Location, spell.SpellId);
 
-                            CastSpell(hexSpell.Location, hexSpell.SpellId);
                             break;
+
+                        case SpellId.PLACE_LURE:
+                            CastSpell((spell as LureSpell).Location, spell.SpellId);
+
+                            break;
+
+                        case SpellId.DARKNESS:
+                            CastSpell((spell as DarknessSpell).Location, spell.SpellId);
+
+                            break;
+
                     }
                 }
             });
@@ -978,7 +988,8 @@ namespace Fourzy._Updates.Mechanics.Board
             //make semi-transparent
             token.SetAlpha(.3f);
 
-            AddIMoveToTurn(move);
+            //AddIMoveToTurn(move);
+            //spawningSpells.Add(spell);
 
             //cast spell
             onCast?.Invoke(activeSpell, game._State.ActivePlayerId);
@@ -1304,18 +1315,22 @@ namespace Fourzy._Updates.Mechanics.Board
 
         public void SetHintAreaColliderState(bool state)
         {
-            foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
+            if (hintBlocks != null && hintBlocks.Count > 0)
             {
-                hintBlock.Value.SetColliderState(state);
+                foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
+                {
+                    hintBlock.Value.SetColliderState(state);
 
-                if (!state)
-                    hintBlock.Value.Hide();
+                    if (!state)
+                        hintBlock.Value.Hide();
+                }
             }
         }
 
         public void SetHintAreaSelectableState(bool state)
         {
-            foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks) hintBlock.Value.SetSelectableState(state);
+            if (hintBlocks != null && hintBlocks.Count > 0)
+                foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks) hintBlock.Value.SetSelectableState(state);
         }
 
         public void SetHelpState(bool state)
@@ -1937,6 +1952,7 @@ namespace Fourzy._Updates.Mechanics.Board
             if (!startTurn)
             {
                 if (createdSpellTokens.Count > 0)
+                {
                     gamePieces.ForEach(gamePiece =>
                     {
                         TokenSpell spell = createdSpellTokens.Find(spellToken => spellToken.location.Equals(gamePiece.location));
@@ -1949,19 +1965,16 @@ namespace Fourzy._Updates.Mechanics.Board
                         }
                     });
 
-                if (turn != null)
-                {
                     //add spells to model
-                    createdSpellTokens.ForEach(spell =>
+                    createdSpellTokens.ForEach(_token =>
                     {
-                        switch (spell.spellId)
+                        if (_token.spell != null)
                         {
-                            case SpellId.HEX:
-                                (new HexSpell(turn.PlayerId, spell.location)).Cast(game._State);
-                                spell.SetAlpha(1f);
-
-                                break;
+                            _token.spell.Cast(game._State);
+                            _token.SetAlpha(1f);
                         }
+                        else
+                            _token._Destroy();
                     });
                 }
             }
@@ -2090,46 +2103,49 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private IEnumerator HideHintBlocksAnimation(HintAreaAnimationPattern pattern)
         {
-            switch (pattern)
+            if (hintBlocks != null && hintBlocks.Count > 0)
             {
-                case HintAreaAnimationPattern.NONE:
-                    foreach (HintBlock hintBlock in hintBlocks.Values) hintBlock.CancelAnimation();
+                switch (pattern)
+                {
+                    case HintAreaAnimationPattern.NONE:
+                        foreach (HintBlock hintBlock in hintBlocks.Values) hintBlock.CancelAnimation();
 
-                    break;
+                        break;
 
-                case HintAreaAnimationPattern.DIAGONAL:
-                    for (int diagonalIndex = 0; diagonalIndex < game.Rows * 2 - 1; diagonalIndex++)
-                    {
-                        for (int col = 0; col <= diagonalIndex; col++)
+                    case HintAreaAnimationPattern.DIAGONAL:
+                        for (int diagonalIndex = 0; diagonalIndex < game.Rows * 2 - 1; diagonalIndex++)
                         {
-                            BoardLocation location = new BoardLocation(diagonalIndex - col, col);
-
-                            if (hintBlocks.ContainsKey(location))
-                                hintBlocks[location].CancelAnimation();
-                        }
-
-                        yield return new WaitForSeconds(.04f);
-                    }
-
-                    break;
-
-                case HintAreaAnimationPattern.CIRCLE:
-                    List<BoardLocation> animated = new List<BoardLocation>();
-
-                    for (int distance = 0; distance < game.Rows; distance++)
-                    {
-                        foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
-                            if (!animated.Contains(hintBlock.Key) && BoardLocationToVec2(hintBlock.Key).magnitude < distance * step.x)
+                            for (int col = 0; col <= diagonalIndex; col++)
                             {
-                                hintBlock.Value.CancelAnimation();
+                                BoardLocation location = new BoardLocation(diagonalIndex - col, col);
 
-                                animated.Add(hintBlock.Key);
+                                if (hintBlocks.ContainsKey(location))
+                                    hintBlocks[location].CancelAnimation();
                             }
 
-                        yield return new WaitForSeconds(.07f);
-                    }
+                            yield return new WaitForSeconds(.04f);
+                        }
 
-                    break;
+                        break;
+
+                    case HintAreaAnimationPattern.CIRCLE:
+                        List<BoardLocation> animated = new List<BoardLocation>();
+
+                        for (int distance = 0; distance < game.Rows; distance++)
+                        {
+                            foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
+                                if (!animated.Contains(hintBlock.Key) && BoardLocationToVec2(hintBlock.Key).magnitude < distance * step.x)
+                                {
+                                    hintBlock.Value.CancelAnimation();
+
+                                    animated.Add(hintBlock.Key);
+                                }
+
+                            yield return new WaitForSeconds(.07f);
+                        }
+
+                        break;
+                }
             }
         }
 

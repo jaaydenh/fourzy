@@ -3,6 +3,7 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Serialized;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using System.Collections;
@@ -39,7 +40,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             ClearPrevious();
 
-            currentView = Instantiate(GameContentManager.Instance.GetTokenPrefab(data.tokenType), tokenParent);
+            currentView = Instantiate(GameContentManager.Instance.GetTokenPrefab(data.tokenType), tokenParent).SetData(TokenFactory.Create(data.tokenType.TokenTypeToString()));
             currentView.transform.localPosition = Vector3.zero;
 
             tileBGImage.enabled = data.showBackgroundTile;
@@ -55,7 +56,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 locationBadge.SetState(false);
                 priceBadge.SetValue(data.price);
 
-                if (themes.Count > 0) priceBadge.targetText.color = themes[0].themeColor;
+                if (themes.Count > 0) priceBadge.SetColor(themes[0].themeColor);
             }
             else
             {
@@ -64,7 +65,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 if (locations.Count == 6) locationBadge.SetValue("All");
                 else locationBadge.SetValue(string.Join(", ", locations));
 
-                if (themes.Count > 0) locationBadge.targetText.color = themes[0].themeColor;
+                if (themes.Count > 0) locationBadge.SetColor(themes[0].themeColor);
 
                 priceBadge.SetState(false);
             }
@@ -75,7 +76,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             //play instructions
             CancelRoutine("tokenInstructions");
-            StartRoutine("tokenInstructions", InstructionRoutine(), () => gameboard.StopBoardUpdates());
+            StartRoutine("tokenInstructions", InstructionRoutine(), gameboard.StopBoardUpdates);
         }
 
         public virtual void Prompt(TokenView tokenView)
@@ -100,7 +101,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 locationBadge.SetState(false);
                 priceBadge.SetValue(data.price);
 
-                if (themes.Count > 0) priceBadge.targetText.color = themes[0].themeColor;
+                if (themes.Count > 0) priceBadge.SetColor(themes[0].themeColor);
             }
             else
             {
@@ -109,7 +110,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 if (locations.Count == 6) locationBadge.SetValue("All");
                 else locationBadge.SetValue(string.Join(", ", locations));
 
-                if (themes.Count > 0) locationBadge.targetText.color = themes[0].themeColor;
+                if (themes.Count > 0) locationBadge.SetColor(themes[0].themeColor);
 
                 priceBadge.SetState(false);
             }
@@ -190,7 +191,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             while (isOpened)
             {
                 ClientFourzyGame game = new ClientFourzyGame(gameboardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Player Two") { HerdId = "1"});
-                gameboard.Initialize(game);
+                gameboard.Initialize(game, false);
 
                 //wait a bit for screen to fade in
                 yield return new WaitForSeconds(.8f);

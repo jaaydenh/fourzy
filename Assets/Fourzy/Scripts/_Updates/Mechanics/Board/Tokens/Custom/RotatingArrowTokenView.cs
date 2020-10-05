@@ -1,8 +1,6 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
-using UnityEngine;
 
 namespace Fourzy._Updates.Mechanics.Board
 {
@@ -31,20 +29,9 @@ namespace Fourzy._Updates.Mechanics.Board
             SetValue(currentCountdownValue);
         }
 
-        public override TokenView UpdateGraphics()
-        {
-            countdown.targetText.UpdateTMP_Text();
-
-            return base.UpdateGraphics();
-        }
-
         private void SetValue(int value)
         {
-            if (frequency != 1)
-            {
-                countdown.SetValue(value);
-                countdown.targetText.UpdateTMP_Text();
-            }
+            if (frequency != 1) countdown.SetValue(value);
         }
     }
 }
