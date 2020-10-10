@@ -78,7 +78,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 case PackType.BOSS_AI_PACK:
                                     menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
                                         nextPack,
-                                        () => GamePlayManager.instance.BackButtonOnClick(),
+                                        () => GamePlayManager.Instance.BackButtonOnClick(),
                                         () => menuController.CloseCurrentScreen());
 
                                     break;
@@ -86,24 +86,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 case PackType.PUZZLE_PACK:
                                     menuController.GetOrAddScreen<PrePackPrompt>().Prompt(
                                         nextPack, 
-                                        () => GamePlayManager.instance.BackButtonOnClick(),
+                                        () => GamePlayManager.Instance.BackButtonOnClick(),
                                         () => menuController.CloseCurrentScreen());
 
                                     break;
                             }
                         }
                         else
-                            GamePlayManager.instance.BackButtonOnClick();
+                            GamePlayManager.Instance.BackButtonOnClick();
                     }
                     else
-                        GamePlayManager.instance.LoadGame(game.Next());
+                        GamePlayManager.Instance.LoadGame(game.Next());
                 }
                 else
-                    GamePlayManager.instance.LoadGame(game.Next());
+                    GamePlayManager.Instance.LoadGame(game.Next());
             }
             else
                 //puzzle failed, rematch
-                GamePlayManager.instance.Rematch();
+                GamePlayManager.Instance.Rematch();
 
             if (isCurrent) menuController.CloseCurrentScreen(true);
         }

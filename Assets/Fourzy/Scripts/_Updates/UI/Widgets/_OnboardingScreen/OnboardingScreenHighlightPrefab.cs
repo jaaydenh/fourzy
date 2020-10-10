@@ -11,7 +11,7 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public void SetArea(Rect area)
         {
-            GameboardView board = GamePlayManager.instance.board;
+            GameboardView board = GamePlayManager.Instance.board;
 
             if (board == null)
                 return;

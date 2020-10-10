@@ -16,8 +16,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 string.Format(LocalizationManager.Value("gauntlet_complete"), game.myMembers.Count),
                 "OK",
                 null,
-                () => GamePlayManager.instance.BackButtonOnClick(),
-                () => GamePlayManager.instance.BackButtonOnClick());
+                GamePlayManager.Instance.BackButtonOnClick,
+                GamePlayManager.Instance.BackButtonOnClick);
         }
     }
 }

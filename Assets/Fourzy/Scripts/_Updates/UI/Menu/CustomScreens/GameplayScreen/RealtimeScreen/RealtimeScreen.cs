@@ -30,7 +30,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void Open(IClientFourzy game)
         {
-            randomPickWidget.SetData(game.unactivePlayer.DisplayName, game.activePlayer.DisplayName);
+            switch (game._Type)
+            {
+                case GameType.REALTIME:
+                    randomPickWidget.SetData(game.unactivePlayer.DisplayName, game.activePlayer.DisplayName);
+
+                    break;
+            }
         }
 
         public override void Open()

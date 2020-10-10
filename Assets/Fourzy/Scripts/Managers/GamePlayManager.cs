@@ -24,7 +24,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 {
     public class GamePlayManager : RoutinesBase
     {
-        public static GamePlayManager instance;
+        public static GamePlayManager Instance;
 
         public static Action<ClientPlayerTurn> onMoveStarted;
         public static Action<ClientPlayerTurn> onMoveEnded;
@@ -69,7 +69,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             base.Awake();
 
-            instance = this;
+            Instance = this;
         }
 
         protected void Start()
@@ -94,19 +94,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             HeaderScreen.instance.Close();
 
-            //auto load game if its not realtime mdoe
-            if (GameManager.Instance.isRealtime)
-            {
-                //notify that this client is ready
-                FourzyPhotonManager.SetClientReady();
-                gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for other player...");
-            }
-            else LoadGame(GameManager.Instance.activeGame);
+            CheckGameMode();
         }
 
         protected void Update()
         {
-            //add gems
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.H))
             {
@@ -177,7 +169,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             game = GameManager.Instance.activeGame;
 
-            Debug.Log($"Type: {game._Type} Mode: {game._Mode}");
+            Debug.Log($"Type: {game._Type} Mode: {game._Mode} Expected Local Type: {GameManager.Instance.ExpectedGameType}");
         }
 
         public void LoadGame(IClientFourzy _game)
@@ -395,17 +387,43 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             GameManager.Instance.OpenMainMenu();
 
-            //disconnect if realtime
-            if (PhotonNetwork.CurrentRoom != null)
+            switch (GameManager.Instance.ExpectedGameType)
             {
-                FourzyPhotonManager.TryLeaveRoom();
-                FourzyPhotonManager.Instance.JoinLobby();
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
+                case GameTypeLocal.REALTIME_QUICKMATCH:
+                    FourzyPhotonManager.TryLeaveRoom();
+                    FourzyPhotonManager.Instance.JoinLobby();
+
+                    break;
             }
         }
 
         public void UnloadGamePlaySceene()
         {
             SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
+        }
+
+        public void CheckGameMode()
+        {
+            //auto load game if its not realtime mdoe
+            switch (GameManager.Instance.ExpectedGameType)
+            {
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
+                case GameTypeLocal.REALTIME_QUICKMATCH:
+                    UnloadBoard();
+                    UnloadBG();
+
+                    //notify that this client is ready
+                    FourzyPhotonManager.SetClientReady();
+                    gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for other player...");
+
+                    break;
+
+                default:
+                    LoadGame(GameManager.Instance.activeGame);
+
+                    break;
+            }
         }
 
         public void Rematch(bool resetMembers = false)
@@ -620,7 +638,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         /// </summary>
         private void LoadBoard()
         {
-            if (board) Destroy(board.gameObject);
+            UnloadBoard();
 
             board = Instantiate(currentConfiguration.gameboardPrefab, transform);
             board.Initialize(game);
@@ -639,14 +657,23 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             board.FadeGamepieces(0f, 0f);
         }
 
+        private void UnloadBoard()
+        {
+            if (board) Destroy(board.gameObject);
+        }
+
         private void LoadBG(Area area)
         {
-            //unload old bg
-            if (bg) Destroy(bg.gameObject);
+            UnloadBG();
 
             currentConfiguration = GameContentManager.Instance.themesDataHolder.GetThemeBGConfiguration(area, Camera.main);
             bg = Instantiate(currentConfiguration.backgroundPrefab, bgParent);
             bg.transform.localPosition = Vector3.zero;
+        }
+
+        private void UnloadBG()
+        {
+            if (bg) Destroy(bg.gameObject);
         }
 
         /// <summary>
@@ -816,7 +843,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
                 CreateRealtimeGame();
-                //Rematch();
             }
         }
 

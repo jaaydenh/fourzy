@@ -3,7 +3,6 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Serialized;
-using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,7 +43,7 @@ namespace Fourzy._Updates.UI.Widgets
                 },
                 1
             )
-            { _Type = GameType.AI });
+            { _Type = GameType.AI }, GameTypeLocal.LOCAL_GAME);
         }
     }
 }

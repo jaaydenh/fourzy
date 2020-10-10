@@ -37,7 +37,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             this.game = game;
 
-            price = GamePlayManager.instance.GetGauntletRechargePrice();
+            price = GamePlayManager.Instance.GetGauntletRechargePrice();
 
             acceptButton.SetState(UserManager.Instance.gems >= price);
             acceptButton.SetLabel(price + "", "price");
@@ -51,9 +51,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 {
                     UserManager.Instance.gems -= price;
                     menuController.CloseCurrentScreen();
-                    GamePlayManager.instance.RechargeByGem();
+                    GamePlayManager.Instance.RechargeByGem();
                 },
-                () => GamePlayManager.instance.BackButtonOnClick());
+                () => GamePlayManager.Instance.BackButtonOnClick());
         }
 
         public void WathcAdToContinue()
@@ -73,7 +73,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             watchAdButton.SetState(true);
 
             menuController.CloseCurrentScreen();
-            GamePlayManager.instance.RechargeByAd();
+            GamePlayManager.Instance.RechargeByAd();
         }
     }
 }

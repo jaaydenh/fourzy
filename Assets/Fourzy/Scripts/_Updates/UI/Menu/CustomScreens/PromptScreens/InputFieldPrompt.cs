@@ -26,11 +26,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             inputField.ActivateInputField();
         }
 
-        public override void Accept()
+        public override void Accept(bool force = false)
         {
             onInput?.Invoke(inputField.text);
 
-            base.Accept();
+            base.Accept(force);
 
             if (onAccept == null) CloseSelf();
         }

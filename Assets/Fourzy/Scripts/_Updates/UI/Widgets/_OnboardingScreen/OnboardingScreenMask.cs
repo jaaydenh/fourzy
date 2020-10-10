@@ -31,7 +31,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void ShowMasks(OnboardingTask_ShowMaskedArea task, bool clear = true)
         {
-            board = GamePlayManager.instance.board;
+            board = GamePlayManager.Instance.board;
             Show();
 
             if (clear) Clear();
@@ -46,7 +46,7 @@ namespace Fourzy._Updates.UI.Widgets
                     for (int row = (int)area.y; row < (int)(area.y + area.height); row++)
                     {
                         Vector2 viewportPoint = Camera.main.WorldToViewportPoint(board.BoardLocationToVec2(new BoardLocation(row, column)) + 
-                            (Vector2)GamePlayManager.instance.board.transform.position);
+                            (Vector2)GamePlayManager.Instance.board.transform.position);
 
                         //figure size
                         MenuController menuController = GetComponentInParent<MenuController>();

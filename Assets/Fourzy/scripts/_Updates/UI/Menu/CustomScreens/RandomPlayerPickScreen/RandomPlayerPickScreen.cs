@@ -53,7 +53,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void DisplayWinner()
         {
             //assign new active player
-            GamePlayManager.instance.UpdatePlayerTurn();
+            GamePlayManager.Instance.UpdatePlayerTurn();
 
             StartRoutine("fadeRoutine", .7f, () => CloseSelf());
         }

@@ -158,7 +158,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SetHintButtonState(true);
         }
 
-        public void Next() => GamePlayManager.instance.LoadGame(game.Next());
+        public void Next() => GamePlayManager.Instance.LoadGame(game.Next());
 
         public void GameComplete()
         {
@@ -175,9 +175,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void TryUseHint()
         {
-            GamePlayManager.instance.PlayHint();
+            GamePlayManager.Instance.PlayHint();
 
-            if (GamePlayManager.instance.IsRoutineActive("hintRoutine")) SetHintButtonState(false);
+            if (GamePlayManager.Instance.IsRoutineActive("hintRoutine")) SetHintButtonState(false);
         }
 
         private void SetHintButtonState(bool state) => hintButton.SetState(state && !game.isOver && game.isMyTurn);

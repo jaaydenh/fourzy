@@ -234,7 +234,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     //pointer
                     case OnboardingActions.POINT_AT:
-                        GameboardView board = GamePlayManager.instance.board;
+                        GameboardView board = GamePlayManager.Instance.board;
                         if (board == null) break;
 
                         OnboardingTask_PointAt pointAtTask = currentTask as OnboardingTask_PointAt;
@@ -272,16 +272,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.SHOW_BOARD_HINT_AREA:
-                        GamePlayManager.instance.board.SetHintAreaSelectableState(false);
-                        GamePlayManager.instance.board.ShowHintArea(Mechanics.Board.GameboardView.HintAreaStyle.ANIMATION_LOOP, Mechanics.Board.GameboardView.HintAreaAnimationPattern.DIAGONAL);
+                        GamePlayManager.Instance.board.SetHintAreaSelectableState(false);
+                        GamePlayManager.Instance.board.ShowHintArea(Mechanics.Board.GameboardView.HintAreaStyle.ANIMATION_LOOP, Mechanics.Board.GameboardView.HintAreaAnimationPattern.DIAGONAL);
 
                         yield return null;
 
                         break;
 
                     case OnboardingActions.HIDE_BOARD_HINT_AREA:
-                        GamePlayManager.instance.board.SetHintAreaSelectableState(true);
-                        GamePlayManager.instance.board.HideHintArea(Mechanics.Board.GameboardView.HintAreaAnimationPattern.DIAGONAL);
+                        GamePlayManager.Instance.board.SetHintAreaSelectableState(true);
+                        GamePlayManager.Instance.board.HideHintArea(Mechanics.Board.GameboardView.HintAreaAnimationPattern.DIAGONAL);
 
                         yield return null;
 
@@ -299,12 +299,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.LIMIT_BOARD_INPUT:
-                        GamePlayManager.instance.board.LimitInput(currentTask.areas);
+                        GamePlayManager.Instance.board.LimitInput(currentTask.areas);
 
                         break;
 
                     case OnboardingActions.RESET_BOARD_INPUT:
-                        GamePlayManager.instance.board.SetInputMap(true);
+                        GamePlayManager.Instance.board.SetInputMap(true);
 
                         break;
 
@@ -319,7 +319,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.PLAY_INITIAL_MOVES:
-                        if (GamePlayManager.instance) GamePlayManager.instance.board.PlayInitialMoves();
+                        if (GamePlayManager.Instance) GamePlayManager.Instance.board.PlayInitialMoves();
 
                         break;
 
@@ -330,7 +330,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 GameContentManager.Instance.GetMiscBoard(currentTask.stringValue),
                                 UserManager.Instance.meAsPlayer,
                                 new Player(2, "Player Two"))
-                            { _Type = (GameType)currentTask.intValue });
+                            { _Type = (GameType)currentTask.intValue }, GameTypeLocal.LOCAL_GAME);
 
                         break;
 
@@ -362,7 +362,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     //player1 make move
                     case OnboardingActions.PLAYER_1_PLACE_GAMEPIECE:
                         Player player = activeGame.me;
-                        GamePlayManager.instance.board.TakeTurn(
+                        GamePlayManager.Instance.board.TakeTurn(
                             new SimpleMove(
                                 new Piece(player.PlayerId, int.Parse(player.HerdId)), currentTask.direction, currentTask.intValue));
 
@@ -372,7 +372,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     case OnboardingActions.PLAYER_2_PLACE_GAMEPIECE:
                         Player opponent = activeGame.opponent;
-                        GamePlayManager.instance.board.TakeTurn(
+                        GamePlayManager.Instance.board.TakeTurn(
                             new SimpleMove(
                                 new Piece(opponent.PlayerId, opponent.HerdId == null ? 1 : int.Parse(opponent.HerdId)), currentTask.direction, currentTask.intValue));
 

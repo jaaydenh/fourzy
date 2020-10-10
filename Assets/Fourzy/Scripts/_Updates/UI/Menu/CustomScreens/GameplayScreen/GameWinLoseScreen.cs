@@ -149,7 +149,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gamePieces.Clear();
 
             //get winning gamepieces
-            List<GamePieceView> winningGamepieces = GamePlayManager.instance.board.GetWinningPieces();
+            List<GamePieceView> winningGamepieces = GamePlayManager.Instance.board.GetWinningPieces();
 
             //move them to ui layer
             for (int index = 0; index < winningGamepieces.Count; index++)
@@ -204,7 +204,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         //open waiting prompt
                         waitingScreen = menuController.GetOrAddScreen<PromptScreen>()
-                            .Prompt("Rematch Requested", "Waiting for other player to accept request.", "Leave Game", null, () => GamePlayManager.instance.BackButtonOnClick(), null)
+                            .Prompt("Rematch Requested", "Waiting for other player to accept request.", "Leave Game", null, () => GamePlayManager.Instance.BackButtonOnClick(), null)
                             .CloseOnAccept();
                     }
 
@@ -212,7 +212,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 default:
                     if (isCurrent) menuController.CloseCurrentScreen(true);
-                    GamePlayManager.instance.Rematch();
+                    GamePlayManager.Instance.Rematch();
 
                     break;
             }
@@ -228,7 +228,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 default:
-                    GamePlayManager.instance.LoadGame(game.Next());
+                    GamePlayManager.Instance.LoadGame(game.Next());
 
                     break;
             }
@@ -252,7 +252,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             if (game.myMembers.Count == 0)
                                 OnGauntletLost();
                             else
-                                menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                                menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.Instance.gameplayScreen.OnBack());
                         }
                     }
                     else
@@ -279,7 +279,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                             if (nextPack == null)
                             {
-                                GamePlayManager.instance.BackButtonOnClick();
+                                GamePlayManager.Instance.BackButtonOnClick();
                                 return;
                             }
                             else
@@ -293,7 +293,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                     case PackType.BOSS_AI_PACK:
                                         menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
                                             nextPack,
-                                            () => GamePlayManager.instance.BackButtonOnClick(),
+                                            () => GamePlayManager.Instance.BackButtonOnClick(),
                                             () => menuController.CloseCurrentScreen());
 
                                         break;
@@ -301,17 +301,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                     case PackType.PUZZLE_PACK:
                                         menuController.GetOrAddScreen<PrePackPrompt>().Prompt(
                                             nextPack,
-                                            () => GamePlayManager.instance.BackButtonOnClick(),
+                                            () => GamePlayManager.Instance.BackButtonOnClick(),
                                             () => menuController.CloseCurrentScreen());
 
                                         break;
                                 }
                             }
                             else
-                                GamePlayManager.instance.BackButtonOnClick();
+                                GamePlayManager.Instance.BackButtonOnClick();
                         }
                         else
-                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.BackButtonOnClick());
+                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.Instance.BackButtonOnClick());
                     }
                     else
                         Rematch();
@@ -324,7 +324,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         switch (game._Type)
                         {
                             case GameType.REALTIME:
-                                GamePlayManager.instance.BackButtonOnClick();
+                                GamePlayManager.Instance.BackButtonOnClick();
 
                                 break;
 
@@ -337,9 +337,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     else
                     {
                         if (game.puzzleData && !game.puzzleData.lastInPack)
-                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.instance.gameplayScreen.OnBack());
+                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.Instance.gameplayScreen.OnBack());
                         else
-                            GamePlayManager.instance.BackButtonOnClick();
+                            GamePlayManager.Instance.BackButtonOnClick();
                     }
 
                     break;
@@ -369,7 +369,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                                 menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack);
                             },
-                            () => GamePlayManager.instance.BackButtonOnClick());
+                            () => GamePlayManager.Instance.BackButtonOnClick());
 
                     break;
             }

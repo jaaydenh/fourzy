@@ -33,6 +33,7 @@ namespace Fourzy
         public static Action<string> onCreateRoom;
         public static Action<string> onJoinedRoom;
         public static Action<Player> onPlayerEnteredRoom;
+        public static Action onRoomLeft;
         public static Action<Player> onPlayerLeftRoom;
         public static Action<Hashtable> onRoomPropertiesUpdate;
         public static Action<EventData> onEvent;
@@ -50,15 +51,19 @@ namespace Fourzy
 
         private Coroutine connectionTimedOutRoutine;
 
-        /// <summary>
-        /// Please check if you'r connected first <see cref="PhotonNetwork.IsConnectedAndReady"/>
-        /// </summary>
+        public static bool IsQMLobby => PhotonNetwork.CurrentLobby != null && !PhotonNetwork.CurrentLobby.IsDefault;
+
         public static bool IsDefaultLobby => PhotonNetwork.CurrentLobby != null && PhotonNetwork.CurrentLobby.IsDefault;
 
         /// <summary>
-        /// Please check if you'r connected first <see cref="PhotonNetwork.IsConnectedAndReady"/>
+        /// False when inside any room
         /// </summary>
-        public static bool IsQMLobby => PhotonNetwork.CurrentLobby != null && !PhotonNetwork.CurrentLobby.IsDefault;
+        public static bool InDefaultLobby => PhotonNetwork.InLobby && PhotonNetwork.CurrentLobby.IsDefault;
+
+        /// <summary>
+        /// False when inside any room
+        /// </summary>
+        public static bool InQMLobby => PhotonNetwork.InLobby && !PhotonNetwork.CurrentLobby.IsDefault;
 
         public static bool ConnectedAndReady => PhotonNetwork.IsConnectedAndReady;
 
@@ -235,8 +240,17 @@ namespace Fourzy
         {
             base.OnRoomListUpdate(roomList);
 
-            roomsInfo = roomList;
-            onRoomsListUpdated?.Invoke(roomList);
+            foreach (RoomInfo info in roomList)
+                if (info.RemovedFromList)
+                    roomsInfo.RemoveAll(_room => _room.Name == info.Name);
+                else
+                {
+                    if (roomsInfo.Find(_room => _room.Name == info.Name) == null)
+                        roomsInfo.Add(info);
+                }
+
+            if (DEBUG) Debug.Log($"Rooms list updated: {roomsInfo.Count}.");
+            onRoomsListUpdated?.Invoke(roomsInfo);
         }
 
         public override void OnJoinedRoom()
@@ -281,6 +295,15 @@ namespace Fourzy
             if (DEBUG) Debug.Log($"Disconnected from server.");
 
             onDisconnectedFromServer?.Invoke();
+        }
+
+        public override void OnLeftRoom()
+        {
+            base.OnLeftRoom();
+
+            if (DEBUG) Debug.Log($"Room left.");
+
+            onRoomLeft?.Invoke();
         }
 
         #endregion
@@ -348,11 +371,13 @@ namespace Fourzy
             if (!PhotonNetwork.IsConnected)
             {
                 instance.ConnectUsingSettings();
+
                 return;
             }
-            else if (PhotonNetwork.CurrentLobby == null || PhotonNetwork.CurrentLobby.IsDefault)
+            else if (!InQMLobby)
             {
                 instance.JoinLobby(quickmatchLobby);
+
                 return;
             }
 
@@ -500,11 +525,14 @@ namespace Fourzy
             if (!PhotonNetwork.IsConnected)
             {
                 ConnectUsingSettings();
+
                 return;
             }
             else if (
                 PhotonNetwork.NetworkClientState == ClientState.Authenticating ||
-                PhotonNetwork.NetworkClientState == ClientState.Leaving)
+                PhotonNetwork.NetworkClientState == ClientState.Leaving ||
+                PhotonNetwork.NetworkClientState == ClientState.PeerCreated)
+
                 return;
 
             tasks.Pop();
@@ -531,6 +559,7 @@ namespace Fourzy
 
     public enum RoomType
     {
+        NONE,
         QUICKMATCH,
         DIRECT_INVITE,
         LOBBY_ROOM,

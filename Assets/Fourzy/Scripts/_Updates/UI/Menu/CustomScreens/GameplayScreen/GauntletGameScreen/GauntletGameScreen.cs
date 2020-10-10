@@ -28,16 +28,27 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             this.game = game;
 
-            if (game == null || game._Mode != GameMode.GAUNTLET) return;
+            if (game == null) return;
 
-            if (gamepiece && gamepiece.pieceData.ID != game.me.HerdId)
+            switch (game._Mode)
             {
-                Destroy(gamepiece.gameObject);
-                gamepiece = AddGamepiece(game.me.HerdId);
-            }
-            else if (!gamepiece) gamepiece = AddGamepiece(game.me.HerdId);
+                case GameMode.GAUNTLET:
+                    if (gamepiece && gamepiece.pieceData.ID != game.me.HerdId)
+                    {
+                        Destroy(gamepiece.gameObject);
+                        gamepiece = AddGamepiece(game.me.HerdId);
+                    }
+                    else if (!gamepiece) gamepiece = AddGamepiece(game.me.HerdId);
 
-            Open();
+                    Open();
+
+                    break;
+
+                default:
+                    Close();
+
+                    break;
+            }
         }
 
         public override void Open()

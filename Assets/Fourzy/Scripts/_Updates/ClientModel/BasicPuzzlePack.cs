@@ -185,7 +185,7 @@ namespace Fourzy._Updates.ClientModel
             }
 
             GameManager.Instance.currentPuzzlePack = this;
-            GameManager.Instance.StartGame(game);
+            GameManager.Instance.StartGame(game, GameTypeLocal.LOCAL_GAME);
         }
 
         public void ResetPlayerPrefs()

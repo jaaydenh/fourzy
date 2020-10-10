@@ -71,7 +71,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenNext()
         {
-            if (nextChallenge != null) GamePlayManager.instance.LoadGame(nextChallenge.GetGameForPreviousMove());
+            if (nextChallenge != null) GamePlayManager.Instance.LoadGame(nextChallenge.GetGameForPreviousMove());
         }
 
         public void HideButton()

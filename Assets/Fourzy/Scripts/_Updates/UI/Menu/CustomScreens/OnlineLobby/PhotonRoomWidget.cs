@@ -1,8 +1,6 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Audio;
 using Fourzy._Updates.Mechanics._GamePiece;
-using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu.Screens;
 using Photon.Realtime;
 using TMPro;
@@ -17,7 +15,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         protected RoomInfo data;
 
-        private LobbyPromptScreen _menuScreen;
+        private LobbyScreen _menuScreen;
 
         public string roomName => data.Name;
 
@@ -45,7 +43,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base.OnInitialized();
 
-            _menuScreen = menuScreen as LobbyPromptScreen;
+            _menuScreen = menuScreen as LobbyScreen;
         }
     }
 }

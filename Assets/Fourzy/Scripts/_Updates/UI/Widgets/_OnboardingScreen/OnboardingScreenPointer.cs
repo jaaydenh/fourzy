@@ -39,7 +39,7 @@ namespace Fourzy._Updates.UI.Widgets
         public OnboardingScreenPointer AnimatePointer(params Vector2[] points)
         {
             //update board reference
-            board = GamePlayManager.instance.board;
+            board = GamePlayManager.Instance.board;
 
             StartRoutine("pointerAnimation", PointerAnimationRoutine(points));
 

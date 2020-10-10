@@ -26,9 +26,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private string challengeIdToJoin;
         private string challengedID = "";
+        private MatchmakingScreenState state;
+        private LoadingPromptScreen _prompt;
         private List<string> matchMakingStrings;
-
-        public bool isRealtime { get; set; }
+        
         public AlphaTween alphaTween { get; private set; }
 
         protected override void Awake()
@@ -48,6 +49,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEnteredRoom;
             FourzyPhotonManager.onJoinedRoom += OnRoomJoined;
             FourzyPhotonManager.onConnectionTimeOut += OnConnectionTimeOut;
+            FourzyPhotonManager.onRoomLeft += OnRoomLeft;
         }
 
         protected void OnDestroy()
@@ -61,6 +63,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEnteredRoom;
             FourzyPhotonManager.onJoinedRoom -= OnRoomJoined;
             FourzyPhotonManager.onConnectionTimeOut -= OnConnectionTimeOut;
+            FourzyPhotonManager.onRoomLeft -= OnRoomLeft;
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            _prompt = PersistantMenuController.instance
+                .GetOrAddScreen<LoadingPromptScreen>()
+                .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
         }
 
         public override void Close(bool animate = true)
@@ -69,6 +81,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             StopRoutine("multiplayerTimeout", false);
             StopRoutine("randomText", false);
+
+            state = MatchmakingScreenState.NONE;
             timerLabel.text = string.Empty;
         }
 
@@ -79,12 +93,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnBack();
 
             CloseSelf();
-            if (isRealtime) FourzyPhotonManager.TryLeaveRoom();
+
+            if (FourzyPhotonManager.IsQMLobby) FourzyPhotonManager.TryLeaveRoom();
         }
 
         public void OpenTurnbased()
         {
-            isRealtime = false;
+            state = MatchmakingScreenState.TURNBASED;
             challengedID = "";
 
             menuController.OpenScreen(this);
@@ -92,7 +107,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void StartVSPlayer(string playerID)
         {
-            isRealtime = false;
+            state = MatchmakingScreenState.TURNBASED;
             challengedID = playerID;
 
             menuController.OpenScreen(this);
@@ -100,10 +115,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenRealtime()
         {
-            isRealtime = true;
-            challengedID = "";
+            if (FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) == RoomType.LOBBY_ROOM)
+            {
+                menuController
+                    .GetOrAddScreen<PromptScreen>()
+                    .Prompt("Leave room?", "To enter the quickmatch you have to leave the room you'r currently in.", () =>
+                    {
+                        state = MatchmakingScreenState.WAITTING_ROOM_LEFT;
+                        FourzyPhotonManager.TryLeaveRoom();
 
-            menuController.OpenScreen(this);
+                        _prompt
+                            .Prompt("Leaving room...", "", null, "Back", null, () => state = MatchmakingScreenState.NONE)
+                            .CloseOnDecline();
+                    }, null)
+                    .CloseOnDecline()
+                    .CloseOnAccept();
+            }
+            else
+            {
+                state = MatchmakingScreenState.REALTIME;
+                challengedID = "";
+
+                menuController.OpenScreen(this);
+            }
         }
 
         public override void Open()
@@ -114,19 +148,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
             BlockInput();
             backButton.SetActive(false);
 
-            if (isRealtime)
+            switch (state)
             {
-                messageLabel.text = "Searching for opponent...";
+                case MatchmakingScreenState.REALTIME:
+                    messageLabel.text = "Searching for opponent...";
 
-                FourzyPhotonManager.JoinRandomRoom();
-            }
-            else
-            {
-                messageLabel.text = "Searching for opponent...";
+                    FourzyPhotonManager.JoinRandomRoom();
 
-                Area selectedArea = GameContentManager.Instance.currentTheme.themeID;
-                Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentTheme.themeID);
-                // ChallengeManager.Instance.CreateTurnBasedGame(challengedID/*"5ca27b6b4cd5b739c01cbd21"*/, selectedArea, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
+                    break;
+
+                case MatchmakingScreenState.TURNBASED:
+                    messageLabel.text = "Searching for opponent...";
+
+                    Area selectedArea = GameContentManager.Instance.currentTheme.themeID;
+                    Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentTheme.themeID);
+                    // ChallengeManager.Instance.CreateTurnBasedGame(challengedID/*"5ca27b6b4cd5b739c01cbd21"*/, selectedArea, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
+
+                    break;
             }
 
             StartRoutine("randomText", ShowRandomTextRoutine());
@@ -245,6 +283,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        private void OnRoomLeft()
+        {
+            if (state != MatchmakingScreenState.WAITTING_ROOM_LEFT) return;
+
+            if (_prompt.isOpened) _prompt.Decline();
+            OpenRealtime();
+        }
+
         #endregion
 
         private void StartMatch()
@@ -254,7 +300,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
             timerLabel.text = "Match Found";
 
-            GameManager.Instance.StartGame();
+            GameManager.Instance.StartGame(GameTypeLocal.REALTIME_QUICKMATCH);
         }
 
         private void OnMultiplayerTimerTimedOut()
@@ -308,6 +354,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 else
                     elementIndex = 0;
             }
+        }
+
+        private enum MatchmakingScreenState
+        {
+            NONE,
+            REALTIME,
+            TURNBASED,
+            WAITTING_ROOM_LEFT,
         }
     }
 }

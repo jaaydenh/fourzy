@@ -150,7 +150,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else if (p1DifficultyLevel > -1 || p2DifficultyLevel > -1) game._Type = GameType.AI;
             else game._Type = GameType.PASSANDPLAY;
 
-            GameManager.Instance.StartGame(game);
+            GameManager.Instance.StartGame(game, GameTypeLocal.LOCAL_GAME);
         }
 
         public override void Open()

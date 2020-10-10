@@ -176,7 +176,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     _Type = type,
                 };
 
-            GameManager.Instance.StartGame(game);
+            GameManager.Instance.StartGame(game, GameTypeLocal.LOCAL_GAME);
         }
 
         protected OpponentWidget AddWidget(AIProfile aiProfile, Transform parent, int playerIndex)

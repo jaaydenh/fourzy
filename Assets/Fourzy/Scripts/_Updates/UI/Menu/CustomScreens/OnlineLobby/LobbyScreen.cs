@@ -4,13 +4,14 @@ using Fourzy._Updates.Audio;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Toasts;
 using Fourzy._Updates.UI.Widgets;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
-    public class LobbyPromptScreen : PromptScreen
+    public class LobbyScreen : MenuScreen
     {
         public PhotonRoomWidget widgetPrefab;
         public RectTransform widgetsParent;
@@ -20,15 +21,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         protected List<RoomInfo> roomsData = new List<RoomInfo>();
 
         private LoadingPromptScreen _prompt;
-        private bool listenTo = false;
+        private LobbyState state;
 
         protected override void Awake()
         {
             base.Awake();
-
-            _prompt = PersistantMenuController.instance
-                .GetOrAddScreen<LoadingPromptScreen>()
-                .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
 
             FourzyPhotonManager.onRoomsListUpdated += OnRoomsUpdated;
             FourzyPhotonManager.onJoinedRoom += OnJoinedRoom;
@@ -37,6 +34,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onCreateRoomFailed += OnCreateRoomFailed;
             FourzyPhotonManager.onJoinRoomFailed += OnJoinRoomFailed;
             FourzyPhotonManager.onConnectionTimeOut += OnConnectionTimerOut;
+            FourzyPhotonManager.onConnectedToMaster += OnConnectedToMaster;
         }
 
         protected void OnDestroy()
@@ -48,35 +46,71 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onCreateRoomFailed -= OnCreateRoomFailed;
             FourzyPhotonManager.onJoinRoomFailed -= OnJoinRoomFailed;
             FourzyPhotonManager.onConnectionTimeOut -= OnConnectionTimerOut;
+            FourzyPhotonManager.onConnectedToMaster -= OnConnectedToMaster;
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            _prompt = PersistantMenuController.instance
+                .GetOrAddScreen<LoadingPromptScreen>()
+                .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
+        }
+
+        public override void OnBack()
+        {
+            base.OnBack();
+
+            CloseSelf();
+        }
+
+        public override void Close(bool animate = true)
+        {
+            base.Close(animate);
+
+            state = LobbyState.NONE;
         }
 
         public override void Open()
         {
             base.Open();
 
-            if (CheckLobby()) DisplayRooms(FourzyPhotonManager.Instance.roomsInfo);
+            OnRoomsUpdated(FourzyPhotonManager.Instance.roomsInfo);
         }
 
         public bool CheckLobby()
         {
-            //includes join lobby logic
-            if (FourzyPhotonManager.ConnectedAndReady && FourzyPhotonManager.IsDefaultLobby)
+            if (PhotonNetwork.CurrentRoom != null)
             {
-                if (!isCurrent) menuController.GetOrAddScreen<LobbyPromptScreen>().Prompt();
+                menuController
+                    .GetOrAddScreen<PromptScreen>()
+                    .Prompt("Leave room?", "To enter the lobby you have to leave the room you'r currently in.", () =>
+                    {
+                        state = LobbyState.LEAVING_ROOM;
+                        FourzyPhotonManager.TryLeaveRoom();
+
+                        _prompt
+                            .Prompt("Leaving room...", "", null, "Back", null, () => state = LobbyState.NONE)
+                            .CloseOnDecline();
+                    }, null)
+                    .CloseOnDecline()
+                    .CloseOnAccept();
+
+                return false;
+            }
+            else if (FourzyPhotonManager.ConnectedAndReady && FourzyPhotonManager.InDefaultLobby)
+            {
+                if (!isCurrent) menuController.OpenScreen(this);
 
                 return true;
             }
             else
             {
-                listenTo = true;
+                state = LobbyState.JOINING_LOBBY;
 
                 _prompt
-                    .Prompt("Connecting to server", "", null, "Back", null, () =>
-                    {
-                        listenTo = false;
-
-                        if (isOpened) CloseSelf();
-                    })
+                    .Prompt("Joining lobby...", "", null, "Back", null, () => state = LobbyState.NONE)
                     .CloseOnDecline();
 
                 FourzyPhotonManager.Instance.JoinLobby();
@@ -91,7 +125,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             _prompt
                 .Prompt("Creating new room", "", null, null, null, null)
-                .BlockInput();
+                .CloseOnDecline();
         }
 
         public void JoinRoom(string name)
@@ -100,7 +134,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             _prompt
                 .Prompt("Joining room", name, null, null, null, null)
-                .BlockInput();
+                .CloseOnDecline();
         }
 
         private void DisplayRooms(List<RoomInfo> data)
@@ -126,52 +160,54 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!isOpened) return;
 
-            if (_prompt) _prompt.CloseSelf();
+            if (_prompt.isOpened) _prompt.Decline(true);
             if (isOpened) CloseSelf();
 
-            //play GAME_FOUND sfx
             AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
-
-            GameManager.Instance.StartGame();
         }
 
         private void OnCreateRoomFailed(string error)
         {
-            if (isOpened && _prompt)
-            {
-                _prompt.CloseSelf();
-
-                GamesToastsController.ShowTopToast($"Failed: {error}");
-            }
+            if (isOpened) GamesToastsController.ShowTopToast($"Failed: {error}");
+            if (_prompt.isOpened) _prompt.Decline(true);
         }
 
         private void OnJoinRoomFailed(string error)
         {
-            if (isOpened && _prompt)
-            {
-                _prompt.CloseSelf();
-
-                GamesToastsController.ShowTopToast($"Failed: {error}");
-            }
+            if (isOpened) GamesToastsController.ShowTopToast($"Failed: {error}");
+            if (_prompt.isOpened) _prompt.Decline(true);
         }
 
         private void OnConnectionTimerOut()
         {
-            if (isOpened)
-            {
-                if (_prompt) _prompt.CloseSelf();
-                if (listenTo) CloseSelf();
-            }
+            if (isOpened && state != LobbyState.NONE) CloseSelf();
+            if (_prompt.isOpened) _prompt.Decline(true);
         }
 
         private void OnJoinedLobby(string lobbyName)
         {
-            if (!listenTo) return;
+            if (state != LobbyState.JOINING_LOBBY) return;
 
-            _prompt.Decline();
+            if (_prompt.isOpened) _prompt.Decline(true);
 
             CheckLobby();
+        }
+
+        private void OnConnectedToMaster()
+        {
+            if (state != LobbyState.LEAVING_ROOM) return;
+
+            //if (_prompt.isOpened) _prompt.Decline(true);
+
+            CheckLobby();
+        }
+
+        private enum LobbyState
+        {
+            NONE,
+            JOINING_LOBBY,
+            LEAVING_ROOM,
         }
     }
 }

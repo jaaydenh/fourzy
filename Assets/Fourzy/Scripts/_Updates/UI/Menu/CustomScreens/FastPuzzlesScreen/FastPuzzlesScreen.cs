@@ -20,7 +20,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private LoadingPromptScreen loadingPrompt;
 
-        public void StartFastPuzzleGame() => GameManager.Instance.StartGame(GameContentManager.Instance.GetNextFastPuzzle());
+        public void StartFastPuzzleGame() => GameManager.Instance.StartGame(GameContentManager.Instance.GetNextFastPuzzle(), GameTypeLocal.LOCAL_GAME);
 
         protected override void Awake()
         {

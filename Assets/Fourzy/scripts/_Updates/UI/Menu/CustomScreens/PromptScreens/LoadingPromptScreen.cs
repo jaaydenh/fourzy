@@ -55,12 +55,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Prompt(message, null, null, null, null, onDeny);
         }
 
-        //public override void Decline()
-        //{
-        //    if (onDecline == null) return;
-        //    else onDecline.Invoke();
-        //}
-
         public void SetProgress(float value) => progress.fillAmount = value;
 
         public void UpdateInfo(string text) => promptTitle.text = text;

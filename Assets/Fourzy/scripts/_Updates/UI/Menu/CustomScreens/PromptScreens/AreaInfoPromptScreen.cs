@@ -1,14 +1,13 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.UI.Helpers;
-using FourzyGameModel.Model;
-using UnityEngine;
-using Fourzy._Updates.Serialized;
-using System.Collections.Generic;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Board;
-using Fourzy._Updates.UI.Widgets;
+using Fourzy._Updates.Serialized;
+using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Toasts;
+using FourzyGameModel.Model;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -37,7 +36,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             ThemesDataHolder.GameTheme _themeData = GameContentManager.Instance.themesDataHolder.GetTheme(theme);
 
             if (theme == Area.NONE || _themeData == null) return;
-            
+
             Prompt(_themeData.id, _themeData.description, null);
 
             //get buy buttons
@@ -122,12 +121,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             currentOpenedTheme = themeData;
         }
 
-        public override void Accept()
+        public override void Accept(bool force = false)
         {
-            base.Accept();
+            base.Accept(force);
 
             GameContentManager.Instance.currentTheme = currentOpenedTheme;
-            menuController.CloseCurrentScreen(true);
+            CloseSelf();
         }
 
         public void Purchase(CurrencyType currency)

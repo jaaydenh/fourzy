@@ -124,10 +124,10 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 33
+          selectedMember: 31
           isDynamic: 0
         target: {fileID: 6186301521444083483}
-        memberName: Decline
+        memberName: OnBack
         memberType: 8
         arguments: []
         isDynamic: 0
@@ -374,10 +374,6 @@ MonoBehaviour:
   isOpened: 0
   defaultCalls: 1
   menuController: {fileID: 0}
-  promptTitle: {fileID: 0}
-  promptText: {fileID: 0}
-  acceptButton: {fileID: 0}
-  declineButton: {fileID: 0}
   widgetPrefab: {fileID: 3894803454539625569, guid: 1f0404e594cfdc6429848ff05952fbfc,
     type: 3}
   widgetsParent: {fileID: 6186301522557918216}
@@ -1241,10 +1237,10 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 33
+          selectedMember: 31
           isDynamic: 0
         target: {fileID: 6186301521444083483}
-        memberName: Decline
+        memberName: OnBack
         memberType: 8
         arguments: []
         isDynamic: 0

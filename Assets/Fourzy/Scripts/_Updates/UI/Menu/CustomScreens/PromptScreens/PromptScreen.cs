@@ -54,22 +54,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
             menuController.OpenScreen(this);
 
             closeOnAccept = false;
+            closeOnDecline = false;
 
             return this;
         }
 
-        public virtual void Accept()
+        public virtual void Accept(bool force = false)
         {
-            if (inputBlocked) return;
+            if (inputBlocked && !force) return;
 
             onAccept?.Invoke();
 
             if (closeOnAccept) CloseSelf();
         }
 
-        public virtual void Decline()
+        public virtual void Decline(bool force = false)
         {
-            if (inputBlocked) return;
+            if (inputBlocked && !force) return;
 
             bool closeCalled = false;
 

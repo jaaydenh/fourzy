@@ -80,7 +80,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             game._Type = GameType.PASSANDPLAY;
 
-            GameManager.Instance.StartGame(game);
+            GameManager.Instance.StartGame(game, GameTypeLocal.LOCAL_GAME);
         }
 
         protected override void OnInitialized()

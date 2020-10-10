@@ -102,7 +102,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenDiscord() => Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/nMZ3MgE"/*)*/);
 
-        public void OpenOnlineLobby() => PersistantMenuController.instance.GetOrAddScreen<LobbyPromptScreen>().CheckLobby();
+        public void OpenOnlineLobby() => PersistantMenuController.instance.GetOrAddScreen<LobbyScreen>().CheckLobby();
 
         public void StartRealtime() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
 

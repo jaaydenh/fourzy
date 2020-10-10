@@ -33,7 +33,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Prompt(LocalizationManager.Value("change_name"), "", LocalizationManager.Value("change_name"), null);
         }
 
-        public override void Accept()
+        public override void Accept(bool force = false)
         {
             //change name
             if (string.IsNullOrEmpty(inputField.text))

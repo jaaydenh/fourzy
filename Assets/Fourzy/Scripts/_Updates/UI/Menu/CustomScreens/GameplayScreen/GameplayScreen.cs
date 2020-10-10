@@ -79,7 +79,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (game == null)
             {
-                GamePlayManager.instance.BackButtonOnClick();
+                GamePlayManager.Instance.BackButtonOnClick();
             }
             else
             {
@@ -88,20 +88,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case GameType.PUZZLE:
                     case GameType.TURN_BASED:
                     case GameType.PRESENTATION:
-                        GamePlayManager.instance.BackButtonOnClick();
+                        GamePlayManager.Instance.BackButtonOnClick();
 
                         break;
 
                     default:
                         if (game.isOver)
-                            GamePlayManager.instance.BackButtonOnClick();
+                            GamePlayManager.Instance.BackButtonOnClick();
                         else
                             menuController.GetOrAddScreen<PromptScreen>()
                                 .Prompt(LocalizationManager.Value("leave_game"), 
                                 "",
                                 LocalizationManager.Value("yes"), 
                                 LocalizationManager.Value("no"), 
-                                () => GamePlayManager.instance.BackButtonOnClick());
+                                () => GamePlayManager.Instance.BackButtonOnClick());
 
                         break;
                 }
@@ -226,7 +226,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //position help button
-            Vector2 viewportPoint = Camera.main.WorldToViewportPoint(gameplayManager.board.BoardLocationToVec2(new BoardLocation(0, 0)) + (Vector2)GamePlayManager.instance.board.transform.position);
+            Vector2 viewportPoint = Camera.main.WorldToViewportPoint(gameplayManager.board.BoardLocationToVec2(new BoardLocation(0, 0)) + (Vector2)GamePlayManager.Instance.board.transform.position);
             helpButton.rectTransform.anchorMin = helpButton.rectTransform.anchorMax = viewportPoint;
             if (GameManager.Instance.Landscape)
                 helpButton.rectTransform.anchoredPosition = new Vector2(-160f, 0f);

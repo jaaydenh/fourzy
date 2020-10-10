@@ -115,10 +115,7 @@ namespace Fourzy._Updates.UI.Menu
             currentScreen = screens[index];
         }
 
-        public void SetCurrentScreen(MenuScreen screen)
-        {
-            SetCurrentScreen(screens.IndexOf(screen));
-        }
+        public void SetCurrentScreen(MenuScreen screen) => SetCurrentScreen(screens.IndexOf(screen));
 
         /// <summary>
         /// Invokes OnBack on current screen
@@ -195,11 +192,11 @@ namespace Fourzy._Updates.UI.Menu
 
         public void OpenScreen(MenuScreen screen)
         {
-            if (currentScreen && currentScreen.isOpened && screen.closePreviousWhenOpened) currentScreen.Close();
+            if (currentScreen && currentScreen != screen && currentScreen.isOpened && screen.closePreviousWhenOpened) currentScreen.Close();
+
+            if (!currentScreen || (currentScreen != screen)) screensStack.Push(screen);
 
             SetCurrentScreen(screen);
-            screensStack.Push(currentScreen);
-
             currentScreen.Open();
         }
 

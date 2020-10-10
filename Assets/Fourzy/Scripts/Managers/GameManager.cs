@@ -92,7 +92,7 @@ namespace Fourzy
         }
         public bool Landscape => Screen.width > Screen.height;
         public bool ExtraFeatures => extraFeatures || Application.isEditor;
-        public bool isRealtime => PhotonNetwork.CurrentRoom != null;
+        public GameTypeLocal ExpectedGameType { get; private set; }
         public PuzzleData dailyPuzzlePack { get; private set; }
         public IClientFourzy activeGame { get; set; }
         public BasicPuzzlePack currentPuzzlePack { get; set; }
@@ -308,8 +308,15 @@ namespace Fourzy
             //}
         }
 
-        public Coroutine StartGame(IClientFourzy game)
+        public void SetExpectedGameType(GameTypeLocal gameType)
         {
+            ExpectedGameType = gameType;
+        }
+
+        public Coroutine StartGame(IClientFourzy game, GameTypeLocal gameType)
+        {
+            SetExpectedGameType(gameType);
+
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
@@ -320,7 +327,7 @@ namespace Fourzy
 
             //if gameplay scene is already opened, just load game
             if (activeGame != null)
-                GamePlayManager.instance.LoadGame(game);
+                GamePlayManager.Instance.LoadGame(game);
             else
             {
                 sessionID = Guid.NewGuid().ToString();
@@ -336,22 +343,21 @@ namespace Fourzy
             return StartRoutine("startingGame", StartingGameRoutine());
         }
 
-        /// <summary>
-        /// StarGame version for Photon
-        /// </summary>
-        public void StartGame()
+        public void StartGame(GameTypeLocal gameType)
         {
-            //if (isRealtime)
-            //{
-            //    PhotonNetwork.LoadLevel(Constants.GAMEPLAY_SCENE_NAME);
-            //}
-            //else
-            //{
+            SetExpectedGameType(gameType);
+
+            if (isGameplaySceneLoaded)
+            {
+                GamePlayManager.Instance.CheckGameMode();
+            }
+            else
+            {
                 if (isMainMenuLoaded)
                     SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME, LoadSceneMode.Additive);
                 else
                     SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME);
-            //}
+            }
         }
 
         public void OpenMainMenu()
@@ -359,7 +365,7 @@ namespace Fourzy
             if (!isMainMenuLoaded) SceneManager.LoadScene(MainMenuSceneName);
 
             //unload gameplay scene 
-            if (isGameplaySceneLoaded) GamePlayManager.instance.UnloadGamePlaySceene();
+            if (isGameplaySceneLoaded) GamePlayManager.Instance.UnloadGamePlaySceene();
         }
 
         public void ResetGames()
@@ -774,7 +780,7 @@ namespace Fourzy
                 StartGame(new ClientFourzyGame(GameContentManager.Instance.themesDataHolder.GetRandomTheme(Area.NONE),
                     new Player(1, "AI Player 1") { PlayerString = "1" },
                     new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
-                { _Type = GameType.PRESENTATION, });
+                { _Type = GameType.PRESENTATION, }, GameTypeLocal.LOCAL_GAME);
             }
         }
 
@@ -805,7 +811,7 @@ namespace Fourzy
 
         private IEnumerator StartingGameRoutine()
         {
-            while (!GamePlayManager.instance || !GamePlayManager.instance.isBoardReady) yield return null;
+            while (!GamePlayManager.Instance || !GamePlayManager.Instance.isBoardReady) yield return null;
         }
 
 #if !UNITY_IOS && !UNITY_ANDROID
@@ -876,5 +882,16 @@ namespace Fourzy
             SWIPE,
             SWIPE_STYLE_2,
         }
+    }
+
+    /// <summary>
+    /// For client use only
+    /// </summary>
+    public enum GameTypeLocal
+    {
+        LOCAL_GAME,
+        REALTIME_LOBBY_GAME,
+        REALTIME_QUICKMATCH,
+
     }
 }

@@ -77,7 +77,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void OpenGame()
         {
-            GameManager.Instance.StartGame(data.GetGameForPreviousMove());
+            //GameManager.Instance.StartGame(data.GetGameForPreviousMove());
         }
 
         public void Rematch()
