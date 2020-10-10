@@ -2,7 +2,6 @@
 
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.ClientModel;
-using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tools;
@@ -19,7 +18,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class OnboardingScreen : MenuScreen
     {
-        public static OnboardingScreen instance;
+        public static OnboardingScreen Instance;
 
         public OnboardingScreenMask masks;
         public OnboardingScreenBG bg;
@@ -99,7 +98,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void OpenTutorial(Tutorial tutorial)
         {
             StopAllCoroutines();
-            instance = this;
+            Instance = this;
 
             RemoveCurrentButton();
             _yield = false;
@@ -148,6 +147,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //            break;
             //    }
             //}
+        }
+
+        public static void CloseTutorial()
+        {
+            if (!Instance) return;
+
+            if (Instance.isOpened) Instance.CloseSelf();
         }
 
         private void MoveStarted(ClientPlayerTurn turn)
@@ -240,8 +246,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         OnboardingTask_PointAt pointAtTask = currentTask as OnboardingTask_PointAt;
 
                         pointer.AnimatePointer(
-                            pointAtTask.points.ContainsKey(GameManager.Instance.placementStyle) ? 
-                            pointAtTask.points[GameManager.Instance.placementStyle] : 
+                            pointAtTask.points.ContainsKey(GameManager.Instance.placementStyle) ?
+                            pointAtTask.points[GameManager.Instance.placementStyle] :
                             pointAtTask.points.Values.First());
                         pointer.SetMessage(currentTask.stringValue);
 
@@ -340,7 +346,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         //if (taskIndex == currentBatch.tasks.Length - 1)
                         //    yield return StartRoutine("moveNext", waitTask.time, () => Next());
                         //else
-                            yield return new WaitForSeconds(waitTask.time);
+                        yield return new WaitForSeconds(waitTask.time);
 
                         break;
 

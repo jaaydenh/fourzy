@@ -417,6 +417,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     FourzyPhotonManager.SetClientReady();
                     gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for other player...");
 
+                    //unload tutorial screen
+                    OnboardingScreen.CloseTutorial();
+
                     break;
 
                 default:

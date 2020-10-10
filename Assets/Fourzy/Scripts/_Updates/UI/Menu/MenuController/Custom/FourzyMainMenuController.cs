@@ -120,7 +120,7 @@ namespace Fourzy._Updates.UI.Menu
             base.OnInitialized();
 
             //skip if tutorial running
-            if (OnboardingScreen.instance && OnboardingScreen.instance.isTutorialRunning) return;
+            if (OnboardingScreen.Instance && OnboardingScreen.Instance.isTutorialRunning) return;
 
             //check for news
             if (PlayerPrefsWrapper.GetTutorialFinished("Onboarding"))
