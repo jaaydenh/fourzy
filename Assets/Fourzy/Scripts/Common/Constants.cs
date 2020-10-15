@@ -51,6 +51,10 @@ namespace Fourzy
         public const string MAIN_MENU_CANVAS_NAME = "MainMenuCanvas";
         public const string GAMEPLAY_MENU_CANVAS_NAME = "GameSceneCanvas";
 
+        public const string DEFAULT_GAME_PIECE = "44";
+        public const int MAX_PLAYER_LEVEL = 32;
+        public const int MIN_PLAYER_LEVEL = 1;
+
         public const string PUZZLE_PACKS_ROOT_FOLDER = "PuzzlePacks";
         public const string PUZZLES_ROOT_FOLDER = "PuzzlePool";
         public const string LOCALIZATION_FOLDER = "Localization";

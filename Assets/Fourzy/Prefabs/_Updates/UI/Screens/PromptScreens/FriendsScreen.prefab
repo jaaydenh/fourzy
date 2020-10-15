@@ -956,7 +956,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 3913719291345124414}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -1207,7 +1207,7 @@ MonoBehaviour:
     persistentCalls:
       calls: []
   onBackSfx: 3
-  closePreviousWhenOpened: 0
+  closePreviousWhenOpened: 1
   default: 0
   isOpened: 0
   defaultCalls: 1

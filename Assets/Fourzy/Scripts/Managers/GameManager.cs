@@ -376,6 +376,12 @@ namespace Fourzy
             ResetHintInstructions();
         }
 
+        public void ChallengePlayerRealtime(string playfabName)
+        {
+            FourzyPhotonManager.CreateRoom(RoomType.DIRECT_INVITE, playfabName);
+
+        }
+
         public void ResetHintInstructions()
         {
             PlayerPrefsWrapper.SetHintTutorialStage(0);

@@ -361,7 +361,6 @@ namespace Fourzy
             Debug.Log("TokenExpiration: " + result.EntityToken.TokenExpiration);
             Debug.Log("Entity.Id: " + result.EntityToken.Entity.Id);
             Debug.Log("Entity.Type: " + result.EntityToken.Entity.Type);
-            //AnalyticsManager.Instance.Identify(result.PlayFabId);
 
             if (GameManager.Instance.showInfoToasts && !GameManager.Instance.Landscape) GamesToastsController.ShowTopToast("Device Authentication Success");
 
@@ -371,6 +370,7 @@ namespace Fourzy
                 Debug.Log($"New device");
                 UserManager.Instance.settingRandomName = true;
                 UserManager.Instance.SetDisplayName(UserManager.CreateNewPlayerName());
+                UserManager.Instance.UpdateSelectedGamePiece(Constants.DEFAULT_GAME_PIECE);
             }
 
             PlayFabClientAPI.GetAccountInfo(

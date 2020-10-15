@@ -19,6 +19,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private GamePieceView playerOneView;
         private GamePieceView playerTwoView;
 
+        private RoomType displayable = RoomType.DIRECT_INVITE | RoomType.LOBBY_ROOM;
+
         protected override void Awake()
         {
             base.Awake();
@@ -95,7 +97,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnJoinedRoom(string roomName)
         {
-            if (FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) != RoomType.LOBBY_ROOM) return;
+            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) & displayable) != 0) return;
 
             if (PhotonNetwork.IsMasterClient) SetData(PhotonNetwork.LocalPlayer);
             else SetData(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.LocalPlayer);
@@ -103,7 +105,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnPlayerEnteredRoom(Photon.Realtime.Player other)
         {
-            if (FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) != RoomType.LOBBY_ROOM) return;
+            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) & displayable) != 0) return;
 
             SetData(PhotonNetwork.LocalPlayer, other);
         }

@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
 using Fourzy._Updates.UI.Toasts;
@@ -18,8 +19,9 @@ namespace Fourzy._Updates.UI.Widgets
         public TMP_Text nameLabel;
         public RectTransform gamepieceParent;
         public StringEventTrigger statusIcon;
-        //public ButtonExtended playButton;
+        public ButtonExtended playButton;
 
+        private GamePieceView gamepiece;
         private FriendInfo friendInfo;
         private bool removing;
 
@@ -30,6 +32,18 @@ namespace Fourzy._Updates.UI.Widgets
             this.friendInfo = friendInfo;
 
             nameLabel.text = friendInfo.TitleDisplayName;
+
+            return this;
+        }
+
+        public FriendWidget SetPlayerIcon(string gamepieceID)
+        {
+            if (gamepiece) Destroy(gamepiece.gameObject);
+
+            gamepiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(gamepieceID).player1Prefab, gamepieceParent);
+
+            gamepiece.transform.localPosition = Vector3.zero;
+            gamepiece.StartBlinking();
 
             return this;
         }
@@ -45,12 +59,20 @@ namespace Fourzy._Updates.UI.Widgets
         {
             statusIcon.TryInvoke(state ? "on" : "off");
 
+            playButton.SetActive(state);
+
             return this;
         }
 
-        public FriendWidget UpdateState(string state)
+        public void Challenge()
         {
-            return this;
+            menuScreen.menuController
+                .GetOrAddScreen<PromptScreen>()
+                .Prompt(
+                    "Challenge Player?",
+                    $"Challenge {friendInfo.TitleDisplayName} to play agains you?",
+                    () => GameManager.Instance.ChallengePlayerRealtime(friendInfo.TitleDisplayName))
+                .CloseOnAccept();
         }
 
         public void ShowUnfollowPrompt()

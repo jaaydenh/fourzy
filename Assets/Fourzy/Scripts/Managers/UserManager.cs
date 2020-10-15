@@ -18,10 +18,6 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class UserManager : UnitySingleton<UserManager>
     {
-        public const string DEFAULT_GAME_PIECE = "44";
-        public const int MAX_PLAYER_LEVEL = 32;
-        public const int MIN_PLAYER_LEVEL = 1;
-
         public static Action onDisplayNameChanged;
         public static Action<string> onDisplayNameChangeFailed;
 
@@ -51,14 +47,15 @@ namespace Fourzy
             {
                 string selectedGamePiece = PlayerPrefsWrapper.GetSelectedGamePiece();
 
-                return (string.IsNullOrEmpty(selectedGamePiece)) ? DEFAULT_GAME_PIECE : selectedGamePiece;
+                return (string.IsNullOrEmpty(selectedGamePiece)) ? Constants.DEFAULT_GAME_PIECE : selectedGamePiece;
             }
 
             private set
             {
                 PlayerPrefsWrapper.SetSelectedGamePiece(value);
-
                 FourzyPhotonManager.UpdatePlayerGamepiece(value);
+
+                PlayFabClientAPI.UpdateAvatarUrl(new UpdateAvatarUrlRequest() { ImageUrl = value, }, OnAvatarUrlUpdate, OnPlayFabError);
             }
         }
 
@@ -179,7 +176,7 @@ namespace Fourzy
         public int GetTotalLevelXP(int _level)
         {
             int sum = 0;
-            for (int __level = MIN_PLAYER_LEVEL; __level <= _level; __level++)
+            for (int __level = Constants.MIN_PLAYER_LEVEL; __level <= _level; __level++)
                 sum += GetLevelXP(__level);
 
             return sum;
@@ -193,7 +190,7 @@ namespace Fourzy
         /// <returns></returns>
         public int GetLevelXPLeft(int xp)
         {
-            if (xp < GetLevelXP(MIN_PLAYER_LEVEL))
+            if (xp < GetLevelXP(Constants.MIN_PLAYER_LEVEL))
                 return xp;
             else
                 return xp - GetTotalLevelXP(GetLevel(xp) - 1);
@@ -206,9 +203,9 @@ namespace Fourzy
         /// <returns></returns>
         public int GetLevel(int xp)
         {
-            int _level = MIN_PLAYER_LEVEL;
+            int _level = Constants.MIN_PLAYER_LEVEL;
 
-            while (xp >= GetLevelXP(_level) && _level <= MAX_PLAYER_LEVEL)
+            while (xp >= GetLevelXP(_level) && _level <= Constants.MAX_PLAYER_LEVEL)
             {
                 xp -= GetLevelXP(_level);
                 _level++;
@@ -431,6 +428,11 @@ namespace Fourzy
                 // if (GS.Authenticated)
                 //     GetUserGamePiece();
             }
+        }
+
+        private void OnAvatarUrlUpdate(EmptyResponse response)
+        {
+            Debug.Log(response.ToJson());
         }
 
         private void OnPlayFabError(PlayFabError error)

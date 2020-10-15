@@ -451,25 +451,26 @@ namespace Fourzy
             List<string> customProperties = new List<string>() { Constants.REALTIME_GAMEPIECE_KEY, };
             List<string> expectedUsers = new List<string>();
 
+            if (!string.IsNullOrEmpty(expectedUser)) expectedUsers.Add(expectedUser);
+
+            customProperties.Add(Constants.REALTIME_ROOM_TYPE_KEY);
+            properties.Add(Constants.REALTIME_ROOM_TYPE_KEY, (int)type);
+
             switch (type)
             {
                 case RoomType.LOBBY_ROOM:
                     roomName = $"{UserManager.Instance.userName}'s room";
-                    customProperties.Add(Constants.REALTIME_ROOM_TYPE_KEY);
-                    properties.Add(Constants.REALTIME_ROOM_TYPE_KEY, (int)type);
 
                     break;
 
                 case RoomType.DIRECT_INVITE:
                     roomName = $"{UserManager.Instance.userName} challenged you!";
 
-                    if (!string.IsNullOrEmpty(expectedUser)) expectedUsers.Add(expectedUser);
-
                     break;
 
+                case RoomType.QUICKMATCH:
                 default:
                     roomName = Guid.NewGuid().ToString();
-                    //isVisible = false;
 
                     break;
             }
@@ -557,11 +558,13 @@ namespace Fourzy
         }
     }
 
+    [Flags]
     public enum RoomType
     {
-        NONE,
-        QUICKMATCH,
-        DIRECT_INVITE,
-        LOBBY_ROOM,
+        NONE = 0,
+        QUICKMATCH = 1,
+        DIRECT_INVITE = 2,
+        LOBBY_ROOM = 4,
+
     }
 }

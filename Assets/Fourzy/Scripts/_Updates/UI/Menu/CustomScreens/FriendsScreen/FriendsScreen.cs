@@ -56,7 +56,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             isUpdating = true;
 
             PlayFabClientAPI.GetFriendsList(
-                new GetFriendsListRequest() /*{ ProfileConstraints = new PlayerProfileViewConstraints() { ShowDisplayName = true, } }*/,
+                new GetFriendsListRequest() { ProfileConstraints = new PlayerProfileViewConstraints() { ShowDisplayName = true, ShowAvatarUrl = true} },
                 OnGetFriendsListResult,
                 OnGetFriendsError);
         }
@@ -91,10 +91,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Debug.Log($"Playfab friends {obj.Friends.Count}");
 
             if (obj.Friends.Count > 0)
-            {
                 //get photon friends list
                 PhotonNetwork.FindFriends(friendsIDs);
-            }
             else
                 isUpdating = false;
         }
@@ -112,6 +110,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     friends.Add(Instantiate(widgetPrefab, widgetsParent)
                         .SetData(friendsData[friendIndex])
                         .SetOnFriendRemoved(OnFriendRemoved)
+                        .SetPlayerIcon(string.IsNullOrEmpty(friendsData[friendIndex].Profile.AvatarUrl) ? Constants.DEFAULT_GAME_PIECE : friendsData[friendIndex].Profile.AvatarUrl)
                         .UpdateOnlineStatus(_friends[friendIndex].IsOnline));
         }
 

@@ -54,7 +54,7 @@ namespace Fourzy._Updates.ClientModel
             get
             {
                 GameStateDataEpoch result = new GameStateDataEpoch();
-
+                State.SerializeData();
                 result.GameBoardData = State.Board.SerializeData();
                 //get board
                 result.Players = new Dictionary<int, Player>();
@@ -63,7 +63,7 @@ namespace Fourzy._Updates.ClientModel
 
                 result.WinnerId = State.WinnerId;
                 result.ActivePlayerId = State.ActivePlayerId;
-                result.GameSeed = _Type.ToString();
+                result.GameSeed = State.GameSeed;
 
                 result.GameEffects = new List<IGameEffect>();
                 result.Herds = new Dictionary<int, Herd>();

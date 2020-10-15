@@ -144,7 +144,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Clear();
 
             foreach (RoomInfo roomData in data)
-                if (!roomData.RemovedFromList)
+                if (!roomData.RemovedFromList && 
+                    roomData.CustomProperties.ContainsKey(Constants.REALTIME_ROOM_TYPE_KEY) && 
+                    (RoomType)roomData.CustomProperties[Constants.REALTIME_ROOM_TYPE_KEY] == RoomType.LOBBY_ROOM)
                     rooms.Add(Instantiate(widgetPrefab, widgetsParent).SetData(roomData));
         }
 
