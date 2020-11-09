@@ -97,7 +97,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnJoinedRoom(string roomName)
         {
-            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) & displayable) != 0) return;
+            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) & displayable) == 0) return;
 
             if (PhotonNetwork.IsMasterClient) SetData(PhotonNetwork.LocalPlayer);
             else SetData(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.LocalPlayer);
@@ -105,7 +105,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnPlayerEnteredRoom(Photon.Realtime.Player other)
         {
-            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) & displayable) != 0) return;
+            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) & displayable) == 0) return;
 
             SetData(PhotonNetwork.LocalPlayer, other);
         }

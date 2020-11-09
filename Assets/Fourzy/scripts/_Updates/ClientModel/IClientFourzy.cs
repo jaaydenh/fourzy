@@ -99,5 +99,19 @@ namespace FourzyGameModel.Model
     {
         [JsonProperty("realtimeData")]
         public RealtimeData realtimeData;
+
+        public GameStateDataEpoch() { }
+
+        public GameStateDataEpoch(GameStateData data)
+        {
+            GameSeed = data.GameSeed;
+            Herds = data.Herds;
+            Players = data.Players;
+            WinnerId = data.WinnerId;
+            WinningLocations = data.WinningLocations;
+            GameBoardData = data.GameBoardData;
+            GameEffects = data.GameEffects;
+            ActivePlayerId = data.ActivePlayerId;
+        }
     }
 }

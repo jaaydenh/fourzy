@@ -167,7 +167,6 @@ namespace Fourzy
 
             if (tasks.Count > 0)
             {
-
                 switch (tasks.Peek().Key)
                 {
                     case "joinRandomRoom":
@@ -242,7 +241,10 @@ namespace Fourzy
 
             foreach (RoomInfo info in roomList)
                 if (info.RemovedFromList)
+                {
                     roomsInfo.RemoveAll(_room => _room.Name == info.Name);
+                    if (DEBUG) Debug.Log($"Room removed: {info.Name}.");
+                }
                 else
                 {
                     if (roomsInfo.Find(_room => _room.Name == info.Name) == null)
@@ -262,6 +264,13 @@ namespace Fourzy
             onJoinedRoom?.Invoke(PhotonNetwork.CurrentRoom.Name);
 
             if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
+
+            //if room is to be removed, remove it yourself
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            {
+                roomsInfo.RemoveAll(_room => _room.Name == PhotonNetwork.CurrentRoom.Name);
+                if (DEBUG) Debug.Log($"Room removed: {PhotonNetwork.CurrentRoom.Name}.");
+            }
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)

@@ -39,6 +39,10 @@ public class MoPubDemoGUI : MonoBehaviour
     private readonly string[] _interstitialAdUnits = { "24534e1901884e398f1253216226017e" };
     private readonly string[] _rewardedAdUnits =
         { "920b6145fb1546cf8b5cf2ac34638bb7", "a96ae2ef41d44822af45c6328c4e1eb1" };
+#else
+    private readonly string[] _bannerAdUnits = new string[0];
+    private readonly string[] _interstitialAdUnits = new string[0];
+    private readonly string[] _rewardedAdUnits = new string[0];
 #endif
 
 #if mopub_native_beta
@@ -116,7 +120,8 @@ public class MoPubDemoGUI : MonoBehaviour
 
     private void AddAdUnitsToStateMaps(IEnumerable<string> adUnits)
     {
-        foreach (var adUnit in adUnits) {
+        foreach (var adUnit in adUnits)
+        {
             _adUnitToLoadedMapping[adUnit] = false;
             _adUnitToShownMapping[adUnit] = false;
         }
@@ -156,7 +161,8 @@ public class MoPubDemoGUI : MonoBehaviour
         // Remove any existing available rewards associated with this AdUnit from previous ad requests
         _adUnitToRewardsMapping.Remove(adUnitId);
 
-        if (availableRewards != null) {
+        if (availableRewards != null)
+        {
             _adUnitToRewardsMapping[adUnitId] = availableRewards;
         }
     }
@@ -201,9 +207,11 @@ public class MoPubDemoGUI : MonoBehaviour
     }
 
 
-    public bool ConsentDialogLoaded {
+    public bool ConsentDialogLoaded
+    {
         private get { return _consentDialogLoaded; }
-        set {
+        set
+        {
             _consentDialogLoaded = value;
             if (_consentDialogLoaded) UpdateStatusLabel("Consent dialog loaded");
         }
@@ -212,7 +220,12 @@ public class MoPubDemoGUI : MonoBehaviour
 
     private void Awake()
     {
-        if (Screen.width < 960 && Screen.height < 960) {
+#if UNITY_STANDALONE && !UNITY_EDITOR
+    return;
+#endif
+
+        if (Screen.width < 960 && Screen.height < 960)
+        {
             _skin.button.fixedHeight = 50;
         }
 
@@ -234,6 +247,10 @@ public class MoPubDemoGUI : MonoBehaviour
 
     private void Start()
     {
+#if UNITY_STANDALONE && !UNITY_EDITOR
+    return;
+#endif
+
         // The SdkInitialize() call is handled by the MoPubManager prefab now. Please see:
         // https://developers.mopub.com/publishers/unity/initialize/#option-1-use-the-mopub-manager-recommended
 
@@ -272,8 +289,13 @@ public class MoPubDemoGUI : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_STANDALONE && !UNITY_EDITOR
+    return;
+#endif
+
         // Enable scrollview dragging
-        foreach (var touch in Input.touches) {
+        foreach (var touch in Input.touches)
+        {
             if (touch.phase != TouchPhase.Moved) continue;
             _scrollPosition.y += touch.deltaPosition.y;
             _scrollPosition.x -= touch.deltaPosition.x;
@@ -307,6 +329,9 @@ public class MoPubDemoGUI : MonoBehaviour
 
     private void OnGUI()
     {
+#if UNITY_STANDALONE && !UNITY_EDITOR
+    return;
+#endif
         GUI.skin = _skin;
 
         // Screen.safeArea was added in Unity 2017.2.0p1
@@ -349,12 +374,15 @@ public class MoPubDemoGUI : MonoBehaviour
         const int titlePadding = 102;
         GUILayout.Space(titlePadding);
         GUILayout.Label("Banners");
-        if (!IsAdUnitArrayNullOrEmpty(_bannerAdUnits)) {
-            foreach (var bannerAdUnit in _bannerAdUnits) {
+        if (!IsAdUnitArrayNullOrEmpty(_bannerAdUnits))
+        {
+            foreach (var bannerAdUnit in _bannerAdUnits)
+            {
                 GUILayout.BeginHorizontal();
 
                 GUI.enabled = !_adUnitToLoadedMapping[bannerAdUnit] || ForceEnableButtons;
-                if (GUILayout.Button(CreateRequestButtonLabel(bannerAdUnit))) {
+                if (GUILayout.Button(CreateRequestButtonLabel(bannerAdUnit)))
+                {
                     var position = _bannerPositions[_bannerPositionIndex++];
                     UpdateStatusLabel(string.Format("Requesting {0} at position {1}", bannerAdUnit, position));
                     MoPub.RequestBanner(bannerAdUnit, position, MoPub.MaxAdSize.Width336Height280);
@@ -362,7 +390,8 @@ public class MoPubDemoGUI : MonoBehaviour
                 }
 
                 GUI.enabled = _adUnitToLoadedMapping[bannerAdUnit] || ForceEnableButtons;
-                if (GUILayout.Button("Destroy")) {
+                if (GUILayout.Button("Destroy"))
+                {
                     ClearStatusLabel();
                     MoPub.DestroyBanner(bannerAdUnit);
                     _adUnitToLoadedMapping[bannerAdUnit] = false;
@@ -370,14 +399,16 @@ public class MoPubDemoGUI : MonoBehaviour
                 }
 
                 GUI.enabled = _adUnitToLoadedMapping[bannerAdUnit] && !_adUnitToShownMapping[bannerAdUnit] || ForceEnableButtons;
-                if (GUILayout.Button("Show")) {
+                if (GUILayout.Button("Show"))
+                {
                     ClearStatusLabel();
                     MoPub.ShowBanner(bannerAdUnit, true);
                     _adUnitToShownMapping[bannerAdUnit] = true;
                 }
 
                 GUI.enabled = _adUnitToLoadedMapping[bannerAdUnit] && _adUnitToShownMapping[bannerAdUnit] || ForceEnableButtons;
-                if (GUILayout.Button("Hide")) {
+                if (GUILayout.Button("Hide"))
+                {
                     ClearStatusLabel();
                     MoPub.ShowBanner(bannerAdUnit, false);
                     _adUnitToShownMapping[bannerAdUnit] = false;
@@ -387,7 +418,9 @@ public class MoPubDemoGUI : MonoBehaviour
 
                 GUILayout.EndHorizontal();
             }
-        } else {
+        }
+        else
+        {
             GUILayout.Label("No banner AdUnits available", _smallerFont, null);
         }
     }
@@ -397,25 +430,30 @@ public class MoPubDemoGUI : MonoBehaviour
     {
         GUILayout.Space(_sectionMarginSize);
         GUILayout.Label("Interstitials");
-        if (!IsAdUnitArrayNullOrEmpty(_interstitialAdUnits)) {
-            foreach (var interstitialAdUnit in _interstitialAdUnits) {
+        if (!IsAdUnitArrayNullOrEmpty(_interstitialAdUnits))
+        {
+            foreach (var interstitialAdUnit in _interstitialAdUnits)
+            {
                 GUILayout.BeginHorizontal();
 
                 GUI.enabled = !_adUnitToLoadedMapping[interstitialAdUnit] || ForceEnableButtons;
-                if (GUILayout.Button(CreateRequestButtonLabel(interstitialAdUnit))) {
+                if (GUILayout.Button(CreateRequestButtonLabel(interstitialAdUnit)))
+                {
                     Debug.Log("requesting interstitial with AdUnit: " + interstitialAdUnit);
                     UpdateStatusLabel("Requesting " + interstitialAdUnit);
                     MoPub.RequestInterstitialAd(interstitialAdUnit);
                 }
 
                 GUI.enabled = _adUnitToLoadedMapping[interstitialAdUnit] || ForceEnableButtons;
-                if (GUILayout.Button("Show")) {
+                if (GUILayout.Button("Show"))
+                {
                     ClearStatusLabel();
                     MoPub.ShowInterstitialAd(interstitialAdUnit);
                 }
 
                 GUI.enabled = _adUnitToLoadedMapping[interstitialAdUnit] || ForceEnableButtons;
-                if (GUILayout.Button("Destroy")) {
+                if (GUILayout.Button("Destroy"))
+                {
                     ClearStatusLabel();
                     MoPub.DestroyInterstitialAd(interstitialAdUnit);
                     _adUnitToLoadedMapping[interstitialAdUnit] = false;
@@ -424,7 +462,9 @@ public class MoPubDemoGUI : MonoBehaviour
                 GUI.enabled = true;
                 GUILayout.EndHorizontal();
             }
-        } else {
+        }
+        else
+        {
             GUILayout.Label("No interstitial AdUnits available", _smallerFont, null);
         }
     }
@@ -434,13 +474,16 @@ public class MoPubDemoGUI : MonoBehaviour
     {
         GUILayout.Space(_sectionMarginSize);
         GUILayout.Label("Rewarded Videos");
-        if (!IsAdUnitArrayNullOrEmpty(_rewardedAdUnits)) {
+        if (!IsAdUnitArrayNullOrEmpty(_rewardedAdUnits))
+        {
             CreateCustomDataField("rewardedCustomDataField", ref _rewardedCustomData);
-            foreach (var rewardedAdUnit in _rewardedAdUnits) {
+            foreach (var rewardedAdUnit in _rewardedAdUnits)
+            {
                 GUILayout.BeginHorizontal();
 
                 GUI.enabled = !_adUnitToLoadedMapping[rewardedAdUnit] || ForceEnableButtons;
-                if (GUILayout.Button(CreateRequestButtonLabel(rewardedAdUnit))) {
+                if (GUILayout.Button(CreateRequestButtonLabel(rewardedAdUnit)))
+                {
                     Debug.Log("requesting rewarded ad with AdUnit: " + rewardedAdUnit);
                     UpdateStatusLabel("Requesting " + rewardedAdUnit);
                     MoPub.RequestRewardedVideo(
@@ -449,7 +492,8 @@ public class MoPubDemoGUI : MonoBehaviour
                 }
 
                 GUI.enabled = _adUnitToLoadedMapping[rewardedAdUnit] || ForceEnableButtons;
-                if (GUILayout.Button("Show")) {
+                if (GUILayout.Button("Show"))
+                {
                     ClearStatusLabel();
                     MoPub.ShowRewardedVideo(rewardedAdUnit, GetCustomData(_rewardedCustomData));
                 }
@@ -468,8 +512,10 @@ public class MoPubDemoGUI : MonoBehaviour
                 GUILayout.Space(_sectionMarginSize);
                 GUILayout.Label("Select a reward:");
 
-                foreach (var reward in _adUnitToRewardsMapping[rewardedAdUnit]) {
-                    if (GUILayout.Button(reward.ToString())) {
+                foreach (var reward in _adUnitToRewardsMapping[rewardedAdUnit])
+                {
+                    if (GUILayout.Button(reward.ToString()))
+                    {
                         MoPub.SelectReward(rewardedAdUnit, reward);
                     }
                 }
@@ -477,7 +523,9 @@ public class MoPubDemoGUI : MonoBehaviour
                 GUILayout.Space(_sectionMarginSize);
                 GUILayout.EndVertical();
             }
-        } else {
+        }
+        else
+        {
             GUILayout.Label("No rewarded AdUnits available", _smallerFont, null);
         }
     }
@@ -538,27 +586,32 @@ public class MoPubDemoGUI : MonoBehaviour
 
         GUILayout.BeginHorizontal();
         GUI.enabled = !ConsentDialogLoaded || ForceEnableButtons;
-        if (GUILayout.Button("Load Consent Dialog")) {
+        if (GUILayout.Button("Load Consent Dialog"))
+        {
             UpdateStatusLabel("Loading consent dialog");
             MoPub.LoadConsentDialog();
         }
         GUI.enabled = ConsentDialogLoaded || ForceEnableButtons;
-        if (GUILayout.Button("Show Consent Dialog")) {
+        if (GUILayout.Button("Show Consent Dialog"))
+        {
             ClearStatusLabel();
             MoPub.ShowConsentDialog();
         }
         GUI.enabled = !_isGdprForced || ForceEnableButtons;
-        if (GUILayout.Button("Force GDPR")) {
+        if (GUILayout.Button("Force GDPR"))
+        {
             ClearStatusLabel();
             MoPub.ForceGdprApplicable();
             UpdateConsentValues();
             _isGdprForced = true;
         }
         GUI.enabled = true;
-        if (GUILayout.Button("Grant Consent")) {
+        if (GUILayout.Button("Grant Consent"))
+        {
             MoPub.PartnerApi.GrantConsent();
         }
-        if (GUILayout.Button("Revoke Consent")) {
+        if (GUILayout.Button("Revoke Consent"))
+        {
             MoPub.PartnerApi.RevokeConsent();
         }
 
@@ -572,7 +625,8 @@ public class MoPubDemoGUI : MonoBehaviour
     {
         GUILayout.Space(_sectionMarginSize);
         GUILayout.Label("Actions");
-        if (GUILayout.Button("Report App Open")) {
+        if (GUILayout.Button("Report App Open"))
+        {
             ClearStatusLabel();
             MoPub.ReportApplicationOpen();
         }
@@ -598,10 +652,13 @@ public class MoPubDemoGUI : MonoBehaviour
         GUI.SetNextControlName(fieldName);
         customDataValue = GUILayout.TextField(customDataValue, GUILayout.MinWidth(200));
         if (Event.current.type != EventType.Repaint) return;
-        if (GUI.GetNameOfFocusedControl() == fieldName && customDataValue == _customDataDefaultText) {
+        if (GUI.GetNameOfFocusedControl() == fieldName && customDataValue == _customDataDefaultText)
+        {
             // Clear default text when focused
             customDataValue = string.Empty;
-        } else if (GUI.GetNameOfFocusedControl() != fieldName && string.IsNullOrEmpty(customDataValue)) {
+        }
+        else if (GUI.GetNameOfFocusedControl() != fieldName && string.IsNullOrEmpty(customDataValue))
+        {
             // Restore default text when unfocused and empty
             customDataValue = _customDataDefaultText;
         }

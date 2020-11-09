@@ -43,25 +43,25 @@ namespace Fourzy._Updates.ClientModel
         {
             get
             {
-                GameStateDataEpoch result = new GameStateDataEpoch();
+                GameStateDataEpoch result = new GameStateDataEpoch(State.SerializeData());
 
-                result.GameBoardData = State.Board.SerializeData();
-                //get board
-                result.Players = new Dictionary<int, Player>();
-                //get players
-                foreach (var player in State.Players) result.Players.Add(player.Key, new Player(player.Value));
+                //result.GameBoardData = State.Board.SerializeData();
+                ////get board
+                //result.Players = new Dictionary<int, Player>();
+                ////get players
+                //foreach (var player in State.Players) result.Players.Add(player.Key, new Player(player.Value));
 
-                result.WinnerId = State.WinnerId;
-                result.ActivePlayerId = State.ActivePlayerId;
-                result.GameSeed = _Type.ToString();
+                //result.WinnerId = State.WinnerId;
+                //result.ActivePlayerId = State.ActivePlayerId;
+                //result.GameSeed = _Type.ToString();
 
-                result.GameEffects = new List<IGameEffect>();
-                result.WinningLocations = new List<BoardLocation>();
-                result.Herds = new Dictionary<int, Herd>();
+                //result.GameEffects = new List<IGameEffect>();
+                //result.WinningLocations = new List<BoardLocation>();
+                //result.Herds = new Dictionary<int, Herd>();
 
-                if (State.GameEffects != null) result.GameEffects = new List<IGameEffect>(State.GameEffects);
-                if (State.WinningLocations != null) result.WinningLocations = new List<BoardLocation>(State.WinningLocations);
-                if (State.Herds != null) foreach (var herd in State.Herds) result.Herds.Add(herd.Key, herd.Value);
+                //if (State.GameEffects != null) result.GameEffects = new List<IGameEffect>(State.GameEffects);
+                //if (State.WinningLocations != null) result.WinningLocations = new List<BoardLocation>(State.WinningLocations);
+                //if (State.Herds != null) foreach (var herd in State.Herds) result.Herds.Add(herd.Key, herd.Value);
 
                 return result;
             }

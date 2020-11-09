@@ -3,12 +3,14 @@
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Helpers;
+using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class SettingsScreen : MenuScreen
     {
         public ButtonExtended puzzlesResetButton;
+        public ButtonExtended fullscreenButton;
 
         public void ChangeName()
         {
@@ -51,11 +53,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ShowFriendsScreen() => menuController.GetOrAddScreen<FriendsScreen>().Prompt();
 
+        public void ToggleFullscreen() => Screen.fullScreen = !Screen.fullScreen;
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
 
             puzzlesResetButton.SetActive(GameManager.Instance.ExtraFeatures && !GameManager.Instance.Landscape);
+
+#if !UNITY_STANDALONE
+            if (fullscreenButton) fullscreenButton.SetActive(false);
+#endif
         }
     }
 }
