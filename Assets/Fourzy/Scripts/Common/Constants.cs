@@ -10,7 +10,7 @@ namespace Fourzy
         public const float DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME = 8f;
 
 #if UNITY_IOS || UNITY_ANDROID
-        public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.SWIPE_STYLE_2;
+        public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.EDGE_TAP;
 #elif UNITY_STANDALONE || UNITY_EDITOR
         public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.EDGE_TAP;
 #endif
@@ -22,7 +22,7 @@ namespace Fourzy
         public const float EXTRA_DELAY_BETWEEN_TURNS = 0.1f;
         public const float BASE_MOVE_SPEED = 8f;
         public const float MOVE_SPEED_CAP = 16f;
-        public const int REALTIME_COUNTDOWN_SECONDS = 6;
+        public const int REALTIME_COUNTDOWN_SECONDS = 4;
         public const float REALTIME_OPPONENT_WAIT_TIME = 30f;
         public const float PHOTON_CONNECTION_WAIT_TIME = 5f;
         public const int GAUNTLET_DEFAULT_MOVES_COUNT = 60;
