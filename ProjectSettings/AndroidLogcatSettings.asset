@@ -3,45 +3,57 @@
     "m_SelectedPackage": {
         "deviceId": "RF8M21C3DME",
         "name": "com.supermove.fourzy",
-        "processId": 26883,
-        "exited": false
+        "processId": 6846,
+        "exited": true
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
         {
             "deviceId": "RF8M21C3DME",
-            "name": "com.google.android.youtube",
-            "processId": 24080,
-            "exited": false
+            "name": "com.supermove.fourzy",
+            "processId": 14503,
+            "exited": true
         },
         {
             "deviceId": "RF8M21C3DME",
-            "name": "org.telegram.messenger",
-            "processId": 1816,
+            "name": "com.supermove.fourzy",
+            "processId": 30447,
+            "exited": true
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 3562,
+            "exited": true
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 5168,
             "exited": true
         },
         {
             "deviceId": "RF8M21C3DME",
             "name": "com.sec.android.app.launcher",
-            "processId": 10766,
+            "processId": 10423,
             "exited": false
         },
         {
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
-            "processId": 16985,
+            "processId": 31247,
             "exited": true
         },
         {
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
-            "processId": 17630,
+            "processId": 1583,
             "exited": false
         },
         {
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
-            "processId": 26883,
+            "processId": 6846,
             "exited": false
         }
     ],

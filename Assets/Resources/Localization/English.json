@@ -274,6 +274,10 @@
       "value": "Magic"
     },
     {
+      "key": "match_found",
+      "value": "Match Found!"
+    },
+    {
       "key": "music",
       "value": "Music"
     },
@@ -452,6 +456,10 @@
     {
       "key": "watch_ad_to_continue",
       "value": "Watch Ad to Continue"
+    },
+    {
+      "key": "waiting_for_opponent",
+      "value": "Waiting for opponent"
     },
     {
       "key": "welcome_to_fourzy",

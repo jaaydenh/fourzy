@@ -9,6 +9,7 @@ using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
+using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using Photon.Pun;
@@ -883,11 +884,21 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
         {
+            if (game == null)
+            {
+                BackButtonOnClick();
+                GamesToastsController.ShowTopToast($"Opponent left the room");
+
+                return;
+            }
+
             switch (game._Type)
             {
                 case GameType.REALTIME:
                     //pause game
                     PauseGame();
+
+                    FourzyPhotonManager.TryLeaveRoom();
 
                     //display prompt
                     PersistantMenuController.instance.GetOrAddScreen<PromptScreen>()

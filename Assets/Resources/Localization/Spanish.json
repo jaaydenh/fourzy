@@ -275,6 +275,10 @@
       "value": "Magia"
     },
     {
+      "key": "match_found",
+      "value": "Opuesta encontrada!"
+    },
+    {
       "key": "music",
       "value": "Música"
     },
@@ -457,6 +461,10 @@
     {
       "key": "watch_ad_to_continue",
       "value": "Ver anuncio para continuar"
+    },
+    {
+      "key": "waiting_for_opponent",
+      "value": "Esperando a la oponente"
     },
     {
       "key": "welcome_to_fourzy",
