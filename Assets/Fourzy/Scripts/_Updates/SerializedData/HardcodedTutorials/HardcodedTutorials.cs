@@ -39,7 +39,7 @@ namespace Fourzy._Updates._Tutorial
                         [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
                         [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(4f, 0f) },
                     }),
-                    new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_down"), 1, .15f),
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("tap_to_place"), 1, .15f),
                     new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
                     //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
                     new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
@@ -66,7 +66,7 @@ namespace Fourzy._Updates._Tutorial
                         [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(0f, 3f), new Vector2(2f, 3f) },
                         [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(0f, 3f) },
                     }),
-                    new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1, .15f),
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("tap_to_place"), 1, .15f),
                     new OnboardingTask_LimitInput(new Rect(0f, 3f, 3f, 1f)),
                     //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
                     new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
@@ -93,7 +93,7 @@ namespace Fourzy._Updates._Tutorial
                         [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(0f, 1f), new Vector2(2f, 1f) },
                         [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(0f, 1f) },
                     }),
-                    new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_swipe_right"), 1, .15f),
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("tap_to_place"), 1, .15f),
                     new OnboardingTask_LimitInput(new Rect(0f, 1f, 3f, 1f)),
                     //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
                     new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
