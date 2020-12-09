@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "RF8M21C3DME",
         "name": "com.supermove.fourzy",
-        "processId": 6846,
+        "processId": 24784,
         "exited": true
     },
     "m_SelectedPriority": 0,
@@ -54,6 +54,12 @@
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
             "processId": 6846,
+            "exited": false
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 24784,
             "exited": false
         }
     ],

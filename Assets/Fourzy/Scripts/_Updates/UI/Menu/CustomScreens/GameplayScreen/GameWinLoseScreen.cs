@@ -324,7 +324,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         switch (game._Type)
                         {
                             case GameType.REALTIME:
-                                GamePlayManager.Instance.BackButtonOnClick();
+                                //GamePlayManager.Instance.BackButtonOnClick();
 
                                 break;
 
