@@ -403,7 +403,7 @@
     },
     {
       "key": "tap_to_place",
-      "value": "Swipe to move\nyour piece"
+      "value": "Tap to move\nyour piece"
     },
     {
       "key": "tap_to_open_map",
@@ -459,7 +459,7 @@
     },
     {
       "key": "waiting_for_opponent",
-      "value": "Waiting for opponent"
+      "value": "Waiting for opponent..."
     },
     {
       "key": "welcome_to_fourzy",
