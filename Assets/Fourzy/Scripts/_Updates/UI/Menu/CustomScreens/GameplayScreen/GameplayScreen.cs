@@ -199,8 +199,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //initialize timer
             if (timersEnabled)
             {
-                timerWidgets[0].AssignPlayer(game.player1);
-                timerWidgets[1].AssignPlayer(game.player2);
+                timerWidgets[0].AssignPlayer(me);
+                timerWidgets[1].AssignPlayer(opponent);
             }
             //disable timer widgets if not needed
             else
