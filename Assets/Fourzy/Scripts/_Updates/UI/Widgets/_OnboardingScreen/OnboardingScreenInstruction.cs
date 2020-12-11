@@ -11,7 +11,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         public OnboardingScreenInstruction DisplayText(float yAnchor, string message)
         {
-            if (!visible || alphaTween.value != 0f) Show(.2f);
+            if (!visible || alphaTween._value != 0f) 
+                Show(.2f);
 
             label.text = message;
             SetAnchors(new Vector2(.5f, yAnchor));
@@ -21,7 +22,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void _Hide()
         {
-            if (visible || alphaTween.value != 0f) Hide(.3f);
+            if (visible || alphaTween._value != 0f)
+                Hide(.3f);
         }
     }
 }

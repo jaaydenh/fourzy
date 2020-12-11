@@ -19,34 +19,37 @@ namespace Fourzy._Updates.Tween
 
         public override void AtProgress(float value, PlaybackDirection direction)
         {
+            float newValue = 0f;
+
             switch (direction)
             {
                 case PlaybackDirection.FORWARD:
                     if (value < 1f)
-                        _value = Mathf.Lerp(from, to, curve.Evaluate(value));
+                        newValue = Mathf.Lerp(from, to, curve.Evaluate(value));
                     else
                     {
-                        _value = Mathf.Lerp(from, to, curve.Evaluate(1f));
+                        newValue = Mathf.Lerp(from, to, curve.Evaluate(1f));
                         isPlaying = false;
                     }
                     break;
 
                 case PlaybackDirection.BACKWARD:
                     if (value < 1f)
-                        _value = Mathf.Lerp(to, from, curve.Evaluate(value));
+                        newValue = Mathf.Lerp(to, from, curve.Evaluate(value));
                     else
                     {
-                        _value = Mathf.Lerp(to, from, curve.Evaluate(1f));
+                        newValue = Mathf.Lerp(to, from, curve.Evaluate(1f));
                         isPlaying = false;
                     }
                     break;
             }
 
-            SetAlpha(_value);
+            SetAlpha(newValue);
         }
 
         public void SetAlpha(float value)
         {
+            _value = value;
             foreach (GraphicsColorGroup group in alphaGroup) group.alpha = value;
         }
 

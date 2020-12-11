@@ -45,7 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 default:
-                    Close();
+                    if (isOpened) Close();
 
                     break;
             }
