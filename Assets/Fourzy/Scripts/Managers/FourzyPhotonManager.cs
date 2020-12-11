@@ -347,11 +347,11 @@ namespace Fourzy
         {
             if (PhotonNetwork.CurrentRoom == null) return defaultValue;
 
-            if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(key))
-                return (T)PhotonNetwork.CurrentRoom.CustomProperties[key];
-            else
-                return defaultValue;
+            return GetRoomProperty(PhotonNetwork.CurrentRoom.CustomProperties, key, defaultValue);
         }
+
+        public static T GetRoomProperty<T>(Hashtable values, string key, T defaultValue)
+            => values.ContainsKey(key)? (T) values[key] : defaultValue;
 
         public static bool CheckPlayersReady() =>
             (GetRoomProperty(Constants.REALTIME_PLAYER_2_READY, false)) && (GetRoomProperty(Constants.REALTIME_PLAYER_1_READY, false));
@@ -422,9 +422,10 @@ namespace Fourzy
             PhotonNetwork.JoinRoom(roomName);
         }
 
-        public static void CreateRoom(RoomType type, string expectedUser = "")
+        public static void CreateRoom(RoomType type, string password = "", string expectedUser = "")
         {
-            tasks.Push(new KeyValuePair<string, Action>("createRoom", () => CreateRoom(type, expectedUser)));
+            tasks.Push(new KeyValuePair<string, Action>("createRoom", 
+                () => CreateRoom(type, password, expectedUser)));
 
             if (!PhotonNetwork.IsConnected)
             {
@@ -457,13 +458,19 @@ namespace Fourzy
                 [Constants.REALTIME_GAMEPIECE_KEY] = UserManager.Instance.gamePieceID,
             };
             string roomName;
-            List<string> customProperties = new List<string>() { Constants.REALTIME_GAMEPIECE_KEY, };
+            List<string> lobbyProperties = new List<string>() { Constants.REALTIME_GAMEPIECE_KEY, };
             List<string> expectedUsers = new List<string>();
 
             if (!string.IsNullOrEmpty(expectedUser)) expectedUsers.Add(expectedUser);
 
-            customProperties.Add(Constants.REALTIME_ROOM_TYPE_KEY);
+            lobbyProperties.Add(Constants.REALTIME_ROOM_TYPE_KEY);
             properties.Add(Constants.REALTIME_ROOM_TYPE_KEY, (int)type);
+
+            if (!string.IsNullOrEmpty(password))
+            {
+                lobbyProperties.Add(Constants.REALTIME_ROOM_PASSWORD);
+                properties.Add(Constants.REALTIME_ROOM_PASSWORD, password);
+            }
 
             switch (type)
             {
@@ -491,7 +498,7 @@ namespace Fourzy
                 {
                     MaxPlayers = 2,
                     CustomRoomProperties = properties,
-                    CustomRoomPropertiesForLobby = customProperties.ToArray(),
+                    CustomRoomPropertiesForLobby = lobbyProperties.ToArray(),
                 },
                 null,
                 expectedUsers.ToArray());

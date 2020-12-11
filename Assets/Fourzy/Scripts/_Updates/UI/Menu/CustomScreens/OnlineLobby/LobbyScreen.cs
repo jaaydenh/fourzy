@@ -6,8 +6,10 @@ using Fourzy._Updates.UI.Toasts;
 using Fourzy._Updates.UI.Widgets;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -16,10 +18,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public PhotonRoomWidget widgetPrefab;
         public RectTransform widgetsParent;
         public ButtonExtended createGameButton;
+        public Image checkmark;
+        public Sprite checkmarkOn;
+        public Sprite checkmarkOff;
 
         protected List<PhotonRoomWidget> rooms = new List<PhotonRoomWidget>();
         protected List<RoomInfo> roomsData = new List<RoomInfo>();
 
+        private bool passwordEnabled;
         private LoadingPromptScreen _prompt;
         private LobbyState state;
 
@@ -56,6 +62,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             _prompt = PersistantMenuController.instance
                 .GetOrAddScreen<LoadingPromptScreen>()
                 .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
+
+            UpdateCheckmarkButton();
         }
 
         public override void OnBack()
@@ -77,6 +85,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             OnRoomsUpdated(FourzyPhotonManager.Instance.roomsInfo);
+        }
+
+        public void ToggleCheckmark()
+        {
+            passwordEnabled = !passwordEnabled;
+            UpdateCheckmarkButton();
         }
 
         public bool CheckLobby()
@@ -121,7 +135,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void CreateRoom()
         {
-            FourzyPhotonManager.CreateRoom(RoomType.LOBBY_ROOM);
+            string password = "";
+
+            if (passwordEnabled)
+                password = Guid.NewGuid().ToString().Substring(0, Constants.REALTIME_ROOM_PASSWORD_LENGTH);
+
+            FourzyPhotonManager.CreateRoom(RoomType.LOBBY_ROOM, password: password) ;
 
             _prompt
                 .Prompt("Creating new room", "", null, null, null, null)
@@ -135,6 +154,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             _prompt
                 .Prompt("Joining room", name, null, null, null, null)
                 .CloseOnDecline();
+        }
+
+        private void UpdateCheckmarkButton()
+        {
+            checkmark.sprite = passwordEnabled ? checkmarkOn : checkmarkOff;
         }
 
         private void DisplayRooms(List<RoomInfo> data)

@@ -378,7 +378,7 @@ namespace Fourzy
 
         public void ChallengePlayerRealtime(string playfabName)
         {
-            FourzyPhotonManager.CreateRoom(RoomType.DIRECT_INVITE, playfabName);
+            FourzyPhotonManager.CreateRoom(RoomType.DIRECT_INVITE, expectedUser: playfabName);
 
         }
 
