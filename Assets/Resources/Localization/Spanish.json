@@ -355,6 +355,10 @@
       "value": "Puntos de portal raros"
     },
     {
+      "key": "reload",
+      "value": "Recargar"
+    },
+    {
       "key": "replay_tutorial",
       "value": "Repetir tutorial"
     },

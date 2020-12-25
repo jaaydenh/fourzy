@@ -4,6 +4,7 @@ using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.UI.Menu.Screens;
 using Newtonsoft.Json;
+using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections.Generic;
@@ -36,17 +37,15 @@ namespace Fourzy._Updates.UI.Menu
             ////try load fast puzzlePack
             //if (Input.GetKeyDown(KeyCode.A))
             //{
-            //    GetScreen<PrePackPrompt>().Prompt(GameContentManager.Instance.externalPuzzlePacks.Values.First());
-            //}
-
-            //if (Input.GetKeyDown(KeyCode.Q))
-            //{
-            //    //create turn based game
+            //    //GetScreen<PrePackPrompt>().Prompt(GameContentManager.Instance.externalPuzzlePacks.Values.First());
             //    PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             //    {
-            //        FunctionName = "createTurnBased",
-
-            //    }, OnResult, OnError);
+            //        FunctionName = "updateFastPuzzlesStat",
+            //        FunctionParameter = new { value = 5 },
+            //        GeneratePlayStreamEvent = true,
+            //    },
+            //    (result) => { Debug.Log($"Fast puzzles stat updated {5}"); },
+            //    (error) => { Debug.LogError(error.ErrorMessage); });
             //}
             //else if (Input.GetKeyDown(KeyCode.W))
             //{
@@ -74,15 +73,15 @@ namespace Fourzy._Updates.UI.Menu
             //}
         }
 
-        //private void OnResult(ExecuteCloudScriptResult result)
-        //{
-        //    print("good: " + result.ToJson());
-        //}
+        private void OnResult(ExecuteCloudScriptResult result)
+        {
+            print("good: " + result.ToJson());
+        }
 
-        //private void OnError(PlayFabError error)
-        //{
-        //    print("bad: " + error.ToString());
-        //}
+        private void OnError(PlayFabError error)
+        {
+            print("bad: " + error.ToString());
+        }
 
         protected override void OnInvokeMenuEvents(MenuEvents events)
         {

@@ -111,6 +111,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 //load game
                 StartRoutine("load_game", Constants.LOBBY_GAME_LOAD_DELAY, StartGame);
                 state = LobbyOverlayState.LOADING_GAME;
+
+                GameManager.Instance.opponentID = two.UserId;
             }
 
             empty.SetActive(!isTwo);

@@ -499,6 +499,7 @@ namespace Fourzy
                     MaxPlayers = 2,
                     CustomRoomProperties = properties,
                     CustomRoomPropertiesForLobby = lobbyProperties.ToArray(),
+                    PublishUserId = true,
                 },
                 null,
                 expectedUsers.ToArray());

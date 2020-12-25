@@ -353,21 +353,30 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
-        public ClientFourzyGame(Player Player1, Player Player2, GameOptions Options = null) : base(Player1, Player2, Options)
+        public ClientFourzyGame(Player Player1, Player Player2, GameOptions Options = null) 
+            : base(Player1, Player2, Options)
         {
             Initialize();
 
             isBoardRandom = true;
         }
 
-        public ClientFourzyGame(Area Area, Player Player1, Player Player2, int FirstPlayerId, GameOptions Options = null) : base(Area, Player1, Player2, FirstPlayerId, Options)
+        public ClientFourzyGame(
+            Area Area, 
+            Player Player1,
+            Player Player2, 
+            int FirstPlayerId, 
+            GameOptions Options = null) : base(Area, Player1, Player2, FirstPlayerId, Options)
         {
             Initialize();
 
             isBoardRandom = true;
         }
 
-        public ClientFourzyGame(GameBoardDefinition definition, Player Player1, Player Player2) : base(definition, Player1, Player2)
+        public ClientFourzyGame(
+            GameBoardDefinition definition, 
+            Player Player1, 
+            Player Player2) : base(definition, Player1, Player2)
         {
             initialMoves = new List<SimpleMove>(definition.InitialMoves);
             BoardID = definition.ID;
@@ -549,7 +558,7 @@ namespace Fourzy._Updates.ClientModel
                         PlayerPrefsWrapper.SetFastPuzzleComplete(puzzleData.ID, true);
 
                         //send new statistics to playfab
-                        GameManager.UpdateStatistic("PuzzlesLB", GameContentManager.Instance.finishedFastPuzzlesCount);
+                        GameManager.UpdateFastPuzzlesStat(GameContentManager.Instance.finishedFastPuzzlesCount);
                     }
 
                     //assign rewards if any

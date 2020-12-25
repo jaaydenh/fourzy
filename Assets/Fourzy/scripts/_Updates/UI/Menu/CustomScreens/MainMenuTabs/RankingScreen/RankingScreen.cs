@@ -2,109 +2,128 @@
 
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
-using System.Collections.Generic;
-using TMPro;
+using Newtonsoft.Json;
+using PlayFab;
+using PlayFab.ClientModels;
+using System.Collections;
 using UnityEngine;
+using static Fourzy._Updates.UI.Menu.Screens.FastPuzzlesScreen;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class RankingScreen : MenuTab
     {
-        public TMP_Text noPlayerText;
-        public LeaderboardPlayerWidget playerLeaderboardWidgetPrefab;
+        public Badge loadingIndicator;
+
+        public FastPuzzlesLeaderboardPlayerWidget leaderboardWidgetPrefab;
         public RectTransform widgetsParent;
-        public ToggleExtended winsButton;
 
         private bool loadingLeaderboard = false;
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            GameManager.onNetworkAccess += NetworkAccess;
+        }
+
+        protected void OnDestroy()
+        {
+            GameManager.onNetworkAccess -= NetworkAccess;
+        }
+
         public override void Open()
         {
+            bool _opened = isOpened;
             base.Open();
 
-            GameManager.onNetworkAccess += OnNetwowkAccess;
-
-            InvokeCurrent();
+            if (!_opened) StartRoutine("showLB", ShowLeaderboard());
         }
 
         public override void Close(bool animate)
         {
             base.Close(animate);
 
-            GameManager.onNetworkAccess -= OnNetwowkAccess;
+            CancelLoading();
         }
 
-        public void GetWinsLeaderboard()
+        public void ReloadLeaderboard()
         {
-            if (loadingLeaderboard || !isCurrent || !GameManager.NetworkAccess)
-                return;
+            if (loadingLeaderboard) return;
 
-            loadingLeaderboard = true;
-
-            // LoginManager.Instance.GetWinsLeaderboard(GetLeaderboardCallback);
+            StartRoutine("showLB", ShowLeaderboard());
         }
 
-        public void GetTrophiesLeaderboard()
+        private void ClearEntries()
         {
-            if (loadingLeaderboard || !isCurrent || !GameManager.NetworkAccess)
-                return;
-
-            loadingLeaderboard = true;
-
-            // LoginManager.Instance.GetCoinsEarnedLeaderboard(GetLeaderboardCallback);
+            foreach (WidgetBase widget in widgets) Destroy(widget.gameObject);
+            widgets.Clear();
         }
 
-        public void InvokeCurrent()
+        private void NetworkAccess(bool state)
         {
-            //remove old ones
-            foreach (Transform playerWidget in widgetsParent)
-                Destroy(playerWidget.gameObject);
-
-            if (winsButton.isOn)
-                GetWinsLeaderboard();
-            else
-                GetTrophiesLeaderboard();
+            if (!state) CancelLoading();
         }
 
-        private void GetLeaderboardCallback(List<LeaderboardEntry> leaderboards, string errorMessage)
+        private void CancelLoading()
+        {
+            if (loadingLeaderboard)
+            {
+                loadingLeaderboard = false;
+                CancelRoutine("showLB");
+            }
+        }
+
+        private void OnError(PlayFabError error)
         {
             loadingLeaderboard = false;
+            loadingIndicator.SetValue(LocalizationManager.Value(error.ErrorMessage));
 
-            //remove old ones
-            foreach (Transform playerWidget in widgetsParent)
-                Destroy(playerWidget.gameObject);
-
-            if (leaderboards == null)
-            {
-                noPlayerText.text = errorMessage;
-                noPlayerText.gameObject.SetActive(true);
-                return;
-            }
-
-            noPlayerText.gameObject.SetActive(leaderboards.Count == 0);
-
-            foreach (LeaderboardEntry leaderboard in leaderboards)
-            {
-                LeaderboardPlayerWidget leaderboardPlayerWidget = Instantiate(playerLeaderboardWidgetPrefab, widgetsParent);
-
-                leaderboardPlayerWidget.SetData(leaderboard);
-            }
+            Debug.Log(error.ErrorMessage);
         }
 
-        private void OnNetwowkAccess(bool state)
+        private void OnLeaderboardLoaded(ExecuteCloudScriptResult result)
         {
-            if (state)
-                InvokeCurrent();
+            if (!loadingLeaderboard) return;
+
+            loadingLeaderboard = false;
+            loadingIndicator.SetState(false);
+
+            LeaderboardRequestResult leaderboard =
+                JsonConvert.DeserializeObject<LeaderboardRequestResult>(result.FunctionResult.ToString());
+
+            foreach (PlayerLeaderboardEntry entry in leaderboard.s1)
+                widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
+
+            if (leaderboard.s2 != null)
+                foreach (PlayerLeaderboardEntry entry in leaderboard.s2)
+                    widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
         }
 
-        public class LeaderboardEntry
+        private IEnumerator ShowLeaderboard()
         {
-            public string userId;
-            public string userName;
-            public string facebookId;
-            public long rank;
-            public bool isWinsLeaderboard;
+            ClearEntries();
 
-            public string value;
+            loadingLeaderboard = true;
+            float timer = 0f;
+            //wait 10 seconds
+            while (
+                (string.IsNullOrEmpty(LoginManager.playerMasterAccountID) || !GameManager.NetworkAccess) &&
+                timer < 10f)
+            {
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            if (timer >= 10f || !isOpened) yield break;
+
+            loadingIndicator.SetValue(LocalizationManager.Value("loading"));
+
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "getLeaderboard",
+                FunctionParameter = new { maxCount = 6, tableName = "All Time Rating" }
+            }, OnLeaderboardLoaded, OnError);
         }
     }
 }

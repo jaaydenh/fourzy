@@ -354,6 +354,10 @@
       "value": "Rare Portal Points"
     },
     {
+      "key": "reload",
+      "value": "Reload"
+    },
+    {
       "key": "replay_tutorial",
       "value": "Replay Tutorial"
     },

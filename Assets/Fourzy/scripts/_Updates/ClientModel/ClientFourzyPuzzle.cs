@@ -288,7 +288,7 @@ namespace Fourzy._Updates.ClientModel
                         PlayerPrefsWrapper.SetFastPuzzleComplete(puzzleData.ID, true);
 
                         //send new statistics to playfab
-                        GameManager.UpdateStatistic("PuzzlesLB", GameContentManager.Instance.finishedFastPuzzlesCount);
+                        GameManager.UpdateFastPuzzlesStat(GameContentManager.Instance.finishedFastPuzzlesCount);
                     }
 
                     //assign rewards if any

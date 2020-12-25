@@ -100,6 +100,7 @@ namespace Fourzy
         public DependencyStatus dependencyStatus { get; set; }
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public string sessionID { get; private set; }
+        public string opponentID { get; set; }
         public LocationInfo? lastLocation { get; private set; } = null;
         public string MainMenuSceneName => Landscape ? Constants.MAIN_MENU_L_SCENE_NAME : Constants.MAIN_MENU_P_SCENE_NAME;
 
@@ -438,14 +439,16 @@ namespace Fourzy
 
         public static bool NetworkAccess => NetworkManager.Status == NetStatus.Connected;
 
-        public static void UpdateStatistic(string stat, int _value)
+        public static void UpdateFastPuzzlesStat(int _value)
         {
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
-                FunctionName = "updateStatistic",
-                FunctionParameter = new { stat_name = stat, value = _value },
+                FunctionName = "updateFastPuzzlesStat",
+                FunctionParameter = new { value = _value },
                 GeneratePlayStreamEvent = true,
-            }, (result) => { Debug.Log($"{stat} updated {_value}"); }, (error) => { Debug.LogError(error.ErrorMessage); });
+            }, 
+            (result) => { Debug.Log($"Fast puzzles stat updated {_value}"); }, 
+            (error) => { Debug.LogError(error.ErrorMessage); });
         }
 
         public static int ValueFromCurrencyType(CurrencyType type)

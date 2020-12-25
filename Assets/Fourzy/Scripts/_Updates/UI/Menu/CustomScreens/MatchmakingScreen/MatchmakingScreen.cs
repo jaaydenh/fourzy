@@ -264,6 +264,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!isOpened) return;
 
+            GameManager.Instance.opponentID = otherPlayer.UserId;
             //other player connected, switch to gameplay scene
             StartMatch();
 

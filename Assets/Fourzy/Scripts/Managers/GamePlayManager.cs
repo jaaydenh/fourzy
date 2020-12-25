@@ -13,6 +13,8 @@ using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using Photon.Pun;
+using PlayFab;
+using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,6 +50,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private string awaitingChallengeID = "";
         private long epochDelta;
         private bool logGameFinished;
+        private bool ratingUpdated = true;
+        private float startedAt = 0f;
         private GameState previousGameState;
         private int gauntletRechargedViaGems = 0;
         private int gauntletRechargedViaAds = 0;
@@ -103,20 +107,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.H))
             {
-                UserManager.Instance.hints += 3;
-
-                PersistantOverlayScreen.instance.AnimateReward(true, RewardType.HINTS, 3, Vector2.one * .5f);
             }
-            else if (Input.GetKeyDown(KeyCode.I))
-                UserManager.Instance.hints -= 3;
-            else if (Input.GetKeyDown(KeyCode.V))
-                DisplayHint(new PlayerTurn(new SimpleMove(new Piece(1), Direction.DOWN, 3)));
-            else if (Input.GetKeyDown(KeyCode.B))
-                DisplayHint(new PlayerTurn(new SimpleMove(new Piece(1), Direction.UP, 3)));
-            else if (Input.GetKeyDown(KeyCode.N))
-                DisplayHint(new PlayerTurn(new SimpleMove(new Piece(1), Direction.LEFT, 3)));
-            else if (Input.GetKeyDown(KeyCode.M))
-                DisplayHint(new PlayerTurn(new SimpleMove(new Piece(1), Direction.RIGHT, 3)));
 #endif
         }
 
@@ -148,8 +139,34 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             //analytics
             if (game != null && !game.isOver)
+                AnalyticsManager.Instance.LogGame(
+                    game._Mode.GameModeToAnalyticsEvent(false),
+                    game,
+                    extraParams: new KeyValuePair<string, object>(
+                        AnalyticsManager.GAME_RESULT_KEY,
+                        AnalyticsManager.GameResultType.Abandoned));
+        }
+
+        public void BackButtonOnClick()
+        {
+            //analytics
+            if (game != null && !game.isOver)
                 AnalyticsManager.Instance.LogGame(game._Mode.GameModeToAnalyticsEvent(false), game,
                     extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAME_RESULT_KEY, AnalyticsManager.GameResultType.Abandoned));
+
+            GameManager.Instance.OpenMainMenu();
+
+            switch (GameManager.Instance.ExpectedGameType)
+            {
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
+                case GameTypeLocal.REALTIME_QUICKMATCH:
+                    FourzyPhotonManager.TryLeaveRoom();
+                    FourzyPhotonManager.Instance.JoinLobby();
+
+                    GameManager.Instance.opponentID = "";
+
+                    break;
+            }
         }
 
         protected void SetGameIfNull(IClientFourzy _game)
@@ -215,11 +232,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (PhotonNetwork.IsMasterClient)
             {
                 //ready opponent
-                FourzyGameModel.Model.Player opponen = new FourzyGameModel.Model.Player(2, PhotonNetwork.PlayerListOthers[0].NickName)
-                {
-                    HerdId = FourzyPhotonManager.GetOpponentGamepiece(),
-                    PlayerString = "2"
-                };
+                FourzyGameModel.Model.Player opponen =
+                    new FourzyGameModel.Model.Player(2, PhotonNetwork.PlayerListOthers[0].NickName)
+                    {
+                        HerdId = FourzyPhotonManager.GetOpponentGamepiece(),
+                        PlayerString = "2"
+                    };
 
                 //load realtime game
                 ClientFourzyGame _game = new ClientFourzyGame(
@@ -238,6 +256,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
                 var result = PhotonNetwork.RaiseEvent(Constants.GAME_DATA, JsonConvert.SerializeObject(gameStateData), eventOptions, SendOptions.SendReliable);
                 Debug.Log("Photon create game event result: " + result);
+
+                ratingUpdated = false;
 
                 LoadGame(_game);
             }
@@ -318,6 +338,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             gameplayScreen.OnGameStarted();
 
+            startedAt = Time.time;
             board.interactable = true;
             board.OnPlayManagerReady();
             game.SetInitialTime(Time.time);
@@ -377,26 +398,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private void FadePieces(float alpha, float fadeTime)
         {
             if (board.gamePieces.Count > 0) board.FadeGamepieces(alpha, fadeTime);
-        }
-
-        public void BackButtonOnClick()
-        {
-            //analytics
-            if (game != null && !game.isOver)
-                AnalyticsManager.Instance.LogGame(game._Mode.GameModeToAnalyticsEvent(false), game,
-                    extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAME_RESULT_KEY, AnalyticsManager.GameResultType.Abandoned));
-
-            GameManager.Instance.OpenMainMenu();
-
-            switch (GameManager.Instance.ExpectedGameType)
-            {
-                case GameTypeLocal.REALTIME_LOBBY_GAME:
-                case GameTypeLocal.REALTIME_QUICKMATCH:
-                    FourzyPhotonManager.TryLeaveRoom();
-                    FourzyPhotonManager.Instance.JoinLobby();
-
-                    break;
-            }
         }
 
         public void UnloadGamePlaySceene()
@@ -895,14 +896,22 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 case GameType.REALTIME:
+                    if (gameState == GameState.GAME && Time.time - startedAt > 10f)
+                        OnRealtimeGameFinished();
+
                     //pause game
                     PauseGame();
 
                     FourzyPhotonManager.TryLeaveRoom();
 
                     //display prompt
-                    PersistantMenuController.instance.GetOrAddScreen<PromptScreen>()
-                        .Prompt($"{otherPlayer.NickName} disconnected...", "Other player disconnected.", null, "Back", null, BackButtonOnClick).CloseOnDecline();
+                    PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
+                        $"{otherPlayer.NickName} disconnected...",
+                        "Other player disconnected.",
+                        null,
+                        "Back",
+                        null,
+                        BackButtonOnClick).CloseOnDecline();
 
                     break;
             }
@@ -916,27 +925,44 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             gameplayScreen.OnGameFinished();
 
-            if (!logGameFinished)
-            {
-                //AnalyticsManager.Instance.LogGameEvent(game.IsWinner() ? AnalyticsManager.AnalyticsGameEvents.GAME_FINISHED : AnalyticsManager.AnalyticsGameEvents.GAME_FAILED, game);
-            }
+            //realtime game finished
+            if (game._Type == GameType.REALTIME && game.draw == false && game.IsWinner())
+                OnRealtimeGameFinished();
 
             //analytics event
-            AnalyticsManager.GameResultType gameResult;
-
-            if (game._Mode == GameMode.LOCAL_VERSUS)
-                gameResult = game.draw ? AnalyticsManager.GameResultType.Draw : AnalyticsManager.GameResultType.Win;
-            else
+            AnalyticsManager.GameResultType gameResult = AnalyticsManager.GameResultType.None;
+            switch (game._Mode)
             {
-                if (game.draw)
-                    gameResult = AnalyticsManager.GameResultType.Draw;
-                else
-                    gameResult = game.IsWinner() ? AnalyticsManager.GameResultType.Win : AnalyticsManager.GameResultType.Lose;
+                case GameMode.NONE:
+                    //case GameMode.LOCAL_VERSUS:
+                    gameResult = game.draw ? AnalyticsManager.GameResultType.Draw : AnalyticsManager.GameResultType.Win;
+
+                    break;
+
+                default:
+                    if (!logGameFinished)
+                    {
+                        if (game.draw)
+                            gameResult = AnalyticsManager.GameResultType.Draw;
+                        else
+                            gameResult = game.IsWinner() ?
+                                AnalyticsManager.GameResultType.Win :
+                                AnalyticsManager.GameResultType.Lose;
+                    }
+
+                    break;
             }
 
-            AnalyticsManager.Instance.LogGame(game._Mode.GameModeToAnalyticsEvent(false), game,
-                extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAME_RESULT_KEY, gameResult));
+            if (gameResult != AnalyticsManager.GameResultType.None)
+            {
+                AnalyticsManager.Instance.LogGame(
+                    game._Mode.GameModeToAnalyticsEvent(false),
+                    game,
+                    extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAME_RESULT_KEY, gameResult));
+            }
+            //
 
+            //rewards screen
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
@@ -946,6 +972,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+            //
 
             //reset controller filter
             switch (game._Type)
@@ -956,6 +983,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     break;
             }
+            //
 
             StartRoutine("postGameRoutine", PostGameFinished());
         }
@@ -1019,6 +1047,27 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         break;
                 }
             }
+        }
+
+        private void OnRealtimeGameFinished()
+        {
+            if (string.IsNullOrEmpty(GameManager.Instance.opponentID)) return;
+            if (ratingUpdated) return;
+
+            ratingUpdated = true;
+
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "ratingGameComplete",
+                FunctionParameter = new
+                {
+                    winnerID = LoginManager.playerMasterAccountID,
+                    opponentID = GameManager.Instance.opponentID
+                },
+                GeneratePlayStreamEvent = true,
+            },
+            (result) => { Debug.Log("Rating values updated"); },
+            (error) => { Debug.LogError(error.ErrorMessage); });
         }
 
         private void OnLogin(bool state)

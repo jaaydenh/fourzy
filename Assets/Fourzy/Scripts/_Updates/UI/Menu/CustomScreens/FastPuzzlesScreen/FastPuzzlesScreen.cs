@@ -14,7 +14,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class FastPuzzlesScreen : MenuScreen
     {
-        public LeaderboardPlayerWidget leaderboardWidgetPrefab;
+        public FastPuzzlesLeaderboardPlayerWidget leaderboardWidgetPrefab;
         public RectTransform widgetsParent;
         public Badge noEntries;
 
@@ -27,6 +27,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Awake();
 
             GameManager.onNetworkAccess += NetworkAccess;
+        }
+
+        protected void OnDestroy()
+        {
+            GameManager.onNetworkAccess -= NetworkAccess;
         }
 
         public override void Open()
@@ -49,7 +54,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             loadingPrompt.CloseSelf();
 
-            LeaderboardRequestResult leaderboard = JsonConvert.DeserializeObject<LeaderboardRequestResult>(result.FunctionResult.ToString());
+            LeaderboardRequestResult leaderboard = 
+                JsonConvert.DeserializeObject<LeaderboardRequestResult>(result.FunctionResult.ToString());
 
             if (leaderboard.version != PlayerPrefsWrapper.GetFastPuzzlesLeaderboardVersion())
             {
@@ -61,14 +67,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             ClearEntries();
 
-            if (leaderboard.leaderboard.Count < 2)
+            if (leaderboard.s1.Count < 2)
             {
                 noEntries.SetState(true);
                 return;
             }
             else noEntries.SetState(false);
 
-            foreach (PlayerLeaderboardEntry entry in leaderboard.leaderboard) widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
+            foreach (PlayerLeaderboardEntry entry in leaderboard.s1)
+                widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
+
+            if (leaderboard.s2 != null)
+                foreach (PlayerLeaderboardEntry entry in leaderboard.s2)
+                    widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
         }
 
         private void NetworkAccess(bool state)
@@ -109,14 +120,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
-                FunctionName = "getFastPuzzleLB",
-                FunctionParameter = new { maxCount = 6, }
+                FunctionName = "getLeaderboard",
+                FunctionParameter = new { maxCount = 6, tableName = "PuzzlesLB" }
             }, OnLeaderboardLoaded, OnError);
         }
 
         public class LeaderboardRequestResult
         {
-            public List<PlayerLeaderboardEntry> leaderboard;
+            public List<PlayerLeaderboardEntry> s1;
+            public List<PlayerLeaderboardEntry> s2;
             public int version;
         }
     }
