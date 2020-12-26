@@ -51807,7 +51807,6 @@ GameObject:
   - component: {fileID: 1870856808}
   - component: {fileID: 1870856804}
   - component: {fileID: 1870856803}
-  - component: {fileID: 1870856806}
   - component: {fileID: 1870856809}
   m_Layer: 5
   m_Name: RankingScreen(Tab)
@@ -51904,19 +51903,6 @@ MonoBehaviour:
   leaderboardWidgetPrefab: {fileID: 126614029804787601, guid: 2b69edf428dbd9f46a4626a70a5c353a,
     type: 3}
   widgetsParent: {fileID: 1381583814}
---- !u!114 &1870856806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1870856801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AllowSwitchOff: 0
 --- !u!114 &1870856808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60489,7 +60475,7 @@ PrefabInstance:
     - target: {fileID: 5939137052275477453, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -24.999878
+      value: -24.999817
       objectReference: {fileID: 0}
     - target: {fileID: 5939137052561732778, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}

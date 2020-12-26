@@ -92,6 +92,7 @@ namespace Fourzy
         public const byte GAME_DATA = 0;
         public const byte TAKE_TURN = 1;
         public const byte REMATCH_REQUEST = 2;
+        public const byte RATING_GAME_DATA = 3;
 
         public const string CreateGameEndpoint = "http://fourzyfunctions.azurewebsites.net/api/CreateGame";
     }

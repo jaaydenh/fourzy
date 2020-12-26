@@ -201,6 +201,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             gameState = GameState.OPENNING_GAME;
             gameStarted = false;
             isBoardReady = false;
+            ratingUpdated = false;
             gauntletRechargedViaAds = 0;
 
             SetGameIfNull(_game);
@@ -254,10 +255,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 var eventOptions = new Photon.Realtime.RaiseEventOptions();
                 eventOptions.Flags.HttpForward = true;
                 eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
-                var result = PhotonNetwork.RaiseEvent(Constants.GAME_DATA, JsonConvert.SerializeObject(gameStateData), eventOptions, SendOptions.SendReliable);
+                var result = PhotonNetwork.RaiseEvent(
+                    Constants.GAME_DATA, 
+                    JsonConvert.SerializeObject(gameStateData), 
+                    eventOptions, 
+                    SendOptions.SendReliable);
                 Debug.Log("Photon create game event result: " + result);
-
-                ratingUpdated = false;
 
                 LoadGame(_game);
             }
@@ -880,6 +883,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         .CloseOnAccept();
 
                     break;
+
+                case Constants.RATING_GAME_DATA:
+                    RatingGameCompleteResult ratingResultData = 
+                        JsonConvert.DeserializeObject<RatingGameCompleteResult>(data.CustomData.ToString());
+
+                    GamesToastsController.ShowTopToast(
+                        $"Your rating was updated to {ratingResultData.opponentRating}");
+
+                    break;
             }
         }
 
@@ -1066,7 +1078,28 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 },
                 GeneratePlayStreamEvent = true,
             },
-            (result) => { Debug.Log("Rating values updated"); },
+            (result) =>
+            {
+                RatingGameCompleteResult ratingResult = 
+                    JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString());
+
+                GamesToastsController.ShowTopToast($"Your rating was updated to {ratingResult.winnerRating}");
+
+                //try send rating update to other client 
+                if (PhotonNetwork.CurrentRoom != null)
+                {
+                    var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                    eventOptions.Flags.HttpForward = true;
+                    eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+
+                    var photonEventResult = PhotonNetwork.RaiseEvent(
+                        Constants.RATING_GAME_DATA,
+                        result.FunctionResult.ToString(),
+                        eventOptions,
+                        SendOptions.SendReliable);
+                    Debug.Log("Photon create game event result: " + photonEventResult);
+                }
+            },
             (error) => { Debug.LogError(error.ErrorMessage); });
         }
 
@@ -1327,6 +1360,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         GAME,
         PAUSED,
         HELP_STATE,
+    }
+
+    [Serializable]
+    public class RatingGameCompleteResult
+    {
+        public int winnerRating;
+        public int opponentRating;
     }
 }
 

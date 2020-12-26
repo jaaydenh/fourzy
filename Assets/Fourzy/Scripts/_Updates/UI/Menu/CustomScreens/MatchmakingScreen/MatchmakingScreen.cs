@@ -277,6 +277,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
+                GameManager.Instance.opponentID = PhotonNetwork.PlayerListOthers[0].UserId;
+
                 //open gameplay scene
                 StartMatch();
 
