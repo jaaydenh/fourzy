@@ -40,6 +40,7 @@ namespace Fourzy
         public static Action onConnectionTimeOut;
         public static Action<List<FriendInfo>> onFriendsUpdated;
         public static Action<List<RoomInfo>> onRoomsListUpdated;
+        public static Action<Player, Hashtable> onPlayerPpopertiesUpdate;
 
         public static bool DEBUG = false;
         public static TypedLobby quickmatchLobby = new TypedLobby("QuickmatchLobby", LobbyType.AsyncRandomLobby);
@@ -51,9 +52,11 @@ namespace Fourzy
 
         private Coroutine connectionTimedOutRoutine;
 
-        public static bool IsQMLobby => PhotonNetwork.CurrentLobby != null && !PhotonNetwork.CurrentLobby.IsDefault;
+        public static bool IsQMLobby => PhotonNetwork.CurrentLobby != null && 
+            !PhotonNetwork.CurrentLobby.IsDefault;
 
-        public static bool IsDefaultLobby => PhotonNetwork.CurrentLobby != null && PhotonNetwork.CurrentLobby.IsDefault;
+        public static bool IsDefaultLobby => PhotonNetwork.CurrentLobby != null && 
+            PhotonNetwork.CurrentLobby.IsDefault;
 
         /// <summary>
         /// False when inside any room
@@ -126,7 +129,7 @@ namespace Fourzy
 
             if (DEBUG) Debug.Log($"Connected to master.");
 
-            UpdatePlayerGamepiece(UserManager.Instance.gamePieceID);
+            SetMyProperty(Constants.REALTIME_GAMEPIECE_KEY, UserManager.Instance.gamePieceID);
 
             onConnectedToMaster?.Invoke();
 
@@ -315,6 +318,13 @@ namespace Fourzy
             onRoomLeft?.Invoke();
         }
 
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+            base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
+
+            onPlayerPpopertiesUpdate?.Invoke(targetPlayer, changedProps);
+        }
+
         #endregion
 
         public static void SetClientReady()
@@ -351,7 +361,7 @@ namespace Fourzy
         }
 
         public static T GetRoomProperty<T>(Hashtable values, string key, T defaultValue)
-            => values.ContainsKey(key)? (T) values[key] : defaultValue;
+            => values.ContainsKey(key) ? (T)values[key] : defaultValue;
 
         public static bool CheckPlayersReady() =>
             (GetRoomProperty(Constants.REALTIME_PLAYER_2_READY, false)) && (GetRoomProperty(Constants.REALTIME_PLAYER_1_READY, false));
@@ -424,7 +434,7 @@ namespace Fourzy
 
         public static void CreateRoom(RoomType type, string password = "", string expectedUser = "")
         {
-            tasks.Push(new KeyValuePair<string, Action>("createRoom", 
+            tasks.Push(new KeyValuePair<string, Action>("createRoom",
                 () => CreateRoom(type, password, expectedUser)));
 
             if (!PhotonNetwork.IsConnected)
@@ -507,19 +517,22 @@ namespace Fourzy
             instance.RunTimeoutRoutine();
         }
 
-        public static void UpdatePlayerGamepiece(string value)
-        {
-            if (PhotonNetwork.IsConnected)
-                PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable()
-                {
-                    [Constants.REALTIME_GAMEPIECE_KEY] = value,
-                });
-        }
-
-        public static string GetOpponentGamepiece()
+        public static T GetOpponentProperty<T>(string key, T defaultValue)
         {
             Hashtable _porps = PhotonNetwork.PlayerListOthers[0].CustomProperties;
-            return _porps.ContainsKey(Constants.REALTIME_GAMEPIECE_KEY) ? _porps[Constants.REALTIME_GAMEPIECE_KEY].ToString() : Constants.REALTIME_DEFAULT_GAMEPIECE_KEY;
+            return _porps.ContainsKey(key) ? (T)_porps[key] : defaultValue;
+        }
+
+        public static void SetMyProperty(string key, object value)
+        {
+            if (PhotonNetwork.IsConnected)
+                PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { [key] = value, });
+        }
+
+        public static T GetMyProperty<T>(string key, T defaultValue)
+        {
+            Hashtable _porps = PhotonNetwork.LocalPlayer.CustomProperties;
+            return _porps.ContainsKey(key) ? (T)_porps[key] : defaultValue;
         }
 
         public void OnEvent(EventData photonEvent)

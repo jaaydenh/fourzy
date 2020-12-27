@@ -1,17 +1,16 @@
 ﻿//modded
 
-using Fourzy._Updates.Mechanics;
+using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
+using Newtonsoft.Json;
 // using GameSparks.Api.Requests;
 // using GameSparks.Core;
 using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Fourzy
 {
@@ -24,6 +23,7 @@ namespace Fourzy
         public static Action OnUpdateUserInfo;
         public static Action<CurrencyType> onCurrencyUpdate;
         public static Action<string> OnUpdateUserGamePieceID;
+        public static Action<int> onRatingAquired;
 
         public bool settingRandomName = false;
 
@@ -53,9 +53,12 @@ namespace Fourzy
             private set
             {
                 PlayerPrefsWrapper.SetSelectedGamePiece(value);
-                FourzyPhotonManager.UpdatePlayerGamepiece(value);
+                FourzyPhotonManager.SetMyProperty(Constants.REALTIME_GAMEPIECE_KEY, value);
 
-                PlayFabClientAPI.UpdateAvatarUrl(new UpdateAvatarUrlRequest() { ImageUrl = value, }, OnAvatarUrlUpdate, OnPlayFabError);
+                PlayFabClientAPI.UpdateAvatarUrl(
+                    new UpdateAvatarUrlRequest() { ImageUrl = value, },
+                    OnAvatarUrlUpdate,
+                    OnPlayFabError);
             }
         }
 
@@ -143,6 +146,20 @@ namespace Fourzy
             }
         }
 
+        public int lastCachedRating
+        {
+            get => _lastCachedRating;
+
+            set
+            {
+                _lastCachedRating = value;
+
+                onRatingAquired?.Invoke(_lastCachedRating);
+
+                FourzyPhotonManager.SetMyProperty(Constants.REALTIME_RATING_KEY, _lastCachedRating);
+            }
+        }
+
         public int level => GetLevel(xp);
 
         public int xpLeft => GetLevelXPLeft(xp);
@@ -150,6 +167,8 @@ namespace Fourzy
         public float levelProgress => GetProgression(xp);
 
         public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceID + "" };
+
+        private int _lastCachedRating;
 
         protected override void Awake()
         {
@@ -361,6 +380,32 @@ namespace Fourzy
                 extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAMEPIECE_SELECT_KEY, _gamePieceID));
         }
 
+        public static void GetPlayerRating(
+            Action<int> _onRatingAquired = null, 
+            Action onFailed = null)
+        {
+            if (string.IsNullOrEmpty(LoginManager.playerMasterAccountID)) return;
+
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "checkPlayerRating",
+                FunctionParameter = new { playerID = LoginManager.playerMasterAccountID, }
+            }, (result) =>
+            {
+                CheckRatingResult data =
+                    JsonConvert.DeserializeObject<CheckRatingResult>(result.FunctionResult.ToString());
+
+                Instance.lastCachedRating = data.rating;
+                _onRatingAquired?.Invoke(data.rating);
+            }, (error) =>
+            {
+                Debug.Log(error.ErrorMessage);
+                GamesToastsController.ShowTopToast(error.ErrorMessage);
+
+                onFailed?.Invoke();
+            });
+        }
+
         public static string CreateNewPlayerName()
         {
             string[] firstNameSyllables = { "kit", "mon", "fay", "shi", "zag", "blarg", "rash", "izen", "boop", "pop", "moop", "foop" };
@@ -447,6 +492,13 @@ namespace Fourzy
             settingRandomName = false;
 
             onDisplayNameChanged?.Invoke();
+        }
+
+        [System.Serializable]
+        private struct CheckRatingResult
+        {
+            public int rating;
+            public bool justAdded;
         }
     }
 }

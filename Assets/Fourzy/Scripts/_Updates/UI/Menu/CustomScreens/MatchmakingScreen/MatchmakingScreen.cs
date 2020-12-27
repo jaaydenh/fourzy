@@ -1,13 +1,11 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
 // using GameSparks.Api.Responses;
 using Photon.Pun;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -29,7 +27,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private MatchmakingScreenState state;
         private LoadingPromptScreen _prompt;
         private List<string> matchMakingStrings;
-        
+
         public AlphaTween alphaTween { get; private set; }
 
         protected override void Awake()
@@ -115,7 +113,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenRealtime()
         {
-            if (FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) == RoomType.LOBBY_ROOM)
+            if (FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) ==
+                RoomType.LOBBY_ROOM)
             {
                 menuController
                     .GetOrAddScreen<PromptScreen>()
@@ -125,7 +124,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         FourzyPhotonManager.TryLeaveRoom();
 
                         _prompt
-                            .Prompt("Leaving room...", "", null, "Back", null, () => state = MatchmakingScreenState.NONE)
+                            .Prompt(
+                            "Leaving room...",
+                            "",
+                            null,
+                            "Back",
+                            null,
+                            () => state = MatchmakingScreenState.NONE)
                             .CloseOnDecline();
                     }, null)
                     .CloseOnDecline()
@@ -151,9 +156,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (state)
             {
                 case MatchmakingScreenState.REALTIME:
-                    messageLabel.text = "Searching for opponent...";
+                    messageLabel.text = "Retrieving player stats...";
 
-                    FourzyPhotonManager.JoinRandomRoom();
+                    //first get stats
+                    UserManager.GetPlayerRating(rating =>
+                    {
+                        messageLabel.text = "Searching for opponent...";
+
+                        FourzyPhotonManager.JoinRandomRoom();
+                    }, () =>
+                    {
+                        messageLabel.text = "Failed retrieving players' stats";
+
+                        ReadyToClose();
+                    });
 
                     break;
 
@@ -252,6 +268,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             messageLabel.text = $"Failed to create new room. {error}";
 
+            ReadyToClose();
+        }
+
+        private void ReadyToClose()
+        {
             //unblock input
             SetInteractable(true);
             backButton.SetActive(true);
@@ -264,7 +285,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!isOpened) return;
 
-            GameManager.Instance.opponentID = otherPlayer.UserId;
+            GameManager.Instance.cachedOpponentID = otherPlayer.UserId;
             //other player connected, switch to gameplay scene
             StartMatch();
 
@@ -277,7 +298,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                GameManager.Instance.opponentID = PhotonNetwork.PlayerListOthers[0].UserId;
+                GameManager.Instance.cachedOpponentID = PhotonNetwork.PlayerListOthers[0].UserId;
 
                 //open gameplay scene
                 StartMatch();

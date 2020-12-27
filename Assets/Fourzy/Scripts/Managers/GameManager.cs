@@ -100,7 +100,7 @@ namespace Fourzy
         public DependencyStatus dependencyStatus { get; set; }
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public string sessionID { get; private set; }
-        public string opponentID { get; set; }
+        public string cachedOpponentID { get; set; }
         public LocationInfo? lastLocation { get; private set; } = null;
         public string MainMenuSceneName => Landscape ? Constants.MAIN_MENU_L_SCENE_NAME : Constants.MAIN_MENU_P_SCENE_NAME;
 

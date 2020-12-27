@@ -381,24 +381,7 @@ namespace Fourzy
                 OnGetPlayerAccount,
                 error => Debug.Log("Error retrieving players profile: " + error.ErrorMessage));
 
-            //check scores
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
-            {
-                FunctionName = "checkPlayerRating",
-                FunctionParameter = new { playerID = result.PlayFabId, }
-            }, OnScoresChecked, OnError);
-
             RequestPhotonToken(result);
-        }
-
-        private void OnError(PlayFabError error)
-        {
-            Debug.Log($"Failed to {error.ErrorMessage}");
-        }
-
-        private void OnScoresChecked(ExecuteCloudScriptResult results)
-        {
-            Debug.Log($"Player ratings checked");
         }
 
         private void RequestPhotonToken(LoginResult obj)

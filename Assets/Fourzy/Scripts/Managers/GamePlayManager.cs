@@ -163,7 +163,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     FourzyPhotonManager.TryLeaveRoom();
                     FourzyPhotonManager.Instance.JoinLobby();
 
-                    GameManager.Instance.opponentID = "";
+                    GameManager.Instance.cachedOpponentID = "";
 
                     break;
             }
@@ -236,7 +236,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 FourzyGameModel.Model.Player opponen =
                     new FourzyGameModel.Model.Player(2, PhotonNetwork.PlayerListOthers[0].NickName)
                     {
-                        HerdId = FourzyPhotonManager.GetOpponentGamepiece(),
+                        HerdId = FourzyPhotonManager.GetOpponentProperty(
+                            Constants.REALTIME_GAMEPIECE_KEY, 
+                            Constants.REALTIME_DEFAULT_GAMEPIECE_KEY),
                         PlayerString = "2"
                     };
 
@@ -890,6 +892,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     GamesToastsController.ShowTopToast(
                         $"Your rating was updated to {ratingResultData.opponentRating}");
+                    UserManager.Instance.lastCachedRating = ratingResultData.opponentRating;
 
                     break;
             }
@@ -1063,7 +1066,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnRealtimeGameFinished()
         {
-            if (string.IsNullOrEmpty(GameManager.Instance.opponentID)) return;
+            if (string.IsNullOrEmpty(GameManager.Instance.cachedOpponentID)) return;
             if (ratingUpdated) return;
 
             ratingUpdated = true;
@@ -1074,7 +1077,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 FunctionParameter = new
                 {
                     winnerID = LoginManager.playerMasterAccountID,
-                    opponentID = GameManager.Instance.opponentID
+                    opponentID = GameManager.Instance.cachedOpponentID
                 },
                 GeneratePlayStreamEvent = true,
             },
@@ -1084,6 +1087,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString());
 
                 GamesToastsController.ShowTopToast($"Your rating was updated to {ratingResult.winnerRating}");
+                UserManager.Instance.lastCachedRating = ratingResult.winnerRating;
 
                 //try send rating update to other client 
                 if (PhotonNetwork.CurrentRoom != null)

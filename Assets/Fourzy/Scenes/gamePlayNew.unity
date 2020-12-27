@@ -10822,6 +10822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: {fileID: 780493827}
+  extraLabel: {fileID: 1003021969}
   pieceParent: {fileID: 641201534}
   magicBadge: {fileID: 1978830621}
   playerNameMaxSize: 11
@@ -16522,7 +16523,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 23
+          selectedMember: 25
           isDynamic: 0
         target: {fileID: 1690463457}
         memberName: ButtonTap
@@ -18657,7 +18658,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 35
+          selectedMember: 38
           isDynamic: 0
         target: {fileID: 783680541}
         memberName: OnBGTap
@@ -19156,6 +19157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: {fileID: 47867944}
+  extraLabel: {fileID: 807682335}
   pieceParent: {fileID: 850697869}
   magicBadge: {fileID: 286430233}
   playerNameMaxSize: 11
@@ -22415,7 +22417,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 41
+          selectedMember: 42
           isDynamic: 0
         target: {fileID: 159788920}
         memberName: OnBack

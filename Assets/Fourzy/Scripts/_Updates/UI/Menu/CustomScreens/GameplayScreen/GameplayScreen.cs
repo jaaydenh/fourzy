@@ -7,6 +7,7 @@ using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
 using FourzyGameModel.Model;
+using Photon.Pun;
 using StackableDecorator;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,6 +60,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             helpButtonOutline = helpButton.GetComponent<UIOutline>();
 
             timerWidgets.ForEach(widget => widget.onValueEmpty += OnTimerEmpty);
+
+            FourzyPhotonManager.onPlayerPpopertiesUpdate += OnPlayerPropertiesUpdate;
+        }
+
+        protected void OnDestroy()
+        {
+            FourzyPhotonManager.onPlayerPpopertiesUpdate -= OnPlayerPropertiesUpdate;
         }
 
         public override void Open()
@@ -156,6 +164,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             player1Widget.SetPlayerName(me.DisplayName);
             player1Widget.SetPlayerIcon(me);
             player1Widget.StopPlayerTurnAnimation();
+            player1Widget.SetExtraDataAsRating(
+                FourzyPhotonManager.GetMyProperty(Constants.REALTIME_RATING_KEY, -1));
 
             Player opponent = game.opponent;
             if (opponent != null)
@@ -163,6 +173,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 player2Widget.SetPlayerName(opponent.DisplayName);
                 player2Widget.SetPlayerIcon(opponent);
                 player2Widget.StopPlayerTurnAnimation();
+                player2Widget.SetExtraDataAsRating(
+                    FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, -1));
 
                 if (game.hideOpponent)
                 {
@@ -526,6 +538,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     rematchButton.SetState(false);
                 }
             }
+        }
+
+        private void OnPlayerPropertiesUpdate(
+            Photon.Realtime.Player player, 
+            ExitGames.Client.Photon.Hashtable changes)
+        {
+            if (game == null || 
+                game._Type != GameType.REALTIME || 
+                !changes.ContainsKey(Constants.REALTIME_RATING_KEY)) return;
+
+            (PhotonNetwork.LocalPlayer == player ? player1Widget : player2Widget)
+                .SetExtraData(changes[Constants.REALTIME_RATING_KEY].ToString());
         }
 
         private IEnumerator WaitForTapRoutine()

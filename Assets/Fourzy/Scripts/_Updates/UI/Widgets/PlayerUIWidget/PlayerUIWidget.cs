@@ -1,10 +1,13 @@
 ﻿//@vadym udod
 
+using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
+using Photon.Pun;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -13,6 +16,7 @@ namespace Fourzy._Updates.UI.Widgets
     public class PlayerUIWidget : WidgetBase
     {
         public TextMeshProUGUI playerName;
+        public TextMeshProUGUI extraLabel;
         public RectTransform pieceParent;
         public Badge magicBadge;
         public int playerNameMaxSize = 9;
@@ -87,6 +91,21 @@ namespace Fourzy._Updates.UI.Widgets
             this.game = game;
 
             game.onMagic += UpdateMagic;
+        }
+
+        public void SetExtraData(string text)
+        {
+            extraLabel.text = text;
+        }
+
+        public void SetExtraDataAsRating(int value)
+        {
+            bool useRating = game._Type == GameType.REALTIME && PhotonNetwork.CurrentRoom != null;
+
+            if (useRating && value != -1) 
+                SetExtraData($"Rating {value}");
+            else
+                SetExtraData("Wizard");
         }
 
         public override void Show(float time)

@@ -3,89 +3,11 @@
     "m_SelectedPackage": {
         "deviceId": "RF8M21C3DME",
         "name": "com.supermove.fourzy",
-        "processId": 21603,
+        "processId": 17780,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 24784,
-            "exited": true
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 3363,
-            "exited": true
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.sec.android.app.launcher",
-            "processId": 2262,
-            "exited": false
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 11427,
-            "exited": true
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 15432,
-            "exited": true
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 26116,
-            "exited": true
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.google.android.youtube",
-            "processId": 25214,
-            "exited": false
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 3522,
-            "exited": false
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 15226,
-            "exited": false
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 29663,
-            "exited": false
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 6839,
-            "exited": false
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 8811,
-            "exited": false
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 28414,
-            "exited": false
-        },
         {
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
@@ -96,12 +18,42 @@
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
             "processId": 18756,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
             "processId": 21603,
+            "exited": true
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 26590,
+            "exited": true
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 5080,
+            "exited": true
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.sec.android.app.launcher",
+            "processId": 4132,
+            "exited": false
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 4181,
+            "exited": false
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 17780,
             "exited": false
         }
     ],

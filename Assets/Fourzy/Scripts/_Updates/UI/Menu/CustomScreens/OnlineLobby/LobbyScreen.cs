@@ -133,27 +133,50 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        /// <summary>
+        /// Invoke by Create Room button
+        /// </summary>
         public void CreateRoom()
         {
-            string password = "";
-
-            if (passwordEnabled)
-                password = Guid.NewGuid().ToString().Substring(0, Constants.REALTIME_ROOM_PASSWORD_LENGTH);
-
-            FourzyPhotonManager.CreateRoom(RoomType.LOBBY_ROOM, password: password) ;
-
             _prompt
-                .Prompt("Creating new room", "", null, null, null, null)
+                .Prompt("Retrieving player stats...", "", null, null, null, null)
                 .CloseOnDecline();
+
+            UserManager.GetPlayerRating(rating =>
+            {
+                string password = "";
+
+                if (passwordEnabled)
+                    password = Guid.NewGuid().ToString().Substring(0, Constants.REALTIME_ROOM_PASSWORD_LENGTH);
+
+                FourzyPhotonManager.CreateRoom(RoomType.LOBBY_ROOM, password: password);
+
+                if (_prompt.isOpened) _prompt.promptTitle.text = "Creating new room";
+            }, () =>
+            {
+                if (_prompt.isOpened) _prompt.Decline(true);
+            });
         }
 
         public void JoinRoom(string name)
         {
-            FourzyPhotonManager.JoinRoom(name);
-
             _prompt
-                .Prompt("Joining room", name, null, null, null, null)
+                .Prompt("Retrieving player stats...", null, null, null, null, null)
                 .CloseOnDecline();
+
+            UserManager.GetPlayerRating(rating =>
+            {
+                FourzyPhotonManager.JoinRoom(name);
+
+                if (_prompt.isOpened)
+                {
+                    _prompt.promptTitle.text = "Joining room";
+                    _prompt.promptText.text = name;
+                }
+            }, () =>
+            {
+                if (_prompt.isOpened) _prompt.Decline(true);
+            });
         }
 
         private void UpdateCheckmarkButton()
@@ -168,8 +191,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Clear();
 
             foreach (RoomInfo roomData in data)
-                if (!roomData.RemovedFromList && 
-                    roomData.CustomProperties.ContainsKey(Constants.REALTIME_ROOM_TYPE_KEY) && 
+                if (!roomData.RemovedFromList &&
+                    roomData.CustomProperties.ContainsKey(Constants.REALTIME_ROOM_TYPE_KEY) &&
                     (RoomType)roomData.CustomProperties[Constants.REALTIME_ROOM_TYPE_KEY] == RoomType.LOBBY_ROOM)
                     rooms.Add(Instantiate(widgetPrefab, widgetsParent).SetData(roomData));
         }
@@ -189,8 +212,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (_prompt.isOpened) _prompt.Decline(true);
             if (isOpened) CloseSelf();
 
-            //get opponent
-            GameManager.Instance.opponentID = PhotonNetwork.PlayerListOthers[0].UserId;
+            if (PhotonNetwork.PlayerListOthers.Length > 0)
+                GameManager.Instance.cachedOpponentID = PhotonNetwork.PlayerListOthers[0].UserId;
 
             AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);

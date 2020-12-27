@@ -104,7 +104,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 lobbyButton.GetBadge().badge.SetValue(LocalizationManager.Value("match_found"));
 
                 playerTwoView = Instantiate(GameContentManager.Instance.piecesDataHolder
-                    .GetGamePiecePrefabData(FourzyPhotonManager.GetOpponentGamepiece()).player1Prefab, playerTwoParent);
+                    .GetGamePiecePrefabData(FourzyPhotonManager.GetOpponentProperty(
+                        Constants.REALTIME_GAMEPIECE_KEY, 
+                        Constants.REALTIME_DEFAULT_GAMEPIECE_KEY)).player1Prefab, playerTwoParent);
 
                 playerTwoView.StartBlinking();
 
@@ -112,7 +114,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 StartRoutine("load_game", Constants.LOBBY_GAME_LOAD_DELAY, StartGame);
                 state = LobbyOverlayState.LOADING_GAME;
 
-                GameManager.Instance.opponentID = two.UserId;
+                GameManager.Instance.cachedOpponentID = two.UserId;
             }
 
             empty.SetActive(!isTwo);
