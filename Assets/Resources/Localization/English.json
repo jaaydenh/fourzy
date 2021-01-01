@@ -455,7 +455,7 @@
     },
     {
       "key": "versus",
-      "value": "Versus"
+      "value": "Local"
     },
     {
       "key": "watch_ad_to_continue",
@@ -752,6 +752,10 @@
     {
       "key": "level4_cpu",
       "value": "IMPOSSIBLE"
+    },
+    {
+      "key": "practice",
+      "value": "Practice"
     }
   ]
 }

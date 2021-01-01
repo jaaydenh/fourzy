@@ -176,7 +176,7 @@ PlayerSettings:
     Android: com.supermove.fourzy
     iPhone: com.PartyTroll.Fourzy
   buildNumber:
-    iPhone: 8
+    iPhone: 9
   AndroidBundleVersionCode: 10308
   AndroidMinSdkVersion: 24
   AndroidTargetSdkVersion: 0
@@ -248,7 +248,7 @@ PlayerSettings:
   tvOSManualSigningProvisioningProfileID: 
   iOSManualSigningProvisioningProfileType: 0
   tvOSManualSigningProvisioningProfileType: 0
-  appleEnableAutomaticSigning: 0
+  appleEnableAutomaticSigning: 1
   iOSRequireARKit: 0
   iOSAutomaticallyDetectAndAddCapabilities: 1
   appleEnableProMotion: 0
@@ -798,7 +798,7 @@ PlayerSettings:
   allowUnsafeCode: 0
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
-  gcIncremental: 0
+  gcIncremental: 1
   gcWBarrierValidation: 0
   apiCompatibilityLevelPerPlatform:
     Android: 3

@@ -157,7 +157,7 @@ namespace Fourzy._Updates._Tutorial
                         [PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(4f, 0f), new Vector2(4f, 2f) },
                         [PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(4f, 0f) },
                     }),
-                    new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_tap_1"), 1, .15f),
+                    new OnboardingTask_ShowMessage(LocalizationManager.Value("rule_tap_2"), 1, .15f),
                     new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
                     //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
                     new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {

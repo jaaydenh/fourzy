@@ -53,7 +53,7 @@ namespace Fourzy._Updates.UI.Widgets
             else
             {
                 InputFieldPrompt screen = menuScreen.menuController.GetOrAddScreen<InputFieldPrompt>();
-                screen._Prompt(CheckPassword, "Enter Password", "Password:", "Join", "Close");
+                screen._Prompt(CheckPassword, "Enter Room Code", "", "Join", "Close");
                 screen.CloseOnAccept().CloseOnDecline();
             }
         }
