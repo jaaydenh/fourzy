@@ -282,6 +282,10 @@
       "value": "Music"
     },
     {
+      "key": "no_connection",
+      "value": "Internet connection required"
+    },
+    {
       "key": "no_connection_fast_puzzle",
       "value": "Internet connection required to play random puzzle ladder games"
     },

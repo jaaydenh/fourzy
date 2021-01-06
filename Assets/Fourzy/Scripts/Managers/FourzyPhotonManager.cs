@@ -519,6 +519,9 @@ namespace Fourzy
 
         public static T GetOpponentProperty<T>(string key, T defaultValue)
         {
+            if (PhotonNetwork.PlayerListOthers == null || PhotonNetwork.PlayerListOthers.Length == 0) 
+                return defaultValue;
+
             Hashtable _porps = PhotonNetwork.PlayerListOthers[0].CustomProperties;
             return _porps.ContainsKey(key) ? (T)_porps[key] : defaultValue;
         }
@@ -531,6 +534,9 @@ namespace Fourzy
 
         public static T GetMyProperty<T>(string key, T defaultValue)
         {
+            if (PhotonNetwork.LocalPlayer == null) 
+                return defaultValue;
+
             Hashtable _porps = PhotonNetwork.LocalPlayer.CustomProperties;
             return _porps.ContainsKey(key) ? (T)_porps[key] : defaultValue;
         }

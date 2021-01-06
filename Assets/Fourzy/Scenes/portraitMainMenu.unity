@@ -58363,7 +58363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: no_connection_fast_puzzle
+  key: no_connection
   updateOnStart: 1
 --- !u!1 &2128128891
 GameObject:

@@ -119,6 +119,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             loadingIndicator.SetValue(LocalizationManager.Value("loading"));
 
+            //PlayFabClientAPI.GetLeaderboardAroundPlayer
+
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "getLeaderboard",

@@ -3,29 +3,11 @@
     "m_SelectedPackage": {
         "deviceId": "RF8M21C3DME",
         "name": "com.supermove.fourzy",
-        "processId": 17780,
+        "processId": 1981,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 11032,
-            "exited": true
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 18756,
-            "exited": true
-        },
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 21603,
-            "exited": true
-        },
         {
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
@@ -42,18 +24,24 @@
             "deviceId": "RF8M21C3DME",
             "name": "com.sec.android.app.launcher",
             "processId": 4132,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
             "processId": 4181,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
             "processId": 17780,
+            "exited": true
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 1981,
             "exited": false
         }
     ],

@@ -283,6 +283,10 @@
       "value": "Música"
     },
     {
+      "key": "no_connection",
+      "value": "Requiere conexión a Internet"
+    },
+    {
       "key": "no_connection_fast_puzzle",
       "value": "Se requiere conexión a Internet para jugar juegos de escalera aleatorios"
     },

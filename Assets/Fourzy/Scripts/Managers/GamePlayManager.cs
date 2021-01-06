@@ -950,7 +950,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameMode.NONE:
                     //case GameMode.LOCAL_VERSUS:
-                    gameResult = game.draw ? AnalyticsManager.GameResultType.Draw : AnalyticsManager.GameResultType.Win;
+                    gameResult = game.draw ? 
+                        AnalyticsManager.GameResultType.Draw : 
+                        AnalyticsManager.GameResultType.Win;
 
                     break;
 
@@ -994,7 +996,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameType.PASSANDPLAY:
                     //change gamepad mode
-                    StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
+                    StandaloneInputModuleExtended.GamepadFilter = 
+                        StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
 
                     break;
             }
