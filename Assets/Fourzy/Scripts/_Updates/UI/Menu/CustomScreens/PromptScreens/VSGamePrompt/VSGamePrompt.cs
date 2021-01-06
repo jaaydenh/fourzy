@@ -65,7 +65,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             Prompt(
-                $"Beat {puzzlePack.aiPlayerName}",
+                $"Defeat {puzzlePack.aiPlayerName}",
                 null,
                 onAccept ?? (() =>
                 {

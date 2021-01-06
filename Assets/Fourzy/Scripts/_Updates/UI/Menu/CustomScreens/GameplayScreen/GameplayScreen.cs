@@ -152,8 +152,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Player me = game.me;
 
-            if (game._Type != GameType.PRESENTATION)
+            if (game._Type != GameType.PRESENTATION) {
                 player1Widget.spellsHolder.Open(game, gameplayManager.board, me);
+            }
 
             player1Widget.SetGame(game);
             player2Widget.SetGame(game);
@@ -164,8 +165,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             player1Widget.SetPlayerName(me.DisplayName);
             player1Widget.SetPlayerIcon(me);
             player1Widget.StopPlayerTurnAnimation();
-            player1Widget.SetExtraDataAsRating(
-                FourzyPhotonManager.GetMyProperty(Constants.REALTIME_RATING_KEY, -1));
+            if (game._Type == GameType.REALTIME) {
+                player1Widget.SetExtraDataAsRating(FourzyPhotonManager.GetMyProperty(Constants.REALTIME_RATING_KEY, -1));
+            }
 
             Player opponent = game.opponent;
             if (opponent != null)
@@ -173,8 +175,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 player2Widget.SetPlayerName(opponent.DisplayName);
                 player2Widget.SetPlayerIcon(opponent);
                 player2Widget.StopPlayerTurnAnimation();
-                player2Widget.SetExtraDataAsRating(
-                    FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, -1));
+                if (game._Type == GameType.REALTIME) {
+                    player2Widget.SetExtraDataAsRating(FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, -1));
+                }
 
                 if (game.hideOpponent)
                 {

@@ -934,7 +934,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &42920414
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11940,7 +11940,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 38
+          selectedMember: 40
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: ResetTutorial
@@ -14526,7 +14526,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 36
+          selectedMember: 37
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: OpenNews
@@ -15301,7 +15301,7 @@ MonoBehaviour:
         isCallEnabled: 0
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 46
+          selectedMember: 49
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: StartTutorialAdventure
@@ -16476,7 +16476,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Support
+  m_text: Discord
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 651c299b1cbbf79428ddb083f312589b, type: 2}
@@ -16808,7 +16808,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 32
+          selectedMember: 33
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: OnBack
@@ -17574,7 +17574,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Versus
+  m_text: Local
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e3398873146f24937a8ce9bb6a1c44a0, type: 2}
@@ -17643,7 +17643,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 931662786}
-    characterCount: 6
+    characterCount: 5
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -18832,7 +18832,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 34
+          selectedMember: 35
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: OpenDiscord
@@ -22492,7 +22492,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 35
+          selectedMember: 36
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: OpenFastPuzzleScreen
@@ -27184,7 +27184,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 640, y: 192.5}
+  m_AnchoredPosition: {x: -547.84, y: -103}
   m_SizeDelta: {x: 410, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1574380344
@@ -29258,10 +29258,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Rating
+  m_text: Online Rankings
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: e3398873146f24937a8ce9bb6a1c44a0, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: b30aa28be200e4147982d1dd0ea6641c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -29327,10 +29327,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1696795929}
-    characterCount: 6
+    characterCount: 15
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 1
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -29362,7 +29362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abdbc74b2f85b468bd2e924cc147e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: rating
+  key: rankings
   updateOnStart: 1
 --- !u!222 &1696795931
 CanvasRenderer:
@@ -30323,7 +30323,7 @@ GameObject:
   - component: {fileID: 1757549352}
   - component: {fileID: 1757549351}
   m_Layer: 5
-  m_Name: Rating
+  m_Name: Rankings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30338,18 +30338,18 @@ RectTransform:
   m_GameObject: {fileID: 1757549349}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000216, y: 1.0000216, z: 1.0000216}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1696795927}
   - {fileID: 905103404}
   m_Father: {fileID: 133142678}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -48.596558, y: -65.69989}
-  m_SizeDelta: {x: 330, y: 105}
-  m_Pivot: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 655, y: -87.50189}
+  m_SizeDelta: {x: 410, y: 175}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1757549351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30571,7 +30571,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2209cc194f01746e59ba25d22b0831ce, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c4ddcbc5d3c45144f85b3d96ed825d69, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -33481,7 +33481,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 604, y: -103}
+  m_AnchoredPosition: {x: 655.2, y: 192}
   m_SizeDelta: {x: 410, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2022563123
@@ -33595,7 +33595,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c4ddcbc5d3c45144f85b3d96ed825d69, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6ddc67ee46c16764393867a2a940a597, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -33658,7 +33658,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 198.5
+  orthographic size: 915
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -33694,7 +33694,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024581700}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 198.5, y: 111.5, z: -100}
+  m_LocalPosition: {x: 915, y: 514.5, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -37406,7 +37406,7 @@ PrefabInstance:
     - target: {fileID: 5939137052275477453, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -24.999939
+      value: -24.999878
       objectReference: {fileID: 0}
     - target: {fileID: 6013281596795780520, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
@@ -41342,7 +41342,7 @@ PrefabInstance:
     - target: {fileID: 6186301522338559828, guid: 2e1e79e4b00875b4da8788ac7738c62e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -24.999939
+      value: -24.999878
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e1e79e4b00875b4da8788ac7738c62e, type: 3}
