@@ -166,7 +166,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             player1Widget.SetPlayerIcon(me);
             player1Widget.StopPlayerTurnAnimation();
             if (game._Type == GameType.REALTIME) {
-                player1Widget.SetExtraDataAsRating(FourzyPhotonManager.GetMyProperty(Constants.REALTIME_RATING_KEY, -1));
+                player1Widget.SetExtraDataAsRating(
+                    FourzyPhotonManager.GetMyProperty(Constants.REALTIME_RATING_KEY, -1));
             }
 
             Player opponent = game.opponent;
@@ -176,7 +177,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 player2Widget.SetPlayerIcon(opponent);
                 player2Widget.StopPlayerTurnAnimation();
                 if (game._Type == GameType.REALTIME) {
-                    player2Widget.SetExtraDataAsRating(FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, -1));
+                    player2Widget.SetExtraDataAsRating(
+                        FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, -1));
                 }
 
                 if (game.hideOpponent)
@@ -552,7 +554,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 !changes.ContainsKey(Constants.REALTIME_RATING_KEY)) return;
 
             (PhotonNetwork.LocalPlayer == player ? player1Widget : player2Widget)
-                .SetExtraData(changes[Constants.REALTIME_RATING_KEY].ToString());
+                .SetExtraDataAsRating((int)changes[Constants.REALTIME_RATING_KEY]);
         }
 
         private IEnumerator WaitForTapRoutine()

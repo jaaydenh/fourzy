@@ -76,7 +76,7 @@ namespace Fourzy
 
         public static bool GetTutorialOpened(string name) => PlayerPrefs.GetInt(kTutorialOpened + name, 0) != 0;
 
-        public static void SetUsetName(string userName) => PlayerPrefs.SetString(kUserName, userName);
+        public static void SetUserName(string userName) => PlayerPrefs.SetString(kUserName, userName);
 
         public static string GetUserName() => PlayerPrefs.GetString(kUserName);
 

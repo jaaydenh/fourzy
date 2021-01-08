@@ -203,7 +203,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3ad0d87fb738941698d893b32a150547, type: 3}
+  m_Sprite: {fileID: 21300000, guid: de0f74adb0da5e342808877afd38eaa8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -276,7 +276,7 @@ MonoBehaviour:
           selectedMember: 0
           isDynamic: 1
         target: {fileID: 114853032980329910}
-        memberName: progress
+        memberName: value
         memberType: 4
         argument:
           supportedType: 3
@@ -295,7 +295,7 @@ MonoBehaviour:
   from: 0
   to: 1
   onValue:
-    inspectorListHeight: 40
+    inspectorListHeight: 83
     persistentCalls:
       calls: []
 --- !u!1 &1084044493547148

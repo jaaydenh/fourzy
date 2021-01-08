@@ -13584,7 +13584,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 28
+          selectedMember: 31
           isDynamic: 0
         target: {fileID: 678526985}
         memberName: CloseSelf
@@ -13611,6 +13611,9 @@ MonoBehaviour:
   menuController: {fileID: 0}
   autoAdjustSize: 0
   loadingIndicator: {fileID: 15396164}
+  reloadButton: {fileID: 0}
+  scrollView: {fileID: 0}
+  verticalLayoutGroup: {fileID: 0}
   leaderboardWidgetPrefab: {fileID: 126614029804787601, guid: 2b69edf428dbd9f46a4626a70a5c353a,
     type: 3}
   widgetsParent: {fileID: 1084035743}

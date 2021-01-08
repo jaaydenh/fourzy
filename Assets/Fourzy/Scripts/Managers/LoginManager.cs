@@ -438,6 +438,7 @@ namespace Fourzy
             }
 
             playerTitleID = result.AccountInfo.TitleInfo.TitlePlayerAccount.Id;
+            UserManager.GetPlayerRating();
 
             //get profile
             PlayFabProfilesAPI.GetProfile(

@@ -60,11 +60,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 00/00
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
@@ -264,11 +263,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: 02fa1cb9f5ae045ddaa384e098a4a60f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -347,9 +345,13 @@ MonoBehaviour:
     name: 
     enabled: 0
     rarity: 30
+    startingMagic: 100
+    spells: 
     outlineColor: {r: 0, g: 0, b: 1, a: 1}
     borderColor: {r: 0, g: 1, b: 0, a: 1}
     piecesToUnlock: 30
+    profilePicture: {fileID: 0}
+    profilePictureOffset: {x: 0, y: 0}
     piecesProgression:
       list: 5000000096000000f00000002c01000026020000
     pieces: 0
@@ -603,12 +605,11 @@ MonoBehaviour:
   m_Material: {fileID: 2100000, guid: 7c311327353b90d4f9d496ec6201b161, type: 2}
   m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_RaycastTarget: 0
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 3ad0d87fb738941698d893b32a150547, type: 3}
+  m_Sprite: {fileID: 21300000, guid: de0f74adb0da5e342808877afd38eaa8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -681,7 +682,7 @@ MonoBehaviour:
           selectedMember: 0
           isDynamic: 1
         target: {fileID: 114671148978832026}
-        memberName: progress
+        memberName: value
         memberType: 4
         argument:
           supportedType: 3
@@ -700,6 +701,6 @@ MonoBehaviour:
   from: 0
   to: 1
   onValue:
-    inspectorListHeight: 40
+    inspectorListHeight: 83
     persistentCalls:
       calls: []

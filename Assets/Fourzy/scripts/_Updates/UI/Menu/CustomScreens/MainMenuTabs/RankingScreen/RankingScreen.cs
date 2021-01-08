@@ -2,23 +2,36 @@
 
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
-using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using static Fourzy._Updates.UI.Menu.Screens.FastPuzzlesScreen;
+using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class RankingScreen : MenuTab
     {
+        public const int LOADED_WIDGETS_CAP = 50;
+        public const int TO_LOAD_PER_REQUEST = 6;
+        public const float TIMEOUT_TIME = 6f;
+
         public Badge loadingIndicator;
+        public ButtonExtended reloadButton;
+        public ScrollRect scrollView;
+        public VerticalLayoutGroup verticalLayoutGroup;
 
         public FastPuzzlesLeaderboardPlayerWidget leaderboardWidgetPrefab;
         public RectTransform widgetsParent;
 
         private bool loadingLeaderboard = false;
+        private bool checkScrolling = false;
+        private float prevScrollValue = 0f;
+        private List<FastPuzzlesLeaderboardPlayerWidget> loadedWidgets =
+            new List<FastPuzzlesLeaderboardPlayerWidget>();
+        private List<PlayerLeaderboardEntry> playersData = new List<PlayerLeaderboardEntry>();
 
         protected override void Awake()
         {
@@ -37,7 +50,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             bool _opened = isOpened;
             base.Open();
 
-            if (!_opened) StartRoutine("showLB", ShowLeaderboard());
+            if (!_opened)
+                StartRoutine("showLB", AddMoreResults());
         }
 
         public override void Close(bool animate)
@@ -51,13 +65,38 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (loadingLeaderboard) return;
 
-            StartRoutine("showLB", ShowLeaderboard());
+            StartRoutine("showLB", AddMoreResults());
+        }
+
+        public void OnScrollValueChanged(Vector2 value)
+        {
+            if (checkScrolling && !loadingLeaderboard)
+            {
+                if (value.y >= 1f && (value.y > prevScrollValue || prevScrollValue == 1f))
+                    StartRoutine("showLB", AddMoreResults(-1));
+                else if (value.y <= 0f && (value.y < prevScrollValue || prevScrollValue == 0f))
+                    StartRoutine("showLB", AddMoreResults(1));
+            }
+
+            prevScrollValue = value.y;
+        }
+
+        public void PointerCheck()
+        {
+            checkScrolling = true;
+        }
+
+        public void PointerUp()
+        {
+            checkScrolling = false;
         }
 
         private void ClearEntries()
         {
-            foreach (WidgetBase widget in widgets) Destroy(widget.gameObject);
-            widgets.Clear();
+            foreach (WidgetBase widget in loadedWidgets) Destroy(widget.gameObject);
+            loadedWidgets.Clear();
+
+            playersData.Clear();
         }
 
         private void NetworkAccess(bool state)
@@ -82,50 +121,130 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Debug.Log(error.ErrorMessage);
         }
 
-        private void OnLeaderboardLoaded(ExecuteCloudScriptResult result)
+        private void OnValuesAdded(List<PlayerLeaderboardEntry> newValues, int direction)
         {
             if (!loadingLeaderboard) return;
 
             loadingLeaderboard = false;
             loadingIndicator.SetState(false);
 
-            LeaderboardRequestResult leaderboard =
-                JsonConvert.DeserializeObject<LeaderboardRequestResult>(result.FunctionResult.ToString());
+            if (newValues.Count == 0)
+            {
+                //no more entries to load in this direction
+                return;
+            }
 
-            foreach (PlayerLeaderboardEntry entry in leaderboard.s1)
-                widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
+            //remove copies if any
+            List<PlayerLeaderboardEntry> toRemove = new List<PlayerLeaderboardEntry>(playersData
+                    .Where(_entry => newValues.Any(_newEntry => _newEntry.PlayFabId == _entry.PlayFabId)));
 
-            if (leaderboard.s2 != null)
-                foreach (PlayerLeaderboardEntry entry in leaderboard.s2)
-                    widgets.Add(Instantiate(leaderboardWidgetPrefab, widgetsParent).SetData(entry));
+            foreach (PlayerLeaderboardEntry entry in toRemove)
+                RemoveEntry(playersData.IndexOf(entry));
+
+            for (int newEntryIndex = 0; newEntryIndex < newValues.Count; newEntryIndex++)
+            {
+                int index = direction < 0 ? newEntryIndex : playersData.Count;
+                AddEntry(newValues[newEntryIndex], index);
+            }
+
+            //cap values
+            if (playersData.Count > LOADED_WIDGETS_CAP)
+            {
+                int amountToRemove = playersData.Count - LOADED_WIDGETS_CAP;
+                int startIndex = direction < 0 ? LOADED_WIDGETS_CAP : 0;
+
+                for (int removedIndex = 0; removedIndex < amountToRemove; removedIndex++)
+                    RemoveEntry(startIndex);
+            }
+
+            for (int dataIndex = 0; dataIndex < playersData.Count; dataIndex++)
+                loadedWidgets[dataIndex].SetData(playersData[dataIndex]);
+
+
+            //
+            void AddEntry(PlayerLeaderboardEntry entry, int index)
+            {
+                playersData.Insert(index, entry);
+
+                FastPuzzlesLeaderboardPlayerWidget newWidget =
+                    Instantiate(leaderboardWidgetPrefab, widgetsParent);
+
+                loadedWidgets.Insert(index, newWidget);
+                newWidget.transform.SetSiblingIndex(index);
+            }
+
+            void RemoveEntry(int index)
+            {
+                if (index < 0) return;
+
+                Destroy(loadedWidgets[index].gameObject);
+                loadedWidgets.RemoveAt(index);
+                playersData.RemoveAt(index);
+            }
         }
 
-        private IEnumerator ShowLeaderboard()
+        private IEnumerator AddMoreResults(int direction = 0)
         {
-            ClearEntries();
-
+            //check connection
             loadingLeaderboard = true;
+            if (playersData.Count == 0) direction = 0;
+
             float timer = 0f;
-            //wait 10 seconds
-            while (
-                (string.IsNullOrEmpty(LoginManager.playerMasterAccountID) || !GameManager.NetworkAccess) &&
-                timer < 10f)
+            while (string.IsNullOrEmpty(LoginManager.playerMasterAccountID) && timer < TIMEOUT_TIME)
             {
                 timer += Time.deltaTime;
                 yield return null;
             }
 
-            if (timer >= 10f || !isOpened) yield break;
+            if (timer >= TIMEOUT_TIME || !isOpened)
+            {
+                loadingLeaderboard = false;
+                loadingIndicator.SetValue("Player not logged in");
+
+                yield break;
+            }
 
             loadingIndicator.SetValue(LocalizationManager.Value("loading"));
 
-            //PlayFabClientAPI.GetLeaderboardAroundPlayer
-
-            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            PlayerProfileViewConstraints viewConstraints = new PlayerProfileViewConstraints()
             {
-                FunctionName = "getLeaderboard",
-                FunctionParameter = new { maxCount = 6, tableName = "All Time Rating" }
-            }, OnLeaderboardLoaded, OnError);
+                ShowAvatarUrl = true,
+                ShowDisplayName = true,
+            };
+
+            if (direction == 0)
+            {
+                ClearEntries();
+                PlayFabClientAPI.GetLeaderboardAroundPlayer(
+                    new GetLeaderboardAroundPlayerRequest()
+                    {
+                        PlayFabId = LoginManager.playerMasterAccountID,
+                        StatisticName = "All Time Rating",
+                        MaxResultsCount = TO_LOAD_PER_REQUEST,
+                        ProfileConstraints = viewConstraints,
+                    },
+                    result => OnValuesAdded(result.Leaderboard, direction),
+                    OnError);
+            }
+            else
+            {
+                int startIndex =
+                    playersData[direction > 0 ? playersData.Count - 1 : 0].Position
+                    + (direction < 0 ? -TO_LOAD_PER_REQUEST : 0)
+                    + (direction > 0 ? 1 : 0);
+
+                startIndex = Mathf.Clamp(startIndex, 0, int.MaxValue);
+
+                PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest()
+                {
+                    StatisticName = "All Time Rating",
+                    MaxResultsCount = TO_LOAD_PER_REQUEST,
+                    StartPosition = startIndex,
+                    ProfileConstraints = viewConstraints,
+                },
+                result => OnValuesAdded(result.Leaderboard, direction),
+                OnError);
+            }
         }
     }
 }

@@ -20,7 +20,6 @@ namespace Fourzy
         public static Action onDisplayNameChanged;
         public static Action<string> onDisplayNameChangeFailed;
 
-        public static Action OnUpdateUserInfo;
         public static Action<CurrencyType> onCurrencyUpdate;
         public static Action<string> OnUpdateUserGamePieceID;
         public static Action<int> onRatingAquired;
@@ -168,7 +167,7 @@ namespace Fourzy
 
         public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceID + "" };
 
-        private int _lastCachedRating;
+        private int _lastCachedRating = -1;
 
         protected override void Awake()
         {
@@ -271,7 +270,7 @@ namespace Fourzy
         {
             if (PhotonNetwork.IsConnected) PhotonNetwork.NickName = value;
 
-            PlayerPrefsWrapper.SetUsetName(value);
+            PlayerPrefsWrapper.SetUserName(value);
 
             if (updatePlayFabDisplayName)
             {
@@ -283,92 +282,6 @@ namespace Fourzy
             else
                 settingRandomName = false;
         }
-
-        public void SetProfileLanguage(string language, EntityKey entity)
-        {
-            //PlayFabClientAPI.
-        }
-
-        //public void UpdateInformation()
-        //{
-        //    new AccountDetailsRequest().Send((response) =>
-        //    {
-        //        string facebookId = response.ExternalIds.GetString("FB");
-        //        int? rateElo = response.ScriptData.GetInt("ratingElo");
-        //        //Mixpanel.Identify(response.UserId);
-        //        //Mixpanel.people.Set("$name", userName);
-
-        //        //if server username not matching local username, update server username
-        //        if (response.DisplayName != userName) UpdatePlayerDisplayName(userName);
-
-        //        UpdateUserInfo(response.UserId, facebookId, response.Currency1, rateElo);
-        //    });
-        //}
-
-        //public void UpdatePlayerDisplayName(string name)
-        //{
-        //    //first check new name
-
-        //    userName = name;
-
-        //    OnUpdateUserInfo?.Invoke();
-
-        //    ////update username on server
-        //    //new ChangeUserDetailsRequest()
-        //    //    .SetDisplayName(name)
-        //    //    .Send((response) =>
-        //    //    {
-        //    //        if (response.HasErrors)
-        //    //        {
-        //    //            if (GameManager.Instance.debugMessages)
-        //    //                Debug.Log("Error updating player display name: " + response.Errors.ToString());
-        //    //        }
-        //    //        else
-        //    //        {
-        //    //            if (GameManager.Instance.debugMessages)
-        //    //                Debug.Log("Successfully updated player display name");
-        //    //        }
-        //    //    });
-        //    PlayFabClientAPI.UpdateUserTitleDisplayName(new PlayFab.ClientModels.UpdateUserTitleDisplayNameRequest() { DisplayName = name, }, ChangeDisplayNameResult, OnPlayFabError);
-        //}
-
-        public void GetUserGamePiece()
-        {
-            // new LogEventRequest().SetEventKey("getGamePiece")
-            //     .Send((response) =>
-            //     {
-            //         if (response.HasErrors)
-            //         {
-            //             if (GameManager.Instance.debugMessages)
-            //                 Debug.Log("***** Error getting player gamepiece: " + response.Errors.JSON);
-            //         }
-            //         else
-            //         {
-            //             string serverGamePiece = response.ScriptData.GetInt("gamePieceId") + "";
-
-            //             if (serverGamePiece != gamePieceID) UpdateSelectedGamePiece(gamePieceID);
-            //         }
-            //     });
-        }
-
-        //public void UpdateUserInfo(string uid, string fbId, long? coins, int? rating)
-        //{
-        //    userId = uid;
-
-        //    ratingElo = rating.GetValueOrDefault(0);
-        //    //this.coins = coins.GetValueOrDefault(0);
-
-        //    if (fbId != null)
-        //        StartCoroutine(GetFBPicture(fbId, (sprite) =>
-        //        {
-        //            if (sprite)
-        //                profilePicture = sprite;
-        //        }));
-
-        //    GetUserGamePiece();
-
-        //    OnUpdateUserInfo?.Invoke();
-        //}
 
         public void UpdateSelectedGamePiece(string _gamePieceID)
         {

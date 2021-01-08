@@ -46,8 +46,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             base.Open();
 
-            UserManager.OnUpdateUserInfo += UserManagerOnUpdateName;
-
             GamePlayManager.onMoveStarted += MoveStarted;
             GamePlayManager.onMoveEnded += MoveEnded;
             GamePlayManager.onGameFinished += OnGameFinished;
@@ -62,8 +60,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             pointer.HidePointer();
             RemoveCurrentButton();
             StopAllCoroutines();
-
-            UserManager.OnUpdateUserInfo -= UserManagerOnUpdateName;
 
             GamePlayManager.onMoveStarted -= MoveStarted;
             GamePlayManager.onMoveEnded -= MoveEnded;
@@ -132,21 +128,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             _yield = false;
             CancelRoutine("messageYield");
-        }
-
-        private void UserManagerOnUpdateName()
-        {
-            //OnboardingTasksBatch batch = tutorial.data[currentTaskIndex];
-
-            //foreach (OnboardingTask task in batch.tasks)
-            //{
-            //    switch (task.action)
-            //    {
-            //        case OnboardingActions.USER_CHANGE_NAME_PROMPT:
-
-            //            break;
-            //    }
-            //}
         }
 
         public static void CloseTutorial()

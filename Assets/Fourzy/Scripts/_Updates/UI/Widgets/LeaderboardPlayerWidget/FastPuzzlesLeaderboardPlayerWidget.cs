@@ -15,8 +15,13 @@ namespace Fourzy._Updates.UI.Widgets
         public TMP_Text valueLabel;
         public RectTransform iconParent;
 
+        private GamePieceView currentGamepiece;
+        private PlayerLeaderboardEntry data;
+
         public FastPuzzlesLeaderboardPlayerWidget SetData(PlayerLeaderboardEntry entry)
         {
+            data = entry;
+
             playerNameLabel.text = entry.DisplayName;
             positionLabel.text = (entry.Position + 1) + "";
             valueLabel.text = entry.StatValue + "";
@@ -27,14 +32,22 @@ namespace Fourzy._Updates.UI.Widgets
                 AddGamepieceView(UserManager.Instance.gamePieceID);
             }
             else
+            {
+                positionLabel.color = Color.white;
                 AddGamepieceView(entry.Profile.AvatarUrl);
+            }
 
             return this;
         }
 
+        public float GetHeight() => rectTransform ? rectTransform.rect.height : 0f;
+
         private GamePieceView AddGamepieceView(string pieceID = "")
         {
-            GamePieceView gamePieceView = string.IsNullOrEmpty(pieceID) ?
+            if (currentGamepiece)
+                Destroy(currentGamepiece.gameObject);
+
+            currentGamepiece = string.IsNullOrEmpty(pieceID) ?
                 Instantiate(
                     GameContentManager.Instance.piecesDataHolder.gamePieces.list.Random().player1Prefab, 
                     iconParent) :
@@ -42,10 +55,10 @@ namespace Fourzy._Updates.UI.Widgets
                     GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(pieceID).player1Prefab, 
                     iconParent);
 
-            gamePieceView.transform.localPosition = Vector3.zero;
-            gamePieceView.StartBlinking();
+            currentGamepiece.transform.localPosition = Vector3.zero;
+            currentGamepiece.StartBlinking();
 
-            return gamePieceView;
+            return currentGamepiece;
         }
     }
 }

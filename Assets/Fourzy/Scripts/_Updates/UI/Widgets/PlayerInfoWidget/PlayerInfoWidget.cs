@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Mechanics._GamePiece;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -11,6 +10,7 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public TMP_Text playerNameLabel;
         public TMP_Text pieceNameLabel;
+        public TMP_Text ratingLabel;
         public Slider starsSlider;
         public GamePieceWidgetSmall gamePieceWidget;
 
@@ -18,13 +18,15 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base.Awake();
 
-            UserManager.OnUpdateUserInfo += OnUpdateUserInfo;
+            UserManager.onRatingAquired += OnRatingUpate;
+            UserManager.onDisplayNameChanged += OnUpdateUserInfo;
             UserManager.OnUpdateUserGamePieceID += OnUpdateUserGamePieceID;
         }
 
         protected void OnDestroy()
         {
-            UserManager.OnUpdateUserInfo -= OnUpdateUserInfo;
+            UserManager.onRatingAquired -= OnRatingUpate;
+            UserManager.onDisplayNameChanged -= OnUpdateUserInfo;
             UserManager.OnUpdateUserGamePieceID -= OnUpdateUserGamePieceID;
         }
 
@@ -42,12 +44,21 @@ namespace Fourzy._Updates.UI.Widgets
             UserManager user = UserManager.Instance;
 
             OnUpdateUserInfo();
+            OnRatingUpate(0);
             OnUpdateUserGamePieceID(user.gamePieceID);
         }
 
         private void OnUpdateUserInfo()
         {
             playerNameLabel.text = UserManager.Instance.userName;
+        }
+
+        private void OnRatingUpate(int rating)
+        {
+            if (UserManager.Instance.lastCachedRating == -1)
+                ratingLabel.text = $"Rating: ...";
+            else
+                ratingLabel.text = $"Rating: {UserManager.Instance.lastCachedRating}";
         }
 
         private void OnUpdateUserGamePieceID(string gamePieceID)
