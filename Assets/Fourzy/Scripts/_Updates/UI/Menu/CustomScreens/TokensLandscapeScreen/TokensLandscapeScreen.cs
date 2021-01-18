@@ -32,7 +32,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Vector2 spacing = tokensParent.spacing;
             List<TokensDataHolder.TokenData> allTokens = GameContentManager.Instance.enabledTokens;
-            Debug.Log("Tokens count: " + allTokens.Count);
             TokenWidget prefab = GameContentManager.GetPrefab<TokenWidget>(GameContentManager.PrefabType.TOKEN_SMALL);
 
             Vector2 size = tokensParent.cellSize;
@@ -83,16 +82,32 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void SetPage(int page)
         {
             int start;
+            int end;
+            //disable prev
             if (currentPage > -1)
             {
-                start = currentPage * elementsPerPage;
-                for (int index = start; index < start + elementsPerPage; index++) tokenWidgets[index].SetActive(false);
+                ResetStartEnd();
+
+                for (int index = start; index < end; index++)
+                {
+                    tokenWidgets[index].SetActive(false);
+                }
             }
 
             currentPage = page;
 
-            start = currentPage * elementsPerPage;
-            for (int index = start; index < start + elementsPerPage; index++) tokenWidgets[index].SetActive(true);
+            ResetStartEnd();
+            //enable current
+            for (int index = start; index < end; index++)
+            {
+                tokenWidgets[index].SetActive(true);
+            }
+
+            void ResetStartEnd()
+            {
+                start = currentPage * elementsPerPage;
+                end = Mathf.Min(start + elementsPerPage, tokenWidgets.Count);
+            }
         }
     }
 }
