@@ -76,7 +76,15 @@ namespace Fourzy._Updates.UI.Widgets
         public void Open(IClientFourzy game, GameboardView board, Player owner)
         {
             //ignore if spells disabled
-            if (!SettingsManager.Get(SettingsManager.KEY_MAGIC)) return;
+            if (!SettingsManager.Get(SettingsManager.KEY_MAGIC))
+            {
+                //this option only affects local games
+                //spells are ON by default for multiplayer games
+                if (GameManager.Instance.ExpectedGameType == GameTypeLocal.LOCAL_GAME)
+                {
+                    return;
+                }
+            }
 
             //clear spells widgets
             foreach (SpellUIWidget widget in spellWidgets) Destroy(widget.gameObject);

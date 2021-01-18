@@ -246,7 +246,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             readyButton.SetState(selectedPlayers.ToList().TrueForAll(_widget => _widget != null));
         }
 
-        public void PickBoard() => menuController.GetScreen<LandscapeGameboardSelectionScreen>().Open(selectedTheme.themeID);
+        public void PickBoard() => 
+            menuController
+            .GetScreen<LandscapeGameboardSelectionScreen>()
+            .Open(selectedTheme.themeID);
 
         public void ToggleP2()
         {
@@ -258,12 +261,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 p2DifficultyLevel = -1;
                 profiles[1].DisplayDifficulty(-1);
 
-                if (selectedPlayers[1] != null) selectedPlayers[1].SetP2AsCPU(false);
+                if (selectedPlayers[1] != null)
+                {
+                    selectedPlayers[1].SetP2AsCPU(false);
+                }
             }
-            else PickP2();
+            else
+            {
+                PickP2();
+            }
         }
 
-        public void PickP2() => difficultyDropdown.Open(false).SetPosition(profiles[1].transform, Vector2.zero).SetOnClick(OnP2DifficultySelected);
+        public void PickP2() => 
+            difficultyDropdown
+            .Open(false)
+            .SetPosition(profiles[1].transform, Vector2.zero)
+            .SetOnClick(OnP2DifficultySelected);
 
         public void ToggleP1()
         {
@@ -274,10 +287,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 profiles[0].DisplayDifficulty(-1);
             }
             else
-                difficultyDropdown.Open(true).SetPosition(profiles[0].transform, Vector2.zero).SetOnClick(OnP1DifficultySelected);
+            {
+                difficultyDropdown
+                    .Open(true)
+                    .SetPosition(profiles[0].transform, Vector2.zero)
+                    .SetOnClick(OnP1DifficultySelected);
+            }
         }
 
         public void ToggleLocalTimer() => SettingsManager.Toggle(SettingsManager.KEY_LOCAL_TIMER);
+
+        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_MAGIC);
 
         protected override void OnInitialized()
         {

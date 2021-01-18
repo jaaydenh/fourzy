@@ -109,6 +109,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleTimer() => SetTimerState(!SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER));
 
+        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_MAGIC);
+
         public void SetArea(PracticeScreenAreaSelectWidget widget)
         {
             if (currentAreaWidget)
