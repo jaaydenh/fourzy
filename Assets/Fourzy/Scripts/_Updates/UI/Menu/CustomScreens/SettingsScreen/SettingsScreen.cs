@@ -28,9 +28,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ResetPuzzles()
         {
-            GameContentManager.Instance.ResetFastPuzzles();
-            GameContentManager.Instance.ResetPuzzlePacks();
-            GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
+            menuController.GetOrAddScreen<PromptScreen>().Prompt(
+                "Reset Progress",
+                "All puzzles progress will be removed",
+                LocalizationManager.Value("yes"),
+                LocalizationManager.Value("no"),
+                () =>
+                {
+                    GameContentManager.Instance.ResetFastPuzzles();
+                    GameContentManager.Instance.ResetPuzzlePacks();
+                    GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
+                },
+                null)
+                .CloseOnAccept()
+                .CloseOnDecline();
         }
 
         public void ForceAIPresentation()

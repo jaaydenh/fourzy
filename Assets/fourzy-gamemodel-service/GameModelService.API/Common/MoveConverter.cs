@@ -51,9 +51,105 @@ namespace FourzyGameModel.Common
                         {
                             case (int)SpellId.HEX:
                                 move = new HexSpell();
-                                serializer.Populate(jsonObject.CreateReader(), move);
+
+                                break;
+
+                            case (int)SpellId.HOLD_FOURZY:
+                                move = new HoldFourzySpell();
+
+                                break;
+
+                            case (int)SpellId.PRISON:
+                                move = new PrisonSpell();
+
+                                break;
+
+                            case (int)SpellId.DARKNESS:
+                                move = new DarknessSpell();
+
+                                break;
+
+                            case (int)SpellId.FRUIT:
+                                move = new FruitSpell();
+
+                                break;
+
+                            case (int)SpellId.SLURP:
+                                move = new SlurpSpell();
+
+                                break;
+
+                            case (int)SpellId.SQUIRT_WATER:
+                                move = new SquirtWaterSpell();
+
+                                break;
+
+                            case (int)SpellId.THROW_BOMB:
+                                move = new BombSpell();
+
+                                break;
+
+                            case (int)SpellId.PLACE_LURE:
+                                move = new LureSpell();
+
+                                break;
+
+                            case (int)SpellId.ICE_WALL:
+                                move = new IceWallSpell();
+
+                                break;
+
+                            case (int)SpellId.FIRE_WALL:
+                                move = new FireWallSpell();
+
+                                break;
+
+                            case (int)SpellId.DIG:
+                                move = new DigSpell();
+
+                                break;
+
+                            case (int)SpellId.GROWL:
+                                move = new GrowlSpell();
+
+                                break;
+
+                            case (int)SpellId.SUMMON_SPECTER:
+                                move = new SpecterSpell();
+
+                                break;
+
+                            case (int)SpellId.RAINBOW:
+                                move = new RainbowSpell();
+
+                                break;
+
+                            case (int)SpellId.PUNCH:
+                                move = new PunchSpell();
+
+                                break;
+
+                            case (int)SpellId.FREEZE:
+                                move = new FreezeSpell();
+
+                                break;
+
+                            case (int)SpellId.MELT:
+                                move = new MeltSpell();
+
+                                break;
+
+                            case (int)SpellId.LIFE:
+                                move = new LifeSpell();
+
+                                break;
+
+                            case (int)SpellId.DEATH:
+                                move = new DeathSpell();
+
                                 break;
                         }
+                        serializer.Populate(jsonObject.CreateReader(), move);
 
                         break;
                 }

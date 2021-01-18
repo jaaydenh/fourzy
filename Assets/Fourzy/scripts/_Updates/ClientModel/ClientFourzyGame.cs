@@ -353,7 +353,7 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
-        public ClientFourzyGame(Player Player1, Player Player2, GameOptions Options = null) 
+        public ClientFourzyGame(Player Player1, Player Player2, GameOptions Options = null)
             : base(Player1, Player2, Options)
         {
             Initialize();
@@ -362,10 +362,10 @@ namespace Fourzy._Updates.ClientModel
         }
 
         public ClientFourzyGame(
-            Area Area, 
+            Area Area,
             Player Player1,
-            Player Player2, 
-            int FirstPlayerId, 
+            Player Player2,
+            int FirstPlayerId,
             GameOptions Options = null) : base(Area, Player1, Player2, FirstPlayerId, Options)
         {
             Initialize();
@@ -374,8 +374,8 @@ namespace Fourzy._Updates.ClientModel
         }
 
         public ClientFourzyGame(
-            GameBoardDefinition definition, 
-            Player Player1, 
+            GameBoardDefinition definition,
+            Player Player1,
             Player Player2) : base(definition, Player1, Player2)
         {
             initialMoves = new List<SimpleMove>(definition.InitialMoves);
@@ -436,58 +436,64 @@ namespace Fourzy._Updates.ClientModel
 
             PlayerTurnResult turnResult = TakeTurn(turn, returnStartOfNextTurn);
 
-            if (!local)
-            {
-                //if its a turn-based game, update server with PlayerTurn data
-                switch (_Type)
-                {
-                    case Fourzy.GameType.TURN_BASED:
-                        Debug.Log(JsonConvert.SerializeObject(turn));
-                        // new LogChallengeEventRequest().SetEventKey("takeTurnNew")
-                        //     .SetChallengeInstanceId(challengeData.challengeInstanceId)
-                        //     .SetEventAttribute("playerTurn", new GSRequestData(JsonConvert.SerializeObject(turn)))
-                        //     .SetDurable(true)
-                        //     .Send(response =>
-                        //     {
-                        //         if (response.HasErrors)
-                        //         {
-                        //             Debug.Log("***** Error taking turn: " + response.Errors.JSON);
-                        //             Debug.Log("Player Turn: " + JsonConvert.SerializeObject(turn));
-                        //             Debug.Log("GameStateData: " + JsonConvert.SerializeObject(State.SerializeData()));
+            //if (!local)
+            //{
+            //    //if its a turn-based game, update server with PlayerTurn data
+            //    switch (_Type)
+            //    {
+            //        case Fourzy.GameType.TURN_BASED:
+            //            Debug.Log(JsonConvert.SerializeObject(turn));
+            //            // new LogChallengeEventRequest().SetEventKey("takeTurnNew")
+            //            //     .SetChallengeInstanceId(challengeData.challengeInstanceId)
+            //            //     .SetEventAttribute("playerTurn", new GSRequestData(JsonConvert.SerializeObject(turn)))
+            //            //     .SetDurable(true)
+            //            //     .Send(response =>
+            //            //     {
+            //            //         if (response.HasErrors)
+            //            //         {
+            //            //             Debug.Log("***** Error taking turn: " + response.Errors.JSON);
+            //            //             Debug.Log("Player Turn: " + JsonConvert.SerializeObject(turn));
+            //            //             Debug.Log("GameStateData: " + JsonConvert.SerializeObject(State.SerializeData()));
 
-                        //             AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.turn_based);
+            //            //             AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.turn_based);
 
-                        //             MenuController.GetMenu("GameSceneCanvas").GetOrAddScreen<PromptScreen>().Prompt("Move failed!", response.Errors.JSON, null, "OK", null);
-                        //         }
-                        //         else
-                        //         {
-                        //             Debug.Log("Take Turn Success");
+            //            //             MenuController.GetMenu("GameSceneCanvas").GetOrAddScreen<PromptScreen>().Prompt("Move failed!", response.Errors.JSON, null, "OK", null);
+            //            //         }
+            //            //         else
+            //            //         {
+            //            //             Debug.Log("Take Turn Success");
 
-                        //             //AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.TAKE_TURN, this);
-                        //         }
-                        //     });
+            //            //             //AnalyticsManager.Instance.LogGameEvent(AnalyticsManager.AnalyticsGameEvents.TAKE_TURN, this);
+            //            //         }
+            //            //     });
 
 
-                        //if user just made a turn, manually update this game without waiting for server response
-                        challengeData.playerTurnRecord.Add(turn);
-                        challengeData.UpdateLastTurnGame();
+            //            //if user just made a turn, manually update this game without waiting for server response
+            //            challengeData.playerTurnRecord.Add(turn);
+            //            challengeData.UpdateLastTurnGame();
 
-                        // ChallengeManager.OnChallengeUpdateLocal.Invoke(challengeData);
+            //            // ChallengeManager.OnChallengeUpdateLocal.Invoke(challengeData);
 
-                        break;
+            //            break;
 
-                    case Fourzy.GameType.REALTIME:
-                        var result = PhotonNetwork.RaiseEvent(
-                            Constants.TAKE_TURN, 
-                            JsonConvert.SerializeObject(turn), 
-                            new Photon.Realtime.RaiseEventOptions() { Flags = new Photon.Realtime.WebFlags(Photon.Realtime.WebFlags.HttpForwardConst) { HttpForward = true } }, 
-                            SendOptions.SendReliable);
+            //        case Fourzy.GameType.REALTIME:
+            //            bool result = PhotonNetwork.RaiseEvent(
+            //                Constants.TAKE_TURN,
+            //                JsonConvert.SerializeObject(turn),
+            //                new Photon.Realtime.RaiseEventOptions()
+            //                {
+            //                    Flags = new Photon.Realtime.WebFlags(Photon.Realtime.WebFlags.HttpForwardConst)
+            //                    {
+            //                        HttpForward = true
+            //                    }
+            //                },
+            //                SendOptions.SendReliable);
 
-                        //Debug.Log("Photon take turn event result: " + result);
+            //            Debug.Log("Turn sent to other client: " + result);
 
-                        break;
-                }
-            }
+            //            break;
+            //    }
+            //}
 
             return turnResult;
         }

@@ -16,11 +16,11 @@ namespace Fourzy._Updates.Mechanics.Board
             ShowOutline(true);
         }
 
-        public override void SetData(ISpell spell)
+        public override void SetData(ISpell spell, IMove spellMove)
         {
             if (spell.SpellId != SpellId.HEX) return;
 
-            base.SetData(spell);
+            base.SetData(spell, spellMove);
 
             currentCountdownValue = (spell as HexSpell).Duration - 1;
 

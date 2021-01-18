@@ -4,6 +4,7 @@ using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.Board;
 using FourzyGameModel.Model;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,9 +21,12 @@ namespace Fourzy._Updates.UI.Widgets
         public GameboardView board { get; private set; }
         public List<SpellUIWidget> spellWidgets { get; private set; }
         public ToggleGroup toggleGroup { get; private set; }
+
+        [NonSerialized]
         public Player owner;
 
-        public SpellUIWidget activeSpell => spellWidgets.Find(spell => spell.state == SpellUIWidget.SpellState.ACTIVE);
+        public SpellUIWidget activeSpell => 
+            spellWidgets.Find(spell => spell.state == SpellUIWidget.SpellState.ACTIVE);
 
         //protected void Update()
         //{
@@ -95,9 +99,12 @@ namespace Fourzy._Updates.UI.Widgets
                     case GameType.PRESENTATION:
                     case GameType.FRIEND:
                     case GameType.LEADERBOARD:
-                    case GameType.REALTIME:
 
                         break;
+
+                    case GameType.REALTIME:
+                        //display opponents' spells, ideally should be loaded from their profile
+                        //currently just hardcoded
 
                     case GameType.AI:
                     case GameType.PASSANDPLAY:
@@ -146,12 +153,34 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void UpdateSpells(ClientPlayerTurn turn, bool startTurn)
         {
-            if (startTurn || turn == null || turn.PlayerId < 1) return;
+            if (startTurn || turn == null || turn.PlayerId < 1)
+            {
+                return;
+            }
 
-            spellWidgets.ForEach(widget => widget.UpdateWidget(turn.PlayerId));
+            UpdateSpells(turn.PlayerId);
         }
 
-        public void UpdateSpells(int playerID) => spellWidgets.ForEach(widget => widget.UpdateWidget(playerID));
+        public void UpdateSpells(int playerID)
+        {
+            spellWidgets.ForEach(widget => widget.UpdateWidget(playerID));
+        }
+
+        internal bool CheckTurn()
+        {
+            return game._State.ActivePlayerId == owner.PlayerId;
+        }
+
+        internal bool CheckRealtimeGameCondition()
+        {
+            switch (game._Type)
+            {
+                case GameType.REALTIME:
+                    return game.isMyTurn;
+            }
+
+            return true;
+        }
 
         protected override void OnInitialized()
         {

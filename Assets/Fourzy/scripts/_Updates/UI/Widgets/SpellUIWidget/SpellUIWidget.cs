@@ -35,7 +35,10 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (state == SpellState.UNAVAILABLE) return;
 
-            if (spellsList.activeSpell != null && spellsList.activeSpell != this) spellsList.activeSpell.CancelCast();
+            if (spellsList.activeSpell != null && spellsList.activeSpell != this)
+            {
+                spellsList.activeSpell.CancelCast();
+            }
 
             switch (state)
             {
@@ -77,34 +80,41 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void SetButtonState(bool _state)
         {
-            state = _state ? (state == SpellState.ACTIVE ? SpellState.ACTIVE : SpellState.NONE) : SpellState.UNAVAILABLE;
+            state = _state ? 
+                (state == SpellState.ACTIVE ? SpellState.ACTIVE : SpellState.NONE) : 
+                SpellState.UNAVAILABLE;
 
             button.playOnClick = _state ? AudioTypes.BUTTON_CLICK : unavailableSfx;
             button.SetState(_state);
             button.interactable = true;
         }
 
-        public void TrySetButtonState(int playerId, bool _state) => SetButtonState(spellsList.game.magic[playerId] >= data.price && _state);
+        public void TrySetButtonState(int playerId, bool _state) => 
+            SetButtonState(spellsList.game.magic[playerId] >= data.price && _state);
 
         public void UpdateWidget(int playerId)
         {
             button.GetBadge("price").badge.SetValue(data.price);
 
-            bool? setTo = !spellsList.board.isAnimating && spellsList.game._State.ActivePlayerId == spellsList.owner.PlayerId;
+            bool setTo = 
+                !spellsList.board.isAnimating && 
+                spellsList.CheckTurn() && 
+                spellsList.CheckRealtimeGameCondition();
 
-            if (setTo != null)
+            if (setTo)
             {
-                if (setTo.Value)
+                if (spellsList.owner.PlayerId != playerId)
                 {
-                    if (spellsList.owner.PlayerId != playerId)
+                    if (state == SpellState.ACTIVE || state == SpellState.NONE)
                     {
-                        if (state == SpellState.ACTIVE || state == SpellState.NONE) TrySetButtonState(playerId, false);
-                        return;
+                        TrySetButtonState(playerId, false);
                     }
-                }
 
-                TrySetButtonState(playerId, setTo.Value);
+                    return;
+                }
             }
+
+            TrySetButtonState(playerId, setTo);
         }
 
         private void UpdateBG()

@@ -152,7 +152,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Player me = game.me;
 
-            if (game._Type != GameType.PRESENTATION) {
+            if (game._Type != GameType.PRESENTATION) 
+            {
                 player1Widget.spellsHolder.Open(game, gameplayManager.board, me);
             }
 
@@ -165,7 +166,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             player1Widget.SetPlayerName(me.DisplayName);
             player1Widget.SetPlayerIcon(me);
             player1Widget.StopPlayerTurnAnimation();
-            if (game._Type == GameType.REALTIME) {
+
+            if (game._Type == GameType.REALTIME) 
+            {
                 player1Widget.SetExtraDataAsRating(
                     FourzyPhotonManager.GetMyProperty(Constants.REALTIME_RATING_KEY, -1));
             }
@@ -176,7 +179,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 player2Widget.SetPlayerName(opponent.DisplayName);
                 player2Widget.SetPlayerIcon(opponent);
                 player2Widget.StopPlayerTurnAnimation();
-                if (game._Type == GameType.REALTIME) {
+
+                if (game._Type == GameType.REALTIME)
+                {
                     player2Widget.SetExtraDataAsRating(
                         FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, -1));
                 }
@@ -195,10 +200,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                             //load spells only for human opponent
                             if (opponent.Profile == AIProfile.Player)
+                            {
                                 player2Widget.spellsHolder.Open(game, gameplayManager.board, opponent);
+                            }
                         }
                         else
+                        {
                             player2Widget.Hide(.1f);
+                        }
                     }
                     else
                     {
@@ -206,12 +215,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         //load spells only for human opponent
                         if (opponent.Profile == AIProfile.Player)
+                        {
                             player2Widget.spellsHolder.Open(game, gameplayManager.board, opponent);
+                        }
                     }
                 }
             }
             else
+            {
                 player2Widget.Hide(.1f);
+            }
 
             //initialize timer
             if (timersEnabled)
@@ -243,12 +256,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //position help button
-            Vector2 viewportPoint = Camera.main.WorldToViewportPoint(gameplayManager.board.BoardLocationToVec2(new BoardLocation(0, 0)) + (Vector2)GamePlayManager.Instance.board.transform.position);
+            Vector2 viewportPoint = Camera.main.WorldToViewportPoint(
+                gameplayManager.board.BoardLocationToVec2(
+                    new BoardLocation(0, 0)) + (Vector2)GamePlayManager.Instance.board.transform.position);
             helpButton.rectTransform.anchorMin = helpButton.rectTransform.anchorMax = viewportPoint;
             if (GameManager.Instance.Landscape)
+            {
                 helpButton.rectTransform.anchoredPosition = new Vector2(-160f, 0f);
+            }
             else
+            {
                 helpButton.rectTransform.anchoredPosition = new Vector2(0f, 110f);
+            }
 
             puzzleUI.Open(game);
             turnbaseUI.Open(game);
@@ -331,7 +350,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 case GameType.PUZZLE:
                 case GameType.AI:
-                    if (!game.isMyTurn) gameInfoWidget.SetText(LocalizationManager.Value("thinking")).ShowDelayed(time: .6f);
+                    if (!game.isMyTurn)
+                    {
+                        gameInfoWidget.SetText(LocalizationManager.Value("thinking")).ShowDelayed(time: .6f);
+                    }
 
                     break;
             }

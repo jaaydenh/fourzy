@@ -1,13 +1,10 @@
 ﻿//@vadym udod
 
-using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
-using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using Photon.Pun;
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -43,9 +40,13 @@ namespace Fourzy._Updates.UI.Widgets
             else
             {
                 if (name.Length > playerNameMaxSize)
+                {
                     playerName.text = name.Substring(0, playerNameMaxSize - 1) + "...";
+                }
                 else
+                {
                     playerName.text = name;
+                }
             }
         }
 
@@ -53,9 +54,14 @@ namespace Fourzy._Updates.UI.Widgets
         {
             assignedPlayer = player;
 
-            if (current) Destroy(current.gameObject);
+            if (current)
+            {
+                Destroy(current.gameObject);
+            }
 
-            current = Instantiate(player.PlayerId == 1 ? game.playerOneGamepiece : game.playerTwoGamepiece, pieceParent);
+            current = Instantiate(player.PlayerId == 1 ?
+                game.playerOneGamepiece :
+                game.playerTwoGamepiece, pieceParent);
             current.transform.localPosition = Vector3.zero;
             current.transform.localScale = Vector3.one * 94f;
 
@@ -80,8 +86,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void StartWinJumps()
         {
-            if (!current)
-                return;
+            if (!current) return;
 
             current.ShowUIWinAnimation();
         }
@@ -102,28 +107,42 @@ namespace Fourzy._Updates.UI.Widgets
         {
             bool useRating = game._Type == GameType.REALTIME && PhotonNetwork.CurrentRoom != null;
 
-            if (useRating && value != -1) 
+            if (useRating && value != -1)
+            {
                 SetExtraData($"Rating {value}");
+            }
             else
+            {
                 SetExtraData("Wizard");
+            }
         }
 
         public override void Show(float time)
         {
-            if (alphaTween._value < 1f) base.Show(time);
+            if (alphaTween._value < 1f)
+            {
+                base.Show(time);
+            }
+
             shown = true;
         }
 
         public override void Hide(float time)
         {
-            if (alphaTween._value > 0f) base.Hide(time);
+            if (alphaTween._value > 0f)
+            {
+                base.Hide(time);
+            }
+
             shown = false;
         }
 
         private void UpdateMagic(int playerId, int value)
         {
             if (assignedPlayer.PlayerId == playerId)
+            {
                 magicBadge.SetValue(value);
+            }
         }
     }
 }

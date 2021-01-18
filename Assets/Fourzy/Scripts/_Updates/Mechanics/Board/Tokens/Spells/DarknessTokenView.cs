@@ -6,11 +6,11 @@ namespace Fourzy._Updates.Mechanics.Board
 {
     public class DarknessTokenView : TokenSpell
     {
-        public override void SetData(ISpell spell)
+        public override void SetData(ISpell spell, IMove spellMove)
         {
             if (spell.SpellId != SpellId.DARKNESS) return;
 
-            base.SetData(spell);
+            base.SetData(spell, spellMove);
 
             currentCountdownValue = (spell as DarknessSpell).Duration - 1;
 

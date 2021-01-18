@@ -27,7 +27,8 @@ namespace Fourzy._Updates.ClientModel
         {
         }
 
-        public ClientPlayerTurn(int PlayerId, Direction Direction, int Location, BoardLocation HexLocation) : base(PlayerId, Direction, Location, HexLocation)
+        public ClientPlayerTurn(int PlayerId, Direction Direction, int Location, BoardLocation HexLocation) : 
+            base(PlayerId, Direction, Location, HexLocation)
         {
         }
     }

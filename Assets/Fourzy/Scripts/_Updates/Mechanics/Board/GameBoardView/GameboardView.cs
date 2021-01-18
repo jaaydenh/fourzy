@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
@@ -11,6 +12,8 @@ using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
+using Newtonsoft.Json;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -160,17 +163,25 @@ namespace Fourzy._Updates.Mechanics.Board
 
             if (gameplayManager && gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
             {
-                BoardLocation _location = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+                BoardLocation _location = 
+                    Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
                 IEnumerable<TokenView> _tokens = BoardBitsAt<TokenView>(_location);
                 if (_tokens.Count() == 0)
                 {
-                    if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE) gameplayManager.ToggleHelpState();
+                    if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
+                    {
+                        gameplayManager.ToggleHelpState();
+                    }
+
                     return;
                 }
 
                 PersistantMenuController.instance.GetOrAddScreen<TokenPrompt>().Prompt(_tokens.First());
 
-                if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE) gameplayManager.ToggleHelpState();
+                if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
+                {
+                    gameplayManager.ToggleHelpState();
+                }
 
                 return;
             }
@@ -306,17 +317,28 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case BoardActionState.CAST_SPELL:
-                    List<BoardLocation> locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new HexSpell(0, new BoardLocation()));
+                    List<BoardLocation> locationsList = 
+                        SpellEvaluator.GetValidSpellLocations(
+                            game._State.Board, 
+                            new HexSpell(0, new BoardLocation()));
 
                     //modify by current spells
-                    foreach (TokenSpell _spell in createdSpellTokens) locationsList.RemoveAll(_location => _location.Equals(_spell.location));
+                    foreach (TokenSpell _spell in createdSpellTokens)
+                    {
+                        locationsList.RemoveAll(_location => _location.Equals(_spell.location));
+                    }
 
-                    BoardLocation touchLocation = Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
+                    BoardLocation touchLocation = 
+                        Vec2ToBoardLocation(Camera.main.ScreenToWorldPoint(position) - transform.localPosition);
 
                     if (!locationsList.Contains(touchLocation))
+                    {
                         onCastCanceled?.Invoke();
+                    }
                     else
+                    {
                         CastSpell(touchLocation, activeSpell);
+                    }
 
                     actionState = BoardActionState.MOVE;
                     HideHintArea(HintAreaAnimationPattern.DIAGONAL);
@@ -774,17 +796,24 @@ namespace Fourzy._Updates.Mechanics.Board
             return TakeTurn(playerTurn.GetMove(), true);
         }
 
-        public Coroutine TakeTurn(Direction direction, int location, bool local = false) => TakeTurn(new SimpleMove(game.activePlayerPiece, direction, location), local);
+        public Coroutine TakeTurn(Direction direction, int location, bool local = false) => 
+            TakeTurn(new SimpleMove(game.activePlayerPiece, direction, location), local);
 
         public Coroutine TakeTurn(SimpleMove move, bool local = false)
         {
             //change help state
             if (gameplayManager)
             {
-                if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE) gameplayManager.ToggleHelpState();
+                if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
+                {
+                    gameplayManager.ToggleHelpState();
+                }
             }
 
-            if (actionState == BoardActionState.CAST_SPELL) onCastCanceled?.Invoke();
+            if (actionState == BoardActionState.CAST_SPELL)
+            {
+                onCastCanceled?.Invoke();
+            }
 
             if (!game.turnEvaluator.CanIMakeMove(move))
             {
@@ -793,10 +822,50 @@ namespace Fourzy._Updates.Mechanics.Board
             }
 
             AddIMoveToTurn(move);
-            if (selectedBoardLocation != null) turn.createdOnThisDevice = true;
+            if (selectedBoardLocation != null)
+            {
+                turn.createdOnThisDevice = true;
+            }
 
             PlayerTurnResult turnResults = game.TakeTurn(turn, local, true);
-            while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
+
+            if (!local)
+            {
+                switch (game._Type)
+                {
+                    case GameType.REALTIME:
+                        //cant send same turn, as it should contain spells
+                        List<IMove> _movesToSend = new List<IMove>();
+                        _movesToSend.Add(move);
+                        foreach (TokenSpell _spell in createdSpellTokens)
+                        {
+                            _movesToSend.Add(_spell.spellMove);
+                        }
+
+                        PlayerTurn turnToSend = new PlayerTurn(_movesToSend);
+
+                        bool result = PhotonNetwork.RaiseEvent(
+                            Constants.TAKE_TURN,
+                            JsonConvert.SerializeObject(turnToSend),
+                            new Photon.Realtime.RaiseEventOptions()
+                            {
+                                Flags = new Photon.Realtime.WebFlags(Photon.Realtime.WebFlags.HttpForwardConst)
+                                {
+                                    HttpForward = true
+                                }
+                            },
+                            SendOptions.SendReliable);
+
+                        Debug.Log("Turn sent to other client: " + result);
+
+                        break;
+                }
+            }
+
+            while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE)
+            {
+                turnResults.Activity.RemoveAt(0);
+            }
 
             Coroutine coroutine = StartCoroutine(BoardUpdateRoutine(turnResults, false));
 
@@ -982,14 +1051,11 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
             }
 
-            token.SetData(spell);
+            token.SetData(spell, move);
             createdSpellTokens.Add(token);
 
             //make semi-transparent
             token.SetAlpha(.3f);
-
-            //AddIMoveToTurn(move);
-            //spawningSpells.Add(spell);
 
             //cast spell
             onCast?.Invoke(activeSpell, game._State.ActivePlayerId);
@@ -1247,8 +1313,13 @@ namespace Fourzy._Updates.Mechanics.Board
                         case GameManager.PlacementStyle.EDGE_TAP:
                             //only active inputMap values
                             foreach (InputMapValue inputMapValue in inputMapActiveOnly)
-                                if (hintBlocks.ContainsKey(inputMapValue.location) && turnEvaluator.CanIMakeMove(inputMapValue.Move))
+                            {
+                                if (hintBlocks.ContainsKey(inputMapValue.location) &&
+                                    turnEvaluator.CanIMakeMove(inputMapValue.Move))
+                                {
                                     affected.Add(inputMapValue.location, hintBlocks[inputMapValue.location]);
+                                }
+                            }
 
                             break;
 
@@ -1258,10 +1329,14 @@ namespace Fourzy._Updates.Mechanics.Board
 
                             //only hightight current edge
                             foreach (InputMapValue inputMapValue in inputMapActiveOnly)
+                            {
                                 if (hintBlocks.ContainsKey(inputMapValue.location) &&
                                     turnEvaluator.CanIMakeMove(inputMapValue.Move) &&
                                     inputMapValue.Move.Direction == targetDir)
+                                {
                                     affected.Add(inputMapValue.location, hintBlocks[inputMapValue.location]);
+                                }
+                            }
 
                             break;
                     }
@@ -1274,28 +1349,41 @@ namespace Fourzy._Updates.Mechanics.Board
                     switch (activeSpell)
                     {
                         case SpellId.HEX:
-                            locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new HexSpell(0, new BoardLocation()));
+                            locationsList = SpellEvaluator.GetValidSpellLocations(
+                                game._State.Board, 
+                                new HexSpell(0, new BoardLocation()));
 
                             break;
 
                         case SpellId.PLACE_LURE:
-                            locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new LureSpell(0, new BoardLocation()));
+                            locationsList = SpellEvaluator.GetValidSpellLocations(
+                                game._State.Board, 
+                                new LureSpell(0, new BoardLocation()));
 
                             break;
 
                         case SpellId.DARKNESS:
-                            locationsList = SpellEvaluator.GetValidSpellLocations(game._State.Board, new DarknessSpell(0, new BoardLocation()));
+                            locationsList = SpellEvaluator.GetValidSpellLocations(
+                                game._State.Board, 
+                                new DarknessSpell(0, new BoardLocation()));
 
                             break;
                     }
 
 
                     //modify by current spells
-                    foreach (TokenSpell _spell in createdSpellTokens) locationsList.RemoveAll(_location => _location.Equals(_spell.location));
+                    foreach (TokenSpell _spell in createdSpellTokens)
+                    {
+                        locationsList.RemoveAll(_location => _location.Equals(_spell.location));
+                    }
 
                     foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
+                    {
                         if (locationsList.Contains(hintBlock.Key))
+                        {
                             affected.Add(hintBlock.Key, hintBlock.Value);
+                        }
+                    }
 
                     SetHintAreaColliderState(true);
                     SetHintAreaSelectableState(false);
@@ -1330,7 +1418,12 @@ namespace Fourzy._Updates.Mechanics.Board
         public void SetHintAreaSelectableState(bool state)
         {
             if (hintBlocks != null && hintBlocks.Count > 0)
-                foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks) hintBlock.Value.SetSelectableState(state);
+            {
+                foreach (KeyValuePair<BoardLocation, HintBlock> hintBlock in hintBlocks)
+                {
+                    hintBlock.Value.SetSelectableState(state);
+                }
+            }
         }
 
         public void SetHelpState(bool state)
@@ -1344,7 +1437,14 @@ namespace Fourzy._Updates.Mechanics.Board
                 foreach (TokenView token in tokens)
                 {
                     bool contains = false;
-                    foreach (TokenView other in tokensToHighlight) if (other.location.Equals(token.location)) contains = true;
+                    foreach (TokenView other in tokensToHighlight)
+                    {
+                        if (other.location.Equals(token.location))
+                        {
+                            contains = true;
+                        }
+                    }
+
                     if (!contains)
                     {
                         tokensToHighlight.Add(token);
@@ -1354,11 +1454,16 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 lastHighlighted = tokensToHighlight;
 
-                StartRoutine("showHintBlocks", AnimateHintBlocks(affected, HintAreaStyle.NONE, HintAreaAnimationPattern.CIRCLE));
+                StartRoutine(
+                    "showHintBlocks", 
+                    AnimateHintBlocks(affected, HintAreaStyle.NONE, HintAreaAnimationPattern.CIRCLE));
             }
             else
             {
-                foreach (TokenView token in lastHighlighted) affected.Add(token.location, hintBlocks[token.location]);
+                foreach (TokenView token in lastHighlighted)
+                {
+                    affected.Add(token.location, hintBlocks[token.location]);
+                }
                 lastHighlighted = new List<TokenView>();
 
                 HideHintArea(HintAreaAnimationPattern.NONE);
@@ -1376,7 +1481,10 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             if (boxCollider2D)
             {
-                topLeft = boxCollider2D.offset + new Vector2(-boxCollider2D.bounds.size.x * .5f / transform.localScale.x, boxCollider2D.bounds.size.y * .5f / transform.localScale.y);
+                topLeft = boxCollider2D.offset + 
+                    new Vector2(
+                        -boxCollider2D.bounds.size.x * .5f / transform.localScale.x, 
+                        boxCollider2D.bounds.size.y * .5f / transform.localScale.y);
                 step = new Vector3(boxCollider2D.size.x / game.Columns, boxCollider2D.size.y / game.Rows);
             }
             else if (rectTransform)
@@ -1419,8 +1527,12 @@ namespace Fourzy._Updates.Mechanics.Board
                 location = startingLocation + currentOffset;
 
                 foreach (BoardLocation boardLocation in possibleSwipeLocations)
+                {
                     if (boardLocation.GetLocation(swipeDirection) == location)
+                    {
                         return possibleSwipeLocations.IndexOf(boardLocation);
+                    }
+                }
 
                 currentOffset = -currentOffset + Mathf.RoundToInt(Mathf.Sign(-currentOffset));
 
@@ -1442,7 +1554,9 @@ namespace Fourzy._Updates.Mechanics.Board
                 if (tap)
                 {
                     if (Vec2ToBoardLocation(position).OnBoard(game._State.Board))
-                        negativeVfx.StartVfx(null, (Vector2)transform.position + BoardLocationToVec2(Vec2ToBoardLocation(position)), 0f);
+                        negativeVfx.StartVfx(
+                            null, 
+                            (Vector2)transform.position + BoardLocationToVec2(Vec2ToBoardLocation(position)), 0f);
                     else
                         negativeVfx.StartVfx(null, position, 0f);
 
@@ -1471,7 +1585,11 @@ namespace Fourzy._Updates.Mechanics.Board
                 //BoardLocation mirrored = SettingsManager.Instance.Get(SettingsManager.KEY_MOVE_ORIGIN) ? inputMapValue.location.Mirrored(model) : inputMapValue.location;
                 BoardLocation mirrored = inputMapValue.location/*.Mirrored(model)*/;
 
-                if (InputMap(mirrored) && turnEvaluator.CanIMakeMove(new SimpleMove(piece, GetDirection(mirrored), GetLocationFromBoardLocation(mirrored))))
+                if (InputMap(mirrored) && 
+                    turnEvaluator.CanIMakeMove(new SimpleMove(
+                        piece, 
+                        GetDirection(mirrored), 
+                        GetLocationFromBoardLocation(mirrored))))
                 {
                     if (!mirrored.Equals(selectedBoardLocation))
                     {
@@ -1493,7 +1611,13 @@ namespace Fourzy._Updates.Mechanics.Board
                 }
                 else
                 {
-                    if (!previousLocation.Equals(mirrored) || tap) negativeVfx.StartVfx(null, (Vector2)transform.position + BoardLocationToVec2(inputMapValue.location), 0f);
+                    if (!previousLocation.Equals(mirrored) || tap)
+                    {
+                        negativeVfx.StartVfx(
+                            null, 
+                            (Vector2)transform.position + BoardLocationToVec2(inputMapValue.location), 
+                            0f);
+                    }
 
                     moveArrow._Reset();
                     selectedBoardLocation = null;
@@ -1505,7 +1629,10 @@ namespace Fourzy._Updates.Mechanics.Board
             }
         }
 
-        private InputMapValue GetClosestInputMapValue(List<InputMapValue> _inputMap, Vector3 position, float maxDistance = 1.5f)
+        private InputMapValue GetClosestInputMapValue(
+            List<InputMapValue> _inputMap, 
+            Vector3 position, 
+            float maxDistance = 1.5f)
         {
             float _maxDistance = 0f;
 
@@ -1520,7 +1647,9 @@ namespace Fourzy._Updates.Mechanics.Board
                 if (distanceToCurrent <= _maxDistance)
                 {
                     if (closest == null)
+                    {
                         closest = inputMapValue;
+                    }
                     else
                     {
                         if (distanceToCurrent < Vector2.Distance(position, BoardLocationToVec2(closest.location)))
@@ -1557,8 +1686,12 @@ namespace Fourzy._Updates.Mechanics.Board
         private void CreateHintArea()
         {
             if (hintBlocks != null)
+            {
                 foreach (HintBlock _hintBlock in hintBlocks.Values)
+                {
                     Destroy(_hintBlock.gameObject);
+                }
+            }
 
             hintBlocks = new Dictionary<BoardLocation, HintBlock>();
 
@@ -1613,10 +1746,19 @@ namespace Fourzy._Updates.Mechanics.Board
 
         private void AddIMoveToTurn(IMove move)
         {
-            if (turn == null) turn = new ClientPlayerTurn(new List<IMove>() { move });
-            else turn.Moves.Add(move);
+            if (turn == null)
+            {
+                turn = new ClientPlayerTurn(new List<IMove>() { move });
+            }
+            else
+            {
+                turn.Moves.Add(move);
+            }
 
-            if (move.MoveType == MoveType.SIMPLE && turn.PlayerId == 0) turn.PlayerId = (move as SimpleMove).Piece.PlayerId;
+            if (move.MoveType == MoveType.SIMPLE && turn.PlayerId == 0)
+            {
+                turn.PlayerId = (move as SimpleMove).Piece.PlayerId;
+            }
         }
 
         private IEnumerator BoardUpdateRoutine(PlayerTurnResult turnResults, bool startTurn)
@@ -1955,7 +2097,8 @@ namespace Fourzy._Updates.Mechanics.Board
                 {
                     gamePieces.ForEach(gamePiece =>
                     {
-                        TokenSpell spell = createdSpellTokens.Find(spellToken => spellToken.location.Equals(gamePiece.location));
+                        TokenSpell spell = 
+                            createdSpellTokens.Find(spellToken => spellToken.location.Equals(gamePiece.location));
 
                         //remove it
                         if (spell)
