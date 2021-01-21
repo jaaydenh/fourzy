@@ -102,7 +102,9 @@ namespace Fourzy
         public string sessionID { get; private set; }
         public string cachedOpponentID { get; set; }
         public LocationInfo? lastLocation { get; private set; } = null;
-        public string MainMenuSceneName => Landscape ? Constants.MAIN_MENU_L_SCENE_NAME : Constants.MAIN_MENU_P_SCENE_NAME;
+        public string MainMenuSceneName => Landscape ? 
+            Constants.MAIN_MENU_L_SCENE_NAME : 
+            Constants.MAIN_MENU_P_SCENE_NAME;
 
         private bool configFetched = false;
         private PlacementStyle _placementStyle;

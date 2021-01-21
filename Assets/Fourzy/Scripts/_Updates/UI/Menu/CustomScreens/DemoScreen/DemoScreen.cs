@@ -3,6 +3,7 @@
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
+using Fourzy._Updates.UI.Helpers;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -10,6 +11,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public class DemoScreen : MenuScreen
     {
         public CanvasGroup context;
+        public ButtonExtended startQuickmatchButton;
         public PositionTween buttonPositionTween;
 
         private bool isContextShown = false;
@@ -58,6 +60,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void SetLanguageThai() => LocalizationManager.Instance.SetCurrentLanguage(SystemLanguage.Thai);
 
+        public void StartRealtime()
+        {
+            Toggle();
+
+            FourzyMainMenuController.instance
+                .GetScreen<MatchmakingScreen>()
+                .OpenRealtime();
+        }
+
         public void OpenGrid()
         {
             menuController.OpenScreen<PuzzleSelectionScreen>(true);
@@ -70,9 +81,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             PlayerPrefsWrapper.SetRewardRewarded(Constants.GAME_MODE_GAUNTLET_GAME, true);
         }
 
-        public void CompleteProgress() => GameContentManager.Instance.progressionMaps[0].CompleteAll(0);
+        public void CompleteProgress() => 
+            GameContentManager.Instance.progressionMaps[0].CompleteAll(0);
 
-        public void SetPlacementStyle(int value) => GameManager.Instance.placementStyle = (GameManager.PlacementStyle)value;
+        public void SetPlacementStyle(int value) => 
+            GameManager.Instance.placementStyle = (GameManager.PlacementStyle)value;
 
         public void UnlockGamepieces()
         {
@@ -98,7 +111,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             context.interactable = isContextShown;
             context.blocksRaycasts = isContextShown;
 
-            if (!isContextShown && FourzyMainMenuController.instance) FourzyMainMenuController.instance.currentScreen.Open();
+            if (!isContextShown && FourzyMainMenuController.instance)
+            {
+                FourzyMainMenuController.instance.currentScreen.Open();
+            }
         }
 
         protected override void OnInitialized()
@@ -109,7 +125,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             GameManager.onSceneChanged += OnSceneChanged;
 
-            if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) OnDemo(true);
+            if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
+            {
+                OnDemo(true);
+            }
         }
 
         private void OnDemo(bool state)
@@ -120,7 +139,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnSceneChanged(string sceneName)
         {
-
+            startQuickmatchButton.SetActive(sceneName == GameManager.Instance.MainMenuSceneName);
         }
     }
 }

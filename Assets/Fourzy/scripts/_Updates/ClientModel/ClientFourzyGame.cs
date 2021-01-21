@@ -680,6 +680,7 @@ namespace Fourzy._Updates.ClientModel
             _FirstState.Players[2].PlayerString = id;
             _State.Players[2].PlayerString = id;
         }
+
         public static ClientFourzyGame FromPuzzleData(ClientPuzzleData puzzleData, IClientFourzy current)
         {
             ClientFourzyGame game;
