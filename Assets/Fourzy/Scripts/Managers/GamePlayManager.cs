@@ -95,7 +95,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             FourzyPhotonManager.onPlayerLeftRoom += OnPlayerLeftRoom;
             FourzyPhotonManager.onEvent += OnEventCall;
 
-            if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput += OnNoInput;
+            if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
+            {
+                PointerInputModuleExtended.noInput += OnNoInput;
+            }
 
             HeaderScreen.instance.Close();
 
@@ -151,8 +154,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             //analytics
             if (game != null && !game.isOver)
-                AnalyticsManager.Instance.LogGame(game._Mode.GameModeToAnalyticsEvent(false), game,
-                    extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAME_RESULT_KEY, AnalyticsManager.GameResultType.Abandoned));
+            {
+                AnalyticsManager.Instance.LogGame(
+                    game._Mode.GameModeToAnalyticsEvent(false), 
+                    game,
+                    extraParams: new KeyValuePair<string, object>(
+                        AnalyticsManager.GAME_RESULT_KEY, 
+                        AnalyticsManager.GameResultType.Abandoned));
+            }
 
             GameManager.Instance.OpenMainMenu();
 
@@ -181,9 +190,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 GameManager.Instance.activeGame = newGame;
             }
-            else
-            if (_game != GameManager.Instance.activeGame)
+            else if (_game != GameManager.Instance.activeGame)
+            {
                 GameManager.Instance.activeGame = _game;
+            }
 
             game = GameManager.Instance.activeGame;
 
@@ -295,8 +305,16 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void OnPointerRelease(Vector2 position, int pointerId)
         {
-            if (CustomInputManager.GamepadCount == 2 && pointerId > -1 && game._State.ActivePlayerId != (pointerId + 1)) return;
-            if (gameState != GameState.GAME) return;
+            if (CustomInputManager.GamepadCount == 2 && 
+                pointerId > -1 && 
+                game._State.ActivePlayerId != (pointerId + 1))
+            {
+                return;
+            }
+            if (gameState != GameState.GAME)
+            {
+                return;
+            }
 
             board.OnPointerRelease(position);
         }
@@ -364,11 +382,21 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             HashSet<TokensDataHolder.TokenData> tokens = new HashSet<TokensDataHolder.TokenData>();
 
             foreach (BoardSpace boardSpace in game.boardContent)
+            {
                 foreach (IToken token in boardSpace.Tokens.Values)
-                    if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type) && !GameManager.Instance.excludeInstructionsFor.Contains(token.Type))
+                {
+                    if (!PlayerPrefsWrapper.InstructionPopupWasDisplayed((int)token.Type) &&
+                        !GameManager.Instance.excludeInstructionsFor.Contains(token.Type))
+                    {
                         tokens.Add(GameContentManager.Instance.GetTokenData(token.Type));
+                    }
+                }
+            }
 
-            if (tokens.Count > 0) gameState = GameState.PREGAME_DISPLAY_INSTRUCTION;
+            if (tokens.Count > 0)
+            {
+                gameState = GameState.PREGAME_DISPLAY_INSTRUCTION;
+            }
 
             foreach (TokensDataHolder.TokenData token in tokens)
             {
@@ -397,12 +425,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void FadeTokens(float alpha, float fadeTime)
         {
-            if (board.tokens.Count > 0) board.FadeTokens(alpha, fadeTime);
+            if (board.tokens.Count > 0)
+            {
+                board.FadeTokens(alpha, fadeTime);
+            }
         }
 
         private void FadePieces(float alpha, float fadeTime)
         {
-            if (board.gamePieces.Count > 0) board.FadeGamepieces(alpha, fadeTime);
+            if (board.gamePieces.Count > 0)
+            {
+                board.FadeGamepieces(alpha, fadeTime);
+            }
         }
 
         public void UnloadGamePlaySceene()
@@ -464,13 +498,17 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.PASSANDPLAY:
                     //create new game if random board
                     if (game.asFourzyGame.isBoardRandom)
+                    {
                         game = new ClientFourzyGame(
                             game._Area,
                             UserManager.Instance.meAsPlayer, new FourzyGameModel.Model.Player(2, "Player Two"),
                             UserManager.Instance.meAsPlayer.PlayerId)
                         { _Type = GameType.PASSANDPLAY };
+                    }
                     else
+                    {
                         game._Reset(resetMembers);
+                    }
 
                     LoadGame(game);
 
@@ -534,14 +572,24 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void PlayHint()
         {
-            if (game == null || !game.isMyTurn || game.isOver || !game.puzzleData || game.puzzleData.Solution.Count == 0) return;
+            if (game == null || 
+                !game.isMyTurn || 
+                game.isOver || 
+                !game.puzzleData || 
+                game.puzzleData.Solution.Count == 0) return;
 
-            AnalyticsManager.Instance.LogGame(AnalyticsManager.AnalyticsGameEvents.PUZZLE_LEVEL_HINT_BUTTON_PRESS, game,
-                extraParams: new KeyValuePair<string, object>(AnalyticsManager.HINT_STORE_ITEMS_KEY, StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)));
+            AnalyticsManager.Instance.LogGame(
+                AnalyticsManager.AnalyticsGameEvents.PUZZLE_LEVEL_HINT_BUTTON_PRESS, 
+                game,
+                extraParams: new KeyValuePair<string, object>(
+                    AnalyticsManager.HINT_STORE_ITEMS_KEY, 
+                    StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)));
 
             if (UserManager.Instance.hints <= 0)
             {
-                PersistantMenuController.instance.GetOrAddScreen<StorePromptScreen>().Prompt(StorePromptScreen.StoreItemType.HINTS);
+                PersistantMenuController.instance
+                    .GetOrAddScreen<StorePromptScreen>()
+                    .Prompt(StorePromptScreen.StoreItemType.HINTS);
 
                 return;
             }
@@ -592,10 +640,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             BoardLocation location = turn.GetMove().ToBoardLocation(game);
             BoardLocation next = location.Neighbor(turn.GetMove().Direction, 2);
 
-            _Tutorial.OnboardingTask_PointAt pointAtTask = new _Tutorial.OnboardingTask_PointAt(new Dictionary<GameManager.PlacementStyle, Vector2[]>()
+            _Tutorial.OnboardingTask_PointAt pointAtTask = 
+                new _Tutorial.OnboardingTask_PointAt(new Dictionary<GameManager.PlacementStyle, Vector2[]>()
             {
-                [GameManager.PlacementStyle.EDGE_TAP] = new Vector2[] { new Vector2(location.Column, location.Row) },
-                [GameManager.PlacementStyle.SWIPE_STYLE_2] = new Vector2[] { new Vector2(location.Column, location.Row), new Vector2(next.Column, next.Row) }
+                [GameManager.PlacementStyle.EDGE_TAP] = 
+                    new Vector2[] { new Vector2(location.Column, location.Row) },
+                [GameManager.PlacementStyle.SWIPE_STYLE_2] = 
+                    new Vector2[] { new Vector2(location.Column, location.Row), new Vector2(next.Column, next.Row) }
             },
             hintMessage);
 
@@ -623,13 +674,17 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
             }
 
-            _Tutorial.OnboardingTask_ShowMaskedArea maskTask = new _Tutorial.OnboardingTask_ShowMaskedArea(new Dictionary<GameManager.PlacementStyle, Rect>()
+            _Tutorial.OnboardingTask_ShowMaskedArea maskTask = 
+                new _Tutorial.OnboardingTask_ShowMaskedArea(new Dictionary<GameManager.PlacementStyle, Rect>()
             {
-                [GameManager.PlacementStyle.EDGE_TAP] = new Rect(location.Column, location.Row, 1f, 1f),
+                [GameManager.PlacementStyle.EDGE_TAP] = 
+                    new Rect(location.Column, location.Row, 1f, 1f),
                 [GameManager.PlacementStyle.SWIPE_STYLE_2] = swipeRect
             }, UI.Widgets.OnboardingScreenMaskObject.MaskStyle.PX_0);
 
-            PersistantMenuController.instance.GetOrAddScreen<OnboardingScreen>().OpenTutorial(new _Tutorial.Tutorial()
+            PersistantMenuController.instance
+                .GetOrAddScreen<OnboardingScreen>()
+                .OpenTutorial(new _Tutorial.Tutorial()
             {
                 name = "hint move",
                 onBack = _Tutorial.TutorialOnBack.IGNORE,
@@ -676,14 +731,20 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             UnloadBG();
 
-            currentConfiguration = GameContentManager.Instance.themesDataHolder.GetThemeBGConfiguration(area, Camera.main);
+            currentConfiguration = GameContentManager
+                .Instance
+                .themesDataHolder
+                .GetThemeBGConfiguration(area, Camera.main);
             bg = Instantiate(currentConfiguration.backgroundPrefab, bgParent);
             bg.transform.localPosition = Vector3.zero;
         }
 
         private void UnloadBG()
         {
-            if (bg) Destroy(bg.gameObject);
+            if (bg)
+            {
+                Destroy(bg.gameObject);
+            }
         }
 
         /// <summary>
@@ -697,8 +758,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.REALTIME:
                     if (Input.GetJoystickNames().Length > 1)
                     {
-                        StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.SPECIFIC_GAMEPAD;
-                        StandaloneInputModuleExtended.GamepadID = game._State.ActivePlayerId == 1 ? 0 : 1;
+                        StandaloneInputModuleExtended.GamepadFilter = 
+                            StandaloneInputModuleExtended.GamepadControlFilter.SPECIFIC_GAMEPAD;
+                        StandaloneInputModuleExtended.GamepadID = 
+                            game._State.ActivePlayerId == 1 ? 0 : 1;
                     }
 
                     break;
@@ -745,7 +808,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 //    break;
 
                 default:
-                    AudioTypes gameBGAudio = GameContentManager.Instance.themesDataHolder.GetTheme(game._Area).bgAudio;
+                    AudioTypes gameBGAudio = GameContentManager
+                        .Instance
+                        .themesDataHolder
+                        .GetTheme(game._Area).bgAudio;
 
                     if (gameplayBGAudio != null)
                     {
@@ -756,7 +822,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         }
                     }
                     else
+                    {
                         gameplayBGAudio = AudioHolder.instance.PlayBGAudio(gameBGAudio, true, 1f, 3f);
+                    }
+
                     break;
             }
         }
@@ -780,7 +849,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     if (game.puzzleData)
                     {
                         if (game.puzzleData.pack)
+                        {
                             PlayerPrefsWrapper.SetPuzzlePackOpened(game.puzzleData.pack.packID, true);
+                        }
                     }
 
                     break;
@@ -832,23 +903,35 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable values)
         {
-            if (values.ContainsKey(Constants.REALTIME_PLAYER_1_READY) || values.ContainsKey(Constants.REALTIME_PLAYER_2_READY))
+            if (values.ContainsKey(Constants.REALTIME_PLAYER_1_READY) || 
+                values.ContainsKey(Constants.REALTIME_PLAYER_2_READY))
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    if (FourzyPhotonManager.CheckPlayersReady()) CreateRealtimeGame();
+                    if (FourzyPhotonManager.CheckPlayersReady())
+                    {
+                        CreateRealtimeGame();
+                    }
                 }
             }
 
             if (values.ContainsKey(Constants.EPOCH_KEY))
             {
                 //update epoch delta
-                if (!PhotonNetwork.IsMasterClient) epochDelta = values.ContainsKey(Constants.EPOCH_KEY) ? FourzyPhotonManager.GetRoomProperty(Constants.EPOCH_KEY, 0L) - Utils.EpochMilliseconds() : 0L;
+                if (!PhotonNetwork.IsMasterClient)
+                {
+                    epochDelta = 
+                        values.ContainsKey(Constants.EPOCH_KEY) ? 
+                        FourzyPhotonManager.GetRoomProperty(Constants.EPOCH_KEY, 0L) - Utils.EpochMilliseconds() : 0L;
+                }
             }
 
             if (FourzyPhotonManager.CheckPlayersRematchReady())
             {
-                if (waitingScreen && waitingScreen.isOpened) waitingScreen.CloseSelf();
+                if (waitingScreen && waitingScreen.isOpened)
+                {
+                    waitingScreen.CloseSelf();
+                }
                 waitingScreen = null;
 
                 gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
@@ -862,7 +945,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (data.Code)
             {
                 case Constants.GAME_DATA:
-                    ClientFourzyGame _realtimeGame = new ClientFourzyGame(JsonConvert.DeserializeObject<GameStateDataEpoch>(data.CustomData.ToString()));
+                    ClientFourzyGame _realtimeGame = 
+                        new ClientFourzyGame(
+                            JsonConvert.DeserializeObject<GameStateDataEpoch>(data.CustomData.ToString()));
                     //assign proper user id
                     _realtimeGame.SetPlayer2ID(UserManager.Instance.userId);
 
@@ -871,7 +956,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case Constants.TAKE_TURN:
-                    StartRoutine("takeTurn", PlayRealtimeTurn(JsonConvert.DeserializeObject<PlayerTurn>(data.CustomData.ToString())));
+                    StartRoutine("takeTurn", PlayRealtimeTurn(
+                        JsonConvert.DeserializeObject<PlayerTurn>(data.CustomData.ToString())));
 
                     break;
 
@@ -1112,7 +1198,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnLogin(bool state)
         {
-            if (state) noNetworkOverlay.SetActive(false);
+            if (state)
+            {
+                noNetworkOverlay.SetActive(false);
+            }
         }
 
         private void OnNoInput(KeyValuePair<string, float> noInputFilter)
@@ -1138,7 +1227,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     switch (GameManager.Instance.placementStyle)
                     {
                         case GameManager.PlacementStyle.EDGE_TAP:
-                            board.ShowHintArea(GameboardView.HintAreaStyle.ANIMATION_LOOP, GameboardView.HintAreaAnimationPattern.NONE);
+                            board.ShowHintArea(
+                                GameboardView.HintAreaStyle.ANIMATION_LOOP, 
+                                GameboardView.HintAreaAnimationPattern.NONE);
                             board.SetHintAreaSelectableState(false);
 
                             break;
@@ -1155,7 +1246,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             yield return StartCoroutine(FadeGameScreen(1f, .5f));
 
             MenuScreen _screen = menuController.GetScreen<PrePackPrompt>();
-            if (!_screen) _screen = menuController.GetScreen<VSGamePrompt>();
+            if (!_screen)
+            {
+                _screen = menuController.GetScreen<VSGamePrompt>();
+            }
 
             while (_screen && _screen.isOpened) yield return null;
 
@@ -1179,7 +1273,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameType.TURN_BASED:
                     if (!game.asFourzyGame.challengeData.haveMoves)
+                    {
                         playerPickScreen._Open();
+                    }
                     else
                     {
                         PlayerTurn lastTurn = game.asFourzyGame.challengeData.lastTurn;
@@ -1215,12 +1311,16 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             bool resetBoard = game._playerTurnRecord.Count != lastHintIndex;
 
             if (!resetBoard)
+            {
                 for (int turnIndex = 0; turnIndex < game._playerTurnRecord.Count; turnIndex++)
+                {
                     if (game._playerTurnRecord[turnIndex].Notation != game.puzzleData.Solution[turnIndex].Notation)
                     {
                         resetBoard = true;
                         break;
                     }
+                }
+            }
 
             if (resetBoard)
             {
@@ -1262,7 +1362,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             PlayerTurn lastTurn = gameData.lastTurn;
 
-            if (game.asFourzyGame.playerTurnRecord.Count > 0 && game.asFourzyGame.playerTurnRecord[game.asFourzyGame.playerTurnRecord.Count - 1].PlayerId == lastTurn.PlayerId) yield break;
+            if (game.asFourzyGame.playerTurnRecord.Count > 0 &&
+                game.asFourzyGame.playerTurnRecord[game.asFourzyGame.playerTurnRecord.Count - 1].PlayerId == lastTurn.PlayerId) yield break;
 
             //compare challenges
             if (gameData.challengeInstanceId != game.asFourzyGame.challengeData.challengeInstanceId) yield break;

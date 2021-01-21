@@ -690,9 +690,23 @@ namespace Fourzy._Updates.ClientModel
             {
                 case PackType.AI_PACK:
                     if (puzzleData.gauntletStatus != null)
-                        game = new ClientFourzyGame(me, puzzleData.puzzleIndex, membersCount: (current != null ? current.myMembers.Count : Constants.GAUNTLET_DEFAULT_MOVES_COUNT));
+                    {
+                        game = new ClientFourzyGame(
+                            me,
+                            puzzleData.puzzleIndex,
+                            membersCount: (current != null ?
+                                    current.myMembers.Count :
+                                    Constants.GAUNTLET_DEFAULT_MOVES_COUNT));
+                    }
                     else
+                    {
                         game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, me);
+
+                        if (!string.IsNullOrEmpty(puzzleData.aiPlayerName))
+                        {
+                            game.opponent.DisplayName = puzzleData.aiPlayerName;
+                        }
+                    }
 
                     break;
 
@@ -703,8 +717,12 @@ namespace Fourzy._Updates.ClientModel
             }
 
             game.puzzleData = puzzleData;
-            game.BoardID = puzzleData.gameBoardDefinition != null ? puzzleData.gameBoardDefinition.ID : "random_level";
-            game._State.ActivePlayerId = puzzleData.firstTurn < 1 ? game.me.PlayerId : puzzleData.firstTurn;
+            game.BoardID = puzzleData.gameBoardDefinition != null ? 
+                puzzleData.gameBoardDefinition.ID : 
+                "random_level";
+            game._State.ActivePlayerId = puzzleData.firstTurn < 1 ? 
+                game.me.PlayerId : 
+                puzzleData.firstTurn;
 
             game.opponent.HerdId = puzzleData.PuzzlePlayer.HerdId;
 
