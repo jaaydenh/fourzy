@@ -2,7 +2,6 @@
 
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Menu.Screens;
-using Fourzy._Updates.UI.Toasts;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -18,6 +17,7 @@ namespace Fourzy._Updates.UI.Widgets
         protected RoomInfo data;
 
         private LobbyScreen _menuScreen;
+        private InputFieldPrompt passwordScreen;
         private string password = null;
 
         public string roomName => data.Name;
@@ -36,8 +36,8 @@ namespace Fourzy._Updates.UI.Widgets
             }
 
             password = FourzyPhotonManager.GetRoomProperty(
-                data.CustomProperties, 
-                Constants.REALTIME_ROOM_PASSWORD, 
+                data.CustomProperties,
+                Constants.REALTIME_ROOM_PASSWORD,
                 "");
             lockImage.SetActive(!string.IsNullOrEmpty(password));
 
@@ -49,12 +49,16 @@ namespace Fourzy._Updates.UI.Widgets
         public void JoinGame()
         {
             if (string.IsNullOrEmpty(password))
+            {
                 _menuScreen.JoinRoom(data.Name);
+            }
             else
             {
-                InputFieldPrompt screen = menuScreen.menuController.GetOrAddScreen<InputFieldPrompt>();
-                screen._Prompt(CheckPassword, "Enter Room Code", "", "Join", "Close");
-                screen.CloseOnAccept().CloseOnDecline();
+                passwordScreen = menuScreen.menuController
+                    .GetOrAddScreen<InputFieldPrompt>()
+                    ._Prompt(CheckPassword, "Enter Room Code", "", "Join", "Close");
+
+                passwordScreen.CloseOnDecline();
             }
         }
 
@@ -68,9 +72,20 @@ namespace Fourzy._Updates.UI.Widgets
         private void CheckPassword(string value)
         {
             if (value.Equals(password))
+            {
+                if (passwordScreen.isOpened)
+                {
+                    passwordScreen.CloseSelf();
+                }
+
                 _menuScreen.JoinRoom(data.Name);
+            }
             else
-                GamesToastsController.ShowTopToast("Wrong password");
+            {
+                passwordScreen
+                    .SetText("Wrong password", 1f)
+                    .SetTextColor(Color.red, 1f);
+            }
         }
     }
 }

@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: _BGs2
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 8192
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 2
+      m_CompressionQuality: 100
+      m_CrunchedCompression: 1
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: c94a211610a9b894c85cad991d67f9b8, type: 3}
+    - {fileID: 102900000, guid: 5ba3326ed1007644c815e3ed0ad4b01f, type: 3}
+    - {fileID: 102900000, guid: 139cf89a0645d9042b6c4acb6becce05, type: 3}
+    totalSpriteSurfaceArea: 44096418
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 651df280ce7e0de488fb00fc8ccffe5c, type: 3}
+  - {fileID: 21300000, guid: 9b6500a0c5088ee4eb1e9d829b40dfeb, type: 3}
+  - {fileID: 21300000, guid: 5182f4f0fe84af243b4165aa58f1c06e, type: 3}
+  - {fileID: 21300000, guid: 98e64f32d8322924fbc0889a66ca5ae8, type: 3}
+  - {fileID: 21300000, guid: 624b2572ee178ac4eae0dd4e5fe6422c, type: 3}
+  - {fileID: 21300000, guid: 97ecd5920dfc1654fbe8da46007f7c4e, type: 3}
+  - {fileID: 21300000, guid: 6b54b7c2b4393bb4c98ee5a7fb116306, type: 3}
+  - {fileID: 21300000, guid: 178622a40076d27409e51ef241f26fe9, type: 3}
+  - {fileID: 21300000, guid: 11f5fd2619227314bb1d7b20284f9f50, type: 3}
+  - {fileID: 21300000, guid: f44a7346fde707d4e98a233a7e9ac5a7, type: 3}
+  - {fileID: 21300000, guid: 046c8e76d5d4eb248b39284782f17b80, type: 3}
+  - {fileID: 21300000, guid: c39836a7620fb8a4c978300b4381357a, type: 3}
+  - {fileID: 21300000, guid: 4f65f2d794ca2344dbaf38b853013b98, type: 3}
+  - {fileID: 21300000, guid: 7a4dbef746b9e4840be2607c5b1826dd, type: 3}
+  - {fileID: 21300000, guid: 5bc2dd4836a9c9749b770f163312c92a, type: 3}
+  - {fileID: 21300000, guid: ad107309a66d9b542ab245f66c91beb4, type: 3}
+  - {fileID: 21300000, guid: f06c7f0a6ed892a4ba22a40a56477dad, type: 3}
+  - {fileID: 21300000, guid: 046d0f6a03a65204d86efc8fdc0ec81c, type: 3}
+  - {fileID: 21300000, guid: b3a3a3fa1283cc249af75de64b1c0abb, type: 3}
+  - {fileID: 21300000, guid: dbdc591b399709a428a23f9ee6241c57, type: 3}
+  - {fileID: 21300000, guid: defac7cc8367fc846837d81c6515d0a4, type: 3}
+  - {fileID: 21300000, guid: 0519d88dd89ad724fb50e36dcb9632bf, type: 3}
+  - {fileID: 21300000, guid: d65eb5bd80f96aa479f1660b5fa57083, type: 3}
+  - {fileID: 21300000, guid: c18f272e5fb766944b3ad78762e78324, type: 3}
+  - {fileID: 21300000, guid: bf7cef5e3bb8fa34aa57e8fbecc9768c, type: 3}
+  - {fileID: 21300000, guid: a72d0beedb5d30f46887fd043f2eb104, type: 3}
+  - {fileID: 21300000, guid: 2623bb5faf7abbc4da6c39584f50e9de, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - IcePalace-iPhone7_Bluefire90
+  - 03_Beach-Gameboard
+  - 01_Training-Gameboard
+  - IcePalace-iPhone7_BG2
+  - IcePalace-iPhoneX_Gameboard
+  - 02_Forest-Background
+  - 02_Forest-Gameboard
+  - IcePalace-iPad_BG1
+  - IcePalace-iPhoneX_BG1
+  - IcePalace-iPhone7_Bluefire
+  - Pattern (iPhoneX)
+  - IcePalace-iPad_aurora
+  - IcePalace-iPad_BG2
+  - IcePalace-iPad_Gameboard
+  - 03_Beach-Background
+  - 01_Training-Background
+  - 01_Training-Gameboard
+  - IcePalace-iPhone7_BG1
+  - 03_Beach_Gameboard
+  - 02_Forest-Background
+  - IcePalace-iPhone7_Gameboard
+  - IcePalace-iPhoneX_GlassEffect
+  - IcePalace-iPhoneX_BG2
+  - 02_Forest-Gameboard
+  - 01_Training-Background
+  - 03_Beach_Background
+  - IcePalace-iPhone7_glasseffect
+  m_Tag: _BGs2
+  m_IsVariant: 0

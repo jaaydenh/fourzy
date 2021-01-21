@@ -18,7 +18,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             //load new ones
             foreach (Camera3dItemProgressionMap map in GameContentManager.Instance.progressionMaps)
-                widgets.Add(Instantiate(adventureWidgetPrefab, widgetsParent).SetData(map));
+                widgets
+                    .Add(Instantiate(adventureWidgetPrefab, widgetsParent)
+                    .SetData(map));
         }
 
         public override void Open()

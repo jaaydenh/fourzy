@@ -339,7 +339,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressionMaps:
   - {fileID: 2196441795849348853, guid: 3cd0083bbf82d5d4998d9b0935cd1727, type: 3}
-  - {fileID: 2196441795849348853, guid: 3c578faf40505024eb2192e7b476e50a, type: 3}
   piecesDataHolder: {fileID: 11400000, guid: 15dde20219883e047b2bf43f7a126e41, type: 2}
   aiPlayersDataHolder: {fileID: 11400000, guid: 193c04713a60cff4cbf91989ce9e78ef,
     type: 2}

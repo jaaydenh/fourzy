@@ -1314,7 +1314,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 30
+          selectedMember: 31
           isDynamic: 0
         target: {fileID: 2062966886790463431}
         memberName: Next
@@ -1367,7 +1367,7 @@ RectTransform:
   m_LocalScale: {x: 0.9999777, y: 0.9999777, z: 0.9999777}
   m_Children: []
   m_Father: {fileID: 4122331451801946430}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -22437,7 +22437,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 40
+  m_Spacing: 120
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -24228,7 +24228,7 @@ RectTransform:
   m_LocalScale: {x: 0.9999777, y: 0.9999777, z: 0.9999777}
   m_Children: []
   m_Father: {fileID: 4122331451801946430}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -25188,7 +25188,7 @@ RectTransform:
   m_GameObject: {fileID: 3261771136071628849}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_Children:
   - {fileID: 5996893076992064511}
   - {fileID: 2507570890834512734}
@@ -40850,8 +40850,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 509494860494599768}
   - {fileID: 5836722152901344470}
+  - {fileID: 509494860494599768}
   - {fileID: 4759239626229278493}
   - {fileID: 42502844267481320}
   m_Father: {fileID: 2261576473015156951}
@@ -60952,7 +60952,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 580
+  m_PreferredWidth: 800
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -60980,7 +60980,7 @@ MonoBehaviour:
   m_CellSize: {x: 120, y: 110}
   m_Spacing: {x: 80, y: 35}
   m_Constraint: 1
-  m_ConstraintCount: 3
+  m_ConstraintCount: 4
 --- !u!114 &1386949777429994433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61977,7 +61977,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 26
+          selectedMember: 29
           isDynamic: 0
         target: {fileID: 8634153775719886396}
         memberName: OnBack
@@ -63762,7 +63762,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 580
+  m_PreferredWidth: 800
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -63780,8 +63780,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 20
-    m_Right: 20
+    m_Left: 60
+    m_Right: 60
     m_Top: 90
     m_Bottom: 35
   m_ChildAlignment: 3
@@ -63790,7 +63790,7 @@ MonoBehaviour:
   m_CellSize: {x: 120, y: 120}
   m_Spacing: {x: 20, y: 50}
   m_Constraint: 1
-  m_ConstraintCount: 4
+  m_ConstraintCount: 5
 --- !u!114 &7975442878034582136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64910,7 +64910,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 580
+  m_PreferredWidth: 800
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -64928,8 +64928,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 55
-    m_Right: 55
+    m_Left: 80
+    m_Right: 80
     m_Top: 170
     m_Bottom: 25
   m_ChildAlignment: 3
@@ -64938,7 +64938,7 @@ MonoBehaviour:
   m_CellSize: {x: 130, y: 85}
   m_Spacing: {x: 40, y: 40}
   m_Constraint: 1
-  m_ConstraintCount: 3
+  m_ConstraintCount: 4
 --- !u!114 &3308806618718865898
 MonoBehaviour:
   m_ObjectHideFlags: 0

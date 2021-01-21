@@ -30,10 +30,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (defaultCalls) Decline();
         }
 
-        public virtual PromptScreen Prompt(string title, string text, Action accept = null, Action decline = null) => 
+        public virtual PromptScreen Prompt(
+            string title,
+            string text, 
+            Action accept = null, 
+            Action decline = null) => 
             Prompt(title, text, LocalizationManager.Value("yes"), LocalizationManager.Value("no"), accept, decline);
 
-        public virtual PromptScreen Prompt(string title, string text, string yes, string no, Action accept = null, Action decline = null)
+        public virtual PromptScreen Prompt(
+            string title, 
+            string text, 
+            string yes, 
+            string no, 
+            Action accept = null, 
+            Action decline = null)
         {
             onDecline = decline;
             onAccept = accept;

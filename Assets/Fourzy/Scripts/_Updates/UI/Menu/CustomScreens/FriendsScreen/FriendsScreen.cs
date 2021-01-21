@@ -47,7 +47,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             StopRoutine("listUpdates", false);
         }
 
-        public void AddFriend() => menuController.GetOrAddScreen<InputFieldPrompt>()._Prompt(OnAddFriend, "Add friend", "Input friends' name to add them", "Add", "Back");
+        public void AddFriend() => menuController
+            .GetOrAddScreen<InputFieldPrompt>()
+            ._Prompt(OnAddFriend, "Add friend", "Input friends' name to add them", "Add", "Back")
+            .CloseOnAccept();
 
         public void UpdateFriendsList()
         {
@@ -56,7 +59,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             isUpdating = true;
 
             PlayFabClientAPI.GetFriendsList(
-                new GetFriendsListRequest() { ProfileConstraints = new PlayerProfileViewConstraints() { ShowDisplayName = true, ShowAvatarUrl = true} },
+                new GetFriendsListRequest() { ProfileConstraints = new PlayerProfileViewConstraints() { ShowDisplayName = true, ShowAvatarUrl = true } },
                 OnGetFriendsListResult,
                 OnGetFriendsError);
         }

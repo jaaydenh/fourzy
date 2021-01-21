@@ -23,12 +23,12 @@ SpriteAtlas:
     platformSettings:
     - serializedVersion: 3
       m_BuildTarget: DefaultTexturePlatform
-      m_MaxTextureSize: 4096
+      m_MaxTextureSize: 8192
       m_ResizeAlgorithm: 0
       m_TextureFormat: -1
-      m_TextureCompression: 1
-      m_CompressionQuality: 50
-      m_CrunchedCompression: 0
+      m_TextureCompression: 2
+      m_CompressionQuality: 100
+      m_CrunchedCompression: 1
       m_AllowsAlphaSplitting: 0
       m_Overridden: 0
       m_AndroidETC2FallbackOverride: 0
@@ -43,7 +43,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: be044a4a46a3d1a4794d948d7e6d087b, type: 3}
-    totalSpriteSurfaceArea: 23484915
+    totalSpriteSurfaceArea: 25558515
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -211,6 +211,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: fedde08800cf84929a66c849d6bc2c57, type: 3}
   - {fileID: 21300000, guid: 5710089895910a740a5def727d202a85, type: 3}
   - {fileID: 21300000, guid: 18d95898cdc7fd14fa8414673fa65cf7, type: 3}
+  - {fileID: 21300000, guid: 8112d1a83a4273441a8a88b9ee2b7c99, type: 3}
   - {fileID: 21300000, guid: 50e066a8f1275e04e8e7ec62f05a0d5c, type: 3}
   - {fileID: 21300000, guid: bd251aa8f29c14bddbcde82e38845b6e, type: 3}
   - {fileID: 21300000, guid: 1a48bcd819ee97b46b6004a58a423003, type: 3}
@@ -511,6 +512,7 @@ SpriteAtlas:
   - buttonTertiary
   - Icon-MovesOFF
   - Bots-05-Green
+  - Banner-16.9
   - buttonLeaderboard selected
   - buttonChat
   - Background-Eggplant
