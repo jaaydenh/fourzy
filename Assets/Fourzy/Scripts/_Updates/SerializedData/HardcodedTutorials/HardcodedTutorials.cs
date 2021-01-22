@@ -114,22 +114,22 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask_Wait(1f),
                     new OnboardingTask() { action = OnboardingActions.LOAD_MAIN_MENU },
 
-                    //point at adventure button button
-                    new OnboardingTask_Log("5"),
-                    new OnboardingTask_HighlightButton(
-                        "AdventureButton",
-                        "MainMenuCanvas",
-                        Vector2.one,
-                        Vector2.zero,
-                        Vector2.zero,
-                        new MessageData(LocalizationManager.Value("tap_to_open_map"), Vector2.zero, new Vector2(0f, -165f))),
-                    new OnboardingTask_Log("6"),
+                    // //point at adventure button button
+                    // new OnboardingTask_Log("5"),
+                    // new OnboardingTask_HighlightButton(
+                    //     "AdventureButton",
+                    //     "MainMenuCanvas",
+                    //     Vector2.one,
+                    //     Vector2.zero,
+                    //     Vector2.zero,
+                    //     new MessageData(LocalizationManager.Value("tap_to_open_map"), Vector2.zero, new Vector2(0f, -165f))),
+                    // new OnboardingTask_Log("6"),
 
-                    new OnboardingTask_HighlightProgressionEvent (
-                        0,
-                        Vector3.one * .75f,
-                        new MessageData(LocalizationManager.Value("tap_to_start_playing"), Vector2.zero, new Vector2(0f, -170f))),
-                    new OnboardingTask_Log("7"),
+                    // new OnboardingTask_HighlightProgressionEvent (
+                    //     0,
+                    //     Vector3.one * .75f,
+                    //     new MessageData(LocalizationManager.Value("tap_to_start_playing"), Vector2.zero, new Vector2(0f, -170f))),
+                    // new OnboardingTask_Log("7"),
                 },
             },
 
