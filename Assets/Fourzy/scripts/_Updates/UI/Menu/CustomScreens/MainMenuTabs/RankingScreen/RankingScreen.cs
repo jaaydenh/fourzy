@@ -28,6 +28,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private bool loadingLeaderboard = false;
         private bool checkScrolling = false;
+        private bool firstLoad = true;
         private float prevScrollValue = 0f;
         private List<FastPuzzlesLeaderboardPlayerWidget> loadedWidgets =
             new List<FastPuzzlesLeaderboardPlayerWidget>();
@@ -51,7 +52,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             if (!_opened)
+            {
                 StartRoutine("showLB", AddMoreResults());
+            }
         }
 
         public override void Close(bool animate)
@@ -126,13 +129,36 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (!loadingLeaderboard) return;
 
             loadingLeaderboard = false;
-            loadingIndicator.SetState(false);
 
-            if (newValues.Count == 0)
+            if (firstLoad)
             {
+                if (!UserManager.Instance.ratingAssigned)
+                {
+                    menuController
+                        .GetOrAddScreen<PromptScreen>()
+                        .Prompt(
+                            "Leaderboard",
+                            $"Please complete {Constants.GAMES_BEFORE_RATING_DISPLAYED} rating games to appear on a leaderboard",
+                            LocalizationManager.Value("ok"),
+                            "")
+                        .CloseOnAccept();
+                }
+
+                firstLoad = false;
+            }
+
+            //remove current user if rating is 0
+            newValues.RemoveAll(_entry => _entry.PlayFabId == LoginManager.playfabID && _entry.StatValue == 0);
+
+            if (newValues.Count == 0 && loadedWidgets.Count == 0)
+            {
+                loadingIndicator.SetValue("No entries");
+
                 //no more entries to load in this direction
                 return;
             }
+
+            loadingIndicator.SetState(false);
 
             //remove copies if any
             List<PlayerLeaderboardEntry> toRemove = new List<PlayerLeaderboardEntry>(playersData
@@ -190,7 +216,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (playersData.Count == 0) direction = 0;
 
             float timer = 0f;
-            while (string.IsNullOrEmpty(LoginManager.playerMasterAccountID) && timer < TIMEOUT_TIME)
+            while (string.IsNullOrEmpty(LoginManager.playfabID) && timer < TIMEOUT_TIME)
             {
                 timer += Time.deltaTime;
                 yield return null;
@@ -218,7 +244,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 PlayFabClientAPI.GetLeaderboardAroundPlayer(
                     new GetLeaderboardAroundPlayerRequest()
                     {
-                        PlayFabId = LoginManager.playerMasterAccountID,
+                        PlayFabId = LoginManager.playfabID,
                         StatisticName = "All Time Rating",
                         MaxResultsCount = TO_LOAD_PER_REQUEST,
                         ProfileConstraints = viewConstraints,

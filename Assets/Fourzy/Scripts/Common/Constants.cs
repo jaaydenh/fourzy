@@ -9,13 +9,10 @@ namespace Fourzy
         public const float DEMO_IDLE_TIME = 45f;
         public const float DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME = 8f;
 
-#if UNITY_IOS || UNITY_ANDROID
-        public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.EDGE_TAP;
-#elif UNITY_STANDALONE || UNITY_EDITOR
-        public const int DEFAULT_PLACEMENT_STYLE = (int)GameManager.PlacementStyle.EDGE_TAP;
-#endif
+        public const int DEFAULT_PLACEMENT_STYLE_TOUCH = (int)GameManager.PlacementStyle.EDGE_TAP;
+        public const int DEFAULT_PLACEMENT_STYLE_POINTER = (int)GameManager.PlacementStyle.EDGE_TAP;
         public const Area DEFAULT_AREA = Area.ICE_PALACE;
-        public const int DEFAULT_CPU_DIFFICULTY = 1; //0-3
+        public const int DEFAULT_STANDALONE_CPU_DIFFICULTY = 1; //0-3
         public const int DEFAULT_UNLOCKED_THEMES = 30;
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
@@ -26,21 +23,25 @@ namespace Fourzy
         public const float REALTIME_OPPONENT_WAIT_TIME = 30f;
         public const float LOBBY_GAME_LOAD_DELAY = 2.2f;
         public const float PHOTON_CONNECTION_WAIT_TIME = 5f;
+
+        //gauntlet
         public const int GAUNTLET_DEFAULT_MOVES_COUNT = 60;
         public const int BASE_GAUNTLET_MOVES_COST = 2;
         public const int GAUNTLET_RECHARGE_AMOUNT = 10;
 
         public const int TIMER_SECTIONS = 5;
-        public const int CIRCULAR_TIMER_VALUE = 8;
-        public const int INITIAL_TIMER_TIME = 3;
-        public const int AI_TURN_TIMER_RESET_VALUE = 2;
+        public const int INITIAL_TIMER_SECTIONS = 3;
+        public const int CIRCULAR_TIMER_SECONDS = 8;
+        public const int RESET_TIMER_SECTIONS = 2;
 
         // Adds additional time to timer after X turns
-        public const int ADD_TIMER_BAR_EVERY_X_TURN = 1;
+        public const int ADD_TIMER_BAR_EVERY_X_TURN = 0;
         public const int BARS_TO_ADD = 1;
+        public const bool LOSE_ON_EMPTY_TIMER = true;
 
         public const int RUNNING_CHALLENGES_COUNT = 100;
         public const int COMPLETE_CHALLENGES_COUNT = 50;
+        public const int GAMES_BEFORE_RATING_DISPLAYED = 5;
 
         public const string GAME_MODE_FAST_PUZZLES = "unlock_fast_puzzles_mode";
         public const string GAME_MODE_GAUNTLET_GAME = "unlock_gauntlet_mode";
@@ -76,14 +77,18 @@ namespace Fourzy
         #endregion
 
         //photon
+        public static readonly float REALTIME_GAME_VALID_AFTER_X_SECONDS = 10f;
         public static readonly string REALTIME_PLAYER_1_READY = "p1ready";
         public static readonly string REALTIME_PLAYER_2_READY = "p2ready";
         public static readonly string REALTIME_PLAYER_1_REMATCH = "p1rematch";
         public static readonly string REALTIME_PLAYER_2_REMATCH = "p2rematch";
         public static readonly string REALTIME_GAMEPIECE_KEY = "p";
         public static readonly string REALTIME_RATING_KEY = "r";
+        public static readonly string REALTIME_WINS_KEY = "w";
+        public static readonly string REALTIME_LOSES_KEY = "l";
+        public static readonly string REALTIME_DRAWS_KEY = "d";
         public static readonly string REALTIME_ROOM_TYPE_KEY = "t";
-        public static readonly string REALTIME_ROOM_PASSWORD = "w";
+        public static readonly string REALTIME_ROOM_PASSWORD = "z";
         public static readonly int REALTIME_ROOM_PASSWORD_LENGTH = 5;
         public static readonly string REALTIME_DEFAULT_GAMEPIECE_KEY = "1";
         public static readonly string REALTIME_TIMER_KEY = "timer";
@@ -94,6 +99,7 @@ namespace Fourzy
         public const byte TAKE_TURN = 1;
         public const byte REMATCH_REQUEST = 2;
         public const byte RATING_GAME_DATA = 3;
+        public const byte RATING_GAME_OTHER_LOST = 4;
 
         public const string CreateGameEndpoint = "http://fourzyfunctions.azurewebsites.net/api/CreateGame";
     }

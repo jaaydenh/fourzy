@@ -100,10 +100,10 @@ namespace Fourzy
         public DependencyStatus dependencyStatus { get; set; }
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public string sessionID { get; private set; }
-        public string cachedOpponentID { get; set; }
+        public string currentOpponent { get; set; }
         public LocationInfo? lastLocation { get; private set; } = null;
-        public string MainMenuSceneName => Landscape ? 
-            Constants.MAIN_MENU_L_SCENE_NAME : 
+        public string MainMenuSceneName => Landscape ?
+            Constants.MAIN_MENU_L_SCENE_NAME :
             Constants.MAIN_MENU_P_SCENE_NAME;
 
         private bool configFetched = false;
@@ -429,12 +429,6 @@ namespace Fourzy
             StartRoutine("fetching_news", FetchingNews());
         }
 
-        public static void UpdateGameTypeUserProperty(GameType gameType)
-        {
-            Debug.Log("Updating user property");
-            FirebaseAnalytics.SetUserProperty("game_type", gameType.ToString());
-        }
-
         public static void Vibrate(HapticTypes type) => MMVibrationManager.Haptic(type);
 
         public static void Vibrate() => Vibrate(HapticTypes.Success);
@@ -445,12 +439,25 @@ namespace Fourzy
         {
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
-                FunctionName = "updateFastPuzzlesStat",
+                FunctionName = "reportFastPuzzlesCount",
                 FunctionParameter = new { value = _value },
                 GeneratePlayStreamEvent = true,
-            }, 
-            (result) => { Debug.Log($"Fast puzzles stat updated {_value}"); }, 
+            },
+            (result) => { Debug.Log($"Fast puzzles stat updated {_value}"); },
             (error) => { Debug.LogError(error.ErrorMessage); });
+        }
+
+        public static void GetTitleData(Action<object> onDataLoaded, Action onFailed)
+        {
+            PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(),
+                result =>
+                {
+                    onDataLoaded?.Invoke(result.Data);
+                }, error =>
+                {
+                    Debug.Log(error.ErrorMessage);
+                    onFailed?.Invoke();
+                });
         }
 
         public static int ValueFromCurrencyType(CurrencyType type)
@@ -556,6 +563,9 @@ namespace Fourzy
 
                     activeGame = null;
                     currentPuzzlePack = null;
+
+                    //get player stats
+                    UserManager.GetMyStats();
 
                     break;
             }
@@ -663,7 +673,9 @@ namespace Fourzy
 
         private void DisplayDailyPuzzlePopup()
         {
-            dailyPuzzlePack = JsonConvert.DeserializeObject<PuzzleData>(File.ReadAllText(Application.persistentDataPath + "/" + PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_DAILY_PUZZLE)));
+            dailyPuzzlePack = JsonConvert.DeserializeObject<PuzzleData>(
+                File.ReadAllText(Application.persistentDataPath + "/" + 
+                    PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_DAILY_PUZZLE)));
 
             if (dailyPuzzlePack != null)
             {

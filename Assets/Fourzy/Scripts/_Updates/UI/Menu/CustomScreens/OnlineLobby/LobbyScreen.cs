@@ -170,8 +170,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 if (_prompt.isOpened)
                 {
-                    _prompt.promptTitle.text = "Joining room";
-                    _prompt.promptText.text = name;
+                    _prompt.promptTitle.text = $"Joining room \n{name}";
                 }
             }, () =>
             {
@@ -213,7 +212,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (isOpened) CloseSelf();
 
             if (PhotonNetwork.PlayerListOthers.Length > 0)
-                GameManager.Instance.cachedOpponentID = PhotonNetwork.PlayerListOthers[0].UserId;
+                GameManager.Instance.currentOpponent = PhotonNetwork.PlayerListOthers[0].UserId;
 
             AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);

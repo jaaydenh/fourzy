@@ -526,6 +526,14 @@ namespace Fourzy
             return _porps.ContainsKey(key) ? (T)_porps[key] : defaultValue;
         }
 
+        public static int GetOpponentTotalGames()
+        {
+            return
+                GetOpponentProperty(Constants.REALTIME_WINS_KEY, 0) +
+                GetOpponentProperty(Constants.REALTIME_LOSES_KEY, 0) +
+                GetOpponentProperty(Constants.REALTIME_DRAWS_KEY, 0);
+        }
+
         public static void SetMyProperty(string key, object value)
         {
             if (PhotonNetwork.IsConnected)

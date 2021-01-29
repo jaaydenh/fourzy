@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics._GamePiece;
-using Fourzy._Updates.Tools;
 using PlayFab.ClientModels;
 using TMPro;
 using UnityEngine;
@@ -26,7 +25,7 @@ namespace Fourzy._Updates.UI.Widgets
             positionLabel.text = (entry.Position + 1) + "";
             valueLabel.text = entry.StatValue + "";
 
-            if (entry.PlayFabId == LoginManager.playerMasterAccountID)
+            if (entry.PlayFabId == LoginManager.playfabID)
             {
                 positionLabel.color = Color.green;
                 AddGamepieceView(UserManager.Instance.gamePieceID);
@@ -47,12 +46,9 @@ namespace Fourzy._Updates.UI.Widgets
             if (currentGamepiece)
                 Destroy(currentGamepiece.gameObject);
 
-            currentGamepiece = string.IsNullOrEmpty(pieceID) ?
-                Instantiate(
-                    GameContentManager.Instance.piecesDataHolder.gamePieces.list.Random().player1Prefab, 
-                    iconParent) :
-                Instantiate(
-                    GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(pieceID).player1Prefab, 
+            pieceID = string.IsNullOrEmpty(pieceID) ? Constants.DEFAULT_GAME_PIECE : pieceID;
+            currentGamepiece = Instantiate(
+                    GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(pieceID).player1Prefab,
                     iconParent);
 
             currentGamepiece.transform.localPosition = Vector3.zero;

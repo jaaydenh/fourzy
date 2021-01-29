@@ -43,7 +43,7 @@ namespace Fourzy._Updates.ClientModel
                 if ((int)State.Board.Area > 1)
                     return State.Board.Area;
                 else
-                    return Constants.DEFAULT_AREA;
+                    return InternalSettings.Current.DEFAULT_AREA;
             }
 
             set { }
@@ -236,7 +236,10 @@ namespace Fourzy._Updates.ClientModel
 
         public int Columns => State.Board.Columns;
 
-        public bool isOver => State.WinningLocations != null || (puzzleData && puzzleData.pack && puzzleData.pack.gauntletStatus != null && myMembers.Count == 0);
+        public bool isOver => 
+            State.WinnerId > 0 ||
+            State.WinningLocations != null || 
+            (puzzleData && puzzleData.pack && puzzleData.pack.gauntletStatus != null && myMembers.Count == 0);
 
         public bool draw { get; set; }
 
@@ -697,7 +700,7 @@ namespace Fourzy._Updates.ClientModel
                             puzzleData.puzzleIndex,
                             membersCount: (current != null ?
                                     current.myMembers.Count :
-                                    Constants.GAUNTLET_DEFAULT_MOVES_COUNT));
+                                    InternalSettings.Current.GAUNTLET_DEFAULT_MOVES_COUNT));
                     }
                     else
                     {

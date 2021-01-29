@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.Mechanics._GamePiece;
 using TMPro;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -18,16 +19,20 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base.Awake();
 
-            UserManager.onRatingAquired += OnRatingUpate;
+            UserManager.onRatingUpdate += OnRatingUpate;
             UserManager.onDisplayNameChanged += OnUpdateUserInfo;
             UserManager.OnUpdateUserGamePieceID += OnUpdateUserGamePieceID;
+
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
         protected void OnDestroy()
         {
-            UserManager.onRatingAquired -= OnRatingUpate;
+            UserManager.onRatingUpdate -= OnRatingUpate;
             UserManager.onDisplayNameChanged -= OnUpdateUserInfo;
             UserManager.OnUpdateUserGamePieceID -= OnUpdateUserGamePieceID;
+
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
         public GamePieceView SetData(string gamePieceID)
@@ -58,12 +63,23 @@ namespace Fourzy._Updates.UI.Widgets
             if (UserManager.Instance.lastCachedRating == -1)
                 ratingLabel.text = $"Rating: ...";
             else
-                ratingLabel.text = $"Rating: {UserManager.Instance.lastCachedRating}";
+                ratingLabel.text = $"Rating:\n{UserManager.Instance.lastCachedRatingFiltered}";
         }
 
         private void OnUpdateUserGamePieceID(string gamePieceID)
         {
             pieceNameLabel.text = SetData(gamePieceID).pieceData.name;
+        }
+
+        private void OnSceneUnloaded(Scene scene)
+        {
+            switch (scene.name)
+            {
+                case Constants.GAMEPLAY_SCENE_NAME:
+                    ratingLabel.text = $"Rating: ...";
+
+                    break;
+            }
         }
     }
 }

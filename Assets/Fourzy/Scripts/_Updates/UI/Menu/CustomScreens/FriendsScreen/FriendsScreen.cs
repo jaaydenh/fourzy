@@ -113,7 +113,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     friends.Add(Instantiate(widgetPrefab, widgetsParent)
                         .SetData(friendsData[friendIndex])
                         .SetOnFriendRemoved(OnFriendRemoved)
-                        .SetPlayerIcon(string.IsNullOrEmpty(friendsData[friendIndex].Profile.AvatarUrl) ? Constants.DEFAULT_GAME_PIECE : friendsData[friendIndex].Profile.AvatarUrl)
+                        .SetPlayerIcon(string.IsNullOrEmpty(friendsData[friendIndex].Profile.AvatarUrl) ? 
+                            InternalSettings.Current.DEFAULT_GAME_PIECE : 
+                            friendsData[friendIndex].Profile.AvatarUrl)
                         .UpdateOnlineStatus(_friends[friendIndex].IsOnline));
         }
 

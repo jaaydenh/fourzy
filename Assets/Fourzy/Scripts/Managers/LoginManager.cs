@@ -19,6 +19,7 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections;
 using PlayFab.ProfilesModels;
+using Fourzy._Updates;
 
 namespace Fourzy
 {
@@ -30,7 +31,7 @@ namespace Fourzy
         public static event Action<string> OnLoginMessage;
         public static event Action<bool> OnDeviceLoginComplete;
 
-        public static string playerMasterAccountID;
+        public static string playfabID;
         public static string playerTitleID;
 
         private bool isConnecting;
@@ -353,7 +354,7 @@ namespace Fourzy
 
         private void PlayFabLoginSuccess(LoginResult result)
         {
-            playerMasterAccountID = result.PlayFabId;
+            playfabID = result.PlayFabId;
 
             Debug.Log("PlayFabId: " + result.PlayFabId);
             Debug.Log("SessionTicket: " + result.SessionTicket);
@@ -362,7 +363,11 @@ namespace Fourzy
             Debug.Log("Entity.Id: " + result.EntityToken.Entity.Id);
             Debug.Log("Entity.Type: " + result.EntityToken.Entity.Type);
 
-            if (GameManager.Instance.showInfoToasts && !GameManager.Instance.Landscape) GamesToastsController.ShowTopToast("Device Authentication Success");
+            if (GameManager.Instance.showInfoToasts && 
+                !GameManager.Instance.Landscape)
+            {
+                GamesToastsController.ShowTopToast("Device Authentication Success");
+            }
 
             if (result.NewlyCreated)
             {
@@ -370,7 +375,7 @@ namespace Fourzy
                 Debug.Log($"New device");
                 UserManager.Instance.settingRandomName = true;
                 UserManager.Instance.SetDisplayName(UserManager.CreateNewPlayerName());
-                UserManager.Instance.UpdateSelectedGamePiece(Constants.DEFAULT_GAME_PIECE);
+                UserManager.Instance.UpdateSelectedGamePiece(InternalSettings.Current.DEFAULT_GAME_PIECE);
             }
 
             PlayFabClientAPI.GetAccountInfo(
@@ -399,7 +404,7 @@ namespace Fourzy
             LogMessage("Photon token acquired: " + obj.PhotonCustomAuthenticationToken + "  Authentication complete.");
 
             var customAuth = new Photon.Realtime.AuthenticationValues { AuthType = Photon.Realtime.CustomAuthenticationType.Custom };
-            customAuth.AddAuthParameter("username", playerMasterAccountID);
+            customAuth.AddAuthParameter("username", playfabID);
             customAuth.AddAuthParameter("token", obj.PhotonCustomAuthenticationToken);
 
             PhotonNetwork.AuthValues = customAuth;
@@ -438,7 +443,9 @@ namespace Fourzy
             }
 
             playerTitleID = result.AccountInfo.TitleInfo.TitlePlayerAccount.Id;
-            UserManager.GetPlayerRating();
+
+            UserManager.GetMyStats();
+            GameManager.GetTitleData(data => InternalSettings.Current.Update(data), null);
 
             //get profile
             PlayFabProfilesAPI.GetProfile(

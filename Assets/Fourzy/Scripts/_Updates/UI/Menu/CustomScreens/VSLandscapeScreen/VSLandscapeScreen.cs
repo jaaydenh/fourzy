@@ -319,7 +319,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (CustomInputManager.GamepadCount < 2)
             {
-                OnP2DifficultySelected(Constants.DEFAULT_CPU_DIFFICULTY);
+                OnP2DifficultySelected(InternalSettings.Current.DEFAULT_STANDALONE_CPU_DIFFICULTY);
             }
         }
 

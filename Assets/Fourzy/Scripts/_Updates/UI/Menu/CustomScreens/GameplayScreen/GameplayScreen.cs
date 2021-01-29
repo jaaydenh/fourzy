@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.GameplayScene;
@@ -33,8 +34,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public MenuScreen tapToStartOverlay;
 
         private IClientFourzy game;
-        private GamePlayManager gameplayManager; 
-        private int onePlayerTurnCounter;
+        private GamePlayManager gameplayManager;
+        private int gameTurnCounter;
 
         public PuzzleUIScreen puzzleUI { get; private set; }
         public TurnBaseScreen turnbaseUI { get; private set; }
@@ -60,13 +61,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             helpButtonOutline = helpButton.GetComponent<UIOutline>();
 
             timerWidgets.ForEach(widget => widget.onValueEmpty += OnTimerEmpty);
-
-            FourzyPhotonManager.onPlayerPpopertiesUpdate += OnPlayerPropertiesUpdate;
-        }
-
-        protected void OnDestroy()
-        {
-            FourzyPhotonManager.onPlayerPpopertiesUpdate -= OnPlayerPropertiesUpdate;
         }
 
         public override void Open()
@@ -105,10 +99,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             GamePlayManager.Instance.BackButtonOnClick();
                         else
                             menuController.GetOrAddScreen<PromptScreen>()
-                                .Prompt(LocalizationManager.Value("leave_game"), 
+                                .Prompt(LocalizationManager.Value("leave_game"),
                                 "",
-                                LocalizationManager.Value("yes"), 
-                                LocalizationManager.Value("no"), 
+                                LocalizationManager.Value("yes"),
+                                LocalizationManager.Value("no"),
                                 () => GamePlayManager.Instance.BackButtonOnClick());
 
                         break;
@@ -152,7 +146,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Player me = game.me;
 
-            if (game._Type != GameType.PRESENTATION) 
+            if (game._Type != GameType.PRESENTATION)
             {
                 player1Widget.spellsHolder.Open(game, gameplayManager.board, me);
             }
@@ -163,27 +157,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
             player1Widget.Initialize();
             player2Widget.Initialize();
 
-            player1Widget.SetPlayerName(me.DisplayName);
-            player1Widget.SetPlayerIcon(me);
+            player1Widget.SetPlayer(me);
+            //player1Widget.SetPlayerName(me.DisplayName);
             player1Widget.StopPlayerTurnAnimation();
 
-            if (game._Type == GameType.REALTIME) 
+            if (game._Type == GameType.REALTIME)
             {
-                player1Widget.SetExtraDataAsRating(
-                    FourzyPhotonManager.GetMyProperty(Constants.REALTIME_RATING_KEY, -1));
+                player1Widget.SetRating(
+                    UserManager.Instance.lastCachedRating, 
+                    UserManager.Instance.totalPlayfabGames);
             }
 
             Player opponent = game.opponent;
             if (opponent != null)
             {
-                player2Widget.SetPlayerName(opponent.DisplayName);
-                player2Widget.SetPlayerIcon(opponent);
+                player2Widget.SetPlayer(opponent);
+                //player2Widget.SetPlayerName(opponent.DisplayName);
                 player2Widget.StopPlayerTurnAnimation();
 
                 if (game._Type == GameType.REALTIME)
                 {
-                    player2Widget.SetExtraDataAsRating(
-                        FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, -1));
+                    player2Widget.SetRating(
+                        FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, -1),
+                        FourzyPhotonManager.GetOpponentTotalGames());
                 }
 
                 if (game.hideOpponent)
@@ -307,7 +303,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (timersEnabled)
             {
-                if (game._FirstState.ActivePlayerId == turn.PlayerId) onePlayerTurnCounter++;
+                if (game._FirstState.ActivePlayerId == turn.PlayerId)
+                {
+                    gameTurnCounter++;
+                }
 
                 //deactivate timers, add timer value
                 timerWidgets.ForEach(widget =>
@@ -318,10 +317,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         if (!widget.isEmpty)
                         {
-                            if (onePlayerTurnCounter % Constants.ADD_TIMER_BAR_EVERY_X_TURN == 0)
-                                widget.AddTimerValue(Constants.BARS_TO_ADD, true, true);
+                            if (InternalSettings.Current.ADD_TIMER_BAR_EVERY_X_TURN > 0 &&
+                                gameTurnCounter % InternalSettings.Current.ADD_TIMER_BAR_EVERY_X_TURN == 0)
+                            {
+                                widget.AddTimerValue(InternalSettings.Current.BARS_TO_ADD, true, true);
+                            }
                             else
-                                widget.AddSmallTimerValue(Constants.CIRCULAR_TIMER_VALUE);
+                            {
+                                widget.AddSmallTimerValue(InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+                            }
                         }
                     }
                 });
@@ -362,11 +366,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (timersEnabled)
             {
-                //activate timers
+                //activate timer
                 ActivatePlayerTimer(game._State.ActivePlayerId);
 
                 //reset timers
-                timerWidgets.ForEach(widget => { if (widget.isEmpty) widget.AddTimerValue(Constants.AI_TURN_TIMER_RESET_VALUE, true, true); });
+                timerWidgets.ForEach(widget =>
+                {
+                    if (widget.isEmpty)
+                    {
+                        widget.AddTimerValue(InternalSettings.Current.RESET_TIMER_SECTIONS, true, true);
+                    }
+                });
             }
 
             #endregion
@@ -508,19 +518,61 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (game._Type)
             {
                 case GameType.PASSANDPLAY:
-                    gameplayManager.board.TakeAITurn();
+                    if (InternalSettings.Current.LOSE_ON_EMPTY_TIMER)
+                    {
+                        timerWidgets.ForEach(_widget => _widget.Deactivate());
+                        gameplayManager.OnGameFinished(game);
+                    }
+                    else
+                    {
+                        gameplayManager.board.TakeAITurn();
+                    }
 
                     break;
 
                 case GameType.REALTIME:
-                    //only take turn if its my turn
-                    if (game.isMyTurn) gameplayManager.board.TakeAITurn();
+                    if (InternalSettings.Current.LOSE_ON_EMPTY_TIMER)
+                    {
+                        timerWidgets.ForEach(_widget => _widget.Deactivate());
+
+                        if (game.isMyTurn)
+                        {
+                            Debug.Log("telling other client that im done");
+                            //set other as winner
+                            game._State.WinnerId = game.opponent.PlayerId;
+
+                            gameplayManager.OnGameFinished(game);
+
+                            //tell other client that X lost
+                            if (PhotonNetwork.CurrentRoom != null)
+                            {
+                                var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                                eventOptions.Flags.HttpForward = true;
+                                eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+
+                                var photonEventResult = PhotonNetwork.RaiseEvent(
+                                    Constants.RATING_GAME_OTHER_LOST,
+                                    null,
+                                    eventOptions,
+                                    SendOptions.SendReliable);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //only take turn if its my turn
+                        if (game.isMyTurn)
+                        {
+                            gameplayManager.board.TakeAITurn();
+                        }
+                    }
 
                     break;
             }
         }
 
-        private void ActivatePlayerTimer(int playerID) => timerWidgets.Find(widget => widget.player.PlayerId == playerID).Activate();
+        private void ActivatePlayerTimer(int playerID) =>
+            timerWidgets.Find(widget => widget.player.PlayerId == playerID).Activate();
 
         private void HideGameInfoWidget(bool checkType = true)
         {
@@ -565,18 +617,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     rematchButton.SetState(false);
                 }
             }
-        }
-
-        private void OnPlayerPropertiesUpdate(
-            Photon.Realtime.Player player, 
-            ExitGames.Client.Photon.Hashtable changes)
-        {
-            if (game == null || 
-                game._Type != GameType.REALTIME || 
-                !changes.ContainsKey(Constants.REALTIME_RATING_KEY)) return;
-
-            (PhotonNetwork.LocalPlayer == player ? player1Widget : player2Widget)
-                .SetExtraDataAsRating((int)changes[Constants.REALTIME_RATING_KEY]);
         }
 
         private IEnumerator WaitForTapRoutine()

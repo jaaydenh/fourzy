@@ -7,7 +7,6 @@ using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Photon.Pun;
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -19,6 +18,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public Color winColor;
         public Color loseColor;
         public TMP_Text stateLabel;
+        public TMP_Text infoLabel;
         public TMP_Text tapToContinueLabel;
         public RectTransform piecesParent;
 
@@ -53,6 +53,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             this.game = game;
             string bgTapText = "";
+            infoLabel.text = "";
 
             switch (game._Mode)
             {
@@ -74,9 +75,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
 
                             if (game.myMembers.Count > 0)
+                            {
                                 bgTapText = LocalizationManager.Value("rematch");
+                            }
                             else
+                            {
                                 bgTapText = LocalizationManager.Value("back_to_menu");
+                            }
                         }
                     }
 
@@ -90,9 +95,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     else
                     {
                         if (game.IsWinner())
+                        {
                             stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                        }
                         else
+                        {
                             stateLabel.text = $"{LocalizationManager.Value("player_two")} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                        }
                     }
 
                     break;
@@ -105,9 +114,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     else
                     {
                         if (game.IsWinner())
+                        {
                             stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                        }
                         else
+                        {
                             stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
+                        }
                     }
 
                     break;
@@ -142,10 +155,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 showButtonRow = true;
             }
             else
+            {
                 SetButtonRowState(true);
+            }
 
             //gamepieces
-            foreach (GamePieceView gamepiece in gamePieces) Destroy(gamepiece.gameObject);
+            foreach (GamePieceView gamepiece in gamePieces)
+            {
+                Destroy(gamepiece.gameObject);
+            }
             gamePieces.Clear();
 
             //get winning gamepieces
@@ -164,9 +182,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        public void SetInfoLabel(string text)
+        {
+            infoLabel.text = text;
+        }
+
         public void CloseIfOpened()
         {
-            if (isCurrent) menuController.CloseCurrentScreen(true);
+            if (isCurrent)
+            {
+                menuController.CloseCurrentScreen(true);
+            }
         }
 
         public override void Open()
@@ -365,7 +391,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             () =>
                             {
                                 game.puzzleData.pack.ResetPlayerPrefs();
-                                game.AddMembers(Constants.GAUNTLET_DEFAULT_MOVES_COUNT);
+                                game.AddMembers(InternalSettings.Current.GAUNTLET_DEFAULT_MOVES_COUNT);
 
                                 menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack);
                             },

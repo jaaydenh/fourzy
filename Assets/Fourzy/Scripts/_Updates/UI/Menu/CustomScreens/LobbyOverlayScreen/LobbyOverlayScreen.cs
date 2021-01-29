@@ -111,10 +111,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 playerTwoView.StartBlinking();
 
                 //load game
-                StartRoutine("load_game", Constants.LOBBY_GAME_LOAD_DELAY, StartGame);
+                StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame);
                 state = LobbyOverlayState.LOADING_GAME;
 
-                GameManager.Instance.cachedOpponentID = two.UserId;
+                GameManager.Instance.currentOpponent = two.UserId;
             }
 
             empty.SetActive(!isTwo);

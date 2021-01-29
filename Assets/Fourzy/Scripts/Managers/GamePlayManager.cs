@@ -18,6 +18,7 @@ using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -61,6 +62,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public GameplayBG bg { get; private set; }
         public GameplayScreen gameplayScreen { get; private set; }
         public RandomPlayerPickScreen playerPickScreen { get; private set; }
+        public GameWinLoseScreen gameWinLoseScreen { get; private set; }
         public LoadingPromptScreen loadingPrompt { get; private set; }
 
         public IClientFourzy game { get; private set; }
@@ -81,6 +83,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             gameplayScreen = menuController.GetOrAddScreen<GameplayScreen>();
             playerPickScreen = menuController.GetOrAddScreen<RandomPlayerPickScreen>();
+            gameWinLoseScreen = menuController.GetOrAddScreen<GameWinLoseScreen>();
 
             touchZone.onPointerDownData += OnPointerDown;
             touchZone.onPointerUpData += OnPointerRelease;
@@ -172,7 +175,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     FourzyPhotonManager.TryLeaveRoom();
                     FourzyPhotonManager.Instance.JoinLobby();
 
-                    GameManager.Instance.cachedOpponentID = "";
+                    GameManager.Instance.currentOpponent = "";
 
                     break;
             }
@@ -973,12 +976,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case Constants.RATING_GAME_DATA:
-                    RatingGameCompleteResult ratingResultData = 
-                        JsonConvert.DeserializeObject<RatingGameCompleteResult>(data.CustomData.ToString());
+                    OnRatingDataAquired(
+                        JsonConvert.DeserializeObject<RatingGameCompleteResult>(data.CustomData.ToString()));
 
-                    GamesToastsController.ShowTopToast(
-                        $"Your rating was updated to {ratingResultData.opponentRating}");
-                    UserManager.Instance.lastCachedRating = ratingResultData.opponentRating;
+                    break;
+
+                case Constants.RATING_GAME_OTHER_LOST:
+                    game._State.WinnerId = game.me.PlayerId;
+                    OnGameFinished(game);
 
                     break;
             }
@@ -997,8 +1002,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 case GameType.REALTIME:
-                    if (gameState == GameState.GAME && Time.time - startedAt > 10f)
-                        OnRealtimeGameFinished();
+                    //if more than X seconds passed, player who left the game loses
+                    if (!game.isOver && Time.time - startedAt > 
+                        Constants.REALTIME_GAME_VALID_AFTER_X_SECONDS)
+                    {
+                        OnRealtimeGameFinished(LoginManager.playfabID, GameManager.Instance.currentOpponent);
+                    }
 
                     //pause game
                     PauseGame();
@@ -1020,15 +1029,29 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         #endregion
 
-        private void OnGameFinished(IClientFourzy game)
+        internal void OnGameFinished(IClientFourzy game)
         {
             onGameFinished?.Invoke(game);
 
             gameplayScreen.OnGameFinished();
 
             //realtime game finished
-            if (game._Type == GameType.REALTIME && game.draw == false && game.IsWinner())
-                OnRealtimeGameFinished();
+            if (game._Type == GameType.REALTIME)
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    if (game.IsWinner())
+                    {
+                        OnRealtimeGameFinished(LoginManager.playfabID, GameManager.Instance.currentOpponent);
+                    }
+                    else
+                    {
+                        OnRealtimeGameFinished(GameManager.Instance.currentOpponent, LoginManager.playfabID);
+                    }
+                }
+
+                ratingUpdated = true;
+            }
 
             //analytics event
             AnalyticsManager.GameResultType gameResult = AnalyticsManager.GameResultType.None;
@@ -1153,30 +1176,29 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        private void OnRealtimeGameFinished()
+        private void OnRealtimeGameFinished(string winnerID, string opponentID)
         {
-            if (string.IsNullOrEmpty(GameManager.Instance.cachedOpponentID)) return;
+            if (game == null) return;
+            if (string.IsNullOrEmpty(GameManager.Instance.currentOpponent)) return;
             if (ratingUpdated) return;
 
-            ratingUpdated = true;
+            UserManager.Instance.playfabWinsCount += 1;
 
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
-                FunctionName = "ratingGameComplete",
+                FunctionName = "reportRatingGameComplete",
                 FunctionParameter = new
                 {
-                    winnerID = LoginManager.playerMasterAccountID,
-                    opponentID = GameManager.Instance.cachedOpponentID
+                    winnerID,
+                    opponentID,
+                    game.draw,
                 },
                 GeneratePlayStreamEvent = true,
             },
             (result) =>
             {
-                RatingGameCompleteResult ratingResult = 
-                    JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString());
-
-                GamesToastsController.ShowTopToast($"Your rating was updated to {ratingResult.winnerRating}");
-                UserManager.Instance.lastCachedRating = ratingResult.winnerRating;
+                OnRatingDataAquired(
+                    JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString()));
 
                 //try send rating update to other client 
                 if (PhotonNetwork.CurrentRoom != null)
@@ -1190,10 +1212,33 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         result.FunctionResult.ToString(),
                         eventOptions,
                         SendOptions.SendReliable);
-                    Debug.Log("Photon create game event result: " + photonEventResult);
                 }
             },
             (error) => { Debug.LogError(error.ErrorMessage); });
+        }
+
+        private void OnRatingDataAquired(RatingGameCompleteResult data)
+        {
+            foreach (RatingGamePlayer player in data.players)
+            {
+                if (player.playfabID == LoginManager.playfabID)
+                {
+                    UserManager.Instance.lastCachedRating = player.rating;
+
+                    if (player.winner)
+                    {
+                        UserManager.Instance.playfabWinsCount += 1;
+
+                        gameWinLoseScreen.SetInfoLabel($"+{player.ratingChange} rating points!");
+                    }
+                    else
+                    {
+                        UserManager.Instance.playfabLosesCount += 1;
+
+                        gameWinLoseScreen.SetInfoLabel($"{player.ratingChange} rating points!");
+                    }
+                }
+            }
         }
 
         private void OnLogin(bool state)
@@ -1349,7 +1394,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private IEnumerator StartRealtimeCountdown()
         {
             //start timer
-            yield return gameplayScreen.realtimeScreen.StartCountdown(Constants.REALTIME_COUNTDOWN_SECONDS);
+            yield return gameplayScreen.realtimeScreen
+                .StartCountdown(InternalSettings.Current.REALTIME_COUNTDOWN_SECONDS);
 
             UpdatePlayerTurn();
         }
@@ -1473,8 +1519,25 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
     [Serializable]
     public class RatingGameCompleteResult
     {
-        public int winnerRating;
-        public int opponentRating;
+        public RatingGamePlayer[] players;
+        public bool draw;
+
+        public RatingGameCompleteResult()
+        {
+        }
+    }
+
+    [Serializable]
+    public class RatingGamePlayer
+    {
+        public string playfabID;
+        public int rating;
+        public int ratingChange;
+        public bool winner;
+
+        public RatingGamePlayer()
+        {
+        }
     }
 }
 

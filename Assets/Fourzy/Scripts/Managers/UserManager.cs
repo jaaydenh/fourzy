@@ -1,10 +1,9 @@
 ﻿//modded
 
+using Fourzy._Updates;
 using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
-// using GameSparks.Api.Requests;
-// using GameSparks.Core;
 using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -22,7 +21,11 @@ namespace Fourzy
 
         public static Action<CurrencyType> onCurrencyUpdate;
         public static Action<string> OnUpdateUserGamePieceID;
-        public static Action<int> onRatingAquired;
+        public static Action<int> onRatingUpdate;
+        public static Action<int> onWinsUpdate;
+        public static Action<int> onLosesUpdate;
+        public static Action<int> onDrawsUpdate;
+        public static Action<int> onTotalGamesUpdate;
 
         public bool settingRandomName = false;
 
@@ -46,7 +49,9 @@ namespace Fourzy
             {
                 string selectedGamePiece = PlayerPrefsWrapper.GetSelectedGamePiece();
 
-                return (string.IsNullOrEmpty(selectedGamePiece)) ? Constants.DEFAULT_GAME_PIECE : selectedGamePiece;
+                return (string.IsNullOrEmpty(selectedGamePiece)) ?
+                    InternalSettings.Current.DEFAULT_GAME_PIECE :
+                    selectedGamePiece;
             }
 
             private set
@@ -153,9 +158,80 @@ namespace Fourzy
             {
                 _lastCachedRating = value;
 
-                onRatingAquired?.Invoke(_lastCachedRating);
+                onRatingUpdate?.Invoke(_lastCachedRating);
 
                 FourzyPhotonManager.SetMyProperty(Constants.REALTIME_RATING_KEY, _lastCachedRating);
+            }
+        }
+
+        public string lastCachedRatingFiltered
+        {
+            get
+            {
+                if (ratingAssigned)
+                {
+                    return lastCachedRating.ToString();
+                }
+                else
+                {
+                    return "Apprentice";
+                }
+            }
+        }
+
+        public bool ratingAssigned => totalPlayfabGames >= Constants.GAMES_BEFORE_RATING_DISPLAYED;
+
+        public int playfabWinsCount
+        {
+            get => _lastCachedWins;
+
+            set
+            {
+                _lastCachedWins = value;
+
+                onWinsUpdate?.Invoke(_lastCachedWins);
+
+                FourzyPhotonManager.SetMyProperty(Constants.REALTIME_WINS_KEY, value);
+            }
+        }
+
+        public int playfabLosesCount
+        {
+            get => _lastCachedLoses;
+
+            set
+            {
+                _lastCachedLoses = value;
+
+                onLosesUpdate?.Invoke(_lastCachedLoses);
+
+                FourzyPhotonManager.SetMyProperty(Constants.REALTIME_LOSES_KEY, value);
+            }
+        }
+
+        public int playfabDrawsCount
+        {
+            get => _lastCachedDraws;
+
+            set
+            {
+                _lastCachedDraws = value;
+
+                onDrawsUpdate?.Invoke(_lastCachedDraws);
+
+                FourzyPhotonManager.SetMyProperty(Constants.REALTIME_DRAWS_KEY, value);
+            }
+        }
+
+        public int totalPlayfabGames
+        {
+            get
+            {
+                int _result = playfabWinsCount + playfabLosesCount + playfabDrawsCount;
+
+                onTotalGamesUpdate?.Invoke(_result);
+
+                return _result;
             }
         }
 
@@ -168,6 +244,9 @@ namespace Fourzy
         public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceID + "" };
 
         private int _lastCachedRating = -1;
+        private int _lastCachedWins = 0;
+        private int _lastCachedLoses = 0;
+        private int _lastCachedDraws = 0;
 
         protected override void Awake()
         {
@@ -294,27 +373,81 @@ namespace Fourzy
         }
 
         public static void GetPlayerRating(
-            Action<int> _onRatingAquired = null, 
+            Action<int> _onRatingAquired = null,
             Action onFailed = null)
         {
-            if (string.IsNullOrEmpty(LoginManager.playerMasterAccountID)) return;
+            if (string.IsNullOrEmpty(LoginManager.playfabID))
+            {
+                Debug.LogError("User account id must be set");
+
+                return;
+            }
 
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "checkPlayerRating",
-                FunctionParameter = new { playerID = LoginManager.playerMasterAccountID, }
-            }, (result) =>
+                FunctionParameter = new { playerID = LoginManager.playfabID, }
+            }, result =>
             {
                 CheckRatingResult data =
                     JsonConvert.DeserializeObject<CheckRatingResult>(result.FunctionResult.ToString());
 
                 Instance.lastCachedRating = data.rating;
                 _onRatingAquired?.Invoke(data.rating);
-            }, (error) =>
+            }, error =>
             {
                 Debug.Log(error.ErrorMessage);
                 GamesToastsController.ShowTopToast(error.ErrorMessage);
 
+                onFailed?.Invoke();
+            });
+        }
+
+        /// <summary>
+        /// Only called after user logged in into playfab
+        /// </summary>
+        public static void GetMyStats(Action onFailed = null)
+        {
+            if (string.IsNullOrEmpty(LoginManager.playfabID))
+            {
+                Debug.LogError("User account id must be set");
+
+                return;
+            }
+
+            GetPlayerStats(LoginManager.playfabID, false, data =>
+            {
+                Instance.playfabWinsCount = data.wins;
+                Instance.playfabLosesCount = data.loses;
+                Instance.playfabDrawsCount = data.drawGames;
+
+                Instance.lastCachedRating = data.rating;
+
+                Debug.Log($"Stats received: wins {data.wins} loses {data.loses} draws {data.drawGames} rating {data.rating}");
+            }, onFailed);
+        }
+
+        public static void GetPlayerStats(
+            string playerID, 
+            bool full,
+            Action<CheckPlayerStatsResult> onSuccess, 
+            Action onFailed)
+        {
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "userStats",
+                FunctionParameter = new
+                {
+                    playerID,
+                    full,
+                }
+            }, result =>
+            {
+                onSuccess?.Invoke(
+                    JsonConvert.DeserializeObject<CheckPlayerStatsResult>(result.FunctionResult.ToString()));
+            }, error =>
+            {
+                Debug.Log(error.ErrorMessage);
                 onFailed?.Invoke();
             });
         }
@@ -355,30 +488,6 @@ namespace Fourzy
             return firstName + " " + lastName + Mathf.CeilToInt(UnityEngine.Random.Range(0f, 9999f)).ToString();
         }
 
-        //public IEnumerator GetFBPicture(string facebookId, Action<Sprite> callback)
-        //{
-        //    // FB.API("/" + facebookId + "/picture?type=square&height=210&width=210", HttpMethod.GET, UpdateProfileImage);
-
-        //    using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture("https://graph.facebook.com/" + facebookId + "/picture?width=210&height=210"))
-        //    {
-        //        yield return uwr.SendWebRequest();
-
-        //        if (uwr.isNetworkError || uwr.isHttpError)
-        //        {
-        //            if (GameManager.Instance.debugMessages)
-        //                Debug.Log("get_fb_picture_error: " + uwr.error);
-        //        }
-        //        else
-        //        {
-        //            Texture2D tempPic = new Texture2D(25, 25);
-        //            tempPic = DownloadHandlerTexture.GetContent(uwr);
-        //            Sprite profilePictureSprite = Sprite.Create(tempPic, new Rect(0, 0, tempPic.width, tempPic.height), new Vector2(0.5f, 0.5f));
-
-        //            callback(profilePictureSprite);
-        //        }
-        //    }
-        //}
-
         private void OnNetworkAccess(bool networkAccess)
         {
             if (networkAccess)
@@ -408,10 +517,22 @@ namespace Fourzy
         }
 
         [System.Serializable]
-        private struct CheckRatingResult
+        public struct CheckRatingResult
         {
             public int rating;
             public bool justAdded;
+        }
+
+        [System.Serializable]
+        public struct CheckPlayerStatsResult
+        {
+            public string id;
+            public int rating;
+            public int wins;
+            public int loses;
+            public int drawGames;
+            public string displayName;
+            public string fourzy;
         }
     }
 }

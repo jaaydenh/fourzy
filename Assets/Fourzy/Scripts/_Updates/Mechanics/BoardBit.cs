@@ -459,8 +459,8 @@ namespace Fourzy._Updates.Mechanics
 
             if (gameboard)
             {
-                originalSpeed = gameboard.step.x * Constants.BASE_MOVE_SPEED;
-                speedCap = gameboard.step.x * Constants.MOVE_SPEED_CAP;
+                originalSpeed = gameboard.step.x * InternalSettings.Current.BASE_MOVE_SPEED;
+                speedCap = gameboard.step.x * InternalSettings.Current.MOVE_SPEED_CAP;
             }
 
             spriteRenderers = GetComponentsInChildren<SpriteRenderer>(true);

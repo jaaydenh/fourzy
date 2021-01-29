@@ -1,10 +1,12 @@
 ﻿//@vadym udod
 
+using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using Photon.Pun;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -20,15 +22,35 @@ namespace Fourzy._Updates.UI.Widgets
         public SpellsListUIWidget spellsHolder;
 
         private GamePieceView current;
+        private int rating;
+        private int totalGames;
 
         public Player assignedPlayer { get; private set; }
         public IClientFourzy game { get; private set; }
 
-        public bool shown { get; private set; } = false;
+        public bool shown { get; private set; }
+
+        public bool isMe { get; private set; }
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            FourzyPhotonManager.onPlayerPpopertiesUpdate += OnPlayerPropertiesUpdate;
+            UserManager.onTotalGamesUpdate += OnTotalGamesUpdate;
+            UserManager.onRatingUpdate += OnRatingUpdate;
+        }
 
         protected void OnDestroy()
         {
-            if (game != null) game.onMagic -= UpdateMagic;
+            if (game != null)
+            {
+                game.onMagic -= UpdateMagic;
+            }
+
+            FourzyPhotonManager.onPlayerPpopertiesUpdate -= OnPlayerPropertiesUpdate;
+            UserManager.onTotalGamesUpdate -= OnTotalGamesUpdate;
+            UserManager.onRatingUpdate -= OnRatingUpdate;
         }
 
         public void SetPlayerName(string name)
@@ -50,9 +72,13 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        public void SetPlayerIcon(Player player)
+        public void SetPlayer(Player player)
         {
             assignedPlayer = player;
+            if (game != null)
+            {
+                isMe = assignedPlayer == game.me;
+            }
 
             if (current)
             {
@@ -68,6 +94,8 @@ namespace Fourzy._Updates.UI.Widgets
             current.gameObject.SetActive(true);
 
             UpdateMagic(player.PlayerId, player.Magic);
+
+            SetPlayerName(player.DisplayName);
         }
 
         public void ShowPlayerTurnAnimation()
@@ -103,17 +131,17 @@ namespace Fourzy._Updates.UI.Widgets
             extraLabel.text = text;
         }
 
-        public void SetExtraDataAsRating(int value)
+        public void SetRating(int value, int totalGames)
         {
-            bool useRating = game._Type == GameType.REALTIME && PhotonNetwork.CurrentRoom != null;
+            if (value < 0) return;
 
-            if (useRating && value != -1)
+            if (totalGames >= Constants.GAMES_BEFORE_RATING_DISPLAYED)
             {
-                SetExtraData($"Rating {value}");
+                SetExtraData(value.ToString());
             }
             else
             {
-                SetExtraData("Wizard");
+                SetExtraData("Apprentice");
             }
         }
 
@@ -143,6 +171,61 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 magicBadge.SetValue(value);
             }
+        }
+
+        private void OnPlayerPropertiesUpdate(Photon.Realtime.Player player, Hashtable data)
+        {
+            //only opponent
+            if (isMe || player == PhotonNetwork.LocalPlayer)
+            {
+                return;
+            }
+
+            bool condition = false;
+            if (data.ContainsKey(Constants.REALTIME_WINS_KEY) ||
+                data.ContainsKey(Constants.REALTIME_LOSES_KEY) ||
+                data.ContainsKey(Constants.REALTIME_DRAWS_KEY))
+            {
+                totalGames = FourzyPhotonManager.GetOpponentTotalGames();
+                condition = true;
+            }
+
+            if (data.ContainsKey(Constants.REALTIME_RATING_KEY))
+            {
+                rating = (int)data[Constants.REALTIME_RATING_KEY];
+                condition = true;
+            }
+
+            if (condition)
+            {
+                SetRating(rating, totalGames);
+            }
+        }
+
+        private void OnRatingUpdate(int rating)
+        {
+            //only me
+            if (!isMe)
+            {
+                return;
+            }
+
+            this.rating = rating;
+
+            SetRating(rating, totalGames);
+        }
+
+        private void OnTotalGamesUpdate(int totalGames)
+        {
+            //only me
+            if (!isMe)
+            {
+                return;
+            }
+
+            this.totalGames = totalGames;
+
+            SetRating(rating, totalGames);
         }
     }
 }
