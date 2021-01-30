@@ -121,7 +121,7 @@ namespace Fourzy
             PlayerPrefs.GetInt(kGamePieceChampions + id, 0);
 
         public static string GetSelectedGamePiece() => 
-            PlayerPrefs.GetString(kSelectedGamePiece, "");
+            PlayerPrefs.GetString(kSelectedGamePiece, InternalSettings.Current.DEFAULT_GAME_PIECE);
 
         public static void SetSelectedGamePiece(string pieceID) => 
             PlayerPrefs.SetString(kSelectedGamePiece, pieceID);

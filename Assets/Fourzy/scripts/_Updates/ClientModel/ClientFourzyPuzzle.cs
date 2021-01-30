@@ -142,7 +142,9 @@ namespace Fourzy._Updates.ClientModel
 
         public bool hideOpponent { get; set; } = true;
 
-        public Piece activePlayerPiece => new Piece(State.ActivePlayerId, string.IsNullOrEmpty(activePlayer.HerdId) ? 1 : int.Parse(activePlayer.HerdId));
+        public Piece activePlayerPiece => new Piece(
+            State.ActivePlayerId, 
+            string.IsNullOrEmpty(activePlayer.HerdId) ? 1 : int.Parse(activePlayer.HerdId));
 
         public Piece playerPiece
         {

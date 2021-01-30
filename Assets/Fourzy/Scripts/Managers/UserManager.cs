@@ -45,14 +45,7 @@ namespace Fourzy
 
         public string gamePieceID
         {
-            get
-            {
-                string selectedGamePiece = PlayerPrefsWrapper.GetSelectedGamePiece();
-
-                return (string.IsNullOrEmpty(selectedGamePiece)) ?
-                    InternalSettings.Current.DEFAULT_GAME_PIECE :
-                    selectedGamePiece;
-            }
+            get => PlayerPrefsWrapper.GetSelectedGamePiece();
 
             private set
             {
@@ -241,7 +234,7 @@ namespace Fourzy
 
         public float levelProgress => GetProgression(xp);
 
-        public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceID + "" };
+        public Player meAsPlayer => new Player(1, userName) { PlayerString = userId, HerdId = gamePieceID };
 
         private int _lastCachedRating = -1;
         private int _lastCachedWins = 0;
@@ -364,6 +357,7 @@ namespace Fourzy
 
         public void UpdateSelectedGamePiece(string _gamePieceID)
         {
+            Debug.Log($"-------------{_gamePieceID}");
             gamePieceID = _gamePieceID;
 
             OnUpdateUserGamePieceID?.Invoke(gamePieceID);

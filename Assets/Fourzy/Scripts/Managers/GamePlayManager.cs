@@ -1182,8 +1182,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (string.IsNullOrEmpty(GameManager.Instance.currentOpponent)) return;
             if (ratingUpdated) return;
 
-            UserManager.Instance.playfabWinsCount += 1;
-
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "reportRatingGameComplete",
@@ -1224,18 +1222,25 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 if (player.playfabID == LoginManager.playfabID)
                 {
                     UserManager.Instance.lastCachedRating = player.rating;
-
+                    string ratingText = "Rating ";
                     if (player.winner)
                     {
                         UserManager.Instance.playfabWinsCount += 1;
-
-                        gameWinLoseScreen.SetInfoLabel($"+{player.ratingChange} rating points!");
+                        ratingText += "+";
                     }
                     else
                     {
                         UserManager.Instance.playfabLosesCount += 1;
+                    }
 
-                        gameWinLoseScreen.SetInfoLabel($"{player.ratingChange} rating points!");
+                    int diff = Constants.GAMES_BEFORE_RATING_DISPLAYED - UserManager.Instance.totalPlayfabGames;
+                    if (diff > 0)
+                    {
+                        gameWinLoseScreen.SetInfoLabel($"Rating revealed in {diff} more game{(diff == 1 ? "" : "s")}.");
+                    }
+                    else
+                    {
+                        gameWinLoseScreen.SetInfoLabel(ratingText + player.ratingChange);
                     }
                 }
             }

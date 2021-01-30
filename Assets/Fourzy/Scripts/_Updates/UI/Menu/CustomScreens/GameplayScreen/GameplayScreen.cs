@@ -280,11 +280,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             HideGameInfoWidget(false);
         }
 
-        public void ShowOpponentMessage(string message, float duration)
-        {
-            opponentMessagesWidget.AddMessage(message, duration);
-        }
-
         public void OnWrongTurn()
         {
             gameInfoWidget.NotYourTurn();

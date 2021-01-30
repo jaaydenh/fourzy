@@ -13880,7 +13880,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 751.0115
+  m_MinWidth: 750.79395
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -31732,7 +31732,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -100}
-  m_SizeDelta: {x: 0, y: -400}
+  m_SizeDelta: {x: 0, y: -260.02124}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1133987187
 GameObject:
@@ -32178,7 +32178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 751.0115
+  m_MinWidth: 750.79395
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -38022,7 +38022,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1349707711
 RectTransform:
   m_ObjectHideFlags: 0
@@ -38162,7 +38162,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 33
+          selectedMember: 39
           isDynamic: 0
         target: {fileID: 1870856805}
         memberName: ReloadLeaderboard
@@ -43147,7 +43147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 751.0115
+  m_MinWidth: 750.79395
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -47196,7 +47196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 751.0115
+  m_MinWidth: 750.79395
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -51665,7 +51665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 751.0115
+  m_MinWidth: 750.79395
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1

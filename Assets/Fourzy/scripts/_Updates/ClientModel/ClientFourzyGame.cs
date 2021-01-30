@@ -245,7 +245,15 @@ namespace Fourzy._Updates.ClientModel
 
         public bool hideOpponent { get; set; } = false;
 
-        public Piece activePlayerPiece => new Piece(State.ActivePlayerId, string.IsNullOrEmpty(activePlayer.HerdId) ? 1 : int.Parse(activePlayer.HerdId));
+        public Piece activePlayerPiece
+        {
+            get
+            {
+                return new Piece(
+                    State.ActivePlayerId,
+                    string.IsNullOrEmpty(activePlayer.HerdId) ? 1 : int.Parse(activePlayer.HerdId));
+            }
+        }
 
         public Piece playerPiece
         {
@@ -290,7 +298,9 @@ namespace Fourzy._Updates.ClientModel
 
         public GamePieceView activePlayerGamePiece => State.ActivePlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
 
-        public Player me => State.Players.Values.ToList().Find(_player => _player.PlayerString == UserManager.Instance.userId) ?? State.Players[1];
+        public Player me => State.Players.Values
+            .ToList()
+            .Find(_player => _player.PlayerString == UserManager.Instance.userId) ?? State.Players[1];
 
         public Player opponent => State.Players[(PlayerEnum)me.PlayerId == PlayerEnum.ONE ? (int)PlayerEnum.TWO : (int)PlayerEnum.ONE];
 

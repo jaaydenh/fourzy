@@ -2364,7 +2364,10 @@ namespace Fourzy._Updates.Mechanics.Board
                 this.location = location;
                 this.value = value;
 
-                move = new SimpleMove(model.activePlayerPiece, location.GetDirection(model), location.GetLocation(model));
+                move = new SimpleMove(
+                    model.activePlayerPiece, 
+                    location.GetDirection(model), 
+                    location.GetLocation(model));
             }
         }
 
