@@ -13991,8 +13991,8 @@ MonoBehaviour:
   autoAdjustSize: 0
   loadingIndicator: {fileID: 15396164}
   reloadButton: {fileID: 0}
-  scrollView: {fileID: 0}
-  verticalLayoutGroup: {fileID: 0}
+  scrollView: {fileID: 1468310646}
+  verticalLayoutGroup: {fileID: 1084035745}
   leaderboardWidgetPrefab: {fileID: 126614029804787601, guid: 2b69edf428dbd9f46a4626a70a5c353a,
     type: 3}
   widgetsParent: {fileID: 1084035743}
@@ -18661,7 +18661,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1000738602
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18801,7 +18801,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 33
+          selectedMember: 39
           isDynamic: 0
         target: {fileID: 678526985}
         memberName: ReloadLeaderboard
@@ -19571,7 +19571,7 @@ MonoBehaviour:
     m_Left: 15
     m_Right: 15
     m_Top: 20
-    m_Bottom: 0
+    m_Bottom: 20
   m_ChildAlignment: 0
   m_Spacing: 26
   m_ChildForceExpandWidth: 1
@@ -26836,6 +26836,7 @@ GameObject:
   - component: {fileID: 1468310646}
   - component: {fileID: 1468310645}
   - component: {fileID: 1468310644}
+  - component: {fileID: 1468310647}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -26929,7 +26930,76 @@ MonoBehaviour:
   m_VerticalScrollbarSpacing: -3
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 678526985}
+        m_MethodName: OnScrollValueChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1468310647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1468310642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 678526985}
+          m_MethodName: PointerCheck
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 5
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 678526985}
+          m_MethodName: PointerCheck
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 678526985}
+          m_MethodName: PointerUp
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1477837491
 GameObject:
   m_ObjectHideFlags: 0
@@ -30855,7 +30925,6 @@ GameObject:
   - component: {fileID: 1757549355}
   - component: {fileID: 1757549354}
   - component: {fileID: 1757549353}
-  - component: {fileID: 1757549352}
   - component: {fileID: 1757549351}
   m_Layer: 5
   m_Name: Rankings
@@ -30882,7 +30951,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 653, y: -103}
+  m_AnchoredPosition: {x: 655.2001, y: -103}
   m_SizeDelta: {x: 410, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1757549351
@@ -30905,98 +30974,6 @@ MonoBehaviour:
     inspectorListHeight: 83
     persistentCalls:
       calls: []
---- !u!114 &1757549352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1757549349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 621e7244aed05c445859a13faeb1d4a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  continious: 0
-  orientation: 1
-  onIphone:
-    inspectorListHeight: 83
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 0
-          isDynamic: 0
-        target: {fileID: 1757549350}
-        memberName: anchoredPosition
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-  onIphoneX:
-    inspectorListHeight: 83
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 0
-          isDynamic: 0
-        target: {fileID: 1757549350}
-        memberName: anchoredPosition
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
-  onIpad:
-    inspectorListHeight: 83
-    persistentCalls:
-      calls:
-      - genericMenuData:
-          selectedComponent: 1
-          selectedMember: 0
-          isDynamic: 0
-        target: {fileID: 1757549350}
-        memberName: anchoredPosition
-        memberType: 16
-        arguments:
-        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-          supportedType: 7
-          objectArgument: {fileID: 0}
-          stringArgument: 
-          intArgument: 0
-          floatArgument: 0
-          boolArgument: 0
-          colorArgument: {r: 0, g: 0, b: 0, a: 0}
-          vector2Argument: {x: 0, y: 0}
-          vector3Argument: {x: 0, y: 0, z: 0}
-          enumArgument: 
-        isDynamic: 0
-        isCallEnabled: 1
 --- !u!114 &1757549353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32562,9 +32539,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 567}
-  m_SizeDelta: {x: 800, y: 934}
-  m_Pivot: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 800, y: 1000}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1865131889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32699,7 +32676,7 @@ PrefabInstance:
     - target: {fileID: 7486432582446186428, guid: decf42ea205387e4caef2023b8279191,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -49.99994
+      value: -49.999878
       objectReference: {fileID: 0}
     - target: {fileID: 7486432582831536608, guid: decf42ea205387e4caef2023b8279191,
         type: 3}
@@ -34436,7 +34413,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 38
+          selectedMember: 37
           isDynamic: 0
         target: {fileID: 1739894148}
         memberName: OpenOnlineLobby
@@ -36835,7 +36812,7 @@ PrefabInstance:
     - target: {fileID: 571617863460993974, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.999695
+      value: 59.999634
       objectReference: {fileID: 0}
     - target: {fileID: 712370141903046656, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
@@ -38635,17 +38612,17 @@ PrefabInstance:
     - target: {fileID: 8244338561498620451, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8244338561498620451, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8244338561498620451, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8244338561498620451, guid: 6660da8cd1bb65346b4dc60ebc42d4e6,
         type: 3}
@@ -38929,7 +38906,7 @@ PrefabInstance:
     - target: {fileID: 102027882865562241, guid: b602c9de8d12bd1448bc809e6e666441,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -49.99994
+      value: -49.999878
       objectReference: {fileID: 0}
     - target: {fileID: 102027882865562241, guid: b602c9de8d12bd1448bc809e6e666441,
         type: 3}
