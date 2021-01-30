@@ -39,7 +39,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (string.IsNullOrEmpty(inputField.text))
             {
                 SetError(LocalizationManager.Value("cant_be_empty"));
-                //GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "New name can't be empty!");
 
                 return;
             }
@@ -48,11 +47,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 if (inputField.text.Length <= 3 || inputField.text.Length >= 25)
                 {
                     if (inputField.text.Length <= 3)
+                    {
                         SetError(LocalizationManager.Value("too_short"));
+                    }
                     else
+                    {
                         SetError(LocalizationManager.Value("too_long"));
-
-                    //GamesToastsController.ShowToast(GamesToastsController.ToastStyle.ACTION_WARNING, "New name must be between 3 and 25 characters.");
+                    }
                 }
                 else
                 {
@@ -74,7 +75,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             inputField.ActivateInputField();
 
             previousName = UserManager.Instance.userName;
-            promptText.text = $"{LocalizationManager.Value("current_name")}: " + previousName;
+            promptText.text = previousName;
 
             if (UserManager.Instance.currentlyChangingName) SetChangingNameOverlayState(true);
         }
@@ -91,9 +92,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             changingNameOverlay.blocksRaycasts = state;
 
             if (state)
+            {
                 changingNameTween.PlayForward(true);
+            }
             else
+            {
                 changingNameTween.PlayBackward(true);
+            }
         }
 
         private void OnDisplayNameChanged()

@@ -1,11 +1,9 @@
 ﻿
 
 using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
 using System.Globalization;
 using System.Linq;
-using UnityEngine.Networking;
+using UnityEngine;
 
 namespace Fourzy
 {
@@ -42,21 +40,27 @@ namespace Fourzy
 
             string dataAsJson;
 
-            if (file != null)
-                dataAsJson = file.Load<TextAsset>().text;
+            if (file == null) return;
             else
-                return;
+            {
+                dataAsJson = file.Load<TextAsset>().text;
+            }
 
             LocalizationData loadedData = JsonUtility.FromJson<LocalizationData>(dataAsJson);
 
             for (int i = 0; i < loadedData.items.Length; i++)
+            {
                 localizedText.Add(loadedData.items[i].key, loadedData.items[i].value);
+            }
         }
 
         public string GetLocalizedValue(string key)
         {
             string result = missingTextString;
-            if (localizedText.ContainsKey(key)) result = localizedText[key];
+            if (localizedText.ContainsKey(key))
+            {
+                result = localizedText[key];
+            }
 
             return result;
         }
@@ -65,7 +69,10 @@ namespace Fourzy
         {
             PlayerLanguage = language;
             LoadLocalizedText(PlayerLanguage);
-            foreach (LocalizedText text in FindObjectsOfType<LocalizedText>()) text.UpdateLocale();
+            foreach (LocalizedText text in FindObjectsOfType<LocalizedText>())
+            {
+                text.UpdateLocale();
+            }
         }
 
         public static string Value(string key) => Instance.GetLocalizedValue(key);
@@ -74,7 +81,8 @@ namespace Fourzy
         {
             get
             {
-                if ((SystemLanguage) PlayerPrefs.GetInt(STR_LOCALIZATION_KEY, (int)Application.systemLanguage) == SystemLanguage.Spanish) {
+                if ((SystemLanguage)PlayerPrefs.GetInt(STR_LOCALIZATION_KEY, (int)Application.systemLanguage) == SystemLanguage.Spanish)
+                {
                     return SystemLanguage.Spanish;
                 }
                 if ((SystemLanguage)PlayerPrefs.GetInt(STR_LOCALIZATION_KEY, (int)Application.systemLanguage) == SystemLanguage.Thai)

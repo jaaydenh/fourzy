@@ -17,12 +17,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void _Prompt()
         {
             //sort by unread
-            news = GameManager.Instance.latestNews.OrderBy(item => PlayerPrefsWrapper.GetNewsOpened(item.NewsId)).ToList();
+            news = GameManager.Instance.latestNews
+                .OrderBy(item => PlayerPrefsWrapper.GetNewsOpened(item.NewsId))
+                .ToList();
 
             if (news.Count == 0)
+            {
                 Prompt(LocalizationManager.Value("no_news"), "", "", "");
+            }
             else
+            {
                 OpenNewsPage(0);
+            }
         }
 
         public void Previous() => OpenNewsPage(currentNewsIndex - 1);
@@ -33,7 +39,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             currentNewsIndex = page;
 
-            if (menuController.currentScreen != this) Prompt();
+            if (menuController.currentScreen != this)
+            {
+                Prompt();
+            }
 
             promptTitle.text = news[page].Title;
             promptText.text = news[page].Body;

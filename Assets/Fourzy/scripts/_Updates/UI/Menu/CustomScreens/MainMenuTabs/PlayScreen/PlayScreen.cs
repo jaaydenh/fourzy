@@ -1,18 +1,15 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates._Tutorial;
-using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.UI.Helpers;
-using Photon.Pun;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class PlayScreen : MenuTab
     {
+        private const string kLobbyScreenOpened = "lobbyScreenOpened";
+
         public RectTransform body;
         public RectTransform portalsHolder;
         public ButtonExtended fastPuzzleButton;
@@ -46,17 +43,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        public void ContinueStartTurnBasedGame()
-        {
-            // List<ChallengeData> next = ChallengeManager.Instance.NextChallenges;
-
-            //open game
-            // if (next.Count > 0)
-            //     GameManager.Instance.StartGame(next[0].GetGameForPreviousMove());
-            // else
-            //     StartTurnGame();
-        }
-
         public void StartGauntletAIPack()
         {
             //check
@@ -78,7 +64,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void StartTutorialAdventure() => menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
 
-        public void ResetTutorial() => 
+        public void ResetTutorial() =>
             PersistantMenuController.instance.GetOrAddScreen<OnboardingScreen>().OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
 
         public void OpenFastPuzzleScreen()
@@ -100,12 +86,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void OpenNews() => menuController.GetOrAddScreen<NewsPromptScreen>()._Prompt();
 
-        public void OpenDiscord() => Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/t2zW7j3XRs"/*)*/);
+        public void OpenDiscord() => 
+            Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/t2zW7j3XRs"/*)*/);
 
         public void OpenOnlineLobby()
         {
-            //if (PlayerPrefsWrapper.GetRemoteSetting)
-            PersistantMenuController.instance.GetOrAddScreen<LobbyScreen>().CheckLobby();
+            if (PlayerPrefsWrapper.GetBool(kLobbyScreenOpened))
+            {
+                PersistantMenuController.instance.GetOrAddScreen<LobbyScreen>().CheckLobby();
+            }
+            else
+            {
+                menuController.GetOrAddScreen<ChangeNamePromptScreen>()._Prompt();
+
+                PlayerPrefsWrapper.SetBool(kLobbyScreenOpened, true);
+            }
         }
 
         public void StartRealtime() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();

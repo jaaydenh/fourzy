@@ -13,6 +13,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class PracticeScreen : MenuScreen
     {
+        private const string kPracticeScreenOpened = "practiceScreenOpened";
+
         public ScrollRect player1select;
         public ScrollRect player2select;
         public ScrollRect areasContainer;
@@ -92,9 +94,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             HeaderScreen.instance.Close();
 
             //check if was opened
-            if (!PlayerPrefsWrapper.GetPracticeScreenOpened())
+            if (!PlayerPrefsWrapper.GetBool(kPracticeScreenOpened))
             {
-                PlayerPrefsWrapper.SetPracticeScreenOpened(true);
+                PlayerPrefsWrapper.SetBool(kPracticeScreenOpened, true);
 
                 ShowHelp();
             }
