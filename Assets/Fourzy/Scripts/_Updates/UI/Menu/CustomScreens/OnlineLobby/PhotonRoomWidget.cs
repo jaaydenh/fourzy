@@ -47,6 +47,14 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
+        public void _Destroy()
+        {
+            Destroy(gameObject);
+        }
+
+        /// <summary>
+        /// Invoked via button
+        /// </summary>
         public void JoinGame()
         {
             if (string.IsNullOrEmpty(password))

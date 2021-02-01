@@ -23,7 +23,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public Sprite checkmarkOff;
 
         protected List<PhotonRoomWidget> rooms = new List<PhotonRoomWidget>();
-        protected List<RoomInfo> roomsData = new List<RoomInfo>();
 
         private bool passwordEnabled;
         private LoadingPromptScreen _prompt;
@@ -190,19 +189,56 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Clear();
 
             foreach (RoomInfo roomData in data)
-                if (!roomData.RemovedFromList &&
-                    roomData.CustomProperties.ContainsKey(Constants.REALTIME_ROOM_TYPE_KEY) &&
-                    (RoomType)roomData.CustomProperties[Constants.REALTIME_ROOM_TYPE_KEY] == RoomType.LOBBY_ROOM)
+            {
+                if (!roomData.RemovedFromList && IsLobbyRoom(roomData))
+                {
                     rooms.Add(Instantiate(widgetPrefab, widgetsParent).SetData(roomData));
+                }
+            }
         }
 
         private void Clear()
         {
-            foreach (PhotonRoomWidget widget in rooms) Destroy(widget.gameObject);
+            foreach (PhotonRoomWidget widget in rooms)
+            {
+                Destroy(widget.gameObject);
+            }
+
             rooms.Clear();
         }
 
-        private void OnRoomsUpdated(List<RoomInfo> _rooms) => DisplayRooms(roomsData = _rooms);
+        private bool IsLobbyRoom(RoomInfo roomData)
+        {
+            return roomData.CustomProperties.ContainsKey(Constants.REALTIME_ROOM_TYPE_KEY) &&
+                (RoomType)roomData.CustomProperties[Constants.REALTIME_ROOM_TYPE_KEY] == RoomType.LOBBY_ROOM;
+        }
+
+        private void OnRoomsUpdated(List<RoomInfo> _rooms)
+        {
+            foreach (RoomInfo roomData in _rooms)
+            {
+                if (IsLobbyRoom(roomData))
+                {
+                    //remove
+                    if (roomData.RemovedFromList)
+                    {
+                        PhotonRoomWidget _roomWidget = rooms.Find(_widget => _widget.name == roomData.Name);
+
+                        if (_roomWidget)
+                        {
+                            _roomWidget._Destroy();
+                            rooms.Remove(_roomWidget);
+                        }
+                    }
+                    //add
+                    else
+                    {
+                        rooms.Add(Instantiate(widgetPrefab, widgetsParent).SetData(roomData));
+                    }
+                }
+            }
+            DisplayRooms(FourzyPhotonManager.Instance.roomsInfo);
+        }
 
         private void OnJoinedRoom(string roomName)
         {
