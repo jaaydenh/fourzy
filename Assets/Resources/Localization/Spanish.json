@@ -139,6 +139,10 @@
       "value": "Aventuras"
     },
     {
+      "key": "click_to_continue",
+      "value": "Haz click para continuar... "
+    },
+    {
       "key": "complete",
       "value": "terminado"
     },
@@ -175,6 +179,10 @@
       "value": "Elige tu Fourzy"
     },
     {
+      "key": "close",
+      "value": "Cerrar"
+    },
+    {
       "key": "current_name",
       "value": "Nombre actual"
     },
@@ -185,6 +193,10 @@
     {
       "key": "draw",
       "value": "Empate"
+    },
+    {
+      "key": "enter_room_code",
+      "value": "Ingrese código de lugar "
     },
     {
       "key": "excellent",
@@ -257,6 +269,10 @@
     {
       "key": "help",
       "value": "Ayuda"
+    },
+    {
+      "key": "join",
+      "value": "Entrar"
     },
     {
       "key": "lost",
@@ -337,6 +353,10 @@
     {
       "key": "player_two",
       "value": "Jugador 2"
+    },
+    {
+      "key": "practice",
+      "value": "Práctica"
     },
     {
       "key": "practiceScreenPromptTitle",

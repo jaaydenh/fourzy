@@ -28,8 +28,9 @@ namespace Fourzy._Updates.UI.Widgets
 
             if (data.CustomProperties.ContainsKey(Constants.REALTIME_GAMEPIECE_KEY))
             {
-                GamePieceView _gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder
-                    .GetGamePiecePrefabData(data.CustomProperties[Constants.REALTIME_GAMEPIECE_KEY].ToString()).player1Prefab, gamepieceParent);
+                GamePieceView _gamePiece = Instantiate(
+                    GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(data.CustomProperties[Constants.REALTIME_GAMEPIECE_KEY].ToString()).player1Prefab, 
+                    gamepieceParent);
 
                 _gamePiece.transform.localPosition = Vector3.zero;
                 _gamePiece.StartBlinking();
@@ -56,7 +57,12 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 passwordScreen = menuScreen.menuController
                     .GetOrAddScreen<InputFieldPrompt>()
-                    ._Prompt(CheckPassword, "Enter Room Code", "", "Join", "Close");
+                    ._Prompt(
+                        CheckPassword, 
+                        LocalizationManager.Value("enter_room_code"), 
+                        "",
+                        LocalizationManager.Value("join"),
+                        LocalizationManager.Value("close"));
 
                 passwordScreen.CloseOnDecline();
             }

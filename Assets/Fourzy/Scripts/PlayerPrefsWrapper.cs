@@ -178,12 +178,9 @@ namespace Fourzy
             PlayerPrefs.SetInt(kHintsTutorialStage, value);
 
         public static int GetPlacementStyle() =>
-#if UNITY_IOS || UNITY_ANDROID
-            PlayerPrefs.GetInt(kPlacementStyle, InternalSettings.Current.DEFAULT_PLACEMENT_STYLE_TOUCH);
-
-#elif UNITY_STANDALONE || UNITY_EDITOR
-            PlayerPrefs.GetInt(kPlacementStyle, InternalSettings.Current.DEFAULT_PLACEMENT_STYLE_POINTER);
-#endif
+            PlayerPrefs.GetInt(kPlacementStyle, GameManager.HAS_POINTER ?
+                    InternalSettings.Current.DEFAULT_PLACEMENT_STYLE_POINTER :
+                    InternalSettings.Current.DEFAULT_PLACEMENT_STYLE_TOUCH);
 
         public static void SetPlacementStyle(int value) =>
             PlayerPrefs.SetInt(kPlacementStyle, value);

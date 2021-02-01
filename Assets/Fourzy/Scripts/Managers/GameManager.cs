@@ -1,9 +1,6 @@
 ﻿//@vadym udod
 
 using Firebase;
-using Firebase.Analytics;
-using Firebase.RemoteConfig;
-using Firebase.Storage;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
@@ -23,9 +20,7 @@ using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Purchasing;
@@ -44,9 +39,13 @@ namespace Fourzy
         public static Action<string> onDailyChallengeFileName;
         public static Action<PlacementStyle> onPlacementStyle;
 
-        public static Dictionary<string, object> APP_REMOTE_SETTINGS_DEFAULTS;
-
         public static GameManager Instance;
+
+#if UNITY_STANDALONE || UNITY_EDITOR 
+        public static bool HAS_POINTER = true;
+#elif UNITY_IOS || UNITY_ANDROID
+        public static bool HAS_POINTER = false;
+#endif
 
         [Header("Display tutorials?")]
         public bool displayTutorials = true;
@@ -191,44 +190,16 @@ namespace Fourzy
             if (value) Handheld.Vibrate();
 #endif
 
-            APP_REMOTE_SETTINGS_DEFAULTS = new Dictionary<string, object>()
-            {
-                [Constants.KEY_APP_VERSION] = Application.version,
-                [Constants.KEY_DAILY_PUZZLE] = "",
-                [Constants.KEY_STORE_STATE] = "1",
-
-                //rewards
-                [Constants.KEY_REWARDS_TURNBASED] = "0",
-                [Constants.KEY_REWARDS_PASSPLAY] = "0",
-                [Constants.KEY_REWARDS_PUZZLEPLAY] = "0",
-                [Constants.KEY_REWARDS_REALTIME] = "0",
-            };
-
-            FirebaseRemoteConfig.SetDefaults(APP_REMOTE_SETTINGS_DEFAULTS);
-
-            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-            {
-                dependencyStatus = task.Result;
-
-                if (dependencyStatus != DependencyStatus.Available)
-                {
-                    if (debugMessages)
-                        Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
-                }
-                else
-                {
-                    //if (NetworkAccess.HAVE_ACCESS) FirebaseUpdate();
-                    //if (EazyNetChecker.Status == NetStatus.Connected) FirebaseUpdate();
-                }
-            });
-
             if (!PlayerPrefsWrapper.GetInitialPropertiesSet())
             {
                 //unlock areas
                 foreach (Area area in Enum.GetValues(typeof(Area)))
                 {
                     bool state = ((int)area & Constants.DEFAULT_UNLOCKED_THEMES) > 0;
-                    if (state) PlayerPrefsWrapper.SetThemeUnlocked((int)area, state);
+                    if (state)
+                    {
+                        PlayerPrefsWrapper.SetThemeUnlocked((int)area, state);
+                    }
                 }
 
                 PlayerPrefsWrapper.InitialPropertiesSet(true);
@@ -239,7 +210,10 @@ namespace Fourzy
                 foreach (Area area in Enum.GetValues(typeof(Area)))
                 {
                     bool state = ((int)area & Constants.DEFAULT_UNLOCKED_THEMES) > 0;
-                    if (state) PlayerPrefsWrapper.SetThemeUnlocked((int)area, state);
+                    if (state)
+                    {
+                        PlayerPrefsWrapper.SetThemeUnlocked((int)area, state);
+                    }
                 }
             }
 
@@ -255,8 +229,6 @@ namespace Fourzy
             UnityEngine.iOS.NotificationServices.ClearLocalNotifications();
             UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
 #endif
-
-            //NetworkAccess.onNetworkAccess += OnNetworkAccess;
 
             if (SceneManager.GetActiveScene().name == MainMenuSceneName) StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
 
@@ -296,7 +268,10 @@ namespace Fourzy
 
         protected void OnApplicationQuit()
         {
-            if (resetGameOnClose) ResetGames();
+            if (resetGameOnClose)
+            {
+                ResetGames();
+            }
         }
 
         protected void OnApplicationPause(bool pause)
@@ -419,7 +394,10 @@ namespace Fourzy
             onPurchaseFailed?.Invoke(product);
         }
 
-        public void StartPresentataionGame() => OnNoInput(new KeyValuePair<string, float>("startDemoGame", 0f));
+        public void StartPresentataionGame()
+        {
+            OnNoInput(new KeyValuePair<string, float>("startDemoGame", 0f));
+        }
 
         public void CheckNews()
         {
@@ -573,213 +551,6 @@ namespace Fourzy
             onSceneChanged?.Invoke(SceneManager.GetActiveScene().name);
         }
 
-        private void FirebaseUpdate()
-        {
-            FirebaseAnalytics.SetUserProperty(Constants.KEY_EXTRA_FEATURES, ExtraFeatures ? "1" : "0");
-
-            StartCoroutine(GetRemoteSettingsRoutine());
-        }
-
-        private void GetRemoteSettings()
-        {
-            Task fetchTask = FirebaseRemoteConfig.FetchAsync(TimeSpan.Zero);
-            fetchTask.ContinueWith(FetchComplete);
-        }
-
-        private bool VersionCheck()
-        {
-            string value = FirebaseRemoteConfig.GetValue(Constants.KEY_APP_VERSION).StringValue;
-
-            if (debugMessages)
-                Debug.Log($"Version check: {Application.version} app version, {value} required app version");
-
-            //version checker
-            if (Application.version != value)
-            {
-                //show version popup
-                PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
-                    "New Version Available",
-                    "New app version available,\nplease update your app pressing button below",
-                    "Update",
-                    null,
-                    () =>
-                {
-                    //open app page in related store
-                    PersistantMenuController.instance.CloseCurrentScreen(true);
-                },
-                //do nothing on decline
-                () => { }
-                );
-            }
-
-            return Application.version != value;
-        }
-
-        private void RewardsStateCheck()
-        {
-            //check rewards for turnbased/passplay/puzzleplay/realtime
-            new List<string>() {
-                Constants.KEY_REWARDS_TURNBASED,
-                Constants.KEY_REWARDS_PASSPLAY,
-                Constants.KEY_REWARDS_PUZZLEPLAY,
-                Constants.KEY_REWARDS_REALTIME,
-            }.ForEach(key =>
-                {
-                    string value = FirebaseRemoteConfig.GetValue(key).StringValue;
-                    Debug.Log($"Rewards {key}: '{PlayerPrefsWrapper.GetRemoteSetting(key)}' old state, '{(value == "1" ? true : false)}' new state");
-                    PlayerPrefsWrapper.SetRemoteSetting(key, value);
-                });
-        }
-
-        private void DailyPuzzleCheck()
-        {
-            string value = FirebaseRemoteConfig.GetValue(Constants.KEY_DAILY_PUZZLE).StringValue;
-
-            if (debugMessages)
-                Debug.Log($"Old Daily Puzzle file '{PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_DAILY_PUZZLE)}', new '{value}'");
-
-            if (!string.IsNullOrEmpty(value))
-            {
-                //filename check
-                if (PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_DAILY_PUZZLE) != value)
-                {
-                    PlayerPrefsWrapper.SetRemoteSetting(Constants.KEY_DAILY_PUZZLE, value);
-
-                    onDailyChallengeFileName?.Invoke(value);
-
-                    //download file
-                    FirebaseStorage storage = FirebaseStorage.GetInstance("gs://fourzytesting.appspot.com");
-                    StorageReference reference = storage.GetReference("puzzles/daily/" + value);
-
-                    reference.GetFileAsync(Application.persistentDataPath + "/" + value).ContinueWith(task =>
-                    {
-                        Debug.Log(task.Status);
-                        if (!task.IsFaulted && !task.IsCanceled)
-                        {
-                            //downloaded
-                            ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() => DisplayDailyPuzzlePopup());
-                        }
-                    });
-                }
-            }
-        }
-
-        private void StoreCheck()
-        {
-            string value = FirebaseRemoteConfig.GetValue(Constants.KEY_STORE_STATE).StringValue;
-            if (debugMessages) Debug.Log($"Old Store State '{PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_STORE_STATE)}', new '{(value == "1" ? true : false)}'");
-            PlayerPrefsWrapper.SetRemoteSetting(Constants.KEY_STORE_STATE, value);
-        }
-
-        private void DisplayDailyPuzzlePopup()
-        {
-            dailyPuzzlePack = JsonConvert.DeserializeObject<PuzzleData>(
-                File.ReadAllText(Application.persistentDataPath + "/" + 
-                    PlayerPrefsWrapper.GetRemoteSetting(Constants.KEY_DAILY_PUZZLE)));
-
-            if (dailyPuzzlePack != null)
-            {
-                //new daily puzzle available
-
-
-                //show daily puzzle popup
-                PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
-                    "New Daily Puzzle",
-                    "New Daily Puzzle Available!",
-                    "Update",
-                    null,
-                    () =>
-                    {
-                        //open app page in related store
-                        PersistantMenuController.instance.CloseCurrentScreen(true);
-                    },
-                    null
-                );
-            }
-        }
-
-        private void FetchComplete(Task fetchTask)
-        {
-            if (fetchTask.IsCanceled)
-                Debug.Log("Remote config canceled.");
-            else if (fetchTask.IsFaulted)
-                Debug.Log("Remote config encountered an error.");
-            else if (fetchTask.IsCompleted)
-                Debug.Log("Remote config completed successfully!");
-
-            var info = FirebaseRemoteConfig.Info;
-
-            switch (info.LastFetchStatus)
-            {
-                case LastFetchStatus.Success:
-                    FirebaseRemoteConfig.ActivateFetched();
-
-                    if (debugMessages) Debug.Log($"Remote data loaded and ready (last fetch time {info.FetchTime}).");
-
-                    //initial settings fetch only once
-                    if (!configFetched)
-                    {
-                        try
-                        {
-                            ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
-                            {
-                                configFetched = true;
-
-                                //do version check, if no new version available, check daily challenge
-                                if (!VersionCheck())
-                                {
-                                    //daily puzzle check
-                                    DailyPuzzleCheck();
-                                }
-
-                                StoreCheck();
-                            });
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.Log(e.ToString());
-                        }
-                    }
-
-                    //fetch other values
-                    ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
-                    {
-                        RewardsStateCheck();
-                        //...
-                    });
-
-                    break;
-
-                case LastFetchStatus.Failure:
-                    switch (info.LastFetchFailureReason)
-                    {
-                        case FetchFailureReason.Error:
-                            Debug.Log("Remote config failed for unknown reason");
-
-                            break;
-
-                        case FetchFailureReason.Throttled:
-                            Debug.Log("Remote config throttled until " + info.ThrottledEndTime);
-
-                            break;
-                    }
-                    break;
-
-                case LastFetchStatus.Pending:
-                    Debug.Log("Latest Remote config call still pending.");
-                    break;
-            }
-        }
-
-        private void OnNetworkAccess(bool networkAccess)
-        {
-            if (networkAccess)
-            {
-                if (dependencyStatus == DependencyStatus.Available)
-                    FirebaseUpdate();
-            }
-        }
-
         private void OnPlayerEntered(Photon.Realtime.Player obj)
         {
             //lock room 
@@ -823,13 +594,6 @@ namespace Fourzy
                     error => Debug.LogError(error.GenerateErrorReport()));
             }
             catch (Exception) { }
-        }
-
-        private IEnumerator GetRemoteSettingsRoutine()
-        {
-            yield return new WaitForSeconds(.1f);
-
-            GetRemoteSettings();
         }
 
         private IEnumerator StartingGameRoutine()

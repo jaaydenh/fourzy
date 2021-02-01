@@ -138,6 +138,10 @@
       "value": "Adventure"
     },
     {
+      "key": "click_to_continue",
+      "value": "Click to continue..."
+    },
+    {
       "key": "complete",
       "value": "Completed!"
     },
@@ -174,6 +178,10 @@
       "value": "Choose Your Fourzy"
     },
     {
+      "key": "close",
+      "value": "Close"
+    },
+    {
       "key": "current_name",
       "value": "Current name"
     },
@@ -184,6 +192,10 @@
     {
       "key": "draw",
       "value": "Draw"
+    },
+    {
+      "key": "enter_room_code",
+      "value": "Enter Room Code"
     },
     {
       "key": "excellent",
@@ -256,6 +268,10 @@
     {
       "key": "help",
       "value": "Help"
+    },
+    {
+      "key": "join",
+      "value": "Join"
     },
     {
       "key": "lost",
@@ -336,6 +352,10 @@
     {
       "key": "player_two",
       "value": "Player 2"
+    },
+    {
+      "key": "practice",
+      "value": "Practice"
     },
     {
       "key": "practiceScreenPromptTitle",
@@ -756,10 +776,6 @@
     {
       "key": "level4_cpu",
       "value": "IMPOSSIBLE"
-    },
-    {
-      "key": "practice",
-      "value": "Practice"
     }
   ]
 }
