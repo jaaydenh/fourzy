@@ -842,7 +842,9 @@ namespace Fourzy._Updates.Mechanics.Board
                             _movesToSend.Add(_spell.spellMove);
                         }
 
-                        PlayerTurn turnToSend = new PlayerTurn(_movesToSend);
+                        ClientPlayerTurn turnToSend = new ClientPlayerTurn(_movesToSend);
+                        //add local timer data
+                        turnToSend.playerTimerLeft = gameplayManager.timerTimeLeft;
 
                         bool result = PhotonNetwork.RaiseEvent(
                             Constants.TAKE_TURN,

@@ -6,8 +6,11 @@ public static class DeviceIDManager
 {
     public static Action<string> onDeviceID;
 
+
+#if UNITY_IPHONE && !UNITY_EDITOR
     [DllImport("__Internal")]
     static extern string _Get_Device_id();
+#endif
 
     public static void GetDeviceID()
     {
