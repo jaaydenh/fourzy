@@ -94,16 +94,39 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
+                    case GameType.REALTIME:
+                        if (game.isOver)
+                        {
+                            GamePlayManager.Instance.BackButtonOnClick();
+                        }
+                        else
+                        {
+                            menuController.GetOrAddScreen<PromptScreen>()
+                                .Prompt(
+                                    LocalizationManager.Value("are_you_sure"),
+                                    LocalizationManager.Value("leave_realtime_game_message"),
+                                    LocalizationManager.Value("yes"),
+                                    LocalizationManager.Value("no"),
+                                    () => GamePlayManager.Instance.BackButtonOnClick());
+                        }
+
+                        break;
+
                     default:
                         if (game.isOver)
+                        {
                             GamePlayManager.Instance.BackButtonOnClick();
+                        }
                         else
+                        {
                             menuController.GetOrAddScreen<PromptScreen>()
-                                .Prompt(LocalizationManager.Value("leave_game"),
-                                "",
-                                LocalizationManager.Value("yes"),
-                                LocalizationManager.Value("no"),
-                                () => GamePlayManager.Instance.BackButtonOnClick());
+                                .Prompt(
+                                    LocalizationManager.Value("leave_game"),
+                                    "",
+                                    LocalizationManager.Value("yes"),
+                                    LocalizationManager.Value("no"),
+                                    () => GamePlayManager.Instance.BackButtonOnClick());
+                        }
 
                         break;
                 }
