@@ -69,6 +69,23 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
+        public float TotalTimeLeft
+        {
+            get
+            {
+                return timerValue * InternalSettings.Current.CIRCULAR_TIMER_SECONDS + smallTimerValue;
+            }
+
+            set
+            {
+                timerValueTween.StopTween(false);
+                smallTimerValueTween.StopTween(false);
+
+                TimerValue = Mathf.Floor(value / InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+                SmallTimerValue = value - (TimerValue * InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+            }
+        }
+
         public bool isEmpty => timerValue <= 0f;
         public bool active { get; private set; }
         public bool isPaused { get; private set; }
@@ -108,7 +125,10 @@ namespace Fourzy._Updates.UI.Widgets
 
             timerValueTween.PlayForward(true);
 
-            if (resetSmallTimer) AddSmallTimerValue(InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+            if (resetSmallTimer)
+            {
+                AddSmallTimerValue(InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+            }
 
             if (vfx) ShowAddTimerVfx($"+<color=#00FF62>{value * InternalSettings.Current.CIRCULAR_TIMER_SECONDS}sec!</color>", Vector2.zero, vfxDirection);
         }
@@ -121,7 +141,10 @@ namespace Fourzy._Updates.UI.Widgets
 
             TimerValue = Mathf.Clamp(value, 0f, Constants.TIMER_SECTIONS);
 
-            if (timerValue <= 0f) onValueEmpty?.Invoke(player);
+            if (timerValue <= 0f)
+            {
+                onValueEmpty?.Invoke(player);
+            }
 
             AddSmallTimerValue(InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
         }
@@ -130,7 +153,10 @@ namespace Fourzy._Updates.UI.Widgets
         {
             smallTimerValueTween.from = SmallTimerValue;
 
-            smallTimerValueTween.to = Mathf.Clamp(SmallTimerValue + value, 0f, InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+            smallTimerValueTween.to = Mathf.Clamp(
+                SmallTimerValue + value,
+                0f, 
+                InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
             smallTimerValueTween.PlayForward(true);
         }
 
@@ -139,13 +165,20 @@ namespace Fourzy._Updates.UI.Widgets
             VfxHolder.instance.GetVfx<AddTimerVfx>(VfxType.UI_VFX_ADD_TIMER).SetValue(vfxParent, offset, direction, value);
         }
 
-        public void Pause()
+        public void Pause(float time = -1f)
         {
             isPaused = true;
+
+            CancelRoutine("pause");
+            if (time != -1f)
+            {
+                StartRoutine("pause", time, Unpause, null);
+            }
         }
 
         public void Unpause()
         {
+            CancelRoutine("pause");
             isPaused = false;
         }
 

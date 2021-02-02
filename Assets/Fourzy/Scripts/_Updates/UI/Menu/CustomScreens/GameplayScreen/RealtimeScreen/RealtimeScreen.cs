@@ -91,9 +91,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             statusAlphaTween.playbackTime = .5f;
             statusAlphaTween.repeat = RepeatType.PING_PONG;
-
-            statusScaleTween.repeat = RepeatType.PING_PONG;
-
             statusLabel.fontSize = 182f;
 
             for (int timer = Mathf.FloorToInt(duration); timer > 0; timer--)
@@ -103,9 +100,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 statusRotationTween.PlayForward(true);
 
                 if (timer > 1)
+                {
                     statusLabel.text = (timer - 1) + "";
+                }
                 else
+                {
                     statusLabel.text = "GO!";
+                }
 
                 yield return new WaitForSeconds(1f);
             }

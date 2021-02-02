@@ -94,16 +94,39 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
 
+                    case GameType.REALTIME:
+                        if (game.isOver)
+                        {
+                            GamePlayManager.Instance.BackButtonOnClick();
+                        }
+                        else
+                        {
+                            menuController.GetOrAddScreen<PromptScreen>()
+                                .Prompt(
+                                    LocalizationManager.Value("are_you_sure"),
+                                    LocalizationManager.Value("leave_realtime_game_message"),
+                                    LocalizationManager.Value("yes"),
+                                    LocalizationManager.Value("no"),
+                                    () => GamePlayManager.Instance.BackButtonOnClick());
+                        }
+
+                        break;
+
                     default:
                         if (game.isOver)
+                        {
                             GamePlayManager.Instance.BackButtonOnClick();
+                        }
                         else
+                        {
                             menuController.GetOrAddScreen<PromptScreen>()
-                                .Prompt(LocalizationManager.Value("leave_game"),
-                                "",
-                                LocalizationManager.Value("yes"),
-                                LocalizationManager.Value("no"),
-                                () => GamePlayManager.Instance.BackButtonOnClick());
+                                .Prompt(
+                                    LocalizationManager.Value("leave_game"),
+                                    "",
+                                    LocalizationManager.Value("yes"),
+                                    LocalizationManager.Value("no"),
+                                    () => GamePlayManager.Instance.BackButtonOnClick());
+                        }
 
                         break;
                 }
@@ -164,7 +187,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game._Type == GameType.REALTIME)
             {
                 player1Widget.SetRating(
-                    UserManager.Instance.lastCachedRating, 
+                    UserManager.Instance.lastCachedRating,
                     UserManager.Instance.totalPlayfabGames);
             }
 
@@ -414,7 +437,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         menuController.OpenScreen(tapToStartOverlay);
 
                         //wait for tap screen to be closed
-                        StartRoutine("waitFotTap", WaitForTapRoutine(), () => { if (timersEnabled) ActivatePlayerTimer(game._State.ActivePlayerId); }, () => tapToStartOverlay.CloseSelf());
+                        StartRoutine("waitFotTap", WaitForTapRoutine(), () =>
+                        {
+                            if (timersEnabled)
+                            {
+                                ActivatePlayerTimer(game._State.ActivePlayerId);
+                            }
+                        }, () => tapToStartOverlay.CloseSelf());
                     }
                     else
                         if (timersEnabled) ActivatePlayerTimer(game._State.ActivePlayerId);
@@ -422,9 +451,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 case GameType.REALTIME:
-                    //start coutdown
-
-                    if (timersEnabled) ActivatePlayerTimer(game._State.ActivePlayerId);
+                    if (timersEnabled)
+                    {
+                        ActivatePlayerTimer(game._State.ActivePlayerId);
+                    }
 
                     break;
             }
@@ -439,9 +469,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (!game.draw)
             {
                 if (game.IsWinner(player1Widget.assignedPlayer))
+                {
                     player1Widget.StartWinJumps();
+                }
                 else
+                {
                     player2Widget.StartWinJumps();
+                }
             }
 
             if (game.puzzleData)
@@ -566,12 +600,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        private void ActivatePlayerTimer(int playerID) =>
+        private void ActivatePlayerTimer(int playerID)
+        {
             timerWidgets.Find(widget => widget.player.PlayerId == playerID).Activate();
+        }
 
         private void HideGameInfoWidget(bool checkType = true)
         {
             if (checkType)
+            {
                 switch (game._Type)
                 {
                     case GameType.AI:
@@ -580,8 +617,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
                 }
+            }
             else
+            {
                 gameInfoWidget.Hide(.3f);
+            }
         }
 
         private void SetResetButtonState(bool state)

@@ -1,11 +1,9 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
 using FourzyGameModel.Model;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -19,7 +17,7 @@ namespace Fourzy._Updates.ClientModel
         GameType _Type { get; set; }
         GameMode _Mode { get; set; }
         Area _Area { get; set; }
-        GameStateDataEpoch toGameStateData { get; }
+        RealtimeGameStateData toGameStateData { get; }
         string BoardID { get; set; }
         bool isFourzyPuzzle { get; }
         List<Creature> myMembers { get; }
@@ -89,29 +87,5 @@ namespace Fourzy._Updates.ClientModel
         PlayerTurnResult TakeAITurn(bool ReturnStartOfNextTurn = false);
 
         GameState _Reset(bool resetMembers = false);
-    }
-}
-
-namespace FourzyGameModel.Model
-{
-    [Serializable]
-    public class GameStateDataEpoch : GameStateData
-    {
-        [JsonProperty("realtimeData")]
-        public RealtimeData realtimeData;
-
-        public GameStateDataEpoch() { }
-
-        public GameStateDataEpoch(GameStateData data)
-        {
-            GameSeed = data.GameSeed;
-            Herds = data.Herds;
-            Players = data.Players;
-            WinnerId = data.WinnerId;
-            WinningLocations = data.WinningLocations;
-            GameBoardData = data.GameBoardData;
-            GameEffects = data.GameEffects;
-            ActivePlayerId = data.ActivePlayerId;
-        }
     }
 }

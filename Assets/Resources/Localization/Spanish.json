@@ -1,36 +1,36 @@
 {
   "items": [
     {
-      "key": "no",
-      "value": "No"
+      "key": "adventure",
+      "value": "Aventuras"
     },
     {
-      "key": "yes",
-      "value": "Si"
+      "key": "aggressive",
+      "value": "EMPRENDEDOR"
     },
     {
-      "key": "for",
-      "value": "para"
+      "key": "are_you_sure",
+      "value": "¿Estas seguro?"
     },
     {
-      "key": "in",
-      "value": "en"
+      "key": "area_forest",
+      "value": "Bosque encantado"
     },
     {
-      "key": "move",
-      "value": "movimiento"
+      "key": "area_garden",
+      "value": "Jardín de entrenamiento"
     },
     {
-      "key": "moves",
-      "value": "movimientos"
+      "key": "area_island",
+      "value": "Isla arenosa"
     },
     {
-      "key": "previous",
-      "value": "Anterior"
+      "key": "area_palace",
+      "value": "Palacio de hielo"
     },
     {
-      "key": "next",
-      "value": "Próximo"
+      "key": "area_selection",
+      "value": "Selección de área"
     },
     {
       "key": "back",
@@ -45,102 +45,36 @@
       "value": "Comprar"
     },
     {
-      "key": "hints",
-      "value": "Pistas"
+      "key": "cant_be_empty",
+      "value": "No puede estar vacio"
     },
     {
-      "key": "pass",
-      "value": "Paso"
+      "key": "challenge",
+      "value": "Desafío"
     },
     {
-      "key": "win_goal_one",
-      "value": "¡GANA en 1 MOVE!"
+      "key": "change_name",
+      "value": "Cambiar nombre"
     },
     {
-      "key": "win_goal_multiple",
-      "value": "¡GANA en {0} MOVIMIENTOS!"
-    },
-    {
-      "key": "survive_goal_multiple",
-      "value": "¡SOBREVIVA para {0} MOVIMIENTOS!"
-    },
-    {
-      "key": "cover_goal_multiple",
-      "value": "CUBIERTA en {0} MOVIMIENTOS!"
-    },
-    {
-      "key": "win_horizontal_rule",
-      "value": "Ganaste al juntar 4 en raya horizontalmente."
-    },
-    {
-      "key": "win_vertical_rule",
-      "value": "Ganaste al juntar 4 en raya verticalmente."
-    },
-    {
-      "key": "win_diagonal_rule",
-      "value": "Ganaste al juntar 4 en raya diagonalmente."
-    },
-
-    {
-      "key": "rule_swipe_up",
-      "value": "Desliza hacia arriba para moverte"
-    },
-    {
-      "key": "rule_swipe_down",
-      "value": "Desliza hacia abajo para moverte"
-    },
-    {
-      "key": "rule_swipe_left",
-      "value": "Desliza hacia la izquierda para moverte"
-    },
-    {
-      "key": "rule_swipe_right",
-      "value": "Desliza hacia la derecha para moverte"
-    },
-    {
-      "key": "rule_tap_1",
-      "value": "Tap on the edge to make your move!"
-    },
-    {
-      "key": "rule_tap_2",
-      "value": "Select the outer square to move!"
-    },
-    {
-      "key": "rule_tap_3",
-      "value": "Select the outer square to move!"
-    },
-
-    {
-      "key": "aggressive",
-      "value": "EMPRENDEDOR"
-    },
-    {
-      "key": "area_selection",
-      "value": "Selección de área"
-    },
-    {
-      "key": "area_garden",
-      "value": "Jardín de entrenamiento"
-    },
-    {
-      "key": "area_forest",
-      "value": "Bosque encantado"
-    },
-    {
-      "key": "area_island",
-      "value": "Isla arenosa"
-    },
-    {
-      "key": "area_palace",
-      "value": "Palacio de hielo"
-    },
-    {
-      "key": "adventure",
-      "value": "Aventuras"
+      "key": "choose_your_fouzry",
+      "value": "Elige tu Fourzy"
     },
     {
       "key": "click_to_continue",
       "value": "Haz click para continuar... "
+    },
+    {
+      "key": "close",
+      "value": "Cerrar"
+    },
+    {
+      "key": "coins",
+      "value": "Monedas"
+    },
+    {
+      "key": "coming_soon",
+      "value": "Próximamente"
     },
     {
       "key": "complete",
@@ -155,40 +89,20 @@
       "value": "¿Continuar?"
     },
     {
-      "key": "coins",
-      "value": "Monedas"
+      "key": "cover_goal",
+      "value": "CUBRIR"
     },
     {
-      "key": "coming_soon",
-      "value": "Próximamente"
-    },
-    {
-      "key": "cant_be_empty",
-      "value": "No puede estar vacio"
-    },
-    {
-      "key": "change_name",
-      "value": "Cambiar nombre"
-    },
-    {
-      "key": "challenge",
-      "value": "Desafío"
-    },
-    {
-      "key": "choose_your_fouzry",
-      "value": "Elige tu Fourzy"
-    },
-    {
-      "key": "close",
-      "value": "Cerrar"
-    },
-    {
-      "key": "current_name",
-      "value": "Nombre actual"
+      "key": "cover_goal_multiple",
+      "value": "CUBIERTA en {0} MOVIMIENTOS!"
     },
     {
       "key": "cpu_difficulty",
       "value": "DIFICULTAD DE LA CPU"
+    },
+    {
+      "key": "current_name",
+      "value": "Nombre actual"
     },
     {
       "key": "draw",
@@ -219,28 +133,36 @@
       "value": "Puzles"
     },
     {
+      "key": "for",
+      "value": "para"
+    },
+    {
       "key": "found",
       "value": "Encontró"
+    },
+    {
+      "key": "fourzies",
+      "value": "Fourzies"
     },
     {
       "key": "gamepieces",
       "value": "Fourzies"
     },
     {
+      "key": "games",
+      "value": "Juegos"
+    },
+    {
       "key": "gauntlet",
       "value": "Retos"
     },
     {
-      "key": "gauntlet_title",
-      "value": "El Guante"
+      "key": "gauntlet_complete",
+      "value": "Has completado con éxito el guantelete con {0} fourzies izquierda"
     },
     {
       "key": "gauntlet_desc",
       "value": "Los retos contienen una serie de desafíos cada vez más difíciles que deben resolverse en un número limitado de movimientos."
-    },
-    {
-      "key": "gauntlet_complete",
-      "value": "Has completado con éxito el guantelete con {0} fourzies izquierda"
     },
     {
       "key": "gauntlet_failed",
@@ -251,28 +173,68 @@
       "value": "Tu viaje ha terminado. No tienes más Fourzies para jugar"
     },
     {
-      "key": "get_4_to_win",
-      "value": "Conecta 4 piezas para ganar"
+      "key": "gauntlet_title",
+      "value": "El Guante"
     },
     {
       "key": "gems",
       "value": "Gemas"
     },
     {
-      "key": "good_job",
-      "value": "Buen trabajo"
+      "key": "get_4_to_win",
+      "value": "Conecta 4 piezas para ganar"
     },
     {
-      "key": "human",
-      "value": "Juagador\nhumano"
+      "key": "good_job",
+      "value": "Buen trabajo"
     },
     {
       "key": "help",
       "value": "Ayuda"
     },
     {
+      "key": "hints",
+      "value": "Pistas"
+    },
+    {
+      "key": "human",
+      "value": "Juagador\nhumano"
+    },
+    {
+      "key": "in",
+      "value": "en"
+    },
+    {
       "key": "join",
       "value": "Entrar"
+    },
+    {
+      "key": "leave_game",
+      "value": "¿Deseas dejar el juego?"
+    },
+    {
+      "key": "leave_realtime_game_message",
+      "value": "Dejar el juego automáticamente perderá y reducirá su calificación."
+    },
+    {
+      "key": "level1_cpu",
+      "value": "FÁCIL"
+    },
+    {
+      "key": "level2_cpu",
+      "value": "MEDIO"
+    },
+    {
+      "key": "level3_cpu",
+      "value": "DIFÍCIL"
+    },
+    {
+      "key": "level4_cpu",
+      "value": "IMPOSIBLE"
+    },
+    {
+      "key": "loading",
+      "value": "Cargando"
     },
     {
       "key": "lost",
@@ -283,10 +245,6 @@
       "value": "lv"
     },
     {
-      "key": "loading",
-      "value": "Cargando"
-    },
-    {
       "key": "magic",
       "value": "Magia"
     },
@@ -295,8 +253,28 @@
       "value": "Opuesta encontrada!"
     },
     {
+      "key": "move",
+      "value": "movimiento"
+    },
+    {
+      "key": "moves",
+      "value": "movimientos"
+    },
+    {
       "key": "music",
       "value": "Música"
+    },
+    {
+      "key": "news",
+      "value": "Noticias"
+    },
+    {
+      "key": "next",
+      "value": "Próximo"
+    },
+    {
+      "key": "no",
+      "value": "No"
     },
     {
       "key": "no_connection",
@@ -311,20 +289,28 @@
       "value": "Sé el primero en llegar a la cima de la tabla de clasificación del rompecabezas"
     },
     {
-      "key": "not_found",
-      "value": "Por Desbloquear"
-    },
-    {
       "key": "no_news",
       "value": "No news"
     },
     {
-      "key": "news",
-      "value": "Noticias"
+      "key": "not_found",
+      "value": "Por Desbloquear"
     },
     {
       "key": "not_your_turn",
       "value": "No es tu turno"
+    },
+    {
+      "key": "off",
+      "value": "Off"
+    },
+    {
+      "key": "ok",
+      "value": "OK"
+    },
+    {
+      "key": "on",
+      "value": "On"
     },
     {
       "key": "openportal",
@@ -335,16 +321,12 @@
       "value": "Abrir portal raro"
     },
     {
-      "key": "on",
-      "value": "On"
+      "key": "pass",
+      "value": "Paso"
     },
     {
-      "key": "off",
-      "value": "Off"
-    },
-    {
-      "key": "portalpoints",
-      "value": "Puntos de portal"
+      "key": "play",
+      "value": "Jugar"
     },
     {
       "key": "player_one",
@@ -355,72 +337,136 @@
       "value": "Jugador 2"
     },
     {
-      "key": "practice",
-      "value": "Práctica"
+      "key": "portalpoints",
+      "value": "Puntos de portal"
     },
     {
-      "key": "practiceScreenPromptTitle",
-      "value": "Versus"
+      "key": "practice",
+      "value": "Práctica"
     },
     {
       "key": "practiceScreenPromptDescription",
       "value": "Practica contra jugadores bot con diferentes personalidades o pasa y juega con un amigo(a)."
     },
     {
+      "key": "practiceScreenPromptTitle",
+      "value": "Versus"
+    },
+    {
+      "key": "previous",
+      "value": "Anterior"
+    },
+    {
       "key": "puzzle",
       "value": "Puzle"
+    },
+    {
+      "key": "puzzle_Ladder_desc",
+      "value": "Compete para resolver la mayoría de los puzles y sube a la cima de la tabla de clasificatión"
+    },
+    {
+      "key": "puzzle_Ladder_title",
+      "value": "Classificatoria del puzle bloqueada"
     },
     {
       "key": "puzzle_ladder_title",
       "value": "Puzzle Ladder"
     },
     {
+      "key": "random",
+      "value": "Al azar"
+    },
+    {
+      "key": "rankings",
+      "value": "Rango"
+    },
+    {
       "key": "rareportalpoints",
       "value": "Puntos de portal raros"
-    },
-    {
-      "key": "reload",
-      "value": "Recargar"
-    },
-    {
-      "key": "replay_tutorial",
-      "value": "Repetir tutorial"
     },
     {
       "key": "ready_to_play",
       "value": "Listo para jugar"
     },
     {
-      "key": "random",
-      "value": "Al azar"
-    },
-    {
-      "key": "reset",
-      "value": "Reiniciar"
+      "key": "reload",
+      "value": "Recargar"
     },
     {
       "key": "rematch",
       "value": "Revancha"
     },
     {
+      "key": "replay_tutorial",
+      "value": "Repetir tutorial"
+    },
+    {
+      "key": "reset",
+      "value": "Reiniciar"
+    },
+    {
       "key": "reset_progress",
       "value": "Restablecer progreso"
     },
     {
-      "key": "settings",
-      "value": "Configuraciones"
+      "key": "rule_swipe_down",
+      "value": "Desliza hacia abajo para moverte"
+    },
+    {
+      "key": "rule_swipe_left",
+      "value": "Desliza hacia la izquierda para moverte"
+    },
+    {
+      "key": "rule_swipe_right",
+      "value": "Desliza hacia la derecha para moverte"
+    },
+    {
+      "key": "rule_swipe_up",
+      "value": "Desliza hacia arriba para moverte"
+    },
+    {
+      "key": "rule_tap_1",
+      "value": "Tap on the edge to make your move!"
+    },
+    {
+      "key": "rule_tap_2",
+      "value": "Select the outer square to move!"
+    },
+    {
+      "key": "rule_tap_3",
+      "value": "Select the outer square to move!"
+    },
+    {
+      "key": "select",
+      "value": "Elegir"
     },
     {
       "key": "select_board",
       "value": "Selección de juego"
     },
     {
+      "key": "settings",
+      "value": "Configuraciones"
+    },
+    {
       "key": "sound_effects",
       "value": "Efectos de sonido"
     },
     {
+      "key": "store",
+      "value": "Tienda"
+    },
+    {
       "key": "suggest_hint_use",
       "value": "Toca el mago para obtener ayuda."
+    },
+    {
+      "key": "survive_goal",
+      "value": "SOBREVIVIR"
+    },
+    {
+      "key": "survive_goal_multiple",
+      "value": "¡SOBREVIVA para {0} MOVIMIENTOS!"
     },
     {
       "key": "tap_edge_rule",
@@ -431,104 +477,36 @@
       "value": "Presiona para continuar..."
     },
     {
-      "key": "tap_to_start",
-      "value": "Toca para comenzar"
+      "key": "tap_to_open_map",
+      "value": "Presiona para abrir el mapa de progresión"
     },
     {
       "key": "tap_to_place",
       "value": "Disliza para mover tu Fourzy"
     },
     {
-      "key": "tap_to_open_map",
-      "value": "Presiona para abrir el mapa de progresión"
+      "key": "tap_to_start",
+      "value": "Toca para comenzar"
     },
     {
       "key": "tap_to_start_playing",
       "value": "Selecciona un puzle y comienza a jugar"
     },
     {
-      "key": "tickets",
-      "value": "Entradas"
+      "key": "thinking",
+      "value": "Pensando..."
     },
     {
-      "key": "timed_out_title",
-      "value": "Caducado :("
+      "key": "tickets",
+      "value": "Entradas"
     },
     {
       "key": "timed_out_text",
       "value": "Nadie se unió a tu juego."
     },
     {
-      "key": "thinking",
-      "value": "Pensando..."
-    },
-    {
-      "key": "tokens",
-      "value": "Fichas"
-    },
-    {
-      "key": "too_short",
-      "value": "Demasiado corto"
-    },
-    {
-      "key": "too_long",
-      "value": "Demasiado largo"
-    },
-    {
-      "key": "tutorial",
-      "value": "Tutorial"
-    },
-    {
-      "key": "unlocked",
-      "value": "Desbloqueados"
-    },
-    {
-      "key": "versus",
-      "value": "Versus"
-    },
-    {
-      "key": "watch_ad_to_continue",
-      "value": "Ver anuncio para continuar"
-    },
-    {
-      "key": "waiting_for_opponent",
-      "value": "Esperando a la oponente"
-    },
-    {
-      "key": "welcome_to_fourzy",
-      "value": "Bienvenido(a) a Fourzy"
-    },
-    {
-      "key": "xp",
-      "value": "XP"
-    },
-    {
-      "key": "won",
-      "value": "Ganaste"
-    },
-    {
-      "key": "you",
-      "value": "Tú"
-    },
-    {
-      "key": "store",
-      "value": "Tienda"
-    },
-    {
-      "key": "fourzies",
-      "value": "Fourzies"
-    },
-    {
-      "key": "play",
-      "value": "Jugar"
-    },
-    {
-      "key": "games",
-      "value": "Juegos"
-    },
-    {
-      "key": "rankings",
-      "value": "Rango"
+      "key": "timed_out_title",
+      "value": "Caducado :("
     },
     {
       "key": "timer",
@@ -571,6 +549,90 @@
       "value": "Oscuridad"
     },
     {
+      "key": "token_desc_arrow",
+      "value": "Cuando un Fourzy entra en un espacio con una flecha, este continua en la dirección indicada por la flecha."
+    },
+    {
+      "key": "token_desc_blocker",
+      "value": "Un arbusto funciona como un obstáculo que bloquea. FOURZIES no pueden entrar o moverse a través de este espacio."
+    },
+    {
+      "key": "token_desc_circle_bomb",
+      "value": "Cuando una pieza entra en una bomba, la bomba explotará y eliminará esa pieza y cualquier pieza en los 8 espacios circundantes del juego."
+    },
+    {
+      "key": "token_desc_cross_bomb",
+      "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in th same row and Column as the Bomb."
+    },
+    {
+      "key": "token_desc_darkness",
+      "value": "El propósito de la ficha de Oscuridad será ocultar un cuadrado en el tablero y evitar una victoria usando cualquier elemento de ese cuadrado."
+    },
+    {
+      "key": "token_desc_fourway_arrow",
+      "value": "Puede ser izquierda o derecha. Hará que una pieza gire siempre hacia la derecha o hacia la izquierda al pasar por este espacio."
+    },
+    {
+      "key": "token_desc_fruit",
+      "value": "Las frutas caen de las fichas de árbol. Cuando un Fourzy pasa sobre una fruta, la fruta se aplasta y se convierte en una ficha pegajosa."
+    },
+    {
+      "key": "token_desc_fruit_tree",
+      "value": "Bloqueador. Si un árbol frutal detiene una pieza, aparecerá una fruta en el lado opuesto."
+    },
+    {
+      "key": "token_desc_ghost",
+      "value": "Un Fourzy puede atravesar un ficha de fantasma pero no puede detenerse en un espacio donde el fantasma esté. "
+    },
+    {
+      "key": "token_desc_hex",
+      "value": "A Fourzy can move through a Hex but cannot stop on Hex. When a Hex is placed on top of another token, it cancels all effects of that token."
+    },
+    {
+      "key": "token_desc_ice",
+      "value": "FOURZIES se mueven normalmente sobre las hojas de hielo. Pero cuando un Fourzy se encuentre detenido en en una hoja de hielo, otro Fourzy puede empujarlo y la nueva pieza ocupará su lugar."
+    },
+    {
+      "key": "token_desc_ice_block",
+      "value": "Bloqueador. Se desmorona después de bloquear una pieza."
+    },
+    {
+      "key": "token_desc_lure",
+      "value": "La ficha de señuelo debe cambiar la dirección de una pieza y tirar de la pieza del juego hacia ella cada vez que entre en la misma fila o columna que un señuelo."
+    },
+    {
+      "key": "token_desc_move_blocker",
+      "value": "Un bloqueador Las piezas no pueden entrar o moverse por este espacio."
+    },
+    {
+      "key": "token_desc_moving_ghost",
+      "value": "This ghost moves 1 space after each move."
+    },
+    {
+      "key": "token_desc_pit",
+      "value": "Cuando un Fourzy cae en un agujero, este desaparecerá y lo perderás del juego completamente."
+    },
+    {
+      "key": "token_desc_rotating_arrow",
+      "value": "This arrow rotates to the right 90 degrees after each move."
+    },
+    {
+      "key": "token_desc_sand",
+      "value": "Un Fourzy se detendrá siempre al pasar la primera ficha de arena sin importar donde estén las fichas. Un Fourzy puede empujar a otro y ocupar su lugar."
+    },
+    {
+      "key": "token_desc_snow",
+      "value": "Las piezas que viajan a través de la nieve se convertirán en hielo."
+    },
+    {
+      "key": "token_desc_sticky",
+      "value": "Cuando un Fourzy cae en una ficha pegajosa este se detendrá temporalmente. Si un Fourzy ya se encuentra en una pieza pegajosa, otro Fourzy puede empujarla y tomar su lugar."
+    },
+    {
+      "key": "token_desc_water",
+      "value": "Cuando un Fourzy cae en una ficha de agua este detendrá. Si otro Fourzy lo empuja tomará su lugar. Al ser movido de una ficha de agua tú Fourzy solo se moverá un cuadro. "
+    },
+    {
       "key": "token_fourway_arrow",
       "value": "Flecha de cuatro vías"
     },
@@ -585,6 +647,10 @@
     {
       "key": "token_ghost",
       "value": "Fantasma"
+    },
+    {
+      "key": "token_hex",
+      "value": "Hex"
     },
     {
       "key": "token_ice_block",
@@ -651,148 +717,88 @@
       "value": "Web"
     },
     {
-      "key": "token_hex",
-      "value": "Hex"
+      "key": "tokens",
+      "value": "Fichas"
     },
     {
-      "key": "token_desc_blocker",
-      "value": "Un arbusto funciona como un obstáculo que bloquea. FOURZIES no pueden entrar o moverse a través de este espacio."
+      "key": "too_long",
+      "value": "Demasiado largo"
     },
     {
-      "key": "token_desc_darkness",
-      "value": "El propósito de la ficha de Oscuridad será ocultar un cuadrado en el tablero y evitar una victoria usando cualquier elemento de ese cuadrado."
-    },
-    {
-      "key": "token_desc_arrow",
-      "value": "Cuando un Fourzy entra en un espacio con una flecha, este continua en la dirección indicada por la flecha."
-    },
-    {
-      "key": "token_desc_sticky",
-      "value": "Cuando un Fourzy cae en una ficha pegajosa este se detendrá temporalmente. Si un Fourzy ya se encuentra en una pieza pegajosa, otro Fourzy puede empujarla y tomar su lugar."
-    },
-    {
-      "key": "token_desc_ghost",
-      "value": "Un Fourzy puede atravesar un ficha de fantasma pero no puede detenerse en un espacio donde el fantasma esté. "
-    },
-    {
-      "key": "token_desc_pit",
-      "value": "Cuando un Fourzy cae en un agujero, este desaparecerá y lo perderás del juego completamente."
-    },
-    {
-      "key": "token_desc_ice",
-      "value": "FOURZIES se mueven normalmente sobre las hojas de hielo. Pero cuando un Fourzy se encuentre detenido en en una hoja de hielo, otro Fourzy puede empujarlo y la nueva pieza ocupará su lugar."
-    },
-    {
-      "key": "token_desc_sand",
-      "value": "Un Fourzy se detendrá siempre al pasar la primera ficha de arena sin importar donde estén las fichas. Un Fourzy puede empujar a otro y ocupar su lugar."
-    },
-    {
-      "key": "token_desc_fruit",
-      "value": "Las frutas caen de las fichas de árbol. Cuando un Fourzy pasa sobre una fruta, la fruta se aplasta y se convierte en una ficha pegajosa."
-    },
-    {
-      "key": "token_desc_water",
-      "value": "Cuando un Fourzy cae en una ficha de agua este detendrá. Si otro Fourzy lo empuja tomará su lugar. Al ser movido de una ficha de agua tú Fourzy solo se moverá un cuadro. "
-    },
-    {
-      "key": "token_desc_circle_bomb",
-      "value": "Cuando una pieza entra en una bomba, la bomba explotará y eliminará esa pieza y cualquier pieza en los 8 espacios circundantes del juego."
-    },
-    {
-      "key": "token_desc_fourway_arrow",
-      "value": "Puede ser izquierda o derecha. Hará que una pieza gire siempre hacia la derecha o hacia la izquierda al pasar por este espacio."
-    },
-    {
-      "key": "token_desc_fruit_tree",
-      "value": "Bloqueador. Si un árbol frutal detiene una pieza, aparecerá una fruta en el lado opuesto."
-    },
-    {
-      "key": "token_desc_ice_block",
-      "value": "Bloqueador. Se desmorona después de bloquear una pieza."
-    },
-    {
-      "key": "token_desc_snow",
-      "value": "Las piezas que viajan a través de la nieve se convertirán en hielo."
-    },
-    {
-      "key": "token_desc_hex",
-      "value": "A Fourzy can move through a Hex but cannot stop on Hex. When a Hex is placed on top of another token, it cancels all effects of that token."
-    },
-    {
-      "key": "token_desc_moving_ghost",
-      "value": "This ghost moves 1 space after each move."
-    },
-    {
-      "key": "token_desc_rotating_arrow",
-      "value": "This arrow rotates to the right 90 degrees after each move."
-    },
-    {
-      "key": "token_desc_lure",
-      "value": "La ficha de señuelo debe cambiar la dirección de una pieza y tirar de la pieza del juego hacia ella cada vez que entre en la misma fila o columna que un señuelo."
-    },
-    {
-      "key": "token_desc_move_blocker",
-      "value": "Un bloqueador Las piezas no pueden entrar o moverse por este espacio."
-    },
-    {
-      "key": "token_desc_cross_bomb",
-      "value": "When a Fourzy stops on a Bomb, the Bomb will explode and remove that Fourzy and any Fourzies in th same row and Column as the Bomb."
-    },
-    {
-      "key": "win_goal",
-      "value": "Gana"
-    },
-    {
-      "key": "survive_goal",
-      "value": "SOBREVIVIR"
-    },
-    {
-      "key": "cover_goal",
-      "value": "CUBRIR"
-    },
-    {
-      "key": "leave_game",
-      "value": "¿Deseas dejar el juego?"
-    },
-    {
-      "key": "watch_ad",
-      "value": "Ver video por 1 pista"
-    },
-    {
-      "key": "select",
-      "value": "Elegir"
-    },
-    {
-      "key": "puzzle_Ladder_title",
-      "value": "Classificatoria del puzle bloqueada"
-    },
-    {
-      "key": "puzzle_Ladder_desc",
-      "value": "Compete para resolver la mayoría de los puzles y sube a la cima de la tabla de clasificatión"
-    },
-    {
-      "key": "ok",
-      "value": "OK"
+      "key": "too_short",
+      "value": "Demasiado corto"
     },
     {
       "key": "turn_play_button",
       "value": "Online Game"
     },
     {
-      "key": "level1_cpu",
-      "value": "FÁCIL"
+      "key": "tutorial",
+      "value": "Tutorial"
     },
     {
-      "key": "level2_cpu",
-      "value": "MEDIO"
+      "key": "unlocked",
+      "value": "Desbloqueados"
     },
     {
-      "key": "level3_cpu",
-      "value": "DIFÍCIL"
+      "key": "versus",
+      "value": "Versus"
     },
     {
-      "key": "level4_cpu",
-      "value": "IMPOSIBLE"
+      "key": "waiting_for_opponent",
+      "value": "Esperando a la oponente"
+    },
+    {
+      "key": "watch_ad",
+      "value": "Ver video por 1 pista"
+    },
+    {
+      "key": "watch_ad_to_continue",
+      "value": "Ver anuncio para continuar"
+    },
+    {
+      "key": "welcome_to_fourzy",
+      "value": "Bienvenido(a) a Fourzy"
+    },
+    {
+      "key": "win_diagonal_rule",
+      "value": "Ganaste al juntar 4 en raya diagonalmente."
+    },
+    {
+      "key": "win_goal",
+      "value": "Gana"
+    },
+    {
+      "key": "win_goal_multiple",
+      "value": "¡GANA en {0} MOVIMIENTOS!"
+    },
+    {
+      "key": "win_goal_one",
+      "value": "¡GANA en 1 MOVE!"
+    },
+    {
+      "key": "win_horizontal_rule",
+      "value": "Ganaste al juntar 4 en raya horizontalmente."
+    },
+    {
+      "key": "win_vertical_rule",
+      "value": "Ganaste al juntar 4 en raya verticalmente."
+    },
+    {
+      "key": "won",
+      "value": "Ganaste"
+    },
+    {
+      "key": "xp",
+      "value": "XP"
+    },
+    {
+      "key": "yes",
+      "value": "Si"
+    },
+    {
+      "key": "you",
+      "value": "Tú"
     }
   ]
 }
