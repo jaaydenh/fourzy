@@ -4,12 +4,23 @@ using ByteSheep.Events;
 using UnityEngine;
 using StackableDecorator;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace Fourzy._Updates.UI.Helpers
 {
     [ExecuteInEditMode]
     public class OnIPhoneX : MonoBehaviour
     {
+        public static string[] NOTCH_MODELS = new string[] {
+            "iPhone12,1",
+            "iPhone11,8",
+            "iPhone11,6",
+            "iPhone11,2",
+            "iPhone10,6",
+            "Xiaomi Redmi 6 Pro",
+            "Xiaomi Redmi Note 7",
+        };
+
         [StackableField]
         [Buttons(titles = "Force all,Reset all", actions = "ForceAll,ResetAll", below = true)]
         public bool forceiPhoneX;
@@ -17,7 +28,7 @@ namespace Fourzy._Updates.UI.Helpers
         public AdvancedEvent onIPhoneX;
         public AdvancedEvent other;
 
-        private int generation = -1;
+        private string model = "";
 
         protected void Start()
         {
@@ -28,25 +39,27 @@ namespace Fourzy._Updates.UI.Helpers
 
         protected void Update()
         {
-            if (Application.isEditor) CheckPlatform();
+            if (Application.isEditor)
+            {
+                CheckPlatform();
+            }
         }
 
         public void CheckPlatform()
         {
-#if UNITY_IOS || UNITY_EDITOR
-            if (generation < 0 || (UnityEngine.iOS.DeviceGeneration)generation != (forceiPhoneX ? UnityEngine.iOS.DeviceGeneration.iPhoneX : UnityEngine.iOS.Device.generation))
+            if (model != SystemInfo.deviceModel)
             {
-                if (UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPhoneX ||
-                    UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPhoneXR ||
-                    UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPhoneXS ||
-                    UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPhoneXSMax || forceiPhoneX)
+                if (NOTCH_MODELS.Contains(SystemInfo.deviceModel))
+                {
                     onIPhoneX?.Invoke();
+                }
                 else
+                {
                     other?.Invoke();
+                }
 
-                generation = (int)(forceiPhoneX ? UnityEngine.iOS.DeviceGeneration.iPhoneX : UnityEngine.iOS.Device.generation);
+                model = SystemInfo.deviceModel;
             }
-#endif
         }
 
         public void SetHeight(float value)
