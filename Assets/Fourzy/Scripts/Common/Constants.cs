@@ -92,7 +92,6 @@ namespace Fourzy
         public static readonly int REALTIME_ROOM_PASSWORD_LENGTH = 5;
         public static readonly string REALTIME_DEFAULT_GAMEPIECE_KEY = "1";
         public static readonly string REALTIME_TIMER_KEY = "timer";
-        public static readonly string EPOCH_KEY = "mc_epoch";
 
         //events codes
         public const byte GAME_DATA = 0;

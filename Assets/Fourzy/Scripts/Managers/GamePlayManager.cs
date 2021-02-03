@@ -44,11 +44,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public RectTransform hintBlocksParent;
 
         private AudioHolder.BGAudio gameplayBGAudio;
-        private PromptScreen waitingScreen;
+        private PromptScreen realtimeWaitingOtherScreen;
+        private PromptScreen playerLeftScreen;
 
-        //id of rematch challenge
-        private string awaitingChallengeID = "";
-        private long epochDelta;
         private bool logGameFinished;
         private bool ratingUpdated = true;
         private float startedAt = 0f;
@@ -62,7 +60,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         public GameplayScreen gameplayScreen { get; private set; }
         public RandomPlayerPickScreen playerPickScreen { get; private set; }
         public GameWinLoseScreen gameWinLoseScreen { get; private set; }
-        public LoadingPromptScreen loadingPrompt { get; private set; }
 
         public IClientFourzy game { get; private set; }
 
@@ -108,10 +105,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             GameManager.onNetworkAccess += OnNetwork;
             LoginManager.OnDeviceLoginComplete += OnLogin;
-            // ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
-            // ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
 
-            //listen to roomPropertyChanged event
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
             FourzyPhotonManager.onPlayerLeftRoom += OnPlayerLeftRoom;
             FourzyPhotonManager.onEvent += OnEventCall;
@@ -147,8 +141,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             GameManager.onNetworkAccess -= OnNetwork;
             LoginManager.OnDeviceLoginComplete -= OnLogin;
-            // ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
-            // ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
 
             FourzyPhotonManager.onRoomPropertiesUpdate -= OnRoomPropertiesUpdate;
             FourzyPhotonManager.onPlayerLeftRoom -= OnPlayerLeftRoom;
@@ -193,7 +185,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     FourzyPhotonManager.TryLeaveRoom();
                     FourzyPhotonManager.Instance.JoinLobby();
 
-                    GameManager.Instance.currentOpponent = "";
+                    GameManager.Instance.CurrentOpponent = "";
 
                     break;
             }
@@ -228,7 +220,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             CancelRoutine("realtimeCoutdownRoutine");
             CancelRoutine("postGameRoutine");
 
-            awaitingChallengeID = "";
             gameState = GameState.OPENNING_GAME;
             gameStarted = false;
             isBoardReady = false;
@@ -498,12 +489,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
-                    loadingPrompt = PersistantMenuController.instance.GetOrAddScreen<LoadingPromptScreen>();
-                    loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, LocalizationManager.Value("loading"));
-
-                    //loadingPrompt.Prompt("", "Loading new game...", null, null, null, null);
-
-                    // ChallengeManager.Instance.CreateTurnBasedGame(game.opponent.PlayerString, game._Area, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
+                    //loadingPrompt = PersistantMenuController.instance.GetOrAddScreen<LoadingPromptScreen>();
+                    //loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, LocalizationManager.Value("loading"));
 
                     break;
 
@@ -935,24 +922,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 }
             }
 
-            if (values.ContainsKey(Constants.EPOCH_KEY))
-            {
-                //update epoch delta
-                if (!PhotonNetwork.IsMasterClient)
-                {
-                    epochDelta =
-                        values.ContainsKey(Constants.EPOCH_KEY) ?
-                        FourzyPhotonManager.GetRoomProperty(Constants.EPOCH_KEY, 0L) - Utils.EpochMilliseconds() : 0L;
-                }
-            }
-
             if (FourzyPhotonManager.CheckPlayersRematchReady())
             {
-                if (waitingScreen && waitingScreen.isOpened)
+                if (realtimeWaitingOtherScreen && realtimeWaitingOtherScreen.isOpened)
                 {
-                    waitingScreen.CloseSelf();
+                    realtimeWaitingOtherScreen.CloseSelf();
                 }
-                waitingScreen = null;
+                realtimeWaitingOtherScreen = null;
 
                 gameplayScreen.realtimeScreen.CheckWaitingForOtherPlayer("Waiting for game...");
                 CreateRealtimeGame();
@@ -983,7 +959,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case Constants.REMATCH_REQUEST:
-                    waitingScreen = menuController.GetOrAddScreen<PromptScreen>()
+                    realtimeWaitingOtherScreen = menuController.GetOrAddScreen<PromptScreen>()
                         .Prompt($"{game.opponent.DisplayName} wants to play again with you!", "Accept?", () =>
                         {
                             FourzyPhotonManager.SetClientRematchReady();
@@ -1024,7 +1000,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     if (!game.isOver && Time.time - startedAt >
                         Constants.REALTIME_GAME_VALID_AFTER_X_SECONDS)
                     {
-                        OnRealtimeGameFinished(LoginManager.playfabID, GameManager.Instance.currentOpponent);
+                        OnRealtimeGameFinished(LoginManager.playfabID, GameManager.Instance.CurrentOpponent);
                     }
 
                     //pause game
@@ -1033,13 +1009,16 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     FourzyPhotonManager.TryLeaveRoom();
 
                     //display prompt
-                    PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
-                        $"{otherPlayer.NickName} disconnected...",
-                        "Other player disconnected.",
-                        null,
-                        "Back",
-                        null,
-                        BackButtonOnClick).CloseOnDecline();
+                    playerLeftScreen = PersistantMenuController.instance
+                        .GetOrAddScreen<PromptScreen>()
+                        .Prompt(
+                            $"{otherPlayer.NickName} disconnected...",
+                            $"{otherPlayer.NickName} disconnected and forfeits.",
+                            null,
+                            "Back",
+                            null,
+                            BackButtonOnClick)
+                        .CloseOnDecline();
 
                     break;
             }
@@ -1060,11 +1039,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 {
                     if (game.IsWinner())
                     {
-                        OnRealtimeGameFinished(LoginManager.playfabID, GameManager.Instance.currentOpponent);
+                        OnRealtimeGameFinished(LoginManager.playfabID, GameManager.Instance.CurrentOpponent);
                     }
                     else
                     {
-                        OnRealtimeGameFinished(GameManager.Instance.currentOpponent, LoginManager.playfabID);
+                        OnRealtimeGameFinished(GameManager.Instance.CurrentOpponent, LoginManager.playfabID);
                     }
                 }
 
@@ -1206,7 +1185,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private void OnRealtimeGameFinished(string winnerID, string opponentID)
         {
             if (game == null) return;
-            if (string.IsNullOrEmpty(GameManager.Instance.currentOpponent)) return;
+            if (string.IsNullOrEmpty(GameManager.Instance.CurrentOpponent)) return;
             if (ratingUpdated) return;
 
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
@@ -1226,7 +1205,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString()));
 
                 //try send rating update to other client 
-                if (PhotonNetwork.CurrentRoom != null)
+                if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.PlayerListOthers.Length > 0)
                 {
                     var eventOptions = new Photon.Realtime.RaiseEventOptions();
                     eventOptions.Flags.HttpForward = true;
@@ -1246,6 +1225,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         {
             foreach (RatingGamePlayer player in data.players)
             {
+                //Debug.Log($"{player.playfabID} {player.rating} {player.ratingChange} {player.winner}");
                 if (player.playfabID == LoginManager.playfabID)
                 {
                     UserManager.Instance.lastCachedRating = player.rating;
@@ -1261,13 +1241,24 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
 
                     int diff = Constants.GAMES_BEFORE_RATING_DISPLAYED - UserManager.Instance.totalPlayfabGames;
+                    string message;
                     if (diff > 0)
                     {
-                        gameWinLoseScreen.SetInfoLabel($"Rating revealed in {diff} more game{(diff == 1 ? "" : "s")}.");
+                        message = $"Rating revealed in {diff} more game{(diff == 1 ? "" : "s")}.";
                     }
                     else
                     {
-                        gameWinLoseScreen.SetInfoLabel(ratingText + player.ratingChange);
+                        message = ratingText + player.ratingChange;
+                    }
+
+                    if (playerLeftScreen)
+                    {
+                        playerLeftScreen.promptText.text += $"\n{message}";
+                        playerLeftScreen = null;
+                    }
+                    else if (gameWinLoseScreen.isOpened)
+                    {
+                        gameWinLoseScreen.SetInfoLabel(message);
                     }
                 }
             }

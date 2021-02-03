@@ -99,12 +99,23 @@ namespace Fourzy
         public DependencyStatus dependencyStatus { get; set; }
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public string sessionID { get; private set; }
-        public string currentOpponent { get; set; }
+        public string CurrentOpponent
+        {
+            get
+            {
+                return currentOpponent;
+            }
+            set
+            {
+                currentOpponent = value;
+            }
+        }
         public LocationInfo? lastLocation { get; private set; } = null;
         public string MainMenuSceneName => Landscape ?
             Constants.MAIN_MENU_L_SCENE_NAME :
             Constants.MAIN_MENU_P_SCENE_NAME;
 
+        private string currentOpponent;
         private bool configFetched = false;
         private PlacementStyle _placementStyle;
 

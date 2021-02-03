@@ -285,7 +285,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!isOpened) return;
 
-            GameManager.Instance.currentOpponent = otherPlayer.UserId;
+            GameManager.Instance.CurrentOpponent = otherPlayer.UserId;
             //other player connected, switch to gameplay scene
             StartMatch();
 
@@ -298,7 +298,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                GameManager.Instance.currentOpponent = PhotonNetwork.PlayerListOthers[0].UserId;
+                GameManager.Instance.CurrentOpponent = PhotonNetwork.PlayerListOthers[0].UserId;
 
                 //open gameplay scene
                 StartMatch();

@@ -247,9 +247,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (_prompt.isOpened) _prompt.Decline(true);
             if (isOpened) CloseSelf();
 
-            if (PhotonNetwork.PlayerListOthers.Length > 0)
-                GameManager.Instance.currentOpponent = PhotonNetwork.PlayerListOthers[0].UserId;
-
             AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
         }

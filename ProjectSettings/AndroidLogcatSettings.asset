@@ -3,17 +3,11 @@
     "m_SelectedPackage": {
         "deviceId": "RF8M21C3DME",
         "name": "com.supermove.fourzy",
-        "processId": 29754,
+        "processId": 24091,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "RF8M21C3DME",
-            "name": "com.supermove.fourzy",
-            "processId": 17583,
-            "exited": true
-        },
         {
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
@@ -42,6 +36,12 @@
             "deviceId": "RF8M21C3DME",
             "name": "com.supermove.fourzy",
             "processId": 29754,
+            "exited": true
+        },
+        {
+            "deviceId": "RF8M21C3DME",
+            "name": "com.supermove.fourzy",
+            "processId": 24091,
             "exited": false
         }
     ],

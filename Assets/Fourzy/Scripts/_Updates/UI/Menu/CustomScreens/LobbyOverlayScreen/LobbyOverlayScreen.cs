@@ -113,8 +113,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 //load game
                 StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame);
                 state = LobbyOverlayState.LOADING_GAME;
-
-                GameManager.Instance.currentOpponent = two.UserId;
             }
 
             empty.SetActive(!isTwo);
@@ -126,8 +124,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) 
                 & displayable) == 0) return;
 
-            if (PhotonNetwork.IsMasterClient) SetData(PhotonNetwork.LocalPlayer);
-            else SetData(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.LocalPlayer);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                SetData(PhotonNetwork.LocalPlayer);
+            }
+            else
+            {
+                SetData(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.LocalPlayer);
+                GameManager.Instance.CurrentOpponent = PhotonNetwork.PlayerListOthers[0].UserId;
+            }
 
             string password = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_PASSWORD, "");
             lobbyButton.GetBadge("code").badge.SetValue(password);
@@ -139,6 +144,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 & displayable) == 0) return;
 
             SetData(PhotonNetwork.LocalPlayer, other);
+            GameManager.Instance.CurrentOpponent = other.UserId;
         }
 
         private void OnPlayerLeftRoom(Player other)
