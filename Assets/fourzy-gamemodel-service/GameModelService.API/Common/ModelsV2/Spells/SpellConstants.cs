@@ -15,7 +15,7 @@
         public const int DefaultHoldCost = 25;
 
         public const int DefaultDarknessDuration = 4;
-        public const int DefaultDarknessCost = 50;
+        public const int DefaultDarknessCost = 25;
 
         public const int DefaultPrisonDuration = 4;
         public const int DefaultPrisonCost = 50;
@@ -23,7 +23,7 @@
         public const int DefaultMisdirectionCost = 50;
 
         public const int DefaultFruitCost = 20;
-        public const int DefaultLureCost = 20;
+        public const int DefaultLureCost = 25;
         public const int DefaultRainbowCost = 10;
 
         public const int DefaultGrowlCost = 20;
