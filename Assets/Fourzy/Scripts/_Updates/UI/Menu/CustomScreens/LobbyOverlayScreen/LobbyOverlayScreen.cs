@@ -55,7 +55,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnInitialized();
 
-            _prompt = PersistantMenuController.instance
+            _prompt = PersistantMenuController.Instance
                 .GetOrAddScreen<LoadingPromptScreen>()
                 .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
         }
@@ -105,7 +105,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 playerTwoView = Instantiate(GameContentManager.Instance.piecesDataHolder
                     .GetGamePiecePrefabData(FourzyPhotonManager.GetOpponentProperty(
-                        Constants.REALTIME_GAMEPIECE_KEY, 
+                        Constants.REALTIME_ROOM_GAMEPIECE_KEY, 
                         Constants.REALTIME_DEFAULT_GAMEPIECE_KEY)).player1Prefab, playerTwoParent);
 
                 playerTwoView.StartBlinking();

@@ -6,7 +6,6 @@ using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using Photon.Pun;
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -24,12 +23,12 @@ namespace Fourzy._Updates.UI.Widgets
         private GamePieceView current;
         private int rating;
         private int totalGames;
+        private bool magicWidget = true;
 
         public Player assignedPlayer { get; private set; }
         public IClientFourzy game { get; private set; }
 
         public bool shown { get; private set; }
-
         public bool isMe { get; private set; }
 
         protected override void Awake()
@@ -131,6 +130,12 @@ namespace Fourzy._Updates.UI.Widgets
             extraLabel.text = text;
         }
 
+        public void SetMagicWidget(bool value)
+        {
+            magicWidget = value;
+            magicBadge.SetState(value);
+        }
+
         public void SetRating(int value, int totalGames)
         {
             if (value < 0) return;
@@ -167,6 +172,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void UpdateMagic(int playerId, int value)
         {
+            if (!magicWidget) return;
+
             if (assignedPlayer.PlayerId == playerId)
             {
                 magicBadge.SetValue(value);

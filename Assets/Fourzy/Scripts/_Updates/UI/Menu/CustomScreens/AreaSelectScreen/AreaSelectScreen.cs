@@ -10,7 +10,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class AreaSelectScreen : MenuScreen
     {
-        public AreaSelectWidget themeSelectWidget;
+        public AreaWidget themeSelectWidget;
         public RectTransform themesParent;
 
         public ToggleGroup group { get; private set; }
@@ -26,22 +26,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            HeaderScreen.instance.Close();
+            HeaderScreen.Instance.Close();
         }
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
 
-            foreach (ThemesDataHolder.GameTheme theme in GameContentManager.Instance.enabledThemes)
+            foreach (AreasDataHolder.GameArea theme in GameContentManager.Instance.enabledAreas)
             {
-                AreaSelectWidget widgetInstance = Instantiate(themeSelectWidget, themesParent);
+                AreaWidget widgetInstance = Instantiate(themeSelectWidget, themesParent);
 
                 themesParent.localScale = Vector3.one;
 
                 widgetInstance.SetData(theme, group);
 
-                if (theme == GameContentManager.Instance.currentTheme)
+                if (theme == GameContentManager.Instance.currentArea)
                     widgetInstance.toggleExtended.isOn = true;
             }
         }

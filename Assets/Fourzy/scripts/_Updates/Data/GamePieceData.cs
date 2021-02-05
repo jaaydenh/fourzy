@@ -17,7 +17,8 @@ namespace Fourzy
         public bool enabled;
         public int rarity = 30;
         public int startingMagic = 100;
-        public List<SpellId> spells;
+        [SerializeField]
+        private List<SpellId> spells;
         public Color outlineColor = Color.blue;
         public Color borderColor = Color.green;
         public int piecesToUnlock = 40;
@@ -41,6 +42,22 @@ namespace Fourzy
         {
             get => PlayerPrefsWrapper.GetGamePieceChampions(ID);
             set => PlayerPrefsWrapper.GamePieceUpdateChampionsCount(ID, value);
+        }
+
+        /// <summary>
+        /// Temp returns these values
+        /// </summary>
+        public List<SpellId> Spells
+        {
+            get
+            {
+                return new List<SpellId>()
+                {
+                    SpellId.HEX,
+                    SpellId.PLACE_LURE,
+                    SpellId.DARKNESS
+                };
+            }
         }
 
         public int ChampionsFromPieces

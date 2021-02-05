@@ -28,7 +28,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public StringEventTrigger timerToggle;
         public ButtonExtended timerButton;
 
-        private Dictionary<Area, List<GameBoardDefinition>> gameboards = new Dictionary<Area, List<GameBoardDefinition>>();
+        private Dictionary<Area, List<GameBoardDefinition>> gameboards = 
+            new Dictionary<Area, List<GameBoardDefinition>>();
         private int currentBoard = -1;
         private MiniGameboardWidget currentGameboardWidget;
 
@@ -58,10 +59,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
             AddWidget(AIProfile.AggressiveAI, player2select.content, 2);
 
             //load areas
-            SetArea(AddAreaWidget(Area.TRAINING_GARDEN));
-            AddAreaWidget(Area.ENCHANTED_FOREST);
-            AddAreaWidget(Area.SANDY_ISLAND);
-            AddAreaWidget(Area.ICE_PALACE);
+            bool first = true;
+            foreach (Serialized.AreasDataHolder.GameArea areaData in GameContentManager.Instance.enabledAreas)
+            {
+                if (first)
+                {
+                    first = false;
+                    SetArea(AddAreaWidget(areaData.areaID));
+                }
+                else
+                {
+                    AddAreaWidget(areaData.areaID);
+                }
+            }
 
             LoadBoard(currentBoard);
 
@@ -91,7 +101,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            HeaderScreen.instance.Close();
+            HeaderScreen.Instance.Close();
 
             //check if was opened
             if (!PlayerPrefsWrapper.GetBool(kPracticeScreenOpened))
@@ -111,7 +121,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleTimer() => SetTimerState(!SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER));
 
-        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_MAGIC);
+        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_MAGIC);
 
         public void SetArea(PracticeScreenAreaSelectWidget widget)
         {
@@ -124,7 +134,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 }
             }
             else
+            {
                 SetAreaWidget(widget);
+            }
         }
 
         public void NextBoard()
@@ -193,7 +205,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected PracticeScreenAreaSelectWidget AddAreaWidget(Area area)
         {
-            PracticeScreenAreaSelectWidget instance = Instantiate(areaWidgetPrefab, areasContainer.content).SetData(area);
+            PracticeScreenAreaSelectWidget instance = Instantiate(areaWidgetPrefab, areasContainer.content)
+                .SetData(area);
             instance.button.onTap += data => SetArea(instance);
 
             return instance;

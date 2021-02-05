@@ -58,10 +58,6 @@ namespace Fourzy._Updates.UI.Helpers
 
         public override void OnSelect(BaseEventData eventData)
         {
-            Debug.Log(name);
-            //move nav cursor
-            NavigationOverlay.Instance.StickTo(this);
-
             base.OnSelect(eventData);
 
             onSelect.Invoke();

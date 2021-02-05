@@ -327,7 +327,7 @@ MonoBehaviour:
             type: 3}
     - elementName: DARKNESS
       tokenType: 64
-      tokenIcon: {fileID: 0}
+      tokenIcon: {fileID: 21300000, guid: 6a73ed7cc5af5ff40b806d7b115e3ec6, type: 3}
       enabled: 1
       isSpell: 1
       spellID: 3

@@ -51,9 +51,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             UpdateAcceptButton(yes);
             UpdateDeclineButton(no);
 
-            if (promptTitle) promptTitle.text = title;
+            if (promptTitle)
+            {
+                promptTitle.text = title;
+            }
 
-            if (promptText) promptText.text = text;
+            if (promptText)
+            {
+                promptText.text = text;
+            }
 
             return Prompt();
         }

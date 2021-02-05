@@ -37,8 +37,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private ButtonExtended selectedBoardWidgetButton;
 
         private GameBoardDefinition gameBoardDefinition;
-        private ThemesDataHolder.GameTheme selectedTheme;
-        private ThemesDataHolder.GameTheme prevTheme;
+        private AreasDataHolder.GameArea selectedArea;
+        private AreasDataHolder.GameArea prevArea;
 
         private int demoCounter = 0;
 
@@ -142,7 +142,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             ClientFourzyGame game;
             if (gameBoardDefinition == null)
-                game = new ClientFourzyGame(selectedTheme == null ? GameContentManager.Instance.enabledThemes.Random().themeID : selectedTheme.themeID, player1, player2, player1.PlayerId);
+                game = new ClientFourzyGame(selectedArea == null ? GameContentManager.Instance.enabledAreas.Random().areaID : selectedArea.areaID, player1, player2, player1.PlayerId);
             else
                 game = new ClientFourzyGame(gameBoardDefinition, player1, player2);
 
@@ -157,19 +157,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            areaPicker.image.sprite = selectedTheme == null ? randomAreaIcon : selectedTheme.landscapePreview;
-            areaPicker.SetLabel(LocalizationManager.Value(selectedTheme == null ? "random" : selectedTheme.id));
+            areaPicker.image.sprite = selectedArea == null ? randomAreaIcon : selectedArea._4X3;
+            areaPicker.SetLabel(LocalizationManager.Value(selectedArea == null ? "random" : selectedArea.name));
 
-            if (selectedTheme != null && prevTheme != selectedTheme)
+            if (selectedArea != null && prevArea != selectedArea)
             {
                 //new theme selected
                 //selectedBoardWidget.Clear(false);
-                selectedBoardWidget.SetArea(selectedTheme != null ? selectedTheme.themeID : Area.NONE);
+                selectedBoardWidget.SetArea(selectedArea != null ? selectedArea.areaID : Area.NONE);
                 selectedBoardWidgetButton.SetState(true);
 
                 gameBoardDefinition = null;
             }
-            else if (selectedTheme == null)
+            else if (selectedArea == null)
             {
                 selectedBoardWidgetButton.SetState(false);
 
@@ -177,9 +177,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //get board
-            selectedBoardWidget.SetData(gameBoardDefinition, selectedTheme == null);
+            selectedBoardWidget.SetData(gameBoardDefinition, selectedArea == null);
 
-            prevTheme = selectedTheme;
+            prevArea = selectedArea;
         }
 
         public override void OnBack()
@@ -249,7 +249,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void PickBoard() => 
             menuController
             .GetScreen<LandscapeGameboardSelectionScreen>()
-            .Open(selectedTheme.themeID);
+            .Open(selectedArea.areaID);
 
         public void ToggleP2()
         {
@@ -297,7 +297,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleLocalTimer() => SettingsManager.Toggle(SettingsManager.KEY_LOCAL_TIMER);
 
-        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_MAGIC);
+        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_MAGIC);
 
         protected override void OnInitialized()
         {
@@ -437,9 +437,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             gameBoardDefinition = boardDefinition;
         }
 
-        private void OnAreaSelected(ThemesDataHolder.GameTheme areaData)
+        private void OnAreaSelected(AreasDataHolder.GameArea areaData)
         {
-            selectedTheme = areaData;
+            selectedArea = areaData;
         }
 
         private void OnP1DifficultySelected(int option)

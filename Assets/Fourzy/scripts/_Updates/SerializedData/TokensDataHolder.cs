@@ -126,19 +126,19 @@ namespace Fourzy._Updates.Serialized
                 }
             }
 
-            public List<ThemesDataHolder.GameTheme> GetTokenAreas(ThemesDataHolder themesData)
+            public List<AreasDataHolder.GameArea> GetTokenAreas(AreasDataHolder themesData)
             {
-                List<ThemesDataHolder.GameTheme> result = new List<ThemesDataHolder.GameTheme>();
+                List<AreasDataHolder.GameArea> result = new List<AreasDataHolder.GameArea>();
 
                 foreach (Enum value in Enum.GetValues(typeof(Area)))
                     foreach (ThemeTokenPrefabPair prefabData in themesTokens.list)
-                        if (prefabData.theme.HasFlag(value) && themesData.IsThemeEnabled((Area)value))
-                            result.Add(themesData.GetTheme((Area)value));
+                        if (prefabData.theme.HasFlag(value) && themesData.IsAreaEnabled((Area)value))
+                            result.Add(themesData[(Area)value]);
 
                 return result;
             }
 
-            public List<string> GetAreaNames(ThemesDataHolder themesDataHolder) => GetTokenAreas(themesDataHolder)?.Select(area => LocalizationManager.Value(area.id)).ToList() ?? null;
+            public List<string> GetAreaNames(AreasDataHolder themesDataHolder) => GetTokenAreas(themesDataHolder)?.Select(area => LocalizationManager.Value(area.name)).ToList() ?? null;
 
             public Sprite GetTokenSprite()
             {

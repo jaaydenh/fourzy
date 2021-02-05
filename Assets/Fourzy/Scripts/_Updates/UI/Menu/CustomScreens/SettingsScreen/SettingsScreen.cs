@@ -21,7 +21,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             menuController.CloseCurrentScreen();
 
-            PersistantMenuController.instance
+            PersistantMenuController.Instance
                 .GetOrAddScreen<OnboardingScreen>()
                 .OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
         }
@@ -56,11 +56,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleDemoMode() => SettingsManager.Toggle(SettingsManager.KEY_DEMO_MODE);
 
-        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_MAGIC);
-
         public void StartRealtime() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
-
-        public void ToggleRealtimeTimer() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_TIMER);
 
         public void ShowFriendsScreen() => menuController.GetOrAddScreen<FriendsScreen>().Prompt();
 

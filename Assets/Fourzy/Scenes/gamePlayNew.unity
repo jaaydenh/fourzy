@@ -1773,7 +1773,6 @@ GameObject:
   - component: {fileID: 286430234}
   - component: {fileID: 286430233}
   - component: {fileID: 286430232}
-  - component: {fileID: 286430231}
   m_Layer: 5
   m_Name: Magic
   m_TagString: Untagged
@@ -1799,23 +1798,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 114.65, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 33}
   m_Pivot: {x: 0, y: 0.5}
---- !u!114 &286430231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 286430229}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 0
 --- !u!114 &286430232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1849,9 +1834,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hideOnEmpty: 0
-  thisTarget: 1
+  thisTarget: 0
   format: '{0}'
-  targetObject: {fileID: 0}
+  targetObject: {fileID: 286430229}
 --- !u!114 &286430234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10172,7 +10157,7 @@ GameObject:
   - component: {fileID: 665176965}
   - component: {fileID: 665176964}
   m_Layer: 5
-  m_Name: SpellsWidget
+  m_Name: Spells
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11285,7 +11270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba9789f4f041794898aa7acdf6f8255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceiPhoneX: 0
+  forceIPhoneX: 0
   onIPhoneX:
     inspectorListHeight: 128
     persistentCalls:
@@ -20849,7 +20834,7 @@ GameObject:
   - component: {fileID: 1581266717}
   - component: {fileID: 1581266716}
   m_Layer: 5
-  m_Name: SpellsWidget
+  m_Name: Spells
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21833,7 +21818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba9789f4f041794898aa7acdf6f8255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceiPhoneX: 0
+  forceIPhoneX: 0
   onIPhoneX:
     inspectorListHeight: 83
     persistentCalls:
@@ -22382,7 +22367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba9789f4f041794898aa7acdf6f8255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceiPhoneX: 0
+  forceIPhoneX: 0
   onIPhoneX:
     inspectorListHeight: 128
     persistentCalls:
@@ -22848,7 +22833,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba9789f4f041794898aa7acdf6f8255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceiPhoneX: 0
+  forceIPhoneX: 0
   onIPhoneX:
     inspectorListHeight: 128
     persistentCalls:
@@ -27442,7 +27427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba9789f4f041794898aa7acdf6f8255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceiPhoneX: 0
+  forceIPhoneX: 0
   onIPhoneX:
     inspectorListHeight: 128
     persistentCalls:
@@ -33307,7 +33292,6 @@ GameObject:
   - component: {fileID: 1978830622}
   - component: {fileID: 1978830621}
   - component: {fileID: 1978830620}
-  - component: {fileID: 1978830619}
   m_Layer: 5
   m_Name: Magic
   m_TagString: Untagged
@@ -33333,23 +33317,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 114.65, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 33}
   m_Pivot: {x: 0, y: 0.5}
---- !u!114 &1978830619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1978830617}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 0
 --- !u!114 &1978830620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33383,9 +33353,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hideOnEmpty: 0
-  thisTarget: 1
+  thisTarget: 0
   format: '{0}'
-  targetObject: {fileID: 0}
+  targetObject: {fileID: 1978830617}
 --- !u!114 &1978830622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34189,7 +34159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba9789f4f041794898aa7acdf6f8255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceiPhoneX: 0
+  forceIPhoneX: 0
   onIPhoneX:
     inspectorListHeight: 128
     persistentCalls:

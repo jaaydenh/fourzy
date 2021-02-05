@@ -51,7 +51,10 @@ namespace Fourzy._Updates.Mechanics.Rewards
             for (int characterCycle = 0; characterCycle < quantity; characterCycle++)
             {
                 //get random character from selected area
-                rewards.Add(new GamePieceReward(UnityEngine.Random.Range(10, 20), RewardType.GAME_PIECE, GameContentManager.Instance.currentTheme.gamepieces.list.Random().prefab.pieceData.ID));
+                rewards.Add(new GamePieceReward(
+                    UnityEngine.Random.Range(10, 20), 
+                    RewardType.GAME_PIECE, 
+                    GameContentManager.Instance.currentArea.gamepieces.Random().pieceData.ID));
             }
 
             return rewards;

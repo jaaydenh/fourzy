@@ -101,6 +101,10 @@
       "value": "DIFICULTAD DE LA CPU"
     },
     {
+      "key": "create_game",
+      "value": "Crear Juego "
+    },
+    {
       "key": "current_name",
       "value": "Nombre actual"
     },
@@ -143,6 +147,10 @@
     {
       "key": "fourzies",
       "value": "Fourzies"
+    },
+    {
+      "key": "game_options",
+      "value": "Opciones de Juego"
     },
     {
       "key": "gamepieces",

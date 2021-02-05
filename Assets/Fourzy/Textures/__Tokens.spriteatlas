@@ -55,7 +55,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: e1d5cc2cde4784b2daaffb156c3b71d3, type: 3}
-    totalSpriteSurfaceArea: 2631302
+    totalSpriteSurfaceArea: 2647686
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -124,6 +124,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 71c6951ce3a2ccf46a54f1c12bff57da, type: 3}
   - {fileID: 21300000, guid: a578935c7ac0847f48014e1bcdaabb2d, type: 3}
   - {fileID: 21300000, guid: e00d767c04b95427d9ce87938b0c5df4, type: 3}
+  - {fileID: 21300000, guid: 6a73ed7cc5af5ff40b806d7b115e3ec6, type: 3}
   - {fileID: 21300000, guid: f79cc01d2354c4908b9fe6a5cde1c91a, type: 3}
   - {fileID: 21300000, guid: 797f351dd817a494193e8c0702b68ff9, type: 3}
   - {fileID: 21300000, guid: ece13f4db53924687b85ffeb72019746, type: 3}
@@ -239,6 +240,7 @@ SpriteAtlas:
   - iceBlock
   - tokenSnow
   - tokenFruit
+  - darkness_icon
   - tokenIceSheet
   - tokenBlockerIcePalace
   - tokenMovingGhost

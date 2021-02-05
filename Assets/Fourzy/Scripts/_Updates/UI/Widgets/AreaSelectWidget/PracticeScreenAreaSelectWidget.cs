@@ -2,6 +2,8 @@
 
 using ByteSheep.Events;
 using FourzyGameModel.Model;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -9,6 +11,7 @@ namespace Fourzy._Updates.UI.Widgets
     public class PracticeScreenAreaSelectWidget : WidgetBase
     {
         public Image icon;
+        public GameObject disabled;
         public AdvancedEvent onSelect;
         public AdvancedEvent onDeselect;
 
@@ -18,18 +21,11 @@ namespace Fourzy._Updates.UI.Widgets
         {
             this.area = area;
 
-            gameObject.SetActive(true);
+            icon.sprite = GameContentManager.Instance.areasDataHolder[area].square;
+            bool enabled = InternalSettings.Current.UNLOCKED_AREAS.Contains(area);
 
-            if (PlayerPrefsWrapper.GetThemeUnlocked((int)area))
-            {
-                icon.sprite = GameContentManager.Instance.miscGameDataHolder.GetIcon("AreaIconsTemp", area.ToString()).sprite;
-                button.interactable = true;
-            }
-            else
-            {
-                icon.sprite = GameContentManager.Instance.miscGameDataHolder.GetIcon("AreaIconsTemp", area.ToString() + "_locked").sprite;
-                button.interactable = false;
-            }
+            button.interactable = enabled;
+            disabled.SetActive(!enabled);
 
             return this;
         }

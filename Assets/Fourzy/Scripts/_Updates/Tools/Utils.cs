@@ -206,6 +206,74 @@ namespace Fourzy._Updates.Tools
             }
         }
 
+        public static ISpell AsSpell(this SpellId spellID, BoardLocation location, int playerID = 0)
+        {
+            switch (spellID)
+            {
+                case SpellId.HEX:
+                    return new HexSpell(playerID, location);
+
+                case SpellId.HOLD_FOURZY:
+                    return new HoldFourzySpell(playerID, location);
+
+                case SpellId.PRISON:
+                    return new PrisonSpell(playerID, location);
+
+                case SpellId.DARKNESS:
+                    return new DarknessSpell(playerID, location);
+
+                case SpellId.FRUIT:
+                    return new FruitSpell(playerID, location);
+
+                case SpellId.SLURP:
+                    return new SlurpSpell(playerID, location);
+
+                case SpellId.SQUIRT_WATER:
+                    return new SquirtWaterSpell(playerID, location);
+
+                case SpellId.THROW_BOMB:
+                    return new BombSpell(playerID, location);
+
+                case SpellId.PLACE_LURE:
+                    return new LureSpell(playerID, location);
+
+                case SpellId.ICE_WALL:
+                    return new IceWallSpell(location);
+
+                case SpellId.FIRE_WALL:
+                    return new FireWallSpell(playerID, location);
+
+                case SpellId.DIG:
+                    return new DigSpell(playerID, location);
+
+                case SpellId.GROWL:
+                    return new GrowlSpell(playerID, location);
+
+                case SpellId.SUMMON_SPECTER:
+                    return new SpecterSpell(playerID, location);
+
+                case SpellId.RAINBOW:
+                    return new RainbowSpell(playerID, location);
+
+                case SpellId.PUNCH:
+                    return new PunchSpell(playerID, location);
+
+                case SpellId.FREEZE:
+                    return new FreezeSpell(playerID, location);
+
+                case SpellId.MELT:
+                    return new MeltSpell(playerID, location);
+
+                case SpellId.LIFE:
+                    return new LifeSpell(playerID, location);
+
+                case SpellId.DEATH:
+                    return new DeathSpell(playerID, location);
+            }
+
+            return null;
+        }
+
         public static Direction GetDirectionFromLocations(this BoardLocation[] locations)
         {
             if (locations.Length < 2) return Direction.NONE;

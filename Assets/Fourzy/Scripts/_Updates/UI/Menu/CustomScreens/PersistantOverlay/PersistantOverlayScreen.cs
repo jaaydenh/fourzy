@@ -23,7 +23,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public string AnimateReward(bool spawnOrigin, RewardType type, int amount, Vector2 viewportPoint)
         {
-            HeaderScreen.instance.SneakABit();
+            HeaderScreen.Instance.SneakABit();
             string animationID = Random.value + "";
 
             StartRoutine(animationID, AnimateRewardRoutine(
@@ -56,7 +56,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (spawnOrigin) yield return new WaitForSeconds(1.3f);
             else yield return new WaitForSeconds(.5f);
 
-            Vector2 to = HeaderScreen.instance.GetCurrencyWidget(type).transform.position;
+            Vector2 to = HeaderScreen.Instance.GetCurrencyWidget(type).transform.position;
 
             int max = Mathf.Min(amount, maxParticles);
             for (int _index = 0; _index < max; _index++)

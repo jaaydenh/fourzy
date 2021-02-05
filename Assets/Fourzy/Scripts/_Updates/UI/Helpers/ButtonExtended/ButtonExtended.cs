@@ -185,7 +185,7 @@ namespace Fourzy._Updates.UI.Helpers
                 case AnalyticsManager.AnalyticsUIButtons.pass_and_play:
                 case AnalyticsManager.AnalyticsUIButtons.leaderboard_play:
                 case AnalyticsManager.AnalyticsUIButtons.turn_play:
-                    AnalyticsManager.Instance.LogUIButton(eventType, @params: new KeyValuePair<string, object>(AnalyticsManager.AREA_KEY, GameContentManager.Instance.currentTheme.themeID));
+                    AnalyticsManager.Instance.LogUIButton(eventType, @params: new KeyValuePair<string, object>(AnalyticsManager.AREA_KEY, GameContentManager.Instance.currentArea.areaID));
 
                     break;
 

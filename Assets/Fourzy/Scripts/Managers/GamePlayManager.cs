@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using static Fourzy._Updates.Serialized.ThemesDataHolder;
+using static Fourzy._Updates.Serialized.AreasDataHolder;
 
 namespace Fourzy._Updates.Mechanics.GameplayScene
 {
@@ -115,7 +115,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 PointerInputModuleExtended.noInput += OnNoInput;
             }
 
-            HeaderScreen.instance.Close();
+            HeaderScreen.Instance.Close();
 
             CheckGameMode();
         }
@@ -146,7 +146,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             FourzyPhotonManager.onPlayerLeftRoom -= OnPlayerLeftRoom;
             FourzyPhotonManager.onEvent -= OnEventCall;
 
-            if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE)) PointerInputModuleExtended.noInput -= OnNoInput;
+            if (SettingsManager.Get(SettingsManager.KEY_DEMO_MODE))
+            {
+                PointerInputModuleExtended.noInput -= OnNoInput;
+            }
 
             AudioHolder.instance.StopBGAudio(gameplayBGAudio, .5f);
         }
@@ -255,18 +258,19 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (PhotonNetwork.IsMasterClient)
             {
                 //ready opponent
-                FourzyGameModel.Model.Player opponen =
-                    new FourzyGameModel.Model.Player(2, PhotonNetwork.PlayerListOthers[0].NickName)
+                Player opponen =
+                    new Player(2, PhotonNetwork.PlayerListOthers[0].NickName)
                     {
                         HerdId = FourzyPhotonManager.GetOpponentProperty(
-                            Constants.REALTIME_GAMEPIECE_KEY,
+                            Constants.REALTIME_ROOM_GAMEPIECE_KEY,
                             Constants.REALTIME_DEFAULT_GAMEPIECE_KEY),
                         PlayerString = "2"
                     };
 
+                Debug.Log((Area)PlayerPrefsWrapper.GetCurrentArea());
                 //load realtime game
                 ClientFourzyGame _game = new ClientFourzyGame(
-                    GameContentManager.Instance.enabledThemes.Random().themeID,
+                    FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_AREA, Constants.DEFAULT_AREA),
                     UserManager.Instance.meAsPlayer,
                     opponen,
                     UnityEngine.Random.value > .5f ? 1 : 2)
@@ -594,7 +598,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (UserManager.Instance.hints <= 0)
             {
-                PersistantMenuController.instance
+                PersistantMenuController.Instance
                     .GetOrAddScreen<StorePromptScreen>()
                     .Prompt(StorePromptScreen.StoreItemType.HINTS);
 
@@ -689,7 +693,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     [GameManager.PlacementStyle.SWIPE_STYLE_2] = swipeRect
                 }, UI.Widgets.OnboardingScreenMaskObject.MaskStyle.PX_0);
 
-            PersistantMenuController.instance
+            PersistantMenuController.Instance
                 .GetOrAddScreen<OnboardingScreen>()
                 .OpenTutorial(new _Tutorial.Tutorial()
                 {
@@ -740,8 +744,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             currentConfiguration = GameContentManager
                 .Instance
-                .themesDataHolder
-                .GetThemeBGConfiguration(area, Camera.main);
+                .areasDataHolder
+                .GetAreaBGConfiguration(area, Camera.main);
             bg = Instantiate(currentConfiguration.backgroundPrefab, bgParent);
             bg.transform.localPosition = Vector3.zero;
         }
@@ -817,8 +821,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 default:
                     AudioTypes gameBGAudio = GameContentManager
                         .Instance
-                        .themesDataHolder
-                        .GetTheme(game._Area).bgAudio;
+                        .areasDataHolder[game._Area].bgAudio;
 
                     if (gameplayBGAudio != null)
                     {
@@ -910,8 +913,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         private void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable values)
         {
-            if (values.ContainsKey(Constants.REALTIME_PLAYER_1_READY) ||
-                values.ContainsKey(Constants.REALTIME_PLAYER_2_READY))
+            if (values.ContainsKey(Constants.REALTIME_ROOM_PLAYER_1_READY) ||
+                values.ContainsKey(Constants.REALTIME_ROOM_PLAYER_2_READY))
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
@@ -997,8 +1000,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameType.REALTIME:
                     //if more than X seconds passed, player who left the game loses
-                    if (!game.isOver && Time.time - startedAt >
-                        Constants.REALTIME_GAME_VALID_AFTER_X_SECONDS)
+                    if (!game.isOver && 
+                        Time.time - startedAt > Constants.REALTIME_GAME_VALID_AFTER_X_SECONDS &&
+                        gameState == GameState.GAME)
                     {
                         OnRealtimeGameFinished(LoginManager.playfabID, GameManager.Instance.CurrentOpponent);
                     }
@@ -1009,7 +1013,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     FourzyPhotonManager.TryLeaveRoom();
 
                     //display prompt
-                    playerLeftScreen = PersistantMenuController.instance
+                    playerLeftScreen = PersistantMenuController.Instance
                         .GetOrAddScreen<PromptScreen>()
                         .Prompt(
                             $"{otherPlayer.NickName} disconnected...",
@@ -1091,7 +1095,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.TURN_BASED:
                 case GameType.REALTIME:
                 case GameType.PASSANDPLAY:
-                    PersistantMenuController.instance.GetOrAddScreen<RewardsScreen>().SetData(game);
+                    PersistantMenuController.Instance.GetOrAddScreen<RewardsScreen>().SetData(game);
 
                     break;
             }
@@ -1160,12 +1164,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     PauseGame();
 
                     //open prompt screen
-                    PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
+                    PersistantMenuController.Instance.GetOrAddScreen<PromptScreen>().Prompt(
                         "Connection failed.",
                         "Failed to connect to multiplayer server :(", null,
                         LocalizationManager.Value("back"), null, () =>
                         {
-                            PersistantMenuController.instance.CloseCurrentScreen();
+                            PersistantMenuController.Instance.CloseCurrentScreen();
                             BackButtonOnClick();
                         });
                 }
@@ -1529,9 +1533,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.PRESENTATION:
                     yield return new WaitForSeconds(3f);
 
-                    LoadGame(new ClientFourzyGame(GameContentManager.Instance.themesDataHolder.GetRandomTheme(Area.NONE),
-                        new FourzyGameModel.Model.Player(1, "AI Player 1") { PlayerString = "1" },
-                        new FourzyGameModel.Model.Player(2, "AI Player 2") { PlayerString = "2" }, 1)
+                    LoadGame(new ClientFourzyGame(GameContentManager.Instance.enabledAreas.Random().areaID,
+                        new Player(1, "AI Player 1") { PlayerString = "1" },
+                        new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
                     { _Type = GameType.PRESENTATION, });
 
                     break;

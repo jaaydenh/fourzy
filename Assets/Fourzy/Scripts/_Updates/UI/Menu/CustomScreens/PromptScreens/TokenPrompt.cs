@@ -48,7 +48,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
 
-            List<ThemesDataHolder.GameTheme> themes = GameContentManager.Instance.GetTokenThemes(data.tokenType);
+            List<AreasDataHolder.GameArea> themes = GameContentManager.Instance.GetTokenThemes(data.tokenType);
 
             //badges
             if (data.isSpell)
@@ -56,7 +56,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 locationBadge.SetState(false);
                 priceBadge.SetValue(data.price);
 
-                if (themes.Count > 0) priceBadge.SetColor(themes[0].themeColor);
+                if (themes.Count > 0) priceBadge.SetColor(themes[0].areaColor);
             }
             else
             {
@@ -65,7 +65,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 if (locations.Count == 6) locationBadge.SetValue("All");
                 else locationBadge.SetValue(string.Join(", ", locations));
 
-                if (themes.Count > 0) locationBadge.SetColor(themes[0].themeColor);
+                if (themes.Count > 0) locationBadge.SetColor(themes[0].areaColor);
 
                 priceBadge.SetState(false);
             }
@@ -93,7 +93,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
 
-            List<ThemesDataHolder.GameTheme> themes = GameContentManager.Instance.GetTokenThemes(data.tokenType);
+            List<AreasDataHolder.GameArea> themes = GameContentManager.Instance.GetTokenThemes(data.tokenType);
 
             //badges
             if (data.isSpell)
@@ -101,7 +101,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 locationBadge.SetState(false);
                 priceBadge.SetValue(data.price);
 
-                if (themes.Count > 0) priceBadge.SetColor(themes[0].themeColor);
+                if (themes.Count > 0) priceBadge.SetColor(themes[0].areaColor);
             }
             else
             {
@@ -110,7 +110,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 if (locations.Count == 6) locationBadge.SetValue("All");
                 else locationBadge.SetValue(string.Join(", ", locations));
 
-                if (themes.Count > 0) locationBadge.SetColor(themes[0].themeColor);
+                if (themes.Count > 0) locationBadge.SetColor(themes[0].areaColor);
 
                 priceBadge.SetState(false);
             }

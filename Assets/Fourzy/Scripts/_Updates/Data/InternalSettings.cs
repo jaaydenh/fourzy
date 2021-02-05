@@ -1,6 +1,8 @@
 ﻿//@vadym udod
 
 using FourzyGameModel.Model;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +12,20 @@ namespace Fourzy._Updates
 {
     internal class InternalSettings
     {
-        internal static InternalSettings Current = new InternalSettings();
+        internal static InternalSettings Current
+        {
+            get
+            {
+                if (current == null)
+                {
+                    current = new InternalSettings();
+                }
+
+                return current;
+            }
+        }
+        private static InternalSettings current;
+
         private const string PREFIX = "InternalSettings_";
 
         internal int DEFAULT_PLACEMENT_STYLE_POINTER { get; private set; } = 
@@ -31,6 +46,26 @@ namespace Fourzy._Updates
             PlayerPrefs.GetInt(PREFIX + "REALTIME_COUNTDOWN_SECONDS", Constants.REALTIME_COUNTDOWN_SECONDS);
         internal float LOBBY_GAME_LOAD_DELAY { get; private set; } =
             PlayerPrefs.GetFloat(PREFIX + "LOBBY_GAME_LOAD_DELAY", Constants.LOBBY_GAME_LOAD_DELAY);
+        internal Area[] UNLOCKED_AREAS
+        {
+            get
+            {
+                if (unlockedAreas == null)
+                {
+                    string _value = PlayerPrefs.GetString(PREFIX + "UNLOCKED_AREAS", "");
+                    unlockedAreas = string.IsNullOrEmpty(_value) ? Constants.UNLOCKED_AREAS : FromString(_value);
+                }
+
+                return Enum.GetValues(typeof(Area)).Cast<Area>()
+                    .Where(_area => PlayerPrefsWrapper.GetAreaUnlocked((int)_area))
+                    .Concat(unlockedAreas)
+                    .ToArray();
+            }
+            set
+            {
+                unlockedAreas = value;
+            }
+        }
         
         internal int GAUNTLET_DEFAULT_MOVES_COUNT { get; private set; } =
             PlayerPrefs.GetInt(PREFIX + "GAUNTLET_DEFAULT_MOVES_COUNT", Constants.GAUNTLET_DEFAULT_MOVES_COUNT);
@@ -51,6 +86,8 @@ namespace Fourzy._Updates
             PlayerPrefs.GetInt(PREFIX + "BARS_TO_ADD", Constants.BARS_TO_ADD);
         internal bool LOSE_ON_EMPTY_TIMER { get; private set; } =
             PlayerPrefs.GetInt(PREFIX + "LOSE_ON_EMPTY_TIMER", Constants.LOSE_ON_EMPTY_TIMER ? 1 : 0) == 1;
+
+        private Area[] unlockedAreas;
 
         internal void Update(object data, bool saveNewValues = true, bool debugData = true)
         {
@@ -77,6 +114,36 @@ namespace Fourzy._Updates
                     {
                         switch (keyPieces[0])
                         {
+                            case "area":
+                                Area[] areas = FromString(kvPair.Value);
+
+                                bool equal = areas.Length == unlockedAreas.Length;
+                                if (equal)
+                                {
+                                    foreach (Area area in areas)
+                                    {
+                                        if (!unlockedAreas.Contains(area))
+                                        {
+                                            equal = false;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (!equal)
+                                {
+                                    newValues.Add(keyPieces[1], kvPair.Value);
+                                }
+
+                                unlockedAreas = areas;
+
+                                if (saveNewValues)
+                                {
+                                    PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
+                                }
+
+                                break;
+
                             case "b":
                                 bool boolValue = bool.Parse(kvPair.Value);
 
@@ -177,9 +244,15 @@ namespace Fourzy._Updates
                 {
                     Debug.Log($"{kvPair.Key} new value {kvPair.Value}");
                 }
-
                 Debug.Log("-------------------------------------------------------------");
             }
+        }
+
+        private Area[] FromString(string value)
+        {
+            return JsonConvert.DeserializeObject<string[]>(value)
+                .Select(_area => (Area)Enum.Parse(typeof(Area), _area, true))
+                .ToArray();
         }
 
         private struct TypeValuePair

@@ -13,7 +13,7 @@ namespace Fourzy
         public const int DEFAULT_PLACEMENT_STYLE_POINTER = (int)GameManager.PlacementStyle.EDGE_TAP;
         public const Area DEFAULT_AREA = Area.ICE_PALACE;
         public const int DEFAULT_STANDALONE_CPU_DIFFICULTY = 1; //0-3
-        public const int DEFAULT_UNLOCKED_THEMES = 30;
+        public static Area[] UNLOCKED_AREAS = { Area.TRAINING_GARDEN, Area.ENCHANTED_FOREST };
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
         public const float EXTRA_DELAY_BETWEEN_TURNS = 0.1f;
@@ -78,20 +78,26 @@ namespace Fourzy
 
         //photon
         public static readonly float REALTIME_GAME_VALID_AFTER_X_SECONDS = 10f;
-        public static readonly string REALTIME_PLAYER_1_READY = "p1ready";
-        public static readonly string REALTIME_PLAYER_2_READY = "p2ready";
-        public static readonly string REALTIME_PLAYER_1_REMATCH = "p1rematch";
-        public static readonly string REALTIME_PLAYER_2_REMATCH = "p2rematch";
-        public static readonly string REALTIME_GAMEPIECE_KEY = "p";
         public static readonly string REALTIME_RATING_KEY = "r";
         public static readonly string REALTIME_WINS_KEY = "w";
         public static readonly string REALTIME_LOSES_KEY = "l";
         public static readonly string REALTIME_DRAWS_KEY = "d";
-        public static readonly string REALTIME_ROOM_TYPE_KEY = "t";
-        public static readonly string REALTIME_ROOM_PASSWORD = "z";
-        public static readonly int REALTIME_ROOM_PASSWORD_LENGTH = 5;
         public static readonly string REALTIME_DEFAULT_GAMEPIECE_KEY = "1";
-        public static readonly string REALTIME_TIMER_KEY = "timer";
+
+        public static readonly string REALTIME_ROOM_PLAYER_1_READY = "p1ready";
+        public static readonly string REALTIME_ROOM_PLAYER_2_READY = "p2ready";
+        public static readonly string REALTIME_ROOM_PLAYER_1_REMATCH = "p1rematch";
+        public static readonly string REALTIME_ROOM_PLAYER_2_REMATCH = "p2rematch";
+
+        public static readonly string REALTIME_ROOM_AREA = "area";
+        public static readonly string REALTIME_ROOM_GAMEPIECE_KEY = "p";
+        public static readonly string REALTIME_ROOM_TYPE_KEY = "type";
+        public static readonly string REALTIME_ROOM_PASSWORD = "pword";
+        public static readonly string REALTIME_ROOM_TIMER_KEY = "timer";
+        public static readonly string REALTIME_ROOM_MAGIC_KEY = "magic";
+        public static readonly string REALTIME_ROOM_RATING_KEY = "rating";
+        public static readonly string REALTIME_ROOM_GAMES_TOTAL_KEY = "gamesTotal";
+        public static readonly int REALTIME_ROOM_PASSWORD_LENGTH = 5;
 
         //events codes
         public const byte GAME_DATA = 0;

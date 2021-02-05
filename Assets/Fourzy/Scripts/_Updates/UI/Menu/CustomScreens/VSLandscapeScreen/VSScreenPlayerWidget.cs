@@ -1,13 +1,11 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static Fourzy._Updates.Serialized.TokensDataHolder;
 
 namespace Fourzy._Updates.UI.Widgets
 {
@@ -54,41 +52,55 @@ namespace Fourzy._Updates.UI.Widgets
                 localizedText.UpdateLocale();
             }
 
-            _Update();
-
-            return this;
-        }
-
-        public override void _Update()
-        {
-            //toggle magic visibility
-            bool _magic = SettingsManager.Get(SettingsManager.KEY_MAGIC) && data != null;
-
-            if (_magic && prevData != data)
+            if (data != null)
             {
-                //clear spells list
-                foreach (TokenWidgetSmall spell in spells) Destroy(spell.gameObject);
-                spells.Clear();
+                if (prevData != data)
+                {
+                    ClearMagic();
 
-                //add spells
-                foreach (SpellId spellId in data.spells) spells.Add(Instantiate(spellPrefab, spellsParent).SetData(GameContentManager.Instance.tokensDataHolder.GetTokenData(spellId)));
+                    //add spells
+                    foreach (SpellId spellId in data.Spells)
+                    {
+                        spells.Add(
+                            Instantiate(spellPrefab, spellsParent)
+                                .SetData(GameContentManager.Instance.tokensDataHolder.GetTokenData(spellId)));
+                    }
 
-                magic.SetValue(data.startingMagic);
-                spellsParent.gameObject.SetActive(true);
+                    magic.SetValue(data.startingMagic);
+                    magic.SetState(true);
 
-                prevData = data;
+                    prevData = data;
+                }
+            }
+            else
+            {
+                ClearMagic();
+                magic.SetState(false);
             }
 
-            magic.SetState(_magic);
-            spellsParent.gameObject.SetActive(_magic);
+            return this;
         }
 
         public VSScreenPlayerWidget DisplayDifficulty(int level)
         {
-            for (int index = 0; index < difficultyLevels.Length; index++) difficultyLevels[index].SetActive(level == index);
+            for (int index = 0; index < difficultyLevels.Length; index++)
+            {
+                difficultyLevels[index].SetActive(level == index);
+            }
+
             difficultiesHolder.SetActive(level > -1);
 
             return this;
+        }
+
+        private void ClearMagic()
+        {
+            //clear spells list
+            foreach (TokenWidgetSmall spell in spells)
+            {
+                Destroy(spell.gameObject);
+            }
+            spells.Clear();
         }
     }
 }

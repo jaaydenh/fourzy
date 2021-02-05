@@ -7,16 +7,16 @@ using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
 {
-    public class AreaSelectWidgetLandscape : WidgetBase
+    public class AreaWidgetLandscape : WidgetBase
     {
-        public Action<AreaSelectWidgetLandscape> onClick;
+        public Action<AreaWidgetLandscape> onClick;
 
         public TMP_Text label;
         public Image icon;
 
         private LocalizedText localizedText;
 
-        public ThemesDataHolder.GameTheme Data { get; private set; }
+        public AreasDataHolder.GameArea Data { get; private set; }
 
         protected override void OnInitialized()
         {
@@ -30,14 +30,14 @@ namespace Fourzy._Updates.UI.Widgets
             localizedText.enabled = true;
         }
 
-        public AreaSelectWidgetLandscape SetData(ThemesDataHolder.GameTheme data)
+        public AreaWidgetLandscape SetData(AreasDataHolder.GameArea data)
         {
             Data = data;
 
             if (data != null)
             {
-                localizedText.key = data.id;
-                icon.sprite = data.landscapePreview;
+                localizedText.key = data.name;
+                icon.sprite = data._4X3;
             }
 
             return this;

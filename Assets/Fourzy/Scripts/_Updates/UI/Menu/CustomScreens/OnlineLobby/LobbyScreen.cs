@@ -18,13 +18,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public PhotonRoomWidget widgetPrefab;
         public RectTransform widgetsParent;
         public ButtonExtended createGameButton;
-        public Image checkmark;
-        public Sprite checkmarkOn;
-        public Sprite checkmarkOff;
 
         protected List<PhotonRoomWidget> rooms = new List<PhotonRoomWidget>();
 
-        private bool passwordEnabled;
         private LoadingPromptScreen _prompt;
         private LobbyState state;
 
@@ -36,7 +32,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onJoinedRoom += OnJoinedRoom;
             FourzyPhotonManager.onJoinedLobby += OnJoinedLobby;
 
-            FourzyPhotonManager.onCreateRoomFailed += OnCreateRoomFailed;
             FourzyPhotonManager.onJoinRoomFailed += OnJoinRoomFailed;
             FourzyPhotonManager.onConnectionTimeOut += OnConnectionTimerOut;
             FourzyPhotonManager.onConnectedToMaster += OnConnectedToMaster;
@@ -48,7 +43,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onJoinedRoom -= OnJoinedRoom;
             FourzyPhotonManager.onJoinedLobby -= OnJoinedLobby;
 
-            FourzyPhotonManager.onCreateRoomFailed -= OnCreateRoomFailed;
             FourzyPhotonManager.onJoinRoomFailed -= OnJoinRoomFailed;
             FourzyPhotonManager.onConnectionTimeOut -= OnConnectionTimerOut;
             FourzyPhotonManager.onConnectedToMaster -= OnConnectedToMaster;
@@ -58,11 +52,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnInitialized();
 
-            _prompt = PersistantMenuController.instance
+            _prompt = PersistantMenuController.Instance
                 .GetOrAddScreen<LoadingPromptScreen>()
                 .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
-
-            UpdateCheckmarkButton();
         }
 
         public override void OnBack()
@@ -84,12 +76,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
 
             OnRoomsUpdated(FourzyPhotonManager.Instance.roomsInfo);
-        }
 
-        public void ToggleCheckmark()
-        {
-            passwordEnabled = !passwordEnabled;
-            UpdateCheckmarkButton();
+            if (HeaderScreen.Instance)
+            {
+                HeaderScreen.Instance.Close();
+            }
         }
 
         public bool CheckLobby()
@@ -137,24 +128,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         /// </summary>
         public void CreateRoom()
         {
-            _prompt
-                .Prompt("Retrieving player stats...", "", null, null, null, null)
-                .CloseOnDecline();
-
-            UserManager.GetPlayerRating(rating =>
-            {
-                string password = "";
-
-                if (passwordEnabled)
-                    password = Guid.NewGuid().ToString().Substring(0, Constants.REALTIME_ROOM_PASSWORD_LENGTH);
-
-                FourzyPhotonManager.CreateRoom(RoomType.LOBBY_ROOM, password: password);
-
-                if (_prompt.isOpened) _prompt.promptTitle.text = "Creating new room";
-            }, () =>
-            {
-                if (_prompt.isOpened) _prompt.Decline(true);
-            });
+            PersistantMenuController.Instance.GetOrAddScreen<CreateRealtimeGamePrompt>().Prompt();
         }
 
         public void JoinRoom(string name)
@@ -175,11 +149,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 if (_prompt.isOpened) _prompt.Decline(true);
             });
-        }
-
-        private void UpdateCheckmarkButton()
-        {
-            checkmark.sprite = passwordEnabled ? checkmarkOn : checkmarkOff;
         }
 
         private void DisplayRooms(List<RoomInfo> data)
@@ -242,38 +211,51 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnJoinedRoom(string roomName)
         {
-            if (!isOpened) return;
+            if (isOpened)
+            {
+                CloseSelf();
+            }
 
-            if (_prompt.isOpened) _prompt.Decline(true);
-            if (isOpened) CloseSelf();
-
-            AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
-            GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
-        }
-
-        private void OnCreateRoomFailed(string error)
-        {
-            if (isOpened) GamesToastsController.ShowTopToast($"Failed: {error}");
-            if (_prompt.isOpened) _prompt.Decline(true);
+            if (_prompt.isOpened)
+            {
+                _prompt.Decline(true);
+            }
         }
 
         private void OnJoinRoomFailed(string error)
         {
-            if (isOpened) GamesToastsController.ShowTopToast($"Failed: {error}");
-            if (_prompt.isOpened) _prompt.Decline(true);
+            if (isOpened)
+            {
+                GamesToastsController.ShowTopToast($"Failed: {error}");
+            }
+
+            if (_prompt.isOpened)
+            {
+                _prompt.Decline(true);
+            }
         }
 
         private void OnConnectionTimerOut()
         {
-            if (isOpened && state != LobbyState.NONE) CloseSelf();
-            if (_prompt.isOpened) _prompt.Decline(true);
+            if (isOpened && state != LobbyState.NONE)
+            {
+                CloseSelf();
+            }
+
+            if (_prompt.isOpened)
+            {
+                _prompt.Decline(true);
+            }
         }
 
         private void OnJoinedLobby(string lobbyName)
         {
             if (state != LobbyState.JOINING_LOBBY) return;
 
-            if (_prompt.isOpened) _prompt.Decline(true);
+            if (_prompt.isOpened)
+            {
+                _prompt.Decline(true);
+            }
 
             CheckLobby();
         }
@@ -281,8 +263,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void OnConnectedToMaster()
         {
             if (state != LobbyState.LEAVING_ROOM) return;
-
-            //if (_prompt.isOpened) _prompt.Decline(true);
 
             CheckLobby();
         }

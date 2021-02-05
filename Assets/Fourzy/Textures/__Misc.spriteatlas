@@ -47,15 +47,12 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 876f6ff198ef011479dceee28ca6abc5, type: 3}
     - {fileID: 102900000, guid: ba7cf9780204dd4419e58568025354ad, type: 3}
     - {fileID: 102900000, guid: 51ef50acf2d804452a20bbd95812b0ae, type: 3}
-    totalSpriteSurfaceArea: 14294232
+    totalSpriteSurfaceArea: 13621832
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
-  - {fileID: 21300000, guid: 4cb16e2069c352249baa04611dcbb41d, type: 3}
-  - {fileID: 21300000, guid: 25bff9e03bf17f94fb3b0bd902a55b53, type: 3}
   - {fileID: 21300000, guid: 8a279f21fe54f344cabd91371b364627, type: 3}
   - {fileID: 21300000, guid: 69d82d91d5c73814a802f6604eedd55c, type: 3}
-  - {fileID: 21300000, guid: 3d167c13eced3b9498ae39b05b2c1940, type: 3}
   - {fileID: 21300000, guid: a1386693001d04a4ab24caa0dc7a0ded, type: 3}
   - {fileID: 21300000, guid: f89f1a44ce59e412b989aab5194c0ff4, type: 3}
   - {fileID: 21300000, guid: 57269985b61f44b44a2b9d02a8f5f267, type: 3}
@@ -82,7 +79,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 490c8d7a991189c46b3b817f5a46067f, type: 3}
   - {fileID: 21300000, guid: f3c172fa714592a4f83f25a91b9925f0, type: 3}
   - {fileID: 21300000, guid: 8ccb050b8229f42568bcbb74a93d42bc, type: 3}
-  - {fileID: 21300000, guid: d37a954c628692b42850b7e426761625, type: 3}
   - {fileID: 21300000, guid: 11aad45ccf44a4641b1c1e8d44ad0bb9, type: 3}
   - {fileID: 21300000, guid: 0833ab5c0716239459ec274520ade990, type: 3}
   - {fileID: 21300018, guid: e12ce9ceede8241e7afcfa83684494c4, type: 3}
@@ -105,11 +101,8 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 76ce0aeeb1a38f64987cfd2ddc1aa2d1, type: 3}
   - {fileID: 21300000, guid: 47bc87cf6a2c9478d800d77beecb8ff7, type: 3}
   m_PackedSpriteNamesToIndex:
-  - AreaWindows-Square_03 (Blocked)
-  - AreaWindows-Square_02 (Blocked)
   - AreaWindows-Garden
   - AreaWindows-Forest
-  - AreaWindows-Square_01 (Blocked)
   - AreaWindows-Square_01
   - MindIsle_Logo
   - Portal-border
@@ -136,7 +129,6 @@ SpriteAtlas:
   - AreaWindows-Island
   - Fourzy_SplashScreen-iPhone (C)
   - logo
-  - AreaWindows-Square_04 (Blocked)
   - AreaWindows-IcePalace
   - AreaWindows-Square_02
   - tap_area_anim_9

@@ -65,7 +65,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void StartTutorialAdventure() => menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
 
         public void ResetTutorial() =>
-            PersistantMenuController.instance.GetOrAddScreen<OnboardingScreen>().OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
+            PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>().OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
 
         public void OpenFastPuzzleScreen()
         {
@@ -93,7 +93,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (PlayerPrefsWrapper.GetBool(kLobbyScreenOpened))
             {
-                PersistantMenuController.instance.GetOrAddScreen<LobbyScreen>().CheckLobby();
+                menuController.GetScreen<LobbyScreen>().CheckLobby();
             }
             else
             {

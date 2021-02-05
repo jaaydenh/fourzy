@@ -1,7 +1,6 @@
 ﻿//modded @vadym udod
 
 using Fourzy._Updates;
-using Fourzy._Updates.Serialized;
 using UnityEngine;
 
 namespace Fourzy
@@ -13,8 +12,8 @@ namespace Fourzy
 
         private const string kInstructionPopupDisplayed = "instructionPopupDisplayed_";
         private const string kPuzzleChallenge = "puzzleChallenge_";
-        private const string kCurrentTheme = "currentTheme_";
-        private const string kThemeUnlocked = "themeUnlocked_";
+        private const string kCurrentArea = "currentTheme_";
+        private const string kAreaUnlocked = "themeUnlocked_";
         private const string kGamePiecePieces = "gamePiecePieces_";
         private const string kGamePieceChampions = "gamePieceChampions_";
         private const string kSelectedGamePiece = "selectedGamePiece_";
@@ -30,7 +29,6 @@ namespace Fourzy
         private const string kGameViewed = "gameViewed_";
         private const string kGameRewarded = "gameRewarded_";
         private const string kRemoteSetting = "remoteSetting_";
-        private const string kInitialProperties = "initialProperties";
         private const string kFastPuzzle = "fast_puzzle_";
         private const string kAdventureComplete = "adventure_complete_";
         private const string kAdventureUnlocked = "adventure_unlocked_";
@@ -63,15 +61,15 @@ namespace Fourzy
         public static void SetPuzzlePackUnlocked(string ID, bool state) => 
             SetBool(kPuzzleChallenge + ID + "_unlocked", state);
 
-        public static void SetCurrentGameTheme(int currentTheme) =>
-            PlayerPrefs.SetInt(kCurrentTheme, currentTheme);
+        public static void SetCurrentArea(int area) =>
+            PlayerPrefs.SetInt(kCurrentArea, area);
 
-        public static int GetCurrentTheme() =>
-            PlayerPrefs.GetInt(kCurrentTheme, 0);
+        public static int GetCurrentArea() =>
+            PlayerPrefs.GetInt(kCurrentArea, (int)Constants.DEFAULT_AREA);
 
-        public static bool GetThemeUnlocked(int themeID) => GetBool(kThemeUnlocked + themeID);
+        public static bool GetAreaUnlocked(int area) => GetBool(kAreaUnlocked + area);
 
-        public static void SetThemeUnlocked(int themeID, bool state) => SetBool(kThemeUnlocked + themeID, state);
+        public static void SetAreaUnlocked(int area, bool state) => SetBool(kAreaUnlocked + area, state);
 
         public static void SetTutorialState(string name, bool state) => SetBool(kTutorial + name, state);
 
@@ -122,12 +120,6 @@ namespace Fourzy
         public static bool GetGameRewarded(string gameID) => GetBool(kGameRewarded + gameID);
 
         public static void SetGameRewarded(string gameID, bool state) => SetBool(kGameRewarded + gameID, state);
-
-        public static bool GetInitialPropertiesSet() =>
-            PlayerPrefs.GetInt(kInitialProperties, 0) != 0;
-
-        public static void InitialPropertiesSet(bool value) =>
-            PlayerPrefs.SetInt(kInitialProperties, value ? 1 : 0);
 
         public static string GetRemoteSetting(string key) =>
             PlayerPrefs.GetString(kRemoteSetting + key, "0");

@@ -23,42 +23,61 @@ namespace Fourzy._Updates.UI.Helpers
 
         [StackableField]
         [Buttons(titles = "Force all,Reset all", actions = "ForceAll,ResetAll", below = true)]
-        public bool forceiPhoneX;
+        public bool forceIPhoneX;
 
         public AdvancedEvent onIPhoneX;
         public AdvancedEvent other;
 
-        private string model = "";
+        private string model = "0";
 
         protected void Start()
         {
             if (!Application.isPlaying) return;
 
+            model = "";
             CheckPlatform();
         }
 
         protected void Update()
         {
-            if (Application.isEditor)
+            if (!Application.isPlaying)
             {
-                CheckPlatform();
+                CheckPlatform(true);
             }
         }
 
-        public void CheckPlatform()
+        public void CheckPlatform(bool editor = false)
         {
-            if (model != SystemInfo.deviceModel)
+            if (editor)
             {
-                if (NOTCH_MODELS.Contains(SystemInfo.deviceModel))
+                //for editor use
+                if (forceIPhoneX && model == "0")
                 {
                     onIPhoneX?.Invoke();
+                    model = "1";
                 }
-                else
+                else if (!forceIPhoneX && model == "1")
                 {
                     other?.Invoke();
+                    model = "0";
                 }
+            }
+            else
+            {
+                //designed to run only once
+                if (model != SystemInfo.deviceModel)
+                {
+                    if (NOTCH_MODELS.Contains(SystemInfo.deviceModel))
+                    {
+                        onIPhoneX?.Invoke();
+                    }
+                    else
+                    {
+                        other?.Invoke();
+                    }
 
-                model = SystemInfo.deviceModel;
+                    model = SystemInfo.deviceModel;
+                }
             }
         }
 
@@ -128,12 +147,12 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void ForceAll()
         {
-            foreach (OnIPhoneX _controller in FindObjectsOfType<OnIPhoneX>()) _controller.forceiPhoneX = true;
+            foreach (OnIPhoneX _controller in FindObjectsOfType<OnIPhoneX>()) _controller.forceIPhoneX = true;
         }
 
         public void ResetAll()
         {
-            foreach (OnIPhoneX _controller in FindObjectsOfType<OnIPhoneX>()) _controller.forceiPhoneX = false;
+            foreach (OnIPhoneX _controller in FindObjectsOfType<OnIPhoneX>()) _controller.forceIPhoneX = false;
         }
     }
 }

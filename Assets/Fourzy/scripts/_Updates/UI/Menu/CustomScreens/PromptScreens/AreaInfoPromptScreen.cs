@@ -7,6 +7,7 @@ using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,26 +30,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private List<GameObject> tokens = new List<GameObject>();
         private List<ButtonExtended> buyButtons = new List<ButtonExtended>();
 
-        private ThemesDataHolder.GameTheme currentOpenedTheme;
+        private AreasDataHolder.GameArea currentOpenedTheme;
 
-        public void Prompt(Area theme)
+        public void Prompt(Area area)
         {
-            ThemesDataHolder.GameTheme _themeData = GameContentManager.Instance.themesDataHolder.GetTheme(theme);
+            AreasDataHolder.GameArea _themeData = GameContentManager.Instance.areasDataHolder[area];
 
-            if (theme == Area.NONE || _themeData == null) return;
+            if (area == Area.NONE || _themeData == null) return;
 
-            Prompt(_themeData.id, _themeData.description, null);
+            Prompt(_themeData.name, _themeData.description, null);
 
             //get buy buttons
-            if (!PlayerPrefsWrapper.GetThemeUnlocked((int)theme))
+            if (!InternalSettings.Current.UNLOCKED_AREAS.Contains(area))
             {
                 foreach (ButtonExtended button in buyButtons) Destroy(button.gameObject);
                 buyButtons.Clear();
 
-                foreach (ThemesDataHolder.AreaUnlockRequirement unlockRequirement in _themeData.unclockRequirements.list)
+                foreach (AreasDataHolder.AreaUnlockRequirement unlockRequirement in 
+                    _themeData.unlockRequirements)
                 {
                     ButtonExtended buttonInstance = Instantiate(buyButton, buttonsParent);
-                    buttonInstance.GetBadge(unlockRequirement.type.ToString()).badge.SetValue(unlockRequirement.quantity);
+                    buttonInstance
+                        .GetBadge(unlockRequirement.type.ToString()).badge
+                        .SetValue(unlockRequirement.quantity);
                     buttonInstance.events.AddListener(() => Purchase(unlockRequirement.type));
 
                     buyButtons.Add(buttonInstance);
@@ -58,12 +62,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SetData(_themeData);
         }
 
-        public void SetData(ThemesDataHolder.GameTheme themeData)
+        public void SetData(AreasDataHolder.GameArea themeData)
         {
-            if (themeData.themeID == Area.NONE) return;
+            if (themeData.areaID == Area.NONE) return;
 
             //refresh buttons
-            if (PlayerPrefsWrapper.GetThemeUnlocked((int)themeData.themeID) || themeData.unclockRequirements.list.Count == 0)
+            if (InternalSettings.Current.UNLOCKED_AREAS.Contains(themeData.areaID) || 
+                themeData.unlockRequirements.Count == 0)
             {
                 buyButtons.ForEach(button => button.SetActive(false));
 
@@ -78,18 +83,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (themeData == currentOpenedTheme) return;
 
-            icon.sprite = themeData.preview;
+            icon.sprite = themeData._16X9;
 
             foreach (GameObject gamePiece in gamePieces) Destroy(gamePiece);
             gamePieces.Clear();
 
-            gamePiecesRoot.SetActive(themeData.gamepieces.list.Count > 0);
-            foreach (ThemesDataHolder.GamePieceView_ThemesDataHolder gamePiecePrefab in themeData.gamepieces.list)
+            gamePiecesRoot.SetActive(themeData.gamepieces.Count > 0);
+            foreach (GamePieceView gamePiecePrefab in themeData.gamepieces)
             {
                 GameObject gamePieceHolderInstance = Instantiate(gamePieceHolder, gamePiecesParent);
                 gamePieceHolderInstance.SetActive(true);
 
-                GamePieceView gamePieceInstance = Instantiate(gamePiecePrefab.prefab, gamePieceHolderInstance.transform);
+                GamePieceView gamePieceInstance = Instantiate(
+                    gamePiecePrefab, 
+                    gamePieceHolderInstance.transform);
                 gamePieceInstance.transform.localScale = Vector3.one * 70f;
                 gamePieceInstance.StartBlinking();
 
@@ -99,9 +106,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             foreach (GameObject tokenView in tokens) Destroy(tokenView);
             tokens.Clear();
 
-            tokensRoot.SetActive(themeData.tokens.list.Count > 0);
+            tokensRoot.SetActive(themeData.tokens.Count > 0);
 
-            foreach (TokenType tokenType in themeData.tokens.list)
+            foreach (TokenType tokenType in themeData.tokens)
             {
                 GameObject tokenHolderInstance = Instantiate(gamePieceHolder, tokensParent);
                 tokenHolderInstance.SetActive(true);
@@ -112,7 +119,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 bg.gameObject.SetActive(tokenData.showBackgroundTile);
                 bg.color = tokenData.backgroundTileColor;
 
-                TokenView tokenInstance = Instantiate(GameContentManager.Instance.GetTokenPrefab(tokenType, themeData.themeID), tokenHolderInstance.transform);
+                TokenView tokenInstance = Instantiate(
+                    GameContentManager.Instance.GetTokenPrefab(tokenType, themeData.areaID), 
+                    tokenHolderInstance.transform);
                 tokenInstance.transform.localScale = Vector3.one * (tokenData.showBackgroundTile ? 55f : 70f);
 
                 tokens.Add(tokenHolderInstance);
@@ -125,13 +134,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Accept(force);
 
-            GameContentManager.Instance.currentTheme = currentOpenedTheme;
+            GameContentManager.Instance.currentArea = currentOpenedTheme;
             CloseSelf();
         }
 
         public void Purchase(CurrencyType currency)
         {
-            ThemesDataHolder.AreaUnlockRequirement unlockRequirement = currentOpenedTheme.unclockRequirements.GetRequirement(currency);
+            AreasDataHolder.AreaUnlockRequirement unlockRequirement = currentOpenedTheme.GetRequirement(currency);
 
             //check currency
             switch (currency)
@@ -172,7 +181,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //unlock
-            PlayerPrefsWrapper.SetThemeUnlocked((int)currentOpenedTheme.themeID, true);
+            PlayerPrefsWrapper.SetAreaUnlocked((int)currentOpenedTheme.areaID, true);
 
             SetData(currentOpenedTheme);
         }

@@ -10,10 +10,13 @@ namespace Fourzy._Updates.Serialized
     [CreateAssetMenu(fileName = "DefaultMiscGameContentHolder", menuName = "Create Misc GameContent Holder")]
     public class MiscGameContentHolder : ScriptableObject
     {
-        [ListDrawerSettings(NumberOfItemsPerPage = 1)]
+        [ListDrawerSettings(NumberOfItemsPerPage = 5, ListElementLabelName = "id")]
         public List<IconsCollection> collections;
 
-        [BoxGroup("Products"), InfoBox("$productsInfo", "productsInfoToggle")]
+        [
+            BoxGroup("Products"), 
+            InfoBox("$productsInfo", "productsInfoToggle"),
+            ListDrawerSettings(NumberOfItemsPerPage = 5, ListElementLabelName = "id")]
         public List<StoreItemExtraData> products;
 
         public IconData GetIcon(string collectionID, string id) => 
@@ -30,12 +33,16 @@ namespace Fourzy._Updates.Serialized
             }
         }
 
+        /// <summary>
+        /// editor
+        /// </summary>
         private bool productsInfoToggle => productsInfo.Length > 0;
 
         [System.Serializable]
         public class IconsCollection
         {
             public string id;
+            [ListDrawerSettings(NumberOfItemsPerPage = 5, ListElementLabelName = "id")]
             public List<IconData> icons;
         }
 

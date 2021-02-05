@@ -21,6 +21,6 @@ namespace Fourzy._Updates.UI.Widgets
             return this;
         }
 
-        public void OnClick() => PersistantMenuController.instance.GetOrAddScreen<TokenPrompt>().Prompt(data);
+        public void OnClick() => PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(data);
     }
 }

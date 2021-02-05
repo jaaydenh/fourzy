@@ -17,7 +17,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public override void _Update()
         {
-            image.sprite = GameContentManager.Instance.currentTheme.preview;
+            image.sprite = GameContentManager.Instance.currentArea._16X9;
         }
 
         protected override void OnInitialized()

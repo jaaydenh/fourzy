@@ -343,7 +343,7 @@ MonoBehaviour:
   aiPlayersDataHolder: {fileID: 11400000, guid: 193c04713a60cff4cbf91989ce9e78ef,
     type: 2}
   tokensDataHolder: {fileID: 11400000, guid: 81d92e211f16cf74eb57eaf3cf637ecb, type: 2}
-  themesDataHolder: {fileID: 11400000, guid: a7bbdce1503d5d14c893c6261d179c4c, type: 2}
+  areasDataHolder: {fileID: 11400000, guid: a7bbdce1503d5d14c893c6261d179c4c, type: 2}
   passAndPlayDataHolder: {fileID: 11400000, guid: 79c1623dc4c7cb347befe40747749d3e,
     type: 2}
   miscBoardsDataHolder: {fileID: 11400000, guid: c42940ba8db90734ebc4b24eebffeb03,
@@ -476,6 +476,9 @@ MonoBehaviour:
         type: 3}
     - _name: LobbyPrompt
       prefab: {fileID: 6186301521444083483, guid: 2e1e79e4b00875b4da8788ac7738c62e,
+        type: 3}
+    - _name: CreateRealtimeGamePrompt
+      prefab: {fileID: 8960912254840272272, guid: 9d6e2a8a4dd55404a9eee145ec96aee0,
         type: 3}
 --- !u!1 &1527524902537866
 GameObject:

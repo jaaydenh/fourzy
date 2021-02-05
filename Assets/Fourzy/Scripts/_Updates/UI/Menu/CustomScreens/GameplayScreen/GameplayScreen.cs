@@ -46,6 +46,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private UIOutline helpButtonOutline;
         private bool timersEnabled;
+        private MagicState magicState = MagicState.DISABLED;
 
         protected override void Awake()
         {
@@ -138,14 +139,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             this.gameplayManager = gameplayManager;
             game = gameplayManager.game;
 
-            //use timer?
-            switch (game._Mode)
-            {
-                case GameMode.GAUNTLET:
-                    timersEnabled = false;
-
-                    break;
-            }
+            #region Timer usage
 
             switch (game._Type)
             {
@@ -156,7 +150,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     break;
 
                 case GameType.REALTIME:
-                    timersEnabled = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_TIMER_KEY, false);
+                    timersEnabled = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TIMER_KEY, false);
 
                     break;
 
@@ -165,13 +159,63 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
             }
-            //timer end
+
+            switch (game._Mode)
+            {
+                case GameMode.GAUNTLET:
+                    timersEnabled = false;
+
+                    break;
+            }
+
+            #endregion
+
+            #region Magic usage
+
+            magicState = MagicState.DISABLED;
+            switch (game._Type)
+            {
+                //case GameType.AI:
+                case GameType.PASSANDPLAY:
+                    if (SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC))
+                    {
+                        magicState = MagicState.BOTH;
+                    }
+
+                    break;
+
+                case GameType.REALTIME:
+                    magicState = 
+                        (MagicState)FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_MAGIC_KEY, 0);
+
+                    break;
+
+                default:
+                    magicState = MagicState.DISABLED;
+
+                    break;
+            }
+
+            switch (game._Mode)
+            {
+                case GameMode.GAUNTLET:
+                    magicState = MagicState.ONLY_PLAYER_1;
+
+                    break;
+            }
+
+            #endregion
 
             Player me = game.me;
 
-            if (game._Type != GameType.PRESENTATION)
+            if (magicState == MagicState.BOTH || magicState == MagicState.ONLY_PLAYER_1)
             {
                 player1Widget.spellsHolder.Open(game, gameplayManager.board, me);
+                player1Widget.SetMagicWidget(true);
+            }
+            else
+            {
+                player1Widget.SetMagicWidget(false);
             }
 
             player1Widget.SetGame(game);
@@ -181,29 +225,51 @@ namespace Fourzy._Updates.UI.Menu.Screens
             player2Widget.Initialize();
 
             player1Widget.SetPlayer(me);
-            //player1Widget.SetPlayerName(me.DisplayName);
             player1Widget.StopPlayerTurnAnimation();
 
-            if (game._Type == GameType.REALTIME)
+            #region Set P1 Rating
+
+            switch (game._Type)
             {
-                player1Widget.SetRating(
-                    UserManager.Instance.lastCachedRating,
-                    UserManager.Instance.totalPlayfabGames);
+                case GameType.REALTIME:
+                    player1Widget.SetRating(
+                        UserManager.Instance.lastCachedRating,
+                        UserManager.Instance.totalPlayfabGames);
+
+                    break;
+
+                default:
+                    player1Widget.SetExtraData("Wizard");
+
+                    break;
             }
+
+            #endregion
 
             Player opponent = game.opponent;
             if (opponent != null)
             {
                 player2Widget.SetPlayer(opponent);
-                //player2Widget.SetPlayerName(opponent.DisplayName);
                 player2Widget.StopPlayerTurnAnimation();
 
-                if (game._Type == GameType.REALTIME)
+                #region Set P2 Rating
+
+                switch (game._Type)
                 {
-                    player2Widget.SetRating(
-                        FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, -1),
-                        FourzyPhotonManager.GetOpponentTotalGames());
+                    case GameType.REALTIME:
+                        player2Widget.SetRating(
+                            FourzyPhotonManager.GetOpponentProperty(Constants.REALTIME_RATING_KEY, -1),
+                            FourzyPhotonManager.GetOpponentTotalGames());
+
+                        break;
+
+                    default:
+                        player2Widget.SetExtraData("Wizard");
+
+                        break;
                 }
+
+                #endregion
 
                 if (game.hideOpponent)
                 {
@@ -215,13 +281,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     {
                         if (game.puzzleData.hasAIOpponent)
                         {
-                            player2Widget.Show(.1f);
-
-                            //load spells only for human opponent
-                            if (opponent.Profile == AIProfile.Player)
-                            {
-                                player2Widget.spellsHolder.Open(game, gameplayManager.board, opponent);
-                            }
+                            ShowPlayer2Magic();
                         }
                         else
                         {
@@ -230,12 +290,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                     else
                     {
+                        ShowPlayer2Magic();
+                    }
+
+                    void ShowPlayer2Magic()
+                    {
                         player2Widget.Show(.1f);
 
-                        //load spells only for human opponent
-                        if (opponent.Profile == AIProfile.Player)
+                        if (magicState == MagicState.BOTH)
                         {
                             player2Widget.spellsHolder.Open(game, gameplayManager.board, opponent);
+                            player2Widget.SetMagicWidget(true);
+                        }
+                        else
+                        {
+                            player2Widget.SetMagicWidget(false);
                         }
                     }
                 }
@@ -657,6 +726,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private IEnumerator WaitForTapRoutine()
         {
             while (!isCurrent) yield return null;
+        }
+
+        private enum MagicState
+        {
+            DISABLED,
+            ONLY_PLAYER_1,
+            BOTH,
         }
     }
 }

@@ -19,8 +19,8 @@ namespace Fourzy._Updates.UI.Menu
         {
             get
             {
-                if (PersistantMenuController.instance.screensStack.Count > 0)
-                    return PersistantMenuController.instance;
+                if (PersistantMenuController.Instance.screensStack.Count > 0)
+                    return PersistantMenuController.Instance;
                 else
                     return _activeMenu;
             }
@@ -298,7 +298,7 @@ namespace Fourzy._Updates.UI.Menu
 
         protected virtual void OnBack()
         {
-            if (PersistantMenuController.instance.screensStack.Count > 0 || !state || !StandaloneInputModuleExtended.BackEventAvailable) return;
+            if (PersistantMenuController.Instance.screensStack.Count > 0 || !state || !StandaloneInputModuleExtended.BackEventAvailable) return;
             
             if (screensStack.Count > 0)
             {

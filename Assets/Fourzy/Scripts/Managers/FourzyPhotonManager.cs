@@ -129,7 +129,7 @@ namespace Fourzy
 
             if (DEBUG) Debug.Log($"Connected to master.");
 
-            SetMyProperty(Constants.REALTIME_GAMEPIECE_KEY, UserManager.Instance.gamePieceID);
+            SetMyProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, UserManager.Instance.gamePieceID);
 
             onConnectedToMaster?.Invoke();
 
@@ -333,7 +333,7 @@ namespace Fourzy
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable()
             {
-                [PhotonNetwork.IsMasterClient ? Constants.REALTIME_PLAYER_1_READY : Constants.REALTIME_PLAYER_2_READY] = true,
+                [PhotonNetwork.IsMasterClient ? Constants.REALTIME_ROOM_PLAYER_1_READY : Constants.REALTIME_ROOM_PLAYER_2_READY] = true,
             });
         }
 
@@ -343,7 +343,7 @@ namespace Fourzy
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable()
             {
-                [PhotonNetwork.IsMasterClient ? Constants.REALTIME_PLAYER_1_REMATCH : Constants.REALTIME_PLAYER_2_REMATCH] = true,
+                [PhotonNetwork.IsMasterClient ? Constants.REALTIME_ROOM_PLAYER_1_REMATCH : Constants.REALTIME_ROOM_PLAYER_2_REMATCH] = true,
             });
         }
 
@@ -364,13 +364,17 @@ namespace Fourzy
             => values.ContainsKey(key) ? (T)values[key] : defaultValue;
 
         public static bool CheckPlayersReady() =>
-            (GetRoomProperty(Constants.REALTIME_PLAYER_2_READY, false)) && (GetRoomProperty(Constants.REALTIME_PLAYER_1_READY, false));
+               GetRoomProperty(Constants.REALTIME_ROOM_PLAYER_2_READY, false) && 
+               GetRoomProperty(Constants.REALTIME_ROOM_PLAYER_1_READY, false);
 
         public static bool CheckPlayersRematchReady() =>
-            GetRoomProperty(Constants.REALTIME_PLAYER_1_REMATCH, false) && GetRoomProperty(Constants.REALTIME_PLAYER_2_REMATCH, false);
+            GetRoomProperty(Constants.REALTIME_ROOM_PLAYER_1_REMATCH, false) && 
+            GetRoomProperty(Constants.REALTIME_ROOM_PLAYER_2_REMATCH, false);
 
         public static bool CheckPlayerRematchReady() =>
-            PhotonNetwork.IsMasterClient ? GetRoomProperty(Constants.REALTIME_PLAYER_1_REMATCH, false) : GetRoomProperty(Constants.REALTIME_PLAYER_2_REMATCH, false);
+            PhotonNetwork.IsMasterClient ? 
+                GetRoomProperty(Constants.REALTIME_ROOM_PLAYER_1_REMATCH, false) : 
+                GetRoomProperty(Constants.REALTIME_ROOM_PLAYER_2_REMATCH, false);
 
         public static void ResetRematchState()
         {
@@ -378,8 +382,8 @@ namespace Fourzy
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable()
             {
-                [Constants.REALTIME_PLAYER_1_REMATCH] = false,
-                [Constants.REALTIME_PLAYER_2_REMATCH] = false,
+                [Constants.REALTIME_ROOM_PLAYER_1_REMATCH] = false,
+                [Constants.REALTIME_ROOM_PLAYER_2_REMATCH] = false,
             });
         }
 
@@ -432,7 +436,10 @@ namespace Fourzy
             PhotonNetwork.JoinRoom(roomName);
         }
 
-        public static void CreateRoom(RoomType type, string password = "", string expectedUser = "")
+        public static void CreateRoom(
+            RoomType type, 
+            string password = "", 
+            string expectedUser = "")
         {
             tasks.Push(new KeyValuePair<string, Action>("createRoom",
                 () => CreateRoom(type, password, expectedUser)));
@@ -464,11 +471,28 @@ namespace Fourzy
 
             Hashtable properties = new ExitGames.Client.Photon.Hashtable()
             {
-                [Constants.REALTIME_TIMER_KEY] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
-                [Constants.REALTIME_GAMEPIECE_KEY] = UserManager.Instance.gamePieceID,
+                [Constants.REALTIME_ROOM_TIMER_KEY] =
+                    SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
+                [Constants.REALTIME_ROOM_MAGIC_KEY] =
+                    SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC) ? 2 : 0,
+                [Constants.REALTIME_ROOM_GAMEPIECE_KEY] =
+                    UserManager.Instance.gamePieceID,
+                [Constants.REALTIME_ROOM_AREA] =
+                    PlayerPrefsWrapper.GetCurrentArea(),
+                [Constants.REALTIME_ROOM_RATING_KEY] =
+                    UserManager.Instance.lastCachedRating,
+                [Constants.REALTIME_ROOM_GAMES_TOTAL_KEY] =
+                    UserManager.Instance.totalPlayfabGames,
             };
             string roomName;
-            List<string> lobbyProperties = new List<string>() { Constants.REALTIME_GAMEPIECE_KEY, };
+            List<string> lobbyProperties = new List<string>() { 
+                Constants.REALTIME_ROOM_GAMEPIECE_KEY, 
+                Constants.REALTIME_ROOM_RATING_KEY,
+                Constants.REALTIME_ROOM_GAMES_TOTAL_KEY,
+                Constants.REALTIME_ROOM_MAGIC_KEY,
+                Constants.REALTIME_ROOM_TIMER_KEY,
+                Constants.REALTIME_ROOM_AREA
+            };
             List<string> expectedUsers = new List<string>();
 
             if (!string.IsNullOrEmpty(expectedUser)) expectedUsers.Add(expectedUser);
@@ -485,7 +509,7 @@ namespace Fourzy
             switch (type)
             {
                 case RoomType.LOBBY_ROOM:
-                    roomName = $"{UserManager.Instance.userName}'s room";
+                    roomName = $"{UserManager.Instance.userName}";
 
                     break;
 

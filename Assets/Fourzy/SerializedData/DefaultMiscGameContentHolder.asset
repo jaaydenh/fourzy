@@ -31,24 +31,6 @@ MonoBehaviour:
       sprite: {fileID: 21300000, guid: 7823a4a0bb10cce43b58144b7fa2b43e, type: 3}
     - id: puzzleProgressionIconEmpty
       sprite: {fileID: 21300000, guid: 7229a1b060353364898853be84f91ee8, type: 3}
-  - id: AreaIconsTemp
-    icons:
-    - id: TRAINING_GARDEN
-      sprite: {fileID: 21300000, guid: a1386693001d04a4ab24caa0dc7a0ded, type: 3}
-    - id: TRAINING_GARDEN_locked
-      sprite: {fileID: 21300000, guid: 3d167c13eced3b9498ae39b05b2c1940, type: 3}
-    - id: ENCHANTED_FOREST
-      sprite: {fileID: 21300000, guid: 0833ab5c0716239459ec274520ade990, type: 3}
-    - id: ENCHANTED_FOREST_locked
-      sprite: {fileID: 21300000, guid: 25bff9e03bf17f94fb3b0bd902a55b53, type: 3}
-    - id: SANDY_ISLAND
-      sprite: {fileID: 21300000, guid: 76ce0aeeb1a38f64987cfd2ddc1aa2d1, type: 3}
-    - id: SANDY_ISLAND_locked
-      sprite: {fileID: 21300000, guid: 4cb16e2069c352249baa04611dcbb41d, type: 3}
-    - id: ICE_PALACE
-      sprite: {fileID: 21300000, guid: 580eff69848132741819a4449bbfd070, type: 3}
-    - id: ICE_PALACE_locked
-      sprite: {fileID: 21300000, guid: d37a954c628692b42850b7e426761625, type: 3}
   products:
   - id: hints_4
     icon: {fileID: 21300000, guid: 31b0d9617756ea649bd00d2b1197f07b, type: 3}

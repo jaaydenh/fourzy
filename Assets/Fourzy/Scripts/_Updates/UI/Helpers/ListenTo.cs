@@ -287,7 +287,7 @@ namespace Fourzy._Updates.UI.Helpers
 
                         case ListenValues.SETTINGS_MAGIC_ON:
                         case ListenValues.SETTINGS_MAGIC_OFF:
-                            OnMagic(SettingsManager.Get(SettingsManager.KEY_MAGIC));
+                            OnMagic(SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC));
 
                             break;
 

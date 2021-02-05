@@ -27,7 +27,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            HeaderScreen.instance.Close();
+            HeaderScreen.Instance.Close();
         }
 
         protected override void OnInitialized()

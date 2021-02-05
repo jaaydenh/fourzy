@@ -70,8 +70,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            if (filterByArea != Area.NONE) foreach (MiniGameboardWidget widget in gameboardWidgets) widget.SetArea(filterByArea);
-            areaNameField.text = LocalizationManager.Value(filterByArea != Area.NONE ? GameContentManager.Instance.themesDataHolder.GetThemeName(filterByArea) : "random");
+            if (filterByArea != Area.NONE)
+            {
+                foreach (MiniGameboardWidget widget in gameboardWidgets)
+                {
+                    widget.SetArea(filterByArea);
+                }
+            }
+
+            areaNameField.text = LocalizationManager.Value(filterByArea != Area.NONE ? 
+                GameContentManager.Instance.areasDataHolder[filterByArea].name: 
+                "random");
             areaBoards = gameboardWidgets.Where(widget => widget.data == null || (widget.data != null && widget.data.Area == filterByArea)).ToList();
             maxPages = Mathf.CeilToInt((float)Boards.Count / boardsPerPage);
 

@@ -7,11 +7,11 @@ namespace Fourzy._Updates.UI.Menu
 {
     public class PersistantMenuController : MenuController
     {
-        public static PersistantMenuController instance;
+        public static PersistantMenuController Instance;
 
         protected override void Awake()
         {
-            if (instance)
+            if (Instance)
             {
                 DestroyImmediate(gameObject);
 
@@ -19,7 +19,7 @@ namespace Fourzy._Updates.UI.Menu
             }
 
             DontDestroyOnLoad(gameObject);
-            instance = this;
+            Instance = this;
             base.Awake();
         }
 

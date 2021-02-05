@@ -15,7 +15,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
     public class RankingScreen : MenuTab
     {
         public const int LOADED_WIDGETS_CAP = 50;
-        public const int TO_LOAD_PER_REQUEST = 6;
+        public const int TO_LOAD_PER_REQUEST = 8;
         public const float TIMEOUT_TIME = 6f;
 
         public Badge loadingIndicator;

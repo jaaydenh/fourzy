@@ -50,7 +50,7 @@ namespace Fourzy
             private set
             {
                 PlayerPrefsWrapper.SetSelectedGamePiece(value);
-                FourzyPhotonManager.SetMyProperty(Constants.REALTIME_GAMEPIECE_KEY, value);
+                FourzyPhotonManager.SetMyProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, value);
 
                 PlayFabClientAPI.UpdateAvatarUrl(
                     new UpdateAvatarUrlRequest() { ImageUrl = value, },

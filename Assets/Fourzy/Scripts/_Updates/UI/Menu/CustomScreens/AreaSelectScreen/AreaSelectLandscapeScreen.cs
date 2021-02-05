@@ -11,23 +11,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class AreaSelectLandscapeScreen : MenuScreen
     {
-        public Action<ThemesDataHolder.GameTheme> onAreaSeleected;
+        public Action<AreasDataHolder.GameArea> onAreaSeleected;
 
-        public AreaSelectWidgetLandscape randomArea;
-        public AreaSelectWidgetLandscape comingSoonArea;
+        public AreaWidgetLandscape randomArea;
+        public AreaWidgetLandscape comingSoonArea;
         public RectTransform widgetsParent;
         public MenuScreen toOpen;
 
-        private List<AreaSelectWidgetLandscape> areaWidgets = new List<AreaSelectWidgetLandscape>();
+        private List<AreaWidgetLandscape> areaWidgets = new List<AreaWidgetLandscape>();
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
 
             randomArea.onClick += OnWidgetSelected;
-            foreach (ThemesDataHolder.GameTheme area in GameContentManager.Instance.enabledThemes)
+            foreach (AreasDataHolder.GameArea area in GameContentManager.Instance.enabledAreas)
             {
-                AreaSelectWidgetLandscape newInstance = Instantiate(comingSoonArea, widgetsParent);
+                AreaWidgetLandscape newInstance = Instantiate(comingSoonArea, widgetsParent);
                 newInstance.SetData(area);
                 newInstance.onClick += OnWidgetSelected;
 
@@ -44,7 +44,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             CloseSelf();
         }
 
-        private void OnWidgetSelected(AreaSelectWidgetLandscape widget)
+        private void OnWidgetSelected(AreaWidgetLandscape widget)
         {
             onAreaSeleected?.Invoke(widget.Data);
 

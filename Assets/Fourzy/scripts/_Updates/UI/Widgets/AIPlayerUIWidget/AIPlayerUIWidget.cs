@@ -34,7 +34,7 @@ namespace Fourzy._Updates.UI.Widgets
             AIPlayersDataHolder.SELECTED = aiPlayerData;
 
             GameManager.Instance.StartGame(new ClientFourzyGame(
-                GameContentManager.Instance.currentTheme.themeID,
+                GameContentManager.Instance.currentArea.areaID,
                 UserManager.Instance.meAsPlayer,
                 new Player(2, aiPlayerData.name, aiPlayerData.profile)
                 {

@@ -73,64 +73,47 @@ namespace Fourzy._Updates.UI.Widgets
         //    }
         //}
 
+
         public void Open(IClientFourzy game, GameboardView board, Player owner)
         {
-            //ignore if spells disabled
-            if (!SettingsManager.Get(SettingsManager.KEY_MAGIC))
-            {
-                //this option only affects local games
-                //spells are ON by default for multiplayer games
-                if (GameManager.Instance.ExpectedGameType == GameTypeLocal.LOCAL_GAME)
-                {
-                    return;
-                }
-            }
-
-            //clear spells widgets
-            foreach (SpellUIWidget widget in spellWidgets) Destroy(widget.gameObject);
-            spellWidgets.Clear();
-
             this.game = game;
             this.board = board;
             this.owner = owner;
 
+            foreach (SpellUIWidget widget in spellWidgets)
+            {
+                Destroy(widget.gameObject);
+            }
+            spellWidgets.Clear();
+
             if (game.puzzleData != null)
             {
-                System.Array.ForEach(game.puzzleData.availableSpells, (spell) => AddSpell(spell));
+                switch (game._Mode)
+                {
+                    case GameMode.GAUNTLET:
+
+                        break;
+
+                    default:
+                        Array.ForEach(game.puzzleData.availableSpells, (spell) => AddSpell(spell));
+
+                        break;
+                }
             }
             else
             {
                 switch (game._Type)
                 {
-                    case GameType.PUZZLE:
-                    case GameType.ONBOARDING:
-                    case GameType.PRESENTATION:
-                    case GameType.FRIEND:
-                    case GameType.LEADERBOARD:
-
-                        break;
-
                     case GameType.REALTIME:
-                        //display opponents' spells, ideally should be loaded from their profile
-                        //currently just hardcoded
 
-                    case GameType.AI:
-                    case GameType.PASSANDPLAY:
-                        //List<SpellId> spells = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(owner.HerdId).spells;
+                        //break;
 
-                        //if (spells.Count > 0)
-                        //    foreach (SpellId spell in spells)
-                        //        AddSpell(spell);
-                        //else
-                            AddSpell(SpellId.HEX);
-                            AddSpell(SpellId.PLACE_LURE);
-                            AddSpell(SpellId.DARKNESS);
-
-                        break;
-
-                    case GameType.TURN_BASED:
-                        //hardoceded for now
-                        AddSpell(SpellId.HEX);
+                    default:
+                        foreach (SpellId spell in GameContentManager.Instance.piecesDataHolder
+                            .GetGamePieceData(owner.HerdId).Spells)
+                        {
+                            AddSpell(spell);
+                        }
 
                         break;
                 }

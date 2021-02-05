@@ -6,7 +6,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class HeaderScreen : MenuScreen
     {
-        public static HeaderScreen instance;
+        public static HeaderScreen Instance;
 
         public CurrencyWidget hintsWidget;
         public CurrencyWidget gemsWidget;
@@ -15,7 +15,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Awake();
 
-            if (!instance) instance = this;
+            if (!Instance) Instance = this;
         }
 
         public override void Close(bool animate = true)

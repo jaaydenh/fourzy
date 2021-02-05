@@ -69,7 +69,7 @@ namespace Fourzy._Updates.UI.Menu
         protected void Update()
         {
             //only continue if current opened screen is GameplayScreen
-            if (menuController.currentScreen != this || PersistantMenuController.instance.screensStack.Count > 0)
+            if (menuController.currentScreen != this || PersistantMenuController.Instance.screensStack.Count > 0)
                 return;
 
             if (Input.GetMouseButtonDown(0))
@@ -85,7 +85,7 @@ namespace Fourzy._Updates.UI.Menu
         {
             base.Open();
 
-            HeaderScreen.instance.Open();
+            HeaderScreen.Instance.Open();
 
             if (currentTab == -1) return;
 
@@ -236,7 +236,7 @@ namespace Fourzy._Updates.UI.Menu
 
             if (defaultTab && tabs.Contains(defaultTab))
             {
-                HeaderScreen.instance.Open();
+                HeaderScreen.Instance.Open();
                 OpenTab(tabs.IndexOf(defaultTab), false);
             }
         }

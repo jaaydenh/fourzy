@@ -68,7 +68,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnInitialized();
 
-            _prompt = PersistantMenuController.instance
+            _prompt = PersistantMenuController.Instance
                 .GetOrAddScreen<LoadingPromptScreen>()
                 .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
         }
@@ -176,8 +176,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case MatchmakingScreenState.TURNBASED:
                     messageLabel.text = "Searching for opponent...";
 
-                    Area selectedArea = GameContentManager.Instance.currentTheme.themeID;
-                    Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentTheme.themeID);
+                    Area selectedArea = GameContentManager.Instance.currentArea.areaID;
+                    Debug.Log("GameContentManager.Instance.currentTheme.themeID: " + GameContentManager.Instance.currentArea.areaID);
                     // ChallengeManager.Instance.CreateTurnBasedGame(challengedID/*"5ca27b6b4cd5b739c01cbd21"*/, selectedArea, CreateTurnBasedGameSuccess, CreateTurnBasedGameError);
 
                     break;
@@ -335,7 +335,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             OnBack();
 
             //open prompt screen
-            PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
+            PersistantMenuController.Instance.GetOrAddScreen<PromptScreen>().Prompt(
                 LocalizationManager.Value("timed_out_title"),
                 LocalizationManager.Value("timed_out_text"), null,
                 LocalizationManager.Value("back"), null, null);
@@ -350,7 +350,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             OnBack();
 
             //open prompt screen
-            PersistantMenuController.instance.GetOrAddScreen<PromptScreen>().Prompt(
+            PersistantMenuController.Instance.GetOrAddScreen<PromptScreen>().Prompt(
                 "Connection failed.",
                 "Failed to connect to multiplayer server :(", null,
                 LocalizationManager.Value("back"), null, null);

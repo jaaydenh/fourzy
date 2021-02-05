@@ -196,37 +196,9 @@ namespace Fourzy
             //to modify manifest file
             bool value = false;
 
-
 #if UNITY_IOS || UNITY_ANDROID
             if (value) Handheld.Vibrate();
 #endif
-
-            if (!PlayerPrefsWrapper.GetInitialPropertiesSet())
-            {
-                //unlock areas
-                foreach (Area area in Enum.GetValues(typeof(Area)))
-                {
-                    bool state = ((int)area & Constants.DEFAULT_UNLOCKED_THEMES) > 0;
-                    if (state)
-                    {
-                        PlayerPrefsWrapper.SetThemeUnlocked((int)area, state);
-                    }
-                }
-
-                PlayerPrefsWrapper.InitialPropertiesSet(true);
-            }
-            else
-            {
-                // temporary until unlock areas is implemented
-                foreach (Area area in Enum.GetValues(typeof(Area)))
-                {
-                    bool state = ((int)area & Constants.DEFAULT_UNLOCKED_THEMES) > 0;
-                    if (state)
-                    {
-                        PlayerPrefsWrapper.SetThemeUnlocked((int)area, state);
-                    }
-                }
-            }
 
             //initialize photon
             FourzyPhotonManager.Initialize(DEBUG: true);
@@ -582,7 +554,7 @@ namespace Fourzy
             if (activeGame == null || (activeGame._Type != GameType.ONBOARDING && activeGame._Type != GameType.PRESENTATION))
             {
                 //start demo mode
-                StartGame(new ClientFourzyGame(GameContentManager.Instance.themesDataHolder.GetRandomTheme(Area.NONE),
+                StartGame(new ClientFourzyGame(GameContentManager.Instance.enabledAreas.Random().areaID,
                     new Player(1, "AI Player 1") { PlayerString = "1" },
                     new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
                 { _Type = GameType.PRESENTATION, }, GameTypeLocal.LOCAL_GAME);

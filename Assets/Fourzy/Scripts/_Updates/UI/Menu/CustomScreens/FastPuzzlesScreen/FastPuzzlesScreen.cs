@@ -41,7 +41,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (!_opened) StartRoutine("showLB", ShowLeaderboard());
 
-            HeaderScreen.instance.Close();
+            HeaderScreen.Instance.Close();
         }
 
         private void OnError(PlayFabError error)
@@ -111,7 +111,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (timer >= 10f || !isOpened) yield break;
 
-            loadingPrompt = PersistantMenuController.instance.GetOrAddScreen<LoadingPromptScreen>();
+            loadingPrompt = PersistantMenuController.Instance.GetOrAddScreen<LoadingPromptScreen>();
             loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, LocalizationManager.Value("loading"), () =>
             {
                 loadingPrompt.CloseSelf();

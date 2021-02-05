@@ -21,7 +21,7 @@ namespace Fourzy._Updates.Managers
         public const string KEY_AUDIO = "SETTINGS_AUDIO";
         public const string KEY_DEMO_MODE = "SETTINGS_DEMO_MODE";
         public const string KEY_ANALYTICS_EVENTS = "SETTINGS_ANALYTICS";
-        public const string KEY_MAGIC = "SETTINGS_MAGIC";
+        public const string KEY_REALTIME_MAGIC = "SETTINGS_MAGIC";
         public const string KEY_REALTIME_TIMER = "SETTINGS_REALTIME_TIMER";
         public const string KEY_LOCAL_TIMER = "SETTINGS_LOCAL_TIMER";
 
@@ -50,7 +50,7 @@ namespace Fourzy._Updates.Managers
             [KEY_SFX] = DEFAULT_SFX,
             [KEY_AUDIO] = DEFAULT_AUDIO,
             [KEY_DEMO_MODE] = DEFAULT_DEMO_MODE,
-            [KEY_MAGIC] = DEFAULT_MAGIC,
+            [KEY_REALTIME_MAGIC] = DEFAULT_MAGIC,
             [KEY_LOCAL_TIMER] = DEFAULT_LOCAL_TIMER,
             [KEY_REALTIME_TIMER] = DEFAULT_REALTIME_TIMER,
 
@@ -84,7 +84,7 @@ namespace Fourzy._Updates.Managers
 
                     break;
 
-                case KEY_MAGIC:
+                case KEY_REALTIME_MAGIC:
                     onMagic?.Invoke(value);
 
                     break;

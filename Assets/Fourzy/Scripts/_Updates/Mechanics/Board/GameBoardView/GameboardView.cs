@@ -92,7 +92,8 @@ namespace Fourzy._Updates.Mechanics.Board
         public List<BoardBit> boardBits { get; private set; }
         public bool isAnimating { get; private set; }
         public BoardActionState actionState { get; private set; }
-        public SpellId activeSpell { get; private set; }
+        public SpellId activeSpellID { get; private set; }
+        public ISpell activeSpell { get; private set; }
         public List<TokenSpell> createdSpellTokens { get; private set; }
         public MoveArrow moveArrow { get; private set; }
         public MoveArrowsController arrowsController { get; private set; }
@@ -176,7 +177,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     return;
                 }
 
-                PersistantMenuController.instance.GetOrAddScreen<TokenPrompt>().Prompt(_tokens.First());
+                PersistantMenuController.Instance.GetOrAddScreen<TokenPrompt>().Prompt(_tokens.First());
 
                 if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
                 {
@@ -318,9 +319,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
                 case BoardActionState.CAST_SPELL:
                     List<BoardLocation> locationsList = 
-                        SpellEvaluator.GetValidSpellLocations(
-                            game._State.Board, 
-                            new HexSpell(0, new BoardLocation()));
+                        SpellEvaluator.GetValidSpellLocations(game._State.Board, activeSpell);
 
                     //modify by current spells
                     foreach (TokenSpell _spell in createdSpellTokens)
@@ -334,10 +333,11 @@ namespace Fourzy._Updates.Mechanics.Board
                     if (!locationsList.Contains(touchLocation))
                     {
                         onCastCanceled?.Invoke();
+                        Debug.Log("location not available");
                     }
                     else
                     {
-                        CastSpell(touchLocation, activeSpell);
+                        CastSpell(touchLocation, activeSpellID);
                     }
 
                     actionState = BoardActionState.MOVE;
@@ -886,7 +886,6 @@ namespace Fourzy._Updates.Mechanics.Board
             SetHintAreaSelectableState(true);
 
             IMove move = null;
-            ISpell spell = null;
 
             TokenSpell token = SpawnToken<TokenSpell>(location.Row, location.Column, spellID.ToTokenType());
 
@@ -896,7 +895,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     HexSpell hex = new HexSpell(game._State.ActivePlayerId, location);
 
                     move = hex;
-                    spell = hex;
+                    activeSpell = hex;
 
                     break;
 
@@ -904,7 +903,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     HoldFourzySpell hold = new HoldFourzySpell(game._State.ActivePlayerId, location);
 
                     move = hold;
-                    spell = hold;
+                    activeSpell = hold;
 
                     break;
 
@@ -912,7 +911,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     PrisonSpell prison = new PrisonSpell(game._State.ActivePlayerId, location);
 
                     move = prison;
-                    spell = prison;
+                    activeSpell = prison;
 
                     break;
 
@@ -920,7 +919,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     DarknessSpell darkness = new DarknessSpell(game._State.ActivePlayerId, location);
 
                     move = darkness;
-                    spell = darkness;
+                    activeSpell = darkness;
 
                     break;
 
@@ -928,7 +927,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     FruitSpell fruit = new FruitSpell(game._State.ActivePlayerId, location);
 
                     move = fruit;
-                    spell = fruit;
+                    activeSpell = fruit;
 
                     break;
 
@@ -936,7 +935,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     SlurpSpell slurp = new SlurpSpell(game._State.ActivePlayerId, location);
 
                     move = slurp;
-                    spell = slurp;
+                    activeSpell = slurp;
 
                     break;
 
@@ -944,7 +943,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     SquirtWaterSpell squirtWater = new SquirtWaterSpell(game._State.ActivePlayerId, location);
 
                     move = squirtWater;
-                    spell = squirtWater;
+                    activeSpell = squirtWater;
 
                     break;
 
@@ -952,7 +951,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     BombSpell bomb = new BombSpell(game._State.ActivePlayerId, location);
 
                     move = bomb;
-                    spell = bomb;
+                    activeSpell = bomb;
 
                     break;
 
@@ -960,7 +959,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     LureSpell lure = new LureSpell(game._State.ActivePlayerId, location);
 
                     move = lure;
-                    spell = lure;
+                    activeSpell = lure;
 
                     break;
 
@@ -968,7 +967,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     IceWallSpell iceWall = new IceWallSpell(location);
 
                     move = iceWall;
-                    spell = iceWall;
+                    activeSpell = iceWall;
 
                     break;
 
@@ -976,7 +975,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     FireWallSpell fireWall = new FireWallSpell(game._State.ActivePlayerId, location);
 
                     move = fireWall;
-                    spell = fireWall;
+                    activeSpell = fireWall;
 
                     break;
 
@@ -984,7 +983,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     DigSpell dig = new DigSpell(game._State.ActivePlayerId, location);
 
                     move = dig;
-                    spell = dig;
+                    activeSpell = dig;
 
                     break;
 
@@ -992,7 +991,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     GrowlSpell growl = new GrowlSpell(game._State.ActivePlayerId, location);
 
                     move = growl;
-                    spell = growl;
+                    activeSpell = growl;
 
                     break;
 
@@ -1000,7 +999,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     SpecterSpell specter = new SpecterSpell(game._State.ActivePlayerId, location);
 
                     move = specter;
-                    spell = specter;
+                    activeSpell = specter;
 
                     break;
 
@@ -1008,7 +1007,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     RainbowSpell rainbow = new RainbowSpell(game._State.ActivePlayerId, location);
 
                     move = rainbow;
-                    spell = rainbow;
+                    activeSpell = rainbow;
 
                     break;
 
@@ -1016,7 +1015,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     PunchSpell punch = new PunchSpell(game._State.ActivePlayerId, location);
 
                     move = punch;
-                    spell = punch;
+                    activeSpell = punch;
 
                     break;
 
@@ -1024,7 +1023,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     FreezeSpell freeze = new FreezeSpell(game._State.ActivePlayerId, location);
 
                     move = freeze;
-                    spell = freeze;
+                    activeSpell = freeze;
 
                     break;
 
@@ -1032,7 +1031,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     MeltSpell melt = new MeltSpell(game._State.ActivePlayerId, location);
 
                     move = melt;
-                    spell = melt;
+                    activeSpell = melt;
 
                     break;
 
@@ -1040,7 +1039,7 @@ namespace Fourzy._Updates.Mechanics.Board
                     LifeSpell life = new LifeSpell(game._State.ActivePlayerId, location);
 
                     move = life;
-                    spell = life;
+                    activeSpell = life;
 
                     break;
 
@@ -1048,25 +1047,26 @@ namespace Fourzy._Updates.Mechanics.Board
                     DeathSpell death = new DeathSpell(game._State.ActivePlayerId, location);
 
                     move = death;
-                    spell = death;
+                    activeSpell = death;
 
                     break;
             }
 
-            token.SetData(spell, move);
+            token.SetData(activeSpell, move);
             createdSpellTokens.Add(token);
 
             //make semi-transparent
             token.SetAlpha(.3f);
 
             //cast spell
-            onCast?.Invoke(activeSpell, game._State.ActivePlayerId);
+            onCast?.Invoke(activeSpellID, game._State.ActivePlayerId);
         }
 
         public void PrepareForSpell(SpellId spellId)
         {
             actionState = BoardActionState.CAST_SPELL;
-            activeSpell = spellId;
+            activeSpellID = spellId;
+            activeSpell = spellId.AsSpell(new BoardLocation());
 
             CancelRoutine("wrongMove");
             //show hint area depending on spell
@@ -1346,32 +1346,8 @@ namespace Fourzy._Updates.Mechanics.Board
                     break;
 
                 case BoardActionState.CAST_SPELL:
-                    List<BoardLocation> locationsList = null;
-
-                    switch (activeSpell)
-                    {
-                        case SpellId.HEX:
-                            locationsList = SpellEvaluator.GetValidSpellLocations(
-                                game._State.Board, 
-                                new HexSpell(0, new BoardLocation()));
-
-                            break;
-
-                        case SpellId.PLACE_LURE:
-                            locationsList = SpellEvaluator.GetValidSpellLocations(
-                                game._State.Board, 
-                                new LureSpell(0, new BoardLocation()));
-
-                            break;
-
-                        case SpellId.DARKNESS:
-                            locationsList = SpellEvaluator.GetValidSpellLocations(
-                                game._State.Board, 
-                                new DarknessSpell(0, new BoardLocation()));
-
-                            break;
-                    }
-
+                    List<BoardLocation> locationsList = 
+                        SpellEvaluator.GetValidSpellLocations(game._State.Board, activeSpell);
 
                     //modify by current spells
                     foreach (TokenSpell _spell in createdSpellTokens)
@@ -2092,7 +2068,7 @@ namespace Fourzy._Updates.Mechanics.Board
                 }
             }
 
-            //check if any of created space been covered by gamepieces
+            //check if new spells are covered by gamepieces
             if (!startTurn)
             {
                 if (createdSpellTokens.Count > 0)

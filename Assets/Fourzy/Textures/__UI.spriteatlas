@@ -43,7 +43,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: be044a4a46a3d1a4794d948d7e6d087b, type: 3}
-    totalSpriteSurfaceArea: 25558515
+    totalSpriteSurfaceArea: 25573235
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -176,6 +176,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 73d688c62e9cf409896ff14f8edd1cec, type: 3}
   - {fileID: 21300000, guid: 82984dc6fbcb91f45986011af372f000, type: 3}
   - {fileID: 21300000, guid: 30aa5ee60d8dc094ba557b632196b494, type: 3}
+  - {fileID: 21300000, guid: efc001f619dd9e248a1617dd46cd2a69, type: 3}
   - {fileID: 21300000, guid: 821718f67459b384782a52f9c27671d9, type: 3}
   - {fileID: 21300000, guid: 511bccf649a42d7499b934a5bff67f21, type: 3}
   - {fileID: 21300000, guid: e7a11a075a6e3c54d895c7dfc470e764, type: 3}
@@ -477,6 +478,7 @@ SpriteAtlas:
   - CloseButton
   - middle_c_box
   - Checkmark
+  - timer_icon
   - Selector-CPU (noShadow)
   - AreaWindow_Selected
   - 3

@@ -24,7 +24,7 @@ namespace Fourzy
         public GamePiecesDataHolder piecesDataHolder;
         public AIPlayersDataHolder aiPlayersDataHolder;
         public TokensDataHolder tokensDataHolder;
-        public ThemesDataHolder themesDataHolder;
+        public AreasDataHolder areasDataHolder;
         public PassAndPlayDataHolder passAndPlayDataHolder;
         public MiscBoardsDataHolder miscBoardsDataHolder;
         public MiscGameContentHolder miscGameDataHolder;
@@ -39,26 +39,29 @@ namespace Fourzy
 
         public Dictionary<PrefabType, PrefabTypePair> typedPrefabsFastAccess { get; private set; }
 
-        public ThemesDataHolder.GameTheme currentTheme
+        public AreasDataHolder.GameArea currentArea
         {
-            get => themesDataHolder.currentTheme;
-
-            set => themesDataHolder.currentTheme = value;
+            get => areasDataHolder.currentAreaData;
+            set => areasDataHolder.currentAreaData = value;
         }
 
-        public List<ThemesDataHolder.GameTheme> themes => themesDataHolder.themes.list;
+        public List<AreasDataHolder.GameArea> enabledAreas => 
+            areasDataHolder.areas.Where(theme => theme.enabled).ToList();
 
-        public List<ThemesDataHolder.GameTheme> enabledThemes => themesDataHolder.themes.list.Where(theme => theme.enabled).ToList();
+        public List<TokensDataHolder.TokenData> tokens => 
+            tokensDataHolder.tokens.list;
 
-        public List<TokensDataHolder.TokenData> tokens => tokensDataHolder.tokens.list;
+        public List<TokensDataHolder.TokenData> enabledTokens => 
+            tokensDataHolder.tokens.list.Where(token => token.enabled).ToList();
 
-        public List<TokensDataHolder.TokenData> enabledTokens => tokensDataHolder.tokens.list.Where(token => token.enabled).ToList();
+        public List<GameBoardDefinition> passAndPlayGameboards => 
+            passAndPlayDataHolder.gameboards;
 
-        public List<GameBoardDefinition> passAndPlayGameboards => passAndPlayDataHolder.gameboards;
+        public int finishedFastPuzzlesCount => 
+            fastPuzzles.Keys.Where(id => PlayerPrefsWrapper.GetFastPuzzleComplete(id)).Count();
 
-        public int finishedFastPuzzlesCount => fastPuzzles.Keys.Where(id => PlayerPrefsWrapper.GetFastPuzzleComplete(id)).Count();
-
-        public List<Camera3dItemProgressionMap> existingProgressionMaps { get; private set; } = new List<Camera3dItemProgressionMap>();
+        public List<Camera3dItemProgressionMap> existingProgressionMaps { get; private set; } = 
+            new List<Camera3dItemProgressionMap>();
 
         protected override void Awake()
         {
@@ -68,8 +71,12 @@ namespace Fourzy
 
             typedPrefabsFastAccess = new Dictionary<PrefabType, PrefabTypePair>();
             foreach (PrefabTypePair prefabTypePair in typedPrefabs.list)
+            {
                 if (!typedPrefabsFastAccess.ContainsKey(prefabTypePair.prefabType))
+                {
                     typedPrefabsFastAccess.Add(prefabTypePair.prefabType, prefabTypePair);
+                }
+            }
 
             piecesDataHolder.Initialize();
             passAndPlayDataHolder.Initialize();
@@ -81,23 +88,32 @@ namespace Fourzy
             LoadPuzzlePacks();
         }
 
-        public GameBoardDefinition GetMiscBoard(string boardID) => miscBoardsDataHolder.gameboards.Find(board => board.ID == boardID);
+        public GameBoardDefinition GetMiscBoard(string boardID) => 
+            miscBoardsDataHolder.gameboards.Find(board => board.ID == boardID);
 
-        public GameBoardDefinition GetMiscBoardByName(string boardName) => miscBoardsDataHolder.gameboards.Find(board => board.BoardName == boardName);
+        public GameBoardDefinition GetMiscBoardByName(string boardName) => 
+            miscBoardsDataHolder.gameboards.Find(board => board.BoardName == boardName);
 
-        public GameBoardDefinition GetPassAndPlayBoard(string boardID) => passAndPlayDataHolder.gameboards.Find(board => board.ID == boardID);
+        public GameBoardDefinition GetPassAndPlayBoard(string boardID) => 
+            passAndPlayDataHolder.gameboards.Find(board => board.ID == boardID);
 
-        public GameBoardDefinition GetPassAndPlayBoardByName(string boardName) => passAndPlayDataHolder.gameboards.Find(board => board.BoardName == boardName);
+        public GameBoardDefinition GetPassAndPlayBoardByName(string boardName) => 
+            passAndPlayDataHolder.gameboards.Find(board => board.BoardName == boardName);
 
-        public TokenView GetTokenPrefab(TokenType tokenType, Area theme) => tokensDataHolder.GetToken(tokenType, theme);
+        public TokenView GetTokenPrefab(TokenType tokenType, Area theme) => 
+            tokensDataHolder.GetToken(tokenType, theme);
 
-        public TokenView GetTokenPrefab(TokenType tokenType) => GetTokenPrefab(tokenType, themes[0].themeID);
+        public TokenView GetTokenPrefab(TokenType tokenType) => 
+            GetTokenPrefab(tokenType, areasDataHolder.areas[0].areaID);
 
-        public TokensDataHolder.TokenData GetTokenData(TokenType tokenType) => tokensDataHolder.GetTokenData(tokenType);
+        public TokensDataHolder.TokenData GetTokenData(TokenType tokenType) => 
+            tokensDataHolder.GetTokenData(tokenType);
 
-        public List<ThemesDataHolder.GameTheme> GetTokenThemes(TokenType tokenType) => GetTokenData(tokenType)?.GetTokenAreas(themesDataHolder) ?? null;
+        public List<AreasDataHolder.GameArea> GetTokenThemes(TokenType tokenType) => 
+            GetTokenData(tokenType)?.GetTokenAreas(areasDataHolder) ?? null;
 
-        public List<string> GetTokenAreaNames(TokenType tokenType) => GetTokenData(tokenType)?.GetAreaNames(themesDataHolder) ?? null;
+        public List<string> GetTokenAreaNames(TokenType tokenType) => 
+            GetTokenData(tokenType)?.GetAreaNames(areasDataHolder) ?? null;
 
         public ClientFourzyPuzzle GetNextFastPuzzle(string id = "")
         {
@@ -110,55 +126,79 @@ namespace Fourzy
                 string _id = "";
                 
                 foreach (string __id in ids)
+                {
                     if (!PlayerPrefsWrapper.GetFastPuzzleComplete(__id))
                     {
                         _id = __id;
                         break;
                     }
+                }
 
                 if (string.IsNullOrEmpty(_id))
+                {
                     return new ClientFourzyPuzzle(new ClientPuzzleData(fastPuzzles[ids[0]]).Initialize());
+                }
                 else
+                {
                     return new ClientFourzyPuzzle(new ClientPuzzleData(fastPuzzles[_id]).Initialize());
+                }
             }
             else
             {
-                int idIndex = ids.FindIndex(ids.IndexOf(id), __id => !PlayerPrefsWrapper.GetFastPuzzleComplete(__id));
+                int idIndex = ids.FindIndex(ids.IndexOf(id), 
+                    __id => !PlayerPrefsWrapper.GetFastPuzzleComplete(__id));
 
                 if (idIndex > -1 && idIndex < ids.Count - 1)
+                {
                     return new ClientFourzyPuzzle(new ClientPuzzleData(fastPuzzles[ids[idIndex + 1]]).Initialize());
+                }
                 else
+                {
                     return GetNextFastPuzzle();
+                }
             }
         }
 
-        public ClientFourzyPuzzle GetFastPuzzle(string id) => new ClientFourzyPuzzle(new ClientPuzzleData(fastPuzzles[id]).Initialize());
+        public ClientFourzyPuzzle GetFastPuzzle(string id) => 
+            new ClientFourzyPuzzle(new ClientPuzzleData(fastPuzzles[id]).Initialize());
 
         public void ResetFastPuzzles()
         {
-            foreach (string id in fastPuzzles.Keys) PlayerPrefsWrapper.SetFastPuzzleComplete(id, false);
+            foreach (string id in fastPuzzles.Keys)
+            {
+                PlayerPrefsWrapper.SetFastPuzzleComplete(id, false);
+            }
         }
 
         public void ResetPuzzlePacks()
         {
             foreach (BasicPuzzlePack pack in externalPuzzlePacks.Values)
+            {
                 pack.ResetPlayerPrefs();
+            }
 
             foreach (Camera3dItemProgressionMap progressionMap in progressionMaps)
-                (existingProgressionMaps.Find(__map => __map.mapID == progressionMap.mapID) ?? progressionMap).ResetPlayerPrefs();
+            {
+                (existingProgressionMaps.Find(__map => __map.mapID == progressionMap.mapID) ?? progressionMap)
+                    .ResetPlayerPrefs();
+            }
         }
 
-        public BasicPuzzlePack GetExternalPuzzlePack(string folderName) => externalPuzzlePacks[folderName];
+        public BasicPuzzlePack GetExternalPuzzlePack(string folderName) 
+            => externalPuzzlePacks[folderName];
 
         private void LoadAllFastPuzzles()
         {
-            foreach (ResourceItem item in ResourceDB.GetFolder(Constants.PUZZLES_ROOT_FOLDER).GetChilds("", ResourceItem.Type.Asset))
+            foreach (ResourceItem item in ResourceDB
+                .GetFolder(Constants.PUZZLES_ROOT_FOLDER)
+                .GetChilds("", ResourceItem.Type.Asset))
             {
                 if (item.Ext != "json") continue;
+
                 fastPuzzles.Add(item.GetIDFromPuzzleDataFile(), item);
             }
 
-            UnityEngine.Debug.Log($"Loaded {fastPuzzles.Count} fast puzzles from resources");
+            Debug.Log($"Loaded {fastPuzzles.Count} fast puzzles from resources");
         }
 
         /// <summary>
@@ -168,7 +208,9 @@ namespace Fourzy
         {
             externalPuzzlePacks = new Dictionary<string, BasicPuzzlePack>();
 
-            foreach (ResourceItem @event in ResourceDB.GetFolder(Constants.PUZZLE_PACKS_ROOT_FOLDER).GetChilds("", ResourceItem.Type.Folder))
+            foreach (ResourceItem @event in ResourceDB
+                .GetFolder(Constants.PUZZLE_PACKS_ROOT_FOLDER)
+                .GetChilds("", ResourceItem.Type.Folder))
             {
                 IEnumerable<ResourceItem> items = @event.GetChilds("", ResourceItem.Type.Asset);
                 if (items.Count() == 0) continue;
@@ -178,14 +220,20 @@ namespace Fourzy
 
                 int puzzleIndex = 0;
                 //get puzzle descriptions file
-                foreach (ResourceItem puzzleDataFile in @event.GetChild("puzzles").GetChilds("", ResourceItem.Type.Asset))
+                foreach (ResourceItem puzzleDataFile in @event
+                    .GetChild("puzzles")
+                    .GetChilds("", ResourceItem.Type.Asset))
                 {
                     ClientPuzzleData puzzleData = new ClientPuzzleData(puzzleDataFile);
 
                     if (puzzlePack.allRewards.ContainsKey(puzzleIndex))
+                    {
                         puzzleData.rewards = puzzlePack.allRewards[puzzleIndex].ToArray();
+                    }
                     else
+                    {
                         puzzleData.rewards = new RewardsManager.Reward[0];
+                    }
 
                     puzzleData.pack = puzzlePack;
 
@@ -193,7 +241,11 @@ namespace Fourzy
                     if (puzzleData.Enabled)
                     {
                         puzzlePack.enabledPuzzlesData.Add(puzzleData);
-                        if (puzzleData.rewards.Length > 0) puzzlePack.rewardPuzzles.Add(puzzleData);
+
+                        if (puzzleData.rewards.Length > 0)
+                        {
+                            puzzlePack.rewardPuzzles.Add(puzzleData);
+                        }
                     }
 
                     puzzleIndex++;
@@ -208,8 +260,10 @@ namespace Fourzy
         {
             for (int tutorialIndex = 0; tutorialIndex < HardcodedTutorials.tutorials.Count; tutorialIndex++)
             {
-                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorial + HardcodedTutorials.tutorials[tutorialIndex].name);
-                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorialOpened + HardcodedTutorials.tutorials[tutorialIndex].name);
+                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorial + 
+                    HardcodedTutorials.tutorials[tutorialIndex].name);
+                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorialOpened + 
+                    HardcodedTutorials.tutorials[tutorialIndex].name);
             }
         }
 
@@ -221,7 +275,8 @@ namespace Fourzy
             return Instance.typedPrefabsFastAccess[type].prefab;
         }
 
-        public static T GetPrefab<T>(PrefabType type) => GetPrefab(type).GetComponent<T>();
+        public static T GetPrefab<T>(PrefabType type) => 
+            GetPrefab(type).GetComponent<T>();
 
         public static T InstantiatePrefab<T>(PrefabType type, Transform parent) where T : Component
         {
