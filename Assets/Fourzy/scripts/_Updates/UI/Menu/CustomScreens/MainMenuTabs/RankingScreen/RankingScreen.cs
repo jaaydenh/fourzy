@@ -138,7 +138,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         .GetOrAddScreen<PromptScreen>()
                         .Prompt(
                             "Leaderboard",
-                            $"Please complete {Constants.GAMES_BEFORE_RATING_DISPLAYED} rating games to appear on a leaderboard",
+                            $"Please complete {Constants.GAMES_BEFORE_RATING_DISPLAYED} rated games to appear on a leaderboard",
                             LocalizationManager.Value("ok"),
                             "")
                         .CloseOnAccept();
