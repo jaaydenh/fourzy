@@ -1,15 +1,12 @@
 ﻿//@vadym udod
 
-using Fourzy._Updates.Audio;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Toasts;
 using Fourzy._Updates.UI.Widgets;
 using Photon.Pun;
 using Photon.Realtime;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu.Screens
 {
@@ -75,7 +72,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            OnRoomsUpdated(FourzyPhotonManager.Instance.roomsInfo);
+            OnRoomsUpdated(FourzyPhotonManager.Instance.cachedRooms);
 
             if (HeaderScreen.Instance)
             {
@@ -151,62 +148,30 @@ namespace Fourzy._Updates.UI.Menu.Screens
             });
         }
 
-        private void DisplayRooms(List<RoomInfo> data)
-        {
-            if (!isOpened) return;
-
-            Clear();
-
-            foreach (RoomInfo roomData in data)
-            {
-                if (!roomData.RemovedFromList && IsLobbyRoom(roomData))
-                {
-                    rooms.Add(Instantiate(widgetPrefab, widgetsParent).SetData(roomData));
-                }
-            }
-        }
-
-        private void Clear()
-        {
-            foreach (PhotonRoomWidget widget in rooms)
-            {
-                Destroy(widget.gameObject);
-            }
-
-            rooms.Clear();
-        }
-
-        private bool IsLobbyRoom(RoomInfo roomData)
-        {
-            return roomData.CustomProperties.ContainsKey(Constants.REALTIME_ROOM_TYPE_KEY) &&
-                (RoomType)roomData.CustomProperties[Constants.REALTIME_ROOM_TYPE_KEY] == RoomType.LOBBY_ROOM;
-        }
-
         private void OnRoomsUpdated(List<RoomInfo> _rooms)
         {
             foreach (RoomInfo roomData in _rooms)
             {
-                if (IsLobbyRoom(roomData))
-                {
-                    //remove
-                    if (roomData.RemovedFromList)
-                    {
-                        PhotonRoomWidget _roomWidget = rooms.Find(_widget => _widget.name == roomData.Name);
+                PhotonRoomWidget entry = rooms.Find(_widget => _widget.SameName(roomData));
 
-                        if (_roomWidget)
-                        {
-                            _roomWidget._Destroy();
-                            rooms.Remove(_roomWidget);
-                        }
+                //remove
+                if (roomData.RemovedFromList)
+                {
+                    if (entry)
+                    {
+                        entry._Destroy();
+                        rooms.Remove(entry);
                     }
-                    //add
-                    else
+                }
+                //add
+                else
+                {
+                    if (entry == null)
                     {
                         rooms.Add(Instantiate(widgetPrefab, widgetsParent).SetData(roomData));
                     }
                 }
             }
-            DisplayRooms(FourzyPhotonManager.Instance.roomsInfo);
         }
 
         private void OnJoinedRoom(string roomName)

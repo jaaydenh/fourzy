@@ -48,7 +48,7 @@ namespace Fourzy
         private static FourzyPhotonManager instance;
         private static StackModified<KeyValuePair<string, Action>> tasks = new StackModified<KeyValuePair<string, Action>>();
 
-        public List<RoomInfo> roomsInfo = new List<RoomInfo>();
+        public List<RoomInfo> cachedRooms = new List<RoomInfo>();
 
         private Coroutine connectionTimedOutRoutine;
 
@@ -193,6 +193,16 @@ namespace Fourzy
                         break;
                 }
             }
+            else
+            {
+                //clear all rooms
+                foreach (RoomInfo room in cachedRooms)
+                {
+                    room.RemovedFromList = true;
+                }
+                onRoomsListUpdated?.Invoke(cachedRooms);
+                cachedRooms.Clear();
+            }
         }
 
         public override void OnCreateRoomFailed(short returnCode, string message)
@@ -242,20 +252,43 @@ namespace Fourzy
         {
             base.OnRoomListUpdate(roomList);
 
+            List<RoomInfo> toRemove = new List<RoomInfo>();
             foreach (RoomInfo info in roomList)
-                if (info.RemovedFromList)
+            {
+                RoomInfo entry = cachedRooms.Find(_room => _room.Name == info.Name);
+
+                if (entry != null)
                 {
-                    roomsInfo.RemoveAll(_room => _room.Name == info.Name);
-                    if (DEBUG) Debug.Log($"Room removed: {info.Name}.");
+                    if (!info.IsOpen || !info.IsVisible || info.RemovedFromList)
+                    {
+                        toRemove.Add(entry);
+                        entry.RemovedFromList = true;
+                    }
                 }
                 else
                 {
-                    if (roomsInfo.Find(_room => _room.Name == info.Name) == null)
-                        roomsInfo.Add(info);
-                }
+                    //ignore if not a lobby room 
+                    if (!IsLobbyRoom(info)) return;
 
-            if (DEBUG) Debug.Log($"Rooms list updated: {roomsInfo.Count}.");
-            onRoomsListUpdated?.Invoke(roomsInfo);
+                    cachedRooms.Add(info);
+                }
+            }
+
+            onRoomsListUpdated?.Invoke(cachedRooms);
+
+            foreach (RoomInfo _toRemove in toRemove)
+            {
+                RoomInfo ___toRemove = cachedRooms.Find(_info => _info.Name == _toRemove.Name);
+
+                if (___toRemove != null)
+                {
+                    cachedRooms.Remove(___toRemove);
+                    if (DEBUG) Debug.Log($"Room removed: {___toRemove.Name}.");
+                }
+            }
+            toRemove.Clear();
+
+            if (DEBUG) Debug.Log($"Rooms list updated: {cachedRooms.Count}.");
         }
 
         public override void OnJoinedRoom()
@@ -268,12 +301,26 @@ namespace Fourzy
 
             if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
 
-            //if room is to be removed, remove it yourself
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-            {
-                roomsInfo.RemoveAll(_room => _room.Name == PhotonNetwork.CurrentRoom.Name);
-                if (DEBUG) Debug.Log($"Room removed: {PhotonNetwork.CurrentRoom.Name}.");
-            }
+            ////if room is to be removed, remove it yourself
+            //if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            //{
+            //    RoomInfo toRemove = roomsInfo.Find(_room => _room.Name == PhotonNetwork.CurrentRoom.Name);
+
+            //    if (toRemove != null)
+            //    {
+            //        toRemove.RemovedFromList = true;
+            //        onRoomsListUpdated?.Invoke(roomsInfo);
+            //        if (DEBUG) Debug.Log($"Room removed: {PhotonNetwork.CurrentRoom.Name}.");
+
+            //        roomsInfo.Remove(toRemove);
+            //    }
+            //}
+        }
+
+        public override void OnLeftLobby()
+        {
+            base.OnLeftLobby();
+            if (DEBUG) Debug.Log($"Lobby left");
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -408,6 +455,12 @@ namespace Fourzy
 
             PhotonNetwork.JoinRandomRoom();
             instance.RunTimeoutRoutine();
+        }
+
+        public static bool IsLobbyRoom(RoomInfo roomData)
+        {
+            return roomData.CustomProperties.ContainsKey(Constants.REALTIME_ROOM_TYPE_KEY) &&
+                (RoomType)roomData.CustomProperties[Constants.REALTIME_ROOM_TYPE_KEY] == RoomType.LOBBY_ROOM;
         }
 
         public static void JoinRoom(string roomName)

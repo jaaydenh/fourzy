@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 222714686401759270}
   - component: {fileID: 114960755142544164}
   - component: {fileID: 7877660910752570483}
+  - component: {fileID: 3577420573741055234}
   m_Layer: 10
   m_Name: Panel
   m_TagString: Untagged
@@ -246,7 +247,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 570, y: 380}
+  m_SizeDelta: {x: 570, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222714686401759270
 CanvasRenderer:
@@ -310,6 +311,20 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!114 &3577420573741055234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026257739992042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &1044432219094144
 GameObject:
   m_ObjectHideFlags: 0
@@ -2378,7 +2393,7 @@ GameObject:
   - component: {fileID: 3233476926339519031}
   - component: {fileID: 2541691966254870253}
   m_Layer: 10
-  m_Name: GameObject
+  m_Name: Holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5531,8 +5546,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -235}
-  m_SizeDelta: {x: 487, y: 40}
+  m_AnchoredPosition: {x: 20, y: -240}
+  m_SizeDelta: {x: 530, y: 40}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &202810451795522186
 CanvasRenderer:
@@ -5561,7 +5576,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Current Name
+  m_text: error text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d88010131ce14d0aa675e4166b1eefd, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 32e857ccd1977dd418a6f6d936a082b3, type: 2}
@@ -5630,7 +5645,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 4236414948830058255}
-    characterCount: 12
+    characterCount: 10
     spriteCount: 0
     spaceCount: 1
     wordCount: 2

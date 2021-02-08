@@ -27,8 +27,6 @@ namespace Fourzy._Updates.UI.Widgets
         private string password = null;
         private Image _image;
 
-        public string roomName => data.Name;
-
         public PhotonRoomWidget SetData(RoomInfo data)
         {
             this.data = data;
@@ -97,6 +95,11 @@ namespace Fourzy._Updates.UI.Widgets
         public void _Destroy()
         {
             Destroy(gameObject);
+        }
+
+        public bool SameName(RoomInfo data)
+        {
+            return this.data.Name == data.Name;
         }
 
         /// <summary>
