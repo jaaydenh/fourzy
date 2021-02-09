@@ -36,6 +36,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private IClientFourzy game;
         private GamePlayManager gameplayManager;
         private int gameTurnCounter;
+        private UIOutline helpButtonOutline;
+        private bool timersEnabled;
+        private MagicState magicState = MagicState.DISABLED;
 
         public PuzzleUIScreen puzzleUI { get; private set; }
         public TurnBaseScreen turnbaseUI { get; private set; }
@@ -43,10 +46,30 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public RealtimeScreen realtimeScreen { get; private set; }
         public DemoGameScreen demoGameScreen { get; private set; }
         public GauntletGameScreen gauntletGameScreen { get; private set; }
+        public float myTimerLeft
+        {
+            get
+            {
+                if (timerWidgets[0].active)
+                {
+                    return timerWidgets[0].TotalTimeLeft;
+                }
 
-        private UIOutline helpButtonOutline;
-        private bool timersEnabled;
-        private MagicState magicState = MagicState.DISABLED;
+                return -1f;
+            }
+        }
+        public int myMagicLeft
+        {
+            get
+            {
+                if (magicState == MagicState.BOTH || magicState == MagicState.ONLY_PLAYER_1)
+                {
+                    return player1Widget.magic;
+                }
+
+                return -1;
+            }
+        }
 
         protected override void Awake()
         {
@@ -421,6 +444,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
             #endregion
 
             SetResetButtonState(true);
+        }
+
+        public void OnRealtimeTurnRecieved(ClientPlayerTurn turn)
+        {
+            if (timersEnabled)
+            {
+                timerWidgets[1].SetTimerValue(
+                    Mathf.Floor(turn.playerTimerLeft / InternalSettings.Current.CIRCULAR_TIMER_SECONDS));
+            }
+
+            //adjust magic
+            player2Widget.SetMagic(turn.magicLeft);
         }
 
         public void OnMoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult)

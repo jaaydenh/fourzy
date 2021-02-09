@@ -30,6 +30,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public bool shown { get; private set; }
         public bool isMe { get; private set; }
+        public int magic { get; private set; } = 1;
 
         protected override void Awake()
         {
@@ -44,7 +45,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (game != null)
             {
-                game.onMagic -= UpdateMagic;
+                game.onMagic -= OnMagicUpdate;
             }
 
             FourzyPhotonManager.onPlayerPpopertiesUpdate -= OnPlayerPropertiesUpdate;
@@ -92,7 +93,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             current.gameObject.SetActive(true);
 
-            UpdateMagic(player.PlayerId, player.Magic);
+            OnMagicUpdate(player.PlayerId, player.Magic);
 
             SetPlayerName(player.DisplayName);
         }
@@ -122,7 +123,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             this.game = game;
 
-            game.onMagic += UpdateMagic;
+            game.onMagic += OnMagicUpdate;
         }
 
         public void SetExtraData(string text)
@@ -170,13 +171,19 @@ namespace Fourzy._Updates.UI.Widgets
             shown = false;
         }
 
-        private void UpdateMagic(int playerId, int value)
+        internal void SetMagic(int value)
         {
             if (!magicWidget) return;
 
+            magicBadge.SetValue(value);
+            magic = value;
+        }
+
+        private void OnMagicUpdate(int playerId, int value)
+        {
             if (assignedPlayer.PlayerId == playerId)
             {
-                magicBadge.SetValue(value);
+                SetMagic(value);
             }
         }
 

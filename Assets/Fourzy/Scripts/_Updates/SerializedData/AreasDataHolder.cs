@@ -101,6 +101,11 @@ namespace Fourzy._Updates.Serialized
             [ShowIf("enabled"), ListDrawerSettings(NumberOfItemsPerPage = 5, ListElementLabelName = "type")]
             public List<BackgroundConfigurationData> configurations;
 
+            /// <summary>
+            /// Localized
+            /// </summary>
+            public string Name => LocalizationManager.Value(name);
+
             public AreaUnlockRequirement GetRequirement(CurrencyType type) =>
                 unlockRequirements.Find(unlockRequirement => unlockRequirement.type == type);
         }

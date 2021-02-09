@@ -351,7 +351,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         Player player = activeGame.me;
                         GamePlayManager.Instance.board.TakeTurn(
                             new SimpleMove(
-                                new Piece(player.PlayerId, int.Parse(player.HerdId)), currentTask.direction, currentTask.intValue));
+                                new Piece(
+                                    player.PlayerId, 
+                                    int.Parse(player.HerdId)), 
+                                currentTask.direction, 
+                                currentTask.intValue));
 
                         _yield = true;
 
@@ -361,7 +365,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         Player opponent = activeGame.opponent;
                         GamePlayManager.Instance.board.TakeTurn(
                             new SimpleMove(
-                                new Piece(opponent.PlayerId, opponent.HerdId == null ? 1 : int.Parse(opponent.HerdId)), currentTask.direction, currentTask.intValue));
+                                new Piece(
+                                    opponent.PlayerId,
+                                    opponent.HerdId == null ? 1 : int.Parse(opponent.HerdId)), 
+                                currentTask.direction, 
+                                currentTask.intValue));
 
                         _yield = true;
 

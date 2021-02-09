@@ -10,12 +10,14 @@ namespace Fourzy._Updates.ClientModel
     [Serializable]
     public class ClientPlayerTurn : PlayerTurn
     {
-        [JsonProperty("AITurn")]
+        [JsonProperty]
         public bool AITurn = false;
-        [JsonProperty("createdOnThisDevice")]
+        [JsonProperty]
         public bool createdOnThisDevice = false;
-        [JsonProperty("playerTimerLeft")]
+        [JsonProperty]
         public float playerTimerLeft;
+        [JsonProperty]
+        public int magicLeft;
 
         public ClientPlayerTurn(SimpleMove Move) : base(Move)
         {

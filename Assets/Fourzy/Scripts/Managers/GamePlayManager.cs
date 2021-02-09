@@ -63,18 +63,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public IClientFourzy game { get; private set; }
 
-        public float timerTimeLeft
-        {
-            get
-            {
-                if (gameplayScreen.timerWidgets[0].active)
-                {
-                    return gameplayScreen.timerWidgets[0].TotalTimeLeft;
-                }
-
-                return 0f;
-            }
-        }
         public float realtimeTimerDelay
         {
             get
@@ -267,11 +255,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         PlayerString = "2"
                     };
 
-                Debug.Log((Area)PlayerPrefsWrapper.GetCurrentArea());
+                Player me = UserManager.Instance.meAsPlayer;
+
                 //load realtime game
                 ClientFourzyGame _game = new ClientFourzyGame(
                     FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_AREA, Constants.DEFAULT_AREA),
-                    UserManager.Instance.meAsPlayer,
+                    me,
                     opponen,
                     UnityEngine.Random.value > .5f ? 1 : 2)
                 { _Type = GameType.REALTIME };
@@ -1343,23 +1332,23 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             switch (game._Type)
             {
-                case GameType.TURN_BASED:
-                    if (!game.asFourzyGame.challengeData.haveMoves)
-                    {
-                        playerPickScreen._Open();
-                    }
-                    else
-                    {
-                        PlayerTurn lastTurn = game.asFourzyGame.challengeData.lastTurn;
+                //case GameType.TURN_BASED:
+                //    if (!game.asFourzyGame.challengeData.haveMoves)
+                //    {
+                //        playerPickScreen._Open();
+                //    }
+                //    else
+                //    {
+                //        PlayerTurn lastTurn = game.asFourzyGame.challengeData.lastTurn;
 
-                        replayingLastTurn = true;
+                //        replayingLastTurn = true;
 
-                        UpdatePlayerTurn();
+                //        UpdatePlayerTurn();
 
-                        board.TakeTurn(lastTurn);
-                    }
+                //        board.TakeTurn(lastTurn);
+                //    }
 
-                    break;
+                //    break;
 
                 //start timer
                 case GameType.REALTIME:
@@ -1400,7 +1389,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 for (int turnIndex = 0; turnIndex < lastHintIndex; turnIndex++)
                 {
-                    game.TakeTurn(game.puzzleData.Solution[turnIndex], true, false);
+                    game.TakeTurn(game.puzzleData.Solution[turnIndex], false);
                     game.TakeAITurn(false);
                 }
 
@@ -1433,35 +1422,60 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        private IEnumerator PlayTurnBaseTurn(ChallengeData gameData)
-        {
-            if (gameData.lastTurnGame._Type != GameType.TURN_BASED) yield break;
+        //private IEnumerator PlayTurnBaseTurn(ChallengeData gameData)
+        //{
+        //    if (gameData.lastTurnGame._Type != GameType.TURN_BASED) yield break;
 
-            yield return new WaitUntil(() => !board.isAnimating && isBoardReady);
+        //    yield return new WaitUntil(() => !board.isAnimating && isBoardReady);
 
-            PlayerTurn lastTurn = gameData.lastTurn;
+        //    PlayerTurn lastTurn = gameData.lastTurn;
 
-            if (game.asFourzyGame.playerTurnRecord.Count > 0 &&
-                game.asFourzyGame.playerTurnRecord[game.asFourzyGame.playerTurnRecord.Count - 1].PlayerId == lastTurn.PlayerId) yield break;
+        //    if (game.asFourzyGame.playerTurnRecord.Count > 0 &&
+        //        game.asFourzyGame.playerTurnRecord[game.asFourzyGame.playerTurnRecord.Count - 1].PlayerId == lastTurn.PlayerId) yield break;
 
-            //compare challenges
-            if (gameData.challengeInstanceId != game.asFourzyGame.challengeData.challengeInstanceId) yield break;
+        //    //compare challenges
+        //    if (gameData.challengeInstanceId != game.asFourzyGame.challengeData.challengeInstanceId) yield break;
 
-            board.TakeTurn(lastTurn);
-            UpdatePlayerTurn();
-        }
+        //    board.TakeTurn(lastTurn);
+        //    UpdatePlayerTurn();
+        //}
 
         private IEnumerator PlayRealtimeTurn(ClientPlayerTurn turn)
         {
             if (game._Type != GameType.REALTIME) yield break;
 
-            gameplayScreen.timerWidgets[1].SetTimerValue(
-                Mathf.Floor(turn.playerTimerLeft / InternalSettings.Current.CIRCULAR_TIMER_SECONDS));
-
             yield return new WaitUntil(() => !board.isAnimating && isBoardReady);
 
-            board.TakeTurn(turn);
-            UpdatePlayerTurn();
+            gameplayScreen.OnRealtimeTurnRecieved(turn);
+            //since spell are not created as a result of TakeTurn, need to create them manually
+            turn.Moves.ForEach(imove =>
+            {
+                if (imove.MoveType == MoveType.SPELL)
+                {
+                    ISpell spell = imove as ISpell;
+
+                    switch (spell.SpellId)
+                    {
+                        case SpellId.HEX:
+                            board.CastSpell((spell as HexSpell).Location, spell.SpellId);
+
+                            break;
+
+                        case SpellId.PLACE_LURE:
+                            board.CastSpell((spell as LureSpell).Location, spell.SpellId);
+
+                            break;
+
+                        case SpellId.DARKNESS:
+                            board.CastSpell((spell as DarknessSpell).Location, spell.SpellId);
+
+                            break;
+
+                    }
+                }
+            });
+
+            yield return board.TakeTurn(turn);
         }
 
         private IEnumerator PostGameFinished()
