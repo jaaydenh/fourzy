@@ -1,13 +1,13 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
-using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics.Board;
+using Fourzy._Updates.Mechanics.GameplayScene;
 using FourzyGameModel.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -25,8 +25,8 @@ namespace Fourzy._Updates.UI.Widgets
         [NonSerialized]
         public Player owner;
 
-        public SpellUIWidget activeSpell => 
-            spellWidgets.Find(spell => spell.state == SpellUIWidget.SpellState.ACTIVE);
+        public SpellUIWidget activeSpell =>
+            spellWidgets.Find(spell => spell.state == SpellState.ACTIVE);
 
         //protected void Update()
         //{
@@ -74,17 +74,13 @@ namespace Fourzy._Updates.UI.Widgets
         //}
 
 
-        public void Open(IClientFourzy game, GameboardView board, Player owner)
+        public void SetData(IClientFourzy game, GameboardView board, Player owner)
         {
             this.game = game;
             this.board = board;
             this.owner = owner;
 
-            foreach (SpellUIWidget widget in spellWidgets)
-            {
-                Destroy(widget.gameObject);
-            }
-            spellWidgets.Clear();
+            ClearSpells();
 
             if (game.puzzleData != null)
             {
@@ -106,7 +102,7 @@ namespace Fourzy._Updates.UI.Widgets
                 {
                     case GameType.REALTIME:
 
-                        //break;
+                    //break;
 
                     default:
                         foreach (SpellId spell in GameContentManager.Instance.piecesDataHolder
@@ -121,56 +117,10 @@ namespace Fourzy._Updates.UI.Widgets
 
             board.onCast += OnCast;
             board.onCastCanceled += CancelCurrentSpell;
-            board.onMoveStarted += UpdateSpells;
-        }
 
-        public void OnCast(SpellId spellId, int playerId)
-        {
-            activeSpell?.OnCast(playerId);
-            spellWidgets.ForEach(widget => widget.UpdateWidget(playerId));
-        }
-
-        public void CancelCurrentSpell() => activeSpell?.CancelCast();
-
-        public void AddSpell(SpellId spellID)
-        {
-            SpellUIWidget spellWidget = Instantiate(spellWidgetPrefab, spellsContainer);
-            spellWidget.transform.localScale = Vector3.one;
-
-            spellWidget.SetData(spellID, this);
-
-            spellWidgets.Add(spellWidget);
-        }
-
-        public void UpdateSpells(ClientPlayerTurn turn, bool startTurn)
-        {
-            if (startTurn || turn == null || turn.PlayerId < 1)
-            {
-                return;
-            }
-
-            UpdateSpells(turn.PlayerId);
-        }
-
-        public void UpdateSpells(int playerID)
-        {
-            spellWidgets.ForEach(widget => widget.UpdateWidget(playerID));
-        }
-
-        internal bool CheckTurn()
-        {
-            return game._State.ActivePlayerId == owner.PlayerId;
-        }
-
-        internal bool CheckRealtimeGameCondition()
-        {
-            switch (game._Type)
-            {
-                case GameType.REALTIME:
-                    return game.isMyTurn;
-            }
-
-            return true;
+            board.onMoveStarted += OnMoveStarted;
+            board.onMoveEnded += OnMoveEnded;
+            board.onGameFinished += OnGameFinished;
         }
 
         protected override void OnInitialized()
@@ -179,6 +129,71 @@ namespace Fourzy._Updates.UI.Widgets
 
             spellWidgets = new List<SpellUIWidget>();
             toggleGroup = GetComponent<ToggleGroup>();
+
+            GamePlayManager.onGameStarted += OnGameStarted;
+        }
+
+        protected void OnDestroy()
+        {
+            GamePlayManager.onGameStarted -= OnGameStarted;
+        }
+
+        private void AddSpell(SpellId spellId)
+        {
+            spellWidgets.Add(
+                Instantiate(spellWidgetPrefab, spellsContainer)
+                .SetData(spellId, this, owner));
+        }
+
+        private void ClearSpells()
+        {
+            foreach (SpellUIWidget widget in spellWidgets)
+            {
+                Destroy(widget.gameObject);
+            }
+            spellWidgets.Clear();
+        }
+
+        private void OnCast(SpellId spellId, int playerId)
+        {
+            activeSpell?.OnCast(playerId);
+
+            spellWidgets.ForEach(widget => widget.TryActivate());
+        }
+
+        private void CancelCurrentSpell()
+        {
+            activeSpell?.CancelCast();
+        }
+
+        private void OnMoveStarted(ClientPlayerTurn turn, bool startTurn)
+        {
+            if (startTurn || turn == null || turn.PlayerId < 1)
+            {
+                return;
+            }
+
+            spellWidgets.ForEach(widget => widget.SetState(SpellState.UNAVAILABLE));
+        }
+
+        private void OnMoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult, bool startTurn)
+        {
+            if (startTurn || turn == null || turn.PlayerId < 1)
+            {
+                return;
+            }
+
+            spellWidgets.ForEach(widget => widget.TryActivate());
+        }
+
+        private void OnGameStarted(IClientFourzy game)
+        {
+            spellWidgets.ForEach(widget => widget.TryActivate());
+        }
+
+        private void OnGameFinished(IClientFourzy game)
+        {
+            spellWidgets.ForEach(widget => widget.SetState(SpellState.UNAVAILABLE));
         }
     }
 }

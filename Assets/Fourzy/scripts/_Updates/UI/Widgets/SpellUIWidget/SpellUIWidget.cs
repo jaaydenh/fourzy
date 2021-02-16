@@ -1,8 +1,12 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
+using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -15,26 +19,40 @@ namespace Fourzy._Updates.UI.Widgets
 
         private TokensDataHolder.TokenData data;
         private SpellsListUIWidget spellsList;
+        private IClientFourzy game;
+        private Player owner;
+        public SpellState prevState;
 
         public int timesUsed { get; private set; }
         public SpellState state { get; private set; }
         public SpellId spellId { get; private set; }
 
-        public void SetData(SpellId spellId, SpellsListUIWidget spellsList)
+        public SpellUIWidget SetData(SpellId spellId, SpellsListUIWidget spellsList, Player owner)
         {
             this.spellsList = spellsList;
             this.spellId = spellId;
+            this.owner = owner;
 
+            game = spellsList.game;
             data = GameContentManager.Instance.tokensDataHolder.GetTokenData(spellId);
             icon.sprite = data.GetTokenSprite();
 
-            UpdateWidget(spellsList.game._State.ActivePlayerId);
+            button.GetBadge("price").badge.SetValue(data.price);
+
+            SetState(SpellState.UNAVAILABLE);
+
+            return this;
         }
 
+        /// <summary>
+        /// Called via button
+        /// </summary>
         public void OnTap()
         {
             if (state == SpellState.UNAVAILABLE) return;
+            if (owner.PlayerId != game._State.ActivePlayerId) return;
 
+            //cancel prev spell is theres one
             if (spellsList.activeSpell != null && spellsList.activeSpell != this)
             {
                 spellsList.activeSpell.CancelCast();
@@ -43,102 +61,95 @@ namespace Fourzy._Updates.UI.Widgets
             switch (state)
             {
                 case SpellState.NONE:
-                    state = SpellState.ACTIVE;
+                    SetState(SpellState.ACTIVE);
                     spellsList.board.PrepareForSpell(spellId);
 
                     break;
 
                 case SpellState.ACTIVE:
-                    state = SpellState.NONE;
+                    SetState(SpellState.NONE);
                     spellsList.board.CancelSpell();
 
                     break;
             }
-
-            UpdateWidget(spellsList.game._State.ActivePlayerId);
-            UpdateBG();
         }
 
-        public void CancelCast()
+        internal void CancelCast()
         {
-            state = SpellState.NONE;
-
-            UpdateWidget(spellsList.game._State.ActivePlayerId);
-            UpdateBG();
+            SetState(SpellState.NONE);
         }
 
-        public void OnCast(int playerId)
+        internal void OnCast(int playerId)
         {
             timesUsed++;
-            state = SpellState.NONE;
-
-            spellsList.game.AddPlayerMagic(playerId, -data.price);
-
-            UpdateWidget(playerId);
-            UpdateBG();
         }
 
-        public void SetButtonState(bool _state)
+        internal void SetState(SpellState toSet)
         {
-            state = _state ? 
-                (state == SpellState.ACTIVE ? SpellState.ACTIVE : SpellState.NONE) : 
-                SpellState.UNAVAILABLE;
-
-            button.playOnClick = _state ? AudioTypes.BUTTON_CLICK : unavailableSfx;
-            button.SetState(_state);
-            button.interactable = true;
-        }
-
-        public void TrySetButtonState(int playerId, bool _state) => 
-            SetButtonState(spellsList.game.magic[playerId] >= data.price && _state);
-
-        public void UpdateWidget(int playerId)
-        {
-            button.GetBadge("price").badge.SetValue(data.price);
-
-            bool setTo = 
-                !spellsList.board.isAnimating && 
-                spellsList.CheckTurn() && 
-                spellsList.CheckRealtimeGameCondition();
-
-            if (setTo)
+            switch (game._Type)
             {
-                if (spellsList.owner.PlayerId != playerId)
-                {
-                    if (state == SpellState.ACTIVE || state == SpellState.NONE)
+                case GameType.REALTIME:
+                    if (game.opponent.PlayerId == owner.PlayerId)
                     {
-                        TrySetButtonState(playerId, false);
+                        toSet = SpellState.NONE;
                     }
 
-                    return;
-                }
+                    break;
             }
 
-            TrySetButtonState(playerId, setTo);
-        }
+            state = toSet;
 
-        private void UpdateBG()
-        {
+            bool buttonState = state == SpellState.NONE || state == SpellState.ACTIVE;
+            button.playOnClick = buttonState ? AudioTypes.BUTTON_CLICK : unavailableSfx;
+            button.SetState(buttonState);
+            button.interactable = buttonState;
+
             switch (state)
             {
                 case SpellState.NONE:
                 case SpellState.UNAVAILABLE:
-                    selectedBG.PlayBackward(true);
+                    if (prevState == SpellState.ACTIVE)
+                    {
+                        selectedBG.PlayBackward(true);
+                    }
 
                     break;
 
                 case SpellState.ACTIVE:
-                    selectedBG.PlayForward(true);
+                    if (prevState == SpellState.NONE || prevState == SpellState.UNAVAILABLE)
+                    {
+                        selectedBG.PlayForward(true);
+                    }
 
                     break;
             }
+
+            prevState = state;
         }
 
-        public enum SpellState
+        internal void TryActivate()
         {
-            NONE,
-            ACTIVE,
-            UNAVAILABLE,
+            SpellState toSet = SpellState.UNAVAILABLE;
+
+            //not enough magic
+            if (game.magic[owner.PlayerId] >= data.price && game._State.ActivePlayerId == owner.PlayerId)
+            {
+                toSet = SpellState.NONE;
+            }
+
+            SetState(toSet);
         }
+
+        internal bool MagicCheck()
+        {
+            return game.magic[owner.PlayerId] >= data.price;
+        }
+    }
+
+    public enum SpellState
+    {
+        NONE,
+        ACTIVE,
+        UNAVAILABLE,
     }
 }

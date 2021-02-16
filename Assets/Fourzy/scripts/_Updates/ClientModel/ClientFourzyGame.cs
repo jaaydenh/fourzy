@@ -5,8 +5,6 @@ using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
 using FourzyGameModel.Model;
-// using GameSparks.Api.Requests;
-// using GameSparks.Core;
 using Newtonsoft.Json;
 using Photon.Pun;
 using System;
@@ -41,9 +39,13 @@ namespace Fourzy._Updates.ClientModel
             get
             {
                 if ((int)State.Board.Area > 1)
+                {
                     return State.Board.Area;
+                }
                 else
+                {
                     return InternalSettings.Current.DEFAULT_AREA;
+                }
             }
 
             set { }
@@ -279,7 +281,9 @@ namespace Fourzy._Updates.ClientModel
             .ToList()
             .Find(_player => _player.PlayerString == UserManager.Instance.userId) ?? State.Players[1];
 
-        public Player opponent => State.Players[(PlayerEnum)me.PlayerId == PlayerEnum.ONE ? (int)PlayerEnum.TWO : (int)PlayerEnum.ONE];
+        public Player opponent => State.Players[(PlayerEnum)me.PlayerId == PlayerEnum.ONE ? 
+                (int)PlayerEnum.TWO : 
+                (int)PlayerEnum.ONE];
 
         public Player activePlayer => isMyTurn ? me : opponent;
 
@@ -438,17 +442,23 @@ namespace Fourzy._Updates.ClientModel
 
             switch (_Type)
             {
-                //AI turn played on realtime mode it means that players timer is empty, send this turn to another player too
                 case Fourzy.GameType.REALTIME:
-                    var eventOptions = new Photon.Realtime.RaiseEventOptions();
-                    eventOptions.Flags.HttpForward = true;
-                    eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
-                    var aiTurnEvenResult = PhotonNetwork.RaiseEvent(
-                        Constants.TAKE_TURN, 
-                        JsonConvert.SerializeObject(result.Turn), 
-                        eventOptions, 
-                        SendOptions.SendReliable);
-                    Debug.Log("Photon AI take turn event result: " + aiTurnEvenResult);
+                    switch (GameManager.Instance.ExpectedGameType)
+                    {
+                        case GameTypeLocal.REALTIME_LOBBY_GAME:
+                        case GameTypeLocal.REALTIME_QUICKMATCH:
+                            var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                            eventOptions.Flags.HttpForward = true;
+                            eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+                            var aiTurnEvenResult = PhotonNetwork.RaiseEvent(
+                                Constants.TAKE_TURN,
+                                JsonConvert.SerializeObject(result.Turn),
+                                eventOptions,
+                                SendOptions.SendReliable);
+                            Debug.Log("Photon AI take turn event result: " + aiTurnEvenResult);
+
+                            break;
+                    }
 
                     break;
             }

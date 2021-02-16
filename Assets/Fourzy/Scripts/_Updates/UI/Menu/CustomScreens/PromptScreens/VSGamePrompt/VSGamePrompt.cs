@@ -65,7 +65,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             Prompt(
-                $"Defeat {puzzlePack.aiPlayerName}",
+                $"{LocalizationManager.Value("defeat")} {puzzlePack.aiPlayerName}",
                 null,
                 onAccept ?? (() =>
                 {

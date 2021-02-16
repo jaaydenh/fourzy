@@ -396,8 +396,11 @@ namespace Fourzy
 
         public static void TryLeaveRoom()
         {
-            if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.NetworkClientState != Photon.Realtime.ClientState.Leaving)
+            if (PhotonNetwork.CurrentRoom != null && 
+                PhotonNetwork.NetworkClientState != ClientState.Leaving)
+            {
                 PhotonNetwork.LeaveRoom();
+            }
         }
 
         public static T GetRoomProperty<T>(string key, T defaultValue)
@@ -581,7 +584,7 @@ namespace Fourzy
             //create new room
             PhotonNetwork.CreateRoom(
                 roomName,
-                new Photon.Realtime.RoomOptions
+                new RoomOptions
                 {
                     MaxPlayers = 2,
                     CustomRoomProperties = properties,
@@ -599,8 +602,7 @@ namespace Fourzy
             if (PhotonNetwork.PlayerListOthers == null || PhotonNetwork.PlayerListOthers.Length == 0) 
                 return defaultValue;
 
-            Hashtable _porps = PhotonNetwork.PlayerListOthers[0].CustomProperties;
-            return _porps.ContainsKey(key) ? (T)_porps[key] : defaultValue;
+            return GetPlayerProperty(PhotonNetwork.PlayerListOthers[0], key, defaultValue);
         }
 
         public static int GetOpponentTotalGames()
@@ -617,13 +619,22 @@ namespace Fourzy
                 PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { [key] = value, });
         }
 
-        public static T GetMyProperty<T>(string key, T defaultValue)
-        {
-            if (PhotonNetwork.LocalPlayer == null) 
-                return defaultValue;
+        public static T GetMyProperty<T>(string key, T defaultValue) =>
+            GetPlayerProperty(PhotonNetwork.LocalPlayer, key, defaultValue);
 
-            Hashtable _porps = PhotonNetwork.LocalPlayer.CustomProperties;
-            return _porps.ContainsKey(key) ? (T)_porps[key] : defaultValue;
+        public static T GetPlayerProperty<T>(Player player, string key, T defaultValue)
+        {
+            if (player == null) return defaultValue;
+            if (!player.CustomProperties.ContainsKey(key)) return defaultValue;
+
+            return (T)player.CustomProperties[key];
+        }
+
+        public static int GetPlayerTotalGamesCount(Player player)
+        {
+            return GetPlayerProperty(player, Constants.REALTIME_WINS_KEY, 0) +
+                GetPlayerProperty(player, Constants.REALTIME_LOSES_KEY, 0) +
+                GetPlayerProperty(player, Constants.REALTIME_DRAWS_KEY, 0);
         }
 
         public void OnEvent(EventData photonEvent)
@@ -654,8 +665,9 @@ namespace Fourzy
                 PhotonNetwork.NetworkClientState == ClientState.Authenticating ||
                 PhotonNetwork.NetworkClientState == ClientState.Leaving ||
                 PhotonNetwork.NetworkClientState == ClientState.PeerCreated)
-
+            {
                 return;
+            }
 
             tasks.Pop();
             PhotonNetwork.JoinLobby(lobby);

@@ -33,6 +33,10 @@
       "value": "Area Selection"
     },
     {
+      "key": "apprentice",
+      "value": "Apprentice"
+    },
+    {
       "key": "back",
       "value": "Back"
     },
@@ -81,6 +85,10 @@
       "value": "Completed!"
     },
     {
+      "key": "complete_games_to_see_rating",
+      "value": "Please complete {0} rated games to appear on a leaderboard!"
+    },
+    {
       "key": "continue",
       "value": "Continue"
     },
@@ -105,6 +113,10 @@
       "value": "Current name"
     },
     {
+      "key": "defeat",
+      "value": "Defeat"
+    },
+    {
       "key": "draw",
       "value": "Draw"
     },
@@ -113,12 +125,20 @@
       "value": "Enter Room Code"
     },
     {
+      "key": "enter_lobby_warning",
+      "value": "To enter the lobby you have to leave the room you are currently in."
+    },
+    {
       "key": "excellent",
       "value": "Excellent"
     },
     {
       "key": "exit",
       "value": "Exit Game"
+    },
+    {
+      "key": "failed",
+      "value": "Failed"
     },
     {
       "key": "failed1",
@@ -189,6 +209,10 @@
       "value": "Get 4 in a row to Win!"
     },
     {
+      "key": "getting_players_stats",
+      "value": "Retrieving player stats..."
+    },
+    {
       "key": "good_job",
       "value": "Good job!"
     },
@@ -211,6 +235,18 @@
     {
       "key": "join",
       "value": "Join"
+    },
+    {
+      "key": "joining_lobby",
+      "value": "Joining lobby..."
+    },
+    {
+      "key": "joining_room",
+      "value": "Joining room..."
+    },
+    {
+      "key": "leaving_room",
+      "value": "Leaving room..."
     },
     {
       "key": "leave_game",
@@ -317,6 +353,10 @@
       "value": "On"
     },
     {
+      "key": "online_lobby",
+      "value": "Online Lobby"
+    },
+    {
       "key": "openportal",
       "value": "Open Portal"
     },
@@ -387,6 +427,10 @@
     {
       "key": "rareportalpoints",
       "value": "Rare Portal Points"
+    },
+    {
+      "key": "rating",
+      "value": "Rating"
     },
     {
       "key": "ready_to_play",

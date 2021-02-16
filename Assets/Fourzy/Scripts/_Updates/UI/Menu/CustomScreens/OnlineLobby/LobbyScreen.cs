@@ -86,13 +86,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 menuController
                     .GetOrAddScreen<PromptScreen>()
-                    .Prompt("Leave room?", "To enter the lobby you have to leave the room you'r currently in.", () =>
+                    .Prompt(
+                        LocalizationManager.Value("leave_game"), 
+                        LocalizationManager.Value("enter_lobby_warning"), () =>
                     {
                         state = LobbyState.LEAVING_ROOM;
                         FourzyPhotonManager.TryLeaveRoom();
 
                         _prompt
-                            .Prompt("Leaving room...", "", null, "Back", null, () => state = LobbyState.NONE)
+                            .Prompt(
+                                LocalizationManager.Value("leaving_room"), 
+                                "", 
+                                null, 
+                                LocalizationManager.Value("back"),
+                                null, 
+                                () => state = LobbyState.NONE)
                             .CloseOnDecline();
                     }, null)
                     .CloseOnDecline()
@@ -111,7 +119,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 state = LobbyState.JOINING_LOBBY;
 
                 _prompt
-                    .Prompt("Joining lobby...", "", null, "Back", null, () => state = LobbyState.NONE)
+                    .Prompt(
+                        LocalizationManager.Value("joining_lobby"), 
+                        "", 
+                        null,
+                        LocalizationManager.Value("back"),
+                        null, 
+                        () => state = LobbyState.NONE)
                     .CloseOnDecline();
 
                 FourzyPhotonManager.Instance.JoinLobby();
@@ -131,7 +145,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void JoinRoom(string name)
         {
             _prompt
-                .Prompt("Retrieving player stats...", null, null, null, null, null)
+                .Prompt(LocalizationManager.Value("getting_players_stats"), null, null, null, null, null)
                 .CloseOnDecline();
 
             UserManager.GetPlayerRating(rating =>
@@ -140,7 +154,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 if (_prompt.isOpened)
                 {
-                    _prompt.promptTitle.text = $"Joining room \n{name}";
+                    _prompt.promptTitle.text = $"{LocalizationManager.Value("joining_room")} \n{name}";
                 }
             }, () =>
             {
@@ -191,7 +205,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (isOpened)
             {
-                GamesToastsController.ShowTopToast($"Failed: {error}");
+                GamesToastsController.ShowTopToast($"{LocalizationManager.Value("failed")}: {error}");
             }
 
             if (_prompt.isOpened)

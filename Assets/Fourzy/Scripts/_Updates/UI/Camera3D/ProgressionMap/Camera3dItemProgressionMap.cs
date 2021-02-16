@@ -52,8 +52,12 @@ namespace Fourzy._Updates.UI.Camera3D
                 int result = 0;
 
                 foreach (ProgressionEvent widget in widgets)
+                {
                     if (widget.EventType == ProgressionEvent.ProgressionEventType.GAME)
+                    {
                         result += widget.PuzzlePack.enabledPuzzlesData.Count;
+                    }
+                }
 
                 return result;
             }
@@ -66,8 +70,12 @@ namespace Fourzy._Updates.UI.Camera3D
                 int result = 0;
 
                 foreach (ProgressionEvent widget in widgets)
+                {
                     if (widget.EventType == ProgressionEvent.ProgressionEventType.GAME)
+                    {
                         result += widget.PuzzlePack.puzzlesComplete.Count;
+                    }
+                }
 
                 return result;
             }
@@ -101,7 +109,10 @@ namespace Fourzy._Updates.UI.Camera3D
                 finished = true;
                 PlayerPrefsWrapper.SetAdventureComplete(mapID, true);
 
-                MenuController.GetMenu(Constants.MAIN_MENU_CANVAS_NAME).GetOrAddScreen<PromptScreen>().Prompt("Adventure map complete", null, null, "OK");
+                MenuController
+                    .GetMenu(Constants.MAIN_MENU_CANVAS_NAME)
+                    .GetOrAddScreen<PromptScreen>()
+                    .Prompt("Adventure map complete", null, null, "OK");
             }
         }
 
@@ -127,7 +138,9 @@ namespace Fourzy._Updates.UI.Camera3D
             {
                 case ProgressionEvent.ProgressionEventType.GAME:
                     if (!current.PuzzlePack.complete)
+                    {
                         FocusOn(current);
+                    }
 
                     break;
             }
@@ -166,7 +179,10 @@ namespace Fourzy._Updates.UI.Camera3D
 
             float clampedValue = Mathf.Clamp(value, minScrollValue, maxScrollValue);
 
-            if (changeCurrentScrollValue) currentScrollValue = clampedValue;
+            if (changeCurrentScrollValue)
+            {
+                currentScrollValue = clampedValue;
+            }
 
             content.localPosition = new Vector3(Mathf.Lerp(chunkLeft, chunkRight, clampedValue), 0f, 0f);
         }
@@ -178,7 +194,8 @@ namespace Fourzy._Updates.UI.Camera3D
             return currentScrollValue;
         }
 
-        public void FocusOn(ProgressionEvent @event) => Scroll(widgets[widgets.IndexOf(@event)].rectTransform.anchoredPosition.x / chunk.size.x, true);
+        public void FocusOn(ProgressionEvent @event) => 
+            Scroll(widgets[widgets.IndexOf(@event)].rectTransform.anchoredPosition.x / chunk.size.x, true);
 
         public void OnClick(Vector2 position)
         {
@@ -188,7 +205,10 @@ namespace Fourzy._Updates.UI.Camera3D
             {
                 ProgressionEvent progressionEvent = hit2d.transform.GetComponent<ProgressionEvent>();
 
-                if (progressionEvent) progressionEvent.button.OnPointerClick(null);
+                if (progressionEvent)
+                {
+                    progressionEvent.button.OnPointerClick(null);
+                }
             }
         }
 
@@ -223,8 +243,14 @@ namespace Fourzy._Updates.UI.Camera3D
                 if (found) break;
             }
 
-            if (current) return current.unlockWhenComplete;
-            else return new List<ProgressionEvent>();
+            if (current)
+            {
+                return current.unlockWhenComplete;
+            }
+            else
+            {
+                return new List<ProgressionEvent>();
+            }
         }
 
         public BasicPuzzlePack GetNextPack(string currentID)
@@ -232,8 +258,12 @@ namespace Fourzy._Updates.UI.Camera3D
             List<ProgressionEvent> nextEvents = Next(currentID);
 
             foreach (ProgressionEvent @event in nextEvents)
+            {
                 if (@event.EventType == ProgressionEvent.ProgressionEventType.GAME)
+                {
                     return @event.PuzzlePack;
+                }
+            }
 
             return null;
         }
@@ -249,7 +279,9 @@ namespace Fourzy._Updates.UI.Camera3D
             PlayerPrefsWrapper.SetAdventureComplete(mapID, false);
 
             if (string.IsNullOrEmpty(gameObject.scene.name))
+            {
                 Array.ForEach(GetComponentsInChildren<ProgressionEvent>(), widget => widget.ResetEvent());
+            }
             else
             {
                 widgets.ForEach(widget => widget.ResetEvent());
@@ -268,7 +300,8 @@ namespace Fourzy._Updates.UI.Camera3D
                 {
                     case ProgressionEvent.ProgressionEventType.GAME:
 
-                        BasicPuzzlePack pack = GameContentManager.Instance.GetExternalPuzzlePack(events[eventIndex].packName);
+                        BasicPuzzlePack pack = 
+                            GameContentManager.Instance.GetExternalPuzzlePack(events[eventIndex].packName);
 
                         PlayerPrefsWrapper.SetPuzzlePackUnlocked(pack.packID, true);
                         PlayerPrefsWrapper.SetPuzzlePackOpened(pack.packID, true);
@@ -279,28 +312,39 @@ namespace Fourzy._Updates.UI.Camera3D
                             PlayerPrefsWrapper.SetGameRewarded(_data.ID, true);
 
                             foreach (RewardsManager.Reward reward in _data.rewards)
+                            {
                                 PlayerPrefsWrapper.SetRewardRewarded(_data.GetRewardID(reward), true);
+                            }
                         });
 
                         break;
                 }
             }
 
-            if (string.IsNullOrEmpty(gameObject.scene.name) && gameObject.activeInHierarchy) Open();
+            if (string.IsNullOrEmpty(gameObject.scene.name) && gameObject.activeInHierarchy)
+            {
+                Open();
+            }
         }
 
         public ProgressionEvent GetCurrentEvent()
         {
-            List<ProgressionEvent> options = widgets.Where(@event => @event._unlocked && !@event._rewarded).ToList();
+            List<ProgressionEvent> options = widgets
+                .Where(@event => @event._unlocked && !@event._rewarded)
+                .ToList();
 
-            if (options.Count == 0) return widgets[0];
+            if (options.Count == 0)
+            {
+                return widgets[0];
+            }
 
             return options.Find(@event => @event.EventType == ProgressionEvent.ProgressionEventType.GAME) ??
                 options.Find(@event => @event.EventType == ProgressionEvent.ProgressionEventType.CURRENCY);
         }
 
         public Vector2 GetEventCameraRelativePosition(ProgressionEvent @event) => 
-            new Vector2((@event.rectTransform.anchoredPosition.x - (contentPosition - cameraSize.x)) / (cameraSize.x * 2f),
+            new Vector2(
+                (@event.rectTransform.anchoredPosition.x - (contentPosition - cameraSize.x)) / (cameraSize.x * 2f),
                 @event.rectTransform.anchoredPosition.y / (cameraSize.y * 2f));
 
         public Vector2 GetCurrentEventSize() => GetCurrentEvent().size;
@@ -324,7 +368,10 @@ namespace Fourzy._Updates.UI.Camera3D
 
         private void OnSceneChanged(string sceneName)
         {
-            if (sceneName == Constants.GAMEPLAY_SCENE_NAME) gameObject.SetActive(false);
+            if (sceneName == Constants.GAMEPLAY_SCENE_NAME)
+            {
+                gameObject.SetActive(false);
+            }
         }
 
         private void ResetRewardID()

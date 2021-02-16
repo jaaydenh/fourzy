@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Firebase;
+using Fourzy._Updates;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
@@ -96,27 +97,15 @@ namespace Fourzy
         public IClientFourzy activeGame { get; set; }
         public BasicPuzzlePack currentPuzzlePack { get; set; }
         public Camera3dItemProgressionMap currentMap { get; set; }
-        public DependencyStatus dependencyStatus { get; set; }
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
+        public OpponentData RealtimeOpponent { get; set; }
+        public string BotPieceId { get; set; }
         public string sessionID { get; private set; }
-        public string CurrentOpponent
-        {
-            get
-            {
-                return currentOpponent;
-            }
-            set
-            {
-                currentOpponent = value;
-            }
-        }
         public LocationInfo? lastLocation { get; private set; } = null;
         public string MainMenuSceneName => Landscape ?
             Constants.MAIN_MENU_L_SCENE_NAME :
             Constants.MAIN_MENU_P_SCENE_NAME;
 
-        private string currentOpponent;
-        private bool configFetched = false;
         private PlacementStyle _placementStyle;
 
         public bool isMainMenuLoaded
@@ -125,11 +114,13 @@ namespace Fourzy
             {
                 bool mainMenuLoaded = false;
                 for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+                {
                     if (SceneManager.GetSceneAt(sceneIndex).name == MainMenuSceneName)
                     {
                         mainMenuLoaded = true;
                         break;
                     }
+                }
 
                 return mainMenuLoaded;
             }
@@ -141,11 +132,13 @@ namespace Fourzy
             {
                 bool mainMenuLoaded = false;
                 for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+                {
                     if (SceneManager.GetSceneAt(sceneIndex).name == Constants.GAMEPLAY_SCENE_NAME)
                     {
                         mainMenuLoaded = true;
                         break;
                     }
+                }
 
                 return mainMenuLoaded;
             }
@@ -155,8 +148,14 @@ namespace Fourzy
         {
             get
             {
-                if (lastLocation == null) return fallbackLatitude;
-                else return lastLocation.Value.latitude;
+                if (lastLocation == null)
+                {
+                    return fallbackLatitude;
+                }
+                else
+                {
+                    return lastLocation.Value.latitude;
+                }
             }
         }
 
@@ -164,12 +163,20 @@ namespace Fourzy
         {
             get
             {
-                if (lastLocation == null) return fallbackLongitude;
-                else return lastLocation.Value.longitude;
+                if (lastLocation == null)
+                {
+                    return fallbackLongitude;
+                }
+                else 
+                {
+                    return lastLocation.Value.longitude;
+                }
             }
         }
 
-        public List<TitleNewsItem> unreadNews => latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ?? new List<TitleNewsItem>();
+        public List<TitleNewsItem> unreadNews => 
+            latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ??
+            new List<TitleNewsItem>();
 
         protected override void Awake()
         {
@@ -192,6 +199,7 @@ namespace Fourzy
 
             NetworkManager.onStatusChanged += OnNetStatusChanged;
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEntered;
+            FourzyPhotonManager.onPlayerPpopertiesUpdate += OnPlayerPropertiesUpdate;
 
             //to modify manifest file
             bool value = false;
@@ -231,16 +239,17 @@ namespace Fourzy
         protected void Update()
         {
             //force demo game
-            if (StandaloneInputModuleExtended.OnHotkey1Press()) StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
-            //if (Input.GetKeyDown(KeyCode.Z)) PhotonNetwork.Disconnect();
-            //if (Input.GetKeyDown(KeyCode.X)) print(PhotonNetwork.NetworkClientState);
+            //if (StandaloneInputModuleExtended.OnHotkey1Press()) StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
+           
         }
 
         protected void OnDestroy()
         {
-            FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEntered;
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
+
+            FourzyPhotonManager.onPlayerPpopertiesUpdate -= OnPlayerPropertiesUpdate;
+            FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEntered;
 
             //NetworkAccess.onNetworkAccess -= OnNetworkAccess;
 
@@ -255,18 +264,6 @@ namespace Fourzy
             {
                 ResetGames();
             }
-        }
-
-        protected void OnApplicationPause(bool pause)
-        {
-            //if (!pause)
-            //{
-            //    if (NetworkAccess.HAVE_ACCESS)
-            //    {
-            //        if (dependencyStatus == DependencyStatus.Available)
-            //            FirebaseUpdate();
-            //    }
-            //}
         }
 
         public void SetExpectedGameType(GameTypeLocal gameType)
@@ -288,15 +285,21 @@ namespace Fourzy
 
             //if gameplay scene is already opened, just load game
             if (activeGame != null)
+            {
                 GamePlayManager.Instance.LoadGame(game);
+            }
             else
             {
                 sessionID = Guid.NewGuid().ToString();
 
                 if (isMainMenuLoaded)
+                {
                     SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME, LoadSceneMode.Additive);
+                }
                 else
+                {
                     SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME);
+                }
             }
 
             activeGame = game;
@@ -315,9 +318,13 @@ namespace Fourzy
             else
             {
                 if (isMainMenuLoaded)
+                {
                     SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME, LoadSceneMode.Additive);
+                }
                 else
+                {
                     SceneManager.LoadScene(Constants.GAMEPLAY_SCENE_NAME);
+                }
             }
         }
 
@@ -486,6 +493,40 @@ namespace Fourzy
             }
         }
 
+        internal void BotWinsByPlayerForfeit()
+        {
+            if (activeGame == null) return;
+            if (string.IsNullOrEmpty(RealtimeOpponent.Id)) return;
+
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "reportRatingGameComplete",
+                FunctionParameter = new
+                {
+                    winnerID = RealtimeOpponent,
+                    opponentID = LoginManager.playfabID,
+                    draw = false,
+                },
+                GeneratePlayStreamEvent = true,
+            },
+            (result) =>
+            {
+                RatingGameCompleteResult gameResult = JsonConvert
+                    .DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString());
+
+                foreach (RatingGamePlayer player in gameResult.players)
+                {
+                    Debug.Log($"{player.playfabID} {player.rating} {player.ratingChange} {player.winner}");
+                    if (player.playfabID == LoginManager.playfabID)
+                    {
+                        UserManager.Instance.playfabLosesCount += 1;
+                        UserManager.Instance.lastCachedRating = player.rating;
+                    }
+                }
+            },
+            (error) => { Debug.LogError(error.ErrorMessage); });
+        }
+
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             switch (scene.name)
@@ -540,7 +581,29 @@ namespace Fourzy
             PhotonNetwork.CurrentRoom.IsVisible = false;
         }
 
-        private void OnNetStatusChanged(NetStatus status) => onNetworkAccess?.Invoke(status == NetStatus.Connected);
+        private void OnPlayerPropertiesUpdate(
+            Photon.Realtime.Player player, 
+            ExitGames.Client.Photon.Hashtable data)
+        {
+            if (PhotonNetwork.PlayerListOthers.Length == 0 || PhotonNetwork.PlayerListOthers[0] != player) return;
+
+            if (RealtimeOpponent != null)
+            {
+                if (data.ContainsKey(Constants.REALTIME_WINS_KEY) ||
+                    data.ContainsKey(Constants.REALTIME_LOSES_KEY) ||
+                    data.ContainsKey(Constants.REALTIME_DRAWS_KEY))
+                {
+                    RealtimeOpponent.TotalGames = FourzyPhotonManager.GetPlayerTotalGamesCount(player);
+                }
+                else if (data.ContainsKey(Constants.REALTIME_RATING_KEY))
+                {
+                    RealtimeOpponent.Rating = (int)data[Constants.REALTIME_RATING_KEY];
+                }
+            }
+        }
+
+        private void OnNetStatusChanged(NetStatus status) => 
+            onNetworkAccess?.Invoke(status == NetStatus.Connected);
 
         private void OnNoInput(KeyValuePair<string, float> noInputFilter)
         {
@@ -662,6 +725,6 @@ namespace Fourzy
         LOCAL_GAME,
         REALTIME_LOBBY_GAME,
         REALTIME_QUICKMATCH,
-
+        REALTIME_BOT_GAME,
     }
 }

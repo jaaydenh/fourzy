@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates;
 using FourzyGameModel.Model;
 
 namespace Fourzy
@@ -14,15 +15,33 @@ namespace Fourzy
         public const Area DEFAULT_AREA = Area.ICE_PALACE;
         public const int DEFAULT_STANDALONE_CPU_DIFFICULTY = 1; //0-3
         public static Area[] UNLOCKED_AREAS = { Area.TRAINING_GARDEN, Area.ENCHANTED_FOREST };
+        public static BotSettings BOT_SETTINGS = new BotSettings()
+        {
+            difficultyLevels = new BotDifficulty[] {
+                new BotDifficulty() { r = 9999, d = AIProfile.AggressiveAI },
+                new BotDifficulty() { r = 1800, d = AIProfile.SimpleAI },
+                new BotDifficulty() { r = 1600, d = AIProfile.EasyAI }
+            },
+            botMatchAfter = new float[] { 10f, 15f },
+            ratingRange = new int[] { -35, 75 },
+            turnDelayTime = new float[] { 1.2f, 2.5f },
+            rematchAcceptTime = new float[] { 3f, 6f },
+            maxRematchTimes = new int[] { 2, 4 },
+        };
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
         public const float EXTRA_DELAY_BETWEEN_TURNS = 0.1f;
         public const float BASE_MOVE_SPEED = 8f;
         public const float MOVE_SPEED_CAP = 16f;
         public const int REALTIME_COUNTDOWN_SECONDS = 4;
+
+        /// <summary>
+        /// This wait time is for quick match lobby
+        /// </summary>
         public const float REALTIME_OPPONENT_WAIT_TIME = 30f;
         public const float LOBBY_GAME_LOAD_DELAY = 2.2f;
         public const float PHOTON_CONNECTION_WAIT_TIME = 5f;
+        public const float TIME_UNTIL_MATCHED_WITH_BOT = 30f;
 
         //gauntlet
         public const int GAUNTLET_DEFAULT_MOVES_COUNT = 60;

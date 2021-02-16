@@ -4,7 +4,6 @@ using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using Photon.Pun;
 using Photon.Realtime;
-using System;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -19,13 +18,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameObject overlay;
         public ButtonExtended lobbyButton;
 
-        private LoadingPromptScreen _prompt;
+        private LoadingPromptScreen leavingPrompt;
+        private PromptScreen wantToLeavePrompt;
         private LobbyOverlayState state = LobbyOverlayState.NONE;
 
         private GamePieceView playerOneView;
         private GamePieceView playerTwoView;
 
         private RoomType displayable = RoomType.DIRECT_INVITE | RoomType.LOBBY_ROOM;
+        private GamePieceView playerGamepiece => GameContentManager.Instance.piecesDataHolder
+                    .GetGamePiecePrefabData(UserManager.Instance.gamePieceID).player1Prefab;
+        private GamePieceView opponentGamepiece => GameContentManager.Instance.piecesDataHolder
+                    .GetGamePiecePrefabData(FourzyPhotonManager.GetOpponentProperty(
+                        Constants.REALTIME_ROOM_GAMEPIECE_KEY,
+                        Constants.REALTIME_DEFAULT_GAMEPIECE_KEY)).player1Prefab;
 
         protected override void Awake()
         {
@@ -33,6 +39,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Instance = this;
 
+            FourzyPhotonManager.onCreateRoom += OnRoomCreated;
             FourzyPhotonManager.onJoinedRoom += OnJoinedRoom;
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEnteredRoom;
             FourzyPhotonManager.onPlayerLeftRoom += OnPlayerLeftRoom;
@@ -43,6 +50,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected void OnDestroy()
         {
+            FourzyPhotonManager.onCreateRoom -= OnRoomCreated;
             FourzyPhotonManager.onJoinedRoom -= OnJoinedRoom;
             FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEnteredRoom;
             FourzyPhotonManager.onPlayerLeftRoom -= OnPlayerLeftRoom;
@@ -55,39 +63,51 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnInitialized();
 
-            _prompt = PersistantMenuController.Instance
+            leavingPrompt = PersistantMenuController.Instance
                 .GetOrAddScreen<LoadingPromptScreen>()
                 .SetType(LoadingPromptScreen.LoadingPromptType.BASIC);
         }
 
+        /// <summary>
+        /// Called by button
+        /// </summary>
         public void OnActivate()
         {
-            menuController
+            wantToLeavePrompt = menuController
                 .GetOrAddScreen<PromptScreen>()
                 .Prompt("Leave room?", "You sure you want to leave online room?", () =>
                 {
                     FourzyPhotonManager.TryLeaveRoom();
 
                     state = LobbyOverlayState.LEAVING_ROOM;
-                    _prompt.Prompt("Leaving room...", "", null, () => state = LobbyOverlayState.NONE).CloseOnDecline();
+                    leavingPrompt
+                        .Prompt("Leaving room...", "", null, () => state = LobbyOverlayState.NONE)
+                        .CloseOnDecline();
                 }, null)
                 .CloseOnDecline()
                 .CloseOnAccept();
         }
 
-        public void SetData(Photon.Realtime.Player one, Photon.Realtime.Player two = null)
+        private void SetData(GamePieceView one, GamePieceView two = null)
         {
             if (!isOpened) Open();
 
             bool isOne = one != null;
             bool isTwo = two != null;
 
-            if (playerOneView) Destroy(playerOneView.gameObject);
+            //remove prev
+            if (playerOneView)
+            {
+                Destroy(playerOneView.gameObject);
+            }
+            if (playerTwoView)
+            {
+                Destroy(playerTwoView.gameObject);
+            }
+
             if (isOne)
             {
-                playerOneView = Instantiate(GameContentManager.Instance.piecesDataHolder
-                    .GetGamePiecePrefabData(UserManager.Instance.gamePieceID).player1Prefab, playerOneParent);
-
+                playerOneView = Instantiate(one, playerOneParent);
                 playerOneView.StartBlinking();
 
                 if (!isTwo)
@@ -97,22 +117,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 }
             }
 
-            if (playerTwoView) Destroy(playerTwoView.gameObject);
             if (isTwo)
             {
                 lobbyButton.GetBadge().badge.SetColor(Color.green);
                 lobbyButton.GetBadge().badge.SetValue(LocalizationManager.Value("match_found"));
 
-                playerTwoView = Instantiate(GameContentManager.Instance.piecesDataHolder
-                    .GetGamePiecePrefabData(FourzyPhotonManager.GetOpponentProperty(
-                        Constants.REALTIME_ROOM_GAMEPIECE_KEY, 
-                        Constants.REALTIME_DEFAULT_GAMEPIECE_KEY)).player1Prefab, playerTwoParent);
-
+                playerTwoView = Instantiate(two, playerTwoParent);
                 playerTwoView.StartBlinking();
-
-                //load game
-                StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame);
-                state = LobbyOverlayState.LOADING_GAME;
             }
 
             empty.SetActive(!isTwo);
@@ -121,36 +132,50 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnJoinedRoom(string roomName)
         {
-            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) 
+            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
                 & displayable) == 0) return;
 
             if (PhotonNetwork.IsMasterClient)
             {
-                SetData(PhotonNetwork.LocalPlayer);
+                SetData(playerGamepiece);
             }
             else
             {
-                SetData(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.LocalPlayer);
-                GameManager.Instance.CurrentOpponent = PhotonNetwork.PlayerListOthers[0].UserId;
+                SetData(playerGamepiece, opponentGamepiece);
+                GameManager.Instance.RealtimeOpponent = new OpponentData(PhotonNetwork.PlayerListOthers[0]);
+
+                //load game
+                StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame, null);
+                state = LobbyOverlayState.LOADING_GAME;
             }
 
             string password = FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_PASSWORD, "");
             lobbyButton.GetBadge("code").badge.SetValue(password);
         }
 
-        private void OnPlayerEnteredRoom(Photon.Realtime.Player other)
+        private void OnPlayerEnteredRoom(Player other)
         {
-            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) 
+            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
                 & displayable) == 0) return;
 
-            SetData(PhotonNetwork.LocalPlayer, other);
-            GameManager.Instance.CurrentOpponent = other.UserId;
+            if (isOpened)
+            {
+                SetData(playerGamepiece, opponentGamepiece);
+                GameManager.Instance.RealtimeOpponent = new OpponentData(other);
+
+                //load game
+                StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame, null);
+                state = LobbyOverlayState.LOADING_GAME;
+
+                CancelRoutine("startBotMatch");
+            }
         }
 
         private void OnPlayerLeftRoom(Player other)
         {
             switch (state)
             {
+                case LobbyOverlayState.LOADING_BOT_GAME:
                 case LobbyOverlayState.LOADING_GAME:
                     CancelRoutine("load_game");
 
@@ -160,17 +185,38 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnJoinedLobby(string lobbyName)
         {
-            if (isOpened) Close();
+            if (state == LobbyOverlayState.LOADING_BOT_GAME)
+            {
+                return;
+            }
+
+            if (isOpened)
+            {
+                Close();
+                CancelRoutine("startBotMatch");
+            }
         }
 
         private void OnRoomLeft()
         {
-            if (isOpened) Close();
+            if (state == LobbyOverlayState.LOADING_BOT_GAME)
+            {
+                return;
+            }
+
+            if (isOpened)
+            {
+                Close();
+                CancelRoutine("startBotMatch");
+            }
 
             switch (state)
             {
                 case LobbyOverlayState.LEAVING_ROOM:
-                    if (_prompt.isOpened) _prompt.Decline(true);
+                    if (leavingPrompt.isOpened)
+                    {
+                        leavingPrompt.Decline(true);
+                    }
 
                     break;
 
@@ -181,18 +227,79 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
+        private void OnRoomCreated(string roomName)
+        {
+            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
+                & displayable) == 0) return;
+
+            StartBotRoutine();
+        }
+
+        private void StartBotRoutine()
+        {
+            float waitTime = InternalSettings.Current.BOT_SETTINGS.randomMatchAfter;
+
+            if (waitTime <= 0f) return;
+
+            StartRoutine("startBotMatch", waitTime, () =>
+            {
+                if (wantToLeavePrompt && wantToLeavePrompt.isOpened)
+                {
+                    wantToLeavePrompt.CloseSelf();
+                }
+
+                state = LobbyOverlayState.LOADING_BOT_GAME;
+
+                GameManager.Instance.RealtimeOpponent = 
+                    new OpponentData(
+                        "bot", 
+                        UserManager.DefaultBotRating(), 
+                        Constants.GAMES_BEFORE_RATING_DISPLAYED);
+                GameManager.Instance.BotPieceId = 
+                    GameContentManager.Instance.piecesDataHolder.random.data.ID;
+
+                SetData(playerGamepiece,
+                    GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
+                        GameManager.Instance.BotPieceId).player1Prefab);
+
+                StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame);
+
+                FourzyPhotonManager.TryLeaveRoom();
+                FourzyPhotonManager.Instance.JoinLobby();
+            },
+            null);
+        }
+
         private void OnConnectionTimedOut()
         {
-            if (_prompt.isOpened) _prompt.CloseSelf();
+            if (leavingPrompt.isOpened)
+            {
+                leavingPrompt.Close();
+                CancelRoutine("startBotMatch");
+            }
         }
 
         private void StartGame()
         {
-            if (state != LobbyOverlayState.LOADING_GAME) return;
+            switch (state)
+            {
+                case LobbyOverlayState.LOADING_GAME:
+                    GameManager.Instance.StartGame(GameTypeLocal.REALTIME_LOBBY_GAME);
 
-            GameManager.Instance.StartGame(GameTypeLocal.REALTIME_LOBBY_GAME);
+                    break;
 
-            if (isOpened) Close();
+                case LobbyOverlayState.LOADING_BOT_GAME:
+                    GameManager.Instance.StartGame(GameTypeLocal.REALTIME_BOT_GAME);
+
+                    break;
+            }
+
+            if (isOpened)
+            {
+                Close();
+            }
+
+            state = LobbyOverlayState.NONE;
         }
 
         private enum LobbyOverlayState
@@ -200,6 +307,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             NONE,
             LEAVING_ROOM,
             LOADING_GAME,
+            LOADING_BOT_GAME,
         }
     }
 }

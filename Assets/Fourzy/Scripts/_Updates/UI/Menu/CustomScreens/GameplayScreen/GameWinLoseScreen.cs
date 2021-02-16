@@ -32,6 +32,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private PromptScreen waitingScreen;
         private TurnBaseScreen turnBasedTab;
         private bool showButtonRow = false;
+        private int botRematchesLeft;
 
         private List<GamePieceView> gamePieces = new List<GamePieceView>();
 
@@ -60,19 +61,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameMode.GAUNTLET:
                     if (game.draw)
                     {
-                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
+                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
+                            $"{LocalizationManager.Value("draw")}</color>";
                         bgTapText = LocalizationManager.Value("continue");
                     }
                     else
                     {
-                        if (game.IsWinner() && (game.myMembers.Count > 0 || game.puzzleData.pack.complete))
+                        if (game.IsWinner() && 
+                            (game.myMembers.Count > 0 || game.puzzleData.pack.complete))
                         {
-                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                $"{LocalizationManager.Value("won")}</color>";
                             bgTapText = LocalizationManager.Value("continue");
                         }
                         else
                         {
-                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
+                                $"{LocalizationManager.Value("lost")}</color>";
 
                             if (game.myMembers.Count > 0)
                             {
@@ -90,17 +95,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameMode.LOCAL_VERSUS:
                     if (game.draw)
                     {
-                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
+                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
+                            $"{LocalizationManager.Value("draw")}</color>";
                     }
                     else
                     {
                         if (game.IsWinner())
                         {
-                            stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                            stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#" +
+                                $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                $"{LocalizationManager.Value("won")}</color>";
                         }
                         else
                         {
-                            stateLabel.text = $"{LocalizationManager.Value("player_two")} <color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                            stateLabel.text = $"{LocalizationManager.Value("player_two")} <color=#" +
+                                $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                $"{LocalizationManager.Value("won")}</color>";
                         }
                     }
 
@@ -109,17 +119,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 default:
                     if (game.draw)
                     {
-                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("draw")}</color>";
+                        stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
+                            $"{LocalizationManager.Value("draw")}</color>";
                     }
                     else
                     {
                         if (game.IsWinner())
                         {
-                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>{LocalizationManager.Value("won")}</color>";
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                $"{LocalizationManager.Value("won")}</color>";
                         }
                         else
                         {
-                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>{LocalizationManager.Value("lost")}</color>";
+                            stateLabel.text = $"You<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
+                                $"{LocalizationManager.Value("lost")}</color>";
                         }
                     }
 
@@ -127,7 +140,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             tapToContinue.AtProgress(0f);
-            if (RewardsScreen.WillDisplayRewardsScreen(game) || (game.puzzleData && game.puzzleData.pack))
+            if (RewardsScreen.WillDisplayRewardsScreen(game) || 
+                (game.puzzleData && game.puzzleData.pack))
             {
                 //display 'tap to continue'
                 if (string.IsNullOrEmpty(bgTapText))
@@ -175,7 +189,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 GamePieceView gamepieceView = Instantiate(winningGamepieces[index], piecesParent);
 
                 gamepieceView.transform.position = winningGamepieces[index].transform.position;
-                gamepieceView.transform.localScale = (GameManager.Instance.Landscape ? 89f : 75f) * Vector3.one;
+                gamepieceView.transform.localScale = (GameManager.Instance.Landscape ? 89f : 75f) * 
+                    Vector3.one;
                 gamepieceView.PlayWinAnimation(index * .15f + .15f);
 
                 gamePieces.Add(gamepieceView);
@@ -219,25 +234,70 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameType.REALTIME:
                     if (!waitingScreen)
                     {
-                        FourzyPhotonManager.SetClientRematchReady();
+                        switch (GameManager.Instance.ExpectedGameType)
+                        {
+                            case GameTypeLocal.REALTIME_LOBBY_GAME:
+                            case GameTypeLocal.REALTIME_QUICKMATCH:
+                                FourzyPhotonManager.SetClientRematchReady();
 
-                        //send rematch request
-                        var result = PhotonNetwork.RaiseEvent(
-                            Constants.REMATCH_REQUEST,
-                            null,
-                            new Photon.Realtime.RaiseEventOptions() { Flags = new Photon.Realtime.WebFlags(Photon.Realtime.WebFlags.HttpForwardConst) { HttpForward = true } },
-                            SendOptions.SendReliable);
+                                //send rematch request
+                                var result = PhotonNetwork.RaiseEvent(
+                                    Constants.REMATCH_REQUEST,
+                                    null,
+                                    new Photon.Realtime.RaiseEventOptions()
+                                    {
+                                        Flags = new Photon.Realtime.WebFlags(Photon.Realtime.WebFlags.HttpForwardConst)
+                                        {
+                                            HttpForward = true
+                                        }
+                                    },
+                                    SendOptions.SendReliable);
+
+                                break;
+
+                            case GameTypeLocal.REALTIME_BOT_GAME:
+                                StartRoutine(
+                                    "botRematch",
+                                    InternalSettings.Current.BOT_SETTINGS.randomRematchAcceptTime,
+                                    () =>
+                                    {
+                                        if (botRematchesLeft > 0 && waitingScreen)
+                                        {
+                                            waitingScreen.CloseSelf();
+                                            waitingScreen = null;
+
+                                            GamePlayManager.Instance.LoadGame(null);
+
+                                            botRematchesLeft -= 1;
+                                        }
+                                        else
+                                        {
+                                            GamePlayManager.Instance.BackButtonOnClick();
+                                        }
+                                    },
+                                    null);
+
+                                break;
+                        }
 
                         //open waiting prompt
                         waitingScreen = menuController.GetOrAddScreen<PromptScreen>()
-                            .Prompt("Rematch Requested", "Waiting for other player to accept request.", "Leave Game", null, () => GamePlayManager.Instance.BackButtonOnClick(), null)
+                            .Prompt(
+                                "Rematch Requested",
+                                "Waiting for other player to accept request.",
+                                "Leave Game",
+                                null,
+                                () => GamePlayManager.Instance.BackButtonOnClick(), null)
                             .CloseOnAccept();
                     }
 
                     break;
 
                 default:
-                    if (isCurrent) menuController.CloseCurrentScreen(true);
+                    if (isCurrent)
+                    {
+                        menuController.CloseCurrentScreen(true);
+                    }
                     GamePlayManager.Instance.Rematch();
 
                     break;
@@ -278,15 +338,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             if (game.myMembers.Count == 0)
                                 OnGauntletLost();
                             else
-                                menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.Instance.gameplayScreen.OnBack());
+                                menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
+                                    game.puzzleData.pack, 
+                                    () => GamePlayManager.Instance.gameplayScreen.OnBack());
                         }
                     }
                     else
                     {
                         if (game.myMembers.Count == 0)
+                        {
                             OnGauntletLost();
+                        }
                         else
+                        {
                             Rematch();
+                        }
                     }
 
                     break;
@@ -301,7 +367,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             GameManager.Instance.currentMap.UpdateWidgets();
 
                             //open screen for next event
-                            BasicPuzzlePack nextPack = GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packID);
+                            BasicPuzzlePack nextPack = GameManager.Instance.currentMap
+                                .GetNextPack(game.puzzleData.pack.packID);
 
                             if (nextPack == null)
                             {
@@ -309,7 +376,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 return;
                             }
                             else
+                            {
                                 nextPack.StartNextUnsolvedPuzzle();
+                            }
 
                             if (nextPack)
                             {
@@ -334,13 +403,21 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                 }
                             }
                             else
+                            {
                                 GamePlayManager.Instance.BackButtonOnClick();
+                            }
                         }
                         else
-                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.Instance.BackButtonOnClick());
+                        {
+                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
+                                game.puzzleData.pack,
+                                () => GamePlayManager.Instance.BackButtonOnClick());
+                        }
                     }
                     else
+                    {
                         Rematch();
+                    }
 
                     break;
 
@@ -356,16 +433,26 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                             default:
                                 Rematch();
+
                                 break;
                         }
                     }
-                    else if (nextGameButton.gameObject.activeInHierarchy) NextGame();
+                    else if (nextGameButton.gameObject.activeInHierarchy)
+                    {
+                        NextGame();
+                    }
                     else
                     {
                         if (game.puzzleData && !game.puzzleData.lastInPack)
-                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(game.puzzleData.pack, () => GamePlayManager.Instance.gameplayScreen.OnBack());
+                        {
+                            menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
+                                game.puzzleData.pack,
+                                () => GamePlayManager.Instance.gameplayScreen.OnBack());
+                        }
                         else
+                        {
                             GamePlayManager.Instance.BackButtonOnClick();
+                        }
                     }
 
                     break;
@@ -445,7 +532,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnRoomPropertiesUpdate(Hashtable values)
         {
-            if (FourzyPhotonManager.CheckPlayersRematchReady() && waitingScreen && waitingScreen.isOpened) waitingScreen.CloseSelf();
+            if (FourzyPhotonManager.CheckPlayersRematchReady() && 
+                waitingScreen && 
+                waitingScreen.isOpened)
+            {
+                waitingScreen.CloseSelf();
+            }
+
             waitingScreen = null;
         }
 
@@ -454,6 +547,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnInitialized();
 
             turnBasedTab = menuController.GetOrAddScreen<TurnBaseScreen>();
+            botRematchesLeft = InternalSettings.Current.BOT_SETTINGS.randomRematchTimes;
         }
     }
 }

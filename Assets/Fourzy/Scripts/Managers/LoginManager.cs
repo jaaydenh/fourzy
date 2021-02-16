@@ -446,10 +446,6 @@ namespace Fourzy
 
             UserManager.GetMyStats();
             GameManager.GetTitleData(data => InternalSettings.Current.Update(data), null);
-            foreach (FourzyGameModel.Model.Area area in InternalSettings.Current.UNLOCKED_AREAS)
-            {
-                Debug.Log(area);
-            }
 
             //get profile
             PlayFabProfilesAPI.GetProfile(

@@ -137,14 +137,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (Instance.isOpened) Instance.CloseSelf();
         }
 
-        private void MoveStarted(ClientPlayerTurn turn)
+        private void MoveStarted(ClientPlayerTurn turn, bool startTurn)
         {
             if (turn == null || turn.PlayerId < 1) return;
 
             if (currentTask.action == OnboardingActions.ON_MOVE_STARTED) SkipToNext();
         }
 
-        private void MoveEnded(ClientPlayerTurn turn)
+        private void MoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult, bool startTurn)
         {
             if (turn == null || turn.PlayerId < 1) return;
 

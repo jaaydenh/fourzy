@@ -67,7 +67,6 @@ namespace Fourzy._Updates.Mechanics.Board
         private List<Direction> possibleSwipeDirections;
         private List<BoardLocation> blockedSwipeLocations;
         private List<TokenView> lastHighlighted = new List<TokenView>();
-        //private List<ISpell> spawningSpells = new List<ISpell>(); 
         private bool touched = false;
         private float holdTimer;
         private float tapStartTime;
@@ -79,7 +78,6 @@ namespace Fourzy._Updates.Mechanics.Board
         private Dictionary<string, Coroutine> boardUpdateRoutines;
         private Vfx negativeVfx;
         private Thread aiTurnThread;
-        //private Task aiTurnTask;
 
         private int lastRow = 0;
         private int lastCol = 0;
@@ -143,8 +141,20 @@ namespace Fourzy._Updates.Mechanics.Board
 
 #if UNITY_EDITOR
             //cheats
-            if (interactable) if (Input.GetKeyDown(KeyCode.P)) DropPiece(Camera.main.ScreenToWorldPoint(Input.mousePosition), true);
-            if (interactable) if (Input.GetKeyDown(KeyCode.O)) DropPiece(Camera.main.ScreenToWorldPoint(Input.mousePosition), false);
+            if (interactable)
+            {
+                if (Input.GetKeyDown(KeyCode.P))
+                {
+                    DropPiece(Camera.main.ScreenToWorldPoint(Input.mousePosition), true);
+                }
+            }
+            if (interactable)
+            {
+                if (Input.GetKeyDown(KeyCode.O))
+                {
+                    DropPiece(Camera.main.ScreenToWorldPoint(Input.mousePosition), false);
+                }
+            }
 #endif
         }
 
@@ -662,7 +672,10 @@ namespace Fourzy._Updates.Mechanics.Board
 
             boardBits.Add(gamePiece);
 
-            if (sort) SortBits();
+            if (sort)
+            {
+                SortBits();
+            }
 
             return gamePiece;
         }
@@ -675,7 +688,11 @@ namespace Fourzy._Updates.Mechanics.Board
                     return null;
 
                 default:
-                    return SpawnToken<TokenView>(token.Space.Location.Row, token.Space.Location.Column, token.Type, sort).SetData(token);
+                    return SpawnToken<TokenView>(
+                            token.Space.Location.Row, 
+                            token.Space.Location.Column, 
+                            token.Type, sort)
+                        .SetData(token);
             }
         }
 
@@ -706,10 +723,19 @@ namespace Fourzy._Updates.Mechanics.Board
             List<GamePieceView> result = new List<GamePieceView>();
 
             if (game._State.WinningLocations != null)
+            {
                 for (int locationIndex = 0; locationIndex < game._State.WinningLocations.Count; locationIndex++)
+                {
                     result.AddRange(BoardBitsAt<GamePieceView>(game._State.WinningLocations[locationIndex]));
+                }
+            }
 
             return result;
+        }
+
+        public void TakeAITurn(float delay)
+        {
+            StartRoutine("takeAITurnDelay", delay, TakeAITurn, null);
         }
 
         public void TakeAITurn()
@@ -717,13 +743,23 @@ namespace Fourzy._Updates.Mechanics.Board
             //change help state
             if (gameplayManager)
             {
-                if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE) gameplayManager.ToggleHelpState();
+                if (gameplayManager.gameState == GameplayScene.GameState.HELP_STATE)
+                {
+                    gameplayManager.ToggleHelpState();
+                }
             }
 
-            if (actionState == BoardActionState.CAST_SPELL) onCastCanceled?.Invoke();
+            if (actionState == BoardActionState.CAST_SPELL)
+            {
+                onCastCanceled?.Invoke();
+            }
 
             selectedBoardLocation = null;
-            if (touched) OnPointerRelease(Vector2.zero);
+
+            if (touched)
+            {
+                OnPointerRelease(Vector2.zero);
+            }
 
             aiTurnThread = ThreadsQueuer.Instance.StartThreadForFunc(() =>
             {
@@ -737,13 +773,21 @@ namespace Fourzy._Updates.Mechanics.Board
                     turnResults = game.TakeAITurn(true);
 
                     //clear first before move actions
-                    while (turnResults.Activity.Count > 0 && turnResults.Activity[0].Timing != GameActionTiming.MOVE) turnResults.Activity.RemoveAt(0);
+                    while (
+                        turnResults.Activity.Count > 0 && 
+                        turnResults.Activity[0].Timing != GameActionTiming.MOVE)
+                    {
+                        turnResults.Activity.RemoveAt(0);
+                    }
 
                     ThreadsQueuer.Instance.QueueFuncToExecuteFromMainThread(() =>
                     {
                         if (GameManager.Instance.activeGame == null ||
                             GameManager.Instance.activeGame.BoardID != gameId ||
-                            gameplayManager.board != _board) return;
+                            gameplayManager.board != _board)
+                        {
+                            return;
+                        }
 
                         turn = new ClientPlayerTurn(turnResults.Turn.Moves);
                         turn.PlayerId = turnResults.Turn.PlayerId;
@@ -752,7 +796,9 @@ namespace Fourzy._Updates.Mechanics.Board
 
                         turn.AITurn = true;
 
-                        boardUpdateRoutines.Add(turnResults.GameState.UniqueId, StartCoroutine(BoardUpdateRoutine(turnResults, false)));
+                        boardUpdateRoutines.Add(
+                            turnResults.GameState.UniqueId, 
+                            StartCoroutine(BoardUpdateRoutine(turnResults, false)));
 
                         //manually reset noInput timer
                         StandaloneInputModuleExtended.instance.ResetNoInputTimer();
@@ -1013,7 +1059,11 @@ namespace Fourzy._Updates.Mechanics.Board
             //make semi-transparent
             token.SetAlpha(.3f);
 
-            //cast spell
+            game.AddPlayerMagic(
+                game._State.ActivePlayerId, 
+                -GameContentManager.Instance.tokensDataHolder.GetTokenData(activeSpell.SpellId).price);
+
+            //invoke cast spell
             onCast?.Invoke(activeSpellID, game._State.ActivePlayerId);
         }
 
@@ -1166,6 +1216,7 @@ namespace Fourzy._Updates.Mechanics.Board
             createdSpellTokens = new List<TokenSpell>();
 
             CancelRoutine("lock_board");
+            CancelRoutine("takeAITurnDelay");
 
             CreateInputMap();
             StopBoardUpdates();
@@ -1229,33 +1280,40 @@ namespace Fourzy._Updates.Mechanics.Board
             switch (game._Type)
             {
                 case GameType.REALTIME:
-                    //cant send same turn, as it should contain spells
-                    List<IMove> _movesToSend = new List<IMove>();
-                    _movesToSend.Add(_move);
-                    foreach (TokenSpell _spell in createdSpellTokens)
+                    switch (GameManager.Instance.ExpectedGameType)
                     {
-                        _movesToSend.Add(_spell.spellMove);
-                    }
-
-                    ClientPlayerTurn turnToSend = new ClientPlayerTurn(_movesToSend);
-                    //add local timer data
-                    turnToSend.playerTimerLeft = gameplayManager.gameplayScreen.myTimerLeft;
-                    turnToSend.magicLeft = gameplayManager.gameplayScreen.myMagicLeft;
-                    turnToSend.PlayerId = _move.Piece.PlayerId;
-
-                    bool result = PhotonNetwork.RaiseEvent(
-                        Constants.TAKE_TURN,
-                        JsonConvert.SerializeObject(turnToSend),
-                        new Photon.Realtime.RaiseEventOptions()
-                        {
-                            Flags = new Photon.Realtime.WebFlags(Photon.Realtime.WebFlags.HttpForwardConst)
+                        case GameTypeLocal.REALTIME_LOBBY_GAME:
+                        case GameTypeLocal.REALTIME_QUICKMATCH:
+                            //cant send same turn, as it should contain spells
+                            List<IMove> _movesToSend = new List<IMove>();
+                            _movesToSend.Add(_move);
+                            foreach (TokenSpell _spell in createdSpellTokens)
                             {
-                                HttpForward = true
+                                _movesToSend.Add(_spell.spellMove);
                             }
-                        },
-                        SendOptions.SendReliable);
 
-                    Debug.Log("Turn sent to other client: " + result);
+                            ClientPlayerTurn turnToSend = new ClientPlayerTurn(_movesToSend);
+                            //add local timer data
+                            turnToSend.playerTimerLeft = gameplayManager.gameplayScreen.myTimerLeft;
+                            turnToSend.magicLeft = gameplayManager.gameplayScreen.myMagicLeft;
+                            turnToSend.PlayerId = _move.Piece.PlayerId;
+
+                            bool result = PhotonNetwork.RaiseEvent(
+                                Constants.TAKE_TURN,
+                                JsonConvert.SerializeObject(turnToSend),
+                                new Photon.Realtime.RaiseEventOptions()
+                                {
+                                    Flags = new Photon.Realtime.WebFlags(Photon.Realtime.WebFlags.HttpForwardConst)
+                                    {
+                                        HttpForward = true
+                                    }
+                                },
+                                SendOptions.SendReliable);
+
+                            Debug.Log("Turn sent to other client: " + result);
+
+                            break;
+                    }
 
                     break;
             }
@@ -2291,7 +2349,7 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             foreach (PlayerTurn turn in turns)
             {
-                yield return TakeTurn((ClientPlayerTurn)turn);
+                yield return TakeTurn(new ClientPlayerTurn(turn.Moves) { PlayerId = turn.PlayerId });
 
                 yield return new WaitForSeconds(.5f);
             }
