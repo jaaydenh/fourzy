@@ -46,27 +46,13 @@ namespace Fourzy._Updates
             PlayerPrefs.GetInt(PREFIX + "REALTIME_COUNTDOWN_SECONDS", Constants.REALTIME_COUNTDOWN_SECONDS);
         internal float LOBBY_GAME_LOAD_DELAY { get; private set; } =
             PlayerPrefs.GetFloat(PREFIX + "LOBBY_GAME_LOAD_DELAY", Constants.LOBBY_GAME_LOAD_DELAY);
-        internal Area[] UNLOCKED_AREAS
-        {
-            get
-            {
-                if (unlockedAreas == null)
-                {
-                    string _value = PlayerPrefs.GetString(PREFIX + "UNLOCKED_AREAS", "");
-                    unlockedAreas = string.IsNullOrEmpty(_value) ? Constants.UNLOCKED_AREAS : FromString(_value);
-                }
+        internal Area[] UNLOCKED_AREAS { get; private set; } =
+            AreasFromString(PlayerPrefs.GetString(PREFIX + "UNLOCKED_AREAS", "")) ??
+            Constants.UNLOCKED_AREAS;
+        internal BotSettings BOT_SETTINGS { get; private set; } =
+            BotSettingsFromString(PlayerPrefs.GetString(PREFIX + "BOT_SETTINGS", "")) ?? 
+            Constants.BOT_SETTINGS;
 
-                return Enum.GetValues(typeof(Area)).Cast<Area>()
-                    .Where(_area => PlayerPrefsWrapper.GetAreaUnlocked((int)_area))
-                    .Concat(unlockedAreas)
-                    .ToArray();
-            }
-            set
-            {
-                unlockedAreas = value;
-            }
-        }
-        
         internal int GAUNTLET_DEFAULT_MOVES_COUNT { get; private set; } =
             PlayerPrefs.GetInt(PREFIX + "GAUNTLET_DEFAULT_MOVES_COUNT", Constants.GAUNTLET_DEFAULT_MOVES_COUNT);
 
@@ -87,8 +73,6 @@ namespace Fourzy._Updates
         internal bool LOSE_ON_EMPTY_TIMER { get; private set; } =
             PlayerPrefs.GetInt(PREFIX + "LOSE_ON_EMPTY_TIMER", Constants.LOSE_ON_EMPTY_TIMER ? 1 : 0) == 1;
 
-        private Area[] unlockedAreas;
-
         internal void Update(object data, bool saveNewValues = true, bool debugData = true)
         {
             Dictionary<string, string> _data = data as Dictionary<string, string>;
@@ -107,6 +91,7 @@ namespace Fourzy._Updates
             foreach (var kvPair in _data)
             {
                 string[] keyPieces = kvPair.Key.Split(' ');
+                bool equal = false;
 
                 if (keyPieces.Length > 1)
                 {
@@ -114,15 +99,32 @@ namespace Fourzy._Updates
                     {
                         switch (keyPieces[0])
                         {
-                            case "area":
-                                Area[] areas = FromString(kvPair.Value);
+                            case "bot":
+                                if (PlayerPrefs.GetString(
+                                    PREFIX + "BOT_SETTINGS", 
+                                    JsonConvert.SerializeObject(BOT_SETTINGS)) != kvPair.Value)
+                                {
+                                    newValues.Add(keyPieces[1], kvPair.Value);
+                                    BOT_SETTINGS = BotSettingsFromString(kvPair.Value);
 
-                                bool equal = areas.Length == unlockedAreas.Length;
+                                    if (saveNewValues)
+                                    {
+                                        PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
+                                    }
+                                }
+
+                                break;
+
+                            case "area":
+                                Area[] areas = AreasFromString(kvPair.Value);
+
+                                equal = areas.Length == UNLOCKED_AREAS.Length;
                                 if (equal)
                                 {
+                                    //compare contents
                                     foreach (Area area in areas)
                                     {
-                                        if (!unlockedAreas.Contains(area))
+                                        if (!UNLOCKED_AREAS.Contains(area))
                                         {
                                             equal = false;
                                             break;
@@ -133,13 +135,12 @@ namespace Fourzy._Updates
                                 if (!equal)
                                 {
                                     newValues.Add(keyPieces[1], kvPair.Value);
-                                }
+                                    UNLOCKED_AREAS = areas;
 
-                                unlockedAreas = areas;
-
-                                if (saveNewValues)
-                                {
-                                    PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
+                                    if (saveNewValues)
+                                    {
+                                        PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
+                                    }
                                 }
 
                                 break;
@@ -150,14 +151,13 @@ namespace Fourzy._Updates
                                 if((bool)properties[keyPieces[1]].GetValue(this) != boolValue)
                                 {
                                     newValues.Add(keyPieces[1], boolValue.ToString());
+                                    properties[keyPieces[1]].SetValue(this, boolValue);
+
+                                    if (saveNewValues)
+                                    {
+                                        PlayerPrefs.SetInt(PREFIX + keyPieces[1], boolValue ? 1 : 0);
+                                    }
                                 } 
-
-                                properties[keyPieces[1]].SetValue(this, boolValue);
-
-                                if (saveNewValues)
-                                {
-                                    PlayerPrefs.SetInt(PREFIX + keyPieces[1], boolValue ? 1 : 0);
-                                }
 
                                 break;
 
@@ -167,13 +167,12 @@ namespace Fourzy._Updates
                                 if ((float)properties[keyPieces[1]].GetValue(this) != floatValue)
                                 {
                                     newValues.Add(keyPieces[1], floatValue.ToString());
-                                }
+                                    properties[keyPieces[1]].SetValue(this, floatValue);
 
-                                properties[keyPieces[1]].SetValue(this, floatValue);
-
-                                if (saveNewValues)
-                                {
-                                    PlayerPrefs.SetFloat(PREFIX + keyPieces[1], floatValue);
+                                    if (saveNewValues)
+                                    {
+                                        PlayerPrefs.SetFloat(PREFIX + keyPieces[1], floatValue);
+                                    }
                                 }
 
                                 break;
@@ -184,13 +183,12 @@ namespace Fourzy._Updates
                                 if ((int)properties[keyPieces[1]].GetValue(this) != intValue)
                                 {
                                     newValues.Add(keyPieces[1], intValue.ToString());
-                                }
+                                    properties[keyPieces[1]].SetValue(this, intValue);
 
-                                properties[keyPieces[1]].SetValue(this, intValue);
-
-                                if (saveNewValues)
-                                {
-                                    PlayerPrefs.SetInt(PREFIX + keyPieces[1], intValue);
+                                    if (saveNewValues)
+                                    {
+                                        PlayerPrefs.SetInt(PREFIX + keyPieces[1], intValue);
+                                    }
                                 }
 
                                 break;
@@ -199,13 +197,12 @@ namespace Fourzy._Updates
                                 if ((string)properties[keyPieces[1]].GetValue(this) != kvPair.Value)
                                 {
                                     newValues.Add(keyPieces[1], kvPair.Value);
-                                }
+                                    properties[keyPieces[1]].SetValue(this, kvPair.Value);
 
-                                properties[keyPieces[1]].SetValue(this, kvPair.Value);
-
-                                if (saveNewValues)
-                                {
-                                    PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
+                                    if (saveNewValues)
+                                    {
+                                        PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
+                                    }
                                 }
 
                                 break;
@@ -248,23 +245,96 @@ namespace Fourzy._Updates
             }
         }
 
-        private Area[] FromString(string value)
+        internal static AIProfile FromCurrentRating()
         {
-            return JsonConvert.DeserializeObject<string[]>(value)
-                .Select(_area => (Area)Enum.Parse(typeof(Area), _area, true))
-                .ToArray();
+            int rating = UserManager.Instance.lastCachedRating;
+
+            foreach (BotDifficulty botDifficulty in Current.BOT_SETTINGS.difficultyLevels)
+            {
+                if (rating <= botDifficulty.r)
+                {
+                    return botDifficulty.d;
+                }
+            }
+
+            return AIProfile.SimpleAI;
         }
 
-        private struct TypeValuePair
+        private static Area[] AreasFromString(string value)
         {
-            internal string type;
-            internal string value;
-
-            public TypeValuePair(string type, string value)
+            try
             {
-                this.type = type;
-                this.value = value;
+                return JsonConvert.DeserializeObject<string[]>(value)
+                                .Select(_area => (Area)Enum.Parse(typeof(Area), _area, true))
+                                .ToArray();
+            } catch (Exception)
+            {
+                return null;
             }
         }
+
+        private static BotSettings BotSettingsFromString(string value)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<BotSettings>(value);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+    }
+
+    [Serializable]
+    public class BotSettings
+    {
+        [JsonProperty]
+        internal BotDifficulty[] difficultyLevels;
+        [JsonProperty]
+        internal float[] botMatchAfter;
+        [JsonProperty]
+        internal int[] ratingRange;
+        [JsonProperty]
+        internal float[] turnDelayTime;
+        [JsonProperty]
+        internal float[] rematchAcceptTime;
+        [JsonProperty]
+        internal int[] maxRematchTimes;
+
+        public BotSettings() { }
+
+        [JsonIgnore]
+        public float randomMatchAfter => UnityEngine.Random.Range(botMatchAfter[0], botMatchAfter[1]);
+        [JsonIgnore]
+        public int randomRating => UnityEngine.Random.Range(ratingRange[0], ratingRange[1]);
+        [JsonIgnore]
+        public float randomTurnDelay => UnityEngine.Random.Range(turnDelayTime[0], turnDelayTime[1]);
+        [JsonIgnore]
+        public float randomRematchAcceptTime => UnityEngine.Random.Range(rematchAcceptTime[0], rematchAcceptTime[1]);
+        [JsonIgnore]
+        public int randomRematchTimes => UnityEngine.Random.Range(maxRematchTimes[0], maxRematchTimes[1]);
+    }
+
+    [Serializable]
+    internal class BotDifficulty
+    {
+        internal int r
+        {
+            get => int.Parse(_r);
+            set => _r = value.ToString();
+        }
+        internal AIProfile d
+        {
+            get => (AIProfile)Enum.Parse(typeof(AIProfile), _d, true);
+            set => _d = value.ToString();
+        }
+
+        [JsonProperty("r")]
+        private string _r;
+        [JsonProperty("d")]
+        private string _d;
+
+        public BotDifficulty() { }
     }
 }

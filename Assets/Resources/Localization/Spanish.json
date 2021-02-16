@@ -33,6 +33,10 @@
       "value": "Selección de área"
     },
     {
+      "key": "apprentice",
+      "value": "Aprendiz"
+    },
+    {
       "key": "back",
       "value": "Espalda"
     },
@@ -81,6 +85,10 @@
       "value": "terminado"
     },
     {
+      "key": "complete_games_to_see_rating",
+      "value": "¡Completa {0} juegos clasificados para aparecer en una tabla de clasificación!"
+    },
+    {
       "key": "continue",
       "value": "Continuar"
     },
@@ -109,6 +117,10 @@
       "value": "Nombre actual"
     },
     {
+      "key": "defeat",
+      "value": "Fracaso"
+    },
+    {
       "key": "draw",
       "value": "Empate"
     },
@@ -117,12 +129,20 @@
       "value": "Ingrese código de lugar "
     },
     {
+      "key": "enter_lobby_warning",
+      "value": "Para ingresar al lobby, debe salir de la habitación en la que se encuentra actualmente."
+    },
+    {
       "key": "excellent",
       "value": "¡Excelente!"
     },
     {
       "key": "exit",
       "value": "Salir del juego"
+    },
+    {
+      "key": "failed",
+      "value": "Fallido"
     },
     {
       "key": "failed1",
@@ -193,6 +213,10 @@
       "value": "Conecta 4 piezas para ganar"
     },
     {
+      "key": "getting_players_stats",
+      "value": "Recuperando estadísticas de jugador ..."
+    },
+    {
       "key": "good_job",
       "value": "Buen trabajo"
     },
@@ -215,6 +239,18 @@
     {
       "key": "join",
       "value": "Entrar"
+    },
+    {
+      "key": "joining_lobby",
+      "value": "Uniéndose al lobby ..."
+    },
+    {
+      "key": "joining_room",
+      "value": "Uniéndose a la sala ..."
+    },
+    {
+      "key": "leaving_room",
+      "value": "Saliendo del cuarto..."
     },
     {
       "key": "leave_game",
@@ -321,6 +357,10 @@
       "value": "On"
     },
     {
+      "key": "online_lobby",
+      "value": "Vestíbulo en línea"
+    },
+    {
       "key": "openportal",
       "value": "Portal abierto"
     },
@@ -391,6 +431,10 @@
     {
       "key": "rareportalpoints",
       "value": "Puntos de portal raros"
+    },
+    {
+      "key": "rating",
+      "value": "Clasificación"
     },
     {
       "key": "ready_to_play",

@@ -58,8 +58,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.Open();
         }
 
-        public void _Update() { }
-
         public void OnMoveStarted()
         {
             if (!isOpened || game._Mode != GameMode.GAUNTLET || game.isMyTurn) return;

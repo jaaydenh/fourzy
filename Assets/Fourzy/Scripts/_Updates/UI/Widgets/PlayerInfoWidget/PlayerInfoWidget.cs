@@ -61,9 +61,10 @@ namespace Fourzy._Updates.UI.Widgets
         private void OnRatingUpate(int rating)
         {
             if (UserManager.Instance.lastCachedRating == -1)
-                ratingLabel.text = $"Rating: ...";
+                ratingLabel.text = $"{LocalizationManager.Value("rating")}: ...";
             else
-                ratingLabel.text = $"Rating:\n{UserManager.Instance.lastCachedRatingFiltered}";
+                ratingLabel.text = $"{LocalizationManager.Value("rating")}:" +
+                    $"\n{UserManager.Instance.lastCachedRatingFiltered}";
         }
 
         private void OnUpdateUserGamePieceID(string gamePieceID)
@@ -76,7 +77,7 @@ namespace Fourzy._Updates.UI.Widgets
             switch (scene.name)
             {
                 case Constants.GAMEPLAY_SCENE_NAME:
-                    ratingLabel.text = $"Rating: ...";
+                    ratingLabel.text = $"{LocalizationManager.Value("rating")}: ...";
 
                     break;
             }

@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-
 using UnityEngine.EventSystems;
 
 namespace Fourzy._Updates.UI.Menu

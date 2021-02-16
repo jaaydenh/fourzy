@@ -6,6 +6,7 @@ using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using Photon.Pun;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -30,12 +31,14 @@ namespace Fourzy._Updates.UI.Widgets
 
         public bool shown { get; private set; }
         public bool isMe { get; private set; }
+        public int magic { get; private set; } = 1;
 
         protected override void Awake()
         {
             base.Awake();
 
-            FourzyPhotonManager.onPlayerPpopertiesUpdate += OnPlayerPropertiesUpdate;
+            OpponentData.onRatingUdpate += OnOpponentRatingUpdate;
+            OpponentData.onTotalGamesUpdate += OnOpponentTotalGamesUpdate;
             UserManager.onTotalGamesUpdate += OnTotalGamesUpdate;
             UserManager.onRatingUpdate += OnRatingUpdate;
         }
@@ -44,10 +47,11 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (game != null)
             {
-                game.onMagic -= UpdateMagic;
+                game.onMagic -= OnMagicUpdate;
             }
 
-            FourzyPhotonManager.onPlayerPpopertiesUpdate -= OnPlayerPropertiesUpdate;
+            OpponentData.onRatingUdpate -= OnOpponentRatingUpdate;
+            OpponentData.onTotalGamesUpdate -= OnOpponentTotalGamesUpdate;
             UserManager.onTotalGamesUpdate -= OnTotalGamesUpdate;
             UserManager.onRatingUpdate -= OnRatingUpdate;
         }
@@ -92,9 +96,16 @@ namespace Fourzy._Updates.UI.Widgets
 
             current.gameObject.SetActive(true);
 
-            UpdateMagic(player.PlayerId, player.Magic);
+            SetMagic(player.Magic);
 
             SetPlayerName(player.DisplayName);
+        }
+
+        public void SetGame(IClientFourzy game)
+        {
+            this.game = game;
+
+            game.onMagic += OnMagicUpdate;
         }
 
         public void ShowPlayerTurnAnimation()
@@ -116,13 +127,6 @@ namespace Fourzy._Updates.UI.Widgets
             if (!current) return;
 
             current.ShowUIWinAnimation();
-        }
-
-        public void SetGame(IClientFourzy game)
-        {
-            this.game = game;
-
-            game.onMagic += UpdateMagic;
         }
 
         public void SetExtraData(string text)
@@ -170,44 +174,43 @@ namespace Fourzy._Updates.UI.Widgets
             shown = false;
         }
 
-        private void UpdateMagic(int playerId, int value)
+        internal void SetMagic(int value)
         {
             if (!magicWidget) return;
 
+            magicBadge.SetValue(value);
+            magic = value;
+        }
+
+        private void OnMagicUpdate(int playerId, int value)
+        {
             if (assignedPlayer.PlayerId == playerId)
             {
-                magicBadge.SetValue(value);
+                SetMagic(value);
             }
         }
 
-        private void OnPlayerPropertiesUpdate(Photon.Realtime.Player player, Hashtable data)
+        private void OnOpponentRatingUpdate(int rating)
         {
-            //only opponent
-            if (isMe || player == PhotonNetwork.LocalPlayer)
+            if (isMe)
             {
                 return;
             }
 
-            bool condition = false;
-            if (data.ContainsKey(Constants.REALTIME_WINS_KEY) ||
-                data.ContainsKey(Constants.REALTIME_LOSES_KEY) ||
-                data.ContainsKey(Constants.REALTIME_DRAWS_KEY))
-            {
-                totalGames = FourzyPhotonManager.GetOpponentTotalGames();
-                condition = true;
-            }
-
-            if (data.ContainsKey(Constants.REALTIME_RATING_KEY))
-            {
-                rating = (int)data[Constants.REALTIME_RATING_KEY];
-                condition = true;
-            }
-
-            if (condition)
-            {
-                SetRating(rating, totalGames);
-            }
+            SetRating(this.rating = rating, totalGames);
         }
+
+        private void OnOpponentTotalGamesUpdate(int totalGames)
+        {
+            if (isMe)
+            {
+                return;
+            }
+
+            SetRating(rating, this.totalGames = totalGames);
+        }
+
+        #region Local player
 
         private void OnRatingUpdate(int rating)
         {
@@ -234,5 +237,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             SetRating(rating, totalGames);
         }
+
+        #endregion
     }
 }

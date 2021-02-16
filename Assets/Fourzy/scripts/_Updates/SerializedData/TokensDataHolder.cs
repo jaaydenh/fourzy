@@ -23,44 +23,61 @@ namespace Fourzy._Updates.Serialized
             TokenData data = GetTokenData(tokenType);
 
             if (data == null)
+            {
                 return tokens.list[0].themesTokens.list[0].tokenPrefab;
+            }
 
-            ThemeTokenPrefabPair prefabData = data.themesTokens.list.Find(_prefabData => Tools.Utils.IsSet(_prefabData.theme, theme));
+            ThemeTokenPrefabPair prefabData = 
+                data.themesTokens.list.Find(_prefabData => Tools.Utils.IsSet(_prefabData.theme, theme));
 
             if (prefabData != null)
+            {
                 return prefabData.tokenPrefab;
+            }
             else
+            {
                 return data.themesTokens.list[0].tokenPrefab;
+            }
         }
 
-        public TokenData GetTokenData(TokenType tokenType) => tokens.list.Find(_data => _data.tokenType == tokenType);
+        public TokenData GetTokenData(TokenType tokenType) => 
+            tokens.list.Find(_data => _data.tokenType == tokenType);
 
-        public TokenData GetTokenData(SpellId spellID) => tokens.list.Find(_data => _data.isSpell && _data.spellID == spellID);
+        public TokenData GetTokenData(SpellId spellID) => 
+            tokens.list.Find(_data => _data.isSpell && _data.spellID == spellID);
 
         public Dictionary<TokenType, Sprite> GetTokensSprites()
         {
             Dictionary<TokenType, Sprite> tokensSprites = new Dictionary<TokenType, Sprite>();
             tokensSprites.Add(TokenType.NONE, missingTokenGraphics);
 
-            foreach (TokenData tokenData in tokens.list) tokensSprites.Add(tokenData.tokenType, tokenData.GetTokenSprite());
+            foreach (TokenData tokenData in tokens.list)
+            {
+                tokensSprites.Add(tokenData.tokenType, tokenData.GetTokenSprite());
+            }
 
             return tokensSprites;
         }
 
-        public Sprite GetTokenSprite(TokenType tokenType) => GetTokenSprite(GetTokenData(tokenType));
+        public Sprite GetTokenSprite(TokenType tokenType) => 
+            GetTokenSprite(GetTokenData(tokenType));
 
         public Sprite GetTokenSprite(TokenData tokenData)
         {
             Sprite sprite = tokenData.GetTokenSprite();
 
-            if (sprite) return sprite;
+            if (sprite)
+            {
+                return sprite;
+            }
 
             return missingTokenGraphics;
         }
 
         public void ResetTokenInstructions()
         {
-            tokens.list.ForEach(token => PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, false));
+            tokens.list.ForEach(token =>
+                PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, false));
         }
 
         [Serializable]
@@ -121,8 +138,14 @@ namespace Fourzy._Updates.Serialized
                 get
                 {
                     //get price depending on spell
-                    if (isSpell) return spellID.GetSpellPrice();
-                    else return 10;
+                    if (isSpell)
+                    {
+                        return spellID.GetSpellPrice();
+                    }
+                    else
+                    {
+                        return 10;
+                    }
                 }
             }
 
@@ -131,26 +154,38 @@ namespace Fourzy._Updates.Serialized
                 List<AreasDataHolder.GameArea> result = new List<AreasDataHolder.GameArea>();
 
                 foreach (Enum value in Enum.GetValues(typeof(Area)))
+                {
                     foreach (ThemeTokenPrefabPair prefabData in themesTokens.list)
+                    {
                         if (prefabData.theme.HasFlag(value) && themesData.IsAreaEnabled((Area)value))
+                        {
                             result.Add(themesData[(Area)value]);
+                        }
+                    }
+                }
 
                 return result;
             }
 
-            public List<string> GetAreaNames(AreasDataHolder themesDataHolder) => GetTokenAreas(themesDataHolder)?.Select(area => LocalizationManager.Value(area.name)).ToList() ?? null;
+            public List<string> GetAreaNames(AreasDataHolder themesDataHolder) =>
+                GetTokenAreas(themesDataHolder)?.Select(area => LocalizationManager.Value(area.name)).ToList() ?? null;
 
             public Sprite GetTokenSprite()
             {
                 if (tokenIcon == null)
                 {
-                    SpriteRenderer tokenSpriteRenderer = themesTokens.list[0].tokenPrefab.body.GetComponent<SpriteRenderer>();
+                    SpriteRenderer tokenSpriteRenderer =
+                        themesTokens.list[0].tokenPrefab.body.GetComponent<SpriteRenderer>();
 
                     if (tokenSpriteRenderer)
+                    {
                         return tokenSpriteRenderer.sprite;
+                    }
                 }
                 else
+                {
                     return tokenIcon;
+                }
 
                 return null;
             }

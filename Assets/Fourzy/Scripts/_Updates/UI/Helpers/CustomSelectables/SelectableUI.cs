@@ -42,7 +42,6 @@ namespace Fourzy._Updates.UI.Helpers
             hooks.ForEach(hook => hook.OnEnter());
             onPointerEnter.Invoke();
             onEnter?.Invoke(data);
-
         }
 
         public virtual void OnExit(PointerEventData data)

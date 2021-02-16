@@ -1,12 +1,11 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Mechanics._GamePiece;
-using System.Collections.Generic;
-using UnityEngine;
-using StackableDecorator;
-using UnityEditor;
-using System;
 using Fourzy._Updates.Tools;
+using StackableDecorator;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 namespace Fourzy._Updates.Serialized
 {
@@ -56,16 +55,23 @@ namespace Fourzy._Updates.Serialized
             }
             else
             {
-                GamePiecePrefabData gamePieceData = gamePieces.list.Find(gamePiece => gamePiece.data.ID == gamePieceID);
+                GamePiecePrefabData gamePieceData =
+                    gamePieces.list.Find(gamePiece => gamePiece.data.ID == gamePieceID);
 
-                if (gamePieceData != null) return gamePieceData.data;
-                else return null;
+                if (gamePieceData != null)
+                {
+                    return gamePieceData.data;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
         public GamePieceData GetGamePieceData(GamePieceView gamePiece)
         {
-            GamePiecePrefabData prefabData = gamePieces.list.Find(_prefabData => 
+            GamePiecePrefabData prefabData = gamePieces.list.Find(_prefabData =>
                 gamePiece.name.Contains(_prefabData.player1Prefab.name) ||
                 gamePiece.name.Contains(_prefabData.player2Prefab.name));
 

@@ -99,11 +99,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        public void _Update()
-        {
-
-        }
-
         public void OnMoveStarted()
         {
             if (game == null || !game.puzzleData) return;
@@ -153,7 +148,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (game == null || game.puzzleData == null) return;
 
-            if (game._Type == GameType.PUZZLE) movesLeftWidget.UpdateMovesLeft();
+            if (game._Type == GameType.PUZZLE)
+            {
+                movesLeftWidget.UpdateMovesLeft();
+            }
 
             SetHintButtonState(true);
         }

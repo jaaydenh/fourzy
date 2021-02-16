@@ -45,43 +45,43 @@ namespace Fourzy._Updates.ClientModel
         //     UpdateLastTurnGame();
         // }
 
-        public ClientFourzyGame GetGameForMove(PlayerTurn targetMove)
-        {
-            ClientFourzyGame game = new ClientFourzyGame(originalGameState);
-            game.BoardID = challengeInstanceId;
-            game._Type = GameType.TURN_BASED;
-            game.challengeData = this;
+        //public ClientFourzyGame GetGameForMove(PlayerTurn targetMove)
+        //{
+        //    ClientFourzyGame game = new ClientFourzyGame(originalGameState);
+        //    game.BoardID = challengeInstanceId;
+        //    game._Type = GameType.TURN_BASED;
+        //    game.challengeData = this;
 
-            if (targetMove == null)
-                return game;
+        //    if (targetMove == null)
+        //        return game;
 
-            foreach (PlayerTurn turn in playerTurnRecord)
-            {
-                game.TakeTurn(turn, true);
+        //    foreach (PlayerTurn turn in playerTurnRecord)
+        //    {
+        //        game.TakeTurn(turn, true);
 
-                if (turn == targetMove) break;
-            }
+        //        if (turn == targetMove) break;
+        //    }
 
-            return game;
-        }
+        //    return game;
+        //}
 
-        public ClientFourzyGame GetGameForPreviousMove()
-        {
-            if (playerTurnRecord.Count < 2)
-                return GetGameForMove(null);
+        //public ClientFourzyGame GetGameForPreviousMove()
+        //{
+        //    if (playerTurnRecord.Count < 2)
+        //        return GetGameForMove(null);
 
-            return GetGameForMove(playerTurnRecord[playerTurnRecord.Count - 2]);
-        }
+        //    return GetGameForMove(playerTurnRecord[playerTurnRecord.Count - 2]);
+        //}
 
-        public ClientFourzyGame GetGameForLastMove()
-        {
-            if (playerTurnRecord.Count == 0)
-                return GetGameForMove(null);
+        //public ClientFourzyGame GetGameForLastMove()
+        //{
+        //    if (playerTurnRecord.Count == 0)
+        //        return GetGameForMove(null);
 
-            return GetGameForMove(lastTurn);
-        }
+        //    return GetGameForMove(lastTurn);
+        //}
 
-        public void UpdateLastTurnGame() => lastTurnGame = GetGameForLastMove();
+        //public void UpdateLastTurnGame() => lastTurnGame = GetGameForLastMove();
 
         public bool Validate() => !string.IsNullOrEmpty(challengeInstanceId) && originalGameState.Players.Count > 1;
 
