@@ -200,22 +200,25 @@ namespace Fourzy._Updates.ClientModel
 
         public bool IsWinner() => me.PlayerId == State.WinnerId;
 
-        public override PlayerTurnResult TakeTurn(PlayerTurn turn, bool returnStartOfNextTurn = false)
+        public override PlayerTurnResult TakeTurn(
+            PlayerTurn Turn, 
+            bool ReturnStartOfNextTurn = false, 
+            bool TriggerEndOfTurn = true)
         {
             if (State.Players.ContainsKey(State.ActivePlayerId))
             {
-                turn.PlayerString = State.Players[State.ActivePlayerId].PlayerString ?? "";
+                Turn.PlayerString = State.Players[State.ActivePlayerId].PlayerString ?? "";
             }
             else
             {
-                turn.PlayerString = "Null";
+                Turn.PlayerString = "Null";
                 Debug.Log("Active PlayerId is not present in Player Dictionary: " + 
                     State.ActivePlayerId + " GameSeed: " + State.GameSeed);
             }
 
-            _allTurnRecord.Add(turn);
+            _allTurnRecord.Add(Turn);
 
-            return base.TakeTurn(turn, returnStartOfNextTurn);
+            return base.TakeTurn(Turn, ReturnStartOfNextTurn);
         }
 
         public override PlayerTurnResult TakeAITurn(bool ReturnStartOfNextTurn = false)
@@ -255,8 +258,10 @@ namespace Fourzy._Updates.ClientModel
                         {
                             puzzleData.pack.justFinished = true;
 
-                            AnalyticsManager.Instance.LogEvent(AnalyticsManager.AnalyticsGameEvents.EVENT_COMPLETED,
-                                extraParams: new KeyValuePair<string, object>(AnalyticsManager.EVENT_ID_KEY, puzzleData.pack.packID));
+                            AnalyticsManager.Instance.LogEvent(
+                                AnalyticsManager.AnalyticsGameEvents.EVENT_COMPLETED,
+                                extraParams: new KeyValuePair<string, object>(
+                                    AnalyticsManager.EVENT_ID_KEY, puzzleData.pack.packID));
                         }
                     }
                     else
@@ -283,7 +288,9 @@ namespace Fourzy._Updates.ClientModel
             if (isOver)
             {
                 if (IsWinner())
+                {
                     LoseStreak = 0;
+                }
                 //else
                 //    LoseStreak++;
             }
@@ -299,7 +306,10 @@ namespace Fourzy._Updates.ClientModel
             int playerID = me.PlayerId;
 
             List<Creature> addition = new List<Creature>();
-            for (int index = 0; index < count; index++) addition.Add(new Creature(playerPiece.HerdId));
+            for (int index = 0; index < count; index++)
+            {
+                addition.Add(new Creature(playerPiece.HerdId));
+            }
 
             State.Herds[playerID].Members.AddRange(addition);
             State.Players[playerID].HerdCount = State.Herds[playerID].Members.Count;
@@ -308,9 +318,13 @@ namespace Fourzy._Updates.ClientModel
         public IClientFourzy Next()
         {
             if (puzzleData.pack)
+            {
                 return puzzleData.pack.Next(this);
+            }
             else
+            {
                 return GameContentManager.Instance.GetNextFastPuzzle(puzzleData.ID);
+            }
         }
 
         public PlayerTurnResult StartTurn() => StartTurn(_State);
@@ -337,14 +351,21 @@ namespace Fourzy._Updates.ClientModel
             _allTurnRecord = new List<PlayerTurn>();
 
             if (puzzleData.pack)
+            {
                 hideOpponent = puzzleData.pack.packType == PackType.PUZZLE_PACK;
+            }
             else
+            {
                 hideOpponent = true;
+            }
 
             draw = false;
             magic = new Dictionary<int, int>();
             //assign magic values
-            foreach (KeyValuePair<int, Player> player in State.Players) magic.Add(player.Key, player.Value.Magic);
+            foreach (KeyValuePair<int, Player> player in State.Players)
+            {
+                magic.Add(player.Key, player.Value.Magic);
+            }
         }
 
         private void AssignPrefabs()
@@ -355,9 +376,15 @@ namespace Fourzy._Updates.ClientModel
                 if (State.Players[1].HerdId != null) player1HerdId = State.Players[1].HerdId;
 
                 if (State.Players.ContainsKey(1) && !string.IsNullOrEmpty(State.Players[1].HerdId))
-                    playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(player1HerdId);
+                {
+                    playerOnePrefabData = 
+                        GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(player1HerdId);
+                }
                 else
-                    playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(UserManager.Instance.gamePieceID);
+                {
+                    playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
+                        UserManager.Instance.gamePieceID);
+                }
             }
 
             if (playerTwoPrefabData == null)
@@ -366,9 +393,15 @@ namespace Fourzy._Updates.ClientModel
                 if (State.Players[2].HerdId != null) player2HerdId = State.Players[2].HerdId;
 
                 if (State.Players.ContainsKey(2) && !string.IsNullOrEmpty(State.Players[2].HerdId))
-                    playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(player2HerdId);
+                {
+                    playerTwoPrefabData = 
+                        GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(player2HerdId);
+                }
                 else
-                    playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(UserManager.Instance.gamePieceID);
+                {
+                    playerTwoPrefabData = 
+                        GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(UserManager.Instance.gamePieceID);
+                }
             }
         }
     }
