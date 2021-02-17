@@ -416,22 +416,22 @@ namespace Fourzy._Updates.ClientModel
 
         public bool IsWinner() => me.PlayerId == State.WinnerId;
 
-        public override PlayerTurnResult TakeTurn(PlayerTurn turn, bool ReturnStartOfNextTurn = false)
+        public override PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn = false, bool TriggerEndOfTurn = true)
         {
             if (State.Players.ContainsKey(State.ActivePlayerId))
             {
-                turn.PlayerString = State.Players[State.ActivePlayerId].PlayerString ?? "";
+                Turn.PlayerString = State.Players[State.ActivePlayerId].PlayerString ?? "";
             }
             else
             {
-                turn.PlayerString = "Null";
+                Turn.PlayerString = "Null";
                 Debug.Log("Active PlayerId is not present in Player Dictionary: " +
                     State.ActivePlayerId + " GameSeed: " + State.GameSeed);
             }
 
-            _allTurnRecord.Add(turn);
+            _allTurnRecord.Add(Turn);
 
-            return base.TakeTurn(turn, ReturnStartOfNextTurn);
+            return base.TakeTurn(Turn, ReturnStartOfNextTurn, TriggerEndOfTurn);
         }
 
         public override PlayerTurnResult TakeAITurn(bool ReturnStartOfNextTurn = false)

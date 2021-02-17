@@ -117,6 +117,10 @@
       "value": "Defeat"
     },
     {
+      "key": "disconnected",
+      "value": "Disconnected"
+    },
+    {
       "key": "draw",
       "value": "Draw"
     },
@@ -251,6 +255,10 @@
     {
       "key": "leave_game",
       "value": "Leave Game?"
+    },
+    {
+      "key": "left_game",
+      "value": "left the game"
     },
     {
       "key": "leave_realtime_game_message",

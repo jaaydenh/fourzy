@@ -82,7 +82,7 @@ namespace Fourzy._Updates.ClientModel
         ClientFourzyGame asFourzyGame { get; }
         ClientFourzyPuzzle asFourzyPuzzle { get; }
 
-        PlayerTurnResult TakeTurn(PlayerTurn playerTurn, bool returnStartOfNextTurn);
+        PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn = false, bool TriggerEndOfTurn = true);
         PlayerTurnResult TakeAITurn(bool ReturnStartOfNextTurn = false);
 
         GameState _Reset(bool resetMembers = false);
