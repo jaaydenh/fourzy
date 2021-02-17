@@ -128,7 +128,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 0
-  bundleVersion: 1.4.0
+  bundleVersion: 1.4.2
   preloadedAssets:
   - {fileID: 11400000, guid: 6b047155eff92054e891973a2ffb856a, type: 2}
   metroInputSource: 0
@@ -177,7 +177,7 @@ PlayerSettings:
     iPhone: com.PartyTroll.Fourzy
   buildNumber:
     iPhone: 1
-  AndroidBundleVersionCode: 10401
+  AndroidBundleVersionCode: 10402
   AndroidMinSdkVersion: 24
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 0
