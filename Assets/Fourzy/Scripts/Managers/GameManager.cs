@@ -99,7 +99,7 @@ namespace Fourzy
         public Camera3dItemProgressionMap currentMap { get; set; }
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public OpponentData RealtimeOpponent { get; set; }
-        public string BotPieceId { get; set; }
+        public Player Bot { get; set; }
         public string sessionID { get; private set; }
         public LocationInfo? lastLocation { get; private set; } = null;
         public string MainMenuSceneName => Landscape ?

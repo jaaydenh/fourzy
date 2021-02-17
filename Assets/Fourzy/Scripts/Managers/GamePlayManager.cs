@@ -210,23 +210,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 switch (GameManager.Instance.ExpectedGameType)
                 {
                     case GameTypeLocal.REALTIME_BOT_GAME:
-                        AIProfile profileFromRating = InternalSettings.FromCurrentRating();
-                        Debug.Log($"Game versus {profileFromRating} AI.");
-
-                        Player opponen = new Player(
-                            2, 
-                            UserManager.CreateNewPlayerName(),
-                            profileFromRating)
-                            {
-                                HerdId = GameManager.Instance.BotPieceId,
-                                PlayerString = "2",
-                            };
-
                         //load realtime game
                         newGame = new ClientFourzyGame(
                             (Area)PlayerPrefsWrapper.GetCurrentArea(),
                             UserManager.Instance.meAsPlayer,
-                            opponen,
+                            GameManager.Instance.Bot,
                             UnityEngine.Random.value > .5f ? 1 : 2)
                         { _Type = GameType.REALTIME };
 
@@ -251,7 +239,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             game = GameManager.Instance.activeGame;
 
-            Debug.Log($"Type: {game._Type} Mode: {game._Mode} Expected Local Type: {GameManager.Instance.ExpectedGameType}");
+            Debug.Log($"Type: {game._Type} Mode: {game._Mode} Expected Local Type: " +
+                $"{GameManager.Instance.ExpectedGameType} Opponent: {game.opponent.Profile}");
         }
 
         public void LoadGame(IClientFourzy _game)

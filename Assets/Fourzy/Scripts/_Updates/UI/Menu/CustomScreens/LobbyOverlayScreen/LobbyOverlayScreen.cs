@@ -255,12 +255,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         "bot", 
                         UserManager.DefaultBotRating(), 
                         Constants.GAMES_BEFORE_RATING_DISPLAYED);
-                GameManager.Instance.BotPieceId = 
-                    GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                GameManager.Instance.Bot = new FourzyGameModel.Model.Player(
+                    2,
+                    UserManager.CreateNewPlayerName(),
+                    InternalSettings.FromCurrentRating())
+                    {
+                        HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID,
+                        PlayerString = "2",
+                    };
 
                 SetData(playerGamepiece,
                     GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
-                        GameManager.Instance.BotPieceId).player1Prefab);
+                        GameManager.Instance.Bot.HerdId).player1Prefab);
 
                 StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame);
 
