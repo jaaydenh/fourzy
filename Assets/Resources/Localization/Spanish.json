@@ -121,6 +121,10 @@
       "value": "Fracaso"
     },
     {
+      "key": "disconnected",
+      "value": "Desconectado"
+    },
+    {
       "key": "draw",
       "value": "Empate"
     },
@@ -255,6 +259,10 @@
     {
       "key": "leave_game",
       "value": "¿Deseas dejar el juego?"
+    },
+    {
+      "key": "left_game",
+      "value": "dejó el juego"
     },
     {
       "key": "leave_realtime_game_message",
