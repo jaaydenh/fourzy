@@ -1,10 +1,10 @@
 {
   "dependencies": {
+    "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
+    "com.coffee.unmask": "https://github.com/mob-sakai/UnmaskForUGUI.git",
     "com.google.external-dependency-manager": "1.2.156",
-    "com.google.firebase.analytics": "6.15.2",
-    "com.google.firebase.messaging": "6.15.2",
-    "com.google.firebase.remote-config": "6.15.2",
-    "com.google.firebase.storage": "6.15.2",
+    "com.google.firebase.messaging": "7.1.0",
+    "com.tayx.graphy": "https://github.com/Tayx94/graphy.git",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.analytics": "3.3.5",
@@ -14,7 +14,7 @@
     "com.unity.ide.rider": "1.1.4",
     "com.unity.ide.vscode": "1.2.2",
     "com.unity.inputsystem": "1.0.0",
-    "com.unity.mobile.android-logcat": "1.2.0",
+    "com.unity.mobile.android-logcat": "1.2.1",
     "com.unity.multiplayer-hlapi": "1.0.6",
     "com.unity.postprocessing": "2.2.2",
     "com.unity.purchasing": "2.1.1",

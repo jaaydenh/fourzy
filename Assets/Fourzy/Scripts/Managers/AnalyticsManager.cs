@@ -1,12 +1,10 @@
 ﻿//@vadym udod
 
-using Firebase.Analytics;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
-using GameAnalyticsSDK;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -97,11 +95,9 @@ namespace Fourzy
 
         public enum AnalyticsProvider
         {
-            FIREBASE = 1,
             PLAYFAB = 2,
-            GAME_ANALYTICS = 4,
 
-            ALL = FIREBASE | PLAYFAB | GAME_ANALYTICS,
+            ALL = PLAYFAB ,
         }
 
         public enum AnalyticsGameEvents
@@ -192,8 +188,6 @@ namespace Fourzy
         protected override void Awake()
         {
             base.Awake();
-
-            GameAnalytics.Initialize();
         }
 
         public static void Initialize(bool _DEBUG = false)
@@ -351,10 +345,6 @@ namespace Fourzy
                 {
                     switch (value)
                     {
-                        case AnalyticsProvider.FIREBASE:
-                            LogFirebaseEvent(gameEventType.ToString().ToLower(), @params);
-
-                            break;
 
                         case AnalyticsProvider.PLAYFAB:
                             LogPlayFabPlayerEvent(gameEventType.ToString().ToLower(), @params);
@@ -400,10 +390,6 @@ namespace Fourzy
                 {
                     switch (value)
                     {
-                        case AnalyticsProvider.FIREBASE:
-                            LogFirebaseEvent(gameEventType.ToString().ToLower(), @params);
-
-                            break;
 
                         case AnalyticsProvider.PLAYFAB:
                             LogPlayFabPlayerEvent(gameEventType.ToString().ToLower(), @params);
@@ -535,25 +521,9 @@ namespace Fourzy
                 {
                     switch (value)
                     {
-                        case AnalyticsProvider.FIREBASE:
-                            LogFirebaseEvent(AnalyticsEvents.TUTORIALS.ToString().ToLower(), _params);
-
-                            break;
 
                         case AnalyticsProvider.PLAYFAB:
                             LogPlayFabPlayerEvent(AnalyticsEvents.TUTORIALS.ToString().ToLower(), _params);
-
-                            break;
-
-                        case AnalyticsProvider.GAME_ANALYTICS:
-                            string values = $"{AnalyticsEvents.TUTORIALS.ToString().ToLower()}";
-
-                            foreach (KeyValuePair<string, object> param in _params)
-                            {
-                                values += $":{param.Value}";
-                            }
-
-                            LogGameAnalyticsDesignEvent(values);
 
                             break;
                     }
@@ -612,22 +582,6 @@ namespace Fourzy
         //    else if (game.)
         //}
 
-        private void LogFirebaseEvent(string eventType, Dictionary<string, object> @params)
-        {
-            if (!SettingsPass()) return;
-
-            List<Parameter> firebaseParams = new List<Parameter>();
-
-            if (@params != null)
-                foreach (KeyValuePair<string, object> _param in @params)
-                    if (_param.Key != null && _param.Value != null)
-                        firebaseParams.Add(new Parameter(_param.Key, _param.Value.ToString()));
-
-            FirebaseAnalytics.LogEvent(eventType, firebaseParams.ToArray());
-
-            if (DEBUG) Debug.Log("Firebase event sent: " + eventType);
-        }
-
         private void LogPlayFabPlayerEvent(string eventName, Dictionary<string, object> @params)
         {
             if (!SettingsPass()) return;
@@ -639,24 +593,6 @@ namespace Fourzy
             }, null, null);
 
             if (DEBUG) Debug.Log("Playfab event sent: " + eventName);
-        }
-
-        private void LogGameAnalyticsDesignEvent(string value)
-        {
-            if (!SettingsPass()) return;
-
-            GameAnalytics.NewDesignEvent(value);
-
-            if (DEBUG) Debug.Log("Game Analytics event sent: " + value);
-        }
-
-        private void LogGameAnalyticsErrorEvent(GAErrorSeverity severity, string value)
-        {
-            if (!SettingsPass()) return;
-
-            GameAnalytics.NewErrorEvent(severity, value);
-
-            if (DEBUG) Debug.Log("Game Analytics Error event sent: " + value);
         }
 
         private bool NetworkPass() => GameManager.NetworkAccess;
