@@ -646,7 +646,7 @@
     },
     {
       "key": "token_desc_hex",
-      "value": "A Fourzy can move through a Hex but cannot stop on Hex. When a Hex is placed on top of another token, it cancels all effects of that token."
+      "value": "A Fourzy can move through a Nope but cannot stop on Nope. When a Nope is placed on top of another token, it cancels all effects of that token."
     },
     {
       "key": "token_desc_ice",
@@ -710,7 +710,7 @@
     },
     {
       "key": "token_hex",
-      "value": "Hex"
+      "value": "Nope"
     },
     {
       "key": "token_ice_block",
