@@ -18,6 +18,7 @@ extern "C" {
 }
 #endif
 
+static MoPubBackgroundEventCallback _bgEventCallback;
 
 @implementation MoPubManager
 
@@ -61,16 +62,43 @@ extern "C" {
 }
 
 
-+ (void)sendUnityEvent:(NSString*)eventName withArgs:(NSArray*)args
++ (MoPubBackgroundEventCallback)bgEventCallback
+{
+    return _bgEventCallback;
+}
+
+
++ (void)setBgEventCallback:(MoPubBackgroundEventCallback)cb
+{
+    _bgEventCallback = cb;
+}
+
+
++ (void)sendUnityEvent:(NSString*)eventName withArgs:(NSArray*)args backgroundOK:(BOOL)bg
 {
     NSData* data = [NSJSONSerialization dataWithJSONObject:args options:0 error:nil];
-    UnitySendMessage("MoPubManager", eventName.UTF8String, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding].UTF8String);
+    NSString* json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    if (bg && _bgEventCallback != nil)
+        _bgEventCallback(eventName.UTF8String, json.UTF8String);
+    UnitySendMessage("MoPubManager", eventName.UTF8String, json.UTF8String);
+}
+
+
++ (void)sendUnityEvent:(NSString*)eventName withArgs:(NSArray*)args
+{
+    [MoPubManager sendUnityEvent:eventName withArgs:args backgroundOK:NO];
+}
+
+
+- (void)sendUnityEvent:(NSString*)eventName backgroundOK:(BOOL)bg
+{
+    [[self class] sendUnityEvent:eventName withArgs:@[_adUnitId] backgroundOK:bg];
 }
 
 
 - (void)sendUnityEvent:(NSString*)eventName
 {
-    [[self class] sendUnityEvent:eventName withArgs:@[_adUnitId]];
+    [[self class] sendUnityEvent:eventName withArgs:@[_adUnitId] backgroundOK:NO];
 }
 
 
@@ -212,7 +240,7 @@ extern "C" {
 }
 
 
-- (void)requestBanner:(float)width height:(float)height atPosition:(MoPubAdPosition)position
+- (void)requestBanner:(float)width height:(float)height atPosition:(MoPubAdPosition)position keywords:(NSString*)keywords userDataKeywords:(NSString*)userDataKeywords
 {
     // kill the current adView if we have one
     if (_adView)
@@ -228,6 +256,8 @@ extern "C" {
         _adView.location = _lastKnownLocation;
 
     _adView.delegate = self;
+    _adView.keywords = keywords;
+    _adView.userDataKeywords = userDataKeywords;
     _autorefresh = YES;
     [[MoPubManager unityViewController].view addSubview:_adView];
     [_adView loadAd];
@@ -445,9 +475,9 @@ __deprecated_msg("createBanner has been deprecated, please use requestBanner ins
 {
     if (impressionData != nil) {
         NSString * jsonString = [[NSString alloc] initWithData:impressionData.jsonRepresentation encoding:NSUTF8StringEncoding];
-        [[self class] sendUnityEvent:@"EmitImpressionTrackedEvent" withArgs:@[_adUnitId, jsonString]];
+        [[self class] sendUnityEvent:@"EmitImpressionTrackedEvent" withArgs:@[_adUnitId, jsonString] backgroundOK:YES];
     } else
-        [self sendUnityEvent:@"EmitImpressionTrackedEvent"];
+        [self sendUnityEvent:@"EmitImpressionTrackedEvent" backgroundOK:YES];
 }
 
 
@@ -576,10 +606,11 @@ __deprecated_msg("createBanner has been deprecated, please use requestBanner ins
                         impressionData:(MPImpressionData * _Nullable)impressionData;
 {
     if (impressionData != nil) {
-        NSString * jsonString = [[NSString alloc] initWithData:impressionData.jsonRepresentation encoding:NSUTF8StringEncoding];
-        [[self class] sendUnityEvent:@"EmitImpressionTrackedEvent" withArgs:@[_adUnitId, jsonString]];
+        NSString * jsonString = [[NSString alloc] initWithData:impressionData.jsonRepresentation
+                                                      encoding:NSUTF8StringEncoding];
+        [[self class] sendUnityEvent:@"EmitImpressionTrackedEvent" withArgs:@[_adUnitId, jsonString] backgroundOK:YES];
     } else
-        [self sendUnityEvent:@"EmitImpressionTrackedEvent"];
+        [self sendUnityEvent:@"EmitImpressionTrackedEvent" backgroundOK:YES];
 }
 
 @end

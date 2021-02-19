@@ -34,6 +34,17 @@ namespace Tests
         }
 
         [Test]
+        public void CompareVersionsWithEmptyValues()
+        {
+            Assert.That(MoPubUtils.CompareVersions("", ""), Is.EqualTo(0));
+            Assert.That(MoPubUtils.CompareVersions("", "1"), Is.EqualTo(-1));
+            Assert.That(MoPubUtils.CompareVersions("1", ""), Is.EqualTo(1));
+            Assert.That(MoPubUtils.CompareVersions(null, null), Is.EqualTo(0));
+            Assert.That(MoPubUtils.CompareVersions(null, "1"), Is.EqualTo(-1));
+            Assert.That(MoPubUtils.CompareVersions("1", null), Is.EqualTo(1));
+        }
+
+        [Test]
         public void DecodeArgsWithNullShouldErrorAndYieldEmptyList()
         {
             var res = MoPubUtils.DecodeArgs(null, 0);

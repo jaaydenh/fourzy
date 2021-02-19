@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -30,9 +29,10 @@ internal class MoPubiOSAdUnit : MoPubAdUnit
 
     #region Banners
 
-    internal override void RequestBanner(float width, float height, MoPub.AdPosition position)
+    internal override void RequestBanner(float width, float height, MoPub.AdPosition position, string keywords = "",
+        string userDataKeywords = "")
     {
-        _moPubRequestBanner(width, height, (int) position, AdUnitId);
+        _moPubRequestBanner(width, height, (int) position, AdUnitId, keywords, userDataKeywords);
     }
 
 
@@ -176,7 +176,8 @@ internal class MoPubiOSAdUnit : MoPubAdUnit
 #if ENABLE_IL2CPP && UNITY_ANDROID
     // IL2CPP on Android scrubs DllImports, so we need to provide stubs to unblock compilation
     private static bool _moPubIsPluginReady(string adUnitId) { return false; }
-    private static void _moPubRequestBanner(float width, float height, int position, string adUnitId) {}
+    private static void _moPubRequestBanner(float width, float height, int position, string adUnitId,
+                                            string keywords, string userDataKeywords) {}
     private static void _moPubDestroyBanner(string adUnitId) {}
     private static void _moPubShowBanner(string adUnitId, bool shouldShow) {}
     private static void _moPubRefreshBanner(string adUnitId, string keywords, string userDataKeywords) {}
@@ -198,7 +199,8 @@ internal class MoPubiOSAdUnit : MoPubAdUnit
     private static extern bool _moPubIsPluginReady(string adUnitId);
 
     [DllImport("__Internal")]
-    private static extern void _moPubRequestBanner(float width, float height, int position, string adUnitId);
+    private static extern void _moPubRequestBanner(float width, float height, int position, string adUnitId,
+                                                   string keywords, string userDataKeywords);
 
 
     [DllImport("__Internal")]

@@ -31,6 +31,10 @@ namespace PlayFab.Events
         public event PlayFabResultEvent<ConfirmPurchaseResult> OnConfirmPurchaseResultEvent;
         public event PlayFabRequestEvent<ConsumeItemRequest> OnConsumeItemRequestEvent;
         public event PlayFabResultEvent<ConsumeItemResult> OnConsumeItemResultEvent;
+        public event PlayFabRequestEvent<ConsumeMicrosoftStoreEntitlementsRequest> OnConsumeMicrosoftStoreEntitlementsRequestEvent;
+        public event PlayFabResultEvent<ConsumeMicrosoftStoreEntitlementsResponse> OnConsumeMicrosoftStoreEntitlementsResultEvent;
+        public event PlayFabRequestEvent<ConsumePS5EntitlementsRequest> OnConsumePS5EntitlementsRequestEvent;
+        public event PlayFabResultEvent<ConsumePS5EntitlementsResult> OnConsumePS5EntitlementsResultEvent;
         public event PlayFabRequestEvent<ConsumePSNEntitlementsRequest> OnConsumePSNEntitlementsRequestEvent;
         public event PlayFabResultEvent<ConsumePSNEntitlementsResult> OnConsumePSNEntitlementsResultEvent;
         public event PlayFabRequestEvent<ConsumeXboxEntitlementsRequest> OnConsumeXboxEntitlementsRequestEvent;
@@ -41,6 +45,8 @@ namespace PlayFab.Events
         public event PlayFabResultEvent<ExecuteCloudScriptResult> OnExecuteCloudScriptResultEvent;
         public event PlayFabRequestEvent<GetAccountInfoRequest> OnGetAccountInfoRequestEvent;
         public event PlayFabResultEvent<GetAccountInfoResult> OnGetAccountInfoResultEvent;
+        public event PlayFabRequestEvent<GetAdPlacementsRequest> OnGetAdPlacementsRequestEvent;
+        public event PlayFabResultEvent<GetAdPlacementsResult> OnGetAdPlacementsResultEvent;
         public event PlayFabRequestEvent<ListUsersCharactersRequest> OnGetAllUsersCharactersRequestEvent;
         public event PlayFabResultEvent<ListUsersCharactersResult> OnGetAllUsersCharactersResultEvent;
         public event PlayFabRequestEvent<GetCatalogItemsRequest> OnGetCatalogItemsRequestEvent;
@@ -165,6 +171,8 @@ namespace PlayFab.Events
         public event PlayFabResultEvent<LinkIOSDeviceIDResult> OnLinkIOSDeviceIDResultEvent;
         public event PlayFabRequestEvent<LinkKongregateAccountRequest> OnLinkKongregateRequestEvent;
         public event PlayFabResultEvent<LinkKongregateAccountResult> OnLinkKongregateResultEvent;
+        public event PlayFabRequestEvent<LinkNintendoServiceAccountRequest> OnLinkNintendoServiceAccountRequestEvent;
+        public event PlayFabResultEvent<EmptyResult> OnLinkNintendoServiceAccountResultEvent;
         public event PlayFabRequestEvent<LinkNintendoSwitchDeviceIdRequest> OnLinkNintendoSwitchDeviceIdRequestEvent;
         public event PlayFabResultEvent<LinkNintendoSwitchDeviceIdResult> OnLinkNintendoSwitchDeviceIdResultEvent;
         public event PlayFabRequestEvent<LinkOpenIdConnectRequest> OnLinkOpenIdConnectRequestEvent;
@@ -189,6 +197,7 @@ namespace PlayFab.Events
         public event PlayFabRequestEvent<LoginWithGoogleAccountRequest> OnLoginWithGoogleAccountRequestEvent;
         public event PlayFabRequestEvent<LoginWithIOSDeviceIDRequest> OnLoginWithIOSDeviceIDRequestEvent;
         public event PlayFabRequestEvent<LoginWithKongregateRequest> OnLoginWithKongregateRequestEvent;
+        public event PlayFabRequestEvent<LoginWithNintendoServiceAccountRequest> OnLoginWithNintendoServiceAccountRequestEvent;
         public event PlayFabRequestEvent<LoginWithNintendoSwitchDeviceIdRequest> OnLoginWithNintendoSwitchDeviceIdRequestEvent;
         public event PlayFabRequestEvent<LoginWithOpenIdConnectRequest> OnLoginWithOpenIdConnectRequestEvent;
         public event PlayFabRequestEvent<LoginWithPlayFabRequest> OnLoginWithPlayFabRequestEvent;
@@ -222,12 +231,16 @@ namespace PlayFab.Events
         public event PlayFabResultEvent<RemoveGenericIDResult> OnRemoveGenericIDResultEvent;
         public event PlayFabRequestEvent<RemoveSharedGroupMembersRequest> OnRemoveSharedGroupMembersRequestEvent;
         public event PlayFabResultEvent<RemoveSharedGroupMembersResult> OnRemoveSharedGroupMembersResultEvent;
+        public event PlayFabRequestEvent<ReportAdActivityRequest> OnReportAdActivityRequestEvent;
+        public event PlayFabResultEvent<ReportAdActivityResult> OnReportAdActivityResultEvent;
         public event PlayFabRequestEvent<DeviceInfoRequest> OnReportDeviceInfoRequestEvent;
         public event PlayFabResultEvent<EmptyResponse> OnReportDeviceInfoResultEvent;
         public event PlayFabRequestEvent<ReportPlayerClientRequest> OnReportPlayerRequestEvent;
         public event PlayFabResultEvent<ReportPlayerClientResult> OnReportPlayerResultEvent;
         public event PlayFabRequestEvent<RestoreIOSPurchasesRequest> OnRestoreIOSPurchasesRequestEvent;
         public event PlayFabResultEvent<RestoreIOSPurchasesResult> OnRestoreIOSPurchasesResultEvent;
+        public event PlayFabRequestEvent<RewardAdActivityRequest> OnRewardAdActivityRequestEvent;
+        public event PlayFabResultEvent<RewardAdActivityResult> OnRewardAdActivityResultEvent;
         public event PlayFabRequestEvent<SendAccountRecoveryEmailRequest> OnSendAccountRecoveryEmailRequestEvent;
         public event PlayFabResultEvent<SendAccountRecoveryEmailResult> OnSendAccountRecoveryEmailResultEvent;
         public event PlayFabRequestEvent<SetFriendTagsRequest> OnSetFriendTagsRequestEvent;
@@ -258,9 +271,11 @@ namespace PlayFab.Events
         public event PlayFabResultEvent<UnlinkIOSDeviceIDResult> OnUnlinkIOSDeviceIDResultEvent;
         public event PlayFabRequestEvent<UnlinkKongregateAccountRequest> OnUnlinkKongregateRequestEvent;
         public event PlayFabResultEvent<UnlinkKongregateAccountResult> OnUnlinkKongregateResultEvent;
+        public event PlayFabRequestEvent<UnlinkNintendoServiceAccountRequest> OnUnlinkNintendoServiceAccountRequestEvent;
+        public event PlayFabResultEvent<EmptyResponse> OnUnlinkNintendoServiceAccountResultEvent;
         public event PlayFabRequestEvent<UnlinkNintendoSwitchDeviceIdRequest> OnUnlinkNintendoSwitchDeviceIdRequestEvent;
         public event PlayFabResultEvent<UnlinkNintendoSwitchDeviceIdResult> OnUnlinkNintendoSwitchDeviceIdResultEvent;
-        public event PlayFabRequestEvent<UninkOpenIdConnectRequest> OnUnlinkOpenIdConnectRequestEvent;
+        public event PlayFabRequestEvent<UnlinkOpenIdConnectRequest> OnUnlinkOpenIdConnectRequestEvent;
         public event PlayFabResultEvent<EmptyResponse> OnUnlinkOpenIdConnectResultEvent;
         public event PlayFabRequestEvent<UnlinkPSNAccountRequest> OnUnlinkPSNAccountRequestEvent;
         public event PlayFabResultEvent<UnlinkPSNAccountResult> OnUnlinkPSNAccountResultEvent;

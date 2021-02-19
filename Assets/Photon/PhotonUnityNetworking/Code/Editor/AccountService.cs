@@ -36,7 +36,7 @@ namespace Photon.Pun
         private const string DefaultToken = "VQ920wVUieLHT9c3v1ZCbytaLXpXbktUztKb3iYLCdiRKjUagcl6eg==";
 
         /// <summary>
-        /// third parties custom token, if null, defaults to DefaultContext property value
+        /// third parties custom context, if null, defaults to DefaultContext property value
         /// </summary>
         public string CustomContext = null;
         
@@ -44,62 +44,57 @@ namespace Photon.Pun
         /// third parties custom token. If null, defaults to DefaultToken property value
         /// </summary>
         public string CustomToken = null;
-        
-        
+
         /// <summary>
-        /// Attempts to create a Photon Cloud Account asynchronously.
-        /// Once your callback is called, check ReturnCode, Message and AppId to get the result of this attempt.
+        /// If this AccountService instance is currently waiting for a response. While pending, RegisterByEmail is blocked.
         /// </summary>
+        public bool RequestPendingResult = false;
+
+        /// <summary>
+        /// Attempts to create a Photon Cloud Account asynchronously. Blocked while RequestPendingResult is true.
+        /// </summary>
+        /// <remarks>
+        /// Once your callback is called, check ReturnCode, Message and AppId to get the result of this attempt.
+        /// </remarks>
         /// <param name="email">Email of the account.</param>
         /// <param name="serviceTypes">Defines which type of Photon-service is being requested.</param>
         /// <param name="callback">Called when the result is available.</param>
-        public bool RegisterByEmail(string email, string serviceTypes, Action<AccountServiceResponse> callback = null, Action<string> errorCallback = null)
+        /// <param name="errorCallback">Called when the request failed.</param>
+        public bool RegisterByEmail(string email, List<ServiceTypes> serviceTypes, Action<AccountServiceResponse> callback = null, Action<string> errorCallback = null)
         {
+            if (this.RequestPendingResult)
+            {
+                Debug.LogError("Registration request pending result. Not sending another.");
+                return false;
+            }
+
             if (!IsValidEmail(email))
             {
                 Debug.LogErrorFormat("Email \"{0}\" is not valid", email);
                 return false;
             }
-            if (string.IsNullOrEmpty(serviceTypes))
+
+            string serviceTypeString = GetServiceTypesFromList(serviceTypes);
+            if (string.IsNullOrEmpty(serviceTypeString))
             {
                 Debug.LogError("serviceTypes string is null or empty");
                 return false;
             }
-            AccountServiceRequest req = new AccountServiceRequest();
-            req.Email = email;
-            req.ServiceTypes = serviceTypes;
-            //Debug.LogWarningFormat("Service types sent {0}", serviceTypes);
-            return this.RegisterByEmail(req, callback, errorCallback);
-        }
 
-        public bool RegisterByEmail(string email, List<ServiceTypes> serviceTypes, Action<AccountServiceResponse> callback = null, Action<string> errorCallback = null)
-        {
-            if (serviceTypes == null || serviceTypes.Count == 0)
-            {
-                Debug.LogError("serviceTypes list is null or empty");
-                return false;
-            }
-            return this.RegisterByEmail(email, GetServiceTypesFromList(serviceTypes), callback, errorCallback);
-        }
-
-        public bool RegisterByEmail(AccountServiceRequest request, Action<AccountServiceResponse> callback = null, Action<string> errorCallback = null)
-        {
-            if (request == null)
-            {
-                Debug.LogError("Registration request is null");
-                return false;
-            }
-            string fullUrl = GetUrlWithQueryStringEscaped(request);
+            string fullUrl = GetUrlWithQueryStringEscaped(email, serviceTypeString);
 
             RequestHeaders["x-functions-key"] = string.IsNullOrEmpty(CustomToken) ? DefaultToken : CustomToken;
-            
-            //Debug.LogWarningFormat("Full URL {0}", fullUrl);
+
+
+            this.RequestPendingResult = true;
+
             PhotonEditorUtils.StartCoroutine(
                 PhotonEditorUtils.HttpPost(fullUrl,
                     RequestHeaders,
                     null,
                     s =>
                     {
+                        this.RequestPendingResult = false;
                         //Debug.LogWarningFormat("received response {0}", s);
                         if (string.IsNullOrEmpty(s))
                         {
@@ -126,6 +121,7 @@ namespace Photon.Pun
                     },
                     e =>
                     {
+                        this.RequestPendingResult = false;
                         if (errorCallback != null)
                         {
                             errorCallback(e);
@@ -135,12 +131,15 @@ namespace Photon.Pun
             return true;
         }
 
-        private string GetUrlWithQueryStringEscaped(AccountServiceRequest request)
+
+        private string GetUrlWithQueryStringEscaped(string email, string serviceTypes)
         {
-            string email = UnityEngine.Networking.UnityWebRequest.EscapeURL(request.Email);
-            string st = UnityEngine.Networking.UnityWebRequest.EscapeURL(request.ServiceTypes);
+            string emailEscaped = UnityEngine.Networking.UnityWebRequest.EscapeURL(email);
+            string st = UnityEngine.Networking.UnityWebRequest.EscapeURL(serviceTypes);
+            string uv = UnityEngine.Networking.UnityWebRequest.EscapeURL(Application.unityVersion);
             string serviceUrl = string.Format(ServiceUrl, string.IsNullOrEmpty(CustomContext) ? DefaultContext : CustomContext );
-            return string.Format("{0}?email={1}&st={2}", serviceUrl, email, st);
+
+            return string.Format("{0}?email={1}&st={2}&uv={3}", serviceUrl, emailEscaped, st, uv);
         }
 
         /// <summary>
@@ -182,23 +181,26 @@ namespace Photon.Pun
             }
         }
 
+        /// <summary>
+        /// Turns the list items to a comma separated string. Returns null if list is null or empty.
+        /// </summary>
+        /// <param name="appTypes">List of service types.</param>
+        /// <returns>Returns null if list is null or empty.</returns>
         private static string GetServiceTypesFromList(List<ServiceTypes> appTypes)
         {
-            if (appTypes != null)
+            if (appTypes == null || appTypes.Count <= 0)
             {
-                string serviceTypes = string.Empty;
-                if (appTypes.Count > 0)
-                {
-                    serviceTypes = ((int)appTypes[0]).ToString();
-                    for (int i = 1; i < appTypes.Count; i++)
-                    {
-                        int appType = (int)appTypes[i];
-                        serviceTypes = string.Format("{0},{1}", serviceTypes, appType);
-                    }
-                }
-                return serviceTypes;
+                return null;
             }
-            return null;
+
+            string serviceTypes = ((int)appTypes[0]).ToString();
+            for (int i = 1; i < appTypes.Count; i++)
+            {
+                int appType = (int)appTypes[i];
+                serviceTypes = string.Format("{0},{1}", serviceTypes, appType);
+            }
+            
+            return serviceTypes;
         }
 
         // RFC2822 compliant matching 99.9% of all email addresses in actual use today
@@ -224,12 +226,6 @@ namespace Photon.Pun
         public Dictionary<string, string> ApplicationIds; // Unity's JsonUtility does not support deserializing Dictionary
     }
     
-    [Serializable]
-    public class AccountServiceRequest
-    {
-        public string Email;
-        public string ServiceTypes;
-    }
 
     public class AccountServiceReturnCodes
     {

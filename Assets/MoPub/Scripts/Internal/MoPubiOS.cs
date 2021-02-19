@@ -23,7 +23,7 @@ internal class MoPubiOS : MoPubPlatformApi
         _moPubInitializeSdk(sdkConfiguration.AdUnitId, sdkConfiguration.AdditionalNetworksString,
                             sdkConfiguration.MediationSettingsJson, sdkConfiguration.AllowLegitimateInterest,
                             (int) sdkConfiguration.LogLevel, sdkConfiguration.NetworkConfigurationsJson,
-                            sdkConfiguration.MoPubRequestOptionsJson);
+                            sdkConfiguration.MoPubRequestOptionsJson, MoPubManager.BackgroundEventListener.SendEvent);
     }
 
 
@@ -48,6 +48,12 @@ internal class MoPubiOS : MoPubPlatformApi
     internal override void OnApplicationPause(bool paused)
     {
         MoPubManager.EmitConsentDialogDismissedIfApplicable(paused);
+    }
+
+
+    internal override void DisableViewability()
+    {
+        _moPubDisableViewability();
     }
 
 
@@ -238,7 +244,8 @@ internal class MoPubiOS : MoPubPlatformApi
     private static void _moPubInitializeSdk(string adUnitId, string additionalNetworksJson,
                                             string mediationSettingsJson, bool allowLegitimateInterest,
                                             int logLevel, string adapterConfigJson,
-                                            string moPubRequestOptionsJson) {}
+                                            string moPubRequestOptionsJson,
+                                            MoPubManager.BackgroundEventListener.Delegate callback) {}
     private static bool _moPubIsSdkInitialized() { return false; }
     private static string _moPubGetSDKVersion() { return null; }
     private static void _moPubEnableLocationSupport(bool shouldUseLocation) {}
@@ -249,6 +256,7 @@ internal class MoPubiOS : MoPubPlatformApi
     private static void _moPubSetLogLevel(int logLevel) {}
     private static void _moPubForceWKWebView(bool shouldForce) {}
     private static void _moPubReportApplicationOpen(string iTunesAppId) {}
+    private static void _moPubDisableViewability() {}
     private static bool _moPubCanCollectPersonalInfo() { return false; }
     private static int _moPubCurrentConsentStatus() { return -1; }
     private static int _moPubIsGDPRApplicable() { return -1; }
@@ -272,7 +280,8 @@ internal class MoPubiOS : MoPubPlatformApi
     private static extern void _moPubInitializeSdk(string adUnitId, string additionalNetworksJson,
                                                    string mediationSettingsJson, bool allowLegitimateInterest,
                                                    int logLevel, string adapterConfigJson,
-                                                   string moPubRequestOptionsJson);
+                                                   string moPubRequestOptionsJson,
+                                                   MoPubManager.BackgroundEventListener.Delegate callback);
 
 
     [DllImport("__Internal")]
@@ -312,6 +321,10 @@ internal class MoPubiOS : MoPubPlatformApi
 
     [DllImport("__Internal")]
     private static extern void _moPubReportApplicationOpen(string iTunesAppId);
+
+
+    [DllImport("__Internal")]
+    private static extern void _moPubDisableViewability();
 
 
     [DllImport("__Internal")]

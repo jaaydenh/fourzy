@@ -28,7 +28,8 @@ internal class MoPubAndroid : MoPubPlatformApi
             sdkConfiguration.AllowLegitimateInterest,
             (int) sdkConfiguration.LogLevel,
             sdkConfiguration.NetworkConfigurationsJson,
-            sdkConfiguration.MoPubRequestOptionsJson);
+            sdkConfiguration.MoPubRequestOptionsJson,
+            MoPubManager.BackgroundEventListener.Instance);
     }
 
 
@@ -58,6 +59,12 @@ internal class MoPubAndroid : MoPubPlatformApi
     }
 
 
+    internal override void DisableViewability()
+    {
+        PluginClass.CallStatic("disableViewability");
+    }
+
+
     internal override bool AllowLegitimateInterest
     {
         get { return PluginClass.CallStatic<bool>("shouldAllowLegitimateInterest"); }
@@ -80,7 +87,7 @@ internal class MoPubAndroid : MoPubPlatformApi
     internal override MoPub.LogLevel SdkLogLevel
     {
         get { return (MoPub.LogLevel) PluginClass.CallStatic<int>("getLogLevel"); }
-        set { PluginClass.CallStatic<int>("setLogLevel", (int) value); }
+        set { PluginClass.CallStatic("setLogLevel", (int) value); }
     }
 
 

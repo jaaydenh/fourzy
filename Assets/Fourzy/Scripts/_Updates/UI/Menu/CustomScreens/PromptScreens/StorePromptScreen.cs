@@ -33,9 +33,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             try
             {
-                return string.Join(",", CodelessIAPStoreListener.Instance.StoreController.products.all
-                    .Where(product => product.definition.id.IndexOf(filter.ToString(), System.StringComparison.InvariantCultureIgnoreCase) >= 0)
-                    .Select(product => product.definition.id));
+                //return string.Join(",", CodelessIAPStoreListener.Instance.StoreController.products.all
+                //    .Where(product => product.definition.id.IndexOf(filter.ToString(), System.StringComparison.InvariantCultureIgnoreCase) >= 0)
+                //    .Select(product => product.definition.id));
             }
             catch (Exception) { }
 
@@ -56,10 +56,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             try
             {
-                //add widgets
-                foreach (Product product in CodelessIAPStoreListener.Instance.StoreController.products.all)
-                    if (product.definition.id.IndexOf(filter.ToString(), System.StringComparison.InvariantCultureIgnoreCase) >= 0)
-                        widgets.Add(Instantiate(storeItemWidget, productsParent).SetData(product));
+                ////add widgets
+                //foreach (Product product in CodelessIAPStoreListener.Instance.StoreController.products.all)
+                //    if (product.definition.id.IndexOf(filter.ToString(), System.StringComparison.InvariantCultureIgnoreCase) >= 0)
+                //        widgets.Add(Instantiate(storeItemWidget, productsParent).SetData(product));
             }
             catch (Exception) { }
         }

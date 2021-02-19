@@ -40,6 +40,7 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 1
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: c94a211610a9b894c85cad991d67f9b8, type: 3}
@@ -47,6 +48,8 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 139cf89a0645d9042b6c4acb6becce05, type: 3}
     totalSpriteSurfaceArea: 44096418
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 651df280ce7e0de488fb00fc8ccffe5c, type: 3}
@@ -104,5 +107,6 @@ SpriteAtlas:
   - 01_Training-Background
   - 03_Beach_Background
   - IcePalace-iPhone7_glasseffect
+  m_RenderDataMap: {}
   m_Tag: _BGs2
   m_IsVariant: 0

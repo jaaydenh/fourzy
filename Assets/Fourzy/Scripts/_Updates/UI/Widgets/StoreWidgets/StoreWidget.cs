@@ -37,7 +37,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void OnTap()
         {
-            CodelessIAPStoreListener.Instance.InitiatePurchase(data.definition.id);
+            //CodelessIAPStoreListener.Instance.InitiatePurchase(data.definition.id);
         }
     }
 }
