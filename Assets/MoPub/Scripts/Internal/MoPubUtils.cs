@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using MJ = MoPubInternal.ThirdParty.MiniJSON;
 using UnityEngine;
+using MJ = MoPubInternal.ThirdParty.MiniJSON;
 
 public class MoPubUtils {
 
@@ -37,6 +37,10 @@ public class MoPubUtils {
 
     private static int[] VersionStringToInts(string version)
     {
+        if (string.IsNullOrEmpty(version)) {
+            return new[] { 0 };
+        }
+
         int piece;
         return version.Split('.')
             .Select(v => int.TryParse(v, NumberStyles.Any, CultureInfo.InvariantCulture, out piece) ? piece : 0)

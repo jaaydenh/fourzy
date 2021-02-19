@@ -92,6 +92,7 @@ namespace StackableDecorator
                     height += 20;
             }
             return height;
+
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label, bool includeChildren)

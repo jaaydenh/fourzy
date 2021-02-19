@@ -278,12 +278,6 @@ namespace Fourzy._Updates.UI.Helpers
 
                             break;
 
-                        case ListenValues.SETTINGS_ANALYTICS_ON:
-                        case ListenValues.SETTINGS_ANALYTICS_OFF:
-                            OnAnalyticsMode(SettingsManager.Get(SettingsManager.KEY_ANALYTICS_EVENTS));
-
-                            break;
-
 
                         case ListenValues.SETTINGS_MAGIC_ON:
                         case ListenValues.SETTINGS_MAGIC_OFF:

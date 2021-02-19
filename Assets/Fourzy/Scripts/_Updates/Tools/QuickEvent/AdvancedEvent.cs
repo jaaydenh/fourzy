@@ -255,6 +255,7 @@ namespace ByteSheep.Events
         }
 
         public virtual void OnBeforeSerialize() { }
+
         public virtual void OnAfterDeserialize()
         {
             for (int i = 0; i < persistentCalls.calls.Count; i++)

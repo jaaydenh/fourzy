@@ -15,6 +15,8 @@ namespace MoPubInternal.Editor.Postbuild
             if (buildTarget != BuildTarget.iOS)
                 return;
 
+            PrepareProject(buildPath);
+
             // Make sure that the proper location usage string is in Info.plist
 
             const string locationKey = "NSLocationWhenInUseUsageDescription";
@@ -30,6 +32,24 @@ namespace MoPubInternal.Editor.Postbuild
                 plist.root.SetString(locationKey, usage);
                 plist.WriteToFile(plistPath);
             }
+        }
+
+        private static void PrepareProject(string buildPath)
+        {
+            var projPath = Path.Combine(buildPath, "Unity-iPhone.xcodeproj/project.pbxproj");
+            var project = new PBXProject();
+            project.ReadFromString(File.ReadAllText(projPath));
+            var target =
+#if UNITY_2019_3_OR_NEWER
+                project.GetUnityMainTargetGuid();
+#else
+                project.TargetGuidByName("Unity-iPhone");
+#endif
+            // The MoPub iOS SDK now includes Swift, so these properties ensure Xcode handles that properly.
+            project.AddBuildProperty(target, "SWIFT_VERSION", "5.0");
+            project.AddBuildProperty(target, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "YES");
+
+            File.WriteAllText(projPath, project.WriteToString());
         }
     }
 }

@@ -25,6 +25,8 @@ internal abstract class MoPubPlatformApi
 
     internal abstract void OnApplicationPause(bool paused);
 
+    internal abstract void DisableViewability();
+
     internal abstract string SdkName { get; }
 
     internal abstract bool IsSdkInitialized { get; }

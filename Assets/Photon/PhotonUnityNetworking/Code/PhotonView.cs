@@ -21,16 +21,6 @@ namespace Photon.Pun
     using UnityEditor;
 #endif
 
-    public interface IOnPhotonViewPreNetDestroy
-    {
-        void OnPreNetDestroy(PhotonView rootView);
-    }
-
-    public interface IOnPhotonViewControllerChange
-    {
-        void OnControllerChange(Player newOwner, Player newController, bool isMine);
-    }
-
     /// <summary>
     /// A PhotonView identifies an object across the network (viewID) and configures how the controlling client updates remote instances.
     /// </summary>
@@ -58,7 +48,7 @@ namespace Photon.Pun
 
 
         [NonSerialized]
-        private int ownerActorNr; // TODO maybe changing this should trigger "Was Transfered"!?
+        private int ownerActorNr; // TODO maybe changing this should trigger "Was Transferred"!?
 
         [FormerlySerializedAs("group")]
         public byte Group = 0;
@@ -84,6 +74,12 @@ namespace Photon.Pun
         // this field is serialized by unity. that means it is copied when instantiating a persistent obj into the scene
         [FormerlySerializedAs("prefixBackup")]
         public int prefixField = -1;
+
+        public enum ObservableSearch { Manual, AutoFindActive, AutoFindAll }
+
+        // Default to manual so existing PVs in projects default to same as before. Reset() changes this to AutoAll for new implementations.
+        public ObservableSearch observableSearch = ObservableSearch.Manual;
+
 
         /// <summary>
         /// This is the InstantiationData that was passed when calling PhotonNetwork.Instantiate* (if that was used to spawn this prefab)
@@ -117,7 +113,7 @@ namespace Photon.Pun
         protected internal object[] lastOnSerializeDataReceived = null;
 
         [FormerlySerializedAs("synchronization")]
-        public ViewSynchronization Synchronization;
+        public ViewSynchronization Synchronization = ViewSynchronization.UnreliableOnChange;
 
         /// <summary>Defines if ownership of this PhotonView is fixed, can be requested or simply taken.</summary>
         /// <remarks>
@@ -132,13 +128,13 @@ namespace Photon.Pun
 
         #region Callback Interfaces
 
-        private struct CallbackQueueItem
+        private struct CallbackTargetChange
         {
-            public object obj;
+            public IPhotonViewCallback obj;
             public Type type;
             public bool add;
 
-            public CallbackQueueItem(object obj, Type type, bool add)
+            public CallbackTargetChange(IPhotonViewCallback obj, Type type, bool add)
             {
                 this.obj = obj;
                 this.type = type;
@@ -146,29 +142,48 @@ namespace Photon.Pun
             }
         }
 
-        private Queue<CallbackQueueItem> CallbackChangeQueue = new Queue<CallbackQueueItem>();
+        private Queue<CallbackTargetChange> CallbackChangeQueue = new Queue<CallbackTargetChange>();
 
         private List<IOnPhotonViewPreNetDestroy> OnPreNetDestroyCallbacks;
+        private List<IOnPhotonViewOwnerChange> OnOwnerChangeCallbacks;
         private List<IOnPhotonViewControllerChange> OnControllerChangeCallbacks;
 
-        public void AddCallbackTarget(object obj)
+        /// <summary>
+        /// Add object to all applicable callback interfaces. Object must implement at least one IOnPhotonViewCallback derived interface.
+        /// </summary>
+        /// <param name="obj">An object that implements OnPhotonView callback interface(s).</param>
+        public void AddCallbackTarget(IPhotonViewCallback obj)
         {
-            CallbackChangeQueue.Enqueue(new CallbackQueueItem(obj, null, true));
+            CallbackChangeQueue.Enqueue(new CallbackTargetChange(obj, null, true));
         }
 
-        public void RemoveCallbackTarget(object obj)
+        /// <summary>
+        /// Remove object from all applicable callback interfaces. Object must implement at least one IOnPhotonViewCallback derived interface.
+        /// </summary>
+        /// <param name="obj">An object that implements OnPhotonView callback interface(s).</param>
+        public void RemoveCallbackTarget(IPhotonViewCallback obj)
         {
-            CallbackChangeQueue.Enqueue(new CallbackQueueItem(obj, null, false));
+            CallbackChangeQueue.Enqueue(new CallbackTargetChange(obj, null, false));
         }
 
-        public void AddCallbackTarget<T>(object obj) where T : class
+        /// <summary>
+        /// Add object to this PhotonView's callback.
+        /// T is the IOnPhotonViewCallback derived interface you want added to its associated callback list.
+        /// Supplying IOnPhotonViewCallback (the interface base class) as T will add ALL implemented IOnPhotonViewCallback Interfaces found on the object.
+        /// </summary>
+        public void AddCallback<T>(IPhotonViewCallback obj) where T : class, IPhotonViewCallback
         {
-            CallbackChangeQueue.Enqueue(new CallbackQueueItem(obj, typeof(T), true));
+            CallbackChangeQueue.Enqueue(new CallbackTargetChange(obj, typeof(T), true));
         }
 
-        public void RemovecallbackTarget<T>(object obj) where T : class
+        /// <summary>
+        /// Remove object from this PhotonView's callback list for T.
+        /// T is the IOnPhotonViewCallback derived interface you want removed from its associated callback list.
+        /// Supplying IOnPhotonViewCallback (the interface base class) as T will remove ALL implemented IOnPhotonViewCallback Interfaces found on the object.
+        /// </summary>
+        public void RemoveCallback<T>(IPhotonViewCallback obj) where T : class, IPhotonViewCallback
         {
-            CallbackChangeQueue.Enqueue(new CallbackQueueItem(obj, typeof(T), false));
+            CallbackChangeQueue.Enqueue(new CallbackTargetChange(obj, typeof(T), false));
         }
 
         /// <summary>
@@ -181,32 +196,35 @@ namespace Photon.Pun
                 var item = CallbackChangeQueue.Dequeue();
                 var obj = item.obj;
                 var type = item.type;
+                var add = item.add;
 
-                // null indicates we are collecting ALL interface types on an object, rather than a specified callback interface
                 if (type == null)
                 {
-                    type = obj.GetType();
-
-                    if (typeof(IOnPhotonViewPreNetDestroy).CheckIsAssignableFrom(type))
-                        RegisterCallback(obj as IOnPhotonViewPreNetDestroy, ref OnPreNetDestroyCallbacks, item.add);
-
-                    if (typeof(IOnPhotonViewControllerChange).CheckIsAssignableFrom(type))
-                        RegisterCallback(obj as IOnPhotonViewControllerChange, ref OnControllerChangeCallbacks, item.add);
+                    TryRegisterCallback(obj, ref OnPreNetDestroyCallbacks, add);
+                    TryRegisterCallback(obj, ref OnOwnerChangeCallbacks, add);
+                    TryRegisterCallback(obj, ref OnControllerChangeCallbacks, add);
                 }
+                else if (type == typeof(IOnPhotonViewPreNetDestroy))
+                    RegisterCallback(obj as IOnPhotonViewPreNetDestroy, ref OnPreNetDestroyCallbacks, add);
 
-                else
-                {
-                    if (type == typeof(IOnPhotonViewPreNetDestroy))
-                        RegisterCallback(obj as IOnPhotonViewPreNetDestroy, ref OnPreNetDestroyCallbacks, item.add);
+                else if (type == typeof(IOnPhotonViewOwnerChange))
+                    RegisterCallback(obj as IOnPhotonViewOwnerChange, ref OnOwnerChangeCallbacks, add);
 
-                    if (type == typeof(IOnPhotonViewControllerChange))
-                        RegisterCallback(obj as IOnPhotonViewControllerChange, ref OnControllerChangeCallbacks, item.add);
-                }
-
+                else if (type == typeof(IOnPhotonViewControllerChange))
+                    RegisterCallback(obj as IOnPhotonViewControllerChange, ref OnControllerChangeCallbacks, add);
             }
         }
 
-        private void RegisterCallback<T>(T obj, ref List<T> list, bool add) where T : class
+        private void TryRegisterCallback<T>(IPhotonViewCallback obj, ref List<T> list, bool add) where T : class, IPhotonViewCallback
+        {
+            T iobj = obj as T;
+            if (iobj != null)
+            {
+                RegisterCallback(iobj, ref list, add);
+            }
+        }
+
+        private void RegisterCallback<T>(T obj, ref List<T> list, bool add) where T : class, IPhotonViewCallback
         {
             if (ReferenceEquals(list, null))
                 list = new List<T>();
@@ -259,13 +277,19 @@ namespace Photon.Pun
         [FormerlySerializedAs("instantiationId")]
         public int InstantiationId; // if the view was instantiated with a GO, this GO has a instantiationID (first view's viewID)
 
-        /// <summary>True if the PhotonView was loaded with the scene (game object) or instantiated with InstantiateSceneObject.</summary>
+        [Obsolete("Renamed. Use IsRoomView instead")]
+        public bool IsSceneView
+        {
+            get { return this.IsRoomView; }
+        }
+        
+        /// <summary>True if the PhotonView was loaded with the scene (game object) or instantiated with InstantiateRoomObject.</summary>
         /// <remarks>
-        /// Scene objects are not owned by a particular player but belong to the scene. Thus they don't get destroyed when their
+        /// Room objects are not owned by a particular player but belong to the scene. Thus they don't get destroyed when their
         /// creator leaves the game and the current Master Client can control them (whoever that is).
         /// The ownerId is 0 (player IDs are 1 and up).
         /// </remarks>
-        public bool IsSceneView
+        public bool IsRoomView
         {
             get { return this.CreatorActorNr == 0; }
         }
@@ -278,8 +302,11 @@ namespace Photon.Pun
         internal void ResetPhotonView(bool resetOwner)
         {
             // If this was fired by this connection rejoining, reset the ownership cache to owner = creator.
+            // TODO: This reset may not be needed at all with the ownership being invalidated next.
             if (resetOwner)
                 ResetOwnership();
+
+            ownershipCacheIsValid = OwnershipCacheState.Invalid;
 
             // Reset the delta check to force a complete update of owned objects, to ensure joining connections get full updates.
             lastOnSerializeDataSent = null;
@@ -290,10 +317,22 @@ namespace Photon.Pun
         /// </summary>
         internal void ResetOwnership()
         {
-            if (CreatorActorNr == 0)
-                SetOwnerInternal(null, 0);
+            if (this.CreatorActorNr == 0)
+            {
+                this.SetOwnerInternal(null, 0);
+            }
             else
-               SetOwnerInternal(PhotonNetwork.CurrentRoom.GetPlayer(this.CreatorActorNr), CreatorActorNr);
+            {
+                // Offline Mode or just offline edge cases... just set to null.
+                if (ReferenceEquals(PhotonNetwork.CurrentRoom, null))
+                {
+                    this.SetOwnerInternal(null, this.CreatorActorNr);
+                }
+                else
+                {
+                    this.SetOwnerInternal(PhotonNetwork.CurrentRoom.GetPlayer(this.CreatorActorNr), this.CreatorActorNr);
+                }
+            }
         }
 
         /// <summary>
@@ -312,19 +351,53 @@ namespace Photon.Pun
                 }
             }
             else
+            {
                 ownershipCacheIsValid = OwnershipCacheState.OwnerValid;
+            }
 
+            Player prevOwner = this.owner;
             this.owner = newOwner;
             this.ownerActorNr = newOwnerId;
+            this.AmOwner = newOwner == PhotonNetwork.LocalPlayer;
+
+            UpdateCallbackLists();
+
+            if (newOwner != prevOwner)
+                if (!ReferenceEquals(OnOwnerChangeCallbacks, null))
+                    for (int i = 0, cnt = OnOwnerChangeCallbacks.Count; i < cnt; ++i)
+                        OnOwnerChangeCallbacks[i].OnOwnerChange(newOwner, prevOwner);
 
             RebuildControllerCache(true);
+        }
+
+        public void SetControllerInternal(int newControllerId)
+        {
+            SetControllerInternal(PhotonNetwork.CurrentRoom.GetPlayer(newControllerId), newControllerId);
+        }
+
+        public void SetControllerInternal(Player newController, int newControllerId)
+        {
+            Player prevController = this.controller;
+
+            this.controller = newController;
+            this.controllerActorNr = newControllerId;
+            this.amController = newController == PhotonNetwork.LocalPlayer;
+
+            this.ownershipCacheIsValid |= OwnershipCacheState.ControllerValid;
+
+            UpdateCallbackLists();
+
+            if (controller != prevController)
+                if (!ReferenceEquals(OnControllerChangeCallbacks, null))
+                    for (int i = 0, cnt = OnControllerChangeCallbacks.Count; i < cnt; ++i)
+                        OnControllerChangeCallbacks[i].OnControllerChange(newController, prevController);
         }
 
         internal void RebuildControllerCache(bool ownerHasChanged = false)
         {
             var prevController = controller;
 
-            // Scene objects (ownerId 0) must change controller
+            // Room objects (ownerId 0) must change controller
             if (owner == null || this.ownerActorNr == 0 || this.owner.IsInactive)
             {
                 var masterclient = PhotonNetwork.MasterClient;
@@ -337,24 +410,23 @@ namespace Photon.Pun
                 this.controllerActorNr = this.ownerActorNr;
             }
 
-            if (ownershipCacheIsValid < OwnershipCacheState.ControllerValid)
-            {
-                // No changes to the controller or owner - nothing has changed.
-                if (!ownerHasChanged && ReferenceEquals(this.controller, prevController))
-                {
-                    return;
-                }
-            }
-            else
-                ownershipCacheIsValid |= OwnershipCacheState.ControllerValid;
+            //    // No changes to the controller or owner - nothing has changed.
+            //if (!ownerHasChanged && this.ownershipCacheIsValid >= OwnershipCacheState.ControllerValid && ReferenceEquals(this.controller, prevController))
+            //    {
+            //    Debug.Log("NothingChanged");
+            //        return;
+            //    }
+
+            ownershipCacheIsValid |= OwnershipCacheState.ControllerValid;
 
             this.amController = this.controllerActorNr != -1 && this.controllerActorNr == PhotonNetwork.LocalPlayer.ActorNumber;
 
             UpdateCallbackLists();
 
-            if (!ReferenceEquals(OnControllerChangeCallbacks, null))
-                for (int i = 0, cnt = OnControllerChangeCallbacks.Count; i < cnt; ++i)
-                    OnControllerChangeCallbacks[i].OnControllerChange(this.owner, this.controller, this.amController);
+            if (controller != prevController)
+                if (!ReferenceEquals(OnControllerChangeCallbacks, null))
+                    for (int i = 0, cnt = OnControllerChangeCallbacks.Count; i < cnt; ++i)
+                        OnControllerChangeCallbacks[i].OnControllerChange(this.controller, prevController);
         }
 
         private Player owner;
@@ -415,7 +487,7 @@ namespace Photon.Pun
 
                     ownershipCacheIsValid |= OwnershipCacheState.ControllerValid;
                 }
-                   
+
 
                 return controller;
             }
@@ -480,6 +552,8 @@ namespace Photon.Pun
             }
         }
 
+        public bool AmOwner { get; private set; }
+
         #endregion Ownership
 
         protected internal bool didAwake;
@@ -491,6 +565,13 @@ namespace Photon.Pun
         protected internal bool removedFromLocalViewList;
 
         internal MonoBehaviour[] RpcMonoBehaviours;
+
+#if UNITY_EDITOR
+        private void Reset()
+        {
+            observableSearch = ObservableSearch.AutoFindAll;
+        }
+#endif
 
         /// <summary>Called by Unity on start of the application and does a setup the PhotonView.</summary>
         protected internal void Awake()
@@ -510,6 +591,22 @@ namespace Photon.Pun
             }
 
             this.didAwake = true;
+
+            FindObservables();
+        }
+
+        public void FindObservables(bool force = false)
+        {
+            if (!force && observableSearch == ObservableSearch.Manual)
+                return;
+
+            if (ObservedComponents == null)
+                ObservedComponents = new List<Component>();
+
+            ObservedComponents.Clear();
+
+            transform.GetNestedComponentsInChildren<Component, IPunObservable, PhotonView>(force || observableSearch == ObservableSearch.AutoFindAll, ObservedComponents);
+
         }
 
         public void OnPreNetDestroy(PhotonView rootView)
@@ -518,7 +615,9 @@ namespace Photon.Pun
 
             if (!ReferenceEquals(OnPreNetDestroyCallbacks, null))
                 for (int i = 0, cnt = OnPreNetDestroyCallbacks.Count; i < cnt; ++i)
+                {
                     OnPreNetDestroyCallbacks[i].OnPreNetDestroy(rootView);
+                }
         }
 
         protected internal void OnDestroy()
@@ -533,6 +632,7 @@ namespace Photon.Pun
                 }
             }
         }
+
 
         /// <summary>
         /// Depending on the PhotonView's OwnershipTransfer setting, any client can request to become owner of the PhotonView.
@@ -554,7 +654,7 @@ namespace Photon.Pun
                 if (PhotonNetwork.LogLevel >= PunLogLevel.Informational)
                 {
                     Debug.LogWarning("Attempting to RequestOwnership of GameObject '" + name + "' viewId: " + ViewID +
-                        ", but PhotonView.OwnershipTranfer is set to Fixed.");
+                        ", but PhotonView.OwnershipTransfer is set to Fixed.");
                 }
             }
         }
@@ -597,10 +697,10 @@ namespace Photon.Pun
                 {
                     if (OwnershipTransfer == OwnershipOption.Fixed)
                         Debug.LogWarning("Attempting to TransferOwnership of GameObject '" + name + "' viewId: " + ViewID +
-                            " without the authority to do so. TransferOwnership is not allowed if PhotonView.OwnershipTranfer is set to Fixed.");
+                            " without the authority to do so. TransferOwnership is not allowed if PhotonView.OwnershipTransfer is set to Fixed.");
                     else if (OwnershipTransfer == OwnershipOption.Request)
                         Debug.LogWarning("Attempting to TransferOwnership of GameObject '" + name + "' viewId: " + ViewID +
-                           " without the authority to do so. PhotonView.OwnershipTranfer is set to Request, so only the controller of this object can TransferOwnership.");
+                           " without the authority to do so. PhotonView.OwnershipTransfer is set to Request, so only the controller of this object can TransferOwnership.");
                 }
             }
         }
@@ -612,7 +712,9 @@ namespace Photon.Pun
             {
                 for (int i = 0; i < this.ObservedComponents.Count; ++i)
                 {
-                    SerializeComponent(this.ObservedComponents[i], stream, info);
+                    var component = this.ObservedComponents[i];
+                    if (component != null)
+                        SerializeComponent(this.ObservedComponents[i], stream, info);
                 }
             }
         }
@@ -623,7 +725,9 @@ namespace Photon.Pun
             {
                 for (int i = 0; i < this.ObservedComponents.Count; ++i)
                 {
-                    DeserializeComponent(this.ObservedComponents[i], stream, info);
+                    var component = this.ObservedComponents[i];
+                    if (component != null)
+                        DeserializeComponent(component, stream, info);
                 }
             }
         }
@@ -697,7 +801,7 @@ namespace Photon.Pun
         }
 
         /// <summary>
-        /// Call a RPC method of this GameObject on remote clients of this room (or on all, inclunding this client).
+        /// Call a RPC method of this GameObject on remote clients of this room (or on all, including this client).
         /// </summary>
         /// <remarks>
         /// [Remote Procedure Calls](@ref rpcManual) are an essential tool in making multiplayer games with PUN.
@@ -746,7 +850,7 @@ namespace Photon.Pun
         }
 
         /// <summary>
-        /// Call a RPC method of this GameObject on remote clients of this room (or on all, inclunding this client).
+        /// Call a RPC method of this GameObject on remote clients of this room (or on all, including this client).
         /// </summary>
         /// <remarks>
         /// [Remote Procedure Calls](@ref rpcManual) are an essential tool in making multiplayer games with PUN.
@@ -771,12 +875,12 @@ namespace Photon.Pun
 
         public static PhotonView Get(Component component)
         {
-            return component.GetComponent<PhotonView>();
+            return component.transform.GetParentComponent<PhotonView>();
         }
 
         public static PhotonView Get(GameObject gameObj)
         {
-            return gameObj.GetComponent<PhotonView>();
+            return gameObj.transform.GetParentComponent<PhotonView>();
         }
 
         /// <summary>
@@ -791,7 +895,7 @@ namespace Photon.Pun
 
         public override string ToString()
         {
-            return string.Format("View {0}{3} on {1} {2}", this.ViewID, (this.gameObject != null) ? this.gameObject.name : "GO==null", (this.IsSceneView) ? "(scene)" : string.Empty, this.Prefix > 0 ? "lvl" + this.Prefix : "");
+            return string.Format("View {0}{3} on {1} {2}", this.ViewID, (this.gameObject != null) ? this.gameObject.name : "GO==null", (this.IsRoomView) ? "(scene)" : string.Empty, this.Prefix > 0 ? "lvl" + this.Prefix : "");
         }
     }
 }

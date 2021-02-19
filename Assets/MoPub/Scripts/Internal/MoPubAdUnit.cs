@@ -54,7 +54,8 @@ internal class MoPubAdUnit
     #region Banners
 
 
-    internal virtual void RequestBanner(float width, float height, MoPub.AdPosition position) { }
+    internal virtual void RequestBanner(float width, float height, MoPub.AdPosition position, string keywords = "",
+        string userDataKeywords = "") { }
 
 
     internal virtual void ShowBanner(bool shouldShow) { }

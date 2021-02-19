@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using AOT;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -112,8 +114,19 @@ public class MoPubManager : MonoBehaviour
     // Fired when the MoPub consent dialog has been dismissed.
     public static event Action OnConsentDialogDismissedEvent;
 
-    // Fired when the ad is shown; may or may not contain impression data
+    // Fired generally when the ad is dismissed, specifically when the Unity Player resumes after an impression is made.
+    // This may happen at other times however, such as when the user taps the ad. In some environments, tapping an ad
+    // momentarily resumes the Unity Player before opening the browser, which triggers the impression callback before
+    // the ad is explicitly dismissed. For more predictable behavior across platforms, see OnImpressionTrackedEventBg.
+    //
+    // NOTE: ImpressionData will be empty when also subscribed to OnImpressionTrackedEventBg.
     public static event Action<string, MoPub.ImpressionData> OnImpressionTrackedEvent;
+
+    // Fired immediately when the ad is shown, potentially in a background thread. Unlike OnImpressionTrackedEvent
+    // which is triggered on the Unity layer, OnImpressionTrackedEventBg is fired natively from Android and iOS.
+    //
+    // NOTE: Subscribing to this event will cause ImpressionData to be empty on OnImpressionTrackedEvent.
+    public static event Action<string, MoPub.ImpressionData> OnImpressionTrackedEventBg;
 
     #endregion MoPubEvents
 
@@ -253,6 +266,42 @@ public class MoPubManager : MonoBehaviour
 
 
     #region PlatformCallbacks
+
+
+    internal class BackgroundEventListener : AndroidJavaProxy
+    {
+        private BackgroundEventListener() : base("com.mopub.unity.MoPubUnityPlugin$IBackgroundEventListener") { }
+
+        public static readonly BackgroundEventListener Instance = new BackgroundEventListener();
+
+        // Called from Android Wrapper (Java).
+        public void onEvent(string eventName, string eventArgsJson)
+        {
+            SendEvent(eventName, eventArgsJson);
+        }
+
+        // For use in DllImport declaration to specify the callback signature.
+        public delegate void Delegate(string eventName, string eventArgsJson);
+
+        // Called from iOS Wrapper (Objective-C) directly and from Android Wrapper (Java) via onEvent.
+        [MonoPInvokeCallback(typeof(Delegate))]
+        public static void SendEvent(string eventName, string eventArgsJson)
+        {
+            try {
+                // Handle events that are supported in the background.
+                switch (eventName) {
+                    case "EmitImpressionTrackedEvent":
+                        EmitImpressionTrackedEventHandler(eventArgsJson, background: true);
+                        break;
+                    default:
+                        throw new ArgumentException("Unrecognized event callback name.");
+                }
+            }
+            catch (Exception e) {
+                Debug.LogErrorFormat("Exception while handling background event {0}: {1}", eventName, e);
+            }
+        }
+    }
 
 
     public void EmitSdkInitializedEvent(string argsJson)
@@ -628,16 +677,26 @@ public class MoPubManager : MonoBehaviour
     }
 #endif
 
-    public void EmitImpressionTrackedEvent(string argsJson)
+    private static void EmitImpressionTrackedEventHandler(string argsJson, bool background = false)
     {
         var args = MoPubUtils.DecodeArgs(argsJson, min: 1);
         var adUnitId = args[0];
-        var impressionData = args.Length > 1
-            ? MoPub.ImpressionData.FromJson(args[1])
-            : new MoPub.ImpressionData();
+        var impressionData = new MoPub.ImpressionData();
+        if (args.Length > 1) {
+            if (background || OnImpressionTrackedEventBg == null) // Only include data on *one* event.
+                impressionData = MoPub.ImpressionData.FromJson(args[1]);
+            else if (OnImpressionTrackedEvent != null)  // Only log if user is subscribed to *both* events.
+                Debug.Log("Suppressing impression data from `OnImpressionTrackedEvent` since it was already delivered" +
+                          " to `OnImpressionTrackedEventBg`.");
+        }
 
-        var evt = OnImpressionTrackedEvent;
+        var evt = background ? OnImpressionTrackedEventBg : OnImpressionTrackedEvent;
         if (evt != null) evt(adUnitId, impressionData);
+    }
+
+    public void EmitImpressionTrackedEvent(string argsJson)
+    {
+        EmitImpressionTrackedEventHandler(argsJson);
     }
 
 

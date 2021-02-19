@@ -52,6 +52,7 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 1
+    secondaryTextureSettings: {}
     variantMultiplier: 0.25
     packables:
     - {fileID: 102900000, guid: 152fd4c19f9611d4ab89618506bc0e74, type: 3}
@@ -59,6 +60,8 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 792e441131412dd4ba3d994238c84e25, type: 3}
     totalSpriteSurfaceArea: 27710041
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 84ac63107ab6a594bab39e40b6eeede6, type: 3}
@@ -192,5 +195,6 @@ SpriteAtlas:
   - Wizard
   - Wizard-armL
   - Portal-rocks
+  m_RenderDataMap: {}
   m_Tag: __LandscapeBuild
   m_IsVariant: 0

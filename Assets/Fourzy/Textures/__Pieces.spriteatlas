@@ -52,11 +52,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 0
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: f5103557fc46648308a6e9cb92d22df4, type: 3}
     totalSpriteSurfaceArea: 3809248
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: d0b37a00ae729fe49a5e742ac5e49cf6, type: 3}
@@ -728,5 +731,6 @@ SpriteAtlas:
   - Fourzy36_Eyes-win
   - Fourzy17_Mouth-open
   - Fourzy16_Body
+  m_RenderDataMap: {}
   m_Tag: __Pieces
   m_IsVariant: 0

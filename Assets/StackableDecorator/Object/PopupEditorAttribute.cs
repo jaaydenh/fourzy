@@ -4,7 +4,7 @@ using System.Reflection;
 using UnityEditor;
 using System.Collections.Generic;
 #if UNITY_2017_1_OR_NEWER
-using UnityEditor.Experimental.AssetImporters;
+using UnityEditor.AssetImporters;
 #endif
 #endif
 

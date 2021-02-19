@@ -51,6 +51,12 @@ internal class MoPubUnityEditor : MoPubPlatformApi
     }
 
 
+    internal override void DisableViewability()
+    {
+        Debug.Log("Viewability measurement would now be disabled on a real device.");
+    }
+
+
     internal override bool AllowLegitimateInterest { get; set; }
 
 

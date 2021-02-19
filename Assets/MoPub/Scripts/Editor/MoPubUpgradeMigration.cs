@@ -42,6 +42,10 @@ public static class MoPubUpgradeMigration
     };
 
     private static readonly string[] RedundantJars = {
+        "Assets/MoPub/Plugins/Android/mopub-sdk-base.aar",
+        "Assets/MoPub/Plugins/Android/mopub-sdk-banner.aar",
+        "Assets/MoPub/Plugins/Android/mopub-sdk-fullscreen.aar",
+        "Assets/MoPub/Plugins/Android/mopub-sdk-native-static.aar",
         "Assets/MoPub/Plugins/Android/mopub-sdk-interstitial.aar",
         "Assets/MoPub/Plugins/Android/mopub-sdk-rewardedvideo.aar",
         "Assets/MoPub/Plugins/Android/MoPub.plugin/libs/mopub-sdk-banner.jar",
@@ -50,7 +54,8 @@ public static class MoPubUpgradeMigration
         "Assets/MoPub/Plugins/Android/MoPub.plugin/libs/mopub-sdk-native-static.jar",
         "Assets/MoPub/Plugins/Android/MoPub.plugin/libs/mopub-sdk-rewardedvideo.jar",
         "Assets/MoPub/Plugins/Android/MoPub.plugin/libs/mopub-unity-wrappers.jar",
-        "Assets/MoPub/Plugins/Android/MoPub.plugin/libs/mopub-unity-plugins.jar"
+        "Assets/MoPub/Plugins/Android/MoPub.plugin/libs/mopub-unity-plugins.jar",
+        "Assets/MoPub/Plugins/Android/MoPub.plugin/libs/mopub-volley-2.0.0.jar"
     };
 
     private const string RedundantDir = "Assets/MoPub/Extras/";

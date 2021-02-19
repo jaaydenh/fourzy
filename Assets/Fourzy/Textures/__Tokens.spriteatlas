@@ -52,11 +52,14 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 0
       enableTightPacking: 0
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: e1d5cc2cde4784b2daaffb156c3b71d3, type: 3}
     totalSpriteSurfaceArea: 2647686
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 6bd56ed1d8ae94a5fb83dcd2e341072d, type: 3}
@@ -290,5 +293,6 @@ SpriteAtlas:
   - tokenSpider1
   - token90RightArrow
   - tokenBomb
+  m_RenderDataMap: {}
   m_Tag: __Tokens
   m_IsVariant: 0

@@ -13,12 +13,6 @@ MonoBehaviour:
   m_Name: ResourceDB
   m_EditorClassIdentifier: 
   items:
-  - name: FacebookSettings
-    ext: asset
-    path: 
-    type: 2
-    objectTypeName: Facebook.Unity.Settings.FacebookSettings, Facebook.Unity.Settings,
-      Version=7.18.0.0, Culture=neutral, PublicKeyToken=null
   - name: BoardsPool
     ext: 
     path: 
@@ -1816,312 +1810,18 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: GameSparksLogo
-    ext: png
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: GameSparksSettings
-    ext: asset
-    path: 
-    type: 2
-    objectTypeName: GameSparksSettings, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: Physics Box
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Robot Kyle 2D
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: BoxFlashPrefab
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: BoxPrefab
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: ColorPreview
-    ext: png
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: eurof35
-    ext: ttf
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Font, UnityEngine.TextRenderingModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: eurof_tt
-    ext: txt
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: UnitMaterial
-    ext: mat
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: UnitMaterialDark
-    ext: mat
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: UnitMaterialEmit
-    ext: mat
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: UnitTexture
-    ext: png
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: OwnershipCube
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: OwnershipSphere
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Robot Kyle Mecanim
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PickupCharacter
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Robot Kyle RPG
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Player
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Materials
-    ext: 
-    path: 
-    type: 1
-    objectTypeName: 
-  - name: creature1-tanden.1
-    ext: mat
-    path: Materials
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: creature1-tanden
-    ext: mat
-    path: Materials
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: muktargame-Mat
-    ext: mat
-    path: Materials
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: muktargame-No Name
-    ext: mat
-    path: Materials
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: muktargame-oog.1
-    ext: mat
-    path: Materials
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: muktargame-oog
-    ext: mat
-    path: Materials
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: muktargame-tanden.1
-    ext: mat
-    path: Materials
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: muktargame-tanden
-    ext: mat
-    path: Materials
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: oudemanoogcolor
-    ext: mat
-    path: Materials
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Scripts
-    ext: 
-    path: 
-    type: 1
-    objectTypeName: 
-  - name: footstep
-    ext: wav
-    path: Scripts
-    type: 2
-    objectTypeName: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: myThirdPersonController
-    ext: cs
-    path: Scripts
-    type: 2
-    objectTypeName: UnityEditor.MonoScript, UnityEditor, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: textures
-    ext: 
-    path: 
-    type: 1
-    objectTypeName: 
-  - name: muktarcolorgoed_1
-    ext: jpg
-    path: textures
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: muktarnormalhighq_1
-    ext: jpg
-    path: textures
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: oudemanoogcolor_1
-    ext: jpg
-    path: textures
-    type: 2
-    objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: monsterprefab
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: muktargame
-    ext: fbx
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: My Robot Kyle
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: PhotonServerSettings
     ext: asset
     path: 
     type: 2
-    objectTypeName: ServerSettings, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+    objectTypeName: Photon.Pun.ServerSettings, PhotonUnityNetworking, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: PlayFabSharedSettings
     ext: asset
     path: 
     type: 2
-    objectTypeName: PlayFabSharedSettings, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    objectTypeName: PlayFabSharedSettings, PlayFab, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  - name: Sirenix
-    ext: 
-    path: 
-    type: 1
-    objectTypeName: 
-  - name: GlobalSerializationConfig
-    ext: asset
-    path: Sirenix
-    type: 2
-    objectTypeName: Sirenix.Serialization.GlobalSerializationConfig, Sirenix.Serialization.Config,
-      Version=2.1.0.0, Culture=neutral, PublicKeyToken=null
-  - name: iso_languages
-    ext: txt
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: ISD_Settings
-    ext: asset
-    path: 
-    type: 2
-    objectTypeName: SA.iOS.XCode.ISD_Settings, Assembly-CSharp-firstpass, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: ISN_Settings
-    ext: asset
-    path: 
-    type: 2
-    objectTypeName: SA.iOS.ISN_Settings, Assembly-CSharp-firstpass, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: en
-    ext: lproj
-    path: 
-    type: 1
-    objectTypeName: 
-  - name: InfoPlist
-    ext: strings
-    path: en.lproj
-    type: 2
-    objectTypeName: UnityEditor.DefaultAsset, UnityEditor, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: BillingMode
-    ext: json
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: UIFakeStoreCanvas
-    ext: prefab
-    path: 
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: GameAnalytics
-    ext: 
-    path: 
-    type: 1
-    objectTypeName: 
-  - name: Settings
-    ext: asset
-    path: GameAnalytics
-    type: 2
-    objectTypeName: GameAnalyticsSDK.Setup.Settings, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: Localization
     ext: 
     path: 
@@ -2186,6 +1886,12 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - name: LiberationSans SDF - Fallback
+    ext: asset
+    path: Fonts & Materials
+    type: 2
+    objectTypeName: TMPro.TMP_FontAsset, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - name: LiberationSans SDF - Outline
     ext: mat
     path: Fonts & Materials
@@ -2197,95 +1903,6 @@ MonoBehaviour:
     path: Fonts & Materials
     type: 2
     objectTypeName: TMPro.TMP_FontAsset, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: Shaders
-    ext: 
-    path: 
-    type: 1
-    objectTypeName: 
-  - name: TMPro
-    ext: cginc
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TMPro_Properties
-    ext: cginc
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TMPro_Surface
-    ext: cginc
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: TMP_Bitmap-Custom-Atlas
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: TMP_Bitmap-Mobile
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: TMP_Bitmap
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: TMP_SDF Overlay
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: TMP_SDF-Mobile Masking
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: TMP_SDF-Mobile Overlay
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: TMP_SDF-Mobile
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: TMP_SDF-Surface-Mobile
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: TMP_SDF-Surface
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: TMP_SDF
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: TMP_Sprite
-    ext: shader
-    path: Shaders
-    type: 2
-    objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   - name: Sprite Assets
     ext: 
@@ -2327,6 +1944,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 344
-  m_FolderCount: 50
+  m_FileCount: 286
+  m_FolderCount: 43
   UpdateAutomatically: 0
