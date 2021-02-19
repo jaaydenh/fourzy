@@ -176,26 +176,7 @@ namespace Fourzy._Updates.UI.Helpers
             scaleTween.playbackTime = time;
 
             scaleTween.PlayForward(true);
-        }
 
-        public void LogButtonEvent(AnalyticsManager.AnalyticsUIButtons eventType)
-        {
-            switch (eventType)
-            {
-                case AnalyticsManager.AnalyticsUIButtons.pass_and_play:
-                case AnalyticsManager.AnalyticsUIButtons.leaderboard_play:
-                case AnalyticsManager.AnalyticsUIButtons.turn_play:
-                    AnalyticsManager.Instance.LogUIButton(eventType, @params: new KeyValuePair<string, object>(AnalyticsManager.AREA_KEY, GameContentManager.Instance.currentArea.areaID));
-
-                    break;
-
-                case AnalyticsManager.AnalyticsUIButtons.puzzle_play:
-                case AnalyticsManager.AnalyticsUIButtons.create_game:
-                case AnalyticsManager.AnalyticsUIButtons.change_name:
-                    AnalyticsManager.Instance.LogUIButton(eventType);
-
-                    break;
-            }
         }
 
         public override void OnPointerClick(PointerEventData eventData)

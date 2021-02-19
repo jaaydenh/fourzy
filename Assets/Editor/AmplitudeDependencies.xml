@@ -1,0 +1,23 @@
+<dependencies>
+  <androidPackages>
+    <repositories>
+      <repository>https://repo.maven.apache.org/maven2</repository>
+    </repositories>
+
+    <androidPackage spec="com.amplitude:android-sdk:2.28.2">
+      <repositories>
+        <repository>https://maven.google.com</repository>
+      </repositories>
+    </androidPackage>
+
+    <androidPackage spec="com.squareup.okhttp3:okhttp:4.2.2">
+      <repositories>
+        <repository>https://maven.google.com</repository>
+      </repositories>
+    </androidPackage>
+  </androidPackages>
+
+  <iosPods>
+  
+  </iosPods>
+</dependencies>

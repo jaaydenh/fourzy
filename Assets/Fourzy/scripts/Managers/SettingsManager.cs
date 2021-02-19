@@ -20,7 +20,6 @@ namespace Fourzy._Updates.Managers
         public const string KEY_SFX = "SETTINGS_SFX";
         public const string KEY_AUDIO = "SETTINGS_AUDIO";
         public const string KEY_DEMO_MODE = "SETTINGS_DEMO_MODE";
-        public const string KEY_ANALYTICS_EVENTS = "SETTINGS_ANALYTICS";
         public const string KEY_REALTIME_MAGIC = "SETTINGS_MAGIC";
         public const string KEY_REALTIME_TIMER = "SETTINGS_REALTIME_TIMER";
         public const string KEY_LOCAL_TIMER = "SETTINGS_LOCAL_TIMER";
@@ -53,9 +52,6 @@ namespace Fourzy._Updates.Managers
             [KEY_REALTIME_MAGIC] = DEFAULT_MAGIC,
             [KEY_LOCAL_TIMER] = DEFAULT_LOCAL_TIMER,
             [KEY_REALTIME_TIMER] = DEFAULT_REALTIME_TIMER,
-
-            //temp
-            [KEY_ANALYTICS_EVENTS] = false,
         };
 
         public static void Set(string key, bool value)
@@ -76,11 +72,6 @@ namespace Fourzy._Updates.Managers
 
                 case KEY_DEMO_MODE:
                     onDemoMode?.Invoke(value);
-
-                    break;
-
-                case KEY_ANALYTICS_EVENTS:
-                    onAnalyticsEvent?.Invoke(value);
 
                     break;
 
@@ -121,17 +112,9 @@ namespace Fourzy._Updates.Managers
             {
                 switch (key)
                 {
-                    case KEY_ANALYTICS_EVENTS:
-#if UNITY_EDITOR
-                        instance.values[key] = PlayerPrefs.GetInt(key, 0) == 1 ? true : false;
-#else
-                        instance.values[key] = PlayerPrefs.GetInt(key, 1) == 1 ? true : false;
-#endif
-
-                        break;
-
                     default:
-                        instance.values[key] = PlayerPrefs.GetInt(key, instance.values[key] ? 1 : 0) == 1 ? true : false;
+                        instance.values[key] = 
+                            PlayerPrefs.GetInt(key, instance.values[key] ? 1 : 0) == 1 ? true : false;
 
                         break;
                 }

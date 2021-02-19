@@ -2,9 +2,7 @@
 
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
-using Fourzy._Updates.Mechanics;
 using Fourzy._Updates.Tools;
-using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -16,6 +14,17 @@ namespace Fourzy
 {
     public class AnalyticsManager : RoutinesBase
     {
+        /// <summary>
+        /// Log events instead of sending them
+        /// </summary>
+        public static bool DEBUG = false;
+
+#if UNITY_EDITOR
+        private const string AMP_API_KEY = "4c62628ff8687c70a9fd201aea80db00";
+#else
+        private const string AMP_API_KEY = "300f3bfc4f1180cf072c49fcd198950f";
+#endif
+
         public const string BOARD_ID_KEY = "board_id";
         public const string LEVEL_ID = "level_id";
         public const string EVENT_ID_KEY = "event_id";
@@ -50,54 +59,24 @@ namespace Fourzy
         {
             get
             {
-                if (instance == null) Initialize(true);
+                if (instance == null)
+                {
+                    Initialize(true);
+                }
 
                 return instance;
             }
         }
 
-        public static bool DEBUG = false;
-
-        /// <summary>
-        /// To check if event is enabled
-        /// </summary>
-        public static Dictionary<AnalyticsGameEvents, bool> gameEventsSwitch = new Dictionary<AnalyticsGameEvents, bool>()
-        {
-            [AnalyticsGameEvents.VERSUS_GAME_START] = true,
-            [AnalyticsGameEvents.VERSUS_GAME_END] = true,
-            [AnalyticsGameEvents.RANDOM_PUZZLE_START] = true,
-            [AnalyticsGameEvents.RANDOM_PUZZLE_END] = true,
-            [AnalyticsGameEvents.GAUNTLET_LEVEL_START] = true,
-            [AnalyticsGameEvents.GAUNTLET_LEVEL_END] = true,
-            [AnalyticsGameEvents.AI_LEVEL_START] = true,
-            [AnalyticsGameEvents.AI_LEVEL_END] = true,
-            [AnalyticsGameEvents.BOSS_AI_LEVEL_START] = true,
-            [AnalyticsGameEvents.BOSS_AI_LEVEL_END] = true,
-            [AnalyticsGameEvents.PUZZLE_LEVEL_START] = true,
-            [AnalyticsGameEvents.PUZZLE_LEVEL_END] = true,
-            [AnalyticsGameEvents.PUZZLE_LEVEL_HINT_BUTTON_PRESS] = true,
-            [AnalyticsGameEvents.PUZZLE_HINT_STORE_HINT_PURCHASE] = true,
-            [AnalyticsGameEvents.EVENT_OPENED] = true,
-            [AnalyticsGameEvents.EVENT_COMPLETED] = true,
-            [AnalyticsGameEvents.SELECT_GAMEPIECE] = true,
-            [AnalyticsGameEvents.NONE] = false,
-        };
-
-        public static Dictionary<AnalyticsEvents, bool> miscEventsSwitch = new Dictionary<AnalyticsEvents, bool>()
-        {
-            [AnalyticsEvents.SETTINGS_CHANGE] = true,
-            [AnalyticsEvents.UI] = true,
-            [AnalyticsEvents.TUTORIALS] = true,
-            [AnalyticsEvents.ERROR] = true,
-        };
-
         private static AnalyticsManager instance;
 
         public enum AnalyticsProvider
         {
+            AMPLITUDE = 1,
             PLAYFAB = 2,
+            UNITY_ANALYTICS = 4,
 
-            ALL = PLAYFAB ,
+            ALL = AMPLITUDE | PLAYFAB | UNITY_ANALYTICS,
         }
 
         public enum AnalyticsGameEvents
@@ -122,58 +101,6 @@ namespace Fourzy
             SELECT_GAMEPIECE,
         }
 
-        public enum AnalyticsEvents
-        {
-
-            /// <summary>
-            /// Params: value_name, new_value, old_value
-            /// </summary>
-            SETTINGS_CHANGE = 0,
-
-            /// <summary>
-            /// Params: name, stage
-            /// </summary>
-            TUTORIALS = 1,
-
-            UI = 2,
-
-            ERROR = 20,
-        }
-
-        public enum AnalyticsUIButtons
-        {
-            none,
-
-            create_game,
-            pass_and_play,
-            leaderboard_play,
-            turn_play,
-            puzzle_play,
-            change_name,
-        }
-
-        public enum AnalyticsSettingsKeys
-        {
-            CHANGE_NAME,
-        }
-
-        public enum AnalyticsErrorType
-        {
-            puzzle_play,
-            pass_play,
-            turn_based,
-            realtime,
-            onboarding,
-            main_menu,
-            gameplay_scene,
-            settings,
-            challenge_manager,
-            create_turn_base_game,
-            create_realtime_game,
-
-            unidentified,
-        }
-
         public enum GameResultType
         {
             None,
@@ -188,6 +115,12 @@ namespace Fourzy
         protected override void Awake()
         {
             base.Awake();
+
+            Amplitude amplitude = Amplitude.getInstance("your project");
+            amplitude.logging = true;
+            amplitude.trackSessionEvents(true);
+            amplitude.useAdvertisingIdForDeviceId();
+            amplitude.init(AMP_API_KEY);
         }
 
         public static void Initialize(bool _DEBUG = false)
@@ -202,7 +135,10 @@ namespace Fourzy
 
             DontDestroyOnLoad(go);
 
-            if (DEBUG) Debug.Log("Analytics manager initialized.");
+            if (DEBUG)
+            {
+                Debug.Log("Analytics manager initialized.");
+            }
         }
 
         public void LogGame(
@@ -211,8 +147,6 @@ namespace Fourzy
             AnalyticsProvider provider = AnalyticsProvider.ALL,
             params KeyValuePair<string, object>[] extraParams)
         {
-            if (!NetworkPass() || !gameEventsSwitch[gameEventType]) return;
-
             Dictionary<string, object> @params = new Dictionary<string, object>();
 
             foreach (KeyValuePair<string, object> p in extraParams) @params.Add(p.Key, p.Value);
@@ -324,7 +258,7 @@ namespace Fourzy
                     @params.Add(HINT_AVAILABLE_KEY, UserManager.Instance.hints > 0);
                     @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
                     @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
-                    
+
                     break;
 
                 case AnalyticsGameEvents.PUZZLE_HINT_STORE_HINT_PURCHASE:
@@ -351,21 +285,6 @@ namespace Fourzy
 
                             break;
 
-                        //case AnalyticsProvider.GAME_ANALYTICS:
-                        //    string values = $"{gameEventType.ToString().ToLower()}";
-
-                        //    values += $":{game._Type.ToString().ToLower()}";
-
-                        //    values += $":{game._Area.ToString().ToLower()}";
-
-                        //    if (game.puzzleData && game.puzzleData.pack)
-                        //    {
-                        //        values += $":pack_id-{game.puzzleData.pack.packID.Truncate(7)}";
-                        //    }
-
-                        //    LogGameAnalyticsDesignEvent(values);
-
-                        //    break;
                     }
                 }
             }
@@ -375,14 +294,11 @@ namespace Fourzy
             AnalyticsProvider provider = AnalyticsProvider.ALL,
             params KeyValuePair<string, object>[] extraParams)
         {
-            if (!NetworkPass()) return;
-            if (!gameEventsSwitch[gameEventType] || gameEventType == AnalyticsGameEvents.NONE) return;
-
             Dictionary<string, object> @params = new Dictionary<string, object>();
 
             foreach (KeyValuePair<string, object> p in extraParams) @params.Add(p.Key, p.Value);
 
-            
+
 
             foreach (Enum value in Enum.GetValues(provider.GetType()))
             {
@@ -400,192 +316,27 @@ namespace Fourzy
             }
         }
 
-        public void LogSettingsChange(AnalyticsSettingsKeys settingsKey, string newValue, string oldValue, AnalyticsProvider provider = AnalyticsProvider.ALL)
+        public void LogSettingsChange(
+            string settingsKey, 
+            string newValue, 
+            string oldValue, 
+            AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
-            //not used
 
-            //if (!NetworkPass()) return;
-            //if (!miscEventsSwitch[AnalyticsEvents.SETTINGS_CHANGE]) return;
-
-            //Dictionary<string, object> @params = new Dictionary<string, object>();
-
-            //@params.Add(SETTINGS_VALUE_NAME_KEY, settingsKey);
-            //@params.Add(SETTINGS_NEW_VALUE_KEY, newValue);
-            //@params.Add(SETTINGS_OLD_VALUE_KEY, oldValue);
-
-            //foreach (Enum value in Enum.GetValues(provider.GetType()))
-            //{
-            //    if (provider.HasFlag(value))
-            //    {
-            //        switch (value)
-            //        {
-            //            case AnalyticsProvider.FIREBASE:
-            //                LogFirebaseEvent(AnalyticsEvents.SETTINGS_CHANGE.ToString().ToLower(), @params);
-
-            //                break;
-
-            //            case AnalyticsProvider.PLAYFAB:
-            //                LogPlayFabPlayerEvent(AnalyticsEvents.SETTINGS_CHANGE.ToString().ToLower(), @params);
-
-            //                break;
-
-            //            case AnalyticsProvider.GAME_ANALYTICS:
-            //                string values = $"{settingsKey.ToString().ToLower()}:{oldValue}:{newValue}";
-
-            //                LogGameAnalyticsDesignEvent(values);
-
-            //                break;
-            //        }
-            //    }
-            //}
         }
 
-        public void LogError(string errorString, AnalyticsErrorType analyticsError = AnalyticsErrorType.unidentified, AnalyticsProvider provider = AnalyticsProvider.ALL)
+        public void LogError(string errorString, AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
-            //not used
 
-            //if (!NetworkPass()) return;
-            //if (!miscEventsSwitch[AnalyticsEvents.ERROR]) return;
-
-            //Dictionary<string, object> @params = new Dictionary<string, object>();
-
-            //@params.Add(analyticsError.ToString().ToLower(), errorString);
-
-            //foreach (Enum value in Enum.GetValues(provider.GetType()))
-            //{
-            //    if (provider.HasFlag(value))
-            //    {
-            //        switch (value)
-            //        {
-            //            case AnalyticsProvider.FIREBASE:
-            //                LogFirebaseEvent(AnalyticsEvents.ERROR.ToString().ToLower(), @params);
-
-            //                break;
-
-            //            case AnalyticsProvider.PLAYFAB:
-            //                LogPlayFabPlayerEvent(AnalyticsEvents.SETTINGS_CHANGE.ToString().ToLower(), @params);
-
-            //                break;
-
-            //            case AnalyticsProvider.GAME_ANALYTICS:
-            //                string values = $"{analyticsError.ToString().ToLower()}:{errorString.Truncate(15)}";
-
-            //                GAErrorSeverity severity = GAErrorSeverity.Undefined;
-
-            //                switch (analyticsError)
-            //                {
-            //                    case AnalyticsErrorType.realtime:
-            //                    case AnalyticsErrorType.turn_based:
-            //                    case AnalyticsErrorType.puzzle_play:
-            //                    case AnalyticsErrorType.pass_play:
-            //                    case AnalyticsErrorType.challenge_manager:
-            //                    case AnalyticsErrorType.create_realtime_game:
-            //                    case AnalyticsErrorType.create_turn_base_game:
-            //                        severity = GAErrorSeverity.Critical;
-
-            //                        break;
-
-            //                    case AnalyticsErrorType.gameplay_scene:
-            //                    case AnalyticsErrorType.main_menu:
-            //                        severity = GAErrorSeverity.Error;
-
-            //                        break;
-
-            //                    case AnalyticsErrorType.onboarding:
-            //                    case AnalyticsErrorType.settings:
-            //                        severity = GAErrorSeverity.Warning;
-
-            //                        break;
-            //                }
-
-            //                LogGameAnalyticsErrorEvent(severity, errorString);
-
-            //                break;
-            //        }
-            //    }
-            //}
         }
 
         public void LogTutorialEvent(string name, string stage, AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
-            if (!NetworkPass()) return;
-            if (!miscEventsSwitch[AnalyticsEvents.TUTORIALS]) return;
 
-            Dictionary<string, object> _params = new Dictionary<string, object>();
-
-            _params.Add(TUTORIAL_NAME_KEY, name);
-            _params.Add(TUTORIAL_STAGE_KEY, stage);
-
-            foreach (Enum value in Enum.GetValues(provider.GetType()))
-                if (provider.HasFlag(value))
-                {
-                    switch (value)
-                    {
-
-                        case AnalyticsProvider.PLAYFAB:
-                            LogPlayFabPlayerEvent(AnalyticsEvents.TUTORIALS.ToString().ToLower(), _params);
-
-                            break;
-                    }
-                }
         }
-
-        public void LogUIButton(AnalyticsUIButtons buttonEvent, AnalyticsProvider provider = AnalyticsProvider.ALL, params KeyValuePair<string, object>[] @params)
-        {
-            //not used
-
-            //if (!NetworkPass()) return;
-            //if (!miscEventsSwitch[AnalyticsEvents.UI]) return;
-
-            //lastLoggedButton = lastLoggedButtonConsumable = buttonEvent;
-
-            //Dictionary<string, object> _params = new Dictionary<string, object>();
-
-            //foreach (KeyValuePair<string, object> param in @params)
-            //{
-            //    _params.Add(param.Key, param.Value);
-            //}
-
-            //foreach (Enum value in Enum.GetValues(provider.GetType()))
-            //    if (provider.HasFlag(value))
-            //    {
-            //        switch (value)
-            //        {
-            //            case AnalyticsProvider.FIREBASE:
-            //                LogFirebaseEvent(AnalyticsEvents.UI.ToString().ToLower() + "_" + buttonEvent.ToString().ToLower(), _params);
-
-            //                break;
-
-            //            case AnalyticsProvider.PLAYFAB:
-            //                LogPlayFabPlayerEvent(AnalyticsEvents.UI.ToString().ToLower() + "_" + buttonEvent.ToString().ToLower(), _params);
-
-            //                break;
-
-            //            case AnalyticsProvider.GAME_ANALYTICS:
-            //                string values = $"{AnalyticsEvents.UI.ToString().ToLower()}:{buttonEvent.ToString().ToLower()}";
-
-            //                foreach (KeyValuePair<string, object> param in @params)
-            //                {
-            //                    values += $":{param.Value}";
-            //                }
-
-            //                LogGameAnalyticsDesignEvent(values);
-
-            //                break;
-            //        }
-            //    }
-        }
-
-        //public static GameResultType ResultType(IClientFourzy game)
-        //{
-        //    if (game.IsWinner()) return GameResultType.Win;
-        //    else if (game.)
-        //}
 
         private void LogPlayFabPlayerEvent(string eventName, Dictionary<string, object> @params)
         {
-            if (!SettingsPass()) return;
-
             PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
             {
                 EventName = eventName,
@@ -594,9 +345,5 @@ namespace Fourzy
 
             if (DEBUG) Debug.Log("Playfab event sent: " + eventName);
         }
-
-        private bool NetworkPass() => GameManager.NetworkAccess;
-
-        private bool SettingsPass() => SettingsManager.Get(SettingsManager.KEY_ANALYTICS_EVENTS);
     }
 }
