@@ -47,7 +47,7 @@ namespace ByteSheep.Events
                     return vector3Argument;
                 case AdvancedSupportedTypes.Enum:
                     Type enumType = Type.GetType(typeName);
-                    //if (enumType == null) return null;
+                    if (enumType == null) return null;
 
                     string[] names = Enum.GetNames(enumType);
                     for (int i = 0; i < names.Length; i++)
