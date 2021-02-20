@@ -264,11 +264,19 @@ namespace Fourzy._Updates.UI.Helpers
                         case ListenValues.SETTINGS_SFX_ON:
                             OnSfx(SettingsManager.Get(SettingsManager.KEY_SFX));
 
+
+
+
+
+
+
                             break;
 
                         case ListenValues.SETTINGS_AUDIO_OFF:
                         case ListenValues.SETTINGS_AUDIO_ON:
                             OnAudio(SettingsManager.Get(SettingsManager.KEY_AUDIO));
+
+
 
                             break;
 
@@ -277,7 +285,6 @@ namespace Fourzy._Updates.UI.Helpers
                             OnDemoMode(SettingsManager.Get(SettingsManager.KEY_DEMO_MODE));
 
                             break;
-
 
                         case ListenValues.SETTINGS_MAGIC_ON:
                         case ListenValues.SETTINGS_MAGIC_OFF:
