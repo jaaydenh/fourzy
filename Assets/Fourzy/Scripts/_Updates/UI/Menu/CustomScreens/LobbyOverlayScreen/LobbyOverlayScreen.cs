@@ -1,9 +1,12 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
+using FourzyGameModel.Model;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -153,7 +156,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             lobbyButton.GetBadge("code").badge.SetValue(password);
         }
 
-        private void OnPlayerEnteredRoom(Player other)
+        private void OnPlayerEnteredRoom(Photon.Realtime.Player other)
         {
             if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
                 & displayable) == 0) return;
@@ -173,7 +176,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        private void OnPlayerLeftRoom(Player other)
+        private void OnPlayerLeftRoom(Photon.Realtime.Player other)
         {
             switch (state)
             {
@@ -234,7 +237,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
                 & displayable) == 0) return;
 
-            AnalyticsManager.Instance.LogLobbyGameCreated();
+            AnalyticsManager.Instance.LogEvent(
+                "LOBBY_CREATED",
+                new Dictionary<string, object>()
+                {
+                    ["playerID"] = LoginManager.playfabID,
+                    ["time"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
+                    ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
+                    ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
+                    ["isPrivate"] = !string.IsNullOrEmpty(FourzyPhotonManager.PASSWORD),
+                    ["complexityScore"] = "",
+                });
+
             StartBotRoutine();
         }
 

@@ -192,7 +192,7 @@ namespace Fourzy
 
             ExecutePerVersion.TryExecute();
             ThreadsQueuer.Initialize();
-            AnalyticsManager.Initialize(true);
+            AnalyticsManager.Initialize(false);
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;

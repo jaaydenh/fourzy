@@ -1,25 +1,22 @@
 ﻿//modded
 
+using Fourzy._Updates;
 using Fourzy._Updates.UI.Toasts;
-// using GameSparks.Api.Requests;
-// using GameSparks.Api.Responses;
-// using GameSparks.Core;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
 //#if UNITY_IOS
 //using UnityEngine.SocialPlatforms.GameCenter;
 //#endif
 //using SA.iOS.GameKit;
 //using SA.Foundation.Templates;
-using Fourzy._Updates.UI.Menu.Screens;
 using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
-using System.Collections;
 using PlayFab.ProfilesModels;
-using Fourzy._Updates;
-using UnityEngine.Analytics;
+// using GameSparks.Api.Requests;
+// using GameSparks.Api.Responses;
+// using GameSparks.Core;
+using System;
+using System.Collections;
+using UnityEngine;
 
 namespace Fourzy
 {
@@ -354,6 +351,7 @@ namespace Fourzy
 
         private void PlayFabLoginSuccess(LoginResult result)
         {
+            playfabID = result.PlayFabId;
             AnalyticsManager.SetUsetID(result.PlayFabId);
 
             Debug.Log("PlayFabId: " + result.PlayFabId);
@@ -363,7 +361,7 @@ namespace Fourzy
             Debug.Log("Entity.Id: " + result.EntityToken.Entity.Id);
             Debug.Log("Entity.Type: " + result.EntityToken.Entity.Type);
 
-            if (GameManager.Instance.showInfoToasts && 
+            if (GameManager.Instance.showInfoToasts &&
                 !GameManager.Instance.Landscape)
             {
                 GamesToastsController.ShowTopToast("Device Authentication Success");
@@ -449,7 +447,14 @@ namespace Fourzy
 
             //get profile
             PlayFabProfilesAPI.GetProfile(
-                new GetEntityProfileRequest() { Entity = new PlayFab.ProfilesModels.EntityKey() { Id = playerTitleID, Type = "title_player_account" } },
+                new GetEntityProfileRequest()
+                {
+                    Entity = new PlayFab.ProfilesModels.EntityKey()
+                    {
+                        Id = playerTitleID,
+                        Type = "title_player_account"
+                    }
+                },
                 OnProfileOK,
                 error => Debug.Log("Error getting profile: " + error.ErrorMessage));
         }

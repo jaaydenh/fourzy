@@ -153,21 +153,6 @@ namespace Fourzy
             Amplitude.Instance.setUserId(userId);
         }
 
-        public void LogLobbyGameCreated(AnalyticsProvider provider = AnalyticsProvider.ALL)
-        {
-            Dictionary<string, object> values = new Dictionary<string, object>()
-            {
-                ["playerID"] = LoginManager.playfabID,
-                ["time"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
-                ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
-                ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
-                ["isPrivate"] = !string.IsNullOrEmpty(FourzyPhotonManager.PASSWORD),
-                ["complexityScore"] = "",
-            };
-
-            LogEvent(AnalyticsEvents.LOBBY_CREATED, values, provider);
-        }
-
         public void LogOtherJoinedLobby(string playerId, AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
             Dictionary<string, object> values = new Dictionary<string, object>()
