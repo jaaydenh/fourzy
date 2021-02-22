@@ -3,12 +3,15 @@
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tools;
+using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 namespace Fourzy
 {
@@ -116,7 +119,7 @@ namespace Fourzy
         {
             base.Awake();
 
-            Amplitude amplitude = Amplitude.getInstance("your project");
+            Amplitude amplitude = Amplitude.getInstance();
             amplitude.logging = true;
             amplitude.trackSessionEvents(true);
             amplitude.useAdvertisingIdForDeviceId();
@@ -138,6 +141,51 @@ namespace Fourzy
             if (DEBUG)
             {
                 Debug.Log("Analytics manager initialized.");
+            }
+        }
+        
+        public static void SetUsetID(string userId)
+        {
+            Analytics.SetUserId(userId);
+            Amplitude.Instance.setUserId(userId);
+        }
+
+        public void LogLobbyGameCreated(AnalyticsProvider provider = AnalyticsProvider.ALL)
+        {
+            string lobbyCreatedEvent = "lobbyCreated";
+            Dictionary<string, object> values = new Dictionary<string, object>()
+            {
+                ["playerID"] = LoginManager.playfabID,
+                ["time"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
+                ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
+                ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
+                ["isPrivate"] = !string.IsNullOrEmpty(FourzyPhotonManager.PASSWORD),
+                ["complexityScore"] = "",
+            };
+
+            foreach (Enum value in Enum.GetValues(provider.GetType()))
+            {
+                if (provider.HasFlag(value))
+                {
+                    switch (value)
+                    {
+                        case AnalyticsProvider.AMPLITUDE:
+                            LogAmplitude(lobbyCreatedEvent, values);
+
+                            break;
+
+                        case AnalyticsProvider.PLAYFAB:
+                            LogPlayFab(lobbyCreatedEvent, values);
+
+                            break;
+
+                        case AnalyticsProvider.UNITY_ANALYTICS:
+                            LogUnity(lobbyCreatedEvent, values);
+
+                            break;
+
+                    }
+                }
             }
         }
 
@@ -281,7 +329,7 @@ namespace Fourzy
                     {
 
                         case AnalyticsProvider.PLAYFAB:
-                            LogPlayFabPlayerEvent(gameEventType.ToString().ToLower(), @params);
+                            LogPlayFab(gameEventType.ToString().ToLower(), @params);
 
                             break;
 
@@ -308,7 +356,7 @@ namespace Fourzy
                     {
 
                         case AnalyticsProvider.PLAYFAB:
-                            LogPlayFabPlayerEvent(gameEventType.ToString().ToLower(), @params);
+                            LogPlayFab(gameEventType.ToString().ToLower(), @params);
 
                             break;
                     }
@@ -335,15 +383,50 @@ namespace Fourzy
 
         }
 
-        private void LogPlayFabPlayerEvent(string eventName, Dictionary<string, object> @params)
+        private void LogPlayFab(string eventName, Dictionary<string, object> values)
         {
-            PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
+            if (DEBUG)
             {
-                EventName = eventName,
-                Body = @params
-            }, null, null);
+                Debug.Log(string.Format("{0}: {1}",
+                    eventName,
+                    string.Join(", ", values.Select(_v => $"{_v.Key} = {_v.Value}"))));
+            }
+            else
+            {
+                PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
+                {
+                    EventName = eventName,
+                    Body = values
+                }, null, null);
+            }
+        }
 
-            if (DEBUG) Debug.Log("Playfab event sent: " + eventName);
+        private void LogAmplitude(string eventName, Dictionary<string, object> values)
+        {
+            if (DEBUG)
+            {
+                Debug.Log(string.Format("{0}: {1}",
+                    eventName,
+                    string.Join(", ", values.Select(_v => $"{_v.Key} = {_v.Value}"))));
+            }
+            else
+            {
+                Amplitude.Instance.logEvent(eventName, values);
+            }
+        }
+
+        private void LogUnity(string eventName, Dictionary<string, object> values)
+        {
+            if (DEBUG)
+            {
+                Debug.Log(string.Format("{0}: {1}", 
+                    eventName, 
+                    string.Join(", ", values.Select(_v => $"{_v.Key} = {_v.Value}"))));
+            }
+            else
+            {
+                Analytics.CustomEvent(eventName, values);
+            }
         }
     }
 }

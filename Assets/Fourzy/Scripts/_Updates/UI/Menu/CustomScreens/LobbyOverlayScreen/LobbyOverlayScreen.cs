@@ -232,6 +232,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
                 & displayable) == 0) return;
 
+            AnalyticsManager.Instance.LogLobbyGameCreated();
             StartBotRoutine();
         }
 

@@ -1,6 +1,15 @@
 <dependencies>
   <packages>
     <package>com.amplitude:android-sdk:2.28.2</package>
+    <package>com.android.support:appcompat-v7:25.3.1</package>
+    <package>com.android.support:cardview-v7:25.3.1</package>
+    <package>com.android.support:customtabs:25.3.1</package>
+    <package>com.android.support:support-v4:25.3.1</package>
+    <package>com.facebook.android:facebook-applinks:[9.0, 10)</package>
+    <package>com.facebook.android:facebook-core:[9.0, 10)</package>
+    <package>com.facebook.android:facebook-gamingservices:[9.0, 10)</package>
+    <package>com.facebook.android:facebook-login:[9.0, 10)</package>
+    <package>com.facebook.android:facebook-share:[9.0, 10)</package>
     <package>com.google.android.gms:play-services-base:17.6.0</package>
     <package>com.google.firebase:firebase-analytics:18.0.2</package>
     <package>com.google.firebase:firebase-app-unity:7.1.0</package>
@@ -8,6 +17,7 @@
     <package>com.google.firebase:firebase-messaging:21.0.1</package>
     <package>com.google.firebase:firebase-messaging-unity:7.1.0</package>
     <package>com.mopub:mopub-sdk:5.16.0</package>
+    <package>com.parse.bolts:bolts-android:1.4.0</package>
     <package>com.squareup.okhttp3:okhttp:4.2.2</package>
   </packages>
   <files>
@@ -18,6 +28,8 @@
     <file>Assets/Plugins/Android/androidx.arch.core.core-common-2.1.0.jar</file>
     <file>Assets/Plugins/Android/androidx.arch.core.core-runtime-2.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.asynclayoutinflater.asynclayoutinflater-1.0.0.aar</file>
+    <file>Assets/Plugins/Android/androidx.browser.browser-1.0.0.aar</file>
+    <file>Assets/Plugins/Android/androidx.cardview.cardview-1.0.0.aar</file>
     <file>Assets/Plugins/Android/androidx.collection.collection-1.1.0.jar</file>
     <file>Assets/Plugins/Android/androidx.concurrent.concurrent-futures-1.0.0.jar</file>
     <file>Assets/Plugins/Android/androidx.coordinatorlayout.coordinatorlayout-1.0.0.aar</file>
@@ -56,6 +68,13 @@
     <file>Assets/Plugins/Android/androidx.versionedparcelable.versionedparcelable-1.1.0.aar</file>
     <file>Assets/Plugins/Android/androidx.viewpager.viewpager-1.0.0.aar</file>
     <file>Assets/Plugins/Android/com.amplitude.android-sdk-2.28.2.aar</file>
+    <file>Assets/Plugins/Android/com.android.installreferrer.installreferrer-1.0.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-applinks-9.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-common-9.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-core-9.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-gamingservices-9.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-login-9.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.facebook-share-9.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.datatransport.transport-api-2.2.1.aar</file>
     <file>Assets/Plugins/Android/com.google.android.datatransport.transport-backend-cct-2.3.3.aar</file>
     <file>Assets/Plugins/Android/com.google.android.datatransport.transport-runtime-2.2.5.aar</file>
@@ -74,6 +93,7 @@
     <file>Assets/Plugins/Android/com.google.code.gson.gson-2.8.6.jar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-analytics-18.0.2.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-annotations-16.0.0.jar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-app-unity-7.1.0.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-common-19.5.0.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-components-16.1.0.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-datatransport-17.0.10.aar</file>
@@ -85,7 +105,9 @@
     <file>Assets/Plugins/Android/com.google.firebase.firebase-installations-interop-16.0.1.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-measurement-connector-18.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.firebase.firebase-messaging-21.0.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-messaging-unity-7.1.0.aar</file>
     <file>Assets/Plugins/Android/com.google.guava.listenablefuture-1.0.jar</file>
+    <file>Assets/Plugins/Android/com.google.zxing.core-3.3.3.jar</file>
     <file>Assets/Plugins/Android/com.mopub.mopub-sdk-5.16.0.aar</file>
     <file>Assets/Plugins/Android/com.mopub.mopub-sdk-banner-5.16.0.aar</file>
     <file>Assets/Plugins/Android/com.mopub.mopub-sdk-base-5.16.0.aar</file>
@@ -93,6 +115,9 @@
     <file>Assets/Plugins/Android/com.mopub.mopub-sdk-native-static-5.16.0.aar</file>
     <file>Assets/Plugins/Android/com.mopub.omsdk-android-1.3.4.aar</file>
     <file>Assets/Plugins/Android/com.mopub.volley.mopub-volley-2.1.0.jar</file>
+    <file>Assets/Plugins/Android/com.parse.bolts.bolts-android-1.4.0.jar</file>
+    <file>Assets/Plugins/Android/com.parse.bolts.bolts-applinks-1.4.0.jar</file>
+    <file>Assets/Plugins/Android/com.parse.bolts.bolts-tasks-1.4.0.jar</file>
     <file>Assets/Plugins/Android/com.squareup.okhttp3.okhttp-4.2.2.jar</file>
     <file>Assets/Plugins/Android/com.squareup.okio.okio-2.2.2.jar</file>
     <file>Assets/Plugins/Android/javax.inject.javax.inject-1.jar</file>

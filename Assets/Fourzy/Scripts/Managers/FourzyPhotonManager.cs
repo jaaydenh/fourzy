@@ -43,6 +43,7 @@ namespace Fourzy
         public static Action<Player, Hashtable> onPlayerPpopertiesUpdate;
 
         public static bool DEBUG = false;
+        public static string PASSWORD = "";
         public static TypedLobby quickmatchLobby = new TypedLobby("QuickmatchLobby", LobbyType.AsyncRandomLobby);
 
         private static FourzyPhotonManager instance;
@@ -301,6 +302,8 @@ namespace Fourzy
 
             if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
 
+            PASSWORD = GetRoomProperty(Constants.REALTIME_ROOM_PASSWORD, "");
+
             ////if room is to be removed, remove it yourself
             //if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             //{
@@ -362,6 +365,7 @@ namespace Fourzy
 
             if (DEBUG) Debug.Log($"Room left.");
 
+            PASSWORD = "";
             onRoomLeft?.Invoke();
         }
 

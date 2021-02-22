@@ -19,6 +19,7 @@ using PlayFab.ClientModels;
 using System.Collections;
 using PlayFab.ProfilesModels;
 using Fourzy._Updates;
+using UnityEngine.Analytics;
 
 namespace Fourzy
 {
@@ -353,7 +354,7 @@ namespace Fourzy
 
         private void PlayFabLoginSuccess(LoginResult result)
         {
-            playfabID = result.PlayFabId;
+            AnalyticsManager.SetUsetID(result.PlayFabId);
 
             Debug.Log("PlayFabId: " + result.PlayFabId);
             Debug.Log("SessionTicket: " + result.SessionTicket);
