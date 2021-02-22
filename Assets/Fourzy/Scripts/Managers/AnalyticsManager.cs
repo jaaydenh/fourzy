@@ -82,7 +82,7 @@ namespace Fourzy
             ALL = AMPLITUDE | PLAYFAB | UNITY_ANALYTICS,
         }
 
-        public enum AnalyticsGameEvents
+        public enum AnalyticsEvents
         {
             NONE,
             VERSUS_GAME_START,
@@ -102,6 +102,9 @@ namespace Fourzy
             EVENT_OPENED,
             EVENT_COMPLETED,
             SELECT_GAMEPIECE,
+
+            LOBBY_CREATED,
+            LOBBY_JOINED_BY_OTHER,
         }
 
         public enum GameResultType
@@ -152,7 +155,6 @@ namespace Fourzy
 
         public void LogLobbyGameCreated(AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
-            string lobbyCreatedEvent = "lobbyCreated";
             Dictionary<string, object> values = new Dictionary<string, object>()
             {
                 ["playerID"] = LoginManager.playfabID,
@@ -163,211 +165,29 @@ namespace Fourzy
                 ["complexityScore"] = "",
             };
 
-            foreach (Enum value in Enum.GetValues(provider.GetType()))
-            {
-                if (provider.HasFlag(value))
-                {
-                    switch (value)
-                    {
-                        case AnalyticsProvider.AMPLITUDE:
-                            LogAmplitude(lobbyCreatedEvent, values);
-
-                            break;
-
-                        case AnalyticsProvider.PLAYFAB:
-                            LogPlayFab(lobbyCreatedEvent, values);
-
-                            break;
-
-                        case AnalyticsProvider.UNITY_ANALYTICS:
-                            LogUnity(lobbyCreatedEvent, values);
-
-                            break;
-
-                    }
-                }
-            }
+            LogEvent(AnalyticsEvents.LOBBY_CREATED, values, provider);
         }
 
-        public void LogGame(
-            AnalyticsGameEvents gameEventType,
-            IClientFourzy game,
-            AnalyticsProvider provider = AnalyticsProvider.ALL,
-            params KeyValuePair<string, object>[] extraParams)
+        public void LogOtherJoinedLobby(string playerId, AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
-            Dictionary<string, object> @params = new Dictionary<string, object>();
-
-            foreach (KeyValuePair<string, object> p in extraParams) @params.Add(p.Key, p.Value);
-
-            @params.Add(BOARD_ID_KEY, game.BoardID);
-            @params.Add(AREA_KEY, game._Area);
-
-            switch (gameEventType)
+            Dictionary<string, object> values = new Dictionary<string, object>()
             {
-                case AnalyticsGameEvents.VERSUS_GAME_END:
-                    @params.Add(ALL_TURNS_COUNT_KEY, game._allTurnRecord.Count);
+                ["playerID"] = playerId,
+                ["time"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
+                ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
+                ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
+                ["isPrivate"] = !string.IsNullOrEmpty(FourzyPhotonManager.PASSWORD),
+                ["complexityScore"] = "",
+                ["creatorPlayerId"] = LoginManager.playfabID,
+            };
 
-                    break;
-
-                case AnalyticsGameEvents.RANDOM_PUZZLE_START:
-                    @params.Add(SESSION_ID_KEY, GameManager.Instance.sessionID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-
-                    break;
-
-                case AnalyticsGameEvents.RANDOM_PUZZLE_END:
-                    @params.Add(SESSION_ID_KEY, GameManager.Instance.sessionID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(PUZZLE_TURNS_LIMIT_KEY, game.puzzleData.MoveLimit);
-
-                    break;
-
-                case AnalyticsGameEvents.GAUNTLET_LEVEL_START:
-                    @params.Add(GAUNTLET_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAUNTLET_MEMBERS_LEFT_KEY, game.myMembers.Count);
-                    @params.Add(MAGIC_LEFT_KEY, game.me.Magic);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-                    @params.Add(BOARD_JSON_KEY, JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
-
-                    break;
-
-                case AnalyticsGameEvents.GAUNTLET_LEVEL_END:
-                    @params.Add(GAUNTLET_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAUNTLET_MEMBERS_LEFT_KEY, game.myMembers.Count);
-                    @params.Add(MAGIC_LEFT_KEY, game.me.Magic);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-                    @params.Add(BOARD_JSON_KEY, JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-
-                    break;
-
-                case AnalyticsGameEvents.AI_LEVEL_START:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-
-                    break;
-
-                case AnalyticsGameEvents.AI_LEVEL_END:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-
-                    break;
-
-                case AnalyticsGameEvents.BOSS_AI_LEVEL_START:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-                    @params.Add(GAME_BOSS_TYPE_KEY, game.puzzleData.aiBoss);
-
-                    break;
-
-                case AnalyticsGameEvents.BOSS_AI_LEVEL_END:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-                    @params.Add(GAME_BOSS_TYPE_KEY, game.puzzleData.aiBoss);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(BOSS_MOVES_COUNT, game.BossMoves);
-
-                    break;
-
-                case AnalyticsGameEvents.PUZZLE_LEVEL_START:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-
-                    break;
-
-                case AnalyticsGameEvents.PUZZLE_LEVEL_END:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(PUZZLE_TURNS_LIMIT_KEY, game.puzzleData.MoveLimit);
-
-                    break;
-
-                case AnalyticsGameEvents.PUZZLE_LEVEL_HINT_BUTTON_PRESS:
-                    //try add eventid
-                    if (game.puzzleData.pack) @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(HINT_AVAILABLE_KEY, UserManager.Instance.hints > 0);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
-
-                    break;
-
-                case AnalyticsGameEvents.PUZZLE_HINT_STORE_HINT_PURCHASE:
-                    //try add eventid
-                    if (game.puzzleData.pack) @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
-
-                    break;
-            }
-
-            foreach (Enum value in Enum.GetValues(provider.GetType()))
-            {
-                if (provider.HasFlag(value))
-                {
-                    switch (value)
-                    {
-
-                        case AnalyticsProvider.PLAYFAB:
-                            LogPlayFab(gameEventType.ToString().ToLower(), @params);
-
-                            break;
-
-                    }
-                }
-            }
-        }
-        public void LogEvent(
-            AnalyticsGameEvents gameEventType,
-            AnalyticsProvider provider = AnalyticsProvider.ALL,
-            params KeyValuePair<string, object>[] extraParams)
-        {
-            Dictionary<string, object> @params = new Dictionary<string, object>();
-
-            foreach (KeyValuePair<string, object> p in extraParams) @params.Add(p.Key, p.Value);
-
-
-
-            foreach (Enum value in Enum.GetValues(provider.GetType()))
-            {
-                if (provider.HasFlag(value))
-                {
-                    switch (value)
-                    {
-
-                        case AnalyticsProvider.PLAYFAB:
-                            LogPlayFab(gameEventType.ToString().ToLower(), @params);
-
-                            break;
-                    }
-                }
-            }
+            LogEvent(AnalyticsEvents.LOBBY_CREATED, values, provider);
         }
 
         public void LogSettingsChange(
-            string settingsKey, 
-            string newValue, 
-            string oldValue, 
+            string settingsKey,
+            string newValue,
+            string oldValue,
             AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
 
@@ -383,49 +203,209 @@ namespace Fourzy
 
         }
 
-        private void LogPlayFab(string eventName, Dictionary<string, object> values)
+        public void LogGame(
+            AnalyticsEvents eventType,
+            IClientFourzy game,
+            AnalyticsProvider provider = AnalyticsProvider.ALL,
+            params KeyValuePair<string, object>[] extraParams)
+        {
+            Dictionary<string, object> @params = new Dictionary<string, object>();
+
+            @params.Add(BOARD_ID_KEY, game.BoardID);
+            @params.Add(AREA_KEY, game._Area);
+
+            switch (eventType)
+            {
+                case AnalyticsEvents.VERSUS_GAME_END:
+                    @params.Add(ALL_TURNS_COUNT_KEY, game._allTurnRecord.Count);
+
+                    break;
+
+                case AnalyticsEvents.RANDOM_PUZZLE_START:
+                    @params.Add(SESSION_ID_KEY, GameManager.Instance.sessionID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+
+                    break;
+
+                case AnalyticsEvents.RANDOM_PUZZLE_END:
+                    @params.Add(SESSION_ID_KEY, GameManager.Instance.sessionID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
+                    @params.Add(PUZZLE_TURNS_LIMIT_KEY, game.puzzleData.MoveLimit);
+
+                    break;
+
+                case AnalyticsEvents.GAUNTLET_LEVEL_START:
+                    @params.Add(GAUNTLET_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+                    @params.Add(GAUNTLET_MEMBERS_LEFT_KEY, game.myMembers.Count);
+                    @params.Add(MAGIC_LEFT_KEY, game.me.Magic);
+                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
+                    @params.Add(BOARD_JSON_KEY, JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
+
+                    break;
+
+                case AnalyticsEvents.GAUNTLET_LEVEL_END:
+                    @params.Add(GAUNTLET_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+                    @params.Add(GAUNTLET_MEMBERS_LEFT_KEY, game.myMembers.Count);
+                    @params.Add(MAGIC_LEFT_KEY, game.me.Magic);
+                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
+                    @params.Add(BOARD_JSON_KEY, JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
+                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
+
+                    break;
+
+                case AnalyticsEvents.AI_LEVEL_START:
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
+
+                    break;
+
+                case AnalyticsEvents.AI_LEVEL_END:
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
+                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
+
+                    break;
+
+                case AnalyticsEvents.BOSS_AI_LEVEL_START:
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
+                    @params.Add(GAME_BOSS_TYPE_KEY, game.puzzleData.aiBoss);
+
+                    break;
+
+                case AnalyticsEvents.BOSS_AI_LEVEL_END:
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
+                    @params.Add(GAME_BOSS_TYPE_KEY, game.puzzleData.aiBoss);
+                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
+                    @params.Add(BOSS_MOVES_COUNT, game.BossMoves);
+
+                    break;
+
+                case AnalyticsEvents.PUZZLE_LEVEL_START:
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+
+                    break;
+
+                case AnalyticsEvents.PUZZLE_LEVEL_END:
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
+                    @params.Add(PUZZLE_TURNS_LIMIT_KEY, game.puzzleData.MoveLimit);
+
+                    break;
+
+                case AnalyticsEvents.PUZZLE_LEVEL_HINT_BUTTON_PRESS:
+                    //try add eventid
+                    if (game.puzzleData.pack) @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+                    @params.Add(HINT_AVAILABLE_KEY, UserManager.Instance.hints > 0);
+                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
+                    @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
+
+                    break;
+
+                case AnalyticsEvents.PUZZLE_HINT_STORE_HINT_PURCHASE:
+                    //try add eventid
+                    if (game.puzzleData.pack) @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+
+                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
+                    @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
+
+                    break;
+            }
+
+            foreach (KeyValuePair<string, object> p in extraParams)
+            {
+                @params.Add(p.Key, p.Value);
+            }
+
+            LogEvent(eventType, @params, provider);
+        }
+
+        public void LogEvent(
+            AnalyticsEvents eventType,
+            AnalyticsProvider provider = AnalyticsProvider.ALL,
+            params KeyValuePair<string, object>[] values)
+        {
+            LogEvent(eventType, values.ToDictionary(_value => _value.Key, _value => _value.Value), provider);
+        }
+
+        public void LogEvent(
+           AnalyticsEvents eventType,
+           Dictionary<string, object> values,
+           AnalyticsProvider provider = AnalyticsProvider.ALL)
+        {
+            LogEvent(eventType.ToString(), values, provider);
+        }
+
+        public void LogEvent(
+           string eventType,
+           AnalyticsProvider provider = AnalyticsProvider.ALL,
+           params KeyValuePair<string, object>[] values)
+        {
+            LogEvent(eventType, values.ToDictionary(_value => _value.Key, _value => _value.Value), provider);
+        }
+
+        public void LogEvent(
+           string @event,
+           Dictionary<string, object> values,
+           AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
             if (DEBUG)
             {
                 Debug.Log(string.Format("{0}: {1}",
-                    eventName,
+                    @event,
                     string.Join(", ", values.Select(_v => $"{_v.Key} = {_v.Value}"))));
             }
             else
             {
-                PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
+                foreach (Enum value in Enum.GetValues(provider.GetType()))
                 {
-                    EventName = eventName,
-                    Body = values
-                }, null, null);
-            }
-        }
+                    if (provider.HasFlag(value))
+                    {
+                        switch (value)
+                        {
+                            case AnalyticsProvider.AMPLITUDE:
+                                Amplitude.Instance.logEvent(@event, values);
 
-        private void LogAmplitude(string eventName, Dictionary<string, object> values)
-        {
-            if (DEBUG)
-            {
-                Debug.Log(string.Format("{0}: {1}",
-                    eventName,
-                    string.Join(", ", values.Select(_v => $"{_v.Key} = {_v.Value}"))));
-            }
-            else
-            {
-                Amplitude.Instance.logEvent(eventName, values);
-            }
-        }
+                                break;
 
-        private void LogUnity(string eventName, Dictionary<string, object> values)
-        {
-            if (DEBUG)
-            {
-                Debug.Log(string.Format("{0}: {1}", 
-                    eventName, 
-                    string.Join(", ", values.Select(_v => $"{_v.Key} = {_v.Value}"))));
-            }
-            else
-            {
-                Analytics.CustomEvent(eventName, values);
+                            case AnalyticsProvider.PLAYFAB:
+                                PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
+                                {
+                                    EventName = @event,
+                                    Body = values
+                                }, null, null);
+
+                                break;
+
+                            case AnalyticsProvider.UNITY_ANALYTICS:
+                                Analytics.CustomEvent(@event, values);
+
+                                break;
+
+                        }
+                    }
+                }
             }
         }
     }

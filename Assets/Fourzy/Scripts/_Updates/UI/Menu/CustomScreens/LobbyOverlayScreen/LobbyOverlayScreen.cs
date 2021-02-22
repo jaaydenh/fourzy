@@ -167,6 +167,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame, null);
                 state = LobbyOverlayState.LOADING_GAME;
 
+                AnalyticsManager.Instance.LogOtherJoinedLobby(GameManager.Instance.RealtimeOpponent.Id);
+
                 CancelRoutine("startBotMatch");
             }
         }
@@ -268,6 +270,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 SetData(playerGamepiece,
                     GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
                         GameManager.Instance.Bot.HerdId).player1Prefab);
+                AnalyticsManager.Instance.LogOtherJoinedLobby(GameManager.Instance.Bot.Profile.ToString());
 
                 StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame);
 

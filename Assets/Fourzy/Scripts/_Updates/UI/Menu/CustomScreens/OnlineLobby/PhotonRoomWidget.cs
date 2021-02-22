@@ -136,6 +136,8 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void CheckPassword(string value)
         {
+            FourzyPhotonManager.PASSWORD = value;
+
             if (value.Equals(password))
             {
                 if (passwordScreen.isOpened)

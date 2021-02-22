@@ -28,7 +28,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public StringEventTrigger timerToggle;
         public ButtonExtended timerButton;
 
-        private Dictionary<Area, List<GameBoardDefinition>> gameboards = 
+        private Dictionary<Area, List<GameBoardDefinition>> gameboards =
             new Dictionary<Area, List<GameBoardDefinition>>();
         private int currentBoard = -1;
         private MiniGameboardWidget currentGameboardWidget;
@@ -41,9 +41,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             foreach (GameBoardDefinition gameBoardDefinition in GameContentManager.Instance.passAndPlayGameboards)
             {
-                if (gameBoardDefinition.Area <= Area.NONE) gameBoardDefinition.Area = Area.TRAINING_GARDEN;
+                if (gameBoardDefinition.Area <= Area.NONE)
+                {
+                    gameBoardDefinition.Area = Area.TRAINING_GARDEN;
+                }
 
-                if (!gameboards.ContainsKey(gameBoardDefinition.Area)) gameboards.Add(gameBoardDefinition.Area, new List<GameBoardDefinition>());
+                if (!gameboards.ContainsKey(gameBoardDefinition.Area))
+                {
+                    gameboards.Add(gameBoardDefinition.Area, new List<GameBoardDefinition>());
+                }
+
                 gameboards[gameBoardDefinition.Area].Add(gameBoardDefinition);
             }
 
@@ -112,7 +119,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        public void ShowHelp() => 
+        public void ShowHelp() =>
             menuController.GetOrAddScreen<PromptScreen>().Prompt(
                 LocalizationManager.Value("practiceScreenPromptTitle"),
                 LocalizationManager.Value("practiceScreenPromptDescription"),
@@ -141,16 +148,28 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void NextBoard()
         {
-            if (currentBoard + 1 == gameboards[currentAreaWidget.area].Count) currentBoard = -1;
-            else currentBoard++;
+            if (currentBoard + 1 == gameboards[currentAreaWidget.area].Count)
+            {
+                currentBoard = -1;
+            }
+            else
+            {
+                currentBoard++;
+            }
 
             LoadBoard(currentBoard);
         }
 
         public void PreviousBoard()
         {
-            if (currentBoard - 1 == -2) currentBoard = gameboards[currentAreaWidget.area].Count - 1;
-            else currentBoard--;
+            if (currentBoard - 1 == -2)
+            {
+                currentBoard = gameboards[currentAreaWidget.area].Count - 1;
+            }
+            else
+            {
+                currentBoard--;
+            }
 
             LoadBoard(currentBoard);
         }
@@ -159,38 +178,75 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             Player player1;
             if (player1Profile.aiProfile != AIProfile.Player)
-                player1 = new Player(1, player1Profile.aiProfile.ToString(), player1Profile.aiProfile) { HerdId = player1Profile.prefabData.data.ID };
+            {
+                player1 = new Player(1, player1Profile.aiProfile.ToString(), player1Profile.aiProfile)
+                {
+                    HerdId = player1Profile.prefabData.data.ID
+                };
+            }
             else
-                player1 = new Player(1, LocalizationManager.Value("player_one")) { PlayerString = UserManager.Instance.userId, HerdId = UserManager.Instance.gamePieceID };
+            {
+                player1 = new Player(1, LocalizationManager.Value("player_one"))
+                {
+                    PlayerString = UserManager.Instance.userId,
+                    HerdId = UserManager.Instance.gamePieceID
+                };
+            }
 
             Player player2;
             if (player2Profile.aiProfile != AIProfile.Player)
-                player2 = new Player(2, player2Profile.aiProfile.ToString(), player2Profile.aiProfile) { HerdId = player2Profile.prefabData.data.ID };
+            {
+                player2 = new Player(2, player2Profile.aiProfile.ToString(), player2Profile.aiProfile)
+                {
+                    HerdId = player2Profile.prefabData.data.ID
+                };
+            }
             else
             {
                 if (player1.Profile == AIProfile.Player)
-                    player2 = new Player(2, LocalizationManager.Value("player_two")) { HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID };
+                {
+                    player2 = new Player(2, LocalizationManager.Value("player_two"))
+                    {
+                        HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID
+                    };
+                }
                 else
-                    player2 = new Player(2, LocalizationManager.Value("player_one")) { PlayerString = UserManager.Instance.userId, HerdId = player1Profile.prefabData.data.ID };
+                {
+                    player2 = new Player(2, LocalizationManager.Value("player_one"))
+                    {
+                        PlayerString = UserManager.Instance.userId,
+                        HerdId = player1Profile.prefabData.data.ID
+                    };
+                }
             }
 
             GameType type = GameType.PASSANDPLAY;
 
-            if (player1Profile.aiProfile != AIProfile.Player && player2Profile.aiProfile != AIProfile.Player) type = GameType.PRESENTATION;
-            else if (player1Profile.aiProfile != AIProfile.Player || player2Profile.aiProfile != AIProfile.Player) type = GameType.AI;
+            if (player1Profile.aiProfile != AIProfile.Player && player2Profile.aiProfile != AIProfile.Player)
+            {
+                type = GameType.PRESENTATION;
+            }
+            else if (player1Profile.aiProfile != AIProfile.Player || player2Profile.aiProfile != AIProfile.Player)
+            {
+                type = GameType.AI;
+            }
 
             ClientFourzyGame game;
             if (currentBoard > -1)
+            {
                 game = new ClientFourzyGame(gameboards[currentAreaWidget.area][currentBoard], player1, player2)
                 {
                     _Area = currentAreaWidget.area,
                     _Type = type,
                 };
+            }
             else
+            {
                 game = new ClientFourzyGame(currentAreaWidget.area, player1, player2, 1)
                 {
                     _Type = type,
                 };
+            }
 
             GameManager.Instance.StartGame(game, GameTypeLocal.LOCAL_GAME);
         }
@@ -222,7 +278,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             currentAreaWidget = widget;
             currentAreaWidget.Select();
-            if (currentGameboardWidget) currentGameboardWidget.SetArea(currentAreaWidget.area);
+
+            if (currentGameboardWidget)
+            {
+                currentGameboardWidget.SetArea(currentAreaWidget.area);
+            }
 
             currentBoard = -1;
             LoadBoard(currentBoard);
@@ -230,14 +290,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void LoadBoard(int index)
         {
-            if (currentGameboardWidget) Destroy(currentGameboardWidget.gameObject);
+            if (currentGameboardWidget)
+            {
+                Destroy(currentGameboardWidget.gameObject);
+            }
 
             MiniGameboardWidget gameboard = Instantiate(miniGameboardPrefab, gameboardParent);
             gameboard.ResetAnchors();
             gameboard.button.interactable = false;
             gameboard.SetArea(currentAreaWidget.area);
 
-            if (index > -1) gameboard.QuickLoadBoard(gameboards[currentAreaWidget.area][index]);
+            if (index > -1)
+            {
+                gameboard.QuickLoadBoard(gameboards[currentAreaWidget.area][index]);
+            }
 
             currentGameboardWidget = gameboard;
         }
@@ -284,7 +350,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             if (player1Profile && player2Profile)
-                timerButton.SetState(player1Profile.aiProfile == AIProfile.Player && player2Profile.aiProfile == AIProfile.Player);
+            {
+                timerButton.SetState(
+                    player1Profile.aiProfile == AIProfile.Player &&
+                    player2Profile.aiProfile == AIProfile.Player);
+            }
         }
     }
 }

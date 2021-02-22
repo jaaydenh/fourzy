@@ -302,8 +302,6 @@ namespace Fourzy
 
             if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
 
-            PASSWORD = GetRoomProperty(Constants.REALTIME_ROOM_PASSWORD, "");
-
             ////if room is to be removed, remove it yourself
             //if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             //{
@@ -528,6 +526,8 @@ namespace Fourzy
             }
 
             tasks.Pop();
+
+            PASSWORD = password;
 
             Hashtable properties = new ExitGames.Client.Photon.Hashtable()
             {

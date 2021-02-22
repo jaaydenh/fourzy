@@ -267,7 +267,9 @@ namespace Fourzy
         {
             int sum = 0;
             for (int __level = Constants.MIN_PLAYER_LEVEL; __level <= _level; __level++)
+            {
                 sum += GetLevelXP(__level);
+            }
 
             return sum;
         }
@@ -281,9 +283,13 @@ namespace Fourzy
         public int GetLevelXPLeft(int xp)
         {
             if (xp < GetLevelXP(Constants.MIN_PLAYER_LEVEL))
+            {
                 return xp;
+            }
             else
+            {
                 return xp - GetTotalLevelXP(GetLevel(xp) - 1);
+            }
         }
 
         /// <summary>
@@ -313,7 +319,10 @@ namespace Fourzy
 
         public float GetProgressionDifference(int lower, int upper)
         {
-            if (upper < lower) return 0f;
+            if (upper < lower)
+            {
+                return 0f;
+            }
 
             float result = 0f;
 
@@ -321,17 +330,25 @@ namespace Fourzy
             int _levelDifference = GetLevel(upper) - fromLevel;
 
             if (_levelDifference == 0)
+            {
                 return GetProgression(upper) - GetProgression(lower);
+            }
             else
             {
                 for (int _level = fromLevel; _level <= fromLevel + _levelDifference; _level++)
                 {
                     if (_level == fromLevel)
+                    {
                         result += 1f - GetProgression(lower);
+                    }
                     else if (_level == fromLevel + _levelDifference)
+                    {
                         result += GetProgression(upper);
+                    }
                     else
+                    {
                         result++;
+                    }
                 }
 
                 return result;
@@ -340,19 +357,30 @@ namespace Fourzy
 
         public void SetDisplayName(string value, bool updatePlayFabDisplayName = true)
         {
-            if (PhotonNetwork.IsConnected) PhotonNetwork.NickName = value;
+            if (PhotonNetwork.IsConnected)
+            {
+                PhotonNetwork.NickName = value;
+            }
 
             PlayerPrefsWrapper.SetUserName(value);
 
             if (updatePlayFabDisplayName)
             {
+                AnalyticsManager.Instance.LogEvent(
+                    "CHANGE_NAME",
+                    AnalyticsManager.AnalyticsProvider.ALL,
+                    new KeyValuePair<string, object>("oldName", userName),
+                    new KeyValuePair<string, object>("newName", value));
+
                 PlayFabClientAPI.UpdateUserTitleDisplayName(
                     new UpdateUserTitleDisplayNameRequest() { DisplayName = value, },
                     ChangeDisplayNameResult,
                     OnPlayFabError);
             }
             else
+            {
                 settingRandomName = false;
+            }
         }
 
         public void UpdateSelectedGamePiece(string _gamePieceID)
@@ -362,8 +390,9 @@ namespace Fourzy
 
             OnUpdateUserGamePieceID?.Invoke(gamePieceID);
 
-            AnalyticsManager.Instance.LogEvent(AnalyticsManager.AnalyticsGameEvents.SELECT_GAMEPIECE,
-                extraParams: new KeyValuePair<string, object>(AnalyticsManager.GAMEPIECE_SELECT_KEY, _gamePieceID));
+            AnalyticsManager.Instance.LogEvent(
+                AnalyticsManager.AnalyticsEvents.SELECT_GAMEPIECE,
+                values: new KeyValuePair<string, object>(AnalyticsManager.GAMEPIECE_SELECT_KEY, _gamePieceID));
         }
 
         public static void GetPlayerRating(

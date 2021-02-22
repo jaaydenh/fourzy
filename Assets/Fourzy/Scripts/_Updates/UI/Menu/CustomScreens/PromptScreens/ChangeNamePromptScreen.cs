@@ -1,7 +1,6 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Tween;
-using Fourzy._Updates.UI.Toasts;
 using TMPro;
 using UnityEngine;
 

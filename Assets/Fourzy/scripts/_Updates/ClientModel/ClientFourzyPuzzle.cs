@@ -259,8 +259,8 @@ namespace Fourzy._Updates.ClientModel
                             puzzleData.pack.justFinished = true;
 
                             AnalyticsManager.Instance.LogEvent(
-                                AnalyticsManager.AnalyticsGameEvents.EVENT_COMPLETED,
-                                extraParams: new KeyValuePair<string, object>(
+                                AnalyticsManager.AnalyticsEvents.EVENT_COMPLETED,
+                                values: new KeyValuePair<string, object>(
                                     AnalyticsManager.EVENT_ID_KEY, puzzleData.pack.packID));
                         }
                     }

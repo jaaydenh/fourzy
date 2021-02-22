@@ -642,7 +642,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 game.puzzleData.Solution.Count == 0) return;
 
             AnalyticsManager.Instance.LogGame(
-                AnalyticsManager.AnalyticsGameEvents.PUZZLE_LEVEL_HINT_BUTTON_PRESS,
+                AnalyticsManager.AnalyticsEvents.PUZZLE_LEVEL_HINT_BUTTON_PRESS,
                 game,
                 extraParams: new KeyValuePair<string, object>(
                     AnalyticsManager.HINT_STORE_ITEMS_KEY,

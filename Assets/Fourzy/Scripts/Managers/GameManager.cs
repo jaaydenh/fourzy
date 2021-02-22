@@ -336,6 +336,16 @@ namespace Fourzy
             if (isGameplaySceneLoaded) GamePlayManager.Instance.UnloadGamePlaySceene();
         }
 
+        public void OpenDiscordPage()
+        {
+            AnalyticsManager.Instance.LogEvent(
+                "OPEN_DISCORD",
+                AnalyticsManager.AnalyticsProvider.ALL,
+                new KeyValuePair<string, object>("playerId", LoginManager.playfabID));
+
+            Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/t2zW7j3XRs"/*)*/);
+        }
+
         public void ResetGames()
         {
             GameContentManager.Instance.ResetFastPuzzles();
@@ -371,7 +381,7 @@ namespace Fourzy
                 //analytics
                 if (activeGame != null)
                     AnalyticsManager.Instance.LogGame(
-                        AnalyticsManager.AnalyticsGameEvents.PUZZLE_HINT_STORE_HINT_PURCHASE,
+                        AnalyticsManager.AnalyticsEvents.PUZZLE_HINT_STORE_HINT_PURCHASE,
                         activeGame,
                         AnalyticsManager.AnalyticsProvider.ALL,
                         new KeyValuePair<string, object>(AnalyticsManager.HINT_STORE_ITEMS_KEY, StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)),
