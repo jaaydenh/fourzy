@@ -9,7 +9,6 @@ using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
-using Fourzy._Updates.UI.Toasts;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using Photon.Pun;
@@ -1056,6 +1055,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         gameState == GameState.GAME)
                     {
                         OnRealtimeGameFinished(LoginManager.playfabID, GameManager.Instance.RealtimeOpponent.Id);
+
+                        AnalyticsManager.Instance.LogEvent(
+                            "REALTIME_GAME_COMPLETED",
+                            new Dictionary<string, object>()
+                            {
+                                ["area"] = game._Area.ToString(),
+                                ["result"] = "opponentLeftRoom",
+                                ["turnsTaken"] = game._allTurnRecord.Count,
+                                ["complexityScore"] = "",
+                                ["winnerTimerLeft"] = gameplayScreen.myTimerLeft,
+                                ["opponentTimerLeft"] = gameplayScreen.opponentTimerLeft,
+                            });
 
                         //display prompt
                         playerLeftScreen = PersistantMenuController.Instance

@@ -23,7 +23,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             PersistantMenuController.Instance
                 .GetOrAddScreen<OnboardingScreen>()
-                .OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
+                .OpenTutorial(HardcodedTutorials.GetByName(
+                    GameManager.Instance.Landscape ? 
+                        "OnboardingLandscape" : 
+                        "Onboarding"));
+
+            AnalyticsManager.Instance.LogEvent("TUTORIAL_REPLAY");
         }
 
         public void ResetPuzzles()
@@ -38,6 +43,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     GameContentManager.Instance.ResetFastPuzzles();
                     GameContentManager.Instance.ResetPuzzlePacks();
                     GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
+
+                    AnalyticsManager.Instance.LogEvent("PROGRESS_RESET");
                 },
                 null)
                 .CloseOnAccept()

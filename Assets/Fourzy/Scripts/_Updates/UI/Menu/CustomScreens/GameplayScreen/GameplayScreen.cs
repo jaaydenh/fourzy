@@ -37,39 +37,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private GamePlayManager gameplayManager;
         private int gameTurnCounter;
         private UIOutline helpButtonOutline;
-        private bool timersEnabled;
         private MagicState magicState = MagicState.DISABLED;
 
+        public bool timersEnabled { get; private set; }
+        public bool magicEnabled => magicState == MagicState.BOTH || magicState == MagicState.ONLY_PLAYER_1;
         public PuzzleUIScreen puzzleUI { get; private set; }
         public TurnBaseScreen turnbaseUI { get; private set; }
         public PassAndPlayScreen passAndPlayUI { get; private set; }
         public RealtimeScreen realtimeScreen { get; private set; }
         public DemoGameScreen demoGameScreen { get; private set; }
         public GauntletGameScreen gauntletGameScreen { get; private set; }
-        public float myTimerLeft
-        {
-            get
-            {
-                if (timerWidgets[0].active)
-                {
-                    return timerWidgets[0].TotalTimeLeft;
-                }
-
-                return -1f;
-            }
-        }
-        public int myMagicLeft
-        {
-            get
-            {
-                if (magicState == MagicState.BOTH || magicState == MagicState.ONLY_PLAYER_1)
-                {
-                    return player1Widget.magic;
-                }
-
-                return -1;
-            }
-        }
+        public float myTimerLeft => timersEnabled ? timerWidgets[0].TotalTimeLeft : -1f;
+        public float opponentTimerLeft => timersEnabled ? timerWidgets[1].TotalTimeLeft : -1f;
+        public int myMagicLeft => magicEnabled ? player1Widget.magic : -1;
 
         protected override void Awake()
         {
@@ -256,7 +236,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Player me = game.me;
 
-            if (magicState == MagicState.BOTH || magicState == MagicState.ONLY_PLAYER_1)
+            if (magicEnabled)
             {
                 player1Widget.spellsHolder.SetData(game, gameplayManager.board, me);
                 player1Widget.SetMagicWidget(true);
@@ -462,6 +442,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (game.activePlayer.PlayerId == player1Widget.assignedPlayer.PlayerId)
             {
                 player1Widget.ShowPlayerTurnAnimation();
+
                 if (!game.hideOpponent)
                 {
                     player2Widget.StopPlayerTurnAnimation();
@@ -470,6 +451,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else
             {
                 player2Widget.ShowPlayerTurnAnimation();
+
                 if (!game.hideOpponent)
                 {
                     player1Widget.StopPlayerTurnAnimation();
@@ -498,10 +480,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             {
                                 ActivatePlayerTimer(game._State.ActivePlayerId);
                             }
-                        }, () => tapToStartOverlay.CloseSelf());
+                        },
+                        () => tapToStartOverlay.CloseSelf());
                     }
                     else
-                        if (timersEnabled) ActivatePlayerTimer(game._State.ActivePlayerId);
+                    {
+                        if (timersEnabled)
+                        {
+                            ActivatePlayerTimer(game._State.ActivePlayerId);
+                        }
+                    }
 
                     break;
 
@@ -539,9 +527,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 //open puzzle win/lose screen
                 if (game.isFourzyPuzzle)
+                {
                     puzzleWinLoseScreen.Open(game);
+                }
                 else
+                {
                     gameWinLoseScreen.Open(game);
+                }
             }
             else
             {
