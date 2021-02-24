@@ -192,6 +192,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         OnBotGameFinished();
                     }
 
+                    AnalyticsManager.Instance.LogRealtimeGameCompleted(
+                        game._Area.ToString(),
+                        "gameComplete",
+                        game._allTurnRecord.Count,
+                        "",
+                        gameplayScreen.opponentTimerLeft,
+                        gameplayScreen.myTimerLeft,
+                        gameplayScreen.magicEnabled,
+                        gameplayScreen.timersEnabled,
+                        LoginManager.playfabID,
+                        GameManager.Instance.Bot.Profile.ToString());
+
                     GameManager.Instance.RealtimeOpponent = null;
 
                     break;
@@ -221,8 +233,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     case GameTypeLocal.LOCAL_GAME:
                         newGame = new ClientFourzyGame(
-                            GameContentManager.Instance.GetMiscBoard("20"), 
-                            UserManager.Instance.meAsPlayer, 
+                            GameContentManager.Instance.GetMiscBoard("20"),
+                            UserManager.Instance.meAsPlayer,
                             new Player(2, "Player Two"));
                         newGame._Type = GameType.PASSANDPLAY;
 
@@ -1050,7 +1062,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameType.REALTIME:
                     //if more than X seconds passed, player who left the game loses
-                    if (!game.isOver && 
+                    if (!game.isOver &&
                         Time.time - startedAt > Constants.REALTIME_GAME_VALID_AFTER_X_SECONDS &&
                         gameState == GameState.GAME)
                     {
@@ -1066,6 +1078,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                                 ["complexityScore"] = "",
                                 ["winnerTimerLeft"] = gameplayScreen.myTimerLeft,
                                 ["opponentTimerLeft"] = gameplayScreen.opponentTimerLeft,
+                                ["isMagicEnabled"] = gameplayScreen.magicEnabled,
+                                ["timer"] = gameplayScreen.timersEnabled,
+                                ["winnerPlayerId"] = LoginManager.playfabID,
+                                ["opponentPlyerId"] = GameManager.Instance.RealtimeOpponent.Id,
                             });
 
                         //display prompt
@@ -1116,6 +1132,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             gameplayScreen.OnGameFinished();
 
+            bool winner;
             //realtime game finished
             if (game._Type == GameType.REALTIME)
             {
@@ -1125,13 +1142,31 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     case GameTypeLocal.REALTIME_QUICKMATCH:
                         if (PhotonNetwork.IsMasterClient)
                         {
-                            if (game.IsWinner())
+                            winner = game.IsWinner();
+
+                            AnalyticsManager.Instance.LogRealtimeGameCompleted(
+                                game._Area.ToString(),
+                                "gameComplete",
+                                game._allTurnRecord.Count,
+                                "",
+                                winner ? gameplayScreen.myTimerLeft : gameplayScreen.opponentTimerLeft,
+                                winner ? gameplayScreen.opponentTimerLeft : gameplayScreen.myTimerLeft,
+                                gameplayScreen.magicEnabled,
+                                gameplayScreen.timersEnabled,
+                                LoginManager.playfabID,
+                                GameManager.Instance.RealtimeOpponent.Id);
+
+                            if (winner)
                             {
-                                OnRealtimeGameFinished(LoginManager.playfabID, GameManager.Instance.RealtimeOpponent.Id);
+                                OnRealtimeGameFinished(
+                                    LoginManager.playfabID,
+                                    GameManager.Instance.RealtimeOpponent.Id);
                             }
                             else
                             {
-                                OnRealtimeGameFinished(GameManager.Instance.RealtimeOpponent.Id, LoginManager.playfabID);
+                                OnRealtimeGameFinished(
+                                    GameManager.Instance.RealtimeOpponent.Id,
+                                    LoginManager.playfabID);
                             }
                         }
 
@@ -1140,7 +1175,21 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     case GameTypeLocal.REALTIME_BOT_GAME:
                         OnBotGameFinished();
 
-                    break;
+                        winner = game.IsWinner();
+
+                        AnalyticsManager.Instance.LogRealtimeGameCompleted(
+                            game._Area.ToString(),
+                            "gameComplete",
+                            game._allTurnRecord.Count,
+                            "",
+                            winner ? gameplayScreen.myTimerLeft : gameplayScreen.opponentTimerLeft,
+                            winner ? gameplayScreen.opponentTimerLeft : gameplayScreen.myTimerLeft,
+                            gameplayScreen.magicEnabled,
+                            gameplayScreen.timersEnabled,
+                            LoginManager.playfabID,
+                            GameManager.Instance.Bot.Profile.ToString());
+
+                        break;
                 }
 
                 ratingUpdated = true;
@@ -1155,6 +1204,23 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     gameResult = game.draw ?
                         AnalyticsManager.GameResultType.Draw :
                         AnalyticsManager.GameResultType.Win;
+
+                    break;
+
+                case GameMode.PUZZLE_PACK:
+                    if (game.draw || !game.IsWinner())
+                    {
+                        PlayerPrefsWrapper.AddPuzzlesFailedTimes();
+                        Amplitude.Instance.setUserProperty(
+                            "totalPuzzleFailures",
+                            PlayerPrefsWrapper.GetPuzzleFailedTimes());
+                    }
+                    else
+                    {
+                        Amplitude.Instance.setUserProperty(
+                            "totalPuzzlesCompleted",
+                            GameManager.Instance.currentMap.totalGamesComplete);
+                    }
 
                     break;
 

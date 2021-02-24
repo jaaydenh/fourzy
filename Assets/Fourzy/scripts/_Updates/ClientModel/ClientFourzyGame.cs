@@ -31,7 +31,6 @@ namespace Fourzy._Updates.ClientModel
 
         public bool isBoardRandom { get; private set; } = false;
 
-        //sticks and stones addition
         private int _originalHerdCount;
 
         public Area _Area
@@ -51,13 +50,7 @@ namespace Fourzy._Updates.ClientModel
             set { }
         }
 
-        public RealtimeGameStateData toGameStateData
-        {
-            get
-            {
-                return new RealtimeGameStateData(State.SerializeData());
-            }
-        }
+        public RealtimeGameStateData toGameStateData => new RealtimeGameStateData(State.SerializeData());
 
         public GameType _Type
         {
@@ -75,13 +68,22 @@ namespace Fourzy._Updates.ClientModel
                         switch (GameManager.Instance.characterType)
                         {
                             case GameManager.PassPlayCharactersType.SELECTED_RANDOM:
-                                if (string.IsNullOrEmpty(opponent.HerdId)) opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                if (string.IsNullOrEmpty(opponent.HerdId))
+                                {
+                                    opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                }
 
                                 break;
 
                             case GameManager.PassPlayCharactersType.RANDOM:
-                                if (string.IsNullOrEmpty(me.HerdId)) me.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
-                                if (string.IsNullOrEmpty(opponent.HerdId)) opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                if (string.IsNullOrEmpty(me.HerdId))
+                                {
+                                    me.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                }
+                                if (string.IsNullOrEmpty(opponent.HerdId))
+                                {
+                                    opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                }
 
                                 break;
                         }
@@ -177,7 +179,10 @@ namespace Fourzy._Updates.ClientModel
             {
                 List<PlayerTurn> result = new List<PlayerTurn>();
 
-                foreach (SimpleMove move in initialMoves) result.Add(new PlayerTurn(move));
+                foreach (SimpleMove move in initialMoves)
+                {
+                    result.Add(new PlayerTurn(move));
+                }
 
                 return result;
             }
@@ -207,7 +212,9 @@ namespace Fourzy._Updates.ClientModel
             {
                 AssignPrefabs();
 
-                return playerOnePrefabData.data.ID == playerTwoPrefabData.data.ID ? playerTwoPrefabData.player2Prefab : playerTwoPrefabData.player1Prefab;
+                return playerOnePrefabData.data.ID == playerTwoPrefabData.data.ID ?
+                    playerTwoPrefabData.player2Prefab :
+                    playerTwoPrefabData.player1Prefab;
             }
         }
 
@@ -215,9 +222,9 @@ namespace Fourzy._Updates.ClientModel
 
         public int Columns => State.Board.Columns;
 
-        public bool isOver => 
+        public bool isOver =>
             State.WinnerId > 0 ||
-            State.WinningLocations != null || 
+            State.WinningLocations != null ||
             (puzzleData && puzzleData.pack && puzzleData.pack.gauntletStatus != null && myMembers.Count == 0);
 
         public bool draw { get; set; }
@@ -239,7 +246,9 @@ namespace Fourzy._Updates.ClientModel
             get
             {
                 Player _player = me;
-                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ? 1 : int.Parse(_player.HerdId));
+                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ?
+                    1 :
+                    int.Parse(_player.HerdId));
             }
         }
 
@@ -248,7 +257,9 @@ namespace Fourzy._Updates.ClientModel
             get
             {
                 Player _player = opponent;
-                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ? 1 : int.Parse(_player.HerdId));
+                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ?
+                    1 :
+                    int.Parse(_player.HerdId));
             }
         }
 
@@ -259,8 +270,12 @@ namespace Fourzy._Updates.ClientModel
                 List<BoardSpace> result = new List<BoardSpace>();
 
                 for (int row = 0; row < Rows; row++)
+                {
                     for (int col = 0; col < Columns; col++)
+                    {
                         result.Add(State.Board.ContentsAt(row, col));
+                    }
+                }
 
                 return result;
             }
@@ -271,18 +286,27 @@ namespace Fourzy._Updates.ClientModel
             State.ActivePlayerId = UnityEngine.Random.value > .5f ? 1 : 2;
         }
 
-        public GamePieceView myGamePiece => me.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
+        public GamePieceView myGamePiece => 
+            me.PlayerId == 1 ? 
+            playerOneGamepiece :
+            playerTwoGamepiece;
 
-        public GamePieceView opponentGamePiece => opponent.PlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
+        public GamePieceView opponentGamePiece => 
+            opponent.PlayerId == 1 ? 
+            playerOneGamepiece : 
+            playerTwoGamepiece;
 
-        public GamePieceView activePlayerGamePiece => State.ActivePlayerId == 1 ? playerOneGamepiece : playerTwoGamepiece;
+        public GamePieceView activePlayerGamePiece => 
+            State.ActivePlayerId == 1 ?
+            playerOneGamepiece :
+            playerTwoGamepiece;
 
         public Player me => State.Players.Values
             .ToList()
             .Find(_player => _player.PlayerString == UserManager.Instance.userId) ?? State.Players[1];
 
-        public Player opponent => State.Players[(PlayerEnum)me.PlayerId == PlayerEnum.ONE ? 
-                (int)PlayerEnum.TWO : 
+        public Player opponent => State.Players[(PlayerEnum)me.PlayerId == PlayerEnum.ONE ?
+                (int)PlayerEnum.TWO :
                 (int)PlayerEnum.ONE];
 
         public Player activePlayer => isMyTurn ? me : opponent;
@@ -321,7 +345,7 @@ namespace Fourzy._Updates.ClientModel
             }
         }
 
-        public ClientFourzyGame asFourzyGame => this as ClientFourzyGame;
+        public ClientFourzyGame asFourzyGame => this;
 
         public ClientFourzyPuzzle asFourzyPuzzle => null;
 
@@ -390,21 +414,29 @@ namespace Fourzy._Updates.ClientModel
             isBoardRandom = true;
         }
 
-        public ClientFourzyGame(GameBoardDefinition definition, BossType aiBoss, Player player) : base(definition, aiBoss, player)
+        public ClientFourzyGame(GameBoardDefinition definition, BossType aiBoss, Player player)
+            : base(definition, aiBoss, player)
         {
             Initialize();
 
             _Type = Fourzy.GameType.AI;
         }
 
-        public ClientFourzyGame(GameBoardDefinition definition, AIProfile aiProfile, Player player) : base(definition, aiProfile, player)
+        public ClientFourzyGame(GameBoardDefinition definition, AIProfile aiProfile, Player player)
+            : base(definition, aiProfile, player)
         {
             Initialize();
 
             _Type = Fourzy.GameType.AI;
         }
 
-        public ClientFourzyGame(Player Player1, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, int membersCount = 999/*GauntletStatus Status = null*/, GameOptions Options = null)
+        public ClientFourzyGame(
+            Player Player1,
+            int GauntletLevel,
+            Area CurrentArea = Area.NONE,
+            int DifficultModifier = -1,
+            int membersCount = 999/*GauntletStatus Status = null*/,
+            GameOptions Options = null)
             : base(Player1, GauntletLevel, CurrentArea, DifficultModifier, /*Status*/membersCount, Options)
         {
             Initialize();
@@ -416,7 +448,10 @@ namespace Fourzy._Updates.ClientModel
 
         public bool IsWinner() => me.PlayerId == State.WinnerId;
 
-        public override PlayerTurnResult TakeTurn(PlayerTurn Turn, bool ReturnStartOfNextTurn = false, bool TriggerEndOfTurn = true)
+        public override PlayerTurnResult TakeTurn(
+            PlayerTurn Turn,
+            bool ReturnStartOfNextTurn = false,
+            bool TriggerEndOfTurn = true)
         {
             if (State.Players.ContainsKey(State.ActivePlayerId))
             {
@@ -496,7 +531,7 @@ namespace Fourzy._Updates.ClientModel
 
                             AnalyticsManager.Instance.LogEvent(AnalyticsManager.AnalyticsEvents.EVENT_COMPLETED,
                                 values: new KeyValuePair<string, object>(
-                                    AnalyticsManager.EVENT_ID_KEY, 
+                                    AnalyticsManager.EVENT_ID_KEY,
                                     puzzleData.pack.packID));
                         }
                     }
@@ -524,17 +559,9 @@ namespace Fourzy._Updates.ClientModel
             if (isOver)
             {
                 if (IsWinner())
+                {
                     LoseStreak = 0;
-                //else
-                //    switch (_Mode)
-                //    {
-                //        case GameMode.AI_PACK:
-                //        case GameMode.BOSS_AI_PACK:
-                //        case GameMode.GAUNTLET:
-                //            LoseStreak++;
-
-                //            break;
-                //    }
+                }
             }
         }
 
@@ -548,7 +575,10 @@ namespace Fourzy._Updates.ClientModel
             int playerID = me.PlayerId;
 
             List<Creature> addition = new List<Creature>();
-            for (int index = 0; index < count; index++) addition.Add(new Creature(playerPiece.HerdId));
+            for (int index = 0; index < count; index++)
+            {
+                addition.Add(new Creature(playerPiece.HerdId));
+            }
 
             State.Herds[playerID].Members.AddRange(addition);
             State.Players[playerID].HerdCount = State.Herds[playerID].Members.Count;
@@ -563,9 +593,13 @@ namespace Fourzy._Updates.ClientModel
             if (puzzleData)
             {
                 if (puzzleData.pack)
+                {
                     return puzzleData.pack.Next(this);
+                }
                 else
+                {
                     return GameContentManager.Instance.GetNextFastPuzzle(puzzleData.ID);
+                }
             }
 
             switch (_Type)
@@ -574,14 +608,27 @@ namespace Fourzy._Updates.ClientModel
                     GameBoardDefinition _gameBoardDefinition = null;
 
                     //get next board
-                    int index = GameContentManager.Instance.passAndPlayDataHolder.gameboards.IndexOf(GameContentManager.Instance.passAndPlayDataHolder.gameboards.Find(board => board.ID == BoardID));
+                    int index = GameContentManager.Instance.passAndPlayDataHolder.gameboards.IndexOf(
+                        GameContentManager.Instance.passAndPlayDataHolder.gameboards.Find(board =>
+                        board.ID == BoardID));
 
                     if (index < GameContentManager.Instance.passAndPlayDataHolder.gameboards.Count && index >= 0)
-                        _gameBoardDefinition = GameContentManager.Instance.passAndPlayDataHolder.gameboards[index + 1];
+                    {
+                        _gameBoardDefinition =
+                            GameContentManager.Instance.passAndPlayDataHolder.gameboards[index + 1];
+                    }
                     else
+                    {
                         _gameBoardDefinition = GameContentManager.Instance.passAndPlayDataHolder.gameboards[0];
+                    }
 
-                    return new ClientFourzyGame(_gameBoardDefinition, UserManager.Instance.meAsPlayer, new Player(2, "Player Two")) { _Type = Fourzy.GameType.PASSANDPLAY };
+                    return new ClientFourzyGame(
+                        _gameBoardDefinition,
+                        UserManager.Instance.meAsPlayer,
+                        new Player(2, "Player Two"))
+                    {
+                        _Type = Fourzy.GameType.PASSANDPLAY
+                    };
             }
 
             return null;
@@ -594,15 +641,22 @@ namespace Fourzy._Updates.ClientModel
             int myID = me.PlayerId;
             int currentHerdCount = 0;
 
-            if (State.Herds.Count > 0 && !resetMembers) currentHerdCount = State.Herds[myID].Members.Count;
+            if (State.Herds.Count > 0 && !resetMembers)
+            {
+                currentHerdCount = State.Herds[myID].Members.Count;
+            }
             State = new GameState(_FirstState);
 
             if (State.Herds.Count > 0)
             {
                 if (resetMembers)
+                {
                     State.Herds[myID] = new Herd(_FirstState.Herds[myID].HerdId, _originalHerdCount);
+                }
                 else
+                {
                     State.Herds[myID] = new Herd(_FirstState.Herds[myID].HerdId, currentHerdCount);
+                }
             }
 
             LoseStreak++;
@@ -659,11 +713,11 @@ namespace Fourzy._Updates.ClientModel
             }
 
             game.puzzleData = puzzleData;
-            game.BoardID = puzzleData.gameBoardDefinition != null ? 
-                puzzleData.gameBoardDefinition.ID : 
+            game.BoardID = puzzleData.gameBoardDefinition != null ?
+                puzzleData.gameBoardDefinition.ID :
                 "random_level";
-            game._State.ActivePlayerId = puzzleData.firstTurn < 1 ? 
-                game.me.PlayerId : 
+            game._State.ActivePlayerId = puzzleData.firstTurn < 1 ?
+                game.me.PlayerId :
                 puzzleData.firstTurn;
 
             game.opponent.HerdId = puzzleData.PuzzlePlayer.HerdId;
@@ -692,7 +746,10 @@ namespace Fourzy._Updates.ClientModel
             draw = false;
             //assign magic values
             magic = new Dictionary<int, int>();
-            foreach (KeyValuePair<int, Player> player in State.Players) magic.Add(player.Key, player.Value.Magic);
+            foreach (KeyValuePair<int, Player> player in State.Players)
+            {
+                magic.Add(player.Key, player.Value.Magic);
+            }
         }
 
         private void AssignPrefabs(bool force = false)
@@ -700,23 +757,41 @@ namespace Fourzy._Updates.ClientModel
             if (playerOnePrefabData == null || force)
             {
                 string player1HerdId = "1";
-                if (State.Players[1].HerdId != null) player1HerdId = State.Players[1].HerdId;
+                if (State.Players[1].HerdId != null)
+                {
+                    player1HerdId = State.Players[1].HerdId;
+                }
 
                 if (State.Players.ContainsKey(1) && !string.IsNullOrEmpty(State.Players[1].HerdId))
-                    playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(player1HerdId);
+                {
+                    playerOnePrefabData =
+                        GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(player1HerdId);
+                }
                 else
-                    playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(UserManager.Instance.gamePieceID);
+                {
+                    playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
+                        UserManager.Instance.gamePieceID);
+                }
             }
 
             if (playerTwoPrefabData == null || force)
             {
                 string player2HerdId = "1";
-                if (State.Players[2].HerdId != null) player2HerdId = State.Players[2].HerdId;
+                if (State.Players[2].HerdId != null)
+                {
+                    player2HerdId = State.Players[2].HerdId;
+                }
 
                 if (State.Players.ContainsKey(2) && !string.IsNullOrEmpty(State.Players[2].HerdId))
-                    playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(player2HerdId);
+                {
+                    playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
+                        player2HerdId);
+                }
                 else
-                    playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(UserManager.Instance.gamePieceID);
+                {
+                    playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
+                        UserManager.Instance.gamePieceID);
+                }
             }
         }
     }

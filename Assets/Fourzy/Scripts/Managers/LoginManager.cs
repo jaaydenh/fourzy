@@ -16,6 +16,7 @@ using PlayFab.ProfilesModels;
 // using GameSparks.Core;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy
@@ -45,8 +46,8 @@ namespace Fourzy
 
             GameManager.onNetworkAccess += OnNetworkAccess;
 
-            Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
-            Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
+            //Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
+            //Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
         }
 
         protected void Start()
@@ -59,8 +60,8 @@ namespace Fourzy
         {
             GameManager.onNetworkAccess -= OnNetworkAccess;
 
-            Firebase.Messaging.FirebaseMessaging.TokenReceived -= OnTokenReceived;
-            Firebase.Messaging.FirebaseMessaging.MessageReceived -= OnMessageReceived;
+            //Firebase.Messaging.FirebaseMessaging.TokenReceived -= OnTokenReceived;
+            //Firebase.Messaging.FirebaseMessaging.MessageReceived -= OnMessageReceived;
         }
 
         // public void GetCoinsEarnedLeaderboard(Action<List<RankingScreen.LeaderboardEntry>, string> callback)
@@ -73,17 +74,17 @@ namespace Fourzy
         //     GetLeaderboard("winLossLeaderboard", callback, true);
         // }
 
-        private void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token)
-        {
-            Debug.Log("Firebase: Received Registration Token: " + token.Token);
+        //private void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token)
+        //{
+        //    Debug.Log("Firebase: Received Registration Token: " + token.Token);
 
-            ManagePushNotifications(token.Token, "fcm");
-        }
+        //    ManagePushNotifications(token.Token, "fcm");
+        //}
 
-        private void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
-        {
-            Debug.Log("Firebase: Received a new message from: " + e.Message.From);
-        }
+        //private void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
+        //{
+        //    Debug.Log("Firebase: Received a new message from: " + e.Message.From);
+        //}
 
         private void ManagePushNotifications(string token, string deviceOS)
         {
@@ -360,6 +361,7 @@ namespace Fourzy
             Debug.Log("TokenExpiration: " + result.EntityToken.TokenExpiration);
             Debug.Log("Entity.Id: " + result.EntityToken.Entity.Id);
             Debug.Log("Entity.Type: " + result.EntityToken.Entity.Type);
+            Debug.Log(result);
 
             if (GameManager.Instance.showInfoToasts &&
                 !GameManager.Instance.Landscape)
@@ -374,6 +376,21 @@ namespace Fourzy
                 UserManager.Instance.settingRandomName = true;
                 UserManager.Instance.SetDisplayName(UserManager.CreateNewPlayerName());
                 UserManager.Instance.UpdateSelectedGamePiece(InternalSettings.Current.DEFAULT_GAME_PIECE);
+
+                Amplitude.Instance.setUserProperties(new Dictionary<string, object>()
+                {
+                    ["first"] = true,
+                    ["hasMonetized"] = false,
+                    ["hasWatchedAd"] = false,
+                    ["totalPuzzlesCompleted"] = 0,
+                    ["totalPuzzleFailures"] = 0,
+                    ["totalRealtimeGamesPlayed"] = 0,
+                    ["totalRealtimeGamesWon"] = 0,
+                    ["totalRealtimeGamesLost"] = 0,
+                    ["totalRealtimeGamesDraw"] = 0,
+                    ["hasSubscription"] = false,
+                    ["totalSpent"] = 0,
+                });
             }
 
             PlayFabClientAPI.GetAccountInfo(
@@ -445,6 +462,12 @@ namespace Fourzy
             UserManager.GetMyStats();
             GameManager.GetTitleData(data => InternalSettings.Current.Update(data), null);
 
+            PlayFabClientAPI.GetPlayerProfile(new GetPlayerProfileRequest()
+                {
+                    PlayFabId = playfabID
+                }, 
+                OnPlayerProfile,
+                error => Debug.Log("Error getting player profile: " + error.ErrorMessage));
             //get profile
             PlayFabProfilesAPI.GetProfile(
                 new GetEntityProfileRequest()
@@ -459,38 +482,10 @@ namespace Fourzy
                 error => Debug.Log("Error getting profile: " + error.ErrorMessage));
         }
 
-        // private void GetLeaderboard(string leaderboardShortCode, Action<List<RankingScreen.LeaderboardEntry>, string> callback, bool isWinsLeaderboard)
-        // {
-        //     new LeaderboardDataRequest()
-        //         .SetLeaderboardShortCode(leaderboardShortCode)
-        //         .SetEntryCount(100)
-        //         .Send((response) =>
-        //         {
-        //             if (response.HasErrors)
-        //             {
-        //                 Debug.Log("***** Error Retrieving Leaderboard Data: " + response.Errors.JSON);
-        //                 callback?.Invoke(null, "Error Retrieving Leaderboard Data: " + response.Errors.JSON);
-        //                 return;
-        //             }
-
-        //             List<RankingScreen.LeaderboardEntry> leaderboards = new List<RankingScreen.LeaderboardEntry>();
-
-        //             foreach (LeaderboardDataResponse._LeaderboardData entry in response.Data)
-        //             {
-        //                 RankingScreen.LeaderboardEntry leaderboard = new RankingScreen.LeaderboardEntry();
-        //                 leaderboard.userId = entry.UserId;
-        //                 leaderboard.userName = entry.UserName;
-        //                 leaderboard.facebookId = entry.ExternalIds.GetString("FB");
-        //                 leaderboard.rank = entry.Rank.Value;
-        //                 leaderboard.isWinsLeaderboard = isWinsLeaderboard;
-        //                 leaderboard.value = isWinsLeaderboard ? entry.JSONData["wins"].ToString() : leaderboard.value = entry.JSONData["completed"].ToString();
-
-        //                 leaderboards.Add(leaderboard);
-        //             }
-
-        //             callback?.Invoke(leaderboards, string.Empty);
-        //         });
-        // }
+        private void OnPlayerProfile(GetPlayerProfileResult playerProfile)
+        {
+            UserManager.Instance.totalSpentUSD = playerProfile.PlayerProfile.TotalValueToDateInUSD ?? 0;
+        }
 
         private IEnumerator SetProfileLanguage(string currentLanguageCode)
         {

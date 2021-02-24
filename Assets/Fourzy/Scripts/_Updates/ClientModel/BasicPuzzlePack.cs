@@ -59,7 +59,10 @@ namespace Fourzy._Updates.ClientModel
 
             foreach (RewardIndexed reward in _rewards)
             {
-                if (!allRewards.ContainsKey(reward.levelIndex)) allRewards.Add(reward.levelIndex, new List<RewardsManager.Reward>());
+                if (!allRewards.ContainsKey(reward.levelIndex))
+                {
+                    allRewards.Add(reward.levelIndex, new List<RewardsManager.Reward>());
+                }
 
                 allRewards[reward.levelIndex].Add(reward);
             }

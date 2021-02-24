@@ -15,7 +15,7 @@ MonoBehaviour:
   TitleId: 9EB47
   DeveloperSecretKey: 
   ProductionEnvironmentUrl: 
-  RequestType: 0
+  RequestType: 2
   AdvertisingIdType: 
   AdvertisingIdValue: 
   DisableAdvertising: 0

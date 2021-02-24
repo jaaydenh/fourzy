@@ -24,6 +24,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private LoadingPromptScreen leavingPrompt;
         private PromptScreen wantToLeavePrompt;
         private LobbyOverlayState state = LobbyOverlayState.NONE;
+        private float lobbyCreatedAt;
 
         private GamePieceView playerOneView;
         private GamePieceView playerTwoView;
@@ -93,7 +94,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void SetData(GamePieceView one, GamePieceView two = null)
         {
-            if (!isOpened) Open();
+            if (!isOpened)
+            {
+                Open();
+            }
 
             bool isOne = one != null;
             bool isTwo = two != null;
@@ -138,6 +142,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
                 & displayable) == 0) return;
 
+            lobbyCreatedAt = Time.time;
+
             if (PhotonNetwork.IsMasterClient)
             {
                 SetData(playerGamepiece);
@@ -170,7 +176,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame, null);
                 state = LobbyOverlayState.LOADING_GAME;
 
-                AnalyticsManager.Instance.LogOtherJoinedLobby(GameManager.Instance.RealtimeOpponent.Id);
+                AnalyticsManager.Instance.LogOtherJoinedLobby(
+                    GameManager.Instance.RealtimeOpponent.Id,
+                    Time.time - lobbyCreatedAt);
 
                 CancelRoutine("startBotMatch");
             }
@@ -214,6 +222,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 Close();
                 CancelRoutine("startBotMatch");
             }
+
+            AnalyticsManager.Instance.LogEvent("lobbyGameAbandoned", new Dictionary<string, object>()
+            {
+                ["playerID"] = LoginManager.playfabID,
+                ["time"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
+                ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
+                ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
+                ["isPrivate"] = !string.IsNullOrEmpty(FourzyPhotonManager.PASSWORD),
+                ["complexityScore"] = "",
+                ["timeSinceGameCreated"] = Time.time - lobbyCreatedAt,
+            });
 
             switch (state)
             {
@@ -284,7 +303,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 SetData(playerGamepiece,
                     GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
                         GameManager.Instance.Bot.HerdId).player1Prefab);
-                AnalyticsManager.Instance.LogOtherJoinedLobby(GameManager.Instance.Bot.Profile.ToString());
+                AnalyticsManager.Instance.LogOtherJoinedLobby(
+                    GameManager.Instance.Bot.Profile.ToString(),
+                    Time.time - lobbyCreatedAt);
 
                 StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame);
 

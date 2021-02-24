@@ -237,12 +237,15 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void Unlock(bool animate)
         {
-            if (_unlocked) return;
+            if (_unlocked || !gameObject.activeInHierarchy) return;
 
             onUnlock.Invoke();
             _unlocked = true;
 
-            if (wasRewarded) Rewarded(animate);
+            if (wasRewarded)
+            {
+                Rewarded(animate);
+            }
 
             switch (EventType)
             {

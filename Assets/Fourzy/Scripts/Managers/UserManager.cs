@@ -154,6 +154,7 @@ namespace Fourzy
                 onRatingUpdate?.Invoke(_lastCachedRating);
 
                 FourzyPhotonManager.SetMyProperty(Constants.REALTIME_RATING_KEY, _lastCachedRating);
+                Amplitude.Instance.setUserProperty("realtimeRating", value);
             }
         }
 
@@ -171,6 +172,11 @@ namespace Fourzy
                 }
             }
         }
+
+        /// <summary>
+        /// In cents
+        /// </summary>
+        public uint totalSpentUSD { get; set; }
 
         public bool ratingAssigned => totalPlayfabGames >= Constants.GAMES_BEFORE_RATING_DISPLAYED;
 
@@ -373,7 +379,10 @@ namespace Fourzy
                     new KeyValuePair<string, object>("newName", value));
 
                 PlayFabClientAPI.UpdateUserTitleDisplayName(
-                    new UpdateUserTitleDisplayNameRequest() { DisplayName = value, },
+                    new UpdateUserTitleDisplayNameRequest()
+                    {
+                        DisplayName = value,
+                    },
                     ChangeDisplayNameResult,
                     OnPlayFabError);
             }
@@ -451,9 +460,9 @@ namespace Fourzy
         }
 
         public static void GetPlayerStats(
-            string playerID, 
+            string playerID,
             bool full,
-            Action<CheckPlayerStatsResult> onSuccess, 
+            Action<CheckPlayerStatsResult> onSuccess,
             Action onFailed)
         {
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
@@ -532,13 +541,17 @@ namespace Fourzy
 
         private void OnPlayFabError(PlayFabError error)
         {
-            if (settingRandomName) SetDisplayName(CreateNewPlayerName());
+            if (settingRandomName)
+            {
+                SetDisplayName(CreateNewPlayerName());
+            }
 
             onDisplayNameChangeFailed?.Invoke(error.ErrorMessage);
         }
 
         private void ChangeDisplayNameResult(UpdateUserTitleDisplayNameResult result)
         {
+            Amplitude.Instance.setUserProperty("playerName", userName);
             settingRandomName = false;
 
             onDisplayNameChanged?.Invoke();

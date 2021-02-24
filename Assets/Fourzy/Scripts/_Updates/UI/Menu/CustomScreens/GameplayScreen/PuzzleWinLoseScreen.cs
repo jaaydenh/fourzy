@@ -93,19 +93,30 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             }
                         }
                         else
+                        {
                             GamePlayManager.Instance.BackButtonOnClick();
+                        }
                     }
                     else
+                    {
                         GamePlayManager.Instance.LoadGame(game.Next());
+                    }
                 }
                 else
+                {
                     GamePlayManager.Instance.LoadGame(game.Next());
+                }
             }
             else
+            {
                 //puzzle failed, rematch
                 GamePlayManager.Instance.Rematch();
+            }
 
-            if (isCurrent) menuController.CloseCurrentScreen(true);
+            if (isCurrent)
+            {
+                menuController.CloseCurrentScreen(true);
+            }
         }
 
         private IEnumerator OpenRoutine()
@@ -122,8 +133,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 if (game.puzzleData.pack)
                 {
-                    if (!puzzlePackProgressWidget.puzzlePack || puzzlePackProgressWidget.puzzlePack.packID != game.puzzleData.pack.packID)
+                    if (!puzzlePackProgressWidget.puzzlePack ||
+                        puzzlePackProgressWidget.puzzlePack.packID != game.puzzleData.pack.packID)
+                    {
                         puzzlePackProgressWidget.SetData(game.puzzleData.pack);
+                    }
 
                     yield return new WaitForSeconds(.95f);
 
@@ -132,7 +146,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         .Show(.5f);
 
                     //animate rewards
-                    puzzlePackProgressWidget.AnimateRewardsForIndex(game.puzzleData.pack.puzzlesComplete.IndexOf(game.puzzleData));
+                    puzzlePackProgressWidget.AnimateRewardsForIndex(
+                        game.puzzleData.pack.puzzlesComplete.IndexOf(game.puzzleData));
                 }
             }
             else

@@ -186,7 +186,7 @@ namespace Fourzy._Updates.ClientModel
 
         public ClientFourzyGame asFourzyGame => null;
 
-        public ClientFourzyPuzzle asFourzyPuzzle => this as ClientFourzyPuzzle;
+        public ClientFourzyPuzzle asFourzyPuzzle => this;
 
         public ClientFourzyPuzzle(ClientPuzzleData _puzzleData) : base(_puzzleData, UserManager.Instance.meAsPlayer)
         {
@@ -291,8 +291,6 @@ namespace Fourzy._Updates.ClientModel
                 {
                     LoseStreak = 0;
                 }
-                //else
-                //    LoseStreak++;
             }
         }
 
@@ -399,8 +397,8 @@ namespace Fourzy._Updates.ClientModel
                 }
                 else
                 {
-                    playerTwoPrefabData = 
-                        GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(UserManager.Instance.gamePieceID);
+                    playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
+                        UserManager.Instance.gamePieceID);
                 }
             }
         }

@@ -279,7 +279,10 @@ namespace Fourzy
             {
                 case GameType.TURN_BASED:
                     if (debugMessages)
+                    {
                         Debug.Log($"Starting challenge, id: {game.BoardID}");
+                    }
+
                     break;
             }
 
@@ -370,9 +373,12 @@ namespace Fourzy
             onPurchaseComplete?.Invoke(product);
 
             //try get product data
-            MiscGameContentHolder.StoreItemExtraData _data = GameContentManager.Instance.miscGameDataHolder.GetStoreItem(product.definition.id);
+            MiscGameContentHolder.StoreItemExtraData _data = 
+                GameContentManager.Instance.miscGameDataHolder.GetStoreItem(product.definition.id);
 
             if (!_data) return;
+
+            Amplitude.Instance.setUserProperty("totalSpent", UserManager.Instance.totalSpentUSD);
 
             if (product.definition.id.Contains("hints"))
             {

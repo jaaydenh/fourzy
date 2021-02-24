@@ -260,10 +260,8 @@ namespace Fourzy
         {
             for (int tutorialIndex = 0; tutorialIndex < HardcodedTutorials.tutorials.Count; tutorialIndex++)
             {
-                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorial + 
-                    HardcodedTutorials.tutorials[tutorialIndex].name);
-                PlayerPrefs.DeleteKey(PlayerPrefsWrapper.kTutorialOpened + 
-                    HardcodedTutorials.tutorials[tutorialIndex].name);
+                PlayerPrefs.DeleteKey("tutorial_" + HardcodedTutorials.tutorials[tutorialIndex].name);
+                PlayerPrefs.DeleteKey("tutorialOpened_" + HardcodedTutorials.tutorials[tutorialIndex].name);
             }
         }
 

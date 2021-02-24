@@ -597,22 +597,34 @@ namespace Fourzy._Updates.Tools
             switch (mode)
             {
                 case GameMode.LOCAL_VERSUS:
-                    return start ? AnalyticsManager.AnalyticsEvents.VERSUS_GAME_START : AnalyticsManager.AnalyticsEvents.VERSUS_GAME_END;
+                    return start ? 
+                        AnalyticsManager.AnalyticsEvents.VERSUS_GAME_START :
+                        AnalyticsManager.AnalyticsEvents.VERSUS_GAME_END;
 
                 case GameMode.PUZZLE_FAST:
-                    return start ? AnalyticsManager.AnalyticsEvents.RANDOM_PUZZLE_START : AnalyticsManager.AnalyticsEvents.RANDOM_PUZZLE_END;
+                    return start ?
+                        AnalyticsManager.AnalyticsEvents.RANDOM_PUZZLE_START :
+                        AnalyticsManager.AnalyticsEvents.RANDOM_PUZZLE_END;
 
                 case GameMode.GAUNTLET:
-                    return start ? AnalyticsManager.AnalyticsEvents.GAUNTLET_LEVEL_START : AnalyticsManager.AnalyticsEvents.GAUNTLET_LEVEL_END;
+                    return start ?
+                        AnalyticsManager.AnalyticsEvents.GAUNTLET_LEVEL_START :
+                        AnalyticsManager.AnalyticsEvents.GAUNTLET_LEVEL_END;
 
                 case GameMode.AI_PACK:
-                    return start ? AnalyticsManager.AnalyticsEvents.AI_LEVEL_START : AnalyticsManager.AnalyticsEvents.AI_LEVEL_END;
+                    return start ?
+                        AnalyticsManager.AnalyticsEvents.AI_LEVEL_START :
+                        AnalyticsManager.AnalyticsEvents.AI_LEVEL_END;
 
                 case GameMode.BOSS_AI_PACK:
-                    return start ? AnalyticsManager.AnalyticsEvents.BOSS_AI_LEVEL_START : AnalyticsManager.AnalyticsEvents.BOSS_AI_LEVEL_END;
+                    return start ? 
+                        AnalyticsManager.AnalyticsEvents.BOSS_AI_LEVEL_START :
+                        AnalyticsManager.AnalyticsEvents.BOSS_AI_LEVEL_END;
 
                 case GameMode.PUZZLE_PACK:
-                    return start ? AnalyticsManager.AnalyticsEvents.PUZZLE_LEVEL_START : AnalyticsManager.AnalyticsEvents.PUZZLE_LEVEL_END;
+                    return start ?
+                        AnalyticsManager.AnalyticsEvents.PUZZLE_LEVEL_START :
+                        AnalyticsManager.AnalyticsEvents.PUZZLE_LEVEL_END;
             }
 
             return AnalyticsManager.AnalyticsEvents.NONE;

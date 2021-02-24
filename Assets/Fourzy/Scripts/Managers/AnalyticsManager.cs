@@ -104,7 +104,6 @@ namespace Fourzy
             SELECT_GAMEPIECE,
 
             LOBBY_CREATED,
-            LOBBY_JOINED_BY_OTHER,
         }
 
         public enum GameResultType
@@ -127,6 +126,24 @@ namespace Fourzy
             amplitude.trackSessionEvents(true);
             amplitude.useAdvertisingIdForDeviceId();
             amplitude.init(AMP_API_KEY);
+        }
+
+        protected void Start()
+        {
+            PlayerPrefsWrapper.AddAppOpened();
+
+            int timesOpened = PlayerPrefsWrapper.GetAppOpened();
+            if (timesOpened == 2)
+            {
+                Amplitude.Instance.setUserProperty("first", false);
+            }
+            Amplitude.Instance.setUserProperty("totalSessions", timesOpened);
+        }
+
+        protected void OnApplicationQuit()
+        {
+            Amplitude.Instance.setUserProperty("lastSeenDate",
+                (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
         }
 
         public static void Initialize(bool _DEBUG = false)
@@ -153,7 +170,7 @@ namespace Fourzy
             Amplitude.Instance.setUserId(userId);
         }
 
-        public void LogOtherJoinedLobby(string playerId, AnalyticsProvider provider = AnalyticsProvider.ALL)
+        public void LogOtherJoinedLobby(string playerId, float timePassed, AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
             Dictionary<string, object> values = new Dictionary<string, object>()
             {
@@ -164,9 +181,39 @@ namespace Fourzy
                 ["isPrivate"] = !string.IsNullOrEmpty(FourzyPhotonManager.PASSWORD),
                 ["complexityScore"] = "",
                 ["creatorPlayerId"] = LoginManager.playfabID,
+                ["timeSinceGameCreated"] = timePassed,
             };
 
             LogEvent(AnalyticsEvents.LOBBY_CREATED, values, provider);
+        }
+
+        public void LogRealtimeGameCompleted(
+            string area, 
+            string result,
+            int turnsCount,
+            string complexityScore,
+            float winnerTimerLeft,
+            float opponentTimerLeft,
+            bool magicEnabled,
+            bool timerEnabled,
+            string winnerId,
+            string opponentId)
+        {
+            LogEvent(
+                "REALTIME_GAME_COMPLETED",
+                new Dictionary<string, object>()
+                {
+                    ["area"] = area,
+                    ["result"] = result,
+                    ["turnsTaken"] = turnsCount,
+                    ["complexityScore"] = complexityScore,
+                    ["winnerTimerLeft"] = winnerTimerLeft,
+                    ["opponentTimerLeft"] = opponentTimerLeft,
+                    ["isMagicEnabled"] = magicEnabled,
+                    ["timer"] = timerEnabled,
+                    ["winnerPlayerId"] = winnerId,
+                    ["opponentPlyerId"] = opponentId,
+                });
         }
 
         public void LogSettingsChange(
