@@ -11,18 +11,21 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Fourzy/Scenes/dev2.unity
     guid: 2ce2bbdcfda7c864980b2b4776d16484
-  - enabled: 1
+  - enabled: 0
     path: Assets/Fourzy/Scenes/logo.unity
     guid: 3d7de46172b55e6428ad01b7276860e0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Fourzy/Scenes/portraitMainMenu.unity
     guid: 097b1549cd8b1864182578f5913cbcfb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Fourzy/Scenes/landscapeMainMenu.unity
     guid: 6c87b16c8ae8d5d4a83f544c04ae2608
-  - enabled: 1
+  - enabled: 0
     path: Assets/Fourzy/Scenes/gamePlayNew.unity
     guid: 5ac49ce917313314ca626e8b6c3217fe
+  - enabled: 1
+    path: Assets/sample.unity
+    guid: 62992621aabe2f54fb9ed8a2c31f56db
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 6b047155eff92054e891973a2ffb856a,
       type: 2}
