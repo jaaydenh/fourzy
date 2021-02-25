@@ -225,11 +225,6 @@ namespace Fourzy
 
         }
 
-        public void LogError(string errorString, AnalyticsProvider provider = AnalyticsProvider.ALL)
-        {
-
-        }
-
         public void LogTutorialEvent(string name, string stage, AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
 

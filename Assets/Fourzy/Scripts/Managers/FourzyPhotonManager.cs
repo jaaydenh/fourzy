@@ -160,9 +160,13 @@ namespace Fourzy
         {
             base.OnJoinedLobby();
 
-            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
+            if (connectionTimedOutRoutine != null)
+            {
+                StopCoroutine(connectionTimedOutRoutine);
+            }
 
-            if (DEBUG) Debug.Log($"Joined lobby: {(string.IsNullOrEmpty(PhotonNetwork.CurrentLobby.Name) ? "DEFAULT" : PhotonNetwork.CurrentLobby.Name)}.");
+            if (DEBUG) Debug.Log(
+                $"Joined lobby: {(string.IsNullOrEmpty(PhotonNetwork.CurrentLobby.Name) ? "DEFAULT" : PhotonNetwork.CurrentLobby.Name)}.");
 
             //update name
             PhotonNetwork.NickName = UserManager.Instance.userName;
@@ -177,7 +181,9 @@ namespace Fourzy
                         //if (DEBUG) Debug.Log($"Last task set to {tasks.Peek().Key}");
 
                         if (PhotonNetwork.CurrentLobby.IsDefault)
+                        {
                             JoinLobby(quickmatchLobby);
+                        }
                         else
                         {
                             tasks.Pop().Value();
@@ -187,9 +193,13 @@ namespace Fourzy
 
                     case "createRoom":
                         if (PhotonNetwork.CurrentLobby.IsDefault)
+                        {
                             tasks.Pop().Value();
+                        }
                         else
+                        {
                             JoinLobby();
+                        }
 
                         break;
                 }
@@ -210,43 +220,82 @@ namespace Fourzy
         {
             base.OnCreateRoomFailed(returnCode, message);
 
-            if (DEBUG) Debug.Log($"Failed to create new Room. {message}");
+            AnalyticsManager.Instance.LogEvent(
+                "CREATE_ROOM_ERROR",
+                AnalyticsManager.AnalyticsProvider.ALL,
+                new KeyValuePair<string, object>("code", returnCode),
+                new KeyValuePair<string, object>("message", message));
+
+            if (DEBUG)
+            {
+                Debug.Log($"Failed to create new Room. {message}");
+            }
 
             onCreateRoomFailed?.Invoke(message);
 
-            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
+            if (connectionTimedOutRoutine != null)
+            {
+                StopCoroutine(connectionTimedOutRoutine);
+            }
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
         {
+            AnalyticsManager.Instance.LogEvent(
+                "JOIN_ROOM_ERROR",
+                AnalyticsManager.AnalyticsProvider.ALL,
+                new KeyValuePair<string, object>("code", returnCode),
+                new KeyValuePair<string, object>("message", message));
+
             base.OnJoinRoomFailed(returnCode, message);
 
-            if (DEBUG) Debug.Log($"Failied to join room: {message}");
+            if (DEBUG)
+            {
+                Debug.Log($"Failied to join room: {message}");
+            }
 
             onJoinRoomFailed?.Invoke(message);
 
-            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
+            if (connectionTimedOutRoutine != null)
+            {
+                StopCoroutine(connectionTimedOutRoutine);
+            }
         }
 
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
+            AnalyticsManager.Instance.LogEvent(
+                "JOIN_RANDOM_ROOM_ERROR",
+                AnalyticsManager.AnalyticsProvider.ALL,
+                new KeyValuePair<string, object>("code", returnCode),
+                new KeyValuePair<string, object>("message", message));
+
             base.OnJoinRandomFailed(returnCode, message);
             if (DEBUG) Debug.Log($"Failied to join random room. {returnCode} code {message} message.");
 
             onJoinRandomFailed?.Invoke();
 
-            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
+            if (connectionTimedOutRoutine != null)
+            {
+                StopCoroutine(connectionTimedOutRoutine);
+            }
         }
 
         public override void OnCreatedRoom()
         {
             base.OnCreatedRoom();
 
-            if (DEBUG) Debug.Log($"Room created: {PhotonNetwork.CurrentRoom.Name}.");
+            if (DEBUG)
+            {
+                Debug.Log($"Room created: {PhotonNetwork.CurrentRoom.Name}.");
+            }
 
             onCreateRoom?.Invoke(PhotonNetwork.CurrentRoom.Name);
 
-            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
+            if (connectionTimedOutRoutine != null)
+            {
+                StopCoroutine(connectionTimedOutRoutine);
+            }
         }
 
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -296,11 +345,17 @@ namespace Fourzy
         {
             base.OnJoinedRoom();
 
-            if (DEBUG) Debug.Log($"Room joined: {PhotonNetwork.CurrentRoom.Name}.");
+            if (DEBUG)
+            {
+                Debug.Log($"Room joined: {PhotonNetwork.CurrentRoom.Name}.");
+            }
 
             onJoinedRoom?.Invoke(PhotonNetwork.CurrentRoom.Name);
 
-            if (connectionTimedOutRoutine != null) StopCoroutine(connectionTimedOutRoutine);
+            if (connectionTimedOutRoutine != null)
+            {
+                StopCoroutine(connectionTimedOutRoutine);
+            }
 
             ////if room is to be removed, remove it yourself
             //if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
