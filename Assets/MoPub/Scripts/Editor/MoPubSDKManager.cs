@@ -360,7 +360,9 @@ public class MoPubSDKManager : EditorWindow
         // Is any async job in progress?
         var stillWorking = coroutine != null || downloader != null;
 
-        var tooltip = string.Empty;
+        string tooltip = string.Empty;
+        if (isInst && (MoPubUtils.CompareVersions(cur, lat) != 0 || testing))
+            tooltip += "\n  Installed:  " + cur;
         if (info.NetworkVersions != null) {
             string version;
             if (info.NetworkVersions.TryGetValue(PackageConfig.Platform.ANDROID, out version))
@@ -368,8 +370,8 @@ public class MoPubSDKManager : EditorWindow
             if (info.NetworkVersions.TryGetValue(PackageConfig.Platform.IOS, out version))
                 tooltip += "\n  iOS SDK:  " + version;
         }
-        tooltip += "\n  Installed:  " + (cur ?? "n/a");
-        tooltip = info.Name + "\n  Package:  " + (lat ?? "n/a") + tooltip;
+        if (!string.IsNullOrEmpty(tooltip))
+            tooltip = info.Name + "\n  Package:  " + (lat ?? "n/a") + tooltip;
 
         GUILayout.Space(4);
         using (new EditorGUILayout.HorizontalScope(GUILayout.ExpandWidth(false))) {

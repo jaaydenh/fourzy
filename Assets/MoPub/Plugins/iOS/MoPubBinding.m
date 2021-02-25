@@ -125,10 +125,8 @@ void _moPubInitializeSdk(const char* adUnitIdString,
                          bool allowLegitimateInterest,
                          int logLevel,
                          const char* networkConfigurationJson,
-                         const char* moPubRequestOptionsJson,
-                         MoPubBackgroundEventCallback bgEventCallback)
+                         const char* moPubRequestOptionsJson)
 {
-    [MoPubManager setBgEventCallback:bgEventCallback];
     moPubSubscribeToConsentNotifications();
 
     NSString* adUnitId = GetStringParam(adUnitIdString);
@@ -190,11 +188,6 @@ void _moPubReportApplicationOpen(const char* iTunesAppId)
     [[MPAdConversionTracker sharedConversionTracker] reportApplicationOpenForApplicationID:GetStringParam(iTunesAppId)];
 }
 
-void _moPubDisableViewability()
-{
-    [[MoPub sharedInstance] disableViewability];
-}
-
 void _moPubForceWKWebView(bool shouldForce)
 {
     [MoPub sharedInstance].forceWKWebView = (shouldForce ? YES : NO);
@@ -209,15 +202,11 @@ bool _moPubIsPluginReady(const char* adUnitId)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Banners
 
-void _moPubRequestBanner(float width, float height, int bannerPosition, const char* adUnitId, const char* keywords, const char* userDataKeywords)
+void _moPubRequestBanner(float width, float height, int bannerPosition, const char* adUnitId)
 {
     MoPubAdPosition position = (MoPubAdPosition)bannerPosition;
 
-    [[MoPubManager managerForAdunit:GetStringParam(adUnitId)] requestBanner:width
-                                                                     height:height
-                                                                 atPosition:position
-                                                                   keywords:GetNullableStringParam(keywords)
-                                                           userDataKeywords:GetNullableStringParam(userDataKeywords)];
+    [[MoPubManager managerForAdunit:GetStringParam(adUnitId)] requestBanner:width height:height atPosition:position];
 }
 
 

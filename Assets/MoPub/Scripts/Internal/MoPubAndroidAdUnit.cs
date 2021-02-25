@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
@@ -33,11 +34,9 @@ internal class MoPubAndroidAdUnit : MoPubAdUnit {
 
     #region Banners
 
-    internal override void RequestBanner(float width, float height, MoPub.AdPosition position, string keywords = "",
-        string userDataKeywords = "")
+    internal override void RequestBanner(float width, float height, MoPub.AdPosition position)
     {
-        _plugin.Call("requestBanner", width, height, (int) position, keywords,
-            userDataKeywords);
+        _plugin.Call("requestBanner", width, height, (int) position);
     }
 
 

@@ -41,7 +41,6 @@ public class MoPubEventListener : MonoBehaviour
 #endif
 
         MoPubManager.OnImpressionTrackedEvent += OnImpressionTrackedEvent;
-        MoPubManager.OnImpressionTrackedEventBg += OnImpressionTrackedEventBg;
     }
 
 
@@ -66,7 +65,6 @@ public class MoPubEventListener : MonoBehaviour
 #endif
 
         MoPubManager.OnImpressionTrackedEvent -= OnImpressionTrackedEvent;
-        MoPubManager.OnImpressionTrackedEventBg -= OnImpressionTrackedEventBg;
     }
 
 
@@ -161,11 +159,5 @@ public class MoPubEventListener : MonoBehaviour
     private void OnImpressionTrackedEvent(string adUnitId, MoPub.ImpressionData impressionData)
     {
         _demoGUI.ImpressionTracked(adUnitId, impressionData);
-    }
-
-
-    private void OnImpressionTrackedEventBg(string adUnitId, MoPub.ImpressionData impressionData)
-    {
-        MoPubDemoGUI.ImpressionTrackedBg(adUnitId, impressionData);
     }
 }

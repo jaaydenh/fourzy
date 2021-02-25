@@ -21,7 +21,7 @@ public abstract class MoPub : MoPubBase
     /// Please see <a href="https://github.com/mopub/mopub-unity-sdk">our GitHub repository</a> for details.
     /// </para>
     /// </summary>
-    public const string MoPubSdkVersion = "5.15.0";
+    public const string MoPubSdkVersion = "5.13.0";
 
 
     #region SdkSetup
@@ -129,15 +129,6 @@ public abstract class MoPub : MoPubBase
 
 
     /// <summary>
-    /// Disables viewability measurement for the rest of the app session.
-    /// </summary>
-    public static void DisableViewability()
-    {
-        MoPubManager.MoPubPlatformApi.DisableViewability();
-    }
-
-
-    /// <summary>
     /// Returns a human-readable string of the MoPub SDK being used.
     /// </summary>
     /// <returns>A string with the MoPub SDK platform and version.</returns>
@@ -235,17 +226,14 @@ public abstract class MoPub : MoPubBase
     /// <param name="position">Where in the screen to position the loaded ad. See <see cref="MoPub.AdPosition"/>.
     /// </param>
     /// <param name="maxAdSize">The maximum size of the banner to load. See <see cref="MoPub.MaxAdSize"/>.</param>
-    /// <param name="keywords">An optional comma-separated string with the desired non-PII keywords for this ad.</param>
-    /// <param name="userDataKeywords">An optional comma-separated string with the desired PII keywords for this ad.
-    /// </param>
     public static void RequestBanner(string adUnitId, AdPosition position,
-        MaxAdSize maxAdSize = MaxAdSize.Width320Height50, string keywords = "", string userDataKeywords = "")
+        MaxAdSize maxAdSize = MaxAdSize.Width320Height50)
     {
         var width = maxAdSize.Width();
         var height = maxAdSize.Height();
         MoPubLog.Log("RequestBanner", MoPubLog.AdLogEvent.LoadAttempted);
         MoPubLog.Log("RequestBanner", "Size requested: " + width + "x" + height);
-        AdUnitManager.GetAdUnit(adUnitId).RequestBanner(width, height, position, keywords, userDataKeywords);
+        AdUnitManager.GetAdUnit(adUnitId).RequestBanner(width, height, position);
     }
 
 
@@ -939,8 +927,7 @@ public abstract class MoPub : MoPubBase
         public class Facebook   : SupportedNetwork { public Facebook()   : base("Facebook") { } }
         public class Flurry     : SupportedNetwork { public Flurry()     : base("Flurry") { } }
         public class IronSource : SupportedNetwork { public IronSource() : base("IronSource") { } }
-        public class Pangle     : SupportedNetwork { public Pangle()     : base("Pangle") { } }
-        public class Snap       : SupportedNetwork { public Snap()       : base("SnapAd") { } }
+        public class Mintegral  : SupportedNetwork { public Mintegral()  : base("Mintegral") { } }
         public class Tapjoy     : SupportedNetwork { public Tapjoy()     : base("Tapjoy") { } }
         public class Unity      : SupportedNetwork { public Unity()      : base("UnityAds") { } }
         public class Verizon    : SupportedNetwork { public Verizon()    : base("Verizon") { } }

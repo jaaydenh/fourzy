@@ -27,8 +27,7 @@ internal class MoPubUnityEditorAdUnit : MoPubAdUnit
 
     #region Banners
 
-    internal override void RequestBanner(float width, float height, MoPub.AdPosition position, string keywords = "",
-        string userDataKeywords = "")
+    internal override void RequestBanner(float width, float height, MoPub.AdPosition position)
     {
         RequestAdUnit();
         ForceRefresh();

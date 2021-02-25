@@ -196,17 +196,8 @@ public class MoPubDemoGUI : MonoBehaviour
 
     public void ImpressionTracked(string adUnit, MoPub.ImpressionData impressionData)
     {
-        // When the app is handling both background and foreground Impression events, the impressionData in the
-        // foreground event should be blank (to avoid duplicate tracking).
         UpdateStatusLabel("Impression tracked for " + adUnit + " with impression data: "
-            + impressionData.JsonRepresentation);
-    }
-
-
-    public static void ImpressionTrackedBg(string adUnit, MoPub.ImpressionData impressionData)
-    {
-        Debug.Log("[Background] Impression tracked for " + adUnit + " with impression data: "
-                  + impressionData.JsonRepresentation);
+                          + impressionData.JsonRepresentation);
     }
 
 
