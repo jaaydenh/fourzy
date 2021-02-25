@@ -1,0 +1,321 @@
+{
+    "boardSpaceData": [
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "oRH010"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "oLH010"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "oRH010"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "oLH010"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "oRH010"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "oLH010"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        }
+    ],
+    "initialMoves": [],
+    "rows": 8,
+    "columns": 8,
+    "area": 4,
+    "id": "023dba0c-3f6f-4a9b-b9ae-2c1eec9ea316",
+    "boardName": "Ghosts In The Garden",
+    "enabled": true,
+    "enabledGallery": true,
+    "enabledRealtime": true
+}

@@ -1,0 +1,313 @@
+{
+    "boardSpaceData": [
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": "1",
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": "1",
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": "2",
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": "1",
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": "2",
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "."
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        }
+    ],
+    "initialMoves": [],
+    "rows": 8,
+    "columns": 8,
+    "area": 2,
+    "id": "81ffdb64-8d1a-4ee6-85e4-708d225e6c27",
+    "boardName": "FruitPack1_C_FruityChange_WinIn2",
+    "enabled": true,
+    "enabledGallery": false,
+    "enabledRealtime": false
+}

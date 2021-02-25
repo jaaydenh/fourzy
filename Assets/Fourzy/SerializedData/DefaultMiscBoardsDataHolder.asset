@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aba7f9bd57e3904ea630e98c74cbe26, type: 3}
+  m_Name: DefaultMiscBoardsDataHolder
+  m_EditorClassIdentifier: 
+  path: Fourzy/Resources/MiscBoards
+  boards:
+    list:
+    - _name: 'Name: Testing board, ID: 202'
+      boardFile: {fileID: 4900000, guid: f73e00b7952d09440b9537e3bc3310c9, type: 3}
+    - _name: 'Name: EmptyBoard, ID: 201'
+      boardFile: {fileID: 4900000, guid: da87db7d83d23df4e8457e6b564c1ae2, type: 3}
+    - _name: 'Name: Moving Ghost, ID: 31'
+      boardFile: {fileID: 4900000, guid: baa5cf0d087988b498e6095b5aa4250e, type: 3}
+    - _name: 'Name: RotatingArrowSample, ID: 235e79d1-257b-4ddd-8032-2820f641cf4b'
+      boardFile: {fileID: 4900000, guid: 8d43d9ae6f1d33f4d97a5fe49bca793b, type: 3}
+    - _name: 'Name: BlockerTokenInstruction, ID: 0'
+      boardFile: {fileID: 4900000, guid: baf3131ffb84a4048ad3910fc8bc0529, type: 3}
+    - _name: 'Name: ArrowTokenInstruction, ID: 1'
+      boardFile: {fileID: 4900000, guid: 3f1f6d58d03917040929e2c7325af101, type: 3}
+    - _name: 'Name: BounceTokenInstruction, ID: 13'
+      boardFile: {fileID: 4900000, guid: e8fdcc16fa9cc774fa36c1f4e5b1a75e, type: 3}
+    - _name: 'Name: CircleBombTokenInstruction, ID: 14'
+      boardFile: {fileID: 4900000, guid: c4a897bb51f843343806880cf2562b0f, type: 3}
+    - _name: 'Name: FireTokenInstruction, ID: 15'
+      boardFile: {fileID: 4900000, guid: cde3591a11ffb75449286bba01a0afd5, type: 3}
+    - _name: 'Name: FruitTokenInstruction, ID: 8'
+      boardFile: {fileID: 4900000, guid: a5744664d8bbb79448bf5964d086165b, type: 3}
+    - _name: 'Name: GhostTokenInstruction, ID: 3'
+      boardFile: {fileID: 4900000, guid: 23097243b406daf46b2ca079f0599773, type: 3}
+    - _name: 'Name: IceTokenInstruction, ID: 4'
+      boardFile: {fileID: 4900000, guid: 91d449266c66a0e4a90da73561626fe5, type: 3}
+    - _name: 'Name: PitTokenInstruction, ID: 5'
+      boardFile: {fileID: 4900000, guid: 5d7ccf77d24d2d7408bcb295eeb4004c, type: 3}
+    - _name: 'Name: PuddleTokenInstruction, ID: 16'
+      boardFile: {fileID: 4900000, guid: 3a1cfc4a9733d6242bc518ccd5f417d4, type: 3}
+    - _name: 'Name: RandomLeftRightTokenInstruction, ID: 7'
+      boardFile: {fileID: 4900000, guid: 278fede49c97a8145994afaf6a2a6f08, type: 3}
+    - _name: 'Name: SandTokenInstruction, ID: 6'
+      boardFile: {fileID: 4900000, guid: 0d5ddb94fd93c4a4999c65730e6eefc1, type: 3}
+    - _name: 'Name: SpiderTokenInstruction, ID: 10'
+      boardFile: {fileID: 4900000, guid: 73086c17863addb4697cd20e2fec5249, type: 3}
+    - _name: 'Name: StickyTokenInstruction, ID: 2'
+      boardFile: {fileID: 4900000, guid: 285c8dff8d0802442a91bbd397397c12, type: 3}
+    - _name: 'Name: WallTokenInstruction, ID: 9'
+      boardFile: {fileID: 4900000, guid: 8bb2f018db1d6154789df8468202c6bb, type: 3}
+    - _name: 'Name: WaterTokenInstruction, ID: 12'
+      boardFile: {fileID: 4900000, guid: 2af50eb1d42aab2449a3f7c5a427f2aa, type: 3}
+    - _name: 'Name: WebTokenInstruction, ID: 11'
+      boardFile: {fileID: 4900000, guid: 3585f326e096c7b4882eaea478403c46, type: 3}
+    - _name: 'Name: FruitTreeInstructionBoard, ID: 18'
+      boardFile: {fileID: 4900000, guid: 021aa65a639fde940bd00399be78c6d3, type: 3}
+    - _name: 'Name: OnboardingLevelSampleBoard, ID: 200'
+      boardFile: {fileID: 4900000, guid: ebd261e9c2fd34c47ad5e28c00108a2e, type: 3}
+    - _name: 'Name: OnboardingBoard1, ID: 5ad8564f-5c97-4d72-a9ae-ede419dbc401'
+      boardFile: {fileID: 4900000, guid: 3651ebc005adf3045a07c874cc19c57e, type: 3}
+    - _name: 'Name: OnboardingBoard2, ID: 32a9a6be-e0ec-4e28-929a-b18bc3a54fd6'
+      boardFile: {fileID: 4900000, guid: f65eab4bd0544dd429da15d3b877aa1e, type: 3}
+    - _name: 'Name: OnboardingBoard3, ID: 5a134b65-c173-48ab-8352-98a8c372d52e'
+      boardFile: {fileID: 4900000, guid: 4f1c1d0bee223d849a398d51971cea20, type: 3}
+    - _name: 'Name: IceBlockTokenInstruction, ID: 19'
+      boardFile: {fileID: 4900000, guid: f02545c0f85854aceb039af6f9b62848, type: 3}
+    - _name: 'Name: SnowTokenInstruction, ID: 20'
+      boardFile: {fileID: 4900000, guid: 43da1437a015f2642ab143c7c94b2353, type: 3}
+    - _name: 'Name: HexSpellTokenInstruction, ID: 21'
+      boardFile: {fileID: 4900000, guid: a753be221bdb3e047a14c5b655c352b9, type: 3}
+    - _name: 'Name: FourWayArrowTokenInstruction, ID: 22'
+      boardFile: {fileID: 4900000, guid: b6a0a61516dbf485381b102ae8a45d3e, type: 3}
+    - _name: 'Name: LureTokenInstructionBoard, ID: 23'
+      boardFile: {fileID: 4900000, guid: 78bce2df401586347ba00b685fa3b77e, type: 3}
+    - _name: 'Name: MoveBlockerTokenInstruction, ID: 24'
+      boardFile: {fileID: 4900000, guid: 330abe9e7c4bdfa4a80f66a45820e240, type: 3}
+    - _name: 'Name: VictoryRewardTestingBoard, ID: 1e41fa3e-fc27-44fd-b7e8-64af1db7943c'
+      boardFile: {fileID: 4900000, guid: dd0b34c32389c7345bd522f5a2637cec, type: 3}
+    - _name: 'Name: DrawBoardTester, ID: 5f938652-e6e9-4e36-8c5d-a4d4fde7395c'
+      boardFile: {fileID: 4900000, guid: f272be493ad442e4fbb6469163a25a77, type: 3}
+    - _name: 'Name: RotatingArrowInstructionBoard, ID: 3d15e1e1-4069-4d6d-ac97-ff4acb938f5c'
+      boardFile: {fileID: 4900000, guid: cec11713aa4fc3d4eacd86133243faef, type: 3}
+    - _name: 'Name: CrossBombInstructionBoard, ID: cefb7a62-c34c-4f20-9c62-96b560b1ba89'
+      boardFile: {fileID: 4900000, guid: 3d32bbfb8eeda764abea2027d0c3aa13, type: 3}
+    - _name: 'Name: MovingGhostTest, ID: 58fc6d9e-81cb-4c2e-bcf7-cfa8637fc3f2'
+      boardFile: {fileID: 4900000, guid: 0a455a91398ecd448b974fe73465b341, type: 3}
+    - _name: 'Name: darkness, ID: 7722f447-2374-4956-8336-4411d523884a'
+      boardFile: {fileID: 4900000, guid: 39bbe508e1785c2418af82e98b7ba047, type: 3}

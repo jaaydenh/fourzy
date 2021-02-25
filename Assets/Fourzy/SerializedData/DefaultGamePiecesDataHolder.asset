@@ -1,0 +1,533 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d20bf172a5f4a8f48a8629895e44c2eb, type: 3}
+  m_Name: DefaultGamePiecesDataHolder
+  m_EditorClassIdentifier: 
+  gamePieces:
+    list:
+    - _name: Red Dragon Fourzy-44 Variant
+      data:
+        ID: 44
+        name: Red Dragon
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0, g: 0.4666667, b: 0.9960785, a: 1}
+        borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: f6418452ef2f81a4791bc6980492754e,
+          type: 3}
+        profilePictureOffset: {x: -66, y: 14}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 30
+      player1Prefab: {fileID: 1912799475505460758, guid: 6958e8d3563c88b4ba2cba447b8ee1ed,
+        type: 3}
+      player2Prefab: {fileID: 4199936739902266244, guid: 5991ee940d6515a4db27bfc18cbc1daf,
+        type: 3}
+    - _name: Sir Knighty Fourzy-23 Variant
+      data:
+        ID: 23
+        name: Sir Knighty
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0.9960785, g: 1, b: 0.11764707, a: 1}
+        borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 30
+      player1Prefab: {fileID: 3974870754057325091, guid: 33851e064bde8ab4daf83f5e6c1b8625,
+        type: 3}
+      player2Prefab: {fileID: 6776202281948818908, guid: 7288ecd28bdcffb4589a870c4245ad2b,
+        type: 3}
+    - _name: Masked Fourzy-09 Variant
+      data:
+        ID: 12
+        name: Masked
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 0.5411765, b: 0, a: 1}
+        borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 30
+      player1Prefab: {fileID: 6128777428980690519, guid: c26c94a8d94885244b13560062697a5c,
+        type: 3}
+      player2Prefab: {fileID: 8699996572201907596, guid: 925db8004f6d91c46bdf3436ff4c509d,
+        type: 3}
+    - _name: Night Owl Fourzy-18 Variant
+      data:
+        ID: 17
+        name: Night Owl
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 1, b: 0, a: 1}
+        borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: c73c4997af5cca34a9fb7180c31dfcfd,
+          type: 3}
+        profilePictureOffset: {x: -3, y: -43}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 30
+      player1Prefab: {fileID: 199449817183531395, guid: 233e3f7fcd2a27949ae2e7fc630fb680,
+        type: 3}
+      player2Prefab: {fileID: 1386132387167348578, guid: 1bb3795f602b4ff438aa2c19ec74bd43,
+        type: 3}
+    - _name: Crossy Fourzy-02 Variant
+      data:
+        ID: 3
+        name: Crossy
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0, g: 1, b: 0.6627451, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 1}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: fdb4f9674b360df478829d8929e5e9dc,
+          type: 3}
+        profilePictureOffset: {x: 0, y: 0}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 2811853481136367920, guid: 501ae4bb220056444ba4732d645da809,
+        type: 3}
+      player2Prefab: {fileID: 1471794324565520707, guid: d665ff38ef1112249a174524c503b706,
+        type: 3}
+    - _name: Triangry Fourzy-03 Variant
+      data:
+        ID: 4
+        name: Triangry
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 0.7568628, b: 0, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 0}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: a75f294368bb04d47b950aeb0e806319,
+          type: 3}
+        profilePictureOffset: {x: -15, y: -26}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 7039071045634544731, guid: b1dd14466f648fd478ea8078b8f8db5e,
+        type: 3}
+      player2Prefab: {fileID: 1273599101791352548, guid: 65a688a21fb925541874435586b5084b,
+        type: 3}
+    - _name: Mr. Bun Fourzy-17 Variant
+      data:
+        ID: 5
+        name: Mr. Bun
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 0.3921569, b: 1, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 0}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: c1d24a9606b58b742ba08f026865f926,
+          type: 3}
+        profilePictureOffset: {x: 0, y: -50}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 1676609191546690612, guid: 2b54608c97da9e04c9c162c2f5328311,
+        type: 3}
+      player2Prefab: {fileID: 7362191402604282324, guid: c2c62a48e1ada1b42ad7157023c2a4b7,
+        type: 3}
+    - _name: Daisy Fourzy-06 Variant
+      data:
+        ID: 6
+        name: Daisy
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0, g: 0.8980393, b: 1, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 0}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: eace5bed472eb3743ac90030a395310d,
+          type: 3}
+        profilePictureOffset: {x: 0, y: -30}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 5199269407045597157, guid: 9765dad3184127d4a8bbc3e2e65336f9,
+        type: 3}
+      player2Prefab: {fileID: 6199131635891211940, guid: 4658526f24c70b24a850a3580f07f434,
+        type: 3}
+    - _name: Spooked Fourzy-07 Variant
+      data:
+        ID: 7
+        name: Spooked
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0.37254903, g: 1, b: 0.53333336, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 0}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 6576606855969728960, guid: 74415bf42c0517b45bcfa0bd57d90437,
+        type: 3}
+      player2Prefab: {fileID: 47512167054787771, guid: 1149fdc4a69a4b74fa28ce0478e05a8b,
+        type: 3}
+    - _name: SquidMo Fourzy-08 Variant
+      data:
+        ID: 8
+        name: SquidMo
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0.58431375, g: 1, b: 0, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 0}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: 3ad17d444b486a040ae304bbe0839794,
+          type: 3}
+        profilePictureOffset: {x: 7, y: -25}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 8620094149043960381, guid: ee8f4b6dc4ca53847962658b4882fad6,
+        type: 3}
+      player2Prefab: {fileID: 5411715879758530410, guid: 87ebc0fbb276f9344869d893d5765fa0,
+        type: 3}
+    - _name: Ginger Fourzy-05 Variant
+      data:
+        ID: 9
+        name: Ginger
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0.6392157, g: 0.41176474, b: 0.9960785, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 0}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 5841790964071463582, guid: 83eee2766bc691e4f9fa053207f90c68,
+        type: 3}
+      player2Prefab: {fileID: 5265662473142153822, guid: 097e58db2ac0e074293d399c982219e9,
+        type: 3}
+    - _name: Blobby Fourzy-04 Variant
+      data:
+        ID: 1
+        name: Blobby
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 1, b: 0.29411766, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 0}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 5850652874326644820, guid: c33502f68010829499f160b16d2ff88a,
+        type: 3}
+      player2Prefab: {fileID: 3037363664063910796, guid: b86d0e80064180345b1e74e1b4ae43a5,
+        type: 3}
+    - _name: Sentinal Fourzy-11 Variant
+      data:
+        ID: 10
+        name: Sentinal
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0.8117648, g: 0.9960785, b: 0, a: 1}
+        borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: f7c08911bfd59784981d16a9f7166cc9,
+          type: 3}
+        profilePictureOffset: {x: 0, y: -30}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 3008632754777774422, guid: 541328802fe2ad54b8cfb885bbc2b643,
+        type: 3}
+      player2Prefab: {fileID: 441494821392692054, guid: 2e37407a01421e745b25a9b8bd0abcc2,
+        type: 3}
+    - _name: Droidz Fourzy-16 Variant
+      data:
+        ID: 11
+        name: Droidz
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0, g: 1, b: 1, a: 1}
+        borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: d0bf6693d52113042818892f0f9097f6,
+          type: 3}
+        profilePictureOffset: {x: 14, y: 24}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 4979347029933200198, guid: 001a4dfc8302eeb4ea65fa0ae12a1160,
+        type: 3}
+      player2Prefab: {fileID: 5164172713599178379, guid: e99be6bd0874d4540a3b69bee6feecd1,
+        type: 3}
+    - _name: Cyclops Fourzy-01 Variant
+      data:
+        ID: 2
+        name: Cyclops
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0, g: 1, b: 0.6627451, a: 1}
+        borderColor: {r: 1, g: 1, b: 1, a: 0}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: bab83e858a08f9d40b0b2f4dfc9eb70f,
+          type: 3}
+        profilePictureOffset: {x: 11, y: -30}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 129306896706497102, guid: 30d9e06aadf6a9446b994c68cd59d48e,
+        type: 3}
+      player2Prefab: {fileID: 1166267820841079138, guid: 49f97f15819037b4995443ef7d37ae84,
+        type: 3}
+    - _name: The Bot Fourzy-10 Variant
+      data:
+        ID: 13
+        name: The Bot
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 0.36862746, b: 1, a: 1}
+        borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: 4b92cfda188a7bf4788bb26d7b637be6,
+          type: 3}
+        profilePictureOffset: {x: 0, y: 0}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 8004934299830492596, guid: 0f60c6b56ed528b44b6d0d0a461919e8,
+        type: 3}
+      player2Prefab: {fileID: 6266431368268073879, guid: 4ecb9bdee92ce9c468e52fdfea476f1c,
+        type: 3}
+    - _name: MewWhiskey Fourzy-12 Variant
+      data:
+        ID: 14
+        name: MewWhiskey
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0.5882353, g: 0.9960785, b: 0.9960785, a: 1}
+        borderColor: {r: 0.9960785, g: 0.6117647, b: 0, a: 1}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 4183014607794544357, guid: 83d1f34afe8480545aeda1ed7cc41246,
+        type: 3}
+      player2Prefab: {fileID: 6247048933141322455, guid: cdd084f4918991d45b953f7c5eb9a104,
+        type: 3}
+    - _name: Furrzy Fourzy-14 Variant
+      data:
+        ID: 15
+        name: Furrzy
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 1, b: 0.30588236, a: 1}
+        borderColor: {r: 1, g: 0.6156863, b: 0, a: 1}
+        piecesToUnlock: 60
+        profilePicture: {fileID: 21300000, guid: 21149a38a5e3ba148a7d134d2d0a1626,
+          type: 3}
+        profilePictureOffset: {x: -1, y: -30}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 6622972341321018873, guid: 0e465806c37671a46ba74c563581a185,
+        type: 3}
+      player2Prefab: {fileID: 9089172778016556641, guid: 3ce1d35db64c698458539c324d2012b7,
+        type: 3}
+    - _name: Eeek Fourzy-13 Variant
+      data:
+        ID: 16
+        name: Eeek
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 0.39607847, b: 0.5568628, a: 1}
+        borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
+        piecesToUnlock: 60
+        profilePicture: {fileID: 21300000, guid: 298491a9f6dadb646a45618b15cd02c9,
+          type: 3}
+        profilePictureOffset: {x: -20, y: -52}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 2487924146770352966, guid: 363c7322a9e5e054e8ea51f0719e4ad3,
+        type: 3}
+      player2Prefab: {fileID: 5140903452275623593, guid: ce89e0e006b15f54981ce6364f561f78,
+        type: 3}
+    - _name: Rainbow Bite Fourzy-19 Variant
+      data:
+        ID: 18
+        name: Rainbow Bite
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 0.33333334, b: 1, a: 1}
+        borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
+        piecesToUnlock: 30
+        profilePicture: {fileID: 21300000, guid: f43d6947711d21841a30a77b5a300552,
+          type: 3}
+        profilePictureOffset: {x: -38, y: 61}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 30
+      player1Prefab: {fileID: 3827068522086520645, guid: e8a8bf608141cf846b5a4689c46a4035,
+        type: 3}
+      player2Prefab: {fileID: 8716823118059120996, guid: b2858d767c9ed974b940ad2d493f0703,
+        type: 3}
+    - _name: Wizzle Wisp Fourzy-20 Variant
+      data:
+        ID: 19
+        name: Wizzle Wisp
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0, g: 1, b: 0.53333336, a: 1}
+        borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
+        piecesToUnlock: 60
+        profilePicture: {fileID: 21300000, guid: c3503510c7fd65943a48d44c60cd1225,
+          type: 3}
+        profilePictureOffset: {x: 0, y: 31}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 1004307609327887750, guid: 3a5a634b98d23134f8a17bc5f7ab4f40,
+        type: 3}
+      player2Prefab: {fileID: 4688549563729829321, guid: 575c00809413a62488a55dec06d526a4,
+        type: 3}
+    - _name: Snow Person Fourzy-21 Variant
+      data:
+        ID: 21
+        name: Snow Person
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 0.5137255, b: 0.52156866, a: 1}
+        borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
+        piecesToUnlock: 60
+        profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 3277097321123099967, guid: d3bfba0f81e54814cb2349d58837e85b,
+        type: 3}
+      player2Prefab: {fileID: 8625214451842383249, guid: a2d57f29f5cde4b468d92c78b10c4c55,
+        type: 3}
+    - _name: Mecha Bunny Fourzy-36 Variant
+      data:
+        ID: 36
+        name: Mecha Bunny
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 1, g: 0.45882356, b: 1, a: 1}
+        borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
+        piecesToUnlock: 60
+        profilePicture: {fileID: 21300000, guid: 9a8d1e1655e0c1c40b11db96af5c5f22,
+          type: 3}
+        profilePictureOffset: {x: -1, y: 61}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 5089221997847664087, guid: c27128c8d6d336c478e7ed026a7d6857,
+        type: 3}
+      player2Prefab: {fileID: 5034072604579296946, guid: 38a77cd11c95a0a4cb7087832a17ee0a,
+        type: 3}
+    - _name: Techno Bug Fourzy-45 Variant
+      data:
+        ID: 45
+        name: Techno Bug
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0.003921569, g: 0.97647065, b: 0.49803925, a: 1}
+        borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
+        piecesToUnlock: 60
+        profilePicture: {fileID: 0}
+        profilePictureOffset: {x: 0, y: 0}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 868307597764827387, guid: 825fca623b83fff4a8b71683fcf1b031,
+        type: 3}
+      player2Prefab: {fileID: 3600020066660262105, guid: 0f0b53b410614ad449722edec3378799,
+        type: 3}
+    - _name: Mr. Hatty Fourzy-38 Variant
+      data:
+        ID: 38
+        name: Mr. Hatty
+        enabled: 1
+        rarity: 30
+        startingMagic: 100
+        spells: 
+        outlineColor: {r: 0.654902, g: 0.43137258, b: 1, a: 1}
+        borderColor: {r: 0.89019614, g: 0.007843138, b: 1, a: 1}
+        piecesToUnlock: 60
+        profilePicture: {fileID: 21300000, guid: 0f77731c615de8340afe1a9f37be11df,
+          type: 3}
+        profilePictureOffset: {x: 21, y: -28}
+        piecesProgression:
+          list: 5000000096000000f00000002c01000026020000
+        pieces: 0
+      player1Prefab: {fileID: 5105064160253020775, guid: 093db82c1c3d7464a8abf61ae3840df9,
+        type: 3}
+      player2Prefab: {fileID: 4210905367504214145, guid: f0460963b4b433f40ba54775f89023d7,
+        type: 3}

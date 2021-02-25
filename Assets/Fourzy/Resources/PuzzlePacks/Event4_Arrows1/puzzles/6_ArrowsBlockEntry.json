@@ -1,0 +1,682 @@
+{
+    "ID": "a67b5937-5de9-45fe-b090-3957a5e9ee83",
+    "Enabled": true,
+    "GameBoard": {
+        "boardSpaceData": [
+            {
+                "P": null,
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": "2",
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": "2",
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": "1",
+                "T": null
+            },
+            {
+                "P": "1",
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": "1",
+                "T": null
+            },
+            {
+                "P": "1",
+                "T": null
+            },
+            {
+                "P": "2",
+                "T": null
+            },
+            {
+                "P": "2",
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "AD"
+                ]
+            },
+            {
+                "P": null,
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "1",
+                "T": null
+            },
+            {
+                "P": "1",
+                "T": null
+            },
+            {
+                "P": "1",
+                "T": null
+            },
+            {
+                "P": "2",
+                "T": null
+            },
+            {
+                "P": "2",
+                "T": null
+            },
+            {
+                "P": null,
+                "T": null
+            },
+            {
+                "P": null,
+                "T": [
+                    "B"
+                ]
+            }
+        ],
+        "initialMoves": [],
+        "rows": 8,
+        "columns": 8,
+        "area": 2,
+        "id": "f31be85b-357b-46ff-94a1-dc9b62cb01de",
+        "boardName": "arrowPackLevel1",
+        "enabled": true,
+        "enabledGallery": false,
+        "enabledRealtime": false
+    },
+    "Profile": 0,
+    "Boss": 0,
+    "FirstTurn": 1,
+    "Solution": [
+        {
+            "playerId": 1,
+            "playerString": null,
+            "moves": [
+                {
+                    "piece": {
+                        "conditions": [],
+                        "playerId": 1,
+                        "herdId": 0,
+                        "UniqueId": "1445e2d8-1fa7-4850-a910-ce1487a62f49",
+                        "pieceType": 0,
+                        "Notation": "1"
+                    },
+                    "direction": 1,
+                    "location": 3,
+                    "moveType": 0,
+                    "notation": "Move:DOWN4"
+                }
+            ],
+            "Notation": "Move:LEFT4",
+            "timestamp": 0,
+            "uniqueId": "e1b0287d-b335-4bc6-8577-08e155a9ceca"
+        },
+        {
+            "playerId": 1,
+            "playerString": null,
+            "moves": [
+                {
+                    "piece": {
+                        "conditions": [],
+                        "playerId": 1,
+                        "herdId": 0,
+                        "UniqueId": "1445e2d8-1fa7-4850-a910-ce1487a62f49",
+                        "pieceType": 0,
+                        "Notation": "1"
+                    },
+                    "direction": 1,
+                    "location": 3,
+                    "moveType": 0,
+                    "notation": "Move:DOWN4"
+                }
+            ],
+            "Notation": "Move:LEFT4",
+            "timestamp": 0,
+            "uniqueId": "e1b0287d-b335-4bc6-8577-08e155a9ceca"
+        }
+    ],
+    "SolutionStateData": {
+        "boardSpaceData": [
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "1",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "1",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "1",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "1",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "1",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": [
+                    "s"
+                ]
+            },
+            {
+                "P": "2",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "1",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            },
+            {
+                "P": "0",
+                "T": []
+            },
+            {
+                "P": "0",
+                "T": [
+                    "B"
+                ]
+            }
+        ],
+        "rows": 8,
+        "columns": 8,
+        "area": 8
+    },
+    "GoalType": 0,
+    "MoveLimit": 2,
+    "Complexity": 0
+}

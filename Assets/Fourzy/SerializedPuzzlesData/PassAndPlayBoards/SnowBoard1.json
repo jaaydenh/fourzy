@@ -1,0 +1,317 @@
+{
+    "boardSpaceData": [
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "*"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        }
+    ],
+    "initialMoves": [],
+    "rows": 8,
+    "columns": 8,
+    "area": 16,
+    "id": "caeeadd5-3f96-4a74-86e4-634f8e1b892d",
+    "boardName": "Snow Cross",
+    "enabled": true,
+    "enabledGallery": true,
+    "enabledRealtime": false
+}

@@ -1,0 +1,317 @@
+{
+    "boardSpaceData": [
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "oRH010"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "oLH010"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "oRH010"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "oLH010"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": [
+                "S"
+            ]
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": null
+        },
+        {
+            "P": null,
+            "T": [
+                "B"
+            ]
+        }
+    ],
+    "initialMoves": [],
+    "rows": 8,
+    "columns": 8,
+    "area": 2,
+    "id": "506269e4-e7ba-463e-8240-98b55fc4bf1e",
+    "boardName": "Sticky Line",
+    "enabled": true,
+    "enabledGallery": true,
+    "enabledRealtime": true
+}

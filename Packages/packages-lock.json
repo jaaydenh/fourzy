@@ -21,6 +21,24 @@
       "dependencies": {},
       "url": "https://unityregistry-pa.googleapis.com"
     },
+    "com.google.firebase.app": {
+      "version": "7.1.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.google.external-dependency-manager": "1.2.164"
+      },
+      "url": "https://unityregistry-pa.googleapis.com"
+    },
+    "com.google.firebase.messaging": {
+      "version": "7.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.google.firebase.app": "7.1.0"
+      },
+      "url": "https://unityregistry-pa.googleapis.com"
+    },
     "com.tayx.graphy": {
       "version": "https://github.com/Tayx94/graphy.git",
       "depth": 0,

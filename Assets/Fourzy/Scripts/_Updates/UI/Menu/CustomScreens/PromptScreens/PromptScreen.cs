@@ -1,0 +1,146 @@
+﻿//@vadym udod
+
+using Fourzy._Updates.UI.Helpers;
+using System;
+using TMPro;
+
+namespace Fourzy._Updates.UI.Menu.Screens
+{
+    /// <summary>
+    /// Promp screen can be used in various places
+    /// </summary>
+    public class PromptScreen : MenuScreen
+    {
+        public TextMeshProUGUI promptTitle;
+        public TextMeshProUGUI promptText;
+
+        public ButtonExtended acceptButton;
+        public ButtonExtended declineButton;
+
+        protected Action onAccept;
+        protected Action onDecline;
+
+        protected bool closeOnAccept;
+        protected bool closeOnDecline;
+
+        public override void OnBack()
+        {
+            base.OnBack();
+
+            if (defaultCalls) Decline();
+        }
+
+        public virtual PromptScreen Prompt(
+            string title,
+            string text, 
+            Action accept = null, 
+            Action decline = null) => 
+            Prompt(title, text, LocalizationManager.Value("yes"), LocalizationManager.Value("no"), accept, decline);
+
+        public virtual PromptScreen Prompt(
+            string title, 
+            string text, 
+            string yes, 
+            string no, 
+            Action accept = null, 
+            Action decline = null)
+        {
+            onDecline = decline;
+            onAccept = accept;
+
+            UpdateAcceptButton(yes);
+            UpdateDeclineButton(no);
+
+            if (promptTitle)
+            {
+                promptTitle.text = title;
+            }
+
+            if (promptText)
+            {
+                promptText.text = text;
+            }
+
+            return Prompt();
+        }
+
+        public virtual PromptScreen Prompt()
+        {
+            transform.SetAsLastSibling();
+            menuController.OpenScreen(this);
+
+            closeOnAccept = false;
+            closeOnDecline = false;
+
+            return this;
+        }
+
+        public virtual void Accept(bool force = false)
+        {
+            if (inputBlocked && !force) return;
+
+            onAccept?.Invoke();
+
+            if (closeOnAccept) CloseSelf();
+        }
+
+        public virtual void Decline(bool force = false)
+        {
+            if (inputBlocked && !force) return;
+
+            bool closeCalled = false;
+
+            if (onDecline != null)
+                onDecline.Invoke();
+            else
+            {
+                closeCalled = true;
+                CloseSelf();
+            }
+
+            if (!closeCalled && closeOnDecline) CloseSelf();
+        }
+
+        public void UpdateAcceptButton(string yes)
+        {
+            if (acceptButton)
+            {
+                if (string.IsNullOrEmpty(yes))
+                    acceptButton.SetActive(false);
+                else
+                {
+                    acceptButton.SetActive(true);
+                    acceptButton.SetLabel(yes);
+                }
+            }
+        }
+
+        public void UpdateDeclineButton(string no)
+        {
+            if (declineButton)
+            {
+                if (string.IsNullOrEmpty(no))
+                    declineButton.SetActive(false);
+                else
+                {
+                    declineButton.SetActive(true);
+                    declineButton.SetLabel(no);
+                }
+            }
+        }
+
+        public PromptScreen CloseOnAccept()
+        {
+            closeOnAccept = true;
+
+            return this;
+        }
+
+        public PromptScreen CloseOnDecline()
+        {
+            closeOnDecline = true;
+
+            return this;
+        }
+    }
+}

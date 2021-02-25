@@ -1,0 +1,283 @@
+{
+  "ID": "790ae27b-0d56-43bd-a0b8-b36e504a2c37",
+  "Enabled": true,
+  "GameBoard": {
+    "boardSpaceData": [
+      {
+        "P": null,
+        "T": [ "B" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "B" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "." ]
+      },
+      {
+        "P": null,
+        "T": [ "." ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "." ]
+      },
+      {
+        "P": null,
+        "T": [ "." ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "S" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "B" ]
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": null
+      },
+      {
+        "P": null,
+        "T": [ "B" ]
+      }
+    ],
+    "initialMoves": [],
+    "rows": 8,
+    "columns": 8,
+    "area": 2,
+    "id": "dd8e9f6a-2da8-454d-bddb-cf4877bd8028",
+    "boardName": "Level_CenterFruitWithRing",
+    "enabled": true,
+    "enabledGallery": true,
+    "enabledRealtime": true
+  },
+  "Profile": 2,
+  "Boss": 0,
+  "FirstTurn": 1,
+  "Solution": [],
+  "SolutionStateData": null,
+  "GoalType": 0,
+  "MoveLimit": -1,
+  "Complexity": -1,
+  "StartingMagic": 0,
+  "AvailableSpells": []
+}

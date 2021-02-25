@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 564db6deeb270754e863b33cb06d105a, type: 3}
+  m_Name: DefaultAIPlayersHolder
+  m_EditorClassIdentifier: 
+  aiPlayers:
+    list:
+    - name: Easy
+      gamePieceID: 13
+      profile: 6
+      bossProfile: 0
+      background: {fileID: 21300000, guid: fb1280741d3be9c43b09e33e1508d1fd, type: 3}
+      enabled: 1
+    - name: Normal
+      gamePieceID: 11
+      profile: 2
+      bossProfile: 0
+      background: {fileID: 21300000, guid: bf6c559ef9d3a494b9a6ca2596021ace, type: 3}
+      enabled: 1
+    - name: Hard
+      gamePieceID: 10
+      profile: 7
+      bossProfile: 0
+      background: {fileID: 21300000, guid: fca5cb0f6b668b346ae11f256503b230, type: 3}
+      enabled: 1
+    - name: Entry Way Boss
+      gamePieceID: 5
+      profile: 5
+      bossProfile: 10
+      background: {fileID: 21300000, guid: fca5cb0f6b668b346ae11f256503b230, type: 3}
+      enabled: 1
+    - name: Pass Bot
+      gamePieceID: 15
+      profile: 3
+      bossProfile: 0
+      background: {fileID: 21300000, guid: 6113907e565ae71469ed83617a4b0197, type: 3}
+      enabled: 1

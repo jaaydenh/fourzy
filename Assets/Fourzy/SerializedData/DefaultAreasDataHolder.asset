@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae95b13050c5aaf499003bbbb076d227, type: 3}
+  m_Name: DefaultAreasDataHolder
+  m_EditorClassIdentifier: 
+  areas:
+  - name: area_garden
+    enabled: 1
+    areaColor: {r: 0.48584908, g: 1, b: 0.55352443, a: 1}
+    description: area_garden
+    levelToUnlock: 0
+    areaID: 2
+    bgAudio: 101
+    _16X9: {fileID: 21300000, guid: 8a279f21fe54f344cabd91371b364627, type: 3}
+    _4X3: {fileID: 21300000, guid: d667c501cbda9964491a786b24aae2ed, type: 3}
+    square: {fileID: 21300000, guid: a1386693001d04a4ab24caa0dc7a0ded, type: 3}
+    gamepieces:
+    - {fileID: 5850652874326644820, guid: c33502f68010829499f160b16d2ff88a, type: 3}
+    - {fileID: 129306896706497102, guid: 30d9e06aadf6a9446b994c68cd59d48e, type: 3}
+    - {fileID: 2811853481136367920, guid: 501ae4bb220056444ba4732d645da809, type: 3}
+    - {fileID: 7039071045634544731, guid: b1dd14466f648fd478ea8078b8f8db5e, type: 3}
+    - {fileID: 5841790964071463582, guid: 83eee2766bc691e4f9fa053207f90c68, type: 3}
+    tokens: 010000000200000005000000
+    unlockRequirements: []
+    configurations:
+    - type: 1
+      backgroundPrefab: {fileID: 100717712478524717, guid: 5db6c9e4bc219304f898a34597d5c30a,
+        type: 3}
+      gameboardPrefab: {fileID: 114596246813145948, guid: 53ecf298ef535ef4db4feba11d3b54de,
+        type: 3}
+    - type: 2
+      backgroundPrefab: {fileID: 100717712478524717, guid: 3d3c93f53c8ec7b4586a99f7879422b0,
+        type: 3}
+      gameboardPrefab: {fileID: 114596246813145948, guid: 53ecf298ef535ef4db4feba11d3b54de,
+        type: 3}
+    - type: 3
+      backgroundPrefab: {fileID: 100717712478524717, guid: 447b1bb158790f748bb0fb2bfb2f217d,
+        type: 3}
+      gameboardPrefab: {fileID: 114596246813145948, guid: b70b53f171f60c046a0eab8dccd82185,
+        type: 3}
+    - type: 4
+      backgroundPrefab: {fileID: 100717712478524717, guid: 959a85ccab0b6ee419008ef010e66a97,
+        type: 3}
+      gameboardPrefab: {fileID: 114596246813145948, guid: f2392a298ba109b44b13b219411575e8,
+        type: 3}
+  - name: area_forest
+    enabled: 1
+    areaColor: {r: 0.48584908, g: 1, b: 0.55352443, a: 1}
+    description: area_forest
+    levelToUnlock: 0
+    areaID: 4
+    bgAudio: 104
+    _16X9: {fileID: 21300000, guid: 69d82d91d5c73814a802f6604eedd55c, type: 3}
+    _4X3: {fileID: 21300000, guid: 1c3b37fef723d504c8f8046f5bc33340, type: 3}
+    square: {fileID: 21300000, guid: 0833ab5c0716239459ec274520ade990, type: 3}
+    gamepieces: []
+    tokens: 010000000400000005000000
+    unlockRequirements: []
+    configurations:
+    - type: 1
+      backgroundPrefab: {fileID: 100717712478524717, guid: 68cdd5af200ba0849a5a4385c943bde3,
+        type: 3}
+      gameboardPrefab: {fileID: 114604034529016452, guid: c4971f4b387cd9f408f8b1c3601525b9,
+        type: 3}
+    - type: 2
+      backgroundPrefab: {fileID: 100717712478524717, guid: b1d07b3a9aff1324d97061d2637fd394,
+        type: 3}
+      gameboardPrefab: {fileID: 114604034529016452, guid: c4971f4b387cd9f408f8b1c3601525b9,
+        type: 3}
+    - type: 3
+      backgroundPrefab: {fileID: 100717712478524717, guid: 813afc18abc665f458c9969feb040603,
+        type: 3}
+      gameboardPrefab: {fileID: 114604034529016452, guid: e58d315bf1f40e947a0716665037fa0c,
+        type: 3}
+    - type: 4
+      backgroundPrefab: {fileID: 100717712478524717, guid: 6d515f5186767b24fbbfdbebeceb48e7,
+        type: 3}
+      gameboardPrefab: {fileID: 114604034529016452, guid: e0ef8ade28fee084a8be39c0fc39d8fe,
+        type: 3}
+  - name: area_island
+    enabled: 1
+    areaColor: {r: 1, g: 0.9930853, b: 0.3915094, a: 1}
+    description: area_island
+    levelToUnlock: 0
+    areaID: 8
+    bgAudio: 103
+    _16X9: {fileID: 21300000, guid: 490c8d7a991189c46b3b817f5a46067f, type: 3}
+    _4X3: {fileID: 21300000, guid: b46531abbff1f7d428c7973c544ce23d, type: 3}
+    square: {fileID: 21300000, guid: 76ce0aeeb1a38f64987cfd2ddc1aa2d1, type: 3}
+    gamepieces: []
+    tokens: 030000000a000000
+    unlockRequirements: []
+    configurations:
+    - type: 1
+      backgroundPrefab: {fileID: 100717712478524717, guid: 6f27c38ff4aebc34c9a5284acc779c59,
+        type: 3}
+      gameboardPrefab: {fileID: 114393224895534332, guid: c28d989bfa97d474a88eafa175ea34ae,
+        type: 3}
+    - type: 2
+      backgroundPrefab: {fileID: 100717712478524717, guid: 439d5490b183157498a395ff942312e3,
+        type: 3}
+      gameboardPrefab: {fileID: 114393224895534332, guid: c28d989bfa97d474a88eafa175ea34ae,
+        type: 3}
+    - type: 3
+      backgroundPrefab: {fileID: 100717712478524717, guid: 82e764b6f899971499039554d0a25a2b,
+        type: 3}
+      gameboardPrefab: {fileID: 114393224895534332, guid: d06b9036fa716df46a5eefb51aa7336d,
+        type: 3}
+    - type: 4
+      backgroundPrefab: {fileID: 100717712478524717, guid: 731e10ebb6b373f4da4738d24d6d9841,
+        type: 3}
+      gameboardPrefab: {fileID: 114393224895534332, guid: c3be3f0eb44e99848baef0af2e8aa80c,
+        type: 3}
+  - name: area_palace
+    enabled: 1
+    areaColor: {r: 0.4669811, g: 0.9826793, b: 1, a: 1}
+    description: area_palace
+    levelToUnlock: 0
+    areaID: 16
+    bgAudio: 105
+    _16X9: {fileID: 21300000, guid: 11aad45ccf44a4641b1c1e8d44ad0bb9, type: 3}
+    _4X3: {fileID: 21300000, guid: 33820d7792fb0f2489f4bcf56971f93a, type: 3}
+    square: {fileID: 21300000, guid: 580eff69848132741819a4449bbfd070, type: 3}
+    gamepieces: []
+    tokens: 090000000800000001000000
+    unlockRequirements: []
+    configurations:
+    - type: 1
+      backgroundPrefab: {fileID: 1817477846, guid: 22c5377ac7c173347abcf97bc58f5d06,
+        type: 3}
+      gameboardPrefab: {fileID: 6685559819090786594, guid: 7bcce4d2cfe9759449f77b5d3d8c9372,
+        type: 3}
+    - type: 2
+      backgroundPrefab: {fileID: 1817477846, guid: 45636ded056e21d479501b087a3b0f45,
+        type: 3}
+      gameboardPrefab: {fileID: 6685559819090786594, guid: 9c12ee47864d71547ae993da921a452a,
+        type: 3}
+    - type: 3
+      backgroundPrefab: {fileID: 1817477846, guid: 466449ac0a4e8cc4fa40da1ee7e19a4b,
+        type: 3}
+      gameboardPrefab: {fileID: 6685559819090786594, guid: fb9c68edc35f1da4a85f4d8679894314,
+        type: 3}
+    - type: 4
+      backgroundPrefab: {fileID: 1817477846, guid: 09ae01a83ba5a5e4fbc9f804bd1b437f,
+        type: 3}
+      gameboardPrefab: {fileID: 114596246813145948, guid: cfe038f1ec8e38041b1fd85b033ce858,
+        type: 3}
