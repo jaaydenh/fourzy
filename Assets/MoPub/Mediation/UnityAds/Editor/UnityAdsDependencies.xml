@@ -1,0 +1,10 @@
+<!-- WARNING: File modified by script.  Keep all tags with a mopub-key attribute to a single line. -->
+<dependencies>
+ <androidPackages>
+   <androidPackage spec="com.mopub.mediation:unityads:3.6.0.1" mopub-key="ANDROID_ADAPTER_VERSION"/>
+   <androidPackage spec="com.unity3d.ads:unity-ads:3.6.0" mopub-key="ANDROID_SDK_VERSION"/>
+ </androidPackages>
+ <iosPods>
+   <iosPod name="MoPub-UnityAds-Adapters" subspecs="['Network']" minTargetSdk="8.0" version="3.6.0.1" mopub-key="IOS_ADAPTER_VERSION"/>
+ </iosPods>
+</dependencies>
