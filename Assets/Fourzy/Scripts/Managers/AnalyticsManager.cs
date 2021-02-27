@@ -102,8 +102,6 @@ namespace Fourzy
             EVENT_OPENED,
             EVENT_COMPLETED,
             SELECT_GAMEPIECE,
-
-            LOBBY_CREATED,
         }
 
         public enum GameResultType
@@ -121,11 +119,11 @@ namespace Fourzy
         {
             base.Awake();
 
-            Amplitude amplitude = Amplitude.getInstance();
-            amplitude.logging = true;
-            amplitude.trackSessionEvents(true);
-            amplitude.useAdvertisingIdForDeviceId();
-            amplitude.init(AMP_API_KEY);
+            //Amplitude amplitude = Amplitude.getInstance();
+            //amplitude.logging = true;
+            //amplitude.trackSessionEvents(true);
+            //amplitude.useAdvertisingIdForDeviceId();
+            //amplitude.init(AMP_API_KEY);
         }
 
         protected void Start()
@@ -133,17 +131,17 @@ namespace Fourzy
             PlayerPrefsWrapper.AddAppOpened();
 
             int timesOpened = PlayerPrefsWrapper.GetAppOpened();
-            if (timesOpened == 2)
-            {
-                Amplitude.Instance.setUserProperty("first", false);
-            }
-            Amplitude.Instance.setUserProperty("totalSessions", timesOpened);
+            //if (timesOpened == 2)
+            //{
+            //    Amplitude.Instance.setUserProperty("first", false);
+            //}
+            //Amplitude.Instance.setUserProperty("totalSessions", timesOpened);
         }
 
         protected void OnApplicationQuit()
         {
-            Amplitude.Instance.setUserProperty("lastSeenDate",
-                (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
+            //Amplitude.Instance.setUserProperty("lastSeenDate",
+            //    (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
         }
 
         public static void Initialize(bool _DEBUG = false)
@@ -167,24 +165,28 @@ namespace Fourzy
         public static void SetUsetID(string userId)
         {
             Analytics.SetUserId(userId);
-            Amplitude.Instance.setUserId(userId);
+            //Amplitude.Instance.setUserId(userId);
         }
 
-        public void LogOtherJoinedLobby(string playerId, float timePassed, AnalyticsProvider provider = AnalyticsProvider.ALL)
+        public void LogOtherJoinedLobby(
+            string playerId, 
+            float timePassed, 
+            AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
             Dictionary<string, object> values = new Dictionary<string, object>()
             {
-                ["playerID"] = playerId,
-                ["time"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
+                ["playerId"] = playerId,
+                ["creatorPlayerId"] = LoginManager.playfabId,
+                ["timer"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
                 ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
                 ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
                 ["isPrivate"] = !string.IsNullOrEmpty(FourzyPhotonManager.PASSWORD),
                 ["complexityScore"] = "",
-                ["creatorPlayerId"] = LoginManager.playfabID,
+                ["creatorPlayerId"] = LoginManager.playfabId,
                 ["timeSinceGameCreated"] = timePassed,
             };
 
-            LogEvent(AnalyticsEvents.LOBBY_CREATED, values, provider);
+            LogEvent("LOBBY_JOINED", values, provider);
         }
 
         public void LogRealtimeGameCompleted(
@@ -412,7 +414,7 @@ namespace Fourzy
                         switch (value)
                         {
                             case AnalyticsProvider.AMPLITUDE:
-                                Amplitude.Instance.logEvent(@event, values);
+                                //Amplitude.Instance.logEvent(@event, values);
 
                                 break;
 

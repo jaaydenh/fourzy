@@ -223,16 +223,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 CancelRoutine("startBotMatch");
             }
 
-            AnalyticsManager.Instance.LogEvent("lobbyGameAbandoned", new Dictionary<string, object>()
-            {
-                ["playerID"] = LoginManager.playfabID,
-                ["time"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
-                ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
-                ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
-                ["isPrivate"] = !string.IsNullOrEmpty(FourzyPhotonManager.PASSWORD),
-                ["complexityScore"] = "",
-                ["timeSinceGameCreated"] = Time.time - lobbyCreatedAt,
-            });
+            AnalyticsManager.Instance.LogEvent(
+                "LOBBY_ABANDONED",
+                new Dictionary<string, object>()
+                {
+                    ["playerId"] = LoginManager.playfabId,
+                    ["timer"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
+                    ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
+                    ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
+                    ["isPrivate"] = !string.IsNullOrEmpty(FourzyPhotonManager.PASSWORD),
+                    ["complexityScore"] = "",
+                    ["timeSinceGameCreated"] = Time.time - lobbyCreatedAt,
+                });
 
             switch (state)
             {
@@ -260,8 +262,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 "LOBBY_CREATED",
                 new Dictionary<string, object>()
                 {
-                    ["playerID"] = LoginManager.playfabID,
-                    ["time"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
+                    ["playerId"] = LoginManager.playfabId,
+                    ["timer"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
                     ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
                     ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
                     ["isPrivate"] = !string.IsNullOrEmpty(FourzyPhotonManager.PASSWORD),
@@ -303,6 +305,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 SetData(playerGamepiece,
                     GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
                         GameManager.Instance.Bot.HerdId).player1Prefab);
+
                 AnalyticsManager.Instance.LogOtherJoinedLobby(
                     GameManager.Instance.Bot.Profile.ToString(),
                     Time.time - lobbyCreatedAt);

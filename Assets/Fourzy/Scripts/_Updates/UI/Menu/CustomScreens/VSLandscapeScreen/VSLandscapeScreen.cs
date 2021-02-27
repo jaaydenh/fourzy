@@ -74,7 +74,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                 }
                 else
+                {
                     demoCounter = 0;
+                }
             }
         }
 
@@ -138,17 +140,48 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 player2.Magic = magic;
             }
 
-            if (p2DifficultyLevel > -1) player2.Profile = AIPlayerFactory.RandomProfile((AIDifficulty)p2DifficultyLevel);
+            if (p2DifficultyLevel > -1)
+            {
+                player2.Profile = AIPlayerFactory.RandomProfile((AIDifficulty)p2DifficultyLevel);
+            }
 
             ClientFourzyGame game;
-            if (gameBoardDefinition == null)
-                game = new ClientFourzyGame(selectedArea == null ? GameContentManager.Instance.enabledAreas.Random().areaID : selectedArea.areaID, player1, player2, player1.PlayerId);
-            else
-                game = new ClientFourzyGame(gameBoardDefinition, player1, player2);
+            Area _area = selectedArea == null ?
+                    GameContentManager.Instance.enabledAreas.Random().areaID :
+                    selectedArea.areaID;
 
-            if (p1DifficultyLevel > -1 && p2DifficultyLevel > -1) game._Type = GameType.PRESENTATION;
-            else if (p1DifficultyLevel > -1 || p2DifficultyLevel > -1) game._Type = GameType.AI;
-            else game._Type = GameType.PASSANDPLAY;
+            if (gameBoardDefinition == null)
+            {
+                game = new ClientFourzyGame(_area, player1, player2, player1.PlayerId);
+            }
+            else
+            {
+                game = new ClientFourzyGame(gameBoardDefinition, player1, player2);
+            }
+
+            if (p1DifficultyLevel > -1 && p2DifficultyLevel > -1)
+            {
+                game._Type = GameType.PRESENTATION;
+            }
+            else if (p1DifficultyLevel > -1 || p2DifficultyLevel > -1)
+            {
+                game._Type = GameType.AI;
+            }
+            else
+            {
+                game._Type = GameType.PASSANDPLAY;
+            }
+
+            AnalyticsManager.Instance.LogEvent(
+                "PRACTICE_GAME_CREATED",
+                new Dictionary<string, object>()
+                {
+                    ["player1"] = player1.Profile.ToString(),
+                    ["player2"] = player2.Profile.ToString(),
+                    ["area"] = _area,
+                    ["isTimerEnabled"] = SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER),
+                    ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
+                });
 
             GameManager.Instance.StartGame(game, GameTypeLocal.LOCAL_GAME);
         }
@@ -328,10 +361,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (!initialized) return;
 
             //remove prev
-            foreach (GamePieceWidgetLandscape gamePieceWidgetLandscape in gamePieceWidgets) Destroy(gamePieceWidgetLandscape.gameObject);
+            foreach (GamePieceWidgetLandscape gamePieceWidgetLandscape in gamePieceWidgets)
+            {
+                Destroy(gamePieceWidgetLandscape.gameObject);
+            }
             gamePieceWidgets.Clear();
 
-            unlockedGamepieces = GameContentManager.Instance.piecesDataHolder.gamePieces.list.Where(_widget => _widget.data.profilePicture);
+            unlockedGamepieces = GameContentManager.Instance.piecesDataHolder.gamePieces.list.Where(
+                _widget => _widget.data.profilePicture);
             int piecesCount = unlockedGamepieces.Count();
 
             Columns = optimalColumnCount;
@@ -340,22 +377,39 @@ namespace Fourzy._Updates.UI.Menu.Screens
             while (piecesCount > Columns * Rows)
             {
                 if (piecesCount > Columns * Rows)
+                {
                     Rows++;
+                }
                 else
+                {
                     break;
+                }
 
                 if (piecesCount > Columns * Rows)
+                {
                     Columns++;
+                }
                 else
+                {
                     break;
+                }
             }
 
-            float _maxGridSize = maxGridWidth > rectTransform.rect.width ? rectTransform.rect.width - 100f : maxGridWidth;
-            gamePiecesRectTransform.sizeDelta = new Vector2((WidgetSize.x * Columns) + (gamepiecesParent.SpacingX * (Columns - 1)), (WidgetSize.y * Rows) + (gamepiecesParent.SpacingY * (Rows - 1)));
+            float _maxGridSize = maxGridWidth > rectTransform.rect.width ?
+                rectTransform.rect.width - 100f : 
+                maxGridWidth;
+            gamePiecesRectTransform.sizeDelta = new Vector2(
+                (WidgetSize.x * Columns) + (gamepiecesParent.SpacingX * (Columns - 1)), 
+                (WidgetSize.y * Rows) + (gamepiecesParent.SpacingY * (Rows - 1)));
             if (gamePiecesRectTransform.sizeDelta.x > _maxGridSize)
-                gamePiecesRectTransform.localScale = new Vector3(_maxGridSize / gamePiecesRectTransform.sizeDelta.x, _maxGridSize / gamePiecesRectTransform.sizeDelta.x);
+                gamePiecesRectTransform.localScale = new Vector3(
+                    _maxGridSize / gamePiecesRectTransform.sizeDelta.x, 
+                    _maxGridSize / gamePiecesRectTransform.sizeDelta.x);
 
-            foreach (GamePiecePrefabData prefabData in unlockedGamepieces) CreateGamepieceWidget(prefabData.data);
+            foreach (GamePiecePrefabData prefabData in unlockedGamepieces)
+            {
+                CreateGamepieceWidget(prefabData.data);
+            }
 
             //add random
             CreateGamepieceWidget(null);
@@ -363,7 +417,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private GamePieceWidgetLandscape CreateGamepieceWidget(GamePieceData data)
         {
-            GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>(GameContentManager.PrefabType.GAME_PIECE_LANDSCAPE, gamePiecesRectTransform);
+            GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>
+                (GameContentManager.PrefabType.GAME_PIECE_LANDSCAPE, gamePiecesRectTransform);
 
             widget
                 .SetData(data)
@@ -378,7 +433,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void UpdateProfiles()
         {
             for (int profileIndex = 0; profileIndex < profiles.Length; profileIndex++)
+            {
                 profiles[profileIndex].SetData(selectedPlayers[profileIndex]);
+            }
         }
 
         private void OnGPSelected(PointerEventData data, GamePieceWidgetLandscape piece)
@@ -395,7 +452,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 }
             }
             else
+            {
                 UpdateSelectedPlayer(data.pointerId, piece);
+            }
 
             readyButton.SetState(selectedPlayers.ToList().TrueForAll(_widget => _widget != null));
             UpdateProfiles();
@@ -410,10 +469,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
             for (int index = 0; index < selectedPlayers.Length; index++)
             {
                 if (indexToIgnore == index) continue;
-                if (selectedPlayers[index] == piece) result.Add(index);
+                if (selectedPlayers[index] == piece)
+                {
+                    result.Add(index);
+                }
             }
 
-            if (result.Count == 0) result.Add(-1);
+            if (result.Count == 0)
+            {
+                result.Add(-1);
+            }
 
             return result.ToArray();
         }
@@ -423,7 +488,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GamePieceWidgetLandscape prev = selectedPlayers[index];
             selectedPlayers[index] = piece;
 
-            if (prev != null) prev.SelectAsPlayer(GetSameProfiles(prev, index));
+            if (prev != null)
+            {
+                prev.SelectAsPlayer(GetSameProfiles(prev, index));
+            }
 
             selectedPlayers[index].SelectAsPlayer(GetSameProfiles(piece, -1));
 
@@ -449,7 +517,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnP2DifficultySelected(int option)
         {
-            if (selectedPlayers[1] != null) selectedPlayers[1].SetP2AsCPU(true);
+            if (selectedPlayers[1] != null)
+            {
+                selectedPlayers[1].SetP2AsCPU(true);
+            }
 
             p2Button.SetLabel("CPU");
             p2DifficultyLevel = option;

@@ -150,7 +150,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             //remove current user if rating is 0
-            newValues.RemoveAll(_entry => _entry.PlayFabId == LoginManager.playfabID && _entry.StatValue == 0);
+            newValues.RemoveAll(_entry => _entry.PlayFabId == LoginManager.playfabId && _entry.StatValue == 0);
 
             if (newValues.Count == 0 && loadedWidgets.Count == 0)
             {
@@ -218,7 +218,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (playersData.Count == 0) direction = 0;
 
             float timer = 0f;
-            while (string.IsNullOrEmpty(LoginManager.playfabID) && timer < TIMEOUT_TIME)
+            while (string.IsNullOrEmpty(LoginManager.playfabId) && timer < TIMEOUT_TIME)
             {
                 timer += Time.deltaTime;
                 yield return null;
@@ -246,7 +246,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 PlayFabClientAPI.GetLeaderboardAroundPlayer(
                     new GetLeaderboardAroundPlayerRequest()
                     {
-                        PlayFabId = LoginManager.playfabID,
+                        PlayFabId = LoginManager.playfabId,
                         StatisticName = "All Time Rating",
                         MaxResultsCount = TO_LOAD_PER_REQUEST,
                         ProfileConstraints = viewConstraints,

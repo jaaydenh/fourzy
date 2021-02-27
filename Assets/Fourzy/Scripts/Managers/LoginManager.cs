@@ -26,8 +26,9 @@ namespace Fourzy
         public static event Action<string> OnLoginMessage;
         public static event Action<bool> OnDeviceLoginComplete;
 
-        public static string playfabID;
-        public static string playerTitleID;
+        public static string playfabId;
+        public static string playerTitleId;
+        public static string masterAccountId;
 
         private bool isConnecting;
 
@@ -43,8 +44,8 @@ namespace Fourzy
 
             GameManager.onNetworkAccess += OnNetworkAccess;
 
-            Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
-            Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
+            //Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
+            //Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
         }
 
         protected void Start()
@@ -57,8 +58,8 @@ namespace Fourzy
         {
             GameManager.onNetworkAccess -= OnNetworkAccess;
 
-            Firebase.Messaging.FirebaseMessaging.TokenReceived -= OnTokenReceived;
-            Firebase.Messaging.FirebaseMessaging.MessageReceived -= OnMessageReceived;
+            //Firebase.Messaging.FirebaseMessaging.TokenReceived -= OnTokenReceived;
+            //Firebase.Messaging.FirebaseMessaging.MessageReceived -= OnMessageReceived;
         }
 
         // public void GetCoinsEarnedLeaderboard(Action<List<RankingScreen.LeaderboardEntry>, string> callback)
@@ -71,17 +72,17 @@ namespace Fourzy
         //     GetLeaderboard("winLossLeaderboard", callback, true);
         // }
 
-        private void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token)
-        {
-            Debug.Log("Firebase: Received Registration Token: " + token.Token);
+        //private void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token)
+        //{
+        //    Debug.Log("Firebase: Received Registration Token: " + token.Token);
 
-            ManagePushNotifications(token.Token, "fcm");
-        }
+        //    ManagePushNotifications(token.Token, "fcm");
+        //}
 
-        private void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
-        {
-            Debug.Log("Firebase: Received a new message from: " + e.Message.From);
-        }
+        //private void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
+        //{
+        //    Debug.Log("Firebase: Received a new message from: " + e.Message.From);
+        //}
 
         private void ManagePushNotifications(string token, string deviceOS)
         {
@@ -349,7 +350,7 @@ namespace Fourzy
 
         private void PlayFabLoginSuccess(LoginResult result)
         {
-            playfabID = result.PlayFabId;
+            playfabId = result.PlayFabId;
             AnalyticsManager.SetUsetID(result.PlayFabId);
 
             Debug.Log("PlayFabId: " + result.PlayFabId);
@@ -374,20 +375,20 @@ namespace Fourzy
                 UserManager.Instance.SetDisplayName(UserManager.CreateNewPlayerName());
                 UserManager.Instance.UpdateSelectedGamePiece(InternalSettings.Current.DEFAULT_GAME_PIECE);
 
-                Amplitude.Instance.setUserProperties(new Dictionary<string, object>()
-                {
-                    ["first"] = true,
-                    ["hasMonetized"] = false,
-                    ["hasWatchedAd"] = false,
-                    ["totalPuzzlesCompleted"] = 0,
-                    ["totalPuzzleFailures"] = 0,
-                    ["totalRealtimeGamesPlayed"] = 0,
-                    ["totalRealtimeGamesWon"] = 0,
-                    ["totalRealtimeGamesLost"] = 0,
-                    ["totalRealtimeGamesDraw"] = 0,
-                    ["hasSubscription"] = false,
-                    ["totalSpent"] = 0,
-                });
+                //Amplitude.Instance.setUserProperties(new Dictionary<string, object>()
+                //{
+                //    ["first"] = true,
+                //    ["hasMonetized"] = false,
+                //    ["hasWatchedAd"] = false,
+                //    ["totalPuzzlesCompleted"] = 0,
+                //    ["totalPuzzleFailures"] = 0,
+                //    ["totalRealtimeGamesPlayed"] = 0,
+                //    ["totalRealtimeGamesWon"] = 0,
+                //    ["totalRealtimeGamesLost"] = 0,
+                //    ["totalRealtimeGamesDraw"] = 0,
+                //    ["hasSubscription"] = false,
+                //    ["totalSpent"] = 0,
+                //});
             }
 
             PlayFabClientAPI.GetAccountInfo(
@@ -416,7 +417,7 @@ namespace Fourzy
             LogMessage("Photon token acquired: " + obj.PhotonCustomAuthenticationToken + "  Authentication complete.");
 
             var customAuth = new Photon.Realtime.AuthenticationValues { AuthType = Photon.Realtime.CustomAuthenticationType.Custom };
-            customAuth.AddAuthParameter("username", playfabID);
+            customAuth.AddAuthParameter("username", playfabId);
             customAuth.AddAuthParameter("token", obj.PhotonCustomAuthenticationToken);
 
             PhotonNetwork.AuthValues = customAuth;
@@ -454,15 +455,16 @@ namespace Fourzy
                 UserManager.Instance.SetDisplayName(result.AccountInfo.TitleInfo.DisplayName, false);
             }
 
-            playerTitleID = result.AccountInfo.TitleInfo.TitlePlayerAccount.Id;
+            playerTitleId = result.AccountInfo.TitleInfo.TitlePlayerAccount.Id;
+            masterAccountId = result.AccountInfo.PlayFabId;
 
             UserManager.GetMyStats();
             GameManager.GetTitleData(data => InternalSettings.Current.Update(data), null);
 
             PlayFabClientAPI.GetPlayerProfile(new GetPlayerProfileRequest()
-                {
-                    PlayFabId = playfabID
-                }, 
+            {
+                PlayFabId = playfabId
+            },
                 OnPlayerProfile,
                 error => Debug.Log("Error getting player profile: " + error.ErrorMessage));
             //get profile
@@ -471,7 +473,7 @@ namespace Fourzy
                 {
                     Entity = new PlayFab.ProfilesModels.EntityKey()
                     {
-                        Id = playerTitleID,
+                        Id = playerTitleId,
                         Type = "title_player_account"
                     }
                 },
@@ -486,7 +488,7 @@ namespace Fourzy
 
         private IEnumerator SetProfileLanguage(string currentLanguageCode)
         {
-            while (!LocalizationManager.Instance.isReady || string.IsNullOrEmpty(playerTitleID)) yield return null;
+            while (!LocalizationManager.Instance.isReady || string.IsNullOrEmpty(playerTitleId)) yield return null;
 
             Debug.Log($"Language state: server {currentLanguageCode} ours {LocalizationManager.Instance.languageCode}");
             if (currentLanguageCode != LocalizationManager.Instance.languageCode)
@@ -494,7 +496,11 @@ namespace Fourzy
                 //updating system language
                 PlayFabProfilesAPI.SetProfileLanguage(new PlayFab.ProfilesModels.SetProfileLanguageRequest()
                 {
-                    Entity = new PlayFab.ProfilesModels.EntityKey() { Id = playerTitleID, Type = "title_player_account" },
+                    Entity = new PlayFab.ProfilesModels.EntityKey()
+                    {
+                        Id = playerTitleId,
+                        Type = "title_player_account"
+                    },
                     ExpectedVersion = 0,
                     Language = LocalizationManager.Instance.languageCode,
                 }, OnLanguageSetOK, OnLanguageSetError);

@@ -25,7 +25,7 @@ namespace Fourzy._Updates.UI.Widgets
             positionLabel.text = (entry.Position + 1) + "";
             valueLabel.text = entry.StatValue + "";
 
-            if (entry.PlayFabId == LoginManager.playfabID)
+            if (entry.PlayFabId == LoginManager.playfabId)
             {
                 positionLabel.color = Color.green;
                 AddGamepieceView(UserManager.Instance.gamePieceID);

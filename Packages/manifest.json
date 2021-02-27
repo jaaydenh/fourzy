@@ -2,8 +2,6 @@
   "dependencies": {
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
     "com.coffee.unmask": "https://github.com/mob-sakai/UnmaskForUGUI.git",
-    "com.google.external-dependency-manager": "1.2.164",
-    "com.google.firebase.messaging": "7.1.0",
     "com.tayx.graphy": "https://github.com/Tayx94/graphy.git",
     "com.unity.2d.animation": "5.0.4",
     "com.unity.2d.sprite": "1.0.0",

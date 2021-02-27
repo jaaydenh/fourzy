@@ -173,9 +173,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void TryUseHint()
         {
-            GamePlayManager.Instance.PlayHint();
+            //GamePlayManager.Instance.PlayHint();
 
-            if (GamePlayManager.Instance.IsRoutineActive("hintRoutine")) SetHintButtonState(false);
+            //if (GamePlayManager.Instance.IsRoutineActive("hintRoutine")) SetHintButtonState(false);
         }
 
         private void SetHintButtonState(bool state) => hintButton.SetState(state && !game.isOver && game.isMyTurn);

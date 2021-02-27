@@ -121,7 +121,10 @@ namespace Fourzy._Updates.UI.Widgets
             TimerValue = Mathf.Clamp(TimerValue + value, 0f, Constants.TIMER_SECTIONS);
             timerValueTween.to = timerValue / Constants.TIMER_SECTIONS;
 
-            if (timerValue <= 0f) onValueEmpty?.Invoke(player);
+            if (timerValue <= 0f)
+            {
+                onValueEmpty?.Invoke(player);
+            }
 
             timerValueTween.PlayForward(true);
 

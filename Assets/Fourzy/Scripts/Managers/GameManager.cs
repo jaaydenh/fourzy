@@ -344,7 +344,8 @@ namespace Fourzy
             AnalyticsManager.Instance.LogEvent(
                 "OPEN_DISCORD",
                 AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("playerId", LoginManager.playfabID));
+                new KeyValuePair<string, object>("playerId", LoginManager.playfabId),
+                new KeyValuePair<string, object>("masterId", LoginManager.masterAccountId));
 
             Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/t2zW7j3XRs"/*)*/);
         }
@@ -378,7 +379,7 @@ namespace Fourzy
 
             if (!_data) return;
 
-            Amplitude.Instance.setUserProperty("totalSpent", UserManager.Instance.totalSpentUSD);
+            //Amplitude.Instance.setUserProperty("totalSpent", UserManager.Instance.totalSpentUSD);
 
             if (product.definition.id.Contains("hints"))
             {
@@ -520,7 +521,7 @@ namespace Fourzy
                 FunctionParameter = new
                 {
                     winnerID = RealtimeOpponent,
-                    opponentID = LoginManager.playfabID,
+                    opponentID = LoginManager.playfabId,
                     draw = false,
                 },
                 GeneratePlayStreamEvent = true,
@@ -533,7 +534,7 @@ namespace Fourzy
                 foreach (RatingGamePlayer player in gameResult.players)
                 {
                     Debug.Log($"{player.playfabID} {player.rating} {player.ratingChange} {player.winner}");
-                    if (player.playfabID == LoginManager.playfabID)
+                    if (player.playfabID == LoginManager.playfabId)
                     {
                         UserManager.Instance.playfabLosesCount += 1;
                         UserManager.Instance.lastCachedRating = player.rating;

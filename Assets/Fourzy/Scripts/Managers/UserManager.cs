@@ -154,7 +154,7 @@ namespace Fourzy
                 onRatingUpdate?.Invoke(_lastCachedRating);
 
                 FourzyPhotonManager.SetMyProperty(Constants.REALTIME_RATING_KEY, _lastCachedRating);
-                Amplitude.Instance.setUserProperty("realtimeRating", value);
+                //Amplitude.Instance.setUserProperty("realtimeRating", value);
             }
         }
 
@@ -408,7 +408,7 @@ namespace Fourzy
             Action<int> _onRatingAquired = null,
             Action onFailed = null)
         {
-            if (string.IsNullOrEmpty(LoginManager.playfabID))
+            if (string.IsNullOrEmpty(LoginManager.playfabId))
             {
                 Debug.LogError("User account id must be set");
 
@@ -418,7 +418,7 @@ namespace Fourzy
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "checkPlayerRating",
-                FunctionParameter = new { playerID = LoginManager.playfabID, }
+                FunctionParameter = new { playerID = LoginManager.playfabId, }
             }, result =>
             {
                 CheckRatingResult data =
@@ -440,14 +440,14 @@ namespace Fourzy
         /// </summary>
         public static void GetMyStats(Action onFailed = null)
         {
-            if (string.IsNullOrEmpty(LoginManager.playfabID))
+            if (string.IsNullOrEmpty(LoginManager.playfabId))
             {
                 Debug.LogError("User account id must be set");
 
                 return;
             }
 
-            GetPlayerStats(LoginManager.playfabID, false, data =>
+            GetPlayerStats(LoginManager.playfabId, false, data =>
             {
                 Instance.playfabWinsCount = data.wins;
                 Instance.playfabLosesCount = data.loses;
@@ -551,7 +551,7 @@ namespace Fourzy
 
         private void ChangeDisplayNameResult(UpdateUserTitleDisplayNameResult result)
         {
-            Amplitude.Instance.setUserProperty("playerName", userName);
+            //Amplitude.Instance.setUserProperty("playerName", userName);
             settingRandomName = false;
 
             onDisplayNameChanged?.Invoke();

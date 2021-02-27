@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: be044a4a46a3d1a4794d948d7e6d087b, type: 3}
-    totalSpriteSurfaceArea: 25613235
+    totalSpriteSurfaceArea: 24299955
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -321,7 +321,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: bf6c559ef9d3a494b9a6ca2596021ace, type: 3}
   - {fileID: 21300000, guid: 0a69879e1efda4cf1bb2640926a05902, type: 3}
   - {fileID: 21300000, guid: dc25c8ae04ae1d74e96f0642e9399fe1, type: 3}
-  - {fileID: 21300000, guid: 0a02d4be4d0e28242a22908f4609e069, type: 3}
   - {fileID: 21300000, guid: 2389d7bea27d10744bcea9c9ac8bbed0, type: 3}
   - {fileID: 21300000, guid: a77f0eceb6d06144e8a8d049bded3664, type: 3}
   - {fileID: 21300000, guid: 6a49f2ee72f661c4a8fd48a5a3385110, type: 3}
@@ -624,7 +623,6 @@ SpriteAtlas:
   - Bots-02-Gold
   - iconTournament
   - Wizard-PuzzleWin
-  - Stars-full
   - Selector-P1B
   - help_icon
   - Wizard

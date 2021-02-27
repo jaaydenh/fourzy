@@ -5072,10 +5072,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 502.9836, y: -225}
+  m_SizeDelta: {x: 1005.9672, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &209624568
 MonoBehaviour:
@@ -17977,10 +17977,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 75}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 502.9836, y: -112.5}
+  m_SizeDelta: {x: 1005.9672, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &707072625
 MonoBehaviour:
@@ -20759,10 +20759,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 502.9836, y: -75}
+  m_SizeDelta: {x: 1005.9672, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &755983302
 MonoBehaviour:
@@ -22636,10 +22636,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 75}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 502.9836, y: -37.5}
+  m_SizeDelta: {x: 1005.9672, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &916533445
 MonoBehaviour:
@@ -31828,10 +31828,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 502.9836, y: -150}
+  m_SizeDelta: {x: 1005.9672, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1275983497
 MonoBehaviour:
@@ -37045,7 +37045,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1870856805}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Fourzy._Updates.UI.Menu.Screens.RankingScreen,
+          Assembly-CSharp
         m_MethodName: OnScrollValueChanged
         m_Mode: 0
         m_Arguments:
@@ -38825,10 +38826,10 @@ RectTransform:
   m_Father: {fileID: 204962647}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 75}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 502.9836, y: -187.5}
+  m_SizeDelta: {x: 1005.9672, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1569757642
 MonoBehaviour:
@@ -39452,7 +39453,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1594060364
 MonoBehaviour:
   m_ObjectHideFlags: 0

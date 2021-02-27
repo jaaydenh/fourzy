@@ -103,7 +103,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             float timer = 0f;
             //wait 10 seconds
-            while ((string.IsNullOrEmpty(LoginManager.playfabID) || !GameManager.NetworkAccess) && timer < 10f)
+            while ((string.IsNullOrEmpty(LoginManager.playfabId) || !GameManager.NetworkAccess) && timer < 10f)
             {
                 timer += Time.deltaTime;
                 yield return null;
