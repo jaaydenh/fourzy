@@ -22,11 +22,11 @@ namespace Fourzy
         /// </summary>
         public static bool DEBUG = false;
 
-#if UNITY_EDITOR
+// #if UNITY_EDITOR
         private const string AMP_API_KEY = "4c62628ff8687c70a9fd201aea80db00";
-#else
-        private const string AMP_API_KEY = "300f3bfc4f1180cf072c49fcd198950f";
-#endif
+// #else
+//         private const string AMP_API_KEY = "300f3bfc4f1180cf072c49fcd198950f";
+// #endif
 
         public const string BOARD_ID_KEY = "board_id";
         public const string LEVEL_ID = "level_id";
@@ -119,11 +119,11 @@ namespace Fourzy
         {
             base.Awake();
 
-            //Amplitude amplitude = Amplitude.getInstance();
-            //amplitude.logging = true;
-            //amplitude.trackSessionEvents(true);
-            //amplitude.useAdvertisingIdForDeviceId();
-            //amplitude.init(AMP_API_KEY);
+            Amplitude amplitude = Amplitude.getInstance();
+            amplitude.logging = true;
+            amplitude.trackSessionEvents(true);
+            amplitude.useAdvertisingIdForDeviceId();
+            amplitude.init(AMP_API_KEY);
         }
 
         protected void Start()
@@ -131,17 +131,17 @@ namespace Fourzy
             PlayerPrefsWrapper.AddAppOpened();
 
             int timesOpened = PlayerPrefsWrapper.GetAppOpened();
-            //if (timesOpened == 2)
-            //{
-            //    Amplitude.Instance.setUserProperty("first", false);
-            //}
-            //Amplitude.Instance.setUserProperty("totalSessions", timesOpened);
+            if (timesOpened == 2)
+            {
+               Amplitude.Instance.setUserProperty("first", false);
+            }
+            Amplitude.Instance.setUserProperty("totalSessions", timesOpened);
         }
 
         protected void OnApplicationQuit()
         {
-            //Amplitude.Instance.setUserProperty("lastSeenDate",
-            //    (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
+            Amplitude.Instance.setUserProperty("lastSeenDate",
+               (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
         }
 
         public static void Initialize(bool _DEBUG = false)
@@ -165,7 +165,7 @@ namespace Fourzy
         public static void SetUsetID(string userId)
         {
             Analytics.SetUserId(userId);
-            //Amplitude.Instance.setUserId(userId);
+            Amplitude.Instance.setUserId(userId);
         }
 
         public void LogOtherJoinedLobby(
@@ -414,7 +414,7 @@ namespace Fourzy
                         switch (value)
                         {
                             case AnalyticsProvider.AMPLITUDE:
-                                //Amplitude.Instance.logEvent(@event, values);
+                                Amplitude.Instance.logEvent(@event, values);
 
                                 break;
 
