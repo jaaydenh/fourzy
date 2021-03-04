@@ -21,11 +21,13 @@ namespace Fourzy._Updates._Tutorial
                 onBack = TutorialOnBack.SHOW_LEAVE_PROMPT,
                 tasks = new OnboardingTask[]
                 {
+                    new OnboardingTask_Log("welcome"),
+
                     new OnboardingTask_OpenGame(GameType.ONBOARDING, "200"),
                     new OnboardingTask() { action = OnboardingActions.WIZARD_CENTER },
                     new OnboardingTask() { action = OnboardingActions.SHOW_BG },
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("welcome_to_fourzy"), 0, .75f),
-                    new OnboardingTask_Log("1"),
+                    new OnboardingTask_Log("howToWin"),
 
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("get_4_to_win"), 0, .75f),
 
@@ -42,6 +44,9 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("tap_to_place"), 1, .15f),
                     new OnboardingTask_LimitInput(new Rect(4f, 0f, 1f, 1f)),
                     //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+
+                    new OnboardingTask_Log("verticalMoveInstructions"),
+
                     new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
                         [PlacementStyle.SWIPE_STYLE_2] = new Rect(4f, 0f, 1f, 3f),
                         [PlacementStyle.EDGE_TAP] = new Rect(4f, 0f, 1f, 1f),
@@ -50,7 +55,7 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                     new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                    new OnboardingTask_Log("2"),
+                    new OnboardingTask_Log("verticalMoveCompleted"),
 
                     new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
                     new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
@@ -69,6 +74,9 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("tap_to_place"), 1, .15f),
                     new OnboardingTask_LimitInput(new Rect(0f, 3f, 3f, 1f)),
                     //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+
+                    new OnboardingTask_Log("horizontalMoveInstructions"),
+
                     new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
                         [PlacementStyle.SWIPE_STYLE_2] = new Rect(0f, 3f, 3f, 1f),
                         [PlacementStyle.EDGE_TAP] = new Rect(0f, 3f, 1f, 1f),
@@ -77,7 +85,7 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                     new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                    new OnboardingTask_Log("3"),
+                    new OnboardingTask_Log("horizontalMoveCompleted"),
 
                     new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
                     new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
@@ -96,6 +104,9 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask_ShowMessage(LocalizationManager.Value("tap_to_place"), 1, .15f),
                     new OnboardingTask_LimitInput(new Rect(0f, 1f, 3f, 1f)),
                     //new OnboardingTask() { action = OnboardingActions.SHOW_BOARD_HINT_AREA },
+
+                    new OnboardingTask_Log("diagonalMoveInstructions"),
+
                     new OnboardingTask_ShowMaskedArea(new Dictionary<PlacementStyle, Rect>() {
                         [PlacementStyle.SWIPE_STYLE_2] = new Rect(0f, 1f, 3f, 1f),
                         [PlacementStyle.EDGE_TAP] = new Rect(0f, 1f, 1f, 1f),
@@ -104,7 +115,7 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask() { action = OnboardingActions.ON_MOVE_STARTED },
                     new OnboardingTask() { action = OnboardingActions.HIDE_POINTER },
                     new OnboardingTask() { action = OnboardingActions.HIDE_MAKSED_AREA },
-                    new OnboardingTask_Log("4"),
+                    new OnboardingTask_Log("diagonalMoveCompleted"),
 
                     new OnboardingTask() { action = OnboardingActions.GAME_FINISHED },
                     new OnboardingTask() { action = OnboardingActions.SHOW_BG, intValue = -1},
@@ -114,6 +125,7 @@ namespace Fourzy._Updates._Tutorial
                     new OnboardingTask_Wait(1f),
                     new OnboardingTask() { action = OnboardingActions.LOAD_MAIN_MENU },
 
+                    new OnboardingTask_Log("tutorialCompleted"),
                     // //point at adventure button button
                     // new OnboardingTask_Log("5"),
                     // new OnboardingTask_HighlightButton(
@@ -397,10 +409,10 @@ namespace Fourzy._Updates._Tutorial
 
     public class OnboardingTask_Log : OnboardingTask
     {
-        public OnboardingTask_Log(string stage)
+        public OnboardingTask_Log(string id)
         {
             action = OnboardingActions.LOG_TUTORIAL;
-            stringValue = stage;
+            stringValue = id;
         }
     }
 

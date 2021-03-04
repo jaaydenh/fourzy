@@ -28,33 +28,33 @@ namespace Fourzy
 //         private const string AMP_API_KEY = "300f3bfc4f1180cf072c49fcd198950f";
 // #endif
 
-        public const string BOARD_ID_KEY = "board_id";
-        public const string LEVEL_ID = "level_id";
-        public const string EVENT_ID_KEY = "event_id";
-        public const string GAUNTLET_ID_KEY = "gauntlet_id";
-        public const string SESSION_ID_KEY = "session_id";
+        public const string BOARD_ID_KEY = "boardId";
+        public const string LEVEL_ID = "levelId";
+        public const string EVENT_ID_KEY = "eventId";
+        public const string GAUNTLET_ID_KEY = "gauntletId";
+        public const string SESSION_ID_KEY = "sessionId";
 
         public const string AREA_KEY = "area";
-        public const string GAME_RESULT_KEY = "game_result";
-        public const string ALL_TURNS_COUNT_KEY = "all_turns_count";
-        public const string PLAYER_TURNS_COUNT_KEY = "player_turns_count";
-        public const string PUZZLE_TURNS_LIMIT_KEY = "puzzle_turns_limit";
-        public const string LEVEL_INDEX_KEY = "level_index";
-        public const string GAUNTLET_MEMBERS_LEFT_KEY = "members_left";
-        public const string MAGIC_LEFT_KEY = "magic_left";
-        public const string GAME_AI_PROFILE_KEY = "ai_profile";
-        public const string GAME_BOSS_TYPE_KEY = "boss_type";
-        public const string BOARD_JSON_KEY = "board_json";
-        public const string BOSS_MOVES_COUNT = "boss_moves_count";
-        public const string HINT_AVAILABLE_KEY = "hint_available";
-        public const string HINT_NUMBER_KEY = "hint_turn_number";
-        public const string HINT_STORE_ITEMS_KEY = "hint_store_items";
-        public const string STORE_ITEM_KEY = "store_item_id";
-        public const string GAMEPIECE_SELECT_KEY = "gamepiece_select";
-        public const string SETTINGS_VALUE_NAME_KEY = "value_name";
-        public const string SETTINGS_NEW_VALUE_KEY = "new_value";
-        public const string SETTINGS_OLD_VALUE_KEY = "old_value";
-        public const string HINT_USED_KEY = "hint_used";
+        public const string GAME_RESULT_KEY = "result";
+        public const string NUM_TURNS_TAKEN_KEY = "numTurnsTaken";
+        public const string PLAYER_TURNS_COUNT_KEY = "playerTurnsCount";
+        public const string PUZZLE_TURNS_LIMIT_KEY = "puzzleTurnsLimit";
+        public const string LEVEL_INDEX_KEY = "levelIndex";
+        public const string GAUNTLET_MEMBERS_LEFT_KEY = "piecesRemaining";
+        public const string MAGIC_LEFT_KEY = "magicRemaining";
+        public const string GAME_AI_PROFILE_KEY = "botProfile";
+        public const string GAME_BOSS_TYPE_KEY = "bossType";
+        public const string BOARD_JSON_KEY = "boardJson";
+        public const string BOSS_MOVES_COUNT = "bossMovesCount";
+        public const string HINT_AVAILABLE_KEY = "isHintAvailable";
+        public const string HINT_NUMBER_KEY = "hintTurnNumber";
+        public const string HINT_STORE_ITEMS_KEY = "hintStoreItems";
+        public const string STORE_ITEM_KEY = "storeItemId";
+        public const string GAMEPIECE_SELECT_KEY = "gamepieceSelect";
+        public const string SETTINGS_VALUE_NAME_KEY = "valueName";
+        public const string SETTINGS_NEW_VALUE_KEY = "newValue";
+        public const string SETTINGS_OLD_VALUE_KEY = "oldValue";
+        public const string HINT_USED_KEY = "hintUsed";
         public const string TUTORIAL_NAME_KEY = "name";
         public const string TUTORIAL_STAGE_KEY = "key";
 
@@ -186,7 +186,7 @@ namespace Fourzy
                 ["timeSinceGameCreated"] = timePassed,
             };
 
-            LogEvent("LOBBY_JOINED", values, provider);
+            LogEvent("lobbyGameJoined", values, provider);
         }
 
         public void LogRealtimeGameCompleted(
@@ -202,7 +202,7 @@ namespace Fourzy
             string opponentId)
         {
             LogEvent(
-                "REALTIME_GAME_COMPLETED",
+                "realtimeGameCompleted",
                 new Dictionary<string, object>()
                 {
                     ["area"] = area,
@@ -227,9 +227,14 @@ namespace Fourzy
 
         }
 
-        public void LogTutorialEvent(string name, string stage, AnalyticsProvider provider = AnalyticsProvider.ALL)
+        public void LogTutorialEvent(string tutorialName, string id, AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
-
+            LogEvent("tutorialStepComplete",
+                new Dictionary<string, object>()
+                {
+                    ["id"] = id
+                },
+                provider);
         }
 
         public void LogGame(
@@ -246,7 +251,7 @@ namespace Fourzy
             switch (eventType)
             {
                 case AnalyticsEvents.VERSUS_GAME_END:
-                    @params.Add(ALL_TURNS_COUNT_KEY, game._allTurnRecord.Count);
+                    @params.Add(NUM_TURNS_TAKEN_KEY, game._allTurnRecord.Count);
 
                     break;
 

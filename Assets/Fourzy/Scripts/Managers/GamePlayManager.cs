@@ -174,7 +174,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameType.PASSANDPLAY:
                     AnalyticsManager.Instance.LogEvent(
-                        "VERSUS_COMPLETE",
+                        "versusGameCompleted",
                         new Dictionary<string, object>()
                         {
                             ["player1"] = game.player1.Profile.ToString(),
@@ -1088,12 +1088,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         OnRealtimeGameFinished(LoginManager.playfabId, GameManager.Instance.RealtimeOpponent.Id);
 
                         AnalyticsManager.Instance.LogEvent(
-                            "REALTIME_GAME_COMPLETED",
+                            "realtimeGameCompleted",
                             new Dictionary<string, object>()
                             {
                                 ["area"] = game._Area.ToString(),
                                 ["result"] = "opponentLeftRoom",
-                                ["turnsTaken"] = game._allTurnRecord.Count,
+                                ["numTurnsTaken"] = game._allTurnRecord.Count,
                                 ["complexityScore"] = "",
                                 ["winnerTimerLeft"] = gameplayScreen.myTimerLeft,
                                 ["opponentTimerLeft"] = gameplayScreen.opponentTimerLeft,
@@ -1283,7 +1283,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
 
                     AnalyticsManager.Instance.LogEvent(
-                        "VERSUS_COMPLETE",
+                        "versusGameCompleted",
                         new Dictionary<string, object>()
                         {
                             ["player1"] = game.player1.Profile.ToString(),
