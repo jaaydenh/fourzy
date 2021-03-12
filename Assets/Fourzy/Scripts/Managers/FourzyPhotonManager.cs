@@ -109,16 +109,22 @@ namespace Fourzy
         {
             base.OnConnected();
 
-            if (DEBUG) Debug.Log($"Connected to photon.");
+            if (DEBUG)
+            {
+                Debug.Log($"Connected to photon.");
+            }
         }
 
         public override void OnFriendListUpdate(List<FriendInfo> friendList)
         {
             base.OnFriendListUpdate(friendList);
 
-            onFriendsUpdated?.Invoke(friendList);
+            if (DEBUG)
+            {
+                Debug.Log("Photon friends list updated");
+            }
 
-            if (DEBUG) Debug.Log("Photon friends list updated");
+            onFriendsUpdated?.Invoke(friendList);
         }
 
         /// <summary>
@@ -128,7 +134,10 @@ namespace Fourzy
         {
             base.OnConnectedToMaster();
 
-            if (DEBUG) Debug.Log($"Connected to master.");
+            if (DEBUG)
+            {
+                Debug.Log($"Connected to master.");
+            }
 
             SetMyProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, UserManager.Instance.gamePieceID);
 
@@ -165,8 +174,10 @@ namespace Fourzy
                 StopCoroutine(connectionTimedOutRoutine);
             }
 
-            if (DEBUG) Debug.Log(
-                $"Joined lobby: {(string.IsNullOrEmpty(PhotonNetwork.CurrentLobby.Name) ? "DEFAULT" : PhotonNetwork.CurrentLobby.Name)}.");
+            if (DEBUG)
+            {
+                Debug.Log($"Joined lobby: {(string.IsNullOrEmpty(PhotonNetwork.CurrentLobby.Name) ? "DEFAULT" : PhotonNetwork.CurrentLobby.Name)}.");
+            }
 
             //update name
             PhotonNetwork.NickName = UserManager.Instance.userName;
@@ -220,16 +231,16 @@ namespace Fourzy
         {
             base.OnCreateRoomFailed(returnCode, message);
 
+            if (DEBUG)
+            {
+                Debug.Log($"Failed to create new Room. {message}");
+            }
+
             AnalyticsManager.Instance.LogEvent(
                 "CREATE_ROOM_ERROR",
                 AnalyticsManager.AnalyticsProvider.ALL,
                 new KeyValuePair<string, object>("code", returnCode),
                 new KeyValuePair<string, object>("message", message));
-
-            if (DEBUG)
-            {
-                Debug.Log($"Failed to create new Room. {message}");
-            }
 
             onCreateRoomFailed?.Invoke(message);
 
@@ -241,18 +252,18 @@ namespace Fourzy
 
         public override void OnJoinRoomFailed(short returnCode, string message)
         {
-            AnalyticsManager.Instance.LogEvent(
-                "JOIN_ROOM_ERROR",
-                AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("code", returnCode),
-                new KeyValuePair<string, object>("message", message));
-
             base.OnJoinRoomFailed(returnCode, message);
 
             if (DEBUG)
             {
                 Debug.Log($"Failied to join room: {message}");
             }
+
+            AnalyticsManager.Instance.LogEvent(
+                "JOIN_ROOM_ERROR",
+                AnalyticsManager.AnalyticsProvider.ALL,
+                new KeyValuePair<string, object>("code", returnCode),
+                new KeyValuePair<string, object>("message", message));
 
             onJoinRoomFailed?.Invoke(message);
 
@@ -264,14 +275,18 @@ namespace Fourzy
 
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
+            base.OnJoinRandomFailed(returnCode, message);
+
+            if (DEBUG)
+            {
+                Debug.Log($"Failied to join random room. {returnCode} code {message} message.");
+            }
+
             AnalyticsManager.Instance.LogEvent(
                 "JOIN_RANDOM_ROOM_ERROR",
                 AnalyticsManager.AnalyticsProvider.ALL,
                 new KeyValuePair<string, object>("code", returnCode),
                 new KeyValuePair<string, object>("message", message));
-
-            base.OnJoinRandomFailed(returnCode, message);
-            if (DEBUG) Debug.Log($"Failied to join random room. {returnCode} code {message} message.");
 
             onJoinRandomFailed?.Invoke();
 
@@ -356,33 +371,26 @@ namespace Fourzy
             {
                 StopCoroutine(connectionTimedOutRoutine);
             }
-
-            ////if room is to be removed, remove it yourself
-            //if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-            //{
-            //    RoomInfo toRemove = roomsInfo.Find(_room => _room.Name == PhotonNetwork.CurrentRoom.Name);
-
-            //    if (toRemove != null)
-            //    {
-            //        toRemove.RemovedFromList = true;
-            //        onRoomsListUpdated?.Invoke(roomsInfo);
-            //        if (DEBUG) Debug.Log($"Room removed: {PhotonNetwork.CurrentRoom.Name}.");
-
-            //        roomsInfo.Remove(toRemove);
-            //    }
-            //}
         }
 
         public override void OnLeftLobby()
         {
             base.OnLeftLobby();
-            if (DEBUG) Debug.Log($"Lobby left");
+
+            if (DEBUG)
+            {
+                Debug.Log($"Lobby left");
+            }
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             base.OnPlayerEnteredRoom(newPlayer);
-            if (DEBUG) Debug.Log($"Player connected: {newPlayer.NickName}.");
+
+            if (DEBUG)
+            {
+                Debug.Log($"Player connected: {newPlayer.NickName}.");
+            }
 
             onPlayerEnteredRoom?.Invoke(newPlayer);
         }
@@ -390,7 +398,11 @@ namespace Fourzy
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             base.OnPlayerLeftRoom(otherPlayer);
-            if (DEBUG) Debug.Log($"Player disconnected: {otherPlayer.NickName}.");
+            if (DEBUG)
+
+            {
+                Debug.Log($"Player disconnected: {otherPlayer.NickName}.");
+            }
 
             onPlayerLeftRoom?.Invoke(otherPlayer);
         }
@@ -398,7 +410,11 @@ namespace Fourzy
         public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
         {
             base.OnRoomPropertiesUpdate(propertiesThatChanged);
-            if (DEBUG) Debug.Log($"New/Changed room properties arrived.");
+
+            if (DEBUG)
+            {
+                Debug.Log($"New/Changed room properties arrived.");
+            }
 
             onRoomPropertiesUpdate?.Invoke(propertiesThatChanged);
         }
@@ -407,7 +423,10 @@ namespace Fourzy
         {
             base.OnDisconnected(cause);
 
-            if (DEBUG) Debug.Log($"Disconnected from server.");
+            if (DEBUG)
+            {
+                Debug.Log($"Disconnected from server.");
+            }
 
             onDisconnectedFromServer?.Invoke();
         }
@@ -416,7 +435,10 @@ namespace Fourzy
         {
             base.OnLeftRoom();
 
-            if (DEBUG) Debug.Log($"Room left.");
+            if (DEBUG)
+            {
+                Debug.Log($"Room left.");
+            }
 
             PASSWORD = "";
             onRoomLeft?.Invoke();

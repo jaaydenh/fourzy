@@ -158,7 +158,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 }
             }, () =>
             {
-                if (_prompt.isOpened) _prompt.Decline(true);
+                if (_prompt.isOpened)
+                {
+                    _prompt.Decline(true);
+                }
             });
         }
 

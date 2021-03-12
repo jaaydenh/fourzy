@@ -423,52 +423,55 @@ public class PlayFabAuthService
         });
 
 #elif UNITY_IPHONE || UNITY_IOS && !UNITY_EDITOR
-		//get ios device id
-		DeviceIDManager.onDeviceID += deviceID =>
+		string id = KeyChain.BindGetKeyChainUser();
+
+		if (string.IsNullOrEmpty(id))
+        {
+			id = SystemInfo.deviceUniqueIdentifier;
+			KeyChain.BindSetKeyChainUser("0", id);
+        }
+		
+		Debug.LogError(id + " device id");
+		PlayFabClientAPI.LoginWithIOSDeviceID(new LoginWithIOSDeviceIDRequest()
 		{
-			Debug.Log($"Unitys' {SystemInfo.deviceUniqueIdentifier} new {deviceID}");
+			TitleId = PlayFabSettings.TitleId,
+			DeviceModel = SystemInfo.deviceModel,
+			OS = SystemInfo.operatingSystem,
+			DeviceId = id,
+			CreateAccount = true,
+			InfoRequestParameters = InfoRequestParams
+		}, (result) => {
+			//Store Identity and session
+			_playFabId = result.PlayFabId;
+			_sessionTicket = result.SessionTicket;
 
-			PlayFabClientAPI.LoginWithIOSDeviceID(new LoginWithIOSDeviceIDRequest()
+			//check if we want to get this callback directly or send to event subscribers.
+			if (callback == null && OnLoginSuccess != null)
 			{
-				TitleId = PlayFabSettings.TitleId,
-				DeviceModel = SystemInfo.deviceModel,
-				OS = SystemInfo.operatingSystem,
-				DeviceId = deviceID,
-				CreateAccount = true,
-				InfoRequestParameters = InfoRequestParams
-			}, (result) => {
-				//Store Identity and session
-				_playFabId = result.PlayFabId;
-				_sessionTicket = result.SessionTicket;
-
-				//check if we want to get this callback directly or send to event subscribers.
-				if (callback == null && OnLoginSuccess != null)
-				{
-					//report login result back to the subscriber
-					OnLoginSuccess.Invoke(result);
-				}
-				else if (callback != null)
-				{
-					//report login result back to the caller
-					callback.Invoke(result);
-				}
-			}, (error) => {
-				//report errro back to the subscriber
-				if (callback == null && OnPlayFabError != null)
-				{
-					OnPlayFabError.Invoke(error);
-				}
-				else
-				{
-					//make sure the loop completes, callback with null
-					callback.Invoke(null);
-					//Output what went wrong to the console.
-					Debug.LogError(error.GenerateErrorReport());
-				}
-			});
-		};
-		DeviceIDManager.GetDeviceID();
+				//report login result back to the subscriber
+				OnLoginSuccess.Invoke(result);
+			}
+			else if (callback != null)
+			{
+				//report login result back to the caller
+				callback.Invoke(result);
+			}
+		}, (error) => {
+			//report errro back to the subscriber
+			if (callback == null && OnPlayFabError != null)
+			{
+				OnPlayFabError.Invoke(error);
+			}
+			else
+			{
+				//make sure the loop completes, callback with null
+				callback.Invoke(null);
+				//Output what went wrong to the console.
+				Debug.LogError(error.GenerateErrorReport());
+			}
+		});
 #else
+
 		PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
 		{
 			TitleId = PlayFabSettings.TitleId,

@@ -17,16 +17,8 @@ namespace Fourzy
 {
     public class AnalyticsManager : RoutinesBase
     {
-        /// <summary>
-        /// Log events instead of sending them
-        /// </summary>
-        public static bool DEBUG = false;
-
-// #if UNITY_EDITOR
-        private const string AMP_API_KEY = "4c62628ff8687c70a9fd201aea80db00";
-// #else
-//         private const string AMP_API_KEY = "300f3bfc4f1180cf072c49fcd198950f";
-// #endif
+        private const string AMP_PROD_KEY = "300f3bfc4f1180cf072c49fcd198950f";
+        private const string AMP_DEBUG_KEY = "4c62628ff8687c70a9fd201aea80db00";
 
         public const string BOARD_ID_KEY = "boardId";
         public const string LEVEL_ID = "levelId";
@@ -64,7 +56,7 @@ namespace Fourzy
             {
                 if (instance == null)
                 {
-                    Initialize(true);
+                    Initialize();
                 }
 
                 return instance;
@@ -119,11 +111,18 @@ namespace Fourzy
         {
             base.Awake();
 
+            string apiKey = AMP_PROD_KEY;
+
+            if (Debug.isDebugBuild || Application.isEditor)
+            {
+                apiKey = AMP_DEBUG_KEY;
+            }
+
             Amplitude amplitude = Amplitude.getInstance();
             amplitude.logging = true;
             amplitude.trackSessionEvents(true);
             amplitude.useAdvertisingIdForDeviceId();
-            amplitude.init(AMP_API_KEY);
+            amplitude.init(apiKey);
         }
 
         protected void Start()
@@ -144,7 +143,7 @@ namespace Fourzy
                (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
         }
 
-        public static void Initialize(bool _DEBUG = false)
+        public static void Initialize()
         {
             if (instance != null) return;
 
@@ -152,14 +151,7 @@ namespace Fourzy
             go.transform.SetParent(null);
             instance = go.AddComponent<AnalyticsManager>();
 
-            DEBUG = _DEBUG;
-
             DontDestroyOnLoad(go);
-
-            if (DEBUG)
-            {
-                Debug.Log("Analytics manager initialized.");
-            }
         }
         
         public static void SetUsetID(string userId)
@@ -186,7 +178,7 @@ namespace Fourzy
                 ["timeSinceGameCreated"] = timePassed,
             };
 
-            LogEvent("lobbyGameJoined", values, provider);
+            LogEvent("LOBBY_GAME_JOINED", values, provider);
         }
 
         public void LogRealtimeGameCompleted(
@@ -202,7 +194,7 @@ namespace Fourzy
             string opponentId)
         {
             LogEvent(
-                "realtimeGameCompleted",
+                "REALTIME_GAME_COMPLETE",
                 new Dictionary<string, object>()
                 {
                     ["area"] = area,
@@ -227,9 +219,12 @@ namespace Fourzy
 
         }
 
-        public void LogTutorialEvent(string tutorialName, string id, AnalyticsProvider provider = AnalyticsProvider.ALL)
+        public void LogTutorialEvent(
+            string tutorialName, 
+            string id, 
+            AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
-            LogEvent("tutorialStepComplete",
+            LogEvent("TUTORIAL_STEP_COMPLETE",
                 new Dictionary<string, object>()
                 {
                     ["id"] = id
@@ -404,40 +399,31 @@ namespace Fourzy
            Dictionary<string, object> values,
            AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
-            if (DEBUG)
+            foreach (Enum value in Enum.GetValues(provider.GetType()))
             {
-                Debug.Log(string.Format("{0}: {1}",
-                    @event,
-                    string.Join(", ", values.Select(_v => $"{_v.Key} = {_v.Value}"))));
-            }
-            else
-            {
-                foreach (Enum value in Enum.GetValues(provider.GetType()))
+                if (provider.HasFlag(value))
                 {
-                    if (provider.HasFlag(value))
+                    switch (value)
                     {
-                        switch (value)
-                        {
-                            case AnalyticsProvider.AMPLITUDE:
-                                Amplitude.Instance.logEvent(@event, values);
+                        case AnalyticsProvider.AMPLITUDE:
+                            Amplitude.Instance.logEvent(@event, values);
 
-                                break;
+                            break;
 
-                            case AnalyticsProvider.PLAYFAB:
-                                PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
-                                {
-                                    EventName = @event,
-                                    Body = values
-                                }, null, null);
+                        case AnalyticsProvider.PLAYFAB:
+                            PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
+                            {
+                                EventName = @event,
+                                Body = values
+                            }, null, null);
 
-                                break;
+                            break;
 
-                            case AnalyticsProvider.UNITY_ANALYTICS:
-                                Analytics.CustomEvent(@event, values);
+                        case AnalyticsProvider.UNITY_ANALYTICS:
+                            Analytics.CustomEvent(@event, values);
 
-                                break;
+                            break;
 
-                        }
                     }
                 }
             }

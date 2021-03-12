@@ -192,7 +192,7 @@ namespace Fourzy
 
             ExecutePerVersion.TryExecute();
             ThreadsQueuer.Initialize();
-            AnalyticsManager.Initialize(false);
+            AnalyticsManager.Initialize();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -221,7 +221,11 @@ namespace Fourzy
             UnityEngine.iOS.NotificationServices.ClearRemoteNotifications();
 #endif
 
-            if (SceneManager.GetActiveScene().name == MainMenuSceneName) StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
+            if (SceneManager.GetActiveScene().name == MainMenuSceneName)
+            {
+                StandaloneInputModuleExtended.GamepadFilter = 
+                    StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
+            }
 
             //StandaloneInputModuleExtended.instance.AddNoInputFilter("startDemoGame", Constants.DEMO_IDLE_TIME);
             //StandaloneInputModuleExtended.instance.AddNoInputFilter("highlightMoves", Constants.DEMO_HIGHLIGHT_POSSIBLE_MOVES_TIME);
@@ -333,10 +337,16 @@ namespace Fourzy
 
         public void OpenMainMenu()
         {
-            if (!isMainMenuLoaded) SceneManager.LoadScene(MainMenuSceneName);
+            if (!isMainMenuLoaded)
+            {
+                SceneManager.LoadScene(MainMenuSceneName);
+            }
 
             //unload gameplay scene 
-            if (isGameplaySceneLoaded) GamePlayManager.Instance.UnloadGamePlaySceene();
+            if (isGameplaySceneLoaded)
+            {
+                GamePlayManager.Instance.UnloadGamePlaySceene();
+            }
         }
 
         public void OpenDiscordPage()
@@ -355,13 +365,13 @@ namespace Fourzy
             GameContentManager.Instance.ResetFastPuzzles();
             GameContentManager.Instance.ResetPuzzlePacks();
             GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
+
             ResetHintInstructions();
         }
 
         public void ChallengePlayerRealtime(string playfabName)
         {
             FourzyPhotonManager.CreateRoom(RoomType.DIRECT_INVITE, expectedUser: playfabName);
-
         }
 
         public void ResetHintInstructions()

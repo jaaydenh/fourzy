@@ -245,21 +245,6 @@ namespace Fourzy._Updates
             }
         }
 
-        internal static AIProfile FromCurrentRating()
-        {
-            int rating = UserManager.Instance.lastCachedRating;
-
-            foreach (BotDifficulty botDifficulty in Current.BOT_SETTINGS.difficultyLevels)
-            {
-                if (rating <= botDifficulty.r)
-                {
-                    return botDifficulty.d;
-                }
-            }
-
-            return AIProfile.SimpleAI;
-        }
-
         private static Area[] AreasFromString(string value)
         {
             try
@@ -290,8 +275,6 @@ namespace Fourzy._Updates
     public class BotSettings
     {
         [JsonProperty]
-        internal BotDifficulty[] difficultyLevels;
-        [JsonProperty]
         internal float[] botMatchAfter;
         [JsonProperty]
         internal int[] ratingRange;
@@ -314,27 +297,5 @@ namespace Fourzy._Updates
         public float randomRematchAcceptTime => UnityEngine.Random.Range(rematchAcceptTime[0], rematchAcceptTime[1]);
         [JsonIgnore]
         public int randomRematchTimes => UnityEngine.Random.Range(maxRematchTimes[0], maxRematchTimes[1]);
-    }
-
-    [Serializable]
-    internal class BotDifficulty
-    {
-        internal int r
-        {
-            get => int.Parse(_r);
-            set => _r = value.ToString();
-        }
-        internal AIProfile d
-        {
-            get => (AIProfile)Enum.Parse(typeof(AIProfile), _d, true);
-            set => _d = value.ToString();
-        }
-
-        [JsonProperty("r")]
-        private string _r;
-        [JsonProperty("d")]
-        private string _d;
-
-        public BotDifficulty() { }
     }
 }

@@ -17,11 +17,6 @@ namespace Fourzy
         public static Area[] UNLOCKED_AREAS = { Area.TRAINING_GARDEN, Area.ENCHANTED_FOREST };
         public static BotSettings BOT_SETTINGS = new BotSettings()
         {
-            difficultyLevels = new BotDifficulty[] {
-                new BotDifficulty() { r = 9999, d = AIProfile.AggressiveAI },
-                new BotDifficulty() { r = 1800, d = AIProfile.SimpleAI },
-                new BotDifficulty() { r = 1600, d = AIProfile.EasyAI }
-            },
             botMatchAfter = new float[] { 10f, 15f },
             ratingRange = new int[] { -35, 75 },
             turnDelayTime = new float[] { 1.2f, 2.5f },

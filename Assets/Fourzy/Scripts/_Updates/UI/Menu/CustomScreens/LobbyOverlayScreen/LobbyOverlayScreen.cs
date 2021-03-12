@@ -296,7 +296,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 GameManager.Instance.Bot = new FourzyGameModel.Model.Player(
                     2,
                     UserManager.CreateNewPlayerName(),
-                    InternalSettings.FromCurrentRating())
+                    /*InternalSettings.FromCurrentRating()*/
+                    AIProfile.EasyAI)
                     {
                         HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID,
                         PlayerString = "2",
