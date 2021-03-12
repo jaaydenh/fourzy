@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 public class KeyChain {
 	
-	#if UNITY_IPHONE || UNITY_STANDALONE_OSX
+	#if UNITY_IPHONE
 	
 	[DllImport("__Internal")]
 	private static extern string getKeyChainUser();
