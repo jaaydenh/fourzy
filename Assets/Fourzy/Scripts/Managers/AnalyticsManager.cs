@@ -50,6 +50,8 @@ namespace Fourzy
         public const string TUTORIAL_NAME_KEY = "name";
         public const string TUTORIAL_STAGE_KEY = "key";
 
+        private Action playFabCachedEvents;
+
         public static AnalyticsManager Instance
         {
             get
@@ -394,6 +396,15 @@ namespace Fourzy
             LogEvent(eventType, values.ToDictionary(_value => _value.Key, _value => _value.Value), provider);
         }
 
+        public void FlushPlayfabEvents()
+        {
+            if (playFabCachedEvents != null)
+            {
+                playFabCachedEvents.Invoke();
+                playFabCachedEvents = null;
+            }
+        }
+
         public void LogEvent(
            string @event,
            Dictionary<string, object> values,
@@ -411,11 +422,18 @@ namespace Fourzy
                             break;
 
                         case AnalyticsProvider.PLAYFAB:
-                            PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
+                            if (PlayFabClientAPI.IsClientLoggedIn())
                             {
-                                EventName = @event,
-                                Body = values
-                            }, null, null);
+                                PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest
+                                {
+                                    EventName = @event,
+                                    Body = values
+                                }, null, null);
+                            }
+                            else
+                            {
+                                playFabCachedEvents += () => LogEvent(@event, values, AnalyticsProvider.PLAYFAB);
+                            }
 
                             break;
 

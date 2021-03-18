@@ -11,6 +11,8 @@ using PlayFab;
 using PlayFab.ClientModels;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 using System;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 /// <summary>
 /// Supported Authentication types
@@ -422,16 +424,44 @@ public class PlayFabAuthService
             }
         });
 
-#elif UNITY_IPHONE || UNITY_IOS && !UNITY_EDITOR
+#elif UNITY_IPHONE && !UNITY_EDITOR
+		
+		bool setId = false;
 		string id = KeyChain.BindGetKeyChainUser();
 
 		if (string.IsNullOrEmpty(id))
+		{
+			setId = true;
+		}
+        else
         {
+
+            try
+            {
+				Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(id);
+
+				if (!values.ContainsKey("uuid") || string.IsNullOrEmpty(values["uuid"]))
+				{
+					setId = true;
+				}
+				else
+				{
+					id = values["uuid"];
+				}
+			}
+            catch (Exception)
+            {
+				setId = true;
+				KeyChain.BindDeleteKeyChainUser();
+            }
+		}
+
+		if (setId)
+		{
 			id = SystemInfo.deviceUniqueIdentifier;
 			KeyChain.BindSetKeyChainUser("0", id);
-        }
-		
-		Debug.LogError(id + " device id");
+		}
+
 		PlayFabClientAPI.LoginWithIOSDeviceID(new LoginWithIOSDeviceIDRequest()
 		{
 			TitleId = PlayFabSettings.TitleId,

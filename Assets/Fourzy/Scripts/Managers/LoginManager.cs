@@ -352,14 +352,18 @@ namespace Fourzy
         {
             playfabId = result.PlayFabId;
             AnalyticsManager.SetUsetID(result.PlayFabId);
+            AnalyticsManager.Instance.FlushPlayfabEvents();
 
-            Debug.Log("PlayFabId: " + result.PlayFabId);
-            Debug.Log("SessionTicket: " + result.SessionTicket);
-            Debug.Log("EntityToken: " + result.EntityToken.EntityToken);
-            Debug.Log("TokenExpiration: " + result.EntityToken.TokenExpiration);
-            Debug.Log("Entity.Id: " + result.EntityToken.Entity.Id);
-            Debug.Log("Entity.Type: " + result.EntityToken.Entity.Type);
-            Debug.Log(result);
+            if (Application.isEditor || Debug.isDebugBuild)
+            {
+                Debug.Log("PlayFabId: " + result.PlayFabId);
+                Debug.Log("SessionTicket: " + result.SessionTicket);
+                Debug.Log("EntityToken: " + result.EntityToken.EntityToken);
+                Debug.Log("TokenExpiration: " + result.EntityToken.TokenExpiration);
+                Debug.Log("Entity.Id: " + result.EntityToken.Entity.Id);
+                Debug.Log("Entity.Type: " + result.EntityToken.Entity.Type);
+                Debug.Log(result);
+            }
 
             if (GameManager.Instance.showInfoToasts &&
                 !GameManager.Instance.Landscape)
@@ -432,7 +436,14 @@ namespace Fourzy
 
         public void LogMessage(string message)
         {
-            Debug.Log("Login Manager: " + message);
+            if (Application.isEditor || Debug.isDebugBuild)
+            {
+                Debug.Log("Login Manager: " + message);
+            }
+            else
+            {
+                Debug.Log("Photon token aquired");
+            }
         }
 
         private void OnProfileOK(GetEntityProfileResponse profile)
