@@ -15,10 +15,9 @@ namespace Fourzy
         public const Area DEFAULT_AREA = Area.ICE_PALACE;
         public const int DEFAULT_STANDALONE_CPU_DIFFICULTY = 1; //0-3
         public static Area[] UNLOCKED_AREAS = { Area.TRAINING_GARDEN, Area.ENCHANTED_FOREST };
-        public static BotSettings BOT_SETTINGS = new BotSettings()
+        public static BotGameSettings BOT_SETTINGS = new BotGameSettings()
         {
             botMatchAfter = new float[] { 10f, 15f },
-            ratingRange = new int[] { -35, 75 },
             turnDelayTime = new float[] { 1.2f, 2.5f },
             rematchAcceptTime = new float[] { 3f, 6f },
             maxRematchTimes = new int[] { 2, 4 },

@@ -4,8 +4,11 @@ using Fourzy._Updates.Managers;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
+using Newtonsoft.Json;
 using Photon.Pun;
 using Photon.Realtime;
+using PlayFab;
+using PlayFab.ClientModels;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -281,42 +284,57 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             StartRoutine("startBotMatch", waitTime, () =>
             {
-                if (wantToLeavePrompt && wantToLeavePrompt.isOpened)
+                //get bot profile from players' rating
+                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
                 {
-                    wantToLeavePrompt.CloseSelf();
-                }
+                    FunctionName = "botDataFromRating",
+                    GeneratePlayStreamEvent = true,
+                },
+                (result) =>
+                {
+                    BotSettings botSettings = 
+                        JsonConvert.DeserializeObject<BotSettings>(result.FunctionResult.ToString());
 
-                state = LobbyOverlayState.LOADING_BOT_GAME;
+                    Debug.Log("starting ai match for " + botSettings.AIProfile);
+                    if (wantToLeavePrompt && wantToLeavePrompt.isOpened)
+                    {
+                        wantToLeavePrompt.CloseSelf();
+                    }
 
-                GameManager.Instance.RealtimeOpponent = 
-                    new OpponentData(
-                        "bot", 
-                        UserManager.DefaultBotRating(), 
-                        Constants.GAMES_BEFORE_RATING_DISPLAYED);
-                GameManager.Instance.Bot = new FourzyGameModel.Model.Player(
-                    2,
-                    UserManager.CreateNewPlayerName(),
-                    /*InternalSettings.FromCurrentRating()*/
-                    AIProfile.EasyAI)
+                    state = LobbyOverlayState.LOADING_BOT_GAME;
+
+                    GameManager.Instance.RealtimeOpponent =
+                        new OpponentData(
+                            "bot",
+                            botSettings.r,
+                            Constants.GAMES_BEFORE_RATING_DISPLAYED);
+                    GameManager.Instance.Bot = new FourzyGameModel.Model.Player(
+                        2,
+                        UserManager.CreateNewPlayerName(),
+                        botSettings.AIProfile)
                     {
                         HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID,
                         PlayerString = "2",
                     };
 
-                SetData(playerGamepiece,
-                    GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
-                        GameManager.Instance.Bot.HerdId).player1Prefab);
+                    SetData(playerGamepiece,
+                        GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
+                            GameManager.Instance.Bot.HerdId).player1Prefab);
 
-                AnalyticsManager.Instance.LogOtherJoinedLobby(
-                    GameManager.Instance.Bot.Profile.ToString(),
-                    Time.time - lobbyCreatedAt);
+                    AnalyticsManager.Instance.LogOtherJoinedLobby(
+                        GameManager.Instance.Bot.Profile.ToString(),
+                        Time.time - lobbyCreatedAt);
 
-                StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame);
+                    StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame);
 
-                FourzyPhotonManager.TryLeaveRoom();
-                FourzyPhotonManager.Instance.JoinLobby();
+                    FourzyPhotonManager.TryLeaveRoom();
+                    FourzyPhotonManager.Instance.JoinLobby();
+                },
+                (error) => { Debug.LogError(error.ErrorMessage); });
             },
             null);
+
+
         }
 
         private void OnConnectionTimedOut()

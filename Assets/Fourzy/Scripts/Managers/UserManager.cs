@@ -520,11 +520,6 @@ namespace Fourzy
             return firstName + " " + lastName + Mathf.CeilToInt(UnityEngine.Random.Range(0f, 9999f)).ToString();
         }
 
-        public static int DefaultBotRating()
-        {
-            return Instance.lastCachedRating + InternalSettings.Current.BOT_SETTINGS.randomRating;
-        }
-
         private void OnNetworkAccess(bool networkAccess)
         {
             if (networkAccess)

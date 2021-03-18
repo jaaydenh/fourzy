@@ -1443,6 +1443,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (ratingUpdated) return;
 
             float winner = game.draw ? .5f : (game.IsWinner() ? 1f : 0f);
+
+            Debug.Log(winner);
             PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
                 FunctionName = "reportBotGameComplete",
@@ -1450,7 +1452,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 {
                     playerId = LoginManager.playfabId,
                     winner,
-                    rating = GameManager.Instance.RealtimeOpponent.Rating
+                    botId = game.opponent.Profile.ToString()
                 },
                 GeneratePlayStreamEvent = true,
             },

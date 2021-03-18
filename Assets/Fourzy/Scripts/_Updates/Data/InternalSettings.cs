@@ -49,7 +49,7 @@ namespace Fourzy._Updates
         internal Area[] UNLOCKED_AREAS { get; private set; } =
             AreasFromString(PlayerPrefs.GetString(PREFIX + "UNLOCKED_AREAS", "")) ??
             Constants.UNLOCKED_AREAS;
-        internal BotSettings BOT_SETTINGS { get; private set; } =
+        internal BotGameSettings BOT_SETTINGS { get; private set; } =
             BotSettingsFromString(PlayerPrefs.GetString(PREFIX + "BOT_SETTINGS", "")) ?? 
             Constants.BOT_SETTINGS;
 
@@ -258,11 +258,11 @@ namespace Fourzy._Updates
             }
         }
 
-        private static BotSettings BotSettingsFromString(string value)
+        private static BotGameSettings BotSettingsFromString(string value)
         {
             try
             {
-                return JsonConvert.DeserializeObject<BotSettings>(value);
+                return JsonConvert.DeserializeObject<BotGameSettings>(value);
             }
             catch (Exception)
             {
@@ -272,12 +272,10 @@ namespace Fourzy._Updates
     }
 
     [Serializable]
-    public class BotSettings
+    public class BotGameSettings
     {
         [JsonProperty]
         internal float[] botMatchAfter;
-        [JsonProperty]
-        internal int[] ratingRange;
         [JsonProperty]
         internal float[] turnDelayTime;
         [JsonProperty]
@@ -285,17 +283,28 @@ namespace Fourzy._Updates
         [JsonProperty]
         internal int[] maxRematchTimes;
 
-        public BotSettings() { }
+        public BotGameSettings() { }
 
         [JsonIgnore]
         public float randomMatchAfter => UnityEngine.Random.Range(botMatchAfter[0], botMatchAfter[1]);
-        [JsonIgnore]
-        public int randomRating => UnityEngine.Random.Range(ratingRange[0], ratingRange[1]);
         [JsonIgnore]
         public float randomTurnDelay => UnityEngine.Random.Range(turnDelayTime[0], turnDelayTime[1]);
         [JsonIgnore]
         public float randomRematchAcceptTime => UnityEngine.Random.Range(rematchAcceptTime[0], rematchAcceptTime[1]);
         [JsonIgnore]
         public int randomRematchTimes => UnityEngine.Random.Range(maxRematchTimes[0], maxRematchTimes[1]);
+    }
+    
+    [Serializable]
+    public class BotSettings
+    {
+        [JsonProperty]
+        internal int r;
+        [JsonProperty]
+        internal string d;
+
+        public AIProfile AIProfile => (AIProfile)Enum.Parse(typeof(AIProfile), d);
+
+        public BotSettings() { }
     }
 }
