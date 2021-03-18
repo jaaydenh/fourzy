@@ -117,12 +117,19 @@ namespace Fourzy._Updates.Managers
         {
             this.id = id;
             this.link = link;
-            this.responseType = contentContain ? NetCheckResponseType.ResponseContainContent : NetCheckResponseType.ResponseContent;
+            this.responseType = contentContain ? 
+                NetCheckResponseType.ResponseContainContent : 
+                NetCheckResponseType.ResponseContent;
             this.expectedHttpStatusCode = HttpStatusCode.OK;
             this.expectedContent = expectedContent;
         }
 
-        public NetCheckMethod(string id, string link, NetCheckResponseType responseType, HttpStatusCode expectedHttpStatusCode, string expectedContent)
+        public NetCheckMethod(
+            string id, 
+            string link, 
+            NetCheckResponseType responseType, 
+            HttpStatusCode expectedHttpStatusCode, 
+            string expectedContent)
         {
             this.id = id;
             this.link = link;
@@ -137,25 +144,44 @@ namespace Fourzy._Updates.Managers
             yield return www.SendWebRequest();
 
             // Check if there is any internet connectivity
-            if (www.isNetworkError || www.isHttpError || www.responseCode == 0)
+            if (www.result == UnityWebRequest.Result.ConnectionError ||
+                www.result == UnityWebRequest.Result.ProtocolError ||
+                www.responseCode == 0)
             {
                 status = NetStatus.NoDNSConnection;
                 yield break;
             }
 
             if (responseType == NetCheckResponseType.HTTPStatusCode)
-                status = www.responseCode.ToString() == ((int)expectedHttpStatusCode).ToString() ? NetStatus.Connected : NetStatus.WalledGarden;
+            {
+                status = www.responseCode.ToString() == ((int)expectedHttpStatusCode).ToString() ?
+                    NetStatus.Connected : 
+                    NetStatus.WalledGarden;
+            }
             else if (responseType == NetCheckResponseType.ResponseContent)
-                status = www.downloadHandler.text.Trim().Equals(expectedContent.Trim()) ? NetStatus.Connected : NetStatus.WalledGarden;
+            { 
+                status = www.downloadHandler.text.Trim().Equals(expectedContent.Trim()) ? 
+                    NetStatus.Connected : 
+                    NetStatus.WalledGarden; 
+            }
             else if (responseType == NetCheckResponseType.ResponseContainContent)
-                status = www.downloadHandler.text.Trim().Contains(expectedContent.Trim()) ? NetStatus.Connected : NetStatus.WalledGarden;
+            {
+                status = www.downloadHandler.text.Trim().Contains(expectedContent.Trim()) ?
+                    NetStatus.Connected : 
+                    NetStatus.WalledGarden;
+            }
         }
 
         public NetStatus GetCheckStatus() => status;
 
         public override string ToString() => id + ": " + link;
 
-        public override int GetHashCode() => id.GetHashCode() ^ link.GetHashCode() ^ responseType.GetHashCode() ^ expectedContent.GetHashCode() ^ expectedHttpStatusCode.GetHashCode();
+        public override int GetHashCode() => 
+            id.GetHashCode() ^ 
+            link.GetHashCode() ^ 
+            responseType.GetHashCode() ^ 
+            expectedContent.GetHashCode() ^ 
+            expectedHttpStatusCode.GetHashCode();
 
         public override bool Equals(object obj)
         {
@@ -167,8 +193,12 @@ namespace Fourzy._Updates.Managers
             else
             {
                 NetCheckMethod other = (NetCheckMethod)obj;
-                result = id.Equals(other.id) && link.Equals(other.link) && responseType.Equals(other.responseType)
-                    && expectedHttpStatusCode.Equals(other.expectedHttpStatusCode) && expectedContent.Equals(other.expectedContent);
+                result = 
+                    id.Equals(other.id) && 
+                    link.Equals(other.link) && 
+                    responseType.Equals(other.responseType) && 
+                    expectedHttpStatusCode.Equals(other.expectedHttpStatusCode) && 
+                    expectedContent.Equals(other.expectedContent);
             }
             return result;
         }

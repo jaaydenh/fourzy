@@ -21,8 +21,6 @@ namespace Fourzy
     [UnitySingleton(UnitySingletonAttribute.Type.ExistsInScene)]
     public class LoginManager : UnitySingleton<LoginManager>
     {
-        // private delegate void FacebookLoginCallback(AuthenticationResponse _resp);
-
         public static event Action<string> OnLoginMessage;
         public static event Action<bool> OnDeviceLoginComplete;
 
