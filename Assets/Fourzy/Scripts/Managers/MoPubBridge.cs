@@ -81,7 +81,7 @@ namespace Fourzy._Updates.Mechanics
 
         private void OnRewardedVideoClosedEvent(string adUnitID)
         {
-            if (GameManager.Instance.debugMessages) Debug.Log("rewarded video closed " + adUnitID);
+            Debug.Log("rewarded video closed " + adUnitID);
 
             onAdPlayed?.Invoke(adUnitID);
         }
@@ -108,7 +108,7 @@ namespace Fourzy._Updates.Mechanics
 
         private void OnRewardedVideoLoadedEvent(string adUnitID)
         {
-            if (GameManager.Instance.debugMessages) Debug.Log("rewarded video loaded " + adUnitID);
+            Debug.Log("rewarded video loaded " + adUnitID);
 
             if (cancelRewardedVideo) return;
 
@@ -127,8 +127,7 @@ namespace Fourzy._Updates.Mechanics
         {
             string adUniID = _rewardedVideoAdUnits[0];
 
-            if (GameManager.Instance.debugMessages)
-                Debug.Log("requesting video ad, location lat:" + GameManager.Instance.latitude + ", lon:" + GameManager.Instance.longitude);
+            Debug.Log("requesting video ad, location lat:" + GameManager.Instance.latitude + ", lon:" + GameManager.Instance.longitude);
 
             cancelRewardedVideo = false;
             loadingPrompt = PersistantMenuController.Instance.GetOrAddScreen<LoadingPromptScreen>();

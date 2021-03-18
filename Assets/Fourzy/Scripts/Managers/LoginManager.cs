@@ -363,8 +363,7 @@ namespace Fourzy
                 Debug.Log(result);
             }
 
-            if (GameManager.Instance.showInfoToasts &&
-                !GameManager.Instance.Landscape)
+            if (!GameManager.Instance.Landscape)
             {
                 GamesToastsController.ShowTopToast("Device Authentication Success");
             }

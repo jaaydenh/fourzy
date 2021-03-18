@@ -14,6 +14,7 @@ namespace Fourzy._Updates.UI.Toasts
     {
         public static GamesToastsController instance;
 
+        public RectTransform toastsParent;
         public int maxToastsVisible = 2;
         public ToastStylePair[] prefabs;
 
@@ -45,7 +46,9 @@ namespace Fourzy._Updates.UI.Toasts
 
             toastPrefabFastAccess = new Dictionary<ToastStyle, ToastStylePair>();
             foreach (ToastStylePair pair in prefabs)
+            {
                 toastPrefabFastAccess.Add(pair.style, pair);
+            }
         }
 
         protected void Update()
@@ -63,11 +66,15 @@ namespace Fourzy._Updates.UI.Toasts
 
             //fastfade if needed
             if (activeToasts.Count == maxToastsVisible)
+            {
                 activeToasts.Dequeue().Hide(.3f);
+            }
 
             //move other up
             foreach (GameToast toast in movableToast)
+            {
                 toast.MoveRelative(newToast.toastStepDistance, .4f);
+            }
 
             activeToasts.Enqueue(newToast);
             movableToast.Enqueue(newToast);
@@ -80,11 +87,15 @@ namespace Fourzy._Updates.UI.Toasts
 
             //fastfade if needed
             if (topActiveToasts.Count == maxToastsVisible)
+            {
                 topActiveToasts.Dequeue().Hide(.3f);
+            }
 
             //move other up
             foreach (GameToast toast in topMovableToast)
+            {
                 toast.MoveRelative(newToast.toastStepDistance, .4f);
+            }
 
             topActiveToasts.Enqueue(newToast);
             topMovableToast.Enqueue(newToast);
@@ -94,14 +105,20 @@ namespace Fourzy._Updates.UI.Toasts
         {
             //check if toasts pool with this style exists
             if (!toasts.ContainsKey(style))
+            {
                 toasts.Add(style, new List<GameToast>());
+            }
 
             //check if there is an available toasts, if not, create one
             foreach (GameToast toast in toasts[style])
+            {
                 if (toast.available)
+                {
                     return toast;
+                }
+            }
 
-            GameToast newToast = Instantiate(toastPrefabFastAccess[style].prefab, transform);
+            GameToast newToast = Instantiate(toastPrefabFastAccess[style].prefab, toastsParent);
 
             newToast.SetAlpha(0f);
             newToast.transform.localScale = Vector3.one;
@@ -118,8 +135,7 @@ namespace Fourzy._Updates.UI.Toasts
         /// <param name="sprite">Icon</param>
         public static void ShowToast(ToastStyle toastStyle, string message, Sprite sprite)
         {
-            if (!instance)
-                return;
+            if (!instance) return;
 
             GameToast toast = instance.GetToast(toastStyle);
             toast.SetData(instance, message, sprite);
@@ -134,8 +150,7 @@ namespace Fourzy._Updates.UI.Toasts
         /// <param name="iconStyle">Icon style</param>
         public static void ShowToast(ToastStyle toastStyle, string message, ToastIconStyle iconStyle)
         {
-            if (!instance)
-                return;
+            if (!instance) return;
 
             GameToast toast = instance.GetToast(toastStyle);
             toast.SetData(instance, message, iconStyle);
@@ -149,8 +164,7 @@ namespace Fourzy._Updates.UI.Toasts
         /// <param name="message">Message</param>
         public static void ShowToast(ToastStyle toastStyle, string message)
         {
-            if (!instance)
-                return;
+            if (!instance) return;
 
             GameToast toast = instance.GetToast(toastStyle);
             toast.SetData(instance, message);
@@ -160,8 +174,7 @@ namespace Fourzy._Updates.UI.Toasts
 
         public static void ShowTopToast(string message)
         {
-            if (!instance)
-                return;
+            if (!instance) return;
 
             GameToast toast = instance.GetToast(ToastStyle.TOP_TOAST);
             toast.SetData(instance, message);

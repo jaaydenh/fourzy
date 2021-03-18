@@ -54,13 +54,6 @@ namespace Fourzy._Updates.UI.Menu
             tabs = new List<MenuTab>(GetComponentsInChildren<MenuTab>(true));
         }
 
-        protected override void Start()
-        {
-            base.Start();
-
-            if (GameManager.Instance.Landscape) tabsBar.gameObject.SetActive(!GameManager.Instance.hideTabsBar);
-        }
-
         protected void OnDestroy()
         {
             swipeHandler.onSwipe -= OnSwipe;

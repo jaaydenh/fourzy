@@ -25,10 +25,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            fastPuzzlesUnlocked = PlayerPrefsWrapper.GetRewardRewarded("unlock_fast_puzzles_mode") || GameManager.Instance.defaultPuzzlesState;
+            fastPuzzlesUnlocked = 
+                PlayerPrefsWrapper.GetRewardRewarded("unlock_fast_puzzles_mode") || 
+                GameManager.Instance.defaultPuzzlesState;
             fastPuzzleButton.GetBadge("locked").badge.SetState(!fastPuzzlesUnlocked);
 
-            gauntletGameUnlocked = PlayerPrefsWrapper.GetRewardRewarded("unlock_gauntlet_mode") || GameManager.Instance.defaultGauntletState;
+            gauntletGameUnlocked = 
+                PlayerPrefsWrapper.GetRewardRewarded("unlock_gauntlet_mode") || 
+                GameManager.Instance.defaultGauntletState;
+
             gauntletGameButton.GetBadge("locked").badge.SetState(!gauntletGameUnlocked);
         }
 
@@ -65,19 +70,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void StartTutorialAdventure() => menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
 
         public void ResetTutorial() =>
-            PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>().OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding")));
+            PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>()
+                .OpenTutorial(HardcodedTutorials.GetByName((GameManager.Instance.Landscape ? 
+                    "OnboardingLandscape" : 
+                    "Onboarding")));
 
         public void OpenFastPuzzleScreen()
         {
             //check
             if (!fastPuzzlesUnlocked)
             {
-                menuController.GetOrAddScreen<PromptScreen>().Prompt(LocalizationManager.Value("puzzle_Ladder_title"),
-                    LocalizationManager.Value("puzzle_Ladder_desc"),
-                    LocalizationManager.Value("ok"),
-                    null,
-                    () => menuController.CloseCurrentScreen(),
-                    null);
+                menuController.GetOrAddScreen<PromptScreen>()
+                    .Prompt(LocalizationManager.Value("puzzle_Ladder_title"),
+                        LocalizationManager.Value("puzzle_Ladder_desc"),
+                        LocalizationManager.Value("ok"),
+                        null,
+                        () => menuController.CloseCurrentScreen(),
+                        null);
                 return;
             }
 
@@ -109,12 +118,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnInitialized();
 
             matchmakingScreen = menuController.GetOrAddScreen<MatchmakingScreen>();
-            if (body) onIPhoneX = body.GetComponent<OnIPhoneX>();
-            if (portalsHolder) portalsHolder.gameObject.SetActive(!GameManager.Instance.hidePortalWidgets);
-            if (onIPhoneX) onIPhoneX.CheckPlatform();
+            if (body)
+            {
+                onIPhoneX = body.GetComponent<OnIPhoneX>();
+            }
+            if (onIPhoneX)
+            {
+                onIPhoneX.CheckPlatform();
+            }
 
             //force open
-            if (GameManager.Instance.Landscape && @default) Open();
+            if (GameManager.Instance.Landscape && @default)
+            {
+                Open();
+            }
         }
     }
 }
