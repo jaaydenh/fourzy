@@ -7,15 +7,14 @@ namespace FourzyGameModel.Model
 {
     public static class BossGameFactory
     {
-        public static GameState CreateBossGame(Area BossArea, BossType Boss, Player Player, GameOptions Options = null, string SeedString = "")
+        public static GameState CreateBossGame(Area BossArea, BossType Boss, Player Player, GameOptions Options = null, BoardGenerationPreferences Preferences = null, string SeedString = "")
         {
             if (Options == null) Options = new GameOptions();
             Player BossPlayer = new Player(2, Boss.ToString());
             BossPlayer.BossType = Boss;
             BossPlayer.SpecialAbilityCount = 1;
             BossPlayer.Profile = AIProfile.BossAI;
-            GameBoard Board = BossFactory.CreateBoard(Boss, Options, SeedString);
-            //GameBoard Board = BoardFactory.CreateRandomBoard(Options, BossPlayer, Player, BossArea);
+            GameBoard Board = BossFactory.CreateBoard(Boss, Options, Preferences, SeedString);
             GameState BossGS = new GameState(Board,Options,1);
             BossGS.Players.Add(1, Player);
             BossGS.Players.Add(2, BossPlayer);

@@ -30,15 +30,21 @@ namespace FourzyGameModel.Model
             this.PlayerId = PlayerId;
         }
 
+        //Adjusted Valid Spell Location to include only edge spaces.
         public List<BoardLocation> GetValidSpellLocations(GameBoard Board)
         {
             List<BoardLocation> Locations = new List<BoardLocation>() { };
 
-            foreach (BoardSpace s in Board.Contents)
+            foreach (BoardLocation l in new BoardLocation(0,0).Ring(Board, Rotation.CLOCKWISE))
             {
-                if (ValidTargetLocation(s))
-                    Locations.Add(s.Location);
+                if (ValidTargetLocation(Board.ContentsAt(l))) Locations.Add(l);
             }
+
+            //foreach (BoardSpace s in Board.Contents)
+            //{
+            //    if (ValidTargetLocation(s))
+            //        Locations.Add(s.Location);
+            //}
 
             return Locations;
         }

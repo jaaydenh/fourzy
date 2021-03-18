@@ -13,7 +13,7 @@ namespace FourzyGameModel.Model
             }
         }
 
-        public const int MAX_GENERATOR_ATTEMPTS = 10;
+        public const int MAX_GENERATOR_ATTEMPTS = 50;
     }
 
     public enum LineType { VERTICAL, HORIZONTAL, DIAGONAL, NONE};
@@ -46,7 +46,8 @@ namespace FourzyGameModel.Model
         ARROW_TURN,
         ARROW_DOUBLETURN,
         ARROW_WING,
-        SINGULARITY
+        SINGULARITY,
+        FILL_THE_RING
     }
 
     public enum IngredientType { TERRAIN, LARGEFEATURE, SMALLFEATURE, NOISE,

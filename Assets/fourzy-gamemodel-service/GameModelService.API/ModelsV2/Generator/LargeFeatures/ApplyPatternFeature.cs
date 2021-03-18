@@ -9,7 +9,9 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
+
+        public TokenType InsertToken { get;  }
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -20,14 +22,15 @@ namespace FourzyGameModel.Model
         {
             this.Name = Pattern.ToString();
             this.Type = IngredientType.LARGEFEATURE;
-            this.Token = Token;
+            this.Tokens = new List<TokenType>() { Token };
+            this.InsertToken = Token;
 
             this.Pattern = Pattern;
         }
 
         public void Build(GameBoard Board)
         {
-            Board.AddToken(TokenFactory.Create(Token), Pattern.Locations, 0, true);
+            Board.AddToken(TokenFactory.Create(InsertToken), Pattern.Locations, 0, true);
         }
     }
 }

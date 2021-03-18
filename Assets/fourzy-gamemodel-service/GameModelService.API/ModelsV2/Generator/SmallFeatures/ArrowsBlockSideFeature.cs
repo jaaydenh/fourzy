@@ -9,7 +9,7 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; set; }
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -23,7 +23,7 @@ namespace FourzyGameModel.Model
         {
             this.Name = "Block With Arrow Pattern";
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
             this.RelativeDirection = RelativeDirection;
             this.BlockDirection = BlockDirection;
         }

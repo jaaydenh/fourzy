@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace FourzyGameModel.Model
@@ -195,7 +196,7 @@ namespace FourzyGameModel.Model
         }
 
 
-        public static string GenerateAIPlayerName(AIDifficulty Difficulty, int length = -1)
+        public static string GenerateAIPlayerName(AIDifficulty Difficulty, int length = -1, bool CreateFullName = true)
         {
             const string vowels = "aeiou";
             const string consonants = "bcdfghjklmnpqrstvwxyz";
@@ -213,7 +214,39 @@ namespace FourzyGameModel.Model
                     .Append(consonants[rnd.Next(consonants.Length)]);
             }
             name[0] = char.ToUpper(name[0]);
-            return name.ToString();
+
+            if (CreateFullName)
+                return GenerateAIPlayerFullName(Difficulty, name.ToString());
+            else
+                return name.ToString();
+        }
+
+        private static string GenerateAIPlayerFullName(AIDifficulty Difficulty, string FirstName)
+        {
+            //with a title, like 'the tearmaker'
+            //with a lastname based on a topic 'eggsalad', 'herdlord', 'thinkerer'
+            List<string> possibilities = new List<string>();
+            switch (Difficulty)
+            {
+                case AIDifficulty.Pushover:
+                    possibilities.AddRange(new List<string>() { });
+                    break;
+                case AIDifficulty.Easy:
+                    break;
+                case AIDifficulty.Medium:
+                    break;
+                case AIDifficulty.Hard:
+                    break;
+                case AIDifficulty.Doctor:
+                    FirstName = "Dr. " + FirstName;
+                    break;
+
+            }
+
+            string Surname = "";
+            string Title = "";
+            
+            return FirstName + " " + Surname + " " + Title;
         }
 
 

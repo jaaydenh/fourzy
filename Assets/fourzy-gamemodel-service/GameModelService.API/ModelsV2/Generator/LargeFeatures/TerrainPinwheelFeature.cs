@@ -9,7 +9,8 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
+
         public string Pattern { get; set; }
         public int Min { get; set; }
         public int Max { get; set; }
@@ -18,13 +19,14 @@ namespace FourzyGameModel.Model
         {
             this.Name = "Terrain Pinwheel";
             this.Type = IngredientType.LARGEFEATURE;
-            this.Token = Token;
+            this.Tokens = new List<TokenType>() { Token };
+
             this.Pattern = Pattern;
         }
 
         public void Build(GameBoard Board)
         {
-            Board.AddToken(TokenFactory.Create(Token), new PinWheelPattern(Board,Pattern,Min,Max).Locations, 0, true);
+            Board.AddToken(TokenFactory.Create(Tokens.First()), new PinWheelPattern(Board,Pattern,Min,Max).Locations, 0, true);
         }
     }
 }

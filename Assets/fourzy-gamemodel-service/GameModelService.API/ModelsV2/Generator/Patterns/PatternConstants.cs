@@ -7,7 +7,7 @@ namespace FourzyGameModel.Model
 {
     public static class PatternConstants
     {
-        
+        public const int BlobCreationPercentage = 80;
     }
 
     public  enum PatternComplexity { None=0, Simple=1, Medium=3, Difficult=5, BrainBuster=10, Any=-1 }

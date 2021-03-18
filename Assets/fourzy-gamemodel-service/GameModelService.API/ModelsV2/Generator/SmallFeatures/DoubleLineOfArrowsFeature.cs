@@ -1,10 +1,12 @@
-﻿namespace FourzyGameModel.Model
+﻿using System.Collections.Generic;
+
+namespace FourzyGameModel.Model
 {
     public class DoubleLineOfArrowsFeature : ISmallFeature, IBoardIngredient
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -18,7 +20,7 @@
             this.Insert = Insert;
             this.Name = "Double Line of Arrows";
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = Token;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
             this.Width = Width;
             this.Height = Height;
         }
@@ -40,7 +42,9 @@
                     break;
             }
 
-            foreach ( BoardLocation l in new SolidFullLinePattern(Board, Insert, LineType.HORIZONTAL).Locations)
+            //adjusted this formula.  We should put it back if it's a problem.
+            //foreach (BoardLocation l in new SolidFullLinePattern(Board, Insert, LineType.HORIZONTAL).Locations)
+            foreach ( BoardLocation l in new SolidFullLinePattern(Board, Insert, Line).Locations)
             {
                 Board.AddToken(new ArrowToken(Direction), l);
             }

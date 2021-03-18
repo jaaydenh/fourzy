@@ -64,7 +64,7 @@ namespace FourzyGameModel.Model
         {
             get
             {
-                return TokenConstants.COMPLEXITY_HARD;
+                return 75;
             }
         }
 

@@ -107,12 +107,12 @@ namespace FourzyGameModel.Model
 
         public const int DefaultCountdown = 4;
 
-        public const int COMPLEXITY_SIMPLE = 1;
-        public const int COMPLEXITY_BASIC = 2;
-        public const int COMPLEXITY_NORMAL = 3;
-        public const int COMPLEXITY_MEDIUM = 4;
-        public const int COMPLEXITY_HARD = 5;
-        public const int COMPLEXITY_CHALLENGE = 10;
+        public const int COMPLEXITY_SIMPLE = 10;
+        public const int COMPLEXITY_BASIC = 20;
+        public const int COMPLEXITY_NORMAL = 30;
+        public const int COMPLEXITY_MEDIUM = 40;
+        public const int COMPLEXITY_HARD = 50;
+        public const int COMPLEXITY_CHALLENGE = 100;
 
 
         public static Direction GetOrientation(char orientation)
@@ -199,6 +199,10 @@ namespace FourzyGameModel.Model
                     return MoveMethod.HORIZONTAL_PACE;
                 case 'V':
                     return MoveMethod.VERTICAL_PACE;
+                case '+':
+                    return MoveMethod.RING_CLOCKWISE;
+                case '-':
+                    return MoveMethod.RING_COUNTERCLOCKWISE;
             }
             return MoveMethod.NONE;
         }
@@ -215,6 +219,10 @@ namespace FourzyGameModel.Model
                     return "H";
                 case MoveMethod.VERTICAL_PACE:
                     return "V";
+                case MoveMethod.RING_CLOCKWISE:
+                    return "+";
+                case MoveMethod.RING_COUNTERCLOCKWISE:
+                    return "-";
             }
             return "";
         }
@@ -254,6 +262,6 @@ namespace FourzyGameModel.Model
 
     }
 
-    public enum MoveMethod { HORIZONTAL_PACE, VERTICAL_PACE, CLOCKWISE, COUNTERCLOCKWISE, NONE, WRAPAROUND };
+    public enum MoveMethod { HORIZONTAL_PACE, VERTICAL_PACE, CLOCKWISE, COUNTERCLOCKWISE, RING_CLOCKWISE, RING_COUNTERCLOCKWISE, WRAPAROUND, RANDOM, NONE};
 
 }

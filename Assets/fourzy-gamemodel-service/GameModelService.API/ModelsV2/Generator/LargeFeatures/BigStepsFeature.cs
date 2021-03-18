@@ -9,7 +9,8 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
+
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -21,7 +22,7 @@ namespace FourzyGameModel.Model
         {
             this.Name = "Big Steps";
             this.Type = IngredientType.LARGEFEATURE;
-            this.Token = Token;
+            this.Tokens = new List<TokenType>() { Token };
             this.Height = Height;
             this.Width = Width;
         }
@@ -41,7 +42,7 @@ namespace FourzyGameModel.Model
                 for (int c = 0; c <Width; c++)
                 {
                     if (c>=r)
-                        Board.AddToken(TokenFactory.Create(Token), 
+                        Board.AddToken(TokenFactory.Create(Tokens.First()), 
                             new BoardLocation(Insert.Row + r, Insert.Column + c));
                 }
             }

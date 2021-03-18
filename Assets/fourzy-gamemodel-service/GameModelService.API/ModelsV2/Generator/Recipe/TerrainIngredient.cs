@@ -9,7 +9,8 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
+
 
         public IBoardPattern Pattern { get; set; }
         public IToken TokenPattern { get; set; }
@@ -18,7 +19,8 @@ namespace FourzyGameModel.Model
         {
             this.Name = "Terrain";
             this.Type = IngredientType.TERRAIN;
-            this.Token = TokenPattern.Type;
+            this.Tokens = new List<TokenType>() { TokenPattern.Type };
+
             this.TokenPattern = TokenPattern;
             this.Pattern = Pattern;
         }

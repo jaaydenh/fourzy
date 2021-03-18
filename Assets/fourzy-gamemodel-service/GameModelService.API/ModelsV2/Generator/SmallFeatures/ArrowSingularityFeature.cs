@@ -9,7 +9,8 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
+
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -19,17 +20,19 @@ namespace FourzyGameModel.Model
 
         public AddTokenMethod AddMethod { get; set; }
         public bool ReplaceTokens { get; set; }
+        public bool PlaceFourWayAtCenter { get; set; }
 
-        public ArrowSingularityFeature(AddTokenMethod AddMethod = AddTokenMethod.ONLY_TERRAIN, bool ReplaceTokens = false)
+        public ArrowSingularityFeature(AddTokenMethod AddMethod = AddTokenMethod.ONLY_TERRAIN, bool ReplaceTokens = false, bool PlaceFourWayAtCenter = false)
         {
             this.Name = "Singularity";
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
 
             this.AddMethod = AddMethod;
             this.ReplaceTokens = ReplaceTokens;
             this.Width = -1;
             this.Height = -1;
+            this.PlaceFourWayAtCenter = PlaceFourWayAtCenter;
         }
 
 
@@ -40,7 +43,8 @@ namespace FourzyGameModel.Model
             Board.AddToken(new ArrowToken(Direction.UP), new BoardLocation(Insert.Row -1, Insert.Column));
             Board.AddToken(new ArrowToken(Direction.RIGHT), new BoardLocation(Insert.Row, Insert.Column-1));
             Board.AddToken(new ArrowToken(Direction.LEFT), new BoardLocation(Insert.Row, Insert.Column+1));
-
+            if (PlaceFourWayAtCenter)
+                Board.AddToken(new FourWayArrowToken(), Insert, AddMethod, ReplaceTokens);
         }
     }
     

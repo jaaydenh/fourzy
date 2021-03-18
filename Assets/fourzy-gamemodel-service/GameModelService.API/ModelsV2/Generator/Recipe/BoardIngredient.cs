@@ -9,7 +9,7 @@ namespace FourzyGameModel.Model
     {
         string Name { get; }
         IngredientType Type { get; }
-        TokenType Token {get; }
+        List <TokenType> Tokens {get; }
                 
         void Build(GameBoard Board);
     }

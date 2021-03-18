@@ -9,7 +9,8 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
+
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -23,7 +24,7 @@ namespace FourzyGameModel.Model
         {
             this.Name = "Ice Pillars";
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = Token;
+            this.Tokens = new List<TokenType>() { Token };
 
             this.Patterns = new Dictionary<string, int>();
             this.Patterns.Add("SymmetricOutsideBlock", 5);

@@ -6,6 +6,7 @@ namespace FourzyGameModel.Model
 {
     public class FourzyGame
     {
+        public GameState InitialState;
         public GameState LastState;
         public GameState State;
         public List<GameAction> GameActions;
@@ -23,6 +24,7 @@ namespace FourzyGameModel.Model
             this.State.Players.Add(2, new Player(2, "Second"));
             this.GameType = GameType.STANDARD;
             this.State.ActivePlayerId = 1;
+            this.InitialState = new GameState(this.State);
         }
 
         public FourzyGame(GameState gameState)
@@ -30,6 +32,7 @@ namespace FourzyGameModel.Model
             this.State = new GameState(gameState);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.STANDARD;
+            this.InitialState = new GameState(this.State);
         }
 
         public FourzyGame(GameStateData gameStateData)
@@ -37,6 +40,8 @@ namespace FourzyGameModel.Model
             this.State = new GameState(gameStateData);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.STANDARD;
+            this.InitialState = new GameState(this.State);
+
         }
 
         //For 2 Player Games        
@@ -52,6 +57,8 @@ namespace FourzyGameModel.Model
             this.State.Players.Add(2, Player2);
             this.GameType = GameType.STANDARD;
             this.State.ActivePlayerId = 1;
+            this.InitialState = new GameState(this.State);
+
         }
 
         // Select a Area and create a random board.
@@ -146,6 +153,8 @@ namespace FourzyGameModel.Model
 
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.STANDARD;
+            this.InitialState = new GameState(this.State);
+
         }
 
         // Pass in a Board
@@ -159,6 +168,7 @@ namespace FourzyGameModel.Model
             this.State.Players.Add(2, Player2);
             this.GameType = GameType.STANDARD;
             this.State.ActivePlayerId = FirstPlayerId;
+            this.InitialState = new GameState(this.State);
         }
 
         //Pass in a Board Definition.
@@ -171,6 +181,7 @@ namespace FourzyGameModel.Model
             this.State.Players.Add(2, Player2);
             this.GameType = GameType.STANDARD;
             if (Options != null) this.State.Options = Options;
+            this.InitialState = new GameState(this.State);
         }
 
 
@@ -203,6 +214,8 @@ namespace FourzyGameModel.Model
 
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
+            this.InitialState = new GameState(this.State);
+
         }
 
         public FourzyGame(GameBoardDefinition definition, AIProfile Profile, Player Player1, int FirstPlayerId = 1, Player AI = null)
@@ -215,6 +228,8 @@ namespace FourzyGameModel.Model
                 AI = new Player(2, Profile.ToString(), Profile);
             this.State.Players.Add(2, AI);
             this.GameType = GameType.STANDARD;
+            this.InitialState = new GameState(this.State);
+
         }
 
         //THE GAUNTLET
@@ -232,6 +247,8 @@ namespace FourzyGameModel.Model
             this.State = GauntletFactory.Create(Human, GauntletLevel, /*Status*/membersCount, CurrentArea, DifficultModifier, Options, SeedString);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
+            this.InitialState = new GameState(this.State);
+
         }
 
         //Create a boss match with a specific board.
@@ -240,6 +257,8 @@ namespace FourzyGameModel.Model
             this.State = BossGameFactory.CreateBossGame(definition, Boss, Player, Options);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
+            this.InitialState = new GameState(this.State);
+
         }
 
         //Create a boss match in an selected Area.
@@ -248,6 +267,7 @@ namespace FourzyGameModel.Model
             this.State = BossGameFactory.CreateBossGame(Area, Boss, Player, Options);
             this.playerTurnRecord = new List<PlayerTurn>();
             this.GameType = GameType.AI;
+            this.InitialState = new GameState(this.State);
         }
 
         #endregion "Constructors"

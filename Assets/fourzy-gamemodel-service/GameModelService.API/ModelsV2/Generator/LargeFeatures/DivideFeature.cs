@@ -10,7 +10,8 @@ namespace FourzyGameModel.Model
         public LargeFeatureType Feature { get { return LargeFeatureType.DIVIDE; } }
         public string Name { get { return "Divide"; } }
         public IngredientType Type { get { return IngredientType.LARGEFEATURE; } }
-        public TokenType Token { get; }
+        public List<TokenType> Tokens { get; }
+
         public int DivideRatio { get; set; }
         public LineType DivideType { get; set; }
         public IToken TokenA { get; set; }
@@ -22,7 +23,8 @@ namespace FourzyGameModel.Model
             this.DivideType = DivideType;
             this.TokenA = TokenA;
             this.TokenB = TokenB;
-            this.Token = TokenA.Type;
+            this.Tokens = new List<TokenType>() { TokenA.Type, TokenB.Type };
+
         }
 
         public void Build(GameBoard Board)

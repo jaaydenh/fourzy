@@ -11,17 +11,40 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; set; }
         public List<IBoardIngredient> Ingredients { get; set; }
-        public List<TokenType> Tokens { get; set; }
-        public PatternComplexity Complexity { get; set; }
+
+
+
+        //covert this to code instead of maintaining list.
+        public List<TokenType> Tokens { get
+            {
+                List<TokenType> tokens = new List<TokenType>();
+                foreach (IBoardIngredient i in Ingredients)
+                {
+                    foreach (TokenType t in i.Tokens)
+                    if (!tokens.Contains(t)) tokens.Add(t);
+                }
+                return tokens;
+            }
+        }
+
+        //public PatternComplexity Complexity { get; set; }
+        // Change to upper and lower bounds.  This will be arbritary, but will trigger use of recipe
+
+        public int ComplexityHighThreshold { get; set; }
+        public int ComplexityLowThreshold { get; set; }
+
+        //It might be worth converting this to determine based on incredients
+        //For now, we may need to flag them manually.
         public bool ContainsRandom { get; set; }
 
-        public BoardRecipe(string Name, PatternComplexity Complexity = PatternComplexity.None)
+        public BoardRecipe(string Name, int ComplexityLowThreshold=-1, int ComplexityHighThreshold =-1)
         {
             this.Name = Name;
             this.Ingredients = new List<IBoardIngredient>();
-            this.Complexity = Complexity;
-            this.Tokens = new List<TokenType>();
+            //this.Tokens = new List<TokenType>();
             this.ContainsRandom = false;
+            this.ComplexityHighThreshold = ComplexityHighThreshold;
+            this.ComplexityLowThreshold = ComplexityLowThreshold;
         }
 
         public void Build(GameBoard Board)
@@ -35,7 +58,7 @@ namespace FourzyGameModel.Model
         public void AddIngredient(IBoardIngredient NewIngredient)
         {
             Ingredients.Add(NewIngredient);
-            Tokens.Add(NewIngredient.Token);
+            //Tokens.Add(NewIngredient.Token);
         }
     }
 }

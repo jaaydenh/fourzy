@@ -9,7 +9,8 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
+
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -25,7 +26,7 @@ namespace FourzyGameModel.Model
             this.Insert = InsertLocation;
             this.Name = "In Arrow Pattern";
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
             this.Solid = Solid;
             this.AddMethod = AddTokenMethod.ONLY_TERRAIN;
             this.ReplaceTokens = false;
@@ -36,7 +37,7 @@ namespace FourzyGameModel.Model
             this.Insert = new BoardLocation(0,0);
             this.Name = "In Arrow Pattern";
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
             this.Solid = false;
             this.AddMethod = AddTokenMethod.ONLY_TERRAIN;
             this.ReplaceTokens = false;
@@ -47,7 +48,7 @@ namespace FourzyGameModel.Model
         {
             if (Insert.Row == 0 && Insert.Column == 0)
             {
-                Insert = Board.Random.RandomLocation(new BoardLocation(1, 1), Board.Rows - 2, Board.Columns - 2);
+                Insert = Board.Random.RandomLocation(new BoardLocation(2, 2), Board.Rows - 3, Board.Columns - 3);
             }
             int count = 0;
             foreach (BoardLocation l in Insert.Look(Board,Direction.UP))

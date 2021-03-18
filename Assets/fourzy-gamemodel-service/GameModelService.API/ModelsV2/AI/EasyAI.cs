@@ -10,10 +10,10 @@ namespace FourzyGameModel.Model
     public class EasyAI : AIPlayer
     {
         private GameState EvalState { get; set; }
-        private int InitialChanceToWin = 0;
-        private int ChanceToWinPerPiece = 2;
+        //private int InitialChanceToWin = 0;
+        //private int ChanceToWinPerPiece = 2;
         private int InitialBlockChance = 90;
-        private int ChanceToBlockPerPiece = -2;
+        //private int ChanceToBlockPerPiece = -2;
         private int NumberOfMovesToConsider = 7;
 
         public EasyAI(GameState State)

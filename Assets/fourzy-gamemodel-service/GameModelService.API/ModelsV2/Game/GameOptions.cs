@@ -10,6 +10,7 @@ namespace FourzyGameModel.Model
         public int Columns = Constants.DefaultColumns;
         public bool MovesReduceHerd = false;
         public bool PlayersUseSpells = false;
+        public bool TimerActive = false;
 
         //Maybe some other choices/settings related to game
         //string GameType = "";

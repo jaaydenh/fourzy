@@ -9,7 +9,8 @@ namespace FourzyGameModel.Model
     {
         public string Name { get { return "ArrowStorm"; } }
         public IngredientType Type { get; }
-        public TokenType Token { get; }
+        public List<TokenType> Tokens { get; }
+
 
         public LargeFeatureType Feature { get { return LargeFeatureType.ARROW_STORM; } }
         public int NumberCycles { get; set; }
@@ -17,7 +18,7 @@ namespace FourzyGameModel.Model
         public ArrowStormFeature(int NumberCycles = 3)
         {
             this.NumberCycles = NumberCycles;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
         }
 
         public void Build(GameBoard Board)

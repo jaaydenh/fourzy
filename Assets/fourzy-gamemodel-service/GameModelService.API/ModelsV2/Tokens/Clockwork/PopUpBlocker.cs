@@ -27,7 +27,7 @@ namespace FourzyGameModel.Model
             get
             {
                 return TokenConstants.PopUpBlocker.ToString()
-                       + int.Parse(Raised.ToString()).ToString()
+                       + (Raised ? 1:0).ToString()
                        + Frequency.ToString()
                        + Countdown.ToString();
             }
@@ -38,7 +38,7 @@ namespace FourzyGameModel.Model
             get
             {
                 return new List<string>() { TokenConstants.PopUpBlocker.ToString(),
-                                            int.Parse( Raised.ToString() ).ToString(),
+                                            (Raised ? 1:0).ToString(),
                                             Frequency.ToString(),
                                             Countdown.ToString()};
             }
@@ -87,7 +87,8 @@ namespace FourzyGameModel.Model
             StandardTokenInit();
 
             this.Type = TokenType.POPUP_BLOCKER;
-            this.TokenCharacter = 'B';
+            this.TokenCharacter = TokenConstants.PopUpBlocker;
+            this.Countdown = Frequency;
             this.Frequency = Frequency;
             this.Raised = Raised;
             this.DestroyPiece = false;
@@ -107,7 +108,7 @@ namespace FourzyGameModel.Model
 
             if (Notation.Length > 1)
             {
-                this.Raised = bool.Parse(Notation[1].ToString());
+                this.Raised = Notation[1] == '1';
             }
 
             if (Notation.Length > 2)
@@ -168,7 +169,7 @@ namespace FourzyGameModel.Model
                     Space.Pieces.Clear();
                 } else
                 {
-                    //unless 'destory' mode is activated, popup blocker will remain down.
+                    //unless 'destroy' mode is activated, popup blocker will remain down.
                     return;
                 }
             }

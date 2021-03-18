@@ -7,56 +7,77 @@ namespace FourzyGameModel.Model
 {
     public abstract class BoardGenerator
     {
+        public abstract Area Area { get; } 
+        public abstract string Name {  get;  }
+
+        //Each generator will have complexities in a defined range. 
+        public abstract int MinComplexity { get; }
+        public abstract int MaxComplexity { get; }
+
+        //These are used to determine which recipes to use.
+        protected GameOptions Options;
+        protected BoardGenerationPreferences Preferences;
+
+        //Concept of noise no longer being used at this level.
+
+        //public virtual int MinNoise { get { return 0; } }
+        //public virtual int MaxNoise { get { return 10; } }
+        //public virtual Dictionary<string, int> NoiseTokens { get; set; }
+        //public virtual string BaseTerrain { get { return "empty"; } }
+
+        ////Need to review this section. Going to comment out for now.
+        //public virtual Dictionary<string, int> TerrainTypes { get; set; }
+        //public static Dictionary<string, int> LineTypes = new Dictionary<string, int>()
+        //    {
+        //     { "vertical", 34},
+        //     { "horizontal", 34 },
+        //     { "diagonal", 35}
+        //};
+        //public List<TokenType> AllowedTokens { get; set; }
+
+
+        //REVIEW
+        //Should be converted to Get Function.  Allow Random is a flag to determine whether we want to include random elements in the creation
+        public bool AllowRandom { get { return Preferences.IncludesRandomTokens; } }
+
+        //A random object is created with a seed to generate a board
         public RandomTools Random { get; set; }
-        public List<TokenType> AllowedTokens {get; set;}
+        public string SeedString { get; set; }
 
-        public string Name = "Base Board Generator";
-
-
-        public virtual int MinNoise { get { return 0; } }
-        public virtual int MaxNoise { get { return 10; } }
-        public virtual Dictionary<string, int> NoiseTokens { get; set; }
-        public virtual string base_terrain { get { return "empty"; } }
-        public virtual Dictionary<string, int> TerrainTypes { get; set; }
-     
-        public static Dictionary<string, int> LineTypes = new Dictionary<string, int>()
-            {
-             { "vertical", 34},
-             { "horizontal", 34 },
-             { "diagonal", 35}
-        };
-
-        public virtual bool AllowRandom { get; set; }
-        public virtual string RequestedRecipeName { get; set; }
-        public virtual Dictionary<BoardRecipe, int> Recipes { get; set; }
-        public virtual Area Area { get { return Area.NONE; } }
-
+        //A list of the recipes used by the generator and weight for probability.
+        public Dictionary<BoardRecipe, int> Recipes { get; set; }
+    
         public virtual void Initialize()
         {
 
         }
 
-        public virtual GameBoard GenerateBoard(int Rows, int Columns, string SeedString = "", int DesiredMinComplexity = -1, int DesiredMaxComplexity = -1)
+        //public virtual GameBoard GenerateBoard(int Rows, int Columns, string SeedString = "", int DesiredMinComplexity = -1, int DesiredMaxComplexity = -1)
+              
+        public virtual GameBoard GenerateBoard()
         {
             GameBoard NewBoard = null;
             int count = 0;
-            NewBoard = BuildBoard(Rows, Columns, SeedString);
+            NewBoard = BuildBoard();
+            BoardGeneratorTester Tester = new BoardGeneratorTester();
 
-            while (!BoardGeneratorTester.TestGeneratedBoard(NewBoard) && count++ < 100)
-                NewBoard = BuildBoard(Rows, Columns, SeedString);
+            while (!Tester.TestGeneratedBoard(NewBoard) && count++ < BoardGeneratorConstants.MAX_GENERATOR_ATTEMPTS)
+                NewBoard = BuildBoard();
 
             return NewBoard;
         }
 
-        public GameBoard BuildBoard(int Rows, int Columns, string SeedString)
+        public virtual GameBoard BuildBoard()
         {
-            GameBoard NewBoard = BoardFactory.CreateDefaultBoard(Rows, Columns);
+            GameBoard NewBoard = BoardFactory.CreateDefaultBoard(Options.Rows, Options.Columns);
             NewBoard.Random = new RandomTools(SeedString);
             BoardRecipe CurrentRecipe = null;
 
             if (Recipes == null) return null;
             if (Recipes.Count == 0) return null;
 
+            string RequestedRecipeName = "";
+            if (RequestedRecipeName.Length == 0 && Preferences.RequestedRecipe.Length > 0) RequestedRecipeName = Preferences.RequestedRecipe;
             if (RequestedRecipeName.Length > 0)
             {
                 foreach (BoardRecipe r in Recipes.Keys)
@@ -65,11 +86,46 @@ namespace FourzyGameModel.Model
                 }
             }
 
-            if (CurrentRecipe == null) CurrentRecipe = NewBoard.Random.RandomWeightedRecipe(Recipes);
+            //No recipe found. Let's pick one.
+            //Use information from Board Preferences.
+            if (CurrentRecipe == null)
+            {
+                //1. Eliminate bad recipes.
+                foreach(BoardRecipe r in Recipes.Keys)
+                {
+                    if (
+                        (Preferences.TargetComplexityLow > 0 && r.ComplexityLowThreshold > 0 && r.ComplexityLowThreshold > Preferences.TargetComplexityHigh)
+                        || (Preferences.TargetComplexityHigh > 0 && r.ComplexityHighThreshold > 0 && r.ComplexityHighThreshold < Preferences.TargetComplexityLow)
+                        || (!Preferences.IncludesRandomTokens && r.ContainsRandom)
+                        ) { 
+                        Recipes.Remove(r); 
+                        continue; }
+
+                    if (Preferences.AllowedTokens.Count >0)
+                    foreach (TokenType t in r.Tokens)
+                    {
+                        if (!Preferences.AllowedTokens.Contains(t)) { Recipes.Remove(r); continue; }
+                    }
+
+                    if (Preferences.ForbiddenTokens.Count > 0)
+                        foreach (TokenType t in r.Tokens)
+                        {
+                            if (Preferences.ForbiddenTokens.Contains(t)) { Recipes.Remove(r); continue; }
+                        }
+                }
+   
+                CurrentRecipe = NewBoard.Random.RandomWeightedRecipe(Recipes);
+            }
 
             foreach (IBoardIngredient Ingredient in CurrentRecipe.Ingredients)
             {
-                NewBoard = ApplyIngredient(NewBoard, Ingredient);
+                try
+                {
+                    NewBoard = ApplyIngredient(NewBoard, Ingredient);
+                }
+                catch (Exception ex){
+                    string TestMessage = ex.Message;
+                }
             }
 
             NewBoard.Area = Area;
@@ -87,12 +143,17 @@ namespace FourzyGameModel.Model
             return RecipeList;
         }
 
-        public virtual List<BoardRecipe> GetRecipes(PatternComplexity Complexity)
+        public virtual List<BoardRecipe> GetRecipesInComplexityRange(int Low, int High)
         {
             List<BoardRecipe> RecipeList = new List<BoardRecipe>();
             foreach (BoardRecipe r in Recipes.Keys)
             {
-                if (r.Complexity == Complexity) RecipeList.Add(r);
+                if (
+                      (Low > 0 && r.ComplexityLowThreshold > 0 && r.ComplexityLowThreshold > High)
+                      || (High > 0 && r.ComplexityHighThreshold > 0 && r.ComplexityHighThreshold < Low)
+                      ) continue;
+                
+                RecipeList.Add(r);
             }
 
             return RecipeList;
@@ -115,23 +176,35 @@ namespace FourzyGameModel.Model
             return RecipeList;
         }
 
-        public virtual List<BoardRecipe> GetRecipes(PatternComplexity Complexity, List<TokenType> AllowedTokens)
+        public virtual List<BoardRecipe> GetRecipes(BoardGenerationPreferences Preferences)
         {
             List<BoardRecipe> RecipeList = new List<BoardRecipe>();
 
             foreach (BoardRecipe r in Recipes.Keys)
             {
-                if (r.Complexity != Complexity) continue;
-                bool tokens_allowed = true;
-                foreach (TokenType t in r.Tokens)
+                if (
+                    (Preferences.TargetComplexityLow > 0 && r.ComplexityLowThreshold > 0 && r.ComplexityLowThreshold > Preferences.TargetComplexityHigh)
+                    || (Preferences.TargetComplexityHigh > 0 && r.ComplexityHighThreshold > 0 && r.ComplexityHighThreshold < Preferences.TargetComplexityLow)
+                    || (!Preferences.IncludesRandomTokens && r.ContainsRandom)
+                    )
                 {
-                    if (!AllowedTokens.Contains(t))  tokens_allowed = false; 
+                    continue;
                 }
-                if (tokens_allowed)
-                    if (AllowRandom || !r.ContainsRandom)
-                        RecipeList.Add(r);
-            }
 
+                if (Preferences.AllowedTokens.Count > 0)
+                    foreach (TokenType t in r.Tokens)
+                    {
+                        if (!Preferences.AllowedTokens.Contains(t)) {  continue; }
+                    }
+
+                if (Preferences.ForbiddenTokens.Count > 0)
+                    foreach (TokenType t in r.Tokens)
+                    {
+                        if (Preferences.ForbiddenTokens.Contains(t)) {  continue; }
+                    }
+
+                RecipeList.Add(r);
+            }
 
             return RecipeList;
         }

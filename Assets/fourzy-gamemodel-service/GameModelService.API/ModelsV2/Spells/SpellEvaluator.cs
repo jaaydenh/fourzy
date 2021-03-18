@@ -14,8 +14,8 @@ namespace FourzyGameModel.Model
 
             switch (Spell.SpellId)
             {
+                //do not return any locations.
                 case SpellId.SUN:
-                    int a = 1;
                     break;
                 default:
                     Locations = Spell.GetValidSpellLocations(Board);

@@ -55,7 +55,7 @@ namespace FourzyGameModel.Model
                 //go with the the flow.
                 BoardLocation next = flow.Neighbor(FlowDirection);
 
-                bool turn = false;
+                //bool turn = false;
                 if (!next.OnBoard(Board))
                 {
                     if (Turns.Count == 0)

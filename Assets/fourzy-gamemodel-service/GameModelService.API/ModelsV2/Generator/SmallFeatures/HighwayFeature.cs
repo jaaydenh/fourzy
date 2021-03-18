@@ -9,7 +9,8 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
+
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -35,7 +36,7 @@ namespace FourzyGameModel.Model
             this.Separation = Separation;
             this.Name = "HighwaySeparation " + Separation + " " + LineDirection.ToString();
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
             this.TwoWay = TwoWay;
             this.AddMethod = AddMethod;
             this.ReplaceTokens = ReplaceTokens;
@@ -46,7 +47,7 @@ namespace FourzyGameModel.Model
 
         public void Build(GameBoard Board)
         {
-            if (InsertLocation == 0) InsertLocation = Board.Random.RandomInteger(1, Board.Rows - 3);
+            if (InsertLocation == 0) InsertLocation = Board.Random.RandomInteger(2, Board.Rows - 3);
             if (LineDirection == LineDirection.NONE) LineDirection = (LineDirection)Board.Random.RandomInteger(0, 1);
 
             //A random chance to have the first lane a particular direction.

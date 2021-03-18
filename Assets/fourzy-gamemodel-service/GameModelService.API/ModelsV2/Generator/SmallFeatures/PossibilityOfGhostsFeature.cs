@@ -9,13 +9,14 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
+
 
         public int Width { get; set; }
         public int Height { get; set; }
 
         public BoardLocation Insert { get; set; }
-        public SmallFeatureType Feature { get { return SmallFeatureType.ARROW_HIGHWAY; } }
+        public SmallFeatureType Feature { get { return SmallFeatureType.A_COUPLE_OF_GHOSTS; } }
         public AddTokenMethod AddMethod { get; set; }
         public bool ReplaceTokens { get; set; }
         public int GhostChance { get; set; }
@@ -25,7 +26,7 @@ namespace FourzyGameModel.Model
         {
             this.Name = "PossiblityOfGhosts " ;
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.GHOST };
             this.AddMethod = AddMethod;
             this.ReplaceTokens = ReplaceTokens;
             this.GhostChance = GhostChance;
@@ -35,7 +36,9 @@ namespace FourzyGameModel.Model
 
         public void Build(GameBoard Board)
         {
-            if (GhostCount <0) GhostCount = Board.Random.RandomInteger(1, Board.Rows - 3);
+            if (GhostCount < 0) GhostCount = Board.Random.RandomInteger(1, Board.Rows - 3);
+            else GhostCount = Board.Random.RandomInteger(1, GhostCount);
+
             if (GhostChance <0) GhostChance = Board.Random.RandomInteger(0, 50);
 
             if (Board.Random.Chance(GhostChance))

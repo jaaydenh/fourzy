@@ -10,7 +10,8 @@ namespace FourzyGameModel.Model
         public string Name { get; }
         public IngredientType Type { get; }
         public SmallFeatureType Feature { get { return SmallFeatureType.TREES_DROP_FRUIT; } }
-        public TokenType Token { get; }
+        public List<TokenType> Tokens { get; }
+
 
         private Dictionary<string, int> Patterns;
         private int NumberPatterns { get; set; }
@@ -19,7 +20,7 @@ namespace FourzyGameModel.Model
         {
             this.Name = "Trees Drop Some Fruit";
             this.Type = IngredientType.ENHANCEMENT;
-            this.Token = TokenType.FRUIT_TREE;
+            this.Tokens = new List<TokenType>() { TokenType.STICKY, TokenType.FRUIT, TokenType.FRUIT_TREE};
 
             this.NumberPatterns = NumberPatterns;
             this.Patterns = new Dictionary<string, int>();

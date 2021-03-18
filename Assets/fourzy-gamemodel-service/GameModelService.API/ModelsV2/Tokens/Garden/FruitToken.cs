@@ -64,7 +64,7 @@ namespace FourzyGameModel.Model
         {
             get
             {
-                return TokenConstants.COMPLEXITY_NORMAL;
+                return TokenConstants.COMPLEXITY_MEDIUM;
             }
         }
 

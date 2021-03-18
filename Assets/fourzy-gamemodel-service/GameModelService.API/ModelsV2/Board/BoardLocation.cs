@@ -84,7 +84,7 @@ namespace FourzyGameModel.Model
         
         #region "Equality"
 
-        public bool Equals(object obj)
+        public override bool Equals(object obj)
         {
             if (obj == null) return false;
             if (this.GetType() != obj.GetType()) return false;
@@ -97,9 +97,14 @@ namespace FourzyGameModel.Model
             if (other.Row == this.Row && other.Column == this.Column) return true;
             return false;
         }
-       
 
-
+        public override int GetHashCode()
+        {
+            //I don't have a reference to the board and how many rows and columns
+            //Don't want to use a constant so we can have dynamic sized boards eventually.
+            //I don't anticipate a board reaching 100, so this should return a unique value.
+            return Row * 100 + Column ;
+        }
 
         public static BoardLocation operator - (BoardLocation left, BoardLocation right)
         {
@@ -157,6 +162,61 @@ namespace FourzyGameModel.Model
 
                 return new BoardLocation(Row, Column);
         }
+
+        public List<BoardLocation> Ring(GameBoard Board, Rotation Direction)
+        {
+            List<BoardLocation> Ring = new List<BoardLocation>() { };
+
+            BoardLocation eval = new BoardLocation(this);
+
+            int colval = -1;
+            if (eval.Column < Board.Columns / 2)
+                colval = eval.Column;
+            else colval = Board.Columns - eval.Column -1;
+
+            int rowval = -1;
+            if (eval.Row < Board.Rows / 2)
+                rowval = eval.Row ;
+            else rowval = Board.Rows - eval.Row -1;
+
+            int ringval = Math.Min(rowval, colval);
+
+            int leftcol = ringval;
+            int rightcol = Board.Columns - ringval -1;
+            int toprow = ringval;
+            int botrow = Board.Rows - ringval -1;
+
+            do
+            {
+                if (Direction == Rotation.CLOCKWISE)
+                {
+                    if (eval.Column == leftcol)
+                        if (eval.Row == toprow) eval.Column++;
+                        else eval.Row--;
+                    else if (eval.Column == rightcol)
+                        if (eval.Row != botrow) eval.Row++;
+                        else eval.Column--;
+                    else if (eval.Row == toprow) eval.Column++;
+                    else if (eval.Row == botrow) eval.Column--;
+                }
+                else
+                {
+                    if (eval.Column == leftcol)
+                        if (eval.Row == botrow) eval.Column++;
+                        else eval.Row++;
+                    else if (eval.Column == rightcol)
+                        if (eval.Row == toprow) eval.Column--;
+                        else eval.Row--;
+                    else if (eval.Row == toprow) eval.Column--;
+                    else if (eval.Row == botrow) eval.Column++;
+                }
+                Ring.Add(new BoardLocation(eval));
+
+            } while(!eval.Equals(this));
+
+            return Ring;
+        }
+
 
         public BoardLocation Neighbor(CompassDirection Direction, int Distance = 1)
         {

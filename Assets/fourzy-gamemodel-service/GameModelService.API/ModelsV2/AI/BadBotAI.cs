@@ -9,8 +9,8 @@ namespace FourzyGameModel.Model
     public class BadBotAI : AIPlayer
     {
         private GameState EvalState { get; set; }
-        private int InitialChanceToWin = 0;
-        private int ChanceToWinPerPiece = 2;
+        //private int InitialChanceToWin = 0;
+        //private int ChanceToWinPerPiece = 2;
         private int MaxChanceToWin = 75;
         private int MinChanceToWin = 10;
         

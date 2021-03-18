@@ -38,7 +38,7 @@
         SPIDER_HUNT, SPIDER_SQUISH, SPIDER_WEAVE, DROP_FRUIT, DROP_FRUIT_SQUISHED, GHOST_WRAPAROUND, GAME_EFFECT, REVEAL_TRAP, GIANT_CUBE
     }
     public enum PortalColor { RED, YELLOW, GREEN, BLUE}
-    public enum TokenColor { RED, YELLOW, GREEN, BLUE,
+    public enum TokenColor { RED, YELLOW, GREEN, BLUE, ORANGE, BROWN,
         NONE
     }
     //public enum SwitchColor { RED, YELLOW, GREEN, BLUE}

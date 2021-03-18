@@ -74,8 +74,27 @@ namespace FourzyGameModel.Model
         CenterOne,
         CenterLineOfFour,
         TwoCenterLinesOfFour,
-        ThreeCenterLinesOfFour
+        ThreeCenterLinesOfFour,
+        OneRandomRingOne,
+        OneRandomRingTwo,
+        OneRandomRingThree,
+        TwoRandomRingOne,
+        TwoRandomRingTwo,
+        TwoRandomRingThree,
+        FourRandomRingOne,
+        FourRandomRingTwo,
+        FourConnectedRingOne,
+        FourConnectedRingTwo,
+        TwoSymmetricRingOne,
+        TwoSymmetricRingTwo,
+        TwoSymmetricRingThree,
+        FourSymmetricRingOne,
+        FourSymmetricRingTwo,
+        AlternateRingOne,
+        AlternateRingTwo
     }
 
     public enum RelativeDirection { IN, OUT, NONE}
+    public enum LineFillStyle { RANDOM, CONNECTED, SYMMETRIC, FILLED, ALTERNATING }
+
 }

@@ -36,9 +36,10 @@ namespace FourzyGameModel.Model
             return Boss.Powers;
         }
 
-        public static GameBoard CreateBoard(BossType Type, GameOptions Options = null, string SeedString="")
+        public static GameBoard CreateBoard(BossType Type, GameOptions Options = null, BoardGenerationPreferences Preferences = null, string SeedString="")
         {
             if (Options == null) Options = new GameOptions();
+            if (Preferences == null) Preferences = new BoardGenerationPreferences();
 
             GameBoard Board = BoardFactory.CreateDefaultBoard(Options);
             Board.Random = new RandomTools(SeedString);

@@ -9,7 +9,7 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; set; }
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -29,7 +29,7 @@ namespace FourzyGameModel.Model
             this.HorizontalDirection = HorizontalDirection;
             this.Name = "Cross Arrow Pattern";
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
             this.Solid = Solid;
             this.AddMethod = AddTokenMethod.ONLY_TERRAIN;
             this.ReplaceTokens = false;
@@ -40,7 +40,7 @@ namespace FourzyGameModel.Model
             this.Insert = new BoardLocation(0, 0);
             this.Name = "In Arrow Pattern";
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
             this.VerticalDirection = Direction.NONE;
             this.HorizontalDirection = Direction.NONE;
             this.Solid = false;

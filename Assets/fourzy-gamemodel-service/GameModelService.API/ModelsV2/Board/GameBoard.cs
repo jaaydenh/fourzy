@@ -54,6 +54,9 @@ namespace FourzyGameModel.Model
 
         public RandomTools Random { get; set; }
 
+        public string Recipe { get; set; }
+        public string SeedString { get; set; }
+
         public string ContentString
         {
             get
@@ -274,6 +277,9 @@ namespace FourzyGameModel.Model
             this.Parent = GameBoardToCopy.Parent;
             this.Random = GameBoardToCopy.Parent.Random;
             this.Area = GameBoardToCopy.Area;
+
+            this.Recipe = GameBoardToCopy.Recipe;
+            this.SeedString = GameBoardToCopy.SeedString;
         }
 
         #endregion

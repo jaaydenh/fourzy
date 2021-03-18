@@ -9,7 +9,8 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
+
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -28,8 +29,8 @@ namespace FourzyGameModel.Model
             this.ArrowDirection = LineDirection;
             this.Name = "Double Arrow" + " " + LineDirection.ToString();
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
-            
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
+
             this.AddMethod = AddMethod;
             this.ReplaceTokens = ReplaceTokens;
             this.Width = -1;

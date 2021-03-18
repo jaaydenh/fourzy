@@ -35,7 +35,6 @@ namespace FourzyGameModel.Model
             if (RandomInteger(0, 100) <= Percentage) return true;
             return false;
         }
-
         public Area RandomArea()
         {
             var v = Enum.GetValues(typeof(Area));
@@ -96,6 +95,11 @@ namespace FourzyGameModel.Model
                 l = new BoardLocation(RandomInteger(0, State.Board.Rows - 1), RandomInteger(0, State.Board.Columns - 1));
 
             return l;
+        }
+
+        public MoveMethod RandomMoveMethod()
+        {
+            return (MoveMethod)RandomInteger(0, 6);
         }
 
         public string RandomItem(List<string> Items)

@@ -9,7 +9,7 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; set; }
+        public List<TokenType> Tokens { get; }
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -24,7 +24,7 @@ namespace FourzyGameModel.Model
             this.Rotation = Rotation;
             this.Name = "Arrow Cycle " + Rotation.ToString();
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
             this.Width = Width;
             this.Height = Height;
         }
@@ -35,7 +35,7 @@ namespace FourzyGameModel.Model
             this.Rotation = Rotation.NONE;
             this.Name = "Arrow Cycle " + Rotation.ToString();
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
             this.Width = 2;
             this.Height = 2;
         }

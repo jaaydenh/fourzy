@@ -9,7 +9,7 @@ namespace FourzyGameModel.Model
     {
         public string Name { get; }
         public IngredientType Type { get; }
-        public TokenType Token { get; }
+        public List<TokenType> Tokens { get; }
 
         public SmallFeatureType Feature { get { return SmallFeatureType.A_COUPLE_OF_ARROWS; } }
         public int ArrowCount { get; set; }
@@ -18,7 +18,7 @@ namespace FourzyGameModel.Model
         {
             this.Name = "A Couple of Arrows";
             this.Type = IngredientType.SMALLFEATURE;
-            this.Token = TokenType.ARROW;
+            this.Tokens = new List<TokenType>() { TokenType.ARROW };
             this.ArrowCount= ArrowCount;
         }
 

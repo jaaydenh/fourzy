@@ -23,11 +23,11 @@ namespace FourzyGameModel.Model
             if (EvalState.Board.FindPieces(EvalState.Opponent(EvalState.ActivePlayerId)).Count <= 1)
                 return AI.GetRandomTurn();
 
-            bool Panic = false;
+            //bool Panic = false;
             SimpleMove Move = AI.GetRandomOkMove(2);
             if (Move == null)
             {
-                Panic = true;
+                //Panic = true;
                 return new PlayerTurn(AI.GetBestLostCauseMove());
             }
 

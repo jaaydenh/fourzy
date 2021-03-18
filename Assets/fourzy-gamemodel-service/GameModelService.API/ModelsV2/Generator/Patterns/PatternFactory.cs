@@ -15,6 +15,41 @@ namespace FourzyGameModel.Model
                     return new ACouplePattern(Board).Locations;
                 case PatternType.OneRandom:
                     return new ACouplePattern(Board, 1).Locations;
+                case PatternType.OneRandomRingOne:
+                    return new RingPattern(Board,1, 1,LineFillStyle.RANDOM).Locations;
+                case PatternType.OneRandomRingTwo:
+                    return new RingPattern(Board, 2, 1, LineFillStyle.RANDOM).Locations;
+                case PatternType.OneRandomRingThree:
+                    return new RingPattern(Board, 3, 1, LineFillStyle.RANDOM).Locations;
+                case PatternType.TwoRandomRingOne:
+                    return new RingPattern(Board, 1, 2, LineFillStyle.RANDOM).Locations;
+                case PatternType.TwoRandomRingTwo:
+                    return new RingPattern(Board, 2, 2, LineFillStyle.RANDOM).Locations;
+                case PatternType.TwoRandomRingThree:
+                    return new RingPattern(Board, 3, 2, LineFillStyle.RANDOM).Locations;
+                case PatternType.TwoSymmetricRingOne:
+                    return new RingPattern(Board, 1, 2, LineFillStyle.SYMMETRIC).Locations;
+                case PatternType.TwoSymmetricRingTwo:
+                    return new RingPattern(Board, 2, 2, LineFillStyle.SYMMETRIC).Locations;
+                case PatternType.TwoSymmetricRingThree:
+                    return new RingPattern(Board, 3, 2, LineFillStyle.SYMMETRIC).Locations;
+                case PatternType.FourRandomRingOne:
+                    return new RingPattern(Board, 1, 4, LineFillStyle.RANDOM).Locations;
+                case PatternType.FourRandomRingTwo:
+                    return new RingPattern(Board, 2, 4, LineFillStyle.RANDOM).Locations;
+                case PatternType.FourConnectedRingOne:
+                    return new RingPattern(Board, 1, 4, LineFillStyle.CONNECTED).Locations;
+                case PatternType.FourConnectedRingTwo:
+                    return new RingPattern(Board, 2, 4, LineFillStyle.CONNECTED).Locations;
+                case PatternType.FourSymmetricRingOne:
+                    return new RingPattern(Board, 1, 4, LineFillStyle.SYMMETRIC).Locations;
+                case PatternType.FourSymmetricRingTwo:
+                    return new RingPattern(Board, 2, 4, LineFillStyle.SYMMETRIC).Locations;
+                case PatternType.AlternateRingOne:
+                    return new RingPattern(Board, 1, 0, LineFillStyle.ALTERNATING).Locations;
+                case PatternType.AlternateRingTwo:
+                    return new RingPattern(Board, 2, 0, LineFillStyle.ALTERNATING).Locations;
+
                 case PatternType.TwoRandom:
                     return new ACouplePattern(Board,2).Locations;
                 case PatternType.ThreeRandom:

@@ -26,37 +26,37 @@ namespace FourzyGameModel.Model
 
             foreach (BoardLocation l in Center.Look(Board,Direction.LEFT))
             {
-                int chance = 90;
+                int chance = PatternConstants.BlobCreationPercentage;
                 if (Board.Random.Chance(chance--)) Locations.Add(l);
                 else break;
             }
             foreach (BoardLocation l in Center.Look(Board, Direction.UP))
             {
-                int chance = 90;
+                int chance = PatternConstants.BlobCreationPercentage;
                 if (Board.Random.Chance(chance--)) Locations.Add(l);
                 else break;
             }
             foreach (BoardLocation l in Center.Neighbor(Direction.RIGHT).Look(Board, Direction.UP))
             {
-                int chance = 90;
+                int chance = PatternConstants.BlobCreationPercentage;
                 if (Board.Random.Chance(chance--)) Locations.Add(l);
                 else break;
             }
             foreach (BoardLocation l in Center.Neighbor(Direction.RIGHT).Look(Board, Direction.RIGHT))
             {
-                int chance = 90;
+                int chance = PatternConstants.BlobCreationPercentage;
                 if (Board.Random.Chance(chance--)) Locations.Add(l);
                 else break;
             }
             foreach (BoardLocation l in Center.Neighbor(Direction.DOWN).Look(Board, Direction.LEFT))
             {
-                int chance = 90;
+                int chance = PatternConstants.BlobCreationPercentage;
                 if (Board.Random.Chance(chance--)) Locations.Add(l);
                 else break;
             }
             foreach (BoardLocation l in Center.Neighbor(Direction.DOWN).Look(Board, Direction.DOWN))
             {
-                int chance = 90;
+                int chance = PatternConstants.BlobCreationPercentage;
                 if (Board.Random.Chance(chance--)) Locations.Add(l);
                 else break;
             }

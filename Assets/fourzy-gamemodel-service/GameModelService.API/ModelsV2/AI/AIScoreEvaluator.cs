@@ -397,7 +397,7 @@ namespace FourzyGameModel.Model
             int multiplier = 0;
             int count = 0;
             int i = 0;
-            bool contiguous = true;
+            //bool contiguous = true;
             int alive = 0;
             BoardLocation loc;
             switch (WinDirection)
@@ -427,11 +427,11 @@ namespace FourzyGameModel.Model
 
                         if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
                             count++;
-                        else
-                        {
-                            //if (AliveSpaces.Contains(loc)) alive++;
-                            contiguous = false;
-                        }
+                        //else
+                        //{
+                        //    //if (AliveSpaces.Contains(loc)) alive++;
+                        //    contiguous = false;
+                        //}
 
                         i++;
                         loc = new BoardLocation(Location.Row, Location.Column + i);
@@ -463,11 +463,11 @@ namespace FourzyGameModel.Model
 
                         if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
                             count++;
-                        else
-                        {
-                            //if (AliveSpaces.Contains(loc)) alive++;
-                            contiguous = false;
-                        }
+                        //else
+                        //{
+                        //    //if (AliveSpaces.Contains(loc)) alive++;
+                        //    contiguous = false;
+                        //}
 
                         i++;
                         loc = new BoardLocation(Location.Row + i, Location.Column);
@@ -500,11 +500,11 @@ namespace FourzyGameModel.Model
 
                         if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
                             count++;
-                        else
-                        {
-                            //if (AliveSpaces.Contains(loc)) alive++;
-                            contiguous = false;
-                        }
+                        //else
+                        //{
+                        //    //if (AliveSpaces.Contains(loc)) alive++;
+                        //    contiguous = false;
+                        //}
 
                         i++;
                         loc = new BoardLocation(Location.Row + i, Location.Column - i);
@@ -538,11 +538,11 @@ namespace FourzyGameModel.Model
 
                         if (EvalState.Board.ContentsAt(loc).Control == PlayerId)
                             count++;
-                        else
-                        {
-                            //if (AliveSpaces.Contains(loc)) alive++;
-                            contiguous = false;
-                        }
+                        //else
+                        //{
+                        //    //if (AliveSpaces.Contains(loc)) alive++;
+                        //    contiguous = false;
+                        //}
 
                         i++;
                         loc = new BoardLocation(Location.Row + i, Location.Column + i);
@@ -866,7 +866,7 @@ namespace FourzyGameModel.Model
         {
             int count = 0;
             int i = 0;
-            bool contiguous = true;
+            //bool contiguous = true;
             BoardLocation loc;
             switch (WinDirection)
             {
@@ -891,8 +891,8 @@ namespace FourzyGameModel.Model
 
                         if (State.Board.ContentsAt(loc).Control == PlayerId)
                             count++;
-                        else
-                            contiguous = false;
+                        //else
+                        //    contiguous = false;
 
                         i++;
                         loc = new BoardLocation(Location.Row, Location.Column + i);
@@ -921,8 +921,8 @@ namespace FourzyGameModel.Model
 
                         if (State.Board.ContentsAt(loc).Control == PlayerId)
                             count++;
-                        else
-                            contiguous = false;
+                        //else
+                        //    contiguous = false;
 
                         i++;
                         loc = new BoardLocation(Location.Row + i, Location.Column);
@@ -952,8 +952,8 @@ namespace FourzyGameModel.Model
 
                         if (State.Board.ContentsAt(loc).Control == PlayerId)
                             count++;
-                        else
-                            contiguous = false;
+                        //else
+                        //    contiguous = false;
 
                         i++;
                         loc = new BoardLocation(Location.Row - i, Location.Column - i);
@@ -984,8 +984,8 @@ namespace FourzyGameModel.Model
 
                         if (State.Board.ContentsAt(loc).Control == PlayerId)
                             count++;
-                        else
-                            contiguous = false;
+                        //else
+                        //    contiguous = false;
 
                         i++;
                         loc = new BoardLocation(Location.Row + i, Location.Column + i);
@@ -1053,7 +1053,7 @@ namespace FourzyGameModel.Model
         {
             int count = 0;
             int i = 0;
-            bool contiguous = true;
+            //bool contiguous = true;
             BoardLocation loc;
             switch (WinDirection)
             {
@@ -1082,8 +1082,8 @@ namespace FourzyGameModel.Model
 
                         if (State.Board.ContentsAt(loc).Control == PlayerId)
                             count++;
-                        else
-                            contiguous = false;
+                        //else
+                        //    contiguous = false;
 
                         i++;
                         loc = new BoardLocation(Location.Row, Location.Column + i);
@@ -1113,8 +1113,8 @@ namespace FourzyGameModel.Model
 
                         if (State.Board.ContentsAt(loc).Control == PlayerId)
                             count++;
-                        else
-                            contiguous = false;
+                        //else
+                        //    contiguous = false;
 
                         i++;
                         loc = new BoardLocation(Location.Row + i, Location.Column);
@@ -1124,70 +1124,70 @@ namespace FourzyGameModel.Model
                     break;
                 case WinDirection.DIAGONAL_NE_SW:
                     return 0;
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(State.Board) && i < 5)
-                    {
-                        if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
+                    //loc = new BoardLocation(Location.Row, Location.Column);
+                    //while (loc.OnBoard(State.Board) && i < 5)
+                    //{
+                    //    if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
 
-                        if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadLocations.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (State.Board.ContentsAt(loc).ContainsPiece
-                            && !State.Board.ContentsAt(loc).TokensAllowPushing
-                            && State.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
+                    //    if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
+                    //    {
+                    //        return 0;
+                    //    }
+                    //    if (DeadLocations.Contains(loc))
+                    //    {
+                    //        return 0;
+                    //    }
+                    //    else if (State.Board.ContentsAt(loc).ContainsPiece
+                    //        && !State.Board.ContentsAt(loc).TokensAllowPushing
+                    //        && State.Board.ContentsAt(loc).Control != PlayerId)
+                    //    {
+                    //        return 0;
+                    //    }
 
-                        if (State.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                            contiguous = false;
+                    //    if (State.Board.ContentsAt(loc).Control == PlayerId)
+                    //        count++;
+                    //    else
+                    //        contiguous = false;
 
-                        i++;
-                        loc = new BoardLocation(Location.Row - i, Location.Column + i);
+                    //    i++;
+                    //    loc = new BoardLocation(Location.Row - i, Location.Column + i);
 
-                    }
-                    break;
+                    //}
+                    //break;
 
 
                 case WinDirection.DIAGONAL_NW_SE:
                     return 0;
-                    loc = new BoardLocation(Location.Row, Location.Column);
-                    while (loc.OnBoard(State.Board) && i < 5)
-                    {
-                        if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
+                    //loc = new BoardLocation(Location.Row, Location.Column);
+                    //while (loc.OnBoard(State.Board) && i < 5)
+                    //{
+                    //    if (State.Board.ContentsAt(loc).Control == PlayerId && (i == 0 || i == 4)) return 0;
 
-                        if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
-                        {
-                            return 0;
-                        }
-                        if (DeadLocations.Contains(loc))
-                        {
-                            return 0;
-                        }
-                        else if (State.Board.ContentsAt(loc).ContainsPiece
-                            && !State.Board.ContentsAt(loc).TokensAllowPushing
-                            && State.Board.ContentsAt(loc).Control != PlayerId)
-                        {
-                            return 0;
-                        }
+                    //    if (!State.Board.ContentsAt(loc).TokensAllowEndHere)
+                    //    {
+                    //        return 0;
+                    //    }
+                    //    if (DeadLocations.Contains(loc))
+                    //    {
+                    //        return 0;
+                    //    }
+                    //    else if (State.Board.ContentsAt(loc).ContainsPiece
+                    //        && !State.Board.ContentsAt(loc).TokensAllowPushing
+                    //        && State.Board.ContentsAt(loc).Control != PlayerId)
+                    //    {
+                    //        return 0;
+                    //    }
 
-                        if (State.Board.ContentsAt(loc).Control == PlayerId)
-                            count++;
-                        else
-                            contiguous = false;
+                    //    if (State.Board.ContentsAt(loc).Control == PlayerId)
+                    //        count++;
+                    //    else
+                    //        contiguous = false;
 
-                        i++;
-                        loc = new BoardLocation(Location.Row + i, Location.Column + i);
+                    //    i++;
+                    //    loc = new BoardLocation(Location.Row + i, Location.Column + i);
 
-                    }
-                    break;
+                    //}
+                    //break;
 
             }
 

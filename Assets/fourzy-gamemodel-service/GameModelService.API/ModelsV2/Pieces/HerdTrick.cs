@@ -2,6 +2,6 @@
 {
     public class HerdTrick
     {
-        string Name;
+        public string Name {get; set;}
     }
 }
