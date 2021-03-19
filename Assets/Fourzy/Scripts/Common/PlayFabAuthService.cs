@@ -385,7 +385,6 @@ public class PlayFabAuthService
 			{
 				customDeviceID = GameManager.Instance.customUserId;
 			}
-			Debug.Log("________________" + customDeviceID);
 		}
 
 #if UNITY_ANDROID && !UNITY_EDITOR
