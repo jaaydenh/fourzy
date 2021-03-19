@@ -52,16 +52,5 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             tabbedScreen.OpenTab(0, tabbedScreen.isOpened);
         }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            if (GameManager.Instance.Landscape)
-            {
-                hintsWidget.SetActive(!GameManager.Instance.hideTickets);
-                gemsWidget.SetActive(!GameManager.Instance.hideGems);
-            }
-        }
     }
 }

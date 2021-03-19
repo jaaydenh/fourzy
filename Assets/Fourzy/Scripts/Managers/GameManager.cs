@@ -52,8 +52,6 @@ namespace Fourzy
         public bool displayTutorials = true;
         [Header("Display tutorial even if it was already displayed")]
         public bool forceDisplayTutorials = true;
-        public bool showInfoToasts = true;
-        public bool debugMessages = true;
         [Tooltip("Options effected:\n   - Reset Puzzles\n   - Pass&Play rewards screen"), SerializeField]
         private bool extraFeatures = true;
 
@@ -61,13 +59,8 @@ namespace Fourzy
         public bool tapToStartGame = true;
         public PassPlayCharactersType characterType = PassPlayCharactersType.SELECTED_RANDOM;
 
-        [Header("Landscape settings")]
-        public bool hideTabsBar = true;
-        public bool hideGems = true;
-        public bool hideTickets = true;
-        public bool hidePortalWidgets = true;
-
         [Header("Misc settings")]
+        public bool showInfoToasts = true;
         public bool defaultGauntletState = true;
         public bool defaultPuzzlesState = true;
         public bool resetGameOnClose = true;
@@ -91,7 +84,6 @@ namespace Fourzy
             }
         }
         public bool Landscape => Screen.width > Screen.height;
-        public bool ExtraFeatures => extraFeatures || Application.isEditor;
         public GameTypeLocal ExpectedGameType { get; private set; }
         public PuzzleData dailyPuzzlePack { get; private set; }
         public IClientFourzy activeGame { get; set; }
@@ -282,10 +274,7 @@ namespace Fourzy
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
-                    if (debugMessages)
-                    {
-                        Debug.Log($"Starting challenge, id: {game.BoardID}");
-                    }
+                    Debug.Log($"Starting challenge, id: {game.BoardID}");
 
                     break;
             }

@@ -73,8 +73,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnInitialized();
 
-            puzzlesResetButton.SetActive(GameManager.Instance.ExtraFeatures && !GameManager.Instance.Landscape);
-
 #if !UNITY_STANDALONE
             if (fullscreenButton) fullscreenButton.SetActive(false);
 #endif

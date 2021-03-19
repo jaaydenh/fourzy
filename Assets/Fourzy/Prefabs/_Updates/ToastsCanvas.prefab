@@ -30,7 +30,8 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
-  m_Children: []
+  m_Children:
+  - {fileID: 3146240655336918811}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -82,6 +83,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &114561874604520218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,7 +113,111 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3fb146616793054ea38f2d277abc310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toastsParent: {fileID: 3146240655336918811}
   maxToastsVisible: 2
   prefabs:
   - prefab: {fileID: 114830852162734606, guid: cd6a721b858d3294cbe624d5594152a6, type: 3}
     style: 0
+  - prefab: {fileID: 114289499395651876, guid: f4b54656e79739a4aa98818ceae25777, type: 3}
+    style: 2
+--- !u!1 &8454775840483181801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3146240655336918811}
+  - component: {fileID: 6876868983783050371}
+  m_Layer: 5
+  m_Name: ToastsParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3146240655336918811
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8454775840483181801}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 224187744540529198}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6876868983783050371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8454775840483181801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ba9789f4f041794898aa7acdf6f8255, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceIPhoneX: 0
+  onIPhoneX:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 13
+          isDynamic: 0
+        target: {fileID: 3146240655336918811}
+        memberName: offsetMax
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 7
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: -60}
+          vector3Argument: {x: 0, y: 0, z: 0}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
+  other:
+    inspectorListHeight: 83
+    persistentCalls:
+      calls:
+      - genericMenuData:
+          selectedComponent: 1
+          selectedMember: 13
+          isDynamic: 0
+        target: {fileID: 3146240655336918811}
+        memberName: offsetMax
+        memberType: 16
+        arguments:
+        - typeName: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          supportedType: 7
+          objectArgument: {fileID: 0}
+          stringArgument: 
+          intArgument: 0
+          floatArgument: 0
+          boolArgument: 0
+          colorArgument: {r: 0, g: 0, b: 0, a: 0}
+          vector2Argument: {x: 0, y: 0}
+          vector3Argument: {x: 0, y: 0, z: 0}
+          enumArgument: 
+        isDynamic: 0
+        isCallEnabled: 1
