@@ -71,6 +71,7 @@ namespace Fourzy
         public bool defaultGauntletState = true;
         public bool defaultPuzzlesState = true;
         public bool resetGameOnClose = true;
+        public string customUserId = "";
         public float fallbackLatitude = 37.7833f;
         public float fallbackLongitude = 122.4167f;
         public List<TokenType> excludeInstructionsFor;
