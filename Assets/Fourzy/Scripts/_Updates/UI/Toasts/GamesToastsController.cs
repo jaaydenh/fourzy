@@ -174,6 +174,8 @@ namespace Fourzy._Updates.UI.Toasts
 
         public static void ShowTopToast(string message)
         {
+            if (!GameManager.Instance.showInfoToasts) return;
+            //if (!Debug.isDebugBuild && !Application.isEditor) return; 
             if (!instance) return;
 
             GameToast toast = instance.GetToast(ToastStyle.TOP_TOAST);

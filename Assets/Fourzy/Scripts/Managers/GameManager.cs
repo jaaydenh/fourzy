@@ -60,6 +60,7 @@ namespace Fourzy
         public PassPlayCharactersType characterType = PassPlayCharactersType.SELECTED_RANDOM;
 
         [Header("Misc settings")]
+        public bool showInfoToasts = true;
         public bool defaultGauntletState = true;
         public bool defaultPuzzlesState = true;
         public bool resetGameOnClose = true;
