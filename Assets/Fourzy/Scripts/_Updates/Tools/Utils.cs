@@ -592,42 +592,63 @@ namespace Fourzy._Updates.Tools
             return "";
         }
 
-        public static AnalyticsManager.AnalyticsEvents GameModeToAnalyticsEvent(this GameMode mode, bool start)
+        public static AnalyticsManager.AnalyticsEvents GameToAnalyticsEvent(this IClientFourzy game, bool start)
         {
-            switch (mode)
+            switch (GameManager.Instance.ExpectedGameType)
             {
-                case GameMode.LOCAL_VERSUS:
-                    return start ? 
-                        AnalyticsManager.AnalyticsEvents.VERSUS_GAME_START :
-                        AnalyticsManager.AnalyticsEvents.VERSUS_GAME_END;
-
-                case GameMode.PUZZLE_FAST:
+                case GameTypeLocal.REALTIME_BOT_GAME:
                     return start ?
-                        AnalyticsManager.AnalyticsEvents.RANDOM_PUZZLE_START :
-                        AnalyticsManager.AnalyticsEvents.RANDOM_PUZZLE_END;
+                        AnalyticsManager.AnalyticsEvents.realtimeBotGameStart :
+                        AnalyticsManager.AnalyticsEvents.realtimeBotGameEnd;
 
-                case GameMode.GAUNTLET:
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
                     return start ?
-                        AnalyticsManager.AnalyticsEvents.GAUNTLET_LEVEL_START :
-                        AnalyticsManager.AnalyticsEvents.GAUNTLET_LEVEL_END;
+                        AnalyticsManager.AnalyticsEvents.realtimeLobbyGameStart :
+                        AnalyticsManager.AnalyticsEvents.realtimeLobbyGameEnd;
 
-                case GameMode.AI_PACK:
+                case GameTypeLocal.REALTIME_QUICKMATCH:
                     return start ?
-                        AnalyticsManager.AnalyticsEvents.AI_LEVEL_START :
-                        AnalyticsManager.AnalyticsEvents.AI_LEVEL_END;
+                        AnalyticsManager.AnalyticsEvents.realtimeQuickmatchStart :
+                        AnalyticsManager.AnalyticsEvents.realtimeQuickmatchEnd;
 
-                case GameMode.BOSS_AI_PACK:
-                    return start ? 
-                        AnalyticsManager.AnalyticsEvents.BOSS_AI_LEVEL_START :
-                        AnalyticsManager.AnalyticsEvents.BOSS_AI_LEVEL_END;
+                case GameTypeLocal.LOCAL_GAME:
+                    switch (game._Mode)
+                    {
+                        case GameMode.LOCAL_VERSUS:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.versusGameStart :
+                                AnalyticsManager.AnalyticsEvents.versusGameEnd;
 
-                case GameMode.PUZZLE_PACK:
-                    return start ?
-                        AnalyticsManager.AnalyticsEvents.PUZZLE_LEVEL_START :
-                        AnalyticsManager.AnalyticsEvents.PUZZLE_LEVEL_END;
+                        case GameMode.PUZZLE_FAST:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.randomPuzzleStart :
+                                AnalyticsManager.AnalyticsEvents.randomPuzzleEnd;
+
+                        case GameMode.GAUNTLET:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.gauntletLevelStart :
+                                AnalyticsManager.AnalyticsEvents.gauntletLevelEnd;
+
+                        case GameMode.AI_PACK:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.aiLevelStart :
+                                AnalyticsManager.AnalyticsEvents.aiLevelEnd;
+
+                        case GameMode.BOSS_AI_PACK:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.bossAILevelStart :
+                                AnalyticsManager.AnalyticsEvents.bossAILevelEnd;
+
+                        case GameMode.PUZZLE_PACK:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.puzzleLevelStart :
+                                AnalyticsManager.AnalyticsEvents.puzzleLevelEnd;
+                    }
+
+                    break;
             }
 
-            return AnalyticsManager.AnalyticsEvents.NONE;
+            return AnalyticsManager.AnalyticsEvents.none;
         }
 
         public static Vector2 GetViewportPosition(this RectTransform target)

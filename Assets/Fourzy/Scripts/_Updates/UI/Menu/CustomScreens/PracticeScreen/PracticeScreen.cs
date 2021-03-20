@@ -215,7 +215,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     player2 = new Player(2, LocalizationManager.Value("player_one"))
                     {
                         PlayerString = UserManager.Instance.userId,
-                        HerdId = player1Profile.prefabData.data.ID
+                        HerdId = UserManager.Instance.gamePieceID
                     };
                 }
             }
@@ -249,7 +249,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             AnalyticsManager.Instance.LogEvent(
-                "PRACTICE_GAME_CREATED",
+                "practiceGameCreated",
                 new Dictionary<string, object>()
                 {
                     ["player1"] = player1.Profile.ToString(),

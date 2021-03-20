@@ -92,7 +92,7 @@ namespace Fourzy
         public List<TitleNewsItem> latestNews { get; private set; } = new List<TitleNewsItem>();
         public OpponentData RealtimeOpponent { get; set; }
         public Player Bot { get; set; }
-        public string sessionID { get; private set; }
+        public string sessionId { get; private set; }
         public LocationInfo? lastLocation { get; private set; } = null;
         public string MainMenuSceneName => Landscape ?
             Constants.MAIN_MENU_L_SCENE_NAME :
@@ -159,14 +159,14 @@ namespace Fourzy
                 {
                     return fallbackLongitude;
                 }
-                else 
+                else
                 {
                     return lastLocation.Value.longitude;
                 }
             }
         }
 
-        public List<TitleNewsItem> unreadNews => 
+        public List<TitleNewsItem> unreadNews =>
             latestNews?.Where(titleNews => !PlayerPrefsWrapper.GetNewsOpened(titleNews.NewsId)).ToList() ??
             new List<TitleNewsItem>();
 
@@ -215,7 +215,7 @@ namespace Fourzy
 
             if (SceneManager.GetActiveScene().name == MainMenuSceneName)
             {
-                StandaloneInputModuleExtended.GamepadFilter = 
+                StandaloneInputModuleExtended.GamepadFilter =
                     StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;
             }
 
@@ -236,7 +236,7 @@ namespace Fourzy
         {
             //force demo game
             //if (StandaloneInputModuleExtended.OnHotkey1Press()) StandaloneInputModuleExtended.instance.TriggerNoInputEvent("startDemoGame");
-           
+
         }
 
         protected void OnDestroy()
@@ -286,7 +286,7 @@ namespace Fourzy
             }
             else
             {
-                sessionID = Guid.NewGuid().ToString();
+                sessionId = Guid.NewGuid().ToString();
 
                 if (isMainMenuLoaded)
                 {
@@ -373,7 +373,7 @@ namespace Fourzy
             onPurchaseComplete?.Invoke(product);
 
             //try get product data
-            MiscGameContentHolder.StoreItemExtraData _data = 
+            MiscGameContentHolder.StoreItemExtraData _data =
                 GameContentManager.Instance.miscGameDataHolder.GetStoreItem(product.definition.id);
 
             if (!_data) return;
@@ -386,12 +386,14 @@ namespace Fourzy
 
                 //analytics
                 if (activeGame != null)
+                {
                     AnalyticsManager.Instance.LogGame(
-                        AnalyticsManager.AnalyticsEvents.PUZZLE_HINT_STORE_HINT_PURCHASE,
+                        AnalyticsManager.AnalyticsEvents.hintPurchase,
                         activeGame,
                         AnalyticsManager.AnalyticsProvider.ALL,
                         new KeyValuePair<string, object>(AnalyticsManager.HINT_STORE_ITEMS_KEY, StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)),
                         new KeyValuePair<string, object>(AnalyticsManager.STORE_ITEM_KEY, _data.id));
+                }
             }
         }
 
@@ -598,7 +600,7 @@ namespace Fourzy
         }
 
         private void OnPlayerPropertiesUpdate(
-            Photon.Realtime.Player player, 
+            Photon.Realtime.Player player,
             ExitGames.Client.Photon.Hashtable data)
         {
             if (PhotonNetwork.PlayerListOthers.Length == 0 || PhotonNetwork.PlayerListOthers[0] != player) return;
@@ -618,7 +620,7 @@ namespace Fourzy
             }
         }
 
-        private void OnNetStatusChanged(NetStatus status) => 
+        private void OnNetStatusChanged(NetStatus status) =>
             onNetworkAccess?.Invoke(status == NetStatus.Connected);
 
         private void OnNoInput(KeyValuePair<string, float> noInputFilter)

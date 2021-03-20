@@ -314,7 +314,7 @@ namespace Fourzy._Updates.UI.Widgets
                     }
 
                     AnalyticsManager.Instance.LogEvent(
-                        AnalyticsManager.AnalyticsEvents.EVENT_OPENED,
+                        AnalyticsManager.AnalyticsEvents.eventOpened,
                         values: new KeyValuePair<string, object>(AnalyticsManager.EVENT_ID_KEY, PuzzlePack.packID));
 
                     break;
@@ -387,7 +387,7 @@ namespace Fourzy._Updates.UI.Widgets
                     if (PuzzlePack.packType == PackType.BOSS_AI_PACK || PuzzlePack.packType == PackType.AI_PACK)
                     {
                         //spawn gamepiece
-                        gamePieceView = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(PuzzlePack.GetHerdID()).player1Prefab, gamePieceParent);
+                        gamePieceView = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(PuzzlePack.GetHerdId()).player1Prefab, gamePieceParent);
 
                         gamePieceView.transform.localPosition = Vector3.zero;
                         gamePieceView.transform.localScale = Vector3.one * 140f;

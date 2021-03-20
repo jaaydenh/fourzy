@@ -741,9 +741,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        private void ActivatePlayerTimer(int playerID)
+        private void ActivatePlayerTimer(int playerId)
         {
-            timerWidgets.Find(widget => widget.player.PlayerId == playerID).Activate();
+            if (playerId < 1) return;
+
+            timerWidgets.Find(widget => widget.player.PlayerId == playerId).Activate();
         }
 
         private void HideGameInfoWidget(bool checkType = true)

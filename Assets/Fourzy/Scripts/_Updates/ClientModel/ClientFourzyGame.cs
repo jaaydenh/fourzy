@@ -527,9 +527,7 @@ namespace Fourzy._Updates.ClientModel
 
                         if (puzzleData.pack.complete && !_complete)
                         {
-                            puzzleData.pack.justFinished = true;
-
-                            AnalyticsManager.Instance.LogEvent(AnalyticsManager.AnalyticsEvents.EVENT_COMPLETED,
+                            AnalyticsManager.Instance.LogEvent(AnalyticsManager.AnalyticsEvents.eventComplete,
                                 values: new KeyValuePair<string, object>(
                                     AnalyticsManager.EVENT_ID_KEY,
                                     puzzleData.pack.packID));

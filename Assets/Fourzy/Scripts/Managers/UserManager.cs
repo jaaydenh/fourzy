@@ -400,7 +400,7 @@ namespace Fourzy
             OnUpdateUserGamePieceID?.Invoke(gamePieceID);
 
             AnalyticsManager.Instance.LogEvent(
-                AnalyticsManager.AnalyticsEvents.SELECT_GAMEPIECE,
+                AnalyticsManager.AnalyticsEvents.selectGamepiece,
                 values: new KeyValuePair<string, object>(AnalyticsManager.GAMEPIECE_SELECT_KEY, _gamePieceID));
         }
 

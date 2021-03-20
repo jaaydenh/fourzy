@@ -20,26 +20,9 @@ namespace Fourzy
         private const string AMP_PROD_KEY = "300f3bfc4f1180cf072c49fcd198950f";
         private const string AMP_DEBUG_KEY = "4c62628ff8687c70a9fd201aea80db00";
 
-        public const string BOARD_ID_KEY = "boardId";
-        public const string LEVEL_ID = "levelId";
         public const string EVENT_ID_KEY = "eventId";
-        public const string GAUNTLET_ID_KEY = "gauntletId";
-        public const string SESSION_ID_KEY = "sessionId";
 
-        public const string AREA_KEY = "area";
         public const string GAME_RESULT_KEY = "result";
-        public const string NUM_TURNS_TAKEN_KEY = "numTurnsTaken";
-        public const string PLAYER_TURNS_COUNT_KEY = "playerTurnsCount";
-        public const string PUZZLE_TURNS_LIMIT_KEY = "puzzleTurnsLimit";
-        public const string LEVEL_INDEX_KEY = "levelIndex";
-        public const string GAUNTLET_MEMBERS_LEFT_KEY = "piecesRemaining";
-        public const string MAGIC_LEFT_KEY = "magicRemaining";
-        public const string GAME_AI_PROFILE_KEY = "botProfile";
-        public const string GAME_BOSS_TYPE_KEY = "bossType";
-        public const string BOARD_JSON_KEY = "boardJson";
-        public const string BOSS_MOVES_COUNT = "bossMovesCount";
-        public const string HINT_AVAILABLE_KEY = "isHintAvailable";
-        public const string HINT_NUMBER_KEY = "hintTurnNumber";
         public const string HINT_STORE_ITEMS_KEY = "hintStoreItems";
         public const string STORE_ITEM_KEY = "storeItemId";
         public const string GAMEPIECE_SELECT_KEY = "gamepieceSelect";
@@ -78,35 +61,46 @@ namespace Fourzy
 
         public enum AnalyticsEvents
         {
-            NONE,
-            VERSUS_GAME_START,
-            VERSUS_GAME_END,
-            RANDOM_PUZZLE_START,
-            RANDOM_PUZZLE_END,
-            GAUNTLET_LEVEL_START,
-            GAUNTLET_LEVEL_END,
-            AI_LEVEL_START,
-            AI_LEVEL_END,
-            BOSS_AI_LEVEL_START,
-            BOSS_AI_LEVEL_END,
-            PUZZLE_LEVEL_START,
-            PUZZLE_LEVEL_END,
-            PUZZLE_LEVEL_HINT_BUTTON_PRESS,
-            PUZZLE_HINT_STORE_HINT_PURCHASE,
-            EVENT_OPENED,
-            EVENT_COMPLETED,
-            SELECT_GAMEPIECE,
+            none,
+            versusGameStart,
+            versusGameEnd,
+            randomPuzzleStart,
+            randomPuzzleEnd,
+            gauntletLevelStart,
+            gauntletLevelEnd,
+            aiLevelStart,
+            aiLevelEnd,
+            bossAILevelStart,
+            bossAILevelEnd,
+            puzzleLevelStart,
+            puzzleLevelEnd,
+            hintButtonPressed,
+            hintPurchase,
+            eventOpened,
+            eventComplete,
+            selectGamepiece,
+            realtimeBotGameStart,
+            realtimeBotGameEnd,
+            realtimeLobbyGameStart,
+            realtimeLobbyGameEnd,
+            realtimeQuickmatchStart,
+            realtimeQuickmatchEnd,
         }
 
         public enum GameResultType
         {
-            None,
-            Win,
-            Lose,
-            Draw,
-            NoPossibleMoves,
-            Reset,
-            Abandoned,
+            none,
+            player1Win,
+            player2Win,
+            win,
+            lose,
+            draw,
+            reset,
+            skip,
+            noPossibleMoves,
+            abandoned,
+            player1TimeExpired,
+            player2TimeExpired,
         }
 
         protected override void Awake()
@@ -180,36 +174,7 @@ namespace Fourzy
                 ["timeSinceGameCreated"] = timePassed,
             };
 
-            LogEvent("LOBBY_GAME_JOINED", values, provider);
-        }
-
-        public void LogRealtimeGameCompleted(
-            string area, 
-            string result,
-            int turnsCount,
-            string complexityScore,
-            float winnerTimerLeft,
-            float opponentTimerLeft,
-            bool magicEnabled,
-            bool timerEnabled,
-            string winnerId,
-            string opponentId)
-        {
-            LogEvent(
-                "REALTIME_GAME_COMPLETE",
-                new Dictionary<string, object>()
-                {
-                    ["area"] = area,
-                    ["result"] = result,
-                    ["turnsTaken"] = turnsCount,
-                    ["complexityScore"] = complexityScore,
-                    ["winnerTimerLeft"] = winnerTimerLeft,
-                    ["opponentTimerLeft"] = opponentTimerLeft,
-                    ["isMagicEnabled"] = magicEnabled,
-                    ["timer"] = timerEnabled,
-                    ["winnerPlayerId"] = winnerId,
-                    ["opponentPlyerId"] = opponentId,
-                });
+            LogEvent("lobbyGameJoined", values, provider);
         }
 
         public void LogSettingsChange(
@@ -226,7 +191,7 @@ namespace Fourzy
             string id, 
             AnalyticsProvider provider = AnalyticsProvider.ALL)
         {
-            LogEvent("TUTORIAL_STEP_COMPLETE",
+            LogEvent("tutorialStepComplete",
                 new Dictionary<string, object>()
                 {
                     ["id"] = id
@@ -242,124 +207,127 @@ namespace Fourzy
         {
             Dictionary<string, object> @params = new Dictionary<string, object>();
 
-            @params.Add(BOARD_ID_KEY, game.BoardID);
-            @params.Add(AREA_KEY, game._Area);
+            @params.Add("boardId", game.BoardID);
+            @params.Add("area", game._Area);
 
             switch (eventType)
             {
-                case AnalyticsEvents.VERSUS_GAME_END:
-                    @params.Add(NUM_TURNS_TAKEN_KEY, game._allTurnRecord.Count);
+                case AnalyticsEvents.versusGameEnd:
+                    @params.Add("turnsCount", game._allTurnRecord.Count);
 
                     break;
 
-                case AnalyticsEvents.RANDOM_PUZZLE_START:
-                    @params.Add(SESSION_ID_KEY, GameManager.Instance.sessionID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
+                case AnalyticsEvents.randomPuzzleStart:
+                    @params.Add("sessionId", GameManager.Instance.sessionId);
+                    @params.Add("puzzleId", game.puzzleData.ID);
 
                     break;
 
-                case AnalyticsEvents.RANDOM_PUZZLE_END:
-                    @params.Add(SESSION_ID_KEY, GameManager.Instance.sessionID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(PUZZLE_TURNS_LIMIT_KEY, game.puzzleData.MoveLimit);
+                case AnalyticsEvents.randomPuzzleEnd:
+                    @params.Add("sessionId", GameManager.Instance.sessionId);
+                    @params.Add("puzzleId", game.puzzleData.ID);
+                    @params.Add("turnsCount", game._playerTurnRecord.Count);
+                    @params.Add("turnsLimit", game.puzzleData.MoveLimit);
 
                     break;
 
-                case AnalyticsEvents.GAUNTLET_LEVEL_START:
-                    @params.Add(GAUNTLET_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAUNTLET_MEMBERS_LEFT_KEY, game.myMembers.Count);
-                    @params.Add(MAGIC_LEFT_KEY, game.me.Magic);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-                    @params.Add(BOARD_JSON_KEY, JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
+                case AnalyticsEvents.gauntletLevelStart:
+                    @params.Add("gauntletId", game.puzzleData.pack.packID);
+                    @params.Add("levelIndex", game.puzzleData.puzzleIndex);
+                    @params.Add("currentNumPieces", game.myMembers.Count);
+                    @params.Add("currentMagicQty", game.me.Magic);
+                    @params.Add("aiProfileId", game.puzzleData.aiProfile);
+                    @params.Add("boardJson", JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
 
                     break;
 
-                case AnalyticsEvents.GAUNTLET_LEVEL_END:
-                    @params.Add(GAUNTLET_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAUNTLET_MEMBERS_LEFT_KEY, game.myMembers.Count);
-                    @params.Add(MAGIC_LEFT_KEY, game.me.Magic);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-                    @params.Add(BOARD_JSON_KEY, JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
+                case AnalyticsEvents.gauntletLevelEnd:
+                    @params.Add("gauntletId", game.puzzleData.pack.packID);
+                    @params.Add("levelIndex", game.puzzleData.puzzleIndex);
+                    @params.Add("currentNumPieces", game.myMembers.Count);
+                    @params.Add("currentMagicQty", game.me.Magic);
+                    @params.Add("aiProfileId", game.puzzleData.aiProfile);
+                    @params.Add("boardJson", JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
+                    @params.Add("turnsCount", game._playerTurnRecord.Count);
 
                     break;
 
-                case AnalyticsEvents.AI_LEVEL_START:
+                case AnalyticsEvents.aiLevelStart:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
+                    @params.Add("levelId", game.puzzleData.ID);
+                    @params.Add("levelIndex", game.puzzleData.puzzleIndex);
+                    @params.Add("aiProfile", game.puzzleData.aiProfile);
 
                     break;
 
-                case AnalyticsEvents.AI_LEVEL_END:
+                case AnalyticsEvents.aiLevelEnd:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
+                    @params.Add("levelId", game.puzzleData.ID);
+                    @params.Add("levelIndex", game.puzzleData.puzzleIndex);
+                    @params.Add("aiProfileId", game.puzzleData.aiProfile);
+                    @params.Add("turnsCount", game._playerTurnRecord.Count);
 
                     break;
 
-                case AnalyticsEvents.BOSS_AI_LEVEL_START:
+                case AnalyticsEvents.bossAILevelStart:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-                    @params.Add(GAME_BOSS_TYPE_KEY, game.puzzleData.aiBoss);
+                    @params.Add("levelId", game.puzzleData.ID);
+                    @params.Add("levelIndex", game.puzzleData.puzzleIndex);
+                    @params.Add("aiProfileId", game.puzzleData.aiProfile);
+                    @params.Add("bossType", game.puzzleData.aiBoss);
 
                     break;
 
-                case AnalyticsEvents.BOSS_AI_LEVEL_END:
+                case AnalyticsEvents.bossAILevelEnd:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(GAME_AI_PROFILE_KEY, game.puzzleData.aiProfile);
-                    @params.Add(GAME_BOSS_TYPE_KEY, game.puzzleData.aiBoss);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(BOSS_MOVES_COUNT, game.BossMoves);
+                    @params.Add("levelId", game.puzzleData.ID);
+                    @params.Add("levelIndex", game.puzzleData.puzzleIndex);
+                    @params.Add("aiProfileId", game.puzzleData.aiProfile);
+                    @params.Add("bossType", game.puzzleData.aiBoss);
+                    @params.Add("turnsCount", game._playerTurnRecord.Count);
+                    @params.Add("bossMovesCount", game.BossMoves);
 
                     break;
 
-                case AnalyticsEvents.PUZZLE_LEVEL_START:
+                case AnalyticsEvents.puzzleLevelStart:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
+                    @params.Add("levelId", game.puzzleData.ID);
+                    @params.Add("levelIndex", game.puzzleData.puzzleIndex);
 
                     break;
 
-                case AnalyticsEvents.PUZZLE_LEVEL_END:
+                case AnalyticsEvents.puzzleLevelEnd:
                     @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(PUZZLE_TURNS_LIMIT_KEY, game.puzzleData.MoveLimit);
+                    @params.Add("levelId", game.puzzleData.ID);
+                    @params.Add("levelIndex", game.puzzleData.puzzleIndex);
+                    @params.Add("turnsCount", game._playerTurnRecord.Count);
+                    @params.Add("turnsLimit", game.puzzleData.MoveLimit);
 
                     break;
 
-                case AnalyticsEvents.PUZZLE_LEVEL_HINT_BUTTON_PRESS:
+                case AnalyticsEvents.hintButtonPressed:
+                    //try add eventid
+                    if (game.puzzleData.pack)
+                    {
+                        @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    }
+
+                    @params.Add("levelId", game.puzzleData.ID);
+                    @params.Add("levelIndex", game.puzzleData.puzzleIndex);
+                    @params.Add("isHintAvailable", UserManager.Instance.hints > 0);
+                    @params.Add("turnsCount", game._playerTurnRecord.Count);
+                    @params.Add("hintTurnNumber", PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
+
+                    break;
+
+                case AnalyticsEvents.hintPurchase:
                     //try add eventid
                     if (game.puzzleData.pack) @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
 
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(HINT_AVAILABLE_KEY, UserManager.Instance.hints > 0);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
-
-                    break;
-
-                case AnalyticsEvents.PUZZLE_HINT_STORE_HINT_PURCHASE:
-                    //try add eventid
-                    if (game.puzzleData.pack) @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
-
-                    @params.Add(LEVEL_ID, game.puzzleData.ID);
-                    @params.Add(LEVEL_INDEX_KEY, game.puzzleData.puzzleIndex);
-                    @params.Add(PLAYER_TURNS_COUNT_KEY, game._playerTurnRecord.Count);
-                    @params.Add(HINT_NUMBER_KEY, PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
+                    @params.Add("levelId", game.puzzleData.ID);
+                    @params.Add("levelIndex", game.puzzleData.puzzleIndex);
+                    @params.Add("turnsCount", game._playerTurnRecord.Count);
+                    @params.Add("hintTurnNumber", PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
 
                     break;
             }
