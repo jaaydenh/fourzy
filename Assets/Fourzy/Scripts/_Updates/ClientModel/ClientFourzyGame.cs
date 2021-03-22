@@ -111,7 +111,9 @@ namespace Fourzy._Updates.ClientModel
                     if (puzzleData.pack)
                     {
                         if (puzzleData.gauntletStatus != null)
+                        {
                             return GameMode.GAUNTLET;
+                        }
                         else
                         {
                             switch (puzzleData.pack.packType)
@@ -149,7 +151,10 @@ namespace Fourzy._Updates.ClientModel
         {
             get
             {
-                if (string.IsNullOrEmpty(gameID)) gameID = Guid.NewGuid().ToString();
+                if (string.IsNullOrEmpty(gameID))
+                {
+                    gameID = Guid.NewGuid().ToString();
+                }
 
                 return gameID;
             }
@@ -530,7 +535,7 @@ namespace Fourzy._Updates.ClientModel
                             AnalyticsManager.Instance.LogEvent(AnalyticsManager.AnalyticsEvents.eventComplete,
                                 values: new KeyValuePair<string, object>(
                                     AnalyticsManager.EVENT_ID_KEY,
-                                    puzzleData.pack.packID));
+                                    puzzleData.pack.packId));
                         }
                     }
                     else
@@ -582,10 +587,6 @@ namespace Fourzy._Updates.ClientModel
             State.Players[playerID].HerdCount = State.Herds[playerID].Members.Count;
         }
 
-        /// <summary>
-        /// Only work with passplay boards for now
-        /// </summary>
-        /// <returns></returns>
         public IClientFourzy Next()
         {
             if (puzzleData)
@@ -658,6 +659,7 @@ namespace Fourzy._Updates.ClientModel
             }
 
             LoseStreak++;
+            playerTurnRecord = new List<PlayerTurn>();
 
             Initialize(false);
 
@@ -683,6 +685,7 @@ namespace Fourzy._Updates.ClientModel
             switch (puzzleData.pack.packType)
             {
                 case PackType.AI_PACK:
+                    //gauntlet game
                     if (puzzleData.gauntletStatus != null)
                     {
                         game = new ClientFourzyGame(
@@ -692,9 +695,15 @@ namespace Fourzy._Updates.ClientModel
                                     current.myMembers.Count :
                                     InternalSettings.Current.GAUNTLET_DEFAULT_MOVES_COUNT));
                     }
+                    //ai puzzle pack
                     else
                     {
                         game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiProfile, me);
+                        //if (current != null && current.puzzleData)
+                        //{
+                        //    if ()
+                        //    Debug.Log("___________" + game.BoardID);
+                        //}
 
                         if (!string.IsNullOrEmpty(puzzleData.aiPlayerName))
                         {
@@ -706,18 +715,13 @@ namespace Fourzy._Updates.ClientModel
 
                 default:
                     game = new ClientFourzyGame(puzzleData.gameBoardDefinition, puzzleData.aiBoss, me);
+                    game.BoardID = puzzleData.gameBoardDefinition.ID;
 
                     break;
             }
 
             game.puzzleData = puzzleData;
-            game.BoardID = puzzleData.gameBoardDefinition != null ?
-                puzzleData.gameBoardDefinition.ID :
-                "random_level";
-            game._State.ActivePlayerId = puzzleData.firstTurn < 1 ?
-                game.me.PlayerId :
-                puzzleData.firstTurn;
-
+            game._State.ActivePlayerId = puzzleData.firstTurn < 1 ? game.me.PlayerId : puzzleData.firstTurn;
             game.opponent.HerdId = puzzleData.PuzzlePlayer.HerdId;
 
             return game;

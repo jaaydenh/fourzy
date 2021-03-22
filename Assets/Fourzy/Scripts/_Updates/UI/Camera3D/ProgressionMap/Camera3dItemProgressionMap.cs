@@ -222,7 +222,7 @@ namespace Fourzy._Updates.UI.Camera3D
                 switch (@event.EventType)
                 {
                     case ProgressionEvent.ProgressionEventType.GAME:
-                        if (currentID == @event.PuzzlePack.packID)
+                        if (currentID == @event.PuzzlePack.packId)
                         {
                             current = @event;
                             found = true;
@@ -303,8 +303,8 @@ namespace Fourzy._Updates.UI.Camera3D
                         BasicPuzzlePack pack = 
                             GameContentManager.Instance.GetExternalPuzzlePack(events[eventIndex].packName);
 
-                        PlayerPrefsWrapper.SetPuzzlePackUnlocked(pack.packID, true);
-                        PlayerPrefsWrapper.SetPuzzlePackOpened(pack.packID, true);
+                        PlayerPrefsWrapper.SetPuzzlePackUnlocked(pack.packId, true);
+                        PlayerPrefsWrapper.SetPuzzlePackOpened(pack.packId, true);
 
                         pack.puzzlesData.ForEach(_data =>
                         {

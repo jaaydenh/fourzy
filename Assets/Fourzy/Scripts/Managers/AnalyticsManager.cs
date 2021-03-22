@@ -25,7 +25,8 @@ namespace Fourzy
         public const string GAME_RESULT_KEY = "result";
         public const string HINT_STORE_ITEMS_KEY = "hintStoreItems";
         public const string STORE_ITEM_KEY = "storeItemId";
-        public const string GAMEPIECE_SELECT_KEY = "gamepieceSelect";
+        public const string GAMEPIECE_SELECT_KEY = "gamepieceId";
+        public const string GAMEPIECE_NAME_KEY = "name";
         public const string SETTINGS_VALUE_NAME_KEY = "valueName";
         public const string SETTINGS_NEW_VALUE_KEY = "newValue";
         public const string SETTINGS_OLD_VALUE_KEY = "oldValue";
@@ -232,7 +233,7 @@ namespace Fourzy
                     break;
 
                 case AnalyticsEvents.gauntletLevelStart:
-                    @params.Add("gauntletId", game.puzzleData.pack.packID);
+                    @params.Add("gauntletId", game.puzzleData.pack.packId);
                     @params.Add("levelIndex", game.puzzleData.puzzleIndex);
                     @params.Add("currentNumPieces", game.myMembers.Count);
                     @params.Add("currentMagicQty", game.me.Magic);
@@ -242,7 +243,7 @@ namespace Fourzy
                     break;
 
                 case AnalyticsEvents.gauntletLevelEnd:
-                    @params.Add("gauntletId", game.puzzleData.pack.packID);
+                    @params.Add("gauntletId", game.puzzleData.pack.packId);
                     @params.Add("levelIndex", game.puzzleData.puzzleIndex);
                     @params.Add("currentNumPieces", game.myMembers.Count);
                     @params.Add("currentMagicQty", game.me.Magic);
@@ -253,24 +254,27 @@ namespace Fourzy
                     break;
 
                 case AnalyticsEvents.aiLevelStart:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packId);
                     @params.Add("levelId", game.puzzleData.ID);
                     @params.Add("levelIndex", game.puzzleData.puzzleIndex);
-                    @params.Add("aiProfile", game.puzzleData.aiProfile);
+                    @params.Add("aiProfileId", game.puzzleData.aiProfile);
 
                     break;
 
                 case AnalyticsEvents.aiLevelEnd:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packId);
                     @params.Add("levelId", game.puzzleData.ID);
                     @params.Add("levelIndex", game.puzzleData.puzzleIndex);
                     @params.Add("aiProfileId", game.puzzleData.aiProfile);
                     @params.Add("turnsCount", game._playerTurnRecord.Count);
+                    @params.Add(
+                        "isAlreadySolved",
+                        PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID));
 
                     break;
 
                 case AnalyticsEvents.bossAILevelStart:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packId);
                     @params.Add("levelId", game.puzzleData.ID);
                     @params.Add("levelIndex", game.puzzleData.puzzleIndex);
                     @params.Add("aiProfileId", game.puzzleData.aiProfile);
@@ -279,29 +283,35 @@ namespace Fourzy
                     break;
 
                 case AnalyticsEvents.bossAILevelEnd:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packId);
                     @params.Add("levelId", game.puzzleData.ID);
                     @params.Add("levelIndex", game.puzzleData.puzzleIndex);
                     @params.Add("aiProfileId", game.puzzleData.aiProfile);
                     @params.Add("bossType", game.puzzleData.aiBoss);
                     @params.Add("turnsCount", game._playerTurnRecord.Count);
                     @params.Add("bossMovesCount", game.BossMoves);
+                    @params.Add(
+                        "isAlreadySolved",
+                        PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID));
 
                     break;
 
                 case AnalyticsEvents.puzzleLevelStart:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packId);
                     @params.Add("levelId", game.puzzleData.ID);
                     @params.Add("levelIndex", game.puzzleData.puzzleIndex);
 
                     break;
 
                 case AnalyticsEvents.puzzleLevelEnd:
-                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packId);
                     @params.Add("levelId", game.puzzleData.ID);
                     @params.Add("levelIndex", game.puzzleData.puzzleIndex);
                     @params.Add("turnsCount", game._playerTurnRecord.Count);
                     @params.Add("turnsLimit", game.puzzleData.MoveLimit);
+                    @params.Add(
+                        "isAlreadySolved",
+                        PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID));
 
                     break;
 
@@ -309,7 +319,7 @@ namespace Fourzy
                     //try add eventid
                     if (game.puzzleData.pack)
                     {
-                        @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                        @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packId);
                     }
 
                     @params.Add("levelId", game.puzzleData.ID);
@@ -322,7 +332,7 @@ namespace Fourzy
 
                 case AnalyticsEvents.hintPurchase:
                     //try add eventid
-                    if (game.puzzleData.pack) @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packID);
+                    if (game.puzzleData.pack) @params.Add(EVENT_ID_KEY, game.puzzleData.pack.packId);
 
                     @params.Add("levelId", game.puzzleData.ID);
                     @params.Add("levelIndex", game.puzzleData.puzzleIndex);

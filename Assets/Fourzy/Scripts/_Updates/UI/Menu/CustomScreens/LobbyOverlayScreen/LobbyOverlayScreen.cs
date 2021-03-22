@@ -227,7 +227,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             AnalyticsManager.Instance.LogEvent(
-                "LOBBY_ABANDONED",
+                "lobbyAbandoned",
                 new Dictionary<string, object>()
                 {
                     ["playerId"] = LoginManager.playfabId,
@@ -262,7 +262,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 & displayable) == 0) return;
 
             AnalyticsManager.Instance.LogEvent(
-                "LOBBY_CREATED",
+                "lobbyCreated",
                 new Dictionary<string, object>()
                 {
                     ["playerId"] = LoginManager.playfabId,

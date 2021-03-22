@@ -23,6 +23,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public TweenBase completeIcon;
         public AlphaTween packInfoTween;
 
+        private int prevHintsCount = -1;
+
         public IClientFourzy game { get; private set; }
 
         public void Open(IClientFourzy game)
@@ -193,9 +195,25 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void TryUseHint()
         {
-            //GamePlayManager.Instance.PlayHint();
+            GamePlayManager.Instance.PlayHint();
 
-            //if (GamePlayManager.Instance.IsRoutineActive("hintRoutine")) SetHintButtonState(false);
+            if (GamePlayManager.Instance.IsRoutineActive("hintRoutine"))
+            {
+                SetHintButtonState(false);
+            }
+
+            //if check to prevent event spamming
+            if (prevHintsCount != UserManager.Instance.hints)
+            {
+                AnalyticsManager.Instance.LogGame(
+                    AnalyticsManager.AnalyticsEvents.hintButtonPressed,
+                    game,
+                    extraParams: new KeyValuePair<string, object>(
+                        AnalyticsManager.HINT_STORE_ITEMS_KEY,
+                        StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)));
+            }
+
+            prevHintsCount = UserManager.Instance.hints;
         }
 
         private void SetHintButtonState(bool state) => hintButton.SetState(state && !game.isOver && game.isMyTurn);

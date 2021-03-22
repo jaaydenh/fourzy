@@ -17,7 +17,7 @@ namespace Fourzy._Updates.ClientModel
     {
         public string name;
         public PackType packType = PackType.PUZZLE_PACK;
-        public string packID;
+        public string packId;
         public string aiPlayerName;
         public string herdID;
         public UnlockRequirementsEnum unlockRequirement;
@@ -47,7 +47,7 @@ namespace Fourzy._Updates.ClientModel
 
             name = jObject["name"].ToObject<string>();
             packType = (PackType)jObject["type"].ToObject<int>();
-            packID = jObject["id"].ToObject<string>();
+            packId = jObject["id"].ToObject<string>();
             unlockRequirement = (UnlockRequirementsEnum)jObject["unlockRequirement"].ToObject<int>();
             herdID = jObject["herdID"].ToObject<string>();
             aiPlayerName = jObject["playerName"].ToObject<string>();
@@ -80,7 +80,7 @@ namespace Fourzy._Updates.ClientModel
 
             name = "Beat The Bot";
             packType = PackType.AI_PACK;
-            packID = Guid.NewGuid().ToString();
+            packId = Guid.NewGuid().ToString();
             unlockRequirement = UnlockRequirementsEnum.NONE;
             herdID = "1";
             aiPlayerName = "The Bot";
@@ -90,7 +90,7 @@ namespace Fourzy._Updates.ClientModel
             {
                 ClientPuzzleData puzzleData = new ClientPuzzleData();
                 puzzleData.pack = this;
-                puzzleData.ID = packID + "_level_" + levelIndex;
+                puzzleData.ID = packId + "_level_" + levelIndex;
                 puzzleData.aiPlayerName = aiPlayerName;
                 puzzleData.PuzzlePlayer = puzzlePlayer;
                 puzzleData.startingMagic = FourzyGameModel.Model.Constants.PlayerStartingMagic;
@@ -160,6 +160,12 @@ namespace Fourzy._Updates.ClientModel
         {
             ClientPuzzleData data = enabledPuzzlesData.Next(current.puzzleData);
 
+            if (data == current.puzzleData)
+            {
+                current._Reset();
+                return current;
+            }
+
             data.Initialize();
 
             switch (data.pack.packType)
@@ -215,8 +221,8 @@ namespace Fourzy._Updates.ClientModel
 
         public void ResetPlayerPrefs()
         {
-            PlayerPrefsWrapper.SetPuzzlePackUnlocked(packID, false);
-            PlayerPrefsWrapper.SetPuzzlePackOpened(packID, false);
+            PlayerPrefsWrapper.SetPuzzlePackUnlocked(packId, false);
+            PlayerPrefsWrapper.SetPuzzlePackOpened(packId, false);
 
             puzzlesData.ForEach(_data =>
             {

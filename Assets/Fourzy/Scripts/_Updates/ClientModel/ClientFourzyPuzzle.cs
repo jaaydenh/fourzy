@@ -259,7 +259,7 @@ namespace Fourzy._Updates.ClientModel
                             AnalyticsManager.Instance.LogEvent(
                                 AnalyticsManager.AnalyticsEvents.eventComplete,
                                 values: new KeyValuePair<string, object>(
-                                    AnalyticsManager.EVENT_ID_KEY, puzzleData.pack.packID));
+                                    AnalyticsManager.EVENT_ID_KEY, puzzleData.pack.packId));
                         }
                     }
                     else

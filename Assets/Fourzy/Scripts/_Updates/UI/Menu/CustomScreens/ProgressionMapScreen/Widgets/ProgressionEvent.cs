@@ -315,7 +315,7 @@ namespace Fourzy._Updates.UI.Widgets
 
                     AnalyticsManager.Instance.LogEvent(
                         AnalyticsManager.AnalyticsEvents.eventOpened,
-                        values: new KeyValuePair<string, object>(AnalyticsManager.EVENT_ID_KEY, PuzzlePack.packID));
+                        values: new KeyValuePair<string, object>(AnalyticsManager.EVENT_ID_KEY, PuzzlePack.packId));
 
                     break;
 

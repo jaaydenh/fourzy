@@ -85,7 +85,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 onAccept ?? (() =>
                 {
                     CloseSelf();
-                    puzzlePack.StartNextUnsolvedPuzzle(/*GameManager.Instance.activeGame*/);
+                    puzzlePack.StartNextUnsolvedPuzzle();
                 }),
                 onDeny ?? (() => menuController.CloseCurrentScreen()));
         }

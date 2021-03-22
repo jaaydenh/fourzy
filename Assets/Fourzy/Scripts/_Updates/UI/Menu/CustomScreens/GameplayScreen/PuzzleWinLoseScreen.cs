@@ -67,7 +67,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         GameManager.Instance.currentMap.UpdateWidgets();
 
                         //open screen for next event
-                        BasicPuzzlePack nextPack = GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packID);
+                        BasicPuzzlePack nextPack = GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packId);
                         nextPack.StartNextUnsolvedPuzzle();
 
                         if (nextPack)
@@ -134,7 +134,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 if (game.puzzleData.pack)
                 {
                     if (!puzzlePackProgressWidget.puzzlePack ||
-                        puzzlePackProgressWidget.puzzlePack.packID != game.puzzleData.pack.packID)
+                        puzzlePackProgressWidget.puzzlePack.packId != game.puzzleData.pack.packId)
                     {
                         puzzlePackProgressWidget.SetData(game.puzzleData.pack);
                     }

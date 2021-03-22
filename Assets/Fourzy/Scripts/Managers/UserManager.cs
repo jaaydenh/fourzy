@@ -394,14 +394,17 @@ namespace Fourzy
 
         public void UpdateSelectedGamePiece(string _gamePieceID)
         {
-            Debug.Log($"-------------{_gamePieceID}");
             gamePieceID = _gamePieceID;
 
             OnUpdateUserGamePieceID?.Invoke(gamePieceID);
 
             AnalyticsManager.Instance.LogEvent(
                 AnalyticsManager.AnalyticsEvents.selectGamepiece,
-                values: new KeyValuePair<string, object>(AnalyticsManager.GAMEPIECE_SELECT_KEY, _gamePieceID));
+                AnalyticsManager.AnalyticsProvider.ALL,
+                new KeyValuePair<string, object>(AnalyticsManager.GAMEPIECE_SELECT_KEY, _gamePieceID),
+                new KeyValuePair<string, object>(
+                    AnalyticsManager.GAMEPIECE_NAME_KEY, 
+                    GameContentManager.Instance.piecesDataHolder.GetGamePieceData(_gamePieceID).name));
         }
 
         public static void GetPlayerRating(
@@ -531,7 +534,6 @@ namespace Fourzy
 
         private void OnAvatarUrlUpdate(EmptyResponse response)
         {
-            Debug.Log(response.ToJson());
         }
 
         private void OnPlayFabError(PlayFabError error)

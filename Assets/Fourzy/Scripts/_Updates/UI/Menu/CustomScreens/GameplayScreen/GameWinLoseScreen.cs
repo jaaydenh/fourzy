@@ -368,7 +368,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                             //open screen for next event
                             BasicPuzzlePack nextPack = GameManager.Instance.currentMap
-                                .GetNextPack(game.puzzleData.pack.packID);
+                                .GetNextPack(game.puzzleData.pack.packId);
 
                             if (nextPack == null)
                             {
