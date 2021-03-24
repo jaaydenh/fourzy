@@ -13,6 +13,7 @@ using LoginResult = PlayFab.ClientModels.LoginResult;
 using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Fourzy;
 
 /// <summary>
 /// Supported Authentication types
@@ -367,7 +368,7 @@ public class PlayFabAuthService
 		string customDeviceID = "";
 		foreach (string arg in Environment.GetCommandLineArgs())
 		{
-			if (arg.Contains("deviceID"))
+			if (arg.Contains("userId"))
             {
 				string[] argParts = arg.Split('=');
 				
@@ -376,6 +377,14 @@ public class PlayFabAuthService
 					customDeviceID = argParts[1];
                 }
             }
+		}
+
+		if (string.IsNullOrEmpty(customDeviceID))
+		{
+			if (Application.isEditor || Debug.isDebugBuild)
+			{
+				customDeviceID = GameManager.Instance.customUserId;
+			}
 		}
 
 #if UNITY_ANDROID && !UNITY_EDITOR
