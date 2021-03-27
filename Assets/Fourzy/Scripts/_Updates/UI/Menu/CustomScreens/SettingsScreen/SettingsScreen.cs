@@ -28,7 +28,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         "OnboardingLandscape" : 
                         "Onboarding"));
 
-            AnalyticsManager.Instance.LogEvent("TUTORIAL_REPLAY");
+            AnalyticsManager.Instance.LogEvent("tutorialReplay");
         }
 
         public void ResetPuzzles()
@@ -40,11 +40,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 LocalizationManager.Value("no"),
                 () =>
                 {
-                    GameContentManager.Instance.ResetFastPuzzles();
-                    GameContentManager.Instance.ResetPuzzlePacks();
-                    GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
-
-                    AnalyticsManager.Instance.LogEvent("PROGRESS_RESET");
+                    GameManager.Instance.ResetGames(false);
                 },
                 null)
                 .CloseOnAccept()

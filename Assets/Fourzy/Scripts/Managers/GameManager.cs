@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 //using Firebase;
+using ExitGames.Client.Photon;
 using Fourzy._Updates;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
@@ -39,6 +40,7 @@ namespace Fourzy
         public static Action<string> onSceneChanged;
         public static Action<string> onDailyChallengeFileName;
         public static Action<PlacementStyle> onPlacementStyle;
+        public static Action<RatingGameCompleteResult> ratingDataReceived;
 
         public static GameManager Instance;
 
@@ -188,6 +190,8 @@ namespace Fourzy
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
+            FourzyPhotonManager.onEvent += OnEventCall;
+            Application.logMessageReceived += HandleException;
 
             NetworkManager.onStatusChanged += OnNetStatusChanged;
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEntered;
@@ -202,6 +206,8 @@ namespace Fourzy
 
             //initialize photon
             FourzyPhotonManager.Initialize(DEBUG: true);
+
+            PlayerPrefsWrapper.AddAppOpened();
         }
 
         protected void Start()
@@ -243,6 +249,8 @@ namespace Fourzy
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
+            FourzyPhotonManager.onEvent -= OnEventCall;
+            Application.logMessageReceived -= HandleException;
 
             FourzyPhotonManager.onPlayerPpopertiesUpdate -= OnPlayerPropertiesUpdate;
             FourzyPhotonManager.onPlayerEnteredRoom -= OnPlayerEntered;
@@ -341,21 +349,241 @@ namespace Fourzy
         public void OpenDiscordPage()
         {
             AnalyticsManager.Instance.LogEvent(
-                "OPEN_DISCORD",
+                "discordButtonPress",
                 AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("playerId", LoginManager.playfabId),
-                new KeyValuePair<string, object>("masterId", LoginManager.masterAccountId));
+                new KeyValuePair<string, object>("playerId", LoginManager.masterAccountId));
 
             Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/t2zW7j3XRs"/*)*/);
         }
 
-        public void ResetGames()
+        public void ResetGames(bool resetHintInstructions = false)
         {
             GameContentManager.Instance.ResetFastPuzzles();
             GameContentManager.Instance.ResetPuzzlePacks();
             GameContentManager.Instance.tokensDataHolder.ResetTokenInstructions();
 
-            ResetHintInstructions();
+            if (resetHintInstructions)
+            {
+                ResetHintInstructions();
+            }
+
+            AnalyticsManager.Instance.LogEvent("progressReset");
+
+            PlayerPrefsWrapper.AddAdventurePuzzlesResets();
+            Amplitude.Instance.setUserProperty(
+                "totalAdventurePuzzlesReset",
+                PlayerPrefsWrapper.GetAdventurePuzzleResets());
+        }
+
+        public void ReportRealtimeGameFinished(IClientFourzy game, string winnerID, string opponentID)
+        {
+            if (activeGame == null) return;
+            if (string.IsNullOrEmpty(opponentID)) return;
+
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "reportRatingGameComplete",
+                FunctionParameter = new
+                {
+                    winnerID,
+                    opponentID,
+                    activeGame.draw,
+                },
+                GeneratePlayStreamEvent = true,
+            },
+            (result) =>
+            {
+                RatingGameCompleteResult gameCompleteResult =
+                    JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString());
+                OnRatingDataAquired(gameCompleteResult);
+
+                LogGameComplete(game);
+
+                //try send rating update to other client 
+                if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.PlayerListOthers.Length > 0)
+                {
+                    var eventOptions = new Photon.Realtime.RaiseEventOptions();
+                    eventOptions.Flags.HttpForward = true;
+                    eventOptions.Flags.WebhookFlags = Photon.Realtime.WebFlags.HttpForwardConst;
+
+                    var photonEventResult = PhotonNetwork.RaiseEvent(
+                        Constants.RATING_GAME_DATA,
+                        result.FunctionResult.ToString(),
+                        eventOptions,
+                        SendOptions.SendReliable);
+                }
+            },
+            (error) =>
+            {
+                Debug.LogError(error.ErrorMessage);
+
+                ReportPlayFabError(error.ErrorMessage);
+            });
+        }
+
+        public void ReportPlayFabError(string errorMessage)
+        {
+            AnalyticsManager.Instance.LogEvent(
+                "playfabError",
+                AnalyticsManager.AnalyticsProvider.ALL,
+                new KeyValuePair<string, object>("error", errorMessage));
+        }
+
+        private void OnRatingDataAquired(RatingGameCompleteResult data)
+        {
+            foreach (RatingGamePlayer player in data.players)
+            {
+                if (player.playfabID == LoginManager.playfabId)
+                {
+                    UserManager.Instance.lastCachedRating = player.rating;
+
+                    if (player.winner)
+                    {
+                        UserManager.Instance.playfabWinsCount += 1;
+                    }
+                    else
+                    {
+                        UserManager.Instance.playfabLosesCount += 1;
+                    }
+
+                    ratingDataReceived?.Invoke(data);
+                }
+                else
+                {
+                    if (RealtimeOpponent != null)
+                    {
+                        RealtimeOpponent.SetExternalRating(player.rating);
+                        RealtimeOpponent.SetExternalTotalGames(RealtimeOpponent.TotalGames + 1);
+                    }
+                }
+            }
+        }
+
+        public void ReportBotGameFinished(IClientFourzy game)
+        {
+            if (game == null) return;
+            if (string.IsNullOrEmpty(RealtimeOpponent.Id)) return;
+
+            float winner = game.draw ? .5f : (game.IsWinner() ? 1f : 0f);
+
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "reportBotGameComplete",
+                FunctionParameter = new
+                {
+                    playerId = LoginManager.playfabId,
+                    winner,
+                    botId = game.opponent.Profile.ToString()
+                },
+                GeneratePlayStreamEvent = true,
+            },
+            (result) =>
+            {
+                RatingGameCompleteResult ratingGameResult =
+                    JsonConvert.DeserializeObject<RatingGameCompleteResult>(result.FunctionResult.ToString());
+                OnRatingDataAquired(ratingGameResult);
+
+                if (RealtimeOpponent != null)
+                {
+                    //manually update opponent data
+                    foreach (RatingGamePlayer playerData in ratingGameResult.players)
+                    {
+                        if (playerData.playfabID == "bot")
+                        {
+                            RealtimeOpponent.SetExternalRating(playerData.rating);
+                            RealtimeOpponent.TotalGames += 1;
+                        }
+                    }
+                }
+
+                LogGameComplete(game);
+            },
+            (error) =>
+            {
+                Debug.LogError(error.ErrorMessage);
+
+                ReportPlayFabError(error.ErrorMessage);
+            });
+        }
+
+        private void LogGameComplete(IClientFourzy game)
+        {
+            if (game._Type == GameType.ONBOARDING) return;
+
+            AnalyticsManager.GameResultType gameResult;
+            Dictionary<string, object> extraParams = new Dictionary<string, object>();
+
+            bool isPlayer1 = game.me == game.player1;
+
+            if (!game.turnEvaluator.IsAvailableSimpleMove())
+            {
+                gameResult = AnalyticsManager.GameResultType.noPossibleMoves;
+            }
+            else if (game.draw)
+            {
+                gameResult = AnalyticsManager.GameResultType.draw;
+            }
+            else
+            {
+                bool checkPlayer1or2Win = false;
+
+                switch (ExpectedGameType)
+                {
+                    case GameTypeLocal.REALTIME_BOT_GAME:
+                    case GameTypeLocal.REALTIME_LOBBY_GAME:
+                    case GameTypeLocal.REALTIME_QUICKMATCH:
+                        checkPlayer1or2Win = true;
+
+                        break;
+
+                    case GameTypeLocal.LOCAL_GAME:
+                        switch (game._Mode)
+                        {
+                            case GameMode.VERSUS:
+                                checkPlayer1or2Win = true;
+
+                                break;
+                        }
+
+                        break;
+                }
+
+                if (checkPlayer1or2Win)
+                {
+                    gameResult = game.IsWinner(game.player1) ?
+                        AnalyticsManager.GameResultType.player1Win :
+                        AnalyticsManager.GameResultType.player2Win;
+                }
+                else
+                {
+                    gameResult = game.IsWinner() ?
+                        AnalyticsManager.GameResultType.win :
+                        AnalyticsManager.GameResultType.lose;
+                }
+            }
+
+            extraParams.Add(AnalyticsManager.GAME_RESULT_KEY, gameResult.ToString());
+
+            if (GamePlayManager.Instance)
+            {
+                if (GamePlayManager.Instance.gameplayScreen.timersEnabled)
+                {
+                    float player1TimeLeft = isPlayer1 ?
+                        GamePlayManager.Instance.gameplayScreen.myTimerLeft :
+                        GamePlayManager.Instance.gameplayScreen.opponentTimerLeft;
+                    float player2TimeLeft = isPlayer1 ?
+                        GamePlayManager.Instance.gameplayScreen.opponentTimerLeft :
+                        GamePlayManager.Instance.gameplayScreen.myTimerLeft;
+
+                    extraParams.Add("player1TimeRemaining", player1TimeLeft);
+                    extraParams.Add("player2TimeRemaining", player2TimeLeft);
+                }
+            }
+
+            if (gameResult != AnalyticsManager.GameResultType.none)
+            {
+                AnalyticsManager.Instance.LogGame(game.GameToAnalyticsEvent(false), game, extraParams);
+            }
         }
 
         public void ChallengePlayerRealtime(string playfabName)
@@ -430,7 +658,12 @@ namespace Fourzy
                 GeneratePlayStreamEvent = true,
             },
             (result) => { Debug.Log($"Fast puzzles stat updated {_value}"); },
-            (error) => { Debug.LogError(error.ErrorMessage); });
+            (error) =>
+            {
+                Debug.LogError(error.ErrorMessage);
+
+                Instance.ReportPlayFabError(error.ErrorMessage);
+            });
         }
 
         public static void GetTitleData(Action<object> onDataLoaded, Action onFailed)
@@ -441,6 +674,7 @@ namespace Fourzy
                     onDataLoaded?.Invoke(result.Data);
                 }, error =>
                 {
+                    Instance.ReportPlayFabError(error.ErrorMessage);
                     Debug.Log(error.ErrorMessage);
                     onFailed?.Invoke();
                 });
@@ -542,7 +776,26 @@ namespace Fourzy
                     }
                 }
             },
-            (error) => { Debug.LogError(error.ErrorMessage); });
+            (error) =>
+            {
+                Debug.LogError(error.ErrorMessage);
+
+                Instance.ReportPlayFabError(error.ErrorMessage);
+            });
+        }
+
+        private void HandleException(string condition, string stackTrace, LogType type)
+        {
+            switch (type)
+            {
+                case LogType.Error:
+                    AnalyticsManager.Instance.LogEvent(
+                        "error",
+                        AnalyticsManager.AnalyticsProvider.ALL,
+                        new KeyValuePair<string, object>("error", condition));
+
+                    break;
+            }
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -611,10 +864,12 @@ namespace Fourzy
                     data.ContainsKey(Constants.REALTIME_LOSES_KEY) ||
                     data.ContainsKey(Constants.REALTIME_DRAWS_KEY))
                 {
+                    RealtimeOpponent.useExternalTotalGamesValue = false;
                     RealtimeOpponent.TotalGames = FourzyPhotonManager.GetPlayerTotalGamesCount(player);
                 }
                 else if (data.ContainsKey(Constants.REALTIME_RATING_KEY))
                 {
+                    RealtimeOpponent.useExternalRatingValue = false;
                     RealtimeOpponent.Rating = (int)data[Constants.REALTIME_RATING_KEY];
                 }
             }
@@ -642,6 +897,18 @@ namespace Fourzy
             }
         }
 
+        private void OnEventCall(EventData data)
+        {
+            switch (data.Code)
+            {
+                case Constants.RATING_GAME_DATA:
+                    OnRatingDataAquired(
+                        JsonConvert.DeserializeObject<RatingGameCompleteResult>(data.CustomData.ToString()));
+
+                    break;
+            }
+        }
+
         private IEnumerator FetchingNews()
         {
             while (!LoginManager.Instance.languageChecked) yield return null;
@@ -655,7 +922,11 @@ namespace Fourzy
                         latestNews = result.News;
                         onNewsFetched?.Invoke();
                     },
-                    error => Debug.LogError(error.GenerateErrorReport()));
+                    error =>
+                    {
+                        Debug.LogError(error.GenerateErrorReport());
+                        ReportPlayFabError(error.ErrorMessage);
+                    });
             }
             catch (Exception) { }
         }

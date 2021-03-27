@@ -96,20 +96,22 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case GameType.REALTIME:
-                        if (game.isOver)
-                        {
-                            GamePlayManager.Instance.BackButtonOnClick();
-                        }
-                        else
-                        {
-                            menuController.GetOrAddScreen<PromptScreen>()
-                                .Prompt(
-                                    LocalizationManager.Value("are_you_sure"),
-                                    LocalizationManager.Value("leave_realtime_game_message"),
-                                    LocalizationManager.Value("yes"),
-                                    LocalizationManager.Value("no"),
-                                    () => GamePlayManager.Instance.BackButtonOnClick());
-                        }
+                        //cant leave realtime game anymore
+
+                        //if (game.isOver)
+                        //{
+                        //    GamePlayManager.Instance.BackButtonOnClick();
+                        //}
+                        //else
+                        //{
+                        //    menuController.GetOrAddScreen<PromptScreen>()
+                        //        .Prompt(
+                        //            LocalizationManager.Value("are_you_sure"),
+                        //            LocalizationManager.Value("leave_realtime_game_message"),
+                        //            LocalizationManager.Value("yes"),
+                        //            LocalizationManager.Value("no"),
+                        //            () => GamePlayManager.Instance.BackButtonOnClick());
+                        //}
 
                         break;
 
@@ -209,7 +211,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             break;
 
                         case GameTypeLocal.REALTIME_BOT_GAME:
-                            magicState = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER) ? 
+                            magicState = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC) ? 
                                 MagicState.BOTH : 
                                 MagicState.DISABLED;
 

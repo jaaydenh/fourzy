@@ -66,7 +66,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void Clear()
         {
-            foreach (FriendWidget widget in friends) Destroy(widget.gameObject);
+            foreach (FriendWidget widget in friends)
+            {
+                Destroy(widget.gameObject);
+            }
+
             friends.Clear();
         }
 
@@ -77,13 +81,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onFriendsUpdated += OnPhotonFriendsUpdated;
         }
 
-        private void OnGetFriendsError(PlayFabError obj)
+        private void OnGetFriendsError(PlayFabError error)
         {
+            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+
             isUpdating = false;
 
             if (!isOpened) return;
 
-            GamesToastsController.ShowTopToast($"Failed: {obj.ErrorMessage}");
+            GamesToastsController.ShowTopToast($"Failed: {error.ErrorMessage}");
         }
 
         private void OnGetFriendsListResult(GetFriendsListResult obj)
@@ -113,8 +119,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     friends.Add(Instantiate(widgetPrefab, widgetsParent)
                         .SetData(friendsData[friendIndex])
                         .SetOnFriendRemoved(OnFriendRemoved)
-                        .SetPlayerIcon(string.IsNullOrEmpty(friendsData[friendIndex].Profile.AvatarUrl) ? 
-                            InternalSettings.Current.DEFAULT_GAME_PIECE : 
+                        .SetPlayerIcon(string.IsNullOrEmpty(friendsData[friendIndex].Profile.AvatarUrl) ?
+                            InternalSettings.Current.DEFAULT_GAME_PIECE :
                             friendsData[friendIndex].Profile.AvatarUrl)
                         .UpdateOnlineStatus(_friends[friendIndex].IsOnline));
         }
@@ -131,7 +137,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void OnAddFriend(string displayName)
         {
             lastAddFriendName = displayName;
-            PlayFabClientAPI.AddFriend(new PlayFab.ClientModels.AddFriendRequest() { FriendTitleDisplayName = displayName, }, OnAddFriendResult, OnAddFriendError);
+            PlayFabClientAPI.AddFriend(new PlayFab.ClientModels.AddFriendRequest()
+            {
+                FriendTitleDisplayName = displayName,
+            }, 
+            OnAddFriendResult, 
+            OnAddFriendError);
         }
 
         private void OnAddFriendResult(AddFriendResult obj)
@@ -149,9 +160,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             UpdateFriendsList();
         }
 
-        private void OnAddFriendError(PlayFabError obj)
+        private void OnAddFriendError(PlayFabError error)
         {
-            GamesToastsController.ShowTopToast($"Failed: {obj.ErrorMessage}");
+            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+
+            GamesToastsController.ShowTopToast($"Failed: {error.ErrorMessage}");
         }
 
         private float GetWaitTime(int iteration) => Mathf.Clamp(iteration, 0f, 10f) + .5f;

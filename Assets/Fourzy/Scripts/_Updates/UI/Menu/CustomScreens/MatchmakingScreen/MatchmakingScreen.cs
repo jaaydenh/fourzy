@@ -4,8 +4,11 @@ using Fourzy._Updates.Audio;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
+using Newtonsoft.Json;
 // using GameSparks.Api.Responses;
 using Photon.Pun;
+using PlayFab;
+using PlayFab.ClientModels;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -27,6 +30,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private MatchmakingScreenState state;
         private LoadingPromptScreen _prompt;
         private List<string> matchMakingStrings;
+        private float roomCreatedTime;
+        private bool useBotMatch;
 
         public AlphaTween alphaTween { get; private set; }
 
@@ -64,6 +69,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
             FourzyPhotonManager.onRoomLeft -= OnRoomLeft;
         }
 
+        public void BackButtonPressed()
+        {
+            OnBack();
+
+            AnalyticsManager.Instance.LogEvent(
+                "realtimeMatchmakingAbandoned",
+                AnalyticsManager.AnalyticsProvider.ALL,
+                new KeyValuePair<string, object>("playerId", LoginManager.masterAccountId),
+                new KeyValuePair<string, object>("area", ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString()),
+                new KeyValuePair<string, object>("matchmakingTimeElapsed", Time.time - roomCreatedTime)
+                );
+        }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -77,7 +95,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Close(animate);
 
-            StopRoutine("multiplayerTimeout", false);
+            StopRoutine("botMatch", false);
             StopRoutine("randomText", false);
 
             state = MatchmakingScreenState.NONE;
@@ -92,7 +110,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             CloseSelf();
 
-            if (FourzyPhotonManager.IsQMLobby) FourzyPhotonManager.TryLeaveRoom();
+            if (FourzyPhotonManager.IsQMLobby)
+            {
+                FourzyPhotonManager.TryLeaveRoom();
+            }
         }
 
         public void OpenTurnbased()
@@ -163,7 +184,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     {
                         messageLabel.text = "Searching for opponent...";
 
+                        roomCreatedTime = Time.time;
                         FourzyPhotonManager.JoinRandomRoom();
+
+                        AnalyticsManager.Instance.LogEvent(
+                            "realtimeMatchmakingStarted",
+                            AnalyticsManager.AnalyticsProvider.ALL,
+                            new KeyValuePair<string, object>("playerId", LoginManager.masterAccountId),
+                            new KeyValuePair<string, object>("area", ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString()));
                     }, () =>
                     {
                         messageLabel.text = "Failed retrieving players' stats";
@@ -186,57 +214,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             StartRoutine("randomText", ShowRandomTextRoutine());
         }
 
-        // private void OnChallengesUpdate(List<ChallengeData> challenges) => OnChallengeUpdate(challenges.Find(_challenge => _challenge.challengeInstanceId == challengeIdToJoin));
-
-        // private void OnChallengeUpdate(ChallengeData challenge)
-        // {
-        //     if (!isOpened || challenge == null || challenge.challengeInstanceId != challengeIdToJoin)
-        //         return;
-
-        //     Debug.Log($"Game starts {challenge.challengeInstanceId}");
-        //     challengeIdToJoin = "";
-
-        //     //cancel extra check
-        //     CancelRoutine("newChallengeExtraCheck");
-
-        //     //play GAME_FOUND sfx
-        //     AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
-        //     GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
-        //     timerLabel.text = "Match Found";
-
-        //     StartRoutine("openGame", 1.5f, () =>
-        //     {
-        //         menuController.CloseCurrentScreen();
-        //         GameManager.Instance.StartGame(challenge.lastTurnGame);
-        //     });
-        // }
-
-        // private void CreateTurnBasedGameSuccess(LogEventResponse response)
-        // {
-        //     challengeIdToJoin = response.ScriptData.GetString("challengeInstanceId");
-        //     Debug.Log($"Game created {challengeIdToJoin}");
-
-        //     //start routine to check for this challenge in 5 seconds if OnChallengeStarted wasnt triggered on ChallengeManager
-        //     StartRoutine("newChallengeExtraCheck", 5f, () => ChallengeManager.Instance.GetChallengeRequest(challengeIdToJoin), null);
-        // }
-
-        // private void CreateTurnBasedGameError(LogEventResponse response)
-        // {
-        //     if (!isOpened) return;
-
-        //     Debug.Log("***** Error Creating Turn based game: " + response.Errors.JSON);
-        //     AnalyticsManager.Instance.LogError(response.Errors.JSON, AnalyticsManager.AnalyticsErrorType.create_turn_base_game);
-
-        //     messageLabel.text = "Failed to create new game...";
-        //     timerLabel.text = response.Errors.JSON;
-
-        //     //unblock input
-        //     SetInteractable(true);
-        //     backButton.SetActive(true);
-
-        //     StopRoutine("randomText", false);
-        // }
-
         #region Photon callbacks
 
         private void OnJoinRandomFailed()
@@ -258,8 +235,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SetInteractable(true);
             backButton.SetActive(true);
 
+            useBotMatch = InternalSettings.Current.BOT_SETTINGS.randomMatchAfter > 0f;
+
             //start timeout timer
-            StartRoutine("multiplayerTimeout", Constants.REALTIME_OPPONENT_WAIT_TIME, OnMultiplayerTimerTimedOut, null);
+            StartRoutine(
+                "botMatch",
+                useBotMatch ?
+                    InternalSettings.Current.BOT_SETTINGS.randomMatchAfter :
+                    Constants.REALTIME_OPPONENT_WAIT_TIME,
+                StartBotMatch,
+                null);
         }
 
         private void OnCreateRoomFailed(string error)
@@ -287,7 +272,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             GameManager.Instance.RealtimeOpponent = new OpponentData(otherPlayer);
             //other player connected, switch to gameplay scene
-            StartMatch();
+            StartMatch(GameTypeLocal.REALTIME_QUICKMATCH);
 
             CloseSelf();
         }
@@ -301,7 +286,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 GameManager.Instance.RealtimeOpponent = new OpponentData(PhotonNetwork.PlayerListOthers[0]);
 
                 //open gameplay scene
-                StartMatch();
+                StartMatch(GameTypeLocal.REALTIME_QUICKMATCH);
 
                 CloseSelf();
             }
@@ -317,28 +302,66 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         #endregion
 
-        private void StartMatch()
+        private void StartMatch(GameTypeLocal type)
         {
             //play GAME_FOUND sfx
             AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
             timerLabel.text = "Match Found";
 
-            GameManager.Instance.StartGame(GameTypeLocal.REALTIME_QUICKMATCH);
+            GameManager.Instance.StartGame(type);
         }
 
-        private void OnMultiplayerTimerTimedOut()
+        private void StartBotMatch()
         {
-            //leave room and close screen
-            PhotonNetwork.LeaveRoom();
-
             OnBack();
 
-            //open prompt screen
-            PersistantMenuController.Instance.GetOrAddScreen<PromptScreen>().Prompt(
-                LocalizationManager.Value("timed_out_title"),
-                LocalizationManager.Value("timed_out_text"), null,
-                LocalizationManager.Value("back"), null, null);
+            if (useBotMatch)
+            {
+                //get bot profile from players' rating
+                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+                {
+                    FunctionName = "botDataFromRating",
+                    GeneratePlayStreamEvent = true,
+                },
+                (result) =>
+                {
+                    BotSettings botSettings =
+                        JsonConvert.DeserializeObject<BotSettings>(result.FunctionResult.ToString());
+
+                    Debug.Log("starting ai match for " + botSettings.AIProfile);
+
+                    GameManager.Instance.RealtimeOpponent =
+                        new OpponentData(
+                            "bot",
+                            botSettings.r,
+                            Constants.GAMES_BEFORE_RATING_DISPLAYED);
+                    GameManager.Instance.Bot = new FourzyGameModel.Model.Player(
+                        2,
+                        UserManager.CreateNewPlayerName(),
+                        botSettings.AIProfile)
+                    {
+                        HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID,
+                        PlayerString = "2",
+                    };
+
+                    StartMatch(GameTypeLocal.REALTIME_BOT_GAME);
+                },
+                (error) =>
+                {
+                    Debug.LogError(error.ErrorMessage);
+
+                    GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+                });
+            }
+            else
+            {
+                //timed out
+                PersistantMenuController.Instance.GetOrAddScreen<PromptScreen>().Prompt(
+                    LocalizationManager.Value("timed_out_title"),
+                    LocalizationManager.Value("timed_out_text"), null,
+                    LocalizationManager.Value("back"), null, null);
+            }
         }
 
         private void OnConnectionTimeOut()

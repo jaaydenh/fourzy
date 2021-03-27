@@ -24,12 +24,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (game._Type)
             {
                 case GameType.TURN_BASED:
-                    if (game.asFourzyGame.challengeData.haveMoves)
-                    {
-                        if (isOpened) CloseSelf();
-                    }
-                    else
-                        randomPickWidget.SetData(game.activePlayer.DisplayName, game.unactivePlayer.DisplayName);
+                    //if (game.asFourzyGame.challengeData.haveMoves)
+                    //{
+                    //    if (isOpened) CloseSelf();
+                    //}
+                    //else
+                    //    randomPickWidget.SetData(game.activePlayer.DisplayName, game.unactivePlayer.DisplayName);
 
                     break;
 

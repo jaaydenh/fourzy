@@ -173,7 +173,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             AnalyticsManager.Instance.LogGame(
                 game.GameToAnalyticsEvent(false),
                 game,
-                extraParams: new KeyValuePair<string, object>(
+                values: new KeyValuePair<string, object>(
                     AnalyticsManager.GAME_RESULT_KEY,
                     AnalyticsManager.GameResultType.skip));
 
@@ -208,7 +208,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 AnalyticsManager.Instance.LogGame(
                     AnalyticsManager.AnalyticsEvents.hintButtonPressed,
                     game,
-                    extraParams: new KeyValuePair<string, object>(
+                    values: new KeyValuePair<string, object>(
                         AnalyticsManager.HINT_STORE_ITEMS_KEY,
                         StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)));
             }

@@ -248,17 +248,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 };
             }
 
-            AnalyticsManager.Instance.LogEvent(
-                "practiceGameCreated",
-                new Dictionary<string, object>()
-                {
-                    ["player1"] = player1.Profile.ToString(),
-                    ["player2"] = player2.Profile.ToString(),
-                    ["area"] = currentAreaWidget.area,
-                    ["isTimerEnabled"] = SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER),
-                    ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
-                });
-
             GameManager.Instance.StartGame(game, GameTypeLocal.LOCAL_GAME);
         }
 

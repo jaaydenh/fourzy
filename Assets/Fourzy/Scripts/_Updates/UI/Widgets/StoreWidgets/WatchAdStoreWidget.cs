@@ -92,6 +92,11 @@ namespace Fourzy._Updates.UI.Widgets
 
             PersistantOverlayScreen.instance.AnimateReward(true, RewardType.HINTS, reward, Vector2.one * .5f);
             UserManager.Instance.hints += reward;
+
+            PlayerPrefsWrapper.AddAdsWatched();
+
+            Amplitude.Instance.setUserProperty("hasWatchedAd", true);
+            Amplitude.Instance.setUserProperty("totalAdsWatched", PlayerPrefsWrapper.GetAdsWatched());
         }
     }
 }

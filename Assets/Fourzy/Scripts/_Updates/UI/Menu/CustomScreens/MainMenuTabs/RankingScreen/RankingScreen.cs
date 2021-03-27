@@ -122,6 +122,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             loadingIndicator.SetValue(LocalizationManager.Value(error.ErrorMessage));
 
             Debug.Log(error.ErrorMessage);
+            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
         }
 
         private void OnValuesAdded(List<PlayerLeaderboardEntry> newValues, int direction)

@@ -596,28 +596,24 @@ namespace Fourzy._Updates.Tools
         {
             switch (GameManager.Instance.ExpectedGameType)
             {
-                case GameTypeLocal.REALTIME_BOT_GAME:
-                    return start ?
-                        AnalyticsManager.AnalyticsEvents.realtimeBotGameStart :
-                        AnalyticsManager.AnalyticsEvents.realtimeBotGameEnd;
-
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                     return start ?
                         AnalyticsManager.AnalyticsEvents.realtimeLobbyGameStart :
                         AnalyticsManager.AnalyticsEvents.realtimeLobbyGameEnd;
 
+                case GameTypeLocal.REALTIME_BOT_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
                     return start ?
-                        AnalyticsManager.AnalyticsEvents.realtimeQuickmatchStart :
-                        AnalyticsManager.AnalyticsEvents.realtimeQuickmatchEnd;
+                        AnalyticsManager.AnalyticsEvents.realtimeGameCreated :
+                        AnalyticsManager.AnalyticsEvents.realtimeGameCompleted;
 
                 case GameTypeLocal.LOCAL_GAME:
                     switch (game._Mode)
                     {
-                        case GameMode.LOCAL_VERSUS:
+                        case GameMode.VERSUS:
                             return start ?
-                                AnalyticsManager.AnalyticsEvents.versusGameStart :
-                                AnalyticsManager.AnalyticsEvents.versusGameEnd;
+                                AnalyticsManager.AnalyticsEvents.versusGameCreated :
+                                AnalyticsManager.AnalyticsEvents.versusGameCompleted;
 
                         case GameMode.PUZZLE_FAST:
                             return start ?
@@ -1307,7 +1303,10 @@ namespace Fourzy._Updates.Tools
             return curve;
         }
 
-        public static long EpochMilliseconds() => Convert.ToInt64((DateTime.Now).ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
+        public static long EpochMilliseconds() => 
+            Convert.ToInt64((DateTime.Now).ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
+
+        public static long EpochSeconds() => EpochMilliseconds() / 1000L;
 
         private static bool LastBoardLocationCheck(List<BoardLocation> actions, BoardLocation checkTo) => actions.Count == 0 || !actions[actions.Count - 1].Equals(checkTo);
     }

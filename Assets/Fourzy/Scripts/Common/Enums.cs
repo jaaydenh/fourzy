@@ -15,7 +15,7 @@
         ONBOARDING, 
         PRESENTATION};
 
-    public enum GameMode { NONE, PUZZLE_FAST, PUZZLE_PACK, AI_PACK, BOSS_AI_PACK, GAUNTLET, LOCAL_VERSUS }
+    public enum GameMode { NONE, PUZZLE_FAST, PUZZLE_PACK, AI_PACK, BOSS_AI_PACK, GAUNTLET, VERSUS }
     public enum AIPlayerSkill { LEVEL1, LEVEL2, LEVEL3 };
 
     public enum CurrencyType

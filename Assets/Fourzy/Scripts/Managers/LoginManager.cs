@@ -376,21 +376,41 @@ namespace Fourzy
                 UserManager.Instance.SetDisplayName(UserManager.CreateNewPlayerName());
                 UserManager.Instance.UpdateSelectedGamePiece(InternalSettings.Current.DEFAULT_GAME_PIECE);
 
-                //Amplitude.Instance.setUserProperties(new Dictionary<string, object>()
-                //{
-                //    ["first"] = true,
-                //    ["hasMonetized"] = false,
-                //    ["hasWatchedAd"] = false,
-                //    ["totalPuzzlesCompleted"] = 0,
-                //    ["totalPuzzleFailures"] = 0,
-                //    ["totalRealtimeGamesPlayed"] = 0,
-                //    ["totalRealtimeGamesWon"] = 0,
-                //    ["totalRealtimeGamesLost"] = 0,
-                //    ["totalRealtimeGamesDraw"] = 0,
-                //    ["hasSubscription"] = false,
-                //    ["totalSpent"] = 0,
-                //});
+                Amplitude.Instance.setUserProperties(new Dictionary<string, object>()
+                {
+                    ["hasMonetized"] = false,
+                    ["hasWatchedAd"] = false,
+                    ["totalAdventurePuzzlesCompleted"] = 0,
+                    ["totalAdventurePuzzleFailures"] = 0,
+                    ["totalAdventurePuzzlesReset"] = 0,
+                    ["totalRealtimeGamesPlayed"] = 0,
+                    ["totalRealtimeGamesWon"] = 0,
+                    ["totalRealtimeGamesLost"] = 0,
+                    ["totalRealtimeGamesDraw"] = 0,
+                    ["totalRealtimeGamesAbandoned"] = 0,
+                    ["totalRealtimeGamesOpponentAbandoned"] = 0,
+                    ["totalSpent"] = 0,
+                    ["totalAdsWatched"] = false,
+                });
             }
+
+            int timesOpened = PlayerPrefsWrapper.GetAppOpened();
+            if (timesOpened == 1)
+            {
+                Amplitude.Instance.setUserProperty("firstEntry", false);
+            }
+            else if (timesOpened == 2)
+            {
+                Amplitude.Instance.setUserProperty("firstEntry", false);
+            }
+
+            //get seconds since last opened
+            long lastOpened = PlayerPrefsWrapper.GetSecondsSinceLastOpen();
+            PlayerPrefsWrapper.AddDaysPlayed(lastOpened / 60f / 24f);
+            Amplitude.Instance.setUserProperty("totalDaysPlayed", PlayerPrefsWrapper.GetDaysPlayed());
+            PlayerPrefsWrapper.SetAppOpenedTime();
+
+            Amplitude.Instance.setUserProperty("totalSessions", timesOpened);
 
             PlayFabClientAPI.GetAccountInfo(
                 new GetAccountInfoRequest()
@@ -426,9 +446,10 @@ namespace Fourzy
             FourzyPhotonManager.Instance.JoinLobby();
         }
 
-        private void OnPlayFabError(PlayFabError obj)
+        private void OnPlayFabError(PlayFabError error)
         {
-            LogMessage(obj.GenerateErrorReport());
+            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+            LogMessage(error.GenerateErrorReport());
         }
 
         public void LogMessage(string message)
@@ -486,7 +507,11 @@ namespace Fourzy
                     }
                 },
                 OnProfileOK,
-                error => Debug.Log("Error getting profile: " + error.ErrorMessage));
+                error =>
+                {
+                    Debug.Log("Error getting profile: " + error.ErrorMessage);
+                    GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+                });
         }
 
         private void OnPlayerProfile(GetPlayerProfileResult playerProfile)
