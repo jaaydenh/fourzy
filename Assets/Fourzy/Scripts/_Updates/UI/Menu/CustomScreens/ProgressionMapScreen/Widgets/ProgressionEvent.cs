@@ -73,7 +73,10 @@ namespace Fourzy._Updates.UI.Widgets
         {
             get
             {
-                if (_size == Vector2.zero) FindSize(rectTransform);
+                if (_size == Vector2.zero)
+                {
+                    FindSize(rectTransform);
+                }
 
                 return _size;
             }
@@ -169,9 +172,13 @@ namespace Fourzy._Updates.UI.Widgets
                                 if (!other) return;
 
                                 if (unlockWhenComplete.Contains(other))
+                                {
                                     unlockWhenComplete.Remove(other);
+                                }
                                 else
+                                {
                                     unlockWhenComplete.Add(other);
+                                }
 
                                 EditorUtility.SetDirty(this);
                             }
@@ -179,7 +186,9 @@ namespace Fourzy._Updates.UI.Widgets
                     }
                 }
                 else
+                {
                     eventUsed = false;
+                }
             }
         }
 #endif
@@ -188,8 +197,14 @@ namespace Fourzy._Updates.UI.Widgets
         {
             base._Update();
 
-            if (wasRewarded) Rewarded(false);
-            else lines.ForEach(line => line.SetColorLocked());
+            if (wasRewarded)
+            {
+                Rewarded(false);
+            }
+            else
+            {
+                lines.ForEach(line => line.SetColorLocked());
+            }
 
             //if (!_unlocked && !_rewarded) return;
 
@@ -200,7 +215,8 @@ namespace Fourzy._Updates.UI.Widgets
                     {
                         case PackType.PUZZLE_PACK:
                             //update slider
-                            progressSlider.value = (float)PuzzlePack.puzzlesComplete.Count / PuzzlePack.enabledPuzzlesData.Count;
+                            progressSlider.value = 
+                                (float)PuzzlePack.puzzlesComplete.Count / PuzzlePack.enabledPuzzlesData.Count;
 
                             if (PuzzlePack.complete)
                             {
@@ -217,9 +233,13 @@ namespace Fourzy._Updates.UI.Widgets
 
                         case PackType.AI_PACK:
                             if (PuzzlePack.complete)
+                            {
                                 gamePieceView.Sleep();
+                            }
                             else
+                            {
                                 gamePieceView.WakeUp();
+                            }
 
                             break;
                     }
@@ -237,7 +257,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual void Unlock(bool animate)
         {
-            if (_unlocked || !gameObject.activeInHierarchy) return;
+            if (_unlocked) return;
 
             onUnlock.Invoke();
             _unlocked = true;
@@ -255,7 +275,10 @@ namespace Fourzy._Updates.UI.Widgets
                     {
                         Rewarded(true);
                         PlayerPrefsWrapper.SetRewardRewarded(id, true);
-                        if (EventType == ProgressionEventType.CURRENCY) new RewardsManager.Reward[] { reward }.AssignRewards();
+                        if (EventType == ProgressionEventType.CURRENCY)
+                        {
+                            new RewardsManager.Reward[] { reward }.AssignRewards();
+                        }
                     }
 
                     switch (otherRewardID)
@@ -418,7 +441,10 @@ namespace Fourzy._Updates.UI.Widgets
             if (_size.y < obj.sizeDelta.y) _size.y = obj.sizeDelta.y;
 
             //find chunker
-            for (int i = 0; i < obj.childCount; i++) FindSize(obj.GetChild(i).GetComponent<RectTransform>());
+            for (int i = 0; i < obj.childCount; i++)
+            {
+                FindSize(obj.GetChild(i).GetComponent<RectTransform>());
+            }
         }
 
         private IEnumerator RewardAnimationRoutine()
@@ -445,8 +471,12 @@ namespace Fourzy._Updates.UI.Widgets
             if (!resouceDB) resouceDB = ResourceDB.Instance;
 
             //get all puzzlepacks
-            foreach (ResourceItem pack in resouceDB.root.GetChild(Constants.PUZZLE_PACKS_ROOT_FOLDER).GetChilds("", ResourceItem.Type.Folder))
+            foreach (ResourceItem pack in resouceDB.root
+                .GetChild(Constants.PUZZLE_PACKS_ROOT_FOLDER)
+                .GetChilds("", ResourceItem.Type.Folder))
+            {
                 values.Add(pack.Name, pack.Name);
+            }
 
             return values;
         }

@@ -38,7 +38,9 @@ namespace Fourzy._Updates.UI.Widgets
                 gamePiece = AddPiece(data.ID);
             }
             else if (!gamePiece)
+            {
                 gamePiece = AddPiece(data.ID);
+            }
 
             this.data = data;
 
