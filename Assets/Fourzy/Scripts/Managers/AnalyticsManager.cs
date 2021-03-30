@@ -163,15 +163,6 @@ namespace Fourzy
             LogEvent("lobbyGameJoined", values, provider);
         }
 
-        public void LogSettingsChange(
-            string settingsKey,
-            string newValue,
-            string oldValue,
-            AnalyticsProvider provider = AnalyticsProvider.ALL)
-        {
-
-        }
-
         public void LogTutorialEvent(
             string tutorialName,
             string id,
@@ -180,6 +171,7 @@ namespace Fourzy
             LogEvent("tutorialStepComplete",
                 new Dictionary<string, object>()
                 {
+                    ["tutorialName"] = tutorialName,
                     ["id"] = id
                 },
                 provider);
@@ -525,7 +517,6 @@ namespace Fourzy
                             Analytics.CustomEvent(@event, values);
 
                             break;
-
                     }
                 }
             }
