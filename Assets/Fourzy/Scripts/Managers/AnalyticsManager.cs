@@ -222,7 +222,7 @@ namespace Fourzy
                 case AnalyticsEvents.randomPuzzleEnd:
                     _values.Add("sessionId", GameManager.Instance.sessionId);
                     _values.Add("puzzleId", game.puzzleData.ID);
-                    _values.Add("turnsCount", game._playerTurnRecord.Count);
+                    _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
                     _values.Add("turnsLimit", game.puzzleData.MoveLimit);
 
                     break;
@@ -244,7 +244,7 @@ namespace Fourzy
                     _values.Add("currentMagicQty", game.me.Magic);
                     _values.Add("aiProfileId", game.puzzleData.aiProfile);
                     _values.Add("boardJson", JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
-                    _values.Add("turnsCount", game._playerTurnRecord.Count);
+                    _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
 
                     break;
 
@@ -261,7 +261,7 @@ namespace Fourzy
                     _values.Add("levelId", game.puzzleData.ID);
                     _values.Add("levelIndex", game.puzzleData.puzzleIndex);
                     _values.Add("aiProfileId", game.puzzleData.aiProfile);
-                    _values.Add("turnsCount", game._playerTurnRecord.Count);
+                    _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
                     _values.Add(
                         "isAlreadySolved",
                         PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID));
@@ -283,7 +283,7 @@ namespace Fourzy
                     _values.Add("levelIndex", game.puzzleData.puzzleIndex);
                     _values.Add("aiProfileId", game.puzzleData.aiProfile);
                     _values.Add("bossType", game.puzzleData.aiBoss);
-                    _values.Add("turnsCount", game._playerTurnRecord.Count);
+                    _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
                     _values.Add("bossMovesCount", game.BossMoves);
                     _values.Add(
                         "isAlreadySolved",
@@ -302,7 +302,7 @@ namespace Fourzy
                     _values.Add(EVENT_ID_KEY, game.puzzleData.pack.packId);
                     _values.Add("levelId", game.puzzleData.ID);
                     _values.Add("levelIndex", game.puzzleData.puzzleIndex);
-                    _values.Add("turnsCount", game._playerTurnRecord.Count);
+                    _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
                     _values.Add("turnsLimit", game.puzzleData.MoveLimit);
                     _values.Add(
                         "isAlreadySolved",
@@ -320,7 +320,7 @@ namespace Fourzy
                     _values.Add("levelId", game.puzzleData.ID);
                     _values.Add("levelIndex", game.puzzleData.puzzleIndex);
                     _values.Add("isHintAvailable", UserManager.Instance.hints > 0);
-                    _values.Add("turnsCount", game._playerTurnRecord.Count);
+                    _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
                     _values.Add("hintTurnNumber", PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
 
                     break;
@@ -331,7 +331,7 @@ namespace Fourzy
 
                     _values.Add("levelId", game.puzzleData.ID);
                     _values.Add("levelIndex", game.puzzleData.puzzleIndex);
-                    _values.Add("turnsCount", game._playerTurnRecord.Count);
+                    _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
                     _values.Add("hintTurnNumber", PlayerPrefsWrapper.GetPuzzleHintProgress(game.BoardID));
 
                     break;
@@ -349,7 +349,7 @@ namespace Fourzy
                     _values.Add("player2", game.player2.Profile.ToString());
                     _values.Add("isTimerEnabled", SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER));
                     _values.Add("isMagicEnabled", SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC));
-                    _values.Add("turnsCount", game._allTurnRecord.Count);
+                    _values.Add("numTurnsTaken", game._allTurnRecord.Count);
 
                     break;
 
@@ -367,7 +367,7 @@ namespace Fourzy
                     _values.Add("player2Rating", player2Rating);
                     _values.Add("isBotOpponent", isBotOpponent);
                     _values.Add("recipe", game._FirstState.Board.Recipe);
-                    _values.Add("seed", game._FirstState.CompressedString);
+                    _values.Add("initialBoard ", game._FirstState.CompressedString);
 
                     break;
 
@@ -375,7 +375,7 @@ namespace Fourzy
                     (player1Id, player2Id) = GetPlayersIds();
                     (player1Rating, player2Rating) = GetPlayersRatings();
 
-                    _values.Add("turnsCount", game._allTurnRecord.Count);
+                    _values.Add("numTurnsTaken", game._allTurnRecord.Count);
                     _values.Add("complexityScore", "");
                     _values.Add("isTimerEnabled", SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER));
                     _values.Add("isMagicEnabled", SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC));
@@ -386,7 +386,7 @@ namespace Fourzy
                     _values.Add("player2Rating", player2Rating);
                     _values.Add("isBotOpponent", isBotOpponent);
                     _values.Add("recipe", game._FirstState.Board.Recipe);
-                    _values.Add("seed", game._FirstState.CompressedString);
+                    _values.Add("initialBoard ", game._FirstState.CompressedString);
 
                     break;
             }

@@ -390,7 +390,7 @@ namespace Fourzy
                     ["totalRealtimeGamesAbandoned"] = 0,
                     ["totalRealtimeGamesOpponentAbandoned"] = 0,
                     ["totalSpent"] = 0,
-                    ["totalAdsWatched"] = false,
+                    ["totalAdsWatched"] = 0,
                 });
             }
 
