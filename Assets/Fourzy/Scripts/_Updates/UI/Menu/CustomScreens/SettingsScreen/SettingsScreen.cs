@@ -21,14 +21,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             menuController.CloseCurrentScreen();
 
+            AnalyticsManager.Instance.LogEvent("tutorialReplay");
+
             PersistantMenuController.Instance
                 .GetOrAddScreen<OnboardingScreen>()
                 .OpenTutorial(HardcodedTutorials.GetByName(
                     GameManager.Instance.Landscape ? 
                         "OnboardingLandscape" : 
                         "Onboarding"));
-
-            AnalyticsManager.Instance.LogEvent("tutorialReplay");
         }
 
         public void ResetPuzzles()
