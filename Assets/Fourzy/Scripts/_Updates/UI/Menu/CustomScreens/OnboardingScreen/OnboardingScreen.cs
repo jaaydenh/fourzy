@@ -39,9 +39,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public override void Open()
         {
-            //name prompt was closed, so we do next
-            //if (tutorial.tasks.Any(task => OnboardingActions.USER_CHANGE_NAME_PROMPT.)) StartRoutine("nameChanged", .2f, () => Next());
-
             if (isOpened) return;
 
             base.Open();
@@ -79,6 +76,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     menuController.GetOrAddScreen<PromptScreen>().Prompt("Quit tutorial?", "Leave tutorial level?\nYou can reset tutorial in Options Screen.", () =>
                     {
+                        AnalyticsManager.Instance.LogTutorialEvent(tutorial.name, "tutorialSkipped");
+
                         //close prompt
                         menuController.CloseCurrentScreen();
                         //close onboarding
@@ -101,7 +100,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             isTutorialRunning = true;
             this.tutorial = tutorial;
 
-            if (menuController.currentScreen != this) menuController.OpenScreen(this);
+            if (menuController.currentScreen != this)
+            {
+                menuController.OpenScreen(this);
+            }
 
             masks.Hide(0f);
             pointer.Hide(0f);
@@ -118,8 +120,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!GameManager.Instance.displayTutorials) return false;
 
-            if (tutorial == null || ((PlayerPrefsWrapper.GetTutorialOpened(tutorial.name) || PlayerPrefsWrapper.GetTutorialFinished(tutorial.name)) && !GameManager.Instance.forceDisplayTutorials))
+            if (tutorial == null || 
+                ((PlayerPrefsWrapper.GetTutorialOpened(tutorial.name) ||
+                  PlayerPrefsWrapper.GetTutorialFinished(tutorial.name)) &&
+                  !GameManager.Instance.forceDisplayTutorials))
+            {
                 return false;
+            }
 
             return true;
         }
@@ -134,26 +141,38 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!Instance) return;
 
-            if (Instance.isOpened) Instance.CloseSelf();
+            if (Instance.isOpened)
+            {
+                Instance.CloseSelf();
+            }
         }
 
         private void MoveStarted(ClientPlayerTurn turn, bool startTurn)
         {
             if (turn == null || turn.PlayerId < 1) return;
 
-            if (currentTask.action == OnboardingActions.ON_MOVE_STARTED) SkipToNext();
+            if (currentTask.action == OnboardingActions.ON_MOVE_STARTED)
+            {
+                SkipToNext();
+            }
         }
 
         private void MoveEnded(ClientPlayerTurn turn, PlayerTurnResult turnResult, bool startTurn)
         {
             if (turn == null || turn.PlayerId < 1) return;
 
-            if (currentTask.action == OnboardingActions.ON_MOVE_ENDED) SkipToNext();
+            if (currentTask.action == OnboardingActions.ON_MOVE_ENDED)
+            {
+                SkipToNext();
+            }
         }
 
         private void OnGameFinished(IClientFourzy game)
         {
-            if (currentTask.action == OnboardingActions.GAME_FINISHED) SkipToNext();
+            if (currentTask.action == OnboardingActions.GAME_FINISHED)
+            {
+                SkipToNext();
+            }
         }
 
         private void OnButtonTap(PointerEventData data)
@@ -207,9 +226,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         if (messageTask.skipAfter != -1f)
                         {
                             _yield = true;
-                            StartRoutine("messageYield", messageTask.skipAfter, () => SkipToNext(), null);
+                            StartRoutine("messageYield", messageTask.skipAfter, SkipToNext, null);
                         }
-                        else if (bg.shown) _yield = true;
+                        else if (bg.shown)
+                        {
+                            _yield = true;
+                        }
 
                         break;
 
@@ -247,7 +269,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.HIGHLIGHT:
-                        if (!highlight.visible) highlight.Show(.2f);
+                        if (!highlight.visible)
+                        {
+                            highlight.Show(.2f);
+                        }
 
                         highlight.ShowHighlight(currentTask.areas);
 
@@ -260,7 +285,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     case OnboardingActions.SHOW_BOARD_HINT_AREA:
                         GamePlayManager.Instance.board.SetHintAreaSelectableState(false);
-                        GamePlayManager.Instance.board.ShowHintArea(Mechanics.Board.GameboardView.HintAreaStyle.ANIMATION_LOOP, Mechanics.Board.GameboardView.HintAreaAnimationPattern.DIAGONAL);
+                        GamePlayManager.Instance.board.ShowHintArea(
+                            GameboardView.HintAreaStyle.ANIMATION_LOOP,
+                            GameboardView.HintAreaAnimationPattern.DIAGONAL);
 
                         yield return null;
 
@@ -268,7 +295,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     case OnboardingActions.HIDE_BOARD_HINT_AREA:
                         GamePlayManager.Instance.board.SetHintAreaSelectableState(true);
-                        GamePlayManager.Instance.board.HideHintArea(Mechanics.Board.GameboardView.HintAreaAnimationPattern.DIAGONAL);
+                        GamePlayManager.Instance.board.HideHintArea(GameboardView.HintAreaAnimationPattern.DIAGONAL);
 
                         yield return null;
 
@@ -306,7 +333,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.PLAY_INITIAL_MOVES:
-                        if (GamePlayManager.Instance) GamePlayManager.Instance.board.PlayInitialMoves();
+                        if (GamePlayManager.Instance)
+                        {
+                            GamePlayManager.Instance.board.PlayInitialMoves();
+                        }
 
                         break;
 
@@ -323,10 +353,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     case OnboardingActions.WAIT:
                         OnboardingTask_Wait waitTask = currentTask as OnboardingTask_Wait;
-
-                        //if (taskIndex == currentBatch.tasks.Length - 1)
-                        //    yield return StartRoutine("moveNext", waitTask.time, () => Next());
-                        //else
                         yield return new WaitForSeconds(waitTask.time);
 
                         break;
@@ -352,9 +378,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         GamePlayManager.Instance.board.TakeTurn(
                             new SimpleMove(
                                 new Piece(
-                                    player.PlayerId, 
-                                    int.Parse(player.HerdId)), 
-                                currentTask.direction, 
+                                    player.PlayerId,
+                                    int.Parse(player.HerdId)),
+                                currentTask.direction,
                                 currentTask.intValue));
 
                         _yield = true;
@@ -367,8 +393,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             new SimpleMove(
                                 new Piece(
                                     opponent.PlayerId,
-                                    opponent.HerdId == null ? 1 : int.Parse(opponent.HerdId)), 
-                                currentTask.direction, 
+                                    opponent.HerdId == null ? 1 : int.Parse(opponent.HerdId)),
+                                currentTask.direction,
                                 currentTask.intValue));
 
                         _yield = true;
@@ -392,7 +418,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case OnboardingActions.LOAD_MAIN_MENU:
                         GameManager.Instance.OpenMainMenu();
 
-                        while (!FourzyMainMenuController.instance || !FourzyMainMenuController.instance.initialized) yield return null;
+                        while (!FourzyMainMenuController.instance || 
+                            !FourzyMainMenuController.instance.initialized)
+                        {
+                            yield return null;
+                        }
 
                         break;
 
@@ -408,21 +438,34 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case OnboardingActions.HIGHLIGHT_PROGRESSION_EVENT:
                         if (!GameManager.Instance.isMainMenuLoaded) break;
 
-                        OnboardingTask_HighlightProgressionEvent _eventTask = currentTask as OnboardingTask_HighlightProgressionEvent;
+                        OnboardingTask_HighlightProgressionEvent _eventTask = 
+                            currentTask as OnboardingTask_HighlightProgressionEvent;
 
                         ProgressionEvent progressionEvent;
 
                         if (_eventTask.intValue == -1)
+                        {
                             progressionEvent = GameManager.Instance.currentMap.GetCurrentEvent();
+                        }
                         else
+                        {
                             progressionEvent = GameManager.Instance.currentMap.widgets[_eventTask.intValue];
+                        }
 
                         GameManager.Instance.currentMap.FocusOn(progressionEvent);
                         anchors = GameManager.Instance.currentMap.GetEventCameraRelativePosition(progressionEvent);
 
-                        masks.ShowMask(anchors, progressionEvent.rectTransform, _eventTask.vector2value, Vector2.zero, _eventTask.showBG);
+                        masks.ShowMask(
+                            anchors, 
+                            progressionEvent.rectTransform, 
+                            _eventTask.vector2value, 
+                            Vector2.zero, 
+                            _eventTask.showBG);
 
-                        if (!pointer.visible) pointer.Show(.2f);
+                        if (!pointer.visible)
+                        {
+                            pointer.Show(.2f);
+                        }
                         pointer.SetAnchors(anchors);
 
                         if (_eventTask.messageData != null)
@@ -443,7 +486,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         MenuController _menuController = MenuController.GetMenu(_buttonTask.menuName);
                         MenuScreen screen = _menuController.currentScreen;
 
-                        if (screen.GetType() == typeof(MenuTabbedScreen)) screen = (screen as MenuTabbedScreen).CurrentTab;
+                        if (screen.GetType() == typeof(MenuTabbedScreen))
+                        {
+                            screen = (screen as MenuTabbedScreen).CurrentTab;
+                        }
 
                         //get button
                         foreach (ButtonExtended button in screen.GetComponentsInChildren<ButtonExtended>())
@@ -459,10 +505,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         Vector2 viewportPosition = currentButton.rectTransform.GetViewportPosition();
                         _buttonTask.TrySetMessagePivot(viewportPosition);
 
-                        masks.ShowMask(viewportPosition, currentButton.rectTransform, _buttonTask.vector2value, _buttonTask.maskOffset, _buttonTask.showBG);
+                        masks.ShowMask(
+                            viewportPosition,
+                            currentButton.rectTransform, 
+                            _buttonTask.vector2value, 
+                            _buttonTask.maskOffset,
+                            _buttonTask.showBG);
 
                         //pointer
-                        if (!pointer.visible) pointer.Show(.2f);
+                        if (!pointer.visible)
+                        {
+                            pointer.Show(.2f);
+                        }
                         pointer.SetAnchors(viewportPosition);
 
                         if (_buttonTask.messageData != null)
