@@ -111,7 +111,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        public void StartRealtime() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
+        public void StartRealtimeQuickmatch() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
 
         protected override void OnInitialized()
         {

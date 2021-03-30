@@ -189,7 +189,10 @@ namespace Fourzy._Updates.ClientModel
             {
                 initialized = true;
 
-                if (resource != null) ParseJObject(JObject.Parse(resource.Load<TextAsset>().text));
+                if (resource != null)
+                {
+                    ParseJObject(JObject.Parse(resource.Load<TextAsset>().text));
+                }
             }
 
             return this;

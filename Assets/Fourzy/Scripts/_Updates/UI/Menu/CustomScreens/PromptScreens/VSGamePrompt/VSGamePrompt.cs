@@ -40,7 +40,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 .SetProfile(puzzlePack.puzzlePlayer)
                 .SetColor(defaultRightColor);
 
-            foreach (WidgetBase widget in GetWidgets<VSGamePromptProgressionWidget>()) Destroy(widget.gameObject);
+            foreach (WidgetBase widget in GetWidgets<VSGamePromptProgressionWidget>())
+            {
+                Destroy(widget.gameObject);
+            }
             widgets.Clear();
 
             for (int puzzleIndex = 0; puzzleIndex < puzzlePack.enabledPuzzlesData.Count; puzzleIndex++)
@@ -48,9 +51,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 Sprite sprite = null;
 
                 //pick sprite
-                if (puzzleIndex == 0) sprite = left;
-                else if (puzzleIndex == puzzlePack.enabledPuzzlesData.Count - 1 && puzzlePack.allRewards.Count == 0) sprite = right;
-                else sprite = middle;
+                if (puzzleIndex == 0)
+                {
+                    sprite = left;
+                }
+                else if (puzzleIndex == puzzlePack.enabledPuzzlesData.Count - 1 && puzzlePack.allRewards.Count == 0)
+                {
+                    sprite = right;
+                }
+                else
+                {
+                    sprite = middle;
+                }
 
                 AddWidget()
                     .SetSprite(sprite)
@@ -61,7 +73,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 AddWidget()
                     .SetSprite(right)
-                    .SetReward(puzzlePack, puzzlePack.enabledPuzzlesData.Last(), puzzlePack.enabledPuzzlesData.Last().rewards[0]);
+                    .SetReward(
+                        puzzlePack,
+                        puzzlePack.enabledPuzzlesData.Last(), 
+                        puzzlePack.enabledPuzzlesData.Last().rewards[0]);
             }
 
             Prompt(
@@ -70,7 +85,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 onAccept ?? (() =>
                 {
                     CloseSelf();
-                    puzzlePack.StartNextUnsolvedPuzzle(/*GameManager.Instance.activeGame*/);
+                    puzzlePack.StartNextUnsolvedPuzzle();
                 }),
                 onDeny ?? (() => menuController.CloseCurrentScreen()));
         }

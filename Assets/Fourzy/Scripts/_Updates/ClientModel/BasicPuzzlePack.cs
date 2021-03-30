@@ -17,7 +17,7 @@ namespace Fourzy._Updates.ClientModel
     {
         public string name;
         public PackType packType = PackType.PUZZLE_PACK;
-        public string packID;
+        public string packId;
         public string aiPlayerName;
         public string herdID;
         public UnlockRequirementsEnum unlockRequirement;
@@ -31,11 +31,11 @@ namespace Fourzy._Updates.ClientModel
         public Player puzzlePlayer { get; set; }
         public Dictionary<int, List<RewardsManager.Reward>> allRewards { get; set; }
 
-        public List<ClientPuzzleData> puzzlesComplete => enabledPuzzlesData.Where(puzzle => PlayerPrefsWrapper.GetPuzzleChallengeComplete(puzzle.ID)).ToList();
+        public List<ClientPuzzleData> puzzlesComplete => enabledPuzzlesData
+            .Where(puzzle => PlayerPrefsWrapper.GetPuzzleChallengeComplete(puzzle.ID))
+            .ToList();
 
         public bool complete => puzzlesComplete.Count == enabledPuzzlesData.Count;
-
-        public bool justFinished { get; set; }
 
         public BasicPuzzlePack() { }
 
@@ -47,12 +47,15 @@ namespace Fourzy._Updates.ClientModel
 
             name = jObject["name"].ToObject<string>();
             packType = (PackType)jObject["type"].ToObject<int>();
-            packID = jObject["id"].ToObject<string>();
+            packId = jObject["id"].ToObject<string>();
             unlockRequirement = (UnlockRequirementsEnum)jObject["unlockRequirement"].ToObject<int>();
             herdID = jObject["herdID"].ToObject<string>();
             aiPlayerName = jObject["playerName"].ToObject<string>();
             JToken descriptionToken = jObject["description"];
-            if (descriptionToken != null) description = descriptionToken.ToObject<string>();
+            if (descriptionToken != null)
+            {
+                description = descriptionToken.ToObject<string>();
+            }
             puzzlePlayer = new Player(2, aiPlayerName) { HerdId = herdID };
 
             RewardIndexed[] _rewards = jObject["rewards"].ToObject<RewardIndexed[]>();
@@ -77,7 +80,7 @@ namespace Fourzy._Updates.ClientModel
 
             name = "Beat The Bot";
             packType = PackType.AI_PACK;
-            packID = Guid.NewGuid().ToString();
+            packId = Guid.NewGuid().ToString();
             unlockRequirement = UnlockRequirementsEnum.NONE;
             herdID = "1";
             aiPlayerName = "The Bot";
@@ -87,7 +90,7 @@ namespace Fourzy._Updates.ClientModel
             {
                 ClientPuzzleData puzzleData = new ClientPuzzleData();
                 puzzleData.pack = this;
-                puzzleData.ID = packID + "_level_" + levelIndex;
+                puzzleData.ID = packId + "_level_" + levelIndex;
                 puzzleData.aiPlayerName = aiPlayerName;
                 puzzleData.PuzzlePlayer = puzzlePlayer;
                 puzzleData.startingMagic = FourzyGameModel.Model.Constants.PlayerStartingMagic;
@@ -115,11 +118,17 @@ namespace Fourzy._Updates.ClientModel
 
                 for (int puzzleIndex = 0; puzzleIndex < enabledPuzzlesData.Count; puzzleIndex++)
                 {
-                    if (puzzleIndex == 0 && !PlayerPrefsWrapper.GetPuzzleChallengeComplete(enabledPuzzlesData[puzzleIndex].ID))
+                    if (puzzleIndex == 0 && 
+                        !PlayerPrefsWrapper.GetPuzzleChallengeComplete(enabledPuzzlesData[puzzleIndex].ID))
+                    {
                         return enabledPuzzlesData[puzzleIndex];
-                    else if (puzzleIndex > 0 && PlayerPrefsWrapper.GetPuzzleChallengeComplete(enabledPuzzlesData[puzzleIndex - 1].ID)
-                        && !PlayerPrefsWrapper.GetPuzzleChallengeComplete(enabledPuzzlesData[puzzleIndex].ID))
+                    }
+                    else if (puzzleIndex > 0 && 
+                        PlayerPrefsWrapper.GetPuzzleChallengeComplete(enabledPuzzlesData[puzzleIndex - 1].ID) &&
+                        !PlayerPrefsWrapper.GetPuzzleChallengeComplete(enabledPuzzlesData[puzzleIndex].ID))
+                    {
                         return enabledPuzzlesData[puzzleIndex];
+                    }
                 }
 
                 return enabledPuzzlesData[0];
@@ -137,7 +146,10 @@ namespace Fourzy._Updates.ClientModel
                 {
                     reward = _set.Value.Find(_reward => _reward.rewardType == RewardType.PACK_COMPLETE);
 
-                    if (reward != null) return puzzlesData[_set.Key].GetRewardID(reward);
+                    if (reward != null)
+                    {
+                        return puzzlesData[_set.Key].GetRewardID(reward);
+                    }
                 }
 
                 return "";
@@ -148,13 +160,21 @@ namespace Fourzy._Updates.ClientModel
         {
             ClientPuzzleData data = enabledPuzzlesData.Next(current.puzzleData);
 
+            if (data == current.puzzleData)
+            {
+                current._Reset();
+                return current;
+            }
+
             data.Initialize();
 
             switch (data.pack.packType)
             {
-                case PackType.PUZZLE_PACK: return new ClientFourzyPuzzle(data);
+                case PackType.PUZZLE_PACK: 
+                    return new ClientFourzyPuzzle(data);
 
-                default: return ClientFourzyGame.FromPuzzleData(data, current);
+                default: 
+                    return ClientFourzyGame.FromPuzzleData(data, current);
             }
         }
 
@@ -163,7 +183,9 @@ namespace Fourzy._Updates.ClientModel
             IClientFourzy game = null;
 
             if (current != null)
+            {
                 game = Next(current);
+            }
             else
             {
                 ClientPuzzleData data = nextUnsolvedData;
@@ -174,9 +196,15 @@ namespace Fourzy._Updates.ClientModel
 
                     switch (data.pack.packType)
                     {
-                        case PackType.PUZZLE_PACK: game = new ClientFourzyPuzzle(data); break;
+                        case PackType.PUZZLE_PACK: 
+                            game = new ClientFourzyPuzzle(data); 
+                            
+                            break;
 
-                        default: game = ClientFourzyGame.FromPuzzleData(data, GameManager.Instance.activeGame); break;
+                        default: 
+                            game = ClientFourzyGame.FromPuzzleData(data, GameManager.Instance.activeGame); 
+                            
+                            break;
                     }
                 }
             }
@@ -193,10 +221,9 @@ namespace Fourzy._Updates.ClientModel
 
         public void ResetPlayerPrefs()
         {
-            PlayerPrefsWrapper.SetPuzzlePackUnlocked(packID, false);
-            PlayerPrefsWrapper.SetPuzzlePackOpened(packID, false);
+            PlayerPrefsWrapper.SetPuzzlePackUnlocked(packId, false);
+            PlayerPrefsWrapper.SetPuzzlePackOpened(packId, false);
 
-            if (puzzlesData == null) Debug.Log(name);
             puzzlesData.ForEach(_data =>
             {
                 PlayerPrefsWrapper.SetPuzzleChallengeComplete(_data.ID, false);
@@ -210,18 +237,17 @@ namespace Fourzy._Updates.ClientModel
             });
         }
 
-        public string GetHerdID(int levelIndex = -1)
+        public string GetHerdId(int levelIndex = -1)
         {
             if (levelIndex == -1)
+            {
                 return herdID;
+            }
             else
+            {
                 return puzzlesData[levelIndex].herdID;
+            }
         }
-
-        //public void RemoveHerdMember()
-        //{
-        //    gauntletStatus.FourzyCount = Mathf.Clamp(gauntletStatus.FourzyCount - 1, 0, int.MaxValue);
-        //}
 
         public static implicit operator bool(BasicPuzzlePack pack) => pack != null;
     }
@@ -231,7 +257,8 @@ namespace Fourzy._Updates.ClientModel
     {
         public int levelIndex;
 
-        public RewardIndexed(int levelIndex, int quantity, RewardType rewardType, string name) : base(quantity, rewardType, name)
+        public RewardIndexed(int levelIndex, int quantity, RewardType rewardType, string name) :
+            base(quantity, rewardType, name)
         {
             this.levelIndex = levelIndex;
         }

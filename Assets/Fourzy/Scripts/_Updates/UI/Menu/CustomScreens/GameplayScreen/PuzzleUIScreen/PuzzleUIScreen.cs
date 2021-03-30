@@ -3,9 +3,11 @@
 using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Widgets;
+using System.Collections.Generic;
 using TMPro;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -20,6 +22,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public TMP_Text level;
         public TweenBase completeIcon;
         public AlphaTween packInfoTween;
+
+        private int prevHintsCount = -1;
 
         public IClientFourzy game { get; private set; }
 
@@ -36,14 +40,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             this.game = game;
 
-            //hint button
+            //!hint button controls, should be uncommented when hints are brought back
             if (game.puzzleData.Solution.Count > 0)
             {
                 hintButton.Show();
                 SetHintButtonState(true);
             }
             else
+            {
                 hintButton.Hide();
+            }
 
             if (game.puzzleData.pack)
             {
@@ -89,9 +95,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 packInfoTween.SetAlpha(1f);
 
                 if (PlayerPrefsWrapper.GetFastPuzzleComplete(game.puzzleData.ID))
+                {
                     completeIcon.PlayForward(true);
+                }
                 else
+                {
                     completeIcon.AtProgress(0f);
+                }
 
                 rule.text = game.puzzleData.Instructions;
 
@@ -122,7 +132,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         if (game.LoseStreak == 2)
                         {
                             UserManager.Instance.hints++;
-                            PersistantMenuController.Instance.GetOrAddScreen<OnboardingScreen>().OpenTutorial(HardcodedTutorials.GetByName("HintInstruction"));
+                            PersistantMenuController.Instance
+                                .GetOrAddScreen<OnboardingScreen>()
+                                .OpenTutorial(HardcodedTutorials.GetByName("HintInstruction"));
                             PlayerPrefsWrapper.SetHintTutorialStage(progress + 1);
 
                             hintButton.SetOutline(1f);
@@ -156,7 +168,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SetHintButtonState(true);
         }
 
-        public void Next() => GamePlayManager.Instance.LoadGame(game.Next());
+        public void Next()
+        {
+            AnalyticsManager.Instance.LogGame(
+                game.GameToAnalyticsEvent(false),
+                game,
+                values: new KeyValuePair<string, object>(
+                    AnalyticsManager.GAME_RESULT_KEY,
+                    AnalyticsManager.GameResultType.skip));
+
+            GamePlayManager.Instance.LoadGame(game.Next());
+        }
 
         public void GameComplete()
         {
@@ -173,9 +195,25 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void TryUseHint()
         {
-            //GamePlayManager.Instance.PlayHint();
+            GamePlayManager.Instance.PlayHint();
 
-            //if (GamePlayManager.Instance.IsRoutineActive("hintRoutine")) SetHintButtonState(false);
+            if (GamePlayManager.Instance.IsRoutineActive("hintRoutine"))
+            {
+                SetHintButtonState(false);
+            }
+
+            //if check to prevent event spamming
+            if (prevHintsCount != UserManager.Instance.hints)
+            {
+                AnalyticsManager.Instance.LogGame(
+                    AnalyticsManager.AnalyticsEvents.hintButtonPressed,
+                    game,
+                    values: new KeyValuePair<string, object>(
+                        AnalyticsManager.HINT_STORE_ITEMS_KEY,
+                        StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)));
+            }
+
+            prevHintsCount = UserManager.Instance.hints;
         }
 
         private void SetHintButtonState(bool state) => hintButton.SetState(state && !game.isOver && game.isMyTurn);

@@ -1,6 +1,8 @@
 ﻿//modded @vadym udod
 
 using Fourzy._Updates;
+using Fourzy._Updates.Tools;
+using System;
 using UnityEngine;
 
 namespace Fourzy
@@ -46,10 +48,58 @@ namespace Fourzy
 
         public static bool GetTutorialOpened(string name) => GetBool("tutorialOpened_" + name);
 
-        public static void AddPuzzlesFailedTimes() => 
-            PlayerPrefs.SetInt("puzzles_failed", GetPuzzleFailedTimes() + 1);
+        public static void AddAdventurePuzzlesFailedTimes() => 
+            PlayerPrefs.SetInt("puzzles_failed", GetAdventurePuzzleFailedTimes() + 1);
 
-        public static int GetPuzzleFailedTimes() => PlayerPrefs.GetInt("puzzles_failed", 0);
+        public static int GetAdventurePuzzleFailedTimes() => PlayerPrefs.GetInt("puzzles_failed", 0);
+
+        public static void AddAdventurePuzzlesResets() => 
+            PlayerPrefs.SetInt("puzzles_resets", GetAdventurePuzzleResets() + 1);
+
+        public static int GetAdventurePuzzleResets() => PlayerPrefs.GetInt("puzzles_resets", 0);
+
+        public static void AddRealtimeGamePlayed() =>
+            PlayerPrefs.SetInt("realtime_games_played", GetRealtimeGamesPlayed() + 1);
+
+        public static int GetRealtimeGamesPlayed() => PlayerPrefs.GetInt("realtime_games_played", 0);
+
+        public static void AddRealtimeGamesWon() =>
+            PlayerPrefs.SetInt("realtime_games_won", GetRealtimeGamesWon() + 1);
+
+        public static int GetRealtimeGamesWon() => PlayerPrefs.GetInt("realtime_games_won", 0);
+
+        public static void AddRealtimeGamesLost() =>
+            PlayerPrefs.SetInt("realtime_games_lost", GetRealtimeGamesLost() + 1);
+
+        public static int GetRealtimeGamesLost() => PlayerPrefs.GetInt("realtime_games_lost");
+
+        public static void AddRealtimeGamesDraw() =>
+            PlayerPrefs.SetInt("realtime_games_draw", GetRealtimeGamesDraw() + 1);
+
+        public static int GetRealtimeGamesDraw() => PlayerPrefs.GetInt("realtime_games_draw", 0);
+
+        public static void AddRealtimGamesAbandoned() =>
+            PlayerPrefs.SetInt("realtime_games_abandoned", GetRealtimeGamesAbandoned() + 1);
+
+        public static int GetRealtimeGamesAbandoned() => PlayerPrefs.GetInt("realtime_games_abandoned", 0);
+
+        public static void AddRealtimeGamesOpponentAbandoned() =>
+            PlayerPrefs.SetInt("realtime_games_opponent_abandoned", GetRealtimeGamesOpponentAbandoned() + 1);
+
+        public static int GetRealtimeGamesOpponentAbandoned() =>
+            PlayerPrefs.GetInt("realtime_games_opponent_abandoned", 0);
+
+        public static void SetAppOpenedTime() =>
+            PlayerPrefs.SetString("app_opened_last_time", Utils.EpochSeconds().ToString());
+
+        public static long GetSecondsSinceLastOpen() =>
+            Utils.EpochSeconds() - 
+            long.Parse(PlayerPrefs.GetString("app_opened_last_time", Utils.EpochSeconds().ToString()));
+
+        public static void AddDaysPlayed(float value) =>
+            PlayerPrefs.SetFloat("app_days_played", GetDaysPlayed() + value);
+
+        public static float GetDaysPlayed() => PlayerPrefs.GetFloat("app_days_played", 0f);
 
         public static void SetUserName(string userName) =>
             PlayerPrefs.SetString("userName_", userName);
@@ -101,6 +151,10 @@ namespace Fourzy
         public static void AddAppOpened() => PlayerPrefs.SetInt("times_game_opened", GetAppOpened() + 1);
 
         public static int GetAppOpened() => PlayerPrefs.GetInt("times_game_opened", 0);
+
+        public static void AddAdsWatched() => PlayerPrefs.SetInt("ads_watched", GetAdsWatched() + 1);
+
+        public static int GetAdsWatched() => PlayerPrefs.GetInt("ads_watched", 0);
 
         public static bool GetGameRewarded(string gameID) => GetBool("gameRewarded_" + gameID);
 

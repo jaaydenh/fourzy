@@ -48,6 +48,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             loadingPrompt.CloseSelf();
             Debug.Log(error.ErrorMessage);
+
+            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
         }
 
         private void OnLeaderboardLoaded(ExecuteCloudScriptResult result)

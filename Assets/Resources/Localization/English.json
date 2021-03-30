@@ -445,6 +445,10 @@
       "value": "Ready To Play"
     },
     {
+      "key": "realtime_quickmatch",
+      "value": "Realtime Quickmatch"
+    },
+    {
       "key": "reload",
       "value": "Reload"
     },

@@ -449,6 +449,10 @@
       "value": "Listo para jugar"
     },
     {
+      "key": "realtime_quickmatch",
+      "value": "Partida rápida en tiempo real"
+    },
+    {
       "key": "reload",
       "value": "Recargar"
     },

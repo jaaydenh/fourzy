@@ -83,7 +83,12 @@ namespace Fourzy
             }
 
             if (displayTutorial)
-                onboardingScreen.OpenTutorial(HardcodedTutorials.GetByName(GameManager.Instance.Landscape ? "OnboardingLandscape" : "Onboarding"));
+            {
+                onboardingScreen.OpenTutorial(
+                    HardcodedTutorials.GetByName(GameManager.Instance.Landscape ? 
+                        "OnboardingLandscape" :
+                        "Onboarding"));
+            }
         }
     }
 }

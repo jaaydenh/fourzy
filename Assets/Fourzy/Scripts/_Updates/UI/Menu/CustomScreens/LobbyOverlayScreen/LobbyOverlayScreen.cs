@@ -6,7 +6,6 @@ using Fourzy._Updates.UI.Helpers;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using Photon.Pun;
-using Photon.Realtime;
 using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections.Generic;
@@ -215,6 +214,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void OnRoomLeft()
         {
+            if ((FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE)
+                & displayable) == 0) return;
+
             if (state == LobbyOverlayState.LOADING_BOT_GAME)
             {
                 return;
@@ -227,7 +229,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             AnalyticsManager.Instance.LogEvent(
-                "LOBBY_ABANDONED",
+                "lobbyAbandoned",
                 new Dictionary<string, object>()
                 {
                     ["playerId"] = LoginManager.playfabId,
@@ -262,7 +264,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 & displayable) == 0) return;
 
             AnalyticsManager.Instance.LogEvent(
-                "LOBBY_CREATED",
+                "lobbyCreated",
                 new Dictionary<string, object>()
                 {
                     ["playerId"] = LoginManager.playfabId,
@@ -292,7 +294,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 },
                 (result) =>
                 {
-                    BotSettings botSettings = 
+                    BotSettings botSettings =
                         JsonConvert.DeserializeObject<BotSettings>(result.FunctionResult.ToString());
 
                     Debug.Log("starting ai match for " + botSettings.AIProfile);
@@ -330,11 +332,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     FourzyPhotonManager.TryLeaveRoom();
                     FourzyPhotonManager.Instance.JoinLobby();
                 },
-                (error) => { Debug.LogError(error.ErrorMessage); });
+                (error) =>
+                {
+                    Debug.LogError(error.ErrorMessage);
+
+                    GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+                });
             },
             null);
-
-
         }
 
         private void OnConnectionTimedOut()

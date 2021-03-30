@@ -140,6 +140,7 @@ namespace Fourzy
             }
 
             SetMyProperty(Constants.REALTIME_ROOM_GAMEPIECE_KEY, UserManager.Instance.gamePieceID);
+            SetMyProperty(Constants.REALTIME_MID_KEY, LoginManager.masterAccountId);
 
             onConnectedToMaster?.Invoke();
 
@@ -237,7 +238,7 @@ namespace Fourzy
             }
 
             AnalyticsManager.Instance.LogEvent(
-                "CREATE_ROOM_ERROR",
+                "photonError",
                 AnalyticsManager.AnalyticsProvider.ALL,
                 new KeyValuePair<string, object>("code", returnCode),
                 new KeyValuePair<string, object>("message", message));
@@ -260,7 +261,7 @@ namespace Fourzy
             }
 
             AnalyticsManager.Instance.LogEvent(
-                "JOIN_ROOM_ERROR",
+                "photonError",
                 AnalyticsManager.AnalyticsProvider.ALL,
                 new KeyValuePair<string, object>("code", returnCode),
                 new KeyValuePair<string, object>("message", message));
@@ -282,13 +283,17 @@ namespace Fourzy
                 Debug.Log($"Failied to join random room. {returnCode} code {message} message.");
             }
 
-            AnalyticsManager.Instance.LogEvent(
-                "JOIN_RANDOM_ROOM_ERROR",
-                AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("code", returnCode),
-                new KeyValuePair<string, object>("message", message));
-
             onJoinRandomFailed?.Invoke();
+
+            //ignore "No match found" error
+            if (returnCode != 32760)
+            {
+                AnalyticsManager.Instance.LogEvent(
+                    "photonError",
+                    AnalyticsManager.AnalyticsProvider.ALL,
+                    new KeyValuePair<string, object>("code", returnCode),
+                    new KeyValuePair<string, object>("message", message));
+            }
 
             if (connectionTimedOutRoutine != null)
             {
@@ -697,11 +702,10 @@ namespace Fourzy
         public static void SetMyProperty(string key, object value)
         {
             if (PhotonNetwork.IsConnected)
+            {
                 PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { [key] = value, });
+            }
         }
-
-        public static T GetMyProperty<T>(string key, T defaultValue) =>
-            GetPlayerProperty(PhotonNetwork.LocalPlayer, key, defaultValue);
 
         public static T GetPlayerProperty<T>(Player player, string key, T defaultValue)
         {

@@ -89,17 +89,23 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (removing) return this;
 
-            PlayFabClientAPI.RemoveFriend(new RemoveFriendRequest() { FriendPlayFabId = friendInfo.FriendPlayFabId }, OnRemoveFriend, OnRemoveFriendError);
+            PlayFabClientAPI.RemoveFriend(new RemoveFriendRequest()
+            {
+                FriendPlayFabId = friendInfo.FriendPlayFabId
+            }, 
+            OnRemoveFriend, 
+            OnRemoveFriendError);
             removing = true;
 
             return this;
         }
 
-        private void OnRemoveFriendError(PlayFabError obj)
+        private void OnRemoveFriendError(PlayFabError error)
         {
             removing = false;
 
-            GamesToastsController.ShowTopToast($"Failed: {obj.ErrorMessage}");
+            GamesToastsController.ShowTopToast($"Failed: {error.ErrorMessage}");
+            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
         }
 
         private void OnRemoveFriend(RemoveFriendResult obj)

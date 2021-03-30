@@ -592,42 +592,59 @@ namespace Fourzy._Updates.Tools
             return "";
         }
 
-        public static AnalyticsManager.AnalyticsEvents GameModeToAnalyticsEvent(this GameMode mode, bool start)
+        public static AnalyticsManager.AnalyticsEvents GameToAnalyticsEvent(this IClientFourzy game, bool start)
         {
-            switch (mode)
+            switch (GameManager.Instance.ExpectedGameType)
             {
-                case GameMode.LOCAL_VERSUS:
-                    return start ? 
-                        AnalyticsManager.AnalyticsEvents.VERSUS_GAME_START :
-                        AnalyticsManager.AnalyticsEvents.VERSUS_GAME_END;
-
-                case GameMode.PUZZLE_FAST:
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
                     return start ?
-                        AnalyticsManager.AnalyticsEvents.RANDOM_PUZZLE_START :
-                        AnalyticsManager.AnalyticsEvents.RANDOM_PUZZLE_END;
+                        AnalyticsManager.AnalyticsEvents.realtimeLobbyGameStart :
+                        AnalyticsManager.AnalyticsEvents.realtimeLobbyGameEnd;
 
-                case GameMode.GAUNTLET:
+                case GameTypeLocal.REALTIME_BOT_GAME:
+                case GameTypeLocal.REALTIME_QUICKMATCH:
                     return start ?
-                        AnalyticsManager.AnalyticsEvents.GAUNTLET_LEVEL_START :
-                        AnalyticsManager.AnalyticsEvents.GAUNTLET_LEVEL_END;
+                        AnalyticsManager.AnalyticsEvents.realtimeGameCreated :
+                        AnalyticsManager.AnalyticsEvents.realtimeGameCompleted;
 
-                case GameMode.AI_PACK:
-                    return start ?
-                        AnalyticsManager.AnalyticsEvents.AI_LEVEL_START :
-                        AnalyticsManager.AnalyticsEvents.AI_LEVEL_END;
+                case GameTypeLocal.LOCAL_GAME:
+                    switch (game._Mode)
+                    {
+                        case GameMode.VERSUS:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.versusGameCreated :
+                                AnalyticsManager.AnalyticsEvents.versusGameCompleted;
 
-                case GameMode.BOSS_AI_PACK:
-                    return start ? 
-                        AnalyticsManager.AnalyticsEvents.BOSS_AI_LEVEL_START :
-                        AnalyticsManager.AnalyticsEvents.BOSS_AI_LEVEL_END;
+                        case GameMode.PUZZLE_FAST:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.randomPuzzleStart :
+                                AnalyticsManager.AnalyticsEvents.randomPuzzleEnd;
 
-                case GameMode.PUZZLE_PACK:
-                    return start ?
-                        AnalyticsManager.AnalyticsEvents.PUZZLE_LEVEL_START :
-                        AnalyticsManager.AnalyticsEvents.PUZZLE_LEVEL_END;
+                        case GameMode.GAUNTLET:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.gauntletLevelStart :
+                                AnalyticsManager.AnalyticsEvents.gauntletLevelEnd;
+
+                        case GameMode.AI_PACK:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.aiLevelStart :
+                                AnalyticsManager.AnalyticsEvents.aiLevelEnd;
+
+                        case GameMode.BOSS_AI_PACK:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.bossAILevelStart :
+                                AnalyticsManager.AnalyticsEvents.bossAILevelEnd;
+
+                        case GameMode.PUZZLE_PACK:
+                            return start ?
+                                AnalyticsManager.AnalyticsEvents.puzzleLevelStart :
+                                AnalyticsManager.AnalyticsEvents.puzzleLevelEnd;
+                    }
+
+                    break;
             }
 
-            return AnalyticsManager.AnalyticsEvents.NONE;
+            return AnalyticsManager.AnalyticsEvents.none;
         }
 
         public static Vector2 GetViewportPosition(this RectTransform target)
@@ -1286,7 +1303,10 @@ namespace Fourzy._Updates.Tools
             return curve;
         }
 
-        public static long EpochMilliseconds() => Convert.ToInt64((DateTime.Now).ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
+        public static long EpochMilliseconds() => 
+            Convert.ToInt64((DateTime.Now).ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds);
+
+        public static long EpochSeconds() => EpochMilliseconds() / 1000L;
 
         private static bool LastBoardLocationCheck(List<BoardLocation> actions, BoardLocation checkTo) => actions.Count == 0 || !actions[actions.Count - 1].Equals(checkTo);
     }

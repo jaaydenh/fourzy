@@ -56,18 +56,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (!game.draw && game.IsWinner())
             {
-                if (game.puzzleData.pack/* && game.puzzleData.pack.justFinished*/)
+                if (game.puzzleData.pack)
                 {
-                    ////consume
-                    //GameManager.Instance.currentPuzzlePack.justFinished = false;
-
                     if (game.puzzleData.lastInPack)
                     {
                         //force update map
                         GameManager.Instance.currentMap.UpdateWidgets();
 
                         //open screen for next event
-                        BasicPuzzlePack nextPack = GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packID);
+                        BasicPuzzlePack nextPack = 
+                            GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packId);
                         nextPack.StartNextUnsolvedPuzzle();
 
                         if (nextPack)
@@ -134,7 +132,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 if (game.puzzleData.pack)
                 {
                     if (!puzzlePackProgressWidget.puzzlePack ||
-                        puzzlePackProgressWidget.puzzlePack.packID != game.puzzleData.pack.packID)
+                        puzzlePackProgressWidget.puzzlePack.packId != game.puzzleData.pack.packId)
                     {
                         puzzlePackProgressWidget.SetData(game.puzzleData.pack);
                     }

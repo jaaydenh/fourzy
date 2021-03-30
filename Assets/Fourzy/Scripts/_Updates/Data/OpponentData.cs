@@ -10,6 +10,9 @@ namespace Fourzy._Updates
         public static Action<int> onRatingUdpate;
         public static Action<int> onTotalGamesUpdate;
 
+        public bool useExternalRatingValue = false;
+        public bool useExternalTotalGamesValue = false;
+
         private Player _player;
 
         private int rating;
@@ -20,7 +23,7 @@ namespace Fourzy._Updates
         {
             get
             {
-                if (_player == null)
+                if (_player == null || useExternalRatingValue)
                 {
                     return rating;
                 }
@@ -41,7 +44,7 @@ namespace Fourzy._Updates
         {
             get
             {
-                if (_player == null)
+                if (_player == null || useExternalTotalGamesValue)
                 {
                     return totalGames;
                 }
@@ -75,6 +78,26 @@ namespace Fourzy._Updates
 
             this.rating = rating;
             this.totalGames = totalGames;
+        }
+
+        /// <summary>
+        /// This value will be used as current before new value received from opponent (if any)
+        /// </summary>
+        /// <param name="rating"></param>
+        public void SetExternalRating(int rating)
+        {
+            this.rating = rating;
+            useExternalRatingValue = true;
+
+            onRatingUdpate?.Invoke(rating);
+        }
+
+        public void SetExternalTotalGames(int totalGames)
+        {
+            this.totalGames = totalGames;
+            useExternalTotalGamesValue = true;
+
+            onTotalGamesUpdate?.Invoke(totalGames);
         }
     }
 }

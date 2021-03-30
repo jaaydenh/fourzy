@@ -56,6 +56,7 @@ namespace Fourzy
                     new UpdateAvatarUrlRequest() { ImageUrl = value, },
                     OnAvatarUrlUpdate,
                     OnPlayFabError);
+                Amplitude.Instance.setUserProperty("gamePieceId", value);
             }
         }
 
@@ -151,10 +152,10 @@ namespace Fourzy
             {
                 _lastCachedRating = value;
 
-                onRatingUpdate?.Invoke(_lastCachedRating);
+                onRatingUpdate?.Invoke(value);
 
-                FourzyPhotonManager.SetMyProperty(Constants.REALTIME_RATING_KEY, _lastCachedRating);
-                //Amplitude.Instance.setUserProperty("realtimeRating", value);
+                FourzyPhotonManager.SetMyProperty(Constants.REALTIME_RATING_KEY, value);
+                Amplitude.Instance.setUserProperty("realtimeRating", value);
             }
         }
 
@@ -368,12 +369,10 @@ namespace Fourzy
                 PhotonNetwork.NickName = value;
             }
 
-            PlayerPrefsWrapper.SetUserName(value);
-
             if (updatePlayFabDisplayName)
             {
                 AnalyticsManager.Instance.LogEvent(
-                    "CHANGE_NAME",
+                    "playerNameChanged",
                     AnalyticsManager.AnalyticsProvider.ALL,
                     new KeyValuePair<string, object>("oldName", userName),
                     new KeyValuePair<string, object>("newName", value));
@@ -390,18 +389,23 @@ namespace Fourzy
             {
                 settingRandomName = false;
             }
+
+            PlayerPrefsWrapper.SetUserName(value);
         }
 
         public void UpdateSelectedGamePiece(string _gamePieceID)
         {
-            Debug.Log($"-------------{_gamePieceID}");
             gamePieceID = _gamePieceID;
 
             OnUpdateUserGamePieceID?.Invoke(gamePieceID);
 
             AnalyticsManager.Instance.LogEvent(
-                AnalyticsManager.AnalyticsEvents.SELECT_GAMEPIECE,
-                values: new KeyValuePair<string, object>(AnalyticsManager.GAMEPIECE_SELECT_KEY, _gamePieceID));
+                AnalyticsManager.AnalyticsEvents.selectGamepiece,
+                AnalyticsManager.AnalyticsProvider.ALL,
+                new KeyValuePair<string, object>(AnalyticsManager.GAMEPIECE_SELECT_KEY, _gamePieceID),
+                new KeyValuePair<string, object>(
+                    AnalyticsManager.GAMEPIECE_NAME_KEY, 
+                    GameContentManager.Instance.piecesDataHolder.GetGamePieceData(_gamePieceID).name));
         }
 
         public static void GetPlayerRating(
@@ -428,6 +432,7 @@ namespace Fourzy
                 _onRatingAquired?.Invoke(data.rating);
             }, error =>
             {
+                GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
                 Debug.Log(error.ErrorMessage);
                 GamesToastsController.ShowTopToast(error.ErrorMessage);
 
@@ -479,6 +484,7 @@ namespace Fourzy
                     JsonConvert.DeserializeObject<CheckPlayerStatsResult>(result.FunctionResult.ToString()));
             }, error =>
             {
+                GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
                 Debug.Log(error.ErrorMessage);
                 onFailed?.Invoke();
             });
@@ -531,7 +537,6 @@ namespace Fourzy
 
         private void OnAvatarUrlUpdate(EmptyResponse response)
         {
-            Debug.Log(response.ToJson());
         }
 
         private void OnPlayFabError(PlayFabError error)
@@ -542,11 +547,12 @@ namespace Fourzy
             }
 
             onDisplayNameChangeFailed?.Invoke(error.ErrorMessage);
+            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
         }
 
         private void ChangeDisplayNameResult(UpdateUserTitleDisplayNameResult result)
         {
-            //Amplitude.Instance.setUserProperty("playerName", userName);
+            Amplitude.Instance.setUserProperty("playerName", result.DisplayName);
             settingRandomName = false;
 
             onDisplayNameChanged?.Invoke();

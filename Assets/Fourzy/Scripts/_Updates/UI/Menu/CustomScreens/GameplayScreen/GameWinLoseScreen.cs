@@ -92,7 +92,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     break;
 
-                case GameMode.LOCAL_VERSUS:
+                case GameMode.VERSUS:
                     if (game.draw)
                     {
                         stateLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(loseColor)}>" +
@@ -234,6 +234,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameType.REALTIME:
                     if (!waitingScreen)
                     {
+                        //send event
+                        AnalyticsManager.Instance.LogEvent(
+                            "requestRealtimeRematch",
+                            AnalyticsManager.AnalyticsProvider.ALL,
+                            new KeyValuePair<string, object>("isWinner", game.IsWinner()),
+                            new KeyValuePair<string, object>(
+                                "isBotOpponent", 
+                                GameManager.Instance.ExpectedGameType == GameTypeLocal.REALTIME_BOT_GAME),
+                            new KeyValuePair<string, object>("isPrivate", false));
+
                         switch (GameManager.Instance.ExpectedGameType)
                         {
                             case GameTypeLocal.REALTIME_LOBBY_GAME:
@@ -267,18 +277,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                             waitingScreen = null;
 
                                             GamePlayManager.Instance.LoadGame(null);
+                                            //report analytics
+                                            GamePlayManager.Instance.ReportRematchResult(true);
 
                                             botRematchesLeft -= 1;
                                         }
                                         else
                                         {
                                             GamePlayManager.Instance.BackButtonOnClick();
+                                            //report analytics
+                                            GamePlayManager.Instance.ReportRematchResult(false);
                                         }
                                     },
                                     null);
 
                                 break;
                         }
+
+                        GamePlayManager.Instance.rematchRequested = true;
 
                         //open waiting prompt
                         waitingScreen = menuController.GetOrAddScreen<PromptScreen>()
@@ -368,7 +384,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                             //open screen for next event
                             BasicPuzzlePack nextPack = GameManager.Instance.currentMap
-                                .GetNextPack(game.puzzleData.pack.packID);
+                                .GetNextPack(game.puzzleData.pack.packId);
 
                             if (nextPack == null)
                             {

@@ -30,7 +30,7 @@ namespace Fourzy
         public const int REALTIME_COUNTDOWN_SECONDS = 4;
 
         /// <summary>
-        /// This wait time is for quick match lobby
+        /// This value is only used when bot match wait time is < 0f, so it will time out
         /// </summary>
         public const float REALTIME_OPPONENT_WAIT_TIME = 30f;
         public const float LOBBY_GAME_LOAD_DELAY = 2.2f;
@@ -104,6 +104,7 @@ namespace Fourzy
 
         public static readonly string REALTIME_ROOM_AREA = "area";
         public static readonly string REALTIME_ROOM_GAMEPIECE_KEY = "p";
+        public static readonly string REALTIME_MID_KEY = "mid";
         public static readonly string REALTIME_ROOM_TYPE_KEY = "type";
         public static readonly string REALTIME_ROOM_PASSWORD = "pword";
         public static readonly string REALTIME_ROOM_TIMER_KEY = "timer";
