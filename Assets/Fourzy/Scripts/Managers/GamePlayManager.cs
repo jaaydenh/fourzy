@@ -1311,7 +1311,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 if (player.playfabID == LoginManager.playfabId)
                 {
-                    UserManager.Instance.lastCachedRating = player.rating;
                     string ratingText = "Rating ";
                     if (player.winner)
                     {

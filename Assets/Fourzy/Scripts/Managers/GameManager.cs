@@ -446,8 +446,6 @@ namespace Fourzy
                     {
                         UserManager.Instance.playfabLosesCount += 1;
                     }
-
-                    ratingDataReceived?.Invoke(data);
                 }
                 else
                 {
@@ -458,6 +456,8 @@ namespace Fourzy
                     }
                 }
             }
+
+            ratingDataReceived?.Invoke(data);
         }
 
         public void ReportBotGameFinished(IClientFourzy game)

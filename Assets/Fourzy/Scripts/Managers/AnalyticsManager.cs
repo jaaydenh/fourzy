@@ -20,7 +20,7 @@ namespace Fourzy
         private const string AMP_PROD_KEY = "300f3bfc4f1180cf072c49fcd198950f";
         private const string AMP_DEBUG_KEY = "4c62628ff8687c70a9fd201aea80db00";
 
-        public const string EVENT_ID_KEY = "eventId";
+        public const string EVENT_ID_KEY = "adventureEventId";
 
         public const string GAME_RESULT_KEY = "result";
         public const string HINT_STORE_ITEMS_KEY = "hintStoreItems";
