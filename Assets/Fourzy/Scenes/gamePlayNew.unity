@@ -1987,7 +1987,7 @@ MonoBehaviour:
       calls:
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 38
+          selectedMember: 39
           isDynamic: 0
         target: {fileID: 1899509752}
         memberName: Rematch
@@ -1999,7 +1999,7 @@ MonoBehaviour:
           stringArgument: 
           intArgument: 0
           floatArgument: 0
-          boolArgument: 0
+          boolArgument: 1
           colorArgument: {r: 0, g: 0, b: 0, a: 0}
           vector2Argument: {x: 0, y: 0}
           vector3Argument: {x: 0, y: 0, z: 0}
@@ -32592,6 +32592,7 @@ MonoBehaviour:
   bgParent: {fileID: 2068058696}
   noNetworkOverlay: {fileID: 7418769054685816303}
   hintBlocksParent: {fileID: 1256455895}
+  rematchRequested: 0
 --- !u!4 &1899509753
 Transform:
   m_ObjectHideFlags: 0

@@ -108,7 +108,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else
             {
                 //puzzle failed, rematch
-                GamePlayManager.Instance.Rematch();
+                GamePlayManager.Instance.Rematch(false);
             }
 
             if (isCurrent)

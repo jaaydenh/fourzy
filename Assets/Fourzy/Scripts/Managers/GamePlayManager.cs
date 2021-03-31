@@ -566,29 +566,26 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        public void Rematch(bool resetMembers = false)
+        public void Rematch(bool sendResetEvent = false)
         {
             if (game == null) return;
 
-            AnalyticsManager.Instance.LogGame(
-                game.GameToAnalyticsEvent(false),
-                game,
-                values: new KeyValuePair<string, object>(
-                    AnalyticsManager.GAME_RESULT_KEY,
-                    AnalyticsManager.GameResultType.reset));
+            if (sendResetEvent)
+            {
+                AnalyticsManager.Instance.LogGame(
+                    game.GameToAnalyticsEvent(false),
+                    game,
+                    values: new KeyValuePair<string, object>(
+                        AnalyticsManager.GAME_RESULT_KEY,
+                        AnalyticsManager.GameResultType.reset));
+            }
 
             board.StopAIThread();
             switch (game._Type)
             {
-                case GameType.TURN_BASED:
-                    //loadingPrompt = PersistantMenuController.instance.GetOrAddScreen<LoadingPromptScreen>();
-                    //loadingPrompt._Prompt(LoadingPromptScreen.LoadingPromptType.BASIC, LocalizationManager.Value("loading"));
-
-                    break;
-
                 case GameType.AI:
                 case GameType.PUZZLE:
-                    game._Reset(resetMembers);
+                    game._Reset();
 
                     LoadGame(game);
 
@@ -606,7 +603,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     }
                     else
                     {
-                        game._Reset(resetMembers);
+                        game._Reset();
                     }
 
                     LoadGame(game);
@@ -614,7 +611,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     break;
 
                 case GameType.REALTIME:
-                    game._Reset(resetMembers);
+                    game._Reset();
 
                     LoadGame(game);
 

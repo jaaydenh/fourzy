@@ -4,6 +4,7 @@ using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Photon.Pun;
@@ -310,7 +311,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     {
                         menuController.CloseCurrentScreen(true);
                     }
-                    GamePlayManager.Instance.Rematch();
+
+                    GamePlayManager.Instance.Rematch(true);
 
                     break;
             }
