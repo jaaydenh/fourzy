@@ -277,16 +277,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                             waitingScreen = null;
 
                                             GamePlayManager.Instance.LoadGame(null);
-                                            //report analytics
-                                            GamePlayManager.Instance.ReportRematchResult(true);
 
                                             botRematchesLeft -= 1;
                                         }
                                         else
                                         {
                                             GamePlayManager.Instance.BackButtonOnClick();
-                                            //report analytics
-                                            GamePlayManager.Instance.ReportRematchResult(false);
                                         }
                                     },
                                     null);
