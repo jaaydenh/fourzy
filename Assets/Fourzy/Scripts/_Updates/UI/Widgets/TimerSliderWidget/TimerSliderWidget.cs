@@ -73,7 +73,10 @@ namespace Fourzy._Updates.UI.Widgets
         {
             get
             {
-                return timerValue * InternalSettings.Current.CIRCULAR_TIMER_SECONDS + smallTimerValue;
+                return Mathf.Clamp(
+                    timerValue * InternalSettings.Current.CIRCULAR_TIMER_SECONDS + smallTimerValue, 
+                    0f, 
+                    float.MaxValue);
             }
 
             set
