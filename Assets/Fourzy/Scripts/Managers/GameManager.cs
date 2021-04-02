@@ -102,6 +102,7 @@ namespace Fourzy
             Constants.MAIN_MENU_P_SCENE_NAME;
 
         private PlacementStyle _placementStyle;
+        private string lastErrorMessage;
 
         public bool isMainMenuLoaded
         {
@@ -424,10 +425,14 @@ namespace Fourzy
 
         public void ReportPlayFabError(string errorMessage)
         {
+            if (lastErrorMessage == errorMessage) return;
+
             AnalyticsManager.Instance.LogEvent(
                 "playfabError",
                 AnalyticsManager.AnalyticsProvider.ALL,
                 new KeyValuePair<string, object>("error", errorMessage));
+
+            lastErrorMessage = errorMessage;
         }
 
         private void OnRatingDataAquired(RatingGameCompleteResult data)

@@ -85,7 +85,7 @@ namespace Fourzy._Updates.UI.Widgets
             if (opponent == null || string.IsNullOrEmpty(opponent.PlayerString)) return;
 
             Debug.Log($"Open user challenge {opponent.DisplayName}, {opponent.PlayerString}");
-            menuScreen.menuController.GetOrAddScreen<MatchmakingScreen>().StartVSPlayer(opponent.PlayerString);
+            //menuScreen.menuController.GetOrAddScreen<MatchmakingScreen>().StartVSPlayer(opponent.PlayerString);
         }
     }
 }

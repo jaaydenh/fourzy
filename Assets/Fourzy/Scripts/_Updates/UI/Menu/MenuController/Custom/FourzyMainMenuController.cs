@@ -16,6 +16,8 @@ namespace Fourzy._Updates.UI.Menu
     {
         public static FourzyMainMenuController instance;
 
+        private MatchmakingScreen matchmakingScreen;
+
         protected override void Awake()
         {
             base.Awake();
@@ -26,6 +28,8 @@ namespace Fourzy._Updates.UI.Menu
         protected override void Start()
         {
             base.Start();
+
+            matchmakingScreen = GetScreen<MatchmakingScreen>();
 
             //play bg audio
             if (!AudioHolder.instance.IsBGAudioPlaying(Serialized.AudioTypes.BG_MAIN_MENU))
@@ -111,6 +115,11 @@ namespace Fourzy._Updates.UI.Menu
 
                         break;
                 }
+            }
+
+            if (currentScreen == matchmakingScreen)
+            {
+                matchmakingScreen.CloseSelf(false);
             }
         }
 
