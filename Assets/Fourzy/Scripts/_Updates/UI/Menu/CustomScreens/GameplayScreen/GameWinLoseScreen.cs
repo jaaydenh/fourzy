@@ -26,6 +26,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameObject buttonsRow;
         public ButtonExtended nextGameButton;
         public ButtonExtended rematchButton;
+        public ButtonExtended exitButton;
 
         public AlphaTween tapToContinue;
 
@@ -336,6 +337,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             if (isCurrent) menuController.CloseCurrentScreen(true);
         }
 
+        public void OnExitTap()
+        {
+            GamePlayManager.Instance.BackButtonOnClick();
+        }
+
         public void OnBGTap()
         {
             switch (game._Mode)
@@ -536,11 +542,26 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
                 }
+
+                //exit button
+                switch (game._Type)
+                {
+                    case GameType.REALTIME:
+                        exitButton.SetActive(true);
+
+                        break;
+
+                    default:
+                        exitButton.SetActive(false);
+
+                        break;
+                }
             }
             else
             {
                 nextGameButton.SetActive(false);
                 rematchButton.SetActive(false);
+                exitButton.SetActive(false);
             }
         }
 

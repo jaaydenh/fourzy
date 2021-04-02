@@ -76,7 +76,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             AnalyticsManager.Instance.LogEvent(
                 "realtimeMatchmakingAbandoned",
                 AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("playerId", LoginManager.masterAccountId),
+                new KeyValuePair<string, object>("playfabPlayerId", LoginManager.masterAccountId),
                 new KeyValuePair<string, object>("area", ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString()),
                 new KeyValuePair<string, object>("matchmakingTimeElapsed", Time.time - roomCreatedTime)
                 );
@@ -190,7 +190,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         AnalyticsManager.Instance.LogEvent(
                             "realtimeMatchmakingStarted",
                             AnalyticsManager.AnalyticsProvider.ALL,
-                            new KeyValuePair<string, object>("playerId", LoginManager.masterAccountId),
+                            new KeyValuePair<string, object>("playfabMasterAccoutId", LoginManager.masterAccountId),
                             new KeyValuePair<string, object>("area", ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString()));
                     }, () =>
                     {

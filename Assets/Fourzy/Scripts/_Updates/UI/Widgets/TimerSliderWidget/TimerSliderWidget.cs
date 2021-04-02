@@ -149,7 +149,6 @@ namespace Fourzy._Updates.UI.Widgets
         {
             timerValueTween.from = timerValue / Constants.TIMER_SECTIONS;
             timerValueTween.to = value / Constants.TIMER_SECTIONS;
-            Debug.Log(timerValueTween.from + " " + timerValueTween.to);
             timerValueTween.PlayForward(true);
 
             TimerValue = Mathf.Clamp(value, 0f, Constants.TIMER_SECTIONS);

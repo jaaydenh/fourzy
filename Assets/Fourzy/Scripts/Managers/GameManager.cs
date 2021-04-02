@@ -352,7 +352,7 @@ namespace Fourzy
             AnalyticsManager.Instance.LogEvent(
                 "discordButtonPress",
                 AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("playerId", LoginManager.masterAccountId));
+                new KeyValuePair<string, object>("playfabPlayerId", LoginManager.masterAccountId));
 
             Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/t2zW7j3XRs"/*)*/);
         }
