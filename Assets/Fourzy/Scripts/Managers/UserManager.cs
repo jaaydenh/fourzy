@@ -179,7 +179,7 @@ namespace Fourzy
         /// </summary>
         public uint totalSpentUSD { get; set; }
 
-        public bool ratingAssigned => totalPlayfabGames >= Constants.GAMES_BEFORE_RATING_DISPLAYED;
+        public bool ratingAssigned => totalPlayfabGames >= InternalSettings.Current.GAMES_BEFORE_RATING_USED;
 
         public int playfabWinsCount
         {

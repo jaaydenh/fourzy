@@ -309,8 +309,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         new OpponentData(
                             "bot",
                             botSettings.r,
-                            Constants.GAMES_BEFORE_RATING_DISPLAYED);
-                    GameManager.Instance.Bot = new FourzyGameModel.Model.Player(
+                            InternalSettings.Current.GAMES_BEFORE_RATING_USED);
+                    GameManager.Instance.Bot = new Player(
                         2,
                         UserManager.CreateNewPlayerName(),
                         botSettings.AIProfile)

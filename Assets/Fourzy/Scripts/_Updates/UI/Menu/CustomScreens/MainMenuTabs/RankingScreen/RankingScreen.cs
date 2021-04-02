@@ -141,7 +141,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             "Leaderboard",
                             string.Format(
                                 LocalizationManager.Value("complete_games_to_see_rating"), 
-                                Constants.GAMES_BEFORE_RATING_DISPLAYED),
+                                InternalSettings.Current.GAMES_BEFORE_RATING_USED),
                             LocalizationManager.Value("ok"),
                             "")
                         .CloseOnAccept();

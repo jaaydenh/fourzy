@@ -47,7 +47,7 @@ namespace Fourzy._Updates.UI.Widgets
             bool displayRating = FourzyPhotonManager.GetRoomProperty(
                 data.CustomProperties,
                 Constants.REALTIME_ROOM_GAMES_TOTAL_KEY,
-                0) >= Constants.GAMES_BEFORE_RATING_DISPLAYED;
+                0) >= InternalSettings.Current.GAMES_BEFORE_RATING_USED;
 
             if (displayRating)
             {

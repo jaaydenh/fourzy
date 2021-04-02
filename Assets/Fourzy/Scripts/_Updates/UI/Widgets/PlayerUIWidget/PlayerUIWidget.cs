@@ -144,7 +144,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (value < 0) return;
 
-            if (totalGames >= Constants.GAMES_BEFORE_RATING_DISPLAYED)
+            if (totalGames >= InternalSettings.Current.GAMES_BEFORE_RATING_USED)
             {
                 SetExtraData(value.ToString());
             }
