@@ -46,7 +46,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void CloseIfOpened()
         {
-            if (isCurrent) menuController.CloseCurrentScreen(true);
+            if (isCurrent)
+            {
+                menuController.CloseCurrentScreen(true);
+            }
 
             CancelRoutine("open");
             puzzlePackProgressWidget.CancelWidgetsRewardAnimation();
@@ -64,9 +67,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         GameManager.Instance.currentMap.UpdateWidgets();
 
                         //open screen for next event
-                        BasicPuzzlePack nextPack = 
+                        BasicPuzzlePack nextPack =
                             GameManager.Instance.currentMap.GetNextPack(game.puzzleData.pack.packId);
-                        nextPack.StartNextUnsolvedPuzzle();
 
                         if (nextPack)
                         {
@@ -77,15 +79,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                     menuController.GetOrAddScreen<VSGamePrompt>().Prompt(
                                         nextPack,
                                         () => GamePlayManager.Instance.BackButtonOnClick(),
-                                        () => menuController.CloseCurrentScreen());
+                                        () =>
+                                        {
+                                            menuController.CloseCurrentScreen();
+                                            nextPack.StartNextUnsolvedPuzzle();
+                                        });
 
                                     break;
 
                                 case PackType.PUZZLE_PACK:
                                     menuController.GetOrAddScreen<PrePackPrompt>().Prompt(
-                                        nextPack, 
+                                        nextPack,
                                         () => GamePlayManager.Instance.BackButtonOnClick(),
-                                        () => menuController.CloseCurrentScreen());
+                                        () =>
+                                        {
+                                            menuController.CloseCurrentScreen();
+                                            nextPack.StartNextUnsolvedPuzzle();
+                                        });
 
                                     break;
                             }
