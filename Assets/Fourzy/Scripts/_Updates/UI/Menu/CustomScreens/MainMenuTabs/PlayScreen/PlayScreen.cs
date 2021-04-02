@@ -65,8 +65,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             menuController.GetOrAddScreen<GauntletIntroScreen>()._Prompt();
         }
 
-        public void StartTurnGame() => matchmakingScreen.OpenTurnbased();
-
         public void StartTutorialAdventure() => menuController.GetOrAddScreen<ProgressionMapScreen>().Open(GameContentManager.Instance.progressionMaps[0]);
 
         public void ResetTutorial() =>

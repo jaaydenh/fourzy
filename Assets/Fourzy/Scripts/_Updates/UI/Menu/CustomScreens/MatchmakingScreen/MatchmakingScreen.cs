@@ -1,11 +1,11 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.Audio;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
-// using GameSparks.Api.Responses;
 using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -18,15 +18,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
 {
     public class MatchmakingScreen : MenuScreen
     {
-        private const float MINIMAL_TIMER_TIME = 3f;
-
         public TextAsset strings;
         public TMP_Text messageLabel;
         public TMP_Text timerLabel;
         public GameObject backButton;
 
-        private string challengeIdToJoin;
-        private string challengedID = "";
         private MatchmakingScreenState state;
         private LoadingPromptScreen _prompt;
         private List<string> matchMakingStrings;
@@ -43,9 +39,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             matchMakingStrings = JsonUtility.FromJson<GameStrings>(strings.text).values;
 
-            // ChallengeManager.OnChallengesUpdate += OnChallengesUpdate;
-            // ChallengeManager.OnChallengeUpdate += OnChallengeUpdate;
-
             FourzyPhotonManager.onJoinRandomFailed += OnJoinRandomFailed;
             FourzyPhotonManager.onCreateRoom += OnRoomCreated;
             FourzyPhotonManager.onCreateRoomFailed += OnCreateRoomFailed;
@@ -57,9 +50,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected void OnDestroy()
         {
-            // ChallengeManager.OnChallengesUpdate -= OnChallengesUpdate;
-            // ChallengeManager.OnChallengeUpdate -= OnChallengeUpdate;
-
             FourzyPhotonManager.onJoinRandomFailed -= OnJoinRandomFailed;
             FourzyPhotonManager.onCreateRoom -= OnRoomCreated;
             FourzyPhotonManager.onCreateRoomFailed -= OnCreateRoomFailed;
@@ -116,22 +106,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
         }
 
-        public void OpenTurnbased()
-        {
-            state = MatchmakingScreenState.TURNBASED;
-            challengedID = "";
-
-            menuController.OpenScreen(this);
-        }
-
-        public void StartVSPlayer(string playerID)
-        {
-            state = MatchmakingScreenState.TURNBASED;
-            challengedID = playerID;
-
-            menuController.OpenScreen(this);
-        }
-
         public void OpenRealtime()
         {
             if (FourzyPhotonManager.GetRoomProperty(Constants.REALTIME_ROOM_TYPE_KEY, RoomType.NONE) ==
@@ -160,7 +134,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             else
             {
                 state = MatchmakingScreenState.REALTIME;
-                challengedID = "";
 
                 menuController.OpenScreen(this);
             }
@@ -170,13 +143,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.Open();
 
-            challengeIdToJoin = "";
             BlockInput();
             backButton.SetActive(false);
 
             switch (state)
             {
                 case MatchmakingScreenState.REALTIME:
+                    if (!FourzyPhotonManager.ConnectedAndReady && NetworkManager.Status != NetStatus.Connected)
+                    {
+                        ReadyToClose();
+                        timerLabel.text = LocalizationManager.Value("no_connection");
+
+                        return;
+                    }
+
                     messageLabel.text = "Retrieving player stats...";
 
                     //first get stats
@@ -273,8 +253,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GameManager.Instance.RealtimeOpponent = new OpponentData(otherPlayer);
             //other player connected, switch to gameplay scene
             StartMatch(GameTypeLocal.REALTIME_QUICKMATCH);
-
-            CloseSelf();
         }
 
         private void OnRoomJoined(string roomName)
@@ -287,8 +265,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                 //open gameplay scene
                 StartMatch(GameTypeLocal.REALTIME_QUICKMATCH);
-
-                CloseSelf();
             }
         }
 
@@ -296,7 +272,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (state != MatchmakingScreenState.WAITTING_ROOM_LEFT) return;
 
-            if (_prompt.isOpened) _prompt.Decline();
+            if (_prompt.isOpened)
+            {
+                _prompt.Decline();
+            }
+
             OpenRealtime();
         }
 
@@ -304,7 +284,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void StartMatch(GameTypeLocal type)
         {
-            //play GAME_FOUND sfx
+            state = MatchmakingScreenState.NONE;
             AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
             timerLabel.text = "Match Found";
@@ -314,8 +294,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void StartBotMatch()
         {
-            OnBack();
-
             if (useBotMatch)
             {
                 //get bot profile from players' rating
@@ -328,8 +306,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 {
                     BotSettings botSettings =
                         JsonConvert.DeserializeObject<BotSettings>(result.FunctionResult.ToString());
-
-                    Debug.Log("starting ai match for " + botSettings.AIProfile);
 
                     GameManager.Instance.RealtimeOpponent =
                         new OpponentData(
@@ -346,21 +322,32 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     };
 
                     StartMatch(GameTypeLocal.REALTIME_BOT_GAME);
+
+                    if (FourzyPhotonManager.IsQMLobby)
+                    {
+                        FourzyPhotonManager.TryLeaveRoom();
+                    }
                 },
                 (error) =>
                 {
-                    Debug.LogError(error.ErrorMessage);
-
+                    CloseSelf();
                     GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+
+                    Debug.LogError(error.ErrorMessage);
                 });
             }
             else
             {
+                CloseSelf();
+
                 //timed out
                 PersistantMenuController.Instance.GetOrAddScreen<PromptScreen>().Prompt(
                     LocalizationManager.Value("timed_out_title"),
-                    LocalizationManager.Value("timed_out_text"), null,
-                    LocalizationManager.Value("back"), null, null);
+                    LocalizationManager.Value("timed_out_text"),
+                    null,
+                    LocalizationManager.Value("back"), 
+                    null,
+                    null);
             }
         }
 
@@ -370,13 +357,16 @@ namespace Fourzy._Updates.UI.Menu.Screens
             SetInteractable(true);
             backButton.SetActive(true);
 
-            OnBack();
+            CloseSelf();
 
             //open prompt screen
             PersistantMenuController.Instance.GetOrAddScreen<PromptScreen>().Prompt(
-                "Connection failed.",
-                "Failed to connect to multiplayer server :(", null,
-                LocalizationManager.Value("back"), null, null);
+                LocalizationManager.Value("no_connection"),
+                "", 
+                null,
+                LocalizationManager.Value("back"), 
+                null, 
+                null);
         }
 
         private IEnumerator ShowRandomTextRoutine()
@@ -386,6 +376,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             int elementIndex = 0;
             while (true)
             {
+                if (!isOpened) yield return null;
+
                 alphaTween.PlayForward(true);
 
                 timerLabel.text = matchMakingStrings[elementIndex].RemoveLastChar();
@@ -397,9 +389,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 yield return new WaitForSeconds(alphaTween.playbackTime);
 
                 if (elementIndex + 1 < matchMakingStrings.Count)
+                {
                     elementIndex++;
+                }
                 else
+                {
                     elementIndex = 0;
+                }
             }
         }
 
