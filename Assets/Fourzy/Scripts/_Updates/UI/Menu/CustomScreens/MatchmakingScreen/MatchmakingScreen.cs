@@ -190,7 +190,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         AnalyticsManager.Instance.LogEvent(
                             "realtimeMatchmakingStarted",
                             AnalyticsManager.AnalyticsProvider.ALL,
-                            new KeyValuePair<string, object>("playfabMasterAccoutId", LoginManager.masterAccountId),
+                            new KeyValuePair<string, object>("playfabPlayerId", LoginManager.masterAccountId),
                             new KeyValuePair<string, object>("area", ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString()));
                     }, () =>
                     {
