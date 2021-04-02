@@ -74,7 +74,7 @@ namespace Fourzy._Updates.UI.Widgets
             get
             {
                 return Mathf.Clamp(
-                    timerValue * InternalSettings.Current.CIRCULAR_TIMER_SECONDS + smallTimerValue, 
+                    (timerValue - 1) * InternalSettings.Current.CIRCULAR_TIMER_SECONDS + smallTimerValue, 
                     0f, 
                     float.MaxValue);
             }
@@ -136,13 +136,20 @@ namespace Fourzy._Updates.UI.Widgets
                 AddSmallTimerValue(InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
             }
 
-            if (vfx) ShowAddTimerVfx($"+<color=#00FF62>{value * InternalSettings.Current.CIRCULAR_TIMER_SECONDS}sec!</color>", Vector2.zero, vfxDirection);
+            if (vfx)
+            {
+                ShowAddTimerVfx(
+                    $"+<color=#00FF62>{value * InternalSettings.Current.CIRCULAR_TIMER_SECONDS}sec!</color>", 
+                    Vector2.zero, 
+                    vfxDirection);
+            }
         }
 
         public void SetTimerValue(float value)
         {
             timerValueTween.from = timerValue / Constants.TIMER_SECTIONS;
             timerValueTween.to = value / Constants.TIMER_SECTIONS;
+            Debug.Log(timerValueTween.from + " " + timerValueTween.to);
             timerValueTween.PlayForward(true);
 
             TimerValue = Mathf.Clamp(value, 0f, Constants.TIMER_SECTIONS);
