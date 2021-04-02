@@ -44,6 +44,8 @@ namespace Fourzy._Updates
             PlayerPrefs.GetFloat(PREFIX + "MOVE_SPEED_CAP", Constants.MOVE_SPEED_CAP);
         internal int REALTIME_COUNTDOWN_SECONDS { get; private set; } =
             PlayerPrefs.GetInt(PREFIX + "REALTIME_COUNTDOWN_SECONDS", Constants.REALTIME_COUNTDOWN_SECONDS);
+        internal int GAMES_BEFORE_RATING_USED { get; private set; } =
+            PlayerPrefs.GetInt(PREFIX + "GAMES_BEFORE_RATING_DISPLAYED", Constants.GAMES_BEFORE_RATING_USED);
         internal float LOBBY_GAME_LOAD_DELAY { get; private set; } =
             PlayerPrefs.GetFloat(PREFIX + "LOBBY_GAME_LOAD_DELAY", Constants.LOBBY_GAME_LOAD_DELAY);
         internal Area[] UNLOCKED_AREAS { get; private set; } =

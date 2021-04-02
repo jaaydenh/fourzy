@@ -54,7 +54,7 @@ namespace Fourzy
 
         public const int RUNNING_CHALLENGES_COUNT = 100;
         public const int COMPLETE_CHALLENGES_COUNT = 50;
-        public const int GAMES_BEFORE_RATING_DISPLAYED = 5;
+        public const int GAMES_BEFORE_RATING_USED = 5;
 
         public const string GAME_MODE_FAST_PUZZLES = "unlock_fast_puzzles_mode";
         public const string GAME_MODE_GAUNTLET_GAME = "unlock_gauntlet_mode";

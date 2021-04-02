@@ -1317,7 +1317,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         ratingText += "+";
                     }
 
-                    int diff = Constants.GAMES_BEFORE_RATING_DISPLAYED - UserManager.Instance.totalPlayfabGames;
+                    int diff = 
+                        InternalSettings.Current.GAMES_BEFORE_RATING_USED - 
+                        UserManager.Instance.totalPlayfabGames;
                     string message;
                     if (diff > 0)
                     {
