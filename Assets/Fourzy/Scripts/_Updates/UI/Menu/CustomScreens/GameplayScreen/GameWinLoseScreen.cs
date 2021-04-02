@@ -4,6 +4,7 @@ using ExitGames.Client.Photon;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.GameplayScene;
+using Fourzy._Updates.Tools;
 using Fourzy._Updates.Tween;
 using Fourzy._Updates.UI.Helpers;
 using Photon.Pun;
@@ -25,6 +26,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameObject buttonsRow;
         public ButtonExtended nextGameButton;
         public ButtonExtended rematchButton;
+        public ButtonExtended exitButton;
 
         public AlphaTween tapToContinue;
 
@@ -277,16 +279,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                             waitingScreen = null;
 
                                             GamePlayManager.Instance.LoadGame(null);
-                                            //report analytics
-                                            GamePlayManager.Instance.ReportRematchResult(true);
 
                                             botRematchesLeft -= 1;
                                         }
                                         else
                                         {
                                             GamePlayManager.Instance.BackButtonOnClick();
-                                            //report analytics
-                                            GamePlayManager.Instance.ReportRematchResult(false);
                                         }
                                     },
                                     null);
@@ -314,7 +312,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     {
                         menuController.CloseCurrentScreen(true);
                     }
-                    GamePlayManager.Instance.Rematch();
+
+                    GamePlayManager.Instance.Rematch(true);
 
                     break;
             }
@@ -336,6 +335,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
 
             if (isCurrent) menuController.CloseCurrentScreen(true);
+        }
+
+        public void OnExitTap()
+        {
+            GamePlayManager.Instance.BackButtonOnClick();
         }
 
         public void OnBGTap()
@@ -538,11 +542,26 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                         break;
                 }
+
+                //exit button
+                switch (game._Type)
+                {
+                    case GameType.REALTIME:
+                        exitButton.SetActive(true);
+
+                        break;
+
+                    default:
+                        exitButton.SetActive(false);
+
+                        break;
+                }
             }
             else
             {
                 nextGameButton.SetActive(false);
                 rematchButton.SetActive(false);
+                exitButton.SetActive(false);
             }
         }
 

@@ -73,7 +73,10 @@ namespace Fourzy._Updates.UI.Widgets
         {
             get
             {
-                return timerValue * InternalSettings.Current.CIRCULAR_TIMER_SECONDS + smallTimerValue;
+                return Mathf.Clamp(
+                    (timerValue - 1) * InternalSettings.Current.CIRCULAR_TIMER_SECONDS + smallTimerValue, 
+                    0f, 
+                    float.MaxValue);
             }
 
             set
@@ -133,7 +136,13 @@ namespace Fourzy._Updates.UI.Widgets
                 AddSmallTimerValue(InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
             }
 
-            if (vfx) ShowAddTimerVfx($"+<color=#00FF62>{value * InternalSettings.Current.CIRCULAR_TIMER_SECONDS}sec!</color>", Vector2.zero, vfxDirection);
+            if (vfx)
+            {
+                ShowAddTimerVfx(
+                    $"+<color=#00FF62>{value * InternalSettings.Current.CIRCULAR_TIMER_SECONDS}sec!</color>", 
+                    Vector2.zero, 
+                    vfxDirection);
+            }
         }
 
         public void SetTimerValue(float value)

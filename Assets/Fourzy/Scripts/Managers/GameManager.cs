@@ -352,7 +352,7 @@ namespace Fourzy
             AnalyticsManager.Instance.LogEvent(
                 "discordButtonPress",
                 AnalyticsManager.AnalyticsProvider.ALL,
-                new KeyValuePair<string, object>("playerId", LoginManager.masterAccountId));
+                new KeyValuePair<string, object>("playfabPlayerId", LoginManager.masterAccountId));
 
             Application.OpenURL(/*UnityWebRequest.EscapeURL(*/"https://discord.gg/t2zW7j3XRs"/*)*/);
         }
@@ -511,75 +511,87 @@ namespace Fourzy
         {
             if (game._Type == GameType.ONBOARDING) return;
 
-            AnalyticsManager.GameResultType gameResult;
+            AnalyticsManager.GameResultType gameResult = AnalyticsManager.GameResultType.none;
             Dictionary<string, object> extraParams = new Dictionary<string, object>();
 
             bool isPlayer1 = game.me == game.player1;
-
-            if (!game.turnEvaluator.IsAvailableSimpleMove())
-            {
-                gameResult = AnalyticsManager.GameResultType.noPossibleMoves;
-            }
-            else if (game.draw)
-            {
-                gameResult = AnalyticsManager.GameResultType.draw;
-            }
-            else
-            {
-                bool checkPlayer1or2Win = false;
-
-                switch (ExpectedGameType)
-                {
-                    case GameTypeLocal.REALTIME_BOT_GAME:
-                    case GameTypeLocal.REALTIME_LOBBY_GAME:
-                    case GameTypeLocal.REALTIME_QUICKMATCH:
-                        checkPlayer1or2Win = true;
-
-                        break;
-
-                    case GameTypeLocal.LOCAL_GAME:
-                        switch (game._Mode)
-                        {
-                            case GameMode.VERSUS:
-                                checkPlayer1or2Win = true;
-
-                                break;
-                        }
-
-                        break;
-                }
-
-                if (checkPlayer1or2Win)
-                {
-                    gameResult = game.IsWinner(game.player1) ?
-                        AnalyticsManager.GameResultType.player1Win :
-                        AnalyticsManager.GameResultType.player2Win;
-                }
-                else
-                {
-                    gameResult = game.IsWinner() ?
-                        AnalyticsManager.GameResultType.win :
-                        AnalyticsManager.GameResultType.lose;
-                }
-            }
-
-            extraParams.Add(AnalyticsManager.GAME_RESULT_KEY, gameResult.ToString());
 
             if (GamePlayManager.Instance)
             {
                 if (GamePlayManager.Instance.gameplayScreen.timersEnabled)
                 {
                     float player1TimeLeft = isPlayer1 ?
-                        GamePlayManager.Instance.gameplayScreen.myTimerLeft :
+                        GamePlayManager.Instance.gameplayScreen.myTimerLeft : 
                         GamePlayManager.Instance.gameplayScreen.opponentTimerLeft;
-                    float player2TimeLeft = isPlayer1 ?
-                        GamePlayManager.Instance.gameplayScreen.opponentTimerLeft :
+                    float player2TimeLeft = isPlayer1 ? 
+                        GamePlayManager.Instance.gameplayScreen.opponentTimerLeft : 
                         GamePlayManager.Instance.gameplayScreen.myTimerLeft;
+
+                    if (player1TimeLeft <= 0f)
+                    {
+                        gameResult = AnalyticsManager.GameResultType.player1TimeExpired;
+                    }
+                    else if (player2TimeLeft <= 0f)
+                    {
+                        gameResult = AnalyticsManager.GameResultType.player2TimeExpired;
+                    }
 
                     extraParams.Add("player1TimeRemaining", player1TimeLeft);
                     extraParams.Add("player2TimeRemaining", player2TimeLeft);
                 }
             }
+
+            if (gameResult == AnalyticsManager.GameResultType.none)
+            {
+                if (!game.turnEvaluator.IsAvailableSimpleMove())
+                {
+                    gameResult = AnalyticsManager.GameResultType.noPossibleMoves;
+                }
+                else if (game.draw)
+                {
+                    gameResult = AnalyticsManager.GameResultType.draw;
+                }
+                else
+                {
+                    bool checkPlayer1or2Win = false;
+
+                    switch (ExpectedGameType)
+                    {
+                        case GameTypeLocal.REALTIME_BOT_GAME:
+                        case GameTypeLocal.REALTIME_LOBBY_GAME:
+                        case GameTypeLocal.REALTIME_QUICKMATCH:
+                            checkPlayer1or2Win = true;
+
+                            break;
+
+                        case GameTypeLocal.LOCAL_GAME:
+                            switch (game._Mode)
+                            {
+                                case GameMode.VERSUS:
+                                    checkPlayer1or2Win = true;
+
+                                    break;
+                            }
+
+                            break;
+                    }
+
+                    if (checkPlayer1or2Win)
+                    {
+                        gameResult = game.IsWinner(game.player1) ?
+                            AnalyticsManager.GameResultType.player1Win :
+                            AnalyticsManager.GameResultType.player2Win;
+                    }
+                    else
+                    {
+                        gameResult = game.IsWinner() ?
+                            AnalyticsManager.GameResultType.win :
+                            AnalyticsManager.GameResultType.lose;
+                    }
+                }
+            }
+
+            extraParams.Add(AnalyticsManager.GAME_RESULT_KEY, gameResult.ToString());
 
             if (gameResult != AnalyticsManager.GameResultType.none)
             {

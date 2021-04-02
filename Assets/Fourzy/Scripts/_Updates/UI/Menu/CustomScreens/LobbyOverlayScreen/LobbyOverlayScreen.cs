@@ -232,7 +232,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 "lobbyAbandoned",
                 new Dictionary<string, object>()
                 {
-                    ["playerId"] = LoginManager.playfabId,
+                    ["playfabPlayerId"] = LoginManager.playfabId,
                     ["timer"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
                     ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
                     ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),
@@ -267,7 +267,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 "lobbyCreated",
                 new Dictionary<string, object>()
                 {
-                    ["playerId"] = LoginManager.playfabId,
+                    ["playfabPlayerId"] = LoginManager.playfabId,
                     ["timer"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
                     ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
                     ["isMagicEnabled"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC),

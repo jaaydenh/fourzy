@@ -149,7 +149,7 @@ namespace Fourzy
         {
             Dictionary<string, object> values = new Dictionary<string, object>()
             {
-                ["playerId"] = playerId,
+                ["playfabPlayerId"] = playerId,
                 ["creatorPlayerId"] = LoginManager.playfabId,
                 ["timer"] = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER),
                 ["area"] = ((Area)PlayerPrefsWrapper.GetCurrentArea()).ToString(),
