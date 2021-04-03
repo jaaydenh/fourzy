@@ -39,6 +39,8 @@ namespace Fourzy
 
         public Dictionary<PrefabType, PrefabTypePair> typedPrefabsFastAccess { get; private set; }
 
+        public List<ResourceItem> realtimeBotBoards { get; private set; }
+
         public AreasDataHolder.GameArea currentArea
         {
             get => areasDataHolder.currentAreaData;
@@ -86,6 +88,7 @@ namespace Fourzy
 
             LoadAllFastPuzzles();
             LoadPuzzlePacks();
+            LoadTutorialBotGames();
         }
 
         public GameBoardDefinition GetMiscBoard(string boardID) => 
@@ -253,6 +256,27 @@ namespace Fourzy
 
                 externalPuzzlePacks.Add(@event.Name, puzzlePack);
             }
+        }
+
+        private void LoadTutorialBotGames()
+        {
+            //get realtime bot boards
+            realtimeBotBoards = new List<ResourceItem>(ResourceDB
+                .GetFolder(Constants.REALTIME_BOT_BOARDS)
+                .GetChilds("", ResourceItem.Type.Asset)
+                .OrderBy(_board => int.Parse(_board.Name.Split(' ')[0])));
+
+            Debug.Log($"Loaded {realtimeBotBoards.Count} tutorial bot games.");
+        }
+
+        internal ResourceItem GetRealtimeBotBoard(int index)
+        {
+            if (index < realtimeBotBoards.Count)
+            {
+                return realtimeBotBoards[index];
+            }
+
+            return null;
         }
 
         [ContextMenu("ResetOnboarding")]

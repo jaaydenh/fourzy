@@ -66,6 +66,7 @@ namespace Fourzy
         public bool defaultGauntletState = true;
         public bool defaultPuzzlesState = true;
         public bool resetGameOnClose = true;
+        public bool botTutorialGame;
         public string customUserId = "";
         public float fallbackLatitude = 37.7833f;
         public float fallbackLongitude = 122.4167f;
@@ -512,7 +513,7 @@ namespace Fourzy
             });
         }
 
-        private void LogGameComplete(IClientFourzy game)
+        public void LogGameComplete(IClientFourzy game)
         {
             if (game._Type == GameType.ONBOARDING) return;
 

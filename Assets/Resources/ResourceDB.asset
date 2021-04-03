@@ -13,6 +13,18 @@ MonoBehaviour:
   m_Name: ResourceDB
   m_EditorClassIdentifier: 
   items:
+  - name: PhotonServerSettings
+    ext: asset
+    path: 
+    type: 2
+    objectTypeName: Photon.Pun.ServerSettings, PhotonUnityNetworking, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: PlayFabSharedSettings
+    ext: asset
+    path: 
+    type: 2
+    objectTypeName: PlayFabSharedSettings, PlayFab, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - name: BoardsPool
     ext: 
     path: 
@@ -183,6 +195,113 @@ MonoBehaviour:
   - name: Board_ZigZag3
     ext: json
     path: BoardsPool
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: FTUE_ProgressionBoards
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: 1 - OneBlocker
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 10 - UpwardForce
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 11 - GoopSpot
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 12 - A Bit Of Goop
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 13 - FourCornerGoop
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 14 - 4GoopSpots
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 2 - BlockPattern
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 20 - GoopSurrounded
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 21 - GoopArms
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 22 - GoopCorners
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 3 - BlockParty
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 4 - PartiallyBlocked
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 5 - BlockHalves
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 6 - PassingArrows
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 7 - ArrowsInTheMiddle
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 8 - CenterOutwardSpiral
+    ext: json
+    path: FTUE_ProgressionBoards
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: 9 - ArrowCross
+    ext: json
+    path: FTUE_ProgressionBoards
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -421,6 +540,47 @@ MonoBehaviour:
   - name: Level_ZigZag3
     ext: json
     path: LevelDrafts
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Localization
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: English
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Spanish
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Thai
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: _English
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: _Spanish
+    ext: json
+    path: Localization
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: _Thai
+    ext: json
+    path: Localization
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -1810,59 +1970,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: PhotonServerSettings
-    ext: asset
-    path: 
-    type: 2
-    objectTypeName: Photon.Pun.ServerSettings, PhotonUnityNetworking, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: PlayFabSharedSettings
-    ext: asset
-    path: 
-    type: 2
-    objectTypeName: PlayFabSharedSettings, PlayFab, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - name: Localization
-    ext: 
-    path: 
-    type: 1
-    objectTypeName: 
-  - name: English
-    ext: json
-    path: Localization
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Spanish
-    ext: json
-    path: Localization
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Thai
-    ext: json
-    path: Localization
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: _English
-    ext: json
-    path: Localization
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: _Spanish
-    ext: json
-    path: Localization
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: _Thai
-    ext: json
-    path: Localization
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: IAPProductCatalog
     ext: json
     path: 
@@ -1944,6 +2051,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_FileCount: 286
-  m_FolderCount: 43
+  m_FileCount: 303
+  m_FolderCount: 44
   UpdateAutomatically: 0

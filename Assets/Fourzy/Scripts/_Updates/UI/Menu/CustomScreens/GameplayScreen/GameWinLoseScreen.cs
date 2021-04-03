@@ -236,15 +236,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameType.REALTIME:
                     if (!waitingScreen)
                     {
-                        //send event
-                        AnalyticsManager.Instance.LogEvent(
-                            "requestRealtimeRematch",
-                            AnalyticsManager.AnalyticsProvider.ALL,
-                            new KeyValuePair<string, object>("isWinner", game.IsWinner()),
-                            new KeyValuePair<string, object>(
-                                "isBotOpponent", 
-                                GameManager.Instance.ExpectedGameType == GameTypeLocal.REALTIME_BOT_GAME),
-                            new KeyValuePair<string, object>("isPrivate", false));
+                        if (!GameManager.Instance.botTutorialGame)
+                        {
+                            //send event
+                            AnalyticsManager.Instance.LogEvent(
+                                "requestRealtimeRematch",
+                                AnalyticsManager.AnalyticsProvider.ALL,
+                                new KeyValuePair<string, object>("isWinner", game.IsWinner()),
+                                new KeyValuePair<string, object>(
+                                    "isBotOpponent",
+                                    GameManager.Instance.ExpectedGameType == GameTypeLocal.REALTIME_BOT_GAME),
+                                new KeyValuePair<string, object>("isPrivate", false));
+                        }
 
                         switch (GameManager.Instance.ExpectedGameType)
                         {
@@ -273,6 +276,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                     InternalSettings.Current.BOT_SETTINGS.randomRematchAcceptTime,
                                     () =>
                                     {
+                                        if (GameManager.Instance.botTutorialGame)
+                                        {
+                                            GamePlayManager.Instance.BackButtonOnClick();
+                                            return;
+                                        }
+
                                         if (botRematchesLeft > 0 && waitingScreen)
                                         {
                                             waitingScreen.CloseSelf();
