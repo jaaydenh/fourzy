@@ -1397,28 +1397,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        //private void LogLocalGameAbandoned()
-        //{
-        //    if (game._Type == GameType.ONBOARDING) return;
-        //    if (game == null || game.isOver) return;
-
-        //    AnalyticsManager.AnalyticsEvents @event = game.GameToAnalyticsEvent(false);
-        //    KeyValuePair<string, object>[] extraParams = new KeyValuePair<string, object>[0];
-
-        //    if (!game.isOver)
-        //    {
-        //        extraParams = new KeyValuePair<string, object>[]
-        //        {
-        //            new KeyValuePair<string, object>(
-        //                AnalyticsManager.GAME_RESULT_KEY,
-        //                AnalyticsManager.GameResultType.abandoned
-        //                ),
-        //        };
-        //    }
-
-        //    AnalyticsManager.Instance.LogGame(@event, game, values: extraParams);
-        //}
-
         private void LogGameStart()
         {
             if (game._Type == GameType.ONBOARDING) return;
