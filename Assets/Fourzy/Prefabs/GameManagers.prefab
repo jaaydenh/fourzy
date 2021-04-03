@@ -48,9 +48,11 @@ MonoBehaviour:
   extraFeatures: 1
   tapToStartGame: 1
   characterType: 2
+  showInfoToasts: 1
   defaultGauntletState: 1
   defaultPuzzlesState: 1
-  resetGameOnClose: 1
+  resetGameOnClose: 0
+  customUserId: 
   fallbackLatitude: 37.7833
   fallbackLongitude: 122.4167
   excludeInstructionsFor: 01000000

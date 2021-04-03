@@ -358,7 +358,14 @@ namespace Fourzy
                     _values.Add("player1Rating", player1Rating);
                     _values.Add("player2Rating", player2Rating);
                     _values.Add("isBotOpponent", isBotOpponent);
-                    _values.Add("recipe", game._FirstState.Board.Recipe);
+                    if (GameManager.Instance.botTutorialGame)
+                    {
+                        _values.Add("recipe", "predefined");
+                    }
+                    else
+                    {
+                        _values.Add("recipe", game._FirstState.Board.Recipe);
+                    }
                     _values.Add("initialBoard ", game._FirstState.CompressedString);
 
                     break;
@@ -377,7 +384,14 @@ namespace Fourzy
                     _values.Add("player1Rating", player1Rating);
                     _values.Add("player2Rating", player2Rating);
                     _values.Add("isBotOpponent", isBotOpponent);
-                    _values.Add("recipe", game._FirstState.Board.Recipe);
+                    if (GameManager.Instance.botTutorialGame)
+                    {
+                        _values.Add("recipe", "predefined");
+                    }
+                    else
+                    {
+                        _values.Add("recipe", game._FirstState.Board.Recipe);
+                    }
                     _values.Add("initialBoard ", game._FirstState.CompressedString);
 
                     break;
