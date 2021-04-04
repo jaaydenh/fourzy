@@ -1,10 +1,10 @@
 ﻿Cartoon FX Easy Editor
-2017/09/28
-© 2017 - Jean Moreno
+2020/03/05
+© 2020 - Jean Moreno
 ======================
 
 You can open the editor within the Unity top menu:
-Window -> Cartoon FX Easy Editor
+Tools -> Cartoon FX Easy Editor
 
 It allows you to easily change properties of the selected Particle System(s):
 
