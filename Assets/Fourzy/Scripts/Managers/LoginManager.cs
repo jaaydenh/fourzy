@@ -7,6 +7,7 @@ using Fourzy._Updates.UI.Toasts;
 //#endif
 //using SA.iOS.GameKit;
 //using SA.Foundation.Templates;
+using FourzyGameModel.Model;
 using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -373,7 +374,7 @@ namespace Fourzy
                 //try set name
                 Debug.Log($"New device");
                 UserManager.Instance.settingRandomName = true;
-                UserManager.Instance.SetDisplayName(UserManager.CreateNewPlayerName());
+                UserManager.Instance.SetDisplayName(CharacterNameFactory.GeneratePlayerName());
                 UserManager.Instance.UpdateSelectedGamePiece(InternalSettings.Current.DEFAULT_GAME_PIECE);
 
                 Amplitude.Instance.setUserProperties(new Dictionary<string, object>()
@@ -477,7 +478,7 @@ namespace Fourzy
             if (string.IsNullOrEmpty(result.AccountInfo.TitleInfo.DisplayName))
             {
                 UserManager.Instance.settingRandomName = true;
-                UserManager.Instance.SetDisplayName(UserManager.CreateNewPlayerName());
+                UserManager.Instance.SetDisplayName(CharacterNameFactory.GeneratePlayerName());
             }
             else
             {

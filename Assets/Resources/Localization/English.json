@@ -847,6 +847,10 @@
     {
       "key": "you",
       "value": "You"
+    },
+    {
+      "key": "cancel",
+      "value": "Cancel"
     }
   ]
 }

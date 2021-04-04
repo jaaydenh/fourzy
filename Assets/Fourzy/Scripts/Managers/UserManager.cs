@@ -490,42 +490,6 @@ namespace Fourzy
             });
         }
 
-        public static string CreateNewPlayerName()
-        {
-            string[] firstNameSyllables = { "kit", "mon", "fay", "shi", "zag", "blarg", "rash", "izen", "boop", "pop", "moop", "foop" };
-            string[] lastNameSyllables = { "malo", "zak", "abo", "wonk", "zig", "wolf", "cat", "dog", "sheep", "goat" };
-
-            //Creates a first name with 2-3 syllables
-            string firstName = "";
-            int numberOfSyllablesInFirstName = UnityEngine.Random.Range(1, 3);
-            for (int i = 0; i < numberOfSyllablesInFirstName; i++)
-            {
-                firstName += firstNameSyllables[UnityEngine.Random.Range(0, firstNameSyllables.Length)];
-            }
-
-            string firstNameLetter = "";
-            firstNameLetter = firstName.Substring(0, 1);
-            firstName = firstName.Remove(0, 1);
-            firstNameLetter = firstNameLetter.ToUpper();
-            firstName = firstNameLetter + firstName;
-
-            //Creates a last name with 1-2 syllables
-            string lastName = "";
-            int numberOfSyllablesInLastName = UnityEngine.Random.Range(1, 3);
-            for (int j = 0; j < numberOfSyllablesInLastName; j++)
-            {
-                lastName += lastNameSyllables[UnityEngine.Random.Range(0, lastNameSyllables.Length)];
-            }
-            string lastNameLetter = "";
-            lastNameLetter = lastName.Substring(0, 1);
-            lastName = lastName.Remove(0, 1);
-            lastNameLetter = lastNameLetter.ToUpper();
-            lastName = lastNameLetter + lastName;
-
-            //assembles the newly-created name
-            return firstName + " " + lastName + Mathf.CeilToInt(UnityEngine.Random.Range(0f, 9999f)).ToString();
-        }
-
         private void OnNetworkAccess(bool networkAccess)
         {
             if (networkAccess)
@@ -543,7 +507,7 @@ namespace Fourzy
         {
             if (settingRandomName)
             {
-                SetDisplayName(CreateNewPlayerName());
+                SetDisplayName(CharacterNameFactory.GeneratePlayerName());
             }
 
             onDisplayNameChangeFailed?.Invoke(error.ErrorMessage);

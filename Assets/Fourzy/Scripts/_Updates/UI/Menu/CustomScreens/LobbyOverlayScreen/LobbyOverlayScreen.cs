@@ -312,7 +312,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             InternalSettings.Current.GAMES_BEFORE_RATING_USED);
                     GameManager.Instance.Bot = new Player(
                         2,
-                        UserManager.CreateNewPlayerName(),
+                        CharacterNameFactory.GeneratePlayerName(),
                         botSettings.AIProfile)
                     {
                         HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID,

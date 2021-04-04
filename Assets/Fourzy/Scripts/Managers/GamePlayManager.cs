@@ -558,7 +558,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     {
                         GameManager.Instance.Bot = new Player(
                             2,
-                            UserManager.CreateNewPlayerName(),
+                            CharacterNameFactory.GenerateBotName(),
                             AIProfile.EasyAI)
                         {
                             HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID,
