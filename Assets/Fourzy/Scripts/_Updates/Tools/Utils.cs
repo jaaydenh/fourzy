@@ -1,6 +1,7 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
+using Fourzy._Updates.Managers;
 using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
@@ -645,6 +646,42 @@ namespace Fourzy._Updates.Tools
             }
 
             return AnalyticsManager.AnalyticsEvents.none;
+        }
+
+        public static bool GetTimerState(IClientFourzy game)
+        {
+            switch (game._Type)
+            {
+                //case GameType.AI:
+                case GameType.PASSANDPLAY:
+                    return SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER);
+
+                case GameType.REALTIME:
+                    switch (GameManager.Instance.ExpectedGameType)
+                    {
+                        case GameTypeLocal.REALTIME_LOBBY_GAME:
+                        case GameTypeLocal.REALTIME_QUICKMATCH:
+                            return FourzyPhotonManager.GetRoomProperty(
+                                Constants.REALTIME_ROOM_TIMER_KEY,
+                                false);
+
+                        case GameTypeLocal.REALTIME_BOT_GAME:
+                            return SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER);
+                    }
+
+                    break;
+
+                default:
+                    return false;
+            }
+
+            switch (game._Mode)
+            {
+                case GameMode.GAUNTLET:
+                    return false;
+            }
+
+            return false;
         }
 
         public static Vector2 GetViewportPosition(this RectTransform target)
