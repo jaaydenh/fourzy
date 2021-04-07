@@ -53,7 +53,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (game.puzzleData.pack)
             {
-                if (game.puzzleData.pack.complete)
+                if (game.puzzleData.pack.complete && game.puzzleData.pack.enabledPuzzlesData.Count > 1)
                 {
                     nextButton.Show(0f);
                     nextButton.SetState(true);
@@ -182,9 +182,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void GameComplete()
         {
-            if (game.IsWinner()) completeIcon.PlayForward(true);
+            if (game.IsWinner())
+            {
+                completeIcon.PlayForward(true);
+            }
 
-            if (movesLeftWidget.alphaTween._value > 0f) movesLeftWidget.Hide(.3f);
+            if (movesLeftWidget.alphaTween._value > 0f)
+            {
+                movesLeftWidget.Hide(.3f);
+            }
 
             if (nextButton.interactable)
             {

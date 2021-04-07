@@ -221,6 +221,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                         break;
                 }
+                newGame.UpdateFirstState();
 
                 GameManager.Instance.activeGame = newGame;
             }
@@ -632,7 +633,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     {
                         game = new ClientFourzyGame(
                             game._Area,
-                            UserManager.Instance.meAsPlayer, new FourzyGameModel.Model.Player(2, "Player Two"),
+                            UserManager.Instance.meAsPlayer, new Player(2, "Player Two"),
                             UserManager.Instance.meAsPlayer.PlayerId)
                         { _Type = GameType.PASSANDPLAY };
                     }

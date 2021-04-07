@@ -243,6 +243,11 @@ namespace Fourzy._Updates.ClientModel
 
         public void AddMembers(int count) => ClientFourzyHelper.AddMembers(this, count);
 
+        public void UpdateFirstState()
+        {
+            _FirstState = new GameState(State);
+        }
+
         public IClientFourzy Next()
         {
             if (puzzleData.pack)
@@ -275,7 +280,7 @@ namespace Fourzy._Updates.ClientModel
         {
             if (resetFirstState)
             {
-                _FirstState = new GameState(State);
+                UpdateFirstState();
             }
 
             collectedItems = new List<RewardsManager.Reward>();

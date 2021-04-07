@@ -22,6 +22,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public Sprite right;
         public Sprite middle;
         public Sprite left;
+        public Sprite single;
 
         public BasicPuzzlePack puzzlePack { get; private set; }
 
@@ -51,17 +52,24 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 Sprite sprite = null;
 
                 //pick sprite
-                if (puzzleIndex == 0)
+                if (puzzlePack.enabledPuzzlesData.Count == 1)
                 {
-                    sprite = left;
-                }
-                else if (puzzleIndex == puzzlePack.enabledPuzzlesData.Count - 1 && puzzlePack.allRewards.Count == 0)
-                {
-                    sprite = right;
+                    sprite = single;
                 }
                 else
                 {
-                    sprite = middle;
+                    if (puzzleIndex == 0)
+                    {
+                        sprite = left;
+                    }
+                    else if (puzzleIndex == puzzlePack.enabledPuzzlesData.Count - 1 && puzzlePack.allRewards.Count == 0)
+                    {
+                        sprite = right;
+                    }
+                    else
+                    {
+                        sprite = middle;
+                    }
                 }
 
                 AddWidget()

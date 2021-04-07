@@ -44,7 +44,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: be044a4a46a3d1a4794d948d7e6d087b, type: 3}
-    totalSpriteSurfaceArea: 16799154
+    totalSpriteSurfaceArea: 16843029
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -80,6 +80,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 2c208e51785e523468e9de00e075ae6a, type: 3}
   - {fileID: 21300000, guid: 67acd66176af6904084b3eb8bac07eea, type: 3}
   - {fileID: 21300000, guid: 31b0d9617756ea649bd00d2b1197f07b, type: 3}
+  - {fileID: 21300000, guid: c8bc2f81009949e45a56ac4b3be96db2, type: 3}
   - {fileID: 21300000, guid: 8999a69173efb774581fa95ff4219334, type: 3}
   - {fileID: 21300000, guid: 52b6c3a1c5f72de4faa7c8769cd239b3, type: 3}
   - {fileID: 21300000, guid: 9feacfa1f0c12354dbb3a308c0d540cf, type: 3}
@@ -360,6 +361,7 @@ SpriteAtlas:
   - ReadyToPlay-On
   - vs_screen_progress_left
   - icon_ticket_small
+  - single_c_box
   - FourzyBox-P1
   - TabIcons-Play
   - MiniBoard-IcePalace
