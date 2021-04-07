@@ -145,46 +145,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             #region Timer usage
 
             outOfTime = false;
-            switch (game._Type)
-            {
-                //case GameType.AI:
-                case GameType.PASSANDPLAY:
-                    timersEnabled = SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER);
-
-                    break;
-
-                case GameType.REALTIME:
-                    switch (GameManager.Instance.ExpectedGameType)
-                    {
-                        case GameTypeLocal.REALTIME_LOBBY_GAME:
-                        case GameTypeLocal.REALTIME_QUICKMATCH:
-                            timersEnabled = FourzyPhotonManager.GetRoomProperty(
-                                Constants.REALTIME_ROOM_TIMER_KEY, 
-                                false);
-
-                            break;
-
-                        case GameTypeLocal.REALTIME_BOT_GAME:
-                            timersEnabled = SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER);
-
-                            break;
-                    }
-
-                    break;
-
-                default:
-                    timersEnabled = false;
-
-                    break;
-            }
-
-            switch (game._Mode)
-            {
-                case GameMode.GAUNTLET:
-                    timersEnabled = false;
-
-                    break;
-            }
+            timersEnabled = Tools.Utils.GetTimerState(game);
 
             #endregion
 

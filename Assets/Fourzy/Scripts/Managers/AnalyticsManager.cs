@@ -331,7 +331,7 @@ namespace Fourzy
                 case AnalyticsEvents.versusGameCreated:
                     _values.Add("player1", game.player1.Profile.ToString());
                     _values.Add("player2", game.player2.Profile.ToString());
-                    _values.Add("isTimerEnabled", SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER));
+                    _values.Add("isTimerEnabled", Utils.GetTimerState(game));
                     _values.Add("isMagicEnabled", SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC));
 
                     break;
@@ -339,7 +339,7 @@ namespace Fourzy
                 case AnalyticsEvents.versusGameCompleted:
                     _values.Add("player1", game.player1.Profile.ToString());
                     _values.Add("player2", game.player2.Profile.ToString());
-                    _values.Add("isTimerEnabled", SettingsManager.Get(SettingsManager.KEY_LOCAL_TIMER));
+                    _values.Add("isTimerEnabled", Utils.GetTimerState(game));
                     _values.Add("isMagicEnabled", SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC));
                     _values.Add("numTurnsTaken", game._allTurnRecord.Count);
 
@@ -347,7 +347,7 @@ namespace Fourzy
 
                 case AnalyticsEvents.realtimeGameCreated:
                     _values.Add("complexityScore", "");
-                    _values.Add("isTimerEnabled", SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER));
+                    _values.Add("isTimerEnabled", Utils.GetTimerState(game));
                     _values.Add("isMagicEnabled", SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC));
 
                     (player1Id, player2Id) = GetPlayersIds();
@@ -376,7 +376,7 @@ namespace Fourzy
 
                     _values.Add("numTurnsTaken", game._allTurnRecord.Count);
                     _values.Add("complexityScore", "");
-                    _values.Add("isTimerEnabled", SettingsManager.Get(SettingsManager.KEY_REALTIME_TIMER));
+                    _values.Add("isTimerEnabled", Utils.GetTimerState(game));
                     _values.Add("isMagicEnabled", SettingsManager.Get(SettingsManager.KEY_REALTIME_MAGIC));
 
                     _values.Add("player1PlayerId", player1Id);
