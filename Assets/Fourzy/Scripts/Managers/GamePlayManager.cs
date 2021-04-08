@@ -51,6 +51,10 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private PromptScreen playerLeftScreen;
 
         private bool ratingUpdated = true;
+        /// <summary>
+        /// for adventure map
+        /// </summary>
+        private bool isSolved = false;
         private GameState previousGameState;
         private int gauntletRechargedViaGems = 0;
         private int gauntletRechargedViaAds = 0;
@@ -151,7 +155,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (GameManager.Instance.ExpectedGameType)
             {
                 case GameTypeLocal.LOCAL_GAME:
-                    LogLocalGameAbandoned();
+                    LogGameComplete(true);
 
                     break;
 
@@ -183,7 +187,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (GameManager.Instance.ExpectedGameType)
             {
                 case GameTypeLocal.LOCAL_GAME:
-                    LogLocalGameAbandoned();
+                    LogGameComplete(true);
 
                     break;
             }
@@ -231,6 +235,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
 
             game = GameManager.Instance.activeGame;
+
+            if (game.puzzleData)
+            {
+                isSolved = PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID);
+            }
 
             Debug.Log($"Type: {game._Type} Mode: {game._Mode} Expected Local Type: " +
                 $"{GameManager.Instance.ExpectedGameType} Opponent: {game.opponent.Profile}");
@@ -1230,7 +1239,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (GameManager.Instance.ExpectedGameType == GameTypeLocal.LOCAL_GAME)
             {
-                LogGameComplete();
+                LogGameComplete(false);
 
                 switch (game._Mode)
                 {
@@ -1389,28 +1398,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        private void LogLocalGameAbandoned()
-        {
-            if (game._Type == GameType.ONBOARDING) return;
-            if (game == null || game.isOver) return;
-
-            AnalyticsManager.AnalyticsEvents @event = game.GameToAnalyticsEvent(false);
-            KeyValuePair<string, object>[] extraParams = new KeyValuePair<string, object>[0];
-
-            if (!game.isOver)
-            {
-                extraParams = new KeyValuePair<string, object>[]
-                {
-                    new KeyValuePair<string, object>(
-                        AnalyticsManager.GAME_RESULT_KEY,
-                        AnalyticsManager.GameResultType.abandoned
-                        ),
-                };
-            }
-
-            AnalyticsManager.Instance.LogGame(@event, game, values: extraParams);
-        }
-
         private void LogGameStart()
         {
             if (game._Type == GameType.ONBOARDING) return;
@@ -1447,10 +1434,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        private void LogGameComplete()
+        private void LogGameComplete(bool abandoned)
         {
             if (game._Type == GameType.ONBOARDING) return;
 
+            AnalyticsManager.AnalyticsEvents _event = game.GameToAnalyticsEvent(false);
             AnalyticsManager.GameResultType gameResult = AnalyticsManager.GameResultType.none;
             Dictionary<string, object> extraParams = new Dictionary<string, object>();
 
@@ -1461,74 +1449,71 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 float player1TimeLeft = isPlayer1 ? gameplayScreen.myTimerLeft : gameplayScreen.opponentTimerLeft;
                 float player2TimeLeft = isPlayer1 ? gameplayScreen.opponentTimerLeft : gameplayScreen.myTimerLeft;
 
-                if (player1TimeLeft <= 0f)
-                {
-                    gameResult = AnalyticsManager.GameResultType.player1TimeExpired;
-                }
-                else if (player2TimeLeft <= 0f)
-                {
-                    gameResult = AnalyticsManager.GameResultType.player2TimeExpired;
-                }
-
                 extraParams.Add("player1TimeRemaining", player1TimeLeft);
                 extraParams.Add("player2TimeRemaining", player2TimeLeft);
+
+                if (!abandoned)
+                {
+                    if (player1TimeLeft <= 0f)
+                    {
+                        gameResult = AnalyticsManager.GameResultType.player1TimeExpired;
+                    }
+                    else if (player2TimeLeft <= 0f)
+                    {
+                        gameResult = AnalyticsManager.GameResultType.player2TimeExpired;
+                    }
+                }
             }
 
-            if (gameResult == AnalyticsManager.GameResultType.none)
+            if (abandoned)
             {
-                if (!game.turnEvaluator.IsAvailableSimpleMove())
+                gameResult = AnalyticsManager.GameResultType.abandoned;
+            }
+            else
+            {
+                if (gameResult == AnalyticsManager.GameResultType.none)
                 {
-                    gameResult = AnalyticsManager.GameResultType.noPossibleMoves;
-                }
-                else if (game.draw)
-                {
-                    gameResult = AnalyticsManager.GameResultType.draw;
-                }
-                else
-                {
-                    bool checkPlayer1or2Win = false;
-
-                    switch (GameManager.Instance.ExpectedGameType)
+                    if (!game.turnEvaluator.IsAvailableSimpleMove())
                     {
-                        case GameTypeLocal.REALTIME_BOT_GAME:
-                        case GameTypeLocal.REALTIME_LOBBY_GAME:
-                        case GameTypeLocal.REALTIME_QUICKMATCH:
-                            checkPlayer1or2Win = true;
-
-                            break;
-
-                        case GameTypeLocal.LOCAL_GAME:
-                            switch (game._Mode)
-                            {
-                                case GameMode.VERSUS:
-                                    checkPlayer1or2Win = true;
-
-                                    break;
-                            }
-
-                            break;
+                        gameResult = AnalyticsManager.GameResultType.noPossibleMoves;
                     }
-
-                    if (checkPlayer1or2Win)
+                    else if (game.draw)
                     {
-                        gameResult = game.IsWinner(game.player1) ?
-                            AnalyticsManager.GameResultType.player1Win :
-                            AnalyticsManager.GameResultType.player2Win;
+                        gameResult = AnalyticsManager.GameResultType.draw;
                     }
                     else
                     {
-                        gameResult = game.IsWinner() ?
-                            AnalyticsManager.GameResultType.win :
-                            AnalyticsManager.GameResultType.lose;
+                        if (game._Mode == GameMode.VERSUS)
+                        {
+                            gameResult = game.IsWinner(game.player1) ?
+                                AnalyticsManager.GameResultType.player1Win :
+                                AnalyticsManager.GameResultType.player2Win;
+                        }
+                        else
+                        {
+                            gameResult = game.IsWinner() ?
+                                AnalyticsManager.GameResultType.win :
+                                AnalyticsManager.GameResultType.lose;
+                        }
                     }
                 }
             }
 
             extraParams.Add(AnalyticsManager.GAME_RESULT_KEY, gameResult.ToString());
 
+            switch (_event)
+            {
+                case AnalyticsManager.AnalyticsEvents.aiLevelEnd:
+                case AnalyticsManager.AnalyticsEvents.bossAILevelEnd:
+                case AnalyticsManager.AnalyticsEvents.puzzleLevelEnd:
+                    extraParams.Add("isAlreadySolved", isSolved);
+
+                    break;
+            }
+
             if (gameResult != AnalyticsManager.GameResultType.none)
             {
-                AnalyticsManager.Instance.LogGame(game.GameToAnalyticsEvent(false), game, extraParams);
+                AnalyticsManager.Instance.LogGame(_event, game, extraParams);
             }
         }
 

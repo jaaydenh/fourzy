@@ -254,9 +254,6 @@ namespace Fourzy
                     _values.Add("levelIndex", game.puzzleData.puzzleIndex);
                     _values.Add("aiProfileId", game.puzzleData.aiProfile);
                     _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
-                    _values.Add(
-                        "isAlreadySolved",
-                        PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID));
 
                     break;
 
@@ -277,9 +274,6 @@ namespace Fourzy
                     _values.Add("bossType", game.puzzleData.aiBoss);
                     _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
                     _values.Add("bossMovesCount", game.BossMoves);
-                    _values.Add(
-                        "isAlreadySolved",
-                        PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID));
 
                     break;
 
@@ -296,9 +290,6 @@ namespace Fourzy
                     _values.Add("levelIndex", game.puzzleData.puzzleIndex);
                     _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
                     _values.Add("turnsLimit", game.puzzleData.MoveLimit);
-                    _values.Add(
-                        "isAlreadySolved",
-                        PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID));
 
                     break;
 

@@ -73,9 +73,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         movesLeftWidget.SetData(game.asFourzyPuzzle);
 
                         if (PlayerPrefsWrapper.GetPuzzleChallengeComplete(game.puzzleData.ID))
+                        {
                             completeIcon.PlayForward(true);
+                        }
                         else
+                        {
                             completeIcon.AtProgress(0f);
+                        }
 
                         rule.text = game.puzzleData.Instructions;
                         //level.text = "Level " + (game.puzzleData.pack.enabledPuzzlesData.IndexOf(game.puzzleData) + 1);
