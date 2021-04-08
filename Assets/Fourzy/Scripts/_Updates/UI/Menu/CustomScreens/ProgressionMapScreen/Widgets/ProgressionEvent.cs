@@ -110,11 +110,11 @@ namespace Fourzy._Updates.UI.Widgets
                         //{
                         //    case PackType.AI_PACK:
                         //    case PackType.BOSS_AI_PACK:
-                                return PuzzlePack.complete;
+                        return PuzzlePack.complete;
 
-                        //    default:
-                        //        return PlayerPrefsWrapper.GetRewardRewarded(id);
-                        //}
+                    //    default:
+                    //        return PlayerPrefsWrapper.GetRewardRewarded(id);
+                    //}
 
                     default:
                         return PlayerPrefsWrapper.GetRewardRewarded(id);
@@ -215,7 +215,7 @@ namespace Fourzy._Updates.UI.Widgets
                     {
                         case PackType.PUZZLE_PACK:
                             //update slider
-                            progressSlider.value = 
+                            progressSlider.value =
                                 (float)PuzzlePack.puzzlesComplete.Count / PuzzlePack.enabledPuzzlesData.Count;
 
                             if (PuzzlePack.complete)
@@ -304,8 +304,20 @@ namespace Fourzy._Updates.UI.Widgets
             if (_rewarded) return;
 
             //unlock next events
-            unlockWhenComplete.ForEach(@event => @event.Unlock(animate));
-            lines.ForEach(line => line.SetColorUnlocked());
+            unlockWhenComplete.ForEach(@event =>
+            {
+                if (@event.gameObject.activeInHierarchy)
+                {
+                    @event.Unlock(animate);
+                }
+            });
+            lines.ForEach(line =>
+            {
+                if (line.gameObject.activeInHierarchy)
+                {
+                    line.SetColorUnlocked();
+                }
+            });
 
             _rewarded = true;
             onRewarded.Invoke();
@@ -329,7 +341,7 @@ namespace Fourzy._Updates.UI.Widgets
                         case PackType.PUZZLE_PACK:
                             //only open prepack prompt if there are any rewards in puzzle pack
                             //if (PuzzlePack.allRewards.Count > 0)
-                                menuScreen.menuController.GetOrAddScreen<PrePackPrompt>().Prompt(PuzzlePack);
+                            menuScreen.menuController.GetOrAddScreen<PrePackPrompt>().Prompt(PuzzlePack);
                             //else
                             //    PuzzlePack.StartNextUnsolvedPuzzle();
 
