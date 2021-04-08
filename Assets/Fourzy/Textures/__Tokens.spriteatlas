@@ -56,7 +56,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: e1d5cc2cde4784b2daaffb156c3b71d3, type: 3}
-    totalSpriteSurfaceArea: 2647686
+    totalSpriteSurfaceArea: 2649711
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -95,6 +95,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 97926709586254e1fa12a1694073c321, type: 3}
   - {fileID: 21300000, guid: 2a388679cb20442be9eae172db2046dd, type: 3}
   - {fileID: 21300000, guid: 9daaa4893d4e27b4bbc1dd74873d6d70, type: 3}
+  - {fileID: 21300000, guid: 9842ef89a75e742608e6763e6eafc816, type: 3}
   - {fileID: 21300000, guid: 0738a67aa20204c1a9f177165d7914e1, type: 3}
   - {fileID: 21300000, guid: 66b8871bed2bb4643821fcc3b33d50d5, type: 3}
   - {fileID: 21300000, guid: dd31813bada13433ea41906574fc41b7, type: 3}
@@ -196,7 +197,7 @@ SpriteAtlas:
   - token90LeftArrow 2
   - tokenBumper
   - hex
-  - TokenCountdownBox
+  - TokenCountdownBoxOld
   - tokenCrossBomb
   - tokenBush2
   - tokenMagicBlocker
@@ -211,6 +212,7 @@ SpriteAtlas:
   - tokenFourWayArrow1
   - tokenGhost3
   - sticky
+  - TokenCountdownBox
   - tokenPuddle
   - tokenIceSheet 1
   - tokenGhost2
