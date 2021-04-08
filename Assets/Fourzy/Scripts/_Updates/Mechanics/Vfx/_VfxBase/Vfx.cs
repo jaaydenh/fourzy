@@ -73,11 +73,11 @@ namespace Fourzy._Updates.Mechanics._Vfx
 
                     if (particleSystems.Count > 0)
                     {
-                        foreach (var p in particleSystems.Where(x => !x.GetComponent<UIParticle>()))
-                            p.gameObject.AddComponent<UIParticle>();
-
-                        //set scale to root
-                        particleSystems[0].GetComponent<UIParticle>().scale = uiCopyScale;
+                        foreach (var pSystem in particleSystems.Where(x => !x.GetComponent<UIParticle>()))
+                        {
+                            UIParticle uiParticle = pSystem.gameObject.AddComponent<UIParticle>();
+                            uiParticle.scale = uiCopyScale;
+                        }
                     }
                 }
 
