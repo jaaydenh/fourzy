@@ -1,6 +1,5 @@
 ﻿//@vadym udod
 
-//using Firebase;
 using ExitGames.Client.Photon;
 using Fourzy._Updates;
 using Fourzy._Updates.Audio;

@@ -461,6 +461,19 @@ namespace Fourzy._Updates.ClientModel
 
         public void AddMembers(int count) => ClientFourzyHelper.AddMembers(this, count);
 
+        public void UpdateFirstState()
+        {
+            _FirstState = new GameState(State);
+
+            if (State.Herds.Count > 0)
+            {
+                _originalHerdCount = myMembers.Count;
+                int myID = me.PlayerId;
+
+                State.Herds[myID] = new Herd(_FirstState.Herds[myID].HerdId, _originalHerdCount);
+            }
+        }
+
         public IClientFourzy Next()
         {
             if (puzzleData)
@@ -593,6 +606,9 @@ namespace Fourzy._Updates.ClientModel
             game._State.ActivePlayerId = puzzleData.firstTurn < 1 ? game.me.PlayerId : puzzleData.firstTurn;
             game.opponent.HerdId = puzzleData.PuzzlePlayer.HerdId;
 
+            //update games' state
+            game.UpdateFirstState();
+
             return game;
         }
 
@@ -600,15 +616,7 @@ namespace Fourzy._Updates.ClientModel
         {
             if (resetFirstState)
             {
-                _FirstState = new GameState(State);
-
-                if (State.Herds.Count > 0)
-                {
-                    _originalHerdCount = myMembers.Count;
-                    int myID = me.PlayerId;
-
-                    State.Herds[myID] = new Herd(_FirstState.Herds[myID].HerdId, _originalHerdCount);
-                }
+                UpdateFirstState();
             }
 
             collectedItems = new List<RewardsManager.Reward>();
