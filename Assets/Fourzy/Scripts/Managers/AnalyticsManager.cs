@@ -225,7 +225,14 @@ namespace Fourzy
                     _values.Add("currentNumPieces", game.myMembers.Count);
                     _values.Add("currentMagicQty", game.me.Magic);
                     _values.Add("aiProfileId", game.puzzleData.aiProfile);
-                    _values.Add("boardJson", JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
+                    _values.Add(
+                        "boardJson", 
+                        game._State.Board.ContentString);
+                        //JsonConvert.SerializeObject(game._State.Board, Formatting.None,
+                        //new JsonSerializerSettings()
+                        //{
+                        //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        //}));
 
                     break;
 
@@ -235,7 +242,9 @@ namespace Fourzy
                     _values.Add("currentNumPieces", game.myMembers.Count);
                     _values.Add("currentMagicQty", game.me.Magic);
                     _values.Add("aiProfileId", game.puzzleData.aiProfile);
-                    _values.Add("boardJson", JsonConvert.SerializeObject(game.puzzleData.gameBoardDefinition));
+                    _values.Add(
+                        "boardJson",
+                        game._State.Board.ContentString);
                     _values.Add("numTurnsTaken", game._playerTurnRecord.Count);
 
                     break;
