@@ -157,7 +157,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             break;
 
                         default:
-                            bgTapText = LocalizationManager.Value("back_to_menu");
+                            bgTapText = LocalizationManager.Value("tap_to_continue");
 
                             break;
 
