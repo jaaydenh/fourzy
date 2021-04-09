@@ -55,6 +55,7 @@ namespace Fourzy._Updates.Mechanics.Board
         public Action onCastCanceled;
         public Action<SpellId, int> onCast;
         public Action onWrongTurn;
+        public ClientPlayerTurn turn = null;
 
         private Vector3 topLeft;
         private Vector2 touchOriginalLocation;
@@ -75,9 +76,9 @@ namespace Fourzy._Updates.Mechanics.Board
         private float swipeSpeedScale;
 
         private AlphaTween alphaTween;
-        public ClientPlayerTurn turn = null;
         private Dictionary<string, Coroutine> boardUpdateRoutines;
         private Vfx negativeVfx;
+        private Transform vfxsParent;
         private Thread aiTurnThread;
 
         private int lastRow = 0;
@@ -111,11 +112,33 @@ namespace Fourzy._Updates.Mechanics.Board
         {
             base.Awake();
 
-            if (!bitsParent) bitsParent = transform;
+            if (!bitsParent)
+            {
+                bitsParent = transform;
+            }
 
             boxCollider2D = GetComponent<BoxCollider2D>();
             rectTransform = GetComponent<RectTransform>();
             alphaTween = GetComponent<AlphaTween>();
+
+            GameObject _vfxsParent = new GameObject("vfxsParent");
+            _vfxsParent.transform.SetParent(transform);
+            if (rectTransform)
+            {
+                RectTransform _rectVfxsParent = _vfxsParent.AddComponent<RectTransform>();
+                _rectVfxsParent.sizeDelta = rectTransform.sizeDelta;
+                vfxsParent = _rectVfxsParent;
+            }
+            else
+            {
+                vfxsParent = _vfxsParent.transform;
+            }
+            vfxsParent.localPosition = Vector3.zero;
+            vfxsParent.localScale = Vector3.one;
+            if (bitsParent != transform)
+            {
+                vfxsParent.SetAsLastSibling();
+            }
 
             moveArrow = GetComponentInChildren<MoveArrow>();
             arrowsController = GetComponentInChildren<MoveArrowsController>();
@@ -124,7 +147,7 @@ namespace Fourzy._Updates.Mechanics.Board
 
         protected void Start()
         {
-            negativeVfx = VfxHolder.instance.GetVfx<Vfx>(VfxType.VFX_MOVE_NEGATIVE, -1);
+            negativeVfx = VfxHolder.instance.GetVfx<Vfx>("VFX_MOVE_NEGATIVE", -1);
         }
 
         protected void Update()
@@ -394,13 +417,25 @@ namespace Fourzy._Updates.Mechanics.Board
 
                             if (Mathf.Abs(touchOffset.x) > Mathf.Abs(touchOffset.y))
                             {
-                                if (touchOffset.x >= 0f) swipeDirection = Direction.RIGHT;
-                                else swipeDirection = Direction.LEFT;
+                                if (touchOffset.x >= 0f)
+                                {
+                                    swipeDirection = Direction.RIGHT;
+                                }
+                                else
+                                {
+                                    swipeDirection = Direction.LEFT;
+                                }
                             }
                             else
                             {
-                                if (touchOffset.y >= 0f) swipeDirection = Direction.UP;
-                                else swipeDirection = Direction.DOWN;
+                                if (touchOffset.y >= 0f)
+                                {
+                                    swipeDirection = Direction.UP;
+                                }
+                                else
+                                {
+                                    swipeDirection = Direction.DOWN;
+                                }
                             }
 
                             possibleSwipeLocations = new List<BoardLocation>();
@@ -494,6 +529,7 @@ namespace Fourzy._Updates.Mechanics.Board
                             else if (relativeSwipeDistace == 1f)
                             {
                                 OnPointerRelease(position);
+
                                 return;
                             }
                         }
@@ -557,7 +593,9 @@ namespace Fourzy._Updates.Mechanics.Board
                         if (offsetOnDirectionAxis < distanceToFinishSwipeAnimation)
                         {
                             float value = offsetOnDirectionAxis / distanceToFinishSwipeAnimation;
-                            arrowsController.ContinueProgress((value - (DISTANCE_SELECT_DIRECTION_SWIPE_2 / distanceToFinishSwipeAnimation)) / (1f - value));
+                            arrowsController.ContinueProgress(
+                                (value - (DISTANCE_SELECT_DIRECTION_SWIPE_2 / distanceToFinishSwipeAnimation)) / 
+                                (1f - value));
                         }
                         else if (offsetOnDirectionAxis >= DISTANCE_TO_FINISH_SWIPE)
                         {
@@ -565,6 +603,7 @@ namespace Fourzy._Updates.Mechanics.Board
                             if (swipeSpeedScale >= MAX_SWIPE_SPEED_MLT * .5f)
                             {
                                 OnPointerRelease(position);
+
                                 return;
                             }
                         }
@@ -589,7 +628,11 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     if (tapTime > QUICK_TAP_TIME)
                     {
-                        if (!isAnimating) moveArrow._Reset();
+                        if (!isAnimating)
+                        {
+                            moveArrow._Reset();
+                        }
+
                         selectedBoardLocation = null;
                     }
 
@@ -689,10 +732,11 @@ namespace Fourzy._Updates.Mechanics.Board
             GamePieceView gamePiece = Instantiate(
                 player == PlayerEnum.ONE ? game.playerOneGamepiece : game.playerTwoGamepiece, 
                 bitsParent);
+            Vector2 pieceLocalPosition = BoardLocationToVec2(row, col);
 
             gamePiece.gameObject.SetActive(true);
             gamePiece.gameObject.SetLayerRecursively(gameObject.layer);
-            gamePiece.transform.localPosition = BoardLocationToVec2(row, col);
+            gamePiece.transform.localPosition = pieceLocalPosition;
             gamePiece.StartBlinking();
 
             boardBits.Add(gamePiece);
@@ -891,6 +935,7 @@ namespace Fourzy._Updates.Mechanics.Board
             if (!game.turnEvaluator.CanIMakeMove(turn.GetMove()))
             {
                 Debug.Log("Cannot Make Move");
+
                 return null;
             }
             PlayerTurnResult turnResults = game.TakeTurn(turn, true);
@@ -1315,11 +1360,17 @@ namespace Fourzy._Updates.Mechanics.Board
             {
                 bit.transform.SetAsLastSibling();
             }
+
+            if (bitsParent == transform)
+            {
+                vfxsParent.SetAsLastSibling();
+            }
         }
 
         public void OnMove()
         {
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.HeavyImpact);
+
             SimpleMove _move = new SimpleMove(
                 game.activePlayerPiece,
                 GetDirection(selectedBoardLocation.Value),
@@ -1878,19 +1929,23 @@ namespace Fourzy._Updates.Mechanics.Board
                 switch (turnResults.Activity[actionIndex].Type)
                 {
                     case GameActionType.MOVE_PIECE:
+                        GameActionMove _outsideBoardMove = null;
+
                         if (!firstGameActionMoveFound)
                         {
                             //spawn gamepiece using first action
                             moveAction = turnResults.Activity[actionIndex].AsMoveAction();
-                            newGamePiece = SpawnPiece(moveAction.Start.Row, moveAction.Start.Column, (PlayerEnum)moveAction.Piece.PlayerId, false);
-                            newGamePiece.SetPiece(moveAction.Piece.Piece);
-                            newGamePiece.Show(0f);
+                            _outsideBoardMove = moveAction.InDirection(
+                                BoardLocation.Reverse(moveAction.Piece.Direction), 1);
 
-                            if (!localyCreatedTurn)
-                            {
-                                newGamePiece.Show(.25f);
-                                newGamePiece.ScaleToCurrent(Vector3.zero, .25f);
-                            }
+                            newGamePiece = SpawnPiece(
+                                _outsideBoardMove.Start.Row, 
+                                _outsideBoardMove.Start.Column, 
+                                (PlayerEnum)moveAction.Piece.PlayerId);
+
+                            newGamePiece.SetPiece(moveAction.Piece.Piece);
+                            newGamePiece.Show(.25f);
+                            newGamePiece.ScaleToCurrent(Vector3.zero, .25f);
 
                             firstGameActionMoveFound = true;
                         }
@@ -1900,14 +1955,32 @@ namespace Fourzy._Updates.Mechanics.Board
                         GameAction[] moveActions = GetMoveActions(turnResults.Activity, actionIndex);
                         actionIndex += moveActions.Length;
 
-                        GamePieceView targetPiece = BoardBitsAt<GamePieceView>(moveActions[0].AsMoveAction().Start, moveActions[0].AsMoveAction().Piece.UniqueId);
+                        GamePieceView targetPiece = BoardBitsAt<GamePieceView>(
+                            moveActions[0].AsMoveAction().Start, 
+                            moveActions[0].AsMoveAction().Piece.UniqueId);
 
                         GamePieceView bit = (newGamePiece != null) ? newGamePiece : targetPiece;
 
-                        float waitTime = !localyCreatedTurn && (newGamePiece != null)
-                            ? bit.ExecuteGameAction(startTurn,
-                                moveActions.AddElementToStart(moveAction.InDirection(BoardLocation.Reverse(moveAction.Piece.Direction), 2)))
-                            : bit.ExecuteGameAction(startTurn, moveActions);
+                        float waitTime = 0f;
+                        if (newGamePiece == null)
+                        {
+                            waitTime = bit.ExecuteGameAction(startTurn, moveActions);
+                        }
+                        //new gamepiece
+                        else
+                        {
+                            //add spawn vfx
+                            Vfx poofVfx = VfxHolder.instance
+                                .GetVfx<Vfx>("VFX_GAMEPIECE_SPAWN")
+                                .StartVfx(vfxsParent, BoardLocationToVec2(_outsideBoardMove.Start.Row, _outsideBoardMove.Start.Column), 0f);
+                            poofVfx.SetSaLastSibling();
+
+                            yield return new WaitForSeconds(Constants.GAMEPIECE_AFTER_SPAWN_DELAY);
+
+                            waitTime = bit.ExecuteGameAction(
+                                    startTurn,
+                                    moveActions.AddElementToStart(_outsideBoardMove));
+                        }
 
                         //check next action
                         if (actionIndex < turnResults.Activity.Count)
@@ -2022,15 +2095,15 @@ namespace Fourzy._Updates.Mechanics.Board
                             foreach (BoardLocation location in effect.Explosion)
                             {
                                 VfxHolder.instance
-                                    .GetVfx<Vfx>(VfxType.VFX_BOMB_EXPLOSION_LINE)
-                                    .StartVfx(transform, (Vector3)BoardLocationToVec2(location) + Vector3.back, 0f);
+                                    .GetVfx<Vfx>("VFX_BOMB_EXPLOSION_LINE")
+                                    .StartVfx(vfxsParent, BoardLocationToVec2(location), 0f);
                             }
                         }
                         else
                         {
                             bombVfx = VfxHolder.instance
-                                .GetVfx<Vfx>(VfxType.VFX_BOMB_EXPLOSION)
-                                .StartVfx(transform, (Vector3)BoardLocationToVec2(effect.Center) + Vector3.back, 0f);
+                                .GetVfx<Vfx>("VFX_BOMB_EXPLOSION")
+                                .StartVfx(vfxsParent, BoardLocationToVec2(effect.Center), 0f);
                         }
 
                         //destroy bomb

@@ -25,6 +25,7 @@ namespace Fourzy
         public const int PORTAL_POINTS = 100;
         public const int RARE_PORTAL_POINTS = 10;
         public const float EXTRA_DELAY_BETWEEN_TURNS = 0.1f;
+        public const float GAMEPIECE_AFTER_SPAWN_DELAY = .5f;
         public const float BASE_MOVE_SPEED = 8f;
         public const float MOVE_SPEED_CAP = 16f;
         public const int REALTIME_COUNTDOWN_SECONDS = 4;

@@ -46,7 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 100135f4bc324474c8839e02b0e41182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
   duration: 0.7
   uiCopyScale: 100
   onStart:
@@ -97,7 +96,7 @@ MonoBehaviour:
         isCallEnabled: 1
       - genericMenuData:
           selectedComponent: 2
-          selectedMember: 25
+          selectedMember: 24
           isDynamic: 0
         target: {fileID: 4674363942497125029}
         memberName: PlaySfx
@@ -144,6 +143,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

@@ -174,7 +174,9 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void ShowAddTimerVfx(string value, Vector2 offset, Vector2 direction)
         {
-            VfxHolder.instance.GetVfx<AddTimerVfx>(VfxType.UI_VFX_ADD_TIMER).SetValue(vfxParent, offset, direction, value);
+            VfxHolder.instance
+                .GetVfx<AddTimerVfx>("UI_VFX_ADD_TIMER")
+                .SetValue(vfxParent, offset, direction, value);
         }
 
         public void Pause(float time = -1f)

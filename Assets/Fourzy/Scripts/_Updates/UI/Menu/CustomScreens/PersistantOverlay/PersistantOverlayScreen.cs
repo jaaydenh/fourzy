@@ -3,7 +3,6 @@
 using Fourzy._Updates.Mechanics._Vfx;
 using Fourzy._Updates.UI.Widgets;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -61,7 +60,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             int max = Mathf.Min(amount, maxParticles);
             for (int _index = 0; _index < max; _index++)
             {
-                RewardAnimationParticleVfx vfx = VfxHolder.instance.GetVfx<RewardAnimationParticleVfx>(VfxType.UI_REWARD_ANIMATION_PARTICLE);
+                RewardAnimationParticleVfx vfx = VfxHolder.instance.GetVfx<RewardAnimationParticleVfx>(
+                    "UI_REWARD_ANIMATION_PARTICLE");
                 vfx.SetData(
                     transform, 
                     type, 

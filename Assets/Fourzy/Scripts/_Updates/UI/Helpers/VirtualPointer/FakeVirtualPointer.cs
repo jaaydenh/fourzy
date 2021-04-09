@@ -44,15 +44,26 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void Press()
         {
-            if (pressIndicator) pressIndicator.PlayForward(true);
+            if (pressIndicator)
+            {
+                pressIndicator.PlayForward(true);
+            }
             scaleTween.PlayForward(true);
 
-            if (showTouchVfx) VfxHolder.instance.GetVfx<Vfx>(VfxType.UI_TOUCH_VFX).StartVfx(transform.parent, transform.localPosition, 0f);
+            if (showTouchVfx)
+            {
+                VfxHolder.instance
+                    .GetVfx<Vfx>("UI_TOUCH_VFX")
+                    .StartVfx(transform.parent, transform.localPosition, 0f);
+            }
         }
 
         public void Relase()
         {
-            if (pressIndicator) pressIndicator.PlayBackward(true);
+            if (pressIndicator)
+            {
+                pressIndicator.PlayBackward(true);
+            }
             scaleTween.PlayBackward(true);
         }
     }
