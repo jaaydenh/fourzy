@@ -52,6 +52,7 @@ MonoBehaviour:
   defaultGauntletState: 1
   defaultPuzzlesState: 1
   resetGameOnClose: 0
+  botTutorialGame: 0
   customUserId: 
   fallbackLatitude: 37.7833
   fallbackLongitude: 122.4167
@@ -303,136 +304,67 @@ MonoBehaviour:
     type: 2}
   miscGameDataHolder: {fileID: 11400000, guid: 723c3267438074b4f980f63958882dfb, type: 2}
   typedPrefabs:
-    list:
-    - _name: REWARDS_XP
-      prefabType: 16
-      prefab: {fileID: 2179086365048087834, guid: 5d3321b1899bff44f903a69b179c22e5,
-        type: 3}
-    - _name: REWARDS_COIN
-      prefabType: 10
-      prefab: {fileID: 3213377190150069673, guid: ddd299213fea9c64a96b21741feeeec9,
-        type: 3}
-    - _name: REWARDS_TICKET
-      prefabType: 11
-      prefab: {fileID: 2480191876416953368, guid: 338e3b32fc5fa864598347f494ad2be8,
-        type: 3}
-    - _name: REWARDS_GAME_PIECE
-      prefabType: 13
-      prefab: {fileID: 7925316355291592101, guid: d20933a840e9e2d41a4de9fe6a9021a1,
-        type: 3}
-    - _name: REWARDS_GEM
-      prefabType: 12
-      prefab: {fileID: 915194111197399450, guid: 7f3c94e309d467747b7dc80793b77d05,
-        type: 3}
-    - _name: REWARDS_PORTAL_POINTS
-      prefabType: 14
-      prefab: {fileID: 4619857436758114287, guid: 801c329227760ea478fe63eaa7e16bf5,
-        type: 3}
-    - _name: REWARDS_RARE_PORTAL_POINTS
-      prefabType: 15
-      prefab: {fileID: 7041523958711570062, guid: f1826d03060738344a301ca7170ba785,
-        type: 3}
-    - _name: REWARDS_PACK_COMPLETE
-      prefabType: 17
-      prefab: {fileID: 5842573211701814948, guid: 6d2fb3544e72ae64084606c59cf8638e,
-        type: 3}
-    - _name: REWARDS_OPEN_PORTAL
-      prefabType: 18
-      prefab: {fileID: 4495346398306899116, guid: 10bec428a9ced7b4c9105ddbbb165390,
-        type: 3}
-    - _name: REWARDS_OPEN_RARE_PORTAL
-      prefabType: 19
-      prefab: {fileID: 3360629134425220575, guid: 1572a260ce0579d4b98c8c418061babb,
-        type: 3}
-    - _name: REWARDS_HINTS
-      prefabType: 20
-      prefab: {fileID: 2480191876416953368, guid: 338e3b32fc5fa864598347f494ad2be8,
-        type: 3}
-    - _name: REWARD_ANIMATION
-      prefabType: 39
-      prefab: {fileID: 6095591697837977738, guid: be53514a1fd76704a87d7986507d93dd,
-        type: 3}
-    - _name: PUZZLE_PACK_WIDGET
-      prefabType: 41
-      prefab: {fileID: 1778221445083718, guid: 8e30d6a9efe1b49459d98a094846c4bc, type: 3}
-    - _name: GAME_PIECE_SMALL
-      prefabType: 5
-      prefab: {fileID: 1576871843195750, guid: de95eca9ce249a54280efd878a486b52, type: 3}
-    - _name: GAME_PIECE_MEDIUM
-      prefabType: 8
-      prefab: {fileID: 1719389088718380, guid: 93719fda88a629a41a705180ba1fb335, type: 3}
-    - _name: TOKEN_SMALL
-      prefabType: 9
-      prefab: {fileID: 1374114750642054, guid: e5c5c7b2f5b04014c8045bc68175a630, type: 3}
-    - _name: BOARD_HINT_BOX
-      prefabType: 40
-      prefab: {fileID: 1489538643966412, guid: a3c24ed961027314abdb0cbec1278049, type: 3}
-    - _name: MINI_GAME_BOARD
-      prefabType: 7
-      prefab: {fileID: 1001685059054880, guid: 753eac7ea7c84784484fb0e32473bd24, type: 3}
-    - _name: GAME_PIECE_LANDSCAPE
-      prefabType: 4
-      prefab: {fileID: 2811702351793752031, guid: 0735ca95e50fa9c4084566d206f3dfef,
-        type: 3}
+  - type: REWARDS_XP
+    prefab: {fileID: 2179086365048087834, guid: 5d3321b1899bff44f903a69b179c22e5,
+      type: 3}
+  - type: REWARDS_COIN
+    prefab: {fileID: 3213377190150069673, guid: ddd299213fea9c64a96b21741feeeec9,
+      type: 3}
+  - type: REWARDS_TICKET
+    prefab: {fileID: 2480191876416953368, guid: 338e3b32fc5fa864598347f494ad2be8,
+      type: 3}
+  - type: REWARDS_GAME_PIECE
+    prefab: {fileID: 7925316355291592101, guid: d20933a840e9e2d41a4de9fe6a9021a1,
+      type: 3}
+  - type: REWARDS_GEM
+    prefab: {fileID: 915194111197399450, guid: 7f3c94e309d467747b7dc80793b77d05, type: 3}
+  - type: REWARDS_PORTAL_POINTS
+    prefab: {fileID: 4619857436758114287, guid: 801c329227760ea478fe63eaa7e16bf5,
+      type: 3}
+  - type: REWARDS_RARE_PORTAL_POINTS
+    prefab: {fileID: 7041523958711570062, guid: f1826d03060738344a301ca7170ba785,
+      type: 3}
+  - type: REWARDS_PACK_COMPLETE
+    prefab: {fileID: 5842573211701814948, guid: 6d2fb3544e72ae64084606c59cf8638e,
+      type: 3}
+  - type: REWARDS_OPEN_PORTAL
+    prefab: {fileID: 4495346398306899116, guid: 10bec428a9ced7b4c9105ddbbb165390,
+      type: 3}
+  - type: REWARDS_OPEN_RARE_PORTAL
+    prefab: {fileID: 3360629134425220575, guid: 1572a260ce0579d4b98c8c418061babb,
+      type: 3}
+  - type: REWARDS_HINTS
+    prefab: {fileID: 2480191876416953368, guid: 338e3b32fc5fa864598347f494ad2be8,
+      type: 3}
+  - type: GAME_PIECE_SMALL
+    prefab: {fileID: 1576871843195750, guid: de95eca9ce249a54280efd878a486b52, type: 3}
+  - type: GAME_PIECE_MEDIUM
+    prefab: {fileID: 1719389088718380, guid: 93719fda88a629a41a705180ba1fb335, type: 3}
+  - type: TOKEN_SMALL
+    prefab: {fileID: 1374114750642054, guid: e5c5c7b2f5b04014c8045bc68175a630, type: 3}
+  - type: BOARD_HINT_BOX
+    prefab: {fileID: 1489538643966412, guid: a3c24ed961027314abdb0cbec1278049, type: 3}
   screens:
-    list:
-    - _name: TutorialScreen
-      prefab: {fileID: 114675544619200078, guid: 4bfd1264994f0c64db9d8a1231bfbe94,
-        type: 3}
-    - _name: GenericPromptScreen
-      prefab: {fileID: 114230311657223410, guid: d2f368b1e34af5a4694b8652f4ae78a7,
-        type: 3}
-    - _name: ChangeNamePromptScreen
-      prefab: {fileID: 114568876853702864, guid: 9fc1a4ead8357f048ad0a8b0b4b65a19,
-        type: 3}
-    - _name: TokenPromptScreen 1
-      prefab: {fileID: 3689175441170572079, guid: 360f2f65750f5274aab540e5cd1132b6,
-        type: 3}
-    - _name: UpgradeGamePiecePromptScreen
-      prefab: {fileID: 114252308255648604, guid: 356f2ae4f0140264faa60a59046fa019,
-        type: 3}
-    - _name: LoadingPromptScreen
-      prefab: {fileID: 523291431602527423, guid: 62f7c19afb5b1054b9337d58e5af10c3,
-        type: 3}
-    - _name: AreaInfoPromptScreen
-      prefab: {fileID: 4325327119177535745, guid: 57969661751fc8e4e81791c622614dbb,
-        type: 3}
-    - _name: PrePackPrompt
-      prefab: {fileID: 5883465114685039261, guid: 3f2f4ba8078749544bfae00c9627e9d7,
-        type: 3}
-    - _name: VSPrompt
-      prefab: {fileID: 8685335311165154359, guid: d7a22aa0b1bd4c64a893f1a82e6eeb67,
-        type: 3}
-    - _name: StorePrompt
-      prefab: {fileID: 554847239912345784, guid: b6a7208541070344dbf7ea25544b4d00,
-        type: 3}
-    - _name: NewsPromptScreen
-      prefab: {fileID: 6082271716224161652, guid: 168c5ee4c57bfe84fae5edd475e2f554,
-        type: 3}
-    - _name: DemoGameSelectScreen
-      prefab: {fileID: 748917514867771918, guid: 6c3a261672c02cf42a05a18d13c5889b,
-        type: 3}
-    - _name: GauntletIntroPromptScreen
-      prefab: {fileID: 1553800354187221467, guid: e9de294b3fa38ce4d89cb145468e6dad,
-        type: 3}
-    - _name: GauntletLostPromptScreen
-      prefab: {fileID: 3216915219740018543, guid: c7ce8dad1b45f794e93e4a29c89c6ae5,
-        type: 3}
-    - _name: GauntletWinPromptScreen
-      prefab: {fileID: 7658673681696879594, guid: 4045e177651be114cb23d61def7fa00b,
-        type: 3}
-    - _name: InputFieldPromptScreen
-      prefab: {fileID: 1281021656652057426, guid: 865676bc696b3e4448f176b4b7d7ce7d,
-        type: 3}
-    - _name: FriendsScreen
-      prefab: {fileID: 3913719292092202775, guid: a0274cd27aafb9e4faeb9c75668550f9,
-        type: 3}
-    - _name: LobbyPrompt
-      prefab: {fileID: 6186301521444083483, guid: 2e1e79e4b00875b4da8788ac7738c62e,
-        type: 3}
-    - _name: CreateRealtimeGamePrompt
-      prefab: {fileID: 8960912254840272272, guid: 9d6e2a8a4dd55404a9eee145ec96aee0,
-        type: 3}
+  - {fileID: 114675544619200078, guid: 4bfd1264994f0c64db9d8a1231bfbe94, type: 3}
+  - {fileID: 114230311657223410, guid: d2f368b1e34af5a4694b8652f4ae78a7, type: 3}
+  - {fileID: 114568876853702864, guid: 9fc1a4ead8357f048ad0a8b0b4b65a19, type: 3}
+  - {fileID: 3689175441170572079, guid: 360f2f65750f5274aab540e5cd1132b6, type: 3}
+  - {fileID: 114252308255648604, guid: 356f2ae4f0140264faa60a59046fa019, type: 3}
+  - {fileID: 523291431602527423, guid: 62f7c19afb5b1054b9337d58e5af10c3, type: 3}
+  - {fileID: 4325327119177535745, guid: 57969661751fc8e4e81791c622614dbb, type: 3}
+  - {fileID: 5883465114685039261, guid: 3f2f4ba8078749544bfae00c9627e9d7, type: 3}
+  - {fileID: 8685335311165154359, guid: d7a22aa0b1bd4c64a893f1a82e6eeb67, type: 3}
+  - {fileID: 554847239912345784, guid: b6a7208541070344dbf7ea25544b4d00, type: 3}
+  - {fileID: 6082271716224161652, guid: 168c5ee4c57bfe84fae5edd475e2f554, type: 3}
+  - {fileID: 1553800354187221467, guid: e9de294b3fa38ce4d89cb145468e6dad, type: 3}
+  - {fileID: 748917514867771918, guid: 6c3a261672c02cf42a05a18d13c5889b, type: 3}
+  - {fileID: 3216915219740018543, guid: c7ce8dad1b45f794e93e4a29c89c6ae5, type: 3}
+  - {fileID: 7658673681696879594, guid: 4045e177651be114cb23d61def7fa00b, type: 3}
+  - {fileID: 1281021656652057426, guid: 865676bc696b3e4448f176b4b7d7ce7d, type: 3}
+  - {fileID: 3913719292092202775, guid: a0274cd27aafb9e4faeb9c75668550f9, type: 3}
+  - {fileID: 6186301521444083483, guid: 2e1e79e4b00875b4da8788ac7738c62e, type: 3}
+  - {fileID: 8960912254840272272, guid: 9d6e2a8a4dd55404a9eee145ec96aee0, type: 3}
+  - {fileID: 8283656185853923346, guid: 5ec3febb2b6923f4daa0ea21847aa98e, type: 3}
 --- !u!1 &1554460771871666
 GameObject:
   m_ObjectHideFlags: 0

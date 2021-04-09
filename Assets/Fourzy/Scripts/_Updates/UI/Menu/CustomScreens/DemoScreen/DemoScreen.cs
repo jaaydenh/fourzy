@@ -98,6 +98,13 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GameContentManager.Instance.piecesDataHolder.Initialize();
         }
 
+        public void OpenGeneratorTester()
+        {
+            Toggle();
+
+            menuController.OpenScreen(menuController.GetOrAddScreen<GeneratorTesterPrompt>());
+        }
+
         public void Toggle()
         {
             isContextShown = !isContextShown;

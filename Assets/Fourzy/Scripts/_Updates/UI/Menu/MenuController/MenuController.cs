@@ -235,11 +235,14 @@ namespace Fourzy._Updates.UI.Menu
         /// <returns></returns>
         public T AddScreen<T>() where T : MenuScreen
         {
-            foreach (GameContentManager.Screen pair in GameContentManager.Instance.screens.list)
+            foreach (MenuScreen screen in GameContentManager.Instance.screens)
             {
-                MenuScreen screenPrefab = pair.prefab.GetComponent<T>();
+                MenuScreen prefab = screen.GetComponent<T>();
 
-                if (screenPrefab) return AddScreen<T>(screenPrefab);
+                if (prefab)
+                {
+                    return AddScreen<T>(prefab);
+                }
             }
 
             return null;

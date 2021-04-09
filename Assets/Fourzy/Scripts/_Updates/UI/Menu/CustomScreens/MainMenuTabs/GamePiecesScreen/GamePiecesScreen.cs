@@ -83,7 +83,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             PlaceGamepieceWidgets();
 
             //highlight selected one
-            gamePieceWidgets.ForEach(widget => widget.SetSelectedState(widget.data.ID == UserManager.Instance.gamePieceID));
+            gamePieceWidgets.ForEach(widget => widget.SetSelectedState(
+                widget.data.ID == UserManager.Instance.gamePieceID));
         }
 
         public void SetPiecesActive()
@@ -152,7 +153,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             foreach (GamePiecePrefabData prefabData in GameContentManager.Instance.piecesDataHolder.gamePieces.list)
             {
-                GamePieceWidgetMedium widget = GameContentManager.InstantiatePrefab<GamePieceWidgetMedium>(GameContentManager.PrefabType.GAME_PIECE_MEDIUM, transform);
+                GamePieceWidgetMedium widget = GameContentManager.InstantiatePrefab<GamePieceWidgetMedium>(
+                    "GAME_PIECE_MEDIUM", 
+                    transform);
                 widget.SetData(prefabData.data);
 
                 widgets.Add(widget);
@@ -164,7 +167,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             //load tokens
             foreach (TokensDataHolder.TokenData data in GameContentManager.Instance.enabledTokens)
-                widgets.Add(GameContentManager.InstantiatePrefab<TokenWidget>(GameContentManager.PrefabType.TOKEN_SMALL, tokensParent).SetData(data));
+            {
+                widgets.Add(GameContentManager
+                    .InstantiatePrefab<TokenWidget>("TOKEN_SMALL", tokensParent)
+                    .SetData(data));
+            }
         }
 
         private void PlaceGamepieceWidgets()
