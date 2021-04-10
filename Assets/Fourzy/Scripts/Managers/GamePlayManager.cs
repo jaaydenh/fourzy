@@ -190,6 +190,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     LogGameComplete(true);
 
                     break;
+
+                case GameTypeLocal.REALTIME_BOT_GAME:
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
+                case GameTypeLocal.REALTIME_QUICKMATCH:
+                    FourzyPhotonManager.TryLeaveRoom();
+
+                    break;
             }
 
             GameManager.Instance.OpenMainMenu();

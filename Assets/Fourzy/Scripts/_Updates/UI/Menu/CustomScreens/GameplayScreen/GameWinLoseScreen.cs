@@ -102,17 +102,41 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                     else
                     {
-                        if (game.IsWinner())
+                        switch (GameManager.Instance.ExpectedGameType)
                         {
-                            stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#" +
-                                $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
-                                $"{LocalizationManager.Value("won")}</color>";
-                        }
-                        else
-                        {
-                            stateLabel.text = $"{LocalizationManager.Value("player_two")} <color=#" +
-                                $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
-                                $"{LocalizationManager.Value("won")}</color>";
+                            case GameTypeLocal.LOCAL_GAME:
+                                if (game.IsWinner())
+                                {
+                                    stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#" +
+                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                        $"{LocalizationManager.Value("won")}</color>";
+                                }
+                                else
+                                {
+                                    stateLabel.text = $"{LocalizationManager.Value("player_two")} <color=#" +
+                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                        $"{LocalizationManager.Value("won")}</color>";
+                                }
+
+                                break;
+
+                            case GameTypeLocal.REALTIME_BOT_GAME:
+                            case GameTypeLocal.REALTIME_LOBBY_GAME:
+                            case GameTypeLocal.REALTIME_QUICKMATCH:
+                                if (game.IsWinner())
+                                {
+                                    stateLabel.text = $"{game.me.DisplayName} <color=#" +
+                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                        $"{LocalizationManager.Value("won")}</color>";
+                                }
+                                else
+                                {
+                                    stateLabel.text = $"{game.opponent.DisplayName} <color=#" +
+                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                        $"{LocalizationManager.Value("won")}</color>";
+                                }
+
+                                break;
                         }
                     }
 
