@@ -87,7 +87,7 @@ MonoBehaviour:
     - _name: TOKEN_STICKY
       type: 131
       clips:
-      - {fileID: 8300000, guid: 050ee73f8d184498b99a41bf2707c5d0, type: 3}
+      - {fileID: 8300000, guid: b984c6b0784ba4a63b0af0329eaee178, type: 3}
     - _name: TOKEN_SAND
       type: 132
       clips:
