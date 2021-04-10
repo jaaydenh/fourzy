@@ -109,8 +109,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             BoardGenerationPreferences preferences = new BoardGenerationPreferences(area, (int)percentage.value);
             
-            //preferences.RequestedRecipe = recipe.text;
-            preferences.RequestedRecipe = null;
+            preferences.RequestedRecipe = recipe.text;
             preferences.AllowedTokens = tokenViews
                 .Where(_view => _view.IsAllowed)
                 .Select(_view => _view.TokenType)
