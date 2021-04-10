@@ -22,8 +22,8 @@ namespace FourzyGameModel.Model
             this.Type = IngredientType.SMALLFEATURE;
             this.TokenCount = TokenCount;
             Locations = new List<BoardLocation>();
-            int count = 500;
-            int tokens = 0;
+            //int count = 500;
+            //int tokens = 0;
             int pick = -1;
             List<BoardLocation> RingLocations = new BoardLocation(Ring, Ring).Ring(Board, Rotation.CLOCKWISE);
 

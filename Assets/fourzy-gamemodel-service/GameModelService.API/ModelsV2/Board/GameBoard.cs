@@ -53,7 +53,7 @@ namespace FourzyGameModel.Model
         public GameState Parent { get; set; }
 
         public RandomTools Random { get; set; }
-
+        public BoardGenerationType GenerationType { get; set; }
         public string Recipe { get; set; }
         public string SeedString { get; set; }
 
@@ -201,6 +201,7 @@ namespace FourzyGameModel.Model
                 if (Parent.Random != null) this.Random = Parent.Random;
 
             Initialize();
+            this.GenerationType = BoardGenerationType.DEFAULT;
         }
 
         public GameBoard(GameBoardDefinition definition, GameState Parent = null)
@@ -229,6 +230,8 @@ namespace FourzyGameModel.Model
             {
                 this.Random = Parent.Random;
             }
+            this.GenerationType = BoardGenerationType.PREDEFINED;
+
         }
 
         public GameBoard(GameBoardData data)
@@ -258,6 +261,7 @@ namespace FourzyGameModel.Model
             {
                 this.Random = Parent.Random;
             }
+            this.GenerationType = BoardGenerationType.PREDEFINED;
         }
 
         public GameBoard(GameBoard GameBoardToCopy)
@@ -280,6 +284,7 @@ namespace FourzyGameModel.Model
 
             this.Recipe = GameBoardToCopy.Recipe;
             this.SeedString = GameBoardToCopy.SeedString;
+            this.GenerationType = GameBoardToCopy.GenerationType;
         }
 
         #endregion

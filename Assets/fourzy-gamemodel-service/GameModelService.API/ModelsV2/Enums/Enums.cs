@@ -51,5 +51,6 @@
     public enum PuzzleHintType { CLUE, MOVE}
     public enum PlayerType { HUMAN, AI, BOSS }
     public enum GameType { STANDARD, AI, BOSS}
+    public enum BoardGenerationType { PREDEFINED, GENERATED, DEFAULT}
 }
 

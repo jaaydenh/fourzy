@@ -91,11 +91,11 @@ namespace FourzyGameModel.Model
         public GameBoard CreateBoardForTest(Area TestArea, string Recipe)
         {
             Player A = new Player(1, "A");
-            A.Experience = new PlayerExperience();
+//            A.Experience = new PlayerExperience();
 
             Player B = new Player(2, "B");
-            B.Experience = new PlayerExperience();
- 
+  //          B.Experience = new PlayerExperience();
+
             GameBoard board = BoardFactory.CreateGameBoard(TestArea, new GameOptions(), new BoardGenerationPreferences(), Recipe);
             return board;
         }

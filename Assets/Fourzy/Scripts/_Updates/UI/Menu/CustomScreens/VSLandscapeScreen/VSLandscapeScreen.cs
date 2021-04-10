@@ -171,6 +171,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 game._Type = GameType.PASSANDPLAY;
             }
+            game.UpdateFirstState();
 
             AnalyticsManager.Instance.LogEvent(
                 "PRACTICE_GAME_CREATED",

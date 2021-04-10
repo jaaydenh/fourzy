@@ -129,6 +129,8 @@ namespace FourzyGameModel.Model
             }
 
             NewBoard.Area = Area;
+            NewBoard.Recipe = CurrentRecipe.Name;
+            NewBoard.GenerationType = BoardGenerationType.GENERATED;
             return NewBoard;
         }
 

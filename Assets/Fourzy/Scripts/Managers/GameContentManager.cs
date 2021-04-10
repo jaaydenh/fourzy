@@ -84,8 +84,6 @@ namespace Fourzy
             passAndPlayDataHolder.Initialize();
             miscBoardsDataHolder.Initialize();
 
-            //packsDataHolders.ForEach(packsData => packsData.Initialize());
-
             LoadAllFastPuzzles();
             LoadPuzzlePacks();
             LoadTutorialBotGames();
@@ -327,34 +325,6 @@ namespace Fourzy
             public string type;
             public GameObject prefab;
         }
-
-        //public enum PrefabType
-        //{
-        //    NONE = 0,
-
-        //    GAME_PIECE_LANDSCAPE = 4,
-        //    GAME_PIECE_SMALL = 5,
-        //    MINI_GAME_BOARD = 7,
-        //    GAME_PIECE_MEDIUM = 8,
-        //    TOKEN_SMALL = 9,
-
-        //    #region Rewards
-        //    REWARDS_COIN = 10,
-        //    REWARDS_TICKET = 11,
-        //    REWARDS_GEM = 12,
-        //    REWARDS_GAME_PIECE = 13,
-        //    REWARDS_PORTAL_POINTS = 14,
-        //    REWARDS_RARE_PORTAL_POINTS = 15,
-        //    REWARDS_XP = 16,
-        //    REWARDS_PACK_COMPLETE = 17,
-        //    REWARDS_OPEN_PORTAL = 18,
-        //    REWARDS_OPEN_RARE_PORTAL = 19,
-        //    REWARDS_HINTS = 20,
-        //    #endregion
-
-        //    BOARD_HINT_BOX = 40,
-        //    PUZZLE_PACK_WIDGET = 41,
-        //}
     }
 }
 

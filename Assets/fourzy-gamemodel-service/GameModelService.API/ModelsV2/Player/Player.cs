@@ -37,11 +37,11 @@ namespace FourzyGameModel.Model
                
         //I think we should remove these from the player object.  No impact on gameplay
 
-        [JsonProperty("selectedArea")]
-        public Area SelectedArea { get; set; }
+        //[JsonProperty("selectedArea")]
+        //public Area SelectedArea { get; set; }
 
-        [JsonProperty("experience")]
-        public PlayerExperience Experience { get; set; }
+        //[JsonProperty("experience")]
+        //public PlayerExperience Experience { get; set; }
 
         //Consider removing the above properties and place in a factory for creating a game.
 
@@ -52,9 +52,9 @@ namespace FourzyGameModel.Model
             this.PlayerId = PlayerId;
             this.DisplayName = DisplayName;
             this.Magic = Constants.PlayerStartingMagic;
-            this.SelectedArea = Area.NONE;
-            this.Experience = new PlayerExperience();
-            this.Experience.UnlockedAreas.Add(Area.TRAINING_GARDEN);
+            //this.SelectedArea = Area.NONE;
+            //this.Experience = new PlayerExperience();
+            //this.Experience.UnlockedAreas.Add(Area.TRAINING_GARDEN);
             this.Profile = Profile;
             this.SpecialAbilityCount = 0;
             this.BossType = BossType.None;
@@ -68,10 +68,10 @@ namespace FourzyGameModel.Model
             this.DisplayName = original.DisplayName;
             this.HerdId = original.HerdId;
             this.Magic = original.Magic;
-            this.SelectedArea = original.SelectedArea;
+            //this.SelectedArea = original.SelectedArea;
 
             //not sure if copy of experience instance is needed
-            this.Experience = original.Experience;
+            //this.Experience = original.Experience;
             this.Profile = original.Profile;
             this.SpecialAbilityCount = original.SpecialAbilityCount;
             this.BossType = original.BossType;

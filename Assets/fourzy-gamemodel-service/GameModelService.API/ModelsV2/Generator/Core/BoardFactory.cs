@@ -336,6 +336,17 @@ namespace FourzyGameModel.Model
             return new Tuple<int, int>(Min, Max);
         }
 
+        public static int ConvertPlayerDataToComplexityPercentage(int GamesPlayed, int Rating)
+        {
+            RandomTools r = new RandomTools();
+
+            int MinComplexity = Math.Max(20, GamesPlayed / 4);
+            int MaxComplexity = Math.Min(50, (2000 - Rating) / 2000);
+
+            return r.RandomInteger(MinComplexity, MaxComplexity);
+        }
+
+
         public static int ConvertPercentageToTargetScore(Area TargetArea, int TargetPercentage)
         {
             BoardGenerator Gen = BoardGeneratorFactory.CreateGenerator(TargetArea);
