@@ -411,11 +411,6 @@ namespace Fourzy._Updates.UI.Helpers
     [Serializable]
     public class ListenTarget
     {
-        [HideInInspector]
-        public string _name;
-
-        [ShowIf("#Check")]
-        [StackableField]
         public ListenValues type = ListenValues.CHELLENGE_ID;
 
         public string targetText = "{0}";
@@ -423,13 +418,6 @@ namespace Fourzy._Updates.UI.Helpers
         public bool updateOnStart;
         [Header("Will format target text with value")]
         public QuickStringEvent events;
-
-        public bool Check()
-        {
-            _name = type.ToString();
-
-            return true;
-        }
     }
 
     public enum ListenValues

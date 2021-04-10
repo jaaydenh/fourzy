@@ -11,6 +11,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
     {
         public ButtonExtended puzzlesResetButton;
         public ButtonExtended fullscreenButton;
+        public ButtonExtended realtimeMagic;
+        public ButtonExtended realtimeTimer;
 
         public void ChangeName()
         {
@@ -59,19 +61,29 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void ToggleDemoMode() => SettingsManager.Toggle(SettingsManager.KEY_DEMO_MODE);
 
-        public void StartRealtime() => menuController.GetScreen<MatchmakingScreen>().OpenRealtime();
-
         public void ShowFriendsScreen() => menuController.GetOrAddScreen<FriendsScreen>().Prompt();
 
         public void ToggleFullscreen() => Screen.fullScreen = !Screen.fullScreen;
+
+        public void ToggleMagic() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_MAGIC);
+
+        public void ToggleRealtimeTimer() => SettingsManager.Toggle(SettingsManager.KEY_REALTIME_TIMER);
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
 
 #if !UNITY_STANDALONE
-            if (fullscreenButton) fullscreenButton.SetActive(false);
+            if (fullscreenButton)
+            {
+                fullscreenButton.SetActive(false);
+            }
 #endif
+            if (!Debug.isDebugBuild)
+            {
+                realtimeMagic.SetActive(false);
+                realtimeTimer.SetActive(false);
+            }
         }
     }
 }
