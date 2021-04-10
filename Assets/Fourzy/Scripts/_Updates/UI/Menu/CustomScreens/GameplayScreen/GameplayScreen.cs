@@ -113,6 +113,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         //            LocalizationManager.Value("no"),
                         //            () => GamePlayManager.Instance.BackButtonOnClick());
                         //}
+                        if (game.isOver)
+                        {
+                            GamePlayManager.Instance.BackButtonOnClick();
+                        }
 
                         break;
 
@@ -389,8 +393,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             if (timersEnabled)
             {
-                timerWidgets[1].SetTimerValue(
-                    Mathf.Floor(turn.playerTimerLeft / InternalSettings.Current.CIRCULAR_TIMER_SECONDS));
+                timerWidgets[1].TotalTimeLeft = turn.playerTimerLeft;
             }
 
             //adjust magic
