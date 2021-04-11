@@ -33,5 +33,4 @@ MonoBehaviour:
     - {fileID: 4674363942497125029, guid: 562dfac96e03927478026699a5dcc693, type: 3}
   - type: VFX_GAMEPIECE_SPAWN
     options:
-    - {fileID: 2448924107944789624, guid: 3247878bed6c5c942883e329191126e2, type: 3}
     - {fileID: -2100347993449800625, guid: 2d6da53a73a6e7348ada14d576cdc39c, type: 3}
