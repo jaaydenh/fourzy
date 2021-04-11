@@ -571,7 +571,25 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     default:
-                        rematchButton.SetActive(true);
+                        switch (GameManager.Instance.ExpectedGameType)
+                        {
+                            case GameTypeLocal.REALTIME_BOT_GAME:
+                                if (GameManager.Instance.botTutorialGame)
+                                {
+                                    rematchButton.SetActive(false);
+                                }
+                                else
+                                {
+                                    rematchButton.SetActive(true);
+                                }
+
+                                break;
+
+                            default:
+                                rematchButton.SetActive(true);
+
+                                break;
+                        }
 
                         break;
                 }

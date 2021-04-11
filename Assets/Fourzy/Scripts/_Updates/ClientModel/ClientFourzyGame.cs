@@ -95,7 +95,7 @@ namespace Fourzy._Updates.ClientModel
                 {
                     case Fourzy.GameType.PASSANDPLAY:
                         //random active player
-                        State.ActivePlayerId = UnityEngine.Random.value > .5f ? 1 : 2;
+                        SetRandomActivePlayer();
 
                         break;
                 }
@@ -610,6 +610,11 @@ namespace Fourzy._Updates.ClientModel
             game.UpdateFirstState();
 
             return game;
+        }
+
+        internal void SetRandomActivePlayer()
+        {
+            State.ActivePlayerId = UnityEngine.Random.value > .5f ? 1 : 2;
         }
 
         private void Initialize(bool resetFirstState = true)

@@ -596,6 +596,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             _Type = GameType.REALTIME,
                         };
+                        __game.SetRandomActivePlayer();
+                        __game.UpdateFirstState();
 
                         LoadGame(__game);
                     }
