@@ -529,11 +529,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        public void UnloadGamePlaySceene()
-        {
-            SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
-        }
-
         public void CheckGameMode()
         {
             GameManager.Instance.botTutorialGame = false;
