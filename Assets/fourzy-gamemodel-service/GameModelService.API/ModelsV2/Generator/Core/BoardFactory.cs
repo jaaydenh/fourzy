@@ -115,16 +115,16 @@ namespace FourzyGameModel.Model
             switch (BoardArea)
             {
                 case Area.TRAINING_GARDEN:
-                    Generator = new BeginnerGardenRandomGenerator("", Options, Preferences);
+                    Generator = new BeginnerGardenRandomGenerator(Options, Preferences);
                     break;
                 case Area.ICE_PALACE:
-                    Generator = new IcePalaceRandomGenerator("",Options, Preferences);
+                    Generator = new IcePalaceRandomGenerator(Options, Preferences);
                     break;
                 case Area.ENCHANTED_FOREST:
-                    Generator = new ForestRandomGenerator("", Options, Preferences);
+                    Generator = new ForestRandomGenerator(Options, Preferences);
                     break;
                 case Area.SANDY_ISLAND:
-                    Generator = new IslandRandomGenerator("", Options, Preferences);
+                    Generator = new IslandRandomGenerator(Options, Preferences);
                     break;
 
                 case Area.ARENA:
