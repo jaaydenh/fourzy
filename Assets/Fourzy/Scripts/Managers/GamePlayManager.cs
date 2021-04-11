@@ -171,13 +171,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             GameManager.Instance.ReportBotGameFinished(game);
                         }
-
-                        PlayerPrefsWrapper.AddRealtimGamesAbandoned();
-                        Amplitude.Instance.setUserProperty(
-                            "totalRealtimeGamesAbandoned",
-                            PlayerPrefsWrapper.GetRealtimeGamesAbandoned());
                     }
 
+                    PlayerPrefsWrapper.AddRealtimGamesAbandoned();
+                    Amplitude.Instance.setUserProperty(
+                        "totalRealtimeGamesAbandoned",
+                        PlayerPrefsWrapper.GetRealtimeGamesAbandoned());
                     break;
             }
         }
@@ -1207,34 +1206,31 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
                 case GameTypeLocal.REALTIME_BOT_GAME:
-                    if (!GameManager.Instance.botTutorialGame)
+                    if (game.draw)
                     {
-                        if (game.draw)
+                        PlayerPrefsWrapper.AddRealtimeGamesDraw();
+
+                        Amplitude.Instance.setUserProperty(
+                            "totalRealtimeGamesDraw",
+                            PlayerPrefsWrapper.GetRealtimeGamesDraw());
+                    }
+                    else
+                    {
+                        if (game.IsWinner())
                         {
-                            PlayerPrefsWrapper.AddRealtimeGamesDraw();
+                            PlayerPrefsWrapper.AddRealtimeGamesWon();
 
                             Amplitude.Instance.setUserProperty(
-                                "totalRealtimeGamesDraw",
-                                PlayerPrefsWrapper.GetRealtimeGamesDraw());
+                                "totalRealtimeGamesWon",
+                                PlayerPrefsWrapper.GetRealtimeGamesWon());
                         }
                         else
                         {
-                            if (game.IsWinner())
-                            {
-                                PlayerPrefsWrapper.AddRealtimeGamesWon();
+                            PlayerPrefsWrapper.AddRealtimeGamesLost();
 
-                                Amplitude.Instance.setUserProperty(
-                                    "totalRealtimeGamesWon",
-                                    PlayerPrefsWrapper.GetRealtimeGamesWon());
-                            }
-                            else
-                            {
-                                PlayerPrefsWrapper.AddRealtimeGamesLost();
-
-                                Amplitude.Instance.setUserProperty(
-                                    "totalRealtimeGamesLost",
-                                    PlayerPrefsWrapper.GetRealtimeGamesLost());
-                            }
+                            Amplitude.Instance.setUserProperty(
+                                "totalRealtimeGamesLost",
+                                PlayerPrefsWrapper.GetRealtimeGamesLost());
                         }
                     }
 
@@ -1415,20 +1411,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
-                    LoRealtimeGamePlayed();
-
-                    break;
-
                 case GameTypeLocal.REALTIME_BOT_GAME:
-                    if (!GameManager.Instance.botTutorialGame)
-                    {
-                        LoRealtimeGamePlayed();
-                    }
-
+                    LogRealtimeGamePlayed();
                     break;
             }
 
-            void LoRealtimeGamePlayed()
+            void LogRealtimeGamePlayed()
             {
                 PlayerPrefsWrapper.AddRealtimeGamePlayed();
 
