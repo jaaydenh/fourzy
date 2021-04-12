@@ -30,6 +30,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public TMP_InputField recipe;
         public TMP_Dropdown aiProfileDropdown;
         public TMP_Dropdown recipeDropdown;
+        public ButtonExtended toggleComplexityButton;
         public ButtonExtended toggleMagicButton;
         public ButtonExtended toggleRandomElementsButton;
         public ButtonExtended toggleDynamicElementsButton;
@@ -39,6 +40,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private int currentProfileIndex = -1;
 
         public PracticeScreenAreaSelectWidget currentAreaWidget { get; private set; }
+        public bool UseComplexity { get; private set; } = true;
         public bool AllowMagic { get; private set; } = true;
         public bool AllowRandomElements { get; private set; } = false;
         public bool AllowDynamicElements { get; private set; } = true;
@@ -92,6 +94,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             toggleMagicButton.GetBadge().badge.SetState(AllowMagic);
         }
 
+        public void ToggleComplexity()
+        {
+            UseComplexity = !UseComplexity;
+
+            toggleComplexityButton.GetBadge().badge.SetState(UseComplexity);
+            toggleComplexityButton.GetBadge("box").badge.SetState(UseComplexity);
+        }
+
         public void ToggleRandomElements()
         {
             AllowRandomElements = !AllowRandomElements;
@@ -119,6 +129,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Area area = currentAreaWidget ? currentAreaWidget.area : Area.TRAINING_GARDEN;
 
             BoardGenerationPreferences preferences = new BoardGenerationPreferences(area, (int)percentage.value);
+            GameOptions options = new GameOptions() { PlayersUseSpells = AllowMagic };
             
             preferences.RequestedRecipe = recipe.text;
             preferences.AllowedTokens = tokenViews
@@ -136,14 +147,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
             GamePieceData random = GameContentManager.Instance.piecesDataHolder.random.data;
             Player opponent = new Player(2, "Player2", aiProfiles[currentProfileIndex]) { HerdId = random.ID };
 
-            preferences.TargetComplexityLow = (int)low.value;
-            preferences.TargetComplexityHigh = (int)high.value;
+            if (UseComplexity)
+            {
+                preferences.TargetComplexityLow = (int)low.value;
+                preferences.TargetComplexityHigh = (int)high.value;
+            }
+            else
+            {
+                preferences.TargetComplexityLow = -1;
+                preferences.TargetComplexityHigh = -1;
+            }
             game = new ClientFourzyGame(
                 area,
                 UserManager.Instance.meAsPlayer,
                 opponent,
                 1,
-                Preferences: preferences);
+                options,
+                preferences);
 
             if (opponent.Profile == AIProfile.Player)
             {
