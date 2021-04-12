@@ -4,6 +4,7 @@ using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -45,6 +46,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public void OnTap()
         {
             SetState((state + 1) % 3);
+        }
+
+        public void OnPointerEnter(BaseEventData data)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                SetState((state + 1) % 3);
+            }
         }
 
         private void SetState(int state)

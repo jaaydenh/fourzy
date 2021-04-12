@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu.Screens
@@ -28,6 +29,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public TMP_Text percentageText;
         public TMP_InputField recipe;
         public TMP_Dropdown aiProfileDropdown;
+        public TMP_Dropdown recipeDropdown;
         public ButtonExtended toggleMagicButton;
         public ButtonExtended toggleRandomElementsButton;
         public ButtonExtended toggleDynamicElementsButton;
@@ -38,7 +40,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public PracticeScreenAreaSelectWidget currentAreaWidget { get; private set; }
         public bool AllowMagic { get; private set; } = true;
-        public bool AllowRandomElements { get; private set; } = true;
+        public bool AllowRandomElements { get; private set; } = false;
         public bool AllowDynamicElements { get; private set; } = true;
 
         public override void OnBack()
@@ -77,6 +79,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             currentProfileIndex = value;
         }
+
+        public void OnRecipeSelected(int value)
+        {
+            recipe.text = recipeDropdown.options[value].text;
+        }
         
         public void ToggleMagic()
         {
@@ -99,13 +106,17 @@ namespace Fourzy._Updates.UI.Menu.Screens
             toggleDynamicElementsButton.GetBadge().badge.SetState(AllowDynamicElements);
         }
 
+        public void OnRecipeDropdownClick(BaseEventData data)
+        {
+            recipeDropdown.ClearOptions();
+            recipeDropdown.AddOptions(BoardFactory.GetRecipeListForComplexityRange(
+                currentAreaWidget.area,
+                (int)percentage.value));
+        }
+
         public void GenerateAndTry()
         {
-            Area area = Area.NONE;
-            if (currentAreaWidget != null)
-            {
-                area = currentAreaWidget.area;
-            }
+            Area area = currentAreaWidget ? currentAreaWidget.area : Area.TRAINING_GARDEN;
 
             BoardGenerationPreferences preferences = new BoardGenerationPreferences(area, (int)percentage.value);
             
@@ -124,22 +135,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             ClientFourzyGame game;
             GamePieceData random = GameContentManager.Instance.piecesDataHolder.random.data;
             Player opponent = new Player(2, "Player2", aiProfiles[currentProfileIndex]) { HerdId = random.ID };
-            if (area == Area.NONE)
-            {
-                preferences.TargetComplexityLow = (int)low.value;
-                preferences.TargetComplexityHigh = (int)high.value;
 
-                game = new ClientFourzyGame(UserManager.Instance.meAsPlayer, opponent, Preferences: preferences);
-            }
-            else
-            {
-                game = new ClientFourzyGame(
-                    area,
-                    UserManager.Instance.meAsPlayer,
-                    opponent,
-                    1,
-                    Preferences: preferences);
-            }
+            preferences.TargetComplexityLow = (int)low.value;
+            preferences.TargetComplexityHigh = (int)high.value;
+            game = new ClientFourzyGame(
+                area,
+                UserManager.Instance.meAsPlayer,
+                opponent,
+                1,
+                Preferences: preferences);
 
             if (opponent.Profile == AIProfile.Player)
             {
@@ -158,31 +162,18 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected void OnAreaWidgetTap(PracticeScreenAreaSelectWidget widget)
         {
-            if (currentAreaWidget)
+            if (currentAreaWidget && currentAreaWidget != widget)
             {
                 currentAreaWidget.Deselect();
-
-                if (currentAreaWidget == widget)
-                {
-                    currentAreaWidget = null;
-                }
-                else
-                {
-                    currentAreaWidget = widget;
-                }
-            }
-            else
-            {
-                currentAreaWidget = widget;
             }
 
-            low.transform.parent.gameObject.SetActive(currentAreaWidget == null);
-            high.transform.parent.gameObject.SetActive(currentAreaWidget == null);
+            currentAreaWidget = widget;
 
-            if (currentAreaWidget)
-            {
-                currentAreaWidget.Select();
-            }
+            BoardGenerator Gen = BoardGeneratorFactory.CreateGenerator(currentAreaWidget.area);
+            low.value = Gen.MinComplexity;
+            high.value = Gen.MaxComplexity;
+
+            currentAreaWidget.Select();
         }
 
         protected override void OnInitialized()
