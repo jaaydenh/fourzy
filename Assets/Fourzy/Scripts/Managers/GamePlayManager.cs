@@ -580,8 +580,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     if (botGameBoardFile != null)
                     {
                         GameManager.Instance.botTutorialGame = true;
-                        GameBoardDefinition _board = JsonConvert.DeserializeObject<GameBoardDefinition>(
+                        FTUEGameBoardDefinition _board = JsonConvert.DeserializeObject<FTUEGameBoardDefinition>(
                             botGameBoardFile.Load<TextAsset>().text);
+
+                        if (_board.aiProfile >= 0)
+                        {
+                            GameManager.Instance.Bot.Profile = _board.AIProfile;
+                        }
 
                         if (Debug.isDebugBuild)
                         {
