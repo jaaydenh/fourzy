@@ -358,13 +358,18 @@ namespace Fourzy
                     _values.Add("player1Rating", player1Rating);
                     _values.Add("player2Rating", player2Rating);
                     _values.Add("isBotOpponent", isBotOpponent);
-                    if (GameManager.Instance.botTutorialGame)
+                    switch (GameManager.Instance.botGameType)
                     {
-                        _values.Add("recipe", "predefined");
-                    }
-                    else
-                    {
-                        _values.Add("recipe", game._FirstState.Board.Recipe);
+                        case GameManager.BotGameType.FTUE_NOT_RATED:
+                        case GameManager.BotGameType.FTUE_RATED:
+                            _values.Add("recipe", "predefined");
+
+                            break;
+
+                        default:
+                            _values.Add("recipe", game._FirstState.Board.Recipe);
+
+                            break;
                     }
                     _values.Add("initialBoard ", game._FirstState.CompressedString);
 
@@ -384,13 +389,18 @@ namespace Fourzy
                     _values.Add("player1Rating", player1Rating);
                     _values.Add("player2Rating", player2Rating);
                     _values.Add("isBotOpponent", isBotOpponent);
-                    if (GameManager.Instance.botTutorialGame)
+                    switch (GameManager.Instance.botGameType)
                     {
-                        _values.Add("recipe", "predefined");
-                    }
-                    else
-                    {
-                        _values.Add("recipe", game._FirstState.Board.Recipe);
+                        case GameManager.BotGameType.FTUE_NOT_RATED:
+                        case GameManager.BotGameType.FTUE_RATED:
+                            _values.Add("recipe", "predefined");
+
+                            break;
+
+                        default:
+                            _values.Add("recipe", game._FirstState.Board.Recipe);
+
+                            break;
                     }
                     _values.Add("initialBoard ", game._FirstState.CompressedString);
 

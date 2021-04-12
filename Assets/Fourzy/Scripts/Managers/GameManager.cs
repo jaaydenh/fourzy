@@ -65,7 +65,7 @@ namespace Fourzy
         public bool defaultGauntletState = true;
         public bool defaultPuzzlesState = true;
         public bool resetGameOnClose = true;
-        public bool botTutorialGame;
+        public BotGameType botGameType = BotGameType.NONE;
         public string customUserId = "";
         public float fallbackLatitude = 37.7833f;
         public float fallbackLongitude = 122.4167f;
@@ -1006,6 +1006,14 @@ namespace Fourzy
             public GameBoardDefinition gameboard;
             [JsonIgnore]
             public TextAsset assetFile;
+        }
+
+        public enum BotGameType
+        {
+            NONE,
+            REGULAR,
+            FTUE_RATED,
+            FTUE_NOT_RATED,
         }
 
         public enum PassPlayCharactersType
