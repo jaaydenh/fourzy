@@ -312,7 +312,8 @@ namespace Fourzy._Updates.Mechanics
 
             switch (actions[0].Type)
             {
-                case GameActionType.MOVE_PIECE: return StartMoveRoutine(startMove, actions);
+                case GameActionType.MOVE_PIECE: 
+                    return StartMoveRoutine(startMove, actions);
             }
 
             return OnGameAction(actions);

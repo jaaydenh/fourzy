@@ -81,11 +81,9 @@ namespace Fourzy._Updates.UI.Widgets
 
             set
             {
-                timerValueTween.StopTween(false);
-                smallTimerValueTween.StopTween(false);
-
-                TimerValue = Mathf.Floor(value / InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
-                SmallTimerValue = value - (TimerValue * InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+                SetTimerValue(
+                    Mathf.Ceil(value / InternalSettings.Current.CIRCULAR_TIMER_SECONDS),
+                    value % InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
             }
         }
 
@@ -114,7 +112,10 @@ namespace Fourzy._Updates.UI.Widgets
         {
             this.player = player;
 
-            SetTimerValue(InternalSettings.Current.INITIAL_TIMER_SECTIONS);
+            SetTimerValue(
+                InternalSettings.Current.INITIAL_TIMER_SECTIONS, 
+                InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+
             Show(.3f);
         }
 
@@ -145,7 +146,7 @@ namespace Fourzy._Updates.UI.Widgets
             }
         }
 
-        public void SetTimerValue(float value)
+        public void SetTimerValue(float value, float smallTimerValue)
         {
             timerValueTween.from = timerValue / Constants.TIMER_SECTIONS;
             timerValueTween.to = value / Constants.TIMER_SECTIONS;
@@ -158,7 +159,7 @@ namespace Fourzy._Updates.UI.Widgets
                 onValueEmpty?.Invoke(player);
             }
 
-            AddSmallTimerValue(InternalSettings.Current.CIRCULAR_TIMER_SECONDS);
+            AddSmallTimerValue(smallTimerValue);
         }
 
         public void AddSmallTimerValue(float value)
@@ -174,7 +175,9 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void ShowAddTimerVfx(string value, Vector2 offset, Vector2 direction)
         {
-            VfxHolder.instance.GetVfx<AddTimerVfx>(VfxType.UI_VFX_ADD_TIMER).SetValue(vfxParent, offset, direction, value);
+            VfxHolder.instance
+                .GetVfx<AddTimerVfx>("UI_VFX_ADD_TIMER")
+                .SetValue(vfxParent, offset, direction, value);
         }
 
         public void Pause(float time = -1f)

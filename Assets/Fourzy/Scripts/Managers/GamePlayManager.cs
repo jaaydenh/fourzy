@@ -171,13 +171,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             GameManager.Instance.ReportBotGameFinished(game);
                         }
-
-                        PlayerPrefsWrapper.AddRealtimGamesAbandoned();
-                        Amplitude.Instance.setUserProperty(
-                            "totalRealtimeGamesAbandoned",
-                            PlayerPrefsWrapper.GetRealtimeGamesAbandoned());
                     }
 
+                    PlayerPrefsWrapper.AddRealtimGamesAbandoned();
+                    Amplitude.Instance.setUserProperty(
+                        "totalRealtimeGamesAbandoned",
+                        PlayerPrefsWrapper.GetRealtimeGamesAbandoned());
                     break;
             }
         }
@@ -188,6 +187,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameTypeLocal.LOCAL_GAME:
                     LogGameComplete(true);
+
+                    break;
+
+                case GameTypeLocal.REALTIME_BOT_GAME:
+                case GameTypeLocal.REALTIME_LOBBY_GAME:
+                case GameTypeLocal.REALTIME_QUICKMATCH:
+                    FourzyPhotonManager.TryLeaveRoom();
 
                     break;
             }
@@ -524,11 +530,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             }
         }
 
-        public void UnloadGamePlaySceene()
-        {
-            SceneManager.UnloadSceneAsync(Constants.GAMEPLAY_SCENE_NAME);
-        }
-
         public void CheckGameMode()
         {
             GameManager.Instance.botTutorialGame = false;
@@ -596,6 +597,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             _Type = GameType.REALTIME,
                         };
+                        __game.SetRandomActivePlayer();
                         __game.UpdateFirstState();
 
                         LoadGame(__game);
@@ -1206,34 +1208,31 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
                 case GameTypeLocal.REALTIME_BOT_GAME:
-                    if (!GameManager.Instance.botTutorialGame)
+                    if (game.draw)
                     {
-                        if (game.draw)
+                        PlayerPrefsWrapper.AddRealtimeGamesDraw();
+
+                        Amplitude.Instance.setUserProperty(
+                            "totalRealtimeGamesDraw",
+                            PlayerPrefsWrapper.GetRealtimeGamesDraw());
+                    }
+                    else
+                    {
+                        if (game.IsWinner())
                         {
-                            PlayerPrefsWrapper.AddRealtimeGamesDraw();
+                            PlayerPrefsWrapper.AddRealtimeGamesWon();
 
                             Amplitude.Instance.setUserProperty(
-                                "totalRealtimeGamesDraw",
-                                PlayerPrefsWrapper.GetRealtimeGamesDraw());
+                                "totalRealtimeGamesWon",
+                                PlayerPrefsWrapper.GetRealtimeGamesWon());
                         }
                         else
                         {
-                            if (game.IsWinner())
-                            {
-                                PlayerPrefsWrapper.AddRealtimeGamesWon();
+                            PlayerPrefsWrapper.AddRealtimeGamesLost();
 
-                                Amplitude.Instance.setUserProperty(
-                                    "totalRealtimeGamesWon",
-                                    PlayerPrefsWrapper.GetRealtimeGamesWon());
-                            }
-                            else
-                            {
-                                PlayerPrefsWrapper.AddRealtimeGamesLost();
-
-                                Amplitude.Instance.setUserProperty(
-                                    "totalRealtimeGamesLost",
-                                    PlayerPrefsWrapper.GetRealtimeGamesLost());
-                            }
+                            Amplitude.Instance.setUserProperty(
+                                "totalRealtimeGamesLost",
+                                PlayerPrefsWrapper.GetRealtimeGamesLost());
                         }
                     }
 
@@ -1414,20 +1413,12 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             {
                 case GameTypeLocal.REALTIME_LOBBY_GAME:
                 case GameTypeLocal.REALTIME_QUICKMATCH:
-                    LoRealtimeGamePlayed();
-
-                    break;
-
                 case GameTypeLocal.REALTIME_BOT_GAME:
-                    if (!GameManager.Instance.botTutorialGame)
-                    {
-                        LoRealtimeGamePlayed();
-                    }
-
+                    LogRealtimeGamePlayed();
                     break;
             }
 
-            void LoRealtimeGamePlayed()
+            void LogRealtimeGamePlayed()
             {
                 PlayerPrefsWrapper.AddRealtimeGamePlayed();
 

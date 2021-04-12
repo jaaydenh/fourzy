@@ -12,7 +12,6 @@ namespace Fourzy._Updates.Mechanics._Vfx
 {
     public class Vfx : MonoBehaviour
     {
-        public VfxType type;
         public float duration = 1f;
         public float uiCopyScale = 100f;
         public AdvancedEvent onStart;
@@ -49,7 +48,7 @@ namespace Fourzy._Updates.Mechanics._Vfx
 
         public virtual Vfx StartVfx()
         {
-            if (copyParent) transform.SetAsLastSibling();
+            //if (copyParent) transform.SetAsLastSibling();
 
             isActive = true;
             onStart.Invoke();
@@ -76,6 +75,7 @@ namespace Fourzy._Updates.Mechanics._Vfx
                         foreach (var pSystem in particleSystems.Where(x => !x.GetComponent<UIParticle>()))
                         {
                             UIParticle uiParticle = pSystem.gameObject.AddComponent<UIParticle>();
+                            uiParticle.ignoreCanvasScaler = false;
                             uiParticle.scale = uiCopyScale;
                         }
                     }
@@ -133,6 +133,15 @@ namespace Fourzy._Updates.Mechanics._Vfx
             durationLeft = time;
         }
 
+        public virtual void SetSaLastSibling()
+        {
+            transform.SetAsLastSibling();
+            if (uiLayerCopy)
+            {
+                uiLayerCopy.transform.SetAsLastSibling();
+            }
+        }
+
         public virtual void Disable()
         {
             isActive = false;
@@ -158,6 +167,7 @@ namespace Fourzy._Updates.Mechanics._Vfx
         VFX_BOMB_EXPLOSION = 2,
         VFX_MOVE_NEGATIVE = 3,
         VFX_BOMB_EXPLOSION_LINE = 4,
+        VFX_GAMEPIECE_SPAWN = 5,
 
         UI_VFX_ADD_TIMER = 30,
         UI_TOUCH_VFX = 31,

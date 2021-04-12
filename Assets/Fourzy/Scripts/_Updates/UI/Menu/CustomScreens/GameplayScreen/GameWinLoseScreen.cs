@@ -102,17 +102,41 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     }
                     else
                     {
-                        if (game.IsWinner())
+                        switch (GameManager.Instance.ExpectedGameType)
                         {
-                            stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#" +
-                                $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
-                                $"{LocalizationManager.Value("won")}</color>";
-                        }
-                        else
-                        {
-                            stateLabel.text = $"{LocalizationManager.Value("player_two")} <color=#" +
-                                $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
-                                $"{LocalizationManager.Value("won")}</color>";
+                            case GameTypeLocal.LOCAL_GAME:
+                                if (game.IsWinner())
+                                {
+                                    stateLabel.text = $"{LocalizationManager.Value("player_one")} <color=#" +
+                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                        $"{LocalizationManager.Value("won")}</color>";
+                                }
+                                else
+                                {
+                                    stateLabel.text = $"{LocalizationManager.Value("player_two")} <color=#" +
+                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                        $"{LocalizationManager.Value("won")}</color>";
+                                }
+
+                                break;
+
+                            case GameTypeLocal.REALTIME_BOT_GAME:
+                            case GameTypeLocal.REALTIME_LOBBY_GAME:
+                            case GameTypeLocal.REALTIME_QUICKMATCH:
+                                if (game.IsWinner())
+                                {
+                                    stateLabel.text = $"{game.me.DisplayName} <color=#" +
+                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                        $"{LocalizationManager.Value("won")}</color>";
+                                }
+                                else
+                                {
+                                    stateLabel.text = $"{game.opponent.DisplayName} <color=#" +
+                                        $"{ColorUtility.ToHtmlStringRGB(winColor)}>" +
+                                        $"{LocalizationManager.Value("won")}</color>";
+                                }
+
+                                break;
                         }
                     }
 
@@ -157,7 +181,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             break;
 
                         default:
-                            bgTapText = LocalizationManager.Value("back_to_menu");
+                            bgTapText = LocalizationManager.Value("tap_to_continue");
 
                             break;
 
@@ -236,18 +260,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 case GameType.REALTIME:
                     if (!waitingScreen)
                     {
-                        if (!GameManager.Instance.botTutorialGame)
-                        {
-                            //send event
-                            AnalyticsManager.Instance.LogEvent(
-                                "requestRealtimeRematch",
-                                AnalyticsManager.AnalyticsProvider.ALL,
-                                new KeyValuePair<string, object>("isWinner", game.IsWinner()),
-                                new KeyValuePair<string, object>(
-                                    "isBotOpponent",
-                                    GameManager.Instance.ExpectedGameType == GameTypeLocal.REALTIME_BOT_GAME),
-                                new KeyValuePair<string, object>("isPrivate", false));
-                        }
+                        //send event
+                        AnalyticsManager.Instance.LogEvent(
+                            "requestRealtimeRematch",
+                            AnalyticsManager.AnalyticsProvider.ALL,
+                            new KeyValuePair<string, object>("isWinner", game.IsWinner()),
+                            new KeyValuePair<string, object>(
+                                "isBotOpponent",
+                                GameManager.Instance.ExpectedGameType == GameTypeLocal.REALTIME_BOT_GAME),
+                            new KeyValuePair<string, object>("isPrivate", false));
 
                         switch (GameManager.Instance.ExpectedGameType)
                         {
@@ -276,12 +297,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
                                     InternalSettings.Current.BOT_SETTINGS.randomRematchAcceptTime,
                                     () =>
                                     {
-                                        if (GameManager.Instance.botTutorialGame)
-                                        {
-                                            GamePlayManager.Instance.BackButtonOnClick();
-                                            return;
-                                        }
-
                                         if (botRematchesLeft > 0 && waitingScreen)
                                         {
                                             waitingScreen.CloseSelf();
@@ -547,7 +562,25 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     default:
-                        rematchButton.SetActive(true);
+                        switch (GameManager.Instance.ExpectedGameType)
+                        {
+                            case GameTypeLocal.REALTIME_BOT_GAME:
+                                if (GameManager.Instance.botTutorialGame)
+                                {
+                                    rematchButton.SetActive(false);
+                                }
+                                else
+                                {
+                                    rematchButton.SetActive(true);
+                                }
+
+                                break;
+
+                            default:
+                                rematchButton.SetActive(true);
+
+                                break;
+                        }
 
                         break;
                 }

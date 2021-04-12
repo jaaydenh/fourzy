@@ -19513,7 +19513,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 0.6509313, y: 0.6509313, z: 0.6509313}
+    m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -23669,9 +23669,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 100135f4bc324474c8839e02b0e41182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
   duration: 2
-  uiCopyScale: 15
+  uiCopyScale: 40
   onStart:
     inspectorListHeight: 128
     persistentCalls:
@@ -23688,7 +23687,7 @@ MonoBehaviour:
         isCallEnabled: 1
       - genericMenuData:
           selectedComponent: 4
-          selectedMember: 25
+          selectedMember: 24
           isDynamic: 0
         target: {fileID: 1368547108588348377}
         memberName: PlaySfx

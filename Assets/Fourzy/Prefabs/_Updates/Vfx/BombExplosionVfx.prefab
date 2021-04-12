@@ -18866,9 +18866,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 100135f4bc324474c8839e02b0e41182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
   duration: 2.5
-  uiCopyScale: 20
+  uiCopyScale: 50
   onStart:
     inspectorListHeight: 128
     persistentCalls:
@@ -18885,7 +18884,7 @@ MonoBehaviour:
         isCallEnabled: 1
       - genericMenuData:
           selectedComponent: 4
-          selectedMember: 25
+          selectedMember: 24
           isDynamic: 0
         target: {fileID: 114901870875632438}
         memberName: PlaySfx

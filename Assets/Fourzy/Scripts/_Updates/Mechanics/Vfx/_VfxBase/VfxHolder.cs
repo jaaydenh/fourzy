@@ -18,7 +18,7 @@ namespace Fourzy._Updates.Mechanics._Vfx
         [HideInInspector]
         public VfxPool[] pools;
 
-        private Dictionary<VfxType, int> vfxDictionary;
+        private Dictionary<string, int> vfxDictionary;
 
         protected void Awake()
         {
@@ -26,33 +26,34 @@ namespace Fourzy._Updates.Mechanics._Vfx
 
             instance = this;
 
-            vfxDictionary = new Dictionary<VfxType, int>();
+            vfxDictionary = new Dictionary<string, int>();
 
-            pools = new VfxPool[vfxDataHolder.data.list.Count];
+            pools = new VfxPool[vfxDataHolder.data.Count];
 
-            for (int poolIndex = 0; poolIndex < vfxDataHolder.data.list.Count; poolIndex++)
+            for (int poolIndex = 0; poolIndex < vfxDataHolder.data.Count; poolIndex++)
             {
-                vfxDictionary.Add(vfxDataHolder.data.list[poolIndex].type, poolIndex);
+                vfxDictionary.Add(vfxDataHolder.data[poolIndex].type, poolIndex);
 
                 pools[poolIndex] = new VfxPool();
 
-                pools[poolIndex].pool = new List<Vfx>[vfxDataHolder.data.list[poolIndex].options.Length];
-                pools[poolIndex].type = vfxDataHolder.data.list[poolIndex].type;
+                pools[poolIndex].pool = new List<Vfx>[vfxDataHolder.data[poolIndex].options.Length];
+                pools[poolIndex].type = vfxDataHolder.data[poolIndex].type;
 
-                for (int decayIndex = 0; decayIndex < vfxDataHolder.data.list[poolIndex].options.Length; decayIndex++)
+                for (int decayIndex = 0; decayIndex < vfxDataHolder.data[poolIndex].options.Length; decayIndex++)
                 {
                     pools[poolIndex].pool[decayIndex] = new List<Vfx>();
 
                     for (int b = 0; b < defaultPoolSize; b++)
+                    {
                         AddVfx(poolIndex, decayIndex);
+                    }
                 }
             }
         }
 
-        public T GetVfx<T>(VfxType type, int poolIndex = - 1) where T : Vfx
+        public T GetVfx<T>(string type, int poolIndex = - 1) where T : Vfx
         {
-            if (pools.Length == 0)
-                return default(T);
+            if (pools.Length == 0) return default;
 
             VfxPool upperPool = pools[vfxDictionary[type]];
 
@@ -60,9 +61,13 @@ namespace Fourzy._Updates.Mechanics._Vfx
             List<Vfx> pool;
 
             if (poolIndex == -1)
+            {
                 pool = upperPool.pool[Random.Range(0, upperPool.pool.Length)];
+            }
             else
+            {
                 pool = upperPool.pool[poolIndex];
+            }
 
             foreach (Vfx vfx in pool)
             {
@@ -73,12 +78,15 @@ namespace Fourzy._Updates.Mechanics._Vfx
                 }
             }
 
-            if (!result) result = AddVfx(vfxDictionary[type], upperPool.pool.ElementIndex(pool));
+            if (!result)
+            {
+                result = AddVfx(vfxDictionary[type], upperPool.pool.ElementIndex(pool));
+            }
 
             return result as T;
         }
 
-        public int GetRandomPoolIndex(VfxType type)
+        public int GetRandomPoolIndex(string type)
         {
             VfxPool upperPool = pools[vfxDictionary[type]];
 
@@ -87,7 +95,7 @@ namespace Fourzy._Updates.Mechanics._Vfx
 
         public Vfx AddVfx(int poolIndex, int decayIndex)
         {
-            Vfx vfx = Instantiate(vfxDataHolder.data.list[poolIndex].options[decayIndex]);
+            Vfx vfx = Instantiate(vfxDataHolder.data[poolIndex].options[decayIndex]);
             vfx.Initialize(this);
 
             vfx.transform.SetParent(transform);
