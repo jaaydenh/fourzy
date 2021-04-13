@@ -182,9 +182,9 @@ namespace Fourzy
 
             Instance = this;
 
-#if UNITY_IOS
-            MMVibrationManager.iOSInitializeHaptics();
-#endif
+// #if UNITY_IOS
+//             MMVibrationManager.iOSInitializeHaptics();
+// #endif
 
             ExecutePerVersion.TryExecute();
             ThreadsQueuer.Initialize();
@@ -259,9 +259,9 @@ namespace Fourzy
 
             //NetworkAccess.onNetworkAccess -= OnNetworkAccess;
 
-#if UNITY_IOS
-            MMVibrationManager.iOSReleaseHaptics();
-#endif
+// #if UNITY_IOS
+//             MMVibrationManager.iOSReleaseHaptics();
+// #endif
         }
 
         protected void OnApplicationQuit()
