@@ -39,7 +39,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         protected override void Start()
         {
-            foreach (GameBoardDefinition gameBoardDefinition in GameContentManager.Instance.passAndPlayGameboards)
+            foreach (GameBoardDefinition gameBoardDefinition in GameContentManager.Instance.passAndPlayBoards)
             {
                 if (gameBoardDefinition.Area <= Area.NONE)
                 {
@@ -181,7 +181,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 player1 = new Player(1, player1Profile.aiProfile.ToString(), player1Profile.aiProfile)
                 {
-                    HerdId = player1Profile.prefabData.data.ID
+                    HerdId = player1Profile.prefabData.Id
                 };
             }
             else
@@ -198,7 +198,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 player2 = new Player(2, player2Profile.aiProfile.ToString(), player2Profile.aiProfile)
                 {
-                    HerdId = player2Profile.prefabData.data.ID
+                    HerdId = player2Profile.prefabData.Id
                 };
             }
             else
@@ -207,7 +207,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 {
                     player2 = new Player(2, LocalizationManager.Value("player_two"))
                     {
-                        HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID
+                        HerdId = GameContentManager.Instance.piecesDataHolder.random.Id
                     };
                 }
                 else

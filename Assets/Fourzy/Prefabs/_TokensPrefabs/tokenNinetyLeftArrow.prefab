@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 114131688439806090}
   - component: {fileID: 114555132504308182}
   m_Layer: 0
-  m_Name: TokenNinetyLeftArrow
+  m_Name: tokenNinetyLeftArrow
   m_TagString: Token
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,8 +54,8 @@ MonoBehaviour:
   name: token_ninghty_turn
   tokenType: 44
   volume: 1
-  onGamePieceEnter: 139
-  onActivate: 0
+  onGamePieceEnter: 
+  onActivate: 
 --- !u!210 &210662258659597148
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -258,6 +258,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:

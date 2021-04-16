@@ -23,7 +23,7 @@ namespace Fourzy._Updates.UI.Widgets
             button.SetLabel(LocalizationManager.Value(tokenData.name));
             tokenImage.sprite = GameContentManager.Instance.tokensDataHolder.GetTokenSprite(tokenData);
 
-            tileBGImage.enabled = tokenData.showBackgroundTile;
+            tileBGImage.enabled = tokenData.showBackground;
             tileBGImage.color = tokenData.backgroundTileColor;
 
             return this;

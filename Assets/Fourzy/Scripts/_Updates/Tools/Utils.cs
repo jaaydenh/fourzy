@@ -140,13 +140,29 @@ namespace Fourzy._Updates.Tools
 
             for (int index = 0; index < actions.Length; index++)
             {
-                if (actions[index].GetType() == typeof(GameActionMove) && LastBoardLocationCheck(result, actions[index].AsMoveAction().Start)) result.Add(actions[index].AsMoveAction().Start);
-                else if (actions[index].GetType() == typeof(GameActionTokenMovement) && LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().Start)) result.Add(actions[index].AsActionTokenMovement().Start);
+                if (actions[index].GetType() == typeof(GameActionMove) && 
+                    LastBoardLocationCheck(result, actions[index].AsMoveAction().Start))
+                {
+                    result.Add(actions[index].AsMoveAction().Start);
+                }
+                else if (actions[index].GetType() == typeof(GameActionTokenMovement) &&
+                    LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().Start))
+                {
+                    result.Add(actions[index].AsActionTokenMovement().Start);
+                }
 
                 if (index == actions.Length - 1)
                 {
-                    if (actions[index].GetType() == typeof(GameActionMove) && LastBoardLocationCheck(result, actions[index].AsMoveAction().End)) result.Add(actions[index].AsMoveAction().End);
-                    else if (actions[index].GetType() == typeof(GameActionTokenMovement) && LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().End)) result.Add(actions[index].AsActionTokenMovement().End);
+                    if (actions[index].GetType() == typeof(GameActionMove) &&
+                        LastBoardLocationCheck(result, actions[index].AsMoveAction().End))
+                    {
+                        result.Add(actions[index].AsMoveAction().End);
+                    }
+                    else if (actions[index].GetType() == typeof(GameActionTokenMovement) &&
+                        LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().End))
+                    {
+                        result.Add(actions[index].AsActionTokenMovement().End);
+                    }
                 }
             }
 
@@ -165,45 +181,45 @@ namespace Fourzy._Updates.Tools
             return _data;
         }
 
-        public static GameContentManager.PrefabType AsPrefabType(this RewardType currencyType)
+        public static string AsPrefabType(this RewardType currencyType)
         {
             switch (currencyType)
             {
                 case RewardType.COINS:
-                    return GameContentManager.PrefabType.REWARDS_COIN;
+                    return "REWARDS_COIN";
 
                 case RewardType.TICKETS:
-                    return GameContentManager.PrefabType.REWARDS_TICKET;
+                    return "REWARDS_TICKET";
 
                 case RewardType.GEMS:
-                    return GameContentManager.PrefabType.REWARDS_GEM;
+                    return "REWARDS_GEM";
 
                 case RewardType.GAME_PIECE:
-                    return GameContentManager.PrefabType.REWARDS_GAME_PIECE;
+                    return "REWARDS_GAME_PIECE";
 
                 case RewardType.PORTAL_POINTS:
-                    return GameContentManager.PrefabType.REWARDS_PORTAL_POINTS;
+                    return "REWARDS_PORTAL_POINTS";
 
                 case RewardType.RARE_PORTAL_POINTS:
-                    return GameContentManager.PrefabType.REWARDS_RARE_PORTAL_POINTS;
+                    return "REWARDS_RARE_PORTAL_POINTS";
 
                 case RewardType.XP:
-                    return GameContentManager.PrefabType.REWARDS_XP;
+                    return "REWARDS_XP";
 
                 case RewardType.PACK_COMPLETE:
-                    return GameContentManager.PrefabType.REWARDS_PACK_COMPLETE;
+                    return "REWARDS_PACK_COMPLETE";
 
                 case RewardType.OPEN_PORTAL:
-                    return GameContentManager.PrefabType.REWARDS_OPEN_PORTAL;
+                    return "REWARDS_OPEN_PORTAL";
 
                 case RewardType.OPEN_RARE_PORTAL:
-                    return GameContentManager.PrefabType.REWARDS_OPEN_RARE_PORTAL;
+                    return "REWARDS_OPEN_RARE_PORTAL";
 
                 case RewardType.HINTS:
-                    return GameContentManager.PrefabType.REWARDS_HINTS;
+                    return "REWARDS_HINTS";
 
                 default:
-                    return GameContentManager.PrefabType.NONE;
+                    return "";
             }
         }
 

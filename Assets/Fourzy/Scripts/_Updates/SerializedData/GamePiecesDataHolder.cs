@@ -2,7 +2,7 @@
 
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Tools;
-using StackableDecorator;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -12,37 +12,43 @@ namespace Fourzy._Updates.Serialized
     [CreateAssetMenu(fileName = "DefaultGamePiecesDataHolder", menuName = "Create GamePieces Data Holder")]
     public class GamePiecesDataHolder : ScriptableObject
     {
-        [List]
-        [HelpBox("#Message", messageType = StackableDecorator.MessageType.None, below = false)]
-        public GamePiecePrefabDataCollection gamePieces;
+        [ListDrawerSettings(NumberOfItemsPerPage = 15, ListElementLabelName = "name")]
+        public List<GamePieceData> gamePieces;
 
-        public Dictionary<string, GamePiecePrefabData> gamePiecesFastAccess { get; set; }
+        public Dictionary<string, GamePieceData> gamePiecesFastAccess { get; set; }
 
-        public Dictionary<string, GamePiecePrefabData> enabledGamePiecesFastAccess { get; set; }
+        public Dictionary<string, GamePieceData> enabledGamePiecesFastAccess { get; set; }
 
-        public GamePiecePrefabData random => enabledGamePiecesFastAccess.Values.Random();
+        public GamePieceData random => enabledGamePiecesFastAccess.Values.Random();
 
         public void Initialize()
         {
-            gamePiecesFastAccess = new Dictionary<string, GamePiecePrefabData>();
-            enabledGamePiecesFastAccess = new Dictionary<string, GamePiecePrefabData>();
+            gamePiecesFastAccess = new Dictionary<string, GamePieceData>();
+            enabledGamePiecesFastAccess = new Dictionary<string, GamePieceData>();
 
-            foreach (GamePiecePrefabData gamePiece in gamePieces.list)
+            foreach (GamePieceData gamePieceData in gamePieces)
             {
-                gamePiece.data.Initialize();
+                if (gamePieceData.enabled)
+                {
+                    gamePieceData.Initialize();
 
-                gamePiecesFastAccess.Add(gamePiece.data.ID, gamePiece);
+                    gamePiecesFastAccess.Add(gamePieceData.Id, gamePieceData);
 
-                if (gamePiece.data.enabled) enabledGamePiecesFastAccess.Add(gamePiece.data.ID, gamePiece);
+                    enabledGamePiecesFastAccess.Add(gamePieceData.Id, gamePieceData);
+                }
             }
         }
 
-        public GamePiecePrefabData GetGamePiecePrefabData(string gamePieceID)
+        public GamePieceData GetGamePiecePrefabData(string gamePieceID)
         {
             if (gamePiecesFastAccess.ContainsKey(gamePieceID))
+            {
                 return gamePiecesFastAccess[gamePieceID];
+            }
             else
-                return gamePieces.list[0];
+            {
+                return gamePieces[0];
+            }
         }
 
         public GamePieceData GetGamePieceData(string gamePieceID)
@@ -51,44 +57,35 @@ namespace Fourzy._Updates.Serialized
             {
                 if (!gamePiecesFastAccess.ContainsKey(gamePieceID)) return null;
 
-                return gamePiecesFastAccess[gamePieceID].data;
+                return gamePiecesFastAccess[gamePieceID];
             }
             else
             {
-                GamePiecePrefabData gamePieceData =
-                    gamePieces.list.Find(gamePiece => gamePiece.data.ID == gamePieceID);
-
-                if (gamePieceData != null)
-                {
-                    return gamePieceData.data;
-                }
-                else
-                {
-                    return null;
-                }
+                return gamePieces.Find(gamePiece => gamePiece.Id == gamePieceID);
             }
         }
 
         public GamePieceData GetGamePieceData(GamePieceView gamePiece)
         {
-            GamePiecePrefabData prefabData = gamePieces.list.Find(_prefabData =>
+            return gamePieces.Find(_prefabData =>
                 gamePiece.name.Contains(_prefabData.player1Prefab.name) ||
                 gamePiece.name.Contains(_prefabData.player2Prefab.name));
-
-            if (prefabData == null) return null;
-
-            return prefabData.data;
         }
 
         public void UnlockAll()
         {
-            foreach (GamePiecePrefabData gamePiecePrefabData in enabledGamePiecesFastAccess.Values)
-                gamePiecePrefabData.data.Pieces = gamePiecePrefabData.data.piecesToUnlock;
+            foreach (GamePieceData gamePiecePrefabData in enabledGamePiecesFastAccess.Values)
+            {
+                gamePiecePrefabData.Pieces = gamePiecePrefabData.piecesToUnlock;
+            }
         }
 
         public static void ClearGamepiecesData()
         {
-            for (int index = 0; index < 50; index++) PlayerPrefsWrapper.GamePieceDeleteData(index + "");
+            for (int index = 0; index < 50; index++)
+            {
+                PlayerPrefsWrapper.GamePieceDeleteData(index + "");
+            }
         }
 
         public static GamePieceData _GetGamePieceData(GamePieceView gamePiece)
@@ -102,31 +99,5 @@ namespace Fourzy._Updates.Serialized
             return null;
 #endif
         }
-
-        public string Message() => $"Gamepieces Count: {gamePieces.list.Count}";
-    }
-
-    [System.Serializable]
-    public class GamePiecePrefabData
-    {
-        [StackableField, ShowIf("#ShowIf")]
-        public string _name;
-
-        public GamePieceData data;
-        public GamePieceView player1Prefab;
-        public GamePieceView player2Prefab;
-
-        private bool ShowIf()
-        {
-            _name = data.name + (player1Prefab ? " " + player1Prefab.name : "");
-
-            return false;
-        }
-    }
-
-    [System.Serializable]
-    public class GamePiecePrefabDataCollection
-    {
-        public List<GamePiecePrefabData> list;
     }
 }

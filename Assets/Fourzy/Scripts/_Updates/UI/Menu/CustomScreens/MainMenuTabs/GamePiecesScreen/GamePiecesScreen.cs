@@ -83,7 +83,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             PlaceGamepieceWidgets();
 
             //highlight selected one
-            gamePieceWidgets.ForEach(widget => widget.SetSelectedState(widget.data.ID == UserManager.Instance.gamePieceID));
+            gamePieceWidgets.ForEach(widget => widget.SetSelectedState(
+                widget.data.Id == UserManager.Instance.gamePieceID));
         }
 
         public void SetPiecesActive()
@@ -150,10 +151,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void CreateGamePieces()
         {
-            foreach (GamePiecePrefabData prefabData in GameContentManager.Instance.piecesDataHolder.gamePieces.list)
+            foreach (GamePieceData prefabData in GameContentManager.Instance.piecesDataHolder.gamePieces)
             {
-                GamePieceWidgetMedium widget = GameContentManager.InstantiatePrefab<GamePieceWidgetMedium>(GameContentManager.PrefabType.GAME_PIECE_MEDIUM, transform);
-                widget.SetData(prefabData.data);
+                GamePieceWidgetMedium widget = GameContentManager.InstantiatePrefab<GamePieceWidgetMedium>(
+                    "GAME_PIECE_MEDIUM",
+                    transform);
+                widget.SetData(prefabData);
 
                 widgets.Add(widget);
                 gamePieceWidgets.Add(widget);
@@ -164,7 +167,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             //load tokens
             foreach (TokensDataHolder.TokenData data in GameContentManager.Instance.enabledTokens)
-                widgets.Add(GameContentManager.InstantiatePrefab<TokenWidget>(GameContentManager.PrefabType.TOKEN_SMALL, tokensParent).SetData(data));
+            {
+                widgets
+                    .Add(GameContentManager.InstantiatePrefab<TokenWidget>("TOKEN_SMALL", tokensParent)
+                    .SetData(data));
+            }
         }
 
         private void PlaceGamepieceWidgets()
@@ -226,9 +233,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             lockedButton.SetActive(locked.Count != 0);
             lockedCover.gameObject.SetActive(locked.Count != 0);
 
-            unlockedLabel.text = $"{LocalizationManager.Value("unlocked")} {unlocked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
-            foundLabel.text = $"{LocalizationManager.Value("found")} {found.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
-            lockedLabel.text = $"{LocalizationManager.Value("not_found")} {locked.Count}/{GameContentManager.Instance.piecesDataHolder.gamePieces.list.Count}";
+            unlockedLabel.text = $"{LocalizationManager.Value("unlocked")} {unlocked.Count}/" +
+                $"{GameContentManager.Instance.piecesDataHolder.gamePieces.Count}";
+            foundLabel.text = $"{LocalizationManager.Value("found")} {found.Count}/" +
+                $"{GameContentManager.Instance.piecesDataHolder.gamePieces.Count}";
+            lockedLabel.text = $"{LocalizationManager.Value("not_found")} {locked.Count}/" +
+                $"{GameContentManager.Instance.piecesDataHolder.gamePieces.Count}";
         }
 
         protected override void OnInitialized()

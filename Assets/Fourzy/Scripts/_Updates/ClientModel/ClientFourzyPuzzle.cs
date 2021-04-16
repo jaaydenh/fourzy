@@ -84,8 +84,8 @@ namespace Fourzy._Updates.ClientModel
 
         public float initializedTime { get; set; }
 
-        public GamePiecePrefabData playerOnePrefabData { get; set; }
-        public GamePiecePrefabData playerTwoPrefabData { get; set; }
+        public GamePieceData playerOnePrefabData { get; set; }
+        public GamePieceData playerTwoPrefabData { get; set; }
 
         public List<PlayerTurn> InitialTurns => puzzleData.InitialMoves;
 
@@ -107,7 +107,9 @@ namespace Fourzy._Updates.ClientModel
             {
                 ClientFourzyHelper.AssignPrefabs(this);
 
-                return playerOnePrefabData.data.ID == playerTwoPrefabData.data.ID ? playerTwoPrefabData.player2Prefab : playerTwoPrefabData.player1Prefab;
+                return playerOnePrefabData.Id == playerTwoPrefabData.Id ? 
+                    playerTwoPrefabData.player2Prefab : 
+                    playerTwoPrefabData.player1Prefab;
             }
         }
 
@@ -129,27 +131,11 @@ namespace Fourzy._Updates.ClientModel
 
         public bool hideOpponent { get; set; } = true;
 
-        public Piece activePlayerPiece => new Piece(
-            State.ActivePlayerId,
-            string.IsNullOrEmpty(activePlayer.HerdId) ? 1 : int.Parse(activePlayer.HerdId));
+        public Piece activePlayerPiece => ClientFourzyHelper.ActivePlayerPiece(this);
 
-        public Piece playerPiece
-        {
-            get
-            {
-                Player _player = me;
-                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ? 1 : int.Parse(_player.HerdId));
-            }
-        }
+        public Piece playerPiece => ClientFourzyHelper.PlayerPiece(this);
 
-        public Piece opponentPiece
-        {
-            get
-            {
-                Player _player = opponent;
-                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ? 1 : int.Parse(_player.HerdId));
-            }
-        }
+        public Piece opponentPiece => ClientFourzyHelper.OpponentPiece(this);
 
         public ClientPuzzleData puzzleData { get; set; }
 

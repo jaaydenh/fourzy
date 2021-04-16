@@ -25,7 +25,7 @@ namespace Fourzy._Updates.UI.Menu
         public AdvancedEvent onBack;
 
         [Tooltip("What audio to play when onBack invoked")]
-        public AudioTypes onBackSfx = AudioTypes.MENU_BACK;
+        public string onBackSfx = "menu_back";
         public bool closePreviousWhenOpened = true;
 
         [HideInInspector]
@@ -101,7 +101,9 @@ namespace Fourzy._Updates.UI.Menu
             rectTransform = GetComponent<RectTransform>();
             layoutElement = GetComponent<LayoutElement>();
 
-            widgets = new List<WidgetBase>(GetComponentsInChildren<WidgetBase>()).Where(widget => widget.GetComponentInParent<MenuScreen>() == this).ToList();
+            widgets = new List<WidgetBase>(GetComponentsInChildren<WidgetBase>())
+                .Where(widget => widget.GetComponentInParent<MenuScreen>() == this)
+                .ToList();
         }
 
         protected virtual void Start()
@@ -154,9 +156,13 @@ namespace Fourzy._Updates.UI.Menu
                 if (tween)
                 {
                     if (animate)
+                    {
                         tween.PlayBackward(true);
+                    }
                     else
+                    {
                         tween.Progress(0f, PlaybackDirection.FORWARD);
+                    }
                 }
 
                 SetInteractable(false);
@@ -171,11 +177,17 @@ namespace Fourzy._Updates.UI.Menu
         {
             if (menuController)
             {
-                if (isCurrent) menuController.CloseCurrentScreen(animate);
+                if (isCurrent)
+                {
+                    menuController.CloseCurrentScreen(animate);
+                }
                 else
                 {
                     Close(animate);
-                    if (menuController.screensStack.Contains(this)) menuController.screensStack.Remove(this);
+                    if (menuController.screensStack.Contains(this))
+                    {
+                        menuController.screensStack.Remove(this);
+                    }
                 }
             }
             else
@@ -206,8 +218,10 @@ namespace Fourzy._Updates.UI.Menu
         {
             onBack.Invoke();
 
-            if (onBackSfx != AudioTypes.NONE)
+            if (!string.IsNullOrEmpty(onBackSfx))
+            {
                 AudioHolder.instance.PlaySelfSfxOneShotTracked(onBackSfx);
+            }
         }
 
         public virtual void BackToRoot() => menuController.BackToRoot();
@@ -228,7 +242,10 @@ namespace Fourzy._Updates.UI.Menu
         //        EventSystem.current.SetSelectedGameObject(null, null);
         //}
 
-        public virtual List<T> GetWidgets<T>() => widgets.Where(wgt => wgt.GetType() == typeof(T) || wgt.GetType().IsSubclassOf(typeof(T))).Cast<T>().ToList();
+        public virtual List<T> GetWidgets<T>() => widgets
+            .Where(wgt => wgt.GetType() == typeof(T) || wgt.GetType().IsSubclassOf(typeof(T)))
+            .Cast<T>()
+            .ToList();
 
         protected virtual void OnInitialized() { }
     }

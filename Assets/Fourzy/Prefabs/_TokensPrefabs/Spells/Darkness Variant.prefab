@@ -18,8 +18,8 @@ MonoBehaviour:
   name: token_darkness
   tokenType: 64
   volume: 1
-  onGamePieceEnter: 0
-  onActivate: 0
+  onGamePieceEnter: 
+  onActivate: 
   spellId: 3
 --- !u!114 &7859360879986436968
 MonoBehaviour:
@@ -92,12 +92,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b23446c843fdeac4d8a0dd4a2bfcb227,
-        type: 3}
-    - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
-        type: 3}
       propertyPath: m_Size.x
       value: 0.49333334
       objectReference: {fileID: 0}
@@ -108,12 +102,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b23446c843fdeac4d8a0dd4a2bfcb227,
+        type: 3}
     - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
-      propertyPath: m_Color.r
+      propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
@@ -123,7 +118,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
-      propertyPath: m_Color.b
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7027576155741761494, guid: 1c9eb20b288409947b77d8cbd381cf9c,
@@ -135,6 +135,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Darkness Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
@@ -153,6 +158,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -164,16 +174,6 @@ PrefabInstance:
     - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
-        type: 3}
-      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,

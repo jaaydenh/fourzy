@@ -32,8 +32,10 @@ namespace Fourzy._Updates.UI.Menu
             matchmakingScreen = GetScreen<MatchmakingScreen>();
 
             //play bg audio
-            if (!AudioHolder.instance.IsBGAudioPlaying(Serialized.AudioTypes.BG_MAIN_MENU))
-                AudioHolder.instance.PlayBGAudio(Serialized.AudioTypes.BG_MAIN_MENU, true, .75f, 1f);
+            if (!AudioHolder.instance.IsBGAudioPlaying("bg_main_menu"))
+            {
+                AudioHolder.instance.PlayBGAudio("bg_main_menu", true, .75f, 1f);
+            }
         }
 
         protected void Update()
@@ -134,7 +136,10 @@ namespace Fourzy._Updates.UI.Menu
             if (PlayerPrefsWrapper.GetTutorialFinished("Onboarding"))
             {
                 //only force news if onboarding was finished
-                if (GameManager.Instance.unreadNews.Count > 0) GetOrAddScreen<NewsPromptScreen>()._Prompt();
+                if (GameManager.Instance.unreadNews.Count > 0)
+                {
+                    GetOrAddScreen<NewsPromptScreen>()._Prompt();
+                }
             }
         }
     }

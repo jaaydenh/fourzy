@@ -17,7 +17,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using static Fourzy._Updates.Serialized.AreasDataHolder;
 
 namespace Fourzy._Updates.Mechanics.GameplayScene
@@ -572,7 +571,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                             CharacterNameFactory.GenerateBotName(),
                             AIProfile.EasyAI)
                         {
-                            HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID,
+                            HerdId = GameContentManager.Instance.piecesDataHolder.random.Id,
                             PlayerString = "2",
                         };
                     }
@@ -902,7 +901,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             switch (game._Type)
             {
                 default:
-                    AudioTypes gameBGAudio = GameContentManager
+                    string gameBGAudio = GameContentManager
                         .Instance
                         .areasDataHolder[game._Area].bgAudio;
 
@@ -1770,9 +1769,13 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.PUZZLE:
                 case GameType.REALTIME:
                     if (game.IsWinner())
-                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
+                    {
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked("game_won");
+                    }
                     else
-                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_LOST);
+                    {
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked("game_lost");
+                    }
 
                     break;
 
@@ -1781,14 +1784,18 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 case GameType.AI:
                 case GameType.TURN_BASED:
                     if (game.IsWinner())
-                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_WON);
+                    {
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked("game_turnbased_won");
+                    }
                     else
-                        AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_TURNBASED_LOST);
+                    {
+                        AudioHolder.instance.PlaySelfSfxOneShotTracked("game_turnbased_lost");
+                    }
 
                     break;
 
                 default:
-                    AudioHolder.instance.PlaySelfSfxOneShotTracked(AudioTypes.GAME_WON);
+                    AudioHolder.instance.PlaySelfSfxOneShotTracked("game_won");
 
                     break;
             }
@@ -1802,7 +1809,9 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                     LoadGame(new ClientFourzyGame(GameContentManager.Instance.enabledAreas.Random().areaID,
                         new Player(1, "AI Player 1") { PlayerString = "1" },
                         new Player(2, "AI Player 2") { PlayerString = "2" }, 1)
-                    { _Type = GameType.PRESENTATION, });
+                    {
+                        _Type = GameType.PRESENTATION,
+                    });
 
                     break;
             }

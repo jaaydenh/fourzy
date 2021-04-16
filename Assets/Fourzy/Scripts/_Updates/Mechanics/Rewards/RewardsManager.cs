@@ -54,7 +54,7 @@ namespace Fourzy._Updates.Mechanics.Rewards
                 rewards.Add(new GamePieceReward(
                     UnityEngine.Random.Range(10, 20), 
                     RewardType.GAME_PIECE, 
-                    GameContentManager.Instance.currentArea.gamepieces.Random().pieceData.ID));
+                    GameContentManager.Instance.currentArea.gamepieces.Random().pieceData.Id));
             }
 
             return rewards;

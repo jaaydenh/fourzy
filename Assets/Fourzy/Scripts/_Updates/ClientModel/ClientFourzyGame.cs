@@ -3,7 +3,6 @@
 using ExitGames.Client.Photon;
 using Fourzy._Updates.Mechanics._GamePiece;
 using Fourzy._Updates.Mechanics.Rewards;
-using Fourzy._Updates.Serialized;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using Photon.Pun;
@@ -69,7 +68,7 @@ namespace Fourzy._Updates.ClientModel
                             case GameManager.PassPlayCharactersType.SELECTED_RANDOM:
                                 if (string.IsNullOrEmpty(opponent.HerdId))
                                 {
-                                    opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                    opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.Id;
                                 }
 
                                 break;
@@ -77,11 +76,11 @@ namespace Fourzy._Updates.ClientModel
                             case GameManager.PassPlayCharactersType.RANDOM:
                                 if (string.IsNullOrEmpty(me.HerdId))
                                 {
-                                    me.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                    me.HerdId = GameContentManager.Instance.piecesDataHolder.random.Id;
                                 }
                                 if (string.IsNullOrEmpty(opponent.HerdId))
                                 {
-                                    opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID;
+                                    opponent.HerdId = GameContentManager.Instance.piecesDataHolder.random.Id;
                                 }
 
                                 break;
@@ -158,8 +157,8 @@ namespace Fourzy._Updates.ClientModel
 
         public int LoseStreak { get; set; }
 
-        public GamePiecePrefabData playerOnePrefabData { get; set; }
-        public GamePiecePrefabData playerTwoPrefabData { get; set; }
+        public GamePieceData playerOnePrefabData { get; set; }
+        public GamePieceData playerTwoPrefabData { get; set; }
 
         private string gameID;
         private GameType _type;
@@ -205,7 +204,7 @@ namespace Fourzy._Updates.ClientModel
             {
                 ClientFourzyHelper.AssignPrefabs(this);
 
-                return playerOnePrefabData.data.ID == playerTwoPrefabData.data.ID ?
+                return playerOnePrefabData.Id == playerTwoPrefabData.Id ?
                     playerTwoPrefabData.player2Prefab :
                     playerTwoPrefabData.player1Prefab;
             }
@@ -224,37 +223,11 @@ namespace Fourzy._Updates.ClientModel
 
         public bool hideOpponent { get; set; } = false;
 
-        public Piece activePlayerPiece
-        {
-            get
-            {
-                return new Piece(
-                    State.ActivePlayerId,
-                    string.IsNullOrEmpty(activePlayer.HerdId) ? 1 : int.Parse(activePlayer.HerdId));
-            }
-        }
+        public Piece activePlayerPiece => ClientFourzyHelper.ActivePlayerPiece(this);
 
-        public Piece playerPiece
-        {
-            get
-            {
-                Player _player = me;
-                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ?
-                    1 :
-                    int.Parse(_player.HerdId));
-            }
-        }
+        public Piece playerPiece => ClientFourzyHelper.PlayerPiece(this);
 
-        public Piece opponentPiece
-        {
-            get
-            {
-                Player _player = opponent;
-                return new Piece(_player.PlayerId, string.IsNullOrEmpty(_player.HerdId) ?
-                    1 :
-                    int.Parse(_player.HerdId));
-            }
-        }
+        public Piece opponentPiece => ClientFourzyHelper.OpponentPiece(this);
 
         public List<BoardSpace> boardContent => ClientFourzyHelper.BoardContent(this);
 
@@ -494,18 +467,18 @@ namespace Fourzy._Updates.ClientModel
                     GameBoardDefinition _gameBoardDefinition = null;
 
                     //get next board
-                    int index = GameContentManager.Instance.passAndPlayDataHolder.gameboards.IndexOf(
-                        GameContentManager.Instance.passAndPlayDataHolder.gameboards.Find(board =>
+                    int index = GameContentManager.Instance.passAndPlayBoards.IndexOf(
+                        GameContentManager.Instance.passAndPlayBoards.Find(board =>
                         board.ID == BoardID));
 
-                    if (index < GameContentManager.Instance.passAndPlayDataHolder.gameboards.Count && index >= 0)
+                    if (index < GameContentManager.Instance.passAndPlayBoards.Count && index >= 0)
                     {
                         _gameBoardDefinition =
-                            GameContentManager.Instance.passAndPlayDataHolder.gameboards[index + 1];
+                            GameContentManager.Instance.passAndPlayBoards[index + 1];
                     }
                     else
                     {
-                        _gameBoardDefinition = GameContentManager.Instance.passAndPlayDataHolder.gameboards[0];
+                        _gameBoardDefinition = GameContentManager.Instance.passAndPlayBoards[0];
                     }
 
                     return new ClientFourzyGame(

@@ -3,7 +3,6 @@
 using ByteSheep.Events;
 using Coffee.UIExtensions;
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.Serialized;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -48,8 +47,6 @@ namespace Fourzy._Updates.Mechanics._Vfx
 
         public virtual Vfx StartVfx()
         {
-            //if (copyParent) transform.SetAsLastSibling();
-
             isActive = true;
             onStart.Invoke();
 
@@ -107,7 +104,9 @@ namespace Fourzy._Updates.Mechanics._Vfx
                 Canvas canvas = target.GetComponentInParent<Canvas>();
 
                 if (canvas)
+                {
                     transform.localPosition = offset * canvas.transform.lossyScale.x;
+                }
             }
             transform.localPosition = offset;
 
@@ -151,10 +150,12 @@ namespace Fourzy._Updates.Mechanics._Vfx
 
             //if this vfx is controlled by its parent vfx, unactivate parent too
             if (copyParent)
+            {
                 copyParent.isActive = false;
+            }
         }
 
-        public void PlaySfx(AudioTypes audio, float volume)
+        public void PlaySfx(string audio, float volume)
         {
             AudioHolder.instance.PlaySelfSfxOneShotTracked(audio, volume);
         }

@@ -30,7 +30,7 @@ namespace Fourzy._Updates.UI.Helpers
             onStateProperty = serializedObject.FindProperty("onState");
             offStateProperty = serializedObject.FindProperty("offState");
             offStateProperty = serializedObject.FindProperty("offState");
-            sfxProperty = serializedObject.FindProperty("playOnClick");
+            sfxProperty = serializedObject.FindProperty("clickSfx");
             buttonGraphicsProperty = serializedObject.FindProperty("buttonGraphics");
             changeMaterialOnStateProperty = serializedObject.FindProperty("changeMaterialOnState");
             scaleOnClickProperty = serializedObject.FindProperty("scaleOnClick");

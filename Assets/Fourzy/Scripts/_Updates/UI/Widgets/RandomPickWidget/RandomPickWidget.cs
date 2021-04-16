@@ -42,7 +42,7 @@ namespace Fourzy._Updates.UI.Widgets
             spinValue = 0f;
             lastItemIndex = 0;
             targetSpinValue = (itemsCount * 5f) * step;
-            
+
             StartRoutine("spin", SpinRoutine(delay), null, null);
 
             return delay + ANIMATION_TIME;
@@ -96,15 +96,19 @@ namespace Fourzy._Updates.UI.Widgets
             float timer = 0f;
             while ((timer += Time.deltaTime) < ANIMATION_TIME)
             {
-                spinValue = Mathf.LerpUnclamped(startSpinValue, targetSpinValue, animationCurve.Evaluate(timer / ANIMATION_TIME));
+                spinValue = Mathf.LerpUnclamped(
+                    startSpinValue, targetSpinValue, animationCurve.Evaluate(timer / ANIMATION_TIME));
 
                 if (lastItemIndex != (int)(spinValue / step))
                 {
                     lastItemIndex = (int)(spinValue / step);
-                    AudioHolder.instance.PlaySelfSfxOneShot(Serialized.AudioTypes.SCROLL);
+                    AudioHolder.instance.PlaySelfSfxOneShot("scroll");
                 }
 
-                for (int index = 0; index < itemsCount; index++) UpdateWidget(widgets[index]);
+                for (int index = 0; index < itemsCount; index++)
+                {
+                    UpdateWidget(widgets[index]);
+                }
 
                 yield return new WaitForEndOfFrame();
             }

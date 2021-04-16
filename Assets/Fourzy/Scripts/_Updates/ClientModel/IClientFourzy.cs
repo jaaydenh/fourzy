@@ -24,8 +24,8 @@ namespace Fourzy._Updates.ClientModel
 
         List<PlayerTurn> InitialTurns { get; }
 
-        GamePiecePrefabData playerOnePrefabData { get; set; }
-        GamePiecePrefabData playerTwoPrefabData { get; set; }
+        GamePieceData playerOnePrefabData { get; set; }
+        GamePieceData playerTwoPrefabData { get; set; }
 
         GamePieceView playerOneGamepiece { get; }
         GamePieceView playerTwoGamepiece { get; }

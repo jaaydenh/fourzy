@@ -32,14 +32,14 @@ namespace Fourzy._Updates.UI.Widgets
 
         public virtual WidgetBase SetData(GamePieceData data)
         {
-            if (gamePiece && gamePiece.pieceData.ID != data.ID)
+            if (gamePiece && gamePiece.pieceData.Id != data.Id)
             {
                 Destroy(gamePiece.gameObject);
-                gamePiece = AddPiece(data.ID);
+                gamePiece = AddPiece(data.Id);
             }
             else if (!gamePiece)
             {
-                gamePiece = AddPiece(data.ID);
+                gamePiece = AddPiece(data.Id);
             }
 
             this.data = data;
@@ -91,7 +91,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public void UpdateData(GamePieceData _data)
         {
-            if (_data == null || data.ID != _data.ID) return;
+            if (_data == null || data.Id != _data.Id) return;
 
             SetData(_data);
         }

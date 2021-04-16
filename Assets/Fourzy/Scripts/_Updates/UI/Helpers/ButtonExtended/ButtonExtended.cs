@@ -2,7 +2,6 @@
 
 using ByteSheep.Events;
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
 using StackableDecorator;
 using System;
@@ -23,7 +22,7 @@ namespace Fourzy._Updates.UI.Helpers
         public AdvancedEvent events;
         public AdvancedEvent onState;
         public AdvancedEvent offState;
-        public AudioTypes playOnClick = AudioTypes.BUTTON_CLICK;
+        public string clickSfx = "button_click";
         public bool changeMaterialOnState = true;
         public bool scaleOnClick = true;
         [List]
@@ -66,7 +65,9 @@ namespace Fourzy._Updates.UI.Helpers
             Initialize();
 
             if (labelsFastAccess.ContainsKey(labelName))
+            {
                 return labelsFastAccess[labelName];
+            }
 
             return null;
         }
@@ -101,7 +102,9 @@ namespace Fourzy._Updates.UI.Helpers
         public void SetMaterial(Material material)
         {
             foreach (MaskableGraphic maskable in maskableGraphics)
+            {
                 maskable.material = material;
+            }
         }
 
         public void SetGreyscaleMaterial() => SetMaterial(GREYSCALE_MATERIAL);
@@ -110,12 +113,19 @@ namespace Fourzy._Updates.UI.Helpers
         {
             interactable = state;
 
-            if (changeMaterialOnState) SetMaterial(state ? null : GREYSCALE_MATERIAL);
+            if (changeMaterialOnState)
+            {
+                SetMaterial(state ? null : GREYSCALE_MATERIAL);
+            }
 
             if (state)
+            {
                 onState.Invoke();
+            }
             else
+            {
                 offState.Invoke();
+            }
         }
 
         public void DoParse()
@@ -125,10 +135,16 @@ namespace Fourzy._Updates.UI.Helpers
             maskableGraphics = new List<MaskableGraphic>();
 
             if (buttonGraphics.list.Count != 0)
+            {
                 foreach (ButtonGraphics obj in buttonGraphics.list)
+                {
                     Parse(obj.target.transform, obj.propagate);
+                }
+            }
             else
+            {
                 Parse(transform, true);
+            }
         }
 
         public void Parse(Transform obj, bool propagate)
@@ -138,14 +154,20 @@ namespace Fourzy._Updates.UI.Helpers
             if (maskable) maskableGraphics.Add(maskable);
 
             if (propagate)
+            {
                 for (int i = 0; i < obj.childCount; i++)
+                {
                     Parse(obj.GetChild(i), propagate);
+                }
+            }
         }
 
         public virtual void Hide(float time)
         {
             if (time == 0f)
+            {
                 alphaTween.SetAlpha(0f);
+            }
             else
             {
                 alphaTween.playbackTime = time;
@@ -156,7 +178,9 @@ namespace Fourzy._Updates.UI.Helpers
         public virtual void Show(float time)
         {
             if (time == 0f)
+            {
                 alphaTween.SetAlpha(1f);
+            }
             else
             {
                 alphaTween.playbackTime = time;
@@ -187,9 +211,15 @@ namespace Fourzy._Updates.UI.Helpers
 
             events.Invoke();
 
-            if (playOnClick != AudioTypes.NONE) AudioHolder.instance.PlaySelfSfxOneShotTracked(playOnClick);
+            if (!string.IsNullOrEmpty(clickSfx))
+            {
+                AudioHolder.instance.PlaySelfSfxOneShotTracked(clickSfx);
+            }
 
-            if (scaleOnClick && scaleTween) scaleTween.PlayForward(true);
+            if (scaleOnClick && scaleTween)
+            {
+                scaleTween.PlayForward(true);
+            }
 
             onTap?.Invoke(eventData);
         }
@@ -203,13 +233,21 @@ namespace Fourzy._Updates.UI.Helpers
             //get labels/badges
             labelsFastAccess = new Dictionary<string, LabelPair>();
             foreach (LabelPair pair in labels)
+            {
                 if (!labelsFastAccess.ContainsKey(pair.labelName))
+                {
                     labelsFastAccess.Add(pair.labelName, pair);
+                }
+            }
 
             badgesFastAccess = new Dictionary<string, BadgePair>();
             foreach (BadgePair pair in badges)
+            {
                 if (!badgesFastAccess.ContainsKey(pair.badgeName))
+                {
                     badgesFastAccess.Add(pair.badgeName, pair);
+                }
+            }
 
             //get tweens
             scaleTween = GetComponent<ScaleTween>();
@@ -218,7 +256,10 @@ namespace Fourzy._Updates.UI.Helpers
 
             DoParse();
 
-            if (!GREYSCALE_MATERIAL) GREYSCALE_MATERIAL = new Material(Shader.Find("Custom/GreyscaleUI"));
+            if (!GREYSCALE_MATERIAL)
+            {
+                GREYSCALE_MATERIAL = new Material(Shader.Find("Custom/GreyscaleUI"));
+            }
         }
 
         [Serializable]

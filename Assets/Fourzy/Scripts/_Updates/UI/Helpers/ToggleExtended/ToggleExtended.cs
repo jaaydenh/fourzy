@@ -2,7 +2,6 @@
 
 using ByteSheep.Events;
 using Fourzy._Updates.Audio;
-using Fourzy._Updates.Serialized;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,7 +20,7 @@ namespace Fourzy._Updates.UI.Helpers
         [HideInInspector]
         public AdvancedBoolEvent state;
         [HideInInspector]
-        public AudioTypes onSfx = AudioTypes.TOGGLE_ON;
+        public string onSfx = "toggle_on";
 
         public Func<bool> onCondition;
 
@@ -53,7 +52,9 @@ namespace Fourzy._Updates.UI.Helpers
                 AudioHolder.instance.PlaySelfSfxOneShotTracked(onSfx);
             }
             else
+            {
                 offState.Invoke();
+            }
 
             state.Invoke(value);
         }

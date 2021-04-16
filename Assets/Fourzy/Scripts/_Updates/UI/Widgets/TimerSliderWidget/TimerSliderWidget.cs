@@ -104,7 +104,7 @@ namespace Fourzy._Updates.UI.Widgets
                 AddTimerValue(-1f, timerValue > 1f);
 
                 //play sfx
-                AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.TIMER_BAR_LOST);
+                AudioHolder.instance.PlaySelfSfxOneShotTracked("timer_bar_lost");
             }
         }
 

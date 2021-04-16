@@ -18,8 +18,8 @@ MonoBehaviour:
   name: token_ice_block
   tokenType: 9
   volume: 1
-  onGamePieceEnter: 0
-  onActivate: 143
+  onGamePieceEnter: 
+  onActivate: token_ice_block
 --- !u!95 &722497647200722603
 Animator:
   serializedVersion: 3
@@ -46,10 +46,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4370bf03112614b6993cd8a1bcbc517a,
+        type: 3}
+    - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027576155741761494, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 7164873701213644608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
       propertyPath: m_Name
       value: IceBlock Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
@@ -68,6 +99,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -79,16 +115,6 @@ PrefabInstance:
     - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
-        type: 3}
-      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7168386843458034608, guid: 1c9eb20b288409947b77d8cbd381cf9c,
@@ -105,32 +131,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027576155741761494, guid: 1c9eb20b288409947b77d8cbd381cf9c,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 4370bf03112614b6993cd8a1bcbc517a,
-        type: 3}
-    - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1.26
-      objectReference: {fileID: 0}
-    - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 1.69
-      objectReference: {fileID: 0}
-    - target: {fileID: 3312820156316610254, guid: 1c9eb20b288409947b77d8cbd381cf9c,
-        type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c9eb20b288409947b77d8cbd381cf9c, type: 3}

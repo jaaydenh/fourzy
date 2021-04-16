@@ -1,5 +1,6 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.ClientModel;
 using FourzyGameModel.Model;
 using Newtonsoft.Json;
 using System;
@@ -26,7 +27,7 @@ namespace Fourzy._Updates
         }
         private static InternalSettings current;
 
-        private const string PREFIX = "InternalSettings_";
+        internal const string PREFIX = "InternalSettings_";
 
         internal int DEFAULT_PLACEMENT_STYLE_POINTER { get; private set; } = 
             PlayerPrefs.GetInt(PREFIX + "DEFAULT_PLACEMENT_STYLE_POINTER", Constants.DEFAULT_PLACEMENT_STYLE_POINTER);
@@ -74,6 +75,8 @@ namespace Fourzy._Updates
             PlayerPrefs.GetInt(PREFIX + "BARS_TO_ADD", Constants.BARS_TO_ADD);
         internal bool LOSE_ON_EMPTY_TIMER { get; private set; } =
             PlayerPrefs.GetInt(PREFIX + "LOSE_ON_EMPTY_TIMER", Constants.LOSE_ON_EMPTY_TIMER ? 1 : 0) == 1;
+
+        internal Dictionary<Area, AreaProgression> areaProgressions; 
 
         internal void Update(object data, bool saveNewValues = true, bool debugData = true)
         {
@@ -144,6 +147,11 @@ namespace Fourzy._Updates
                                         PlayerPrefs.SetString(PREFIX + keyPieces[1], kvPair.Value);
                                     }
                                 }
+
+                                break;
+
+                            case "areaProgression":
+                                //if (PlayerPrefs.GetString(PREFIX))
 
                                 break;
 

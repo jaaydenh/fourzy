@@ -15,8 +15,8 @@ namespace Fourzy._Updates.Mechanics.Board
         public TokenType tokenType;
         [Range(0f, 1f)]
         public float volume = 1f;
-        public AudioTypes onGamePieceEnter;
-        public AudioTypes onActivate;
+        public string onGamePieceEnter;
+        public string onActivate;
 
         protected Badge countdown;
 

@@ -315,7 +315,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         CharacterNameFactory.GeneratePlayerName(),
                         botSettings.AIProfile)
                     {
-                        HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID,
+                        HerdId = GameContentManager.Instance.piecesDataHolder.random.Id,
                         PlayerString = "2",
                     };
 

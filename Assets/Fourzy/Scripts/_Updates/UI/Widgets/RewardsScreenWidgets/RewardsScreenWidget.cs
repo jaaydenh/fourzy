@@ -4,10 +4,8 @@ using ByteSheep.Events;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Rewards;
-using Fourzy._Updates.Serialized;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -15,7 +13,7 @@ namespace Fourzy._Updates.UI.Widgets
 {
     public class RewardsScreenWidget : WidgetBase
     {
-        public AudioTypes onShow;
+        public string onShow;
         public float volume = 1f;
         public bool swapLabels = false;
         public RectTransform content;
@@ -41,7 +39,9 @@ namespace Fourzy._Updates.UI.Widgets
             base._Update();
 
             if (puzzleData != null && puzzleData.pack != null)
+            {
                 SetChecked(puzzleData.pack.puzzlesComplete.Contains(puzzleData));
+            }
         }
 
         public virtual RewardsScreenWidget SetData(ClientPuzzleData puzzleData, RewardsManager.Reward data)
@@ -60,8 +60,10 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case RewardType.GAME_PIECE:
                     //spawn gamepiece
-                    GamePieceWidgetSmall widgetSmall = GameContentManager.InstantiatePrefab<GamePieceWidgetSmall>(GameContentManager.PrefabType.GAME_PIECE_SMALL, content);
-                    widgetSmall.SetData(GameContentManager.Instance.piecesDataHolder.GetGamePieceData(reward.asGamePieceReward.gamePieceID));
+                    GamePieceWidgetSmall widgetSmall =
+                        GameContentManager.InstantiatePrefab<GamePieceWidgetSmall>("GAME_PIECE_SMALL", content);
+                    widgetSmall.SetData(GameContentManager.Instance.piecesDataHolder
+                        .GetGamePieceData(reward.asGamePieceReward.gamePieceID));
 
                     widgetSmall.ResetAnchors();
                     widgetSmall.transform.localScale = Vector3.one * .55f;
@@ -118,7 +120,11 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case RewardType.HINTS:
                     animator.SetTrigger("bounce");
-                    rewardCoroutineID = PersistantOverlayScreen.instance.AnimateReward(false, reward.rewardType, reward.quantity, Camera.main.WorldToViewportPoint(transform.position));
+                    rewardCoroutineID = PersistantOverlayScreen.instance.AnimateReward(
+                        false, 
+                        reward.rewardType,
+                        reward.quantity, 
+                        Camera.main.WorldToViewportPoint(transform.position));
 
                     break;
             }
@@ -132,9 +138,9 @@ namespace Fourzy._Updates.UI.Widgets
             rewardCoroutineID = "";
         }
 
-        public RewardsScreenWidget PlayAudio(AudioTypes audio)
+        public RewardsScreenWidget PlayAudio(string audio)
         {
-            AudioHolder.instance.PlaySelfSfxOneShotTracked(audio, volume);
+            AudioHolder.instance.PlaySelfSfxOneShotTracked(audio.ToLower(), volume);
 
             return this;
         }
@@ -166,13 +172,21 @@ namespace Fourzy._Updates.UI.Widgets
             {
                 case RewardType.OPEN_PORTAL:
                     if (puzzleData == null || puzzleData.pack == null)
-                        PersistantMenuController.Instance.GetOrAddScreen<PortalScreen>().SetData(RewardsManager.PortalType.SIMPLE);
+                    {
+                        PersistantMenuController.Instance
+                            .GetOrAddScreen<PortalScreen>()
+                            .SetData(RewardsManager.PortalType.SIMPLE);
+                    }
                     else
                     {
                         //check if puzzle was complete and reward wasnt assigned yet
-                        if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && !PlayerPrefsWrapper.GetRewardRewarded(puzzleData.GetRewardID(reward)))
+                        if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && 
+                            !PlayerPrefsWrapper.GetRewardRewarded(puzzleData.GetRewardID(reward)))
                         {
-                            PersistantMenuController.Instance.GetOrAddScreen<PortalScreen>().SetData(RewardsManager.PortalType.SIMPLE);
+                            PersistantMenuController.Instance
+                                .GetOrAddScreen<PortalScreen>()
+                                .SetData(RewardsManager.PortalType.SIMPLE);
+
                             PlayerPrefsWrapper.SetRewardRewarded(puzzleData.GetRewardID(reward), true);
 
                             SetChecked(true);
@@ -183,13 +197,20 @@ namespace Fourzy._Updates.UI.Widgets
 
                 case RewardType.OPEN_RARE_PORTAL:
                     if (puzzleData == null || puzzleData.pack == null)
-                        PersistantMenuController.Instance.GetOrAddScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
+                    {
+                        PersistantMenuController.Instance
+                            .GetOrAddScreen<PortalScreen>()
+                            .SetData(RewardsManager.PortalType.RARE);
+                    }
                     else
                     {
                         //check if puzzle was complete and reward wasnt assigned yet
-                        if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && !PlayerPrefsWrapper.GetRewardRewarded(puzzleData.GetRewardID(reward)))
+                        if (puzzleData.pack.puzzlesComplete.Contains(puzzleData) && 
+                            !PlayerPrefsWrapper.GetRewardRewarded(puzzleData.GetRewardID(reward)))
                         {
-                            PersistantMenuController.Instance.GetOrAddScreen<PortalScreen>().SetData(RewardsManager.PortalType.RARE);
+                            PersistantMenuController.Instance
+                                .GetOrAddScreen<PortalScreen>()
+                                .SetData(RewardsManager.PortalType.RARE);
                             PlayerPrefsWrapper.SetRewardRewarded(puzzleData.GetRewardID(reward), true);
 
                             SetChecked(true);

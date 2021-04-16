@@ -823,7 +823,7 @@ namespace Fourzy
                 case Constants.GAMEPLAY_SCENE_NAME:
                     MenuController.SetState("MainMenuCanvas", false);
 
-                    AudioHolder.instance.StopBGAudio(AudioTypes.BG_MAIN_MENU, .5f);
+                    AudioHolder.instance.StopBGAudio("bg_main_menu", .5f);
                     SceneManager.SetActiveScene(scene);
 
                     break;
@@ -844,7 +844,7 @@ namespace Fourzy
                 case Constants.GAMEPLAY_SCENE_NAME:
                     MenuController.SetState("MainMenuCanvas", true);
 
-                    AudioHolder.instance.PlayBGAudio(AudioTypes.BG_MAIN_MENU, true, .75f, 3f);
+                    AudioHolder.instance.PlayBGAudio("bg_main_menu", true, .75f, 3f);
 
                     //change gamepad mode
                     StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;

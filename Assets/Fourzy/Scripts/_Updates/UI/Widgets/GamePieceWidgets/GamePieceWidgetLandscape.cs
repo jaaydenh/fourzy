@@ -40,13 +40,13 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (data != null)
             {
-                if (gamePiece && gamePiece.pieceData.ID != data.ID)
+                if (gamePiece && gamePiece.pieceData.Id != data.Id)
                 {
                     Destroy(gamePiece.gameObject);
-                    gamePiece = AddPiece(data.ID);
+                    gamePiece = AddPiece(data.Id);
                 }
                 else if (!gamePiece)
-                    gamePiece = AddPiece(data.ID);
+                    gamePiece = AddPiece(data.Id);
 
                 random.SetActive(false);
             }

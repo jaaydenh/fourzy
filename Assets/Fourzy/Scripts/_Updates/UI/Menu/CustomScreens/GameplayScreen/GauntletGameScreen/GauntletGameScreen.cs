@@ -33,7 +33,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (game._Mode)
             {
                 case GameMode.GAUNTLET:
-                    if (gamepiece && gamepiece.pieceData.ID != game.me.HerdId)
+                    if (gamepiece && gamepiece.pieceData.Id != game.me.HerdId)
                     {
                         Destroy(gamepiece.gameObject);
                         gamepiece = AddGamepiece(game.me.HerdId);

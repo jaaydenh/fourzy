@@ -23,6 +23,39 @@ namespace Fourzy._Updates.ClientModel
             return result;
         }
 
+        public static Piece ActivePlayerPiece(IClientFourzy game)
+        {
+            Player activePlayer = game.activePlayer;
+
+            return new Piece(
+                    game._State.ActivePlayerId,
+                    int.Parse(string.IsNullOrEmpty(activePlayer.HerdId) ?
+                        InternalSettings.Current.DEFAULT_GAME_PIECE :
+                        activePlayer.HerdId));
+        }
+
+        public static Piece PlayerPiece(IClientFourzy game)
+        {
+            Player _player = game.me;
+
+            return new Piece(
+                _player.PlayerId,
+                int.Parse(string.IsNullOrEmpty(_player.HerdId) ?
+                    InternalSettings.Current.DEFAULT_GAME_PIECE :
+                    _player.HerdId));
+        }
+
+        public static Piece OpponentPiece(IClientFourzy game)
+        {
+            Player _player = game.opponent;
+
+            return new Piece(
+                _player.PlayerId,
+                int.Parse(string.IsNullOrEmpty(_player.HerdId) ?
+                    InternalSettings.Current.DEFAULT_GAME_PIECE :
+                    _player.HerdId));
+        }
+
         public static void SetInitialTime(IClientFourzy game, float value)
         {
             game.initializedTime = value;

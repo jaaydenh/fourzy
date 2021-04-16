@@ -31,7 +31,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public int maxGridWidth = 2000;
 
         private List<GamePieceWidgetLandscape> gamePieceWidgets = new List<GamePieceWidgetLandscape>();
-        private IEnumerable<GamePiecePrefabData> unlockedGamepieces;
+        private IEnumerable<GamePieceData> unlockedGamepieces;
         private GamePieceWidgetLandscape widgetPrefab;
         private RectTransform gamePiecesRectTransform;
         private ButtonExtended selectedBoardWidgetButton;
@@ -101,14 +101,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 if (selectedPlayers[0].data != null)
                 {
-                    herdId = selectedPlayers[0].data.ID;
+                    herdId = selectedPlayers[0].data.Id;
                     displaName = selectedPlayers[0].data.name;
                     magic = selectedPlayers[0].data.startingMagic;
                 }
                 else
                 {
-                    GamePieceData random = unlockedGamepieces.Random().data;
-                    herdId = random.ID;
+                    GamePieceData random = unlockedGamepieces.Random();
+                    herdId = random.Id;
                     displaName = random.name;
                     magic = random.startingMagic;
                 }
@@ -123,14 +123,14 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 if (selectedPlayers[1].data != null)
                 {
-                    herdId = selectedPlayers[1].data.ID;
+                    herdId = selectedPlayers[1].data.Id;
                     displaName = selectedPlayers[1].data.name;
                     magic = selectedPlayers[1].data.startingMagic;
                 }
                 else
                 {
-                    GamePieceData random = unlockedGamepieces.Random().data;
-                    herdId = random.ID;
+                    GamePieceData random = unlockedGamepieces.Random();
+                    herdId = random.Id;
                     displaName = random.name;
                     magic = random.startingMagic;
                 }
@@ -337,7 +337,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnInitialized();
 
             gamePiecesRectTransform = gamepiecesParent.GetComponent<RectTransform>();
-            widgetPrefab = GameContentManager.GetPrefab<GamePieceWidgetLandscape>(GameContentManager.PrefabType.GAME_PIECE_LANDSCAPE);
+            widgetPrefab = GameContentManager.GetPrefab<GamePieceWidgetLandscape>("GAME_PIECE_LANDSCAPE");
             WidgetSize = widgetPrefab.GetComponent<RectTransform>().rect.size;
             selectedBoardWidgetButton = selectedBoardWidget.GetComponent<ButtonExtended>();
 
@@ -367,8 +367,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             }
             gamePieceWidgets.Clear();
 
-            unlockedGamepieces = GameContentManager.Instance.piecesDataHolder.gamePieces.list.Where(
-                _widget => _widget.data.profilePicture);
+            unlockedGamepieces = GameContentManager.Instance.piecesDataHolder.gamePieces.Where(
+                _widget => _widget.profilePicture);
             int piecesCount = unlockedGamepieces.Count();
 
             Columns = optimalColumnCount;
@@ -402,13 +402,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 (WidgetSize.x * Columns) + (gamepiecesParent.SpacingX * (Columns - 1)), 
                 (WidgetSize.y * Rows) + (gamepiecesParent.SpacingY * (Rows - 1)));
             if (gamePiecesRectTransform.sizeDelta.x > _maxGridSize)
-                gamePiecesRectTransform.localScale = new Vector3(
-                    _maxGridSize / gamePiecesRectTransform.sizeDelta.x, 
-                    _maxGridSize / gamePiecesRectTransform.sizeDelta.x);
-
-            foreach (GamePiecePrefabData prefabData in unlockedGamepieces)
             {
-                CreateGamepieceWidget(prefabData.data);
+                gamePiecesRectTransform.localScale = new Vector3(
+                    _maxGridSize / gamePiecesRectTransform.sizeDelta.x,
+                    _maxGridSize / gamePiecesRectTransform.sizeDelta.x);
+            }
+
+            foreach (GamePieceData prefabData in unlockedGamepieces)
+            {
+                CreateGamepieceWidget(prefabData);
             }
 
             //add random
@@ -417,8 +419,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private GamePieceWidgetLandscape CreateGamepieceWidget(GamePieceData data)
         {
-            GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>
-                (GameContentManager.PrefabType.GAME_PIECE_LANDSCAPE, gamePiecesRectTransform);
+            GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>(
+                "GAME_PIECE_LANDSCAPE", 
+                gamePiecesRectTransform);
 
             widget
                 .SetData(data)

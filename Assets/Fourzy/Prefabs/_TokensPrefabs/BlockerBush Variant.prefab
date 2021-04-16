@@ -18,8 +18,8 @@ MonoBehaviour:
   name: token_blocker_forest
   tokenType: 1
   volume: 1
-  onGamePieceEnter: 0
-  onActivate: 0
+  onGamePieceEnter: 
+  onActivate: 
 --- !u!114 &8191537100175812321
 MonoBehaviour:
   m_ObjectHideFlags: 0

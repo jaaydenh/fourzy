@@ -45,7 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void SelectGamepiece()
         {
-            UserManager.Instance.UpdateSelectedGamePiece(data.ID);
+            UserManager.Instance.UpdateSelectedGamePiece(data.Id);
 
             //close screen
             menuController.CloseCurrentScreen();
@@ -61,7 +61,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void CheckSelected()
         {
-            selectButton.SetActive(UserManager.Instance.gamePieceID != data.ID && data.State == GamePieceState.FoundAndUnlocked);
+            selectButton.SetActive(UserManager.Instance.gamePieceID != data.Id && data.State == GamePieceState.FoundAndUnlocked);
         }
     }
 }

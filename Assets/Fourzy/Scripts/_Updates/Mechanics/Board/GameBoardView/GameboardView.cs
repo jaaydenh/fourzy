@@ -1837,7 +1837,9 @@ namespace Fourzy._Updates.Mechanics.Board
             {
                 for (int row = 0; row < game.Rows; row++)
                 {
-                    HintBlock hintBlock = GameContentManager.InstantiatePrefab<HintBlock>(GameContentManager.PrefabType.BOARD_HINT_BOX, bitsParent);
+                    HintBlock hintBlock = GameContentManager.InstantiatePrefab<HintBlock>(
+                        "BOARD_HINT_BOX", 
+                        bitsParent);
                     hintBlock.transform.localPosition = BoardLocationToVec2(row, col);
 
                     hintBlocks.Add(new BoardLocation(row, col), hintBlock);
