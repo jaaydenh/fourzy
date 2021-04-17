@@ -8,7 +8,7 @@ namespace FourzyGameModel.Model
         public string Name { get; }
         public string Description { get; }
 
-        public int HerdId; 
+        public string HerdId; 
         public List<Creature> Members;
         public List<HerdTrick> AvailableTricks;
 
@@ -20,7 +20,7 @@ namespace FourzyGameModel.Model
         }
 
         //Todo. Constant for default HerdCount.
-        public Herd(int HerdId, int HerdCount = 100)
+        public Herd(string HerdId, int HerdCount = 100)
         {
             //Need to create HerdInfo
             this.Name = "PlaceHolder";

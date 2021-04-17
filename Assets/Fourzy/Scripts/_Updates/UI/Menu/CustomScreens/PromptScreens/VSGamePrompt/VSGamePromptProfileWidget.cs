@@ -28,7 +28,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (gamePiece) Destroy(gamePiece.gameObject);
 
-            gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(profile.HerdId).player1Prefab, content);
+            gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePieceData(profile.HerdId).player1Prefab, content);
 
             gamePiece.transform.localPosition = Vector3.zero;
             gamePiece.transform.localScale = Vector3.one * 135f;

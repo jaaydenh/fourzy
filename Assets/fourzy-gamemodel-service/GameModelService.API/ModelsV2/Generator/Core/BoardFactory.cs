@@ -115,16 +115,16 @@ namespace FourzyGameModel.Model
             switch (BoardArea)
             {
                 case Area.TRAINING_GARDEN:
-                    Generator = new BeginnerGardenRandomGenerator("", Options, Preferences);
+                    Generator = new BeginnerGardenRandomGenerator(Options, Preferences);
                     break;
                 case Area.ICE_PALACE:
-                    Generator = new IcePalaceRandomGenerator("",Options, Preferences);
+                    Generator = new IcePalaceRandomGenerator(Options, Preferences);
                     break;
                 case Area.ENCHANTED_FOREST:
-                    Generator = new ForestRandomGenerator("", Options, Preferences);
+                    Generator = new ForestRandomGenerator(Options, Preferences);
                     break;
                 case Area.SANDY_ISLAND:
-                    Generator = new IslandRandomGenerator("", Options, Preferences);
+                    Generator = new IslandRandomGenerator(Options, Preferences);
                     break;
 
                 case Area.ARENA:
@@ -335,6 +335,17 @@ namespace FourzyGameModel.Model
 
             return new Tuple<int, int>(Min, Max);
         }
+
+        public static int ConvertPlayerDataToComplexityPercentage(int GamesPlayed, int Rating)
+        {
+            RandomTools r = new RandomTools();
+
+            int MinComplexity = Math.Max(20, GamesPlayed / 4);
+            int MaxComplexity = Math.Min(50, (2000 - Rating) / 2000);
+
+            return r.RandomInteger(MinComplexity, MaxComplexity);
+        }
+
 
         public static int ConvertPercentageToTargetScore(Area TargetArea, int TargetPercentage)
         {

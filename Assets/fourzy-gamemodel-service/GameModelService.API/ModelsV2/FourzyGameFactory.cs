@@ -11,16 +11,16 @@ namespace FourzyGameModel.Model
 
         // Select a Area and create a random board.
         // Active Player Id is set to -1 as the first player is not known when the game is created
-        public static FourzyGame CreateFourzyGame(Area Area, Player Player1, Player Player2, int FirstPlayerId = 1, GameOptions Options = null, BoardGenerationPreferences BoardPreferences = null)
+        public static FourzyGame CreateTwoPlayerGame(Area Area, Player Player1, Player Player2, int FirstPlayerId = 1, GameOptions Options = null, BoardGenerationPreferences BoardPreferences = null)
         {
             if (Options == null) Options = new GameOptions();
 
             GameBoard Board = BoardFactory.CreateGameBoard(Area, Options, BoardPreferences);
-            return new FourzyGame();
+            return CreateTwoPlayerGame(Board, Player1, Player2, FirstPlayerId, Options);
         }
 
         // Pass in a Board
-        public static FourzyGame CreateFourzyGame(GameBoard Board, Player Player1, Player Player2, int FirstPlayerId = 1, GameOptions Options = null)
+        public static FourzyGame CreateTwoPlayerGame(GameBoard Board, Player Player1, Player Player2, int FirstPlayerId = 1, GameOptions Options = null)
         {
             if (Options == null) Options = new GameOptions();
 
@@ -36,7 +36,7 @@ namespace FourzyGameModel.Model
         //AI GAMES
 
         //Create a ai match with a random area board.
-        public static FourzyGame CreateAIGameWithGeneratedBoard(Area Area, AIProfile Profile, Player Human, Player AI = null, int FirstPlayerId = 1, GameOptions Options = null, BoardGenerationPreferences Preferences = null)
+        public static FourzyGame CreateAIGame(Area Area, AIProfile Profile, Player Human, Player AI = null, int FirstPlayerId = 1, GameOptions Options = null, BoardGenerationPreferences Preferences = null)
         {
             if (Options == null) Options = new GameOptions();
             if (Preferences == null) Preferences = new BoardGenerationPreferences();
@@ -56,7 +56,7 @@ namespace FourzyGameModel.Model
             return Game;
         }
 
-        public static FourzyGame CreateAIGameWithCustomBoard(GameBoard Board, AIProfile Profile, Player Human, Player AI = null, int FirstPlayerId = 1, GameOptions Options = null)
+        public static FourzyGame CreateAIGame(GameBoard Board, AIProfile Profile, Player Human, Player AI = null, int FirstPlayerId = 1, GameOptions Options = null)
         {
             if (Options == null) Options = new GameOptions();
 

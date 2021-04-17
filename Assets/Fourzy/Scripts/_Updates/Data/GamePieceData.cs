@@ -136,8 +136,10 @@ namespace Fourzy
 
         public void Initialize()
         {
+            //set default number of pieces if value in player prefs not set
             if (!PlayerPrefsWrapper.HaveGamePieceRecord(Id))
             {
+                //this will record it into player prefs
                 Pieces = pieces;
             }
         }

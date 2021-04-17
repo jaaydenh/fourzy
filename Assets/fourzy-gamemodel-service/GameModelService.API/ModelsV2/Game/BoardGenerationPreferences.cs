@@ -15,6 +15,7 @@ namespace FourzyGameModel.Model
 
         //It might be useful to put requested recipe here, instead of a constructor
         public string RequestedRecipe = "";
+        public string RecipeSeed = "";
 
         public List<TokenType> AllowedTokens = new List<TokenType>() { };
         public List<TokenType> ForbiddenTokens = new List<TokenType>() { };

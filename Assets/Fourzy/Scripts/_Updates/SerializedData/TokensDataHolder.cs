@@ -43,6 +43,13 @@ namespace Fourzy._Updates.Serialized
         public TokenData GetTokenData(TokenType tokenType) => 
             tokens.Find(_data => _data.tokenType == tokenType);
 
+        public TokenData GetTokenData(string tokenType)
+        {
+            TokenType _token = (TokenType)Enum.Parse(typeof(TokenType), tokenType);
+
+            return GetTokenData(_token);
+        }
+
         public TokenData GetTokenData(SpellId spellID) => 
             tokens.Find(_data => _data.isSpell && _data.spellID == spellID);
 

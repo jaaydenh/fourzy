@@ -29,9 +29,9 @@ namespace Fourzy._Updates.ClientModel
 
             return new Piece(
                     game._State.ActivePlayerId,
-                    int.Parse(string.IsNullOrEmpty(activePlayer.HerdId) ?
+                    string.IsNullOrEmpty(activePlayer.HerdId) ?
                         InternalSettings.Current.DEFAULT_GAME_PIECE :
-                        activePlayer.HerdId));
+                        activePlayer.HerdId);
         }
 
         public static Piece PlayerPiece(IClientFourzy game)
@@ -40,9 +40,9 @@ namespace Fourzy._Updates.ClientModel
 
             return new Piece(
                 _player.PlayerId,
-                int.Parse(string.IsNullOrEmpty(_player.HerdId) ?
+                string.IsNullOrEmpty(_player.HerdId) ?
                     InternalSettings.Current.DEFAULT_GAME_PIECE :
-                    _player.HerdId));
+                    _player.HerdId);
         }
 
         public static Piece OpponentPiece(IClientFourzy game)
@@ -51,9 +51,9 @@ namespace Fourzy._Updates.ClientModel
 
             return new Piece(
                 _player.PlayerId,
-                int.Parse(string.IsNullOrEmpty(_player.HerdId) ?
+                string.IsNullOrEmpty(_player.HerdId) ?
                     InternalSettings.Current.DEFAULT_GAME_PIECE :
-                    _player.HerdId));
+                    _player.HerdId);
         }
 
         public static void SetInitialTime(IClientFourzy game, float value)
@@ -152,11 +152,11 @@ namespace Fourzy._Updates.ClientModel
                 if (game._State.Players.ContainsKey(1) && !string.IsNullOrEmpty(game._State.Players[1].HerdId))
                 {
                     game.playerOnePrefabData =
-                        GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(herdId);
+                        GameContentManager.Instance.piecesDataHolder.GetGamePieceData(herdId);
                 }
                 else
                 {
-                    game.playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
+                    game.playerOnePrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(
                         UserManager.Instance.gamePieceID);
                 }
             }
@@ -172,11 +172,11 @@ namespace Fourzy._Updates.ClientModel
                 if (game._State.Players.ContainsKey(2) && !string.IsNullOrEmpty(game._State.Players[2].HerdId))
                 {
                     game.playerTwoPrefabData =
-                        GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(herdId);
+                        GameContentManager.Instance.piecesDataHolder.GetGamePieceData(herdId);
                 }
                 else
                 {
-                    game.playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
+                    game.playerTwoPrefabData = GameContentManager.Instance.piecesDataHolder.GetGamePieceData(
                         UserManager.Instance.gamePieceID);
                 }
             }

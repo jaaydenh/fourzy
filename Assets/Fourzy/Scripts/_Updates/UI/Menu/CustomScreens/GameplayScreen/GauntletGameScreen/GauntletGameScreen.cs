@@ -75,7 +75,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private GamePieceView AddGamepiece(string id)
         {
-            GamePieceView _gamepiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(id).player1Prefab, pieceParent);
+            GamePieceView _gamepiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePieceData(id).player1Prefab, pieceParent);
             _gamepiece.StartBlinking();
 
             return _gamepiece;

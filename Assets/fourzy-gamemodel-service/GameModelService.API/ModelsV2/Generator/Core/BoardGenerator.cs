@@ -7,8 +7,8 @@ namespace FourzyGameModel.Model
 {
     public abstract class BoardGenerator
     {
-        public abstract Area Area { get; } 
-        public abstract string Name {  get;  }
+        public abstract Area Area { get; }
+        public abstract string Name { get; }
 
         //Each generator will have complexities in a defined range. 
         public abstract int MinComplexity { get; }
@@ -46,14 +46,14 @@ namespace FourzyGameModel.Model
 
         //A list of the recipes used by the generator and weight for probability.
         public Dictionary<BoardRecipe, int> Recipes { get; set; }
-    
+
         public virtual void Initialize()
         {
 
         }
 
         //public virtual GameBoard GenerateBoard(int Rows, int Columns, string SeedString = "", int DesiredMinComplexity = -1, int DesiredMaxComplexity = -1)
-              
+
         public virtual GameBoard GenerateBoard()
         {
             GameBoard NewBoard = null;
@@ -77,7 +77,7 @@ namespace FourzyGameModel.Model
             if (Recipes.Count == 0) return null;
 
             string RequestedRecipeName = "";
-            if (RequestedRecipeName.Length == 0 && Preferences.RequestedRecipe.Length > 0) RequestedRecipeName = Preferences.RequestedRecipe;
+            if (Preferences.RequestedRecipe.Length > 0) RequestedRecipeName = Preferences.RequestedRecipe;
             if (RequestedRecipeName.Length > 0)
             {
                 foreach (BoardRecipe r in Recipes.Keys)
@@ -86,35 +86,38 @@ namespace FourzyGameModel.Model
                 }
             }
 
+            Dictionary<BoardRecipe, int> SortingHat = new Dictionary<BoardRecipe, int>() { };
             //No recipe found. Let's pick one.
             //Use information from Board Preferences.
             if (CurrentRecipe == null)
             {
                 //1. Eliminate bad recipes.
-                foreach(BoardRecipe r in Recipes.Keys)
+                foreach (BoardRecipe r in Recipes.Keys)
                 {
                     if (
                         (Preferences.TargetComplexityLow > 0 && r.ComplexityLowThreshold > 0 && r.ComplexityLowThreshold > Preferences.TargetComplexityHigh)
                         || (Preferences.TargetComplexityHigh > 0 && r.ComplexityHighThreshold > 0 && r.ComplexityHighThreshold < Preferences.TargetComplexityLow)
                         || (!Preferences.IncludesRandomTokens && r.ContainsRandom)
-                        ) { 
-                        Recipes.Remove(r); 
-                        continue; }
-
-                    if (Preferences.AllowedTokens.Count >0)
-                    foreach (TokenType t in r.Tokens)
+                        )
                     {
-                        if (!Preferences.AllowedTokens.Contains(t)) { Recipes.Remove(r); continue; }
+                        continue;
                     }
+
+                    if (Preferences.AllowedTokens.Count > 0)
+                        foreach (TokenType t in r.Tokens)
+                        {
+                            if (!Preferences.AllowedTokens.Contains(t)) { continue; }
+                        }
 
                     if (Preferences.ForbiddenTokens.Count > 0)
                         foreach (TokenType t in r.Tokens)
                         {
-                            if (Preferences.ForbiddenTokens.Contains(t)) { Recipes.Remove(r); continue; }
+                            if (Preferences.ForbiddenTokens.Contains(t)) { continue; }
                         }
+                    SortingHat.Add(r, Recipes[r]);
                 }
-   
-                CurrentRecipe = NewBoard.Random.RandomWeightedRecipe(Recipes);
+
+                CurrentRecipe = NewBoard.Random.RandomWeightedRecipe(SortingHat);
             }
 
             foreach (IBoardIngredient Ingredient in CurrentRecipe.Ingredients)
@@ -123,12 +126,15 @@ namespace FourzyGameModel.Model
                 {
                     NewBoard = ApplyIngredient(NewBoard, Ingredient);
                 }
-                catch (Exception ex){
+                catch (Exception ex)
+                {
                     string TestMessage = ex.Message;
                 }
             }
 
             NewBoard.Area = Area;
+            NewBoard.Recipe = CurrentRecipe.Name;
+            NewBoard.GenerationType = BoardGenerationType.GENERATED;
             return NewBoard;
         }
 
@@ -152,7 +158,7 @@ namespace FourzyGameModel.Model
                       (Low > 0 && r.ComplexityLowThreshold > 0 && r.ComplexityLowThreshold > High)
                       || (High > 0 && r.ComplexityHighThreshold > 0 && r.ComplexityHighThreshold < Low)
                       ) continue;
-                
+
                 RecipeList.Add(r);
             }
 
@@ -168,7 +174,7 @@ namespace FourzyGameModel.Model
                 bool allowed = true;
                 foreach (TokenType t in r.Tokens)
                 {
-                    if (!AllowedTokens.Contains(t)) { allowed = false;  }
+                    if (!AllowedTokens.Contains(t)) { allowed = false; }
                 }
                 if (allowed) RecipeList.Add(r);
             }
@@ -194,13 +200,13 @@ namespace FourzyGameModel.Model
                 if (Preferences.AllowedTokens.Count > 0)
                     foreach (TokenType t in r.Tokens)
                     {
-                        if (!Preferences.AllowedTokens.Contains(t)) {  continue; }
+                        if (!Preferences.AllowedTokens.Contains(t)) { continue; }
                     }
 
                 if (Preferences.ForbiddenTokens.Count > 0)
                     foreach (TokenType t in r.Tokens)
                     {
-                        if (Preferences.ForbiddenTokens.Contains(t)) {  continue; }
+                        if (Preferences.ForbiddenTokens.Contains(t)) { continue; }
                     }
 
                 RecipeList.Add(r);
@@ -210,10 +216,10 @@ namespace FourzyGameModel.Model
         }
 
         public virtual GameBoard ApplyIngredient(GameBoard Board, IBoardIngredient Ingredient)
-            {
-                Ingredient.Build(Board);
-                return Board;
-            }
-
+        {
+            Ingredient.Build(Board);
+            return Board;
         }
+
     }
+}

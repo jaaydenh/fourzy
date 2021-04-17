@@ -16,6 +16,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Fourzy._Updates.Serialized.TokensDataHolder;
 
 namespace Fourzy
 {
@@ -447,12 +448,6 @@ namespace Fourzy
             FourzyPhotonManager.Instance.JoinLobby();
         }
 
-        private void OnPlayFabError(PlayFabError error)
-        {
-            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
-            LogMessage(error.GenerateErrorReport());
-        }
-
         public void LogMessage(string message)
         {
             if (Application.isEditor || Debug.isDebugBuild)
@@ -491,12 +486,15 @@ namespace Fourzy
             UserManager.GetMyStats();
             GameManager.GetTitleData(data => InternalSettings.Current.Update(data), null);
 
-            PlayFabClientAPI.GetPlayerProfile(new GetPlayerProfileRequest()
-            {
-                PlayFabId = playfabId
-            },
+            //get player profile to see total spent
+            PlayFabClientAPI.GetPlayerProfile(
+                new GetPlayerProfileRequest()
+                {
+                    PlayFabId = playfabId
+                },
                 OnPlayerProfile,
                 error => Debug.Log("Error getting player profile: " + error.ErrorMessage));
+
             //get profile
             PlayFabProfilesAPI.GetProfile(
                 new GetEntityProfileRequest()
@@ -513,11 +511,57 @@ namespace Fourzy
                     Debug.Log("Error getting profile: " + error.ErrorMessage);
                     GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
                 });
+
+            //get inventory
+            PlayFabClientAPI.GetUserInventory(
+                new GetUserInventoryRequest(),
+                OnUserInventoryFetched,
+                OnPlayFabError);
+        }
+
+        private void OnUserInventoryFetched(GetUserInventoryResult inventoryRequestResult)
+        {
+            foreach (ItemInstance itemInstance in inventoryRequestResult.Inventory)
+            {
+                switch (itemInstance.ItemClass)
+                {
+                    case Constants.PLAYFAB_GAMEPIECE_CLASS:
+                        GamePieceData gp =
+                            GameContentManager.Instance.piecesDataHolder.GetGamePieceData(itemInstance.ItemId);
+
+                        if (gp != null)
+                        {
+                            gp.Pieces = itemInstance.RemainingUses.Value;
+                        }
+                        else
+                        {
+                            if (Application.isEditor || Debug.isDebugBuild)
+                            {
+                                string message = $"Gamepiece id {itemInstance.ItemId} not found";
+                                Debug.LogWarning(message);
+                                GameManager.Instance.ReportPlayFabError(message);
+                            }
+                        }
+
+                        break;
+
+                    case Constants.PLAYFAB_TOKEN_CLASS:
+                        //TokenData tokenData = GameContentManager.Instance.tokensDataHolder.GetTokenData(itemInstance.ItemId)
+
+                        break;
+                }
+            }
         }
 
         private void OnPlayerProfile(GetPlayerProfileResult playerProfile)
         {
             UserManager.Instance.totalSpentUSD = playerProfile.PlayerProfile.TotalValueToDateInUSD ?? 0;
+        }
+
+        private void OnPlayFabError(PlayFabError error)
+        {
+            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+            LogMessage(error.GenerateErrorReport());
         }
 
         private IEnumerator SetProfileLanguage(string currentLanguageCode)
@@ -528,7 +572,7 @@ namespace Fourzy
             if (currentLanguageCode != LocalizationManager.Instance.languageCode)
             {
                 //updating system language
-                PlayFabProfilesAPI.SetProfileLanguage(new PlayFab.ProfilesModels.SetProfileLanguageRequest()
+                PlayFabProfilesAPI.SetProfileLanguage(new SetProfileLanguageRequest()
                 {
                     Entity = new PlayFab.ProfilesModels.EntityKey()
                     {

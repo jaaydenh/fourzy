@@ -67,7 +67,12 @@ namespace Fourzy
         public const string MAIN_MENU_CANVAS_NAME = "MainMenuCanvas";
         public const string GAMEPLAY_MENU_CANVAS_NAME = "GameSceneCanvas";
 
-        public const string DEFAULT_GAME_PIECE = "1";
+        //playfab inventory keys
+        public const string PLAYFAB_GAMEPIECE_CLASS = "gamepiece";
+        public const string PLAYFAB_TOKEN_CLASS = "token";
+        public const string PLAYFAB_SPELL_TAG = "spell";
+
+        public const string DEFAULT_GAME_PIECE = "cyclops";
         public const int MAX_PLAYER_LEVEL = 32;
         public const int MIN_PLAYER_LEVEL = 1;
 

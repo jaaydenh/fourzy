@@ -334,7 +334,7 @@ namespace FourzyGameModel.Model
         }
 
         //Eventually We can refine this to have some specific traits for various bots.
-        public static string GenerateBotName(AIDifficulty Difficulty = AIDifficulty.Easy, string Recipe = "")
+        public static string GenerateBotName(AIDifficulty Difficulty, string Recipe = "")
         {
             Initialize();
 

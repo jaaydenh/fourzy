@@ -15,7 +15,7 @@ namespace FourzyGameModel.Model
         public int PlayerId { get; set; }
 
         [JsonProperty("herdId")]
-        public int HerdId { get; set; }
+        public string HerdId { get; set; }
 
         // Unique Id is to help with movement to make sure we grab the right piece when moving from one space to another
         // In the current model, 2 pieces may temporarily have the same location when a push occurs.
@@ -59,14 +59,14 @@ namespace FourzyGameModel.Model
         public Piece(int PlayerId)
         {
             this.PlayerId = PlayerId;
-            this.HerdId = 0;
+            this.HerdId = "";
             this.PieceType = PieceType.PLAYER;
             this.UniqueId = Guid.NewGuid().ToString();
             //this.Name = Herd.GetRandomName();
         }
 
         [JsonConstructor]
-        public Piece(int PlayerId, int HerdId)
+        public Piece(int PlayerId, string HerdId)
         {
             this.PlayerId = PlayerId;
             this.HerdId = HerdId;
@@ -75,7 +75,7 @@ namespace FourzyGameModel.Model
             //this.Name = Herd.GetRandomName();
         }
 
-        public Piece(int PlayerId, int HerdId, PieceType Type, List<PieceConditionType> Conditions = null)
+        public Piece(int PlayerId, string HerdId, PieceType Type, List<PieceConditionType> Conditions = null)
         {
             this.PlayerId = PlayerId;
             this.HerdId = HerdId;
@@ -110,7 +110,7 @@ namespace FourzyGameModel.Model
         public Piece(PieceType NonPlayerType)
         {
             this.PlayerId = 0;
-            this.HerdId = 0;
+            this.HerdId = "";
             this.PieceType = NonPlayerType;
             this.UniqueId = Guid.NewGuid().ToString();
             //this.Name = Herd.GetRandomName();
@@ -118,7 +118,7 @@ namespace FourzyGameModel.Model
 
         public Piece(string Notation)
         {
-            this.HerdId = 0;
+            this.HerdId = "";
             this.UniqueId = Guid.NewGuid().ToString();
 
             string[] notationArray = Notation.Split(':');

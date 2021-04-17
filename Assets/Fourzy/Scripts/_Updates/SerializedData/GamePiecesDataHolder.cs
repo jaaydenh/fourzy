@@ -39,29 +39,17 @@ namespace Fourzy._Updates.Serialized
             }
         }
 
-        public GamePieceData GetGamePiecePrefabData(string gamePieceID)
-        {
-            if (gamePiecesFastAccess.ContainsKey(gamePieceID))
-            {
-                return gamePiecesFastAccess[gamePieceID];
-            }
-            else
-            {
-                return gamePieces[0];
-            }
-        }
-
-        public GamePieceData GetGamePieceData(string gamePieceID)
+        public GamePieceData GetGamePieceData(string gamePieceId)
         {
             if (Application.isPlaying)
             {
-                if (!gamePiecesFastAccess.ContainsKey(gamePieceID)) return null;
+                if (!gamePiecesFastAccess.ContainsKey(gamePieceId)) return null;
 
-                return gamePiecesFastAccess[gamePieceID];
+                return gamePiecesFastAccess[gamePieceId];
             }
             else
             {
-                return gamePieces.Find(gamePiece => gamePiece.Id == gamePieceID);
+                return gamePieces.Find(gamePiece => gamePiece.Id == gamePieceId);
             }
         }
 

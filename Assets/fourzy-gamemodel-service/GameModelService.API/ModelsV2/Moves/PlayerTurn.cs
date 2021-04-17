@@ -70,7 +70,7 @@ namespace FourzyGameModel.Model
         public PlayerTurn(int Player, Direction Direction, int Location )
         {
             PlayerId = (int)Player;
-            Moves = new List<IMove>() { new SimpleMove(new Piece(Player, Player, PieceType.PLAYER),Direction,Location)};
+            Moves = new List<IMove>() { new SimpleMove(new Piece(Player, "", PieceType.PLAYER),Direction,Location)};
             this.UniqueId = Guid.NewGuid().ToString();
         }
         
@@ -78,7 +78,7 @@ namespace FourzyGameModel.Model
         public PlayerTurn(int PlayerId, Direction Direction, int Location, BoardLocation HexLocation)
         {
             this.PlayerId = PlayerId;
-            Moves = new List<IMove>() { new SimpleMove(new Piece(PlayerId, PlayerId, PieceType.PLAYER), Direction, Location) };
+            Moves = new List<IMove>() { new SimpleMove(new Piece(PlayerId, "", PieceType.PLAYER), Direction, Location) };
             Moves.Add(new HexSpell(PlayerId, HexLocation));
             this.UniqueId = Guid.NewGuid().ToString();
         }
