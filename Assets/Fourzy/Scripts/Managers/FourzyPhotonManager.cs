@@ -3,6 +3,7 @@
 using ExitGames.Client.Photon;
 using Fourzy._Updates.Managers;
 using Fourzy._Updates.Tools;
+using Hellmade.Net;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -431,6 +432,7 @@ namespace Fourzy
             if (DEBUG)
             {
                 Debug.Log($"Disconnected from server.");
+                EazyNetChecker.StartConnectionCheck(false, true);
             }
 
             onDisconnectedFromServer?.Invoke();

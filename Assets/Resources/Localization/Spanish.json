@@ -344,6 +344,13 @@
       "key": "no_news",
       "value": "No news"
     },
+      "key": "not_available",
+      "value": "No Disponible"
+    },
+	{
+      "key": "not_supported_functionality",
+      "value": "Actualmente, esta funcionalidad no es compatible"
+    },
     {
       "key": "not_found",
       "value": "Por Desbloquear"

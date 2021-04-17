@@ -4,6 +4,8 @@ using ByteSheep.Events;
 using Fourzy._Updates.Audio;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
+using Hellmade.Net;
+using Sirenix.OdinInspector;
 using StackableDecorator;
 using System;
 using System.Collections.Generic;
@@ -20,14 +22,25 @@ namespace Fourzy._Updates.UI.Helpers
 
         public static Material GREYSCALE_MATERIAL;
 
-        public AdvancedEvent events;
-        public AdvancedEvent onState;
-        public AdvancedEvent offState;
-        public AudioTypes playOnClick = AudioTypes.BUTTON_CLICK;
-        public bool changeMaterialOnState = true;
-        public bool scaleOnClick = true;
+        [SerializeField]
+        internal AdvancedEvent events;
+        [SerializeField]
+        internal AdvancedEvent onState;
+        [SerializeField]
+        internal AdvancedEvent offState;
+        [SerializeField]
+        internal AudioTypes playOnClick = AudioTypes.BUTTON_CLICK;
+        [SerializeField]
+        private bool changeMaterialOnState = true;
+        [SerializeField, HideInPlayMode]
+        private bool networkAffected = false;
+        [SerializeField]
+        [StackableDecorator.ShowIf("$changeMaterialOnState")]
+        private Material textMaterial;
+        [SerializeField]
+        private bool scaleOnClick = true;
         [List]
-        [ShowIf("$changeMaterialOnState")]
+        [StackableDecorator.ShowIf("$changeMaterialOnState")]
         public ButtonGraphicsCollection buttonGraphics;
 
         public List<LabelPair> labels = new List<LabelPair>();
@@ -38,8 +51,8 @@ namespace Fourzy._Updates.UI.Helpers
 
         public ScaleTween scaleTween { get; set; }
         public AlphaTween alphaTween { get; set; }
-        public List<MaskableGraphic> maskableGraphics { get; private set; }
         public RectTransform rectTransform { get; private set; }
+        private HashSet<AffectedGraphics> maskableGraphics { get; set; }
 
         private bool initialized = false;
 
@@ -58,7 +71,24 @@ namespace Fourzy._Updates.UI.Helpers
 
             if (!Application.isPlaying) return;
 
-            if (interactable) onState.Invoke();
+            if (interactable)
+            {
+                onState.Invoke();
+            }
+
+            if (networkAffected)
+            {
+                OnConnectionStatusChanged(GameManager.NetworkAccess);
+                GameManager.onNetworkAccess += OnConnectionStatusChanged;
+            }
+        }
+
+        protected override void OnDestroy()
+        {
+            if (networkAffected)
+            {
+                GameManager.onNetworkAccess -= OnConnectionStatusChanged;
+            }
         }
 
         public LabelPair GetLabel(string labelName = "name")
@@ -66,7 +96,9 @@ namespace Fourzy._Updates.UI.Helpers
             Initialize();
 
             if (labelsFastAccess.ContainsKey(labelName))
+            {
                 return labelsFastAccess[labelName];
+            }
 
             return null;
         }
@@ -100,8 +132,22 @@ namespace Fourzy._Updates.UI.Helpers
 
         public void SetMaterial(Material material)
         {
-            foreach (MaskableGraphic maskable in maskableGraphics)
-                maskable.material = material;
+            foreach (AffectedGraphics affected in maskableGraphics)
+            {
+                if (affected.isText)
+                {
+                    if (textMaterial)
+                    {
+                        (affected.graphics as TMP_Text).fontMaterial = material == null ?
+                            affected.previous :
+                            textMaterial;
+                    }
+                }
+                else
+                {
+                    affected.graphics.material = material;
+                }
+            }
         }
 
         public void SetGreyscaleMaterial() => SetMaterial(GREYSCALE_MATERIAL);
@@ -110,42 +156,79 @@ namespace Fourzy._Updates.UI.Helpers
         {
             interactable = state;
 
-            if (changeMaterialOnState) SetMaterial(state ? null : GREYSCALE_MATERIAL);
+            if (changeMaterialOnState)
+            {
+                SetMaterial(state ? null : GREYSCALE_MATERIAL);
+            }
 
             if (state)
+            {
                 onState.Invoke();
+            }
             else
+            {
                 offState.Invoke();
+            }
         }
 
         public void DoParse()
         {
             if (buttonGraphics == null) return;
 
-            maskableGraphics = new List<MaskableGraphic>();
+            maskableGraphics = new HashSet<AffectedGraphics>();
 
             if (buttonGraphics.list.Count != 0)
+            {
                 foreach (ButtonGraphics obj in buttonGraphics.list)
+                {
                     Parse(obj.target.transform, obj.propagate);
+                }
+            }
             else
+            {
                 Parse(transform, true);
+            }
         }
 
         public void Parse(Transform obj, bool propagate)
         {
             MaskableGraphic maskable = obj.GetComponent<MaskableGraphic>();
 
-            if (maskable) maskableGraphics.Add(maskable);
+            if (maskable)
+            {
+                AffectedGraphics _graphic = new AffectedGraphics()
+                {
+                    graphics = maskable,
+                };
+                _graphic.isText = maskable is TMP_Text; ;
+
+                if (_graphic.isText)
+                {
+                    _graphic.previous = (_graphic.graphics as TMP_Text).fontMaterial;
+                }
+                else
+                {
+                    _graphic.previous = maskable.material;
+                }
+
+                maskableGraphics.Add(_graphic);
+            }
 
             if (propagate)
+            {
                 for (int i = 0; i < obj.childCount; i++)
+                {
                     Parse(obj.GetChild(i), propagate);
+                }
+            }
         }
 
         public virtual void Hide(float time)
         {
             if (time == 0f)
+            {
                 alphaTween.SetAlpha(0f);
+            }
             else
             {
                 alphaTween.playbackTime = time;
@@ -156,7 +239,9 @@ namespace Fourzy._Updates.UI.Helpers
         public virtual void Show(float time)
         {
             if (time == 0f)
+            {
                 alphaTween.SetAlpha(1f);
+            }
             else
             {
                 alphaTween.playbackTime = time;
@@ -181,15 +266,24 @@ namespace Fourzy._Updates.UI.Helpers
 
         public override void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData != null) base.OnPointerClick(eventData);
+            if (eventData != null)
+            {
+                base.OnPointerClick(eventData);
+            }
 
             if (!interactable) return;
 
             events.Invoke();
 
-            if (playOnClick != AudioTypes.NONE) AudioHolder.instance.PlaySelfSfxOneShotTracked(playOnClick);
+            if (playOnClick != AudioTypes.NONE)
+            {
+                AudioHolder.instance.PlaySelfSfxOneShotTracked(playOnClick);
+            }
 
-            if (scaleOnClick && scaleTween) scaleTween.PlayForward(true);
+            if (scaleOnClick && scaleTween)
+            {
+                scaleTween.PlayForward(true);
+            }
 
             onTap?.Invoke(eventData);
         }
@@ -203,13 +297,21 @@ namespace Fourzy._Updates.UI.Helpers
             //get labels/badges
             labelsFastAccess = new Dictionary<string, LabelPair>();
             foreach (LabelPair pair in labels)
+            {
                 if (!labelsFastAccess.ContainsKey(pair.labelName))
+                {
                     labelsFastAccess.Add(pair.labelName, pair);
+                }
+            }
 
             badgesFastAccess = new Dictionary<string, BadgePair>();
             foreach (BadgePair pair in badges)
+            {
                 if (!badgesFastAccess.ContainsKey(pair.badgeName))
+                {
                     badgesFastAccess.Add(pair.badgeName, pair);
+                }
+            }
 
             //get tweens
             scaleTween = GetComponent<ScaleTween>();
@@ -218,7 +320,16 @@ namespace Fourzy._Updates.UI.Helpers
 
             DoParse();
 
-            if (!GREYSCALE_MATERIAL) GREYSCALE_MATERIAL = new Material(Shader.Find("Custom/GreyscaleUI"));
+            if (!GREYSCALE_MATERIAL)
+            {
+                GREYSCALE_MATERIAL = new Material(Shader.Find("Custom/GreyscaleUI"));
+            }
+        }
+
+        private void OnConnectionStatusChanged(bool access)
+        {
+            GetBadge("network").badge.SetState(!access);
+            SetState(access);
         }
 
         [Serializable]
@@ -247,7 +358,7 @@ namespace Fourzy._Updates.UI.Helpers
             [HideInInspector]
             public string _name;
 
-            [ShowIf("#Check")]
+            [StackableDecorator.ShowIf("#Check")]
             [StackableField]
             public GameObject target;
             public bool propagate;
@@ -260,6 +371,13 @@ namespace Fourzy._Updates.UI.Helpers
 
                 return true;
             }
+        }
+
+        private class AffectedGraphics
+        {
+            public MaskableGraphic graphics;
+            public bool isText;
+            public Material previous;
         }
     }
 }

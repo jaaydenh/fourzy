@@ -101,8 +101,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private IEnumerator ShowLeaderboard()
         {
-            NetworkManager.instance.FastCheck();
-
             float timer = 0f;
             //wait 10 seconds
             while ((string.IsNullOrEmpty(LoginManager.playfabId) || !GameManager.NetworkAccess) && timer < 10f)
