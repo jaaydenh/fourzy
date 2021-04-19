@@ -19,7 +19,7 @@
             get { return Piece.PlayerId; }
         }
 
-        public int HerdId
+        public string HerdId
         {
             get { return Piece.HerdId; }
         }

@@ -17,7 +17,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         public Animator pieceAnimator;
         public AnimationCurve movementCurve;
 
-        public AudioTypes onMoveSfx = AudioTypes.GAME_PIECE_MOVE;
+        public string moveSfx = "gamepiece_move";
 
         private int h_win = Animator.StringToHash("win");
         private int h_Idle = Animator.StringToHash("Idle");
@@ -243,7 +243,7 @@ namespace Fourzy._Updates.Mechanics._GamePiece
         {
             base.OnBeforeMoveAction(startTurn, locations);
 
-            AudioHolder.instance.PlaySelfSfxOneShotTracked(onMoveSfx);
+            AudioHolder.instance.PlaySelfSfxOneShotTracked(moveSfx);
 
             if (locations.Length < 2) return;
 

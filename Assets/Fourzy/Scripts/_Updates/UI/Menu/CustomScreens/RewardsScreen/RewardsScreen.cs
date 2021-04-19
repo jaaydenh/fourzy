@@ -178,19 +178,23 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         portalKeysTabAlphaTween.AtProgress(1f);
                         int portalKeysCount = portalKeysWidgets.Count;
                         for (int index = portalKeysWidgets.Count; index < portalPointsRewards.Count; index++)
+                        {
                             portalKeysWidgets.Add(AddWidget(
-                                portalPointsRewards[index], 
-                                GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"), 
+                                portalPointsRewards[index],
+                                GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"),
                                 portalKeysTab));
+                        }
 
                         //add total if needed
                         if (portalKeysWidgets.Count == portalPointsRewards.Count)
                         {
-                            portalKeysWidgets.Add(AddWidget(
-                                new RewardsManager.Reward(
-                                    portalPointsRewards.Sum(reward => reward.quantity), 
-                                    RewardType.PORTAL_POINTS, "Total"),
-                                GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"), 
+                            portalKeysWidgets.Add(
+                                AddWidget(new RewardsManager.Reward(
+                                    portalPointsRewards.Sum(reward => reward.quantity),
+                                    RewardType.PORTAL_POINTS,
+                                    "Total"),
+                                GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"),
+
                                 portalKeysTab));
                         }
 
@@ -205,11 +209,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
                             int collectedItemsCount = collectedItemsWidgets.Count;
                             for (int index = collectedItemsWidgets.Count; index < collectedItems.Count; index++)
                             {
-                                collectedItemsWidgets.Add(AddWidget(
-                                    collectedItems[index], 
-                                    GameContentManager.GetPrefab<RewardsScreenWidget>(
-                                        collectedItems[index].rewardType.AsPrefabType()), 
-                                    collectedItemsTab));
+                                collectedItemsWidgets.Add(
+                                  AddWidget(collectedItems[index],
+                                  GameContentManager.GetPrefab<RewardsScreenWidget>(
+                                      collectedItems[index].rewardType.AsPrefabType()),
+                                  collectedItemsTab));
                             }
 
                             scrollRect.normalizedPosition = Vector2.zero;
@@ -327,7 +331,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 portalKeysWidgets.Add(AddWidget(
                     reward, 
-                    GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"), 
+                    GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"),
+
                     portalKeysTab));
 
                 scrollRect.normalizedPosition = Vector2.zero;
@@ -340,9 +345,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             //add total
             portalKeysWidgets.Add(AddWidget(
                 new RewardsManager.Reward(
-                    portalPointsRewards.Sum(reward => reward.quantity),
-                    RewardType.PORTAL_POINTS, "Total"),
-                GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"), 
+                    portalPointsRewards.Sum(reward => reward.quantity), 
+                    RewardType.PORTAL_POINTS, 
+                    "Total"), 
+                GameContentManager.GetPrefab<RewardsScreenWidget>("REWARDS_PORTAL_POINTS"),
+
                 portalKeysTab));
 
             scrollRect.normalizedPosition = Vector2.zero;

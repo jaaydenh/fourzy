@@ -38,7 +38,7 @@ namespace Fourzy._Updates.UI.Widgets
             string opponentHerdId = "0";
             if (opponent.HerdId != null) opponentHerdId = opponent.HerdId;
 
-            GamePieceView gamePieceView = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(opponentHerdId).player1Prefab, gamepieceParent);
+            GamePieceView gamePieceView = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePieceData(opponentHerdId).player1Prefab, gamepieceParent);
             gamePieceView.transform.localPosition = Vector3.zero;
             gamePieceView.StartBlinking();
 

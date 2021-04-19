@@ -48,7 +48,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             pieceID = string.IsNullOrEmpty(pieceID) ? Constants.DEFAULT_GAME_PIECE : pieceID;
             currentGamepiece = Instantiate(
-                    GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(pieceID).player1Prefab,
+                    GameContentManager.Instance.piecesDataHolder.GetGamePieceData(pieceID).player1Prefab,
                     iconParent);
 
             currentGamepiece.transform.localPosition = Vector3.zero;

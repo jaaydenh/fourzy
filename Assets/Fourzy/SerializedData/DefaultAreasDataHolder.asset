@@ -19,7 +19,7 @@ MonoBehaviour:
     description: area_garden
     levelToUnlock: 0
     areaID: 2
-    bgAudio: 101
+    bgAudio: bg_garden
     _16X9: {fileID: 21300000, guid: 8a279f21fe54f344cabd91371b364627, type: 3}
     _4X3: {fileID: 21300000, guid: d667c501cbda9964491a786b24aae2ed, type: 3}
     square: {fileID: 21300000, guid: a1386693001d04a4ab24caa0dc7a0ded, type: 3}
@@ -58,7 +58,7 @@ MonoBehaviour:
     description: area_forest
     levelToUnlock: 0
     areaID: 4
-    bgAudio: 104
+    bgAudio: bg_forest
     _16X9: {fileID: 21300000, guid: 69d82d91d5c73814a802f6604eedd55c, type: 3}
     _4X3: {fileID: 21300000, guid: 1c3b37fef723d504c8f8046f5bc33340, type: 3}
     square: {fileID: 21300000, guid: 0833ab5c0716239459ec274520ade990, type: 3}
@@ -92,7 +92,7 @@ MonoBehaviour:
     description: area_island
     levelToUnlock: 0
     areaID: 8
-    bgAudio: 103
+    bgAudio: bg_island
     _16X9: {fileID: 21300000, guid: 490c8d7a991189c46b3b817f5a46067f, type: 3}
     _4X3: {fileID: 21300000, guid: b46531abbff1f7d428c7973c544ce23d, type: 3}
     square: {fileID: 21300000, guid: 76ce0aeeb1a38f64987cfd2ddc1aa2d1, type: 3}
@@ -126,7 +126,7 @@ MonoBehaviour:
     description: area_palace
     levelToUnlock: 0
     areaID: 16
-    bgAudio: 105
+    bgAudio: bg_ice_palace
     _16X9: {fileID: 21300000, guid: 11aad45ccf44a4641b1c1e8d44ad0bb9, type: 3}
     _4X3: {fileID: 21300000, guid: 33820d7792fb0f2489f4bcf56971f93a, type: 3}
     square: {fileID: 21300000, guid: 580eff69848132741819a4449bbfd070, type: 3}

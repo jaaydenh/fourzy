@@ -20,7 +20,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public GameBoardDefinition data { get; private set; }
 
-        private List<GameBoardDefinition> gameboards;
         private List<MiniGameboardWidget> gameboardWidgets;
         private int lastInstantiatedIndex = 0;
 
@@ -38,9 +37,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 wasDisabled = false;
 
-                if (lastInstantiatedIndex < gameboards.Count - 1)
+                if (lastInstantiatedIndex < GameContentManager.Instance.passAndPlayBoards.Count - 1)
                 {
-                    StartRoutine("continueInitialize", gameboardWidgets[lastInstantiatedIndex].gameboardView.CreateBitsRoutine(false, true), () =>
+                    StartRoutine(
+                        "continueInitialize", 
+                        gameboardWidgets[lastInstantiatedIndex].gameboardView.CreateBitsRoutine(false, true), () =>
                     {
                         gameboardWidgets[lastInstantiatedIndex].FinishedLoading();
 
@@ -96,7 +97,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnInitialized();
 
-            gameboards = GameContentManager.Instance.passAndPlayGameboards;
             gameboardWidgets = new List<MiniGameboardWidget>();
 
             //spawn random one
@@ -108,7 +108,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private IEnumerator InstantiateBoards()
         {
-            while (lastInstantiatedIndex < gameboards.Count)
+            while (lastInstantiatedIndex < GameContentManager.Instance.passAndPlayBoards.Count)
             {
                 MiniGameboardWidget gameboard = Instantiate(miniGameboardPrefab, gameboardsParent);
 
@@ -118,7 +118,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 widgets.Add(gameboard);
                 gameboardWidgets.Add(gameboard);
 
-                yield return gameboard.SetData(gameboards[lastInstantiatedIndex]).CreateBitsRoutine(true, true);
+                yield return gameboard
+                    .SetData(GameContentManager.Instance.passAndPlayBoards[lastInstantiatedIndex])
+                    .CreateBitsRoutine(true, true);
 
                 gameboardWidgets[lastInstantiatedIndex].FinishedLoading();
 

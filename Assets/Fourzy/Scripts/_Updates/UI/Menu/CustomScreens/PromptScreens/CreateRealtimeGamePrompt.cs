@@ -161,7 +161,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                 CloseSelf();
             }
 
-            AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
+            AudioHolder.instance.PlaySelfSfxOneShotTracked("game_found");
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
         }
 

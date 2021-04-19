@@ -376,12 +376,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
                     //player1 make move
                     case OnboardingActions.PLAYER_1_PLACE_GAMEPIECE:
-                        Player player = activeGame.me;
                         GamePlayManager.Instance.board.TakeTurn(
                             new SimpleMove(
-                                new Piece(
-                                    player.PlayerId,
-                                    int.Parse(player.HerdId)),
+                                activeGame.playerPiece,
                                 currentTask.direction,
                                 currentTask.intValue));
 
@@ -390,12 +387,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         break;
 
                     case OnboardingActions.PLAYER_2_PLACE_GAMEPIECE:
-                        Player opponent = activeGame.opponent;
                         GamePlayManager.Instance.board.TakeTurn(
                             new SimpleMove(
-                                new Piece(
-                                    opponent.PlayerId,
-                                    opponent.HerdId == null ? 1 : int.Parse(opponent.HerdId)),
+                                activeGame.opponentPiece,
                                 currentTask.direction,
                                 currentTask.intValue));
 

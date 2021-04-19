@@ -34,7 +34,7 @@ namespace Fourzy._Updates.UI.Widgets
             if (data.CustomProperties.ContainsKey(Constants.REALTIME_ROOM_GAMEPIECE_KEY))
             {
                 GamePieceView _gamePiece = Instantiate(
-                    GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(data.CustomProperties[Constants.REALTIME_ROOM_GAMEPIECE_KEY].ToString()).player1Prefab, 
+                    GameContentManager.Instance.piecesDataHolder.GetGamePieceData(data.CustomProperties[Constants.REALTIME_ROOM_GAMEPIECE_KEY].ToString()).player1Prefab, 
                     gamepieceParent);
 
                 _gamePiece.transform.localPosition = Vector3.zero;

@@ -40,7 +40,7 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (gamepiece) Destroy(gamepiece.gameObject);
 
-            gamepiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(gamepieceID).player1Prefab, gamepieceParent);
+            gamepiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePieceData(gamepieceID).player1Prefab, gamepieceParent);
 
             gamepiece.transform.localPosition = Vector3.zero;
             gamepiece.StartBlinking();

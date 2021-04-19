@@ -33,9 +33,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private RoomType displayable = RoomType.DIRECT_INVITE | RoomType.LOBBY_ROOM;
         private GamePieceView playerGamepiece => GameContentManager.Instance.piecesDataHolder
-                    .GetGamePiecePrefabData(UserManager.Instance.gamePieceID).player1Prefab;
+                    .GetGamePieceData(UserManager.Instance.gamePieceID).player1Prefab;
         private GamePieceView opponentGamepiece => GameContentManager.Instance.piecesDataHolder
-                    .GetGamePiecePrefabData(FourzyPhotonManager.GetOpponentProperty(
+                    .GetGamePieceData(FourzyPhotonManager.GetOpponentProperty(
                         Constants.REALTIME_ROOM_GAMEPIECE_KEY,
                         Constants.REALTIME_DEFAULT_GAMEPIECE_KEY)).player1Prefab;
 
@@ -284,7 +284,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             if (waitTime <= 0f) return;
 
-            StartRoutine("startBotMatch", waitTime, () =>
+            StartRoutine("startBotMatch", waitTime, (System.Action)(() =>
             {
                 //get bot profile from players' rating
                 PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
@@ -292,7 +292,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     FunctionName = "botDataFromRating",
                     GeneratePlayStreamEvent = true,
                 },
-                (result) =>
+                (System.Action<ExecuteCloudScriptResult>)((result) =>
                 {
                     BotSettings botSettings =
                         JsonConvert.DeserializeObject<BotSettings>(result.FunctionResult.ToString());
@@ -315,30 +315,30 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         CharacterNameFactory.GeneratePlayerName(),
                         botSettings.AIProfile)
                     {
-                        HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID,
+                        HerdId = GameContentManager.Instance.piecesDataHolder.random.Id,
                         PlayerString = "2",
                     };
 
                     SetData(playerGamepiece,
-                        GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(
-                            GameManager.Instance.Bot.HerdId).player1Prefab);
+                        GameContentManager.Instance.piecesDataHolder.GetGamePieceData(
+                            (string)GameManager.Instance.Bot.HerdId).player1Prefab);
 
                     AnalyticsManager.Instance.LogOtherJoinedLobby(
                         GameManager.Instance.Bot.Profile.ToString(),
                         Time.time - lobbyCreatedAt);
 
-                    StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, StartGame);
+                    StartRoutine("load_game", InternalSettings.Current.LOBBY_GAME_LOAD_DELAY, this.StartGame);
 
                     FourzyPhotonManager.TryLeaveRoom();
                     FourzyPhotonManager.Instance.JoinLobby();
-                },
+                }),
                 (error) =>
                 {
                     Debug.LogError(error.ErrorMessage);
 
                     GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
                 });
-            },
+            }),
             null);
         }
 

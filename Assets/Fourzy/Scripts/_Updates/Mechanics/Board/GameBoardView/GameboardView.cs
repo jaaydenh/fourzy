@@ -1837,8 +1837,9 @@ namespace Fourzy._Updates.Mechanics.Board
             {
                 for (int row = 0; row < game.Rows; row++)
                 {
-                    HintBlock hintBlock = 
-                        GameContentManager.InstantiatePrefab<HintBlock>("BOARD_HINT_BOX", bitsParent);
+                    HintBlock hintBlock = GameContentManager.InstantiatePrefab<HintBlock>(
+                        "BOARD_HINT_BOX", 
+                        bitsParent);
                     hintBlock.transform.localPosition = BoardLocationToVec2(row, col);
 
                     hintBlocks.Add(new BoardLocation(row, col), hintBlock);
@@ -2536,11 +2537,18 @@ namespace Fourzy._Updates.Mechanics.Board
 
                     BoardSpace boardSpace = game._State.Board.ContentsAt(row, col);
 
-                    foreach (IToken token in boardSpace.Tokens.Values) SpawnToken(token);
+                    foreach (IToken token in boardSpace.Tokens.Values)
+                    {
+                        SpawnToken(token);
+                    }
 
-                    foreach (Piece piece in boardSpace.Pieces) SpawnPiece(row, col, (PlayerEnum)piece.PlayerId).SetPiece(piece);
+                    foreach (Piece piece in boardSpace.Pieces)
+                    {
+                        SpawnPiece(row, col, (PlayerEnum)piece.PlayerId).SetPiece(piece);
+                    }
 
-                    if (delay && (boardSpace.Tokens.Values.Count + boardSpace.Pieces.Count) > 0) yield return new WaitForEndOfFrame();
+                    if (delay && (boardSpace.Tokens.Values.Count + boardSpace.Pieces.Count) > 0) 
+                        yield return new WaitForEndOfFrame();
                 }
 
                 _lastCol = 0;

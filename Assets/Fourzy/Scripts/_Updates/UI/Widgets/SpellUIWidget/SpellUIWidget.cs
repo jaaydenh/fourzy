@@ -1,12 +1,9 @@
 ﻿//@vadym udod
 
 using Fourzy._Updates.ClientModel;
-using Fourzy._Updates.Mechanics.GameplayScene;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tween;
 using FourzyGameModel.Model;
-using System;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Widgets
@@ -15,7 +12,7 @@ namespace Fourzy._Updates.UI.Widgets
     {
         public Image icon;
         public AlphaTween selectedBG;
-        public AudioTypes unavailableSfx = AudioTypes.NEGATIVE;
+        public string unavailableSfx = "negative";
 
         private TokensDataHolder.TokenData data;
         private SpellsListUIWidget spellsList;
@@ -100,7 +97,7 @@ namespace Fourzy._Updates.UI.Widgets
             state = toSet;
 
             bool buttonState = state == SpellState.NONE || state == SpellState.ACTIVE;
-            button.playOnClick = buttonState ? AudioTypes.BUTTON_CLICK : unavailableSfx;
+            button.clickSfx = buttonState ? "button_click" : unavailableSfx;
             button.SetState(buttonState);
             button.interactable = buttonState;
 

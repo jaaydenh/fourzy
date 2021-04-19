@@ -232,20 +232,14 @@ namespace FourzyGameModel.Model
             this.Options = new GameOptions();
         }
 
-        public void InitializeHerd(int PlayerId, int HerdId, int HerdCount)
+        public void InitializeHerd(int PlayerId, string HerdId, int HerdCount)
         {
             Herds[PlayerId] = new Herd(HerdId, HerdCount);
         }
 
         public void InitializeHerd(int PlayerId, int HerdCount)
         {
-            int HerdId = 1;
-            try
-            {
-                HerdId = int.Parse(Players[PlayerId].HerdId);
-            }
-            catch { }
-            Herds[PlayerId] = new Herd(HerdId, HerdCount);
+            Herds[PlayerId] = new Herd(Players[PlayerId].HerdId, HerdCount);
         }
 
         #endregion "Constructors"

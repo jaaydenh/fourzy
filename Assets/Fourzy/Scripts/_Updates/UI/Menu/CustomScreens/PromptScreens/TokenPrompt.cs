@@ -43,7 +43,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             currentView = Instantiate(GameContentManager.Instance.GetTokenPrefab(data.tokenType), tokenParent).SetData(TokenFactory.Create(data.tokenType.TokenTypeToString()));
             currentView.transform.localPosition = Vector3.zero;
 
-            tileBGImage.enabled = data.showBackgroundTile;
+            tileBGImage.enabled = data.showBackground;
             tileBGImage.color = data.backgroundTileColor;
 
             gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);
@@ -88,7 +88,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             currentView = Instantiate(tokenView, tokenParent);
             currentView.transform.localPosition = Vector3.zero;
 
-            tileBGImage.enabled = data.showBackgroundTile;
+            tileBGImage.enabled = data.showBackground;
             tileBGImage.color = data.backgroundTileColor;
 
             gameboardDefinition = GameContentManager.Instance.GetMiscBoard(data.gameboardInstructionID);

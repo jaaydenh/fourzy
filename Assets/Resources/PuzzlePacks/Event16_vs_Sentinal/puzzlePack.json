@@ -1,9 +1,9 @@
 {
-    "name": "16. Sentinel",
+    "name": "16. Sentinal",
     "type": 1,
     "id": "00160",
     "unlockRequirement": 0,
-    "herdID": "10",
-    "playerName": "Sentinel",
+    "herdID": "sentinal",
+    "playerName": "Sentinal",
     "rewards": []
 }

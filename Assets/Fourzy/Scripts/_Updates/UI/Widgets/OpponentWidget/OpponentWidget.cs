@@ -28,7 +28,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         public int playerID { get; private set; }
         public AIProfile aiProfile { get; private set; }
-        public GamePiecePrefabData prefabData { get; private set; }
+        public GamePieceData prefabData { get; private set; }
 
         public OpponentWidget SetData(AIProfile aiProfile, int playerID)
         {

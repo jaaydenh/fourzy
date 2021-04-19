@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Fourzy._Updates.UI.Menu
@@ -91,8 +90,15 @@ namespace Fourzy._Updates.UI.Menu
             widthScaled = Screen.height / canvaseScaler.referenceResolution.y * canvaseScaler.referenceResolution.x;
             heightScaled = Screen.width / canvaseScaler.referenceResolution.x * canvaseScaler.referenceResolution.y;
 
-            if (!menus.ContainsKey(gameObject.name)) menus.Add(gameObject.name, this);
-            if (GetType() != typeof(PersistantMenuController)) activeMenu = this;
+            if (!menus.ContainsKey(gameObject.name))
+            {
+                menus.Add(gameObject.name, this);
+            }
+
+            if (GetType() != typeof(PersistantMenuController))
+            {
+                activeMenu = this;
+            }
         }
 
         protected virtual void Start()
@@ -123,7 +129,9 @@ namespace Fourzy._Updates.UI.Menu
         public void CurrentScreenOnBack()
         {
             if (currentScreen)
+            {
                 currentScreen.OnBack();
+            }
         }
 
         /// <summary>
@@ -143,7 +151,9 @@ namespace Fourzy._Updates.UI.Menu
                     menuScreen.Open();
                 }
                 else
+                {
                     currentScreen = null;
+                }
             }
         }
 
@@ -152,7 +162,9 @@ namespace Fourzy._Updates.UI.Menu
             if (screensStack.Contains(screen))
             {
                 if (currentScreen == screen)
+                {
                     CloseCurrentScreen(animate);
+                }
                 else
                 {
                     screensStack.Remove(screen);
@@ -160,7 +172,10 @@ namespace Fourzy._Updates.UI.Menu
                 }
             }
 
-            if (screensStack.Count == 0) currentScreen = null;
+            if (screensStack.Count == 0)
+            {
+                currentScreen = null;
+            }
         }
 
         public void BackToRoot()
@@ -168,33 +183,56 @@ namespace Fourzy._Updates.UI.Menu
             MenuScreen first = screensStack.Peek();
 
             while (screensStack.Count > 2)
+            {
                 if (first == screensStack.Peek())
+                {
                     screensStack.Pop().Close(true);
+                }
                 else
+                {
                     screensStack.Pop().Close(false);
+                }
+            }
 
-            if (screensStack.Count > 1) CloseCurrentScreen(false);
+            if (screensStack.Count > 1)
+            {
+                CloseCurrentScreen(false);
+            }
         }
 
         public void OpenScreen<T>(bool addIfNotExists = false) where T : MenuScreen
         {
             foreach (MenuScreen screen in screens)
+            {
                 if (screen.GetType() == typeof(T))
                 {
                     OpenScreen(screen);
                     return;
                 }
+            }
 
-            if (addIfNotExists) OpenScreen(AddScreen<T>());
+            if (addIfNotExists)
+            {
+                OpenScreen(AddScreen<T>());
+            }
         }
 
         public void OpenScreen(int index) => OpenScreen(screens[index]);
 
         public void OpenScreen(MenuScreen screen)
         {
-            if (currentScreen && currentScreen != screen && currentScreen.isOpened && screen.closePreviousWhenOpened) currentScreen.Close();
+            if (currentScreen &&
+                currentScreen != screen &&
+                currentScreen.isOpened &&
+                screen.closePreviousWhenOpened)
+            {
+                currentScreen.Close();
+            }
 
-            if (!currentScreen || (currentScreen != screen)) screensStack.Push(screen);
+            if (!currentScreen || (currentScreen != screen))
+            {
+                screensStack.Push(screen);
+            }
 
             SetCurrentScreen(screen);
             currentScreen.Open();
@@ -202,7 +240,10 @@ namespace Fourzy._Updates.UI.Menu
 
         public T GetScreen<T>() where T : MenuScreen
         {
-            foreach (MenuScreen screen in screens) if (screen.GetType() == typeof(T)) return screen as T;
+            foreach (MenuScreen screen in screens)
+            {
+                if (screen.GetType() == typeof(T)) return screen as T;
+            }
 
             return null;
         }
@@ -210,8 +251,12 @@ namespace Fourzy._Updates.UI.Menu
         public T GetOrAddScreen<T>(bool newIfOpened = false) where T : MenuScreen
         {
             foreach (MenuScreen screen in screens)
+            {
                 if (screen.GetType() == typeof(T) && ((screen.isOpened && !newIfOpened) || !screen.isOpened))
+                {
                     return screen as T;
+                }
+            }
 
             return AddScreen<T>();
         }
@@ -237,9 +282,9 @@ namespace Fourzy._Updates.UI.Menu
         {
             foreach (MenuScreen screen in GameContentManager.Instance.screens)
             {
-                MenuScreen prefab = screen.GetComponent<T>();
+                T prefab = screen.GetComponent<T>();
 
-                if (prefab)
+                if (prefab && !prefab.GetType().IsSubclassOf(typeof(T)))
                 {
                     return AddScreen<T>(prefab);
                 }
@@ -251,14 +296,18 @@ namespace Fourzy._Updates.UI.Menu
         //only works for portrait orientation
         public Vector2 WorldToCanvasPoint(Vector3 worldPoint)
         {
-            Vector3 screenPoint = _camera == null ? Camera.main.WorldToViewportPoint(worldPoint) : _camera.WorldToViewportPoint(worldPoint);
+            Vector3 screenPoint = _camera == null ?
+                Camera.main.WorldToViewportPoint(worldPoint) :
+                _camera.WorldToViewportPoint(worldPoint);
 
-            return new Vector2(screenPoint.x * canvaseScaler.referenceResolution.x * widthRatioAdjusted, screenPoint.y * canvaseScaler.referenceResolution.y * heightRatioAdjusted);
+            return new Vector2(
+                screenPoint.x * canvaseScaler.referenceResolution.x * widthRatioAdjusted,
+                screenPoint.y * canvaseScaler.referenceResolution.y * heightRatioAdjusted);
         }
 
         public Vector2 WorldToCanvasSize(Vector2 size)
             => new Vector2(
-                WorldToCanvasPoint(new Vector3(size.x, 0f)).x - WorldToCanvasPoint(Vector3.zero).x, 
+                WorldToCanvasPoint(new Vector3(size.x, 0f)).x - WorldToCanvasPoint(Vector3.zero).x,
                 WorldToCanvasPoint(new Vector3(0f, size.y)).y - WorldToCanvasPoint(Vector3.zero).y);
 
         public Vector2 WorldToViewport(Vector2 worldPoint)
@@ -301,8 +350,10 @@ namespace Fourzy._Updates.UI.Menu
 
         protected virtual void OnBack()
         {
-            if (PersistantMenuController.Instance.screensStack.Count > 0 || !state || !StandaloneInputModuleExtended.BackEventAvailable) return;
-            
+            if (PersistantMenuController.Instance.screensStack.Count > 0 ||
+                !state
+                || !StandaloneInputModuleExtended.BackEventAvailable) return;
+
             if (screensStack.Count > 0)
             {
                 MenuScreen menuScreen = screensStack.Peek();
@@ -319,7 +370,10 @@ namespace Fourzy._Updates.UI.Menu
 
         private IEnumerator InitializedRoutine()
         {
-            while (!screens.TrueForAll(screen => screen.Initialized)) yield return null;
+            while (!screens.TrueForAll(screen => screen.Initialized))
+            {
+                yield return null;
+            }
 
             OnInitialized();
             initialized = true;
@@ -341,14 +395,23 @@ namespace Fourzy._Updates.UI.Menu
 
         public static void AddMenuEvent(string menuName, params KeyValuePair<string, object>[] events)
         {
-            if (!menuEvents.ContainsKey(menuName)) menuEvents.Add(menuName, new MenuEvents());
+            if (!menuEvents.ContainsKey(menuName))
+            {
+                menuEvents.Add(menuName, new MenuEvents());
+            }
 
-            foreach (var @event in events) menuEvents[menuName][@event.Key] = @event.Value;
+            foreach (var @event in events)
+            {
+                menuEvents[menuName][@event.Key] = @event.Value;
+            }
         }
 
         public static void SetState(string key, bool state)
         {
-            if (menus.ContainsKey(key)) menus[key].SetState(state);
+            if (menus.ContainsKey(key))
+            {
+                menus[key].SetState(state);
+            }
         }
 
         public static MenuController GetMenu(string key)
@@ -374,7 +437,9 @@ namespace Fourzy._Updates.UI.Menu
         public MenuEvents(params KeyValuePair<string, object>[] @params)
         {
             foreach (KeyValuePair<string, object> _param in @params)
+            {
                 this[_param.Key] = _param.Value;
+            }
         }
 
         public int Count => data.Count;

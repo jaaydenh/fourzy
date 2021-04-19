@@ -1,14 +1,16 @@
 ﻿//modded @vadym udod
 
+using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.ClientModel;
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Mechanics.Rewards;
 using Fourzy._Updates.Serialized;
 using Fourzy._Updates.Tools;
-using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
+using Newtonsoft.Json;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,44 +27,38 @@ namespace Fourzy
         public AIPlayersDataHolder aiPlayersDataHolder;
         public TokensDataHolder tokensDataHolder;
         public AreasDataHolder areasDataHolder;
-        public PassAndPlayDataHolder passAndPlayDataHolder;
-        public MiscBoardsDataHolder miscBoardsDataHolder;
         public MiscGameContentHolder miscGameDataHolder;
-        [ListDrawerSettings(NumberOfItemsPerPage = 6)]
+        [ListDrawerSettings(ListElementLabelName = "type", NumberOfItemsPerPage = 6)]
         public List<PrefabTypePair> typedPrefabs;
-        [ListDrawerSettings(NumberOfItemsPerPage = 6)]
+        [ListDrawerSettings(NumberOfItemsPerPage = 10)]
         public List<MenuScreen> screens;
 
-        private Dictionary<string, ResourceItem> fastPuzzles = new Dictionary<string, ResourceItem>();
+        internal Dictionary<string, ResourceItem> fastPuzzles = new Dictionary<string, ResourceItem>();
+        internal Dictionary<string, BasicPuzzlePack> externalPuzzlePacks { get; private set; }
+        internal Dictionary<string, GameObject> typedPrefabsFastAccess { get; private set; }
+        internal List<GameBoardDefinition> miscBoards { get; private set; }
+        internal List<ResourceItem> realtimeBotBoards { get; private set; }
+        internal List<GameBoardDefinition> passAndPlayBoards { get; private set; }
 
-        public Dictionary<string, BasicPuzzlePack> externalPuzzlePacks { get; private set; }
-
-        public Dictionary<string, GameObject> typedPrefabsFastAccess { get; private set; }
-
-        public List<ResourceItem> realtimeBotBoards { get; private set; }
-
-        public AreasDataHolder.GameArea currentArea
+        internal AreasDataHolder.GameArea currentArea
         {
             get => areasDataHolder.currentAreaData;
             set => areasDataHolder.currentAreaData = value;
         }
 
-        public List<AreasDataHolder.GameArea> enabledAreas => 
+        internal List<AreasDataHolder.GameArea> enabledAreas =>
             areasDataHolder.areas.Where(theme => theme.enabled).ToList();
 
-        public List<TokensDataHolder.TokenData> tokens => 
-            tokensDataHolder.tokens.list;
+        internal List<TokensDataHolder.TokenData> tokens => tokensDataHolder.tokens;
 
-        public List<TokensDataHolder.TokenData> enabledTokens => 
-            tokensDataHolder.tokens.list.Where(token => token.enabled).ToList();
+        internal List<TokensDataHolder.TokenData> enabledTokens => tokensDataHolder.tokens
+            .Where(token => token.enabled)
+            .ToList();
 
-        public List<GameBoardDefinition> passAndPlayGameboards => 
-            passAndPlayDataHolder.gameboards;
-
-        public int finishedFastPuzzlesCount => 
+        internal int finishedFastPuzzlesCount =>
             fastPuzzles.Keys.Where(id => PlayerPrefsWrapper.GetFastPuzzleComplete(id)).Count();
 
-        public List<Camera3dItemProgressionMap> existingProgressionMaps { get; private set; } = 
+        internal List<Camera3dItemProgressionMap> existingProgressionMaps { get; private set; } =
             new List<Camera3dItemProgressionMap>();
 
         protected override void Awake()
@@ -81,39 +77,30 @@ namespace Fourzy
             }
 
             piecesDataHolder.Initialize();
-            passAndPlayDataHolder.Initialize();
-            miscBoardsDataHolder.Initialize();
 
             LoadAllFastPuzzles();
             LoadPuzzlePacks();
             LoadTutorialBotGames();
+            LoadAreasProgression();
+            LoadMiscBoards();
+            LoadPassAndPlayBoards();
         }
 
-        public GameBoardDefinition GetMiscBoard(string boardID) => 
-            miscBoardsDataHolder.gameboards.Find(board => board.ID == boardID);
+        public GameBoardDefinition GetMiscBoard(string boardID) => miscBoards.Find(board => board.ID == boardID);
 
-        public GameBoardDefinition GetMiscBoardByName(string boardName) => 
-            miscBoardsDataHolder.gameboards.Find(board => board.BoardName == boardName);
-
-        public GameBoardDefinition GetPassAndPlayBoard(string boardID) => 
-            passAndPlayDataHolder.gameboards.Find(board => board.ID == boardID);
-
-        public GameBoardDefinition GetPassAndPlayBoardByName(string boardName) => 
-            passAndPlayDataHolder.gameboards.Find(board => board.BoardName == boardName);
-
-        public TokenView GetTokenPrefab(TokenType tokenType, Area theme) => 
+        public TokenView GetTokenPrefab(TokenType tokenType, Area theme) =>
             tokensDataHolder.GetToken(tokenType, theme);
 
-        public TokenView GetTokenPrefab(TokenType tokenType) => 
+        public TokenView GetTokenPrefab(TokenType tokenType) =>
             GetTokenPrefab(tokenType, areasDataHolder.areas[0].areaID);
 
-        public TokensDataHolder.TokenData GetTokenData(TokenType tokenType) => 
+        public TokensDataHolder.TokenData GetTokenData(TokenType tokenType) =>
             tokensDataHolder.GetTokenData(tokenType);
 
-        public List<AreasDataHolder.GameArea> GetTokenThemes(TokenType tokenType) => 
+        public List<AreasDataHolder.GameArea> GetTokenThemes(TokenType tokenType) =>
             GetTokenData(tokenType)?.GetTokenAreas(areasDataHolder) ?? null;
 
-        public List<string> GetTokenAreaNames(TokenType tokenType) => 
+        public List<string> GetTokenAreaNames(TokenType tokenType) =>
             GetTokenData(tokenType)?.GetAreaNames(areasDataHolder) ?? null;
 
         public ClientFourzyPuzzle GetNextFastPuzzle(string id = "")
@@ -125,7 +112,7 @@ namespace Fourzy
                 //get random one
                 ids.Shuffle();
                 string _id = "";
-                
+
                 foreach (string __id in ids)
                 {
                     if (!PlayerPrefsWrapper.GetFastPuzzleComplete(__id))
@@ -146,7 +133,7 @@ namespace Fourzy
             }
             else
             {
-                int idIndex = ids.FindIndex(ids.IndexOf(id), 
+                int idIndex = ids.FindIndex(ids.IndexOf(id),
                     __id => !PlayerPrefsWrapper.GetFastPuzzleComplete(__id));
 
                 if (idIndex > -1 && idIndex < ids.Count - 1)
@@ -160,7 +147,7 @@ namespace Fourzy
             }
         }
 
-        public ClientFourzyPuzzle GetFastPuzzle(string id) => 
+        public ClientFourzyPuzzle GetFastPuzzle(string id) =>
             new ClientFourzyPuzzle(new ClientPuzzleData(fastPuzzles[id]).Initialize());
 
         public void ResetFastPuzzles()
@@ -185,14 +172,15 @@ namespace Fourzy
             }
         }
 
-        public BasicPuzzlePack GetExternalPuzzlePack(string folderName) 
+        public BasicPuzzlePack GetExternalPuzzlePack(string folderName)
             => externalPuzzlePacks[folderName];
 
         private void LoadAllFastPuzzles()
         {
             foreach (ResourceItem item in ResourceDB
                 .GetFolder(Constants.PUZZLES_ROOT_FOLDER)
-                .GetChilds("", ResourceItem.Type.Asset))
+                .GetChilds("", ResourceItem.Type.Asset)
+                .Where(_file => _file.Ext == "json"))
             {
                 if (item.Ext != "json") continue;
 
@@ -258,13 +246,55 @@ namespace Fourzy
 
         private void LoadTutorialBotGames()
         {
-            //get realtime bot boards
             realtimeBotBoards = new List<ResourceItem>(ResourceDB
                 .GetFolder(Constants.REALTIME_BOT_BOARDS)
                 .GetChilds("", ResourceItem.Type.Asset)
-                .OrderBy(_board => int.Parse(_board.Name.Split(' ')[0])));
+                .Where(_file => _file.Ext == "json")
+                .OrderBy(_file => int.Parse(_file.Name.Split(' ')[0])));
 
             Debug.Log($"Loaded {realtimeBotBoards.Count} tutorial bot games.");
+        }
+
+        private void LoadAreasProgression()
+        {
+            //foreach (ResourceItem resourceItem in ResourceDB
+            //    .GetFolder(Constants.AREAS_PROGRESSION_FOLDER)
+            //    .GetChilds("", ResourceItem.Type.Asset))
+            //{
+            ////record them
+            //PlayerPrefs.SetString(
+            //    InternalSettings.PREFIX + resourceItem.Name, 
+            //    resourceItem.Load<TextAsset>().text);
+            //}
+        }
+
+        private void LoadMiscBoards()
+        {
+            miscBoards = new List<GameBoardDefinition>(ResourceDB
+                .GetFolder(Constants.MISC_BOARDS_FOLDER)
+                .GetChilds("", ResourceItem.Type.Asset)
+                .Where(_file => _file.Ext == "json")
+                .Select(_file => JsonConvert.DeserializeObject<GameBoardDefinition>(_file.Load<TextAsset>().text)));
+
+            if (Application.isEditor || Debug.isDebugBuild)
+            {
+                Debug.Log($"Loaded {miscBoards.Count} misc boards");
+            }
+        }
+
+        private void LoadPassAndPlayBoards()
+        {
+            passAndPlayBoards = new List<GameBoardDefinition>(ResourceDB
+                .GetFolder(Constants.PASS_AND_PLAY_BOARDS)
+                .GetChild("used", ResourceItem.Type.Folder)
+                .GetChilds("", ResourceItem.Type.Asset)
+                .Where(_file => _file.Ext == "json")
+                .Select(_file => JsonConvert.DeserializeObject<GameBoardDefinition>(_file.Load<TextAsset>().text)));
+
+            if (Application.isEditor || Debug.isDebugBuild)
+            {
+                Debug.Log($"Loaded {miscBoards.Count} pass and play boards");
+            }
         }
 
         internal ResourceItem GetRealtimeBotBoard(int index)
@@ -295,7 +325,7 @@ namespace Fourzy
             return Instance.typedPrefabsFastAccess[type];
         }
 
-        public static T GetPrefab<T>(string type) => 
+        public static T GetPrefab<T>(string type) =>
             GetPrefab(type).GetComponent<T>();
 
         public static T InstantiatePrefab<T>(string type, Transform parent) where T : Component

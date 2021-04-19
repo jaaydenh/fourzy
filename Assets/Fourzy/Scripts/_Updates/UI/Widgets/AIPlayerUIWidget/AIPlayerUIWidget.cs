@@ -22,7 +22,7 @@ namespace Fourzy._Updates.UI.Widgets
 
             bg.sprite = aiPlayerData.background;
 
-            GamePieceView icon = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(aiPlayerData.gamePieceID).player1Prefab, iconParent);
+            GamePieceView icon = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePieceData(aiPlayerData.gamePieceID).player1Prefab, iconParent);
             icon.transform.localScale = new Vector3(100f, 100f, 1f);
             icon.StartBlinking();
 

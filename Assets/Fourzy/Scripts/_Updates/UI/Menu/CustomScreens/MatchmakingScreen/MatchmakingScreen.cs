@@ -285,7 +285,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void StartMatch(GameTypeLocal type)
         {
             state = MatchmakingScreenState.NONE;
-            AudioHolder.instance.PlaySelfSfxOneShotTracked(Serialized.AudioTypes.GAME_FOUND);
+            AudioHolder.instance.PlaySelfSfxOneShotTracked("game_found");
             GameManager.Vibrate(MoreMountains.NiceVibrations.HapticTypes.Success);
             timerLabel.text = "Match Found";
 
@@ -317,7 +317,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
                         CharacterNameFactory.GenerateBotName(AIDifficulty.Medium),
                         botSettings.AIProfile)
                     {
-                        HerdId = GameContentManager.Instance.piecesDataHolder.random.data.ID,
+                        HerdId = GameContentManager.Instance.piecesDataHolder.random.Id,
                         PlayerString = "2",
                     };
 

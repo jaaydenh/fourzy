@@ -86,7 +86,9 @@ namespace Fourzy._Updates.UI.Widgets
                 if (nameLabel) nameLabel.text = data.BoardName;
 
                 game = new ClientFourzyGame(data, UserManager.Instance.meAsPlayer, new Player(2, "Player 2"))
-                { _Type = GameType.PASSANDPLAY };
+                {
+                    _Type = GameType.PASSANDPLAY
+                };
                 game.UpdateFirstState();
 
                 if (updateArea)

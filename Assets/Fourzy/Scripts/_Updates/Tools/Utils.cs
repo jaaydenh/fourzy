@@ -140,13 +140,29 @@ namespace Fourzy._Updates.Tools
 
             for (int index = 0; index < actions.Length; index++)
             {
-                if (actions[index].GetType() == typeof(GameActionMove) && LastBoardLocationCheck(result, actions[index].AsMoveAction().Start)) result.Add(actions[index].AsMoveAction().Start);
-                else if (actions[index].GetType() == typeof(GameActionTokenMovement) && LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().Start)) result.Add(actions[index].AsActionTokenMovement().Start);
+                if (actions[index].GetType() == typeof(GameActionMove) && 
+                    LastBoardLocationCheck(result, actions[index].AsMoveAction().Start))
+                {
+                    result.Add(actions[index].AsMoveAction().Start);
+                }
+                else if (actions[index].GetType() == typeof(GameActionTokenMovement) &&
+                    LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().Start))
+                {
+                    result.Add(actions[index].AsActionTokenMovement().Start);
+                }
 
                 if (index == actions.Length - 1)
                 {
-                    if (actions[index].GetType() == typeof(GameActionMove) && LastBoardLocationCheck(result, actions[index].AsMoveAction().End)) result.Add(actions[index].AsMoveAction().End);
-                    else if (actions[index].GetType() == typeof(GameActionTokenMovement) && LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().End)) result.Add(actions[index].AsActionTokenMovement().End);
+                    if (actions[index].GetType() == typeof(GameActionMove) &&
+                        LastBoardLocationCheck(result, actions[index].AsMoveAction().End))
+                    {
+                        result.Add(actions[index].AsMoveAction().End);
+                    }
+                    else if (actions[index].GetType() == typeof(GameActionTokenMovement) &&
+                        LastBoardLocationCheck(result, actions[index].AsActionTokenMovement().End))
+                    {
+                        result.Add(actions[index].AsActionTokenMovement().End);
+                    }
                 }
             }
 

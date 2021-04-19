@@ -31,8 +31,7 @@ namespace Fourzy._Updates.Audio
 
         protected void Awake()
         {
-            if (instance != null)
-                return;
+            if (instance != null) return;
 
             instance = this;
 
@@ -57,14 +56,22 @@ namespace Fourzy._Updates.Audio
             if (currentPlayedPool.Count > 0)
             {
                 foreach (AudioClip clip in currentPlayedPool.Keys.ToList())
+                {
                     if (currentPlayedPool[clip] - Time.deltaTime > 0f)
+                    {
                         currentPlayedPool[clip] -= Time.deltaTime;
+                    }
                     else
+                    {
                         toRemove.Enqueue(clip);
+                    }
+                }
             }
 
             while (toRemove.Count > 0)
+            {
                 currentPlayedPool.Remove(toRemove.Dequeue());
+            }
         }
 
         public void SetMasterVolume(float value) => mixer.SetFloat("MasterVolume", Mathf.Clamp01(1f - value) * -80f);
@@ -73,7 +80,7 @@ namespace Fourzy._Updates.Audio
 
         public void AudioVolume(float value) => mixer.SetFloat("AudioVolume", Mathf.Clamp01(1f - value) * -80f);
 
-        public bool PlaySfxOneShotTracked(AudioTypes type, AudioSource source, float volume = 1f)
+        public bool PlaySfxOneShotTracked(string type, AudioSource source, float volume = 1f)
         {
             if (!SettingsManager.Get(SettingsManager.KEY_SFX)) return false;
 
@@ -101,9 +108,10 @@ namespace Fourzy._Updates.Audio
             }
         }
 
-        public void PlaySelfSfxOneShotTracked(AudioTypes type, float volume = 1f) => PlaySfxOneShotTracked(type, audioSource, volume);
+        public void PlaySelfSfxOneShotTracked(string type, float volume = 1f) =>
+            PlaySfxOneShotTracked(type, audioSource, volume);
 
-        public void PlaySfxOneShot(AudioTypes type, AudioSource source, float volume = 1f)
+        public void PlaySfxOneShot(string type, AudioSource source, float volume = 1f)
         {
             AudioClip clip = GetAudioClip(type);
 
@@ -112,9 +120,9 @@ namespace Fourzy._Updates.Audio
             source.PlayOneShot(clip, volume);
         }
 
-        public void PlaySelfSfxOneShot(AudioTypes type, float volume = 1f) => PlaySfxOneShot(type, audioSource, volume);
+        public void PlaySelfSfxOneShot(string type, float volume = 1f) => PlaySfxOneShot(type, audioSource, volume);
 
-        public BGAudio PlaySelfSfxOneShot(AudioTypes type, float volume, float pitch)
+        public BGAudio PlaySelfSfxOneShot(string type, float volume, float pitch)
         {
             AudioClip clip = GetAudioClip(type);
 
@@ -128,7 +136,12 @@ namespace Fourzy._Updates.Audio
             _audioSource.outputAudioMixerGroup = audioSource.outputAudioMixerGroup;
             _audioSource.Play();
 
-            BGAudio bgAudio = new BGAudio() { type = type, audioSource = _audioSource, audioClip = clip, };
+            BGAudio bgAudio = new BGAudio()
+            {
+                type = type,
+                audioSource = _audioSource,
+                audioClip = clip,
+            };
 
             bgAudio.playbackRoutine = StartCoroutine(BGAudioRoutine(bgAudio));
 
@@ -142,20 +155,24 @@ namespace Fourzy._Updates.Audio
         /// </summary>
         /// <param name="type">Audio type</param>
         /// <returns></returns>
-        public AudioClip GetAudioClip(AudioTypes type)
+        public AudioClip GetAudioClip(string type)
         {
-            foreach (AudiosIDPair pair in audioData.data.list)
+            foreach (AudiosIDPair pair in audioData.data)
+            {
                 if (pair.type == type)
-                    return pair.clips[UnityEngine.Random.Range(0, pair.clips.Length)];
+                {
+                    return pair.clips[Random.Range(0, pair.clips.Length)];
+                }
+            }
 
             return null;
         }
 
-        public bool IsBGAudioPlaying(AudioTypes type) => currentlyPlayingBG.Find(audio => audio.type == type) != null;
+        public bool IsBGAudioPlaying(string type) => currentlyPlayingBG.Find(audio => audio.type == type) != null;
 
         public bool IsBGAudioPlaying(BGAudio audio) => currentlyPlayingBG.Contains(audio);
 
-        public BGAudio PlayBGAudio(AudioTypes type, bool repeat, float volume, float fadeInTime)
+        public BGAudio PlayBGAudio(string type, bool repeat, float volume, float fadeInTime)
         {
             AudioClip clip = GetAudioClip(type);
 
@@ -174,12 +191,20 @@ namespace Fourzy._Updates.Audio
 
             volumeTween.PlayForward(true);
 
-            BGAudio bgAudio = new BGAudio() { type = type, audioSource = audioSource, volumeTween = volumeTween, audioClip = clip, };
+            BGAudio bgAudio = new BGAudio()
+            {
+                type = type,
+                audioSource = audioSource,
+                volumeTween = volumeTween,
+                audioClip = clip,
+            };
 
             audioSource.Play();
 
             if (!repeat)
+            {
                 bgAudio.playbackRoutine = StartCoroutine(BGAudioRoutine(bgAudio));
+            }
 
             currentlyPlayingBG.Add(bgAudio);
 
@@ -188,23 +213,26 @@ namespace Fourzy._Updates.Audio
 
         public void StopBGAudio(BGAudio bgAudio, float fadeOutTime)
         {
-            if (!currentlyPlayingBG.Contains(bgAudio) || !this)
-                return;
+            if (!currentlyPlayingBG.Contains(bgAudio) || !this) return;
 
             bgAudio.volumeTween.playbackTime = fadeOutTime;
 
             if (bgAudio.playbackRoutine != null)
+            {
                 StopCoroutine(bgAudio.playbackRoutine);
+            }
 
             StartCoroutine(BGAudioFadeOutRoutine(bgAudio));
         }
 
-        public void StopBGAudio(AudioTypes type, float fadeOutTime)
+        public void StopBGAudio(string type, float fadeOutTime)
         {
             BGAudio bgAudio = currentlyPlayingBG.Find(_bgAudio => _bgAudio.type == type);
 
             if (bgAudio != null)
+            {
                 StopBGAudio(bgAudio, fadeOutTime);
+            }
         }
 
         private IEnumerator BGAudioRoutine(BGAudio bgAudio)
@@ -232,10 +260,12 @@ namespace Fourzy._Updates.Audio
 
         private void RemoveBGAudio(BGAudio bgAudio)
         {
-            if (!currentlyPlayingBG.Contains(bgAudio))
-                return;
+            if (!currentlyPlayingBG.Contains(bgAudio)) return;
 
-            if (bgAudio.volumeTween) Destroy(bgAudio.volumeTween);
+            if (bgAudio.volumeTween)
+            {
+                Destroy(bgAudio.volumeTween);
+            }
             Destroy(bgAudio.audioSource);
 
             currentlyPlayingBG.Remove(bgAudio);
@@ -243,7 +273,7 @@ namespace Fourzy._Updates.Audio
 
         public class BGAudio
         {
-            public AudioTypes type;
+            public string type;
 
             public AudioSource audioSource;
             public AudioClip audioClip;

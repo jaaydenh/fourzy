@@ -23,7 +23,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
         public GameObject prevButton;
         public Area filterByArea = Area.NONE;
 
-        private List<GameBoardDefinition> allBoards;
         private List<MiniGameboardWidget> gameboardWidgets;
         private List<MiniGameboardWidget> areaBoards;
 
@@ -60,7 +59,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             boardsPerPage = cols * rows;
 
             areaBoards = new List<MiniGameboardWidget>();
-            allBoards = GameContentManager.Instance.passAndPlayGameboards;
             gameboardWidgets = new List<MiniGameboardWidget>();
 
             CreateWidgets();
@@ -113,38 +111,55 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void CreateWidgets()
         {
             //clear old
-            foreach (MiniGameboardWidget widget in gameboardWidgets) Destroy(widget.gameObject);
+            foreach (MiniGameboardWidget widget in gameboardWidgets)
+            {
+                Destroy(widget.gameObject);
+            }
             gameboardWidgets.Clear();
             areaBoards.Clear();
 
             //add random
             gameboardWidgets.Add(Instantiate(miniGameboardPrefab, widgetsParent).SetOnClick(OnMinigameboardClick));
 
-            foreach (GameBoardDefinition boardDefinition in allBoards)
+            foreach (GameBoardDefinition boardDefinition in GameContentManager.Instance.passAndPlayBoards)
+            {
                 gameboardWidgets.Add(
                     Instantiate(miniGameboardPrefab, widgetsParent)
                         .QuickLoadBoard(boardDefinition, false)
                         .SetOnClick(OnMinigameboardClick));
+            }
 
-            foreach (MiniGameboardWidget widget in gameboardWidgets) widget.SetActive(false);
+            foreach (MiniGameboardWidget widget in gameboardWidgets)
+            {
+                widget.SetActive(false);
+            }
         }
 
         private void SetPage(int page)
         {
             //disable prev
-            if (currentPage > -1) HideBoards();
+            if (currentPage > -1)
+            {
+                HideBoards();
+            }
 
             //enable next
             int startIndex = page * boardsPerPage;
             int to = Mathf.Min(startIndex + boardsPerPage, Boards.Count);
-            for (int widgetIndex = startIndex; widgetIndex < to; widgetIndex++) Boards[widgetIndex].SetActive(true);
+            for (int widgetIndex = startIndex; widgetIndex < to; widgetIndex++)
+            {
+                Boards[widgetIndex].SetActive(true);
+            }
 
             currentPage = page;
         }
 
         private void OnMinigameboardClick(MiniGameboardWidget miniGameboard)
         {
-            if (current) current.Deselect(.25f);
+            if (current)
+            {
+                current.Deselect(.25f);
+            }
 
             onBoardSelected?.Invoke(miniGameboard.data);
             current = miniGameboard;
@@ -156,7 +171,10 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         private void HideBoards()
         {
-            foreach (MiniGameboardWidget widget in gameboardWidgets) widget.SetActive(false);
+            foreach (MiniGameboardWidget widget in gameboardWidgets)
+            {
+                widget.SetActive(false);
+            }
         }
     }
 }

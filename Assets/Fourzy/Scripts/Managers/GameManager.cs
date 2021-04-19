@@ -630,21 +630,21 @@ namespace Fourzy
 
             //Amplitude.Instance.setUserProperty("totalSpent", UserManager.Instance.totalSpentUSD);
 
-            if (product.definition.id.Contains("hints"))
-            {
-                UserManager.Instance.hints += _data.quantity;
+            //if (product.definition.id.Contains("hints"))
+            //{
+            //    UserManager.Instance.hints += _data.quantity;
 
-                //analytics
-                if (activeGame != null)
-                {
-                    AnalyticsManager.Instance.LogGame(
-                        AnalyticsManager.AnalyticsEvents.hintPurchase,
-                        activeGame,
-                        AnalyticsManager.AnalyticsProvider.ALL,
-                        new KeyValuePair<string, object>(AnalyticsManager.HINT_STORE_ITEMS_KEY, StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)),
-                        new KeyValuePair<string, object>(AnalyticsManager.STORE_ITEM_KEY, _data.id));
-                }
-            }
+            //    //analytics
+            //    if (activeGame != null)
+            //    {
+            //        AnalyticsManager.Instance.LogGame(
+            //            AnalyticsManager.AnalyticsEvents.hintPurchase,
+            //            activeGame,
+            //            AnalyticsManager.AnalyticsProvider.ALL,
+            //            new KeyValuePair<string, object>(AnalyticsManager.HINT_STORE_ITEMS_KEY, StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)),
+            //            new KeyValuePair<string, object>(AnalyticsManager.STORE_ITEM_KEY, _data.id));
+            //    }
+            //}
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureReason reason)
@@ -827,7 +827,7 @@ namespace Fourzy
                 case Constants.GAMEPLAY_SCENE_NAME:
                     MenuController.SetState("MainMenuCanvas", false);
 
-                    AudioHolder.instance.StopBGAudio(AudioTypes.BG_MAIN_MENU, .5f);
+                    AudioHolder.instance.StopBGAudio("bg_main_menu", .5f);
                     SceneManager.SetActiveScene(scene);
 
                     break;
@@ -848,7 +848,7 @@ namespace Fourzy
                 case Constants.GAMEPLAY_SCENE_NAME:
                     MenuController.SetState("MainMenuCanvas", true);
 
-                    AudioHolder.instance.PlayBGAudio(AudioTypes.BG_MAIN_MENU, true, .75f, 3f);
+                    AudioHolder.instance.PlayBGAudio("bg_main_menu", true, .75f, 3f);
 
                     //change gamepad mode
                     StandaloneInputModuleExtended.GamepadFilter = StandaloneInputModuleExtended.GamepadControlFilter.ANY_GAMEPAD;

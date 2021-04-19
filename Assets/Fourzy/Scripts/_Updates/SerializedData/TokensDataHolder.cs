@@ -3,7 +3,7 @@
 using Fourzy._Updates.Mechanics.Board;
 using Fourzy._Updates.Tools;
 using FourzyGameModel.Model;
-using StackableDecorator;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,8 @@ namespace Fourzy._Updates.Serialized
     public class TokensDataHolder : ScriptableObject
     {
         public Sprite missingTokenGraphics;
-        [List]
-        public TokenDataList tokens;
+        [ListDrawerSettings(NumberOfItemsPerPage = 16, ListElementLabelName = "tokenType")]
+        public List<TokenData> tokens;
 
         public TokenView GetToken(TokenType tokenType, Area theme)
         {
@@ -24,11 +24,11 @@ namespace Fourzy._Updates.Serialized
 
             if (data == null)
             {
-                return tokens.list[0].themesTokens.list[0].tokenPrefab;
+                return tokens[0].themesTokens[0].tokenPrefab;
             }
 
             ThemeTokenPrefabPair prefabData = 
-                data.themesTokens.list.Find(_prefabData => Tools.Utils.IsSet(_prefabData.theme, theme));
+                data.themesTokens.Find(_prefabData => Tools.Utils.IsSet(_prefabData.theme, theme));
 
             if (prefabData != null)
             {
@@ -36,22 +36,29 @@ namespace Fourzy._Updates.Serialized
             }
             else
             {
-                return data.themesTokens.list[0].tokenPrefab;
+                return data.themesTokens[0].tokenPrefab;
             }
         }
 
         public TokenData GetTokenData(TokenType tokenType) => 
-            tokens.list.Find(_data => _data.tokenType == tokenType);
+            tokens.Find(_data => _data.tokenType == tokenType);
+
+        public TokenData GetTokenData(string tokenType)
+        {
+            TokenType _token = (TokenType)Enum.Parse(typeof(TokenType), tokenType);
+
+            return GetTokenData(_token);
+        }
 
         public TokenData GetTokenData(SpellId spellID) => 
-            tokens.list.Find(_data => _data.isSpell && _data.spellID == spellID);
+            tokens.Find(_data => _data.isSpell && _data.spellID == spellID);
 
         public Dictionary<TokenType, Sprite> GetTokensSprites()
         {
             Dictionary<TokenType, Sprite> tokensSprites = new Dictionary<TokenType, Sprite>();
             tokensSprites.Add(TokenType.NONE, missingTokenGraphics);
 
-            foreach (TokenData tokenData in tokens.list)
+            foreach (TokenData tokenData in tokens)
             {
                 tokensSprites.Add(tokenData.tokenType, tokenData.GetTokenSprite());
             }
@@ -76,23 +83,13 @@ namespace Fourzy._Updates.Serialized
 
         public void ResetTokenInstructions()
         {
-            tokens.list.ForEach(token =>
+            tokens.ForEach(token =>
                 PlayerPrefsWrapper.SetInstructionPopupDisplayed((int)token.tokenType, false));
-        }
-
-        [Serializable]
-        public class TokenDataList
-        {
-            [StackableField]
-            public List<TokenData> list;
         }
 
         [Serializable]
         public class TokenData
         {
-            [HideInInspector]
-            public string elementName;
-
             public TokenType tokenType;
             public Sprite tokenIcon;
             public bool enabled = true;
@@ -100,34 +97,28 @@ namespace Fourzy._Updates.Serialized
             /// Just for some UI features
             /// </summary>
             public bool isSpell = false;
-            [ShowIf("#ShowSpellData")]
-            [StackableField]
+            [ShowIf("@enabled && isSpell")]
             public SpellId spellID;
 
-            [ShowIf("#ShowOther")]
-            [StackableField]
+            [ShowIf("enabled")]
             public string description;
-            [ShowIf("#ShowOther")]
-            [StackableField]
-            public bool showBackgroundTile;
-            [ShowIf("#ShowColor")]
-            [StackableField]
+            [ShowIf("enabled")]
+            public bool showBackground;
+            [ShowIf("@enabled && showBackground")]
             public Color backgroundTileColor;
-            [ShowIf("#ShowOther")]
-            [StackableField]
+            [ShowIf("enabled")]
             public string gameboardInstructionID;
-
-            [List]
-            [ShowIf("#ShowOther")]
-            [StackableField]
-            public ThemeTokensList themesTokens;
+            [ShowIf("enabled")]
+            public List<ThemeTokenPrefabPair> themesTokens;
 
             public string name
             {
                 get
                 {
-                    if (themesTokens.list.Count > 0 && themesTokens.list[0].tokenPrefab)
-                        return themesTokens.list[0].tokenPrefab.name;
+                    if (themesTokens.Count > 0 && themesTokens[0].tokenPrefab)
+                    {
+                        return themesTokens[0].tokenPrefab.name;
+                    }
 
                     return "token_name_default";
                 }
@@ -155,7 +146,7 @@ namespace Fourzy._Updates.Serialized
 
                 foreach (Enum value in Enum.GetValues(typeof(Area)))
                 {
-                    foreach (ThemeTokenPrefabPair prefabData in themesTokens.list)
+                    foreach (ThemeTokenPrefabPair prefabData in themesTokens)
                     {
                         if (prefabData.theme.HasFlag(value) && themesData.IsAreaEnabled((Area)value))
                         {
@@ -175,7 +166,7 @@ namespace Fourzy._Updates.Serialized
                 if (tokenIcon == null)
                 {
                     SpriteRenderer tokenSpriteRenderer =
-                        themesTokens.list[0].tokenPrefab.body.GetComponent<SpriteRenderer>();
+                        themesTokens[0].tokenPrefab.body.GetComponent<SpriteRenderer>();
 
                     if (tokenSpriteRenderer)
                     {
@@ -189,36 +180,12 @@ namespace Fourzy._Updates.Serialized
 
                 return null;
             }
-
-            private bool ShowOther()
-            {
-                elementName = tokenType.ToString() + (!enabled ? ", disabled" : "");
-
-                return enabled;
-            }
-
-            private bool ShowColor()
-            {
-                return ShowOther() && showBackgroundTile;
-            }
-
-            public bool ShowSpellData()
-            {
-                return ShowOther() && isSpell;
-            }
-        }
-
-        [Serializable]
-        public class ThemeTokensList
-        {
-            [StackableField]
-            public List<ThemeTokenPrefabPair> list;
         }
 
         [Serializable]
         public class ThemeTokenPrefabPair
         {
-            [EnumMaskPopup]
+            [StackableDecorator.EnumMaskPopup]
             public Area theme;
             public TokenView tokenPrefab;
         }

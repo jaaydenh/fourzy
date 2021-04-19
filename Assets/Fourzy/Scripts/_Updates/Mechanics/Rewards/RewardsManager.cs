@@ -54,7 +54,7 @@ namespace Fourzy._Updates.Mechanics.Rewards
                 rewards.Add(new GamePieceReward(
                     UnityEngine.Random.Range(10, 20), 
                     RewardType.GAME_PIECE, 
-                    GameContentManager.Instance.currentArea.gamepieces.Random().pieceData.ID));
+                    GameContentManager.Instance.currentArea.gamepieces.Random().pieceData.Id));
             }
 
             return rewards;
@@ -94,7 +94,9 @@ namespace Fourzy._Updates.Mechanics.Rewards
             UserManager.Instance.rarePortalPoints += rewards.Where(reward => reward.rewardType == RewardType.RARE_PORTAL_POINTS).Sum(reward => reward.quantity);
             UserManager.Instance.coins += rewards.Where(reward => reward.rewardType == RewardType.COINS).Sum(reward => reward.quantity);
             UserManager.Instance.tickets += rewards.Where(reward => reward.rewardType == RewardType.TICKETS).Sum(reward => reward.quantity);
-            UserManager.Instance.hints += rewards.Where(reward => reward.rewardType == RewardType.HINTS).Sum(reward => reward.quantity);
+            UserManager.AddHints(rewards
+                .Where(reward => reward.rewardType == RewardType.HINTS)
+                .Sum(reward => reward.quantity));
             UserManager.Instance.gems += rewards.Where(reward => reward.rewardType == RewardType.GEMS).Sum(reward => reward.quantity);
 
             //add gamepieces

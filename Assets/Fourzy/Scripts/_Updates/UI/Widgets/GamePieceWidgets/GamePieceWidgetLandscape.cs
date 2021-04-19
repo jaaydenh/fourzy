@@ -40,13 +40,13 @@ namespace Fourzy._Updates.UI.Widgets
         {
             if (data != null)
             {
-                if (gamePiece && gamePiece.pieceData.ID != data.ID)
+                if (gamePiece && gamePiece.pieceData.Id != data.Id)
                 {
                     Destroy(gamePiece.gameObject);
-                    gamePiece = AddPiece(data.ID);
+                    gamePiece = AddPiece(data.Id);
                 }
                 else if (!gamePiece)
-                    gamePiece = AddPiece(data.ID);
+                    gamePiece = AddPiece(data.Id);
 
                 random.SetActive(false);
             }
@@ -164,7 +164,7 @@ namespace Fourzy._Updates.UI.Widgets
 
         private GamePieceView AddPiece(string id)
         {
-            GamePieceView _gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePiecePrefabData(id).player1Prefab, gamePieceParent);
+            GamePieceView _gamePiece = Instantiate(GameContentManager.Instance.piecesDataHolder.GetGamePieceData(id).player1Prefab, gamePieceParent);
 
             _gamePiece.transform.localPosition = Vector3.zero;
             _gamePiece.StartBlinking();

@@ -36,9 +36,9 @@ namespace Fourzy._Updates.UI.Menu.Screens
             Toggle();
         }
 
-        public void AddHints() => UserManager.Instance.hints += 5;
+        public void AddHints() => UserManager.AddHints(5);
 
-        public void RemoveHints() => UserManager.Instance.hints -= 5;
+        public void RemoveHints() => UserManager.AddHints(-5);
 
         public void AddPortalPoints() => UserManager.Instance.portalPoints += 110;
 

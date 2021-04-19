@@ -1,9 +1,10 @@
 ﻿//@vadym udod
 
+using Fourzy._Updates.Mechanics._GamePiece;
+using FourzyGameModel.Model;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
-using StackableDecorator;
-using FourzyGameModel.Model;
 
 namespace Fourzy
 {
@@ -12,36 +13,36 @@ namespace Fourzy
     {
         public static System.Action<GamePieceData> onUpgrade;
 
-        public string ID;
         public string name;
+        public GamePieceView player1Prefab;
+        public GamePieceView player2Prefab;
+        public string Id;
         public bool enabled;
-        public int rarity = 30;
         public int startingMagic = 100;
-        [SerializeField]
-        private List<SpellId> spells;
-        public Color outlineColor = Color.blue;
-        public Color borderColor = Color.green;
         public int piecesToUnlock = 40;
-        public Sprite profilePicture;
-        public Vector2 profilePictureOffset;
-        [List]
-        public ProgressionCollection piecesProgression;
 
+        [InfoBox("How many pieces unlocked by default")]
         public int pieces = 0;
 
-        [System.NonSerialized]
-        public bool foldout = false;
+        [BoxGroup("Misc data")]
+        public Sprite profilePicture;
+        [BoxGroup("Misc data")]
+        public Vector2 profilePictureOffset;
+        [BoxGroup("Misc data")]
+        public Color outlineColor = Color.blue;
+        [BoxGroup("Misc data")]
+        public Color borderColor = Color.green;
 
         public int Pieces
         {
-            get => PlayerPrefsWrapper.GetGamePiecePieces(ID);
-            set => PlayerPrefsWrapper.GamePieceUpdatePiecesCount(ID, value);
+            get => PlayerPrefsWrapper.GetGamePiecePieces(Id);
+            set => PlayerPrefsWrapper.GamePieceUpdatePiecesCount(Id, value);
         }
 
         public int Champions
         {
-            get => PlayerPrefsWrapper.GetGamePieceChampions(ID);
-            set => PlayerPrefsWrapper.GamePieceUpdateChampionsCount(ID, value);
+            get => PlayerPrefsWrapper.GetGamePieceChampions(Id);
+            set => PlayerPrefsWrapper.GamePieceUpdateChampionsCount(Id, value);
         }
 
         /// <summary>
@@ -65,22 +66,22 @@ namespace Fourzy
             get
             {
                 int starsCount = 0;
-                int piecesCount = Pieces;
+                //int piecesCount = Pieces;
 
-                if (piecesCount < piecesToUnlock) return 0;
+                //if (piecesCount < piecesToUnlock) return 0;
 
-                for (int count = 0; count < 5; count++)
-                    if (count < piecesProgression.list.Count)
-                    {
-                        if (piecesProgression.list[count] > piecesCount)
-                        {
-                            if (count > 0) starsCount = count;
+                //for (int count = 0; count < 5; count++)
+                //    if (count < piecesProgression.list.Count)
+                //    {
+                //        if (piecesProgression.list[count] > piecesCount)
+                //        {
+                //            if (count > 0) starsCount = count;
 
-                            break;
-                        }
-                    }
-                    else
-                        return count;
+                //            break;
+                //        }
+                //    }
+                //    else
+                //        return count;
 
                 return starsCount;
             }
@@ -90,10 +91,12 @@ namespace Fourzy
         {
             get
             {
-                if (Pieces < piecesToUnlock)
-                    return piecesToUnlock;
-                else
-                    return piecesProgression.list[Champions];
+                //if (Pieces < piecesToUnlock)
+                //    return piecesToUnlock;
+                //else
+                //    return piecesProgression.list[Champions];
+
+                return 80;
             }
         }
 
@@ -104,11 +107,17 @@ namespace Fourzy
                 int piecesCount = Pieces;
 
                 if (piecesCount == 0)
+                {
                     return GamePieceState.NotFound;
+                }
                 else if (piecesCount < piecesToUnlock)
+                {
                     return GamePieceState.FoundAndLocked;
+                }
                 else
+                {
                     return GamePieceState.FoundAndUnlocked;
+                }
             }
         }
 
@@ -127,8 +136,10 @@ namespace Fourzy
 
         public void Initialize()
         {
-            if (!PlayerPrefsWrapper.HaveGamePieceRecord(ID))
+            //set default number of pieces if value in player prefs not set
+            if (!PlayerPrefsWrapper.HaveGamePieceRecord(Id))
             {
+                //this will record it into player prefs
                 Pieces = pieces;
             }
         }

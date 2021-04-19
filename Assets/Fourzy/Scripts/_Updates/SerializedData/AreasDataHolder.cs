@@ -14,7 +14,7 @@ namespace Fourzy._Updates.Serialized
     [CreateAssetMenu(fileName = "DefaultAreasDataHolder", menuName = "Create Areas Data Holder")]
     public class AreasDataHolder : ScriptableObject
     {
-        [ListDrawerSettings(NumberOfItemsPerPage = 2, ListElementLabelName = "name")]
+        [ListDrawerSettings(NumberOfItemsPerPage = 10, ListElementLabelName = "name")]
         public List<GameArea> areas;
 
         public GameArea currentAreaData
@@ -84,7 +84,7 @@ namespace Fourzy._Updates.Serialized
             [ShowIf("enabled")]
             public Area areaID;
             [ShowIf("enabled")]
-            public AudioTypes bgAudio;
+            public string bgAudio;
             [ShowIf("enabled"), PreviewField(70)]
             public Sprite _16X9;
             [ShowIf("enabled"), PreviewField(70)]
