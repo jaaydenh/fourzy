@@ -45,7 +45,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
         public void SelectGamepiece()
         {
-            UserManager.Instance.UpdateSelectedGamePiece(data.Id);
+            UserManager.Instance.UpdateSelectedGamePiece(data.ID);
 
             //close screen
             menuController.CloseCurrentScreen();
@@ -54,14 +54,20 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private void CheckUpdate()
         {
             if (data.CanUpgrade)
+            {
                 UpdateAcceptButton("Upgrade");
+            }
             else
+            {
                 UpdateAcceptButton("");
+            }
         }
 
         private void CheckSelected()
         {
-            selectButton.SetActive(UserManager.Instance.gamePieceID != data.Id && data.State == GamePieceState.FoundAndUnlocked);
+            selectButton.SetActive(
+                UserManager.Instance.gamePieceID != data.ID &&
+                data.State == GamePieceState.FoundAndUnlocked);
         }
     }
 }

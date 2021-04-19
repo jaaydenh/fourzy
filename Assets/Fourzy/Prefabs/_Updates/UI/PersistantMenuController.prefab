@@ -146,6 +146,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -398,6 +400,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -815,6 +819,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -984,6 +990,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -1214,6 +1222,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -1492,6 +1502,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -2260,6 +2272,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -2431,6 +2445,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -22676,6 +22692,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -22972,6 +22990,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -23218,6 +23238,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -23389,6 +23411,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -23807,6 +23831,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -25058,6 +25084,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -25446,6 +25474,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -42210,6 +42240,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -48801,6 +48833,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -53924,6 +53958,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -58838,6 +58874,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -59248,8 +59286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: PLACEMENT_STYLE
-      type: 9
+    - type: 9
       targetText: '{0}'
       updateOnStart: 0
       events:
@@ -59887,6 +59924,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -60088,6 +60127,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -60550,6 +60591,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -60721,6 +60764,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -61023,6 +61068,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -61435,6 +61482,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -62206,6 +62255,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -64286,7 +64337,7 @@ PrefabInstance:
     - target: {fileID: 2116881445856535446, guid: e07880b1876696a4e951bd640a19cd40,
         type: 3}
       propertyPath: events.persistentCalls.calls.Array.data[0].isCallEnabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3200973717626060577, guid: e07880b1876696a4e951bd640a19cd40,
         type: 3}
