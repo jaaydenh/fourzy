@@ -552,6 +552,10 @@
       "value": "Presiona para abrir el mapa de progresión"
     },
     {
+      "key": "tap_to_play_first_game",
+      "value": "Tap to start your first game"
+    },
+    {
       "key": "tap_to_place",
       "value": "Disliza para mover tu Fourzy"
     },

@@ -541,6 +541,10 @@
       "value": "Tap to start the first adventure"
     },
     {
+      "key": "tap_to_play_first_game",
+      "value": "Tap to start your first game"
+    },
+    {
       "key": "tap_to_place",
       "value": "Tap to move\nyour piece"
     },
