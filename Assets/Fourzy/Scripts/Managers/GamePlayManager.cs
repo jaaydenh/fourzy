@@ -716,6 +716,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (UserManager.Instance.hints <= 0)
             {
+                //currently unavailable
+                menuController
+                    .GetOrAddScreen<PromptScreen>()
+                    .Prompt(
+                        LocalizationManager.Value("not_available"),
+                        LocalizationManager.Value("not_supported_functionality"),
+                        LocalizationManager.Value("back"),
+                        "")
+                    .CloseOnAccept();
                 //PersistantMenuController.Instance
                 //    .GetOrAddScreen<StorePromptScreen>()
                 //    .Prompt(StorePromptScreen.StoreItemType.HINTS);

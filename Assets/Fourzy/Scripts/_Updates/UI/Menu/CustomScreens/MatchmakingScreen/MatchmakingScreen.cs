@@ -149,7 +149,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             switch (state)
             {
                 case MatchmakingScreenState.REALTIME:
-                    if (!FourzyPhotonManager.ConnectedAndReady && NetworkManager.Status != NetStatus.Connected)
+                    if (!FourzyPhotonManager.ConnectedAndReady && !GameManager.NetworkAccess)
                     {
                         ReadyToClose();
                         timerLabel.text = LocalizationManager.Value("no_connection");
