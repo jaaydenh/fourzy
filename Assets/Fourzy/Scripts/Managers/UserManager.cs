@@ -20,6 +20,7 @@ namespace Fourzy
         public static Action<string> onDisplayNameChangeFailed;
 
         public static Action<CurrencyType> onCurrencyUpdate;
+        public static Action<int, string> onHintsUpdate;
         public static Action<string> OnUpdateUserGamePieceID;
         public static Action<int> onRatingUpdate;
         public static Action<int> onWinsUpdate;
@@ -55,7 +56,7 @@ namespace Fourzy
                 PlayFabClientAPI.UpdateAvatarUrl(
                     new UpdateAvatarUrlRequest() { ImageUrl = value, },
                     OnAvatarUrlUpdate,
-                    OnPlayFabError);
+                    OnChangeNamePlayfabError);
                 Amplitude.Instance.setUserProperty("gamePieceId", value);
             }
         }
@@ -135,13 +136,6 @@ namespace Fourzy
         public int hints
         {
             get => PlayerPrefsWrapper.GetHints();
-
-            set
-            {
-                PlayerPrefsWrapper.SetHints(Mathf.Clamp(value, 0, int.MaxValue));
-
-                onCurrencyUpdate?.Invoke(CurrencyType.HINTS);
-            }
         }
 
         public int lastCachedRating
@@ -362,6 +356,39 @@ namespace Fourzy
             }
         }
 
+        public static void AddHints(int number, string ticket = "")
+        {
+            if (number > 0)
+            {
+                PlayFabClientAPI.AddUserVirtualCurrency(
+                    new AddUserVirtualCurrencyRequest()
+                    {
+                        VirtualCurrency = Constants.HINTS_CURRENCY_KEY,
+                        Amount = number
+                    },
+                    OnHintsAdded,
+                    ModifyCurrencyError,
+                    ticket);
+            }
+            else if (number < 0)
+            {
+                PlayFabClientAPI.SubtractUserVirtualCurrency(new SubtractUserVirtualCurrencyRequest()
+                {
+                    VirtualCurrency = Constants.HINTS_CURRENCY_KEY,
+                    Amount = -number,
+                },
+                OnHintsAdded,
+                ModifyCurrencyError,
+                ticket);
+            }
+        }
+
+        public static void OnHintsValueUpdated(int value, string token = "")
+        {
+            PlayerPrefsWrapper.SetHints(value);
+            onHintsUpdate?.Invoke(value, token);
+        }
+
         public void SetDisplayName(string value, bool updatePlayFabDisplayName = true)
         {
             if (PhotonNetwork.IsConnected)
@@ -383,7 +410,7 @@ namespace Fourzy
                         DisplayName = value,
                     },
                     ChangeDisplayNameResult,
-                    OnPlayFabError);
+                    OnChangeNamePlayfabError);
             }
             else
             {
@@ -404,7 +431,7 @@ namespace Fourzy
                 AnalyticsManager.AnalyticsProvider.ALL,
                 new KeyValuePair<string, object>(AnalyticsManager.GAMEPIECE_SELECT_KEY, _gamePieceID),
                 new KeyValuePair<string, object>(
-                    AnalyticsManager.GAMEPIECE_NAME_KEY, 
+                    AnalyticsManager.GAMEPIECE_NAME_KEY,
                     GameContentManager.Instance.piecesDataHolder.GetGamePieceData(_gamePieceID).name));
         }
 
@@ -503,7 +530,7 @@ namespace Fourzy
         {
         }
 
-        private void OnPlayFabError(PlayFabError error)
+        private void OnChangeNamePlayfabError(PlayFabError error)
         {
             if (settingRandomName)
             {
@@ -511,6 +538,27 @@ namespace Fourzy
             }
 
             onDisplayNameChangeFailed?.Invoke(error.ErrorMessage);
+            GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
+        }
+
+        private static void OnHintsAdded(ModifyUserVirtualCurrencyResult result)
+        {
+            switch (result.VirtualCurrency)
+            {
+                case Constants.HINTS_CURRENCY_KEY:
+                    OnHintsValueUpdated(result.Balance, result.CustomData.ToString());
+
+                    break;
+            }
+        }
+
+        private static void ModifyCurrencyError(PlayFabError error)
+        {
+            if (Application.isEditor || Debug.isDebugBuild)
+            {
+                Debug.LogError(error.ErrorMessage);
+            }
+
             GameManager.Instance.ReportPlayFabError(error.ErrorMessage);
         }
 

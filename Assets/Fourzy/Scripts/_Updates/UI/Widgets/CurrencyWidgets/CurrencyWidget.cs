@@ -2,6 +2,7 @@
 
 using Fourzy._Updates.UI.Helpers;
 using Fourzy._Updates.UI.Menu.Screens;
+using Sirenix.OdinInspector;
 using StackableDecorator;
 using System.Collections;
 using TMPro;
@@ -14,13 +15,14 @@ namespace Fourzy._Updates.UI.Widgets
         public const int MAX_VALUE = 99999;
 
         public bool updateOnStart = true;
+        [DisableInPlayMode]
         public CurrencyType type;
         [StackableField]
-        [ShowIf("#Check")]
+        [StackableDecorator.ShowIf("#Check")]
         public TMP_Text levelLabel;
         public TMP_Text valueLabel;
         [StackableField]
-        [ShowIf("#SliderCheck")]
+        [StackableDecorator.ShowIf("#SliderCheck")]
         public SliderExtended slider;
 
         private int toValue;
@@ -30,14 +32,39 @@ namespace Fourzy._Updates.UI.Widgets
 
         protected void Start()
         {
-            if (updateOnStart) SetTo(GameManager.ValueFromCurrencyType(type), false);
+            if (updateOnStart)
+            {
+                SetTo(GameManager.ValueFromCurrencyType(type), false);
+            }
 
-            UserManager.onCurrencyUpdate += OnCurrencyUpdate;
+            switch (type)
+            {
+                case CurrencyType.HINTS:
+                    UserManager.onHintsUpdate += OnHintsUpdate;
+
+                    break;
+
+                default:
+                    UserManager.onCurrencyUpdate += OnCurrencyUpdate;
+
+                    break;
+            }
         }
 
         protected void OnDestroy()
         {
-            UserManager.onCurrencyUpdate -= OnCurrencyUpdate;
+            switch (type)
+            {
+                case CurrencyType.HINTS:
+                    UserManager.onHintsUpdate -= OnHintsUpdate;
+
+                    break;
+
+                default:
+                    UserManager.onCurrencyUpdate -= OnCurrencyUpdate;
+
+                    break;
+            }
         }
 
         public override void _Update()
@@ -116,9 +143,13 @@ namespace Fourzy._Updates.UI.Widgets
                 case CurrencyType.TICKETS:
                 case CurrencyType.HINTS:
                     if (value > MAX_VALUE)
+                    {
                         valueLabel.text = $"{MAX_VALUE / 1000},{MAX_VALUE % 1000}+";
+                    }
                     else
+                    {
                         valueLabel.text = string.Format("{0:N0}", value);
+                    }
                     break;
 
                 case CurrencyType.PORTAL_POINTS:
@@ -141,7 +172,15 @@ namespace Fourzy._Updates.UI.Widgets
 
         private void OnCurrencyUpdate(CurrencyType type)
         {
-            if (visible && this.type == type) _Update();
+            if (visible && this.type == type)
+            {
+                _Update();
+            }
+        }
+
+        private void OnHintsUpdate(int amount, string token)
+        {
+            OnCurrencyUpdate(CurrencyType.HINTS);
         }
 
         private bool Check() => type == CurrencyType.XP;

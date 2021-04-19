@@ -135,7 +135,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     case 0:
                         if (game.LoseStreak == 2)
                         {
-                            UserManager.Instance.hints++;
+                            UserManager.AddHints(1);
+
                             PersistantMenuController.Instance
                                 .GetOrAddScreen<OnboardingScreen>()
                                 .OpenTutorial(HardcodedTutorials.GetByName("HintInstruction"));

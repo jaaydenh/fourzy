@@ -91,7 +91,7 @@ namespace Fourzy._Updates.UI.Widgets
             int reward = 1;
 
             PersistantOverlayScreen.instance.AnimateReward(true, RewardType.HINTS, reward, Vector2.one * .5f);
-            UserManager.Instance.hints += reward;
+            UserManager.AddHints(reward);
 
             PlayerPrefsWrapper.AddAdsWatched();
 

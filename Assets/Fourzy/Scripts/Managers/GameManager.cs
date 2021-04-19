@@ -630,21 +630,21 @@ namespace Fourzy
 
             //Amplitude.Instance.setUserProperty("totalSpent", UserManager.Instance.totalSpentUSD);
 
-            if (product.definition.id.Contains("hints"))
-            {
-                UserManager.Instance.hints += _data.quantity;
+            //if (product.definition.id.Contains("hints"))
+            //{
+            //    UserManager.Instance.hints += _data.quantity;
 
-                //analytics
-                if (activeGame != null)
-                {
-                    AnalyticsManager.Instance.LogGame(
-                        AnalyticsManager.AnalyticsEvents.hintPurchase,
-                        activeGame,
-                        AnalyticsManager.AnalyticsProvider.ALL,
-                        new KeyValuePair<string, object>(AnalyticsManager.HINT_STORE_ITEMS_KEY, StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)),
-                        new KeyValuePair<string, object>(AnalyticsManager.STORE_ITEM_KEY, _data.id));
-                }
-            }
+            //    //analytics
+            //    if (activeGame != null)
+            //    {
+            //        AnalyticsManager.Instance.LogGame(
+            //            AnalyticsManager.AnalyticsEvents.hintPurchase,
+            //            activeGame,
+            //            AnalyticsManager.AnalyticsProvider.ALL,
+            //            new KeyValuePair<string, object>(AnalyticsManager.HINT_STORE_ITEMS_KEY, StorePromptScreen.ProductsToString(StorePromptScreen.StoreItemType.HINTS)),
+            //            new KeyValuePair<string, object>(AnalyticsManager.STORE_ITEM_KEY, _data.id));
+            //    }
+            //}
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureReason reason)

@@ -551,6 +551,17 @@ namespace Fourzy
                         break;
                 }
             }
+
+            foreach (var currentcyData in inventoryRequestResult.VirtualCurrency)
+            {
+                switch (currentcyData.Key)
+                {
+                    case Constants.HINTS_CURRENCY_KEY:
+                        UserManager.OnHintsValueUpdated(currentcyData.Value);
+
+                        break;
+                }
+            }
         }
 
         private void OnPlayerProfile(GetPlayerProfileResult playerProfile)

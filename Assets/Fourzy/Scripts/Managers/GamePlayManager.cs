@@ -57,6 +57,7 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
         private GameState previousGameState;
         private int gauntletRechargedViaGems = 0;
         private int gauntletRechargedViaAds = 0;
+        private string hintRemovedToken;
 
         public BackgroundConfigurationData currentConfiguration { get; private set; }
         public GameboardView board { get; private set; }
@@ -109,6 +110,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             GameManager.ratingDataReceived += OnRatingDataAquired;
             LoginManager.OnDeviceLoginComplete += OnLogin;
 
+            UserManager.onHintsUpdate += OnHintUpdate;
+
             FourzyPhotonManager.onRoomPropertiesUpdate += OnRoomPropertiesUpdate;
             FourzyPhotonManager.onPlayerLeftRoom += OnPlayerLeftRoom;
             FourzyPhotonManager.onEvent += OnEventCall;
@@ -136,6 +139,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             GameManager.onNetworkAccess -= OnNetwork;
             GameManager.ratingDataReceived -= OnRatingDataAquired;
             LoginManager.OnDeviceLoginComplete -= OnLogin;
+
+            UserManager.onHintsUpdate -= OnHintUpdate;
 
             FourzyPhotonManager.onRoomPropertiesUpdate -= OnRoomPropertiesUpdate;
             FourzyPhotonManager.onPlayerLeftRoom -= OnPlayerLeftRoom;
@@ -731,9 +736,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                 return;
             }
 
-            UserManager.Instance.hints--;
-
-            StartRoutine("hintRoutine", PlayHintRoutine());
+            hintRemovedToken = Guid.NewGuid().ToString();
+            UserManager.AddHints(-1, hintRemovedToken);
         }
 
         public void PauseGame()
@@ -1522,6 +1526,14 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
             if (state)
             {
                 noNetworkOverlay.SetActive(false);
+            }
+        }
+
+        private void OnHintUpdate(int amount, string token)
+        {
+            if (token == hintRemovedToken)
+            {
+                StartRoutine("hintRoutine", PlayHintRoutine());
             }
         }
 
