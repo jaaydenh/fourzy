@@ -64,6 +64,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
                     AddAreaWidget(areaData.areaID);
                 }
             }
+
+            //load tokens
         }
 
         public override void Accept(bool force = false)
@@ -120,6 +122,15 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 SetAreaWidget(widget);
             }
+
+
+            void SetAreaWidget(PracticeScreenAreaSelectWidget widget)
+            {
+                currentAreaWidget = widget;
+                currentAreaWidget.Select();
+
+                PlayerPrefsWrapper.SetCurrentArea((int)widget.area);
+            }
         }
 
         protected PracticeScreenAreaSelectWidget AddAreaWidget(Area area)
@@ -129,14 +140,6 @@ namespace Fourzy._Updates.UI.Menu.Screens
             instance.button.onTap += data => SetArea(instance);
 
             return instance;
-        }
-
-        private void SetAreaWidget(PracticeScreenAreaSelectWidget widget)
-        {
-            currentAreaWidget = widget;
-            currentAreaWidget.Select();
-
-            PlayerPrefsWrapper.SetCurrentArea((int)widget.area);
         }
 
         private void UpdateCheckmarkButton()

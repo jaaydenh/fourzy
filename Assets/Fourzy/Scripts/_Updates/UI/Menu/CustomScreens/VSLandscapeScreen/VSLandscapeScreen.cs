@@ -171,6 +171,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 game._Type = GameType.PASSANDPLAY;
             }
+            game.UpdateFirstState();
 
             AnalyticsManager.Instance.LogEvent(
                 "PRACTICE_GAME_CREATED",
@@ -337,7 +338,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
             base.OnInitialized();
 
             gamePiecesRectTransform = gamepiecesParent.GetComponent<RectTransform>();
-            widgetPrefab = GameContentManager.GetPrefab<GamePieceWidgetLandscape>(GameContentManager.PrefabType.GAME_PIECE_LANDSCAPE);
+            widgetPrefab = GameContentManager.GetPrefab<GamePieceWidgetLandscape>("GAME_PIECE_LANDSCAPE");
             WidgetSize = widgetPrefab.GetComponent<RectTransform>().rect.size;
             selectedBoardWidgetButton = selectedBoardWidget.GetComponent<ButtonExtended>();
 
@@ -418,7 +419,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
         private GamePieceWidgetLandscape CreateGamepieceWidget(GamePieceData data)
         {
             GamePieceWidgetLandscape widget = GameContentManager.InstantiatePrefab<GamePieceWidgetLandscape>
-                (GameContentManager.PrefabType.GAME_PIECE_LANDSCAPE, gamePiecesRectTransform);
+                ("GAME_PIECE_LANDSCAPE", gamePiecesRectTransform);
 
             widget
                 .SetData(data)

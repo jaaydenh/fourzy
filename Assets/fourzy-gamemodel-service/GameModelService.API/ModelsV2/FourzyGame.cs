@@ -45,6 +45,7 @@ namespace FourzyGameModel.Model
         }
 
         //For 2 Player Games        
+        [ObsoleteAttribute("This constructor is obsolete. Use FourzyGameFactory instead.", false)]
         public FourzyGame(Player Player1, Player Player2, GameOptions Options = null, BoardGenerationPreferences Preferences = null)
         {
             if (Options == null) Options = new GameOptions();
@@ -63,6 +64,7 @@ namespace FourzyGameModel.Model
 
         // Select a Area and create a random board.
         // Active Player Id is set to -1 as the first player is not known when the game is created
+        [ObsoleteAttribute("This constructor is obsolete. Use FourzyGameFactory instead.", false)]
         public FourzyGame(Area Area, Player Player1, Player Player2, int FirstPlayerId = 1, GameOptions Options = null, BoardGenerationPreferences BoardPreferences = null)
         {
             if (Options == null) Options = new GameOptions();
@@ -158,6 +160,7 @@ namespace FourzyGameModel.Model
         }
 
         // Pass in a Board
+        [ObsoleteAttribute("This constructor is obsolete. Use FourzyGameFactory instead.", false)]
         public FourzyGame(GameBoard Board, Player Player1, Player Player2, int FirstPlayerId = 1, GameOptions Options = null)
         {
             if (Options == null) Options = new GameOptions();
@@ -172,6 +175,7 @@ namespace FourzyGameModel.Model
         }
 
         //Pass in a Board Definition.
+        [ObsoleteAttribute("This constructor is obsolete. Use FourzyGameFactory instead.", false)]
         public FourzyGame(GameBoardDefinition definition, Player Player1, Player Player2, int FirstPlayerId = 1, GameOptions Options = null)
         {
             this.State = new GameState(definition);
@@ -186,6 +190,7 @@ namespace FourzyGameModel.Model
 
 
         //Pass in a Json String.
+        [ObsoleteAttribute("This constructor is obsolete. Use FourzyGameFactory instead.", false)]
         public FourzyGame(string boardJson)
         {
             GameBoardDefinition gbd = JsonConvert.DeserializeObject<GameBoardDefinition>(boardJson);
@@ -199,8 +204,9 @@ namespace FourzyGameModel.Model
 
 
         //AI GAMES
-
         //Create a ai match with a random area board.
+
+        [ObsoleteAttribute("This constructor is obsolete. Use FourzyGameFactory instead.", false)]
         public FourzyGame(Area Area, AIProfile Profile, Player Player, int FirstPlayerId = 1, GameOptions Options = null)
         {
             if (Options == null) Options = new GameOptions();
@@ -218,6 +224,7 @@ namespace FourzyGameModel.Model
 
         }
 
+        [ObsoleteAttribute("This constructor is obsolete. Moving to pass in a board.", false)]
         public FourzyGame(GameBoardDefinition definition, AIProfile Profile, Player Player1, int FirstPlayerId = 1, Player AI = null)
         {
             this.State = new GameState(definition);
@@ -233,7 +240,7 @@ namespace FourzyGameModel.Model
         }
 
         //THE GAUNTLET
-
+        [ObsoleteAttribute("This constructor is obsolete. Use FourzyGameFactory instead.", false)]
         public FourzyGame(Player Human, int GauntletLevel, Area CurrentArea = Area.NONE, int DifficultModifier = -1, int membersCount = 999, GameOptions Options = null)
         {
             string SeedString = Guid.NewGuid().ToString();
@@ -251,6 +258,7 @@ namespace FourzyGameModel.Model
 
         }
 
+        [ObsoleteAttribute("This constructor is obsolete. Use FourzyGameFactory instead.", false)]
         //Create a boss match with a specific board.
         public FourzyGame(GameBoardDefinition definition, BossType Boss, Player Player, GameOptions Options = null)
         {
@@ -260,6 +268,8 @@ namespace FourzyGameModel.Model
             this.InitialState = new GameState(this.State);
 
         }
+
+        [ObsoleteAttribute("This constructor is obsolete. Use FourzyGameFactory instead.", false)]
 
         //Create a boss match in an selected Area.
         public FourzyGame(Area Area, BossType Boss, Player Player, GameOptions Options = null)

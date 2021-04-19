@@ -11,7 +11,7 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
         public override int MinComplexity { get { return 250; } }
         public override int MaxComplexity { get { return 900; } }
 
-        public BeginnerGardenRandomGenerator(string SeedString = "", GameOptions Options = null, BoardGenerationPreferences Preferences = null)
+        public BeginnerGardenRandomGenerator(GameOptions Options = null, BoardGenerationPreferences Preferences = null)
     {
             if (Options == null) Options = new GameOptions();
             this.Options = Options;
@@ -19,7 +19,7 @@ public class BeginnerGardenRandomGenerator : BoardGenerator
             if (Preferences == null) Preferences = new BoardGenerationPreferences();
             this.Preferences = Preferences;
 
-            this.SeedString = SeedString;
+            this.SeedString = Preferences.RecipeSeed;
             this.Recipes = new Dictionary<BoardRecipe, int>();
 
             //Easy

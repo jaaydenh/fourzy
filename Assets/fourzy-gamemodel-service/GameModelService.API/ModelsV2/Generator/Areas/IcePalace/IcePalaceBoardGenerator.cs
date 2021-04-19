@@ -14,7 +14,7 @@ namespace FourzyGameModel.Model
         public override int MinComplexity { get { return 450; } }
         public override int MaxComplexity { get { return 1650; } }
 
-        public IcePalaceRandomGenerator(string SeedString = "", GameOptions Options = null, BoardGenerationPreferences Preferences = null)
+        public IcePalaceRandomGenerator(GameOptions Options = null, BoardGenerationPreferences Preferences = null)
         {
             if (Options == null) Options = new GameOptions();
             this.Options = Options;
@@ -22,8 +22,8 @@ namespace FourzyGameModel.Model
             if (Preferences == null) Preferences = new BoardGenerationPreferences();
             this.Preferences = Preferences;
 
-            this.SeedString = SeedString;
-        
+            this.SeedString = Preferences.RecipeSeed;
+
             this.Recipes = new Dictionary<BoardRecipe, int>();
             this.Recipes.Add(ThroneRoomRecipe(), 10);
             this.Recipes.Add(IceRoomRecipe(), 10);

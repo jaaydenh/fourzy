@@ -9,11 +9,11 @@ using Fourzy._Updates._Tutorial;
 using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
 using FourzyGameModel.Model;
-using StackableDecorator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace Fourzy
 {
@@ -28,16 +28,16 @@ namespace Fourzy
         public PassAndPlayDataHolder passAndPlayDataHolder;
         public MiscBoardsDataHolder miscBoardsDataHolder;
         public MiscGameContentHolder miscGameDataHolder;
-        [List]
-        public PrefabsCollection typedPrefabs;
-        [List]
-        public ScreensCollection screens;
+        [ListDrawerSettings(NumberOfItemsPerPage = 6)]
+        public List<PrefabTypePair> typedPrefabs;
+        [ListDrawerSettings(NumberOfItemsPerPage = 6)]
+        public List<MenuScreen> screens;
 
         private Dictionary<string, ResourceItem> fastPuzzles = new Dictionary<string, ResourceItem>();
 
         public Dictionary<string, BasicPuzzlePack> externalPuzzlePacks { get; private set; }
 
-        public Dictionary<PrefabType, PrefabTypePair> typedPrefabsFastAccess { get; private set; }
+        public Dictionary<string, GameObject> typedPrefabsFastAccess { get; private set; }
 
         public List<ResourceItem> realtimeBotBoards { get; private set; }
 
@@ -71,20 +71,18 @@ namespace Fourzy
 
             if (InstanceExists) return;
 
-            typedPrefabsFastAccess = new Dictionary<PrefabType, PrefabTypePair>();
-            foreach (PrefabTypePair prefabTypePair in typedPrefabs.list)
+            typedPrefabsFastAccess = new Dictionary<string, GameObject>();
+            foreach (PrefabTypePair prefabTypePair in typedPrefabs)
             {
-                if (!typedPrefabsFastAccess.ContainsKey(prefabTypePair.prefabType))
+                if (!typedPrefabsFastAccess.ContainsKey(prefabTypePair.type))
                 {
-                    typedPrefabsFastAccess.Add(prefabTypePair.prefabType, prefabTypePair);
+                    typedPrefabsFastAccess.Add(prefabTypePair.type, prefabTypePair.prefab);
                 }
             }
 
             piecesDataHolder.Initialize();
             passAndPlayDataHolder.Initialize();
             miscBoardsDataHolder.Initialize();
-
-            //packsDataHolders.ForEach(packsData => packsData.Initialize());
 
             LoadAllFastPuzzles();
             LoadPuzzlePacks();
@@ -289,54 +287,30 @@ namespace Fourzy
             }
         }
 
-        public static GameObject GetPrefab(PrefabType type)
+        public static GameObject GetPrefab(string type)
         {
             if (!Instance.typedPrefabsFastAccess.ContainsKey(type))
                 return null;
 
-            return Instance.typedPrefabsFastAccess[type].prefab;
+            return Instance.typedPrefabsFastAccess[type];
         }
 
-        public static T GetPrefab<T>(PrefabType type) => 
+        public static T GetPrefab<T>(string type) => 
             GetPrefab(type).GetComponent<T>();
 
-        public static T InstantiatePrefab<T>(PrefabType type, Transform parent) where T : Component
+        public static T InstantiatePrefab<T>(string type, Transform parent) where T : Component
         {
             if (!Instance.typedPrefabsFastAccess.ContainsKey(type))
                 return null;
 
             //need this object to have component(T) specified
-            if (!Instance.typedPrefabsFastAccess[type].prefab.GetComponent<T>())
+            if (!Instance.typedPrefabsFastAccess[type].GetComponent<T>())
                 return null;
 
-            GameObject result = Instantiate(Instance.typedPrefabsFastAccess[type].prefab, parent);
+            GameObject result = Instantiate(Instance.typedPrefabsFastAccess[type], parent);
             result.transform.localScale = Vector3.one;
 
             return result.GetComponent<T>();
-        }
-
-        [Serializable]
-        public class ScreensCollection
-        {
-            public List<Screen> list;
-        }
-
-        [Serializable]
-        public class Screen
-        {
-            [HideInInspector]
-            public string _name;
-
-            [StackableField]
-            [ShowIf("#Check")]
-            public MenuScreen prefab;
-
-            public bool Check()
-            {
-                _name = prefab ? prefab.name : "No Prefab";
-
-                return true;
-            }
         }
 
         [Serializable]
@@ -348,48 +322,8 @@ namespace Fourzy
         [Serializable]
         public class PrefabTypePair
         {
-            [HideInInspector]
-            public string _name;
-
-            [StackableField]
-            [ShowIf("#Check")]
-            public PrefabType prefabType;
+            public string type;
             public GameObject prefab;
-
-            public bool Check()
-            {
-                _name = prefabType.ToString();
-
-                return true;
-            }
-        }
-
-        public enum PrefabType
-        {
-            NONE = 0,
-
-            GAME_PIECE_LANDSCAPE = 4,
-            GAME_PIECE_SMALL = 5,
-            MINI_GAME_BOARD = 7,
-            GAME_PIECE_MEDIUM = 8,
-            TOKEN_SMALL = 9,
-
-            #region Rewards
-            REWARDS_COIN = 10,
-            REWARDS_TICKET = 11,
-            REWARDS_GEM = 12,
-            REWARDS_GAME_PIECE = 13,
-            REWARDS_PORTAL_POINTS = 14,
-            REWARDS_RARE_PORTAL_POINTS = 15,
-            REWARDS_XP = 16,
-            REWARDS_PACK_COMPLETE = 17,
-            REWARDS_OPEN_PORTAL = 18,
-            REWARDS_OPEN_RARE_PORTAL = 19,
-            REWARDS_HINTS = 20,
-            #endregion
-
-            BOARD_HINT_BOX = 40,
-            PUZZLE_PACK_WIDGET = 41,
         }
     }
 }
