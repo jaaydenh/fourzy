@@ -29,7 +29,7 @@ namespace Fourzy._Updates.UI.Helpers
         [SerializeField]
         internal AdvancedEvent offState;
         [SerializeField]
-        internal AudioTypes playOnClick = AudioTypes.BUTTON_CLICK;
+        public string clickSfx = "button_click";
         [SerializeField]
         private bool changeMaterialOnState = true;
         [SerializeField, HideInPlayMode]
@@ -275,9 +275,9 @@ namespace Fourzy._Updates.UI.Helpers
 
             events.Invoke();
 
-            if (playOnClick != AudioTypes.NONE)
+            if (!string.IsNullOrEmpty(clickSfx))
             {
-                AudioHolder.instance.PlaySelfSfxOneShotTracked(playOnClick);
+                AudioHolder.instance.PlaySelfSfxOneShotTracked(clickSfx);
             }
 
             if (scaleOnClick && scaleTween)
