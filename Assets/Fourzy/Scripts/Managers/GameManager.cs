@@ -13,6 +13,7 @@ using Fourzy._Updates.UI.Camera3D;
 using Fourzy._Updates.UI.Menu;
 using Fourzy._Updates.UI.Menu.Screens;
 using FourzyGameModel.Model;
+using Hellmade.Net;
 using MoreMountains.NiceVibrations;
 using Newtonsoft.Json;
 using Photon.Pun;
@@ -65,7 +66,7 @@ namespace Fourzy
         public bool defaultGauntletState = true;
         public bool defaultPuzzlesState = true;
         public bool resetGameOnClose = true;
-        public bool botTutorialGame;
+        public BotGameType botGameType = BotGameType.NONE;
         public string customUserId = "";
         public float fallbackLatitude = 37.7833f;
         public float fallbackLongitude = 122.4167f;
@@ -195,7 +196,8 @@ namespace Fourzy
             FourzyPhotonManager.onEvent += OnEventCall;
             Application.logMessageReceived += HandleException;
 
-            NetworkManager.onStatusChanged += OnNetStatusChanged;
+            EazyNetChecker.OnConnectionStatusChanged += OnNetStatusChanged;
+            EazyNetChecker.OnCheckTimeout += OnNetStatusChanged;
             FourzyPhotonManager.onPlayerEnteredRoom += OnPlayerEntered;
             FourzyPhotonManager.onPlayerPpopertiesUpdate += OnPlayerPropertiesUpdate;
 
@@ -232,7 +234,9 @@ namespace Fourzy
 
             //PointerInputModuleExtended.noInput += OnNoInput;
 
-            NetworkManager.instance.StartChecking();
+            EazyNetChecker.CheckIntervalNormal = 5f;
+            EazyNetChecker.Timeout = 5f;
+            EazyNetChecker.StartConnectionCheck(false, true);
             placementStyle = (PlacementStyle)PlayerPrefsWrapper.GetPlacementStyle();
 
 #if !UNITY_IOS && !UNITY_ANDROID
@@ -665,7 +669,7 @@ namespace Fourzy
 
         public static void Vibrate() => Vibrate(HapticTypes.Success);
 
-        public static bool NetworkAccess => NetworkManager.Status == NetStatus.Connected;
+        public static bool NetworkAccess => EazyNetChecker.Status == NetStatus.Connected;
 
         public static void UpdateFastPuzzlesStat(int _value)
         {
@@ -893,8 +897,10 @@ namespace Fourzy
             }
         }
 
-        private void OnNetStatusChanged(NetStatus status) =>
-            onNetworkAccess?.Invoke(status == NetStatus.Connected);
+        private void OnNetStatusChanged()
+        {
+            onNetworkAccess?.Invoke(EazyNetChecker.Status == NetStatus.Connected);
+        }
 
         private void OnNoInput(KeyValuePair<string, float> noInputFilter)
         {
@@ -1006,6 +1012,14 @@ namespace Fourzy
             public GameBoardDefinition gameboard;
             [JsonIgnore]
             public TextAsset assetFile;
+        }
+
+        public enum BotGameType
+        {
+            NONE,
+            REGULAR,
+            FTUE_RATED,
+            FTUE_NOT_RATED,
         }
 
         public enum PassPlayCharactersType

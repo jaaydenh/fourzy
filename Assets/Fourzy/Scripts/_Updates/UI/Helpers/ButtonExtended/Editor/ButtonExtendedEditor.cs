@@ -16,6 +16,8 @@ namespace Fourzy._Updates.UI.Helpers
         private SerializedProperty buttonGraphicsProperty;
         private SerializedProperty changeMaterialOnStateProperty;
         private SerializedProperty scaleOnClickProperty;
+        private SerializedProperty internetAffectedProperty;
+        private SerializedProperty textMaterialProperty;
         private SerializedProperty labelsProperty;
         private SerializedProperty badgesProperty;
 
@@ -34,6 +36,8 @@ namespace Fourzy._Updates.UI.Helpers
             buttonGraphicsProperty = serializedObject.FindProperty("buttonGraphics");
             changeMaterialOnStateProperty = serializedObject.FindProperty("changeMaterialOnState");
             scaleOnClickProperty = serializedObject.FindProperty("scaleOnClick");
+            internetAffectedProperty = serializedObject.FindProperty("networkAffected");
+            textMaterialProperty = serializedObject.FindProperty("textMaterial");
             labelsProperty = serializedObject.FindProperty("labels");
             badgesProperty = serializedObject.FindProperty("badges");
 
@@ -51,6 +55,8 @@ namespace Fourzy._Updates.UI.Helpers
             EditorGUILayout.PropertyField(sfxProperty);
             EditorGUILayout.PropertyField(changeMaterialOnStateProperty);
             EditorGUILayout.PropertyField(scaleOnClickProperty);
+            EditorGUILayout.PropertyField(internetAffectedProperty);
+            EditorGUILayout.PropertyField(textMaterialProperty);
             EditorGUILayout.PropertyField(buttonGraphicsProperty);
 
             if (foldout = EditorGUILayout.Foldout(foldout, "Extra data"))

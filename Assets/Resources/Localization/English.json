@@ -340,6 +340,14 @@
       "key": "no_news",
       "value": "No news"
     },
+	{
+      "key": "not_available",
+      "value": "Not Available"
+    },
+	{
+      "key": "not_supported_functionality",
+      "value": "Currently this functionality is not supported"
+    },
     {
       "key": "not_found",
       "value": "Not Found"

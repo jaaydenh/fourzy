@@ -161,15 +161,20 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                 //bot game to be reported by me, others will be reported by another client
                 case GameTypeLocal.REALTIME_BOT_GAME:
-                    if (GameManager.Instance.botTutorialGame)
+                    if (realtimeGameToBeRatedCondition)
                     {
-                        GameManager.Instance.LogGameComplete(game);
-                    }
-                    else
-                    {
-                        if (realtimeGameToBeRatedCondition)
+                        switch (GameManager.Instance.botGameType)
                         {
-                            GameManager.Instance.ReportBotGameFinished(game);
+                            case GameManager.BotGameType.FTUE_RATED:
+                            case GameManager.BotGameType.REGULAR:
+                                GameManager.Instance.ReportBotGameFinished(game);
+
+                                break;
+
+                            case GameManager.BotGameType.FTUE_NOT_RATED:
+                                GameManager.Instance.LogGameComplete(game);
+
+                                break;
                         }
                     }
 
@@ -219,6 +224,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         {
                             _Type = GameType.REALTIME
                         };
+                        GameManager.Instance.botGameType = GameManager.BotGameType.REGULAR;
+                        if (Debug.isDebugBuild)
+                        {
+                            Debug.Log($"Starting {GameManager.Instance.botGameType} bot game");
+                        }
 
                         break;
 
@@ -532,7 +542,8 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
         public void CheckGameMode()
         {
-            GameManager.Instance.botTutorialGame = false;
+            GameManager.Instance.botGameType = GameManager.BotGameType.NONE;
+
             //auto load game if its not realtime mdoe
             switch (GameManager.Instance.ExpectedGameType)
             {
@@ -581,13 +592,17 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                     if (botGameBoardFile != null)
                     {
-                        GameManager.Instance.botTutorialGame = true;
-                        GameBoardDefinition _board = JsonConvert.DeserializeObject<GameBoardDefinition>(
+                        FTUEGameBoardDefinition _board = JsonConvert.DeserializeObject<FTUEGameBoardDefinition>(
                             botGameBoardFile.Load<TextAsset>().text);
 
-                        if (Debug.isDebugBuild)
+                        if (_board.aiProfile >= 0)
                         {
-                            Debug.Log($"Current tutorial bot board, {_board.BoardName} index {boardIndex}");
+                            GameManager.Instance.Bot.Profile = _board.AIProfile;
+                            GameManager.Instance.botGameType = GameManager.BotGameType.FTUE_NOT_RATED;
+                        }
+                        else
+                        {
+                            GameManager.Instance.botGameType = GameManager.BotGameType.FTUE_RATED;
                         }
 
                         ClientFourzyGame __game = new ClientFourzyGame(
@@ -599,6 +614,11 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         };
                         __game.SetRandomActivePlayer();
                         __game.UpdateFirstState();
+
+                        if (Debug.isDebugBuild)
+                        {
+                            Debug.Log($"Starting {GameManager.Instance.botGameType} bot game, {_board.BoardName}");
+                        }
 
                         LoadGame(__game);
                     }
@@ -718,6 +738,15 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             if (UserManager.Instance.hints <= 0)
             {
+                //currently unavailable
+                menuController
+                    .GetOrAddScreen<PromptScreen>()
+                    .Prompt(
+                        LocalizationManager.Value("not_available"),
+                        LocalizationManager.Value("not_supported_functionality"),
+                        LocalizationManager.Value("back"),
+                        "")
+                    .CloseOnAccept();
                 //PersistantMenuController.Instance
                 //    .GetOrAddScreen<StorePromptScreen>()
                 //    .Prompt(StorePromptScreen.StoreItemType.HINTS);
@@ -1247,18 +1276,27 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
                         break;
 
                     case GameTypeLocal.REALTIME_BOT_GAME:
-                        if (GameManager.Instance.botTutorialGame)
+                        switch (GameManager.Instance.botGameType)
                         {
-                            if (winner)
-                            {
-                                PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
-                            }
+                            case GameManager.BotGameType.FTUE_RATED:
+                            case GameManager.BotGameType.REGULAR:
+                                GameManager.Instance.ReportBotGameFinished(game);
 
-                            GameManager.Instance.LogGameComplete(game);
+                                break;
+
+                            case GameManager.BotGameType.FTUE_NOT_RATED:
+                                GameManager.Instance.LogGameComplete(game);
+
+                                break;
                         }
-                        else
+
+                        switch (GameManager.Instance.botGameType)
                         {
-                            GameManager.Instance.ReportBotGameFinished(game);
+                            case GameManager.BotGameType.FTUE_NOT_RATED:
+                            case GameManager.BotGameType.FTUE_RATED:
+                                PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
+
+                                break;
                         }
 
                         break;

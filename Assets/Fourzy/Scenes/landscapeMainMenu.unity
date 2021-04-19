@@ -270,6 +270,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -441,6 +443,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -1231,6 +1235,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -1379,6 +1385,8 @@ MonoBehaviour:
   menuController: {fileID: 0}
   puzzlesResetButton: {fileID: 1850814827}
   fullscreenButton: {fileID: 582692583}
+  realtimeMagic: {fileID: 0}
+  realtimeTimer: {fileID: 0}
 --- !u!114 &44892455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8340,6 +8348,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -8638,6 +8648,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -8827,6 +8839,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -10040,6 +10054,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list:
@@ -10216,6 +10232,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -10899,6 +10917,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -11414,6 +11434,98 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 128, y: 51}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &407008158
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 407008159}
+  - component: {fileID: 407008162}
+  - component: {fileID: 407008161}
+  - component: {fileID: 407008160}
+  m_Layer: 5
+  m_Name: NoConnection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &407008159
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407008158}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2022563122}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 120, y: 120}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &407008160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407008158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a8240062fa69b24a89c4812d66c9f56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hideOnEmpty: 1
+  thisTarget: 1
+  format: '{0}'
+  targetObject: {fileID: 0}
+--- !u!114 &407008161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407008158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: c7dfc0362b233a64485c4c25cd7de47e, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &407008162
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407008158}
+  m_CullTransparentMesh: 0
 --- !u!1 &436130832
 GameObject:
   m_ObjectHideFlags: 0
@@ -11533,6 +11645,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -12475,6 +12589,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list:
@@ -12861,6 +12977,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -13260,6 +13378,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -13581,6 +13701,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -14313,6 +14435,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -14471,8 +14595,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: NO_INTERNET_ACCESS
-      type: 1
+    - type: 1
       targetText: 
       updateOnStart: 1
       events:
@@ -14500,8 +14623,7 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: INTERNET_ACCESS
-      type: 2
+    - type: 2
       targetText: 
       updateOnStart: 0
       events:
@@ -14992,8 +15114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: SETTINGS_SFX_ON
-      type: 3
+    - type: 3
       targetText: 
       updateOnStart: 1
       events:
@@ -15084,8 +15205,7 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: SETTINGS_SFX_OFF
-      type: 4
+    - type: 4
       targetText: 
       updateOnStart: 0
       events:
@@ -15393,6 +15513,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list:
@@ -16129,6 +16251,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -16368,8 +16492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: 1024
-      type: 1024
+    - type: 1024
       targetText: 
       updateOnStart: 1
       events:
@@ -16460,8 +16583,7 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: 2048
-      type: 2048
+    - type: 2048
       targetText: 
       updateOnStart: 0
       events:
@@ -17008,6 +17130,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -17819,6 +17943,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list:
@@ -18042,6 +18168,98 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 888344115}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &892684874
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 892684875}
+  - component: {fileID: 892684878}
+  - component: {fileID: 892684877}
+  - component: {fileID: 892684876}
+  m_Layer: 5
+  m_Name: NoConnection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &892684875
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892684874}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.9999794, y: 0.9999794, z: 0.9999794}
+  m_Children: []
+  m_Father: {fileID: 1757549350}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 120, y: 120}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &892684876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892684874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a8240062fa69b24a89c4812d66c9f56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hideOnEmpty: 1
+  thisTarget: 1
+  format: '{0}'
+  targetObject: {fileID: 0}
+--- !u!114 &892684877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892684874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: c7dfc0362b233a64485c4c25cd7de47e, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &892684878
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892684874}
+  m_CullTransparentMesh: 0
 --- !u!1 &893547963
 GameObject:
   m_ObjectHideFlags: 0
@@ -18149,6 +18367,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -19375,6 +19595,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -19693,6 +19915,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -19963,6 +20187,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -20163,6 +20389,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list:
@@ -20298,6 +20526,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -21405,7 +21635,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2022563122}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -22053,6 +22283,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -22424,6 +22656,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -22695,6 +22929,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -22940,7 +23176,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2022563122}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -23502,6 +23738,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -23812,8 +24050,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: SETTINGS_AUDIO_ON
-      type: 5
+    - type: 5
       targetText: 
       updateOnStart: 1
       events:
@@ -23904,8 +24141,7 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: SETTINGS_AUDIO_OFF
-      type: 6
+    - type: 6
       targetText: 
       updateOnStart: 0
       events:
@@ -24825,8 +25061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: SETTINGS_REALTIME_TIMER_ON
-      type: 14
+    - type: 14
       targetText: 
       updateOnStart: 1
       events:
@@ -24917,8 +25152,7 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: SETTINGS_REALTIME_TIMER_OFF
-      type: 15
+    - type: 15
       targetText: 
       updateOnStart: 0
       events:
@@ -25557,6 +25791,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -25578,8 +25814,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: NO_INTERNET_ACCESS
-      type: 1
+    - type: 1
       targetText: 
       updateOnStart: 1
       events:
@@ -25607,8 +25842,7 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: INTERNET_ACCESS
-      type: 2
+    - type: 2
       targetText: 
       updateOnStart: 1
       events:
@@ -26898,6 +27132,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -27218,6 +27454,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -27549,6 +27787,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -28115,6 +28355,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -28438,6 +28680,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -29183,6 +29427,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -29792,6 +30038,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -31278,6 +31526,7 @@ RectTransform:
   m_Children:
   - {fileID: 1696795927}
   - {fileID: 905103404}
+  - {fileID: 892684875}
   m_Father: {fileID: 133142678}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -31385,18 +31634,24 @@ MonoBehaviour:
     persistentCalls:
       calls: []
   playOnClick: 2
-  changeMaterialOnState: 0
+  changeMaterialOnState: 1
+  networkAffected: 1
+  textMaterial: {fileID: 2100000, guid: a7ac62c97f4aa8e4ba34cc4b6a77d726, type: 2}
   scaleOnClick: 0
   buttonGraphics:
-    list: []
+    list:
+    - _name: Text
+      target: {fileID: 1696795926}
+      propagate: 0
+    - _name: Rankings
+      target: {fileID: 1757549349}
+      propagate: 0
   labels:
   - labelName: name
     label: {fileID: 1696795929}
   badges:
-  - badgeName: games
-    badge: {fileID: 0}
   - badgeName: network
-    badge: {fileID: 0}
+    badge: {fileID: 892684876}
 --- !u!114 &1757549354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32145,7 +32400,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2022563122}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -32691,6 +32946,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -33452,6 +33709,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -33637,6 +33896,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -33810,8 +34071,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: SETTINGS_MAGIC_ON
-      type: 12
+    - type: 12
       targetText: 
       updateOnStart: 1
       events:
@@ -33902,8 +34162,7 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: SETTINGS_MAGIC_OFF
-      type: 13
+    - type: 13
       targetText: 
       updateOnStart: 0
       events:
@@ -34062,6 +34321,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -34522,8 +34783,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: APP_VERSION
-      type: 18
+    - type: 18
       targetText: 'Version: {0}'
       updateOnStart: 1
       events:
@@ -34672,6 +34932,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 407008159}
   - {fileID: 1152409634}
   - {fileID: 1813953568}
   - {fileID: 1288762856}
@@ -34771,11 +35032,24 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 1
+  textMaterial: {fileID: 2100000, guid: a7ac62c97f4aa8e4ba34cc4b6a77d726, type: 2}
   scaleOnClick: 1
   buttonGraphics:
-    list: []
+    list:
+    - _name: OnlineLobbyButton
+      target: {fileID: 2022563121}
+      propagate: 0
+    - _name: Text
+      target: {fileID: 1152409633}
+      propagate: 0
+    - _name: Circle
+      target: {fileID: 1813953567}
+      propagate: 0
   labels: []
-  badges: []
+  badges:
+  - badgeName: network
+    badge: {fileID: 407008160}
 --- !u!114 &2022563125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36301,6 +36575,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -37052,6 +37328,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list:
@@ -40054,6 +40332,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -40600,6 +40880,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -40894,6 +41176,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list:
@@ -40922,8 +41206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
     list:
-    - _name: SETTINGS_LOCAL_TIMER_ON
-      type: 16
+    - type: 16
       targetText: 
       updateOnStart: 1
       events:
@@ -41014,8 +41297,7 @@ MonoBehaviour:
               transformArgument: {fileID: 0}
             isDynamic: 0
             isCallEnabled: 1
-    - _name: SETTINGS_LOCAL_TIMER_OFF
-      type: 17
+    - type: 17
       targetText: 
       updateOnStart: 0
       events:
@@ -41183,6 +41465,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -41643,6 +41927,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -42088,6 +42374,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -42251,6 +42539,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 0
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list: []
@@ -42858,6 +43148,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -43413,6 +43705,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 0
   buttonGraphics:
     list:
@@ -44661,6 +44955,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -45385,6 +45681,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
@@ -45571,6 +45869,8 @@ MonoBehaviour:
       calls: []
   playOnClick: 2
   changeMaterialOnState: 1
+  networkAffected: 0
+  textMaterial: {fileID: 0}
   scaleOnClick: 1
   buttonGraphics:
     list: []
