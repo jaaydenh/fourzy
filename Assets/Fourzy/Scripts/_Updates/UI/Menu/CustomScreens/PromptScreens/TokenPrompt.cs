@@ -62,10 +62,19 @@ namespace Fourzy._Updates.UI.Menu.Screens
             {
                 List<string> locations = GameContentManager.Instance.GetTokenAreaNames(data.tokenType);
 
-                if (locations.Count == 6) locationBadge.SetValue("All");
-                else locationBadge.SetValue(string.Join(", ", locations));
+                if (locations.Count == 6)
+                {
+                    locationBadge.SetValue("All");
+                }
+                else
+                {
+                    locationBadge.SetValue(string.Join(", ", locations));
+                }
 
-                if (themes.Count > 0) locationBadge.SetColor(themes[0].areaColor);
+                if (themes.Count > 0)
+                {
+                    locationBadge.SetColor(themes[0].areaColor);
+                }
 
                 priceBadge.SetState(false);
             }
@@ -191,10 +200,12 @@ namespace Fourzy._Updates.UI.Menu.Screens
             while (isOpened)
             {
                 ClientFourzyGame game = new ClientFourzyGame(
-                    gameboardDefinition, 
-                    UserManager.Instance.meAsPlayer, 
+                    gameboardDefinition,
+                    UserManager.Instance.meAsPlayer,
                     new Player(2, "Player Two")
-                    { HerdId = "1"});
+                    {
+                        HerdId = InternalSettings.Current.DEFAULT_GAME_PIECE
+                    });
 
                 gameboard.Initialize(game, false);
 

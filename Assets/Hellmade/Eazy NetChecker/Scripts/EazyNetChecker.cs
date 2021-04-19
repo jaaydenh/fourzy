@@ -647,7 +647,10 @@ namespace Hellmade.Net
         {
             IsChecking = false;
             keepChecking = false;
-            Instance.StopAllCoroutines();
+            if (!destroyed)
+            {
+                Instance.StopAllCoroutines();
+            }
             checkerCoroutine = null;
         }
 

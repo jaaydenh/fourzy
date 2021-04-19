@@ -144,8 +144,8 @@ namespace Fourzy._Updates.UI.Menu.Screens
             preferences.IncludesRandomTokens = AllowRandomElements;
 
             ClientFourzyGame game;
-            GamePieceData random = GameContentManager.Instance.piecesDataHolder.random.data;
-            Player opponent = new Player(2, "Player2", aiProfiles[currentProfileIndex]) { HerdId = random.ID };
+            GamePieceData random = GameContentManager.Instance.piecesDataHolder.random;
+            Player opponent = new Player(2, "Player2", aiProfiles[currentProfileIndex]) { HerdId = random.Id };
 
             if (UseComplexity)
             {

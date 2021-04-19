@@ -118,7 +118,7 @@ namespace Fourzy._Updates.UI.Helpers
                             ratio = DisplayRatioOption.IPAD;
                             UpdatePrevious();
                         }
-                        else if (_camera.aspect >= .5f)
+                        else if (_camera.aspect >= .51f)
                         {
                             ratio = DisplayRatioOption.IPHONE;
                             UpdatePrevious();

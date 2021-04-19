@@ -32,7 +32,7 @@ namespace Fourzy._Updates.UI.Menu.Screens
 
             Vector2 spacing = tokensParent.spacing;
             List<TokensDataHolder.TokenData> allTokens = GameContentManager.Instance.enabledTokens;
-            TokenWidget prefab = GameContentManager.GetPrefab<TokenWidget>("GAME_PIECE_LANDSCAPE");
+            TokenWidget prefab = GameContentManager.GetPrefab<TokenWidget>("TOKEN_SMALL");
 
             Vector2 size = tokensParent.cellSize;
             Vector2 prefabSize = size;
