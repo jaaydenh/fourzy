@@ -1150,57 +1150,6 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
             bool winner = game.IsWinner();
 
-            #region Realtime game complete (both vs and bot)
-
-            if (game._Type == GameType.REALTIME)
-            {
-                switch (GameManager.Instance.ExpectedGameType)
-                {
-                    case GameTypeLocal.REALTIME_LOBBY_GAME:
-                    case GameTypeLocal.REALTIME_QUICKMATCH:
-                        if (PhotonNetwork.IsMasterClient)
-                        {
-                            if (winner)
-                            {
-                                GameManager.Instance.ReportRealtimeGameFinished(
-                                    game,
-                                    LoginManager.playfabId,
-                                    GameManager.Instance.RealtimeOpponent.Id);
-                            }
-                            else
-                            {
-                                GameManager.Instance.ReportRealtimeGameFinished(
-                                    game,
-                                    GameManager.Instance.RealtimeOpponent.Id,
-                                    LoginManager.playfabId);
-                            }
-                        }
-
-                        break;
-
-                    case GameTypeLocal.REALTIME_BOT_GAME:
-                        if (GameManager.Instance.botTutorialGame)
-                        {
-                            if (winner)
-                            {
-                                PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
-                            }
-
-                            GameManager.Instance.LogGameComplete(game);
-                        }
-                        else
-                        {
-                            GameManager.Instance.ReportBotGameFinished(game);
-                        }
-
-                        break;
-                }
-
-                ratingUpdated = true;
-            }
-
-            #endregion
-
             #region Amplitude user properties update
 
             switch (GameManager.Instance.ExpectedGameType)
@@ -1265,6 +1214,57 @@ namespace Fourzy._Updates.Mechanics.GameplayScene
 
                         break;
                 }
+            }
+
+            #endregion
+
+            #region Realtime game complete (both vs and bot)
+
+            if (game._Type == GameType.REALTIME)
+            {
+                switch (GameManager.Instance.ExpectedGameType)
+                {
+                    case GameTypeLocal.REALTIME_LOBBY_GAME:
+                    case GameTypeLocal.REALTIME_QUICKMATCH:
+                        if (PhotonNetwork.IsMasterClient)
+                        {
+                            if (winner)
+                            {
+                                GameManager.Instance.ReportRealtimeGameFinished(
+                                    game,
+                                    LoginManager.playfabId,
+                                    GameManager.Instance.RealtimeOpponent.Id);
+                            }
+                            else
+                            {
+                                GameManager.Instance.ReportRealtimeGameFinished(
+                                    game,
+                                    GameManager.Instance.RealtimeOpponent.Id,
+                                    LoginManager.playfabId);
+                            }
+                        }
+
+                        break;
+
+                    case GameTypeLocal.REALTIME_BOT_GAME:
+                        if (GameManager.Instance.botTutorialGame)
+                        {
+                            if (winner)
+                            {
+                                PlayerPrefsWrapper.AddTutorialRealtimeBotGamePlayed();
+                            }
+
+                            GameManager.Instance.LogGameComplete(game);
+                        }
+                        else
+                        {
+                            GameManager.Instance.ReportBotGameFinished(game);
+                        }
+
+                        break;
+                }
+
+                ratingUpdated = true;
             }
 
             #endregion
