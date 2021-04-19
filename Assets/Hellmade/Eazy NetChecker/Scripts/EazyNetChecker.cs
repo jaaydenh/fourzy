@@ -659,6 +659,8 @@ namespace Hellmade.Net
         /// </summary>
         public static void CheckConnection()
         {
+            if (destroyed) return;
+
             if (checkerCoroutine == null)
             {
                 IsChecking = true;

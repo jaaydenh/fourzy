@@ -200,6 +200,11 @@ namespace Fourzy._Updates.UI.Menu.Screens
         {
             base.OnInitialized();
 
+            low.minValue = Constants.MIN_COMPLEXCITY_SCORE;
+            low.maxValue = Constants.MAX_COMPLEXCITY_SCORE - 1;
+            high.minValue = Constants.MIN_COMPLEXCITY_SCORE + 1;
+            high.maxValue = Constants.MAX_COMPLEXCITY_SCORE;
+
             //doprdown
             aiProfiles = new Dictionary<int, AIProfile>();
             AIProfile[] values = (AIProfile[])Enum.GetValues(typeof(AIProfile));

@@ -80,7 +80,7 @@ namespace Fourzy._Updates.UI.Widgets
                 (Area)FourzyPhotonManager.GetRoomProperty(
                     data.CustomProperties,
                     Constants.REALTIME_ROOM_AREA,
-                    (int)Constants.DEFAULT_AREA)].Name;
+                    (int)InternalSettings.Current.DEFAULT_AREA)].Name;
 
             bool timer = FourzyPhotonManager.GetRoomProperty(
                 data.CustomProperties,
